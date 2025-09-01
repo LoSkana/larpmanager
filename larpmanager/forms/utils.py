@@ -41,7 +41,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus
-from larpmanager.models.miscellanea import InventoryArea, InventoryContainer, InventoryItem, InventoryTag
+from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -490,7 +490,7 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return Member.objects.filter(pk__in=self.allowed)
 
 
-class InventoryContainerS2Widget(s2forms.ModelSelect2Widget):
+class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "description__icontains",
@@ -500,10 +500,10 @@ class InventoryContainerS2Widget(s2forms.ModelSelect2Widget):
         self.aid = aid
 
     def get_queryset(self):
-        return InventoryContainer.objects.filter(assoc_id=self.aid)
+        return WarehouseContainer.objects.filter(assoc_id=self.aid)
 
 
-class InventoryAreaS2Widget(s2forms.ModelSelect2Widget):
+class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "description__icontains",
@@ -513,10 +513,10 @@ class InventoryAreaS2Widget(s2forms.ModelSelect2Widget):
         self.event = event
 
     def get_queryset(self):
-        return self.event.get_elements(InventoryArea)
+        return self.event.get_elements(WarehouseArea)
 
 
-class InventoryItemS2(s2forms.ModelSelect2Widget):
+class WarehouseItemS2(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "description__icontains",
@@ -526,18 +526,18 @@ class InventoryItemS2(s2forms.ModelSelect2Widget):
         self.aid = aid
 
     def get_queryset(self):
-        return InventoryItem.objects.filter(assoc_id=self.aid)
+        return WarehouseItem.objects.filter(assoc_id=self.aid)
 
 
-class InventoryItemS2WidgetMulti(InventoryItemS2, s2forms.ModelSelect2MultipleWidget):
+class WarehouseItemS2WidgetMulti(WarehouseItemS2, s2forms.ModelSelect2MultipleWidget):
     pass
 
 
-class InventoryItemS2Widget(InventoryItemS2, s2forms.ModelSelect2Widget):
+class WarehouseItemS2Widget(WarehouseItemS2, s2forms.ModelSelect2Widget):
     pass
 
 
-class InventoryTagS2(s2forms.ModelSelect2Widget):
+class WarehouseTagS2(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "description__icontains",
@@ -547,14 +547,14 @@ class InventoryTagS2(s2forms.ModelSelect2Widget):
         self.aid = aid
 
     def get_queryset(self):
-        return InventoryTag.objects.filter(assoc_id=self.aid)
+        return WarehouseTag.objects.filter(assoc_id=self.aid)
 
 
-class InventoryTagS2WidgetMulti(InventoryTagS2, s2forms.ModelSelect2MultipleWidget):
+class WarehouseTagS2WidgetMulti(WarehouseTagS2, s2forms.ModelSelect2MultipleWidget):
     pass
 
 
-class InventoryTagS2Widget(InventoryTagS2, s2forms.ModelSelect2Widget):
+class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
     pass
 
 

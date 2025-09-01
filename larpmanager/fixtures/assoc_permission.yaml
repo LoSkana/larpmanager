@@ -433,10 +433,10 @@
   pk: 20
   fields:
     name: Containers
-    descr: Manage inventory containers
-    slug: exe_inventory_containers
+    descr: Manage warehouse containers
+    slug: exe_warehouse_containers
     number: 21
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15
@@ -444,10 +444,10 @@
   pk: 48
   fields:
     name: Tags
-    descr: Manage inventory tags
-    slug: exe_inventory_tags
+    descr: Manage warehouse tags
+    slug: exe_warehouse_tags
     number: 36
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15
@@ -455,10 +455,10 @@
   pk: 46
   fields:
     name: Items
-    descr: Manage inventory items
-    slug: exe_inventory_items
+    descr: Manage warehouse items
+    slug: exe_warehouse_items
     number: 46
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15
@@ -466,10 +466,10 @@
   pk: 47
   fields:
     name: Movements
-    descr: Manage inventory movements
-    slug: exe_inventory_movements
+    descr: Manage warehouse movements
+    slug: exe_warehouse_movements
     number: 66
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15

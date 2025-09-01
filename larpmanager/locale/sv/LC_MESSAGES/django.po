@@ -654,6 +654,9 @@ msgstr "Åtgärder"
 msgid "Add new"
 msgstr "Lägg till ny"
 
+msgid "Add tag"
+msgstr "Lägg till tagg"
+
 msgid "Address"
 msgstr "Adress"
 
@@ -704,6 +707,9 @@ msgstr "Detaljer"
 
 msgid "Example"
 msgstr "Exempel"
+
+msgid "Execute"
+msgstr "Utför"
 
 msgid "Faction"
 msgstr "Grupp"
@@ -1209,9 +1215,6 @@ msgstr "Frekvens"
 msgid "Interface"
 msgstr "Gränssnitt"
 
-msgid "Inventory"
-msgstr "Inventering"
-
 msgid "Load list"
 msgstr "Ladda lista"
 
@@ -1272,6 +1275,9 @@ msgstr "Återgång"
 msgid "Seniority"
 msgstr "Senioritet"
 
+msgid "Set quest"
+msgstr "Ställ in uppdrag"
+
 msgid "Short url"
 msgstr "Kort url"
 
@@ -1301,6 +1307,9 @@ msgstr "Översätt"
 
 msgid "Treasurer"
 msgstr "Kassör"
+
+msgid "Warehouse"
+msgstr "Lagerlokal"
 
 msgid "Workshops"
 msgstr "Verkstäder"
@@ -1461,6 +1470,9 @@ msgstr "Ersättning för"
 msgid "Registered"
 msgstr "Inskriven"
 
+msgid "Remove tag"
+msgstr "Ta bort tagg"
+
 msgid "Repertoire"
 msgstr "Repertoar"
 
@@ -1553,6 +1565,9 @@ msgstr "Länk för åtkomst"
 
 msgid "Actual paid"
 msgstr "Faktiskt utbetalt"
+
+msgid "Add to plot"
+msgstr "Lägg till tomt"
 
 msgid "Assignments"
 msgstr "Uppdrag"
@@ -2123,6 +2138,9 @@ msgstr "Personuppgifter"
 msgid "registrations"
 msgstr "inskrivningar"
 
+msgid "Add to faction"
+msgstr "Lägg till i fraktion"
+
 msgid "Available days"
 msgstr "Tillgängliga dagar"
 
@@ -2182,12 +2200,6 @@ msgstr "Global budget"
 
 msgid "Handout Models"
 msgstr "Handout Modeller"
-
-msgid "Inventory area"
-msgstr "Inventeringsområde"
-
-msgid "Inventory tags"
-msgstr "Inventarietiketter"
 
 msgid "List of voters"
 msgstr "Lista över röstberättigade"
@@ -2273,6 +2285,9 @@ msgstr "Känsliga uppgifter"
 msgid "Session active"
 msgstr "Session aktiv"
 
+msgid "Set quest type"
+msgstr "Ange typ av uppdrag"
+
 msgid "Show shortcuts"
 msgstr "Visa genvägar"
 
@@ -2296,6 +2311,12 @@ msgstr "Typ av prolog"
 
 msgid "URL identifier"
 msgstr "Idenominativ URL"
+
+msgid "Warehouse area"
+msgstr "Lagerområde"
+
+msgid "Warehouse tags"
+msgstr "Lagertaggar"
 
 msgid "Writing option"
 msgstr "Alternativ för skrivning"
@@ -2360,9 +2381,6 @@ msgstr "Extern åtkomst"
 msgid "Filter factions"
 msgstr "Filtrera grupper"
 
-msgid "Inventory items"
-msgstr "Varulager"
-
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
 
@@ -2425,6 +2443,9 @@ msgstr "Ladda upp kostnader"
 
 msgid "Volounteer data"
 msgstr "Frivilliga uppgifter"
+
+msgid "Warehouse items"
+msgstr "Lagervaror"
 
 msgid "You can consult"
 msgstr "Du kan rådfråga"
@@ -2573,11 +2594,17 @@ msgstr "Påminnelse om betalning"
 msgid "Reminder profile"
 msgstr "Påminnelseprofil"
 
+msgid "Remove from plot"
+msgstr "Ta bort från tomten"
+
 msgid "Request approved"
 msgstr "Begäran godkänd"
 
 msgid "Selected options"
 msgstr "Valda alternativ"
+
+msgid "Set ability type"
+msgstr "Ange typ av förmåga"
 
 msgid "Show collections"
 msgstr "Visa samlingar"
@@ -2695,6 +2722,9 @@ msgstr "Maximalt tillgänglig"
 
 msgid "Months free quota"
 msgstr "Månader fri kvot"
+
+msgid "Move to container"
+msgstr "Flytta till container"
 
 msgid "Paid current year"
 msgstr "Betald innevarande år"
@@ -2918,9 +2948,6 @@ msgstr "Preferenshistorik"
 msgid "I am not interested"
 msgstr "Inte intresserad"
 
-msgid "Inventory movements"
-msgstr "Förändringar i varulager"
-
 msgid "List of other users"
 msgstr "Lista över andra användare"
 
@@ -2972,6 +2999,9 @@ msgstr "Registreringen stängd"
 msgid "Relationships (Pdf)"
 msgstr "Förhållanden (Pdf)"
 
+msgid "Remove from faction"
+msgstr "Ta bort från fraktionen"
+
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
 
@@ -2983,6 +3013,9 @@ msgstr "Kassaförvaltare"
 
 msgid "Username of account"
 msgstr "Användarnamn för konto"
+
+msgid "Warehouse movements"
+msgstr "Lagerrörelser"
 
 msgid "Where it is located"
 msgstr "Var den är belägen"
@@ -3043,9 +3076,6 @@ msgstr "Presentkortet är annullerat!"
 
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
-
-msgid "Inventory containers"
-msgstr "Behållare för inventarier"
 
 msgid "Issued Reimbursement"
 msgstr "Utfärdad Återbetalning"
@@ -3129,6 +3159,9 @@ msgstr "Villkor och bestämmelser"
 msgid "The tax code matches"
 msgstr "Skattelagstiftningen stämmer överens"
 
+msgid "Warehouse containers"
+msgstr "Lagercontainrar"
+
 #, python-format
 msgid "Welcome to %(name)s!"
 msgstr "Välkommen till %(name)s!"
@@ -3184,11 +3217,8 @@ msgstr "Gå till casting för"
 msgid "If absent, indicate 0"
 msgstr "Om frånvarande, ange 0"
 
-msgid "Inventory assignments"
-msgstr "Tilldelning av inventarier"
-
-msgid "Manage inventory tags"
-msgstr "Hantera inventarietiketter"
+msgid "Manage warehouse tags"
+msgstr "Hantera lagertaggar"
 
 msgid "Name of the character"
 msgstr "Namn på karaktären"
@@ -3257,6 +3287,9 @@ msgstr "För att komma åt historiken"
 msgid "Verification payments"
 msgstr "Verifiering av betalningar"
 
+msgid "Warehouse assignments"
+msgstr "Lageruppdrag"
+
 msgid "You have already paid"
 msgstr "Du har redan betalat"
 
@@ -3317,14 +3350,14 @@ msgstr "Skriv upp dig på väntelistan!"
 msgid "Link to participate in"
 msgstr "Länkar för att delta"
 
-msgid "Manage inventory items"
-msgstr "Hantera lagerartiklar"
-
 msgid "Manage refund requests"
 msgstr "Hantera begäran om återbetalning"
 
 msgid "Manage the event plots"
 msgstr "Hantera evenemangets tomter"
+
+msgid "Manage warehouse items"
+msgstr "Hantera lagerartiklar"
 
 msgid "Manages event revenues"
 msgstr "Hanterar intäkter från evenemang"
@@ -3693,11 +3726,11 @@ msgstr "Ge ett kort till din vän"
 msgid "Hide unassigned characters"
 msgstr "Dölj icke tilldelade tecken"
 
-msgid "Manage inventory movements"
-msgstr "Hantera lagerrörelser"
-
 msgid "Manage the event prologues"
 msgstr "Hantera evenemangets prologer"
+
+msgid "Manage warehouse movements"
+msgstr "Hantera lagerrörelser"
 
 msgid "Now you can create inflows"
 msgstr "Nu kan du skapa inflöden"
@@ -3766,14 +3799,14 @@ msgstr "Ange dina preferenser här"
 msgid "Loading performed, see logs"
 msgstr "Lastning utförd, se loggar"
 
-msgid "Manage inventory containers"
-msgstr "Hantera lagerbehållare"
-
 msgid "Manage quiz-style workshops"
 msgstr "Hantera frågesportsliknande workshops"
 
 msgid "Manage the event characters"
 msgstr "Hantera evenemangets karaktärer"
+
+msgid "Manage warehouse containers"
+msgstr "Hantera lagerbehållare"
 
 msgid "Members of the Organization"
 msgstr "Medlem i föreningen"
@@ -4284,8 +4317,8 @@ msgstr "Formuläret sparas var 30:e sekund"
 msgid "The payment has not been completed"
 msgstr "Betalningen slutfördes inte"
 
-msgid "This page shows the inventory tags"
-msgstr "På denna sida visas inventarietiketterna"
+msgid "This page shows the warehouse tags"
+msgstr "På denna sida visas lagertaggar"
 
 msgid "You are about to make a payment of"
 msgstr "Du är på väg att göra en betalning på"
@@ -4350,8 +4383,8 @@ msgstr "Granska deltagarnas känsliga uppgifter"
 msgid "Set up the membership configuration"
 msgstr "Ställ in medlemskonfigurationen"
 
-msgid "This page shows the inventory items"
-msgstr "På den här sidan visas lagerartiklarna"
+msgid "This page shows the warehouse items"
+msgstr "På denna sida visas lagerartiklarna"
 
 msgid "You can't send messages to yourself"
 msgstr "Du kan inte skicka meddelanden till dig själv"
@@ -4627,8 +4660,8 @@ msgstr "Nu kan du granska evenemangets problem"
 msgid "Now you can se the special page options"
 msgstr "Nu kan du se de speciella sidalternativen"
 
-msgid "Perform checks on inventory assignments"
-msgstr "Utföra kontroller av inventeringsuppdrag"
+msgid "Perform checks on warehouse assignments"
+msgstr "Utföra kontroller av lageruppdrag"
 
 msgid "Photos and videos successfully uploaded"
 msgstr "Foton och videor har laddats upp framgångsrikt"
@@ -4700,14 +4733,14 @@ msgstr "Betalningen granskas för närvarande av personalen"
 msgid "The collection was delivered to the user"
 msgstr "Kollektionen levererades till användaren"
 
-msgid "This page shows the inventory containers"
-msgstr "På den här sidan visas lagerbehållarna"
-
 msgid "This page shows the quests for the event"
 msgstr "Den här sidan visar uppdrag för evenemanget"
 
 msgid "This page shows the signups of the event"
 msgstr "Denna sida visar anmälningarna till evenemanget"
+
+msgid "This page shows the warehouse containers"
+msgstr "På denna sida visas lagercontainrarna"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Värdet måste vara större än eller lika med 0"
@@ -5094,8 +5127,8 @@ msgstr "Maximalt antal utfyllnadsplatser (0 = obegränsat)"
 msgid "Now set up the token and credits configuration"
 msgstr "Nu ska du konfigurera token och krediter"
 
-msgid "Now you can add inventory containers and items"
-msgstr "Nu kan du lägga till lagerbehållare och föremål"
+msgid "Now you can add warehouse containers and items"
+msgstr "Nu kan du lägga till lagerbehållare och artiklar"
 
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nu kan du välja vilka biljetter som kan ges i gåva"
@@ -5611,6 +5644,9 @@ msgstr "Registreringsavgift %(number)d %(user)s per %(event)s"
 msgid "Select which elements to copy, from which other event"
 msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang"
 
+msgid "The character have missing values in mandatory fields"
+msgstr "Tecknet har saknade värden i obligatoriska fält"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
 
@@ -5722,8 +5758,8 @@ msgstr "Om markerad: visar en länk i kalendern till tidigare evenemang"
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Ange den färg som ska användas för att markera texter"
 
-msgid "Manage loading and deployment status of inventory items"
-msgstr "Hantera status för lastning och utplacering av lagerartiklar"
+msgid "Manage loading and deployment status of warehouse items"
+msgstr "Hantera lastnings- och utplaceringsstatus för lagerartiklar"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Hantera betalningar som utförs av deltagare på alla evenemang"
@@ -5733,6 +5769,9 @@ msgstr "Snabbt konfigurera de viktigaste inställningarna för dina evenemang"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Granska de användare som inte klarar evenemangets deadlines"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Markera tabellraderna och välj den operation som ska tillämpas"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Länken kommer att vara giltig under följande antal dagar"
@@ -5912,9 +5951,9 @@ msgstr "Procentandel av momsen som ska beräknas enbart på biljettpriset"
 msgid "The question visibility to participants, allowed values are"
 msgstr "Frågan synliggörs för deltagarna, tillåtna värden är"
 
-msgid "This page allows you to add or edit a new item of inventory"
+msgid "This page allows you to add or edit a new item of warehouse"
 msgstr ""
-"På den här sidan kan du lägga till eller redigera ett nytt inventarieobjekt"
+"På den här sidan kan du lägga till eller redigera ett nytt lagerobjekt"
 
 msgid "This page allows you to change a member's membership status"
 msgstr "På den här sidan kan du ändra en medlems medlemsstatus"
@@ -6176,9 +6215,8 @@ msgstr ""
 "På den här sidan kan du lägga till eller ändra tilläggsavgifter för "
 "prenumerationer"
 
-msgid "This page shows the assignment of inventory items to event area"
-msgstr ""
-"På den här sidan visas tilldelningen av inventarier till evenemangsområdet"
+msgid "This page shows the assignment of warehouse items to event area"
+msgstr "På den här sidan visas hur lagerartiklar tilldelas händelseområden"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "För att du ska kunna betala måste din medlemsansökan vara godkänd"
@@ -6232,10 +6270,9 @@ msgstr "Det skrivelement som denna fråga gäller för, tillåtna värden är"
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "De dras av automatiskt när du anmäler dig till ett nytt evenemang"
 
-msgid "This page allows you to add or edit a new container of inventory"
+msgid "This page allows you to add or edit a new container of warehouse"
 msgstr ""
-"På den här sidan kan du lägga till eller redigera en ny container med "
-"inventarier"
+"På den här sidan kan du lägga till eller redigera en ny lagerbehållare"
 
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
@@ -6304,7 +6341,7 @@ msgstr "Nu kan du granska den kostinformation som deltagarna har lämnat in"
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Ange för vilket tillfälle du vill göra en donation"
 
-msgid "This page allows you to add or edit a new tag for inventory items"
+msgid "This page allows you to add or edit a new tag for warehouse items"
 msgstr ""
 "På den här sidan kan du lägga till eller redigera en ny tagg för "
 "lagerartiklar"
@@ -6333,7 +6370,7 @@ msgstr ""
 "Läggs till längst ner i alla e-postmeddelanden som bekräftar anmälan till "
 "deltagare"
 
-msgid "Enables inventory management for organization warehouse management"
+msgid "Enables warehouse management for organization warehouse management"
 msgstr "Möjliggör lagerhantering för organisationens lagerhantering"
 
 msgid "Enter your email below to receive instructions on how to change it"
@@ -6852,8 +6889,10 @@ msgstr ""
 "markerat"
 
 msgid ""
-"This page shows the event area where inventory items needs to be deployed"
-msgstr "Den här sidan visar händelseområdet där inventarier måste placeras ut"
+"This page shows the event area where warehouse items needs to be deployed"
+msgstr ""
+"På den här sidan visas evenemangsområdet där lagerartiklarna måste placeras "
+"ut"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association"
@@ -7705,11 +7744,11 @@ msgstr ""
 "nedan"
 
 msgid ""
-"This page allows you to add or edit a new assignment of inventory item to "
+"This page allows you to add or edit a new assignment of warehouse item to "
 "event area"
 msgstr ""
-"På den här sidan kan du lägga till eller redigera en ny tilldelning av "
-"inventarier till ett evenemangsområde"
+"På den här sidan kan du lägga till eller redigera en ny tilldelning av en "
+"lagerartikel till ett evenemangsområde"
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
@@ -7801,11 +7840,11 @@ msgstr ""
 "Konfigurera för att deltagarna ska kunna skapa eller redigera karaktärer"
 
 msgid ""
-"This page allows you to add or edit a new movement of item inventory, loans "
+"This page allows you to add or edit a new movement of item warehouse, loans "
 "or repairs"
 msgstr ""
-"På den här sidan kan du lägga till eller redigera en ny förflyttning av "
-"inventarier, lån eller reparationer"
+"På den här sidan kan du lägga till eller redigera en ny flytt av lager, lån "
+"eller reparationer"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"

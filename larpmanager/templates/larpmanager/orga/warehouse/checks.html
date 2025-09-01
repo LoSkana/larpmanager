@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Inventory assignments" %}  - {{ run }}
+    {% trans "Warehouse assignments" %}  - {{ run }}
 {% endblock title %}
 {% block info %}
     {% trans "This page displays cases where the same item has been assigned to multiple areas" %}
@@ -42,7 +42,7 @@
                         <tr id="{{ el.id }}">
                             <td></td>
                             <td>
-                                <a href="{% url 'orga_inventory_area_edit' event.slug run.number el.area.id %}">{{ el.area }}</a>
+                                <a href="{% url 'orga_warehouse_area_edit' event.slug run.number el.area.id %}">{{ el.area }}</a>
                             </td>
                             {% if optionals.quantity %}
                                 <td>

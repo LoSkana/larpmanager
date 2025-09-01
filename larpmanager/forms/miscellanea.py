@@ -40,11 +40,11 @@ from larpmanager.models.miscellanea import (
     Album,
     Competence,
     HelpQuestion,
-    InventoryItem,
     Problem,
     ShuttleService,
     UrlShortner,
     Util,
+    WarehouseItem,
     WorkshopModule,
     WorkshopOption,
     WorkshopQuestion,
@@ -216,10 +216,10 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-def _delete_optionals_inventory(form):
+def _delete_optionals_warehouse(form):
     assoc = Association.objects.get(pk=form.params["a_id"])
-    for field in InventoryItem.get_optional_fields():
-        if not assoc.get_config(f"inventory_{field}", False):
+    for field in WarehouseItem.get_optional_fields():
+        if not assoc.get_config(f"warehouse_{field}", False):
             form.delete_field(field)
 
 

@@ -210,6 +210,8 @@ In order to deploy:
 
 ## Develop
 
+The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
+
 In order to develop:
 
 1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`

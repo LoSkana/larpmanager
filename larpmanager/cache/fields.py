@@ -83,13 +83,15 @@ def get_event_fields_cache(event_id):
 
 def visible_writing_fields(ctx, applicable, only_visible=True):
     key = QuestionApplicable(applicable).label
+
+    ctx["questions"] = {}
+    ctx["options"] = {}
+    ctx["searchable"] = {}
+
     if "writing_fields" not in ctx or key not in ctx["writing_fields"]:
         return
 
     res = ctx["writing_fields"][key]
-    ctx["questions"] = {}
-    ctx["options"] = {}
-    ctx["searchable"] = {}
 
     question_ids = []
     searcheable_ids = []

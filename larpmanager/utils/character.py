@@ -23,7 +23,14 @@ from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import QuestionApplicable
+from larpmanager.models.form import (
+    QuestionApplicable,
+    QuestionStatus,
+    QuestionType,
+    WritingAnswer,
+    WritingChoice,
+    WritingQuestion,
+)
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
@@ -235,3 +242,22 @@ def get_chars_relations(text, chs_numbers):
             extinct.append(number)
 
     return chs, extinct
+
+
+def check_missing_mandatory(ctx):
+    print(ctx["char"])
+    ctx["missing_fields"] = []
+    aux = []
+
+    models = {
+        **{t: WritingAnswer for t in QuestionType.get_answer_types()},
+        **{t: WritingChoice for t in QuestionType.get_choice_types()},
+    }
+
+    questions = ctx["event"].get_elements(WritingQuestion)
+    for que in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
+        model = models.get(que.typ)
+        if model and not model.objects.filter(element_id=ctx["char"]["id"], question=que).exists():
+            aux.append(que.name)
+
+    ctx["missing_fields"] = ", ".join(aux)

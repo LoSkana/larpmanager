@@ -103,6 +103,8 @@ window.addEventListener('DOMContentLoaded', function() {
         $(document).on('dblclick', '.editable', function(event) {
             event.preventDefault();
 
+            if ($("#main_bulk").is(":visible")) return;
+
             eid = $(this).parent().attr("id");
             qid = $(this).attr("qid");
 

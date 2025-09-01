@@ -654,6 +654,9 @@ msgstr "Handlinger"
 msgid "Add new"
 msgstr "Legg til ny"
 
+msgid "Add tag"
+msgstr "Legg til tagg"
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -704,6 +707,9 @@ msgstr "Detaljer"
 
 msgid "Example"
 msgstr "Eksempel"
+
+msgid "Execute"
+msgstr "Utfør"
 
 msgid "Faction"
 msgstr "Gruppe"
@@ -1209,9 +1215,6 @@ msgstr "Frekvens"
 msgid "Interface"
 msgstr "Grensesnitt"
 
-msgid "Inventory"
-msgstr "Lagerbeholdning"
-
 msgid "Load list"
 msgstr "Last inn liste"
 
@@ -1272,6 +1275,9 @@ msgstr "Retur"
 msgid "Seniority"
 msgstr "Ansiennitet"
 
+msgid "Set quest"
+msgstr "Sett oppdrag"
+
 msgid "Short url"
 msgstr "Kort nettadresse"
 
@@ -1301,6 +1307,9 @@ msgstr "Oversett"
 
 msgid "Treasurer"
 msgstr "Kasserer"
+
+msgid "Warehouse"
+msgstr "Lager"
 
 msgid "Workshops"
 msgstr "Verksteder"
@@ -1461,6 +1470,9 @@ msgstr "Refusjon for"
 msgid "Registered"
 msgstr "Innskrevet"
 
+msgid "Remove tag"
+msgstr "Fjern taggen"
+
 msgid "Repertoire"
 msgstr "Repertoar"
 
@@ -1553,6 +1565,9 @@ msgstr "Tilgangslenke"
 
 msgid "Actual paid"
 msgstr "Faktisk betalt"
+
+msgid "Add to plot"
+msgstr "Legg til i plottet"
 
 msgid "Assignments"
 msgstr "Oppgaver"
@@ -2123,6 +2138,9 @@ msgstr "personopplysninger"
 msgid "registrations"
 msgstr "påmeldinger"
 
+msgid "Add to faction"
+msgstr "Legg til i fraksjon"
+
 msgid "Available days"
 msgstr "Tilgjengelige dager"
 
@@ -2182,12 +2200,6 @@ msgstr "Globalt budsjett"
 
 msgid "Handout Models"
 msgstr "Modeller for utdeling"
-
-msgid "Inventory area"
-msgstr "Område for lagerbeholdning"
-
-msgid "Inventory tags"
-msgstr "Lageretiketter"
 
 msgid "List of voters"
 msgstr "Liste over velgere"
@@ -2273,6 +2285,9 @@ msgstr "Sensitive data"
 msgid "Session active"
 msgstr "Økt aktiv"
 
+msgid "Set quest type"
+msgstr "Angi oppdragstype"
+
 msgid "Show shortcuts"
 msgstr "Vis snarveier"
 
@@ -2296,6 +2311,12 @@ msgstr "Type prolog"
 
 msgid "URL identifier"
 msgstr "Idenominativ URL"
+
+msgid "Warehouse area"
+msgstr "Lagerområdet"
+
+msgid "Warehouse tags"
+msgstr "Lageretiketter"
 
 msgid "Writing option"
 msgstr "Mulighet for skriving"
@@ -2360,9 +2381,6 @@ msgstr "Ekstern tilgang"
 msgid "Filter factions"
 msgstr "Filtergrupper"
 
-msgid "Inventory items"
-msgstr "Varelager"
-
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
@@ -2425,6 +2443,9 @@ msgstr "Last opp utgifter"
 
 msgid "Volounteer data"
 msgstr "Frivillige opplysninger"
+
+msgid "Warehouse items"
+msgstr "Lagervarer"
 
 msgid "You can consult"
 msgstr "Du kan konsultere"
@@ -2573,11 +2594,17 @@ msgstr "Påminnelse om betaling"
 msgid "Reminder profile"
 msgstr "Påminnelsesprofil"
 
+msgid "Remove from plot"
+msgstr "Fjern fra tomten"
+
 msgid "Request approved"
 msgstr "Anmodning godkjent"
 
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
+
+msgid "Set ability type"
+msgstr "Angi evnetype"
 
 msgid "Show collections"
 msgstr "Vis samlinger"
@@ -2695,6 +2722,9 @@ msgstr "Maksimalt tilgjengelig"
 
 msgid "Months free quota"
 msgstr "Måneder fri kvote"
+
+msgid "Move to container"
+msgstr "Flytt til container"
 
 msgid "Paid current year"
 msgstr "Betalt inneværende år"
@@ -2918,9 +2948,6 @@ msgstr "Historikk over preferanser"
 msgid "I am not interested"
 msgstr "Ikke interessert"
 
-msgid "Inventory movements"
-msgstr "Beholdningsbevegelser"
-
 msgid "List of other users"
 msgstr "Liste over andre brukere"
 
@@ -2972,6 +2999,9 @@ msgstr "Registreringen er stengt"
 msgid "Relationships (Pdf)"
 msgstr "Relasjoner (Pdf)"
 
+msgid "Remove from faction"
+msgstr "Fjern fra fraksjon"
+
 msgid "Results not present"
 msgstr "Resultater ikke til stede"
 
@@ -2983,6 +3013,9 @@ msgstr "Finansdepartementet"
 
 msgid "Username of account"
 msgstr "Brukernavn for konto"
+
+msgid "Warehouse movements"
+msgstr "Lagerbevegelser"
 
 msgid "Where it is located"
 msgstr "Hvor den befinner seg"
@@ -3043,9 +3076,6 @@ msgstr "Gavekortet er kansellert!"
 
 msgid "Independent factions"
 msgstr "Uavhengige fraksjoner"
-
-msgid "Inventory containers"
-msgstr "Lagerbeholdere"
 
 msgid "Issued Reimbursement"
 msgstr "Utstedt Refusjon"
@@ -3129,6 +3159,9 @@ msgstr "Vilkår og betingelser"
 msgid "The tax code matches"
 msgstr "Skattelovgivningen stemmer overens"
 
+msgid "Warehouse containers"
+msgstr "Lagercontainere"
+
 #, python-format
 msgid "Welcome to %(name)s!"
 msgstr "Velkommen til %(name)s!"
@@ -3184,10 +3217,7 @@ msgstr "Gå til casting for"
 msgid "If absent, indicate 0"
 msgstr "Hvis fraværende, angi 0"
 
-msgid "Inventory assignments"
-msgstr "Tildeling av lagerbeholdning"
-
-msgid "Manage inventory tags"
+msgid "Manage warehouse tags"
 msgstr "Administrer lageretiketter"
 
 msgid "Name of the character"
@@ -3257,6 +3287,9 @@ msgstr "Slik får du tilgang til historikken"
 msgid "Verification payments"
 msgstr "Verifisering av betalinger"
 
+msgid "Warehouse assignments"
+msgstr "Oppgaver på lageret"
+
 msgid "You have already paid"
 msgstr "Du har allerede betalt"
 
@@ -3317,14 +3350,14 @@ msgstr "Sett deg på venteliste!"
 msgid "Link to participate in"
 msgstr "Lenker for å delta"
 
-msgid "Manage inventory items"
-msgstr "Administrere lagervarer"
-
 msgid "Manage refund requests"
 msgstr "Administrere refusjonsforespørsler"
 
 msgid "Manage the event plots"
 msgstr "Administrere arrangementets tomter"
+
+msgid "Manage warehouse items"
+msgstr "Administrere varer på lageret"
 
 msgid "Manages event revenues"
 msgstr "Administrerer inntekter fra arrangementer"
@@ -3693,11 +3726,11 @@ msgstr "Gi et kort til vennen din"
 msgid "Hide unassigned characters"
 msgstr "Skjul tegn som ikke er tilordnet"
 
-msgid "Manage inventory movements"
-msgstr "Administrer lagerbevegelser"
-
 msgid "Manage the event prologues"
 msgstr "Administrer prologene til arrangementet"
+
+msgid "Manage warehouse movements"
+msgstr "Administrere lagerbevegelser"
 
 msgid "Now you can create inflows"
 msgstr "Nå kan du opprette innstrømninger"
@@ -3766,14 +3799,14 @@ msgstr "Angi dine preferanser her"
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
 
-msgid "Manage inventory containers"
-msgstr "Administrer lagerbeholdere"
-
 msgid "Manage quiz-style workshops"
 msgstr "Administrere quiz-lignende workshops"
 
 msgid "Manage the event characters"
 msgstr "Administrer tegnene i arrangementet"
+
+msgid "Manage warehouse containers"
+msgstr "Administrere lagercontainere"
 
 msgid "Members of the Organization"
 msgstr "Medlem av foreningen"
@@ -4284,7 +4317,7 @@ msgstr "Skjemaet lagres hvert 30. sekund"
 msgid "The payment has not been completed"
 msgstr "Betalingen ble ikke fullført"
 
-msgid "This page shows the inventory tags"
+msgid "This page shows the warehouse tags"
 msgstr "Denne siden viser lagerkodene"
 
 msgid "You are about to make a payment of"
@@ -4350,8 +4383,8 @@ msgstr "Gjennomgå deltakernes sensitive data"
 msgid "Set up the membership configuration"
 msgstr "Konfigurer medlemskapskonfigurasjonen"
 
-msgid "This page shows the inventory items"
-msgstr "Denne siden viser lagerbeholdningen"
+msgid "This page shows the warehouse items"
+msgstr "Denne siden viser varene på lageret"
 
 msgid "You can't send messages to yourself"
 msgstr "Du kan ikke sende meldinger til deg selv"
@@ -4627,7 +4660,7 @@ msgstr "Nå kan du gå gjennom hendelsens problemer"
 msgid "Now you can se the special page options"
 msgstr "Nå kan du se de spesielle sidealternativene"
 
-msgid "Perform checks on inventory assignments"
+msgid "Perform checks on warehouse assignments"
 msgstr "Utføre kontroller av lageroppdrag"
 
 msgid "Photos and videos successfully uploaded"
@@ -4700,14 +4733,14 @@ msgstr "Betalingen er for tiden til vurdering hos de ansatte"
 msgid "The collection was delivered to the user"
 msgstr "Samlingen ble levert til brukeren"
 
-msgid "This page shows the inventory containers"
-msgstr "Denne siden viser lagerbeholderne"
-
 msgid "This page shows the quests for the event"
 msgstr "Denne siden viser oppdragene for arrangementet"
 
 msgid "This page shows the signups of the event"
 msgstr "Denne siden viser påmeldingene til arrangementet"
+
+msgid "This page shows the warehouse containers"
+msgstr "Denne siden viser lagercontainerne"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Verdien må være større enn eller lik 0"
@@ -5095,8 +5128,8 @@ msgstr "Maksimalt antall utfyllingspunkter (0 = ubegrenset)"
 msgid "Now set up the token and credits configuration"
 msgstr "Konfigurer nå token- og kredittkonfigurasjonen"
 
-msgid "Now you can add inventory containers and items"
-msgstr "Nå kan du legge til lagerbeholdere og gjenstander"
+msgid "Now you can add warehouse containers and items"
+msgstr "Nå kan du legge til lagercontainere og varer"
 
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nå kan du velge hvilke billetter som kan gis i gave"
@@ -5613,6 +5646,9 @@ msgstr "Registreringsavgift %(number)d %(user)s per %(event)s"
 msgid "Select which elements to copy, from which other event"
 msgstr "Velg hvilke elementer som skal kopieres fra hvilken annen hendelse"
 
+msgid "The character have missing values in mandatory fields"
+msgstr "Tegnet har manglende verdier i obligatoriske felt"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totale antallet billetter som skal trekkes ut er angitt"
 
@@ -5725,8 +5761,8 @@ msgstr ""
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Angi hvilken farge som skal brukes til å utheve tekst"
 
-msgid "Manage loading and deployment status of inventory items"
-msgstr "Administrere status for lasting og utplassering av lagervarer"
+msgid "Manage loading and deployment status of warehouse items"
+msgstr "Administrerer status for lasting og distribusjon av varer på lageret"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
@@ -5736,6 +5772,9 @@ msgstr "Konfigurer raskt de viktigste innstillingene for arrangementene dine"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Koblingen vil være gyldig i følgende antall dager"
@@ -5917,8 +5956,8 @@ msgstr ""
 msgid "The question visibility to participants, allowed values are"
 msgstr "Spørsmålet er synlig for deltakerne, tillatte verdier er"
 
-msgid "This page allows you to add or edit a new item of inventory"
-msgstr "På denne siden kan du legge til eller redigere en ny lagerbeholdning"
+msgid "This page allows you to add or edit a new item of warehouse"
+msgstr "På denne siden kan du legge til eller redigere en ny vare på lageret"
 
 msgid "This page allows you to change a member's membership status"
 msgstr "På denne siden kan du endre et medlems medlemsstatus"
@@ -6169,7 +6208,7 @@ msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "På denne siden kan du legge til eller endre tilleggsavgifter på abonnementer"
 
-msgid "This page shows the assignment of inventory items to event area"
+msgid "This page shows the assignment of warehouse items to event area"
 msgstr "Denne siden viser tilordning av lagervarer til hendelsesområdet"
 
 msgid "To be able to pay, your membership application must be approved"
@@ -6224,7 +6263,7 @@ msgstr "Skriveelementet dette spørsmålet gjelder for, tillatte verdier er"
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "De trekkes automatisk når du melder deg på et nytt arrangement"
 
-msgid "This page allows you to add or edit a new container of inventory"
+msgid "This page allows you to add or edit a new container of warehouse"
 msgstr "På denne siden kan du legge til eller redigere en ny lagerbeholder"
 
 msgid "This page allows you to add or edit the expense of a contributor"
@@ -6299,7 +6338,7 @@ msgstr ""
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vennligst oppgi anledningen du ønsker å donere til"
 
-msgid "This page allows you to add or edit a new tag for inventory items"
+msgid "This page allows you to add or edit a new tag for warehouse items"
 msgstr ""
 "På denne siden kan du legge til eller redigere en ny tagg for lagervarer"
 
@@ -6327,7 +6366,7 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Lagt til nederst i alle e-poster som bekrefter påmelding til deltakerne"
 
-msgid "Enables inventory management for organization warehouse management"
+msgid "Enables warehouse management for organization warehouse management"
 msgstr "Muliggjør lagerstyring for organisasjonens lagerstyring"
 
 msgid "Enter your email below to receive instructions on how to change it"
@@ -6836,9 +6875,9 @@ msgstr ""
 "for"
 
 msgid ""
-"This page shows the event area where inventory items needs to be deployed"
+"This page shows the event area where warehouse items needs to be deployed"
 msgstr ""
-"Denne siden viser hendelsesområdet der lagerbeholdningen må plasseres ut"
+"Denne siden viser hendelsesområdet der lagergjenstandene skal plasseres ut"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association"
@@ -7670,11 +7709,11 @@ msgstr ""
 "nedenfor"
 
 msgid ""
-"This page allows you to add or edit a new assignment of inventory item to "
+"This page allows you to add or edit a new assignment of warehouse item to "
 "event area"
 msgstr ""
-"På denne siden kan du legge til eller redigere en ny tildeling av "
-"lagerbeholdning til et arrangementsområde"
+"På denne siden kan du legge til eller redigere en ny tildeling av lagervarer"
+" til et arrangementsområde"
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
@@ -7765,7 +7804,7 @@ msgstr ""
 "deltakerne"
 
 msgid ""
-"This page allows you to add or edit a new movement of item inventory, loans "
+"This page allows you to add or edit a new movement of item warehouse, loans "
 "or repairs"
 msgstr ""
 "På denne siden kan du legge til eller redigere en ny bevegelse av varelager,"

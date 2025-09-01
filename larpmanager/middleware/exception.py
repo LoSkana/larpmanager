@@ -36,7 +36,7 @@ from larpmanager.utils.exceptions import (
     RedirectError,
     SignupError,
     UnknowRunError,
-    WaitingError,
+    WaitingError, ReturnNow,
 )
 
 
@@ -93,6 +93,7 @@ class ExceptionHandlingMiddleware:
             ),
             (RedirectError, lambda ex: redirect(ex.view)),
             (MainPageError, lambda ex: redirect("/")),
+            (ReturnNow, lambda ex: ex.value)
         ]
 
         for exc_type, handler in handlers:

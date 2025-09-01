@@ -440,7 +440,7 @@ def notify_refund_request(p):
 def get_notify_refund_email(p):
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
     body = _("Details: %(details)s (<b>%(amount).2f</b>)") % {"details": p.details, "amount": p.value}
-    return body, subj
+    return subj, body
 
 
 def get_invoice_email(inv):

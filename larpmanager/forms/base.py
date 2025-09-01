@@ -274,6 +274,11 @@ class BaseRegistrationForm(MyFormRun):
                 if not valid:
                     continue
 
+            if hasattr(option, "tickets_map"):
+                tickets_id = [i for i in option.tickets_map if i is not None]
+                if tickets_id and run.reg.ticket_id not in tickets_id:
+                    continue
+
             # no problem, go ahead
             choices.append((option.id, name))
             if option.description:
@@ -300,11 +305,6 @@ class BaseRegistrationForm(MyFormRun):
                 self.unavail[option.question_id].append(option.id)
             else:
                 name += " - (" + _("Available") + f" {avail})"
-
-        if hasattr(option, "tickets_map"):
-            tickets_id = [i for i in option.tickets_map if i is not None]
-            if tickets_id and run.reg.ticket_id not in tickets_id:
-                valid = False
 
         return name, valid
 
