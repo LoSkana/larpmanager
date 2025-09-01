@@ -2885,6 +2885,9 @@ msgstr "Imposta i tipi di missione"
 msgid "Show cancellations"
 msgstr "Mostra disdette"
 
+msgid "The ticket's email"
+msgstr "L'e-mail del biglietto"
+
 msgid "Total payment sent"
 msgstr "Totale del pagamento inviato"
 
@@ -3404,6 +3407,9 @@ msgstr "Il nome dell'opzione"
 
 msgid "The name of the ticket"
 msgstr "Il nome del biglietto"
+
+msgid "The tier of the ticket"
+msgstr "Il livello del biglietto"
 
 msgid "Total registration fee"
 msgstr "Quota di iscrizione totale"
@@ -4184,6 +4190,9 @@ msgstr "Cercheremo di aiutarti nel modo migliore possibile"
 msgid "You need to define the end date!"
 msgstr "È necessario definire la data di fine!"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Facoltativo) Il costo del biglietto"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Una domanda è stata posta da: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "per confermarla procedi con il pagamento"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>rispondere qui</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Facoltativo) La descrizione del biglietto"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Immagine mostrata in homepage, come promoter"
@@ -4970,6 +4982,9 @@ msgstr "Questa pagina riepiloga i tipi di prologo dell'evento"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "La tua registrazione omaggio è stata riscattata!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Facoltativo) Numero massimo di posti disponibili"
 
 msgid "Background image used across all event pages"
 msgstr "Immagine di sfondo utilizzata in tutte le pagine dell'evento"
@@ -8144,6 +8159,13 @@ msgid ""
 msgstr ""
 "Indicare il massimo numero di sconti di questo tipo che possono venire "
 "richiesti (0 per usi infiniti)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Si noti che i biglietti esistenti con lo stesso nome verranno sovrascritti "
+"con i dati caricati."
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

@@ -2885,6 +2885,9 @@ msgstr "Establecer tipos de búsqueda"
 msgid "Show cancellations"
 msgstr "Mostrar cancelaciones"
 
+msgid "The ticket's email"
+msgstr "El correo electrónico del billete"
+
 msgid "Total payment sent"
 msgstr "Pago total enviado"
 
@@ -3404,6 +3407,9 @@ msgstr "El nombre de la opción"
 
 msgid "The name of the ticket"
 msgstr "El nombre del billete"
+
+msgid "The tier of the ticket"
+msgstr "El nivel del billete"
 
 msgid "Total registration fee"
 msgstr "Cuota total de inscripción"
@@ -4184,6 +4190,9 @@ msgstr "Intentaremos ayudar lo mejor que podamos"
 msgid "You need to define the end date!"
 msgstr "Debe definir la fecha de finalización."
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Opcional) El coste del billete"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Una pregunta fue hecha por: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "para confirmarlo proceda al pago"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>responda aquí</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Opcional) Descripción del ticket"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Imagen mostrada en la página de inicio como promoción"
@@ -4970,6 +4982,9 @@ msgstr "Esta página muestra los tipos de prólogo del evento"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "¡Tu inscripción regalada ha sido canjeada!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Opcional) Número máximo de plazas disponibles"
 
 msgid "Background image used across all event pages"
 msgstr "Imagen de fondo utilizada en todas las páginas del evento"
@@ -8076,6 +8091,13 @@ msgid ""
 msgstr ""
 "Indica el número máximo de descuentos de este tipo que pueden solicitarse (0"
 " para uso infinito)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Tenga en cuenta que los tickets existentes con el mismo nombre se "
+"sobrescribirán con los datos cargados."
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

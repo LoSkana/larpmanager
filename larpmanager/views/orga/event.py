@@ -57,7 +57,7 @@ from larpmanager.utils.download import (
     export_character_form,
     export_data,
     export_registration_form,
-    zip_exports,
+    zip_exports, export_tickets,
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
@@ -297,6 +297,7 @@ def _prepare_backup(ctx):
 
     exports.extend(export_data(ctx, Registration))
     exports.extend(export_registration_form(ctx))
+    exports.extend(export_tickets(ctx))
 
     if "character" in ctx["features"]:
         exports.extend(export_data(ctx, Character))

@@ -34,6 +34,21 @@
         <p>
             <b>{% trans "To add a registration to a participant, they must have consented to share their data with your organization; otherwise, their entry will be skipped" %}.</b>
         </p>
+    {% elif typ == 'registration_ticket' %}
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
+        <table>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note that existing tickets with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
     {% elif typ == 'registration_form' %}
         <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
