@@ -110,7 +110,8 @@ class ExceptionHandlingMiddleware:
 
     @staticmethod
     def _handle_feature_error(request, ex):
-        if ex.feature == "exe_events":
+        # error is association skin is managed
+        if request.assoc["skin_managed"]:
             raise Http404("not allowed")
 
         feature = Feature.objects.get(slug=ex.feature)
