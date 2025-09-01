@@ -274,7 +274,7 @@ class BaseRegistrationForm(MyFormRun):
                 if not valid:
                     continue
 
-            if hasattr(option, "tickets_map"):
+            if reg_count and hasattr(option, "tickets_map"):
                 tickets_id = [i for i in option.tickets_map if i is not None]
                 if tickets_id and run.reg.ticket_id not in tickets_id:
                     continue
