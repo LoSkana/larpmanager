@@ -3655,6 +3655,9 @@ msgstr "Neue Nachricht von %(user)s"
 msgid "Now you can create badges"
 msgstr "Jetzt können Sie Abzeichen erstellen"
 
+msgid "Now you can manage events"
+msgstr "Jetzt können Sie Ereignisse verwalten"
+
 msgid "Optional - email reply to"
 msgstr "Fakultativ - E-Mail-Antwort an"
 
@@ -8322,7 +8325,7 @@ msgid ""
 "uploaded data"
 msgstr ""
 "Beachten Sie, dass bestehende Tickets mit demselben Namen mit den "
-"hochgeladenen Daten überschrieben werden."
+"hochgeladenen Daten überschrieben werden"
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

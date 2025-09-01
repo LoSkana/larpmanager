@@ -3655,6 +3655,9 @@ msgstr "Nytt meddelande från %(user)s"
 msgid "Now you can create badges"
 msgstr "Nu kan du skapa badges"
 
+msgid "Now you can manage events"
+msgstr "Nu kan du hantera evenemang"
+
 msgid "Optional - email reply to"
 msgstr "Valfritt - e-posta svaret till"
 
