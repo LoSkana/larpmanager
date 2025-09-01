@@ -88,3 +88,9 @@
     name: Inventory
     order: 95
     icon: box-open
+- model: larpmanager.permissionmodule
+  pk: 16
+  fields:
+    name: CharacterInventory
+    order: 48
+    icon: box-open

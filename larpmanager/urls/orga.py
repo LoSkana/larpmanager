@@ -24,6 +24,7 @@ from larpmanager.views import manage as views_mg
 from larpmanager.views.orga import accounting as views_oa
 from larpmanager.views.orga import casting as views_oca
 from larpmanager.views.orga import character as views_oc
+from larpmanager.views.orga import characterinventory as views_ci
 from larpmanager.views.orga import copy as views_oy
 from larpmanager.views.orga import event as views_oe
 from larpmanager.views.orga import experience as views_ox
@@ -759,6 +760,16 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/px/rules/<int:num>/<int:order>/",
         views_ox.orga_px_rules_order,
         name="orga_px_rules_order",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/ci/character_inventory/",
+        views_ci.orga_ci_character_inventory,
+        name="orga_ci_character_inventory",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/ci/ci_pool_types/",
+        views_ci.orga_ci_pool_types,
+        name="orga_ci_pool_types",
     ),
     path(
         "<slug:s>/<int:n>/manage/casting/",

@@ -743,6 +743,18 @@
     after_text: Now you can set the player editing settings
     after_link: config/user_character
 - model: larpmanager.feature
+  pk: 120
+  fields:
+    name: Character inventory
+    descr: Allows characters to have inventories
+    slug: character_inventory
+    overall: false
+    module: 7
+    placeholder: false
+    order: 31
+    after_text: Now characters can have inventories
+    after_link: config/character_inventory
+- model: larpmanager.feature
   pk: 121
   fields:
     name: Organisation tax
