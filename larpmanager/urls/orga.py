@@ -767,6 +767,11 @@ urlpatterns = [
         name="orga_ci_character_inventory",
     ),
     path(
+        "<slug:s>/<int:n>/manage/ci/character_inventory/edit/<int:num>/",
+        views_ci.orga_ci_character_inventory_edit,
+        name="orga_ci_character_inventory_edit",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/ci/pool_types/",
         views_ci.orga_ci_pool_types,
         name="orga_ci_pool_types",
