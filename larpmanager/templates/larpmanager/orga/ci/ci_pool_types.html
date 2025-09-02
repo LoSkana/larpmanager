@@ -23,6 +23,8 @@
                         <a href="{% url 'orga_ci_pool_types_edit' run.event.slug run.number el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.name }}</td>
                 </tr>
             {% endfor %}
         </tbody>
