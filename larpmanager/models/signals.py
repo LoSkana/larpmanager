@@ -51,7 +51,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
-from larpmanager.models.characterinventory import CharacterInventory, PoolType, PoolBalance
+from larpmanager.models.characterinventory import CharacterInventory
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -659,17 +659,6 @@ def rotate_vertical_photo(sender, instance: InventoryItem, **kwargs):
 
     basename = os.path.basename(f.name) or f.name
     instance.photo = ContentFile(out.read(), name=basename)
-
-
-@receiver(post_save, sender=CharacterInventory)
-def create_pools_for_inventory(sender, instance, created, **kwargs):
-    if created:
-        for pool_type in PoolType.objects.filter(event=instance.event):
-            PoolBalance.objects.create(
-                inventory=instance,
-                pool_type=pool_type,
-                amount=0
-            )
 
 
 def _get_extension(f, img):

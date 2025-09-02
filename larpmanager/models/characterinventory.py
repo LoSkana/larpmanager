@@ -25,13 +25,13 @@ class CharacterInventory(BaseConceptModel):
     owners = models.ManyToManyField(Character, related_name="character_inventory", blank=True)
 
 
-class PoolType(BaseConceptModel):
-    pass
+class PoolTypeCI(BaseConceptModel):
+    name = models.CharField(max_length=150)
 
 
-class PoolBalance(models.Model):
+class PoolBalanceCI(models.Model):
     inventory = models.ForeignKey("CharacterInventory", on_delete=models.CASCADE, related_name="pools")
-    pool_type = models.ForeignKey(PoolType, on_delete=models.CASCADE, related_name="balances")
+    pool_type = models.ForeignKey(PoolTypeCI, on_delete=models.CASCADE, related_name="balances")
     amount = models.PositiveIntegerField(default=0)
 
     class Meta:
