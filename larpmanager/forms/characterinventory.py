@@ -21,20 +21,19 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import MyForm
-from larpmanager.models.characterinventory import PoolTypeCI
+from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory
 
 
 class CharacterInventoryBaseForm(MyForm):
     class Meta:
-        abstract = True
+        model = CharacterInventory
+        exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
 class OrgaCharacterInventoryForm(CharacterInventoryBaseForm):
-    ##load_js = ["characters-choices"]
-
     page_title = _("Inventories")
 
     page_info = _("This page allows you to add or edit a character inventory")
