@@ -833,9 +833,14 @@ urlpatterns = [
         name="orga_ci_character_inventory",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/ci_pool_types/",
+        "<slug:s>/<int:n>/manage/ci/pool_types/",
         views_ci.orga_ci_pool_types,
         name="orga_ci_pool_types",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/ci/pool_types/edit/<int:num>/",
+        views_ci.orga_ci_pool_types_edit,
+        name="orga_ci_pool_types_edit",
     ),
     path(
         "<slug:event_slug>/manage/px/modifiers/",

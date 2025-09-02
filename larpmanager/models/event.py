@@ -287,6 +287,7 @@ class Event(BaseModel):
             "abilitypx",
             "deliverypx",
             "abilitytypepx",
+            "pooltypeci",
             "writingquestion",
             "writingoption",
         ]

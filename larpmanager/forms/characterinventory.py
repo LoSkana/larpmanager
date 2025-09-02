@@ -21,6 +21,8 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import MyForm
+from larpmanager.models.characterinventory import PoolTypeCI
+
 
 class CharacterInventoryBaseForm(MyForm):
     class Meta:
@@ -39,3 +41,13 @@ class OrgaCharacterInventoryForm(CharacterInventoryBaseForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class OrgaPoolTypePxForm(MyForm):
+    page_title = _("Pool type")
+
+    page_info = _("This page allows you to add or edit a ci pool type")
+
+    class Meta:
+        model = PoolTypeCI
+        exclude = ("number",)
