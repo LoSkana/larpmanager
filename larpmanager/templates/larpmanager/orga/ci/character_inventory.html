@@ -16,15 +16,15 @@
         <tr>
             <td>{{ entry.type.name }}</td>
             <td>{{ entry.balance.amount }}</td>
-            <td>
-                <form method="post" action="{% url 'orga_ci_transfer' run.event.slug run.number %}">
+            <td style="padding: 0.2em;">
+                <form method="post" action="{% url 'orga_ci_transfer' run.event.slug run.number %}" style="display: flex; gap: 0.2em; align-items: center;">
                     {% csrf_token %}
                     <input type="hidden" name="source_inventory" value="{{ character_inventory.id }}">
                     <input type="hidden" name="pool_type" value="{{ entry.type.id }}">
 
-                    <input type="number" name="amount" min="1" max="{{ entry.balance.amount }}">
+                    <input type="number" name="amount" min="1" max="{{ entry.balance.amount }}" style="width: 3em; margin: 0; padding: 0.1em;">
 
-                    <select name="target_inventory">
+                    <select name="target_inventory" style="width: auto; min-width: 4em; margin: 0; padding: 0.1em;">
                        <option value="">NPC</option>
                         {% for inv in all_inventories %}
                             {% if inv.id != character_inventory.id %}
@@ -33,7 +33,7 @@
                         {% endfor %}
                     </select>
 
-                    <button type="submit">{% trans "Transfer" %}</button>
+                    <button type="submit" style="margin: 0; padding: 0.2em 0.4em;">Transfer</button>
                 </form>
             </td>
             <td>
