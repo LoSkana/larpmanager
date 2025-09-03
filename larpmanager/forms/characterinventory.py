@@ -17,12 +17,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django import forms
 from django.utils.translation import gettext_lazy as _
+from django import forms
 
 from larpmanager.forms.base import MyForm
+from larpmanager.forms.utils import EventCharacterS2WidgetMulti
 from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory
+from larpmanager.models.writing import Character
 
+import logging
+
+log = logging.getLogger(__name__)
 
 class CharacterInventoryBaseForm(MyForm):
     class Meta:
@@ -31,15 +36,43 @@ class CharacterInventoryBaseForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        log.error("Initializing CharacterInventoryBaseForm")
+
+        # NOTE: Do not define 'owners' here, let the child form handle it after MyForm manipulations
+        log.error("Fields after MyForm init: %s", self.fields.keys())
 
 
 class OrgaCharacterInventoryForm(CharacterInventoryBaseForm):
-    page_title = _("Inventories")
+    load_js = ["characters-choices"]
 
+    page_title = _("Inventories")
     page_info = _("This page allows you to add or edit a character inventory")
+
+    class Meta:
+        model = CharacterInventory
+        exclude = ("number",)
+        widgets = {
+            "owners": EventCharacterS2WidgetMulti,
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Resolve event from instance or params
+        event = getattr(self.instance, "event", None) or self.params.get("event", None)
+
+        if event:
+            # Set event on the widget so it can filter characters properly
+            self.fields["owners"].widget.set_event(event)
+
+            # Set initial queryset and selection
+            self.fields["owners"].queryset = Character.objects.filter(event=event)
+            if self.instance.pk:
+                self.fields["owners"].initial = self.instance.owners.all()
+        else:
+            # No event → empty queryset
+            self.fields["owners"].queryset = Character.objects.none()
+
 
 
 class OrgaPoolTypePxForm(MyForm):
