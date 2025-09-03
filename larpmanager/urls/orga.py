@@ -1065,4 +1065,10 @@ urlpatterns = [
         views_oms.orga_warehouse_assignment_item_edit,
         name="orga_warehouse_assignment_item_edit",
     ),
+    path(
+        "<slug:s>/<int:n>/<path:p>",
+        views_mg.orga_redirect,
+        name="orga_redirect",
+    ),
+
 ]

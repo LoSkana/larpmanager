@@ -720,3 +720,9 @@ def _check_intro_driver(request, ctx):
 
     ctx["intro_driver"] = True
     save_single_config(member, config_name, True)
+
+@login_required
+def orga_redirect(request, s, n, p):
+    if n > 1:
+        s += f"-{n}"
+    return redirect(f"{s}/{p}")
