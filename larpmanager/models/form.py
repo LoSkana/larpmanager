@@ -113,7 +113,6 @@ RegistrationQuestionType = extend_textchoices(
         ("TICKET", "ticket", _("Ticket")),
         ("ADDITIONAL", "additional_tickets", _("Additional")),
         ("PWYW", "pay_what_you_want", _("Pay what you want")),
-        ("DISCOUNT", "discount", _("Discount")),
         ("QUOTA", "reg_quotas", _("Rate")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
     ],

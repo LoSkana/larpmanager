@@ -452,6 +452,10 @@ def save_event_registration_form(features, instance):
         RegistrationQuestionType.TICKET
     }
 
+    help_texts = {
+        RegistrationQuestionType.TICKET: _("Your registration ticket"),
+    }
+
     basic_tps = BaseQuestionType.get_basic_types()
 
     que = instance.get_elements(RegistrationQuestion)
@@ -469,6 +473,7 @@ def save_event_registration_form(features, instance):
                 event=instance,
                 typ=el,
                 name=choices[el],
+                description=help_texts.get(el, ""),
                 status=QuestionStatus.MANDATORY
             )
 
@@ -476,12 +481,20 @@ def save_event_registration_form(features, instance):
     not_to_remove = set(def_tps)
     all_types -= not_to_remove
 
+    help_texts = {
+        "additional_tickets": _("Reserve additional tickets beyond your own"),
+        "pay_what_you_want": _("Freely indicate the amount of your donation"),
+        "reg_surcharges": _("Registration surcharge"),
+        "reg_quotas": _("Number of installments to split the fee: payments and deadlines will be equally divided from the registration date")
+    }
+
     for el in sorted(list(all_types)):
         if el in features and el not in types:
             RegistrationQuestion.objects.create(
                 event=instance,
                 typ=el,
                 name=_(choices[el].capitalize()),
+                description=help_texts.get(el, ""),
                 status=QuestionStatus.OPTIONAL
             )
         if el not in features and el in types:
