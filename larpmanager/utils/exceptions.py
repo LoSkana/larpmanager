@@ -34,19 +34,19 @@ class RedirectError(Exception):
 
 
 class SignupError(Exception):
-    def __init__(self, slug, number):
+    def __init__(self, slug):
         super().__init__()
         self.slug = slug
 
 
 class WaitingError(Exception):
-    def __init__(self, slug, number):
+    def __init__(self, slug):
         super().__init__()
         self.slug = slug
 
 
 class HiddenError(Exception):
-    def __init__(self, slug, number, name):
+    def __init__(self, slug, name):
         super().__init__()
         self.slug = slug
         self.name = name

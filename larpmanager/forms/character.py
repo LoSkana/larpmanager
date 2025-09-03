@@ -272,7 +272,7 @@ class OrgaCharacterForm(CharacterForm):
             self.show_link.append(id_field)
             self.add_char_finder.append(id_field)
 
-            reverse_args = [self.params["event"].slug, self.params["run"].number, el.plot.id]
+            reverse_args = [self.params["run"].get_slug(), el.plot.id]
             self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
 
     def _save_plot(self, instance):
