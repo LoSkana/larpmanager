@@ -18,6 +18,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from django.db import models
 
+from larpmanager.models.common import PoolTypeCommon, PoolBalanceCommon
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.writing import Character
 
@@ -43,16 +44,15 @@ class CharacterInventory(BaseConceptModel):
         return pool_balances
 
 
-class PoolTypeCI(BaseConceptModel):
-    name = models.CharField(max_length=150)
+class PoolTypeCI(PoolTypeCommon):
+    pass
 
 
-class PoolBalanceCI(BaseConceptModel):
+class PoolBalanceCI(PoolBalanceCommon):
     inventory = models.ForeignKey("CharacterInventory", on_delete=models.CASCADE, related_name="pools")
     pool_type = models.ForeignKey(PoolTypeCI, on_delete=models.CASCADE, related_name="balances")
-    amount = models.PositiveIntegerField(default=0)
 
-    class Meta:
+    class Meta(PoolBalanceCommon.Meta):
         unique_together = ("inventory", "pool_type")
 
 
