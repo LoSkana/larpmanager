@@ -137,7 +137,7 @@ def go_character(context, search, number, tx, run, go_tooltip, simple=False):
     ch = context["chars"][number]
 
     r = get_url(
-        reverse("character", args=[run.event.slug, run.number, ch["number"]]),
+        reverse("character", args=[run.get_slug(), ch["number"]]),
         context["assoc_slug"],
     ).replace('"', "")
 
@@ -203,7 +203,7 @@ def go_trait(context, search, number, tx, run, go_tooltip, simple=False):
         if go_tooltip:
             tooltip = get_tooltip(context, ch)
         r = get_url(
-            reverse("character", args=[run.event.slug, run.number, ch["number"]]),
+            reverse("character", args=[run.get_slug(), ch["number"]]),
             context["slug"],
         )
         lk = (

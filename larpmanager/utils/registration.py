@@ -207,7 +207,7 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
     features = _get_features_map(features_map, run)
 
     registration_available(run, features, reg_count)
-    register_url = reverse("register", args=[run.event.slug, run.number])
+    register_url = reverse("register", args=[run.get_slug()])
 
     if run.reg:
         registration_status_signed(run, features, register_url)
@@ -298,7 +298,7 @@ def registration_status_characters(run, features):
 
     aux = []
     for el in rcrs:
-        url = reverse("character", args=[run.event.slug, run.number, el.character.number])
+        url = reverse("character", args=[run.get_slug(), el.character.number])
         name = el.character.name
         if el.custom_name:
             name = el.custom_name
@@ -317,13 +317,13 @@ def registration_status_characters(run, features):
     if "user_character" in features and not reg_waiting:
         check, max_chars = check_character_maximum(run.event, run.reg.member)
         if not check:
-            url = reverse("character_create", args=[run.event.slug, run.number])
+            url = reverse("character_create", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "
             mes = _("Access character creation!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
         elif len(aux) == 0 and max_chars:
-            url = reverse("character_list", args=[run.event.slug, run.number])
+            url = reverse("character_list", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "
             mes = _("Select your character!")
