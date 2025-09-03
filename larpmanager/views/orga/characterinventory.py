@@ -18,11 +18,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import models
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from larpmanager.forms.characterinventory import OrgaPoolTypePxForm, OrgaCharacterInventoryForm
-from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory
+from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory, InventoryTransfer
 from larpmanager.services.ci_transfer import perform_transfer
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
@@ -59,11 +60,15 @@ logger = logging.getLogger(__name__)
 def orga_ci_character_inventory_view(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_ci_character_inventory")
 
-    ctx["character_inventory"] = CharacterInventory.objects.get(pk=num, event=ctx["event"])
-
-    ctx["pool_balances_list"] = ctx["character_inventory"].get_pool_balances()
-
+    ci = get_object_or_404(CharacterInventory, pk=num, event=ctx["event"])
+    ctx["character_inventory"] = ci
+    ctx["pool_balances_list"] = ci.get_pool_balances()
     ctx["all_inventories"] = CharacterInventory.objects.filter(event=ctx["event"]).order_by("number")
+
+    # All incoming + outgoing transfers
+    ctx["transfers"] = InventoryTransfer.objects.filter(
+        models.Q(source_inventory=ci) | models.Q(target_inventory=ci)
+    ).select_related("source_inventory", "target_inventory", "pool_type", "actor")
 
     return render(request, "larpmanager/orga/ci/character_inventory.html", ctx)
 

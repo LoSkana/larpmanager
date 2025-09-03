@@ -51,4 +51,31 @@
         </tr>
         {% endfor %}
     </table>
+    <h2>{% trans "Transfer Log" %}</h2>
+    <table class="mob tight">
+        <tr>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Actor" %}</th>
+            <th>{% trans "From" %}</th>
+            <th>{% trans "To" %}</th>
+            <th>{% trans "Resource" %}</th>
+            <th>{% trans "Amount" %}</th>
+            <th>{% trans "Reason" %}</th>
+        </tr>
+        {% for t in transfers %}
+        <tr>
+            <td>{{ t.timestamp|date:"Y-m-d H:i" }}</td>
+            <td>{{ t.actor|default:"-" }}</td>
+            <td>{{ t.source_inventory.name|default:"NPC" }}</td>
+            <td>{{ t.target_inventory.name|default:"NPC" }}</td>
+            <td>{{ t.pool_type.name }}</td>
+            <td>{{ t.amount }}</td>
+            <td>{{ t.reason }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" style="text-align:center;">{% trans "No transfers yet." %}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock content %}
