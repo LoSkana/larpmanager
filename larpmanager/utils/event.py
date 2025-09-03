@@ -30,7 +30,7 @@ from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.base import def_user_ctx, get_index_permissions
@@ -46,9 +46,9 @@ def get_event(request, slug, number=None):
 
     try:
         if number:
-            get_run(ctx, slug, number)
-        else:
-            ctx["event"] = Event.objects.get(slug=slug)
+            slug += f"-{number}"
+
+        get_run(ctx, slug)
 
         if "a_id" in ctx:
             if ctx["event"].assoc_id != ctx["a_id"]:
@@ -69,8 +69,8 @@ def get_event(request, slug, number=None):
         raise Http404("Event does not exist") from err
 
 
-def get_event_run(request, s, n, signup=False, slug=None, status=False):
-    ctx = get_event(request, s, number=n)
+def get_event_run(request, s, signup=False, slug=None, status=False):
+    ctx = get_event(request, s)
 
     if signup:
         check_signup(request, ctx)
@@ -124,9 +124,9 @@ def prepare_run(ctx):
     ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
 
 
-def get_run(ctx, s, n):
+def get_run(ctx, s):
     try:
-        res = get_cache_run(ctx["a_id"], s, n)
+        res = get_cache_run(ctx["a_id"], s)
         que = Run.objects.select_related("event")
         fields = [
             "search",
@@ -227,8 +227,8 @@ def has_access_character(request, ctx):
     return False
 
 
-def check_event_permission(request, s, n, perm=None):
-    ctx = get_event_run(request, s, n)
+def check_event_permission(request, s, perm=None):
+    ctx = get_event_run(request, s)
     if not has_event_permission(request, ctx, s, perm):
         raise PermissionError()
     if perm:

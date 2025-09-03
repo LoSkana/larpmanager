@@ -22,12 +22,12 @@
                 <tr>
                     <td>
                         {% if el.s_id %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.s_id %}">{{ el.s_name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.get_slug el.s_id %}">{{ el.s_name }}</a>
                         {% endif %}
                     </td>
                     <td>
                         {% if el.f_id %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.f_id %}">{{ el.f_name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.get_slug el.f_id %}">{{ el.f_name }}</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -51,7 +51,7 @@
                 <tr>
                     <td>
                         {% if el.0.id %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_characters_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         {% endif %}
                     </td>
                     <td>#{{ el.1 }}</td>
@@ -79,10 +79,10 @@
     {% for el in checks.relat_empty %}
     <tr>
         <td>
-            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.source.id %}">{{ el.source }}</a>
+            <a href="{% url 'orga_characters_edit' run.get_slug el.source.id %}">{{ el.source }}</a>
         </td>
         <td>
-            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.target.id %}">{{ el.target }}</a>
+            <a href="{% url 'orga_characters_edit' run.get_slug el.target.id %}">{{ el.target }}</a>
         </td>
     </tr>
     {% endfor %}
@@ -111,7 +111,7 @@
     {% for el in checks.character_extinct %}
     <tr>
         <td>
-            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+            <a href="{% url 'orga_characters_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
         </td>
         <td>
             #{{ el.1 }}
@@ -142,7 +142,7 @@
     {% for el in checks.character_missing %}
     <tr>
         <td>
-            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+            <a href="{% url 'orga_characters_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
         </td>
         <td>
             #{{ el.1 }}
@@ -173,7 +173,7 @@
     {% for el in checks.character_interloper %}
     <tr>
         <td>
-            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+            <a href="{% url 'orga_characters_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
         </td>
         <td>
             #{{ el.1 }}
@@ -204,7 +204,7 @@
                 {% for el in checks.faction_extinct %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_factions_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_factions_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -227,7 +227,7 @@
                 {% for el in checks.faction_missing %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_factions_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_factions_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -250,7 +250,7 @@
                 {% for el in checks.faction_interloper %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_factions_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_factions_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -275,7 +275,7 @@
                 {% for el in checks.prologue_extinct %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_prologues_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_prologues_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -298,7 +298,7 @@
                 {% for el in checks.prologue_missing %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_prologues_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_prologues_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -321,7 +321,7 @@
                 {% for el in checks.prologue_interloper %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_prologues_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_prologues_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -346,7 +346,7 @@
                 {% for el in checks.plot_extinct %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_plots_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_plots_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -369,7 +369,7 @@
                 {% for el in checks.plot_missing %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_plots_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_plots_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -392,7 +392,7 @@
                 {% for el in checks.plot_interloper %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_plots_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_plots_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -417,7 +417,7 @@
                 {% for el in checks.speedlarp_extinct %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_speedlarps_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -440,7 +440,7 @@
                 {% for el in checks.speedlarp_missing %}
                     <tr>
                         <td>
-                            <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                            <a href="{% url 'orga_speedlarps_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                         </td>
                         <td>#{{ el.1 }}</td>
                     </tr>
@@ -462,7 +462,7 @@
                     {% for el in checks.speedlarp_interloper %}
                         <tr>
                             <td>
-                                <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.0.id %}">{{ el.0 }}</a>
+                                <a href="{% url 'orga_speedlarps_edit' run.get_slug el.0.id %}">{{ el.0 }}</a>
                             </td>
                             <td>#{{ el.1 }}</td>
                         </tr>

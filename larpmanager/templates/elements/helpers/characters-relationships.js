@@ -2,7 +2,7 @@
 
 <script>
 
-const editUrl = "{% url 'orga_characters_edit' run.event.slug run.number 0 %}";
+const editUrl = "{% url 'orga_characters_edit' run.get_slug 0 %}";
 
 {% if eid %}
     var eid = {{ eid }};

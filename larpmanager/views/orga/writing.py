@@ -56,7 +56,6 @@ from larpmanager.models.writing import (
     TextVersion,
     TextVersionChoices,
 )
-from larpmanager.utils.bulk import handle_bulk_quest, handle_bulk_trait
 from larpmanager.utils.common import (
     exchange_order,
     get_element,
@@ -78,319 +77,319 @@ from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, w
 
 
 @login_required
-def orga_plots(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_plots")
+def orga_plots(request, s):
+    ctx = check_event_permission(request, s, "orga_plots")
     return writing_list(request, ctx, Plot, "plot")
 
 
 @login_required
-def orga_plots_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_plots"])
+def orga_plots_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_plots"])
     get_plot(ctx, num)
     return writing_view(request, ctx, "plot")
 
 
 @login_required
-def orga_plots_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_plots")
+def orga_plots_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_plots")
     if num != 0:
         get_element(ctx, num, "plot", Plot)
     return writing_edit(request, ctx, PlotForm, "plot", TextVersionChoices.PLOT)
 
 
 @login_required
-def orga_plots_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_plots")
+def orga_plots_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_plots")
     get_plot(ctx, num)
     return writing_versions(request, ctx, "plot", TextVersionChoices.PLOT)
 
 
 @login_required
-def orga_factions(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_factions")
+def orga_factions(request, s):
+    ctx = check_event_permission(request, s, "orga_factions")
     return writing_list(request, ctx, Faction, "faction")
 
 
 @login_required
-def orga_factions_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_factions"])
+def orga_factions_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_factions"])
     get_element(ctx, num, "faction", Faction)
     return writing_view(request, ctx, "faction")
 
 
 @login_required
-def orga_factions_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_factions")
+def orga_factions_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_factions")
     if num != 0:
         get_element(ctx, num, "faction", Faction)
     return writing_edit(request, ctx, FactionForm, "faction", TextVersionChoices.FACTION)
 
 
 @login_required
-def orga_factions_order(request, s, n, num, order):
-    ctx = check_event_permission(request, s, n, "orga_factions")
+def orga_factions_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_factions")
     exchange_order(ctx, Faction, num, order)
-    return redirect("orga_factions", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_factions", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_factions_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_factions")
+def orga_factions_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_factions")
     get_element(ctx, num, "faction", Faction)
     return writing_versions(request, ctx, "faction", TextVersionChoices.FACTION)
 
 
 @login_required
-def orga_quest_types(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_quest_types")
+def orga_quest_types(request, s):
+    ctx = check_event_permission(request, s, "orga_quest_types")
     return writing_list(request, ctx, QuestType, "quest_type")
 
 
 @login_required
-def orga_quest_types_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_quest_types"])
+def orga_quest_types_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_quest_types"])
     get_quest_type(ctx, num)
     return writing_view(request, ctx, "quest_type")
 
 
 @login_required
-def orga_quest_types_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_quest_types")
+def orga_quest_types_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_quest_types")
     if num != 0:
         get_quest_type(ctx, num)
     return writing_edit(request, ctx, QuestTypeForm, "quest_type", TextVersionChoices.QUEST_TYPE)
 
 
 @login_required
-def orga_quest_types_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_quest_types")
+def orga_quest_types_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_quest_types")
     get_quest_type(ctx, num)
     return writing_versions(request, ctx, "quest_type", TextVersionChoices.QUEST_TYPE)
 
 
 @login_required
-def orga_quests(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_quests")
+def orga_quests(request, s):
+    ctx = check_event_permission(request, s, "orga_quests")
     return writing_list(request, ctx, Quest, "quest")
 
 
 @login_required
-def orga_quests_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_quests"])
+def orga_quests_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_quests"])
     get_quest(ctx, num)
     return writing_view(request, ctx, "quest")
 
 
 @login_required
-def orga_quests_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_quests")
+def orga_quests_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_quests")
     if num != 0:
         get_element(ctx, num, "quest", Quest)
     return writing_edit(request, ctx, QuestForm, "quest", TextVersionChoices.QUEST)
 
 
 @login_required
-def orga_quests_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_quests")
+def orga_quests_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_quests")
     get_quest(ctx, num)
     return writing_versions(request, ctx, "quest", TextVersionChoices.QUEST)
 
 
 @login_required
-def orga_traits(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_traits")
+def orga_traits(request, s):
+    ctx = check_event_permission(request, s, "orga_traits")
     return writing_list(request, ctx, Trait, "trait")
 
 
 @login_required
-def orga_traits_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_traits"])
+def orga_traits_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_traits"])
     get_trait(ctx, num)
     return writing_view(request, ctx, "trait")
 
 
 @login_required
-def orga_traits_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_traits")
+def orga_traits_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_traits")
     if num != 0:
         get_trait(ctx, num)
     return writing_edit(request, ctx, TraitForm, "trait", TextVersionChoices.TRAIT)
 
 
 @login_required
-def orga_traits_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_traits")
+def orga_traits_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_traits")
     get_trait(ctx, num)
     return writing_versions(request, ctx, "trait", TextVersionChoices.TRAIT)
 
 
 @login_required
-def orga_handouts(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_handouts")
+def orga_handouts(request, s):
+    ctx = check_event_permission(request, s, "orga_handouts")
     return writing_list(request, ctx, Handout, "handout")
 
 
 @login_required
-def orga_handouts_test(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_handouts")
+def orga_handouts_test(request, s, num):
+    ctx = check_event_permission(request, s, "orga_handouts")
     get_handout(ctx, num)
     return render(request, "pdf/sheets/handout.html", ctx)
 
 
 @login_required
-def orga_handouts_print(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_handouts")
+def orga_handouts_print(request, s, num):
+    ctx = check_event_permission(request, s, "orga_handouts")
     get_handout(ctx, num)
     fp = print_handout(ctx)
     return return_pdf(fp, str(ctx["handout"]))
 
 
 @login_required
-def orga_handouts_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_handouts")
+def orga_handouts_view(request, s, num):
+    ctx = check_event_permission(request, s, "orga_handouts")
     get_handout(ctx, num)
     return print_handout(ctx)
 
 
 @login_required
-def orga_handouts_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_handouts")
+def orga_handouts_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_handouts")
     if num != 0:
         get_handout(ctx, num)
     return writing_edit(request, ctx, HandoutForm, "handout", TextVersionChoices.HANDOUT)
 
 
 @login_required
-def orga_handouts_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_handouts")
+def orga_handouts_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_handouts")
     get_handout(ctx, num)
     return writing_versions(request, ctx, "handout", TextVersionChoices.HANDOUT)
 
 
 @login_required
-def orga_handout_templates(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_handout_templates")
+def orga_handout_templates(request, s):
+    ctx = check_event_permission(request, s, "orga_handout_templates")
     return writing_list(request, ctx, HandoutTemplate, "handout_template")
 
 
 @login_required
-def orga_handout_templates_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_handout_templates")
+def orga_handout_templates_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_handout_templates")
     if num != 0:
         get_handout_template(ctx, num)
     return writing_edit(request, ctx, HandoutTemplateForm, "handout_template", None)
 
 
 @login_required
-def orga_prologue_types(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_prologue_types")
+def orga_prologue_types(request, s):
+    ctx = check_event_permission(request, s, "orga_prologue_types")
     return writing_list(request, ctx, PrologueType, "prologue_type")
 
 
 @login_required
-def orga_prologue_types_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_prologue_types")
+def orga_prologue_types_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_prologue_types")
     if num != 0:
         get_prologue_type(ctx, num)
     return writing_edit(request, ctx, PrologueTypeForm, "prologue_type", None)
 
 
 @login_required
-def orga_prologues(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_prologues")
+def orga_prologues(request, s):
+    ctx = check_event_permission(request, s, "orga_prologues")
     return writing_list(request, ctx, Prologue, "prologue")
 
 
 @login_required
-def orga_prologues_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_prologues"])
+def orga_prologues_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_prologues"])
     get_prologue(ctx, num)
     return writing_view(request, ctx, "prologue")
 
 
 @login_required
-def orga_prologues_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "prologue")
+def orga_prologues_edit(request, s, num):
+    ctx = check_event_permission(request, s, "prologue")
     if num != 0:
         get_prologue(ctx, num)
     return writing_edit(request, ctx, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)
 
 
 @login_required
-def orga_prologues_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_prologues")
+def orga_prologues_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_prologues")
     get_prologue(ctx, num)
     return writing_versions(request, ctx, "prologue", TextVersionChoices.PROLOGUE)
 
 
 @login_required
-def orga_speedlarps(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_speedlarps")
+def orga_speedlarps(request, s):
+    ctx = check_event_permission(request, s, "orga_speedlarps")
     return writing_list(request, ctx, SpeedLarp, "speedlarp")
 
 
 @login_required
-def orga_speedlarps_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_speedlarps"])
+def orga_speedlarps_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_speedlarps"])
     get_speedlarp(ctx, num)
     return writing_view(request, ctx, "speedlarp")
 
 
 @login_required
-def orga_speedlarps_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_speedlarps")
+def orga_speedlarps_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_speedlarps")
     if num != 0:
         get_speedlarp(ctx, num)
     return writing_edit(request, ctx, SpeedLarpForm, "speedlarp", TextVersionChoices.SPEEDLARP)
 
 
 @login_required
-def orga_speedlarps_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_speedlarps")
+def orga_speedlarps_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_speedlarps")
     get_speedlarp(ctx, num)
     return writing_versions(request, ctx, "speedlarp", TextVersionChoices.SPEEDLARP)
 
 
 @login_required
-def orga_assignments(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_assignments")
+def orga_assignments(request, s):
+    ctx = check_event_permission(request, s, "orga_assignments")
     get_event_cache_all(ctx)
     return render(request, "larpmanager/orga/writing/assignments.html", ctx)
 
 
 @login_required
-def orga_progress_steps(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_progress_steps")
+def orga_progress_steps(request, s):
+    ctx = check_event_permission(request, s, "orga_progress_steps")
     return writing_list(request, ctx, ProgressStep, "progress_step")
 
 
 @login_required
-def orga_progress_steps_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_progress_steps", OrgaProgressStepForm, num)
+def orga_progress_steps_edit(request, s, num):
+    return orga_edit(request, s, "orga_progress_steps", OrgaProgressStepForm, num)
 
 
 @login_required
-def orga_progress_steps_order(request, s, n, num, order):
-    ctx = check_event_permission(request, s, n, "orga_progress_steps")
+def orga_progress_steps_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_progress_steps")
     exchange_order(ctx, ProgressStep, num, order)
-    return redirect("orga_progress_steps", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_progress_steps", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_multichoice_available(request, s, n):
+def orga_multichoice_available(request, s):
     if not request.method == "POST":
         return Http404()
 
     class_name = request.POST.get("type", "")
     taken_characters = set()
     if class_name == "registrations":
-        ctx = check_event_permission(request, s, n, "orga_registrations")
+        ctx = check_event_permission(request, s, "orga_registrations")
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id).values_list(
             "character_id", flat=True
         )
     else:
         eid = request.POST.get("eid", "")
-        ctx = check_event_permission(request, s, n, "orga_" + class_name + "s")
+        ctx = check_event_permission(request, s, "orga_" + class_name + "s")
         if eid:
             model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
             taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)
@@ -402,11 +401,11 @@ def orga_multichoice_available(request, s, n):
 
 
 @login_required
-def orga_factions_available(request, s, n):
+def orga_factions_available(request, s):
     if not request.method == "POST":
         return Http404()
 
-    ctx = get_event_run(request, s, n)
+    ctx = get_event_run(request, s)
 
     ctx["list"] = ctx["event"].get_elements(Faction).order_by("number")
 
@@ -427,9 +426,9 @@ def orga_factions_available(request, s, n):
 
 
 @login_required
-def orga_export(request, s, n, nm):
+def orga_export(request, s, nm):
     perm = f"orga_{nm}s"
-    ctx = check_event_permission(request, s, n, perm)
+    ctx = check_event_permission(request, s, perm)
     model = apps.get_model("larpmanager", nm.capitalize())
 
     ctx["nm"] = nm
@@ -439,9 +438,9 @@ def orga_export(request, s, n, nm):
 
 
 @login_required
-def orga_version(request, s, n, nm, num):
+def orga_version(request, s, nm, num):
     perm = f"orga_{nm}s"
-    ctx = check_event_permission(request, s, n, perm)
+    ctx = check_event_permission(request, s, perm)
     tp = next(code for code, label in TextVersionChoices.choices if label.lower() == nm)
     ctx["version"] = TextVersion.objects.get(tp=tp, pk=num)
     ctx["text"] = ctx["version"].text.replace("\n", "<br />")
@@ -449,8 +448,8 @@ def orga_version(request, s, n, nm, num):
 
 
 @login_required
-def orga_reading(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_reading")
+def orga_reading(request, s):
+    ctx = check_event_permission(request, s, "orga_reading")
 
     text_fields = ["teaser", "text"]
 

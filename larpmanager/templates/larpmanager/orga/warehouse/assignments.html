@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', function() {
           const notes = $notes.length ? ($notes.val() || '').trim() : '';
 
           $.ajax({
-                url: '{% url "orga_warehouse_assignment_area" run.event.slug run.number area.id %}',
+                url: '{% url "orga_warehouse_assignment_area" run.get_slug area.id %}',
                 method: 'POST',
                 data: {idx, selected: selected, quantity: quantity, notes: notes },
                 success: function () {

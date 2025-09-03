@@ -42,8 +42,8 @@ from larpmanager.utils.tasks import send_mail_exec
 
 
 @login_required
-def orga_newsletter(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_newsletter")
+def orga_newsletter(request, s):
+    ctx = check_event_permission(request, s, "orga_newsletter")
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
     que = que.exclude(ticket__tier=TicketTier.WAITING).select_related("member")
     ctx["list"] = que.values_list("member__id", "member__email", "member__name", "member__surname")
@@ -51,8 +51,8 @@ def orga_newsletter(request, s, n):
 
 
 @login_required
-def orga_safety(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_safety")
+def orga_safety(request, s):
+    ctx = check_event_permission(request, s, "orga_safety")
     get_event_cache_all(ctx)
     min_length = 3
 
@@ -79,8 +79,8 @@ def orga_safety(request, s, n):
 
 
 @login_required
-def orga_diet(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_diet")
+def orga_diet(request, s):
+    ctx = check_event_permission(request, s, "orga_diet")
     get_event_cache_all(ctx)
     min_length = 3
 
@@ -107,8 +107,8 @@ def orga_diet(request, s, n):
 
 
 @login_required
-def orga_spam(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_spam")
+def orga_spam(request, s):
+    ctx = check_event_permission(request, s, "orga_spam")
 
     already = list(
         Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
@@ -135,8 +135,8 @@ def orga_spam(request, s, n):
 
 
 @login_required
-def orga_persuade(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_persuade")
+def orga_persuade(request, s):
+    ctx = check_event_permission(request, s, "orga_persuade")
 
     already = list(
         Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
@@ -175,8 +175,8 @@ def orga_persuade(request, s, n):
 
 
 @login_required
-def orga_questions(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_questions")
+def orga_questions(request, s):
+    ctx = check_event_permission(request, s, "orga_questions")
 
     ctx["closed"], ctx["open"] = _get_help_questions(ctx, request)
 
@@ -187,8 +187,8 @@ def orga_questions(request, s, n):
 
 
 @login_required
-def orga_questions_answer(request, s, n, r):
-    ctx = check_event_permission(request, s, n, "orga_questions")
+def orga_questions_answer(request, s, r):
+    ctx = check_event_permission(request, s, "orga_questions")
 
     member = Member.objects.get(pk=r)
     if request.method == "POST":
@@ -201,7 +201,7 @@ def orga_questions_answer(request, s, n, r):
             hp.run = ctx["run"]
             hp.save()
             messages.success(request, _("Answer submitted!"))
-            return redirect("orga_questions", s=s, n=n)
+            return redirect("orga_questions", s=s)
     else:
         form = OrgaHelpQuestionForm()
 
@@ -224,13 +224,13 @@ def orga_questions_answer(request, s, n, r):
 
 
 @login_required
-def orga_questions_close(request, s, n, r):
-    ctx = check_event_permission(request, s, n, "orga_questions")
+def orga_questions_close(request, s, r):
+    ctx = check_event_permission(request, s, "orga_questions")
 
     h = HelpQuestion.objects.filter(member_id=r, assoc_id=ctx["a_id"], run_id=ctx["run"]).order_by("-created").first()
     h.closed = True
     h.save()
-    return redirect("orga_questions", s=s, n=n)
+    return redirect("orga_questions", s=s)
 
 
 def send_mail_batch(request, assoc_id=None, run_id=None):
@@ -246,8 +246,8 @@ def send_mail_batch(request, assoc_id=None, run_id=None):
 
 
 @login_required
-def orga_send_mail(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_send_mail")
+def orga_send_mail(request, s):
+    ctx = check_event_permission(request, s, "orga_send_mail")
     if request.method == "POST":
         form = SendMailForm(request.POST)
         if form.is_valid():
@@ -261,23 +261,23 @@ def orga_send_mail(request, s, n):
 
 
 @login_required
-def orga_archive_email(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_archive_email")
+def orga_archive_email(request, s):
+    ctx = check_event_permission(request, s, "orga_archive_email")
     orga_paginate(request, ctx, Email)
     return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
 
 
 # TODO
 @login_required
-def orga_read_mail(request, s, n, nm):
-    ctx = check_event_permission(request, s, n, "orga_archive_email")
+def orga_read_mail(request, s, nm):
+    ctx = check_event_permission(request, s, "orga_archive_email")
     ctx["email"] = get_mail(request, ctx, nm)
     return render(request, "larpmanager/exe/users/read_mail.html", ctx)
 
 
 @login_required
-def orga_sensitive(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_sensitive")
+def orga_sensitive(request, s):
+    ctx = check_event_permission(request, s, "orga_sensitive")
 
     get_event_cache_all(ctx)
 

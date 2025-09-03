@@ -41,7 +41,7 @@
                 {% for el in area.items %}
                     <tr id="{{ el.id }}">
                         <td>
-                            <a href="{% url 'orga_warehouse_assignment_item_edit' event.slug run.number el.id %}"
+                            <a href="{% url 'orga_warehouse_assignment_item_edit' run.get_slug el.id %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                         <td>{{ el.item }}</td>
@@ -188,7 +188,7 @@ window.addEventListener('DOMContentLoaded', function() {
             scheduleReload(5000);
 
             $.ajax({
-                url: "{% url 'orga_warehouse_assignment_manifest' run.event.slug run.number %}",
+                url: "{% url 'orga_warehouse_assignment_manifest' run.get_slug %}",
                 method: "POST",
                 data: { idx: idx, type: type, assignment: assignment, value: newValue },
                 success: function () {

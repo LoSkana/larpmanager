@@ -22,14 +22,14 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_warehouse_area_edit' event.slug run.number el.id %}"
+                        <a href="{% url 'orga_warehouse_area_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.position }}</td>
                     <td>{{ el.description | truncatechars:200 }}</td>
                     <td>
-                        <a href="{% url 'orga_warehouse_area_assignments' event.slug run.number el.id %}"
+                        <a href="{% url 'orga_warehouse_area_assignments' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}">{% trans "Item assignments" %}</a>
                     </td>
                 </tr>

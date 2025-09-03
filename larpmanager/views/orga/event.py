@@ -65,8 +65,8 @@ from larpmanager.utils.upload import go_upload
 
 
 @login_required
-def orga_event(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_event")
+def orga_event(request, s):
+    ctx = check_event_permission(request, s, "orga_event")
     return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
 
 
@@ -96,8 +96,8 @@ def full_event_edit(ctx, request, event, run, exe=False):
 
 
 @login_required
-def orga_roles(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_roles")
+def orga_roles(request, s):
+    ctx = check_event_permission(request, s, "orga_roles")
 
     def def_callback(ctx):
         return EventRole.objects.create(event=ctx["event"], number=1, name="Organizer")
@@ -146,64 +146,64 @@ def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
 
 
 @login_required
-def orga_roles_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_roles", OrgaEventRoleForm, num)
+def orga_roles_edit(request, s, num):
+    return orga_edit(request, s, "orga_roles", OrgaEventRoleForm, num)
 
 
 @login_required
-def orga_appearance(request, s, n):
+def orga_appearance(request, s):
     return orga_edit(
-        request, s, n, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False}
+        request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False}
     )
 
 
 @login_required
-def orga_run(request, s, n):
-    run = get_cache_run(request.assoc["id"], s, n)
-    return orga_edit(request, s, n, "orga_event", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
+def orga_run(request, s):
+    run = get_cache_run(request.assoc["id"], s)
+    return orga_edit(request, s, "orga_event", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
 
 
 @login_required
-def orga_texts(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_texts")
+def orga_texts(request, s):
+    ctx = check_event_permission(request, s, "orga_texts")
     ctx["list"] = EventText.objects.filter(event_id=ctx["event"].id).order_by("typ", "default", "language")
     return render(request, "larpmanager/orga/texts.html", ctx)
 
 
 @login_required
-def orga_texts_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_texts", OrgaEventTextForm, num)
+def orga_texts_edit(request, s, num):
+    return orga_edit(request, s, "orga_texts", OrgaEventTextForm, num)
 
 
 @login_required
-def orga_buttons(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_buttons")
+def orga_buttons(request, s):
+    ctx = check_event_permission(request, s, "orga_buttons")
     ctx["list"] = EventButton.objects.filter(event_id=ctx["event"].id).order_by("number")
     return render(request, "larpmanager/orga/buttons.html", ctx)
 
 
 @login_required
-def orga_buttons_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_buttons", OrgaEventButtonForm, num)
+def orga_buttons_edit(request, s, num):
+    return orga_edit(request, s, "orga_buttons", OrgaEventButtonForm, num)
 
 
 @login_required
-def orga_config(request, s, n, section=None):
+def orga_config(request, s, section=None):
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
-    return orga_edit(request, s, n, "orga_config", OrgaConfigForm, None, "manage", add_ctx=add_ctx)
+    return orga_edit(request, s, "orga_config", OrgaConfigForm, None, "manage", add_ctx=add_ctx)
 
 
 @login_required
-def orga_features(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_features")
+def orga_features(request, s):
+    ctx = check_event_permission(request, s, "orga_features")
     ctx["add_another"] = False
     if backend_edit(request, ctx, OrgaFeatureForm, None, afield=None, assoc=False):
         ctx["new_features"] = Feature.objects.filter(pk__in=ctx["form"].added_features, after_link__isnull=False)
         if not ctx["new_features"]:
-            return redirect("manage", s=ctx["event"].slug, n=ctx["run"].number)
+            return redirect("manage", s=ctx["run"].get_slug())
         for el in ctx["new_features"]:
-            el.follow_link = _orga_feature_after_link(el, s, n)
+            el.follow_link = _orga_feature_after_link(el, s)
         if len(ctx["new_features"]) == 1:
             feature = ctx["new_features"][0]
             msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
@@ -246,48 +246,48 @@ def orga_features_go(request, ctx, num, on=True):
     return ctx["feature"]
 
 
-def _orga_feature_after_link(feature, s, n):
+def _orga_feature_after_link(feature, s):
     after_link = feature.after_link
     if after_link and after_link.startswith("orga"):
-        return reverse(after_link, kwargs={"s": s, "n": n})
-    return reverse("manage", kwargs={"s": s, "n": n}) + (after_link or "")
+        return reverse(after_link, kwargs={"s": s})
+    return reverse("manage", kwargs={"s": s}) + (after_link or "")
 
 
 @login_required
-def orga_features_on(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_features")
+def orga_features_on(request, s, num):
+    ctx = check_event_permission(request, s, "orga_features")
     feature = orga_features_go(request, ctx, num, on=True)
-    return redirect(_orga_feature_after_link(feature, s, n))
+    return redirect(_orga_feature_after_link(feature, s))
 
 
 @login_required
-def orga_features_off(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_features")
+def orga_features_off(request, s, num):
+    ctx = check_event_permission(request, s, "orga_features")
     orga_features_go(request, ctx, num, on=False)
-    return redirect("manage", s=s, n=n)
+    return redirect("manage", s=s)
 
 
 @login_required
-def orga_deadlines(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_deadlines")
+def orga_deadlines(request, s):
+    ctx = check_event_permission(request, s, "orga_deadlines")
     ctx["res"] = check_run_deadlines([ctx["run"]])[0]
     return render(request, "larpmanager/orga/deadlines.html", ctx)
 
 
 @login_required
-def orga_quick(request, s, n):
-    return orga_edit(request, s, n, "orga_quick", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
+def orga_quick(request, s):
+    return orga_edit(request, s, "orga_quick", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
 
 
 @login_required
-def orga_preferences(request, s, n):
+def orga_preferences(request, s):
     m_id = request.user.member.id
-    return orga_edit(request, s, n, None, OrgaPreferencesForm, m_id, "manage", add_ctx={"add_another": False})
+    return orga_edit(request, s, None, OrgaPreferencesForm, m_id, "manage", add_ctx={"add_another": False})
 
 
 @login_required
-def orga_backup(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_event")
+def orga_backup(request, s):
+    ctx = check_event_permission(request, s, "orga_event")
 
     return _prepare_backup(ctx)
 
@@ -318,8 +318,8 @@ def _prepare_backup(ctx):
 
 
 @login_required
-def orga_upload(request, s, n, typ):
-    ctx = check_event_permission(request, s, n, f"orga_{typ}")
+def orga_upload(request, s, typ):
+    ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
     _get_column_names(ctx)
 
@@ -347,8 +347,8 @@ def orga_upload(request, s, n, typ):
 
 
 @login_required
-def orga_upload_template(request, s, n, typ):
-    ctx = check_event_permission(request, s, n)
+def orga_upload_template(request, s, typ):
+    ctx = check_event_permission(request, s)
     ctx["typ"] = typ
     _get_column_names(ctx)
     value_mapping = {

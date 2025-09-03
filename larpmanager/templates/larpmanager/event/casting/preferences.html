@@ -8,18 +8,18 @@
         {% if staff %}
             <p>
                 {% trans "Go to the preferences for" %}:
-                <a href="{% url 'orga_casting_preferences' event.slug run.number 0 %}">{% trans "Characters" %}</a>
+                <a href="{% url 'orga_casting_preferences' run.get_slug 0 %}">{% trans "Characters" %}</a>
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting_preferences' event.slug run.number num %}">{{ qt.name }}</a>
+                    , <a href="{% url 'orga_casting_preferences' run.get_slug num %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
             <h3>Preferenze {{ gl_name }}</h3>
         {% else %}
             <p>
                 {% trans "Go to the preferences for" %}:
-                <a href="{% url 'casting_preferences' event.slug run.number 0 %}">{% trans "characters" %}</a>,
+                <a href="{% url 'casting_preferences' run.get_slug 0 %}">{% trans "characters" %}</a>,
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'casting_preferences' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'casting_preferences' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
             <h3>{% trans "Preferences" %} {{ gl_name }}</h3>

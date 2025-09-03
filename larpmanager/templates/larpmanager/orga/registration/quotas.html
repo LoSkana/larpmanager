@@ -30,7 +30,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_registration_quotas_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_registration_quotas_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.quotas }}</td>

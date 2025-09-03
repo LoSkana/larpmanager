@@ -65,27 +65,27 @@ from larpmanager.utils.writing import writing_post
 
 
 @login_required
-def orga_albums(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_albums")
+def orga_albums(request, s):
+    ctx = check_event_permission(request, s, "orga_albums")
     ctx["list"] = Album.objects.filter(run=ctx["run"]).order_by("-created")
     return render(request, "larpmanager/orga/albums.html", ctx)
 
 
 @login_required
-def orga_albums_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_albums", OrgaAlbumForm, num)
+def orga_albums_edit(request, s, num):
+    return orga_edit(request, s, "orga_albums", OrgaAlbumForm, num)
 
 
 @login_required
-def orga_albums_upload(request, s, n, a):
-    ctx = check_event_permission(request, s, n, "orga_albums")
+def orga_albums_upload(request, s, a):
+    ctx = check_event_permission(request, s, "orga_albums")
     get_album_cod(ctx, a)
     if request.method == "POST":
-        form = UploadAlbumsForm(request, s, n.POST, request.FILES)
+        form = UploadAlbumsForm(request, s.POST, request.FILES)
         if form.is_valid():
             upload_albums(ctx["album"], request.FILES["elem"])
-            messages.success(request, s, n, _("Photos and videos successfully uploaded") + "!")
-            return redirect(request, s, n.path_info)
+            messages.success(request, s, _("Photos and videos successfully uploaded") + "!")
+            return redirect(request, s.path_info)
     else:
         form = UploadAlbumsForm()
     ctx["form"] = form
@@ -93,20 +93,20 @@ def orga_albums_upload(request, s, n, a):
 
 
 @login_required
-def orga_utils(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_utils")
+def orga_utils(request, s):
+    ctx = check_event_permission(request, s, "orga_utils")
     ctx["list"] = Util.objects.filter(event=ctx["event"]).order_by("number")
     return render(request, "larpmanager/orga/utils.html", ctx)
 
 
 @login_required
-def orga_utils_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_utils", UtilForm, num)
+def orga_utils_edit(request, s, num):
+    return orga_edit(request, s, "orga_utils", UtilForm, num)
 
 
 @login_required
-def orga_workshops(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_workshops")
+def orga_workshops(request, s):
+    ctx = check_event_permission(request, s, "orga_workshops")
     # get number of modules
     workshops = ctx["event"].workshops.all()
     limit = datetime.now() - timedelta(days=365)
@@ -125,36 +125,36 @@ def orga_workshops(request, s, n):
 
 
 @login_required
-def orga_workshop_modules(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_workshop_modules")
+def orga_workshop_modules(request, s):
+    ctx = check_event_permission(request, s, "orga_workshop_modules")
     ctx["list"] = WorkshopModule.objects.filter(event=ctx["event"]).order_by("number")
     return render(request, "larpmanager/orga/workshop/modules.html", ctx)
 
 
 @login_required
-def orga_workshop_modules_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_workshop_modules", WorkshopModuleForm, num)
+def orga_workshop_modules_edit(request, s, num):
+    return orga_edit(request, s, "orga_workshop_modules", WorkshopModuleForm, num)
 
 
 @login_required
-def orga_workshop_questions(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_workshop_questions")
+def orga_workshop_questions(request, s):
+    ctx = check_event_permission(request, s, "orga_workshop_questions")
     if request.method == "POST":
-        return writing_post(request, s, n, ctx, WorkshopQuestion, "workshop_question")
+        return writing_post(request, ctx, WorkshopQuestion, "workshop_question")
     ctx["list"] = WorkshopQuestion.objects.filter(module__event=ctx["event"]).order_by("module__number", "number")
     return render(request, "larpmanager/orga/workshop/questions.html", ctx)
 
 
 @login_required
-def orga_workshop_questions_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_workshop_questions", WorkshopQuestionForm, num)
+def orga_workshop_questions_edit(request, s, num):
+    return orga_edit(request, s, "orga_workshop_questions", WorkshopQuestionForm, num)
 
 
 @login_required
-def orga_workshop_options(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_workshop_options")
+def orga_workshop_options(request, s):
+    ctx = check_event_permission(request, s, "orga_workshop_options")
     if request.method == "POST":
-        return writing_post(request, s, n, ctx, WorkshopOption, "workshop_option")
+        return writing_post(request, ctx, WorkshopOption, "workshop_option")
     ctx["list"] = WorkshopOption.objects.filter(question__module__event=ctx["event"]).order_by(
         "question__module__number", "question__number", "is_correct"
     )
@@ -162,37 +162,37 @@ def orga_workshop_options(request, s, n):
 
 
 @login_required
-def orga_workshop_options_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_workshop_options", WorkshopOptionForm, num)
+def orga_workshop_options_edit(request, s, num):
+    return orga_edit(request, s, "orga_workshop_options", WorkshopOptionForm, num)
 
 
 @login_required
-def orga_problems(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_problems")
+def orga_problems(request, s):
+    ctx = check_event_permission(request, s, "orga_problems")
     ctx["list"] = Problem.objects.filter(event=ctx["event"]).order_by("status", "-severity")
     return render(request, "larpmanager/orga/problems.html", ctx)
 
 
 @login_required
-def orga_problems_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_problems", OrgaProblemForm, num)
+def orga_problems_edit(request, s, num):
+    return orga_edit(request, s, "orga_problems", OrgaProblemForm, num)
 
 
 @login_required
-def orga_warehouse_area(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_warehouse_area")
+def orga_warehouse_area(request, s):
+    ctx = check_event_permission(request, s, "orga_warehouse_area")
     ctx["list"] = ctx["event"].get_elements(WarehouseArea)
     return render(request, "larpmanager/orga/warehouse/area.html", ctx)
 
 
 @login_required
-def orga_warehouse_area_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_warehouse_area", OrgaWarehouseAreaForm, num)
+def orga_warehouse_area_edit(request, s, num):
+    return orga_edit(request, s, "orga_warehouse_area", OrgaWarehouseAreaForm, num)
 
 
 @login_required
-def orga_warehouse_area_assignments(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_warehouse_area")
+def orga_warehouse_area_assignments(request, s, num):
+    ctx = check_event_permission(request, s, "orga_warehouse_area")
     get_element(ctx, num, "area", WarehouseArea)
 
     get_warehouse_optionals(ctx, [5, 6])
@@ -238,8 +238,8 @@ def orga_warehouse_area_assignments(request, s, n, num):
 
 
 @login_required
-def orga_warehouse_checks(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_warehouse_checks")
+def orga_warehouse_checks(request, s):
+    ctx = check_event_permission(request, s, "orga_warehouse_checks")
     ctx["items"] = {}
     for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
         if el.item_id not in ctx["items"]:
@@ -252,8 +252,8 @@ def orga_warehouse_checks(request, s, n):
 
 
 @login_required
-def orga_warehouse_manifest(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_warehouse_manifest")
+def orga_warehouse_manifest(request, s):
+    ctx = check_event_permission(request, s, "orga_warehouse_manifest")
     ctx["area_list"] = {}
     get_warehouse_optionals(ctx, [])
 
@@ -268,13 +268,13 @@ def orga_warehouse_manifest(request, s, n):
 
 
 @login_required
-def orga_warehouse_assignment_item_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, num)
+def orga_warehouse_assignment_item_edit(request, s, num):
+    return orga_edit(request, s, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, num)
 
 
 @require_POST
-def orga_warehouse_assignment_manifest(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_warehouse_manifest")
+def orga_warehouse_assignment_manifest(request, s):
+    ctx = check_event_permission(request, s, "orga_warehouse_manifest")
     idx = request.POST.get("idx")
     type = request.POST.get("type").lower()
     value = request.POST.get("value").lower() == "true"
@@ -296,8 +296,8 @@ def orga_warehouse_assignment_manifest(request, s, n):
 
 
 @require_POST
-def orga_warehouse_assignment_area(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_warehouse_manifest")
+def orga_warehouse_assignment_area(request, s, num):
+    ctx = check_event_permission(request, s, "orga_warehouse_manifest")
     get_element(ctx, num, "area", WarehouseArea)
 
     idx = request.POST.get("idx")

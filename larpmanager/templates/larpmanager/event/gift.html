@@ -9,7 +9,7 @@
         {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link" %}!
     </p>
     <div class="c nav">
-        <a href="{% url 'gift_edit' run.event.slug run.number 0 %}">{% trans "Add new" %}</a>
+        <a href="{% url 'gift_edit' run.get_slug 0 %}">{% trans "Add new" %}</a>
     </div>
     <br />
     <table class="mob ">
@@ -21,7 +21,7 @@
         {% for reg in list %}
             <tr>
                 <td>
-                    <a href="{% url 'gift_edit' run.event.slug run.number reg.id %}"
+                    <a href="{% url 'gift_edit' run.get_slug reg.id %}"
                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>
@@ -56,12 +56,12 @@
                         {% elif reg.pending %}
                             {% trans "Payment currently in review by the staff" %}.
                         {% else %}
-                            <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Access link" %}</a>
+                            <a href="{% url 'gift_redeem' run.get_slug reg.redeem_code %}">{% trans "Access link" %}</a>
                             (<i>
                             {% trans "copy this link and give it to your friend" %}:
                         </i>
                         <b>
-                            {{ request.build_absolute_uri|slice:":-1" }}{% url 'gift_redeem' event.slug run.number reg.redeem_code %}
+                            {{ request.build_absolute_uri|slice:":-1" }}{% url 'gift_redeem' run.get_slug reg.redeem_code %}
                         </b>)
                     {% endif %}
                 </td>

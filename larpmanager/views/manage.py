@@ -41,7 +41,7 @@ def manage(request, s=None, n=None):
         return redirect("home")
 
     if s:
-        return _orga_manage(request, s, n)
+        return _orga_manage(request, s)
     else:
         return _exe_manage(request)
 
@@ -259,11 +259,11 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
 
-def _orga_manage(request, s, n):
-    ctx = get_event_run(request, s, n)
+def _orga_manage(request, s):
+    ctx = get_event_run(request, s)
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:
-        return redirect("orga_run", s=s, n=n)
+        return redirect("orga_run", s=s)
 
     ctx["orga_page"] = 1
     ctx["manage"] = 1
@@ -703,10 +703,10 @@ def exe_close_suggestion(request, perm):
     return redirect("manage")
 
 
-def orga_close_suggestion(request, s, n, perm):
-    ctx = check_event_permission(request, s, n, perm)
+def orga_close_suggestion(request, s, perm):
+    ctx = check_event_permission(request, s, perm)
     set_suggestion(ctx, perm)
-    return redirect("manage", s=s, n=n)
+    return redirect("manage", s=s)
 
 
 def _check_intro_driver(request, ctx):

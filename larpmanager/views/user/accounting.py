@@ -184,9 +184,9 @@ def acc_refund(request):
 
 
 @login_required
-def acc_pay(request, s, n, method=None):
+def acc_pay(request, s, method=None):
     check_assoc_feature(request, "payment")
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     if not ctx["run"].reg:
         messages.warning(

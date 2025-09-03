@@ -138,8 +138,8 @@ def pre_register_remove(request, s):
 
 
 @login_required
-def register_exclusive(request, s, n, sc="", dis=""):
-    return register(request, s, n, sc, dis)
+def register_exclusive(request, s, sc="", dis=""):
+    return register(request, s, sc, dis)
 
 
 def save_registration(request, ctx, form, run, event, reg, gifted=False):
@@ -323,8 +323,8 @@ def init_form_submitted(ctx, form, request, reg=None):
 
 
 @login_required
-def register(request, s, n, sc="", dis="", tk=0):
-    ctx = get_event_run(request, s, n, status=True)
+def register(request, s, sc="", dis="", tk=0):
+    ctx = get_event_run(request, s, status=True)
     run = ctx["run"]
     event = ctx["event"]
 
@@ -429,8 +429,8 @@ def _register_prepare(ctx, reg):
     return new_reg
 
 
-def register_reduced(request, s, n):
-    ctx = get_event_run(request, s, n)
+def register_reduced(request, s):
+    ctx = get_event_run(request, s)
     # count the number of reduced tickets
     ct = get_reduced_available_count(ctx["run"])
     return JsonResponse({"res": ct})
@@ -493,11 +493,11 @@ def register_conditions(request, s=None):
 
 @login_required
 @require_POST
-def discount(request, s, n):
+def discount(request, s):
     def error(msg):
         return JsonResponse({"res": "ko", "msg": msg})
 
-    ctx = get_event_run(request, s, n)
+    ctx = get_event_run(request, s)
 
     if "discount" not in ctx["features"]:
         return error(_("Not available, kiddo"))
@@ -591,8 +591,8 @@ def _validate_exclusive_logic(disc, member, run, event):
 
 
 @login_required
-def discount_list(request, s, n):
-    ctx = get_event_run(request, s, n)
+def discount_list(request, s):
+    ctx = get_event_run(request, s)
     # delete expired accounting item
     now = datetime.now()
     # AccountingItemDiscount.objects.filter(expires__lte=now).delete()
@@ -607,8 +607,8 @@ def discount_list(request, s, n):
 
 
 @login_required
-def unregister(request, s, n):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def unregister(request, s):
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     # check if user is actually registered
     try:
@@ -629,8 +629,8 @@ def unregister(request, s, n):
 
 
 @login_required
-def gift(request, s, n):
-    ctx = get_event_run(request, s, n, signup=False, slug="gift", status=True)
+def gift(request, s):
+    ctx = get_event_run(request, s, signup=False, slug="gift", status=True)
     check_registration_open(ctx, request)
 
     ctx["list"] = Registration.objects.filter(
@@ -662,8 +662,8 @@ def check_registration_open(ctx, request):
 
 
 @login_required
-def gift_edit(request, s, n, r):
-    ctx = get_event_run(request, s, n, False, "gift", status=True)
+def gift_edit(request, s, r):
+    ctx = get_event_run(request, s, False, "gift", status=True)
     check_registration_open(ctx, request)
 
     reg = get_registration_gift(ctx, r, request)
@@ -678,7 +678,7 @@ def gift_edit(request, s, n, r):
             else:
                 save_registration(request, ctx, form, ctx["run"], ctx["event"], reg, gifted=True)
                 messages.success(request, _("Operation completed") + "!")
-            return redirect("gift", s=s, n=n)
+            return redirect("gift", s=s)
     else:
         form = RegistrationGiftForm(ctx=ctx, instance=reg)
 
@@ -707,12 +707,12 @@ def get_registration_gift(ctx, r, request):
 
 
 @login_required
-def gift_redeem(request, s, n, code):
-    ctx = get_event_run(request, s, n, False, "gift", status=True)
+def gift_redeem(request, s, code):
+    ctx = get_event_run(request, s, False, "gift", status=True)
 
     if ctx["run"].reg:
         messages.success(request, _("You cannot redeem a membership, you are already a member!"))
-        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("gallery", s=ctx["run"].get_slug())
 
     try:
         reg = Registration.objects.get(
@@ -728,7 +728,7 @@ def gift_redeem(request, s, n, code):
         reg.redeem_code = None
         reg.save()
         messages.success(request, _("Your gifted registration has been redeemed!"))
-        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("gallery", s=ctx["run"].get_slug())
 
     ctx["reg"] = reg
 

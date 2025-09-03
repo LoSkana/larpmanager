@@ -8,8 +8,8 @@ var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
 
 {% if not gift %}
 
-    var discount_url = '{% url "discount" event.slug run.number %}';
-    var discount_list_url  = '{% url "discount_list" event.slug run.number %}';
+    var discount_url = '{% url "discount" run.get_slug %}';
+    var discount_list_url  = '{% url "discount_list" run.get_slug %}';
 
     var discount_apply = '{{ discount_apply }}';
 
