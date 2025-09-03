@@ -89,6 +89,7 @@ def cache_event_links(request):
         ctx["all_runs"][r.id] = roles
         if r.development not in (DevelopStatus.DONE, DevelopStatus.CANC):
             ctx["open_runs"][r.id] = {
+                "slug": r.get_slug(),
                 "e": r.event.slug,
                 "r": r.number,
                 "s": str(r),

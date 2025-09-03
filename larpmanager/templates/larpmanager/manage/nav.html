@@ -6,7 +6,7 @@
                 <a href="{% url 'manage' run.get_slug %}" class="select">{{ run }}</a>
             {% endif %}
             {% for rid, v in open_runs.items %}
-                <a href="{% url 'manage' v.e v.r %}"
+                <a href="{% url 'manage' v.slug %}"
                    class="origin {% if manage and run and run.event.slug == v.e and run.number == v.r %}select{% endif %} ">{{ v.s }}</a>
             {% endfor %}
             {% if assoc_role %}

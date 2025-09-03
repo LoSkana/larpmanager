@@ -725,4 +725,4 @@ def _check_intro_driver(request, ctx):
 def orga_redirect(request, s, n, p):
     if n > 1:
         s += f"-{n}"
-    return redirect(f"{s}/{p}")
+    return redirect(f"/{s}/{p}")
