@@ -782,6 +782,16 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Clear registration counts for all associated runs
     for run_id in instance.runs.values_list("id", flat=True):
         clear_registration_counts_cache(run_id)
+@receiver(post_save, sender=Character)
+def create_personal_inventory(sender, instance, created, **kwargs):
+    if created:
+        inventory = CharacterInventory.objects.create(
+            name=f"{instance.name}'s Personal Storage",
+            event=instance.event
+        )
+        inventory.owners.add(instance)
+        inventory.save()
+
 
     # Reset configuration cache and create default setup
     on_event_post_save_reset_config_cache(instance)
