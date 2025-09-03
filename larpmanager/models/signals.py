@@ -64,7 +64,7 @@ from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, La
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import InventoryItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
+from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all, Character
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.tutorial_query import delete_index, index_tutorial
@@ -454,6 +454,17 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             )
         if el not in features and el in types:
             WritingQuestion.objects.filter(event=instance, typ=el).delete()
+
+
+@receiver(post_save, sender=Character)
+def create_personal_inventory(sender, instance, created, **kwargs):
+    if created:
+        inventory = CharacterInventory.objects.create(
+            name=f"{instance.name}'s Personal Storage",
+            event=instance.event
+        )
+        inventory.owners.add(instance)
+        inventory.save()
 
 
 @receiver(post_save, sender=Registration)
