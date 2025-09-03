@@ -49,9 +49,22 @@ def orga_ci_pool_types(request, s, n):
 def orga_ci_pool_types_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_ci_pool_types", OrgaPoolTypePxForm, num)
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 @login_required
 def orga_ci_character_inventory_view(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_ci_character_inventory")
-    get_character_inventory(ctx, num)
+
+    # Correctly fetch the inventory by ID
+    ctx["character_inventory"] = CharacterInventory.objects.get(pk=num, event=ctx["event"])
+
+    ctx["pool_balances_list"] = ctx["character_inventory"].get_pool_balances()
+
+    # logger.error(
+    #     "Result ctx[pool_balances_list]: %s",
+    #     [f"{pb.pool_type.name}: {pb.amount}" for pb in ctx["pool_balances_list"]]
+    # )
+
     return render(request, "larpmanager/orga/ci/character_inventory.html", ctx)
