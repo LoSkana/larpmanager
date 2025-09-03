@@ -21,6 +21,7 @@ from django.shortcuts import render
 
 from larpmanager.forms.characterinventory import OrgaPoolTypePxForm, OrgaCharacterInventoryForm
 from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory
+from larpmanager.utils.common import get_character_inventory
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
 
@@ -47,3 +48,10 @@ def orga_ci_pool_types(request, s, n):
 @login_required
 def orga_ci_pool_types_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_ci_pool_types", OrgaPoolTypePxForm, num)
+
+
+@login_required
+def orga_ci_character_inventory_view(request, s, n, num):
+    ctx = check_event_permission(request, s, n, "orga_ci_character_inventory")
+    get_character_inventory(ctx, num)
+    return render(request, "larpmanager/orga/ci/character_inventory.html", ctx)
