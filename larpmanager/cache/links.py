@@ -52,7 +52,7 @@ def cache_event_links(request):
     que = Registration.objects.filter(member=member, run__end__gte=ref)
     que = que.filter(cancellation_date__isnull=True, run__event__assoc_id=request.assoc["id"])
     que = que.select_related("run", "run__event")
-    ctx["reg_menu"] = [(r.run.event.slug, r.run.number, str(r.run)) for r in que]
+    ctx["reg_menu"] = [(r.run.get_slug(), str(r.run)) for r in que]
 
     assoc_id = request.assoc["id"]
 

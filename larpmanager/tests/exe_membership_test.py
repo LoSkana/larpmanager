@@ -37,7 +37,7 @@ def test_exe_membership(pw_page):
     go_to(page, live_server, "/manage/features/45/on")
 
     # register
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 

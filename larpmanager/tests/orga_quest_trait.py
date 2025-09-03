@@ -39,7 +39,7 @@ def test_quest_trait(pw_page):
     casting(page, live_server)
 
     # check result
-    go_to(page, live_server, "/test/1")
+    go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").nth(1).click()
     expect(page.locator("#one")).to_contain_text(
         "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test"
@@ -135,7 +135,7 @@ def traits(page, live_server):
     submit_confirm(page)
 
     # check how they appear on user side
-    go_to(page, live_server, "/test/1")
+    go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
     expect(page.locator("#one")).to_contain_text("Name Quest Lore Torta , Pizza")
     page.get_by_role("link", name="Torta").click()
@@ -144,7 +144,7 @@ def traits(page, live_server):
 
 def signups(page, live_server):
     # create signup for my char
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
@@ -186,7 +186,7 @@ def casting(page, live_server):
     submit_confirm(page)
 
     # perform casting
-    go_to(page, live_server, "/test/1")
+    go_to(page, live_server, "/test")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.locator("#faction0").select_option("Torta")
@@ -198,7 +198,7 @@ def casting(page, live_server):
     page.get_by_role("button", name="Submit").click()
 
     # make casting
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()

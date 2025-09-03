@@ -151,8 +151,8 @@
             {% if request_func_name != "home" %}
                 <div class="nav main_nav middlebar">
                     <a href="{% url 'home' %}">Home</a>
-                    {% for s, n, name in reg_menu %}
-                        <a href="{% url 'gallery' s n %}">{{ name }}</a>
+                    {% for slug, name in reg_menu %}
+                        <a href="{% url 'gallery' slug %}">{{ name }}</a>
                     {% endfor %}
                     <hr class="main_nav" />
                 </div>

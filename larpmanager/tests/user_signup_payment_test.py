@@ -66,7 +66,7 @@ def prepare(page, live_server):
     submit_confirm(page)
 
     # set ticket price
-    go_to(page, live_server, "/test/1/manage/tickets")
+    go_to(page, live_server, "/test/manage/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
@@ -75,7 +75,7 @@ def prepare(page, live_server):
 
 def signup(page, live_server):
     # Signup
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("provisional status")
     submit_confirm(page)
@@ -85,12 +85,12 @@ def signup(page, live_server):
     expect(page.locator("b")).to_contain_text("100")
 
     # check reg status
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Provisional registration")
     expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")
 
     # pay
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect(page.locator("b")).to_contain_text("100")
@@ -101,11 +101,11 @@ def signup(page, live_server):
     submit(page)
 
     # approve payment
-    go_to(page, live_server, "/test/1/manage/invoices")
+    go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
 
     # check reg status
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Registration confirmed")
     expect(page.locator("#one")).to_contain_text("please fill in your profile")
     page.get_by_role("link", name=re.compile(r"please fill in your")).click()
@@ -118,10 +118,10 @@ def signup(page, live_server):
 
 def characters(page, live_server):
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/manage/features/178/on")
 
     # Assign character
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
@@ -132,7 +132,7 @@ def characters(page, live_server):
     go_to(page, live_server, "/debug/mail")
 
     # Remove character
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
     submit_confirm(page)

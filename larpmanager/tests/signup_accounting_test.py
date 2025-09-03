@@ -49,7 +49,7 @@ def test_signup_accounting(pw_page):
 
 def check_delete(live_server, page):
     # update signup - orga
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     submit_confirm(page)
 
@@ -58,21 +58,21 @@ def check_delete(live_server, page):
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
-    go_to(page, live_server, "/test/1/manage/cancellations")
+    go_to(page, live_server, "/test/manage/cancellations")
     expect(page.locator('[id="\\31 "]')).to_contain_text("orga@test.it")
 
     # delete payments
-    go_to(page, live_server, "/test/1/manage/tokens")
+    go_to(page, live_server, "/test/manage/tokens")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
-    go_to(page, live_server, "/test/1/manage/credits")
+    go_to(page, live_server, "/test/manage/credits")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
-    go_to(page, live_server, "/test/1/manage/payments")
+    go_to(page, live_server, "/test/manage/payments")
     page.locator('[id="\\35 "]').get_by_role("link", name="").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
@@ -81,22 +81,22 @@ def check_delete(live_server, page):
 
 def discount(live_server, page):
     # check signup
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("100")
     expect(page.locator('[id="\\31 "]')).to_contain_text("52")
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
     expect(page.locator("#one")).to_contain_text("Total payments: 100")
 
     # update signup
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 
     # use discount
-    go_to(page, live_server, "/test/1/manage/features/12/on")
-    go_to(page, live_server, "/test/1/manage/discounts/")
+    go_to(page, live_server, "/test/manage/features/12/on")
+    go_to(page, live_server, "/test/manage/discounts/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("discount")
@@ -113,7 +113,7 @@ def discount(live_server, page):
     page.locator("#id_only_reg").uncheck()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Discounts ").click()
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
@@ -129,12 +129,12 @@ def discount(live_server, page):
 
 def pay(live_server, page):
     # check accounting
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
     expect(page.locator("#one")).to_contain_text("Total registration fee: 100")
     expect(page.locator("#one")).to_contain_text("Total payments: 48")
     expect(page.locator("#one")).to_contain_text("Next payment: 52")
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("52")
     expect(page.locator('[id="\\31 "]')).to_contain_text("48")
@@ -154,7 +154,7 @@ def pay(live_server, page):
     submit(page)
 
     # confirm payment
-    go_to(page, live_server, "/test/1/manage/invoices")
+    go_to(page, live_server, "/test/manage/invoices")
     expect(page.locator('[id="\\31 "]')).to_contain_text("52")
     page.get_by_role("link", name="Confirm", exact=True).click()
 
@@ -184,7 +184,7 @@ def token_credits(live_server, page):
     page.locator("#id_descr").fill("test")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/tokens")
+    go_to(page, live_server, "/test/manage/tokens")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("org")
@@ -195,7 +195,7 @@ def token_credits(live_server, page):
     page.locator("#id_descr").fill("teeest")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/credits")
+    go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").fill("org")
@@ -209,10 +209,10 @@ def token_credits(live_server, page):
 
 def signup_pay(live_server, page):
     # Signup
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Provisional registration")
     page.locator("#one").get_by_role("link", name="Accounting").click()
     expect(page.locator("#one")).to_contain_text("100")
@@ -222,7 +222,7 @@ def signup_pay(live_server, page):
     expect(page.locator("#one")).to_contain_text("100")
 
     # check pay
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect(page.locator("b")).to_contain_text("100")
@@ -255,7 +255,7 @@ def setup_payment(live_server, page):
     submit_confirm(page)
 
     # set ticket price
-    go_to(page, live_server, "/test/1/manage/tickets")
+    go_to(page, live_server, "/test/manage/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
