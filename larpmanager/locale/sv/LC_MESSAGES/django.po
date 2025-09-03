@@ -206,6 +206,9 @@ msgstr "Anslutningsport"
 msgid "Prev"
 msgstr "Före"
 
+msgid "Rate"
+msgstr "Pris"
+
 msgid "Read"
 msgstr "Läs"
 
@@ -3865,9 +3868,6 @@ msgstr "Ett exempel på foto av karaktären"
 msgid "Describe how we can help you"
 msgstr "Beskriv hur vi kan hjälpa dig"
 
-msgid "Description of free donation"
-msgstr "Beskrivning av gratis donation"
-
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funktion %(name)s avaktiverad"
@@ -4061,9 +4061,6 @@ msgstr "Hantera typen av eventuppdrag"
 #, python-format
 msgid "Membership fee payment %(year)s"
 msgstr "Aktieutdelning %(year)s"
-
-msgid "Name of the free donation field"
-msgstr "Namn på fältet för gratis donation"
 
 msgid "Name to be displayed for tokens"
 msgstr "Namn som ska visas för polletter"
@@ -4800,9 +4797,6 @@ msgstr "Hantera förhandsregistrering av alla evenemang"
 msgid "Now you can create the plots of the event"
 msgstr "Nu kan du skapa tomterna för evenemanget"
 
-msgid "Now you can set the optional amount field"
-msgstr "Nu kan du ställa in det valfria beloppsfältet"
-
 msgid "Request of membership to the Organization"
 msgstr "Ansökan om medlemskap i en förening"
 
@@ -4891,6 +4885,9 @@ msgstr "Deltagare som INTE skickade preferenser"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Påminnelse om sammanställning av profiler för %(event)s"
+
+msgid "Reserve additional tickets beyond your own"
+msgstr "Reservera ytterligare biljetter utöver din egen"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
@@ -5238,6 +5235,9 @@ msgstr "Maximalt antal väntande platser (0 = obegränsat)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Ändra några karaktärsdrag för att göra den till din egen"
+
+msgid "Now you can configure the registration question"
+msgstr "Nu kan du konfigurera registreringsfrågan"
 
 msgid "Now you can review the organization's deadlines"
 msgstr "Nu kan du granska organisationens deadlines"
@@ -5721,9 +5721,6 @@ msgstr "Inga anmälningar har ännu mottagits för detta evenemang"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
-
-msgid "Set if you want to reserve tickets in addition to your"
-msgstr "Ställ in om du vill reservera biljetter utöver dina"
 
 msgid "The registration request will be updated automatically"
 msgstr "Ansökan kommer att uppdateras automatiskt"
@@ -9138,6 +9135,13 @@ msgid ""
 msgstr ""
 "Ange om karaktären är en spegel (dvs. om karaktären visar en annan karaktärs"
 " sanna, hemliga ansikte)"
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
+msgstr ""
+"Antal delbetalningar för att dela upp avgiften: betalningar och tidsfrister "
+"kommer att delas upp lika från registreringsdatumet"
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

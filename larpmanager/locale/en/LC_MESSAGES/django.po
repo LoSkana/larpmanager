@@ -1276,12 +1276,6 @@ msgstr ""
 msgid "If checked, allow ticket tier: Seller"
 msgstr ""
 
-msgid "Name of the free donation field"
-msgstr ""
-
-msgid "Description of free donation"
-msgstr ""
-
 msgid "Patron / Reduced"
 msgstr ""
 
@@ -1702,12 +1696,6 @@ msgstr ""
 msgid "This page allows you to add or edit a competency"
 msgstr ""
 
-msgid "Additional tickets"
-msgstr ""
-
-msgid "Set if you want to reserve tickets in addition to your"
-msgstr ""
-
 #, python-format
 msgid ""
 "Enter the “bring a friend” code provided by a registered participant to "
@@ -1715,15 +1703,6 @@ msgid ""
 msgstr ""
 
 msgid "Code 'Bring a friend'"
-msgstr ""
-
-msgid "Registration surcharge"
-msgstr ""
-
-msgid "Free donation"
-msgstr ""
-
-msgid "Freely indicate the amount of your donation"
 msgstr ""
 
 msgid "Single payment"
@@ -1744,23 +1723,6 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-msgid "The number of payments to split the fee"
-msgstr ""
-
-msgid "The ticket will be divided equally in the number of quotas indicated"
-msgstr ""
-
-msgid ""
-"Payment deadlines will be similarly equally divided, based on the date of "
-"registration"
-msgstr ""
-
-msgid "Quotas"
-msgstr ""
-
-msgid "Your registration ticket"
-msgstr ""
-
 msgid "This page allows you to add or edit a signup to this event"
 msgstr ""
 
@@ -1771,6 +1733,18 @@ msgid "Details"
 msgstr ""
 
 msgid "Main"
+msgstr ""
+
+msgid "Free donation"
+msgstr ""
+
+msgid "Freely indicate the amount of your donation"
+msgstr ""
+
+msgid "Quotas"
+msgstr ""
+
+msgid "The number of payments to split the fee"
 msgstr ""
 
 msgid ""
@@ -3024,6 +2998,12 @@ msgstr ""
 msgid "Computed"
 msgstr ""
 
+msgid "Pay what you want"
+msgstr ""
+
+msgid "Rate"
+msgstr ""
+
 msgid "Disabled"
 msgstr ""
 
@@ -3616,6 +3596,20 @@ msgstr ""
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
 "specifically for this event!"
+msgstr ""
+
+msgid "Your registration ticket"
+msgstr ""
+
+msgid "Reserve additional tickets beyond your own"
+msgstr ""
+
+msgid "Registration surcharge"
+msgstr ""
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
 msgstr ""
 
 msgid "Progress status"
@@ -6558,6 +6552,14 @@ msgstr ""
 msgid "This page shows the quota options available for payment of the event"
 msgstr ""
 
+msgid "The ticket will be divided equally in the number of quotas indicated"
+msgstr ""
+
+msgid ""
+"Payment deadlines will be similarly equally divided, based on the date of "
+"registration"
+msgstr ""
+
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration"
@@ -7179,14 +7181,11 @@ msgstr ""
 msgid "Now you can copy elements from an other event"
 msgstr ""
 
-msgid "Pay what you want"
-msgstr ""
-
 msgid ""
 "Allows participants to add an optional extra amount to their registration fee"
 msgstr ""
 
-msgid "Now you can set the optional amount field"
+msgid "Now you can configure the registration question"
 msgstr ""
 
 msgid ""
@@ -7741,6 +7740,9 @@ msgid ""
 msgstr ""
 
 msgid "Now you can select which tickets can be gifted"
+msgstr ""
+
+msgid "Additional tickets"
 msgstr ""
 
 msgid "Allows a user to reserve extra tickets in addition to their own"
