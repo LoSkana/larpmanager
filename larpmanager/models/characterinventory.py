@@ -25,6 +25,22 @@ class CharacterInventory(BaseConceptModel):
     name = models.CharField(max_length=150)
     owners = models.ManyToManyField(Character, related_name="character_inventory", blank=True)
 
+    def get_pool_balances(self):
+        """
+        Returns a list of dicts: each with a PoolTypeCI and the corresponding PoolBalanceCI.
+        Automatically creates a PoolBalanceCI if it doesn't exist.
+        """
+        pool_balances = []
+        for pool_type in self.event.get_elements(PoolTypeCI).order_by("number"):
+            # Get or create the balance
+            balance, created = PoolBalanceCI.objects.get_or_create(
+                inventory=self,
+                pool_type=pool_type,
+                defaults={"amount": 0, "event": self.event, "number": 1},
+            )
+            pool_balances.append({"type": pool_type, "balance": balance})
+        return pool_balances
+
 
 class PoolTypeCI(BaseConceptModel):
     name = models.CharField(max_length=150)

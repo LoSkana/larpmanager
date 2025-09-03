@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Character Inventory" %}
+    {% trans "Character Inventory Name Here" %}: {{ name }}
 {% endblock title %}
 {% block content %}
     <h2>{% trans "Currencies & Materials" %}</h2>
@@ -10,5 +10,11 @@
             <th>{% trans "Name" %}</th>
             <th>{% trans "Available" %}</th>
         </tr>
+        {% for entry in pool_balances_list %}
+        <tr>
+            <td>{{ entry.type.name }}</td>
+            <td>{{ entry.balance.amount }}</td>
+        </tr>
+        {% endfor %}
     </table>
 {% endblock content %}
