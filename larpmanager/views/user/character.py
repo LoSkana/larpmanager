@@ -164,6 +164,34 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
 
     return render(request, "larpmanager/event/character.html", context)
 
+    # --- LOGGING START ---
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    logger.error("ctx['char']: %r", ctx.get("char"))
+
+    char_inventory = None
+    try:
+        char_model = Character.objects.prefetch_related('character_inventory').get(id=ctx["char"]["id"])
+        ctx["char"]["character_inventory"] = char_model.character_inventory.all()
+    except Character.DoesNotExist:
+        ctx["char"]["character_inventory"] = None
+
+    logger.error("char_inventory queryset: %r", char_inventory)
+
+    if char_inventory:
+        for inv in char_inventory:
+            logger.error("Inventory: %r", inv)
+            if hasattr(inv, "get_pool_balances"):
+                logger.error("get_pool_balances: %r", list(inv.get_pool_balances()))
+            else:
+                logger.error("Inventory %r has no get_pool_balances attribute", inv)
+    else:
+        logger.error("No character_inventory found for char %r", ctx.get("char"))
+    # --- LOGGING END ---
+
+    return render(request, "larpmanager/event/character.html", ctx)
 
 def character_external(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
     """Display character sheet via external access token.
