@@ -38,62 +38,86 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
 from larpmanager.models.writing import CharacterStatus, Faction
 
-
-class QuestionType(models.TextChoices):
+class BaseQuestionType(models.TextChoices):
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
     TEXT = "t", _("Single-line text")
     PARAGRAPH = "p", _("Multi-line text")
     EDITOR = "e", _("Advanced text editor")
-    NAME = "name", _("Name")
-    TEASER = "teaser", _("Presentation")
-    SHEET = "text", _("Sheet")
-    COVER = "cover", _("Cover")
-    FACTIONS = "faction", _("Factions")
-    TITLE = "title", _("Title")
-    MIRROR = "mirror", _("Mirror")
-    HIDE = "hide", _("Hide")
-    PROGRESS = "progress", _("Progress")
-    ASSIGNED = "assigned", _("Assigned")
-    COMPUTED = "c", _("Computed")
 
     @staticmethod
     def get_answer_types():
-        return {QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR}
+        return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
     @staticmethod
     def get_choice_types():
-        return {QuestionType.SINGLE, QuestionType.MULTIPLE}
+        return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
     def get_basic_types():
-        return QuestionType.get_answer_types() | QuestionType.get_choice_types()
-
-    @staticmethod
-    def get_def_types():
-        return {QuestionType.NAME, QuestionType.TEASER, QuestionType.SHEET, QuestionType.TITLE}
-
-    @classmethod
-    def get_max_length(cls):
-        return {
-            QuestionType.NAME,
-            QuestionType.SHEET,
-            QuestionType.TEASER,
-            QuestionType.TEXT,
-            QuestionType.PARAGRAPH,
-            QuestionType.MULTIPLE,
-            QuestionType.EDITOR,
-        }
+        return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
     def get_mapping(cls):
         return {
-            QuestionType.SINGLE: "single-choice",
-            QuestionType.MULTIPLE: "multi-choice",
-            QuestionType.TEXT: "short-text",
-            QuestionType.PARAGRAPH: "long-text",
-            QuestionType.EDITOR: "advanced",
+            BaseQuestionType.SINGLE: "single-choice",
+            BaseQuestionType.MULTIPLE: "multi-choice",
+            BaseQuestionType.TEXT: "short-text",
+            BaseQuestionType.PARAGRAPH: "long-text",
+            BaseQuestionType.EDITOR: "advanced",
         }
+
+
+def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+    members = [(m.name, (m.value, m.label)) for m in base] + [
+        (n, (v, lbl)) for (n, v, lbl) in extra
+    ]
+    return models.TextChoices(name, members)
+
+WritingQuestionType = extend_textchoices(
+    "WritingQuestionType",
+    BaseQuestionType,
+    [
+        ("NAME", "name", _("Name")),
+        ("TEASER", "teaser", _("Presentation")),
+        ("SHEET", "text", _("Sheet")),
+        ("COVER", "cover", _("Cover")),
+        ("FACTIONS", "faction", _("Factions")),
+        ("TITLE", "title", _("Title")),
+        ("MIRROR", "mirror", _("Mirror")),
+        ("HIDE", "hide", _("Hide")),
+        ("PROGRESS", "progress", _("Progress")),
+        ("ASSIGNED", "assigned", _("Assigned")),
+        ("COMPUTED", "c", _("Computed")),
+    ],
+)
+
+def get_def_writing_types():
+    return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
+
+def get_writing_max_length():
+    return {
+        WritingQuestionType.NAME,
+        WritingQuestionType.SHEET,
+        WritingQuestionType.TEASER,
+        WritingQuestionType.TEXT,
+        WritingQuestionType.PARAGRAPH,
+        WritingQuestionType.MULTIPLE,
+        WritingQuestionType.EDITOR,
+    }
+
+RegistrationQuestionType = extend_textchoices(
+    "RegistrationQuestionType",
+    BaseQuestionType,
+    [
+        ("TICKET", "ticket", _("Ticket")),
+        ("ADDITIONAL", "additional_tickets", _("Additional")),
+        ("PWYW", "pay_what_you_want", _("Pay what you want")),
+        ("DISCOUNT", "discount", _("Discount")),
+        ("QUOTA", "reg_quotas", _("Rate")),
+        ("SURCHARGE", "reg_surcharges", _("Surcharge")),
+    ],
+)
 
 
 class QuestionStatus(models.TextChoices):
@@ -156,8 +180,8 @@ class QuestionApplicable(models.TextChoices):
 class WritingQuestion(BaseModel):
     typ = models.CharField(
         max_length=10,
-        choices=QuestionType.choices,
-        default=QuestionType.SINGLE,
+        choices=WritingQuestionType.choices,
+        default=BaseQuestionType.SINGLE,
         help_text=_("Question type"),
         verbose_name=_("Type"),
     )
@@ -337,9 +361,9 @@ class WritingAnswer(BaseModel):
 
 class RegistrationQuestion(BaseModel):
     typ = models.CharField(
-        max_length=10,
-        choices=QuestionType.choices,
-        default=QuestionType.SINGLE,
+        max_length=50,
+        choices=RegistrationQuestionType.choices,
+        default=BaseQuestionType.SINGLE,
         help_text=_("Question type"),
         verbose_name=_("Type"),
     )

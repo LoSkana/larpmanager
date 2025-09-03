@@ -18,23 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.conf import settings as conf_settings
-from django.contrib.auth import views as auth_views
-from django.urls import include, path, re_path
 
-from larpmanager.forms.member import (
-    MyPasswordResetConfirmForm,
-    MyPasswordResetForm,
-    MyRegistrationFormUniqueEmail,
-)
-from larpmanager.views import auth as views_auth
-from larpmanager.views import base as views_base
-from larpmanager.views.base import MyLoginView
-from larpmanager.views.user import accounting as views_ua
+from django.urls import path
+
 from larpmanager.views.user import casting as views_uca
 from larpmanager.views.user import character as views_uc
 from larpmanager.views.user import event as views_ue
-from larpmanager.views.user import member as views_um
 from larpmanager.views.user import miscellanea as views_ums
 from larpmanager.views.user import pdf as views_up
 from larpmanager.views.user import registration as views_ur

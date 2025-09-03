@@ -26,7 +26,7 @@ from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     WritingAnswer,
     WritingChoice,
     WritingQuestion,
@@ -250,8 +250,8 @@ def check_missing_mandatory(ctx):
     aux = []
 
     models = {
-        **{t: WritingAnswer for t in QuestionType.get_answer_types()},
-        **{t: WritingChoice for t in QuestionType.get_choice_types()},
+        **{t: WritingAnswer for t in WritingQuestionType.get_answer_types()},
+        **{t: WritingChoice for t in WritingQuestionType.get_choice_types()},
     }
 
     questions = ctx["event"].get_elements(WritingQuestion)

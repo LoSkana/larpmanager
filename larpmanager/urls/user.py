@@ -31,12 +31,9 @@ from larpmanager.views import auth as views_auth
 from larpmanager.views import base as views_base
 from larpmanager.views.base import MyLoginView
 from larpmanager.views.user import accounting as views_ua
-from larpmanager.views.user import casting as views_uca
-from larpmanager.views.user import character as views_uc
 from larpmanager.views.user import event as views_ue
 from larpmanager.views.user import member as views_um
 from larpmanager.views.user import miscellanea as views_ums
-from larpmanager.views.user import pdf as views_up
 from larpmanager.views.user import registration as views_ur
 
 urlpatterns = [

@@ -42,10 +42,10 @@ from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     QuestionVisibility,
     WritingOption,
-    WritingQuestion,
+    WritingQuestion, BaseQuestionType,
 )
 from larpmanager.models.writing import (
     Character,
@@ -482,10 +482,10 @@ class OrgaWritingQuestionForm(MyForm):
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
             # prevent cancellation if one of the default types
-            self.prevent_canc = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
+            self.prevent_canc = len(self.instance.typ) > 1
 
         choices = []
-        for choice in QuestionType.choices:
+        for choice in WritingQuestionType.choices:
             # if it is related to a feature
             if len(choice[0]) > 1:
                 # check it is not already present
