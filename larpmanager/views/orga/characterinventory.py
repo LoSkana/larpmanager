@@ -104,9 +104,11 @@ def orga_ci_transfer(request, s, n):
         redirect_pk = source_inventory.id if source_inventory else 0
         return redirect("orga_ci_character_inventory_view", s=s, n=n, num=redirect_pk)
 
+    reason = request.POST.get("reason", "").strip() or "manual"
+
     # Perform the transfer
     try:
-        perform_transfer(actor, pool_type, amount, source=source_inventory, target=target_inventory, reason="manual")
+        perform_transfer(actor, pool_type, amount, source=source_inventory, target=target_inventory, reason=reason)
         src_name = source_inventory.name if source_inventory else "NPC"
         tgt_name = target_inventory.name if target_inventory else "NPC"
         messages.success(request, f"Transferred {amount} {pool_type.name} from {src_name} to {tgt_name}.")
