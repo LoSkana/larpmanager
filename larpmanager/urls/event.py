@@ -251,6 +251,16 @@ path(
         name="profiles",
     ),
     path(
+        "<slug:s>/register/pre/",
+        views_ur.pre_register,
+        name="pre_register",
+    ),
+    path(
+        "<slug:s>/register/conditions/",
+        views_ur.register_conditions,
+        name="register_conditions",
+    ),
+    path(
         "<slug:s>/register/",
         views_ur.register,
         name="register",
@@ -314,20 +324,5 @@ path(
         "<slug:s>/show_char/",
         views_uc.show_char,
         name="show_char",
-    ),
-    path(
-        "<slug:s>/register/",
-        views_ue.event_register,
-        name="event_register",
-    ),
-    path(
-        "<slug:s>/register/pre/",
-        views_ur.pre_register,
-        name="pre_register",
-    ),
-    path(
-        "<slug:s>/register/conditions/",
-        views_ur.register_conditions,
-        name="register_conditions",
     ),
 ]
