@@ -21,6 +21,7 @@ from django.db import models
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.writing import Character
 
+
 class CharacterInventory(BaseConceptModel):
     name = models.CharField(max_length=150)
     owners = models.ManyToManyField(Character, related_name="character_inventory", blank=True)
@@ -53,3 +54,31 @@ class PoolBalanceCI(BaseConceptModel):
 
     class Meta:
         unique_together = ("inventory", "pool_type")
+
+
+class InventoryTransfer(models.Model):
+    source_inventory = models.ForeignKey(
+        "CharacterInventory",
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name="outgoing_transfers"
+    )
+    target_inventory = models.ForeignKey(
+        "CharacterInventory",
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name="incoming_transfers"
+    )
+    pool_type = models.ForeignKey("PoolTypeCI", on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    actor = models.ForeignKey("auth.User", on_delete=models.SET_NULL, null=True)
+    reason = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        src = self.source_inventory or "Bank"
+        tgt = self.target_inventory or "Bank"
+        return f"{self.amount} {self.pool_type.name} {src} → {tgt}"
