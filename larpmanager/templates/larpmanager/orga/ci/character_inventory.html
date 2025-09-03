@@ -1,0 +1,14 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Character Inventory" %}
+{% endblock title %}
+{% block content %}
+    <h2>{% trans "Currencies & Materials" %}</h2>
+    <table class="mob ">
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Available" %}</th>
+        </tr>
+    </table>
+{% endblock content %}

@@ -46,6 +46,7 @@ from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.characterinventory import CharacterInventory
 from larpmanager.models.event import Event
 from larpmanager.models.experience import update_px
 from larpmanager.models.member import Badge, Member
@@ -144,6 +145,10 @@ def get_event_template(ctx, n):
 
 def get_char(ctx, n, by_number=False):
     get_element(ctx, n, "character", Character, by_number)
+
+
+def get_character_inventory(ctx, n, by_number=False):
+    get_element(ctx, n, "character_inventory", CharacterInventory, by_number)
 
 
 def get_registration(ctx, n):

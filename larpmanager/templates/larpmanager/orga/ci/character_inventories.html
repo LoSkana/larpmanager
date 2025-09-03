@@ -24,7 +24,10 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
-                    <td>{{ el.name }}</td>
+                    <td>
+                        <a href="{% url 'orga_ci_character_inventory_view' run.event.slug run.number el.id %}"
+                            qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
