@@ -1,0 +1,25 @@
+{% load i18n %}
+<div>dummy thicc</div>
+{% if char.character_inventory %}
+<div class="character-inventories">
+    <h3>{% trans "Inventories" %}</h3>
+    <div class="inventory-cards">
+        {% for inventory in char.character_inventory %}
+        <div class="inventory-card">
+            <h4>{{ inventory.name }}</h4>
+            <ul class="pool-balances">
+                {% for pb in inventory.get_pool_balances %}
+                <li>
+                    {{ pb.type.name }}: {{ pb.balance.amount }}
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'orga_ci_character_inventory_view' run.event.slug run.number inventory.id %}" class="btn">
+                {% trans "View Details" %}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
