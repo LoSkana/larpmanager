@@ -36,10 +36,6 @@ class CharacterInventoryBaseForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        log.error("Initializing CharacterInventoryBaseForm")
-
-        # NOTE: Do not define 'owners' here, let the child form handle it after MyForm manipulations
-        log.error("Fields after MyForm init: %s", self.fields.keys())
 
 
 class OrgaCharacterInventoryForm(CharacterInventoryBaseForm):
