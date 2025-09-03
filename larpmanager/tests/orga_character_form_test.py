@@ -34,13 +34,13 @@ def test_orga_character_form(pw_page):
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/manage/features/178/on")
 
     # activate player editor
-    go_to(page, live_server, "/test/1/manage/features/120/on")
+    go_to(page, live_server, "/test/manage/features/120/on")
 
     # set config
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name="Player editor ").click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
@@ -50,7 +50,7 @@ def test_orga_character_form(pw_page):
     submit_confirm(page)
 
     # create character form
-    go_to(page, live_server, "/test/1/manage/writing/form/")
+    go_to(page, live_server, "/test/manage/writing/form/")
 
     add_field_text(page)
 
@@ -72,7 +72,7 @@ def test_orga_character_form(pw_page):
 
     logout(page)
 
-    go_to(page, live_server, "/test/1/")
+    go_to(page, live_server, "/test/")
     page.get_by_role("link", name="pinoloooooooooo").click()
     expect(page.locator("#one")).to_contain_text("Player: Admin Test public: public Presentation baba")
 
@@ -81,7 +81,7 @@ def test_orga_character_form(pw_page):
 
 def create_second_char(live_server, page):
     login_user(page, live_server)
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     page.get_by_role("link", name="Access character creation!").click()
@@ -115,12 +115,12 @@ def create_second_char(live_server, page):
 
 
 def show_chars(page, live_server):
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Writing")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/run")
+    go_to(page, live_server, "/test/manage/run")
     for s in range(0, 13):
         page.locator(f"#id_show_character_{s}").check()
     submit_confirm(page)
@@ -141,7 +141,7 @@ def check_first_char(page, live_server):
     expect(page.locator("#id_q12")).to_have_value("public")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/characters/")
+    go_to(page, live_server, "/test/manage/characters/")
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     page.locator("#id_q4").click()
     page.locator("#id_q4").fill("cccccccccc")
@@ -184,14 +184,14 @@ def recheck_char(live_server, page):
     expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple text")
     expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
     submit_confirm(page)
-    go_to(page, live_server, "/test/1/character/list")
+    go_to(page, live_server, "/test/character/list")
     page.get_by_role("link", name="").click()
     expect(page.locator("#id_q10")).to_have_value("disabled")
     submit_confirm(page)
 
 
 def create_first_char(live_server, page):
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Register").click()
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)

@@ -286,9 +286,9 @@
 
     {% if avatar_form %}
 
-        var upload = '{% url 'character_profile_upload' event.slug run.number character.number %}';
-        var rotate_l = '{% url 'character_profile_rotate' event.slug run.number character.number 1 %}';
-        var rotate_r = '{% url 'character_profile_rotate' event.slug run.number character.number 0 %}';
+        var upload = '{% url 'character_profile_upload' run.get_slug character.number %}';
+        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.number 1 %}';
+        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.number 0 %}';
 
         function profile_update(src) {
             timestamp = (new Date()).getTime();

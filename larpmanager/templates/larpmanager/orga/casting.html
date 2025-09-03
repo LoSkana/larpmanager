@@ -11,9 +11,9 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Casting management for" %}:
-                <a href="{% url 'orga_casting' event.slug run.number 0 %}">{% trans "characters" %}</a>
+                <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
                 {% for idx, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'orga_casting' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
@@ -113,8 +113,8 @@ window['avoids'] = {{ avoids | safe }};
 window['csrf_token'] = "{{ csrf_token }}";
 window['tick'] = "{{ tick }}";
 window['tipo'] = "{{ typ }}";
-window['toggle_url'] = "{% url 'orga_casting_toggle' event.slug run.number typ %}";
-window['orga_casting_url'] = "{% url 'orga_casting' event.slug run.number typ %}";
+window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug typ %}";
+window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug typ %}";
 
 window['trads'] = {
     'g': '{% trans "Player" %}',

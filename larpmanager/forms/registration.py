@@ -61,6 +61,8 @@ class RegistrationForm(BaseRegistrationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.questions = []
+        self.tickets_map = {}
         run = self.params["run"]
         event = run.event
         self.event = event
@@ -145,7 +147,6 @@ class RegistrationForm(BaseRegistrationForm):
     def init_questions(self, event, reg_counts):
         self.tickets_map = {}
         if self.waiting_check:
-            self.questions = []
             return
         self._init_reg_question(self.instance, event)
         for q in self.questions:

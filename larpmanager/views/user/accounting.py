@@ -184,9 +184,9 @@ def acc_refund(request):
 
 
 @login_required
-def acc_pay(request, s, n, method=None):
+def acc_pay(request, s, method=None):
     check_assoc_feature(request, "payment")
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     if not ctx["run"].reg:
         messages.warning(
@@ -231,7 +231,7 @@ def acc_reg(request, reg_id, method=None):
 
     if reg.tot_iscr == reg.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
 
     pending = (
         PaymentInvoice.objects.filter(
@@ -244,12 +244,12 @@ def acc_reg(request, reg_id, method=None):
     )
     if pending:
         messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
 
     if "membership" in ctx["features"] and not reg.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
 
     ctx["reg"] = reg
 
@@ -487,7 +487,7 @@ def acc_profile_check(request, mes, inv):
 def acc_redirect(inv):
     if inv.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(id=inv.idx)
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
     return redirect("accounting")
 
 

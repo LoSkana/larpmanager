@@ -22,13 +22,13 @@
                     <span class="sidebar-link-wrap"
                           descr="{% trans "Access the event dashboard" %}">
                         <a class="sidebar-link"
-                           href="{% url 'manage' run.event.slug run.number %}">Dashboard</a>
+                           href="{% url 'manage' run.get_slug %}">Dashboard</a>
                         <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
                     </span>
                     <span class="sidebar-link-wrap"
                           descr="{% trans "Set your interface preferences" %}">
                         <a class="sidebar-link"
-                           href="{% url 'orga_preferences' run.event.slug run.number %}">{% trans "Preferences" %}</a>
+                           href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
                         <a href="#" class="explain-icon" tog="orga_preferences"><i class="fas fa-question-circle"></i></a>
                     </span>
                 </p>
@@ -46,7 +46,7 @@
                                               descr="{% trans ap.descr %}"
                                               id="{{ ap.slug }}">
                                             <a class="sidebar-link"
-                                               href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
+                                               href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
                                             <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                         </span>
                                     {% endif %}

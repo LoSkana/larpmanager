@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             request = $.ajax({
-                url: "{% url 'orga_multichoice_available' event.slug run.number %}",
+                url: "{% url 'orga_multichoice_available' run.get_slug %}",
                 method: "POST",
                 data: {'type': 'registrations'},
                 datatype: "json",

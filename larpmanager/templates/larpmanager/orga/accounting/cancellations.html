@@ -89,7 +89,7 @@
                             {% if el.refunded %}
                                 {% trans "Refunded" %}
                             {% else %}
-                                <a href="{% url 'orga_cancellation_refund' event.slug run.number el.id %}">{% trans "Approve reimbursement" %}</a>
+                                <a href="{% url 'orga_cancellation_refund' run.get_slug el.id %}">{% trans "Approve reimbursement" %}</a>
                             {% endif %}
                         </td>
                     {% endif %}

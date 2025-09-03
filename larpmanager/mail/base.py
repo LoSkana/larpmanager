@@ -177,7 +177,7 @@ def bring_friend_instructions(reg, ctx):
     body += (
         "<br /><br />"
         + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
-        % {"url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"}
+        % {"url": f"{reg.run.get_slug()}/limitations/"}
         + "."
     )
 
@@ -207,7 +207,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         "trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
     ) % {"event": instance.run, "trait": t["name"], "quest": q["name"]}
     url = get_url(
-        f"{instance.run.event.slug}/{instance.run.number}/character/your",
+        f"{instance.run.get_slug()}/character/your",
         instance.run.event,
     )
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"

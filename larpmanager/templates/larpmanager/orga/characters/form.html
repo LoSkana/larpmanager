@@ -16,7 +16,7 @@
                 {% if nm == label_typ %}
                     {% trans nm as name %}{{ name }}
                 {% else %}
-                    <a href="{% url 'orga_writing_form' run.event.slug run.number nm %}">{% trans nm as name %}{{ name }}</a>
+                    <a href="{% url 'orga_writing_form' run.get_slug nm %}">{% trans nm as name %}{{ name }}</a>
                 {% endif %}
             {% endfor %}
         </p>
@@ -46,7 +46,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_writing_form_edit' run.event.slug run.number typ el.id %}"
+                        <a href="{% url 'orga_writing_form_edit' run.get_slug typ el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
@@ -60,19 +60,19 @@
                     <td>
                         {% for ch in el.options_list %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ ch.id %}">{{ ch.name }}</a>
+                            <a href="{% url 'orga_writing_options_edit' run.get_slug typ ch.id %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id 0 %}">
+                            <a href="{% url 'orga_writing_form_order' run.get_slug typ el.id 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id 1 %}">
+                            <a href="{% url 'orga_writing_form_order' run.get_slug typ el.id 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}

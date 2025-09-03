@@ -37,7 +37,7 @@ def test_upload_download(pw_page):
     check_user_fee(live_server, page)
 
     # prepare
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     check_feature(page, "Characters")
     check_feature(page, "Factions")
@@ -104,7 +104,7 @@ def plots(live_server, page):
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
     expect(page.locator("#id_char_role_2_tr")).to_contain_text("#2 characcter")
     expect(page.locator("#id_char_role_2_tr")).to_contain_text("super start")
-    go_to(page, live_server, "/test/1/manage/plots/")
+    go_to(page, live_server, "/test/manage/plots/")
     check_download(page, "Download")
 
 

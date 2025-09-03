@@ -34,7 +34,7 @@ def test_user_search(pw_page):
 
     characters(page, live_server)
 
-    go_to(page, live_server, "/test/1/")
+    go_to(page, live_server, "/test/")
     page.get_by_role("link", name="Search", exact=True).click()
 
     filter_faction(page)
@@ -111,7 +111,7 @@ def filter_faction(page):
 def prepare(page, live_server):
     # prepare
     login_orga(page, live_server)
-    go_to(page, live_server, "/test/1/manage")
+    go_to(page, live_server, "/test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()

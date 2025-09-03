@@ -34,7 +34,7 @@ def test_orga_registration_form(pw_page):
     login_orga(page, live_server)
 
     # create form
-    go_to(page, live_server, "/test/1/manage/form/")
+    go_to(page, live_server, "/test/manage/form/")
 
     add_text(page)
 
@@ -210,7 +210,7 @@ def add_special(page):
 
 def signup_first(live_server, page):
     # sign up as first user
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("textbox", name="short text").click()
     page.get_by_role("textbox", name="short text").fill("aaaaaaaaaa")
     expect(page.get_by_role("textbox", name="short text")).to_have_value("aaaaaaaaaa")
@@ -229,7 +229,7 @@ def signup_first(live_server, page):
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     # add mandatory
-    go_to(page, live_server, "/test/1/manage/form/")
+    go_to(page, live_server, "/test/manage/form/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -244,7 +244,7 @@ def signup_first(live_server, page):
 
 def signup_check(live_server, page):
     # check values
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#register_form")).to_contain_text("short description")
     expect(page.get_by_role("textbox", name="short text")).to_have_value("aaaaaaaaaa")
     expect(page.locator("#register_form")).to_contain_text("long description")
@@ -277,7 +277,7 @@ def signup_check(live_server, page):
 
 def orga_check(live_server, page):
     # check signups
-    go_to(page, live_server, "/test/1/manage/registrations/")
+    go_to(page, live_server, "/test/manage/registrations/")
     page.get_by_role("link", name="").click()
     expect(page.locator("#id_q1")).to_have_value("aaaaaaaaaa")
     expect(page.get_by_text("BBBBBBBBBB")).to_have_value("BBBBBBBBBB")
@@ -305,7 +305,7 @@ def user_signup(live_server, page):
     logout(page)
     login_user(page, live_server)
     expect(page.locator("#one")).to_contain_text("Hurry: only 9 tickets available.")
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_label("choice").select_option("2")
     expect(page.get_by_label("choice")).to_have_value("2")
     page.get_by_label("rescrited").select_option("4")

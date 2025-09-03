@@ -30,15 +30,15 @@ def test_orga_event_role(pw_page):
 
     login_user(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     expect(page.locator("#header")).to_contain_text("Access denied")
 
-    go_to(page, live_server, "/test/1/manage/accounting/")
+    go_to(page, live_server, "/test/manage/accounting/")
     expect(page.locator("#header")).to_contain_text("Access denied")
 
     login_orga(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/roles")
+    go_to(page, live_server, "/test/manage/roles")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("test role")
@@ -53,13 +53,13 @@ def test_orga_event_role(pw_page):
     logout(page)
     login_user(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/accounting/")
+    go_to(page, live_server, "/test/manage/accounting/")
     expect(page.locator("#banner")).to_contain_text("Event accounting - Test Larp")
 
     logout(page)
     login_orga(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/roles")
+    go_to(page, live_server, "/test/manage/roles")
     page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
@@ -68,8 +68,8 @@ def test_orga_event_role(pw_page):
     logout(page)
     login_user(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     expect(page.locator("#header")).to_contain_text("Access denied")
 
-    go_to(page, live_server, "/test/1/manage/accounting/")
+    go_to(page, live_server, "/test/manage/accounting/")
     expect(page.locator("#header")).to_contain_text("Access denied")

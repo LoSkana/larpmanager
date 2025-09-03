@@ -52,7 +52,7 @@ def cache_event_links(request):
     que = Registration.objects.filter(member=member, run__end__gte=ref)
     que = que.filter(cancellation_date__isnull=True, run__event__assoc_id=request.assoc["id"])
     que = que.select_related("run", "run__event")
-    ctx["reg_menu"] = [(r.run.event.slug, r.run.number, str(r.run)) for r in que]
+    ctx["reg_menu"] = [(r.run.get_slug(), str(r.run)) for r in que]
 
     assoc_id = request.assoc["id"]
 
@@ -89,6 +89,7 @@ def cache_event_links(request):
         ctx["all_runs"][r.id] = roles
         if r.development not in (DevelopStatus.DONE, DevelopStatus.CANC):
             ctx["open_runs"][r.id] = {
+                "slug": r.get_slug(),
                 "e": r.event.slug,
                 "r": r.number,
                 "s": str(r),

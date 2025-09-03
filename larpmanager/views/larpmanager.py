@@ -145,7 +145,7 @@ def choose_assoc(request, p, slugs):
 
 
 def go_redirect_run(run, p):
-    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.event.slug}/{run.number}/{p}"
+    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.get_slug()}/{p}"
     return redirect(n_p)
 
 
@@ -220,13 +220,13 @@ def activate_feature_assoc(request, cod, p=None):
     return redirect(reverse(view_name))
 
 
-def activate_feature_event(request, s, n, cod, p=None):
+def activate_feature_event(request, s, cod, p=None):
     feature = get_object_or_404(Feature, slug=cod)
     if feature.overall:
         raise Http404("feature overall")
 
     # check the user has the permission to add features
-    ctx = get_event_run(request, s, n)
+    ctx = get_event_run(request, s)
     if not has_event_permission(request, {}, ctx["event"].slug, "orga_features"):
         raise PermissionError()
 
@@ -240,7 +240,7 @@ def activate_feature_event(request, s, n, cod, p=None):
     if p:
         return redirect("/" + p)
     view_name = feature.event_permissions.first().slug
-    return redirect(reverse(view_name, kwargs={"s": s, "n": n}))
+    return redirect(reverse(view_name, kwargs={"s": s}))
 
 
 def toggle_sidebar(request):

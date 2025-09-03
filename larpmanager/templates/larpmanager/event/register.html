@@ -16,7 +16,7 @@
         {% if features.player_cancellation %}
             <hr />
             <p>
-                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' event.slug run.number %}">{% trans "cancel your registrations" %}.</a>
+                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' run.get_slug %}">{% trans "cancel your registrations" %}.</a>
             </p>
         {% endif %}
         {% if features.bring_friend %}

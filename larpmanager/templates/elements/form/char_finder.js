@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', function() {
             if (value == null || value == '') return;
 
             request = $.ajax({
-                url: "{% url 'orga_character_get_number' event.slug run.number %}",
+                url: "{% url 'orga_character_get_number' run.get_slug %}",
                 data: { idx: value, type: type },
                 method: "POST",
                 datatype: "json",

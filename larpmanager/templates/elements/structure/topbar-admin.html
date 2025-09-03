@@ -24,7 +24,7 @@
                                 {% if run and run.event.slug == v.e and run.number == v.r %}
                                     <!-- skip -->
                                 {% else %}
-                                    <a href="{% url 'manage' v.e v.r %}" class="origin"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
+                                    <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
                                 {% endif %}
                             {% endfor %}
                             {% if assoc_role %}
@@ -46,12 +46,12 @@
                         <div class="dropdown-menu">
                             {% if run %}
                                 {% if manage %}
-                                    <a href="{% url 'gallery' run.event.slug run.number %}"
+                                    <a href="{% url 'gallery' run.get_slug %}"
                                        class="admin-link">
                                         <i class="fa-solid fa-users"></i> User
                                     </a>
                                 {% else %}
-                                    <a href="{% url 'manage' run.event.slug run.number %}"
+                                    <a href="{% url 'manage' run.get_slug %}"
                                        class="admin-link">
                                         <i class="fa-solid fa-toolbox"></i> Admin
                                     </a>

@@ -8,17 +8,17 @@
         {% if staff %}
             <p>
                 {% trans "Go to the history preferences for" %}:
-                <a href="{% url 'orga_casting_history' event.slug run.number 0 %}">{% trans "characters" %}</a>,
+                <a href="{% url 'orga_casting_history' run.get_slug 0 %}">{% trans "characters" %}</a>,
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting_history' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'orga_casting_history' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% else %}
             <p>
                 {% trans "Go to the history preferences for" %}:
-                <a href="{% url 'casting_history' event.slug run.number 0 %}">{% trans "characters" %}</a>,
+                <a href="{% url 'casting_history' run.get_slug 0 %}">{% trans "characters" %}</a>,
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'casting_history' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'casting_history' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}

@@ -33,33 +33,33 @@ def test_orga_mirror(pw_page):
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/manage/features/178/on")
 
     # show chars
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Writing")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/run")
+    go_to(page, live_server, "/test/manage/run")
     page.locator("#id_show_character_0").check()
     submit_confirm(page)
 
     # check gallery
-    go_to(page, live_server, "/test/1/")
+    go_to(page, live_server, "/test/")
     expect(page.locator("#one")).to_contain_text("Test Character")
 
     # activate casting
-    go_to(page, live_server, "/test/1/manage/features/27/on")
+    go_to(page, live_server, "/test/manage/features/27/on")
 
     # activate mirror
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     page.locator("#id_casting_mirror").check()
     submit_confirm(page)
 
     # create mirror
-    go_to(page, live_server, "/test/1/manage/characters/")
+    go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Mirror")
@@ -67,7 +67,7 @@ def test_orga_mirror(pw_page):
     submit_confirm(page)
 
     # check gallery
-    go_to(page, live_server, "/test/1/")
+    go_to(page, live_server, "/test/")
     expect(page.locator("#one")).to_contain_text("Mirror")
     expect(page.locator("#one")).to_contain_text("Test Character")
 
@@ -75,7 +75,7 @@ def test_orga_mirror(pw_page):
 
 
 def casting(live_server, page):
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     page.locator("#id_casting_characters").click()
     page.locator("#id_casting_characters").fill("1")
@@ -86,11 +86,11 @@ def casting(live_server, page):
     submit_confirm(page)
 
     # sign up and fill preferences
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/casting")
+    go_to(page, live_server, "/test/casting")
     page.locator("#faction0").select_option("all")
     page.locator("#choice0").click()
     expect(page.locator("#casting")).to_contain_text("Mirror")
@@ -99,16 +99,16 @@ def casting(live_server, page):
     submit(page)
 
     # perform casting
-    go_to(page, live_server, "/test/1/manage/casting")
+    go_to(page, live_server, "/test/manage/casting")
     page.get_by_role("button", name="Start algorithm").click()
     expect(page.locator("#assegnazioni")).to_contain_text("#1 Test Character")
     expect(page.locator("#assegnazioni")).to_contain_text("-> #2 Mirror")
     page.get_by_role("button", name="Upload").click()
 
     # check assignment
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     expect(page.locator("#one")).to_contain_text("#1 Test Character")
 
-    go_to(page, live_server, "/test/1")
+    go_to(page, live_server, "/test")
     expect(page.locator("#one")).to_contain_text("Test Character")
     expect(page.locator("#one")).not_to_contain_text("Mirror")

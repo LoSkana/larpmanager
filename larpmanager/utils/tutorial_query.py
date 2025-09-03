@@ -104,7 +104,7 @@ def query_index(request):
             {
                 "name": perm["name"],
                 "descr": perm["descr"],
-                "href": reverse(perm["slug"], args=[run.event.slug, run.number]),
+                "href": reverse(perm["slug"], args=[run.get_slug()]),
             }
             for perm in sorted_permissions
         ]

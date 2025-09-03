@@ -53,7 +53,7 @@ def test_plot_relationship_reading(pw_page):
 
 
 def reading(live_server, page):
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
 
     # set prova presentation and text
     page.get_by_role("link", name="Characters").click()
@@ -126,20 +126,20 @@ def relationships(live_server, page):
     expect(page.locator("#form_relationships")).to_contain_text("#1 Test Character Direct Show <p>ciaaoooooo</p>")
 
     # check in other char
-    go_to(page, live_server, "/test/1/manage/characters/#")
+    go_to(page, live_server, "/test/manage/characters/#")
     page.locator('[id="\\31 "]').get_by_role("cell", name="").click()
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     expect(page.locator("#form_relationships")).to_contain_text("Inverse Show ciaaoooooo")
 
     # check in gallery
-    go_to(page, live_server, "/test/1/")
+    go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
     expect(page.locator("#one")).to_contain_text("Relationships Test Character ciaaoooooo")
 
 
 def plots(live_server, page):
     # create plot
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -202,6 +202,6 @@ def plots(live_server, page):
     submit_confirm(page)
 
     # check in user
-    go_to(page, live_server, "/test/1/")
+    go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
     expect(page.locator("#one")).to_contain_text("testona wwwwwbruuuu")

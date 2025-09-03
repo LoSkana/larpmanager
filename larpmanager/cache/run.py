@@ -30,28 +30,33 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 
 
-def reset_cache_run(a, s, n):
-    key = cache_run_key(a, s, n)
+def reset_cache_run(a, s):
+    key = cache_run_key(a, s)
     cache.delete(key)
 
 
-def cache_run_key(a, s, n):
-    return f"run_{a}_{s}_{n}"
+def cache_run_key(a, s):
+    return f"run_{a}_{s}"
 
 
-def get_cache_run(a, s, n):
-    key = cache_run_key(a, s, n)
+def get_cache_run(a, s):
+    key = cache_run_key(a, s)
     res = cache.get(key)
     if not res:
-        res = init_cache_run(a, s, n)
+        res = init_cache_run(a, s)
         cache.set(key, res)
     return res
 
 
-def init_cache_run(a, s, n):
+def init_cache_run(a, s):
     try:
+        try:
+            s, n = s.split('-')
+            n = int(n)
+        except ValueError:
+            n = 1
+
         run = Run.objects.select_related("event").get(event__assoc_id=a, event__slug=s, number=n)
-        # res = {'run': run.as_dict(), 'event': run.event.as_dict() }
         return run.id
     except ObjectDoesNotExist:
         return None
@@ -60,14 +65,14 @@ def init_cache_run(a, s, n):
 @receiver(pre_save, sender=Run)
 def pre_save_run(sender, instance, **kwargs):
     if instance.pk:
-        reset_cache_run(instance.event.assoc_id, instance.event.slug, instance.number)
+        reset_cache_run(instance.event.assoc_id, instance.get_slug())
 
 
 @receiver(pre_save, sender=Event)
 def pre_save_event(sender, instance, **kwargs):
     if instance.pk:
         for run in instance.runs.all():
-            reset_cache_run(instance.assoc_id, instance.slug, run.number)
+            reset_cache_run(instance.assoc_id, run.get_slug())
 
 
 def reset_cache_config_run(run):

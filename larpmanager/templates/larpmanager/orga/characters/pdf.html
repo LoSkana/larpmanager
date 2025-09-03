@@ -11,15 +11,15 @@
         <table>
             <tr>
                 <td>
-                    <a href="{% url 'orga_gallery_pdf' run.event.slug run.number %}"
+                    <a href="{% url 'orga_gallery_pdf' run.get_slug %}"
                        download>{% trans "Gallery Pdf" %}</a>
                 </td>
                 <td>
-                    <a href="{% url 'orga_gallery_test' run.event.slug run.number %}"
+                    <a href="{% url 'orga_gallery_test' run.get_slug %}"
                        target="_blank">{% trans "Test gallery" %}</a>
                 </td>
                 <td>
-                    <a href="{% url 'orga_profiles_pdf' run.event.slug run.number %}"
+                    <a href="{% url 'orga_profiles_pdf' run.get_slug %}"
                        download>{% trans "PDF Profiles" %}</a>
                 </td>
             </tr>
@@ -34,32 +34,32 @@
                     </select>
                 </td>
                 <td>
-                    <a orig="{% url 'orga_characters_sheet_pdf' run.event.slug run.number 0 %}"
+                    <a orig="{% url 'orga_characters_sheet_pdf' run.get_slug 0 %}"
                        class="link"
                        download>{% trans "Complete sheet (Pdf)" %}</a>
                 </td>
                 <td>
-                    <a orig="{% url 'orga_characters_sheet_test' run.event.slug run.number 0 %}"
+                    <a orig="{% url 'orga_characters_sheet_test' run.get_slug 0 %}"
                        class="link"
                        target="_blank">{% trans "Complete sheet (Test)" %}</a>
                 </td>
                 <td>
-                    <a orig="{% url 'orga_characters_friendly_pdf' run.event.slug run.number 0 %}"
+                    <a orig="{% url 'orga_characters_friendly_pdf' run.get_slug 0 %}"
                        class="link"
                        download>{% trans "Lightweight sheet (Pdf)" %}</a>
                 </td>
                 <td>
-                    <a orig="{% url 'orga_characters_friendly_test' run.event.slug run.number 0 %}"
+                    <a orig="{% url 'orga_characters_friendly_test' run.get_slug 0 %}"
                        class="link"
                        target="_blank">{% trans "Lightweight sheet (Test)" %}</a>
                 </td>
                 <td>
-                    <a orig="{% url 'orga_characters_relationships_pdf' run.event.slug run.number 0 %}"
+                    <a orig="{% url 'orga_characters_relationships_pdf' run.get_slug 0 %}"
                        class="link"
                        download>{% trans "Relationships (Pdf)" %}</a>
                 </td>
                 <td>
-                    <a orig="{% url 'orga_characters_relationships_test' run.event.slug run.number 0 %}"
+                    <a orig="{% url 'orga_characters_relationships_test' run.get_slug 0 %}"
                        class="link"
                        target="_blank">{% trans "Relationships (Test)" %}</a>
                 </td>
@@ -89,7 +89,7 @@
                 <tr>
                     <th>Page background</th>
                     <td>
-                        Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
                         <br />
                         <hr />
                         <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>
@@ -103,7 +103,7 @@
                         <b><i>Make sure the font has format TTF (Truetype), otherwise find some online tool to convert it!</i></b>
                         <br />
                         <br />
-                        Then upload the font on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        Then upload the font on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
                         <br />
                         <hr />
                         <span class="code">@font-face { font-family: '#name#'; src: url('#internal_link#'); }
@@ -116,7 +116,7 @@
                 <tr>
                     <th>Header</th>
                     <td>
-                        Upload the HTML code that will go in the header in the field "HEADER CONTENT" (if you wish to use images, remmber to upload them on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, and to refer to them with the internal link). Then place the following in the "PAGE CSS":
+                        Upload the HTML code that will go in the header in the field "HEADER CONTENT" (if you wish to use images, remmber to upload them on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, and to refer to them with the internal link). Then place the following in the "PAGE CSS":
                         <br />
                         <hr />
                         <span class="code">@page { [... other stuff ...] @frame header_frame { -pdf-frame-content: header_content; top: 1cm; } }</span>
@@ -202,7 +202,7 @@
             <input type="submit" value="{% trans "Confirm" %}">
             <br />
             <br />
-            <a href="{% url 'orga_pdf_regenerate' run.event.slug run.number %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
+            <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
         </form>
     </div>
 {% endblock content %}

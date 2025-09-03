@@ -33,10 +33,10 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_answer' run.event.slug run.number el.member_id %}">{% trans "Answer" %}</a>
+                        <a href="{% url 'orga_questions_answer' run.get_slug el.member_id %}">{% trans "Answer" %}</a>
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_close' run.event.slug run.number el.member_id %}">{% trans "Close" %}</a>
+                        <a href="{% url 'orga_questions_close' run.get_slug el.member_id %}">{% trans "Close" %}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -60,7 +60,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'orga_questions_answer' run.event.slug run.number el.member.id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'orga_questions_answer' run.get_slug el.member.id %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

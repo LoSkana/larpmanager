@@ -413,9 +413,9 @@ def get_fake_request(assoc_slug):
 
 
 @background_auto(queue="pdf")
-def print_handout_bkg(a, s, n, c):
+def print_handout_bkg(a, s, c):
     request = get_fake_request(a)
-    ctx = get_event_run(request, s, n)
+    ctx = get_event_run(request, s)
     print_handout_go(ctx, c)
 
 
@@ -432,16 +432,16 @@ def print_character_go(ctx, c):
 
 
 @background_auto(queue="pdf")
-def print_character_bkg(a, s, n, c):
+def print_character_bkg(a, s, c):
     request = get_fake_request(a)
-    ctx = get_event_run(request, s, n)
+    ctx = get_event_run(request, s)
     print_character_go(ctx, c)
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(a, s, n):
+def print_run_bkg(a, s):
     request = get_fake_request(a)
-    ctx = get_event_run(request, s, n)
+    ctx = get_event_run(request, s)
 
     print_gallery(ctx)
     print_profiles(ctx)

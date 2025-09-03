@@ -94,18 +94,18 @@ def template(live_server, page):
 
 def setup(live_server, page):
     # activate factions
-    go_to(page, live_server, "/test/1/manage/features/104/on")
+    go_to(page, live_server, "/test/manage/features/104/on")
     # activate xp
-    go_to(page, live_server, "/test/1/manage/features/118/on")
+    go_to(page, live_server, "/test/manage/features/118/on")
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/manage/features/178/on")
     # configure test larp
-    go_to(page, live_server, "/test/1/manage/config/")
+    go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/roles/")
+    go_to(page, live_server, "/test/manage/roles/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("blabla")
@@ -119,19 +119,19 @@ def setup(live_server, page):
 
 def px(live_server, page):
     # set up xp
-    go_to(page, live_server, "/test/1/manage/config/")
+    go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
     page.locator("#id_px_start").click()
     page.locator("#id_px_start").fill("10")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/px/ability_types/")
+    go_to(page, live_server, "/test/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/px/abilities/")
+    go_to(page, live_server, "/test/manage/px/abilities/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("standard")
@@ -143,7 +143,7 @@ def px(live_server, page):
     fill_tinymce(page, "id_descr", "sdsfdsfds")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/px/deliveries/")
+    go_to(page, live_server, "/test/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("first live")
@@ -155,7 +155,7 @@ def px(live_server, page):
     submit_confirm(page)
 
     # check px computation
-    go_to(page, live_server, "/test/1/manage/characters/")
+    go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")

@@ -11,7 +11,7 @@
     {% for run in runs %}
         <hr />
         <h3>
-            <a href="{% url 'gallery' run.event.slug run.number %}">{{ run.search }}</a>
+            <a href="{% url 'gallery' run.get_slug %}">{{ run.search }}</a>
         </h3>
     {% endfor %}
 {% endblock content %}

@@ -126,12 +126,12 @@ urlpatterns = [
         name="activate_feature_assoc",
     ),
     path(
-        "<slug:s>/<int:n>/activate/<slug:cod>/next/<path:p>",
+        "<slug:s>/activate/<slug:cod>/next/<path:p>",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
     path(
-        "<slug:s>/<int:n>/activate/<slug:cod>/",
+        "<slug:s>/activate/<slug:cod>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),

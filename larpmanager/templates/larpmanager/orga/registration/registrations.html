@@ -171,7 +171,7 @@
                     {% for reg in dc.list %}
                         <tr id="{{ reg.id }}">
                             <td>
-                                <a href="{% url 'orga_registrations_edit' run.event.slug run.number reg.id %}"
+                                <a href="{% url 'orga_registrations_edit' run.get_slug reg.id %}"
                                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>
@@ -199,9 +199,9 @@
                                 <td>
                                     {% for el in reg.chars %}
                                         {% include "elements/comma.html" %}
-                                        <a href="{% url 'orga_characters_edit' run.event.slug run.number el.id %}">#{{ el.number }} {{ el.name }}</a>
+                                        <a href="{% url 'orga_characters_edit' run.get_slug el.id %}">#{{ el.number }} {{ el.name }}</a>
                                         {% if features.custom_character %}
-                                            <a href="{% url 'orga_registrations_customization' run.event.slug run.number el.id %}"><i class="fas fa-user-pen"></i></a>
+                                            <a href="{% url 'orga_registrations_customization' run.get_slug el.id %}"><i class="fas fa-user-pen"></i></a>
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -212,7 +212,7 @@
                                         {% with factions|get:fnum as ft %}
                                             {% if ft.id %}
                                                 {% include "elements/comma.html" %}
-                                                <a href="{% url 'orga_factions_edit' run.event.slug run.number ft.id %}">{{ ft.name }}</a>
+                                                <a href="{% url 'orga_factions_edit' run.get_slug ft.id %}">{{ ft.name }}</a>
                                             {% endif %}
                                         {% endwith %}
                                     {% endfor %}
@@ -262,7 +262,7 @@
                                         {% include "elements/comma.html" %}
                                         {{ d }}
                                     {% endfor %}
-                                    <a href="{% url 'orga_registration_discounts' run.event.slug run.number reg.id %}">{% trans "Manage" %}</a>
+                                    <a href="{% url 'orga_registration_discounts' run.get_slug reg.id %}">{% trans "Manage" %}</a>
                                 </td>
                             {% endif %}
                             <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>
@@ -333,7 +333,7 @@
                 </tbody>
             </table>
         {% endfor %}
-        <a href="{% url 'orga_registrations_reload' run.event.slug run.number %}">{% trans "Recalculate" %}</a>
+        <a href="{% url 'orga_registrations_reload' run.get_slug %}">{% trans "Recalculate" %}</a>
         <h2>{% trans "Email list" %}</h2>
         <p>
             <a href="#" class="table_toggle" tog='email_players'>{% trans "Players" %}</a>,
@@ -557,8 +557,8 @@
 {% endblock content %}
 {% block js %}
     <script>
-var url_load_questions = "{% url 'orga_registration_form_list' run.event.slug run.number %}";
-var url_load_questions_email = "{% url 'orga_registration_form_email' run.event.slug run.number %}";
+var url_load_questions = "{% url 'orga_registration_form_list' run.get_slug %}";
+var url_load_questions_email = "{% url 'orga_registration_form_email' run.get_slug %}";
 
 var download_text = '{% trans "Download" %}';
 
@@ -579,7 +579,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         request = $.ajax({
-            url: "{% url 'orga_registrations_accounting' run.event.slug run.number %}",
+            url: "{% url 'orga_registrations_accounting' run.get_slug %}",
             method: "POST",
             datatype: "json",
         });
@@ -633,7 +633,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 start_spinner();
 
                 request = $.ajax({
-                    url: "{% url 'orga_registration_member' run.event.slug run.number %}",
+                    url: "{% url 'orga_registration_member' run.get_slug %}",
                     method: "POST",
                     data: { mid: $(this).attr("pop") },
                     datatype: "json",
