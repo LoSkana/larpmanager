@@ -578,8 +578,7 @@ def orga_registration_discount_add(request, s, num, dis):
     ctx["registration"].save()
     return redirect(
         "orga_registration_discounts",
-        s=ctx["event"].slug,
-        n=ctx["run"].number,
+        s=ctx["run"].get_slug(),
         num=ctx["registration"].id,
     )
 
@@ -592,8 +591,7 @@ def orga_registration_discount_del(request, s, num, dis):
     ctx["registration"].save()
     return redirect(
         "orga_registration_discounts",
-        s=ctx["event"].slug,
-        n=ctx["run"].number,
+        s=ctx["run"].get_slug(),
         num=ctx["registration"].id,
     )
 

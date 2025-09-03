@@ -37,21 +37,18 @@ class SignupError(Exception):
     def __init__(self, slug, number):
         super().__init__()
         self.slug = slug
-        self.number = number
 
 
 class WaitingError(Exception):
     def __init__(self, slug, number):
         super().__init__()
         self.slug = slug
-        self.number = number
 
 
 class HiddenError(Exception):
     def __init__(self, slug, number, name):
         super().__init__()
         self.slug = slug
-        self.number = number
         self.name = name
 
 

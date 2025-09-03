@@ -82,7 +82,7 @@ def full_event_edit(ctx, request, event, run, exe=False):
             if exe:
                 return redirect("manage")
             else:
-                return redirect("manage", s=event.slug, n=run.number)
+                return redirect("manage", s=run.get_slug())
     else:
         form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
         form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
@@ -325,7 +325,7 @@ def orga_upload(request, s, typ):
 
     if request.POST:
         form = UploadElementsForm(request.POST, request.FILES)
-        redr = reverse(f"orga_{typ}", args=[ctx["event"].slug, ctx["run"].number])
+        redr = reverse(f"orga_{typ}", args=[ctx["run"].get_slug()])
         if form.is_valid():
             try:
                 # print(request.FILES)

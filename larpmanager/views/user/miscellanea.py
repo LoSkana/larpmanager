@@ -83,12 +83,12 @@ def help_red(request, n):
         ctx["run"] = Run.objects.get(pk=n, event__assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
-    return redirect("help", s=ctx["run"].event.slug, n=ctx["run"].number)
+    return redirect("help", s=ctx["run"].get_slug())
 
 
 @login_required
-def help(request, s=None, n=None):
-    if s and n:
+def help(request, s=None):
+    if s:
         ctx = get_event_run(request, s, status=True)
     else:
         ctx = def_user_ctx(request)
@@ -235,8 +235,7 @@ def workshop_answer(request, s, m):
             messages.success(request, _("Completed module. Remaining: {number:d}").format(number=len(remaining)))
             return redirect(
                 "workshop_answer",
-                s=ctx["event"].slug,
-                n=ctx["run"].number,
+                s=ctx["run"].get_slug(),
                 m=remaining.first().number,
             )
         messages.success(request, _("Well done, you've completed all modules!"))

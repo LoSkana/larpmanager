@@ -467,7 +467,7 @@ def orga_reading(request, s):
         retrieve_cache_text_field(ctx, text_fields, typ)
         for el in ctx["list"]:
             el.type = _(model_name)
-            el.url = reverse(f"orga_{model_name}s_view", args=[ctx["event"].slug, ctx["run"].number, el.id])
+            el.url = reverse(f"orga_{model_name}s_view", args=[ctx["run"].get_slug(), el.id])
 
         ctx["alls"].extend(ctx["list"])
 

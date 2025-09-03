@@ -334,7 +334,7 @@ def orga_writing_form_order(request, s, typ, num, order):
     ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingQuestion, num, order)
-    return redirect("orga_writing_form", s=ctx["event"].slug, typ=typ, n=ctx["run"].number)
+    return redirect("orga_writing_form", s=ctx["run"].get_slug(), typ=typ)
 
 
 @login_required

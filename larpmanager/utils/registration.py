@@ -379,10 +379,10 @@ def get_player_signup(request, ctx):
 def check_signup(request, ctx):
     reg = get_player_signup(request, ctx)
     if not reg:
-        raise SignupError(ctx["event"].slug, ctx["run"].number)
+        raise SignupError(ctx["run"].get_slug())
 
     if reg.ticket and reg.ticket.tier == TicketTier.WAITING:
-        raise WaitingError(ctx["event"].slug, ctx["run"].number)
+        raise WaitingError(ctx["run"].get_slug())
 
 
 def check_assign_character(request, ctx):

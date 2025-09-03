@@ -205,7 +205,7 @@ def event_register(request, s):
         return redirect("pre_register", s=s)
     elif len(runs) == 1:
         run = runs.first()
-        return redirect("register", s=s, n=run.number)
+        return redirect("register", s=run.get_slug())
     ctx["list"] = []
     features_map = {ctx["event"].slug: ctx["features"]}
     for r in runs:
@@ -370,7 +370,7 @@ def check_visibility(ctx, typ, name):
         raise Http404(typ + " not active")
 
     if "staff" not in ctx and not ctx[f"show_{typ}"]:
-        raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
+        raise HiddenError(ctx["run"].get_slug(), name)
 
 
 def factions(request, s):

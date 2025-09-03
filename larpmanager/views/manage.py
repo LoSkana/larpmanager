@@ -36,7 +36,7 @@ from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
-def manage(request, s=None, n=None):
+def manage(request, s=None):
     if request.assoc["id"] == 0:
         return redirect("home")
 
@@ -657,7 +657,7 @@ def _get_href(ctx, perm, name, custom_link):
 def _get_perm_link(ctx, perm, view):
     if perm.startswith("exe"):
         return reverse(view)
-    return reverse(view, args=[ctx["event"].slug, ctx["run"].number])
+    return reverse(view, args=[ctx["run"].get_slug()])
 
 
 def _compile(request, ctx):

@@ -238,7 +238,7 @@ def check_event_permission(request, s, perm=None):
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial
         if config and has_event_permission(request, ctx, s, "orga_config"):
-            ctx["config"] = reverse("orga_config", args=[ctx["event"].slug, ctx["run"].number, config])
+            ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config])
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)

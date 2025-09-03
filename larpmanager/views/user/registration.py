@@ -232,7 +232,7 @@ def registration_redirect(request, reg, new_reg, run):
         mes = _("Registration updated to %(event)s!") % context
 
     messages.success(request, mes)
-    return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+    return redirect("gallery", s=reg.run.get_slug())
 
 
 def save_registration_bring_friend(ctx, form, reg, request):
