@@ -68,6 +68,16 @@ class AbilityPx(BaseConceptModel):
         AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
     )
 
+    template = models.ForeignKey(
+        AbilityTemplatePx,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="abilities",
+        verbose_name=_("Template"),
+        help_text=_("Optional template associated with this ability."),
+    )
+
     cost = models.IntegerField()
 
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
@@ -111,10 +121,11 @@ class AbilityPx(BaseConceptModel):
         ]
 
     def display(self):
-        return f"{name} ({self.cost})"
+        return f"{self.name} ({self.cost})"
 
     def get_description(self):
         return self.template.descr if self.template_id else self.descr
+
 
 
 class DeliveryPx(BaseConceptModel):
