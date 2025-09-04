@@ -48,19 +48,46 @@ class AbilityTypePx(BaseConceptModel):
         ]
 
 class AbilityTemplatePx(BaseConceptModel):
-
     name = models.CharField(max_length=150)
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
-    rank = models.PositiveIntegerField(default=1, verbose_name=_("Rank"))
+    # Self-referential many-to-many: a template can include other templates, including multiple times
+    components = models.ManyToManyField(
+        "self",
+        through="AbilityTemplateComponent",
+        symmetrical=False,
+        blank=True,
+        related_name="used_in",
+        verbose_name=_("Component Templates"),
+        help_text=_("Other templates that are part of this template. Can include multiple instances."),
+    )
 
     def __str__(self):
-        if self.rank > 1:
-            return f"{self.name} {self.rank}"
         return self.name
 
     def get_full_name(self):
         return self.name
+
+
+class AbilityTemplateComponent(models.Model):
+    """
+    Through model to allow multiple instances of the same component template
+    within a parent template.
+    """
+    parent = models.ForeignKey(
+        AbilityTemplatePx,
+        on_delete=models.CASCADE,
+        related_name="component_links"
+    )
+    component = models.ForeignKey(
+        AbilityTemplatePx,
+        on_delete=models.CASCADE,
+        related_name="component_instances"
+    )
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ("parent", "component")
 
 
 class AbilityPx(BaseConceptModel):
