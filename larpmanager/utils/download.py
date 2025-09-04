@@ -44,7 +44,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions, RegistrationQuestionType,
+    get_ordered_registration_questions, RegistrationQuestionType, BaseQuestionType,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
