@@ -451,7 +451,7 @@ def orga_character_form_download(ctx):
 
 def export_character_form(ctx):
     mappings = {
-        "typ": WritingQuestionType.get_mapping(),
+        "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
         "applicable": QuestionApplicable.get_mapping(),
         "visibility": QuestionVisibility.get_mapping(),

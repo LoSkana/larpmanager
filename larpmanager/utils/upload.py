@@ -547,7 +547,7 @@ def _questions_load(ctx, row, is_registration):
 
 def _get_mappings(is_registration):
     mappings = {
-        "typ": invert_dict(WritingQuestionType.get_mapping()),
+        "typ": invert_dict(BaseQuestionType.get_mapping()),
         "status": invert_dict(QuestionStatus.get_mapping()),
         "applicable": invert_dict(QuestionApplicable.get_mapping()),
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
