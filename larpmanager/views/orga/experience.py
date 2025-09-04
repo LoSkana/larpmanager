@@ -30,9 +30,9 @@ from larpmanager.forms.experience import (
     OrgaAbilityTypePxForm,
     OrgaDeliveryPxForm,
     OrgaModifierPxForm,
-    OrgaRulePxForm,
+    OrgaRulePxForm, OrgaAbilityTemplatePxForm,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx, AbilityTemplatePx
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order
 from larpmanager.utils.core.exceptions import ReturnNowError
@@ -159,6 +159,19 @@ def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_px_rules")
     context["list"] = context["event"].get_elements(RulePx).order_by("order")
     return render(request, "larpmanager/orga/px/rules.html", context)
+
+
+def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check permission and get event context
+    context = check_event_context(request, event_slug, "orga_px_ability_templates")
+    context["list"] = context["event"].get_elements(AbilityTemplatePx).order_by("number")
+    return render(request, "larpmanager/orga/px/ability_templates.html", context)
+
+
+@login_required
+def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific rule for an event."""
+    return orga_edit(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm, num)
 
 
 @login_required

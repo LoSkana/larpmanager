@@ -50,6 +50,21 @@ class AbilityTypePx(BaseConceptModel):
         ]
 
 
+class AbilityTemplatePx(BaseConceptModel):
+    name = models.CharField(max_length=150)
+    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
+
+    rank = models.PositiveIntegerField(default=1, verbose_name=_("Rank"))
+
+    def __str__(self):
+        if self.rank > 1:
+            return f"{self.name} {self.rank}"
+        return self.name
+
+    def get_full_name(self):
+        return self.name
+
+
 class AbilityPx(BaseConceptModel):
     """Represents AbilityPx model."""
 
@@ -107,6 +122,10 @@ class AbilityPx(BaseConceptModel):
     def display(self) -> str:
         """Return formatted display string with name and cost."""
         return f"{self.name} ({self.cost})"
+
+    # FIX
+    def get_description(self):
+        return self.template.descr if self.template_id else self.descr
 
 
 class DeliveryPx(BaseConceptModel):

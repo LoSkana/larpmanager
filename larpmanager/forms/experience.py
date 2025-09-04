@@ -26,10 +26,12 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
+    AbilityTemplateS2WidgetMulti,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx, AbilityTemplatePx
 from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
@@ -64,6 +66,23 @@ class OrgaDeliveryPxForm(PxBaseForm):
         exclude = ("number",)
 
         widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti}
+
+
+class OrgaAbilityTemplatePxForm(MyForm):
+    page_title = _("Ability Template")
+
+    page_info = _("This page allows you to add or edit an ability template")
+
+    class Meta:
+        model = AbilityTemplatePx
+        exclude = ("number",)
+
+        widgets = {
+            "components": AbilityTemplateS2WidgetMulti,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class OrgaAbilityPxForm(PxBaseForm):

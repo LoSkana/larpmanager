@@ -728,6 +728,21 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(AbilityPx)
 
 
+class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+    search_fields = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(AbilityTemplate)
+
+    def label_from_instance(self, obj):
+        return obj.get_full_name()
+
+
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     """Represents TicketS2WidgetMulti model."""
 

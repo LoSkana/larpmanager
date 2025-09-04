@@ -1625,6 +1625,12 @@ msgstr ""
 msgid "Manage experience point deliveries"
 msgstr ""
 
+msgid "Ability Template"
+msgstr ""
+
+msgid "This page allows you to add or edit an ability template"
+msgstr ""
+
 msgid "Ability"
 msgstr ""
 
@@ -3137,6 +3143,9 @@ msgstr ""
 msgid ""
 "This code is used to generate the secret registration link, you may keep the "
 "default or customize it"
+msgstr ""
+
+msgid "Rank"
 msgstr ""
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
@@ -6918,6 +6927,20 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
+msgid "Ability Templates"
+msgstr ""
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+
+msgid "Template Name"
+msgstr ""
+
+msgid "Components"
+msgstr ""
+
 msgid "Ability types"
 msgstr ""
 
@@ -8748,6 +8771,9 @@ msgid ""
 msgstr ""
 
 msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+
+msgid "Manage ability templates"
 msgstr ""
 
 msgid "Communications"

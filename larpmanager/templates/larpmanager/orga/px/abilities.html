@@ -21,6 +21,7 @@
                     <th>{% trans "Visible" %}</th>
                     <th>{% trans "Prerequisites" %}</th>
                     <th>{% trans "Requirements" %}</th>
+                    <th>{% trans "Template" %}</th>
                 {% endif %}
             </tr>
         </thead>
@@ -62,6 +63,9 @@
                                 {% include "elements/comma.html" %}
                                 {{ opt.name }}
                             {% endfor %}
+                        </td>
+                        <td>
+                            {% if el.template %}{{ el.template.get_full_name }}{% endif %}
                         </td>
                     {% endif %}
                 </tr>
