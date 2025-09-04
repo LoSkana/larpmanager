@@ -80,8 +80,8 @@ def template(live_server, page):
 
     # check roles
     go_to(page, live_server, "/fromtemplate/1/manage/roles/")
-    expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
-    expect(page.locator('[id="\\35 "]')).to_contain_text("Texts")
+    expect(page.locator('[id="\\36 "]')).to_contain_text("User Test")
+    expect(page.locator('[id="\\36 "]')).to_contain_text("Texts")
     # check configuration
     go_to(page, live_server, "/fromtemplate/1/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
