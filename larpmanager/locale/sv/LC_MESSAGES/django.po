@@ -7746,6 +7746,10 @@ msgid ""
 msgstr ""
 "Om kryssrutan är markerad kan deltagarna ange sången för sina karaktärer"
 
+#, fuzzy
+msgid "Optional template associated with this ability."
+msgstr "Den medlem som är associerad med detta medlemskap"
+
 msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
 msgstr ""

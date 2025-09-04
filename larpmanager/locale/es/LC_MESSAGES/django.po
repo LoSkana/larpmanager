@@ -8028,6 +8028,10 @@ msgstr ""
 "Habilita el campo 'título', un texto breve (2-3 palabras) que se añade al "
 "nombre del personaje"
 
+#, fuzzy
+msgid "Optional template associated with this ability."
+msgstr "El miembro asociado a esta afiliación"
+
 msgid ""
 "If checked, it allows participants to customise the names of their "
 "characters"

@@ -7685,6 +7685,10 @@ msgid ""
 msgstr ""
 "Pokud je tato možnost zaškrtnuta, mohou účastníci uvést píseň své postavy"
 
+#, fuzzy
+msgid "Optional template associated with this ability."
+msgstr "Člen přidružený k tomuto členství"
+
 msgid ""
 "If checked: Participants must provide a receipt/invoice for manual payments"
 msgstr ""

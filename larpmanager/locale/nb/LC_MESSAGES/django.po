@@ -7919,6 +7919,10 @@ msgstr ""
 "Hvis du har foretatt en overføring, må du laste opp kvitteringen for at den "
 "skal bli behandlet"
 
+#, fuzzy
+msgid "Optional template associated with this ability."
+msgstr "Medlemmet som er knyttet til dette medlemskapet"
+
 msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"

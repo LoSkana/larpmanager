@@ -79,6 +79,16 @@ class AbilityPx(BaseConceptModel):
 
     cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
 
+    template = models.ForeignKey(
+        AbilityTemplatePx,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="abilities",
+        verbose_name=_("Template"),
+        help_text=_("Optional template associated with this ability."),
+    )
+
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
     visible = models.BooleanField(

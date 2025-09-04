@@ -7701,6 +7701,10 @@ msgid ""
 "Enables field 'hide', to be able to hide writing element from participants"
 msgstr "Włącza pole 'ukryj', aby móc ukryć element pisania przed uczestnikami"
 
+#, fuzzy
+msgid "Optional template associated with this ability."
+msgstr "Członek powiązany z tym członkostwem"
+
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""

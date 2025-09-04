@@ -3151,6 +3151,9 @@ msgstr ""
 msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr ""
 
+msgid "Optional template associated with this ability."
+msgstr ""
+
 msgid ""
 "Indicate whether the ability is visible to users, and can be freely purchased"
 msgstr ""

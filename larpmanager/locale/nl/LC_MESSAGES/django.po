@@ -9540,6 +9540,10 @@ msgstr ""
 "Zodra de overboeking is bevestigd, vraag je het bewijs van bevestiging op en"
 " upload je het hieronder"
 
+#, fuzzy
+msgid "Optional template associated with this ability."
+msgstr "Het lid geassocieerd met dit lidmaatschap"
+
 msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
