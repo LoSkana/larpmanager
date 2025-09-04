@@ -747,6 +747,16 @@ urlpatterns = [
         name="orga_px_ability_types_edit",
     ),
     path(
+        "<slug:s>/<int:n>/manage/px/ability_templates/",
+        views_ox.orga_px_ability_templates,
+        name="orga_px_ability_templates",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/px/ability_templates/edit/<int:num>/",
+        views_ox.orga_px_ability_templates_edit,
+        name="orga_px_ability_templates_edit",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/px/rules/",
         views_ox.orga_px_rules,
         name="orga_px_rules",

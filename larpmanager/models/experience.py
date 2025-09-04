@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from decimal import Decimal
 
 from django.db import models
@@ -48,13 +49,33 @@ class AbilityTypePx(BaseConceptModel):
         ]
 
 
+class AbilityTemplatePx(BaseConceptModel):
+    name = models.CharField(max_length=150)
+    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
+
+    def __str__(self):
+        return self.name
+
+    def get_full_name(self):
+        return self.name
+
+
 class AbilityPx(BaseConceptModel):
     typ = models.ForeignKey(
         AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
     )
 
-    cost = models.IntegerField()
+    template = models.ForeignKey(
+        AbilityTemplatePx,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="abilities",
+        verbose_name=_("Template"),
+        help_text=_("Optional template associated with this ability."),
+    )
 
+    cost = models.IntegerField()
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
     visible = models.BooleanField(
@@ -98,10 +119,13 @@ class AbilityPx(BaseConceptModel):
     def display(self):
         return f"{self.name} ({self.cost})"
 
+    @property
+    def get_description(self):
+        return self.template.descr if self.template else self.descr
+
 
 class DeliveryPx(BaseConceptModel):
     amount = models.IntegerField()
-
     characters = models.ManyToManyField(Character, related_name="px_delivery_list", blank=True)
 
     class Meta:
@@ -124,13 +148,11 @@ class DeliveryPx(BaseConceptModel):
 
 def update_px(char):
     start = char.event.get_config("px_start", 0)
-
     addit = {
         "px_tot": int(start) + sum(char.px_delivery_list.values_list("amount", flat=True)),
         "px_used": sum(char.px_ability_list.values_list("cost", flat=True)),
     }
     addit["px_avail"] = addit["px_tot"] - addit["px_used"]
-
     save_all_element_configs(char, addit)
 
     # save computed field
@@ -159,7 +181,7 @@ def update_px(char):
         values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
 
     for question_id, value in values.items():
-        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        qa, _ = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
         qa.text = format(value, "f").rstrip("0").rstrip(".")
         qa.save()
 
@@ -195,5 +217,4 @@ class RulePx(BaseConceptModel):
     )
 
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
     order = models.IntegerField(default=0)

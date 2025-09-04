@@ -812,3 +812,14 @@
     hidden: false
     feature: 120
     module: 16
+- model: larpmanager.eventpermission
+  pk: 85
+  fields:
+    name: Ability Template
+    descr: Manage ability templates
+    slug: orga_px_ability_templates
+    number: 42
+    config: px
+    hidden: false
+    feature: 118
+    module: 11
