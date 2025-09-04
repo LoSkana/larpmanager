@@ -47,7 +47,7 @@ from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
-from larpmanager.models.form import QuestionApplicable, WritingQuestionType, BaseQuestionType
+from larpmanager.models.form import QuestionApplicable, WritingQuestionType, BaseQuestionType, RegistrationQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
@@ -367,6 +367,11 @@ def orga_upload_template(request, s, typ):
         WritingQuestionType.HIDE: "hide (true or false)",
         WritingQuestionType.PROGRESS: "name of progress step",
         WritingQuestionType.ASSIGNED: "name of assigned staff",
+        RegistrationQuestionType.TICKET: "name of the ticket",
+        RegistrationQuestionType.ADDITIONAL: "number of additional tickets",
+        RegistrationQuestionType.PWYW: "amount of free donation",
+        RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
+        RegistrationQuestionType.SURCHARGE: "surcharge applied"
     }
     if ctx.get("writing_typ"):
         exports = _writing_template(ctx, typ, value_mapping)
