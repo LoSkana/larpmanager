@@ -1,0 +1,44 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Ability Templates" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page summarizes the reusable ability templates that can be assigned to abilities" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="ability_templates" class="go_datatable writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Template Name" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Components" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_px_ability_templates_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.get_full_name }}</td>
+                    <td>
+                        {{ el.descr | safe | clean_tags | truncatechars:80 }}
+                        {% if el.descr_ln > 80 %}
+                            <a href="#" class="show_popup" pop="{{ el.id }}" fie="descr"><i class="fas fa-eye"></i></a>
+                            <span class="popup_text descr">
+                                <h2>{{ el.get_full_name }}</h2>
+                                {% show_char el.descr run 1 %}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
