@@ -102,6 +102,7 @@ class OrgaAbilityPxForm(PxBaseForm):
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
+            "template": AbilityTemplateS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -109,8 +110,12 @@ class OrgaAbilityPxForm(PxBaseForm):
         super().__init__(*args, **kwargs)
 
         # Configure prerequisite and requirement widgets with event context
+        # FIX
         for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
+        for field_name in ["prerequisites", "dependents", "template"]:
+            if field_name in self.fields:
+                self.fields[field_name].widget.set_event(self.params["event"])
 
         px_user = get_event_config(self.params["event"].id, "px_user", default_value=False, context=self.params)
 

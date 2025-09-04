@@ -4,7 +4,7 @@
     {% trans "Ability" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarizes the abilities that participants can purchase with experience points" %}
+    {% trans "This page summarizes the abilities dummy that participants can purchase with experience points" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
@@ -36,12 +36,12 @@
                     <td>{{ el.typ }}</td>
                     <td>{{ el.cost }}</td>
                     <td>
-                        {{ el.descr | safe | clean_tags | truncatechars:80 }}
+                        {{ el.get_description | safe | clean_tags | truncatechars:80 }}
                         {% if el.descr_ln > 80 %}
                             <a href="#" class="show_popup" pop="{{ el.id }}" fie="descr"><i class="fas fa-eye"></i></a>
                             <span class="popup_text descr">
                                 <h2>{{ el.name }}</h2>
-                            {% show_char el.descr run 1 %} </span>
+                            {% show_char el.get_description run 1 %} </span>
                         {% endif %}
                     </td>
                     <td>

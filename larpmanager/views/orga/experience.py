@@ -161,6 +161,7 @@ def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/px/rules.html", context)
 
 
+@login_required
 def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check permission and get event context
     context = check_event_context(request, event_slug, "orga_px_ability_templates")

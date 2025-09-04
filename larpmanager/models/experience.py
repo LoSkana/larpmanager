@@ -155,7 +155,6 @@ class AbilityPx(BaseConceptModel):
         """Return formatted display string with name and cost."""
         return f"{self.name} ({self.cost})"
 
-    # FIX
     def get_description(self):
         return self.template.descr if self.template_id else self.descr
 
@@ -184,6 +183,48 @@ class DeliveryPx(BaseConceptModel):
     def display(self) -> str:
         """Return formatted display string with name and amount."""
         return f"{self.name} ({self.amount})"
+
+
+def update_px(char):
+    start = char.event.get_config("px_start", 0)
+
+    addit = {
+        "px_tot": int(start) + sum(char.px_delivery_list.values_list("amount", flat=True)),
+        "px_used": sum(char.px_ability_list.values_list("cost", flat=True)),
+    }
+    addit["px_avail"] = addit["px_tot"] - addit["px_used"]
+
+    save_all_element_configs(char, addit)
+
+    # save computed field
+    event = char.event
+    computed_ques = event.get_elements(WritingQuestion).filter(typ=QuestionType.COMPUTED)
+    values = {question.id: Decimal(0) for question in computed_ques}
+
+    # apply rules
+    ability_ids = char.px_ability_list.values_list("pk", flat=True)
+    rules = (
+        event.get_elements(RulePx)
+        .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
+        .distinct()
+        .order_by("order")
+    )
+
+    ops = {
+        Operation.ADDITION: lambda x, y: x + y,
+        Operation.SUBTRACTION: lambda x, y: x - y,
+        Operation.MULTIPLICATION: lambda x, y: x * y,
+        Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
+    }
+
+    for rule in rules:
+        f_id = rule.field.id
+        values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
+
+    for question_id, value in values.items():
+        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        qa.text = format(value, "f").rstrip("0").rstrip(".")
+        qa.save()
 
 
 class Operation(models.TextChoices):
