@@ -251,7 +251,7 @@ def copy(live_server, page):
     page.get_by_role("button", name="Submit").click()
 
     go_to(page, live_server, "/copy/1/manage/roles/")
-    row = page.locator('tr[id="10"]')
+    row = page.locator('tr[id="12"]')
     expect(row).to_contain_text("User Test")
     expect(row).to_contain_text("Appearance (Navigation), Writing (Factions) ")
     go_to(page, live_server, "/copy/1/manage/config/")
