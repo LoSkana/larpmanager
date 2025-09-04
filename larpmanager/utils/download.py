@@ -408,7 +408,7 @@ def orga_registration_form_download(ctx):
 
 def export_registration_form(ctx):
     mappings = {
-        "typ": RegistrationQuestionType.get_mapping(),
+        "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
     }
 
