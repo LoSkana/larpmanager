@@ -147,7 +147,7 @@ def field_multiple(page, live_server):
     submit_confirm(page)
     page.locator('[id="\\34 "]').get_by_role("link", name="").click()
     submit_confirm(page)
-    page.get_by_role("link", name="").click()
+    page.locator('[id="\\33 "]').get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
 
@@ -204,7 +204,7 @@ def gift(page, live_server):
     # gift
     go_to(page, live_server, "/test/gift/")
     page.get_by_role("link", name="Add new").click()
-    page.locator("#id_q2").get_by_text("one").click()
+    page.locator("#id_q3").get_by_text("one").click()
     page.get_by_label("choice").select_option("1")
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("wwww")
