@@ -30,8 +30,7 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx, AbilityTemplatePx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
@@ -76,13 +75,14 @@ class OrgaAbilityTemplatePxForm(MyForm):
     class Meta:
         model = AbilityTemplatePx
         exclude = ("number",)
-
         widgets = {
             "components": AbilityTemplateS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields["components"].widget.set_event(self.params["event"])
 
 
 class OrgaAbilityPxForm(PxBaseForm):

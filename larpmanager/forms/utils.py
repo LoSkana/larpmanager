@@ -737,7 +737,7 @@ class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         self.event = event
 
     def get_queryset(self):
-        return self.event.get_elements(AbilityTemplate)
+        return self.event.get_elements(AbilityTemplatePx)
 
     def label_from_instance(self, obj):
         return obj.get_full_name()
