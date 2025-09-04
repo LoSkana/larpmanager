@@ -66,6 +66,7 @@ def orga_px_ability_types_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_px_ability_types", OrgaAbilityTypePxForm, num)
 
 
+@login_required
 def orga_px_ability_templates(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_px_ability_templates")
     ctx["list"] = ctx["event"].get_elements(AbilityTemplatePx).order_by("number")

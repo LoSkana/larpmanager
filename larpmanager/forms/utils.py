@@ -461,7 +461,7 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(AbilityPx)
 
 
-class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+class AbilityTemplateS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]

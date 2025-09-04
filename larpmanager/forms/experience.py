@@ -19,14 +19,26 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django import forms
-from django.apps import apps
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     EventCharacterS2WidgetMulti,
-    EventWritingOptionS2WidgetMulti, AbilityTemplateS2WidgetMulti,
+    EventWritingOptionS2WidgetMulti, AbilityTemplateS2Widget,
+)
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx, AbilityTemplatePx
+from larpmanager.models.form import QuestionType, WritingQuestion
+
+
+from django import forms
+from django.utils.translation import gettext_lazy as _
+
+from larpmanager.forms.base import MyForm
+from larpmanager.forms.utils import (
+    AbilityS2WidgetMulti,
+    EventCharacterS2WidgetMulti,
+    EventWritingOptionS2WidgetMulti,
 )
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx, AbilityTemplatePx
 from larpmanager.models.form import QuestionType, WritingQuestion
@@ -42,37 +54,22 @@ class PxBaseForm(MyForm):
 
 class OrgaDeliveryPxForm(PxBaseForm):
     load_js = ["characters-choices"]
-
     page_title = _("Delivery")
-
     page_info = _("This page allows you to add or edit a px delivery")
 
     class Meta:
         model = DeliveryPx
         exclude = ("number",)
-
         widgets = {"characters": EventCharacterS2WidgetMulti}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class OrgaAbilityTemplatePxForm(MyForm):
     page_title = _("Ability Template")
-
     page_info = _("This page allows you to add or edit an ability template")
 
     class Meta:
         model = AbilityTemplatePx
         exclude = ("number",)
-        widgets = {
-            "components": AbilityTemplateS2WidgetMulti,
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields["components"].widget.set_event(self.params["event"])
 
 
 class OrgaAbilityPxForm(PxBaseForm):
@@ -87,16 +84,15 @@ class OrgaAbilityPxForm(PxBaseForm):
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "dependents": EventWritingOptionS2WidgetMulti,
+            "template": AbilityTemplateS2Widget,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        #self.fields["template"].widget = AbilityTemplateS2WidgetMulti()
-        #self.fields["template"].widget.set_event(self.params["event"])
-
-        for s in ["prerequisites", "dependents"]:
-            self.fields[s].widget.set_event(self.params["event"])
+        for field_name in ["prerequisites", "dependents", "template"]:
+            if field_name in self.fields:
+                self.fields[field_name].widget.set_event(self.params["event"])
 
         px_user = self.params["event"].get_config("px_user", False)
 
@@ -106,15 +102,12 @@ class OrgaAbilityPxForm(PxBaseForm):
         ]
 
         if not px_user:
-            self.delete_field("dependents")
-            self.delete_field("prerequisites")
-            self.delete_field("visible")
-            #self.delete_field("template")
+            for field_name in ["dependents", "prerequisites", "visible"]:
+                self.delete_field(field_name)
 
 
 class OrgaAbilityTypePxForm(MyForm):
     page_title = _("Ability type")
-
     page_info = _("This page allows you to add or edit a px ability type")
 
     class Meta:
@@ -124,7 +117,6 @@ class OrgaAbilityTypePxForm(MyForm):
 
 class OrgaRulePxForm(MyForm):
     page_title = _("Rule")
-
     page_info = _("This page allows you to add or edit a rule on computed fields")
 
     class Meta:
@@ -146,3 +138,4 @@ class SelectNewAbility(forms.Form):
         ctx = self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
         self.fields["sel"] = forms.ChoiceField(choices=ctx["list"])
+
