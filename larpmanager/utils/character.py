@@ -29,7 +29,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
     WritingAnswer,
     WritingChoice,
-    WritingQuestion,
+    WritingQuestion, BaseQuestionType,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
@@ -250,8 +250,8 @@ def check_missing_mandatory(ctx):
     aux = []
 
     models = {
-        **{t: WritingAnswer for t in WritingQuestionType.get_answer_types()},
-        **{t: WritingChoice for t in WritingQuestionType.get_choice_types()},
+        **{t: WritingAnswer for t in BaseQuestionType.get_answer_types()},
+        **{t: WritingChoice for t in BaseQuestionType.get_choice_types()},
     }
 
     questions = ctx["event"].get_elements(WritingQuestion)
