@@ -32,17 +32,17 @@ def test_user_character_option_reg_ticket(pw_page):
 
     login_orga(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage")
+    go_to(page, live_server, "/test/manage")
 
     prepare(page)
 
-    go_to(page, live_server, "/test/1")
+    go_to(page, live_server, "/test")
 
     create_character(page)
 
     logout(page)
 
-    go_to(page, live_server, "/test/1/character/1")
+    go_to(page, live_server, "/test/character/1")
 
 
 def prepare(page):

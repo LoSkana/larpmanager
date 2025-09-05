@@ -38,7 +38,7 @@ def test_permanence_form(pw_page):
 
     check_exe_config(page)
 
-    go_to(page, live_server, "/test/1/manage")
+    go_to(page, live_server, "/test/manage")
 
     check_orga_roles(page)
 

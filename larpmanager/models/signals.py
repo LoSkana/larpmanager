@@ -55,10 +55,10 @@ from larpmanager.models.event import Event, EventButton, EventConfig, EventText,
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     QuestionVisibility,
     WritingChoice,
-    WritingQuestion,
+    WritingQuestion, BaseQuestionType, RegistrationQuestionType, RegistrationQuestion,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
@@ -286,6 +286,8 @@ def save_event_update(sender, instance, **kwargs):
 
     save_event_tickets(features, instance)
 
+    save_event_registration_form(features, instance)
+
     save_event_character_form(features, instance)
 
     reset_event_features(instance.id)
@@ -316,27 +318,15 @@ def save_event_character_form(features, instance):
     if instance.parent:
         return
 
-    # get most common language between organizers
-    langs = {}
-    for orga in get_event_organizers(instance):
-        lang = orga.language
-        if lang not in langs:
-            langs[lang] = 1
-        else:
-            langs[lang] += 1
-    if langs:
-        max_lang = max(langs, key=langs.get)
-    else:
-        max_lang = "en"
-    activate(max_lang)
+    _activate_orga_lang(instance)
 
     def_tps = {
-        QuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
-        QuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
-        QuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
+        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
+        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
+        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
     }
 
-    custom_tps = QuestionType.get_basic_types()
+    custom_tps = BaseQuestionType.get_basic_types()
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
     _init_faction_form_questions(def_tps, instance, features)
@@ -398,7 +388,7 @@ def _init_plot_form_questions(def_tps, instance, features):
     types = set(que.values_list("typ", flat=True).distinct())
 
     plot_tps = def_tps.copy()
-    plot_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
+    plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
 
     # add default types if none are present
     if not types:
@@ -419,7 +409,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
     types = set(que.values_list("typ", flat=True).distinct())
 
     # evaluate each question type field
-    choices = dict(QuestionType.choices)
+    choices = dict(WritingQuestionType.choices)
     all_types = choices.keys()
     all_types -= custom_tps
 
@@ -439,7 +429,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
     # add types from feature if the feature is active but the field is missing
     not_to_remove = set(def_tps.keys())
     if "px" in features:
-        not_to_remove.add(QuestionType.COMPUTED)
+        not_to_remove.add(WritingQuestionType.COMPUTED)
     all_types -= not_to_remove
     for el in sorted(list(all_types)):
         if el in features and el not in types:
@@ -454,6 +444,77 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             )
         if el not in features and el in types:
             WritingQuestion.objects.filter(event=instance, typ=el).delete()
+
+def save_event_registration_form(features, instance):
+    _activate_orga_lang(instance)
+
+    def_tps = {
+        RegistrationQuestionType.TICKET
+    }
+
+    help_texts = {
+        RegistrationQuestionType.TICKET: _("Your registration ticket"),
+    }
+
+    basic_tps = BaseQuestionType.get_basic_types()
+
+    que = instance.get_elements(RegistrationQuestion)
+    types = set(que.values_list("typ", flat=True).distinct())
+
+    # evaluate each question type field
+    choices = dict(RegistrationQuestionType.choices)
+    all_types = choices.keys()
+    all_types -= basic_tps
+
+    # add default types if none are present
+    if not types:
+        for el in def_tps:
+            RegistrationQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=choices[el],
+                description=help_texts.get(el, ""),
+                status=QuestionStatus.MANDATORY
+            )
+
+    # add types from feature if the feature is active but the field is missing
+    not_to_remove = set(def_tps)
+    all_types -= not_to_remove
+
+    help_texts = {
+        "additional_tickets": _("Reserve additional tickets beyond your own"),
+        "pay_what_you_want": _("Freely indicate the amount of your donation"),
+        "reg_surcharges": _("Registration surcharge"),
+        "reg_quotas": _("Number of installments to split the fee: payments and deadlines will be equally divided from the registration date")
+    }
+
+    for el in sorted(list(all_types)):
+        if el in features and el not in types:
+            RegistrationQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=_(choices[el].capitalize()),
+                description=help_texts.get(el, ""),
+                status=QuestionStatus.OPTIONAL
+            )
+        if el not in features and el in types:
+            RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
+
+
+def _activate_orga_lang(instance):
+    # get most common language between organizers
+    langs = {}
+    for orga in get_event_organizers(instance):
+        lang = orga.language
+        if lang not in langs:
+            langs[lang] = 1
+        else:
+            langs[lang] += 1
+    if langs:
+        max_lang = max(langs, key=langs.get)
+    else:
+        max_lang = "en"
+    activate(max_lang)
 
 
 @receiver(post_save, sender=Registration)
@@ -611,13 +672,14 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
             body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
         body += instance.content
         if instance.screenshot:
-            body += f"<br /><br /><img src='{instance.screenshot_reduced.url}' />"
+            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
         my_send_mail(subj, body, email)
 
 
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
 def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
     try:
+        # noinspection PyProtectedMember, PyUnresolvedReferences
         field = instance._meta.get_field("photo")
         if not isinstance(field, models.ImageField):
             return

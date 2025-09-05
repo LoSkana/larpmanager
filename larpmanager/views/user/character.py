@@ -91,8 +91,8 @@ from larpmanager.views.user.casting import casting_details, get_casting_preferen
 from larpmanager.views.user.registration import init_form_submitted
 
 
-def character(request, s, n, num):
-    ctx = get_event_run(request, s, n, status=True)
+def character(request, s, num):
+    ctx = get_event_run(request, s, status=True)
     get_char_check(request, ctx, num)
 
     return _character_sheet(request, ctx)
@@ -103,11 +103,11 @@ def _character_sheet(request, ctx):
 
     if "check" not in ctx and not ctx["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
-        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("gallery", s=ctx["run"].get_slug())
 
     if "check" not in ctx and ctx["char"]["hide"]:
         messages.warning(request, _("Character not visible"))
-        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("gallery", s=ctx["run"].get_slug())
 
     show_private = "check" in ctx
     if show_private:
@@ -127,8 +127,8 @@ def _character_sheet(request, ctx):
     return render(request, "larpmanager/event/character.html", ctx)
 
 
-def character_external(request, s, n, code):
-    ctx = get_event_run(request, s, n)
+def character_external(request, s, code):
+    ctx = get_event_run(request, s)
 
     if not ctx["event"].get_config("writing_external_access", False):
         raise Http404("external access not active")
@@ -165,8 +165,8 @@ def character_your_link(ctx, char, p=None):
 
 
 @login_required
-def character_your(request, s, n, p=None):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def character_your(request, s, p=None):
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     rcrs = ctx["run"].reg.rcrs.all()
 
@@ -189,7 +189,7 @@ def character_your(request, s, n, p=None):
     return render(request, "larpmanager/event/character/your.html", ctx)
 
 
-def character_form(request, ctx, s, n, instance, form_class):
+def character_form(request, ctx, s, instance, form_class):
     get_options_dependencies(ctx)
     ctx["elementTyp"] = Character
 
@@ -215,7 +215,7 @@ def character_form(request, ctx, s, n, instance, form_class):
                 number = element.number
             elif isinstance(element, RegistrationCharacterRel):
                 number = element.character.number
-            return redirect("character", s=s, n=n, num=number)
+            return redirect("character", s=s, num=number)
     else:
         form = form_class(instance=instance, ctx=ctx)
 
@@ -245,8 +245,8 @@ def _update_character(ctx, element, form, mes, request):
 
 
 @login_required
-def character_customize(request, s, n, num):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def character_customize(request, s, num):
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     get_char_check(request, ctx, num, True)
 
@@ -258,13 +258,13 @@ def character_customize(request, s, n, num):
         if ctx["event"].get_config("custom_character_profile", False):
             ctx["avatar_form"] = AvatarForm()
 
-        return character_form(request, ctx, s, n, rgr, RegistrationCharacterRelForm)
+        return character_form(request, ctx, s, rgr, RegistrationCharacterRelForm)
     except ObjectDoesNotExist as err:
         raise Http404("not your char!") from err
 
 
 @login_required
-def character_profile_upload(request, s, n, num):
+def character_profile_upload(request, s, num):
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
@@ -272,7 +272,7 @@ def character_profile_upload(request, s, n, num):
     if not form.is_valid():
         return JsonResponse({"res": "ko"})
 
-    ctx = get_event_run(request, s, n, signup=True)
+    ctx = get_event_run(request, s, signup=True)
     registration_find(ctx["run"], request.user)
     get_char_check(request, ctx, num, True)
 
@@ -294,8 +294,8 @@ def character_profile_upload(request, s, n, num):
 
 
 @login_required
-def character_profile_rotate(request, s, n, num, r):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def character_profile_rotate(request, s, num, r):
+    ctx = get_event_run(request, s, signup=True, status=True)
     get_char_check(request, ctx, num, True)
 
     try:
@@ -325,8 +325,8 @@ def character_profile_rotate(request, s, n, num, r):
 
 
 @login_required
-def character_list(request, s, n):
-    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+def character_list(request, s):
+    ctx = get_event_run(request, s, status=True, signup=True, slug="user_character")
 
     ctx["list"] = get_player_characters(request.user.member, ctx["event"])
     # add character configs
@@ -345,23 +345,23 @@ def character_list(request, s, n):
 
 
 @login_required
-def character_create(request, s, n):
-    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+def character_create(request, s):
+    ctx = get_event_run(request, s, status=True, signup=True, slug="user_character")
 
     check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
     if check:
         messages.success(request, _("You have reached the maximum number of characters that can be created"))
-        return redirect("character_list", s=s, n=n)
+        return redirect("character_list", s=s)
 
     ctx["class_name"] = "character"
-    return character_form(request, ctx, s, n, None, CharacterForm)
+    return character_form(request, ctx, s,None, CharacterForm)
 
 
 @login_required
-def character_edit(request, s, n, num):
-    ctx = get_event_run(request, s, n, status=True, signup=True)
+def character_edit(request, s, num):
+    ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
-    return character_form(request, ctx, s, n, ctx["character"], CharacterForm)
+    return character_form(request, ctx, s, ctx["character"], CharacterForm)
 
 
 def get_options_dependencies(ctx):
@@ -379,8 +379,8 @@ def get_options_dependencies(ctx):
 
 
 @login_required
-def character_assign(request, s, n, num):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def character_assign(request, s, num):
+    ctx = get_event_run(request, s, signup=True, status=True)
     get_char_check(request, ctx, num, True)
     if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count():
         messages.warning(request, _("You already have an assigned character"))
@@ -388,12 +388,12 @@ def character_assign(request, s, n, num):
         RegistrationCharacterRel.objects.create(reg_id=ctx["run"].reg.id, character=ctx["character"])
         messages.success(request, _("Assigned character!"))
 
-    return redirect("character_list", s=s, n=n)
+    return redirect("character_list", s=s)
 
 
 @login_required
-def character_abilities(request, s, n, num):
-    ctx = check_char_abilities(n, num, request, s)
+def character_abilities(request, s, num):
+    ctx = check_char_abilities(request, s, num)
 
     ctx["available"] = get_available_ability_px(ctx["character"])
 
@@ -416,8 +416,8 @@ def character_abilities(request, s, n, num):
     return render(request, "larpmanager/event/character/abilities.html", ctx)
 
 
-def check_char_abilities(n, num, request, s):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def check_char_abilities(request, s, num):
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     event = ctx["event"]
     if event.parent:
@@ -433,8 +433,8 @@ def check_char_abilities(n, num, request, s):
 
 
 @login_required
-def character_abilities_del(request, s, n, num, id_del):
-    ctx = check_char_abilities(n, num, request, s)
+def character_abilities_del(request, s, num, id_del):
+    ctx = check_char_abilities(request, s, num)
     undo_abilities = get_undo_abilities(ctx, request)
     if id_del not in undo_abilities:
         raise Http404("ability out of undo window")
@@ -443,7 +443,7 @@ def character_abilities_del(request, s, n, num, id_del):
     ctx["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
-    return redirect("character_abilities", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["character"].number)
+    return redirect("character_abilities", s=ctx["run"].get_slug(), num=ctx["character"].number)
 
 
 def _save_character_abilities(ctx, request):
@@ -491,8 +491,8 @@ def get_undo_abilities(ctx, request, new_ability_id=None):
 
 
 @login_required
-def character_relationships(request, s, n, num):
-    ctx = get_event_run(request, s, n, status=True, signup=True)
+def character_relationships(request, s, num):
+    ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
     get_event_cache_all(ctx)
 
@@ -516,8 +516,8 @@ def character_relationships(request, s, n, num):
 
 
 @login_required
-def character_relationships_edit(request, s, n, num, oth):
-    ctx = get_event_run(request, s, n, status=True, signup=True)
+def character_relationships_edit(request, s, num, oth):
+    ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
 
     ctx["relationship"] = None
@@ -525,13 +525,13 @@ def character_relationships_edit(request, s, n, num, oth):
         get_player_relationship(ctx, oth)
 
     if user_edit(request, ctx, PlayerRelationshipForm, "relationship", oth):
-        return redirect("character_relationships", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["char"]["number"])
+        return redirect("character_relationships", s=ctx["run"].get_slug(), num=ctx["char"]["number"])
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
 @require_POST
-def show_char(request, s, n):
-    ctx = get_event_run(request, s, n)
+def show_char(request, s):
+    ctx = get_event_run(request, s)
     get_event_cache_all(ctx)
     search = request.POST.get("text", "").strip()
     if not search.startswith(("#", "@", "^")):

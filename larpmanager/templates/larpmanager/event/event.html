@@ -70,7 +70,7 @@
                     <tr>
                         <td data-title="{% trans "Name" %}">
                             <h3>
-                                <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
+                                <a href="{% url 'gallery' run.get_slug %}">{{ run.search }}</a>
                             </h3>
                         </td>
                         <td data-title="{% trans "Date" %}">
@@ -118,11 +118,11 @@
                             <i>{{ run.pretty_dates }} </i>
                         </td>
                         <td data-title="{% trans "Link" %}">
-                            <a href="{% url 'gallery' event.slug run.number %}">{% trans "Gallery" %}</a>
+                            <a href="{% url 'gallery' run.get_slug %}">{% trans "Gallery" %}</a>
                         </td>
                         <td data-title="{% trans "Character" %}">
                             {% if run.reg and run.reg.character %}
-                                <a href="{% url 'character' event.slug run.number run.reg.character.number %}">{{ run.reg.display_character }}</a>
+                                <a href="{% url 'character' run.get_slug run.reg.character.number %}">{{ run.reg.display_character }}</a>
                             {% endif %}
                         </td>
                     </tr>

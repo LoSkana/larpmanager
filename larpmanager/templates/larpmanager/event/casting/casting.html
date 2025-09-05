@@ -8,16 +8,16 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Go to the casting for" %}:
-                <a href="{% url 'casting' event.slug run.number 0 %}">{% trans "Characters" %}</a>
+                <a href="{% url 'casting' run.get_slug 0 %}">{% trans "Characters" %}</a>
                 {% for qtnum, qt in quest_types.items %}
-                    , <a href="{% url 'casting' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'casting' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
             <h3>Casting {{ gl_name }}</h3>
         {% endif %}
         {% if casting_history %}
             <p>
-                {% trans "Show the" %} <a href="{% url 'casting_history' event.slug run.number typ %}">{% trans "history of preferences" %}.</a>
+                {% trans "Show the" %} <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "history of preferences" %}.</a>
             </p>
         {% endif %}
         {% if assigned %}
@@ -28,7 +28,7 @@
             <p>{% trans "Enter your preferences here" %}!</p>
             {% if casting_show_pref %}
                 <p>
-                    {% trans "Show the" %} <a href="{% url 'casting_preferences' event.slug run.number typ %}">{% trans "global preferences" %}.</a>
+                    {% trans "Show the" %} <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "global preferences" %}.</a>
                 </p>
             {% endif %}
             {% if faction_filter %}

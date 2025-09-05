@@ -40,10 +40,10 @@
                     <td>{{ el.end }}</td>
                     <td>{{ el.counts.count_reg }}</td>
                     <td>
-                        <a href="{% url 'register' el.event.slug el.number %}">{{ el.registration_status }}</a>
+                        <a href="{% url 'register' el.get_slug %}">{{ el.registration_status }}</a>
                     </td>
                     <td>
-                        <a href="{% url 'gallery' el.event.slug el.number %}">{% trans "Gallery" %}</a>
+                        <a href="{% url 'gallery' el.get_slug %}">{% trans "Gallery" %}</a>
                     </td>
                 </tr>
             {% endfor %}

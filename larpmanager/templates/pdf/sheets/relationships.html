@@ -102,7 +102,7 @@
                                  alt="player profile" />
                         {% endif %}
                         <p>
-                            <span class="name"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
+                            <span class="name"><a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a> </span>
                             {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                         </p>

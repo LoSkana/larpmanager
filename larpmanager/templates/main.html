@@ -162,7 +162,7 @@
                             {% if 'help' in assoc.features %}
                                 <td>
                                     <p>
-                                        <a href=" {% if run %}{% url 'help' run.event.slug run.number %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
+                                        <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
                                     </p>
                                 </td>
                             {% endif %}

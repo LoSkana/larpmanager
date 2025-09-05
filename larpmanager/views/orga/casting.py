@@ -51,8 +51,8 @@ from larpmanager.views.user.casting import (
 
 
 @login_required
-def orga_casting_preferences(request, s, n, typ=0):
-    ctx = check_event_permission(request, s, n, "orga_casting_preferences")
+def orga_casting_preferences(request, s, typ=0):
+    ctx = check_event_permission(request, s, "orga_casting_preferences")
     casting_details(ctx, typ)
     if typ == 0:
         casting_preferences_characters(ctx)
@@ -63,8 +63,8 @@ def orga_casting_preferences(request, s, n, typ=0):
 
 
 @login_required
-def orga_casting_history(request, s, n, typ=0):
-    ctx = check_event_permission(request, s, n, "orga_casting_history")
+def orga_casting_history(request, s, typ=0):
+    ctx = check_event_permission(request, s, "orga_casting_history")
     casting_details(ctx, typ)
     if typ == 0:
         casting_history_characters(ctx)
@@ -311,10 +311,10 @@ def _fill_not_chosen(choices, chosen, ctx, preferences, taken):
 
 
 @login_required
-def orga_casting(request, s, n, typ=None, tick=""):
-    ctx = check_event_permission(request, s, n, "orga_casting")
+def orga_casting(request, s, typ=None, tick=""):
+    ctx = check_event_permission(request, s, "orga_casting")
     if typ is None:
-        return redirect("orga_casting", s=ctx["event"].slug, n=ctx["run"].number, typ=0)
+        return redirect("orga_casting", s=ctx["run"].get_slug(), typ=0)
     ctx["typ"] = typ
     ctx["tick"] = tick
     if request.method == "POST":
@@ -333,8 +333,8 @@ def orga_casting(request, s, n, typ=None, tick=""):
 
 
 @login_required
-def orga_casting_toggle(request, s, n, typ):
-    ctx = check_event_permission(request, s, n, "orga_casting")
+def orga_casting_toggle(request, s, typ):
+    ctx = check_event_permission(request, s, "orga_casting")
     try:
         pid = request.POST["pid"]
         oid = request.POST["oid"]

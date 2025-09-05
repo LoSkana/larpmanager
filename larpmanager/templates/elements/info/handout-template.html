@@ -18,7 +18,7 @@
         <tr>
             <th>Page background</th>
             <td>
-                Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
                 <br />
                 <hr />
                 <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>
@@ -32,7 +32,7 @@
                 <b><i>Make sure the font has format TTF (Truetype), otherwise find some online tool to convert it!</i></b>
                 <br />
                 <br />
-                Then upload the font on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                Then upload the font on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
                 <br />
                 <hr />
                 <span class="code">@font-face { font-family: '#name#'; src: url('#internal_link#'); }

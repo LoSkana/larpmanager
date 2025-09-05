@@ -21,7 +21,8 @@
 from django.core.cache import cache
 
 from larpmanager.models.event import Event
-from larpmanager.models.form import QuestionApplicable, QuestionType, QuestionVisibility, WritingOption, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, WritingQuestionType, QuestionVisibility, WritingOption, \
+    WritingQuestion, get_def_writing_types
 
 
 def event_fields_key(event_id):
@@ -57,7 +58,7 @@ def update_event_fields(event_id):
         res[first_key]["options"][el["id"]] = el
 
     # add default names and ids
-    que = event.get_elements(WritingQuestion).filter(typ__in=QuestionType.get_def_types())
+    que = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
     for el in que.values("id", "typ", "name", "applicable"):
         first_key = QuestionApplicable(el["applicable"]).label
         second_key = el["typ"]

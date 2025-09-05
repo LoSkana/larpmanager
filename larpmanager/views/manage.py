@@ -23,7 +23,7 @@ from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
-from larpmanager.models.form import QuestionType, RegistrationQuestion, WritingQuestion
+from larpmanager.models.form import RegistrationQuestion, WritingQuestion, BaseQuestionType
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
@@ -36,12 +36,12 @@ from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
-def manage(request, s=None, n=None):
+def manage(request, s=None):
     if request.assoc["id"] == 0:
         return redirect("home")
 
     if s:
-        return _orga_manage(request, s, n)
+        return _orga_manage(request, s)
     else:
         return _exe_manage(request)
 
@@ -259,11 +259,11 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
 
-def _orga_manage(request, s, n):
-    ctx = get_event_run(request, s, n)
+def _orga_manage(request, s):
+    ctx = get_event_run(request, s)
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:
-        return redirect("orga_run", s=s, n=n)
+        return redirect("orga_run", s=s)
 
     ctx["orga_page"] = 1
     ctx["manage"] = 1
@@ -372,7 +372,7 @@ def _orga_actions_priorities(request, ctx, assoc):
     empty_reg_questions = (
         ctx["event"]
         .get_elements(RegistrationQuestion)
-        .filter(typ__in=[QuestionType.SINGLE, QuestionType.MULTIPLE])
+        .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
@@ -387,7 +387,7 @@ def _orga_actions_priorities(request, ctx, assoc):
     empty_char_questions = (
         ctx["event"]
         .get_elements(WritingQuestion)
-        .filter(typ__in=[QuestionType.SINGLE, QuestionType.MULTIPLE])
+        .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
@@ -657,7 +657,7 @@ def _get_href(ctx, perm, name, custom_link):
 def _get_perm_link(ctx, perm, view):
     if perm.startswith("exe"):
         return reverse(view)
-    return reverse(view, args=[ctx["event"].slug, ctx["run"].number])
+    return reverse(view, args=[ctx["run"].get_slug()])
 
 
 def _compile(request, ctx):
@@ -703,10 +703,10 @@ def exe_close_suggestion(request, perm):
     return redirect("manage")
 
 
-def orga_close_suggestion(request, s, n, perm):
-    ctx = check_event_permission(request, s, n, perm)
+def orga_close_suggestion(request, s, perm):
+    ctx = check_event_permission(request, s, perm)
     set_suggestion(ctx, perm)
-    return redirect("manage", s=s, n=n)
+    return redirect("manage", s=s)
 
 
 def _check_intro_driver(request, ctx):
@@ -720,3 +720,9 @@ def _check_intro_driver(request, ctx):
 
     ctx["intro_driver"] = True
     save_single_config(member, config_name, True)
+
+@login_required
+def orga_redirect(request, s, n, p):
+    if n > 1:
+        s += f"-{n}"
+    return redirect(f"/{s}/{p}")

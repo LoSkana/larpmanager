@@ -53,14 +53,14 @@ def signup(live_server, page):
     go_to(page, live_server, "/debug/mail")
 
     # delete sign up
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
 
     # sign up, confirm profile
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Registration confirmed")
@@ -72,7 +72,7 @@ def signup(live_server, page):
     expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
 
     # test update of signup with no payments
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#banner")).not_to_contain_text("Register")
 
@@ -121,7 +121,7 @@ def pre_register(live_server, page):
     # Activate pre-register
     go_to(page, live_server, "/manage/features/32/on")
 
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
     page.locator("#id_pre_register_active").check()
     submit_confirm(page)
@@ -140,7 +140,7 @@ def pre_register(live_server, page):
     expect(page.locator("#one")).to_contain_text("bauuu")
 
     # disable preregistration, sign up really
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
     page.locator("#id_pre_register_active").uncheck()
     submit_confirm(page)

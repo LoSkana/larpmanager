@@ -340,8 +340,8 @@ def copy_css(ctx, event, parent):
 
 
 @login_required
-def orga_copy(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_copy")
+def orga_copy(request, s):
+    ctx = check_event_permission(request, s, "orga_copy")
 
     if request.method == "POST":
         form = OrganizerCopyForm(request.POST, request.FILES, ctx=ctx)

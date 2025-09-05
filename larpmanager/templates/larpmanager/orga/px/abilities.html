@@ -28,7 +28,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_px_abilities_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
@@ -46,7 +46,7 @@
                     <td>
                         {% for ab in el.characters.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                     {% if px_user %}
@@ -54,7 +54,7 @@
                         <td>
                             {% for ab in el.prerequisites.all %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
                             {% endfor %}
                         </td>
                         <td>

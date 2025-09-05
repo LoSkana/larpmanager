@@ -206,6 +206,9 @@ msgstr "Puerto"
 msgid "Prev"
 msgstr "Anterior"
 
+msgid "Rate"
+msgstr "Tarifa"
+
 msgid "Read"
 msgstr "Leer"
 
@@ -3865,9 +3868,6 @@ msgstr "Foto de presentación del personaje"
 msgid "Describe how we can help you"
 msgstr "Describa cómo podemos ayudarle"
 
-msgid "Description of free donation"
-msgstr "Descripción de la donación gratuita"
-
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "¡Característica %(name)s desactivada"
@@ -4061,9 +4061,6 @@ msgstr "Gestionar el tipo de misiones de eventos"
 #, python-format
 msgid "Membership fee payment %(year)s"
 msgstr "Pago de acciones %(year)s"
-
-msgid "Name of the free donation field"
-msgstr "Nombre del campo de donación gratuita"
 
 msgid "Name to be displayed for tokens"
 msgstr "Nombre que se mostrará para las fichas"
@@ -4798,9 +4795,6 @@ msgstr "Gestionar la preinscripción de todos los actos"
 msgid "Now you can create the plots of the event"
 msgstr "Ahora puedes crear las parcelas del evento"
 
-msgid "Now you can set the optional amount field"
-msgstr "Ahora puedes configurar el campo opcional de importe"
-
 msgid "Request of membership to the Organization"
 msgstr "Solicitud de afiliación a la Organización"
 
@@ -4889,6 +4883,9 @@ msgstr "Participantes que NO enviaron preferencias"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Recordatorio de compilación de perfiles para %(event)s"
+
+msgid "Reserve additional tickets beyond your own"
+msgstr "Reservar entradas adicionales"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Seleccione al azar billetes de lotería para actualizar"
@@ -5237,6 +5234,9 @@ msgstr "Número máximo de plazas en espera (0 = ilimitado)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "¡Modifica algunas características del personaje para hacerlo tuyo"
+
+msgid "Now you can configure the registration question"
+msgstr "Ahora puede configurar la pregunta de registro"
 
 msgid "Now you can review the organization's deadlines"
 msgstr "Ahora puede revisar los plazos de la organización"
@@ -5728,9 +5728,6 @@ msgstr "Aún no se han recibido inscripciones para este acto"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Ahora puedes añadir relaciones al editar un personaje"
-
-msgid "Set if you want to reserve tickets in addition to your"
-msgstr "Establezca si desea reservar entradas además de su"
 
 msgid "The registration request will be updated automatically"
 msgstr "La solicitud de inscipción se actualizará automáticamente"
@@ -9227,6 +9224,13 @@ msgid ""
 msgstr ""
 "Indica si el personaje es un reflejo (es decir, si este personaje muestra la"
 " verdadera cara secreta de otro personaje)"
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
+msgstr ""
+"Número de plazos para fraccionar la tasa: los pagos y los plazos se "
+"dividirán a partes iguales a partir de la fecha de inscripción"
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

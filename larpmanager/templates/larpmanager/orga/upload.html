@@ -156,7 +156,7 @@
         {% endif %}
     {% endif %}
     <p>
-        <a href="{% url 'orga_upload_template' event.slug run.number typ %}">{% trans "Download example template" %}</a>
+        <a href="{% url 'orga_upload_template' run.get_slug typ %}">{% trans "Download example template" %}</a>
     </p>
     <br />
     <br />

@@ -206,6 +206,9 @@ msgstr "Aansluitpoort"
 msgid "Prev"
 msgstr "Prev"
 
+msgid "Rate"
+msgstr "Prijs"
+
 msgid "Read"
 msgstr "Lees"
 
@@ -3865,9 +3868,6 @@ msgstr "Een voorbeeldfoto van het personage"
 msgid "Describe how we can help you"
 msgstr "Beschrijf hoe we je kunnen helpen"
 
-msgid "Description of free donation"
-msgstr "Beschrijving van gratis donatie"
-
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Functie %(name)s gedeactiveerd"
@@ -4061,9 +4061,6 @@ msgstr "Beheer het type event quests"
 #, python-format
 msgid "Membership fee payment %(year)s"
 msgstr "Betaling aandelen %(year)s"
-
-msgid "Name of the free donation field"
-msgstr "Naam van het veld voor gratis donaties"
 
 msgid "Name to be displayed for tokens"
 msgstr "Naam die moet worden weergegeven voor tokens"
@@ -4800,9 +4797,6 @@ msgstr "De voorregistratie van alle evenementen beheren"
 msgid "Now you can create the plots of the event"
 msgstr "Nu kun je de plots van de gebeurtenis maken"
 
-msgid "Now you can set the optional amount field"
-msgstr "Nu kun je het optionele bedragveld instellen"
-
 msgid "Request of membership to the Organization"
 msgstr "Aanvraag lidmaatschap vereniging"
 
@@ -4891,6 +4885,9 @@ msgstr "Deelnemers die GEEN voorkeuren hebben verzonden"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Herinnering profielcompilatie voor %(event)s"
+
+msgid "Reserve additional tickets beyond your own"
+msgstr "Reserveer extra tickets naast je eigen tickets"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
@@ -5244,6 +5241,9 @@ msgstr "Maximum aantal wachtplekken (0 = onbeperkt)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Pas enkele karakterkenmerken aan om er je eigen karakter van te maken"
+
+msgid "Now you can configure the registration question"
+msgstr "Nu kun je de registratievraag configureren"
 
 msgid "Now you can review the organization's deadlines"
 msgstr "Nu kun je de deadlines van de organisatie bekijken"
@@ -5734,9 +5734,6 @@ msgstr "Er zijn nog geen inschrijvingen ontvangen voor dit evenement"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kun je relaties toevoegen wanneer je een personage bewerkt"
-
-msgid "Set if you want to reserve tickets in addition to your"
-msgstr "Stel in als u tickets wilt reserveren naast uw"
 
 msgid "The registration request will be updated automatically"
 msgstr "De toepassing wordt automatisch bijgewerkt"
@@ -9266,6 +9263,13 @@ msgid ""
 msgstr ""
 "Geef aan of het personage een spiegel is (d.w.z. of dit personage het ware "
 "geheime gezicht van een ander personage laat zien)"
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
+msgstr ""
+"Aantal termijnen om de kosten te verdelen: betalingen en termijnen worden "
+"gelijk verdeeld vanaf de registratiedatum"
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

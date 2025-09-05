@@ -103,13 +103,13 @@ def casting_details(ctx, typ):
 
 
 @login_required
-def casting(request, s, n, typ=0):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def casting(request, s, typ=0):
+    ctx = get_event_run(request, s, signup=True, status=True)
     check_event_feature(request, ctx, "casting")
 
     if ctx["run"].reg is None:
         messages.success(request, _("You must signed up in order to select your preferences") + "!")
-        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("gallery", s=ctx["run"].get_slug())
 
     if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == TicketTier.WAITING:
         messages.success(
@@ -119,7 +119,7 @@ def casting(request, s, n, typ=0):
                 "able to select your preferences!"
             ),
         )
-        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("gallery", s=ctx["run"].get_slug())
 
     casting_details(ctx, typ)
     # print(ctx)
@@ -142,7 +142,7 @@ def casting(request, s, n, typ=0):
             pref = int(request.POST[k])
             if pref in prefs.values():
                 messages.warning(request, _("You have indicated several preferences towards the same element!"))
-                return redirect("casting", s=ctx["event"].slug, n=ctx["run"].number, typ=typ)
+                return redirect("casting", s=ctx["run"].get_slug(), typ=typ)
             prefs[i] = pref
 
         _casting_update(ctx, prefs, request, typ)
@@ -285,8 +285,8 @@ def casting_preferences_traits(ctx, typ):
 
 
 @login_required
-def casting_preferences(request, s, n, typ=0):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def casting_preferences(request, s, typ=0):
+    ctx = get_event_run(request, s, signup=True, status=True)
     casting_details(ctx, typ)
 
     if not ctx["casting_show_pref"]:
@@ -381,8 +381,8 @@ def casting_history_traits(ctx):
 
 
 @login_required
-def casting_history(request, s, n, typ=0):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def casting_history(request, s, typ=0):
+    ctx = get_event_run(request, s, signup=True, status=True)
     casting_details(ctx, typ)
 
     if not ctx["casting_history"]:

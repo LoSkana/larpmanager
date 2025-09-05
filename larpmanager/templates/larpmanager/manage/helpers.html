@@ -21,7 +21,7 @@
                     <td>
                         <span class="list-close">
                             {% if event %}
-                                <a href="{% url 'orga_close_suggestion' event.slug run.number obj.slug %}">
+                                <a href="{% url 'orga_close_suggestion' run.get_slug obj.slug %}">
                                     <i class="fa fa-window-close" aria-hidden="true"></i>
                                 </a>
                             {% else %}

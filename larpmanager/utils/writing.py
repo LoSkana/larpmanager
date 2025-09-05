@@ -36,7 +36,8 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import QuestionApplicable, QuestionType, WritingAnswer, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, WritingQuestionType, WritingAnswer, WritingQuestion, \
+    BaseQuestionType
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -210,13 +211,13 @@ def _get_custom_form(ctx):
         return
 
     # default name for fields
-    ctx["fields_name"] = {QuestionType.NAME.value: _("Name")}
+    ctx["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=ctx["writing_typ"])
     ctx["form_questions"] = {}
     for q in que:
-        q.basic_typ = q.typ in QuestionType.get_basic_types()
+        q.basic_typ = q.typ in BaseQuestionType.get_basic_types()
         if q.typ in ctx["fields_name"].keys():
             ctx["fields_name"][q.typ] = q.name
         else:
@@ -257,7 +258,7 @@ def writing_list_query(ctx, ev, typ):
 def writing_list_text_fields(ctx, text_fields, typ):
     # add editor type questions
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
-    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 
     retrieve_cache_text_field(ctx, text_fields, typ)
@@ -279,7 +280,7 @@ def retrieve_cache_text_field(ctx, text_fields, typ):
 def _prepare_writing_list(ctx, request):
     try:
         name_que = (
-            ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"], typ=QuestionType.NAME)
+            ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"], typ=WritingQuestionType.NAME)
         )
         ctx["name_que_id"] = name_que.values_list("id", flat=True)[0]
     except Exception:

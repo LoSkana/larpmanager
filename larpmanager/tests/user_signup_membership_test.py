@@ -65,13 +65,13 @@ def signup(live_server, page):
     page.locator("#id_wire_iban").fill("test iban")
     submit_confirm(page)
     # set ticket price
-    go_to(page, live_server, "/test/1/manage/tickets")
+    go_to(page, live_server, "/test/manage/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
     submit_confirm(page)
     # signup
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("you must request to register as a member")
     submit_confirm(page)
@@ -79,7 +79,7 @@ def signup(live_server, page):
 
 def membership(live_server, page):
     # send membership
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Provisional registration")
     expect(page.locator("#one")).to_contain_text("please upload your membership application to proceed")
     page.get_by_role("link", name="please upload your membership").click()
@@ -104,7 +104,7 @@ def membership(live_server, page):
     page.get_by_role("link", name="Request").click()
     submit_confirm(page)
     # check register
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
 
@@ -118,10 +118,10 @@ def pay(live_server, page):
     page.locator("#id_invoice").set_input_files(str(image_path))
     submit(page)
     # approve payment
-    go_to(page, live_server, "/test/1/manage/invoices")
+    go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
     # check payment
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
     page.locator("a#menu-open").click()
     page.get_by_role("link", name="Logout").click()

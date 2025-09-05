@@ -10,7 +10,7 @@
         </p>
     {% elif hide_signup %}
         <p>
-            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
+            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.get_slug %}">{% trans "Register" %}</a></i>
         </p>
     {% elif not show_character %}
         <p>
@@ -23,7 +23,7 @@
                 {% trans "Go to the quests of type" %}:
                 {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
-                    <a href="{% url 'quests' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    <a href="{% url 'quests' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
@@ -137,11 +137,11 @@ window['facs'] = {{ factions_json | safe }};
 
 window['blank'] = "{% static 'larpmanager/assets/blank-avatar.svg' %}";
 
-window['char_url'] = "{% url 'character' event.slug run.number 0 %}";
+window['char_url'] = "{% url 'character' run.get_slug 0 %}";
 
 window['prof_url'] = "{% url 'public' 0 %}";
 
-window['faction_url'] = "{% url 'faction' event.slug run.number 0 %}";
+window['faction_url'] = "{% url 'faction' run.get_slug 0 %}";
 
 window['cover'] = {% if features.cover %} true {% else %} false {% endif %};
 

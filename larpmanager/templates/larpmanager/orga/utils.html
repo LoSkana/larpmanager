@@ -21,7 +21,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_utils_edit' run.event.slug run.number el.id %}">{{ el }}</a>
+                        <a href="{% url 'orga_utils_edit' run.get_slug el.id %}">{{ el }}</a>
                     </td>
                     <td>
                         {% if el.util %}{{ el.util.size }}{% endif %}

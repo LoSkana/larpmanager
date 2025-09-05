@@ -24,7 +24,7 @@
             <tr class="gall">
                 <td data-title="{% trans "Name" %}">
                     <h3>
-                        <a href="{% url 'gallery' run.event.slug run.number %}">{{ run }}</a>
+                        <a href="{% url 'gallery' run.get_slug %}">{{ run }}</a>
                     </h3>
                 </td>
                 {% if run.event.cover %}

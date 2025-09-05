@@ -28,7 +28,7 @@ from larpmanager.forms.utils import (
     EventWritingOptionS2WidgetMulti,
 )
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
-from larpmanager.models.form import QuestionType, WritingQuestion
+from larpmanager.models.form import WritingQuestionType, WritingQuestion
 
 
 class PxBaseForm(MyForm):
@@ -116,7 +116,7 @@ class OrgaRulePxForm(MyForm):
         self.delete_field("name")
 
         self.fields["abilities"].widget.set_event(self.params["event"])
-        qs = WritingQuestion.objects.filter(event=self.params["event"], typ=QuestionType.COMPUTED)
+        qs = WritingQuestion.objects.filter(event=self.params["event"], typ=WritingQuestionType.COMPUTED)
         self.fields["field"].queryset = qs
 
 

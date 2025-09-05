@@ -62,11 +62,11 @@ from larpmanager.models.event import (
     PreRegistration,
 )
 from larpmanager.models.form import (
-    QuestionType,
+    WritingQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion,
+    RegistrationQuestion, BaseQuestionType,
 )
 from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -290,7 +290,7 @@ def _orga_registrations_text_fields(ctx):
     # add editor type questions
     text_fields = []
     que = RegistrationQuestion.objects.filter(event=ctx["event"])
-    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 
     gctf = get_cache_reg_field(ctx["run"])
@@ -306,8 +306,8 @@ def _orga_registrations_text_fields(ctx):
 
 
 @login_required
-def orga_registrations(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registrations(request, s):
+    ctx = check_event_permission(request, s, "orga_registrations")
 
     if request.method == "POST":
         if request.POST.get("popup") == "1":
@@ -365,8 +365,8 @@ def orga_registrations(request, s, n):
 
 
 @login_required
-def orga_registrations_accounting(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registrations_accounting(request, s):
+    ctx = check_event_permission(request, s, "orga_registrations")
 
     res = _orga_registrations_acc(ctx)
 
@@ -374,8 +374,8 @@ def orga_registrations_accounting(request, s, n):
 
 
 @login_required
-def orga_registration_form_list(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registration_form_list(request, s):
+    ctx = check_event_permission(request, s, "orga_registrations")
 
     eid = request.POST.get("num")
 
@@ -395,7 +395,7 @@ def orga_registration_form_list(request, s, n):
 
     max_length = 100
 
-    if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if q.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         cho = {}
         for opt in RegistrationOption.objects.filter(question=q):
             cho[opt.id] = opt.get_form_text()
@@ -405,7 +405,7 @@ def orga_registration_form_list(request, s, n):
                 res[el.reg_id] = []
             res[el.reg_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"])
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("reg_id", "short_text")
@@ -419,8 +419,8 @@ def orga_registration_form_list(request, s, n):
 
 
 @login_required
-def orga_registration_form_email(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registration_form_email(request, s):
+    ctx = check_event_permission(request, s, "orga_registrations")
 
     eid = request.POST.get("num")
 
@@ -437,7 +437,7 @@ def orga_registration_form_email(request, s, n):
 
     res = {}
 
-    if q.typ not in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return
 
     cho = {}
@@ -459,8 +459,8 @@ def orga_registration_form_email(request, s, n):
 
 
 @login_required
-def orga_registrations_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registrations_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
     ctx["orga_characters"] = has_event_permission(request, ctx, ctx["event"].slug, "orga_characters")
     ctx["continue_add"] = "continue" in request.POST
@@ -477,7 +477,7 @@ def orga_registrations_edit(request, s, n, num):
             if "delete" in request.POST and request.POST["delete"] == "1":
                 cancel_reg(reg)
                 messages.success(request, _("Registration cancelled"))
-                return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
+                return redirect("orga_registrations", s=ctx["run"].get_slug())
 
             # Registration questions
             form.save_reg_questions(reg)
@@ -486,9 +486,9 @@ def orga_registrations_edit(request, s, n, num):
                 _save_questbuilder(ctx, form, reg)
 
             if ctx["continue_add"]:
-                return redirect("orga_registrations_edit", s=ctx["event"].slug, n=ctx["run"].number, num=0)
+                return redirect("orga_registrations_edit", s=ctx["run"].get_slug(), num=0)
 
-            return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
+            return redirect("orga_registrations", s=ctx["run"].get_slug())
     elif num != 0:
         form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
     else:
@@ -520,8 +520,8 @@ def _save_questbuilder(ctx, form, reg):
 
 
 @login_required
-def orga_registrations_customization(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registrations_customization(request, s, num):
+    ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
     get_char(ctx, num)
     rcr = RegistrationCharacterRel.objects.get(
@@ -533,7 +533,7 @@ def orga_registrations_customization(request, s, n, num):
         if form.is_valid():
             form.save()
             messages.success(request, _("Player customisation updated") + "!")
-            return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
+            return redirect("orga_registrations", s=ctx["run"].get_slug())
     else:
         form = RegistrationCharacterRelForm(instance=rcr, ctx=ctx)
 
@@ -542,19 +542,19 @@ def orga_registrations_customization(request, s, n, num):
 
 
 @login_required
-def orga_registrations_reload(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registrations_reload(request, s):
+    ctx = check_event_permission(request, s, "orga_registrations")
     reg_ids = []
     for reg in Registration.objects.filter(run=ctx["run"]):
         reg_ids.append(str(reg.id))
     check_reg_bkg(reg_ids)
     # print(f"@@@@ orga_registrations_reload {request} {datetime.now()}")
-    return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_registrations", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_registration_discounts(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registration_discounts(request, s, num):
+    ctx = check_event_permission(request, s, "orga_registrations")
     get_registration(ctx, num)
     # get active discounts
     ctx["active"] = AccountingItemDiscount.objects.filter(run=ctx["run"], member=ctx["registration"].member)
@@ -564,8 +564,8 @@ def orga_registration_discounts(request, s, n, num):
 
 
 @login_required
-def orga_registration_discount_add(request, s, n, num, dis):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registration_discount_add(request, s, num, dis):
+    ctx = check_event_permission(request, s, "orga_registrations")
     get_registration(ctx, num)
     get_discount(ctx, dis)
     AccountingItemDiscount.objects.create(
@@ -578,29 +578,27 @@ def orga_registration_discount_add(request, s, n, num, dis):
     ctx["registration"].save()
     return redirect(
         "orga_registration_discounts",
-        s=ctx["event"].slug,
-        n=ctx["run"].number,
+        s=ctx["run"].get_slug(),
         num=ctx["registration"].id,
     )
 
 
 @login_required
-def orga_registration_discount_del(request, s, n, num, dis):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registration_discount_del(request, s, num, dis):
+    ctx = check_event_permission(request, s, "orga_registrations")
     get_registration(ctx, num)
     AccountingItemDiscount.objects.get(pk=dis).delete()
     ctx["registration"].save()
     return redirect(
         "orga_registration_discounts",
-        s=ctx["event"].slug,
-        n=ctx["run"].number,
+        s=ctx["run"].get_slug(),
         num=ctx["registration"].id,
     )
 
 
 @login_required
-def orga_cancellations(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_cancellations")
+def orga_cancellations(request, s):
+    ctx = check_event_permission(request, s, "orga_cancellations")
     ctx["list"] = (
         Registration.objects.filter(run=ctx["run"])
         .exclude(cancellation_date__isnull=True)
@@ -644,8 +642,8 @@ def orga_cancellations(request, s, n):
 
 
 @login_required
-def orga_cancellation_refund(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_cancellations")
+def orga_cancellation_refund(request, s, num):
+    ctx = check_event_permission(request, s, "orga_cancellations")
     get_registration(ctx, num)
     if request.method == "POST":
         ref_token = int(request.POST["inp_token"])
@@ -675,7 +673,7 @@ def orga_cancellation_refund(request, s, n, num):
         ctx["registration"].refunded = True
         ctx["registration"].save()
 
-        return redirect("orga_cancellations", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("orga_cancellations", s=ctx["run"].get_slug())
 
     get_reg_payments(ctx["registration"])
 
@@ -700,23 +698,23 @@ def get_pre_registration(event):
 
 
 @login_required
-def orga_pre_registrations(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_pre_registrations")
+def orga_pre_registrations(request, s):
+    ctx = check_event_permission(request, s, "orga_pre_registrations")
     ctx["dc"] = get_pre_registration(ctx["event"])
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 
 
 @login_required
-def orga_reload_cache(request, s, n):
-    ctx = check_event_permission(request, s, n)
+def orga_reload_cache(request, s):
+    ctx = check_event_permission(request, s)
     reset_run(ctx["run"])
-    reset_cache_run(ctx["event"].assoc_id, ctx["event"].slug, ctx["run"].number)
+    reset_cache_run(ctx["event"].assoc_id, ctx["run"].get_slug())
     reset_event_features(ctx["event"].id)
     reset_run_event_links(ctx["event"])
     reset_cache_reg_counts(ctx["run"])
     reset_event_fields_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))
-    return redirect("manage", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("manage", s=ctx["run"].get_slug())
 
 
 def lottery_info(request, ctx):
@@ -735,8 +733,8 @@ def lottery_info(request, ctx):
 
 
 @login_required
-def orga_lottery(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_lottery")
+def orga_lottery(request, s):
+    ctx = check_event_permission(request, s, "orga_lottery")
 
     if request.method == "POST" and request.POST.get("submit"):
         lottery_info(request, ctx)
@@ -764,8 +762,8 @@ def calculate_age(born, today):
 
 
 @require_POST
-def orga_registration_member(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def orga_registration_member(request, s):
+    ctx = check_event_permission(request, s, "orga_registrations")
     member_id = request.POST.get("mid")
 
     # check it's a member

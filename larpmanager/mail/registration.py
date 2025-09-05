@@ -140,7 +140,7 @@ def registration_options(instance):
 
 def registration_payments(instance, currency):
     f_url = get_url("accounting/pay", instance.run.event)
-    url = f"{f_url}/{instance.run.event.slug}/{instance.run.number}"
+    url = f"{f_url}/{instance.run.get_slug()}"
     data = {"url": url, "amount": instance.quota, "currency": currency, "deadline": instance.deadline}
 
     if instance.deadline > 0:
@@ -188,7 +188,7 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
     body = _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>") % context + "."
 
     char_url = get_url(
-        f"{instance.reg.run.event.slug}/{instance.reg.run.number}/character/your",
+        f"{instance.reg.run.get_slug()}/character/your",
         instance.reg.run.event,
     )
 

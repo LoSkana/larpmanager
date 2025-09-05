@@ -32,11 +32,11 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion,
+    RegistrationQuestion, BaseQuestionType, get_writing_max_length,
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
@@ -235,9 +235,9 @@ class BaseRegistrationForm(MyFormRun):
                 self.answers[el.question_id] = el
 
             for el in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related("question"):
-                if el.question.typ == QuestionType.SINGLE:
+                if el.question.typ == BaseQuestionType.SINGLE:
                     self.singles[el.question_id] = el
-                elif el.question.typ == QuestionType.MULTIPLE:
+                elif el.question.typ == BaseQuestionType.MULTIPLE:
                     if el.question_id not in self.multiples:
                         self.multiples[el.question_id] = set()
                     self.multiples[el.question_id].add(el)
@@ -316,13 +316,13 @@ class BaseRegistrationForm(MyFormRun):
                 k = "q" + str(q.id)
                 if k not in form_data:
                     continue
-                if q.typ == QuestionType.MULTIPLE:
+                if q.typ == BaseQuestionType.MULTIPLE:
                     for sel in form_data[k]:
                         if not sel:
                             continue
                         if q.id in self.unavail and int(sel) in self.unavail[q.id]:
                             self.add_error(k, _("Option no longer available"))
-                elif q.typ == QuestionType.SINGLE:
+                elif q.typ == BaseQuestionType.SINGLE:
                     if not form_data[k]:
                         continue
                     if q.id in self.unavail and int(form_data[k]) in self.unavail[q.id]:
@@ -364,7 +364,7 @@ class BaseRegistrationForm(MyFormRun):
 
     def _init_field(self, question, reg_counts=None, orga=True):
         # ignore computed
-        if question.typ == QuestionType.COMPUTED:
+        if question.typ == WritingQuestionType.COMPUTED:
             return None
 
         key = "q" + str(question.id)
@@ -389,12 +389,14 @@ class BaseRegistrationForm(MyFormRun):
                 required = question.status == QuestionStatus.MANDATORY
 
         key = self.init_type(key, orga, question, reg_counts, required)
+        if not key:
+            return key
 
         if not orga:
             self.fields[key].disabled = not active
 
         if question.max_length:
-            if question.typ in QuestionType.get_max_length():
+            if question.typ in get_writing_max_length():
                 self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
@@ -402,39 +404,54 @@ class BaseRegistrationForm(MyFormRun):
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
 
-        question.basic_typ = question.typ in QuestionType.get_basic_types()
+        question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
 
         return key
 
     def init_type(self, key, orga, question, reg_counts, required):
-        if question.typ == QuestionType.MULTIPLE:
+        if question.typ == BaseQuestionType.MULTIPLE:
             self.init_multiple(key, orga, question, reg_counts, required)
 
-        elif question.typ == QuestionType.SINGLE:
+        elif question.typ == BaseQuestionType.SINGLE:
             self.init_single(key, orga, question, reg_counts, required)
 
-        elif question.typ == QuestionType.TEXT:
+        elif question.typ == BaseQuestionType.TEXT:
             self.init_text(key, question, required)
 
-        elif question.typ == QuestionType.PARAGRAPH:
+        elif question.typ == BaseQuestionType.PARAGRAPH:
             self.init_paragraph(key, question, required)
 
-        elif question.typ == QuestionType.EDITOR:
+        elif question.typ == BaseQuestionType.EDITOR:
             self.init_editor(key, question, required)
 
         else:
-            key = question.typ
-            mapping = {"faction": "factions_list"}
-            if key in mapping:
-                key = mapping[key]
-            self.fields[key].label = question.name
-            self.fields[key].help_text = question.description
-            self.reorder_field(key)
-            self.fields[key].required = required
-            if key in ["name", "teaser", "text"]:
-                self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
+            key = self.init_special(question, required)
 
-        self.fields[key].key = key
+        if key:
+            self.fields[key].key = key
+
+        return key
+
+    def init_special(self, question, required):
+        key = question.typ
+        mapping = {
+            "faction": "factions_list",
+            "additional_tickets": "additionals",
+            "pay_what_you_want": "pay_what",
+            "reg_quotas": "quotas",
+            "reg_surcharges": "surcharge",
+        }
+        if key in mapping:
+            key = mapping[key]
+        if key not in self.fields:
+            return None
+
+        self.fields[key].label = question.name
+        self.fields[key].help_text = question.description
+        self.reorder_field(key)
+        self.fields[key].required = required
+        if key in ["name", "teaser", "text"]:
+            self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
 
         return key
 
@@ -527,11 +544,11 @@ class BaseRegistrationForm(MyFormRun):
                 continue
             oid = self.cleaned_data[k]
 
-            if q.typ == QuestionType.MULTIPLE:
+            if q.typ == BaseQuestionType.MULTIPLE:
                 self.save_reg_multiple(instance, oid, q)
-            elif q.typ == QuestionType.SINGLE:
+            elif q.typ == BaseQuestionType.SINGLE:
                 self.save_reg_single(instance, oid, q)
-            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+            elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
                 self.save_reg_text(instance, oid, q)
 
     def save_reg_text(self, instance, oid, q):

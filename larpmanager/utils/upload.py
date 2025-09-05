@@ -33,7 +33,7 @@ from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
@@ -42,7 +42,7 @@ from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
     WritingOption,
-    WritingQuestion,
+    WritingQuestion, BaseQuestionType,
 )
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import (
@@ -329,7 +329,7 @@ def _assign_choice_answer(element, field, value, questions, logs, is_registratio
     question = questions[field]
 
     # check if answer
-    if question["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+    if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
         if is_registration:
             answer, _ = RegistrationAnswer.objects.get_or_create(reg_id=element.id, question_id=question["id"])
         else:
@@ -411,7 +411,7 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
 
     field_type = ctx["fields"][field]
 
-    if field_type in [QuestionType.NAME, "skip"]:
+    if field_type in [WritingQuestionType.NAME, "skip"]:
         return
 
     value = "<br />".join(str(value).strip().split("\n"))
@@ -422,17 +422,17 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
 
 
 def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
-    if field_type == QuestionType.MIRROR:
+    if field_type == WritingQuestionType.MIRROR:
         _get_mirror_instance(ctx, element, value, logs)
-    elif field_type == QuestionType.HIDE:
+    elif field_type == WritingQuestionType.HIDE:
         element.hide = value.lower() == "true"
-    elif field_type == QuestionType.FACTIONS:
+    elif field_type == WritingQuestionType.FACTIONS:
         _assign_faction(ctx, element, value, logs)
-    elif field_type == QuestionType.TEASER:
+    elif field_type == WritingQuestionType.TEASER:
         element.teaser = value
-    elif field_type == QuestionType.SHEET:
+    elif field_type == WritingQuestionType.SHEET:
         element.text = value
-    elif field_type == QuestionType.TITLE:
+    elif field_type == WritingQuestionType.TITLE:
         element.title = value
     # TODO implement
     # elif field_type == QuestionType.COVER:
@@ -547,7 +547,7 @@ def _questions_load(ctx, row, is_registration):
 
 def _get_mappings(is_registration):
     mappings = {
-        "typ": invert_dict(QuestionType.get_mapping()),
+        "typ": invert_dict(BaseQuestionType.get_mapping()),
         "status": invert_dict(QuestionStatus.get_mapping()),
         "applicable": invert_dict(QuestionApplicable.get_mapping()),
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
@@ -555,7 +555,7 @@ def _get_mappings(is_registration):
     if is_registration:
         # update typ with new types
         typ_mapping = mappings["typ"]
-        for key, _ in QuestionType.choices:
+        for key, _ in WritingQuestionType.choices:
             if key not in typ_mapping:
                 typ_mapping[key] = key
     return mappings

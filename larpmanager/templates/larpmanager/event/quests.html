@@ -19,7 +19,7 @@
                 <tr>
                     <td>
                         <h3>
-                            <a href="{% url 'quest' run.event.slug run.number el.number %}">{{ el.name }}</a>
+                            <a href="{% url 'quest' run.get_slug el.number %}">{{ el.name }}</a>
                         </h3>
                     </td>
                     {% if show_quest.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}

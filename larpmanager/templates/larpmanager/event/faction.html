@@ -20,7 +20,7 @@
                     </div>
                     <div class="text">
                         <h3>
-                            <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
+                            <a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a>
                         </h3>
                         {% if el.player_id > 0 %}
                             <div class="go-inline">

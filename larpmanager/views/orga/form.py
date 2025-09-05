@@ -51,8 +51,8 @@ from larpmanager.utils.event import check_event_permission
 
 
 @login_required
-def orga_registration_tickets(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registration_tickets")
+def orga_registration_tickets(request, s):
+    ctx = check_event_permission(request, s, "orga_registration_tickets")
 
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_tickets_download(ctx)
@@ -67,39 +67,39 @@ def orga_registration_tickets(request, s, n):
 
 
 @login_required
-def orga_registration_tickets_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_registration_tickets", OrgaRegistrationTicketForm, num)
+def orga_registration_tickets_edit(request, s, num):
+    return orga_edit(request, s, "orga_registration_tickets", OrgaRegistrationTicketForm, num)
 
 
 @login_required
-def orga_registration_tickets_order(request, s, n, num, order):
-    ctx = check_event_permission(request, s, n, "orga_registration_tickets")
+def orga_registration_tickets_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_registration_tickets")
     exchange_order(ctx, RegistrationTicket, num, order)
-    return redirect("orga_registration_tickets", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_registration_tickets", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_registration_sections(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registration_sections")
+def orga_registration_sections(request, s):
+    ctx = check_event_permission(request, s, "orga_registration_sections")
     ctx["list"] = RegistrationSection.objects.filter(event=ctx["event"]).order_by("order")
     return render(request, "larpmanager/orga/registration/sections.html", ctx)
 
 
 @login_required
-def orga_registration_sections_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_registration_sections", OrgaRegistrationSectionForm, num)
+def orga_registration_sections_edit(request, s, num):
+    return orga_edit(request, s, "orga_registration_sections", OrgaRegistrationSectionForm, num)
 
 
 @login_required
-def orga_registration_sections_order(request, s, n, num, order):
-    ctx = check_event_permission(request, s, n, "orga_registration_sections")
+def orga_registration_sections_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_registration_sections")
     exchange_order(ctx, RegistrationSection, num, order)
-    return redirect("orga_registration_sections", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_registration_sections", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_registration_form(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registration_form")
+def orga_registration_form(request, s):
+    ctx = check_event_permission(request, s, "orga_registration_form")
 
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_registration_form_download(ctx)
@@ -115,40 +115,40 @@ def orga_registration_form(request, s, n):
 
 
 @login_required
-def orga_registration_form_edit(request, s, n, num):
+def orga_registration_form_edit(request, s, num):
     perm = "orga_registration_form"
-    ctx = check_event_permission(request, s, n, perm)
+    ctx = check_event_permission(request, s, perm)
     if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+            return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
         if str(request.POST.get("new_option", "")) == "1":
             return redirect(
-                orga_registration_options_new, s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].id
+                orga_registration_options_new, s=ctx["run"].get_slug(), num=ctx["saved"].id
             )
-        return redirect(perm, s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect(perm, s=ctx["run"].get_slug())
 
     ctx["list"] = RegistrationOption.objects.filter(question=ctx["el"]).order_by("order")
     return render(request, "larpmanager/orga/registration/form_edit.html", ctx)
 
 
 @login_required
-def orga_registration_form_order(request, s, n, num, order):
-    ctx = check_event_permission(request, s, n, "orga_registration_form")
+def orga_registration_form_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_registration_form")
     exchange_order(ctx, RegistrationQuestion, num, order)
-    return redirect("orga_registration_form", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_registration_form", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_registration_options_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_registration_form")
+def orga_registration_options_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_registration_form")
     return registration_option_edit(ctx, num, request)
 
 
 @login_required
-def orga_registration_options_new(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_registration_form")
+def orga_registration_options_new(request, s, num):
+    ctx = check_event_permission(request, s, "orga_registration_form")
     ctx["question_id"] = num
     return registration_option_edit(ctx, 0, request)
 
@@ -158,51 +158,51 @@ def registration_option_edit(ctx, num, request):
         redirect_target = "orga_registration_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_registration_options_new"
-        return redirect(redirect_target, s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].question_id)
+        return redirect(redirect_target, s=ctx["run"].get_slug(), num=ctx["saved"].question_id)
 
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
 @login_required
-def orga_registration_options_order(request, s, n, num, order):
-    ctx = check_event_permission(request, s, n, "orga_registration_form")
+def orga_registration_options_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_registration_form")
     exchange_order(ctx, RegistrationOption, num, order)
     return redirect(
-        "orga_registration_form_edit", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["current"].question_id
+        "orga_registration_form_edit", s=ctx["run"].get_slug(), num=ctx["current"].question_id
     )
 
 
 @login_required
-def orga_registration_quotas(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registration_quotas")
+def orga_registration_quotas(request, s):
+    ctx = check_event_permission(request, s, "orga_registration_quotas")
     ctx["list"] = RegistrationQuota.objects.filter(event=ctx["event"]).order_by("number")
     return render(request, "larpmanager/orga/registration/quotas.html", ctx)
 
 
 @login_required
-def orga_registration_quotas_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_registration_quotas", OrgaRegistrationQuotaForm, num)
+def orga_registration_quotas_edit(request, s, num):
+    return orga_edit(request, s, "orga_registration_quotas", OrgaRegistrationQuotaForm, num)
 
 
 @login_required
-def orga_registration_installments(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registration_installments")
+def orga_registration_installments(request, s):
+    ctx = check_event_permission(request, s, "orga_registration_installments")
     ctx["list"] = RegistrationInstallment.objects.filter(event=ctx["event"]).order_by("order", "amount")
     return render(request, "larpmanager/orga/registration/installments.html", ctx)
 
 
 @login_required
-def orga_registration_installments_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_registration_installments", OrgaRegistrationInstallmentForm, num)
+def orga_registration_installments_edit(request, s, num):
+    return orga_edit(request, s, "orga_registration_installments", OrgaRegistrationInstallmentForm, num)
 
 
 @login_required
-def orga_registration_surcharges(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registration_surcharges")
+def orga_registration_surcharges(request, s):
+    ctx = check_event_permission(request, s, "orga_registration_surcharges")
     ctx["list"] = RegistrationSurcharge.objects.filter(event=ctx["event"]).order_by("number")
     return render(request, "larpmanager/orga/registration/surcharges.html", ctx)
 
 
 @login_required
-def orga_registration_surcharges_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, num)
+def orga_registration_surcharges_edit(request, s, num):
+    return orga_edit(request, s, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, num)

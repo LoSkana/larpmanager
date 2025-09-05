@@ -44,8 +44,8 @@ from larpmanager.utils.pdf import (
 
 
 @login_required
-def orga_characters_pdf(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_pdf(request, s):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     if request.method == "POST":
         form = EventCharactersPdfForm(request.POST, request.FILES, instance=ctx["event"])
         if form.is_valid():
@@ -60,26 +60,26 @@ def orga_characters_pdf(request, s, n):
 
 
 @login_required
-def orga_pdf_regenerate(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_pdf_regenerate(request, s):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     chs = ctx["event"].get_elements(Character)
     for run in Run.objects.filter(event=ctx["event"], end__gte=datetime.now()):
         for ch in chs:
-            print_character_bkg(ctx["event"].assoc.slug, ctx["event"].slug, run.number, ch.number)
+            print_character_bkg(ctx["event"].assoc.slug, run.get_slug(), ch.number)
     messages.success(request, _("Regeneration pdf started") + "!")
-    return redirect("orga_characters_pdf", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_characters_pdf", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_characters_sheet_pdf(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_sheet_pdf(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
     return print_character(ctx, True)
 
 
 @login_required
-def orga_characters_sheet_test(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_sheet_test(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
     ctx["pdf"] = True
     get_character_sheet(ctx)
@@ -88,30 +88,30 @@ def orga_characters_sheet_test(request, s, n, num):
 
 
 @login_required
-def orga_characters_friendly_pdf(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_friendly_pdf(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
     return print_character_friendly(ctx, True)
 
 
 @login_required
-def orga_characters_friendly_test(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_friendly_test(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
     get_character_sheet(ctx)
     return render(request, "pdf/sheets/friendly.html", ctx)
 
 
 @login_required
-def orga_characters_relationships_pdf(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_relationships_pdf(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     get_char_check(request, ctx, num, False, True)
     return print_character_rel(ctx, True)
 
 
 @login_required
-def orga_characters_relationships_test(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_characters_relationships_test(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
     get_character_sheet(ctx)
     get_character_relationships(ctx)
@@ -119,18 +119,18 @@ def orga_characters_relationships_test(request, s, n, num):
 
 
 @login_required
-def orga_gallery_pdf(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_gallery_pdf(request, s):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     return print_gallery(ctx, True)
 
 
 @login_required
-def orga_gallery_test(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_gallery_test(request, s):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     return render(request, "pdf/sheets/gallery.html", ctx)
 
 
 @login_required
-def orga_profiles_pdf(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters_pdf")
+def orga_profiles_pdf(request, s):
+    ctx = check_event_permission(request, s, "orga_characters_pdf")
     return print_profiles(ctx, True)

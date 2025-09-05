@@ -1,3 +1,3 @@
 <div class='home'>
-    <a href="{% url 'trad_index' run.event.slug run.number %}">Trad - {{ run.search }}</a>
+    <a href="{% url 'trad_index' run.get_slug %}">Trad - {{ run.search }}</a>
 </div>
