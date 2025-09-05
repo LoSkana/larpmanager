@@ -49,7 +49,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import (
     Character,
     Faction,
-    FactionType,
+    FactionType, Plot,
 )
 
 # defer script loaded by form
@@ -393,6 +393,28 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2Multiple
 
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
+    pass
+
+
+class EventPlotS2:
+    search_fields = [
+        "number__icontains",
+        "name__icontains",
+        "teaser__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(Plot)
+
+
+class EventPlotS2WidgetMulti(EventPlotS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class EventPlotS2Widget(EventPlotS2, s2forms.ModelSelect2Widget):
     pass
 
 

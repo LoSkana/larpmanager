@@ -35,7 +35,7 @@ from larpmanager.forms.utils import (
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
     TicketS2WidgetMulti,
-    WritingTinyMCE,
+    WritingTinyMCE, EventPlotS2WidgetMulti,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.experience import AbilityPx, DeliveryPx
@@ -53,7 +53,7 @@ from larpmanager.models.writing import (
     Faction,
     FactionType,
     Relationship,
-    TextVersionChoices,
+    TextVersionChoices, Plot, PlotCharacterRel,
 )
 from larpmanager.utils.edit import save_version
 
@@ -252,9 +252,20 @@ class OrgaCharacterForm(CharacterForm):
         if "plot" not in self.params["features"]:
             return
 
+        self.fields["plots"] = forms.ModelMultipleChoiceField(
+            label="Plots",
+            queryset=self.params["event"].get_elements(Plot),
+            required=False,
+            widget=EventPlotS2WidgetMulti,
+        )
+        self.fields["plots"].widget.set_event(self.params["event"])
+
+        self.plots = self.instance.get_plot_characters().order_by("plot__number")
+        self.initial["plots"] = [el.plot_id for el in self.plots]
+
         self.add_char_finder = []
         self.field_link = {}
-        for el in self.instance.get_plot_characters().order_by("plot__number"):
+        for el in self.plots:
             plot = f"#{el.plot.number} {el.plot.name}"
             field = f"pl_{el.plot.id}"
             id_field = f"id_{field}"
@@ -279,6 +290,26 @@ class OrgaCharacterForm(CharacterForm):
         if "plot" not in self.params["features"]:
             return
 
+        # Add / remove plots
+        selected = set(self.cleaned_data.get("plots", []))
+        current = set(
+            Plot.objects.filter(
+                plotcharacterrel__character=instance
+            )
+        )
+
+        to_add = selected - current
+        to_remove = current - selected
+
+        if to_remove:
+            PlotCharacterRel.objects.filter(
+                character=instance, plot__in=[p.pk for p in to_remove]
+            ).delete()
+
+        for plot in to_add:
+            PlotCharacterRel.objects.create(character=instance, plot=plot)
+
+        # update texts
         for pr in instance.get_plot_characters():
             field = f"pl_{pr.plot_id}"
             if field not in self.cleaned_data:
