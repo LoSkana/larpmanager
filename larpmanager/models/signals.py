@@ -672,7 +672,7 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
             body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
         body += instance.content
         if instance.screenshot:
-            body += f"<br /><br /><img src='{instance.screenshot_reduced.url}' />"
+            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
         my_send_mail(subj, body, email)
 
 

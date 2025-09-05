@@ -122,7 +122,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         self.fields["additionals"] = forms.ChoiceField(
             required=False,
-            choices=[(1, "1"), (2, "2"), (3, "3")]
+            choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
         )
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
