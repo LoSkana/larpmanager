@@ -314,12 +314,13 @@ def _orga_actions_priorities(request, ctx, assoc):
     # if there are no characters, suggest to do it
     features = get_event_features(ctx["event"].id)
 
-    if "character" in features and not Character.objects.filter(event=ctx["event"]).count():
-        _add_priority(
-            ctx,
-            _("Create the first character of the event"),
-            "orga_characters",
-        )
+    if "character" in features:
+        if not Character.objects.filter(event=ctx["event"]).count():
+            _add_priority(
+                ctx,
+                _("Create the first character of the event"),
+                "orga_characters",
+            )
 
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
         _add_priority(
