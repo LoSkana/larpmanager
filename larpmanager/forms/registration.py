@@ -350,7 +350,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
         elif ticket.tier == TicketTier.FILLER:
-            filler_alway = event.get_config("filler_alway", False)
+            filler_alway = event.get_config("filler_always", False)
             if filler_alway:
                 if (
                     "filler" not in run.status
