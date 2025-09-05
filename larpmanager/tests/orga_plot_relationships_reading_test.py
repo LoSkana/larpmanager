@@ -49,6 +49,8 @@ def test_plot_relationship_reading(pw_page):
 
     plots(live_server, page)
 
+    plots_character(live_server, page)
+
     reading(live_server, page)
 
 
@@ -205,3 +207,61 @@ def plots(live_server, page):
     go_to(page, live_server, "/test/1/")
     page.get_by_role("link", name="prova").click()
     expect(page.locator("#one")).to_contain_text("testona wwwwwbruuuu")
+
+
+def plots_character(live_server, page):
+    go_to(page, live_server, "/test/1/manage/")
+    # create other plots
+    page.get_by_role("link", name="Plots", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("gaga")
+    page.get_by_text("After confirmation, add").click()
+    page.get_by_role("button", name="Confirm").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("bibi")
+    page.get_by_role("button", name="Confirm").click()
+
+    # test adding them to character
+    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    page.locator("[id=\"\\31 \"]").get_by_role("link", name="").click()
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("gag")
+    page.locator(".select2-results__option").first.click()
+    page.get_by_role("searchbox").fill("bibi")
+    page.locator(".select2-results__option").first.click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # check there are all three
+    page.locator("#one").get_by_role("link", name="Plots").click()
+    expect(page.locator("[id=\"\\31 \"]")).to_contain_text("[T2] gaga [T3] bibi")
+
+
+    page.locator("[id=\"\\31 \"]").get_by_role("link", name="").click()
+
+    # remove third
+    page.get_by_role("listitem", name="T3 bibi").locator("span").click()
+
+    # change second
+    page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show").click()
+    page.get_by_role("row", name="#2 gaga Show This text will").locator("iframe[title=\"Rich Text Area\"]").content_frame.locator("html").click()
+    page.get_by_role("row", name="#2 gaga Show This text will").locator("iframe[title=\"Rich Text Area\"]").content_frame.get_by_label("Rich Text Area").fill("ffff")
+
+    page.get_by_role("button", name="Confirm").click()
+
+    # check
+    page.locator("[id=\"\\31 \"]").get_by_role("link", name="").click()
+    page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show")
+    expect(page.locator("#id_pl_2_tr")).to_contain_text("<p>ffff</p>")
+    page.get_by_role("button", name="Confirm").click()
+
+    page.locator("#one").get_by_role("link", name="Plots").click()
+    expect(page.locator("[id=\"\\31 \"]")).to_contain_text("[T2] gaga")
+    expect(page.locator("[id=\"\\31 \"]")).not_to_contain_text("[T3] bibi")
+
+    # check second, then remove
+    page.locator("[id=\"\\31 \"]").get_by_role("link", name="").click()
+    page.get_by_role("listitem", name="T2 gaga").locator("span").click()
+    page.get_by_role("link", name="Instructions").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    expect(page.locator("[id=\"\\31 \"]")).not_to_contain_text("[T2] gaga")
