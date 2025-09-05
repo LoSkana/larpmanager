@@ -23,7 +23,7 @@ from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
-from larpmanager.models.form import RegistrationQuestion, WritingQuestion, BaseQuestionType
+from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
@@ -314,12 +314,13 @@ def _orga_actions_priorities(request, ctx, assoc):
     # if there are no characters, suggest to do it
     features = get_event_features(ctx["event"].id)
 
-    if "character" in features and not Character.objects.filter(event=ctx["event"]).count():
-        _add_priority(
-            ctx,
-            _("Create the first character of the event"),
-            "orga_characters",
-        )
+    if "character" in features:
+        if not Character.objects.filter(event=ctx["event"]).count():
+            _add_priority(
+                ctx,
+                _("Create the first character of the event"),
+                "orga_characters",
+            )
 
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
         _add_priority(
@@ -720,6 +721,7 @@ def _check_intro_driver(request, ctx):
 
     ctx["intro_driver"] = True
     save_single_config(member, config_name, True)
+
 
 @login_required
 def orga_redirect(request, s, n, p):
