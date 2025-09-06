@@ -47,21 +47,24 @@ class Command(BaseCommand):
             for obj in data:
                 model_label = obj["model"]
                 Model = apps.get_model(model_label)
-
-                pk = obj["pk"]
                 fields = obj["fields"]
 
                 m2m_fields = {}
                 for key in list(fields.keys()):
                     value = fields[key]
-                    if isinstance(value, list):  # assume m2m
+                    if isinstance(value, list):
                         m2m_fields[key] = value
                         fields.pop(key)
-                    elif key in ["feature", "module"]:  # rename foreign key
-                        fields[f"{key}_id"] = fields.pop(key)
+
+                # use slug, otherwise pk
+                lookup = {}
+                if "slug" in fields:
+                    lookup["slug"] = fields["slug"]
+                else:
+                    lookup["pk"] = obj.get("pk")
 
                 with transaction.atomic():
-                    instance, _ = Model.objects.update_or_create(pk=pk, defaults=fields)
+                    instance, _ = Model.objects.update_or_create(defaults=fields, **lookup)
 
                     for field, ids in m2m_fields.items():
                         getattr(instance, field).set(ids)
