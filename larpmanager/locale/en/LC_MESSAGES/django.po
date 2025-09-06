@@ -7844,6 +7844,12 @@ msgstr ""
 msgid "Manage url shortner"
 msgstr ""
 
+msgid "Containers"
+msgstr ""
+
+msgid "Manage warehouse containers"
+msgstr ""
+
 msgid "Pre-Registrations"
 msgstr ""
 
@@ -7925,19 +7931,13 @@ msgstr ""
 msgid "quick"
 msgstr ""
 
-msgid "Containers"
-msgstr ""
-
-msgid "Manage warehouse containers"
-msgstr ""
-
-msgid "Manage warehouse tags"
-msgstr ""
-
 msgid "Manage warehouse items"
 msgstr ""
 
 msgid "Manage warehouse movements"
+msgstr ""
+
+msgid "Manage warehouse tags"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
@@ -8105,9 +8105,6 @@ msgstr ""
 msgid "Manage XP distributions for character skill purchases."
 msgstr ""
 
-msgid "Manage XP rules"
-msgstr ""
-
 msgid "Display full history of participant preferences on characters"
 msgstr ""
 
@@ -8172,6 +8169,9 @@ msgid "Manifest"
 msgstr ""
 
 msgid "Manage loading and deployment status of warehouse items"
+msgstr ""
+
+msgid "Manage XP rules"
 msgstr ""
 
 msgid "Communications"

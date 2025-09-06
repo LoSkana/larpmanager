@@ -30,6 +30,8 @@ from larpmanager.models.member import Member
 class PermissionModule(BaseModel):
     name = models.CharField(max_length=100)
 
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
+
     icon = models.CharField(max_length=100)
 
     order = models.IntegerField()
@@ -38,7 +40,7 @@ class PermissionModule(BaseModel):
 class AssocPermission(BaseModel):
     name = models.CharField(max_length=100)
 
-    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True)
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
 
     number = models.IntegerField(blank=True)
 
@@ -101,7 +103,7 @@ def get_assoc_inners(assoc):
 class EventPermission(BaseModel):
     name = models.CharField(max_length=100)
 
-    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True)
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
 
     number = models.IntegerField(blank=True)
 

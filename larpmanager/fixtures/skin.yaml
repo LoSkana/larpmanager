@@ -1,7 +1,10 @@
 - model: larpmanager.associationskin
-  pk: 1
   fields:
     name: LarpManager
     domain: larpmanager.com
+    default_css: ''
+    default_nation: null
+    default_mandatory_fields: ''
+    default_optional_fields: ''
     default_features:
     - 191

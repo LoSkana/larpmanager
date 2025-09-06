@@ -1,5 +1,4 @@
 - model: larpmanager.eventpermission
-  pk: 1
   fields:
     name: Event
     descr: 'Manage the event settings: name, description, dates, and other data'
@@ -7,10 +6,9 @@
     number: 11
     config: gallery
     hidden: false
-    feature: 215
-    module: 7
+    feature: orga_event
+    module: event
 - model: larpmanager.eventpermission
-  pk: 3
   fields:
     name: Roles
     descr: Assign roles to staff members, and give access to specific functions
@@ -18,10 +16,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 213
-    module: 7
+    feature: orga_roles
+    module: event
 - model: larpmanager.eventpermission
-  pk: 4
   fields:
     name: Configuration
     descr: Manage the configuration of the activated features
@@ -29,10 +26,9 @@
     number: 41
     config: null
     hidden: false
-    feature: 212
-    module: 7
+    feature: orga_config
+    module: event
 - model: larpmanager.eventpermission
-  pk: 5
   fields:
     name: Features
     descr: Activate features for the event
@@ -40,10 +36,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 211
-    module: 7
+    feature: orga_features
+    module: event
 - model: larpmanager.eventpermission
-  pk: 6
   fields:
     name: Appearance
     descr: 'Set visual aspect: colors, background, cover image'
@@ -51,10 +46,9 @@
     number: 11
     config: visualisation
     hidden: false
-    feature: 210
-    module: 6
+    feature: orga_appearance
+    module: appearance
 - model: larpmanager.eventpermission
-  pk: 8
   fields:
     name: Copy
     descr: Copy elements from another event
@@ -62,10 +56,9 @@
     number: 11
     config: null
     hidden: false
-    feature: 10
-    module: 3
+    feature: copy
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 9
   fields:
     name: Casting
     descr: Assign the characters following the participants' preferences
@@ -73,10 +66,9 @@
     number: 11
     config: casting
     hidden: false
-    feature: 27
-    module: 5
+    feature: casting
+    module: casting
 - model: larpmanager.eventpermission
-  pk: 10
   fields:
     name: Accounting
     descr: Manage event accounting
@@ -84,10 +76,9 @@
     number: 11
     config: null
     hidden: false
-    feature: 209
-    module: 2
+    feature: orga_accounting
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 11
   fields:
     name: Payments
     descr: Manage payments performed by participants to cover the registration fee
@@ -95,10 +86,9 @@
     number: 21
     config: payment
     hidden: false
-    feature: 111
-    module: 2
+    feature: payment
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 12
   fields:
     name: Expenses
     descr: Manage expenses uploaded by staff members and approve them
@@ -106,10 +96,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 106
-    module: 2
+    feature: expense
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 13
   fields:
     name: Tokens
     descr: Manages tokens used by participants to cover the registration fee
@@ -117,10 +106,9 @@
     number: 41
     config: token_credit
     hidden: false
-    feature: 107
-    module: 2
+    feature: token_credit
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 14
   fields:
     name: Credits
     descr: Manages credits used by participants to cover the registration fee
@@ -128,10 +116,9 @@
     number: 51
     config: token_credit
     hidden: false
-    feature: 107
-    module: 2
+    feature: token_credit
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 15
   fields:
     name: Inflows
     descr: Manages event revenues
@@ -139,10 +126,9 @@
     number: 61
     config: null
     hidden: false
-    feature: 144
-    module: 2
+    feature: inflow
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 16
   fields:
     name: Outflows
     descr: Manages event's expenses
@@ -150,10 +136,9 @@
     number: 71
     config: null
     hidden: false
-    feature: 108
-    module: 2
+    feature: outflow
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 17
   fields:
     name: Safety
     descr: Review participants' safety-related informations
@@ -161,10 +146,9 @@
     number: 11
     config: null
     hidden: false
-    feature: 26
-    module: 8
+    feature: safety
+    module: users
 - model: larpmanager.eventpermission
-  pk: 18
   fields:
     name: Diet
     descr: Review participants' dietary restrictions and allergies.
@@ -172,10 +156,9 @@
     number: 21
     config: null
     hidden: false
-    feature: 93
-    module: 8
+    feature: diet
+    module: users
 - model: larpmanager.eventpermission
-  pk: 19
   fields:
     name: Sensitive data
     descr: Review participants' sensitive data
@@ -183,10 +166,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 208
-    module: 8
+    feature: orga_sensitive
+    module: users
 - model: larpmanager.eventpermission
-  pk: 20
   fields:
     name: Questions
     descr: Manage questions asked by the participants
@@ -194,10 +176,9 @@
     number: 41
     config: null
     hidden: false
-    feature: 28
-    module: 14
+    feature: help
+    module: communications
 - model: larpmanager.eventpermission
-  pk: 21
   fields:
     name: Spam
     descr: Displays full lists of usual participants not already signed up
@@ -205,10 +186,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 40
-    module: 14
+    feature: newsletter
+    module: communications
 - model: larpmanager.eventpermission
-  pk: 22
   fields:
     name: Preaching
     descr: Displays lists of participants to persuade to sign up
@@ -216,10 +196,9 @@
     number: 61
     config: null
     hidden: false
-    feature: 40
-    module: 14
+    feature: newsletter
+    module: communications
 - model: larpmanager.eventpermission
-  pk: 23
   fields:
     name: Characters
     descr: Manage the event characters
@@ -227,10 +206,9 @@
     number: 11
     config: writing
     hidden: false
-    feature: 178
-    module: 1
+    feature: character
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 26
   fields:
     name: Plots
     descr: Manage the event plots
@@ -238,10 +216,9 @@
     number: 41
     config: null
     hidden: false
-    feature: 103
-    module: 1
+    feature: plot
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 27
   fields:
     name: Factions
     descr: Manage the event factions
@@ -249,10 +226,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 104
-    module: 1
+    feature: faction
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 28
   fields:
     name: Quest type
     descr: Manage the type of event quests
@@ -260,10 +236,9 @@
     number: 21
     config: null
     hidden: false
-    feature: 7
-    module: 13
+    feature: questbuilder
+    module: quests
 - model: larpmanager.eventpermission
-  pk: 29
   fields:
     name: Quest
     descr: Manage the event quests
@@ -271,10 +246,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 7
-    module: 13
+    feature: questbuilder
+    module: quests
 - model: larpmanager.eventpermission
-  pk: 30
   fields:
     name: Traits
     descr: Manage the traits available in the event quests
@@ -282,10 +256,9 @@
     number: 41
     config: null
     hidden: false
-    feature: 7
-    module: 13
+    feature: questbuilder
+    module: quests
 - model: larpmanager.eventpermission
-  pk: 31
   fields:
     name: Prologues type
     descr: Manage the type of event prologues
@@ -293,10 +266,9 @@
     number: 61
     config: null
     hidden: false
-    feature: 6
-    module: 1
+    feature: prologue
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 32
   fields:
     name: Prologues
     descr: Manage the event prologues
@@ -304,10 +276,9 @@
     number: 71
     config: null
     hidden: false
-    feature: 6
-    module: 1
+    feature: prologue
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 33
   fields:
     name: Speed larp
     descr: Manage the event speed-larps
@@ -315,10 +286,9 @@
     number: 21
     config: null
     hidden: false
-    feature: 25
-    module: 3
+    feature: speedlarp
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 34
   fields:
     name: Check
     descr: Perform check on the consistency of character sheets
@@ -326,10 +296,9 @@
     number: 81
     config: null
     hidden: false
-    feature: 178
-    module: 1
+    feature: character
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 35
   fields:
     name: Progress
     descr: Manage the progress steps for the writing elements
@@ -337,10 +306,9 @@
     number: 91
     config: null
     hidden: false
-    feature: 91
-    module: 1
+    feature: progress
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 36
   fields:
     name: Registrations
     descr: Manage participant registrations
@@ -348,10 +316,9 @@
     number: 11
     config: null
     hidden: false
-    feature: 207
-    module: 4
+    feature: orga_registrations
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 37
   fields:
     name: Tickets
     descr: Manage the registration tickets
@@ -359,10 +326,9 @@
     number: 21
     config: tickets
     hidden: false
-    feature: 206
-    module: 4
+    feature: orga_registration_tickets
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 38
   fields:
     name: Sections
     descr: Manage the registration sections
@@ -370,10 +336,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 77
-    module: 4
+    feature: reg_que_sections
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 39
   fields:
     name: Form
     descr: Manage the registration questions and options
@@ -381,10 +346,9 @@
     number: 41
     config: reg_form
     hidden: false
-    feature: 205
-    module: 4
+    feature: orga_registration_form
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 41
   fields:
     name: Surcharges
     descr: Manage the registration surcharges
@@ -392,10 +356,9 @@
     number: 61
     config: null
     hidden: false
-    feature: 139
-    module: 2
+    feature: reg_surcharges
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 42
   fields:
     name: Dynamic rates
     descr: Manage dynamic installment payments for registrations
@@ -403,10 +366,9 @@
     number: 71
     config: null
     hidden: false
-    feature: 62
-    module: 2
+    feature: reg_quotas
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 43
   fields:
     name: Fixed instalments
     descr: Manages fixed installment payments for registrations
@@ -414,10 +376,9 @@
     number: 81
     config: null
     hidden: false
-    feature: 74
-    module: 2
+    feature: reg_installments
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 44
   fields:
     name: Discounts
     descr: Manage registrations discounts available to participants
@@ -425,10 +386,9 @@
     number: 91
     config: null
     hidden: false
-    feature: 12
-    module: 2
+    feature: discount
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 45
   fields:
     name: Pre-Registrations
     descr: Manage the pre-registrations received
@@ -436,10 +396,9 @@
     number: 101
     config: pre_reg
     hidden: false
-    feature: 32
-    module: 4
+    feature: pre_register
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 46
   fields:
     name: Cancellations
     descr: Manages registration cancellations
@@ -447,10 +406,9 @@
     number: 111
     config: null
     hidden: false
-    feature: 204
-    module: 4
+    feature: orga_cancellations
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 47
   fields:
     name: Newsletter
     descr: Displays list of emails of signed-up participants
@@ -458,10 +416,9 @@
     number: 71
     config: null
     hidden: false
-    feature: 40
-    module: 14
+    feature: newsletter
+    module: communications
 - model: larpmanager.eventpermission
-  pk: 49
   fields:
     name: Assignments
     descr: Manages and assigns tasks to characters
@@ -469,10 +426,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 7
-    module: 5
+    feature: questbuilder
+    module: casting
 - model: larpmanager.eventpermission
-  pk: 50
   fields:
     name: Approvals
     descr: Manually approve payments received
@@ -480,10 +436,9 @@
     number: 81
     config: null
     hidden: false
-    feature: 111
-    module: 2
+    feature: payment
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 51
   fields:
     name: Upload Expenses
     descr: Manage your event expenses and upload receipts
@@ -491,10 +446,9 @@
     number: 91
     config: null
     hidden: false
-    feature: 106
-    module: 2
+    feature: expense
+    module: accounting
 - model: larpmanager.eventpermission
-  pk: 52
   fields:
     name: Deadlines
     descr: Displays participants overdue for payment or other deadlines
@@ -502,10 +456,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 94
-    module: 4
+    feature: deadlines
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 53
   fields:
     name: PDF
     descr: Set the options for the automatic PDF generation of characters sheets
@@ -513,10 +466,9 @@
     number: 111
     config: null
     hidden: false
-    feature: 21
-    module: 1
+    feature: print_pdf
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 54
   fields:
     name: Handout Models
     descr: Manage the models for event handouts
@@ -524,10 +476,9 @@
     number: 121
     config: null
     hidden: false
-    feature: 105
-    module: 1
+    feature: handout
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 55
   fields:
     name: Handouts
     descr: Manage the event handouts
@@ -535,10 +486,9 @@
     number: 131
     config: null
     hidden: false
-    feature: 105
-    module: 1
+    feature: handout
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 57
   fields:
     name: Ability type
     descr: Manage the type of character skills
@@ -546,10 +496,9 @@
     number: 41
     config: px
     hidden: false
-    feature: 118
-    module: 11
+    feature: px
+    module: experience
 - model: larpmanager.eventpermission
-  pk: 58
   fields:
     name: Ability
     descr: Manage the character skills purchaseable with XP
@@ -557,10 +506,9 @@
     number: 51
     config: px
     hidden: false
-    feature: 118
-    module: 11
+    feature: px
+    module: experience
 - model: larpmanager.eventpermission
-  pk: 59
   fields:
     name: Delivery
     descr: Manage XP distributions for character skill purchases.
@@ -568,21 +516,9 @@
     number: 61
     config: px
     hidden: false
-    feature: 118
-    module: 11
+    feature: px
+    module: experience
 - model: larpmanager.eventpermission
-  pk: 83
-  fields:
-    name: Rules
-    descr: Manage XP rules
-    slug: orga_px_rules
-    number: 81
-    config: px
-    hidden: false
-    feature: 118
-    module: 11
-- model: larpmanager.eventpermission
-  pk: 60
   fields:
     name: Historical
     descr: Display full history of participant preferences on characters
@@ -590,10 +526,9 @@
     number: 61
     config: casting
     hidden: false
-    feature: 27
-    module: 5
+    feature: casting
+    module: casting
 - model: larpmanager.eventpermission
-  pk: 61
   fields:
     name: Statistics
     descr: Displays statistics on participant preferences on characters
@@ -601,10 +536,9 @@
     number: 71
     config: casting
     hidden: false
-    feature: 27
-    module: 5
+    feature: casting
+    module: casting
 - model: larpmanager.eventpermission
-  pk: 63
   fields:
     name: Utility
     descr: Upload and host files directly
@@ -612,10 +546,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 43
-    module: 3
+    feature: utils
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 64
   fields:
     name: Problems
     descr: Manage issues during the event
@@ -623,10 +556,9 @@
     number: 41
     config: null
     hidden: false
-    feature: 60
-    module: 3
+    feature: problems
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 65
   fields:
     name: Lottery
     descr: Select randomly lottery tickets to upgrade
@@ -634,10 +566,9 @@
     number: 121
     config: lottery
     hidden: false
-    feature: 50
-    module: 4
+    feature: lottery
+    module: registration
 - model: larpmanager.eventpermission
-  pk: 66
   fields:
     name: Workshops
     descr: Manage quiz-style workshops
@@ -645,10 +576,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 24
-    module: 3
+    feature: workshop
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 67
   fields:
     name: Modules
     descr: Manages modules for workshops
@@ -656,10 +586,9 @@
     number: 61
     config: null
     hidden: false
-    feature: 24
-    module: 3
+    feature: workshop
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 68
   fields:
     name: Questions
     descr: Manage questions for workshops
@@ -667,10 +596,9 @@
     number: 1
     config: null
     hidden: false
-    feature: 24
-    module: 3
+    feature: workshop
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 69
   fields:
     name: Answers
     descr: Manage answers for workshop questions
@@ -678,10 +606,9 @@
     number: 81
     config: null
     hidden: false
-    feature: 24
-    module: 3
+    feature: workshop
+    module: miscellany
 - model: larpmanager.eventpermission
-  pk: 70
   fields:
     name: Texts
     descr: Customize specific texts on the event interface
@@ -689,10 +616,9 @@
     number: 20
     config: null
     hidden: false
-    feature: 203
-    module: 6
+    feature: orga_texts
+    module: appearance
 - model: larpmanager.eventpermission
-  pk: 71
   fields:
     name: Navigation
     descr: Customize buttons in the event navigation bar
@@ -700,10 +626,9 @@
     number: 30
     config: null
     hidden: false
-    feature: 202
-    module: 6
+    feature: orga_buttons
+    module: appearance
 - model: larpmanager.eventpermission
-  pk: 74
   fields:
     name: Send e-mail
     descr: Send e-mail
@@ -711,10 +636,9 @@
     number: 99
     config: email
     hidden: false
-    feature: 200
-    module: 14
+    feature: orga_send_mail
+    module: communications
 - model: larpmanager.eventpermission
-  pk: 75
   fields:
     name: Form
     descr: Manage questions and options for characters and writing elements
@@ -722,10 +646,9 @@
     number: 12
     config: char_form
     hidden: false
-    feature: 178
-    module: 1
+    feature: character
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 76
   fields:
     name: Archive
     descr: Display sent e-mails
@@ -733,10 +656,9 @@
     number: 100
     config: email
     hidden: false
-    feature: 199
-    module: 14
+    feature: orga_archive_email
+    module: communications
 - model: larpmanager.eventpermission
-  pk: 77
   fields:
     name: Quick Setup
     descr: quick
@@ -744,10 +666,9 @@
     number: 9999
     config: null
     hidden: true
-    feature: 216
-    module: 7
+    feature: quick_setup
+    module: event
 - model: larpmanager.eventpermission
-  pk: 79
   fields:
     name: Reading
     descr: Read the writing elements
@@ -755,10 +676,9 @@
     number: 999
     config: writing
     hidden: false
-    feature: 178
-    module: 1
+    feature: character
+    module: writing
 - model: larpmanager.eventpermission
-  pk: 80
   fields:
     name: Area
     descr: Manage area of the event
@@ -766,10 +686,9 @@
     number: 11
     config: warehouse
     hidden: false
-    feature: 66
-    module: 15
+    feature: warehouse
+    module: warehouse
 - model: larpmanager.eventpermission
-  pk: 81
   fields:
     name: Checks
     descr: Perform checks on warehouse assignments
@@ -777,10 +696,9 @@
     number: 41
     config: warehouse
     hidden: false
-    feature: 66
-    module: 15
+    feature: warehouse
+    module: warehouse
 - model: larpmanager.eventpermission
-  pk: 82
   fields:
     name: Manifest
     descr: Manage loading and deployment status of warehouse items
@@ -788,5 +706,15 @@
     number: 31
     config: warehouse
     hidden: false
-    feature: 66
-    module: 15
+    feature: warehouse
+    module: warehouse
+- model: larpmanager.eventpermission
+  fields:
+    name: Rules
+    descr: Manage XP rules
+    slug: orga_px_rules
+    number: 81
+    config: px
+    hidden: false
+    feature: px
+    module: experience
