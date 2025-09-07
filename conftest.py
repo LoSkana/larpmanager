@@ -125,6 +125,7 @@ def _db_teardown_between_tests(django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
             _truncate_app_tables()
+        clean_enc()
 
 
 @pytest.fixture(autouse=True)
@@ -132,6 +133,7 @@ def load_fixtures(django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
             call_command("init_db", verbosity=0)
+        clean_enc()
 
 
 def psql(params, env):
