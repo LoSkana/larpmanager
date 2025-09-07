@@ -48,6 +48,6 @@ class Command(BaseCommand):
 
         # delete all .enc
         root = Path(conf_settings.PAYMENT_SETTING_FOLDER).expanduser().resolve()
-        assert root.is_dir(), root
-        for fp in root.glob("*.enc"):
-            fp.unlink()
+        if root.is_dir():
+            for fp in root.glob("*.enc"):
+                fp.unlink()
