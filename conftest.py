@@ -21,9 +21,11 @@
 import logging
 import os
 import subprocess
+from pathlib import Path
 
 import pytest
 from django.conf import settings
+from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
 
@@ -56,7 +58,6 @@ def _cache_isolation(settings):
             "LOCATION": "unique-for-pytest",
         }
     }
-    from django.core.cache import cache
 
     cache.clear()
 
@@ -178,4 +179,12 @@ def django_db_setup():
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
     # don't touch the db in local
-    pass
+    clean_enc()
+
+
+def clean_enc():
+    # delete all .enc
+    root = Path(settings.PAYMENT_SETTING_FOLDER).expanduser().resolve()
+    if root.is_dir():
+        for fp in root.glob("*.enc"):
+            fp.unlink()

@@ -53,7 +53,7 @@ def template(live_server, page):
     page.get_by_role("link", name="New").click()
     page.get_by_role("row", name="Name").locator("td").click()
     page.locator("#id_name").fill("template")
-    page.locator("input[type='checkbox'][value='178']").check()  # mark character
+    page.get_by_role("checkbox", name="Characters").check()
     page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
     submit_confirm(page)
     page.get_by_role("link", name="Add").click()

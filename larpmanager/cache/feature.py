@@ -68,6 +68,9 @@ def update_assoc_features(assoc_id):
             if slug in assoc.mandatory_fields or slug in assoc.optional_fields:
                 res[slug] = 1
 
+        if not assoc.skin.managed:
+            res["exe_events"] = 1
+
     except ObjectDoesNotExist:
         pass
     return res
