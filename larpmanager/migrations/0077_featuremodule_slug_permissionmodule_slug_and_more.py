@@ -2,6 +2,19 @@
 
 import django.core.validators
 from django.db import migrations, models
+from django.utils.text import slugify
+
+
+def update_slugs(apps, schema_editor):
+    FeatureModule = apps.get_model("larpmanager", "FeatureModule")
+    for mod in FeatureModule.objects.all():
+        mod.slug = slugify(mod.name)
+        mod.save()
+
+    PermissionModule = apps.get_model("larpmanager", "PermissionModule")
+    for mod in PermissionModule.objects.all():
+        mod.slug = slugify(mod.name)
+        mod.save()
 
 
 class Migration(migrations.Migration):
@@ -15,12 +28,6 @@ class Migration(migrations.Migration):
             name="slug",
             field=models.SlugField(
                 default="coa",
-                max_length=100,
-                validators=[
-                    django.core.validators.RegexValidator(
-                        "^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -."
-                    )
-                ],
             ),
             preserve_default=False,
         ),
@@ -29,15 +36,10 @@ class Migration(migrations.Migration):
             name="slug",
             field=models.SlugField(
                 default="coa",
-                max_length=100,
-                validators=[
-                    django.core.validators.RegexValidator(
-                        "^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -."
-                    )
-                ],
             ),
             preserve_default=False,
         ),
+        migrations.RunPython(update_slugs),
         migrations.AlterField(
             model_name="assocpermission",
             name="slug",

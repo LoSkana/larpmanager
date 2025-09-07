@@ -7,4 +7,4 @@
     default_mandatory_fields: ''
     default_optional_fields: ''
     default_features:
-    - 191
+    - exe_events

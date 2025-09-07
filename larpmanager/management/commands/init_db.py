@@ -17,7 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from pathlib import Path
 
+from django.conf import settings as conf_settings
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
@@ -43,3 +45,9 @@ class Command(BaseCommand):
             user.save()
 
         self.stdout.write("All done.")
+
+        # delete all .enc
+        root = Path(conf_settings.PAYMENT_SETTING_FOLDER).expanduser().resolve()
+        assert root.is_dir(), root
+        for fp in root.glob("*.enc"):
+            fp.unlink()
