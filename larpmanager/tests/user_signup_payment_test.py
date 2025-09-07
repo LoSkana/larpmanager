@@ -43,7 +43,7 @@ def test_user_signup_payment(pw_page):
 
 def prepare(page, live_server):
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
@@ -118,7 +118,7 @@ def signup(page, live_server):
 
 def characters(page, live_server):
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/character/on")
 
     # Assign character
     go_to(page, live_server, "/test/1/manage/registrations")

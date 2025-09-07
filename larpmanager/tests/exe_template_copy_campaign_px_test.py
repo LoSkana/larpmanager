@@ -48,7 +48,7 @@ def test_exe_template_copy(pw_page):
 
 def template(live_server, page):
     # Activate template
-    go_to(page, live_server, "/manage/features/179/on")
+    go_to(page, live_server, "/manage/features/template/on")
     go_to(page, live_server, "/manage/template")
     page.get_by_role("link", name="New").click()
     page.get_by_role("row", name="Name").locator("td").click()
@@ -94,11 +94,11 @@ def template(live_server, page):
 
 def setup(live_server, page):
     # activate factions
-    go_to(page, live_server, "/test/1/manage/features/104/on")
+    go_to(page, live_server, "/test/1/manage/features/faction/on")
     # activate xp
-    go_to(page, live_server, "/test/1/manage/features/118/on")
+    go_to(page, live_server, "/test/1/manage/features/px/on")
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/character/on")
     # configure test larp
     go_to(page, live_server, "/test/1/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
@@ -243,7 +243,7 @@ def copy(live_server, page):
     page.locator("#slug").fill("copy")
     submit_confirm(page)
 
-    go_to(page, live_server, "/copy/1/manage/features/10/on")
+    go_to(page, live_server, "/copy/1/manage/features/copy/on")
     go_to(page, live_server, "/copy/1/manage/copy/")
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
@@ -270,7 +270,7 @@ def copy(live_server, page):
 
 def campaign(live_server, page):
     # create campaign
-    go_to(page, live_server, "/manage/features/79/on")
+    go_to(page, live_server, "/manage/features/campaign/on")
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
     page.locator("#id_name").click()

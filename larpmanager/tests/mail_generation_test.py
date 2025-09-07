@@ -53,7 +53,7 @@ def expense(image_path, live_server, page):
     submit_confirm(page)
 
     # expenses
-    go_to(page, live_server, "/manage/features/106/on")
+    go_to(page, live_server, "/manage/features/expense/on")
     go_to(page, live_server, "/test/1/manage/expenses/my")
     page.get_by_role("link", name="New").click()
     page.get_by_role("spinbutton", name="Value").click()
@@ -107,7 +107,7 @@ def resubmit_membership(live_server, page):
 
 def submit_membership(live_server, page, image_path):
     # Test membership
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/texts")
     page.wait_for_timeout(2000)
     page.get_by_role("link", name="New").click()
@@ -138,7 +138,7 @@ def submit_membership(live_server, page, image_path):
 
 def badge(live_server, page, image_path):
     # Test badge
-    go_to(page, live_server, "/manage/features/65/on")
+    go_to(page, live_server, "/manage/features/badge/on")
     go_to(page, live_server, "/manage/badges")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -163,7 +163,7 @@ def badge(live_server, page, image_path):
 
 def chat(live_server, page):
     # Test chat
-    go_to(page, live_server, "/manage/features/52/on")
+    go_to(page, live_server, "/manage/features/chat/on")
     go_to(page, live_server, "/public/3/")
     page.get_by_role("link", name="Chat").click()
     page.get_by_role("textbox").fill("ciao!")

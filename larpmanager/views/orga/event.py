@@ -57,7 +57,8 @@ from larpmanager.utils.download import (
     export_character_form,
     export_data,
     export_registration_form,
-    zip_exports, export_tickets,
+    export_tickets,
+    zip_exports,
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
@@ -216,8 +217,8 @@ def orga_features(request, s, n):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def orga_features_go(request, ctx, num, on=True):
-    get_feature(ctx, num)
+def orga_features_go(request, ctx, slug, on=True):
+    get_feature(ctx, slug)
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
     reset_run(ctx["run"])
@@ -254,16 +255,16 @@ def _orga_feature_after_link(feature, s, n):
 
 
 @login_required
-def orga_features_on(request, s, n, num):
+def orga_features_on(request, s, n, slug):
     ctx = check_event_permission(request, s, n, "orga_features")
-    feature = orga_features_go(request, ctx, num, on=True)
+    feature = orga_features_go(request, ctx, slug, on=True)
     return redirect(_orga_feature_after_link(feature, s, n))
 
 
 @login_required
-def orga_features_off(request, s, n, num):
+def orga_features_off(request, s, n, slug):
     ctx = check_event_permission(request, s, n, "orga_features")
-    orga_features_go(request, ctx, num, on=False)
+    orga_features_go(request, ctx, slug, on=False)
     return redirect("manage", s=s, n=n)
 
 

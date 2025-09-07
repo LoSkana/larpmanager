@@ -45,7 +45,7 @@ def test_user_accounting(pw_page):
 
 def prepare(page, live_server):
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
@@ -74,7 +74,7 @@ def prepare(page, live_server):
 
 def donation(page, live_server):
     # test donation
-    go_to(page, live_server, "/manage/features/36/on")
+    go_to(page, live_server, "/manage/features/donate/on")
 
     go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="follow this link").click()
@@ -102,7 +102,7 @@ def donation(page, live_server):
 
 def membership_fees(page, live_server):
     # test membership fees
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
 
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
@@ -157,7 +157,7 @@ def membership_fees(page, live_server):
 
 def collections(page, live_server):
     # test collections
-    go_to(page, live_server, "/manage/features/31/on")
+    go_to(page, live_server, "/manage/features/collection/on")
 
     go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="Create a new collection").click()

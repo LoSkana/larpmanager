@@ -34,7 +34,7 @@ def test_exe_membership(pw_page):
     login_orga(page, live_server)
 
     # activate members
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
 
     # register
     go_to(page, live_server, "/test/1/register")
