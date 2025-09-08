@@ -25,6 +25,8 @@ from django.core.management.base import BaseCommand
 
 from conftest import clean_enc
 from larpmanager.management.commands.utils import check_branch
+from larpmanager.models.association import Association, AssociationSkin
+from larpmanager.models.base import Feature
 
 
 class Command(BaseCommand):
@@ -43,6 +45,16 @@ class Command(BaseCommand):
             user.set_password("banana")
             user.is_active = True
             user.save()
+
+        # Add exe_events to skin and assoc
+        feature = Feature.objects.get(slug="exe_events")
+        for skin in AssociationSkin.objects.all():
+            skin.default_features.add(feature)
+            skin.save()
+
+        for assoc in Association.objects.all():
+            assoc.features.add(feature)
+            assoc.save()
 
         self.stdout.write("All done.")
 
