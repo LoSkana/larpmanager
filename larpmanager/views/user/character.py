@@ -154,8 +154,7 @@ def character_your_link(ctx, char, p=None):
     url = reverse(
         "character",
         kwargs={
-            "s": ctx["event"].slug,
-            "n": ctx["run"].number,
+            "s": ctx["run"].get_slug(),
             "num": char.number,
         },
     )
@@ -354,7 +353,7 @@ def character_create(request, s):
         return redirect("character_list", s=s)
 
     ctx["class_name"] = "character"
-    return character_form(request, ctx, s,None, CharacterForm)
+    return character_form(request, ctx, s, None, CharacterForm)
 
 
 @login_required
