@@ -8444,6 +8444,13 @@ msgstr ""
 "persoonlijke registratie nodig is"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Je moet minstens één optie definiëren voordat je een meerkeuze- of "
+"meerkeuzevraag opslaat"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

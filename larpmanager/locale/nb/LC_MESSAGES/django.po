@@ -8280,6 +8280,13 @@ msgstr ""
 "krever personlig påmelding"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Du må definere minst ett alternativ før du lagrer et enkeltvalgs- eller "
+"flervalgsspørsmål"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

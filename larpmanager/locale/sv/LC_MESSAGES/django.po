@@ -8318,6 +8318,13 @@ msgstr ""
 "personlig registrering"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Du måste ange minst ett alternativ innan du sparar en envals- eller "
+"flervalsfråga"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

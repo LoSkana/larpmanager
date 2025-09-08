@@ -8552,6 +8552,13 @@ msgstr ""
 "pas d'inscription en personne"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Vous devez définir au moins une option avant d'enregistrer une question à "
+"choix unique ou à choix multiple"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""
