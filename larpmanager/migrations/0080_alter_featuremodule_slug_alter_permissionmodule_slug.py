@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0077_featuremodule_slug_permissionmodule_slug_and_more"),
+        ("larpmanager", "0079_featuremodule_slug_permissionmodule_slug_and_more"),
     ]
 
     operations = [

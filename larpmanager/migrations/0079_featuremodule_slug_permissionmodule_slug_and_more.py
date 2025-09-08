@@ -19,7 +19,7 @@ def update_slugs(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0076_warehouseitem_rename_inventoryarea_warehousearea_and_more"),
+        ("larpmanager", "0078_alter_registrationquestion_typ"),
     ]
 
     operations = [
