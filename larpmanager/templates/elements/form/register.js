@@ -83,7 +83,7 @@ $(document).ready(function(){
         });
     });
 
-    for (const el of ['id_quotas', 'id_ticket', 'id_additionals']) {
+    for (const el of ['id_quotas', 'id_ticket']) {
         if ( $( "#" + el ).length ) mandatory.unshift(el);
     }
 
@@ -116,12 +116,25 @@ $(document).ready(function(){
         var s = $('select[name =\"signup\"] option:selected').val();
 
         var sum = ticket_price;
-        $('select').each(function(index, value) {
-           var sel = $(this).val();
-           if ( !sel ) return;
-           var text = $(this).find(":selected").text();
-           sum += get_price(text);
+        var price_map = {};
+
+        $('select').each(function() {
+            var sel = $(this).val();
+            if (!sel) return;
+
+            var text = $(this).find(":selected").text();
+            var price = get_price(text);
+
+            price_map[this.id] = price; // usa this.id
+            sum += price;
         });
+
+        // check additionals
+        const additionals = $("#id_additionals");
+        if (additionals.length && additionals.val()) {
+            const addTickets = additionals.val();
+            sum += price_map["id_ticket"] * addTickets;
+        }
 
         $('input:checked').each(function () {
            sum += get_price($(this).parent().text());

@@ -26,7 +26,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
-from larpmanager.models.form import QuestionType, WritingAnswer, WritingOption, WritingQuestion
+from larpmanager.models.form import WritingQuestionType, WritingAnswer, WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
@@ -135,7 +135,7 @@ def update_px(char):
 
     # save computed field
     event = char.event
-    computed_ques = event.get_elements(WritingQuestion).filter(typ=QuestionType.COMPUTED)
+    computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
     values = {question.id: Decimal(0) for question in computed_ques}
 
     # apply rules

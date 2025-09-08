@@ -34,7 +34,7 @@ from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
@@ -44,7 +44,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions,
+    get_ordered_registration_questions, RegistrationQuestionType, BaseQuestionType,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
@@ -408,7 +408,7 @@ def orga_registration_form_download(ctx):
 
 def export_registration_form(ctx):
     mappings = {
-        "typ": QuestionType.get_mapping(),
+        "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
     }
 
@@ -451,7 +451,7 @@ def orga_character_form_download(ctx):
 
 def export_character_form(ctx):
     mappings = {
-        "typ": QuestionType.get_mapping(),
+        "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
         "applicable": QuestionApplicable.get_mapping(),
         "visibility": QuestionVisibility.get_mapping(),

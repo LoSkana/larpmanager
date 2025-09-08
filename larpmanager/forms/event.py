@@ -53,7 +53,7 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import QuestionType, _get_writing_elements, _get_writing_mapping
+from larpmanager.models.form import WritingQuestionType, _get_writing_elements, _get_writing_mapping, BaseQuestionType
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
@@ -592,17 +592,6 @@ class OrgaConfigForm(ConfigForm):
         help_text = _("If checked, allow ticket tier: Seller")
         self.add_configs("ticket_seller", ConfigType.BOOL, label, help_text)
 
-        if "pay_what_you_want" in self.params["features"]:
-            self.set_section("pay_what_you_want", "Pay what you want")
-
-            label = _("Name")
-            help_text = _("Name of the free donation field")
-            self.add_configs("pay_what_you_want_label", ConfigType.CHAR, label, help_text)
-
-            label = _("Description")
-            help_text = _("Description of free donation")
-            self.add_configs("pay_what_you_want_descr", ConfigType.CHAR, label, help_text)
-
         if "reduced" in self.params["features"]:
             self.set_section("reduced", _("Patron / Reduced"))
             label = "Ratio"
@@ -874,7 +863,7 @@ class OrgaRunForm(ConfigForm):
 
         shows = _get_writing_elements()
 
-        basics = QuestionType.get_basic_types()
+        basics = BaseQuestionType.get_basic_types()
         self.set_section("visibility", _("Visibility"))
         for s in shows:
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
@@ -1087,7 +1076,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
     def set_configs(self):
         super().set_configs()
 
-        basics = QuestionType.get_basic_types()
+        basics = BaseQuestionType.get_basic_types()
         event_id = self.params["event"].id
 
         self.set_section("open", "Default fields")

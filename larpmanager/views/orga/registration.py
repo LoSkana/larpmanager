@@ -62,11 +62,11 @@ from larpmanager.models.event import (
     PreRegistration,
 )
 from larpmanager.models.form import (
-    QuestionType,
+    WritingQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion,
+    RegistrationQuestion, BaseQuestionType,
 )
 from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -290,7 +290,7 @@ def _orga_registrations_text_fields(ctx):
     # add editor type questions
     text_fields = []
     que = RegistrationQuestion.objects.filter(event=ctx["event"])
-    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 
     gctf = get_cache_reg_field(ctx["run"])
@@ -395,7 +395,7 @@ def orga_registration_form_list(request, s):
 
     max_length = 100
 
-    if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if q.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         cho = {}
         for opt in RegistrationOption.objects.filter(question=q):
             cho[opt.id] = opt.get_form_text()
@@ -405,7 +405,7 @@ def orga_registration_form_list(request, s):
                 res[el.reg_id] = []
             res[el.reg_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"])
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("reg_id", "short_text")
@@ -437,7 +437,7 @@ def orga_registration_form_email(request, s):
 
     res = {}
 
-    if q.typ not in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return
 
     cho = {}

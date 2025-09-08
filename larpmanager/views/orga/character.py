@@ -41,12 +41,12 @@ from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionType,
+    WritingQuestionType,
     WritingAnswer,
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    _get_writing_mapping,
+    _get_writing_mapping, BaseQuestionType,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
@@ -202,7 +202,7 @@ def orga_writing_form_list(request, s, typ):
     max_length = 100
 
     question = event.get_elements(WritingQuestion).get(pk=eid, applicable=applicable)
-    if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         cho = {}
         for opt in event.get_elements(WritingOption).filter(question=question):
             cho[opt.id] = opt.name
@@ -212,7 +212,7 @@ def orga_writing_form_list(request, s, typ):
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif question.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.COMPUTED]:
+    elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, WritingQuestionType.COMPUTED]:
         que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
@@ -235,7 +235,7 @@ def orga_writing_form_email(request, s, typ):
     eid = request.POST.get("num")
     q = event.get_elements(WritingQuestion).get(pk=eid)
 
-    if q.typ not in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return
 
     cho = {}
@@ -522,7 +522,7 @@ def orga_writing_excel_edit(request, s, typ):
         return JsonResponse({"k": 0})
 
     tinymce = False
-    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+    if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
         tinymce = True
 
     counter = ""
@@ -617,7 +617,7 @@ def _get_excel_form(request, s, typ, submit=False):
 
     # Remove question other than the one requested
     keep_key = f"q{question_id}"
-    if question.typ not in QuestionType.get_basic_types():
+    if question.typ not in BaseQuestionType.get_basic_types():
         keep_key = question.typ
     remove_keys = []
     for key in form.fields:
@@ -635,7 +635,7 @@ def _get_excel_form(request, s, typ, submit=False):
 
 
 def _get_question_update(ctx, el):
-    if ctx["question"].typ in [QuestionType.COVER]:
+    if ctx["question"].typ in [WritingQuestionType.COVER]:
         return f"""
                 <a href="{el.thumb.url}">
                     <img src="{el.thumb.url}"
@@ -646,16 +646,16 @@ def _get_question_update(ctx, el):
 
     question_key = f"q{ctx['question'].id}"
     question_slug = str(ctx["question"].id)
-    if ctx["question"].typ not in QuestionType.get_basic_types():
+    if ctx["question"].typ not in BaseQuestionType.get_basic_types():
         question_key = ctx["question"].typ
         question_slug = ctx["question"].typ
 
     value = ctx["form"].cleaned_data[question_key]
 
-    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+    if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
         value = strip_tags(str(value))
 
-    if ctx["question"].typ in [QuestionType.MULTIPLE, QuestionType.SINGLE]:
+    if ctx["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
         option_ids = [int(val) for val in value]
         query = ctx["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")

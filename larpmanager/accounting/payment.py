@@ -55,7 +55,8 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
-from larpmanager.models.form import QuestionType, RegistrationAnswer, RegistrationChoice, RegistrationQuestion
+from larpmanager.models.form import RegistrationQuestionType, RegistrationAnswer, RegistrationChoice, \
+    RegistrationQuestion, BaseQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id, get_payment_details
 from larpmanager.utils.base import update_payment_details
@@ -132,7 +133,7 @@ def _custom_reason_reg(ctx, invoice, member_real):
         # Look for a registration question with that name
         try:
             question = RegistrationQuestion.objects.get(event=ctx["reg"].run.event, name__iexact=key)
-            if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+            if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 aux = []
                 que = RegistrationChoice.objects.filter(question=question, reg_id=ctx["reg"].id)
                 for choice in que.select_related("option"):

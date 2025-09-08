@@ -51,7 +51,9 @@
                 <td>{{ el.name }}</td>
                 <td>{{ el.description | truncatechars:50 }}</td>
                 <td>{{ el.get_typ_display }}</td>
-                <td>{{ el.get_status_display }}</td>
+                <td>
+                    {% if el.typ|not_in:"ticket" %}{{ el.get_status_display }}{% endif %}
+                </td>
                 {% if features.gift %}
                     <td>
                         {% if el.giftable %}<i class="fa-solid fa-check"></i>{% endif %}
