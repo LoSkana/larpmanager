@@ -21,7 +21,7 @@
         {% for el in list %}
             <tr>
                 <td>
-                    <a href="{% url 'orga_pre_registrations' el.slug '1' %}">{{ el }}</a>
+                    <a href="{% url 'orga_pre_registrations' el.slug %}">{{ el }}</a>
                 </td>
                 {% for k, v in el.count.items %}<td>{{ v }}</td>{% endfor %}
             </tr>
