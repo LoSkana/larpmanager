@@ -467,8 +467,8 @@ def save_event_registration_form(features, instance):
     all_types -= basic_tps
 
     # add default types if none are present
-    if not types:
-        for el in def_tps:
+    for el in def_tps:
+        if el not in types:
             RegistrationQuestion.objects.create(
                 event=instance,
                 typ=el,

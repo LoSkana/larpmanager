@@ -2,6 +2,15 @@
 
 from django.db import migrations, models
 
+from larpmanager.cache.feature import get_event_features
+from larpmanager.models.signals import save_event_registration_form
+
+
+def update(apps, schema_editor):
+    Event = apps.get_model("larpmanager", "Event")
+    for instance in Event.objects.all():
+        features = get_event_features(instance.id)
+        save_event_registration_form(features, instance)
 
 class Migration(migrations.Migration):
 
@@ -15,4 +24,5 @@ class Migration(migrations.Migration):
             name='typ',
             field=models.CharField(choices=[('s', 'Single choice'), ('m', 'Multiple choice'), ('t', 'Single-line text'), ('p', 'Multi-line text'), ('e', 'Advanced text editor'), ('ticket', 'Ticket'), ('additional_tickets', 'Additional'), ('pay_what_you_want', 'Free donation'), ('discount', 'discount'), ('reg_quotas', 'Quota'), ('reg_surcharges', 'Surcharge')], default='s', help_text='Question type', max_length=50, verbose_name='Type'),
         ),
+        migrations.RunPython(update),
     ]
