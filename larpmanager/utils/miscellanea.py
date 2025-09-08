@@ -44,7 +44,7 @@ def upload_albums_dir(main, cache_subs, name):
         # search if sub album of parent with same name exists
         album = None
         a_name = os.path.basename(name)
-        print(a_name)
+
         for a in parent.sub_albums.all():
             if a.name == a_name:
                 album = a

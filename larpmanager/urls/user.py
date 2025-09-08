@@ -425,5 +425,10 @@ urlpatterns = [
         views_base.tutorial_query,
         name="tutorial_query",
     ),
+    path(
+        "set_member_config/",
+        views_base.set_member_config,
+        name="set_member_config",
+    ),
     path("upload_image/", views_base.upload_image, name="upload_image"),
 ]

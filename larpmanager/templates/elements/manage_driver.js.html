@@ -160,7 +160,18 @@ window.addEventListener('DOMContentLoaded', function() {
             showProgress: true,
             steps: steps,
             allowClose: false,
-            popoverClass: 'my-driverjs'
+            popoverClass: 'my-driverjs',
+            doneBtnText: '{% trans "Done" %}',
+            onDestroyed: () => {
+              $.ajax({
+                url: '{% url "set_member_config" %}',
+                method: 'POST',
+                data: {
+                  name: 'intro_driver',
+                  value: "true",
+                }
+              });
+            }
         });
 
         driverObj.drive();

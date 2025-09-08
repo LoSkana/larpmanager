@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
-from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
@@ -23,7 +22,7 @@ from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
-from larpmanager.models.form import RegistrationQuestion, WritingQuestion, BaseQuestionType
+from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
@@ -720,7 +719,7 @@ def _check_intro_driver(request, ctx):
         return
 
     ctx["intro_driver"] = True
-    save_single_config(member, config_name, True)
+
 
 @login_required
 def orga_redirect(request, s, n, p=None):
