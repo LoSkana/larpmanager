@@ -723,7 +723,9 @@ def _check_intro_driver(request, ctx):
     save_single_config(member, config_name, True)
 
 @login_required
-def orga_redirect(request, s, n, p):
-    if n > 1:
-        s += f"-{n}"
-    return redirect(f"/{s}/{p}")
+def orga_redirect(request, s, n, p=None):
+    suffix = f"-{n}" if n > 1 else ""
+    path = f"/{s}{suffix}/"
+    if p:
+        path += f"{p}"
+    return redirect(path)
