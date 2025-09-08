@@ -46,8 +46,8 @@
     {% include "elements/writing/excel-edit.js" %}
     {% include "elements/form/char_highlight.js" %}
     <script>
-        var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
-        var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
+        var url_load_questions = "{% url 'orga_writing_form_list' run.get_slug label_typ %}";
+        var url_load_questions_email = "{% url 'orga_writing_form_email' run.get_slug label_typ %}";
 
         var accounting = false;
 

@@ -73,13 +73,13 @@ class ExceptionHandlingMiddleware:
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
-                    request, _("To access this feature, you must first register!"), "register", [ex.slug, ex.number]
+                    request, _("To access this feature, you must first register!"), "register", [ex.slug]
                 ),
             ),
             (
                 WaitingError,
                 lambda ex: self._redirect_with_message(
-                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug, ex.number]
+                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug]
                 ),
             ),
             (
@@ -88,7 +88,7 @@ class ExceptionHandlingMiddleware:
                     request,
                     ex.name + " " + _("not visible at this time"),
                     "gallery",
-                    [ex.slug, ex.number],
+                    [ex.slug],
                     level="warning",
                 ),
             ),

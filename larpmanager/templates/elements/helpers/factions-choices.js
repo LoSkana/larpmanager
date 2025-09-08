@@ -24,7 +24,7 @@ window.addEventListener('DOMContentLoaded', function() {
             {% endif %}
 
             request = $.ajax({
-                url: "{% url 'orga_factions_available' event.slug run.number %}",
+                url: "{% url 'orga_factions_available' run.get_slug %}",
                 method: "POST",
                 data: {'eid': eid, 'orga': orga},
                 datatype: "json",

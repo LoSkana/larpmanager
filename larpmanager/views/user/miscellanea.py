@@ -83,13 +83,13 @@ def help_red(request, n):
         ctx["run"] = Run.objects.get(pk=n, event__assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
-    return redirect("help", s=ctx["run"].event.slug, n=ctx["run"].number)
+    return redirect("help", s=ctx["run"].get_slug())
 
 
 @login_required
-def help(request, s=None, n=None):
-    if s and n:
-        ctx = get_event_run(request, s, n, status=True)
+def help(request, s=None):
+    if s:
+        ctx = get_event_run(request, s, status=True)
     else:
         ctx = def_user_ctx(request)
         ctx["a_id"] = request.assoc["id"]
@@ -131,8 +131,8 @@ def help_attachment(request, p):
     return redirect(hp.attachment.url)
 
 
-def handout_ext(request, s, n, cod):
-    ctx = get_event_run(request, s, n)
+def handout_ext(request, s, cod):
+    ctx = get_event_run(request, s)
     ctx["handout"] = get_object_or_404(Handout, event=ctx["event"], cod=cod)
     fp = print_handout(ctx)
     return return_pdf(fp, str(ctx["handout"]))
@@ -161,21 +161,21 @@ def album_aux(request, ctx, parent):
 
 
 @login_required
-def album(request, s, n):
-    ctx = get_event_run(request, s, n)
+def album(request, s):
+    ctx = get_event_run(request, s)
     return album_aux(request, ctx, None)
 
 
 @login_required
-def album_sub(request, s, n, num):
-    ctx = get_event_run(request, s, n)
+def album_sub(request, s, num):
+    ctx = get_event_run(request, s)
     get_album(ctx, num)
     return album_aux(request, ctx, ctx["album"])
 
 
 @login_required
-def workshops(request, s, n):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def workshops(request, s):
+    ctx = get_event_run(request, s, signup=True, status=True)
     # get modules assigned to this event
     ctx["list"] = []
     for workshop in ctx["event"].workshops.all().order_by("number"):
@@ -210,13 +210,13 @@ def valid_workshop_answer(request, ctx):
 
 
 @login_required
-def workshop_answer(request, s, n, m):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+def workshop_answer(request, s, m):
+    ctx = get_event_run(request, s, signup=True, status=True)
     get_workshop(ctx, m)
     completed = [el.pk for el in request.user.member.workshops.all()]
     if ctx["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
-        return redirect("workshops", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("workshops", s=ctx["run"].get_slug())
     ctx["list"] = []
     for question in ctx["workshop"].questions.all().order_by("number"):
         ctx["list"].append(question.show())
@@ -235,12 +235,11 @@ def workshop_answer(request, s, n, m):
             messages.success(request, _("Completed module. Remaining: {number:d}").format(number=len(remaining)))
             return redirect(
                 "workshop_answer",
-                s=ctx["event"].slug,
-                n=ctx["run"].number,
+                s=ctx["run"].get_slug(),
                 m=remaining.first().number,
             )
         messages.success(request, _("Well done, you've completed all modules!"))
-        return redirect("workshops", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("workshops", s=ctx["run"].get_slug())
 
         # if wrong
     return render(request, "larpmanager/event/workshops/failed.html", ctx)

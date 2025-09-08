@@ -236,17 +236,17 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
     return False
 
 
-def orga_edit(request, s, n, perm, form_type, eid, red=None, add_ctx=None):
-    ctx = check_event_permission(request, s, n, perm)
+def orga_edit(request, s, perm, form_type, eid, red=None, add_ctx=None):
+    ctx = check_event_permission(request, s, perm)
     if add_ctx:
         ctx.update(add_ctx)
     if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+            return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
         if not red:
             red = perm
-        return redirect(red, s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect(red, s=ctx["run"].get_slug())
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
@@ -353,13 +353,13 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
     messages.success(request, _("Operation completed") + "!")
 
     if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+        return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
     if redr:
         ctx["element"] = p
         return redr(ctx)
 
-    return redirect("orga_" + nm + "s", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_" + nm + "s", s=ctx["run"].get_slug())
 
 
 def writing_edit_cache_key(eid, typ):

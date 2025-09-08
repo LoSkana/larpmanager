@@ -72,7 +72,7 @@ def get_expense_mail(instance):
     url = get_url(instance.download(), instance)
     body += f"<br /><br /><a href='{url}'>" + _("download document") + "</a>"
     body += "<br /><br />" + _("Did you check and is it correct") + "?"
-    url = f"{instance.run.event.slug}/{instance.run.number}/manage/expenses/approve/{instance.pk}"
+    url = f"{instance.run.get_slug()}/manage/expenses/approve/{instance.pk}"
     body += f"<a href='{url}'>" + _("Confirmation of expenditure") + "</a>"
     return body, subj
 

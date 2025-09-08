@@ -43,12 +43,12 @@ def test_user_character_form_editor(pw_page):
 
 def prepare(page, live_server):
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/manage/features/178/on")
 
     # Activate player editor
-    go_to(page, live_server, "/test/1/manage/features/120/on")
+    go_to(page, live_server, "/test/manage/features/120/on")
 
-    go_to(page, live_server, "/test/1/manage/config")
+    go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name="Player editor ").click()
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
@@ -58,7 +58,7 @@ def prepare(page, live_server):
     page.locator("#id_character_form_wri_que_dependents").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/writing/form/")
+    go_to(page, live_server, "/test/manage/writing/form/")
     expect(page.locator('[id="\\31 "]')).to_contain_text("Name")
     expect(page.locator('[id="\\32 "]')).to_contain_text("Presentation")
     expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")
@@ -147,7 +147,7 @@ def field_text(page, live_server):
     submit_confirm(page)
 
     # Create new character
-    go_to(page, live_server, "/test/1/manage/characters")
+    go_to(page, live_server, "/test/manage/characters")
     page.wait_for_timeout(2000)
     page.get_by_role("link", name="New").click()
     page.wait_for_timeout(2000)
@@ -171,7 +171,7 @@ def field_text(page, live_server):
 
 def character(page, live_server):
     # signup, create char
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Access character creation!")
@@ -206,14 +206,14 @@ def character(page, live_server):
     expect(page.locator("#one")).to_contain_text("my character (Proposed)")
 
     # approve char
-    go_to(page, live_server, "/test/1/manage/characters")
+    go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="\\33 "]').get_by_role("link", name="").click()
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect(page.locator("#one")).to_contain_text("my character")
 
-    go_to(page, live_server, "/test/1")
+    go_to(page, live_server, "/test")
     expect(page.locator("#one")).to_contain_text("my character")

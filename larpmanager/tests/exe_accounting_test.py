@@ -45,7 +45,7 @@ def test_exe_accounting(pw_page):
 
 
 def verify(page, live_server):
-    go_to(page, live_server, "/test/1/manage/accounting/")
+    go_to(page, live_server, "/test/manage/accounting/")
     expect(page.locator("#one")).to_contain_text("Total revenue: 133.00")
     expect(page.locator("#one")).to_contain_text("Net profit: 71.00")
     expect(page.locator("#one")).to_contain_text("Organization tax: 17.29")
@@ -54,7 +54,7 @@ def verify(page, live_server):
     expect(page.locator("#one")).to_contain_text("Inflows: 63.00")
     expect(page.locator("#one")).to_contain_text("Income: 70.00")
 
-    go_to(page, live_server, "/test/1/manage/payments/")
+    go_to(page, live_server, "/test/manage/payments/")
     expect(page.locator('[id="\\31 "]')).to_contain_text("70")
     expect(page.locator('[id="\\31 "]')).to_contain_text("5.70")
 
@@ -69,7 +69,7 @@ def verify(page, live_server):
 
 
 def sign_up_pay(page, live_server):
-    go_to(page, live_server, "/test/1/manage/tickets/")
+    go_to(page, live_server, "/test/manage/tickets/")
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
@@ -90,11 +90,11 @@ def sign_up_pay(page, live_server):
     page.locator("#id_price").fill("20")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/payments/")
+    go_to(page, live_server, "/test/manage/payments/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").press("Home")
@@ -155,7 +155,7 @@ def add_exe(page, live_server):
 
 
 def add_orga(page, live_server):
-    go_to(page, live_server, "/test/1/manage/inflows")
+    go_to(page, live_server, "/test/manage/inflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").fill("13")
@@ -169,7 +169,7 @@ def add_orga(page, live_server):
     expect(page.locator('[id="\\33 "]')).to_contain_text("asdsada")
     expect(page.locator('[id="\\31 "]')).to_contain_text("ggg")
 
-    go_to(page, live_server, "/test/1/manage/outflows")
+    go_to(page, live_server, "/test/manage/outflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").fill("47")

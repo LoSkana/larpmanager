@@ -35,12 +35,12 @@ def test_orga_features_all(pw_page):
 
     login_orga(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/features")
+    go_to(page, live_server, "/test/manage/features")
     _checkboxes(page, True)
 
     visit_all(page, live_server)
 
-    go_to(page, live_server, "/test/1/manage/features")
+    go_to(page, live_server, "/test/manage/features")
     _checkboxes(page, False)
 
 

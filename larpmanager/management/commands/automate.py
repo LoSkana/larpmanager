@@ -95,7 +95,7 @@ class Command(BaseCommand):
             if "record_acc" in ev_features:
                 check_run_accounting(run)
             if "print_pdf" in ev_features:
-                print_run_bkg(run.event.assoc.slug, run.event.slug, run.number)
+                print_run_bkg(run.event.assoc.slug, run.get_slug())
 
     @staticmethod
     def check_old_payments():

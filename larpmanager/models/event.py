@@ -520,6 +520,12 @@ class Run(BaseModel):
             s = f"{s} #{self.number}"
         return s
 
+    def get_slug(self):
+        slug = self.event.slug
+        if self.number > 1:
+            slug += f"-{self.number}"
+        return slug
+
     def get_where(self):
         # noinspection PyUnresolvedReferences
         return self.event.where
