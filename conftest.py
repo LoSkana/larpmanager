@@ -21,7 +21,6 @@
 import logging
 import os
 import subprocess
-from pathlib import Path
 
 import pytest
 from django.conf import settings
@@ -125,7 +124,6 @@ def _db_teardown_between_tests(django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
             _truncate_app_tables()
-        clean_enc()
 
 
 @pytest.fixture(autouse=True)
@@ -133,7 +131,6 @@ def load_fixtures(django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
             call_command("init_db", verbosity=0)
-        clean_enc()
 
 
 def psql(params, env):
@@ -180,13 +177,3 @@ def django_db_setup():
     # normal behaviour in CI
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
-    # don't touch the db in local
-    clean_enc()
-
-
-def clean_enc():
-    # delete all .enc
-    root = Path(settings.PAYMENT_SETTING_FOLDER).expanduser().resolve()
-    if root.is_dir():
-        for fp in root.glob("*.enc"):
-            fp.unlink()
