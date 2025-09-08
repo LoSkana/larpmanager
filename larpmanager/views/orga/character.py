@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
@@ -40,13 +41,14 @@ from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitFor
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
-    WritingQuestionType,
     WritingAnswer,
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    _get_writing_mapping, BaseQuestionType,
+    WritingQuestionType,
+    _get_writing_mapping,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
@@ -316,10 +318,18 @@ def orga_writing_form_edit(request, s, typ, num):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), typ=typ, num=0)
+        edit_option = False
         if str(request.POST.get("new_option", "")) == "1":
-            return redirect(
-                orga_writing_options_new, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].id
-            )
+            edit_option = True
+        elif ctx["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+            if not WritingOption.objects.filter(question_id=ctx["saved"].id).exists():
+                edit_option = True
+                messages.warning(
+                    request,
+                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
+                )
+        if edit_option:
+            return redirect(orga_writing_options_new, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].id)
         return redirect("orga_writing_form", s=ctx["run"].get_slug(), typ=typ)
 
     ctx["list"] = WritingOption.objects.filter(question=ctx["el"], question__applicable=ctx["writing_typ"]).order_by(
@@ -357,9 +367,7 @@ def writing_option_edit(ctx, num, request, typ):
         redirect_target = "orga_writing_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_writing_options_new"
-        return redirect(
-            redirect_target, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].question_id
-        )
+        return redirect(redirect_target, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].question_id)
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
@@ -368,9 +376,7 @@ def orga_writing_options_order(request, s, typ, num, order):
     ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingOption, num, order)
-    return redirect(
-        "orga_writing_form_edit", s=ctx["run"].get_slug(), typ=typ, num=ctx["current"].question_id
-    )
+    return redirect("orga_writing_form_edit", s=ctx["run"].get_slug(), typ=typ, num=ctx["current"].question_id)
 
 
 @login_required

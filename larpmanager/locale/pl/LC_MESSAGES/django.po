@@ -8327,6 +8327,13 @@ msgstr ""
 " osobistej rejestracji"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Przed zapisaniem pytania jednokrotnego lub wielokrotnego wyboru należy "
+"zdefiniować co najmniej jedną opcję"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

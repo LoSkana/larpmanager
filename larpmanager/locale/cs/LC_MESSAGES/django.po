@@ -8170,6 +8170,13 @@ msgstr ""
 "registraci"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Před uložením otázky s jednou nebo více možnostmi musíte definovat alespoň "
+"jednu možnost"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""

@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.registration import (
     OrgaRegistrationInstallmentForm,
@@ -31,6 +33,7 @@ from larpmanager.forms.registration import (
     OrgaRegistrationTicketForm,
 )
 from larpmanager.models.form import (
+    BaseQuestionType,
     RegistrationOption,
     RegistrationQuestion,
     get_ordered_registration_questions,
@@ -123,10 +126,18 @@ def orga_registration_form_edit(request, s, num):
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
+        edit_option = False
         if str(request.POST.get("new_option", "")) == "1":
-            return redirect(
-                orga_registration_options_new, s=ctx["run"].get_slug(), num=ctx["saved"].id
-            )
+            edit_option = True
+        elif ctx["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+            if not RegistrationOption.objects.filter(question_id=ctx["saved"].id).exists():
+                edit_option = True
+                messages.warning(
+                    request,
+                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
+                )
+        if edit_option:
+            return redirect(orga_registration_options_new, s=ctx["run"].get_slug(), num=ctx["saved"].id)
         return redirect(perm, s=ctx["run"].get_slug())
 
     ctx["list"] = RegistrationOption.objects.filter(question=ctx["el"]).order_by("order")
@@ -167,9 +178,7 @@ def registration_option_edit(ctx, num, request):
 def orga_registration_options_order(request, s, num, order):
     ctx = check_event_permission(request, s, "orga_registration_form")
     exchange_order(ctx, RegistrationOption, num, order)
-    return redirect(
-        "orga_registration_form_edit", s=ctx["run"].get_slug(), num=ctx["current"].question_id
-    )
+    return redirect("orga_registration_form_edit", s=ctx["run"].get_slug(), num=ctx["current"].question_id)
 
 
 @login_required
