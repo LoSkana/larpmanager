@@ -1066,6 +1066,11 @@ urlpatterns = [
         name="orga_warehouse_assignment_item_edit",
     ),
     path(
+        "<slug:s>/<int:n>/",
+        views_mg.orga_redirect,
+        name="orga_redirect",
+    ),
+    path(
         "<slug:s>/<int:n>/<path:p>",
         views_mg.orga_redirect,
         name="orga_redirect",
