@@ -4027,6 +4027,9 @@ msgstr ""
 msgid "And that is all"
 msgstr ""
 
+msgid "Done"
+msgstr ""
+
 msgid "Tax code verification"
 msgstr ""
 
@@ -4764,9 +4767,6 @@ msgid "Workshops"
 msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
-msgstr ""
-
-msgid "Done"
 msgstr ""
 
 msgid "To be done"
