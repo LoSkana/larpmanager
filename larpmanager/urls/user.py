@@ -31,12 +31,9 @@ from larpmanager.views import auth as views_auth
 from larpmanager.views import base as views_base
 from larpmanager.views.base import MyLoginView
 from larpmanager.views.user import accounting as views_ua
-from larpmanager.views.user import casting as views_uca
-from larpmanager.views.user import character as views_uc
 from larpmanager.views.user import event as views_ue
 from larpmanager.views.user import member as views_um
 from larpmanager.views.user import miscellanea as views_ums
-from larpmanager.views.user import pdf as views_up
 from larpmanager.views.user import registration as views_ur
 
 urlpatterns = [
@@ -216,12 +213,12 @@ urlpatterns = [
         name="accounting",
     ),
     path(
-        "accounting/pay/<slug:s>/<int:n>/",
+        "accounting/pay/<slug:s>/",
         views_ua.acc_pay,
         name="acc_pay",
     ),
     path(
-        "accounting/pay/<slug:s>/<int:n>/<slug:method>/",
+        "accounting/pay/<slug:s>/<slug:method>/",
         views_ua.acc_pay,
         name="acc_pay",
     ),
@@ -375,281 +372,6 @@ urlpatterns = [
         include("paypal.standard.ipn.urls"),
     ),
     path(
-        "<slug:s>/<int:n>/",
-        views_ue.gallery,
-        name="gallery",
-    ),
-    path(
-        "<slug:s>/<int:n>/event/",
-        views_ue.event,
-        name="event",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/",
-        views_uc.character,
-        name="character",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/external/<slug:code>/",
-        views_uc.character_external,
-        name="character_external",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/change/",
-        views_uc.character_edit,
-        name="character_change",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/customize/",
-        views_uc.character_customize,
-        name="character_customize",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/profile/rotate/<int:r>/",
-        views_uc.character_profile_rotate,
-        name="character_profile_rotate",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/profile/upload/",
-        views_uc.character_profile_upload,
-        name="character_profile_upload",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/list/",
-        views_uc.character_list,
-        name="character_list",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/create/",
-        views_uc.character_create,
-        name="character_create",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/abilities/",
-        views_uc.character_abilities,
-        name="character_abilities",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/abilities/<int:id_del>/",
-        views_uc.character_abilities_del,
-        name="character_abilities_del",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/assign/",
-        views_uc.character_assign,
-        name="character_assign",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/relationships/",
-        views_uc.character_relationships,
-        name="character_relationships",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/relationships/edit/<int:oth>",
-        views_uc.character_relationships_edit,
-        name="character_relationships_edit",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/pdf/sheet/",
-        views_up.character_pdf_sheet,
-        name="character_pdf_sheet",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/pdf/friendly/",
-        views_up.character_pdf_sheet_friendly,
-        name="character_pdf_sheet_friendly",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/<int:num>/pdf/relationships/",
-        views_up.character_pdf_relationships,
-        name="character_pdf_relationships",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/your/",
-        views_uc.character_your,
-        name="character_your",
-    ),
-    path(
-        "<slug:s>/<int:n>/character/your/<path:p>",
-        views_uc.character_your,
-        name="character_your",
-    ),
-    path(
-        "<slug:s>/<int:n>/search/",
-        views_ue.search,
-        name="search",
-    ),
-    path(
-        "<slug:s>/<int:n>/limitations/",
-        views_ue.limitations,
-        name="limitations",
-    ),
-    path(
-        "<slug:s>/<int:n>/gift/",
-        views_ur.gift,
-        name="gift",
-    ),
-    path(
-        "<slug:s>/<int:n>/gift/edit/<int:r>/",
-        views_ur.gift_edit,
-        name="gift_edit",
-    ),
-    path(
-        "<slug:s>/<int:n>/gift/redeem/<slug:code>/",
-        views_ur.gift_redeem,
-        name="gift_redeem",
-    ),
-    path(
-        "<slug:s>/<int:n>/casting/",
-        views_uca.casting,
-        name="casting",
-    ),
-    path(
-        "<slug:s>/<int:n>/casting/<int:typ>/",
-        views_uca.casting,
-        name="casting",
-    ),
-    path(
-        "<slug:s>/<int:n>/casting/preferences/",
-        views_uca.casting_preferences,
-        name="casting_preferences",
-    ),
-    path(
-        "<slug:s>/<int:n>/casting/preferences/<int:typ>/",
-        views_uca.casting_preferences,
-        name="casting_preferences",
-    ),
-    path(
-        "<slug:s>/<int:n>/casting/history/",
-        views_uca.casting_history,
-        name="casting_history",
-    ),
-    path(
-        "<slug:s>/<int:n>/casting/history/<int:typ>/",
-        views_uca.casting_history,
-        name="casting_history",
-    ),
-    path(
-        "<slug:s>/<int:n>/factions/",
-        views_ue.factions,
-        name="factions",
-    ),
-    path(
-        "<slug:s>/<int:n>/faction/<int:g>/",
-        views_ue.faction,
-        name="faction",
-    ),
-    path(
-        "<slug:s>/<int:n>/quests/",
-        views_ue.quests,
-        name="quests",
-    ),
-    path(
-        "<slug:s>/<int:n>/quests/<int:g>/",
-        views_ue.quests,
-        name="quests",
-    ),
-    path(
-        "<slug:s>/<int:n>/quest/<int:g>/",
-        views_ue.quest,
-        name="quest",
-    ),
-    path(
-        "<slug:s>/<int:n>/album/",
-        views_ums.album,
-        name="album",
-    ),
-    path(
-        "<slug:s>/<int:n>/album/<int:num>/",
-        views_ums.album_sub,
-        name="album_sub",
-    ),
-    path(
-        "<slug:s>/export/<slug:t>/",
-        views_ue.export,
-        name="export",
-    ),
-    path(
-        "<slug:s>/<int:n>/handout/<slug:cod>/",
-        views_ums.handout_ext,
-        name="handout_ext",
-    ),
-    path(
-        "<slug:s>/<int:n>/portraits/",
-        views_up.portraits,
-        name="portraits",
-    ),
-    path(
-        "<slug:s>/<int:n>/profiles/",
-        views_up.profiles,
-        name="profiles",
-    ),
-    path(
-        "<slug:s>/<int:n>/register/",
-        views_ur.register,
-        name="register",
-    ),
-    path(
-        "<slug:s>/<int:n>/register/discount/<slug:dis>/",
-        views_ur.register,
-        name="register",
-    ),
-    path(
-        "<slug:s>/<int:n>/register/ticket/<int:tk>/",
-        views_ur.register,
-        name="register",
-    ),
-    path(
-        "<slug:s>/<int:n>/register/reduced/",
-        views_ur.register_reduced,
-        name="register_reduced",
-    ),
-    path(
-        "<slug:s>/<int:n>/register/<slug:sc>/",
-        views_ur.register_exclusive,
-        name="register_exclusive",
-    ),
-    path(
-        "<slug:s>/<int:n>/register/<slug:sc>/discount/<slug:dis>/",
-        views_ur.register_exclusive,
-        name="register_exclusive",
-    ),
-    path(
-        "<slug:s>/<int:n>/discount/",
-        views_ur.discount,
-        name="discount",
-    ),
-    path(
-        "<slug:s>/<int:n>/discount/list",
-        views_ur.discount_list,
-        name="discount_list",
-    ),
-    path(
-        "<slug:s>/<int:n>/unregister/",
-        views_ur.unregister,
-        name="unregister",
-    ),
-    path(
-        "<slug:s>/<int:n>/workshops/",
-        views_ums.workshops,
-        name="workshops",
-    ),
-    path(
-        "<slug:s>/<int:n>/workshops/answer/<int:m>/",
-        views_ums.workshop_answer,
-        name="workshop_answer",
-    ),
-    path(
-        "<slug:s>/<int:n>/help/",
-        views_ums.help,
-        name="help",
-    ),
-    path(
-        "<slug:s>/<int:n>/show_char/",
-        views_uc.show_char,
-        name="show_char",
-    ),
-    path(
         "register/conditions/",
         views_ur.register_conditions,
         name="register_conditions",
@@ -658,21 +380,6 @@ urlpatterns = [
         "at/<slug:s>/",
         views_ums.url_short,
         name="url_short",
-    ),
-    path(
-        "<slug:s>/register/",
-        views_ue.event_register,
-        name="event_register",
-    ),
-    path(
-        "<slug:s>/register/pre/",
-        views_ur.pre_register,
-        name="pre_register",
-    ),
-    path(
-        "<slug:s>/register/conditions/",
-        views_ur.register_conditions,
-        name="register_conditions",
     ),
     path(
         "util/<slug:cod>/",
@@ -717,6 +424,11 @@ urlpatterns = [
         "tutorial_query/",
         views_base.tutorial_query,
         name="tutorial_query",
+    ),
+    path(
+        "set_member_config/",
+        views_base.set_member_config,
+        name="set_member_config",
     ),
     path("upload_image/", views_base.upload_image, name="upload_image"),
 ]

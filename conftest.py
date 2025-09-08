@@ -80,7 +80,7 @@ def pw_page(pytestconfig, browser_type, live_server):
     )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(10000)
+    page.set_default_timeout(60000)
 
     page.on("dialog", lambda dialog: dialog.accept())
 

@@ -33,14 +33,14 @@
                 {% for run in ongoing_runs %}
                     <tr>
                         <td>
-                            <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
+                            <a href="{% url 'manage' run.get_slug %}">{{ run }}</a>
                         </td>
                         <td>
                             <i>{{ run.pretty_dates }}</i>
                         </td>
                         <td>{{ run.get_development_display }}</td>
                         <td>
-                            <a href="{% url 'register' run.event.slug run.number %}">{{ run.registration_status }}</a>
+                            <a href="{% url 'register' run.get_slug %}">{{ run.registration_status }}</a>
                         </td>
                         <td>
                             {% if run.counts.count_reg %}

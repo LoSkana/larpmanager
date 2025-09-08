@@ -73,7 +73,7 @@ function setUpHighlight(key) {
             // console.log('x:', x, 'y:', y);
 
             request = $.ajax({
-                url: "{% url 'show_char' event.slug run.number %}",
+                url: "{% url 'show_char' run.get_slug %}",
                 method: "POST",
                 data: { text: selected },
                 datatype: "json",

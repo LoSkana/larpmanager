@@ -80,8 +80,8 @@ def template(live_server, page):
 
     # check roles
     go_to(page, live_server, "/fromtemplate/1/manage/roles/")
-    expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
-    expect(page.locator('[id="\\35 "]')).to_contain_text("Texts")
+    expect(page.locator('[id="\\36 "]')).to_contain_text("User Test")
+    expect(page.locator('[id="\\36 "]')).to_contain_text("Texts")
     # check configuration
     go_to(page, live_server, "/fromtemplate/1/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
@@ -100,12 +100,12 @@ def setup(live_server, page):
     # activate characters
     go_to(page, live_server, "/test/1/manage/features/character/on")
     # configure test larp
-    go_to(page, live_server, "/test/1/manage/config/")
+    go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/roles/")
+    go_to(page, live_server, "/test/manage/roles/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("blabla")
@@ -119,19 +119,19 @@ def setup(live_server, page):
 
 def px(live_server, page):
     # set up xp
-    go_to(page, live_server, "/test/1/manage/config/")
+    go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
     page.locator("#id_px_start").click()
     page.locator("#id_px_start").fill("10")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/px/ability_types/")
+    go_to(page, live_server, "/test/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/px/abilities/")
+    go_to(page, live_server, "/test/manage/px/abilities/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("standard")
@@ -143,7 +143,7 @@ def px(live_server, page):
     fill_tinymce(page, "id_descr", "sdsfdsfds")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/px/deliveries/")
+    go_to(page, live_server, "/test/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("first live")
@@ -155,7 +155,7 @@ def px(live_server, page):
     submit_confirm(page)
 
     # check px computation
-    go_to(page, live_server, "/test/1/manage/characters/")
+    go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
@@ -251,7 +251,7 @@ def copy(live_server, page):
     page.get_by_role("button", name="Submit").click()
 
     go_to(page, live_server, "/copy/1/manage/roles/")
-    row = page.locator('tr[id="10"]')
+    row = page.locator('tr[id="12"]')
     expect(row).to_contain_text("User Test")
     expect(row).to_contain_text("Appearance (Navigation), Writing (Factions) ")
     go_to(page, live_server, "/copy/1/manage/config/")

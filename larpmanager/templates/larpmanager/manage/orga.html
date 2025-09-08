@@ -26,17 +26,17 @@
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <h2>
-            <a href="{% url 'orga_run' run.event.slug run.number %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
+            <a href="{% url 'orga_run' run.get_slug %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
         </h2>
         <p>
             <b>{{ run }}</b>
             (<i>{{ run.pretty_dates }}</i>)
             - {{ run.get_development_display }}
-            - Status: <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
+            - Status: <a href="{% url 'register' run.get_slug %}">{{ registration_status }}</a>
         </p>
         {% if features.registration_secret %}
             <p>
-                <a href="{% url 'register_exclusive' run.event.slug run.number run.registration_secret %}">{% trans "Secret registration link" %}</a>
+                <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}">{% trans "Secret registration link" %}</a>
             </p>
         {% endif %}
         {% if event.parent %}
@@ -47,7 +47,7 @@
         {% if counts %}
             <hr />
             <h2>
-                <a href="{% url 'orga_registrations' run.event.slug run.number %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
+                <a href="{% url 'orga_registrations' run.get_slug %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
             </h2>
             <table>
                 <tr>
@@ -64,7 +64,7 @@
         {% endif %}
         {% if run.revenue %}
             <h2>
-                <a href="{% url 'orga_accounting' run.event.slug run.number %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
+                <a href="{% url 'orga_accounting' run.get_slug %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
             </h2>
             <table>
                 <tr>
@@ -99,9 +99,9 @@
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <hr />
-        <a href="{% url 'orga_reload_cache' run.event.slug run.number %}">Reload cache</a>
+        <a href="{% url 'orga_reload_cache' run.get_slug %}">Reload cache</a>
         -
-        <a href="{% url 'orga_backup' run.event.slug run.number %}">Full backup</a>
+        <a href="{% url 'orga_backup' run.get_slug %}">Full backup</a>
     </div>
 {% endblock content %}
 {% block css %}

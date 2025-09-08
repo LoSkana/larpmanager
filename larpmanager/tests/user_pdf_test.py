@@ -39,12 +39,12 @@ def test_user_pdf(pw_page):
     go_to(page, live_server, "/test/1/manage/features/print_pdf/on")
 
     # signup
-    go_to(page, live_server, "/test/1/register")
+    go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 
     # Assign character
-    go_to(page, live_server, "/test/1/manage/registrations")
+    go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
@@ -52,7 +52,7 @@ def test_user_pdf(pw_page):
     submit_confirm(page)
 
     # Go to character, test download pdf
-    go_to(page, live_server, "/test/1/character/1")
+    go_to(page, live_server, "/test/character/1")
 
     check_download(page, "Portraits (PDF)")
 

@@ -33,7 +33,7 @@
                         {% if exe %}
                             <a href="{% url 'exe_read_mail' el.id %}" qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
                         {% else %}
-                            <a href="{% url 'orga_read_mail' run.event.slug run.number el.id %}"
+                            <a href="{% url 'orga_read_mail' run.get_slug el.id %}"
                                qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
                         {% endif %}
                     </td>

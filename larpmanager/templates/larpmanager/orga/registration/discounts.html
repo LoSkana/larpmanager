@@ -20,7 +20,7 @@
                     <td>{{ el.disc }}</td>
                     <td>{{ el.value }}</td>
                     <td>
-                        <a href="{% url 'orga_registration_discount_del' event.slug run.number registration.id el.id %}">{% trans "Delete" %}</a>
+                        <a href="{% url 'orga_registration_discount_del' run.get_slug registration.id el.id %}">{% trans "Delete" %}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -39,7 +39,7 @@
                     <td>{{ el }}</td>
                     <td>{{ el.value }}</td>
                     <td>
-                        <a href="{% url 'orga_registration_discount_add' event.slug run.number registration.id el.id %}">{% trans "Add" %}</a>
+                        <a href="{% url 'orga_registration_discount_add' run.get_slug registration.id el.id %}">{% trans "Add" %}</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -32,7 +32,7 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionType,
+    WritingQuestionType,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -62,17 +62,17 @@ class WritingForm(MyForm):
         for que in self.questions:
             types.add(que.typ)
 
-        if QuestionType.COVER not in types:
+        if WritingQuestionType.COVER not in types:
             if "cover" in self.fields:
                 del self.fields["cover"]
 
-        if QuestionType.ASSIGNED in types:
+        if WritingQuestionType.ASSIGNED in types:
             choices = [(m.id, m.show_nick()) for m in get_event_staffers(self.params["run"].event)]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
         else:
             self.delete_field("assigned")
 
-        if QuestionType.PROGRESS in types:
+        if WritingQuestionType.PROGRESS in types:
             self.fields["progress"].choices = [
                 (el.id, str(el)) for el in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
@@ -233,7 +233,7 @@ class PlotForm(WritingForm, BaseWritingForm):
 
                 self.show_link.append(id_field)
                 self.add_char_finder.append(id_field)
-                reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
+                reverse_args = [self.params["run"].get_slug(), ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def _save_multi(self, s, instance):

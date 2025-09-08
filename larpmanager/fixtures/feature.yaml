@@ -45,8 +45,8 @@
     overall: false
     placeholder: false
     order: 50
-    after_text: Now you can set the optional amount field
-    after_link: config/pay_what_you_want
+    after_text: Now you can configure the registration question
+    after_link: orga_registration_form
     hidden: false
     module: accounting
 - model: larpmanager.feature
@@ -902,8 +902,8 @@
     overall: false
     placeholder: false
     order: 50
-    after_text: ''
-    after_link: ''
+    after_text: Now you can configure the registration question
+    after_link: orga_registration_form
     hidden: false
     module: registration
 - model: larpmanager.feature

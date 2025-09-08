@@ -63,7 +63,7 @@ def expense(image_path, live_server, page):
     page.get_by_role("textbox", name="Descr").click()
     page.get_by_role("textbox", name="Descr").fill("dsadas")
     submit_confirm(page)
-    go_to(page, live_server, "/test/1/manage/expenses")
+    go_to(page, live_server, "/test/manage/expenses")
     page.get_by_role("link", name="Approve").click()
 
 
@@ -76,13 +76,13 @@ def resubmit_membership(live_server, page):
     submit_confirm(page)
 
     # signup
-    go_to(page, live_server, "/test/1/manage/tickets/")
+    go_to(page, live_server, "/test/manage/tickets/")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100")
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     # Set membership fee
@@ -94,7 +94,7 @@ def resubmit_membership(live_server, page):
     page.locator("#id_membership_day").fill("01-01")
     submit_confirm(page)
     # update signup, go to membership
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     submit(page)

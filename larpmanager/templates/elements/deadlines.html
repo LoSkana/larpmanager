@@ -189,7 +189,7 @@
                 <b>{% trans "Missing casting preferences" %}</b>
             </td>
             <td>
-                {% trans "They need to complete it immediately" %} - <a href="{% url 'casting' run.event.slug run.number %}">{% trans "give them this address" %}</a>
+                {% trans "They need to complete it immediately" %} - <a href="{% url 'casting' run.get_slug %}">{% trans "give them this address" %}</a>
             </td>
             <td>{{ res.cast|length }}</td>
             <td>

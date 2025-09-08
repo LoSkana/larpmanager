@@ -15,7 +15,7 @@
             {% for el in subs %}
                 <div class="el">
                     <div class="icon album-icon">
-                        <a href="{% url 'album_sub' event.slug run.number el.id %}">
+                        <a href="{% url 'album_sub' run.get_slug el.id %}">
                             <div class="icon-name">
                                 <p>{{ el.name }}</p>
                             </div>

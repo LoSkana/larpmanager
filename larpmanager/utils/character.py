@@ -24,9 +24,9 @@ from django.http import Http404
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
     WritingAnswer,
     WritingChoice,
     WritingQuestion,
@@ -245,13 +245,12 @@ def get_chars_relations(text, chs_numbers):
 
 
 def check_missing_mandatory(ctx):
-    print(ctx["char"])
     ctx["missing_fields"] = []
     aux = []
 
     models = {
-        **{t: WritingAnswer for t in QuestionType.get_answer_types()},
-        **{t: WritingChoice for t in QuestionType.get_choice_types()},
+        **{t: WritingAnswer for t in BaseQuestionType.get_answer_types()},
+        **{t: WritingChoice for t in BaseQuestionType.get_choice_types()},
     }
 
     questions = ctx["event"].get_elements(WritingQuestion)

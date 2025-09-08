@@ -206,6 +206,9 @@ msgstr "Porta di connessione"
 msgid "Prev"
 msgstr "Prev"
 
+msgid "Rate"
+msgstr "Quote"
+
 msgid "Read"
 msgstr "Leggi"
 
@@ -3865,9 +3868,6 @@ msgstr "Una foto esemplificativa del personaggio"
 msgid "Describe how we can help you"
 msgstr "Descrivi come possiamo aiutarti"
 
-msgid "Description of free donation"
-msgstr "Descrizione del di donazione libera"
-
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funzionalità %(name)s disattivata"
@@ -4061,9 +4061,6 @@ msgstr "Gestisci il tipo di missioni evento"
 #, python-format
 msgid "Membership fee payment %(year)s"
 msgstr "Versamento quota sociale %(year)s"
-
-msgid "Name of the free donation field"
-msgstr "Nome del campo di donazione libera"
 
 msgid "Name to be displayed for tokens"
 msgstr "Nome da visualizzare per i gettoni"
@@ -4798,9 +4795,6 @@ msgstr "Gestisci le pre-iscrizioni di tutti gli eventi"
 msgid "Now you can create the plots of the event"
 msgstr "Ora è possibile creare le trame dell'evento"
 
-msgid "Now you can set the optional amount field"
-msgstr "Ora è possibile impostare il campo opzionale dell'importo"
-
 msgid "Request of membership to the Organization"
 msgstr "Richiesta iscrizione all'Associazione"
 
@@ -4889,6 +4883,9 @@ msgstr "Partecipanti che NON hanno inviato preferenze"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Reminder compilazione profilo per %(event)s"
+
+msgid "Reserve additional tickets beyond your own"
+msgstr "Prenota altri biglietti oltre al tuo"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Seleziona in modo casuale i biglietti della lotteria da aggiornare"
@@ -5238,6 +5235,9 @@ msgstr "Numero massimo di posti lista d'attesa (0 = illimitato)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Modifica alcune caratteristiche del personaggio per renderlo tuo"
+
+msgid "Now you can configure the registration question"
+msgstr "Ora puoi configurare la domanda di registrazione"
 
 msgid "Now you can review the organization's deadlines"
 msgstr "Ora è possibile rivedere le scadenze dell'organizzazione"
@@ -5733,9 +5733,6 @@ msgstr "Non sono ancora pervenute iscrizioni per questo evento"
 msgid "Now you can add relationships when editing a character"
 msgstr ""
 "Ora è possibile aggiungere relazioni quando si modifica un personaggio"
-
-msgid "Set if you want to reserve tickets in addition to your"
-msgstr "Imposta se vuoi riservare dei biglietti in più rispetto al tuo"
 
 msgid "The registration request will be updated automatically"
 msgstr "La richiesta di iscrizione verrà aggiornata automaticamente"
@@ -8476,6 +8473,13 @@ msgstr ""
 "registrazione di persona"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"È necessario definire almeno un'opzione prima di salvare una domanda a "
+"scelta singola o multipla"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""
@@ -9294,6 +9298,13 @@ msgid ""
 msgstr ""
 "Indicare se il personaggio è uno specchio (cioè se questo pg mostra il vero "
 "volto segreto di un altro personaggio)"
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
+msgstr ""
+"Numero di rate in cui verrò suddivisa la quota: i pagamenti e le scadenze "
+"saranno equamente suddivisi a partire dalla data di iscrizione"
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

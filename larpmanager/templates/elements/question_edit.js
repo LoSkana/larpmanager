@@ -34,6 +34,12 @@
             } else {
                 $('#id_visibility_tr').fadeIn(speed);
             }
+
+            if (["ticket"].includes(selectedValue)) {
+                $('#id_status_tr').fadeOut(speed);
+            } else {
+                $('#id_status_tr').fadeIn(speed);
+            }
         }
 
         $(document).ready(function() {

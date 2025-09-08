@@ -206,6 +206,9 @@ msgstr "Připojovací port"
 msgid "Prev"
 msgstr "Předchozí"
 
+msgid "Rate"
+msgstr "Hodnotit"
+
 msgid "Read"
 msgstr "Přečtěte si"
 
@@ -3865,9 +3868,6 @@ msgstr "Příklad fotografie postavy"
 msgid "Describe how we can help you"
 msgstr "Popište, jak vám můžeme pomoci"
 
-msgid "Description of free donation"
-msgstr "Popis bezplatného daru"
-
 #, python-format
 msgid "Feature %(name)s deactivated"
 msgstr "Funkce %(name)s deaktivována"
@@ -4061,9 +4061,6 @@ msgstr "Správa typu úkolů událostí"
 #, python-format
 msgid "Membership fee payment %(year)s"
 msgstr "Výplata akcií %(year)s"
-
-msgid "Name of the free donation field"
-msgstr "Název pole pro bezplatné dary"
 
 msgid "Name to be displayed for tokens"
 msgstr "Název, který se má zobrazit u žetonů"
@@ -4798,9 +4795,6 @@ msgstr "Správa předběžné registrace všech událostí"
 msgid "Now you can create the plots of the event"
 msgstr "Nyní můžete vytvořit pozemky události"
 
-msgid "Now you can set the optional amount field"
-msgstr "Nyní můžete nastavit pole nepovinné částky"
-
 msgid "Request of membership to the Organization"
 msgstr "Žádost o členství ve sdružení"
 
@@ -4889,6 +4883,9 @@ msgstr "Účastníci, kteří NEZASLALI preference"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Připomenutí sestavení profilu pro %(event)s"
+
+msgid "Reserve additional tickets beyond your own"
+msgstr "Rezervace dalších vstupenek nad rámec vlastních"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Vyberte náhodně losy pro upgrade"
@@ -5236,6 +5233,9 @@ msgstr "Maximální počet čekajících míst (0 = neomezeně)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Upravte si některé vlastnosti postavy podle sebe"
+
+msgid "Now you can configure the registration question"
+msgstr "Nyní můžete nakonfigurovat registrační otázku"
 
 msgid "Now you can review the organization's deadlines"
 msgstr "Nyní můžete zkontrolovat termíny organizace"
@@ -5722,9 +5722,6 @@ msgstr "Na tuto akci zatím nebyly přijaty žádné registrace"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
-
-msgid "Set if you want to reserve tickets in addition to your"
-msgstr "Nastavte, zda si chcete kromě vstupenek rezervovat také"
 
 msgid "The registration request will be updated automatically"
 msgstr "Aplikace se automaticky aktualizuje"
@@ -8173,6 +8170,13 @@ msgstr ""
 "registraci"
 
 msgid ""
+"You must define at least one option before saving a single-choice or "
+"multiple-choice question"
+msgstr ""
+"Před uložením otázky s jednou nebo více možnostmi musíte definovat alespoň "
+"jednu možnost"
+
+msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "participant profiles"
 msgstr ""
@@ -8985,6 +8989,13 @@ msgid ""
 msgstr ""
 "Uveďte, zda je postava zrcadlem (tj. zda tato postava ukazuje pravou skrytou"
 " tvář jiné postavy)"
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
+msgstr ""
+"Počet splátek pro rozdělení poplatku: platby a termíny budou rovnoměrně "
+"rozděleny od data registrace"
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

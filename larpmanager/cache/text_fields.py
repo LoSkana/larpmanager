@@ -28,11 +28,11 @@ from django.dispatch import receiver
 
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionType,
+    WritingQuestionType,
     RegistrationAnswer,
     RegistrationQuestion,
     WritingAnswer,
-    WritingQuestion,
+    WritingQuestion, BaseQuestionType, RegistrationQuestionType,
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
@@ -82,7 +82,7 @@ def _init_element_cache_text_field(el, res, typ):
     # noinspection PyProtectedMember
     applicable = QuestionApplicable.get_applicable(typ._meta.model_name)
     que = el.event.get_elements(WritingQuestion).filter(applicable=applicable)
-    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         els = WritingAnswer.objects.filter(question_id=que_id, element_id=el.id)
         if els:
             v = els.first().text
@@ -109,7 +109,7 @@ def update_cache_text_fields(el):
 
 
 def update_cache_text_fields_answer(instance):
-    if instance.question.typ != QuestionType.EDITOR:
+    if instance.question.typ != BaseQuestionType.EDITOR:
         return
 
     typ = QuestionApplicable.get_applicable_inverse(instance.question.applicable)
@@ -140,7 +140,7 @@ def _init_element_cache_reg_field(el, res):
 
     # noinspection PyProtectedMember
     que = RegistrationQuestion.objects.filter(event=el.run.event)
-    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         try:
             v = RegistrationAnswer.objects.get(question_id=que_id, reg_id=el.id).text
             field = str(que_id)
@@ -167,7 +167,7 @@ def update_cache_reg_fields(el):
 
 
 def update_cache_reg_fields_answer(instance):
-    if instance.question.typ != QuestionType.EDITOR:
+    if instance.question.typ != BaseQuestionType.EDITOR:
         return
 
     run = instance.reg.run

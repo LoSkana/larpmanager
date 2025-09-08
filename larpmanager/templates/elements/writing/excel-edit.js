@@ -56,7 +56,7 @@ window.addEventListener('DOMContentLoaded', function() {
         formData.append('token', token);
 
         request = $.ajax({
-            url: "{% url 'orga_writing_excel_submit' run.event.slug run.number label_typ %}",
+            url: "{% url 'orga_writing_excel_submit' run.get_slug label_typ %}",
             method: "POST",
             data: formData,
             contentType: false,
@@ -109,7 +109,7 @@ window.addEventListener('DOMContentLoaded', function() {
             qid = $(this).attr("qid");
 
             request = $.ajax({
-                url: "{% url 'orga_writing_excel_edit' run.event.slug run.number label_typ %}",
+                url: "{% url 'orga_writing_excel_edit' run.get_slug label_typ %}",
                 method: "POST",
                 data: { qid: qid, eid: eid},
                 datatype: "json",

@@ -66,19 +66,19 @@
     {% for el in list %}
         <tr id="{{ el.id }}">
             <td>
-                <a href="{% url 'orga_characters_edit' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_characters_edit' run.get_slug el.id %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_characters_view' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_characters_view' run.get_slug el.id %}"
                    qtip="{% trans "Read" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_characters_versions' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_characters_versions' run.get_slug el.id %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
-                <a href="{% url 'character' run.event.slug run.number el.number %}"
+                <a href="{% url 'character' run.get_slug el.number %}"
                    qtip="{% trans "Gallery" %}"><i class="fa-solid fa-eye"></i></a>
                 {% if writing_external_access %}
-                    <a href="{% url 'character_external' run.event.slug run.number el.access_token %}"
+                    <a href="{% url 'character_external' run.get_slug el.access_token %}"
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
             </td>
@@ -93,7 +93,7 @@
             {% if features.plot %}
                 <td class="plots dot_links">
                     {% for p in el.plts %}
-                        <a href="{% url 'orga_plots_edit' run.event.slug run.number p.1 %}">{{ p.0 }}</a>
+                        <a href="{% url 'orga_plots_edit' run.get_slug p.1 %}">{{ p.0 }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.plts | length }}</td>
@@ -101,7 +101,7 @@
             {% if features.relationships %}
                 <td class="relationships dot_links">
                     {% for rel in el.source.all %}
-                        <a href="{% url 'orga_characters_edit' run.event.slug run.number rel.target_id %}">{{ rel.target }}</a>
+                        <a href="{% url 'orga_characters_edit' run.get_slug rel.target_id %}">{{ rel.target }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.source.count }}</td>
@@ -109,7 +109,7 @@
             {% if features.speedlarp %}
                 <td class="speedlarp dot_links">
                     {% for p in el.speedlarps_list.all %}
-                        <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.id %}">{{ p }}</a>
+                        <a href="{% url 'orga_speedlarps_edit' run.get_slug p.id %}">{{ p }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.speedlarps_list.count }}</td>

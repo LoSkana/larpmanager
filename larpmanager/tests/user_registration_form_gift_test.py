@@ -72,7 +72,7 @@ def prepare(page, live_server):
     # Activate gift
     go_to(page, live_server, "/test/1/manage/features/gift/on")
 
-    go_to(page, live_server, "/test/1/manage/form/")
+    go_to(page, live_server, "/test/manage/form/")
 
 
 def field_choice(page, live_server):
@@ -147,7 +147,7 @@ def field_multiple(page, live_server):
     submit_confirm(page)
     page.locator('[id="\\34 "]').get_by_role("link", name="").click()
     submit_confirm(page)
-    page.get_by_role("link", name="").click()
+    page.locator('[id="\\33 "]').get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
 
@@ -177,7 +177,7 @@ def field_text(page, live_server):
     submit_confirm(page)
 
     # sign up
-    go_to(page, live_server, "/test/1/register/")
+    go_to(page, live_server, "/test/register/")
     page.get_by_text("twp (10€) - (Available 2)").click()
     expect(page.locator("#register_form")).to_contain_text("options: 1 / 1")
     page.get_by_label("choice").select_option("2")
@@ -195,16 +195,16 @@ def field_text(page, live_server):
 
 def gift(page, live_server):
     # make ticket giftable
-    go_to(page, live_server, "/test/1/manage/tickets/")
+    go_to(page, live_server, "/test/manage/tickets/")
     page.get_by_role("link", name="").click()
     page.get_by_text("Indicates whether the ticket").click()
     page.locator("#id_giftable").check()
     submit_confirm(page)
 
     # gift
-    go_to(page, live_server, "/test/1/gift/")
+    go_to(page, live_server, "/test/gift/")
     page.get_by_role("link", name="Add new").click()
-    page.locator("#id_q2").get_by_text("one").click()
+    page.locator("#id_q3").get_by_text("one").click()
     page.get_by_label("choice").select_option("1")
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("wwww")
@@ -225,15 +225,15 @@ def gift(page, live_server):
     page.get_by_role("checkbox", name="Authorisation").check()
     page.get_by_role("button", name="Submit").click()
 
-    go_to(page, live_server, "/test/1/gift/")
+    go_to(page, live_server, "/test/gift/")
     expect(page.locator("#one")).to_contain_text("Payment currently in review by the staff.")
 
     # approve payment
-    go_to(page, live_server, "/test/1/manage/invoices")
+    go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
 
     # redeem
-    go_to(page, live_server, "/test/1/gift/")
+    go_to(page, live_server, "/test/gift/")
     expect(page.locator("#one")).to_contain_text("Access link")
     href = page.get_by_role("link", name="Access link").get_attribute("href")
 

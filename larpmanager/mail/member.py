@@ -129,7 +129,7 @@ def notify_membership_approved(member, resp):
             continue
 
         url = get_url("accounting/pay", member.membership)
-        href = f"{url}/{registration.run.event.slug}/{registration.run.number}"
+        href = f"{url}/{registration.run.get_slug()}"
         reg_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
 
     if reg_list:
@@ -176,7 +176,7 @@ def notify_help_question(sender, instance, **kwargs):
                 body, subj = get_help_email(instance)
                 subj += " " + _("for %(event)s") % {"event": instance.run}
                 url = get_url(
-                    f"{instance.run.event.slug}/{instance.run.number}/manage/questions/",
+                    f"{instance.run.get_slug()}/manage/questions/",
                     instance,
                 )
                 body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
@@ -197,7 +197,7 @@ def notify_help_question(sender, instance, **kwargs):
 
         if instance.run:
             url = get_url(
-                f"{instance.run.event.slug}/{instance.run.number}/help",
+                f"{instance.run.get_slug()}/help",
                 instance,
             )
         else:

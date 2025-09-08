@@ -395,12 +395,6 @@ class MembershipStatus(models.TextChoices):
     REWOKED = "r", _("Kicked out")
 
 
-class NewsletterChoices(models.TextChoices):
-    ALL = "a", _("Yes, keep me posted!")
-    ONLY = "o", _("Only really important communications")
-    NO = "n", _("No, I don't want updates")
-
-
 class Membership(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
 

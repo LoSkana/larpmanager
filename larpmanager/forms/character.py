@@ -42,10 +42,10 @@ from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
+    WritingQuestionType,
     QuestionVisibility,
     WritingOption,
-    WritingQuestion,
+    WritingQuestion, BaseQuestionType,
 )
 from larpmanager.models.writing import (
     Character,
@@ -283,7 +283,7 @@ class OrgaCharacterForm(CharacterForm):
             self.show_link.append(id_field)
             self.add_char_finder.append(id_field)
 
-            reverse_args = [self.params["event"].slug, self.params["run"].number, el.plot.id]
+            reverse_args = [self.params["run"].get_slug(), el.plot.id]
             self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
 
     def _save_plot(self, instance):
@@ -513,10 +513,10 @@ class OrgaWritingQuestionForm(MyForm):
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
             # prevent cancellation if one of the default types
-            self.prevent_canc = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
+            self.prevent_canc = len(self.instance.typ) > 1
 
         choices = []
-        for choice in QuestionType.choices:
+        for choice in WritingQuestionType.choices:
             # if it is related to a feature
             if len(choice[0]) > 1:
                 # check it is not already present

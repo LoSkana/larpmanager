@@ -43,9 +43,9 @@
                                  src="{% static 'larpmanager/assets/chevron.png' %}" />
                         </span>
                         <ul>
-                            {% for s, n, name in reg_menu %}
+                            {% for slug, name in reg_menu %}
                                 <li class="sub">
-                                    <a href="{% url 'gallery' s n %}">{{ name }}</a>
+                                    <a href="{% url 'gallery' slug %}">{{ name }}</a>
                                 </li>
                             {% endfor %}
                         </ul>

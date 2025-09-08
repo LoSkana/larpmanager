@@ -18,7 +18,7 @@
         </p>
     {% endif %}
     <p>{% trans "Click below to confirm the cancellation" %}:</p>
-    <form action="{% url 'unregister' event.slug run.number %}" method="post">
+    <form action="{% url 'unregister' run.get_slug %}" method="post">
         {% csrf_token %}
         <input type="hidden" id="confirmation" value="1" />
         <input type="submit"
