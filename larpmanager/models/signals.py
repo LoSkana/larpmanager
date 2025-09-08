@@ -50,7 +50,6 @@ from larpmanager.models.accounting import (
     Collection,
 )
 from larpmanager.models.association import Association, AssociationConfig
-from larpmanager.models.base import Feature
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
 from larpmanager.models.form import (
@@ -642,8 +641,6 @@ def post_save_association_set_skin_features(sender, instance, created, **kwargs)
 
     def update_features():
         instance.features.set(instance.skin.default_features.all())
-        if not instance.skin.managed:
-            instance.features.add(Feature.objects.get(slug="exe_events").pk)
 
     transaction.on_commit(update_features)
 
