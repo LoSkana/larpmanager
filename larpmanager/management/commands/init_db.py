@@ -23,7 +23,6 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from conftest import clean_enc
 from larpmanager.management.commands.utils import check_branch
 from larpmanager.models.association import Association, AssociationSkin
 from larpmanager.models.base import Feature
@@ -57,5 +56,3 @@ class Command(BaseCommand):
             assoc.save()
 
         self.stdout.write("All done.")
-
-        clean_enc()
