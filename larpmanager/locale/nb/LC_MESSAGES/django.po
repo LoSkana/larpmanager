@@ -2717,11 +2717,17 @@ msgstr "Gratis inngang"
 msgid "Give a new answer"
 msgstr "Gi et svar"
 
+msgid "ID document photo"
+msgstr "Foto av ID-dokument"
+
 msgid "Invoice not found"
 msgstr "Faktura ikke funnet"
 
 msgid "Maximum available"
 msgstr "Maksimalt tilgjengelig"
+
+msgid "Membership fee of"
+msgstr "Medlemskapsavgift på"
 
 msgid "Months free quota"
 msgstr "Måneder fri kvote"
@@ -2842,6 +2848,9 @@ msgstr "Informasjon lagret"
 
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsdata"
+
+msgid "Membership request"
+msgstr "Anmodning om medlemskap"
 
 msgid "Name of event area"
 msgstr "Navn på arrangementsområdet"
@@ -3095,6 +3104,9 @@ msgstr "Mail lagt til i køen!"
 msgid "Make the request now"
 msgstr "Søk nå"
 
+msgid "Membership ID number"
+msgstr "Medlemskapets ID-nummer"
+
 msgid "Name - international"
 msgstr "Engelsk navn"
 
@@ -3289,6 +3301,9 @@ msgstr "Instruksjoner for maler"
 
 msgid "To access the history"
 msgstr "Slik får du tilgang til historikken"
+
+msgid "Upload membership fee"
+msgstr "Last opp medlemsavgift"
 
 msgid "Verification payments"
 msgstr "Verifisering av betalinger"
@@ -3612,6 +3627,9 @@ msgstr "Prøv kortgenerering"
 msgid "Upload verified payments"
 msgstr "Last opp bekreftede betalinger"
 
+msgid "User is already a member"
+msgstr "Brukeren er allerede medlem"
+
 msgid "Your registration ticket"
 msgstr "Inngangsbilletten din"
 
@@ -3771,6 +3789,9 @@ msgstr "Disse feltene er obligatoriske"
 msgid "Total remaining to be paid"
 msgstr "Totalt beløp som gjenstår å betale"
 
+msgid "Upload membership document"
+msgstr "Last opp medlemsdokument"
+
 msgid "View photos from the event"
 msgstr "Se bilder fra arrangementet"
 
@@ -3798,6 +3819,9 @@ msgstr "Ta med en venn til %(event)s"
 
 msgid "Confirmation of expenditure"
 msgstr "Bekreftelse av utgifter"
+
+msgid "Date of membership approval"
+msgstr "Dato for godkjenning av medlemskap"
 
 msgid "Description - international"
 msgstr "Engelsk beskrivelse"
@@ -5869,6 +5893,9 @@ msgstr "På denne siden kan du redigere knappene for hendelsesnavigering"
 msgid "This page allows you to edit the roles of the association"
 msgstr "På denne siden kan du redigere rollene til foreningen"
 
+msgid "This page allows you to upload a new membership documents"
+msgstr "På denne siden kan du laste opp nye medlemsdokumenter"
+
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr "For å bekrefte det, vennligst betal %(amount)s innen %(days)s dager"
@@ -6210,6 +6237,10 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Administrere personalutgifter basert på opplastede kvitteringer for alle "
 "arrangementer"
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr ""
+"Medlemsavgift allerede eksisterende for denne brukeren og for dette året"
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr "Velg tegnene som skal legges til i plottet fra rullegardinmenyen"
@@ -6819,6 +6850,11 @@ msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 "På denne siden kan du redigere konfigurasjonen av de aktiverte funksjonene"
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr ""
+"På denne siden kan du laste opp fakturaen for betaling av en medlemsavgift"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -8680,6 +8716,13 @@ msgid ""
 msgstr ""
 "Angi privat informasjon om karakteren din, den vil bare være synlig for deg "
 "og arrangørene"
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+"Vær oppmerksom på at brukeren må ha bekreftet at han/hun samtykker til å "
+"dele dataene sine med organisasjonen din"
 
 msgid ""
 "The character has been added to the faction, but in the faction text the "

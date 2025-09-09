@@ -2717,11 +2717,17 @@ msgstr "Gratis toegang"
 msgid "Give a new answer"
 msgstr "Geef antwoord"
 
+msgid "ID document photo"
+msgstr "Foto ID-document"
+
 msgid "Invoice not found"
 msgstr "Factuur niet gevonden"
 
 msgid "Maximum available"
 msgstr "Maximaal beschikbaar"
+
+msgid "Membership fee of"
+msgstr "Lidmaatschap van"
 
 msgid "Months free quota"
 msgstr "Maanden vrij quotum"
@@ -2842,6 +2848,9 @@ msgstr "Informatie opgeslagen"
 
 msgid "Member Data Checks"
 msgstr "Gegevens van leden controleren"
+
+msgid "Membership request"
+msgstr "Lidmaatschap aanvragen"
 
 msgid "Name of event area"
 msgstr "Naam evenementgebied"
@@ -3095,6 +3104,9 @@ msgstr "Mail toegevoegd aan wachtrij!"
 msgid "Make the request now"
 msgstr "Solliciteer nu"
 
+msgid "Membership ID number"
+msgstr "ID-nummer lidmaatschap"
+
 msgid "Name - international"
 msgstr "Engelse naam"
 
@@ -3289,6 +3301,9 @@ msgstr "Instructies sjabloon"
 
 msgid "To access the history"
 msgstr "De geschiedenis openen"
+
+msgid "Upload membership fee"
+msgstr "Lidmaatschap uploaden"
 
 msgid "Verification payments"
 msgstr "Verificatie betalingen"
@@ -3612,6 +3627,9 @@ msgstr "Probeer kaarten te genereren"
 msgid "Upload verified payments"
 msgstr "Geverifieerde betalingen uploaden"
 
+msgid "User is already a member"
+msgstr "Gebruiker is al lid"
+
 msgid "Your registration ticket"
 msgstr "Je entreebewijs"
 
@@ -3771,6 +3789,9 @@ msgstr "Deze velden zijn verplicht"
 msgid "Total remaining to be paid"
 msgstr "Totaal nog te betalen"
 
+msgid "Upload membership document"
+msgstr "Lidmaatschapsdocument uploaden"
+
 msgid "View photos from the event"
 msgstr "Bekijk foto's van het evenement"
 
@@ -3798,6 +3819,9 @@ msgstr "Neem een vriend(in) mee naar %(event)s"
 
 msgid "Confirmation of expenditure"
 msgstr "Bevestiging van uitgaven"
+
+msgid "Date of membership approval"
+msgstr "Datum goedkeuring lidmaatschap"
 
 msgid "Description - international"
 msgstr "Engelse beschrijving"
@@ -5883,6 +5907,9 @@ msgstr "Op deze pagina kunt u de navigatieknoppen van de gebeurtenis bewerken"
 msgid "This page allows you to edit the roles of the association"
 msgstr "Op deze pagina kunt u de rollen van de associatie bewerken"
 
+msgid "This page allows you to upload a new membership documents"
+msgstr "Op deze pagina kunt u nieuwe lidmaatschapsdocumenten uploaden"
+
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr "Om het te bevestigen, betaal %(amount)s binnen %(days)s dagen"
@@ -6244,6 +6271,9 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Personeelsuitgaven beheren op basis van geüploade bonnetjes voor alle "
 "evenementen"
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr "Lidmaatschap bestaat al voor deze gebruiker en voor dit jaar"
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
@@ -6914,6 +6944,12 @@ msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 "Op deze pagina kunt u de configuratie van de geactiveerde functies bewerken"
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr ""
+"Op deze pagina kunt u de factuur voor de betaling van een "
+"lidmaatschapsbijdrage uploaden"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -8844,6 +8880,13 @@ msgid ""
 msgstr ""
 "Vermeld privé-informatie over je personage, deze zal alleen zichtbaar zijn "
 "voor jou en de organisatoren"
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+"De gebruiker moet toestemming hebben gegeven om zijn gegevens met uw "
+"organisatie te delen"
 
 msgid ""
 "The character has been added to the faction, but in the faction text the "

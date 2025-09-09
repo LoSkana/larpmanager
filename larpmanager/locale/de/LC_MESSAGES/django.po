@@ -2717,11 +2717,17 @@ msgstr "Eintritt frei"
 msgid "Give a new answer"
 msgstr "Eine Antwort geben"
 
+msgid "ID document photo"
+msgstr "Ausweisdokument Foto"
+
 msgid "Invoice not found"
 msgstr "Rechnung nicht gefunden"
 
 msgid "Maximum available"
 msgstr "Maximal verfügbar"
+
+msgid "Membership fee of"
+msgstr "Der Mitgliedsbeitrag beträgt"
 
 msgid "Months free quota"
 msgstr "Monate freies Kontingent"
@@ -2842,6 +2848,9 @@ msgstr "Informationen gespeichert"
 
 msgid "Member Data Checks"
 msgstr "Überprüfung der Mitgliederdaten"
+
+msgid "Membership request"
+msgstr "Antrag auf Mitgliedschaft"
 
 msgid "Name of event area"
 msgstr "Name des Veranstaltungsbereichs"
@@ -3095,6 +3104,9 @@ msgstr "Mail zur Warteschlange hinzugefügt!"
 msgid "Make the request now"
 msgstr "Jetzt bewerben"
 
+msgid "Membership ID number"
+msgstr "ID-Nummer der Mitgliedschaft"
+
 msgid "Name - international"
 msgstr "Englischer Name"
 
@@ -3289,6 +3301,9 @@ msgstr "Vorlage Anweisungen"
 
 msgid "To access the history"
 msgstr "So rufen Sie die Historie auf"
+
+msgid "Upload membership fee"
+msgstr "Mitgliedsbeitrag hochladen"
 
 msgid "Verification payments"
 msgstr "Zahlungen zur Überprüfung"
@@ -3612,6 +3627,9 @@ msgstr "Kartenerstellung ausprobieren"
 msgid "Upload verified payments"
 msgstr "Verifizierte Zahlungen hochladen"
 
+msgid "User is already a member"
+msgstr "Benutzer ist bereits Mitglied"
+
 msgid "Your registration ticket"
 msgstr "Ihre Eintrittskarte"
 
@@ -3771,6 +3789,9 @@ msgstr "Diese Felder sind obligatorisch"
 msgid "Total remaining to be paid"
 msgstr "Noch zu zahlender Gesamtbetrag"
 
+msgid "Upload membership document"
+msgstr "Mitgliedschaftsdokument hochladen"
+
 msgid "View photos from the event"
 msgstr "Sehen Sie sich die Fotos der Veranstaltung an"
 
@@ -3798,6 +3819,9 @@ msgstr "Bringen Sie einen Freund zu %(event)s mit"
 
 msgid "Confirmation of expenditure"
 msgstr "Bestätigung der Ausgaben"
+
+msgid "Date of membership approval"
+msgstr "Datum der Genehmigung der Mitgliedschaft"
 
 msgid "Description - international"
 msgstr "Englische Beschreibung"
@@ -5954,6 +5978,10 @@ msgstr ""
 msgid "This page allows you to edit the roles of the association"
 msgstr "Auf dieser Seite können Sie die Rollen der Vereinigung bearbeiten"
 
+msgid "This page allows you to upload a new membership documents"
+msgstr ""
+"Auf dieser Seite können Sie ein neues Mitgliedschaftsdokument hochladen"
+
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr ""
@@ -6366,6 +6394,10 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Verwaltung der Personalausgaben auf der Grundlage der für alle "
 "Veranstaltungen hochgeladenen Belege"
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr ""
+"Bereits bestehender Mitgliedsbeitrag für diesen Benutzer und für dieses Jahr"
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
@@ -7090,6 +7122,12 @@ msgid ""
 msgstr ""
 "Auf dieser Seite können Sie die Konfiguration der aktivierten Funktionen "
 "bearbeiten"
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr ""
+"Auf dieser Seite können Sie die Rechnung für die Zahlung eines "
+"Mitgliedsbeitrags hochladen"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -9032,6 +9070,13 @@ msgid ""
 msgstr ""
 "Geben Sie private Informationen über Ihren Charakter an, die nur für Sie und"
 " die Organisatoren sichtbar sein werden"
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+"Bitte beachten Sie, dass der Nutzer sein Einverständnis zur Weitergabe "
+"seiner Daten an Ihre Organisation gegeben haben muss"
 
 msgid ""
 "The character has been added to the faction, but in the faction text the "

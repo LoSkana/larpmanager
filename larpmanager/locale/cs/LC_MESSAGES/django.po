@@ -2717,11 +2717,17 @@ msgstr "Vstup zdarma"
 msgid "Give a new answer"
 msgstr "Odpovězte"
 
+msgid "ID document photo"
+msgstr "Fotografie na dokladu totožnosti"
+
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
 
 msgid "Maximum available"
 msgstr "Maximální dostupný počet"
+
+msgid "Membership fee of"
+msgstr "Členský poplatek ve výši"
 
 msgid "Months free quota"
 msgstr "Měsíční volná kvóta"
@@ -2842,6 +2848,9 @@ msgstr "Informace uloženy"
 
 msgid "Member Data Checks"
 msgstr "Kontroly členských údajů"
+
+msgid "Membership request"
+msgstr "Žádost o členství"
 
 msgid "Name of event area"
 msgstr "Název oblasti události"
@@ -3095,6 +3104,9 @@ msgstr "Mail přidán do fronty!"
 msgid "Make the request now"
 msgstr "Přihlaste se nyní"
 
+msgid "Membership ID number"
+msgstr "Identifikační číslo členství"
+
 msgid "Name - international"
 msgstr "Anglický název"
 
@@ -3289,6 +3301,9 @@ msgstr "Pokyny k šabloně"
 
 msgid "To access the history"
 msgstr "Přístup k historii"
+
+msgid "Upload membership fee"
+msgstr "Nahrát členský poplatek"
 
 msgid "Verification payments"
 msgstr "Ověřovací platby"
@@ -3612,6 +3627,9 @@ msgstr "Vyzkoušejte generování karet"
 msgid "Upload verified payments"
 msgstr "Nahrávání ověřených plateb"
 
+msgid "User is already a member"
+msgstr "Uživatel je již členem"
+
 msgid "Your registration ticket"
 msgstr "Vaše vstupenka"
 
@@ -3771,6 +3789,9 @@ msgstr "Tato pole jsou povinná"
 msgid "Total remaining to be paid"
 msgstr "Zbývající částka k vyplacení"
 
+msgid "Upload membership document"
+msgstr "Nahrát členský dokument"
+
 msgid "View photos from the event"
 msgstr "Prohlédněte si fotografie z akce"
 
@@ -3798,6 +3819,9 @@ msgstr "Přiveďte na %(event)s kamaráda"
 
 msgid "Confirmation of expenditure"
 msgstr "Potvrzení výdajů"
+
+msgid "Date of membership approval"
+msgstr "Datum schválení členství"
 
 msgid "Description - international"
 msgstr "Anglický popis"
@@ -5867,6 +5891,9 @@ msgstr "Tato stránka umožňuje upravit navigační tlačítka události"
 msgid "This page allows you to edit the roles of the association"
 msgstr "Na této stránce můžete upravovat role sdružení"
 
+msgid "This page allows you to upload a new membership documents"
+msgstr "Na této stránce můžete nahrát nové členské dokumenty"
+
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr "Pro potvrzení prosím zaplaťte %(amount)s do %(days)s dnů"
@@ -6183,6 +6210,9 @@ msgstr "Uveďte, ke kterému dni byl proveden pohyb ve finančním nástroji"
 msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Správa výdajů zaměstnanců na základě účtenek nahraných pro všechny události"
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr "Již existující členský poplatek pro tohoto uživatele a pro tento rok"
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
@@ -6760,6 +6790,10 @@ msgstr ""
 msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr "Tato stránka umožňuje upravit konfiguraci aktivovaných funkcí"
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr "Tato stránka umožňuje nahrát fakturu o zaplacení členského poplatku"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -8566,6 +8600,13 @@ msgid ""
 msgstr ""
 "Uveďte soukromé informace o své postavě, které budou viditelné pouze pro vás"
 " a organizátory"
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+"Upozorňujeme, že uživatel musí potvrdit souhlas se sdílením svých údajů s "
+"vaší organizací"
 
 msgid ""
 "The character has been added to the faction, but in the faction text the "

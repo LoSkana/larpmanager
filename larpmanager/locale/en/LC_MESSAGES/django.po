@@ -1649,6 +1649,42 @@ msgstr ""
 msgid "This page allows you to change a member's membership status"
 msgstr ""
 
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr ""
+
+msgid "Upload membership fee"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "This page allows you to upload a new membership documents"
+msgstr ""
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+
+msgid "Upload membership document"
+msgstr ""
+
+msgid "Membership request"
+msgstr ""
+
+msgid "ID document photo"
+msgstr ""
+
+msgid "Membership ID number"
+msgstr ""
+
+msgid "Date of membership approval"
+msgstr ""
+
 msgid "This page allows you to add or edit a badge, or assign it  to users"
 msgstr ""
 
@@ -4896,9 +4932,6 @@ msgstr ""
 msgid "This page shows all invoices registered in the system"
 msgstr ""
 
-msgid "Method"
-msgstr ""
-
 msgid "Net"
 msgstr ""
 
@@ -6254,9 +6287,6 @@ msgid ""
 msgstr ""
 
 msgid "This page shows all payments received for this event"
-msgstr ""
-
-msgid "Invoice"
 msgstr ""
 
 msgid "This page shows the uploaded photo albums"
@@ -8486,6 +8516,15 @@ msgid "Member refused!"
 msgstr ""
 
 msgid "Profile updated"
+msgstr ""
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr ""
+
+msgid "Membership fee of"
+msgstr ""
+
+msgid "User is already a member"
 msgstr ""
 
 msgid "Mail added to queue!"

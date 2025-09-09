@@ -31,6 +31,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
 from django.utils import translation
@@ -41,7 +42,7 @@ from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
-from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
+from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.base import FeatureNationality
 from larpmanager.models.member import (
@@ -559,6 +560,88 @@ class ExeMembershipForm(MyForm):
             "date",
             "newsletter",
         )
+
+
+class ExeMembershipFeeForm(forms.Form):
+    page_info = _("This page allows you to upload the invoce of payment of a membership fee")
+
+    page_title = _("Upload membership fee")
+
+    member = forms.ModelChoiceField(
+        label=_("Member"),
+        queryset=Member.objects.none(),
+        required=False,
+        widget=AssocMemberS2Widget,
+    )
+
+    year = forms.IntegerField(required=True)
+
+    invoice = forms.FileField(
+        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        label=_("Invoice"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.params = kwargs.pop("ctx", None)
+        super().__init__(*args, **kwargs)
+        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+        self.initial["year"] = datetime.today().year
+
+        assoc = Association.objects.get(pk=self.params["a_id"])
+        choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
+        self.fields["method"] = forms.ChoiceField(
+            required=True,
+            choices=choices,
+            label=_("Method"),
+        )
+
+
+class ExeMembershipDocumentForm(forms.Form):
+    page_info = (
+        _("This page allows you to upload a new membership documents")
+        + " - "
+        + _("Please note that the user must have confirmed it's consent to share their data with your organization")
+    )
+
+    page_title = _("Upload membership document")
+
+    member = forms.ModelChoiceField(
+        label=_("Member"),
+        queryset=Member.objects.none(),
+        required=False,
+        widget=AssocMemberS2Widget,
+    )
+
+    request = forms.FileField(
+        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        label=_("Membership request"),
+    )
+
+    document = forms.FileField(
+        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        label=_("ID document photo"),
+        required=False,
+    )
+
+    card_number = forms.IntegerField(label=_("Membership ID number"))
+
+    date = forms.DateField(widget=DatePickerInput(), label=_("Date of membership approval"))
+
+    def __init__(self, *args, **kwargs):
+        self.params = kwargs.pop("ctx", None)
+        super().__init__(*args, **kwargs)
+        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+
+        number = Membership.objects.filter(assoc_id=self.params["a_id"]).aggregate(Max("card_number"))[
+            "card_number__max"
+        ]
+        if not number:
+            number = 1
+        else:
+            number += 1
+        self.initial["card_number"] = number
 
 
 class ExeBadgeForm(MyForm):
