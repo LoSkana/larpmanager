@@ -29,7 +29,7 @@ from larpmanager.views.user import pdf as views_up
 from larpmanager.views.user import registration as views_ur
 
 urlpatterns = [
-path(
+    path(
         "<slug:s>/",
         views_ue.gallery,
         name="gallery",
@@ -38,6 +38,11 @@ path(
         "<slug:s>/event/",
         views_ue.event,
         name="event",
+    ),
+    path(
+        "<slug:s>/event/register/",
+        views_ue.event_register,
+        name="event_register",
     ),
     path(
         "<slug:s>/character/<int:num>/",
