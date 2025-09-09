@@ -168,6 +168,8 @@ def has_event_permission(request, ctx, slug, perm=None):
         return False
     if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
         return True
+    # split if provided slug from session
+    slug = slug.split("-", 1)[0]
     (organizer, permissions, names) = get_event_roles(request, slug)
     if organizer:
         return True
