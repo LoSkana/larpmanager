@@ -18,11 +18,6 @@
                             <a href="{% url 'home' %}" title="Home">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'discover' %}"
-                               title="Discover the platform"
-                               {% if request.resolver_match.url_name == "discover" %}class="sel"{% endif %}>Discover</a>
-                        </li>
-                        <li>
                             <a href="{% url 'tutorials' %}"
                                title="Learn how the system works"
                                {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Tutorials</a>
@@ -43,6 +38,11 @@
                                {% if request.resolver_match.url_name == "demo" %}class="sel"{% endif %}>Demo</a>
                         </li>
                         <li>
+                            <a href="{% url 'contact' %}"
+                               title="Contact us"
+                               {% if request.resolver_match.url_name == "contact" %}class="sel"{% endif %}>Contact</a>
+                        </li>
+                        <li>
                             <a id="join"
                                href="{% url 'join' %}"
                                title="Join us"
@@ -60,20 +60,7 @@
                 {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
             {% if contact_form %}
                 <h3>Contact us</h3>
-                <form class="contact"
-                      action="{% url 'contact' %}"
-                      method="post"
-                      id="cnt-form">
-                    {% csrf_token %}
-                    <div class="row gtr-50 gtr-uniform">
-                        <p>Would you like to get in touch with us?</p>
-                        {{ contact_form.as_p }}
-                        <p>
-                            <!-- empty space -->
-                        </p>
-                        <input id="cnt" type="submit" value="Contact us" class="fit" />
-                    </div>
-                </form>
+                {% include "elements/structure/contact_form.html" %}
                 {% if contact_form.errors %}
                     <script>
             window.addEventListener('DOMContentLoaded', function() {
