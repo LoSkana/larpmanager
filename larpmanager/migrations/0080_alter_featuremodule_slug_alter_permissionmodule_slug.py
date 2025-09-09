@@ -17,7 +17,7 @@ def move_enc_files(apps, schema_editor):
         kid = _key_id(assoc.key)
         new_filename = f"{os.path.basename(assoc.slug)}.{kid}.enc"
         new_path = os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, new_filename)
-        old_path = f"{assoc.slug}.enc"
+        old_path = os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, f"{assoc.slug}.enc")
         if os.path.isfile(old_path):
             shutil.move(old_path, new_path)
 
