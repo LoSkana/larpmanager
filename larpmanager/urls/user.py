@@ -430,5 +430,5 @@ urlpatterns = [
         views_base.set_member_config,
         name="set_member_config",
     ),
-    path("upload_image/", views_base.upload_image, name="upload_image"),
+    path("upload_media/", views_base.upload_media, name="upload_media"),
 ]
