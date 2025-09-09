@@ -2717,11 +2717,17 @@ msgstr "Bezpłatna rejestracja"
 msgid "Give a new answer"
 msgstr "Podaj nową odpowiedź"
 
+msgid "ID document photo"
+msgstr "Zdjęcie dokumentu tożsamości"
+
 msgid "Invoice not found"
 msgstr "Nie znaleziono faktury"
 
 msgid "Maximum available"
 msgstr "Maksymalna dostępna wartość"
+
+msgid "Membership fee of"
+msgstr "Składka członkowska w wysokości"
 
 msgid "Months free quota"
 msgstr "Miesiące wolnego limitu"
@@ -2842,6 +2848,9 @@ msgstr "Informacje zapisane"
 
 msgid "Member Data Checks"
 msgstr "Kontrola danych członkowskich"
+
+msgid "Membership request"
+msgstr "Wniosek o członkostwo"
 
 msgid "Name of event area"
 msgstr "Nazwa obszaru wydarzenia"
@@ -3095,6 +3104,9 @@ msgstr "Poczta dodana do kolejki!"
 msgid "Make the request now"
 msgstr "Złóż wniosek teraz"
 
+msgid "Membership ID number"
+msgstr "Numer identyfikacyjny członkostwa"
+
 msgid "Name - international"
 msgstr "Nazwa - międzynarodowa"
 
@@ -3289,6 +3301,9 @@ msgstr "Instrukcje dotyczące szablonu"
 
 msgid "To access the history"
 msgstr "Aby uzyskać dostęp do historii"
+
+msgid "Upload membership fee"
+msgstr "Prześlij opłatę członkowską"
 
 msgid "Verification payments"
 msgstr "Płatności weryfikacyjne"
@@ -3612,6 +3627,9 @@ msgstr "Wypróbuj generowanie arkuszy"
 msgid "Upload verified payments"
 msgstr "Prześlij zweryfikowane płatności"
 
+msgid "User is already a member"
+msgstr "Użytkownik jest już członkiem"
+
 msgid "Your registration ticket"
 msgstr "Bilet rejestracyjny"
 
@@ -3771,6 +3789,9 @@ msgstr "Te pola są obowiązkowe"
 msgid "Total remaining to be paid"
 msgstr "Całkowita kwota pozostała do zapłaty"
 
+msgid "Upload membership document"
+msgstr "Prześlij dokument członkostwa"
+
 msgid "View photos from the event"
 msgstr "Zobacz zdjęcia z wydarzenia"
 
@@ -3798,6 +3819,9 @@ msgstr "Przyprowadź znajomego na %(event)s"
 
 msgid "Confirmation of expenditure"
 msgstr "Potwierdzenie wydatków"
+
+msgid "Date of membership approval"
+msgstr "Data zatwierdzenia członkostwa"
 
 msgid "Description - international"
 msgstr "Opis - międzynarodowy"
@@ -4894,6 +4918,9 @@ msgstr "Wybierz losowo kupony loterii do ulepszenia"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Suma została przypisana jako %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Istnieje już członek o tym numerze"
+
 msgid "This page performs checks on members' data"
 msgstr "Ta strona sprawdza dane członków"
 
@@ -5869,6 +5896,9 @@ msgstr "Ta strona umożliwia edycję przycisków nawigacji zdarzeń"
 msgid "This page allows you to edit the roles of the association"
 msgstr "Ta strona umożliwia edycję ról stowarzyszenia"
 
+msgid "This page allows you to upload a new membership documents"
+msgstr "Ta strona umożliwia przesłanie nowych dokumentów członkowskich"
+
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr "Aby to potwierdzić, należy wpłacić %(amount)s w ciągu %(days)s dni"
@@ -6206,6 +6236,9 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Zarządzanie wydatkami personelu na podstawie paragonów przesłanych dla "
 "wszystkich wydarzeń"
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr "Opłata członkowska już istniejąca dla tego użytkownika i na ten rok"
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
@@ -6831,6 +6864,10 @@ msgstr ""
 msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr "Ta strona umożliwia edycję konfiguracji aktywowanych funkcji"
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr "Ta strona umożliwia przesłanie faktury za opłatę członkowską"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -8726,6 +8763,13 @@ msgid ""
 msgstr ""
 "Wskazuje publiczne informacje o twojej postaci, które będą widoczne tylko "
 "dla ciebie i organizatorów"
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+"Należy pamiętać, że użytkownik musi potwierdzić zgodę na udostępnianie "
+"swoich danych organizacji"
 
 msgid ""
 "The character has been added to the faction, but in the faction text the "

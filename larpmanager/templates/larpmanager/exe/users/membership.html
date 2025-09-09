@@ -19,6 +19,12 @@
             - {% trans "Accepted" %}: {{ sum.a }}
         {% endif %}
     </p>
+    <div class="staff-list">
+        <div class="orga-buttons">
+            <a class="new button" href="{% url 'exe_membership_document' %}">{% trans "Upload membership document" %}</a>
+            <a class="new button" href="{% url 'exe_membership_fee' %}">{% trans "Upload membership fee" %}</a>
+        </div>
+    </div>
     <hr />
     <table id="memberships" class="go_datatable" no_header_cols="[7]">
         <thead>

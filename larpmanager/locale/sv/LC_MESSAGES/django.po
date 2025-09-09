@@ -2717,11 +2717,17 @@ msgstr "Fri entré"
 msgid "Give a new answer"
 msgstr "Ge ett svar"
 
+msgid "ID document photo"
+msgstr "Foto av ID-handling"
+
 msgid "Invoice not found"
 msgstr "Fakturan hittades inte"
 
 msgid "Maximum available"
 msgstr "Maximalt tillgänglig"
+
+msgid "Membership fee of"
+msgstr "Medlemsavgift på"
 
 msgid "Months free quota"
 msgstr "Månader fri kvot"
@@ -2842,6 +2848,9 @@ msgstr "Information sparad"
 
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsuppgifter"
+
+msgid "Membership request"
+msgstr "Ansökan om medlemskap"
 
 msgid "Name of event area"
 msgstr "Namn på evenemangsområdet"
@@ -3095,6 +3104,9 @@ msgstr "Mail läggs till i kön!"
 msgid "Make the request now"
 msgstr "Ansök nu"
 
+msgid "Membership ID number"
+msgstr "Medlemskapets ID-nummer"
+
 msgid "Name - international"
 msgstr "Engelskt namn"
 
@@ -3289,6 +3301,9 @@ msgstr "Instruktioner för mallar"
 
 msgid "To access the history"
 msgstr "För att komma åt historiken"
+
+msgid "Upload membership fee"
+msgstr "Ladda upp medlemsavgift"
 
 msgid "Verification payments"
 msgstr "Verifiering av betalningar"
@@ -3612,6 +3627,9 @@ msgstr "Försök med kortgenerering"
 msgid "Upload verified payments"
 msgstr "Ladda upp verifierade betalningar"
 
+msgid "User is already a member"
+msgstr "Användaren är redan medlem"
+
 msgid "Your registration ticket"
 msgstr "Din entrébiljett"
 
@@ -3771,6 +3789,9 @@ msgstr "Dessa fält är obligatoriska"
 msgid "Total remaining to be paid"
 msgstr "Totalt återstående att betala"
 
+msgid "Upload membership document"
+msgstr "Ladda upp medlemsdokument"
+
 msgid "View photos from the event"
 msgstr "Se bilder från evenemanget"
 
@@ -3798,6 +3819,9 @@ msgstr "Ta med en vän till %(event)s"
 
 msgid "Confirmation of expenditure"
 msgstr "Bekräftelse av utgifter"
+
+msgid "Date of membership approval"
+msgstr "Datum för godkännande av medlemskap"
 
 msgid "Description - international"
 msgstr "Beskrivning på engelska"
@@ -4896,6 +4920,9 @@ msgstr "Välj slumpmässigt lotter för att uppgradera"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Beloppet tilldelades dig som %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Det finns redan en medlem med detta nummer"
+
 msgid "This page performs checks on members' data"
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter"
 
@@ -5869,6 +5896,9 @@ msgstr "På den här sidan kan du redigera navigeringsknapparna för evenemanget
 msgid "This page allows you to edit the roles of the association"
 msgstr "På den här sidan kan du redigera rollerna i föreningen"
 
+msgid "This page allows you to upload a new membership documents"
+msgstr "På den här sidan kan du ladda upp nya medlemsdokument"
+
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr "För att bekräfta det, vänligen betala %(amount)s inom %(days)s dagar"
@@ -6215,6 +6245,9 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Hantera personalkostnader baserat på kvitton som laddats upp för alla "
 "evenemang"
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr "Medlemsavgift redan befintlig för denna användare och för detta år"
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
@@ -6834,6 +6867,11 @@ msgid ""
 msgstr ""
 "På den här sidan kan du redigera konfigurationen av de aktiverade "
 "funktionerna"
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr ""
+"På den här sidan kan du ladda upp fakturan för betalning av en medlemsavgift"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -8718,6 +8756,13 @@ msgid ""
 msgstr ""
 "Ange privat information om din karaktär, den kommer endast att vara synlig "
 "för dig och organisatörerna"
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+"Observera att användaren måste ha bekräftat sitt samtycke till att dela sina"
+" uppgifter med din organisation"
 
 msgid ""
 "The character has been added to the faction, but in the faction text the "
