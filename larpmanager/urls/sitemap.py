@@ -87,7 +87,7 @@ def _organization_sitemap(request):
 def larpmanager_sitemap():
     urls = []
     # Static pages
-    for el in ["", "discover", "tutorials", "usage", "about-us"]:
+    for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
     # Blog posts
     for el in LarpManagerBlog.objects.filter(published=True):
