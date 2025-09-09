@@ -103,7 +103,8 @@ def contact(request):
         form = LarpManagerContact(request=request)
 
     if not done:
-        ctx["contact_form"] = form
+        ctx["form"] = form
+
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
 

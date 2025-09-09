@@ -43,7 +43,8 @@ class LarpManagerCheck(forms.Form):
 
 
 class LarpManagerContact(LarpManagerCheck):
-    email = forms.EmailField(required=True, label="", widget=forms.TextInput(attrs={"placeholder": "Email"}))
+    email = forms.EmailField(required=True, label="", widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+
     content = forms.CharField(
         required=True,
         max_length=3000,
