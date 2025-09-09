@@ -4922,6 +4922,9 @@ msgstr "Wählen Sie nach dem Zufallsprinzip Lotterielose zum Aufwerten aus"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Die Summe wurde Ihnen als %(credits)s zugewiesen"
 
+msgid "There is already a member with this number"
+msgstr "Es gibt bereits ein Mitglied mit dieser Nummer"
+
 msgid "This page performs checks on members' data"
 msgstr "Auf dieser Seite werden die Daten der Mitglieder überprüft"
 

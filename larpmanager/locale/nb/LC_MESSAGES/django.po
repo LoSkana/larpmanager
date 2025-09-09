@@ -4920,6 +4920,9 @@ msgstr "Velg tilfeldig lodd for å oppgradere"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Summen ble tildelt deg som %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Det er allerede et medlem med dette nummeret"
+
 msgid "This page performs checks on members' data"
 msgstr "Denne siden utfører kontroller av medlemmenes data"
 

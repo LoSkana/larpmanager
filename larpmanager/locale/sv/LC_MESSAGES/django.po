@@ -4920,6 +4920,9 @@ msgstr "Välj slumpmässigt lotter för att uppgradera"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Beloppet tilldelades dig som %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Det finns redan en medlem med detta nummer"
+
 msgid "This page performs checks on members' data"
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter"
 

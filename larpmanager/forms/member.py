@@ -43,12 +43,14 @@ from django_registration.forms import RegistrationFormUniqueEmail
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
+from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.base import FeatureNationality
 from larpmanager.models.member import (
     Badge,
     Member,
     Membership,
+    MembershipStatus,
     NewsletterChoices,
     VolunteerRegistry,
     get_user_membership,
@@ -574,8 +576,6 @@ class ExeMembershipFeeForm(forms.Form):
         widget=AssocMemberS2Widget,
     )
 
-    year = forms.IntegerField(required=True)
-
     invoice = forms.FileField(
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
         label=_("Invoice"),
@@ -586,7 +586,6 @@ class ExeMembershipFeeForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
-        self.initial["year"] = datetime.today().year
 
         assoc = Association.objects.get(pk=self.params["a_id"])
         choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
@@ -595,6 +594,15 @@ class ExeMembershipFeeForm(forms.Form):
             choices=choices,
             label=_("Method"),
         )
+
+    def clean_member(self):
+        member = self.cleaned_data["member"]
+        year = datetime.today().year
+
+        if AccountingItemMembership.objects.filter(member=member, year=year).exists():
+            self.add_error("member", _("Membership fee already existing for this user and for this year"))
+
+        return member
 
 
 class ExeMembershipDocumentForm(forms.Form):
@@ -642,6 +650,22 @@ class ExeMembershipDocumentForm(forms.Form):
         else:
             number += 1
         self.initial["card_number"] = number
+
+    def clean_member(self):
+        member = self.cleaned_data["member"]
+        membership = Membership.objects.get(member=member, assoc_id=self.params["a_id"])
+        if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
+            self.add_error("member", _("User is already a member"))
+
+        return member
+
+    def clean_card_number(self):
+        card_number = self.cleaned_data["card_number"]
+
+        if Membership.objects.filter(assoc_id=self.params["a_id"], card_number=card_number).exists():
+            self.add_error("card_number", _("There is already a member with this number"))
+
+        return card_number
 
 
 class ExeBadgeForm(MyForm):

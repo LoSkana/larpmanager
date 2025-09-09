@@ -4918,6 +4918,9 @@ msgstr "Vyberte náhodně losy pro upgrade"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Částka vám byla přidělena jako %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Člen s tímto číslem již existuje"
+
 msgid "This page performs checks on members' data"
 msgstr "Tato stránka provádí kontroly údajů členů"
 

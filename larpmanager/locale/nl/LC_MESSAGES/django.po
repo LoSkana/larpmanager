@@ -4920,6 +4920,9 @@ msgstr "Selecteer willekeurig loten om te upgraden"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "De som werd aan jou toegewezen als %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Er is al een lid met dit nummer"
+
 msgid "This page performs checks on members' data"
 msgstr "Deze pagina voert controles uit op de gegevens van leden"
 

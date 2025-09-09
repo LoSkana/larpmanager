@@ -4918,6 +4918,9 @@ msgstr "Wybierz losowo kupony loterii do ulepszenia"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Suma została przypisana jako %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Istnieje już członek o tym numerze"
+
 msgid "This page performs checks on members' data"
 msgstr "Ta strona sprawdza dane członków"
 

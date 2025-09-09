@@ -4922,6 +4922,9 @@ msgstr "Sélectionner aléatoirement des billets de loterie à revaloriser"
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "La somme vous a été attribuée sous forme de %(credits)s"
 
+msgid "There is already a member with this number"
+msgstr "Il y a déjà un membre avec ce numéro"
+
 msgid "This page performs checks on members' data"
 msgstr "Cette page effectue des contrôles sur les données des membres"
 

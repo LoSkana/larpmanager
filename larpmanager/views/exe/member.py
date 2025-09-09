@@ -29,6 +29,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
 from larpmanager.forms.member import (
     ExeBadgeForm,
@@ -362,26 +363,21 @@ def exe_membership_fee(request):
         form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
             member = form.cleaned_data["member"]
-            year = form.cleaned_data["year"]
-            if AccountingItemMembership.objects.filter(member=member, year=year).exists():
-                messages.warning(request, _("Membership fee already existing for this user and for this year"))
-            else:
-                method = form.cleaned_data["method"]
-                invoice = form.cleaned_data["invoice"]
-                assoc = Association.objects.get(pk=ctx["a_id"])
-                fee = assoc.get_config("membership_fee", "0")
-                payment = PaymentInvoice.objects.create(
-                    member=member,
-                    typ=PaymentType.MEMBERSHIP,
-                    invoice=invoice,
-                    method_id=method,
-                    mc_gross=fee,
-                    causal=_("Membership fee of") + f" {member}",
-                    assoc=assoc,
-                )
-                payment.status = PaymentStatus.CONFIRMED
-                payment.save()
-                messages.success(request, _("Operation completed") + "!")
+            assoc = Association.objects.get(pk=ctx["a_id"])
+            fee = assoc.get_config("membership_fee", "0")
+            payment = PaymentInvoice.objects.create(
+                member=member,
+                typ=PaymentType.MEMBERSHIP,
+                invoice=form.cleaned_data["invoice"],
+                method_id=form.cleaned_data["method"],
+                mc_gross=fee,
+                causal=_("Membership fee of") + f" {member}",
+                assoc=assoc,
+                cod=unique_invoice_cod(),
+            )
+            payment.status = PaymentStatus.CONFIRMED
+            payment.save()
+            messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
         form = ExeMembershipFeeForm(ctx=ctx)
@@ -399,16 +395,13 @@ def exe_membership_document(request):
         if form.is_valid():
             member = form.cleaned_data["member"]
             membership = Membership.objects.get(assoc_id=ctx["a_id"], member=member)
-            if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
-                messages.warning(request, _("User is already a member"))
-            else:
-                membership.document = form.cleaned_data["document"]
-                membership.request = form.cleaned_data["request"]
-                membership.card_number = form.cleaned_data["card_number"]
-                membership.date = form.cleaned_data["date"]
-                membership.status = MembershipStatus.ACCEPTED
-                membership.save()
-                messages.success(request, _("Operation completed") + "!")
+            membership.document = form.cleaned_data["document"]
+            membership.request = form.cleaned_data["request"]
+            membership.card_number = form.cleaned_data["card_number"]
+            membership.date = form.cleaned_data["date"]
+            membership.status = MembershipStatus.ACCEPTED
+            membership.save()
+            messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
         form = ExeMembershipDocumentForm(ctx=ctx)

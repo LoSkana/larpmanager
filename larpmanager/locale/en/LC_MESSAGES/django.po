@@ -1662,6 +1662,9 @@ msgstr ""
 msgid "Method"
 msgstr ""
 
+msgid "Membership fee already existing for this user and for this year"
+msgstr ""
+
 msgid "This page allows you to upload a new membership documents"
 msgstr ""
 
@@ -1683,6 +1686,12 @@ msgid "Membership ID number"
 msgstr ""
 
 msgid "Date of membership approval"
+msgstr ""
+
+msgid "User is already a member"
+msgstr ""
+
+msgid "There is already a member with this number"
 msgstr ""
 
 msgid "This page allows you to add or edit a badge, or assign it  to users"
@@ -8518,13 +8527,7 @@ msgstr ""
 msgid "Profile updated"
 msgstr ""
 
-msgid "Membership fee already existing for this user and for this year"
-msgstr ""
-
 msgid "Membership fee of"
-msgstr ""
-
-msgid "User is already a member"
 msgstr ""
 
 msgid "Mail added to queue!"
