@@ -89,7 +89,7 @@ def tutorial_query(request):
 
 
 @csrf_exempt
-def upload_image(request):
+def upload_media(request):
     if request.method == "POST" and request.FILES.get("file"):
         file = request.FILES["file"]
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
