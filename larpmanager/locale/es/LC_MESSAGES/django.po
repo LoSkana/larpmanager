@@ -2504,6 +2504,9 @@ msgstr "Retraso en el perfil"
 msgid "Desalt thumbnail"
 msgstr "Desalt thumbnail"
 
+msgid "Disable grouping"
+msgstr "Desactivar la agrupación"
+
 msgid "Discounts active"
 msgstr "Descuentos activos"
 
@@ -8675,6 +8678,13 @@ msgid ""
 msgstr ""
 "Habilita el campo 'portada', para mostrar una imagen específica en la "
 "galería - hasta que se asigne a un participante"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Si está marcada, todas las inscripciones se muestran en una sola tabla en "
+"lugar de estar separadas por tipo"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "

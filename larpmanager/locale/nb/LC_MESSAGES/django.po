@@ -2504,6 +2504,9 @@ msgstr "Forsinkelse i profil"
 msgid "Desalt thumbnail"
 msgstr "Desalt miniatyrbilde"
 
+msgid "Disable grouping"
+msgstr "Deaktiver gruppering"
+
 msgid "Discounts active"
 msgstr "Aktiv tilrettelegging"
 
@@ -8550,6 +8553,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å vise et bestemt bilde i galleriet i feltet \"cover\" - "
 "inntil det er tildelt en deltaker"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Hvis dette alternativet er merket av, vises alle registreringer i én tabell "
+"i stedet for å skilles etter type"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "

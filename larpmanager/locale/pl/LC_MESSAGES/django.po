@@ -2504,6 +2504,9 @@ msgstr "Opóźnienie w profilu"
 msgid "Desalt thumbnail"
 msgstr "Miniaturka Desalt"
 
+msgid "Disable grouping"
+msgstr "Wyłącz grupowanie"
+
 msgid "Discounts active"
 msgstr "Aktywne rabaty"
 
@@ -8595,6 +8598,13 @@ msgid ""
 msgstr ""
 "Włącza pole \"okładka\", aby wyświetlić określony obraz w galerii - do "
 "momentu przypisania do uczestnika"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Jeśli zaznaczone, wszystkie rejestracje są wyświetlane w jednej tabeli, a "
+"nie rozdzielone według typu"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "
