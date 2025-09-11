@@ -116,7 +116,7 @@ def check_orga_config(page):
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_text("Email notifications Disable").click()
     page.get_by_text("If checked, options no longer").click()
-    page.get_by_role("link", name="Registration form ").click()
+    page.get_by_role("link", name="Registrations ").click()
     page.get_by_role("link", name="Visualisation ").click()
     expect(page.locator("#id_show_shortcuts_mobile")).to_be_checked()
     expect(page.locator("#id_show_export")).not_to_be_checked()
