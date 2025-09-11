@@ -195,9 +195,9 @@ def orga_warehouse_area_assignments(request, s, num):
     ctx = check_event_permission(request, s, "orga_warehouse_area")
     get_element(ctx, num, "area", WarehouseArea)
 
-    get_warehouse_optionals(ctx, [5, 6])
+    get_warehouse_optionals(ctx, [6, 7])
     if ctx["optionals"]["quantity"]:
-        ctx["no_header_cols"] = [7, 8]
+        ctx["no_header_cols"] = [7, 9]
 
     # GET ITEMS
 
