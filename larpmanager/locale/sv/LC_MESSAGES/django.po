@@ -2945,6 +2945,9 @@ msgstr "Bekräftelse radera"
 msgid "Date of association"
 msgstr "Datum för anslutning"
 
+msgid "Disable provisional"
+msgstr "Inaktivera provisorisk"
+
 msgid "Discounts available"
 msgstr "Tillgängliga faciliteter"
 
@@ -7437,6 +7440,13 @@ msgid ""
 msgstr ""
 "Vill du tillåta användare att lägga till en frivillig donation till sin "
 "registreringsavgift"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Om kryssrutan är markerad bekräftas alla registreringar även om ingen "
+"betalning har mottagits"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "

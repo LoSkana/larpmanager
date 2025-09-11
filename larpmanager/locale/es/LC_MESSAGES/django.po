@@ -2945,6 +2945,9 @@ msgstr "Confirmación de eliminación"
 msgid "Date of association"
 msgstr "Fecha de asociación"
 
+msgid "Disable provisional"
+msgstr "Desactivar provisional"
+
 msgid "Discounts available"
 msgstr "Descuentos disponibles"
 
@@ -7517,6 +7520,13 @@ msgid ""
 msgstr ""
 "¿Desea permitir que los usuarios añadan una donación voluntaria a su cuota "
 "de inscripción"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Si la casilla está marcada, se confirman todas las inscripciones aunque no "
+"se haya recibido ningún pago"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "

@@ -2945,6 +2945,9 @@ msgstr "Bevestiging verwijderen"
 msgid "Date of association"
 msgstr "Datum van vereniging"
 
+msgid "Disable provisional"
+msgstr "Voorlopig uitschakelen"
+
 msgid "Discounts available"
 msgstr "Beschikbare faciliteiten"
 
@@ -7555,6 +7558,13 @@ msgid ""
 msgstr ""
 "Wil je gebruikers toestaan een vrijwillige donatie toe te voegen aan hun "
 "registratiekosten"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Als deze optie is aangevinkt, worden alle registraties bevestigd, zelfs als "
+"er geen betaling is ontvangen"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "

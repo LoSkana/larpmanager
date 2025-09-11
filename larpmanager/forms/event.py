@@ -53,7 +53,7 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import WritingQuestionType, _get_writing_elements, _get_writing_mapping, BaseQuestionType
+from larpmanager.models.form import BaseQuestionType, _get_writing_elements, _get_writing_mapping
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
@@ -548,6 +548,10 @@ class OrgaConfigForm(ConfigForm):
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)
+
+            label = _("Disable provisional")
+            help_text = _("If checked, all registrations are confirmed even if no payment has been received")
+            self.add_configs("payment_no_provisional", ConfigType.BOOL, label, help_text)
 
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))

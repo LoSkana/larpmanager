@@ -2945,6 +2945,9 @@ msgstr "Bekreftelse på sletting"
 msgid "Date of association"
 msgstr "Dato for tilknytning"
 
+msgid "Disable provisional"
+msgstr "Deaktiver midlertidig"
+
 msgid "Discounts available"
 msgstr "Tilgjengelige fasiliteter"
 
@@ -7413,6 +7416,13 @@ msgid ""
 msgstr ""
 "Ønsker du å tillate brukere å legge til en frivillig donasjon til "
 "registreringsavgiften"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Hvis dette alternativet er krysset av, blir alle registreringer bekreftet "
+"selv om ingen betaling er mottatt"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "
