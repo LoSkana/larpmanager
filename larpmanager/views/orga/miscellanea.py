@@ -197,7 +197,7 @@ def orga_warehouse_area_assignments(request, s, num):
 
     get_warehouse_optionals(ctx, [6, 7])
     if ctx["optionals"]["quantity"]:
-        ctx["no_header_cols"] = [7, 9]
+        ctx["no_header_cols"] = [8, 9]
 
     # GET ITEMS
 
