@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.event import (
     ExeEventForm,
@@ -77,6 +78,8 @@ def exe_events_edit(request, num):
                 er.name = "Organizer"
             er.members.add(request.user.member)
             er.save()
+            # reload cache event links
+            reset_event_links(request.user.id, ctx["a_id"])
             return redirect("orga_quick", s=ctx["saved"].slug)
         return redirect("exe_events")
     ctx["add_another"] = False
