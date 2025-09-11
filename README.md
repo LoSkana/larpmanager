@@ -1,7 +1,7 @@
 #  LarpManager
 
 **LarpManager** is a free and open-source platform to manage **LARP (Live Action Role-Playing)** events.
-It has everything you need to run your LARP, free & open source!
+It has Everything you need to manage your LARP, free & open source!
 
 > Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)!
 
