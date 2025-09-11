@@ -15,6 +15,7 @@
                 <th></th>
                 <th>{% trans "Selected" %}</th>
                 <th>{% trans "Item" %}</th>
+                <th>{% trans "Description" %}</th>
                 <th>{% trans "Container" %}</th>
                 <th>{% trans "Tags" %}</th>
                 {% if optionals.quantity %}
@@ -34,6 +35,7 @@
                         <span class="value {% if not el.assigned %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                     </td>
                     <td>{{ el }}</td>
+                    <td>{{ el.description }}</td>
                     <td>{{ el.container }}</td>
                     <td>
                         {% for tag in el.tags.all %}{{ tag }}{% endfor %}
