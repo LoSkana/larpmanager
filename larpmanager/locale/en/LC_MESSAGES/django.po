@@ -885,7 +885,12 @@ msgid ""
 "assigned a character"
 msgstr ""
 
-msgid "Registration form"
+msgid "Disable grouping"
+msgstr ""
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
 msgstr ""
 
 msgid "If checked, adds to all registrations an unique code to reference them"
@@ -2936,6 +2941,9 @@ msgid "Character sheet intro"
 msgstr ""
 
 msgid "Terms and conditions"
+msgstr ""
+
+msgid "Registration form"
 msgstr ""
 
 msgid "Search"

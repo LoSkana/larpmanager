@@ -2504,6 +2504,9 @@ msgstr "Retard dans le profil"
 msgid "Desalt thumbnail"
 msgstr "Miniature de désaltération"
 
+msgid "Disable grouping"
+msgstr "Désactiver le regroupement"
+
 msgid "Discounts active"
 msgstr "Facilitation active"
 
@@ -8836,6 +8839,13 @@ msgid ""
 msgstr ""
 "Permet au champ \"couverture\" d'afficher une image spécifique dans la "
 "galerie - jusqu'à ce qu'elle soit attribuée à un participant"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Si cette case est cochée, tous les enregistrements sont affichés dans un "
+"seul tableau au lieu d'être séparés par type"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "

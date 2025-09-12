@@ -2504,6 +2504,9 @@ msgstr "Vertraging in profiel"
 msgid "Desalt thumbnail"
 msgstr "Miniatuurafbeelding verwijderen"
 
+msgid "Disable grouping"
+msgstr "Groepering uitschakelen"
+
 msgid "Discounts active"
 msgstr "Actief faciliteren"
 
@@ -8724,6 +8727,13 @@ msgid ""
 msgstr ""
 "Maakt veld 'cover' mogelijk, om een specifieke afbeelding in de galerij te "
 "tonen - totdat deze is toegewezen aan een deelnemer"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Als deze optie is ingeschakeld, worden alle registraties in één tabel "
+"weergegeven in plaats van gescheiden per type"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "

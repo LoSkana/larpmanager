@@ -46,13 +46,11 @@
                         <div class="dropdown-menu">
                             {% if run %}
                                 {% if manage %}
-                                    <a href="{% url 'gallery' run.get_slug %}"
-                                       class="admin-link">
+                                    <a href="{% url 'gallery' run.get_slug %}" class="admin-link">
                                         <i class="fa-solid fa-users"></i> User
                                     </a>
                                 {% else %}
-                                    <a href="{% url 'manage' run.get_slug %}"
-                                       class="admin-link">
+                                    <a href="{% url 'manage' run.get_slug %}" class="admin-link">
                                         <i class="fa-solid fa-toolbox"></i> Admin
                                     </a>
                                 {% endif %}
@@ -88,10 +86,10 @@
                 </td>
                 <td class="right">
                     <div class="el no_mobile">
-                        <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a>
+                        <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> {% trans "Profile" %}</a>
                     </div>
                     <div class="el no_mobile">
-                        <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> Accounting</a>
+                        <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> {% trans "Accounting" %}</a>
                     </div>
                     <div class="el">
                         <a id="menu-open" href="#menu"><i class="fa-solid fa-bars"></i> <span class="no_mobile">{% trans "Hi" %}, {{ user.member.display_member }}!</span></a>

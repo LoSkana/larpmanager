@@ -241,6 +241,9 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_registration()
 
     def set_config_gallery(self):
+        if "character" not in self.params["features"]:
+            return
+
         self.set_section("gallery", _("Gallery"))
 
         label = _("Request login")
@@ -267,7 +270,13 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
     def set_config_reg_form(self):
-        self.set_section("reg_form", _("Registration form"))
+        self.set_section("reg_form", _("Registrations"))
+
+        label = _("Disable grouping")
+        help_text = _(
+            "If checked, all registrations are displayed in a single table rather than being separated by type"
+        )
+        self.add_configs("registration_no_grouping", ConfigType.BOOL, label, help_text)
 
         label = _("Unique code")
         help_text = _("If checked, adds to all registrations an unique code to reference them")

@@ -243,7 +243,6 @@ def plots_character(live_server, page):
     # change second
     page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show").click()
     fill_tinymce(page, "id_pl_2", "ffff")
-
     page.get_by_role("button", name="Confirm").click()
 
     # check

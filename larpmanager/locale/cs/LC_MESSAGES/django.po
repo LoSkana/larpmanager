@@ -2504,6 +2504,9 @@ msgstr "Zpoždění v profilu"
 msgid "Desalt thumbnail"
 msgstr "Miniatura Desalt"
 
+msgid "Disable grouping"
+msgstr "Zakázat seskupování"
+
 msgid "Discounts active"
 msgstr "Aktivní dotace"
 
@@ -8446,6 +8449,13 @@ msgid ""
 msgstr ""
 "Umožňuje pole \"cover\", aby se v galerii zobrazil konkrétní obrázek - dokud"
 " není přiřazen účastníkovi"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Pokud je zaškrtnuto, všechny registrace se zobrazí v jedné tabulce a nebudou"
+" odděleny podle typu"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "
