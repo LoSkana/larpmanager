@@ -2504,6 +2504,9 @@ msgstr "Fördröjning i profil"
 msgid "Desalt thumbnail"
 msgstr "Avlägsna miniatyrbild"
 
+msgid "Disable grouping"
+msgstr "Avaktivera gruppering"
+
 msgid "Discounts active"
 msgstr "Aktivt underlättande"
 
@@ -8587,6 +8590,13 @@ msgid ""
 msgstr ""
 "Möjliggör fältet \"cover\", för att visa en specifik bild i galleriet - "
 "tills den tilldelas en deltagare"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Om markerad visas alla registreringar i en enda tabell i stället för att "
+"separeras efter typ"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "

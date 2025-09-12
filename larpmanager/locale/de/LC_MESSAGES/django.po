@@ -2504,6 +2504,9 @@ msgstr "Verzögerung im Profil"
 msgid "Desalt thumbnail"
 msgstr "Vorschaubild entsalzen"
 
+msgid "Disable grouping"
+msgstr "Gruppierung deaktivieren"
+
 msgid "Discounts active"
 msgstr "Aktive Subventionen"
 
@@ -8903,6 +8906,13 @@ msgid ""
 msgstr ""
 "Ermöglicht das Feld \"Cover\", um ein bestimmtes Bild in der Galerie "
 "anzuzeigen - bis es einem Teilnehmer zugewiesen wird"
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
+msgstr ""
+"Wenn diese Option aktiviert ist, werden alle Registrierungen in einer "
+"einzigen Tabelle angezeigt und nicht nach Typ getrennt"
 
 msgid ""
 "Insert the link to an external tool where users will be redirected if they "
