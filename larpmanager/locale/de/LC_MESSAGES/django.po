@@ -2948,6 +2948,9 @@ msgstr "Bestätigung löschen"
 msgid "Date of association"
 msgstr "Datum der Vereinigung"
 
+msgid "Disable provisional"
+msgstr "Provisorisch deaktivieren"
+
 msgid "Discounts available"
 msgstr "Verfügbare Einrichtungen"
 
@@ -7741,6 +7744,13 @@ msgid ""
 msgstr ""
 "Möchten Sie den Nutzern erlauben, eine freiwillige Spende zu ihrer "
 "Registrierungsgebühr hinzuzufügen"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Wenn diese Option aktiviert ist, werden alle Anmeldungen bestätigt, auch "
+"wenn noch keine Zahlung eingegangen ist"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "

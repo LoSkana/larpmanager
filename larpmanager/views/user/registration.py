@@ -285,6 +285,7 @@ def register_info(request, ctx, form, reg, dis):
     ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventTextType.TOC)
     ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
     ctx["hide_unavailable"] = ctx["event"].get_config("registration_hide_unavailable", False)
+    ctx["no_provisional"] = ctx["event"].get_config("payment_no_provisional", False)
 
     init_form_submitted(ctx, form, request, reg)
 

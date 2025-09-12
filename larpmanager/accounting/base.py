@@ -25,6 +25,11 @@ def is_reg_provisional(instance, features=None):
     if not features:
         features = get_event_features(instance.run.event_id)
 
+    # check if provisional disabled
+    if instance.run.event.get_config("payment_no_provisional", False):
+        return False
+
+    # check if the registration has a total price higher than 0, and lower than the amount payed
     if "payment" in features:
         if instance.tot_iscr > 0 >= instance.tot_payed:
             return True

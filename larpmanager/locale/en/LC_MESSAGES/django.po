@@ -1235,6 +1235,14 @@ msgstr ""
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
 
+msgid "Disable provisional"
+msgstr ""
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+
 msgid "Disable Tokens"
 msgstr ""
 

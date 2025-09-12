@@ -558,6 +558,10 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)
 
+            label = _("Disable provisional")
+            help_text = _("If checked, all registrations are confirmed even if no payment has been received")
+            self.add_configs("payment_no_provisional", ConfigType.BOOL, label, help_text)
+
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))
             label = _("Disable Tokens")

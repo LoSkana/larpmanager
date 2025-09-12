@@ -2948,6 +2948,9 @@ msgstr "Odstranění potvrzení"
 msgid "Date of association"
 msgstr "Datum přidružení"
 
+msgid "Disable provisional"
+msgstr "Zakázat provizorní"
+
 msgid "Discounts available"
 msgstr "Dostupná zařízení"
 
@@ -7334,6 +7337,13 @@ msgid ""
 " fee"
 msgstr ""
 "Chcete uživatelům umožnit přidat k registračnímu poplatku dobrovolný dar"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Pokud je zaškrtnuto, jsou všechny registrace potvrzeny, i když nebyla "
+"přijata žádná platba"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "

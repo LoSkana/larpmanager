@@ -2948,6 +2948,9 @@ msgstr "Usunięcie potwierdzenia"
 msgid "Date of association"
 msgstr "Data stowarzyszenia"
 
+msgid "Disable provisional"
+msgstr "Wyłączenie tymczasowości"
+
 msgid "Discounts available"
 msgstr "Dostępne rabaty"
 
@@ -7449,6 +7452,13 @@ msgid ""
 msgstr ""
 "Czy chcesz umożliwić użytkownikom dodanie dobrowolnej darowizny do opłaty "
 "rejestracyjnej"
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+"Jeśli zaznaczone, wszystkie rejestracje są potwierdzane, nawet jeśli nie "
+"otrzymano płatności"
 
 msgid ""
 "If checked, automatic saving during editing will be disable for writing "
