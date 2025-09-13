@@ -173,7 +173,7 @@ def notify_help_question(sender, instance, **kwargs):
         if instance.run:
             for organizer in get_event_organizers(instance.run.event):
                 activate(organizer.language)
-                body, subj = get_help_email(instance)
+                subj, body = get_help_email(instance)
                 subj += " " + _("for %(event)s") % {"event": instance.run}
                 url = get_url(
                     f"{instance.run.get_slug()}/manage/questions/",
@@ -185,7 +185,7 @@ def notify_help_question(sender, instance, **kwargs):
         elif instance.assoc:
             notify_organization_exe(get_help_email, instance.assoc, instance)
         else:
-            body, subj = get_help_email(instance)
+            subj, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
                 my_send_mail(subj, body, email, instance)
 
@@ -212,7 +212,7 @@ def get_help_email(instance):
     subj = hdr(instance) + _("New question by %(user)s") % {"user": instance.member}
     body = _("A question was asked by: %(user)s") % {"user": instance.member}
     body += "<br /><br />" + instance.text
-    return body, subj
+    return subj, body
 
 
 @receiver(pre_save, sender=ChatMessage)
@@ -264,8 +264,8 @@ def get_password_reminder_email(mb):
     memb = mb.member
     aux = mb.password_reset.split("#")
     url = get_url(f"reset/{aux[0]}/{aux[1]}/", assoc)
-    subject = _("Password reset of user %(user)s") % {"user": memb}
+    subj = _("Password reset of user %(user)s") % {"user": memb}
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
         "url": url
     }
-    return body, subject
+    return subj, body
