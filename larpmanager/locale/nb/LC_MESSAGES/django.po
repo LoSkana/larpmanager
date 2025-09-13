@@ -2813,6 +2813,9 @@ msgstr "Få tilgang til historikken"
 msgid "Account activation"
 msgstr "Aktivering av konto"
 
+msgid "Add to xp delivery"
+msgstr "Legg til xp-levering"
+
 msgid "Additional tickets"
 msgstr "Ekstra billetter"
 
@@ -3541,6 +3544,9 @@ msgstr "Registreringen er ennå ikke åpnet!"
 
 msgid "Reminder membership fee"
 msgstr "Påminnelse om medlemsavgift"
+
+msgid "Remove from xp delivery"
+msgstr "Fjern fra xp-levering"
 
 msgid "Show available factions"
 msgstr "Vis tilgjengelige fraksjoner"
@@ -6098,6 +6104,9 @@ msgstr "Tildel tegnene i henhold til deltakernes preferanser"
 
 msgid "Display full history of participant preferences on characters"
 msgstr "Vis full historikk over deltakernes preferanser på tegn"
+
+msgid "Do you want to manage character progression through abilities"
+msgstr "Ønsker du å styre karakterens progresjon gjennom evner"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Hvis avkrysset, kan et alternativ velges maksimalt antall ganger"

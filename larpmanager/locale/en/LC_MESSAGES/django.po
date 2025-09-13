@@ -1516,6 +1516,9 @@ msgstr ""
 msgid "Do you want to allow participants to create their own characters"
 msgstr ""
 
+msgid "Do you want to manage character progression through abilities"
+msgstr ""
+
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""
@@ -8259,6 +8262,12 @@ msgid "Add to plot"
 msgstr ""
 
 msgid "Remove from plot"
+msgstr ""
+
+msgid "Add to xp delivery"
+msgstr ""
+
+msgid "Remove from xp delivery"
 msgstr ""
 
 msgid "Set quest type"
