@@ -534,12 +534,14 @@ def check_field(cls, check):
 
 def round_to_two_significant_digits(number):
     d = Decimal(number)
-    # Scales the number so that the first significant figure is in the unit
-    shift = d.adjusted()
-    rounded = d.scaleb(-shift).quantize(Decimal("1.0"), rounding=ROUND_DOWN)
-    # Reply to the original position
-    rounded = rounded.scaleb(shift)
-    return float(rounded)
+    threshold = 1000
+    # round by 10
+    if abs(number) < threshold:
+        rounded = d.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
+    # round by 100
+    else:
+        rounded = d.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
+    return int(rounded)
 
 
 def exchange_order(ctx, cls, num, order):
