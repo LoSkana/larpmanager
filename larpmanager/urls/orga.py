@@ -986,12 +986,12 @@ urlpatterns = [
         name="orga_features",
     ),
     path(
-        "<slug:s>/manage/features/<int:num>/on/",
+        "<slug:s>/manage/features/<slug:slug>/on/",
         views_oe.orga_features_on,
         name="orga_features_on",
     ),
     path(
-        "<slug:s>/manage/features/<int:num>/off/",
+        "<slug:s>/manage/features/<slug:slug>/off/",
         views_oe.orga_features_off,
         name="orga_features_off",
     ),
@@ -1075,5 +1075,4 @@ urlpatterns = [
         views_mg.orga_redirect,
         name="orga_redirect",
     ),
-
 ]

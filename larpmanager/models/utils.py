@@ -17,7 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import base64
+import hashlib
 import json
 import os
 import random
@@ -149,9 +150,16 @@ class UploadToPathAndRename:
         return new_fn
 
 
+def _key_id(fernet_key):
+    raw = base64.urlsafe_b64decode(fernet_key)
+    return hashlib.sha256(raw).hexdigest()[:12]
+
+
 def get_payment_details_path(assoc):
     os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
-    return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, os.path.basename(assoc.slug) + ".enc")
+    kid = _key_id(assoc.key)
+    filename = f"{os.path.basename(assoc.slug)}.{kid}.enc"
+    return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)
 
 
 def get_payment_details(assoc):

@@ -47,7 +47,7 @@ from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
-from larpmanager.models.form import QuestionApplicable, WritingQuestionType, BaseQuestionType, RegistrationQuestionType
+from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
@@ -57,7 +57,8 @@ from larpmanager.utils.download import (
     export_character_form,
     export_data,
     export_registration_form,
-    zip_exports, export_tickets,
+    export_tickets,
+    zip_exports,
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
@@ -152,9 +153,7 @@ def orga_roles_edit(request, s, num):
 
 @login_required
 def orga_appearance(request, s):
-    return orga_edit(
-        request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False}
-    )
+    return orga_edit(request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -216,8 +215,8 @@ def orga_features(request, s):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def orga_features_go(request, ctx, num, on=True):
-    get_feature(ctx, num)
+def orga_features_go(request, ctx, slug, on=True):
+    get_feature(ctx, slug)
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
     reset_run(ctx["run"])
@@ -254,16 +253,16 @@ def _orga_feature_after_link(feature, s):
 
 
 @login_required
-def orga_features_on(request, s, num):
+def orga_features_on(request, s, slug):
     ctx = check_event_permission(request, s, "orga_features")
-    feature = orga_features_go(request, ctx, num, on=True)
+    feature = orga_features_go(request, ctx, slug, on=True)
     return redirect(_orga_feature_after_link(feature, s))
 
 
 @login_required
-def orga_features_off(request, s, num):
+def orga_features_off(request, s, slug):
     ctx = check_event_permission(request, s, "orga_features")
-    orga_features_go(request, ctx, num, on=False)
+    orga_features_go(request, ctx, slug, on=False)
     return redirect("manage", s=s)
 
 
@@ -371,7 +370,7 @@ def orga_upload_template(request, s, typ):
         RegistrationQuestionType.ADDITIONAL: "number of additional tickets",
         RegistrationQuestionType.PWYW: "amount of free donation",
         RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
-        RegistrationQuestionType.SURCHARGE: "surcharge applied"
+        RegistrationQuestionType.SURCHARGE: "surcharge applied",
     }
     if ctx.get("writing_typ"):
         exports = _writing_template(ctx, typ, value_mapping)

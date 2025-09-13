@@ -53,12 +53,15 @@ from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    WritingQuestionType,
     QuestionVisibility,
+    RegistrationQuestion,
+    RegistrationQuestionType,
     WritingChoice,
-    WritingQuestion, BaseQuestionType, RegistrationQuestionType, RegistrationQuestion,
+    WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
@@ -445,12 +448,11 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
         if el not in features and el in types:
             WritingQuestion.objects.filter(event=instance, typ=el).delete()
 
+
 def save_event_registration_form(features, instance):
     _activate_orga_lang(instance)
 
-    def_tps = {
-        RegistrationQuestionType.TICKET
-    }
+    def_tps = {RegistrationQuestionType.TICKET}
 
     help_texts = {
         RegistrationQuestionType.TICKET: _("Your registration ticket"),
@@ -474,7 +476,7 @@ def save_event_registration_form(features, instance):
                 typ=el,
                 name=choices[el],
                 description=help_texts.get(el, ""),
-                status=QuestionStatus.MANDATORY
+                status=QuestionStatus.MANDATORY,
             )
 
     # add types from feature if the feature is active but the field is missing
@@ -485,7 +487,9 @@ def save_event_registration_form(features, instance):
         "additional_tickets": _("Reserve additional tickets beyond your own"),
         "pay_what_you_want": _("Freely indicate the amount of your donation"),
         "reg_surcharges": _("Registration surcharge"),
-        "reg_quotas": _("Number of installments to split the fee: payments and deadlines will be equally divided from the registration date")
+        "reg_quotas": _(
+            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date"
+        ),
     }
 
     for el in sorted(list(all_types)):
@@ -495,7 +499,7 @@ def save_event_registration_form(features, instance):
                 typ=el,
                 name=_(choices[el].capitalize()),
                 description=help_texts.get(el, ""),
-                status=QuestionStatus.OPTIONAL
+                status=QuestionStatus.OPTIONAL,
             )
         if el not in features and el in types:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()

@@ -176,9 +176,9 @@ def get_album_cod(ctx, s):
         raise Http404("Album does not exist") from err
 
 
-def get_feature(ctx, num):
+def get_feature(ctx, slug):
     try:
-        ctx["feature"] = Feature.objects.get(pk=num)
+        ctx["feature"] = Feature.objects.get(slug=slug)
     except ObjectDoesNotExist as err:
         raise Http404("Feature does not exist") from err
 

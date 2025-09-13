@@ -90,6 +90,8 @@ class FeatureNationality(models.TextChoices):
 class FeatureModule(BaseModel):
     name = models.CharField(max_length=100)
 
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
+
     icon = models.CharField(max_length=100)
 
     order = models.IntegerField()
@@ -102,7 +104,7 @@ class Feature(BaseModel):
 
     descr = models.TextField(max_length=500, blank=True)
 
-    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
 
     order = models.IntegerField()
 
@@ -137,7 +139,7 @@ class Feature(BaseModel):
 class PaymentMethod(BaseModel):
     name = models.CharField(max_length=100)
 
-    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
 
     instructions = HTMLField(blank=True, null=True)
 
