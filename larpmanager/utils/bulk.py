@@ -23,7 +23,7 @@ from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.experience import AbilityPx, AbilityTypePx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 from larpmanager.models.member import Log
 from larpmanager.models.miscellanea import (
     WarehouseContainer,
@@ -67,6 +67,8 @@ class Operations:
     SET_QUEST_TYPE = 8
     SET_TRAIT_QUEST = 9
     SET_ABILITY_TYPE = 10
+    ADD_CHAR_DELIVERY = 11
+    DEL_CHAR_DELIVERY = 12
 
 
 def exec_bulk(request, ctx, mapping):
@@ -143,6 +145,16 @@ def exec_del_char_plot(request, ctx, target, ids):
     plot.characters.remove(*_get_chars(ctx, ids))
 
 
+def exec_add_char_delivery(request, ctx, target, ids):
+    delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
+    delivery.characters.add(*_get_chars(ctx, ids))
+
+
+def exec_del_char_delivery(request, ctx, target, ids):
+    delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
+    delivery.characters.remove(*_get_chars(ctx, ids))
+
+
 def handle_bulk_characters(request, ctx):
     if request.POST:
         mapping = {
@@ -150,6 +162,8 @@ def handle_bulk_characters(request, ctx):
             Operations.DEL_CHAR_FACT: exec_del_char_fact,
             Operations.ADD_CHAR_PLOT: exec_add_char_plot,
             Operations.DEL_CHAR_PLOT: exec_del_char_plot,
+            Operations.ADD_CHAR_DELIVERY: exec_add_char_delivery,
+            Operations.DEL_CHAR_DELIVERY: exec_del_char_delivery,
         }
         raise ReturnNow(exec_bulk(request, ctx, mapping))
 
@@ -170,6 +184,15 @@ def handle_bulk_characters(request, ctx):
             [
                 {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
                 {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
+            ]
+        )
+
+    if "px" in ctx["features"]:
+        delivery = ctx["event"].get_elements(DeliveryPx).values("id", "name")
+        ctx["bulk"].extend(
+            [
+                {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
+                {"idx": Operations.DEL_CHAR_DELIVERY, "label": _("Remove from xp delivery"), "objs": delivery},
             ]
         )
 

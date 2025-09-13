@@ -2813,6 +2813,9 @@ msgstr "Acceder al historial"
 msgid "Account activation"
 msgstr "Activación de la cuenta"
 
+msgid "Add to xp delivery"
+msgstr "Añadir a la entrega xp"
+
 msgid "Additional tickets"
 msgstr "Entradas adicionales"
 
@@ -3541,6 +3544,9 @@ msgstr "¡La inscripción aún no está abierta!"
 
 msgid "Reminder membership fee"
 msgstr "Recordatorio cuota de afiliación"
+
+msgid "Remove from xp delivery"
+msgstr "Eliminar de la entrega xp"
 
 msgid "Show available factions"
 msgstr "Mostrar facciones disponibles"
@@ -6114,6 +6120,10 @@ msgid "Display full history of participant preferences on characters"
 msgstr ""
 "Mostrar el historial completo de preferencias de los participantes en los "
 "personajes"
+
+msgid "Do you want to manage character progression through abilities"
+msgstr ""
+"¿Quieres gestionar la progresión del personaje a través de habilidades"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Si está marcada, una opción puede elegirse un número máximo de veces"

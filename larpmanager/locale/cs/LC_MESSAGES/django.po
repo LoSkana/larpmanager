@@ -2813,6 +2813,9 @@ msgstr "Přístup k historii"
 msgid "Account activation"
 msgstr "Aktivace účtu"
 
+msgid "Add to xp delivery"
+msgstr "Přidat do dodávky xp"
+
 msgid "Additional tickets"
 msgstr "Další vstupenky"
 
@@ -3541,6 +3544,9 @@ msgstr "Registrace ještě není otevřena!"
 
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
+
+msgid "Remove from xp delivery"
+msgstr "Odstranění z dodávky xp"
 
 msgid "Show available factions"
 msgstr "Zobrazit dostupné frakce"
@@ -6083,6 +6089,9 @@ msgstr "Přiřazení postav podle preferencí účastníků"
 
 msgid "Display full history of participant preferences on characters"
 msgstr "Zobrazení úplné historie preferencí účastníků na postavách"
+
+msgid "Do you want to manage character progression through abilities"
+msgstr "Chcete řídit vývoj postavy prostřednictvím schopností"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Pokud je možnost zaškrtnuta, lze ji zvolit maximálně několikrát"

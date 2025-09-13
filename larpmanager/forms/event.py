@@ -1079,6 +1079,11 @@ class OrgaQuickSetupForm(QuickSetupForm):
                         _("Player editor"),
                         _("Do you want to allow participants to create their own characters"),
                     ),
+                    "px": (
+                        True,
+                        _("Experience points"),
+                        _("Do you want to manage character progression through abilities"),
+                    ),
                 }
             )
 
