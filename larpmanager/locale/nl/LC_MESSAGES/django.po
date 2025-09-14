@@ -1755,6 +1755,9 @@ msgstr "Type vaardigheid"
 msgid "Achievements"
 msgstr "Prestaties"
 
+msgid "Add prologue"
+msgstr "Proloog toevoegen"
+
 msgid "Archive mail"
 msgstr "Archief mail"
 
@@ -2079,6 +2082,9 @@ msgstr "Vereisten"
 
 msgid "Progress step"
 msgstr "Stap naar voren"
+
+msgid "Prologue type"
+msgstr "Type proloog"
 
 msgid "Question type"
 msgstr "Type vraag"
@@ -2422,6 +2428,9 @@ msgstr "Vooruitgang"
 
 msgid "Question saved!"
 msgstr "Onderdanige vraag!"
+
+msgid "Remove prologue"
+msgstr "Proloog verwijderen"
 
 msgid "Replacing names"
 msgstr "Namen vervangen"

@@ -1755,6 +1755,9 @@ msgstr "Type de compétence"
 msgid "Achievements"
 msgstr "Réalisations"
 
+msgid "Add prologue"
+msgstr "Ajouter un prologue"
+
 msgid "Archive mail"
 msgstr "Archive mail"
 
@@ -2079,6 +2082,9 @@ msgstr "Conditions préalables"
 
 msgid "Progress step"
 msgstr "Avancer d'un pas"
+
+msgid "Prologue type"
+msgstr "Type de prologue"
 
 msgid "Question type"
 msgstr "Type de question"
@@ -2422,6 +2428,9 @@ msgstr "Progrès"
 
 msgid "Question saved!"
 msgstr "Question de soumission !"
+
+msgid "Remove prologue"
+msgstr "Supprimer le prologue"
 
 msgid "Replacing names"
 msgstr "Remplacement des noms"

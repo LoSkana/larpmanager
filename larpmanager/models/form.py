@@ -38,6 +38,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
 from larpmanager.models.writing import CharacterStatus, Faction
 
+
 class BaseQuestionType(models.TextChoices):
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
@@ -69,10 +70,9 @@ class BaseQuestionType(models.TextChoices):
 
 
 def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
-    members = [(m.name, (m.value, m.label)) for m in base] + [
-        (n, (v, lbl)) for (n, v, lbl) in extra
-    ]
+    members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
+
 
 WritingQuestionType = extend_textchoices(
     "WritingQuestionType",
@@ -92,8 +92,10 @@ WritingQuestionType = extend_textchoices(
     ],
 )
 
+
 def get_def_writing_types():
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
+
 
 def get_writing_max_length():
     return {
@@ -105,6 +107,7 @@ def get_writing_max_length():
         WritingQuestionType.MULTIPLE,
         WritingQuestionType.EDITOR,
     }
+
 
 RegistrationQuestionType = extend_textchoices(
     "RegistrationQuestionType",
@@ -157,6 +160,7 @@ class QuestionApplicable(models.TextChoices):
     FACTION = "f", "faction"
     QUEST = "q", "quest"
     TRAIT = "t", "trait"
+    PROLOGUE = "r", "prologue"
 
     @classmethod
     def get_applicable(cls, model_name):
@@ -621,6 +625,7 @@ def _get_writing_elements():
         ("plot", _("Plots"), QuestionApplicable.PLOT),
         ("quest", _("Quests"), QuestionApplicable.QUEST),
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
+        ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
     return shows
 
@@ -632,5 +637,6 @@ def _get_writing_mapping():
         "plot": "plot",
         "quest": "questbuilder",
         "trait": "questbuilder",
+        "prologue": "prologue",
     }
     return mapping

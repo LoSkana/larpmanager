@@ -53,12 +53,15 @@ from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    WritingQuestionType,
     QuestionVisibility,
+    RegistrationQuestion,
+    RegistrationQuestionType,
     WritingChoice,
-    WritingQuestion, BaseQuestionType, RegistrationQuestionType, RegistrationQuestion,
+    WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
@@ -329,79 +332,46 @@ def save_event_character_form(features, instance):
     custom_tps = BaseQuestionType.get_basic_types()
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
-    _init_faction_form_questions(def_tps, instance, features)
-    _init_questbuilder_form_questions(def_tps, instance, features)
-    _init_plot_form_questions(def_tps, instance, features)
+
+    if "questbuilder" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.QUEST, QuestionApplicable.TRAIT])
+
+    if "prologue" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.PROLOGUE])
+
+    if "faction" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION])
+
+    if "plot" in features:
+        plot_tps = dict(def_tps)
+        plot_tps[WritingQuestionType.TEASER] = (
+            "Concept",
+            QuestionStatus.MANDATORY,
+            QuestionVisibility.PUBLIC,
+            3000,
+        )
+        _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
-def _init_questbuilder_form_questions(def_tps, instance, features):
-    if "questbuilder" not in features:
-        return
+def _init_writing_element(instance, def_tps, applicables):
+    for applicable in applicables:
+        # if there are already questions for this applicable, skip
+        if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():
+            continue
 
-    for applicable in [QuestionApplicable.QUEST, QuestionApplicable.TRAIT]:
-        que = instance.get_elements(WritingQuestion)
-        que = que.filter(applicable=applicable)
-        types = set(que.values_list("typ", flat=True).distinct())
-
-        # add default types if none are present
-        if not types:
-            for el, add in def_tps.items():
-                WritingQuestion.objects.create(
-                    event=instance,
-                    typ=el,
-                    name=_(add[0]),
-                    status=add[1],
-                    visibility=add[2],
-                    max_length=add[3],
-                    applicable=applicable,
-                )
-
-
-def _init_faction_form_questions(def_tps, instance, features):
-    if "faction" not in features:
-        return
-
-    que = instance.get_elements(WritingQuestion)
-    que = que.filter(applicable=QuestionApplicable.FACTION)
-    types = set(que.values_list("typ", flat=True).distinct())
-
-    # add default types if none are present
-    if not types:
-        for el, add in def_tps.items():
-            WritingQuestion.objects.create(
+        objs = [
+            WritingQuestion(
                 event=instance,
-                typ=el,
-                name=_(add[0]),
-                status=add[1],
-                visibility=add[2],
-                max_length=add[3],
-                applicable=QuestionApplicable.FACTION,
+                typ=typ,
+                name=_(cfg[0]),
+                status=cfg[1],
+                visibility=cfg[2],
+                max_length=cfg[3],
+                applicable=applicable,
             )
-
-
-def _init_plot_form_questions(def_tps, instance, features):
-    if "plot" not in features:
-        return
-
-    que = instance.get_elements(WritingQuestion)
-    que = que.filter(applicable=QuestionApplicable.PLOT)
-    types = set(que.values_list("typ", flat=True).distinct())
-
-    plot_tps = def_tps.copy()
-    plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
-
-    # add default types if none are present
-    if not types:
-        for el, add in plot_tps.items():
-            WritingQuestion.objects.create(
-                event=instance,
-                typ=el,
-                name=_(add[0]),
-                status=add[1],
-                visibility=add[2],
-                max_length=add[3],
-                applicable=QuestionApplicable.PLOT,
-            )
+            for typ, cfg in def_tps.items()
+        ]
+        WritingQuestion.objects.bulk_create(objs)
 
 
 def _init_character_form_questions(custom_tps, def_tps, features, instance):
@@ -445,12 +415,11 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
         if el not in features and el in types:
             WritingQuestion.objects.filter(event=instance, typ=el).delete()
 
+
 def save_event_registration_form(features, instance):
     _activate_orga_lang(instance)
 
-    def_tps = {
-        RegistrationQuestionType.TICKET
-    }
+    def_tps = {RegistrationQuestionType.TICKET}
 
     help_texts = {
         RegistrationQuestionType.TICKET: _("Your registration ticket"),
@@ -474,7 +443,7 @@ def save_event_registration_form(features, instance):
                 typ=el,
                 name=choices[el],
                 description=help_texts.get(el, ""),
-                status=QuestionStatus.MANDATORY
+                status=QuestionStatus.MANDATORY,
             )
 
     # add types from feature if the feature is active but the field is missing
@@ -485,7 +454,9 @@ def save_event_registration_form(features, instance):
         "additional_tickets": _("Reserve additional tickets beyond your own"),
         "pay_what_you_want": _("Freely indicate the amount of your donation"),
         "reg_surcharges": _("Registration surcharge"),
-        "reg_quotas": _("Number of installments to split the fee: payments and deadlines will be equally divided from the registration date")
+        "reg_quotas": _(
+            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date"
+        ),
     }
 
     for el in sorted(list(all_types)):
@@ -495,7 +466,7 @@ def save_event_registration_form(features, instance):
                 typ=el,
                 name=_(choices[el].capitalize()),
                 description=help_texts.get(el, ""),
-                status=QuestionStatus.OPTIONAL
+                status=QuestionStatus.OPTIONAL,
             )
         if el not in features and el in types:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()

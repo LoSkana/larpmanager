@@ -1755,6 +1755,9 @@ msgstr "Ferdighetstype"
 msgid "Achievements"
 msgstr "Prestasjoner"
 
+msgid "Add prologue"
+msgstr "Legg til prolog"
+
 msgid "Archive mail"
 msgstr "Arkivpost"
 
@@ -2079,6 +2082,9 @@ msgstr "Forutsetninger"
 
 msgid "Progress step"
 msgstr "Ta et skritt frem"
+
+msgid "Prologue type"
+msgstr "Prolog type"
 
 msgid "Question type"
 msgstr "Type spørsmål"
@@ -2422,6 +2428,9 @@ msgstr "Fremgang"
 
 msgid "Question saved!"
 msgstr "Underdanig spørsmål!"
+
+msgid "Remove prologue"
+msgstr "Fjern prolog"
 
 msgid "Replacing names"
 msgstr "Erstatning av navn"

@@ -309,7 +309,7 @@ def orga_prologues_view(request, s, num):
 
 @login_required
 def orga_prologues_edit(request, s, num):
-    ctx = check_event_permission(request, s, "prologue")
+    ctx = check_event_permission(request, s, "orga_prologues")
     if num != 0:
         get_prologue(ctx, num)
     return writing_edit(request, ctx, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)

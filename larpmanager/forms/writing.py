@@ -32,11 +32,11 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import (
     QuestionApplicable,
-    WritingQuestionType,
     WritingAnswer,
     WritingChoice,
     WritingOption,
     WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import (
@@ -373,13 +373,15 @@ class HandoutTemplateForm(MyForm):
         widgets = {"template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})}
 
 
-class PrologueTypeForm(MyForm):
+class PrologueTypeForm(WritingForm):
+    page_title = _("Prologue type")
+
     class Meta:
         model = PrologueType
-        fields = ["name"]
+        fields = ["name", "event"]
 
 
-class PrologueForm(WritingForm):
+class PrologueForm(WritingForm, BaseWritingForm):
     page_title = _("Prologue")
 
     load_js = ["characters-choices"]
@@ -387,17 +389,22 @@ class PrologueForm(WritingForm):
     class Meta:
         model = Prologue
 
-        exclude = ("teaser", "temp", "hide")
+        exclude = ("number", "teaser", "temp", "hide")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         que = self.params["run"].event.get_elements(PrologueType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
+
+        self.init_orga_fields()
+
+        self.reorder_field("characters")
+
+        self._init_special_fields()
 
 
 class SpeedLarpForm(WritingForm):
