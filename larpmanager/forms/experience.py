@@ -28,7 +28,7 @@ from larpmanager.forms.utils import (
     EventWritingOptionS2WidgetMulti,
 )
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
-from larpmanager.models.form import WritingQuestionType, WritingQuestion
+from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
 class PxBaseForm(MyForm):
@@ -70,13 +70,13 @@ class OrgaAbilityPxForm(PxBaseForm):
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
-            "dependents": EventWritingOptionS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for s in ["prerequisites", "dependents"]:
+        for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
 
         px_user = self.params["event"].get_config("px_user", False)
@@ -86,7 +86,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         ]
 
         if not px_user:
-            self.delete_field("dependents")
+            self.delete_field("requirements")
             self.delete_field("prerequisites")
             self.delete_field("visible")
 

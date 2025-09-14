@@ -330,9 +330,9 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, allows a option to be visible only to participants with selected ticket")
             self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
 
-            label = _("Prerequisites")
+            label = _("Requirements")
             help_text = _("If checked, allows a option to be visible only if other options are selected")
-            self.add_configs("character_form_wri_que_dependents", ConfigType.BOOL, label, help_text)
+            self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
         if "pre_register" in self.params["features"]:

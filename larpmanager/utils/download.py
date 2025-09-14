@@ -32,9 +32,9 @@ from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    WritingQuestionType,
     QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
@@ -44,7 +44,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions, RegistrationQuestionType, BaseQuestionType,
+    get_ordered_registration_questions,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
@@ -557,13 +557,26 @@ def _get_column_names(ctx):
     elif ctx["typ"] == "registration_ticket":
         ctx["columns"] = [
             {
-                "name": _("The ticket's email"),
+                "name": _("The ticket's name"),
                 "tier": _("The tier of the ticket"),
                 "description": _("(Optional) The ticket's description"),
                 "price": _("(Optional) The cost of the ticket"),
-                "max_available": _("(Optional) Maximun number of spots available")
+                "max_available": _("(Optional) Maximun number of spots available"),
             }
         ]
+
+    elif ctx["typ"] == "px_abilitie":
+        ctx["columns"] = [
+            {
+                "name": _("The name ability"),
+                "cost": _("Cost of the ability"),
+                "typ": _("Ability type"),
+                "descr": _("(Optional) The ability description"),
+                "prerequisites": _("(Optional) Other ability as prerequisite, comma-separated"),
+                "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            }
+        ]
+        ctx["name"] = "Ability"
 
     elif ctx["typ"] == "registration_form":
         ctx["columns"] = [
@@ -619,6 +632,9 @@ def _get_column_names(ctx):
             },
         ]
 
+        if "wri_que_requirements" in ctx["features"]:
+            ctx["columns"][1]["requirements"] = _("Optional - Other options as requirements, comma-separated")
+
     else:
         _get_writing_names(ctx)
 
@@ -667,6 +683,7 @@ def _get_writing_names(ctx):
 
 def orga_tickets_download(ctx):
     return zip_exports(ctx, export_tickets(ctx), "Tickets")
+
 
 def export_tickets(ctx):
     mappings = {

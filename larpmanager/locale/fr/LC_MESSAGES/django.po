@@ -1776,9 +1776,6 @@ msgstr "Changer de photo"
 msgid "Collaborator"
 msgstr "Contributeur"
 
-msgid "Dependencies"
-msgstr "Dépendances"
-
 msgid "Event hidden"
 msgstr "Événement caché"
 
@@ -1889,6 +1886,9 @@ msgstr "Date de la demande"
 
 msgid "Request time"
 msgstr "Heure demandée"
+
+msgid "Requirements"
+msgstr "Exigences"
 
 msgid "Rotate right"
 msgstr "Roue droite"
@@ -2621,6 +2621,9 @@ msgstr "Montrer l'explication"
 msgid "Single-line text"
 msgstr "Texte sur une seule ligne"
 
+msgid "The name ability"
+msgstr "Le nom de la capacité"
+
 msgid "Ticket selection"
 msgstr "Sélection des billets"
 
@@ -2783,6 +2786,9 @@ msgstr "Support technique"
 msgid "The question name"
 msgstr "Question de soumission"
 
+msgid "The ticket's name"
+msgstr "Nom du billet"
+
 msgid "Tokens assignment"
 msgstr "Attribution de jetons"
 
@@ -2903,9 +2909,6 @@ msgstr "Configurer les types de quêtes"
 msgid "Show cancellations"
 msgstr "Annulation d'un spectacle"
 
-msgid "The ticket's email"
-msgstr "L'email du billet"
-
 msgid "Total payment sent"
 msgstr "Paiement total envoyé"
 
@@ -2947,6 +2950,9 @@ msgstr "Caractère non trouvé"
 
 msgid "Confirmation delete"
 msgstr "Confirmation de la suppression"
+
+msgid "Cost of the ability"
+msgstr "Coût de la capacité"
 
 msgid "Date of association"
 msgstr "Date de l'association"
@@ -4289,6 +4295,9 @@ msgstr "Vérifier les paiements approuvés manuellement"
 msgid "View all event information in the"
 msgstr ""
 "Consultez toutes les informations relatives à l'événement dans la rubrique"
+
+msgid "(Optional) The ability description"
+msgstr "(Facultatif) La description de la capacité"
 
 msgid "Access the list of your characters"
 msgstr "Accédez à votre liste de personnages"
@@ -5933,6 +5942,9 @@ msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Cette page présente tous les postes de dépenses enregistrés dans le système"
 
+msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgstr "(Facultatif) Autres compétences préalables, séparées par des virgules"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Contenu de la page sur la protection de la vie privée, dont le lien figure "
@@ -5945,6 +5957,10 @@ msgstr ""
 msgid "Now you can review the historical accounting informations"
 msgstr ""
 "Vous pouvez maintenant consulter les informations comptables historiques"
+
+msgid "Optional - Other options as requirements, comma-separated"
+msgstr ""
+"Facultatif - Autres options selon les besoins, séparées par des virgules"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr ""
@@ -6016,6 +6032,9 @@ msgid "Manage expenses uploaded by staff members and approve them"
 msgstr ""
 "Gérer les dépenses téléchargées par les membres du personnel et les "
 "approuver"
+
+msgid "Note that if the cost is 0, if will assigned automatically"
+msgstr "Notez que si le coût est égal à 0, il sera automatiquement attribué"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nom de l'option, affiché dans la question (soyez bref)"
@@ -6165,6 +6184,11 @@ msgstr "Vous avez déjà autorisé le partage de données avec cette organisatio
 msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(credits)s ont été utilisés pour participer à cet événement"
+
+msgid "(Optional) Character options as requirements, comma-separated"
+msgstr ""
+"(Facultatif) Options de caractères en tant qu'exigences, séparées par des "
+"virgules"
 
 msgid "Added at the bottom of mail confirming signup to participants"
 msgstr "Ajouté au bas de l'e-mail confirmant l'inscription aux participants"
@@ -8409,6 +8433,13 @@ msgid ""
 msgstr ""
 "Accorder l'accès à la gestion des événements à d'autres utilisateurs et "
 "définir des rôles avec des autorisations spécifiques"
+
+msgid ""
+"Note that existing abilities with the same name, will be overwritten with "
+"the uploaded data"
+msgstr ""
+"Notez que les capacités existantes portant le même nom seront remplacées par"
+" les données téléchargées"
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all characters "
