@@ -42,7 +42,7 @@ def update_px(char):
     start = char.event.get_config("px_start", 0)
 
     # if any ability is available with cost 0, get it
-    for ability in get_available_ability_px(char):
+    for ability in get_available_ability_px(char, 0):
         if ability.cost == 0:
             char.px_ability_list.add(ability)
 
@@ -111,7 +111,7 @@ def check_modifier_ability_px(ability, all_modifiers, current_char_abilities, cu
         return
 
 
-def get_available_ability_px(char):
+def get_available_ability_px(char, px_avail=None):
     # get all abilities already learned by the character
     current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
 
@@ -120,8 +120,9 @@ def get_available_ability_px(char):
     current_char_choices = set(que.values_list("option_id", flat=True))
 
     # get px available
-    add_char_addit(char)
-    px_avail = int(char.addit.get("px_avail", 0))
+    if px_avail is None:
+        add_char_addit(char)
+        px_avail = int(char.addit.get("px_avail", 0))
 
     # filter all abilities given we have the requested prerequisites / requirements
     all_abilities = (
