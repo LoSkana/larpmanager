@@ -17,24 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import os
+import logging
 from datetime import date
-from io import BytesIO
 
-import PIL.Image as PILImage
 from cryptography.fernet import Fernet
-from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.base import ContentFile
-from django.db import models, transaction
+from django.db import transaction
 from django.db.models import Max, Q
-from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
+from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
-from PIL import ImageOps
 from slugify import slugify
 
 from larpmanager.accounting.vat import compute_vat
@@ -42,6 +37,7 @@ from larpmanager.cache.button import event_button_key
 from larpmanager.cache.config import reset_configs
 from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
 from larpmanager.cache.fields import reset_event_fields_cache
+from larpmanager.mail.base import mail_larpmanager_ticket
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -52,6 +48,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -59,7 +56,6 @@ from larpmanager.models.form import (
     QuestionVisibility,
     RegistrationQuestion,
     RegistrationQuestionType,
-    WritingChoice,
     WritingQuestion,
     WritingQuestionType,
 )
@@ -69,8 +65,17 @@ from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.experience import (
+    modifier_abilities_changed,
+    px_characters_changed,
+    rule_abilities_changed,
+    update_px,
+)
+from larpmanager.utils.miscellanea import rotate_vertical_photo
+from larpmanager.utils.registration import save_registration_character_form
 from larpmanager.utils.tutorial_query import delete_index, index_tutorial
+
+log = logging.getLogger(__name__)
 
 
 @receiver(pre_save)
@@ -612,14 +617,7 @@ def post_save_association_set_skin_features(sender, instance, created, **kwargs)
     transaction.on_commit(update_features)
 
 
-@receiver(post_save, sender=LarpManagerTutorial)
-def post_save_index_tutorial(sender, instance, **kwargs):
-    index_tutorial(instance.id)
-
-
-@receiver(post_delete, sender=LarpManagerTutorial)
-def delete_tutorial_from_index(sender, instance, **kwargs):
-    delete_index(instance.id)
+# Writing
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -632,123 +630,73 @@ def delete_event_field(sender, instance, **kwargs):
     reset_event_fields_cache(instance.event_id)
 
 
-@receiver(post_save, sender=LarpManagerTicket)
-def save_larpmanager_ticket(sender, instance, created, **kwargs):
-    for _name, email in conf_settings.ADMINS:
-        subj = f"LarpManager ticket - {instance.assoc.name}"
-        if instance.reason:
-            subj += f" [{instance.reason}]"
-        body = f"Email: {instance.email} <br /><br />"
-        if instance.member:
-            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
-        body += instance.content
-        if instance.screenshot:
-            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
-        my_send_mail(subj, body, email)
+# Miscellanea
 
 
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
-def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
-    try:
-        # noinspection PyProtectedMember, PyUnresolvedReferences
-        field = instance._meta.get_field("photo")
-        if not isinstance(field, models.ImageField):
-            return
-    except Exception:
-        return
-
-    f = getattr(instance, "photo", None)
-    if not f:
-        return
-
-    if _check_new(f, instance, sender):
-        return
-
-    fileobj = getattr(f, "file", None) or f
-    try:
-        fileobj.seek(0)
-        img = PILImage.open(fileobj)
-    except Exception:
-        return
-
-    img = ImageOps.exif_transpose(img)
-    w, h = img.size
-    if h <= w:
-        return
-
-    img = img.rotate(90, expand=True)
-
-    fmt = _get_extension(f, img)
-
-    if fmt == "JPEG" and img.mode in ("RGBA", "LA", "P"):
-        img = img.convert("RGB")
-
-    out = BytesIO()
-    save_kwargs = {"optimize": True}
-    if fmt == "JPEG":
-        save_kwargs["quality"] = 88
-    img.save(out, format=fmt, **save_kwargs)
-    out.seek(0)
-
-    basename = os.path.basename(f.name) or f.name
-    instance.photo = ContentFile(out.read(), name=basename)
-
-
-def _get_extension(f, img):
-    ext = os.path.splitext(f.name)[1].lower()
-    fmt = (img.format or "").upper()
-    if not fmt:
-        if ext in (".jpg", ".jpeg"):
-            fmt = "JPEG"
-        elif ext == ".png":
-            fmt = "PNG"
-        elif ext == ".webp":
-            fmt = "WEBP"
-        else:
-            fmt = "JPEG"
-    return fmt
-
-
-def _check_new(f, instance, sender):
-    if instance.pk:
-        try:
-            old = sender.objects.filter(pk=instance.pk).only("photo").first()
-            if old:
-                old_name = old.photo.name if old.photo else ""
-                if f.name == old_name and not getattr(f, "file", None):
-                    return True
-        except Exception:
-            pass
-
-    return False
-
-
-def check_character_ticket_options(reg, char):
-    ticket_id = reg.ticket.id
-
-    to_delete = []
-
-    # get options
-    for choice in WritingChoice.objects.filter(element_id=char.id):
-        tickets_map = choice.option.tickets.values_list("pk", flat=True)
-        if tickets_map and ticket_id not in tickets_map:
-            to_delete.append(choice.id)
-
-    WritingChoice.objects.filter(pk__in=to_delete).delete()
+def pre_save_warehouse_item(sender, instance: WarehouseItem, **kwargs):
+    rotate_vertical_photo(instance, sender)
 
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_character_form(sender, instance, **kwargs):
-    if not instance.member:
-        return
+    save_registration_character_form(instance)
 
-    if not instance.ticket:
-        return
 
-    event = instance.run.event
+# Experience
 
+
+@receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
+def post_character_update_px(sender, instance, *args, **kwargs):
+    if "px" in get_event_features(instance.event_id):
+        update_px(instance)
+
+
+@receiver(post_save, sender=AbilityPx)
+def post_save_ability_px(sender, instance, *args, **kwargs):
     for char in instance.characters.all():
-        check_character_ticket_options(instance, char)
+        update_px(char)
 
-    for char in event.get_elements(Character).filter(player=instance.member):
-        check_character_ticket_options(instance, char)
+
+@receiver(post_save, sender=DeliveryPx)
+def post_save_delivery_px(sender, instance, *args, **kwargs):
+    for char in instance.characters.all():
+        char.save()
+
+
+@receiver(post_save, sender=RulePx)
+def post_save_rule_px(sender, instance, *args, **kwargs):
+    event = instance.event.get_class_parent(RulePx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+@receiver(post_save, sender=ModifierPx)
+def post_save_modifier_px(sender, instance, *args, **kwargs):
+    event = instance.event.get_class_parent(ModifierPx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+m2m_changed.connect(px_characters_changed, sender=DeliveryPx.characters.through)
+m2m_changed.connect(px_characters_changed, sender=AbilityPx.characters.through)
+
+m2m_changed.connect(modifier_abilities_changed, sender=ModifierPx.abilities.through)
+m2m_changed.connect(rule_abilities_changed, sender=RulePx.abilities.through)
+
+# LarpManager
+
+
+@receiver(post_save, sender=LarpManagerTutorial)
+def post_save_index_tutorial(sender, instance, **kwargs):
+    index_tutorial(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerTutorial)
+def delete_tutorial_from_index(sender, instance, **kwargs):
+    delete_index(instance.id)
+
+
+@receiver(post_save, sender=LarpManagerTicket)
+def save_larpmanager_ticket(sender, instance, created, **kwargs):
+    mail_larpmanager_ticket(instance)

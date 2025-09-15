@@ -21,11 +21,8 @@ from decimal import Decimal
 from typing import Optional
 
 from django.db.models import Prefetch, Q
-from django.db.models.signals import m2m_changed, post_save
-from django.dispatch import receiver
 
 from larpmanager.cache.config import save_all_element_configs
-from larpmanager.cache.feature import get_event_features
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, Operation, RulePx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -165,24 +162,6 @@ def get_available_ability_px(char, px_avail=None):
     return abilities
 
 
-@receiver(post_save, sender=Character)
-def post_character_update_px(sender, instance, *args, **kwargs):
-    if "px" in get_event_features(instance.event_id):
-        update_px(instance)
-
-
-@receiver(post_save, sender=AbilityPx)
-def post_save_ability_px(sender, instance, *args, **kwargs):
-    for char in instance.characters.all():
-        update_px(char)
-
-
-@receiver(post_save, sender=DeliveryPx)
-def post_save_delivery_px(sender, instance, *args, **kwargs):
-    for char in instance.characters.all():
-        char.save()
-
-
 def px_characters_changed(sender, instance: Optional[DeliveryPx], action, pk_set, **kwargs):
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
@@ -199,32 +178,11 @@ def px_characters_changed(sender, instance: Optional[DeliveryPx], action, pk_set
             update_px(char)
 
 
-m2m_changed.connect(px_characters_changed, sender=DeliveryPx.characters.through)
-m2m_changed.connect(px_characters_changed, sender=AbilityPx.characters.through)
-
-
-@receiver(post_save, sender=RulePx)
-def post_save_rule_px(sender, instance, *args, **kwargs):
-    event = instance.event.get_class_parent(RulePx)
-    for char in event.get_elements(Character).all():
-        update_px(char)
-
-
 def rule_abilities_changed(sender, instance, action, pk_set, **kwargs):
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
     event = instance.event.get_class_parent(RulePx)
-    for char in event.get_elements(Character).all():
-        update_px(char)
-
-
-m2m_changed.connect(rule_abilities_changed, sender=RulePx.abilities.through)
-
-
-@receiver(post_save, sender=ModifierPx)
-def post_save_modifier_px(sender, instance, *args, **kwargs):
-    event = instance.event.get_class_parent(ModifierPx)
     for char in event.get_elements(Character).all():
         update_px(char)
 
@@ -236,9 +194,6 @@ def modifier_abilities_changed(sender, instance, action, pk_set, **kwargs):
     event = instance.event.get_class_parent(ModifierPx)
     for char in event.get_elements(Character).all():
         update_px(char)
-
-
-m2m_changed.connect(modifier_abilities_changed, sender=ModifierPx.abilities.through)
 
 
 def apply_rules_computed(char):
