@@ -47,7 +47,6 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event
-from larpmanager.models.experience import update_px
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
     Album,
@@ -64,7 +63,6 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import my_uuid_short, strip_tags
 from larpmanager.models.writing import (
     Character,
-    CharacterConfig,
     Handout,
     HandoutTemplate,
     Plot,
@@ -503,17 +501,6 @@ def pretty_request(request):
         headers += f"{header_value}: {value}\n"
 
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
-
-
-def add_char_addit(char):
-    char.addit = {}
-    configs = CharacterConfig.objects.filter(character__id=char.id)
-    if not configs.count():
-        update_px(char)
-        configs = CharacterConfig.objects.filter(character__id=char.id)
-
-    for config in configs:
-        char.addit[config.name] = config.value
 
 
 def remove_choice(lst, trm):

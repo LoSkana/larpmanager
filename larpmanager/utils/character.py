@@ -34,9 +34,10 @@ from larpmanager.models.form import (
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
-from larpmanager.utils.common import add_char_addit, get_char
+from larpmanager.utils.common import get_char
 from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
+from larpmanager.utils.experience import add_char_addit
 
 
 def get_character_relationships(ctx, restrict=True):
