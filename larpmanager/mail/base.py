@@ -21,6 +21,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import holidays
+from django.conf import settings as conf_settings
 from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
@@ -285,3 +286,17 @@ def get_exec_language(assoc):
     else:
         max_lang = "en"
     return max_lang
+
+
+def mail_larpmanager_ticket(instance):
+    for _name, email in conf_settings.ADMINS:
+        subj = f"LarpManager ticket - {instance.assoc.name}"
+        if instance.reason:
+            subj += f" [{instance.reason}]"
+        body = f"Email: {instance.email} <br /><br />"
+        if instance.member:
+            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
+        body += instance.content
+        if instance.screenshot:
+            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
+        my_send_mail(subj, body, email)

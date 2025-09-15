@@ -31,7 +31,13 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import (
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationOption,
+    RegistrationQuestion,
+    WritingChoice,
+)
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
@@ -451,3 +457,33 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
             answer.save()
         except ObjectDoesNotExist:
             answer.question = None
+
+
+def check_character_ticket_options(reg, char):
+    ticket_id = reg.ticket.id
+
+    to_delete = []
+
+    # get options
+    for choice in WritingChoice.objects.filter(element_id=char.id):
+        tickets_map = choice.option.tickets.values_list("pk", flat=True)
+        if tickets_map and ticket_id not in tickets_map:
+            to_delete.append(choice.id)
+
+    WritingChoice.objects.filter(pk__in=to_delete).delete()
+
+
+def save_registration_character_form(instance):
+    if not instance.member:
+        return
+
+    if not instance.ticket:
+        return
+
+    event = instance.run.event
+
+    for char in instance.characters.all():
+        check_character_ticket_options(instance, char)
+
+    for char in event.get_elements(Character).filter(player=instance.member):
+        check_character_ticket_options(instance, char)
