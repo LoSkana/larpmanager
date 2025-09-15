@@ -27,7 +27,7 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
@@ -118,6 +118,31 @@ class OrgaRulePxForm(MyForm):
         self.fields["abilities"].widget.set_event(self.params["event"])
         qs = WritingQuestion.objects.filter(event=self.params["event"], typ=WritingQuestionType.COMPUTED)
         self.fields["field"].queryset = qs
+
+
+class OrgaModifierPxForm(MyForm):
+    page_title = _("Rule")
+
+    page_info = _(
+        "This page allows you to add or edit an ability modifier. It is triggered only if all prerequisites "
+        + "and requirements are met. If multiple modifiers apply, only the first is used"
+    )
+
+    class Meta:
+        model = ModifierPx
+        exclude = ("number", "order")
+        widgets = {
+            "abilities": AbilityS2WidgetMulti,
+            "prerequisites": AbilityS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.delete_field("name")
+
+        for field in ["abilities", "prerequisites", "requirements"]:
+            self.fields[field].widget.set_event(self.params["event"])
 
 
 class SelectNewAbility(forms.Form):

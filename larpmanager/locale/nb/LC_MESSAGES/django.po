@@ -1011,6 +1011,9 @@ msgstr "Maksimal bruk"
 msgid "Messages"
 msgstr "Melding sendt"
 
+msgid "New cost"
+msgstr "Ny kostnad"
+
 msgid "New gift"
 msgstr "Ny gave"
 
@@ -1223,6 +1226,9 @@ msgstr "Last inn liste"
 
 msgid "Mandatory"
 msgstr "Obligatorisk"
+
+msgid "Modifiers"
+msgstr "Modifikatorer"
 
 msgid "Movements"
 msgstr "Bevegelser"
@@ -2564,9 +2570,6 @@ msgstr "Ingen kommunikasjon"
 msgid "Number not found"
 msgstr "Nummer ikke funnet"
 
-msgid "Options required"
-msgstr "Nødvendige alternativer"
-
 msgid "Organisation fee"
 msgstr "Organisasjonsavgift"
 
@@ -2989,6 +2992,9 @@ msgstr "Ikke interessert"
 
 msgid "List of other users"
 msgstr "Liste over andre brukere"
+
+msgid "Manage XP modifiers"
+msgstr "Administrere XP-modifikatorer"
 
 msgid "Manage url shortner"
 msgstr "Administrer url shortner"
@@ -4405,6 +4411,9 @@ msgstr "(Valgfritt) Billettens beskrivelse"
 msgid "Image shown on homepage as promoter"
 msgstr "Bilde vises på hjemmesiden som promoter"
 
+msgid "Indicate the prerequisite abilities"
+msgstr "Angi hvilke evner som kreves"
+
 msgid "Insert the html code for the footer"
 msgstr "Skriv inn html-koden som bunnteksten skal fylles med"
 
@@ -4700,6 +4709,9 @@ msgstr "Muliggjør gratis forhåndsregistrering til arrangementer"
 
 msgid "If you need help, remember to check out"
 msgstr "Hvis du trenger hjelp, husk å sjekke ut"
+
+msgid "Indicate the required character options"
+msgstr "Angi de ønskede tegnalternativene"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Administrerer og tildeler oppgaver til karakterer"
@@ -5980,9 +5992,6 @@ msgstr "Gi oss beskjed hvis du støter på problemer eller trenger hjelp"
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Administrere og godkjenne utlegg som er lastet opp av ansatte"
 
-msgid "Note that if the cost is 0, if will assigned automatically"
-msgstr "Merk at hvis kostnaden er 0, vil den tildeles automatisk"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
 
@@ -6153,6 +6162,9 @@ msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Administrere arrangementsmaler som brukes som utgangspunkt for nye "
 "arrangementer"
+
+msgid "Note that if the cost is 0, it will be automatically assigned"
+msgstr "Merk at hvis kostnaden er 0, vil den automatisk bli tildelt"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nå kan deltakerne sende inn donasjoner, og du kan gå gjennom dem"
@@ -9087,6 +9099,13 @@ msgstr ""
 "På denne siden kan du legge til eller endre de dynamiske avdragene som "
 "deltakeren kan dele opp betalingen med"
 
+msgid ""
+"This page summarizes the modifiers that are applied to abilities based on "
+"other abilities, or character fields"
+msgstr ""
+"Denne siden oppsummerer modifikatorene som brukes på evner basert på andre "
+"evner eller karakterfelt"
+
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
@@ -10001,6 +10020,15 @@ msgstr ""
 "Muliggjør dynamisk avdragshåndtering: Den totale avgiften deles jevnt opp i "
 "flere avdrag, som hver forfaller på en dato som bestemmes ved å dele de "
 "gjenværende dagene frem til arrangementet."
+
+msgid ""
+"This page allows you to add or edit an ability modifier. It is triggered "
+"only if all prerequisites and requirements are met. If multiple modifiers "
+"apply, only the first is used"
+msgstr ""
+"På denne siden kan du legge til eller redigere en evnemodifikator. Den "
+"utløses bare hvis alle forutsetninger og krav er oppfylt. Hvis flere "
+"modifikatorer gjelder, brukes bare den første"
 
 msgid ""
 "Fill in this field if you follow a personal diet for reasons of choice(e.g. "
