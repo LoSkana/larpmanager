@@ -113,7 +113,7 @@
     <body class="is-preload {% if interface_old %}interface_old{% endif %}"
           id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
-        <div class="page-container">
+        <div id="page-container">
             {% if not interface_old and not frame %}
                 {% if user.is_authenticated %}
                     {% if topbar %}

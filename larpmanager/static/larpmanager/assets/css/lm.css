@@ -1,3 +1,9 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .hide {
   display: none;
 }
@@ -866,7 +872,6 @@ table {
 
 #page-wrapper.sidebar {
   margin-left: 21ch;
-  min-height: 100vh;
   width: calc(100% - 21ch);
 }
 
@@ -1902,6 +1907,7 @@ input[type="checkbox"].checkbox_single {
   #topbar {
     margin: 0;
     padding: 0.1em 0;
+    flex-shrink: 0;
   }
 
   #topbar .right,
@@ -2107,7 +2113,6 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 #page-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 #wrapper {
@@ -2115,8 +2120,8 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 }
 
 #footer.lm {
-  margin-top: 1em;
-  padding: 0 0 4em 0;
+  flex-shrink: 0;
+  display: flex;
   background: none;
   width: 100%;
 }
