@@ -17,10 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from collections import defaultdict
 from decimal import Decimal
 from typing import Optional
 
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Sum
+from django.db.models.functions import Coalesce
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
@@ -38,6 +40,54 @@ from larpmanager.models.form import (
 from larpmanager.models.writing import Character, CharacterConfig
 
 
+def _build_px_context(char):
+    # get all abilities already learned by the character
+    current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
+
+    # get the options selected for the character
+    current_char_choices = set(
+        WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER).values_list(
+            "option_id", flat=True
+        )
+    )
+
+    # get all modifiers
+    all_modifiers = (
+        char.event.get_elements(ModifierPx)
+        .only("id", "order", "cost")
+        .order_by("order")
+        .prefetch_related(
+            Prefetch("abilities", queryset=AbilityPx.objects.only("id")),
+            Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
+        )
+    )
+
+    # build mapping for cost, prereq, reqs
+    mods_by_ability = defaultdict(list)
+    for m in all_modifiers:
+        # Nessuna query extra: usa i risultati del prefetch in memoria
+        ability_ids = [a.id for a in m.abilities.all()]
+        prereq_ids = {a.id for a in m.prerequisites.all()}
+        req_ids = {o.id for o in m.requirements.all()}
+        payload = (m.cost, prereq_ids, req_ids)
+        for aid in ability_ids:
+            mods_by_ability[aid].append(payload)
+
+    return current_char_abilities, current_char_choices, mods_by_ability
+
+
+def _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices):
+    # look only inf modifiers for that ability
+    for cost, prereq_ids, req_ids in mods_by_ability.get(ability.id, ()):
+        if prereq_ids and not prereq_ids.issubset(current_char_abilities):
+            continue
+        if req_ids and not req_ids.issubset(current_char_choices):
+            continue
+        ability.cost = cost
+        break  # first valid wins
+
+
 def update_px(char):
     start = char.event.get_config("px_start", 0)
 
@@ -48,12 +98,14 @@ def update_px(char):
 
     abilities = get_current_ability_px(char)
 
-    addit = {
-        "px_tot": int(start) + sum(char.px_delivery_list.values_list("amount", flat=True)),
-        "px_used": sum([ability.cost for ability in abilities]),
-    }
+    px_tot = int(start) + (char.px_delivery_list.aggregate(t=Coalesce(Sum("amount"), 0))["t"] or 0)
+    px_used = sum(a.cost for a in abilities)
 
-    addit["px_avail"] = addit["px_tot"] - addit["px_used"]
+    addit = {
+        "px_tot": px_tot,
+        "px_used": px_used,
+        "px_avail": px_tot - px_used,
+    }
 
     save_all_element_configs(char, addit)
 
@@ -61,102 +113,49 @@ def update_px(char):
 
 
 def get_current_ability_px(char):
-    # get all abilities already learned by the character
-    current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
+    current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
-    # get the options selected for the character
-    que = WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER)
-    current_char_choices = set(que.values_list("option_id", flat=True))
-
-    # get all modifiers
-    all_modifiers = (
-        char.event.get_elements(ModifierPx)
-        .order_by("order")
-        .prefetch_related(
-            Prefetch("abilities", queryset=AbilityPx.objects.only("id")),
-            Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
-            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
-        )
-    )
+    abilities_qs = char.px_ability_list.only("id", "cost")
 
     abilities = []
-    for ability in char.px_ability_list.all():
-        # check modifiers to update cost
-        check_modifier_ability_px(ability, all_modifiers, current_char_abilities, current_char_choices)
+    for ability in abilities_qs:
+        _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
         abilities.append(ability)
-
     return abilities
 
 
 def check_available_ability_px(ability, current_char_abilities, current_char_choices):
-    prereq_ids = set(ability.prerequisites.values_list("id", flat=True))
-    requirements_ids = set(ability.requirements.values_list("id", flat=True))
+    prereq_ids = {a.id for a in ability.prerequisites.all()}
+    requirements_ids = {o.id for o in ability.requirements.all()}
     return prereq_ids.issubset(current_char_abilities) and requirements_ids.issubset(current_char_choices)
 
 
-def check_modifier_ability_px(ability, all_modifiers, current_char_abilities, current_char_choices):
-    for modifier in all_modifiers:
-        if ability.id not in modifier.abilities.values_list("id", flat=True):
-            continue
-
-        prereq_ids = set(modifier.prerequisites.values_list("id", flat=True))
-        if prereq_ids and not prereq_ids.issubset(current_char_abilities):
-            continue
-
-        requirements_ids = set(ability.requirements.values_list("id", flat=True))
-        if requirements_ids and not requirements_ids.issubset(current_char_choices):
-            continue
-
-        ability.cost = modifier.cost
-        return
-
-
 def get_available_ability_px(char, px_avail=None):
-    # get all abilities already learned by the character
-    current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
+    current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
-    # get the options selected for the character
-    que = WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER)
-    current_char_choices = set(que.values_list("option_id", flat=True))
-
-    # get px available
     if px_avail is None:
         add_char_addit(char)
         px_avail = int(char.addit.get("px_avail", 0))
 
-    # filter all abilities given we have the requested prerequisites / requirements
     all_abilities = (
         char.event.get_elements(AbilityPx)
         .filter(visible=True)
         .exclude(pk__in=current_char_abilities)
         .select_related("typ")
         .order_by("name")
-    ).prefetch_related(
-        Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
-        Prefetch("requirements", queryset=WritingOption.objects.only("id")),
-    )
-
-    # get all modifiers
-    all_modifiers = (
-        char.event.get_elements(ModifierPx)
-        .order_by("order")
         .prefetch_related(
-            Prefetch("abilities", queryset=AbilityPx.objects.only("id")),
             Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
             Prefetch("requirements", queryset=WritingOption.objects.only("id")),
         )
     )
 
-    # results
     abilities = []
     for ability in all_abilities:
         if not check_available_ability_px(ability, current_char_abilities, current_char_choices):
             continue
 
-        # check modifiers to update cost
-        check_modifier_ability_px(ability, all_modifiers, current_char_abilities, current_char_choices)
+        _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
 
-        # check cost
         if ability.cost > px_avail:
             continue
 
