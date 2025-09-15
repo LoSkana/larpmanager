@@ -1776,9 +1776,6 @@ msgstr "Zmień zdjęcie"
 msgid "Collaborator"
 msgstr "Współpracownik"
 
-msgid "Dependencies"
-msgstr "Zależności"
-
 msgid "Event hidden"
 msgstr "Zdarzenie ukryte"
 
@@ -1889,6 +1886,9 @@ msgstr "Data żądania"
 
 msgid "Request time"
 msgstr "Czas żądania"
+
+msgid "Requirements"
+msgstr "Wymagania"
 
 msgid "Rotate right"
 msgstr "Obrót w prawo"
@@ -2621,6 +2621,9 @@ msgstr "Pokaż wyjaśnienie"
 msgid "Single-line text"
 msgstr "Tekst jednowierszowy"
 
+msgid "The name ability"
+msgstr "Nazwa zdolności"
+
 msgid "Ticket selection"
 msgstr "Wybór biletów"
 
@@ -2783,6 +2786,9 @@ msgstr "Wsparcie techniczne"
 msgid "The question name"
 msgstr "Pytanie zapisane"
 
+msgid "The ticket's name"
+msgstr "Nazwa biletu"
+
 msgid "Tokens assignment"
 msgstr "Przypisanie tokenów"
 
@@ -2903,9 +2909,6 @@ msgstr "Konfigurowanie typów zadań"
 msgid "Show cancellations"
 msgstr "Anulowanie pokazu"
 
-msgid "The ticket's email"
-msgstr "Adres e-mail biletu"
-
 msgid "Total payment sent"
 msgstr "Całkowita wysłana płatność"
 
@@ -2947,6 +2950,9 @@ msgstr "Nie znaleziono znaku"
 
 msgid "Confirmation delete"
 msgstr "Usunięcie potwierdzenia"
+
+msgid "Cost of the ability"
+msgstr "Koszt zdolności"
 
 msgid "Date of association"
 msgstr "Data stowarzyszenia"
@@ -4288,6 +4294,9 @@ msgstr "Weryfikacja ręcznie zatwierdzonych płatności"
 
 msgid "View all event information in the"
 msgstr "Wyświetl wszystkie informacje o wydarzeniu w"
+
+msgid "(Optional) The ability description"
+msgstr "(Opcjonalnie) Opis umiejętności"
 
 msgid "Access the list of your characters"
 msgstr "Uzyskaj dostęp do listy swoich postaci"
@@ -5887,6 +5896,10 @@ msgstr ""
 "Na tej stronie wyświetlane są wszystkie pozycje wydatków zarejestrowane w "
 "systemie"
 
+msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgstr ""
+"(Opcjonalnie) Inne umiejętności jako warunek wstępny, oddzielone przecinkami"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Treść strony prywatności połączona na dole wszystkich stron"
 
@@ -5895,6 +5908,9 @@ msgstr "Wskaż zaimki, które mają być używane w odniesieniu do Ciebie"
 
 msgid "Now you can review the historical accounting informations"
 msgstr "Teraz możesz przeglądać historyczne informacje księgowe"
+
+msgid "Optional - Other options as requirements, comma-separated"
+msgstr "Opcjonalne - inne opcje zgodnie z wymaganiami, oddzielone przecinkami"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Wybierz frakcję, według której chcesz filtrować postacie"
@@ -5955,6 +5971,10 @@ msgstr ""
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr ""
 "Zarządzanie wydatkami przesłanymi przez pracowników i ich zatwierdzanie"
+
+msgid "Note that if the cost is 0, if will assigned automatically"
+msgstr ""
+"Zwróć uwagę, że jeśli koszt wynosi 0, zostanie on przypisany automatycznie"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nazwa opcji wyświetlana w pytaniu (powinna być krótka)"
@@ -6093,6 +6113,9 @@ msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(credits)s zostały wykorzystane do wzięcia udziału w tym "
 "wydarzeniu"
+
+msgid "(Optional) Character options as requirements, comma-separated"
+msgstr "(Opcjonalnie) Opcje znaków jako wymagania, oddzielone przecinkami"
 
 msgid "Added at the bottom of mail confirming signup to participants"
 msgstr "Dodano na dole wiadomości potwierdzającej rejestrację uczestników"
@@ -8178,6 +8201,13 @@ msgid ""
 msgstr ""
 "Przyznawanie dostępu do zarządzania zdarzeniami innym użytkownikom i "
 "definiowanie ról z określonymi uprawnieniami"
+
+msgid ""
+"Note that existing abilities with the same name, will be overwritten with "
+"the uploaded data"
+msgstr ""
+"Należy pamiętać, że istniejące zdolności o tej samej nazwie zostaną "
+"nadpisane przesłanymi danymi"
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all characters "

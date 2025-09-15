@@ -26,7 +26,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
-from larpmanager.models.form import WritingQuestionType, WritingAnswer, WritingOption, WritingQuestion
+from larpmanager.models.form import WritingAnswer, WritingOption, WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Character
 
 
@@ -53,7 +53,7 @@ class AbilityPx(BaseConceptModel):
         AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
     )
 
-    cost = models.IntegerField()
+    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, if will assigned automatically"))
 
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
@@ -71,7 +71,7 @@ class AbilityPx(BaseConceptModel):
         help_text=_("Indicate the prerequisite abilities, which must be possessed before one can acquire this"),
     )
 
-    dependents = models.ManyToManyField(
+    requirements = models.ManyToManyField(
         WritingOption,
         related_name="abilities",
         blank=True,

@@ -30,10 +30,11 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.casting import Quest, QuestType
+from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    WritingQuestionType,
     QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
@@ -42,13 +43,15 @@ from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
     WritingOption,
-    WritingQuestion, BaseQuestionType,
+    WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
-    RegistrationTicket, TicketTier,
+    RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import (
@@ -78,6 +81,8 @@ def go_upload(request, ctx, form):
         return form_load(request, ctx, form, is_registration=False)
     elif ctx["typ"] == "registration":
         return registrations_load(request, ctx, form)
+    elif ctx["typ"] == "px_abilitie":
+        return abilities_load(request, ctx, form)
     elif ctx["typ"] == "registration_ticket":
         return tickets_load(request, ctx, form)
     else:
@@ -575,6 +580,30 @@ def _options_load(ctx, row, questions, is_registration):
         return "ERR - question not found"
     question_id = questions[question]
 
+    created, instance = _get_option(ctx, is_registration, name, question_id)
+
+    for field, value in row.items():
+        if not value or pd.isna(value):
+            continue
+        new_value = value
+        if field in ["question", "name"]:
+            continue
+        if field in ["max_available", "price"]:
+            new_value = int(new_value)
+        if field == "requirements":
+            _assign_requirements(ctx, instance, [], value)
+            continue
+        setattr(instance, field, new_value)
+
+    instance.save()
+
+    if created:
+        return f"OK - Created {name}"
+    else:
+        return f"OK - Updated {name}"
+
+
+def _get_option(ctx, is_registration, name, question_id):
     if is_registration:
         instance, created = RegistrationOption.objects.get_or_create(
             event=ctx["event"],
@@ -589,23 +618,7 @@ def _options_load(ctx, row, questions, is_registration):
             question_id=question_id,
             defaults={"name": name},
         )
-
-    for field, value in row.items():
-        if not value or pd.isna(value):
-            continue
-        new_value = value
-        if field in ["question", "name"]:
-            continue
-        if field in ["max_available", "price"]:
-            new_value = int(new_value)
-        setattr(instance, field, new_value)
-
-    instance.save()
-
-    if created:
-        return f"OK - Created {name}"
-    else:
-        return f"OK - Updated {name}"
+    return created, instance
 
 
 def get_csv_upload_tmp(csv_upload, run):
@@ -662,8 +675,6 @@ def _ticket_load(request, ctx, row):
 
     (ticket, cr) = RegistrationTicket.objects.get_or_create(event=ctx["event"], name=row["name"])
 
-    logs = []
-
     mappings = {
         "tier": invert_dict(TicketTier.get_mapping()),
     }
@@ -692,3 +703,78 @@ def _ticket_load(request, ctx, row):
         msg = f"OK - Updated {ticket}"
 
     return msg
+
+
+def abilities_load(request, ctx, form):
+    (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
+
+    if input_df is not None:
+        for row in input_df.to_dict(orient="records"):
+            logs.append(_ability_load(request, ctx, row))
+    return logs
+
+
+def _ability_load(request, ctx, row):
+    if "name" not in row:
+        return "ERR - There is no name column"
+
+    (element, cr) = AbilityPx.objects.get_or_create(event=ctx["event"].get_class_parent(AbilityPx), name=row["name"])
+
+    logs = []
+
+    for field, value in row.items():
+        if not value or pd.isna(value) or field in ["name"]:
+            continue
+        new_value = value
+        if field == "typ":
+            _assign_type(ctx, element, logs, value)
+            continue
+        if field == "cost":
+            new_value = int(value)
+        if field == "prerequisites":
+            _assign_prereq(ctx, element, logs, value)
+            continue
+        if field == "requirements":
+            _assign_requirements(ctx, element, logs, value)
+            continue
+        if field == "visible":
+            new_value = value.lower().strip() == "true"
+        setattr(element, field, new_value)
+
+    element.save()
+
+    save_log(request.user.member, AbilityPx, element)
+
+    if cr:
+        msg = f"OK - Created {element}"
+    else:
+        msg = f"OK - Updated {element}"
+
+    return msg
+
+
+def _assign_type(ctx, element, logs, value):
+    try:
+        element.typ = ctx["event"].get_elements(AbilityTypePx).get(name__iexact=value)
+    except ObjectDoesNotExist:
+        logs.append(f"ERR - quest type not found: {value}")
+
+
+def _assign_prereq(ctx, element, logs, value):
+    for name in value.split(","):
+        try:
+            prereq = ctx["event"].get_elements(AbilityPx).get(name__iexact=name.strip())
+            element.save()  # to be sure
+            element.prerequisites.add(prereq)
+        except ObjectDoesNotExist:
+            logs.append(f"Prerequisite not found: {name}")
+
+
+def _assign_requirements(ctx, element, logs, value):
+    for name in value.split(","):
+        try:
+            option = ctx["event"].get_elements(WritingOption).get(name__iexact=name.strip())
+            element.save()  # to be sure
+            element.requirements.add(option)
+        except ObjectDoesNotExist:
+            logs.append(f"requirements not found: {name}")

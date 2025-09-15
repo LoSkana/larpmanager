@@ -38,6 +38,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
 from larpmanager.models.writing import CharacterStatus, Faction
 
+
 class BaseQuestionType(models.TextChoices):
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
@@ -69,10 +70,9 @@ class BaseQuestionType(models.TextChoices):
 
 
 def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
-    members = [(m.name, (m.value, m.label)) for m in base] + [
-        (n, (v, lbl)) for (n, v, lbl) in extra
-    ]
+    members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
+
 
 WritingQuestionType = extend_textchoices(
     "WritingQuestionType",
@@ -92,8 +92,10 @@ WritingQuestionType = extend_textchoices(
     ],
 )
 
+
 def get_def_writing_types():
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
+
 
 def get_writing_max_length():
     return {
@@ -105,6 +107,7 @@ def get_writing_max_length():
         WritingQuestionType.MULTIPLE,
         WritingQuestionType.EDITOR,
     }
+
 
 RegistrationQuestionType = extend_textchoices(
     "RegistrationQuestionType",
@@ -301,7 +304,7 @@ class WritingOption(BaseModel):
 
     order = models.IntegerField(default=0)
 
-    dependents = models.ManyToManyField(
+    requirements = models.ManyToManyField(
         "self",
         related_name="dependents_inv",
         symmetrical=False,

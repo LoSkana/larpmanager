@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
@@ -67,7 +68,11 @@ def event_permission_feature_key(slug):
 
 
 def update_event_permission_feature(slug):
-    perm = EventPermission.objects.select_related("feature").get(slug=slug)
+    try:
+        perm = EventPermission.objects.select_related("feature").get(slug=slug)
+    except ObjectDoesNotExist:
+        print(f"permission slug does not exists: {slug}")
+        return "", "", ""
     feature = perm.feature
     if feature.placeholder:
         slug = "def"

@@ -45,6 +45,10 @@ def orga_px_deliveries_edit(request, s, num):
 def orga_px_abilities(request, s):
     ctx = check_event_permission(request, s, "orga_px_abilities")
     handle_bulk_ability(request, ctx)
+
+    ctx["upload"] = "px_abilities"
+    ctx["download"] = 1
+
     ctx["px_user"] = ctx["event"].get_config("px_user", False)
     ctx["list"] = ctx["event"].get_elements(AbilityPx).order_by("number").select_related("typ")
     return render(request, "larpmanager/orga/px/abilities.html", ctx)

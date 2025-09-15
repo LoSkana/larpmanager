@@ -47,7 +47,7 @@ from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
-from larpmanager.models.form import QuestionApplicable, WritingQuestionType, BaseQuestionType, RegistrationQuestionType
+from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
@@ -57,7 +57,8 @@ from larpmanager.utils.download import (
     export_character_form,
     export_data,
     export_registration_form,
-    zip_exports, export_tickets,
+    export_tickets,
+    zip_exports,
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
@@ -152,9 +153,7 @@ def orga_roles_edit(request, s, num):
 
 @login_required
 def orga_appearance(request, s):
-    return orga_edit(
-        request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False}
-    )
+    return orga_edit(request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -321,6 +320,7 @@ def _prepare_backup(ctx):
 def orga_upload(request, s, typ):
     ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
+    ctx["name"] = ctx["typ"]
     _get_column_names(ctx)
 
     if request.POST:
@@ -371,7 +371,7 @@ def orga_upload_template(request, s, typ):
         RegistrationQuestionType.ADDITIONAL: "number of additional tickets",
         RegistrationQuestionType.PWYW: "amount of free donation",
         RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
-        RegistrationQuestionType.SURCHARGE: "surcharge applied"
+        RegistrationQuestionType.SURCHARGE: "surcharge applied",
     }
     if ctx.get("writing_typ"):
         exports = _writing_template(ctx, typ, value_mapping)

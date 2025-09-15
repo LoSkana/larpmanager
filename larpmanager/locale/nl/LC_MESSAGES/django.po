@@ -1776,9 +1776,6 @@ msgstr "Foto wijzigen"
 msgid "Collaborator"
 msgstr "Deelnemer"
 
-msgid "Dependencies"
-msgstr "Afhankelijkheden"
-
 msgid "Event hidden"
 msgstr "Gebeurtenis verborgen"
 
@@ -1889,6 +1886,9 @@ msgstr "Datum aangevraagd"
 
 msgid "Request time"
 msgstr "Gevraagde tijd"
+
+msgid "Requirements"
+msgstr "Vereisten"
 
 msgid "Rotate right"
 msgstr "Rechter wiel"
@@ -2621,6 +2621,9 @@ msgstr "Uitleg tonen"
 msgid "Single-line text"
 msgstr "Enkelvoudige tekst"
 
+msgid "The name ability"
+msgstr "De naam vermogen"
+
 msgid "Ticket selection"
 msgstr "Selectie van tickets"
 
@@ -2783,6 +2786,9 @@ msgstr "Technische ondersteuning"
 msgid "The question name"
 msgstr "Onderdanige vraag"
 
+msgid "The ticket's name"
+msgstr "De naam van het ticket"
+
 msgid "Tokens assignment"
 msgstr "Toekenning van tokens"
 
@@ -2903,9 +2909,6 @@ msgstr "Zoektochttypes instellen"
 msgid "Show cancellations"
 msgstr "Show annuleringen"
 
-msgid "The ticket's email"
-msgstr "De e-mail van het ticket"
-
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
 
@@ -2947,6 +2950,9 @@ msgstr "Karakter niet gevonden"
 
 msgid "Confirmation delete"
 msgstr "Bevestiging verwijderen"
+
+msgid "Cost of the ability"
+msgstr "Kosten van het vermogen"
 
 msgid "Date of association"
 msgstr "Datum van vereniging"
@@ -4288,6 +4294,9 @@ msgstr "Handmatig goedgekeurde betalingen verifiëren"
 
 msgid "View all event information in the"
 msgstr "Bekijk alle evenementinformatie in de"
+
+msgid "(Optional) The ability description"
+msgstr "(Optioneel) De beschrijving van de vaardigheid"
 
 msgid "Access the list of your characters"
 msgstr "Toegang tot je karakterlijst"
@@ -5901,6 +5910,10 @@ msgstr "Op deze pagina kun je een studiepuntenopdracht toevoegen of bewerken"
 msgid "This page shows all expense items recorded in the system"
 msgstr "Deze pagina toont alle uitgaven die in het systeem zijn geregistreerd"
 
+msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgstr ""
+"(Optioneel) Andere vaardigheid als voorwaarde, door komma's gescheiden"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhoud van privacy pagina gelinkt onderaan alle pagina's"
 
@@ -5909,6 +5922,9 @@ msgstr "Geef aan met welke voornaamwoorden je wilt worden aangeduid"
 
 msgid "Now you can review the historical accounting informations"
 msgstr "Nu kun je de historische boekhoudgegevens bekijken"
+
+msgid "Optional - Other options as requirements, comma-separated"
+msgstr "Optioneel - Andere opties zoals vereist, door komma's gescheiden"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
@@ -5970,6 +5986,9 @@ msgstr "Laat het ons weten als je problemen ondervindt of hulp nodig hebt"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Beheer uitgaven die door medewerkers zijn geüpload en keur ze goed"
+
+msgid "Note that if the cost is 0, if will assigned automatically"
+msgstr "Merk op dat als de kosten 0 zijn, deze automatisch worden toegewezen"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
@@ -6117,6 +6136,9 @@ msgstr ""
 msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(credits)s werden gebruikt om deel te nemen aan dit evenement"
+
+msgid "(Optional) Character options as requirements, comma-separated"
+msgstr "(Optioneel) Tekenopties als vereisten, door komma's gescheiden"
 
 msgid "Added at the bottom of mail confirming signup to participants"
 msgstr ""
@@ -8297,6 +8319,13 @@ msgid ""
 msgstr ""
 "Toegang tot gebeurtenisbeheer verlenen aan andere gebruikers en rollen met "
 "specifieke rechten definiëren"
+
+msgid ""
+"Note that existing abilities with the same name, will be overwritten with "
+"the uploaded data"
+msgstr ""
+"Merk op dat bestaande vaardigheden met dezelfde naam worden overschreven met"
+" de geüploade gegevens"
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all characters "
