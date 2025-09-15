@@ -32,28 +32,31 @@ from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     EventCharacterS2WidgetMulti,
+    EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
     TicketS2WidgetMulti,
-    WritingTinyMCE, EventPlotS2WidgetMulti,
+    WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    WritingQuestionType,
     QuestionVisibility,
     WritingOption,
-    WritingQuestion, BaseQuestionType,
+    WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
     Faction,
     FactionType,
+    Plot,
+    PlotCharacterRel,
     Relationship,
-    TextVersionChoices, Plot, PlotCharacterRel,
+    TextVersionChoices,
 )
 from larpmanager.utils.edit import save_version
 
@@ -292,19 +295,13 @@ class OrgaCharacterForm(CharacterForm):
 
         # Add / remove plots
         selected = set(self.cleaned_data.get("plots", []))
-        current = set(
-            Plot.objects.filter(
-                plotcharacterrel__character=instance
-            )
-        )
+        current = set(Plot.objects.filter(plotcharacterrel__character=instance))
 
         to_add = selected - current
         to_remove = current - selected
 
         if to_remove:
-            PlotCharacterRel.objects.filter(
-                character=instance, plot__in=[p.pk for p in to_remove]
-            ).delete()
+            PlotCharacterRel.objects.filter(character=instance, plot__in=[p.pk for p in to_remove]).delete()
 
         for plot in to_add:
             PlotCharacterRel.objects.create(character=instance, plot=plot)
@@ -567,7 +564,7 @@ class OrgaWritingOptionForm(MyForm):
         model = WritingOption
         exclude = ["order"]
         widgets = {
-            "dependents": EventWritingOptionS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
             "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }
@@ -586,7 +583,7 @@ class OrgaWritingOptionForm(MyForm):
         else:
             self.fields["tickets"].widget.set_event(self.params["event"])
 
-        if "wri_que_dependents" not in self.params["features"]:
-            self.delete_field("dependents")
+        if "wri_que_requirements" not in self.params["features"]:
+            self.delete_field("requirements")
         else:
-            self.fields["dependents"].widget.set_event(self.params["event"])
+            self.fields["requirements"].widget.set_event(self.params["event"])

@@ -305,7 +305,7 @@ class WritingOption(BaseModel):
 
     order = models.IntegerField(default=0)
 
-    dependents = models.ManyToManyField(
+    requirements = models.ManyToManyField(
         "self",
         related_name="dependents_inv",
         symmetrical=False,

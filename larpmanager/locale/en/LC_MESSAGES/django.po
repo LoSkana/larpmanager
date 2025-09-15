@@ -955,7 +955,7 @@ msgid ""
 "ticket"
 msgstr ""
 
-msgid "Prerequisites"
+msgid "Requirements"
 msgstr ""
 
 msgid ""
@@ -2995,6 +2995,9 @@ msgid ""
 "default or customize it"
 msgstr ""
 
+msgid "Note that if the cost is 0, if will assigned automatically"
+msgstr ""
+
 msgid ""
 "Indicate whether the ability is visible to users, and can be freely purchased"
 msgstr ""
@@ -3122,6 +3125,9 @@ msgstr ""
 msgid ""
 "Optional – Maximum number of times it can be selected across all characters "
 "(0 = unlimited)"
+msgstr ""
+
+msgid "Prerequisites"
 msgstr ""
 
 msgid ""
@@ -6506,9 +6512,6 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
-msgid "Dependencies"
-msgstr ""
-
 msgid "Ability types"
 msgstr ""
 
@@ -6792,6 +6795,11 @@ msgstr ""
 msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data"
+msgstr ""
+
+msgid ""
+"Note that existing abilities with the same name, will be overwritten with "
+"the uploaded data"
 msgstr ""
 
 msgid "You can also upload a second file with the registration options"
@@ -8327,7 +8335,7 @@ msgstr ""
 msgid "(Optional) The amount of a voluntary donation"
 msgstr ""
 
-msgid "The ticket's email"
+msgid "The ticket's name"
 msgstr ""
 
 msgid "The tier of the ticket"
@@ -8340,6 +8348,21 @@ msgid "(Optional) The cost of the ticket"
 msgstr ""
 
 msgid "(Optional) Maximun number of spots available"
+msgstr ""
+
+msgid "The name ability"
+msgstr ""
+
+msgid "Cost of the ability"
+msgstr ""
+
+msgid "(Optional) The ability description"
+msgstr ""
+
+msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgstr ""
+
+msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
 msgid "The question name"
@@ -8367,6 +8390,9 @@ msgid "The question visibility to participants, allowed values are"
 msgstr ""
 
 msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
+msgstr ""
+
+msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 
 msgid "First character in the relationship (origin)"

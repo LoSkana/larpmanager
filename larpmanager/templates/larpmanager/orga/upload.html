@@ -49,6 +49,21 @@
         <p>
             <i>{% trans "Note that existing tickets with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
+    {% elif typ == 'px_abilitie' %}
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
+        <table>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note that existing abilities with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
     {% elif typ == 'registration_form' %}
         <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
@@ -110,7 +125,7 @@
             <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
     {% else %}
-        <h2>{{ typ | title }}</h2>
+        <h2>{{ name | title }}</h2>
         <p>{% trans "The first line of the file are the field names that you want to upload" %}.</p>
         <p>
             {% trans "Allowed values are" %}:
@@ -186,7 +201,7 @@
         {% else %}
             <table>
                 <tr>
-                    <th>{{ typ | title }}</th>
+                    <th>{{ name | title }}</th>
                     <td>{{ form.first }}</td>
                 </tr>
                 {% if typ == 'character' and features.relationships %}

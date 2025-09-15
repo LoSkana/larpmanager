@@ -1779,9 +1779,6 @@ msgstr "Foto ändern"
 msgid "Collaborator"
 msgstr "Beitragende"
 
-msgid "Dependencies"
-msgstr "Abhängigkeiten"
-
 msgid "Event hidden"
 msgstr "Ereignis versteckt"
 
@@ -1892,6 +1889,9 @@ msgstr "Gewünschtes Datum"
 
 msgid "Request time"
 msgstr "Gewünschte Zeit"
+
+msgid "Requirements"
+msgstr "Anforderungen"
 
 msgid "Rotate right"
 msgstr "Rechtes Rad"
@@ -2630,6 +2630,9 @@ msgstr "Erklärung anzeigen"
 msgid "Single-line text"
 msgstr "Einzeiliger Text"
 
+msgid "The name ability"
+msgstr "Die Namensfähigkeit"
+
 msgid "Ticket selection"
 msgstr "Ticket-Auswahl"
 
@@ -2792,6 +2795,9 @@ msgstr "Technische Unterstützung"
 msgid "The question name"
 msgstr "Unterwürfige Frage"
 
+msgid "The ticket's name"
+msgstr "Der Name des Tickets"
+
 msgid "Tokens assignment"
 msgstr "Token-Zuweisung"
 
@@ -2912,9 +2918,6 @@ msgstr "Questtypen einrichten"
 msgid "Show cancellations"
 msgstr "Absagen von Veranstaltungen"
 
-msgid "The ticket's email"
-msgstr "Die E-Mail des Tickets"
-
 msgid "Total payment sent"
 msgstr "Gesamtzahlung gesendet"
 
@@ -2956,6 +2959,9 @@ msgstr "Zeichen nicht gefunden"
 
 msgid "Confirmation delete"
 msgstr "Bestätigung löschen"
+
+msgid "Cost of the ability"
+msgstr "Kosten der Fähigkeit"
 
 msgid "Date of association"
 msgstr "Datum der Vereinigung"
@@ -4297,6 +4303,9 @@ msgstr "Überprüfen Sie manuell genehmigte Zahlungen"
 
 msgid "View all event information in the"
 msgstr "Alle Informationen zu den Veranstaltungen finden Sie in der"
+
+msgid "(Optional) The ability description"
+msgstr "(Optional) Die Beschreibung der Fähigkeit"
 
 msgid "Access the list of your characters"
 msgstr "Greifen Sie auf Ihre Charakterliste zu"
@@ -5978,6 +5987,9 @@ msgstr ""
 msgid "This page shows all expense items recorded in the system"
 msgstr "Diese Seite zeigt alle im System erfassten Ausgabenposten an"
 
+msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgstr "(fakultativ) Andere Fähigkeit als Voraussetzung, durch Komma getrennt"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhalt der Datenschutzseite, die unten auf allen Seiten verlinkt ist"
 
@@ -5986,6 +5998,9 @@ msgstr "Geben Sie die Pronomen an, mit denen Sie bezeichnet werden möchten"
 
 msgid "Now you can review the historical accounting informations"
 msgstr "Jetzt können Sie die historischen Buchhaltungsinformationen einsehen"
+
+msgid "Optional - Other options as requirements, comma-separated"
+msgstr "Optional - Andere Optionen als Anforderungen, durch Komma getrennt"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr ""
@@ -6057,6 +6072,9 @@ msgstr "Lassen Sie uns wissen, wenn Sie Probleme haben oder Hilfe benötigen"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Von Mitarbeitern hochgeladene Ausgaben verwalten und genehmigen"
+
+msgid "Note that if the cost is 0, if will assigned automatically"
+msgstr "Wenn die Kosten 0 sind, werden sie automatisch zugewiesen"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Name der Option, angezeigt in der Frage (kurz halten)"
@@ -6223,6 +6241,9 @@ msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(credits)s wurden für die Teilnahme an dieser Veranstaltung "
 "verwendet"
+
+msgid "(Optional) Character options as requirements, comma-separated"
+msgstr "(Optional) Zeichenoptionen als Anforderungen, durch Komma getrennt"
 
 msgid "Added at the bottom of mail confirming signup to participants"
 msgstr ""
@@ -8496,6 +8517,13 @@ msgid ""
 msgstr ""
 "Gewährung des Zugriffs auf die Ereignisverwaltung für andere Benutzer und "
 "Definition von Rollen mit spezifischen Berechtigungen"
+
+msgid ""
+"Note that existing abilities with the same name, will be overwritten with "
+"the uploaded data"
+msgstr ""
+"Beachten Sie, dass bestehende Fähigkeiten mit demselben Namen mit den "
+"hochgeladenen Daten überschrieben werden"
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all characters "

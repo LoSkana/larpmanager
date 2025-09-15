@@ -70,7 +70,7 @@ m2m_changed.connect(px_characters_changed, sender=AbilityPx.characters.through)
 
 def check_available_ability_px(ability, current_char_abilities, current_char_choices):
     prereq_ids = set(ability.prerequisites.values_list("id", flat=True))
-    dependent_ids = set(ability.dependents.values_list("id", flat=True))
+    dependent_ids = set(ability.requirements.values_list("id", flat=True))
     return prereq_ids.issubset(current_char_abilities) and dependent_ids.issubset(current_char_choices)
 
 
@@ -86,13 +86,13 @@ def get_available_ability_px(char):
     add_char_addit(char)
     px_avail = char.addit.get("px_avail", 0)
 
-    # filter all abilities given we have the requested prerequisites / dependents
+    # filter all abilities given we have the requested prerequisites / requirements
     all_abilities = (
         char.event.get_elements(AbilityPx)
         .filter(visible=True, cost__lte=px_avail)
         .exclude(pk__in=current_char_abilities)
         .select_related("typ")
-        .prefetch_related("prerequisites", "dependents")
+        .prefetch_related("prerequisites", "requirements")
         .order_by("name")
     )
 

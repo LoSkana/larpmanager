@@ -373,8 +373,8 @@ def get_options_dependencies(ctx):
     question_idxs = que.values_list("id", flat=True)
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
-    for el in que.filter(dependents__isnull=False).distinct():
-        ctx["dependencies"][el.id] = list(el.dependents.values_list("id", flat=True))
+    for el in que.filter(requirements__isnull=False).distinct():
+        ctx["dependencies"][el.id] = list(el.requirements.values_list("id", flat=True))
 
 
 @login_required
