@@ -115,7 +115,7 @@ def update_px(char):
 def get_current_ability_px(char):
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
-    abilities_qs = char.px_ability_list.only("id", "cost")
+    abilities_qs = char.px_ability_list.only("id", "cost").order_by("name")
 
     abilities = []
     for ability in abilities_qs:
