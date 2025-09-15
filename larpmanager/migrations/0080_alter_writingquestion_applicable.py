@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0078_alter_registrationquestion_typ"),
+        ("larpmanager", "0079_rename_dependents_abilitypx_requirements_and_more"),
     ]
 
     operations = [
