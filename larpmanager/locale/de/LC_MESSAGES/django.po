@@ -1755,6 +1755,9 @@ msgstr "Art der Fertigkeit"
 msgid "Achievements"
 msgstr "Errungenschaften"
 
+msgid "Add prologue"
+msgstr "Prolog hinzufügen"
+
 msgid "Archive mail"
 msgstr "Archiv-Mail"
 
@@ -2079,6 +2082,9 @@ msgstr "Voraussetzungen"
 
 msgid "Progress step"
 msgstr "Schritt vorwärts"
+
+msgid "Prologue type"
+msgstr "Typ Prolog"
 
 msgid "Question type"
 msgstr "Art der Frage"
@@ -2422,6 +2428,9 @@ msgstr "Fortschritt"
 
 msgid "Question saved!"
 msgstr "Unterwürfige Frage!"
+
+msgid "Remove prologue"
+msgstr "Prolog entfernen"
 
 msgid "Replacing names"
 msgstr "Ersetzen von Namen"

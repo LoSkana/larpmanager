@@ -20,6 +20,9 @@
     {% if features.plot %}
         <a href="#" class="table_toggle" tog='plots'>{% trans "Plots" %}</a>
     {% endif %}
+    {% if features.prologue %}
+        <a href="#" class="table_toggle" tog='prologues'>{% trans "Prologues" %}</a>
+    {% endif %}
     {% if features.relationships %}
         <a href="#" class="table_toggle" tog='relationships'>{% trans "Relationships" %}</a>
     {% endif %}
@@ -47,6 +50,12 @@
         <th class="plots">{% trans "Plots" %}</th>
         <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Plots" %}
+        </th>
+    {% endif %}
+    {% if features.prologue %}
+        <th class="prologues">{% trans "Prologues" %}</th>
+        <th class="stats">
+            <i class="fa fa-hashtag"></i> {% trans "Prologues" %}
         </th>
     {% endif %}
     {% if features.relationships %}
@@ -97,6 +106,14 @@
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.plts | length }}</td>
+            {% endif %}
+            {% if features.prologue %}
+                <td class="prologues dot_links">
+                    {% for p in el.prologues_list.all %}
+                        <a href="{% url 'orga_prologues_edit' run.get_slug p.id %}">{{ p.name }}</a>
+                    {% endfor %}
+                </td>
+                <td class="stats">{{ el.prologues_list.count }}</td>
             {% endif %}
             {% if features.relationships %}
                 <td class="relationships dot_links">

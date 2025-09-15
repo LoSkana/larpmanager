@@ -1559,7 +1559,7 @@ msgstr ""
 msgid "XP"
 msgstr ""
 
-msgid "speedlarp"
+msgid "Prologue"
 msgstr ""
 
 msgid "Traits"
@@ -1964,7 +1964,7 @@ msgstr ""
 msgid "Handout"
 msgstr ""
 
-msgid "Prologue"
+msgid "Prologue type"
 msgstr ""
 
 msgid "Speed larp"
@@ -7000,6 +7000,9 @@ msgstr ""
 msgid "status"
 msgstr ""
 
+msgid "speedlarp"
+msgstr ""
+
 msgid "Versions"
 msgstr ""
 
@@ -8270,6 +8273,12 @@ msgid "Add to plot"
 msgstr ""
 
 msgid "Remove from plot"
+msgstr ""
+
+msgid "Add prologue"
+msgstr ""
+
+msgid "Remove prologue"
 msgstr ""
 
 msgid "Add to xp delivery"

@@ -1755,6 +1755,9 @@ msgstr "Typ dovednosti"
 msgid "Achievements"
 msgstr "Úspěchy"
 
+msgid "Add prologue"
+msgstr "Přidání prologu"
+
 msgid "Archive mail"
 msgstr "Archivovat poštu"
 
@@ -2079,6 +2082,9 @@ msgstr "Předpoklady"
 
 msgid "Progress step"
 msgstr "Krok vpřed"
+
+msgid "Prologue type"
+msgstr "Typ prologu"
 
 msgid "Question type"
 msgstr "Typ otázky"
@@ -2422,6 +2428,9 @@ msgstr "Progress"
 
 msgid "Question saved!"
 msgstr "Submisivní otázka!"
+
+msgid "Remove prologue"
+msgstr "Odstranění prologu"
 
 msgid "Replacing names"
 msgstr "Nahrazování názvů"

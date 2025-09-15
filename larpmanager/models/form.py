@@ -160,6 +160,7 @@ class QuestionApplicable(models.TextChoices):
     FACTION = "f", "faction"
     QUEST = "q", "quest"
     TRAIT = "t", "trait"
+    PROLOGUE = "r", "prologue"
 
     @classmethod
     def get_applicable(cls, model_name):
@@ -624,6 +625,7 @@ def _get_writing_elements():
         ("plot", _("Plots"), QuestionApplicable.PLOT),
         ("quest", _("Quests"), QuestionApplicable.QUEST),
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
+        ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
     return shows
 
@@ -635,5 +637,6 @@ def _get_writing_mapping():
         "plot": "plot",
         "quest": "questbuilder",
         "trait": "questbuilder",
+        "prologue": "prologue",
     }
     return mapping

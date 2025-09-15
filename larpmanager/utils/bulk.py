@@ -30,7 +30,7 @@ from larpmanager.models.miscellanea import (
     WarehouseItem,
     WarehouseTag,
 )
-from larpmanager.models.writing import Character, Faction, Plot
+from larpmanager.models.writing import Character, Faction, Plot, Prologue
 from larpmanager.utils.exceptions import ReturnNow
 
 
@@ -69,6 +69,8 @@ class Operations:
     SET_ABILITY_TYPE = 10
     ADD_CHAR_DELIVERY = 11
     DEL_CHAR_DELIVERY = 12
+    ADD_CHAR_PROLOGUE = 13
+    DEL_CHAR_PROLOGUE = 14
 
 
 def exec_bulk(request, ctx, mapping):
@@ -155,6 +157,16 @@ def exec_del_char_delivery(request, ctx, target, ids):
     delivery.characters.remove(*_get_chars(ctx, ids))
 
 
+def exec_add_char_prologue(request, ctx, target, ids):
+    prologue = ctx["event"].get_elements(Prologue).get(pk=target)
+    prologue.characters.add(*_get_chars(ctx, ids))
+
+
+def exec_del_char_prologue(request, ctx, target, ids):
+    prologue = ctx["event"].get_elements(Prologue).get(pk=target)
+    prologue.characters.remove(*_get_chars(ctx, ids))
+
+
 def handle_bulk_characters(request, ctx):
     if request.POST:
         mapping = {
@@ -164,6 +176,8 @@ def handle_bulk_characters(request, ctx):
             Operations.DEL_CHAR_PLOT: exec_del_char_plot,
             Operations.ADD_CHAR_DELIVERY: exec_add_char_delivery,
             Operations.DEL_CHAR_DELIVERY: exec_del_char_delivery,
+            Operations.ADD_CHAR_PROLOGUE: exec_add_char_prologue,
+            Operations.DEL_CHAR_PROLOGUE: exec_add_char_prologue,
         }
         raise ReturnNow(exec_bulk(request, ctx, mapping))
 
@@ -184,6 +198,15 @@ def handle_bulk_characters(request, ctx):
             [
                 {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
                 {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
+            ]
+        )
+
+    if "prologue" in ctx["features"]:
+        prologues = ctx["event"].get_elements(Prologue).values("id", "name").order_by("name")
+        ctx["bulk"].extend(
+            [
+                {"idx": Operations.ADD_CHAR_PROLOGUE, "label": _("Add prologue"), "objs": prologues},
+                {"idx": Operations.DEL_CHAR_PROLOGUE, "label": _("Remove prologue"), "objs": prologues},
             ]
         )
 

@@ -1755,6 +1755,9 @@ msgstr "Typ umiejętności"
 msgid "Achievements"
 msgstr "Osiągnięcia"
 
+msgid "Add prologue"
+msgstr "Dodaj prolog"
+
 msgid "Archive mail"
 msgstr "Poczta archiwalna"
 
@@ -2079,6 +2082,9 @@ msgstr "Wymagania wstępne"
 
 msgid "Progress step"
 msgstr "Krok postępu"
+
+msgid "Prologue type"
+msgstr "Typ prologu"
 
 msgid "Question type"
 msgstr "Typ pytania"
@@ -2422,6 +2428,9 @@ msgstr "Status postępu"
 
 msgid "Question saved!"
 msgstr "Pytanie zapisane!"
+
+msgid "Remove prologue"
+msgstr "Usuń prolog"
 
 msgid "Replacing names"
 msgstr "Zastępowanie nazw"
