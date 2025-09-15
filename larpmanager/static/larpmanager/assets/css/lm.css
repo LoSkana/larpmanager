@@ -1855,6 +1855,12 @@ input[type="checkbox"].checkbox_single {
   display: inline-block;
 }
 
+#page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 #sidebar.topbar,
 #page-wrapper.topbar,
 #page-wrapper.topbar header {
@@ -1862,13 +1868,10 @@ input[type="checkbox"].checkbox_single {
 }
 
 #page-wrapper.topbar {
-  position: fixed;
-  overflow: scroll;
+  overflow: auto;
   -ms-overflow-style: none;
 
-  height: 100vh;
-  top: 0;
-  right: 0;
+  flex: 1;
 }
 
 .popup #topbar {
@@ -2201,5 +2204,5 @@ input[type="number"] {
 }
 
 .bulk-el {
-    display: inline-block;
+  display: inline-block;
 }

@@ -113,7 +113,7 @@ def get_character_sheet_px(ctx):
 
     ctx["sheet_abilities"] = {}
     for el in ctx["character"].px_ability_list.all():
-        if el.typ.name not in ctx["sheet_abilities"]:
+        if el.typ and el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
         ctx["sheet_abilities"][el.typ.name].append(el)
 
