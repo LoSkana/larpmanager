@@ -17,16 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import ast
+import json
 from collections import defaultdict
 from decimal import Decimal
 from typing import Optional
 
+from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
-from larpmanager.cache.config import save_all_element_configs
+from larpmanager.cache.config import save_all_element_configs, save_single_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, Operation, RulePx
 from larpmanager.models.form import (
@@ -88,13 +91,25 @@ def _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, curre
         break  # first valid wins
 
 
+def get_free_abilities(char):
+    config_name = _free_abilities_idx()
+    val = char.get_config(config_name, "[]")
+    return ast.literal_eval(val)
+
+
+def _free_abilities_idx():
+    return "free_abilities"
+
+
+def set_free_abilities(char, frees):
+    config_name = _free_abilities_idx()
+    save_single_config(char, config_name, json.dumps(frees))
+
+
 def update_px(char):
     start = char.event.get_config("px_start", 0)
 
-    # if any ability is available with cost 0, get it
-    for ability in get_available_ability_px(char, 0):
-        if ability.cost == 0:
-            char.px_ability_list.add(ability)
+    _handle_free_abilities(char)
 
     abilities = get_current_ability_px(char)
 
@@ -110,6 +125,26 @@ def update_px(char):
     save_all_element_configs(char, addit)
 
     apply_rules_computed(char)
+
+
+def _handle_free_abilities(char):
+    free_abilities = get_free_abilities(char)
+
+    # look for available ability with cost 0, and not already in the free list: get them!
+    for ability in get_available_ability_px(char, 0):
+        if ability.cost == 0:
+            if ability.id not in free_abilities:
+                char.px_ability_list.add(ability)
+                free_abilities.append(ability.id)
+
+    # look for current abilities with cost non 0, yet got in the past as free: remove them!
+    for ability in get_current_ability_px(char):
+        if ability.cost > 0:
+            if ability.id in free_abilities:
+                removed_ids = remove_char_ability(char, ability.id)
+                free_abilities = list(set(free_abilities) - set(removed_ids))
+
+    set_free_abilities(char, free_abilities)
 
 
 def get_current_ability_px(char):
@@ -280,3 +315,23 @@ def add_char_addit(char):
 
     for config in configs:
         char.addit[config.name] = config.value
+
+
+# remove ability and every other ability with that as pre-requisite
+def remove_char_ability(char, ability_id):
+    to_remove_ids = {ability_id}
+
+    while True:
+        dependents_qs = (
+            char.px_ability_list.filter(prerequisites__in=to_remove_ids).values_list("id", flat=True).distinct()
+        )
+        new_ids = set(dependents_qs) - to_remove_ids
+        if not new_ids:
+            break
+        to_remove_ids |= new_ids
+
+    # atomic removal
+    with transaction.atomic():
+        char.px_ability_list.remove(*to_remove_ids)
+
+    return to_remove_ids

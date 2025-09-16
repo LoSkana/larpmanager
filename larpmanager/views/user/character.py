@@ -79,7 +79,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px
+from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
 from larpmanager.utils.registration import (
     check_assign_character,
     check_character_maximum,
@@ -415,7 +415,7 @@ def character_abilities(request, s, num):
         typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
     }
 
-    ctx["undo_abilities"] = get_undo_abilities(ctx, request)
+    ctx["undo_abilities"] = get_undo_abilities(request, ctx, ctx["character"])
 
     return render(request, "larpmanager/event/character/abilities.html", ctx)
 
@@ -439,11 +439,11 @@ def check_char_abilities(request, s, num):
 @login_required
 def character_abilities_del(request, s, num, id_del):
     ctx = check_char_abilities(request, s, num)
-    undo_abilities = get_undo_abilities(ctx, request)
+    undo_abilities = get_undo_abilities(request, ctx, ctx["character"])
     if id_del not in undo_abilities:
         raise Http404("ability out of undo window")
 
-    ctx["character"].px_ability_list.remove(id_del)
+    remove_char_ability(ctx["character"], id_del)
     ctx["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
@@ -471,14 +471,13 @@ def _save_character_abilities(ctx, request):
     ctx["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
-    get_undo_abilities(ctx, request, selected_id)
+    get_undo_abilities(request, ctx, ctx["character"], selected_id)
 
 
-def get_undo_abilities(ctx, request, new_ability_id=None):
+def get_undo_abilities(request, ctx, char, new_ability_id=None):
     px_undo = int(ctx["event"].get_config("px_undo", 0))
-    config_name = "added_px"
-    member = request.user.member
-    val = member.get_config(config_name, "{}")
+    config_name = f"added_px_{char.id}"
+    val = char.get_config(config_name, "{}")
     added_map = ast.literal_eval(val)
     current_time = int(time.time())
     # clean from abilities out of the undo time windows
@@ -488,7 +487,7 @@ def get_undo_abilities(ctx, request, new_ability_id=None):
     # add newly acquired ability and save it
     if px_undo and new_ability_id:
         added_map[str(new_ability_id)] = current_time
-        save_single_config(member, config_name, json.dumps(added_map))
+        save_single_config(char, config_name, json.dumps(added_map))
 
     # return map of abilities recently added, with int key
     return [int(k) for k in added_map.keys()]
