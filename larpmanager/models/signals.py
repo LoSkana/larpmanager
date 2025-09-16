@@ -67,7 +67,7 @@ from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, La
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
+from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.tutorial_query import delete_index, index_tutorial
@@ -574,6 +574,16 @@ def post_save_reset_member_config(sender, instance, **kwargs):
 @receiver(post_delete, sender=MemberConfig)
 def post_delete_reset_member_config(sender, instance, **kwargs):
     reset_configs(instance.member)
+
+
+@receiver(post_save, sender=CharacterConfig)
+def post_save_reset_character_config(sender, instance, **kwargs):
+    reset_configs(instance.character)
+
+
+@receiver(post_delete, sender=CharacterConfig)
+def post_delete_reset_character_config(sender, instance, **kwargs):
+    reset_configs(instance.character)
 
 
 @receiver(pre_save, sender=Association)

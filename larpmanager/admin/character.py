@@ -130,7 +130,7 @@ class AbilityTypePxAdmin(DefModelAdmin):
 class AbilityPxAdmin(DefModelAdmin):
     list_display = ("event", "name", "typ", "cost")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "characters", "typ", "prerequisites"]
+    autocomplete_fields = ["event", "characters", "typ", "prerequisites", "requirements"]
     search_fields = ["name"]
 
 
