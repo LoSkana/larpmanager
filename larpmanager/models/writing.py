@@ -28,6 +28,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
 from larpmanager.models.member import Member
@@ -194,6 +195,9 @@ class Character(Writing):
 
     def __str__(self):
         return f"#{self.number} {self.name}"
+
+    def get_config(self, name, def_v=None):
+        return get_element_config(self, name, def_v)
 
     def show(self, run=None):
         js = super().show(run)

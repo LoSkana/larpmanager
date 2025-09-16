@@ -46,6 +46,7 @@ def update_configs(element):
         "association": ("AssociationConfig", "assoc"),
         "run": ("RunConfig", "run"),
         "member": ("MemberConfig", "member"),
+        "character": ("CharacterConfig", "character"),
     }
     # noinspection PyProtectedMember
     model = element._meta.model_name.lower()
