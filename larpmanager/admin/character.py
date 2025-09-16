@@ -128,7 +128,7 @@ class AbilityTypePxAdmin(DefModelAdmin):
 
 @admin.register(AbilityPx)
 class AbilityPxAdmin(DefModelAdmin):
-    list_display = ("event", "name", "typ", "cost")
+    list_display = ("name", "typ", "cost", "event")
     list_filter = (EventFilter,)
     autocomplete_fields = ["event", "characters", "typ", "prerequisites", "requirements"]
     search_fields = ["name"]

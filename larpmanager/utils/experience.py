@@ -23,6 +23,7 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import Optional
 
+from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
 from django.db.models.signals import m2m_changed, post_save
@@ -140,8 +141,8 @@ def _handle_free_abilities(char):
     for ability in get_current_ability_px(char):
         if ability.cost > 0:
             if ability.id in free_abilities:
-                remove_char_ability(char, ability.id)
-                free_abilities.remove(ability.id)
+                removed_ids = remove_char_ability(char, ability.id)
+                free_abilities = list(set(free_abilities) - set(removed_ids))
 
     set_free_abilities(char, free_abilities)
 
@@ -317,5 +318,20 @@ def add_char_addit(char):
 
 
 # remove ability and every other ability with that as pre-requisite
-def remove_char_ability(char, id_del):
-    char.px_ability_list.remove(id_del)
+def remove_char_ability(char, ability_id):
+    to_remove_ids = {ability_id}
+
+    while True:
+        dependents_qs = (
+            char.px_ability_list.filter(prerequisites__in=to_remove_ids).values_list("id", flat=True).distinct()
+        )
+        new_ids = set(dependents_qs) - to_remove_ids
+        if not new_ids:
+            break
+        to_remove_ids |= new_ids
+
+    # atomic removal
+    with transaction.atomic():
+        char.px_ability_list.remove(*to_remove_ids)
+
+    return to_remove_ids
