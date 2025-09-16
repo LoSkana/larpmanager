@@ -5418,37 +5418,15 @@ msgstr ""
 msgid "Pre-Register"
 msgstr ""
 
-msgid "Show explanation"
+msgid "Registrations for this event are not open yet, but you can pre-register"
+msgstr ""
+
+msgid ""
+"Pre-registration is free. It does not guarantee a spot, but gives you "
+"priority when registration opens"
 msgstr ""
 
 msgid "New pre-registrations"
-msgstr ""
-
-msgid "Operation"
-msgstr ""
-
-msgid "If you like or are interested in an event, you can <b>pre-register</b>"
-msgstr ""
-
-msgid ""
-"This <b>is</b> not binding, and <b>does</b> not automatically secure you a "
-"place at the event, but you will be offered a preferential registration "
-"before the public opening of registration"
-msgstr ""
-
-msgid ""
-"For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new session of an event, spread the voice "
-"and invites others to pre-register to it"
-msgstr ""
-
-msgid ""
-"We only ask you to indicate a <b>order</b> of preference for the your pre-"
-"registrations (imagining you have to choose which one to play, indicates in "
-"what order you want to play them)"
-msgstr ""
-
-msgid "If you wish, you can delete past pre-registrations"
 msgstr ""
 
 msgid "Do you want to tell us something"
@@ -6529,6 +6507,9 @@ msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 
 msgid "Field"
+msgstr ""
+
+msgid "Operation"
 msgstr ""
 
 msgid "Reading"
