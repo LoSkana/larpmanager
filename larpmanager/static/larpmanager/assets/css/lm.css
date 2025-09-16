@@ -2110,6 +2110,12 @@ table.dataTable span.dtcc span.dtcc-button-icon {
   color: rgba(var(--ter-rgb), 0.8) !important;
 }
 
+div.dtcc-dropdown div.dtcc-search > div select option,
+div.dtcc-dropdown div.dtcc-search > div input option {
+  color: var(--pri-clr);
+  background: var(--sec-clr);
+}
+
 #page-wrapper {
   display: flex;
   flex-direction: column;
