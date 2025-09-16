@@ -17,17 +17,151 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from collections import defaultdict
+from decimal import Decimal
 from typing import Optional
 
+from django.db.models import Prefetch, Q, Sum
+from django.db.models.functions import Coalesce
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
+from larpmanager.cache.config import save_all_element_configs
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.experience import AbilityPx, DeliveryPx, RulePx, update_px
-from larpmanager.models.form import QuestionApplicable, WritingChoice
-from larpmanager.models.writing import Character
-from larpmanager.utils.common import add_char_addit
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, Operation, RulePx
+from larpmanager.models.form import (
+    QuestionApplicable,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
+    WritingQuestionType,
+)
+from larpmanager.models.writing import Character, CharacterConfig
+
+
+def _build_px_context(char):
+    # get all abilities already learned by the character
+    current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
+
+    # get the options selected for the character
+    current_char_choices = set(
+        WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER).values_list(
+            "option_id", flat=True
+        )
+    )
+
+    # get all modifiers
+    all_modifiers = (
+        char.event.get_elements(ModifierPx)
+        .only("id", "order", "cost")
+        .order_by("order")
+        .prefetch_related(
+            Prefetch("abilities", queryset=AbilityPx.objects.only("id")),
+            Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
+        )
+    )
+
+    # build mapping for cost, prereq, reqs
+    mods_by_ability = defaultdict(list)
+    for m in all_modifiers:
+        # Nessuna query extra: usa i risultati del prefetch in memoria
+        ability_ids = [a.id for a in m.abilities.all()]
+        prereq_ids = {a.id for a in m.prerequisites.all()}
+        req_ids = {o.id for o in m.requirements.all()}
+        payload = (m.cost, prereq_ids, req_ids)
+        for aid in ability_ids:
+            mods_by_ability[aid].append(payload)
+
+    return current_char_abilities, current_char_choices, mods_by_ability
+
+
+def _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices):
+    # look only inf modifiers for that ability
+    for cost, prereq_ids, req_ids in mods_by_ability.get(ability.id, ()):
+        if prereq_ids and not prereq_ids.issubset(current_char_abilities):
+            continue
+        if req_ids and not req_ids.issubset(current_char_choices):
+            continue
+        ability.cost = cost
+        break  # first valid wins
+
+
+def update_px(char):
+    start = char.event.get_config("px_start", 0)
+
+    # if any ability is available with cost 0, get it
+    for ability in get_available_ability_px(char, 0):
+        if ability.cost == 0:
+            char.px_ability_list.add(ability)
+
+    abilities = get_current_ability_px(char)
+
+    px_tot = int(start) + (char.px_delivery_list.aggregate(t=Coalesce(Sum("amount"), 0))["t"] or 0)
+    px_used = sum(a.cost for a in abilities)
+
+    addit = {
+        "px_tot": px_tot,
+        "px_used": px_used,
+        "px_avail": px_tot - px_used,
+    }
+
+    save_all_element_configs(char, addit)
+
+    apply_rules_computed(char)
+
+
+def get_current_ability_px(char):
+    current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
+
+    abilities_qs = char.px_ability_list.only("id", "cost").order_by("name")
+
+    abilities = []
+    for ability in abilities_qs:
+        _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
+        abilities.append(ability)
+    return abilities
+
+
+def check_available_ability_px(ability, current_char_abilities, current_char_choices):
+    prereq_ids = {a.id for a in ability.prerequisites.all()}
+    requirements_ids = {o.id for o in ability.requirements.all()}
+    return prereq_ids.issubset(current_char_abilities) and requirements_ids.issubset(current_char_choices)
+
+
+def get_available_ability_px(char, px_avail=None):
+    current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
+
+    if px_avail is None:
+        add_char_addit(char)
+        px_avail = int(char.addit.get("px_avail", 0))
+
+    all_abilities = (
+        char.event.get_elements(AbilityPx)
+        .filter(visible=True)
+        .exclude(pk__in=current_char_abilities)
+        .select_related("typ")
+        .order_by("name")
+        .prefetch_related(
+            Prefetch("prerequisites", queryset=AbilityPx.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id")),
+        )
+    )
+
+    abilities = []
+    for ability in all_abilities:
+        if not check_available_ability_px(ability, current_char_abilities, current_char_choices):
+            continue
+
+        _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
+
+        if ability.cost > px_avail:
+            continue
+
+        abilities.append(ability)
+
+    return abilities
 
 
 @receiver(post_save, sender=Character)
@@ -68,48 +202,6 @@ m2m_changed.connect(px_characters_changed, sender=DeliveryPx.characters.through)
 m2m_changed.connect(px_characters_changed, sender=AbilityPx.characters.through)
 
 
-def check_available_ability_px(ability, current_char_abilities, current_char_choices):
-    prereq_ids = set(ability.prerequisites.values_list("id", flat=True))
-    dependent_ids = set(ability.requirements.values_list("id", flat=True))
-    return prereq_ids.issubset(current_char_abilities) and dependent_ids.issubset(current_char_choices)
-
-
-def get_available_ability_px(char):
-    # get all abilities already learned by the character
-    current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
-
-    # get the options selected for the character
-    que = WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER)
-    current_char_choices = set(que.values_list("option_id", flat=True))
-
-    # get px available
-    add_char_addit(char)
-    px_avail = char.addit.get("px_avail", 0)
-
-    # filter all abilities given we have the requested prerequisites / requirements
-    all_abilities = (
-        char.event.get_elements(AbilityPx)
-        .filter(visible=True, cost__lte=px_avail)
-        .exclude(pk__in=current_char_abilities)
-        .select_related("typ")
-        .prefetch_related("prerequisites", "requirements")
-        .order_by("name")
-    )
-
-    # results
-    result = {}
-    for el in all_abilities:
-        if not check_available_ability_px(el, current_char_abilities, current_char_choices):
-            continue
-
-        if el.typ_id not in result:
-            result[el.typ_id] = {"name": el.typ.name, "order": el.typ.id, "list": {}}
-
-        result[el.typ_id]["list"][el.id] = f"{el.name} - {el.cost}"
-
-    return result
-
-
 @receiver(post_save, sender=RulePx)
 def post_save_rule_px(sender, instance, *args, **kwargs):
     event = instance.event.get_class_parent(RulePx)
@@ -127,3 +219,64 @@ def rule_abilities_changed(sender, instance, action, pk_set, **kwargs):
 
 
 m2m_changed.connect(rule_abilities_changed, sender=RulePx.abilities.through)
+
+
+@receiver(post_save, sender=ModifierPx)
+def post_save_modifier_px(sender, instance, *args, **kwargs):
+    event = instance.event.get_class_parent(ModifierPx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+def modifier_abilities_changed(sender, instance, action, pk_set, **kwargs):
+    if action not in {"post_add", "post_remove", "post_clear"}:
+        return
+
+    event = instance.event.get_class_parent(ModifierPx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+m2m_changed.connect(modifier_abilities_changed, sender=ModifierPx.abilities.through)
+
+
+def apply_rules_computed(char):
+    # save computed field
+    event = char.event
+    computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+    values = {question.id: Decimal(0) for question in computed_ques}
+
+    # apply rules
+    ability_ids = char.px_ability_list.values_list("pk", flat=True)
+    rules = (
+        event.get_elements(RulePx)
+        .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
+        .distinct()
+        .order_by("order")
+    )
+    ops = {
+        Operation.ADDITION: lambda x, y: x + y,
+        Operation.SUBTRACTION: lambda x, y: x - y,
+        Operation.MULTIPLICATION: lambda x, y: x * y,
+        Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
+    }
+
+    for rule in rules:
+        f_id = rule.field.id
+        values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
+
+    for question_id, value in values.items():
+        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        qa.text = format(value, "f").rstrip("0").rstrip(".")
+        qa.save()
+
+
+def add_char_addit(char):
+    char.addit = {}
+    configs = CharacterConfig.objects.filter(character__id=char.id)
+    if not configs.count():
+        update_px(char)
+        configs = CharacterConfig.objects.filter(character__id=char.id)
+
+    for config in configs:
+        char.addit[config.name] = config.value

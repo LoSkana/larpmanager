@@ -21,8 +21,14 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from larpmanager.forms.experience import OrgaAbilityPxForm, OrgaAbilityTypePxForm, OrgaDeliveryPxForm, OrgaRulePxForm
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
+from larpmanager.forms.experience import (
+    OrgaAbilityPxForm,
+    OrgaAbilityTypePxForm,
+    OrgaDeliveryPxForm,
+    OrgaModifierPxForm,
+    OrgaRulePxForm,
+)
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.utils.bulk import handle_bulk_ability
 from larpmanager.utils.common import exchange_order
 from larpmanager.utils.edit import orga_edit
@@ -88,3 +94,22 @@ def orga_px_rules_order(request, s, num, order):
     ctx = check_event_permission(request, s, "orga_px_rules")
     exchange_order(ctx, RulePx, num, order)
     return redirect("orga_px_rules", s=ctx["run"].get_slug())
+
+
+@login_required
+def orga_px_modifiers(request, s):
+    ctx = check_event_permission(request, s, "orga_px_modifiers")
+    ctx["list"] = ctx["event"].get_elements(ModifierPx).order_by("order")
+    return render(request, "larpmanager/orga/px/modifiers.html", ctx)
+
+
+@login_required
+def orga_px_modifiers_edit(request, s, num):
+    return orga_edit(request, s, "orga_px_modifiers", OrgaModifierPxForm, num)
+
+
+@login_required
+def orga_px_modifiers_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_px_modifiers")
+    exchange_order(ctx, ModifierPx, num, order)
+    return redirect("orga_px_modifiers", s=ctx["run"].get_slug())

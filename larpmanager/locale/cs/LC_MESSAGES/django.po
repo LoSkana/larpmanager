@@ -1011,6 +1011,9 @@ msgstr "Maximální použití"
 msgid "Messages"
 msgstr "Zpráva odeslána"
 
+msgid "New cost"
+msgstr "Nové náklady"
+
 msgid "New gift"
 msgstr "Nový dárek"
 
@@ -1223,6 +1226,9 @@ msgstr "Seznam zatížení"
 
 msgid "Mandatory"
 msgstr "Povinné"
+
+msgid "Modifiers"
+msgstr "Modifikátory"
 
 msgid "Movements"
 msgstr "Pohyby"
@@ -2564,9 +2570,6 @@ msgstr "Žádná komunikace"
 msgid "Number not found"
 msgstr "Číslo nebylo nalezeno"
 
-msgid "Options required"
-msgstr "Požadované možnosti"
-
 msgid "Organisation fee"
 msgstr "Organizační poplatek"
 
@@ -2986,6 +2989,9 @@ msgstr "Nemám zájem"
 
 msgid "List of other users"
 msgstr "Seznam dalších uživatelů"
+
+msgid "Manage XP modifiers"
+msgstr "Správa modifikátorů XP"
 
 msgid "Manage url shortner"
 msgstr "Správa zkrácené adresy url"
@@ -4402,6 +4408,9 @@ msgstr "(Nepovinné) Popis tipu"
 msgid "Image shown on homepage as promoter"
 msgstr "Obrázek zobrazený na domovské stránce jako promotér"
 
+msgid "Indicate the prerequisite abilities"
+msgstr "Uveďte předpokládané schopnosti"
+
 msgid "Insert the html code for the footer"
 msgstr "Zadejte html kód, kterým vyplníte patičku"
 
@@ -4695,6 +4704,9 @@ msgstr "Umožňuje bezplatnou předběžnou registraci na události"
 
 msgid "If you need help, remember to check out"
 msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
+
+msgid "Indicate the required character options"
+msgstr "Uveďte požadované možnosti znaků"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Správa a přidělování úkolů postavám"
@@ -5970,9 +5982,6 @@ msgstr ""
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Správa výdajů nahraných zaměstnanci a jejich schvalování"
 
-msgid "Note that if the cost is 0, if will assigned automatically"
-msgstr "Všimněte si, že pokud je cena 0, bude přiřazena automaticky"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
 
@@ -6130,6 +6139,9 @@ msgstr "Zde uveďte všechny prvky, kterým se chcete v zadání vyhnout"
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Správa šablon událostí, které slouží jako výchozí body pro nové události"
+
+msgid "Note that if the cost is 0, it will be automatically assigned"
+msgstr "Všimněte si, že pokud jsou náklady 0, budou automaticky přiřazeny"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nyní mohou účastníci zasílat dary a vy si je můžete prohlédnout"
@@ -8974,6 +8986,13 @@ msgstr ""
 "Tato stránka umožňuje přidat nebo upravit dynamické splátky, kterými může "
 "účastník rozdělit platbu"
 
+msgid ""
+"This page summarizes the modifiers that are applied to abilities based on "
+"other abilities, or character fields"
+msgstr ""
+"Na této stránce jsou shrnuty modifikátory, které se vztahují ke schopnostem "
+"na základě jiných schopností nebo polí postavy"
+
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
@@ -9867,6 +9886,15 @@ msgstr ""
 "Umožňuje dynamickou správu splátek: celkový poplatek je rovnoměrně rozdělen "
 "do několika splátek, z nichž každá je splatná k datu určenému vydělením "
 "zbývajících dnů do události."
+
+msgid ""
+"This page allows you to add or edit an ability modifier. It is triggered "
+"only if all prerequisites and requirements are met. If multiple modifiers "
+"apply, only the first is used"
+msgstr ""
+"Na této stránce můžete přidat nebo upravit modifikátor schopnosti. Spustí se"
+" pouze v případě, že jsou splněny všechny předpoklady a požadavky. Pokud se "
+"použije více modifikátorů, použije se pouze první z nich"
 
 msgid ""
 "Fill in this field if you follow a personal diet for reasons of choice(e.g. "

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 import ast
 import json
 import os
@@ -78,7 +79,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.experience import get_available_ability_px
+from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px
 from larpmanager.utils.registration import (
     check_assign_character,
     check_character_maximum,
@@ -394,10 +395,14 @@ def character_assign(request, s, num):
 def character_abilities(request, s, num):
     ctx = check_char_abilities(request, s, num)
 
-    ctx["available"] = get_available_ability_px(ctx["character"])
+    ctx["available"] = {}
+    for ability in get_available_ability_px(ctx["character"]):
+        if ability.typ_id not in ctx["available"]:
+            ctx["available"][ability.typ_id] = {"name": ability.typ.name, "order": ability.typ.id, "list": {}}
+        ctx["available"][ability.typ_id]["list"][ability.id] = f"{ability.name} - {ability.cost}"
 
     ctx["sheet_abilities"] = {}
-    for el in ctx["character"].px_ability_list.all():
+    for el in get_current_ability_px(ctx["character"]):
         if el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
         ctx["sheet_abilities"][el.typ.name].append(el)

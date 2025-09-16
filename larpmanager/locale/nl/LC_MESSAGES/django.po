@@ -1011,6 +1011,9 @@ msgstr "Maximaal gebruik"
 msgid "Messages"
 msgstr "Bericht verzonden"
 
+msgid "New cost"
+msgstr "Nieuwe kosten"
+
 msgid "New gift"
 msgstr "Nieuw cadeau"
 
@@ -1223,6 +1226,9 @@ msgstr "Lijst laden"
 
 msgid "Mandatory"
 msgstr "Verplicht"
+
+msgid "Modifiers"
+msgstr "Aanpassingen"
 
 msgid "Movements"
 msgstr "Bewegingen"
@@ -2564,9 +2570,6 @@ msgstr "Geen communicatie"
 msgid "Number not found"
 msgstr "Aantal niet gevonden"
 
-msgid "Options required"
-msgstr "Vereiste opties"
-
 msgid "Organisation fee"
 msgstr "Organisatiekosten"
 
@@ -2986,6 +2989,9 @@ msgstr "Niet geïnteresseerd"
 
 msgid "List of other users"
 msgstr "Lijst van andere gebruikers"
+
+msgid "Manage XP modifiers"
+msgstr "XP modifiers beheren"
 
 msgid "Manage url shortner"
 msgstr "Beheer url shortner"
@@ -4402,6 +4408,9 @@ msgstr "(Optioneel) De beschrijving van het ticket"
 msgid "Image shown on homepage as promoter"
 msgstr "Afbeelding getoond op homepage als promoter"
 
+msgid "Indicate the prerequisite abilities"
+msgstr "Vermeld de vereiste vaardigheden"
+
 msgid "Insert the html code for the footer"
 msgstr "Voer de html-code in om de voettekst te vullen met"
 
@@ -4697,6 +4706,9 @@ msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
+
+msgid "Indicate the required character options"
+msgstr "Geef de vereiste tekenopties aan"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Taken beheren en toewijzen aan personages"
@@ -5990,9 +6002,6 @@ msgstr "Laat het ons weten als je problemen ondervindt of hulp nodig hebt"
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Beheer uitgaven die door medewerkers zijn geüpload en keur ze goed"
 
-msgid "Note that if the cost is 0, if will assigned automatically"
-msgstr "Merk op dat als de kosten 0 zijn, deze automatisch worden toegewezen"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
@@ -6172,6 +6181,9 @@ msgstr "Geef hier aan welk element je wilt vermijden in de opdracht"
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Eventsjablonen beheren die worden gebruikt als startpunt voor nieuwe events"
+
+msgid "Note that if the cost is 0, it will be automatically assigned"
+msgstr "Merk op dat als de kosten 0 zijn, ze automatisch worden toegewezen"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Deelnemers kunnen nu donaties indienen en jij kunt ze beoordelen"
@@ -9257,6 +9269,13 @@ msgstr ""
 "Op deze pagina kunt u de dynamische termijnen toevoegen of wijzigen waarmee "
 "de deelnemer de betaling kan splitsen"
 
+msgid ""
+"This page summarizes the modifiers that are applied to abilities based on "
+"other abilities, or character fields"
+msgstr ""
+"Deze pagina geeft een overzicht van de modifiers die worden toegepast op "
+"vaardigheden gebaseerd op andere vaardigheden of karaktervelden"
+
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
@@ -10193,6 +10212,15 @@ msgstr ""
 "gelijkmatig verdeeld in meerdere termijnen, die elk verschuldigd zijn op een"
 " datum die wordt bepaald door de resterende dagen tot het evenement te "
 "delen."
+
+msgid ""
+"This page allows you to add or edit an ability modifier. It is triggered "
+"only if all prerequisites and requirements are met. If multiple modifiers "
+"apply, only the first is used"
+msgstr ""
+"Op deze pagina kun je een ability modifier toevoegen of bewerken. Het wordt "
+"alleen geactiveerd als aan alle voorwaarden en vereisten is voldaan. Als er "
+"meerdere modifiers van toepassing zijn, wordt alleen de eerste gebruikt"
 
 msgid ""
 "Fill in this field if you follow a personal diet for reasons of choice(e.g. "

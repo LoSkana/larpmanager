@@ -1586,6 +1586,12 @@ msgstr ""
 msgid "This page allows you to add or edit a rule on computed fields"
 msgstr ""
 
+msgid ""
+"This page allows you to add or edit an ability modifier. It is triggered "
+"only if all prerequisites and requirements are met. If multiple modifiers "
+"apply, only the first is used"
+msgstr ""
+
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
@@ -2995,7 +3001,7 @@ msgid ""
 "default or customize it"
 msgstr ""
 
-msgid "Note that if the cost is 0, if will assigned automatically"
+msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr ""
 
 msgid ""
@@ -3008,9 +3014,6 @@ msgstr ""
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "
 "acquire this"
-msgstr ""
-
-msgid "Options required"
 msgstr ""
 
 msgid ""
@@ -3036,6 +3039,12 @@ msgid ""
 msgstr ""
 
 msgid "The character field of computed type that will be updated"
+msgstr ""
+
+msgid "Indicate the prerequisite abilities"
+msgstr ""
+
+msgid "Indicate the required character options"
 msgstr ""
 
 msgid "Single choice"
@@ -6500,6 +6509,17 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
+msgid "Modifiers"
+msgstr ""
+
+msgid ""
+"This page summarizes the modifiers that are applied to abilities based on "
+"other abilities, or character fields"
+msgstr ""
+
+msgid "New cost"
+msgstr ""
+
 msgid "Rules"
 msgstr ""
 
@@ -8224,6 +8244,9 @@ msgid "Manifest"
 msgstr ""
 
 msgid "Manage loading and deployment status of warehouse items"
+msgstr ""
+
+msgid "Manage XP modifiers"
 msgstr ""
 
 msgid "Communications"

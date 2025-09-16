@@ -1011,6 +1011,9 @@ msgstr "Maximale Verwendungszwecke"
 msgid "Messages"
 msgstr "Nachricht gesendet"
 
+msgid "New cost"
+msgstr "Neue Kosten"
+
 msgid "New gift"
 msgstr "Neues Geschenk"
 
@@ -1223,6 +1226,9 @@ msgstr "Liste laden"
 
 msgid "Mandatory"
 msgstr "Obligatorisch"
+
+msgid "Modifiers"
+msgstr "Modifikatoren"
 
 msgid "Movements"
 msgstr "Bewegungen"
@@ -2564,9 +2570,6 @@ msgstr "Keine Kommunikation"
 msgid "Number not found"
 msgstr "Nummer nicht gefunden"
 
-msgid "Options required"
-msgstr "Erforderliche Optionen"
-
 msgid "Organisation fee"
 msgstr "Organisationsgebühr"
 
@@ -2986,6 +2989,9 @@ msgstr "Nicht interessiert"
 
 msgid "List of other users"
 msgstr "Liste der anderen Benutzer"
+
+msgid "Manage XP modifiers"
+msgstr "Verwalten von XP-Modifikatoren"
 
 msgid "Manage url shortner"
 msgstr "Url-Verknüpfung verwalten"
@@ -4402,6 +4408,9 @@ msgstr "(Optional) Die Beschreibung des Tickets"
 msgid "Image shown on homepage as promoter"
 msgstr "Bild auf der Homepage als Promoter angezeigt"
 
+msgid "Indicate the prerequisite abilities"
+msgstr "Geben Sie die vorausgesetzten Fähigkeiten an"
+
 msgid "Insert the html code for the footer"
 msgstr "Geben Sie den HTML-Code ein, mit dem die Fußzeile gefüllt werden soll"
 
@@ -4699,6 +4708,9 @@ msgstr "Ermöglicht die kostenlose Vorregistrierung für Veranstaltungen"
 
 msgid "If you need help, remember to check out"
 msgstr "Wenn Sie Hilfe benötigen, besuchen Sie bitte"
+
+msgid "Indicate the required character options"
+msgstr "Geben Sie die gewünschten Zeichenoptionen an"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Verwalten und Zuweisen von Aufgaben an Personen"
@@ -6067,9 +6079,6 @@ msgstr "Lassen Sie uns wissen, wenn Sie Probleme haben oder Hilfe benötigen"
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Von Mitarbeitern hochgeladene Ausgaben verwalten und genehmigen"
 
-msgid "Note that if the cost is 0, if will assigned automatically"
-msgstr "Wenn die Kosten 0 sind, werden sie automatisch zugewiesen"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Name der Option, angezeigt in der Frage (kurz halten)"
 
@@ -6273,6 +6282,9 @@ msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Verwalten von Veranstaltungsvorlagen, die als Ausgangspunkt für neue "
 "Veranstaltungen dienen"
+
+msgid "Note that if the cost is 0, it will be automatically assigned"
+msgstr "Wenn die Kosten 0 sind, werden sie automatisch zugewiesen"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr ""
@@ -9448,6 +9460,13 @@ msgstr ""
 "Auf dieser Seite können Sie die dynamischen Raten, mit denen der Teilnehmer "
 "die Zahlung aufteilen kann, hinzufügen oder ändern"
 
+msgid ""
+"This page summarizes the modifiers that are applied to abilities based on "
+"other abilities, or character fields"
+msgstr ""
+"Diese Seite fasst die Modifikatoren zusammen, die auf Fähigkeiten angewendet"
+" werden, die auf anderen Fähigkeiten oder Charakterfeldern basieren"
+
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
@@ -10405,6 +10424,16 @@ msgstr ""
 "gleichmäßig in mehrere Raten aufgeteilt, die jeweils an einem Datum fällig "
 "werden, das durch Division der verbleibenden Tage bis zur Veranstaltung "
 "bestimmt wird."
+
+msgid ""
+"This page allows you to add or edit an ability modifier. It is triggered "
+"only if all prerequisites and requirements are met. If multiple modifiers "
+"apply, only the first is used"
+msgstr ""
+"Auf dieser Seite können Sie einen Fähigkeitsmodifikator hinzufügen oder "
+"bearbeiten. Er wird nur ausgelöst, wenn alle Voraussetzungen und Bedingungen"
+" erfüllt sind. Wenn mehrere Modifikatoren gelten, wird nur der erste "
+"verwendet"
 
 msgid ""
 "Fill in this field if you follow a personal diet for reasons of choice(e.g. "
