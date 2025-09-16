@@ -888,7 +888,7 @@ class OrgaRunForm(ConfigForm):
         for s in shows:
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
                 continue
-            if s[0] == "plot":
+            if s[0] in ["plot", "prologue"]:
                 continue
             fields = self.params["writing_fields"][s[0]]["questions"]
             extra = []
