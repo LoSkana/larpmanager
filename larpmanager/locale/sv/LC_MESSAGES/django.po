@@ -504,6 +504,9 @@ msgstr "Sidfot"
 msgid "Gender"
 msgstr "Genre"
 
+msgid "Guides"
+msgstr "Guider"
+
 msgid "Header"
 msgstr "Huvud"
 
@@ -6166,6 +6169,9 @@ msgstr "Nu kan deltagarna skicka in donationer och du kan granska dem"
 
 msgid "Quickly configure your organization's most important settings"
 msgstr "Konfigurera snabbt din organisations viktigaste inställningar"
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr "Se praktiska exempel på hur LarpManager kan hjälpa ditt evenemang"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

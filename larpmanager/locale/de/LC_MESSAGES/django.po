@@ -504,6 +504,9 @@ msgstr "Fußzeile"
 msgid "Gender"
 msgstr "Genre"
 
+msgid "Guides"
+msgstr "Leitfäden"
+
 msgid "Header"
 msgstr "Kopfzeile"
 
@@ -6294,6 +6297,11 @@ msgstr ""
 msgid "Quickly configure your organization's most important settings"
 msgstr ""
 "Schnelles Konfigurieren der wichtigsten Einstellungen Ihres Unternehmens"
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr ""
+"Sehen Sie praktische Beispiele, wie der LarpManager Ihre Veranstaltung "
+"unterstützen kann"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

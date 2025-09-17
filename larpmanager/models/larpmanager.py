@@ -107,7 +107,7 @@ class LarpManagerShowcase(BaseModel):
         return res
 
 
-class LarpManagerBlog(BaseModel):
+class LarpManagerGuide(BaseModel):
     number = models.IntegerField(blank=True, null=True)
 
     title = models.CharField(max_length=1000)
@@ -119,9 +119,7 @@ class LarpManagerBlog(BaseModel):
     text = HTMLField(blank=True, null=True)
 
     photo = models.ImageField(
-        max_length=500,
-        upload_to=UploadToPathAndRename("albums/"),
-        verbose_name=_("Photo"),
+        max_length=500, upload_to=UploadToPathAndRename("albums/"), verbose_name=_("Photo"), blank=True, null=True
     )
 
     reduced = ImageSpecField(

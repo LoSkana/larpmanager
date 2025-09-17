@@ -504,6 +504,9 @@ msgstr "Pied de page"
 msgid "Gender"
 msgstr "Genre"
 
+msgid "Guides"
+msgstr "Guides"
+
 msgid "Header"
 msgstr "En-tête"
 
@@ -6247,6 +6250,11 @@ msgid "Quickly configure your organization's most important settings"
 msgstr ""
 "Configurez rapidement les paramètres les plus importants de votre "
 "organisation"
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr ""
+"Voir des exemples pratiques de la façon dont LarpManager peut aider votre "
+"événement"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""
