@@ -224,7 +224,7 @@ def acc_reg(request, reg_id, method=None):
     except Exception as err:
         raise Http404(f"registration not found {err}") from err
 
-    ctx = get_event_run(request, reg.run.event.slug, reg.run.number)
+    ctx = get_event_run(request, reg.run.get_slug())
     ctx["show_accounting"] = True
 
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
@@ -573,7 +573,7 @@ def acc_confirm(request, c):
     if not found:
         if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
-            check_event_permission(request, reg.run.event.slug, reg.run.number)
+            check_event_permission(request, reg.run.get_slug())
 
     inv.status = PaymentStatus.CONFIRMED
     inv.save()
