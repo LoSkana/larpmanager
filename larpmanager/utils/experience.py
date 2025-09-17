@@ -132,14 +132,14 @@ def _handle_free_abilities(char):
 
     # look for available ability with cost 0, and not already in the free list: get them!
     for ability in get_available_ability_px(char, 0):
-        if ability.cost == 0:
+        if ability.visible and ability.cost == 0:
             if ability.id not in free_abilities:
                 char.px_ability_list.add(ability)
                 free_abilities.append(ability.id)
 
     # look for current abilities with cost non 0, yet got in the past as free: remove them!
     for ability in get_current_ability_px(char):
-        if ability.cost > 0:
+        if ability.visible and ability.cost > 0:
             if ability.id in free_abilities:
                 removed_ids = remove_char_ability(char, ability.id)
                 free_abilities = list(set(free_abilities) - set(removed_ids))
