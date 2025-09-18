@@ -427,9 +427,9 @@ def guide(request, slug):
     except ObjectDoesNotExist as err:
         raise Http404("guide not found") from err
 
-    ctx["og_image"] = ctx["article"].thumb.url
-    ctx["og_title"] = ctx["article"].title
-    ctx["og_description"] = ctx["article"].description
+    ctx["og_image"] = ctx["guide"].thumb.url
+    ctx["og_title"] = ctx["guide"].title
+    ctx["og_description"] = ctx["guide"].description
 
     return render(request, "larpmanager/larpmanager/guide.html", ctx)
 
