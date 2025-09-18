@@ -24,6 +24,11 @@ from django.core.management.base import CommandError
 
 
 def check_branch():
+    """Prevent dangerous operations from running on main branch.
+
+    Raises:
+        CommandError: If current git branch is 'main' (except in CI environments)
+    """
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
 

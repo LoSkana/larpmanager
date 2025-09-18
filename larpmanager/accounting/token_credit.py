@@ -37,6 +37,21 @@ from larpmanager.models.utils import get_sum
 
 
 def registration_tokens_credits_use(reg, remaining, assoc_id):
+    """Apply available tokens and credits to a registration payment.
+
+    Automatically uses member's available tokens first, then credits
+    to pay for outstanding registration balance.
+
+    Args:
+        reg: Registration instance to apply payments to
+        remaining: Outstanding balance amount
+        features: Event features dictionary
+        assoc_id: Association ID for membership lookup
+
+    Side effects:
+        Creates AccountingItemPayment records and updates membership balances
+        Updates reg.tot_payed with applied amounts
+    """
     if remaining < 0:
         return
 
@@ -82,19 +97,10 @@ def registration_tokens_credits_overpay(reg, overpay, assoc_id):
     Each row is reduced until the overpayment is covered, deleting the row
     if its value reaches zero. Executed inside a single atomic transaction.
 
-    Parameters
-    ----------
-    reg : Registration
-        Registration to adjust.
-    overpay : float
-        Positive amount to reverse.
-    assoc_id : int
-        Association id used to filter payments.
-
-    Returns
-    -------
-    float
-        Amount actually reversed (≤ overpay).
+    Args:
+        reg : Registration to adjust.
+        overpay : Positive amount to reverse.
+        assoc_id : Association id used to filter payments
     """
 
     if overpay <= 0:
@@ -134,6 +140,14 @@ def registration_tokens_credits_overpay(reg, overpay, assoc_id):
 
 
 def get_regs_paying_incomplete(assoc=None):
+    """Get registrations with incomplete payments (excluding small differences).
+
+    Args:
+        assoc: Optional association to filter by
+
+    Returns:
+        QuerySet: Registrations with payment differences > 0.05
+    """
     reg_que = get_regs(assoc)
     reg_que = reg_que.annotate(diff=F("tot_payed") - F("tot_iscr"))
     reg_que = reg_que.filter(Q(diff__gte=-0.05) | Q(diff__gte=0.05))
@@ -141,6 +155,14 @@ def get_regs_paying_incomplete(assoc=None):
 
 
 def get_regs(assoc):
+    """Get active registrations (not cancelled, not from completed events).
+
+    Args:
+        assoc: Optional association to filter by
+
+    Returns:
+        QuerySet: Active registrations
+    """
     reg_que = Registration.objects.filter(cancellation_date__isnull=True)
     reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE])
     if assoc:
@@ -177,6 +199,19 @@ def post_save_accounting_item_expense_accounting(sender, instance, **kwargs):
 
 
 def update_token_credit(instance, token=True):
+    """Update member's token or credit balance based on accounting items.
+
+    Recalculates and updates membership token or credit balance by summing
+    all relevant accounting items (given, used, expenses, refunds).
+
+    Args:
+        instance: Accounting item instance that triggered the update
+        token: If True, update tokens; if False, update credits
+
+    Side effects:
+        Updates membership.tokens or membership.credit
+        Triggers accounting updates on affected registrations
+    """
     assoc_id = instance.assoc_id
 
     # skip if not active

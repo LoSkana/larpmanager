@@ -84,11 +84,29 @@ utc = pytz.UTC
 
 # ## PROFILING CHECK
 def check_already(nm, params):
+    """Check if a background task is already queued.
+
+    Args:
+        nm (str): Task name
+        params: Task parameters
+
+    Returns:
+        bool: True if task already exists in queue
+    """
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.count() > 0
 
 
 def get_channel(a, b):
+    """Generate unique channel ID for two entities.
+
+    Args:
+        a (int): First entity ID
+        b (int): Second entity ID
+
+    Returns:
+        int: Unique channel ID using Cantor pairing
+    """
     a = int(a)
     b = int(b)
     if a > b:
@@ -98,6 +116,15 @@ def get_channel(a, b):
 
 
 def cantor(k1, k2):
+    """Cantor pairing function to map two integers to a unique integer.
+
+    Args:
+        k1 (int): First integer
+        k2 (int): Second integer
+
+    Returns:
+        float: Unique pairing result
+    """
     return ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
 
 
@@ -116,6 +143,14 @@ def check_diff(self, tx1, tx2):
 
 
 def get_assoc(request):
+    """Get association from request context.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        Association: Association instance from request context
+    """
     return get_object_or_404(Association, pk=request.assoc["id"])
 
 

@@ -62,6 +62,16 @@ class FeatureForm(MyForm):
         self.prevent_canc = True
 
     def _init_features(self, overall):
+        """Initialize feature selection fields organized by modules.
+
+        Args:
+            overall: If True, initialize association-level features;
+                    if False, initialize event-level features
+
+        Side effects:
+            Adds feature selection fields to the form organized by modules
+            Sets initial values based on current feature assignments
+        """
         init_features = None
         if self.instance.pk:
             init_features = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
@@ -89,6 +99,15 @@ class FeatureForm(MyForm):
                 self.initial[f"mod_{module.id}"] = init_features
 
     def _save_features(self, instance):
+        """Save selected features to the instance.
+
+        Args:
+            instance: Model instance to save features to
+
+        Side effects:
+            Clears existing features and sets new ones based on form data
+            Sets self.added_features with newly added feature IDs
+        """
         old_features = set(instance.features.values_list("id", flat=True))
         instance.features.clear()
 
@@ -114,6 +133,15 @@ class QuickSetupForm(MyForm):
         self.prevent_canc = True
 
     def init_fields(self, features):
+        """Initialize form fields for quick setup configuration.
+
+        Args:
+            features: List of currently enabled feature slugs
+
+        Side effects:
+            Creates boolean fields for each setup option
+            Sets initial values based on current configuration
+        """
         # for each value in self.setup, init a field
         for key, element in self.setup.items():
             (is_feature, label, help_text) = element

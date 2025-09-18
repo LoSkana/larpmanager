@@ -28,10 +28,26 @@ from larpmanager.models.base import Feature, FeatureModule
 
 
 def assoc_permission_feature_key(slug):
+    """Generate cache key for association permission features.
+
+    Args:
+        slug (str): Permission slug
+
+    Returns:
+        str: Cache key for association permission feature
+    """
     return f"assoc_permission_feature_{slug}"
 
 
 def update_assoc_permission_feature(slug):
+    """Update cached association permission feature data.
+
+    Args:
+        slug (str): Permission slug
+
+    Returns:
+        tuple: (feature_slug, tutorial, config) data
+    """
     perm = AssocPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
     if feature.placeholder:
@@ -45,6 +61,14 @@ def update_assoc_permission_feature(slug):
 
 
 def get_assoc_permission_feature(slug):
+    """Get cached association permission feature data.
+
+    Args:
+        slug (str): Permission slug
+
+    Returns:
+        tuple: (feature_slug, tutorial, config) from cache or database
+    """
     if not slug:
         return "def", None, None
     res = cache.get(assoc_permission_feature_key(slug))
@@ -64,6 +88,14 @@ def post_delete_assoc_permission_reset(sender, instance, **kwargs):
 
 
 def event_permission_feature_key(slug):
+    """Generate cache key for event permission features.
+
+    Args:
+        slug (str): Permission slug
+
+    Returns:
+        str: Cache key for event permission feature
+    """
     return f"event_permission_feature_{slug}"
 
 

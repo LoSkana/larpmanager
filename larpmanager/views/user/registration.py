@@ -79,6 +79,18 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 
 @login_required
 def pre_register(request, s=""):
+    """Handle pre-registration for events.
+
+    Allows users to register interest in events before full registration opens.
+    Can target specific events or show all available events.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Optional event slug to pre-register for specific event
+
+    Returns:
+        HttpResponse: Pre-registration form or redirect after processing
+    """
     if s:
         ctx = get_event(request, s)
         ctx["sel"] = ctx["event"].id
@@ -143,6 +155,20 @@ def register_exclusive(request, s, sc="", dis=""):
 
 
 def save_registration(request, ctx, form, run, event, reg, gifted=False):
+    """Save registration data and handle payment processing.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with form and event data
+        form: Registration form instance
+        run: Run instance being registered for
+        event: Event instance
+        reg: Registration instance to save
+        gifted (bool): Whether this is a gifted registration
+
+    Returns:
+        HttpResponse: Redirect to appropriate next step or error handling
+    """
     # pprint(form.cleaned_data)
     # Create / modification registration
     if not reg:
@@ -183,6 +209,19 @@ def save_registration(request, ctx, form, run, event, reg, gifted=False):
 
 
 def save_registration_standard(ctx, event, form, gifted, provisional, reg):
+    """Save standard registration with ticket and payment processing.
+
+    Args:
+        ctx: Context dictionary with event and form data
+        event: Event instance
+        form: Registration form instance
+        gifted (bool): Whether this is a gifted registration
+        provisional (bool): Whether registration is provisional
+        reg: Registration instance to process
+
+    Side effects:
+        Creates registration ticket and processes payment calculations
+    """
     if not gifted and not provisional:
         reg.modified = reg.modified + 1
     if "additionals" in form.cleaned_data:
@@ -204,6 +243,17 @@ def save_registration_standard(ctx, event, form, gifted, provisional, reg):
 
 
 def registration_redirect(request, reg, new_reg, run):
+    """Handle post-registration redirect logic.
+
+    Args:
+        request: Django HTTP request object
+        reg: Registration instance
+        new_reg (bool): Whether this is a new registration
+        run: Run instance
+
+    Returns:
+        HttpResponse: Redirect to appropriate next step based on registration state
+    """
     # check if user needs to compile membership
     if "membership" in request.assoc["features"]:
         if not request.user.member.membership.compiled:

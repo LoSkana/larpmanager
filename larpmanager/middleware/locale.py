@@ -25,11 +25,25 @@ from django.utils import translation
 
 
 class LocaleAdvMiddleware:
+    """Advanced locale middleware with user preference support.
+
+    Determines language based on user preferences, falling back to
+    browser detection with validation against supported languages.
+    """
+
     def __init__(self, get_response):
         self.get_response = get_response
         # One-time configuration and initialization.
 
     def __call__(self, request):
+        """Activate language for request based on user/browser preferences.
+
+        Args:
+            request: Django HTTP request object
+
+        Returns:
+            HttpResponse: Response with activated language
+        """
         request.LANGUAGE_CODE = self.get_lang(request)
         translation.activate(request.LANGUAGE_CODE)
         response = self.get_response(request)
@@ -37,6 +51,16 @@ class LocaleAdvMiddleware:
 
     @staticmethod
     def get_lang(request):
+        """Determine appropriate language for the request.
+
+        Priority: test environment > user preference > browser detection > default
+
+        Args:
+            request: Django HTTP request object
+
+        Returns:
+            str: Language code to activate
+        """
         if os.getenv("PYTEST_CURRENT_TEST"):
             language = "en"
         elif hasattr(request, "user") and hasattr(request.user, "member"):

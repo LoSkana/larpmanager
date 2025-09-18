@@ -31,19 +31,33 @@ from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionStatus,
-    WritingQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion, BaseQuestionType, get_writing_max_length,
+    RegistrationQuestion,
+    WritingQuestionType,
+    get_writing_max_length,
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
 class MyForm(forms.ModelForm):
+    """Base form class with context parameter handling.
+
+    Extends Django's ModelForm to support additional context parameters
+    that can be passed during form initialization.
+    """
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with optional context parameters.
+
+        Args:
+            *args: Positional arguments passed to parent ModelForm
+            **kwargs: Keyword arguments, may include 'ctx' for context data
+        """
         super().__init__()
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
@@ -79,12 +93,22 @@ class MyForm(forms.ModelForm):
         self.max_lengths = {}
 
     def get_automatic_field(self):
+        """Get list of fields that should be automatically populated.
+
+        Returns:
+            list: Field names that are automatically set and hidden from user
+        """
         s = ["event", "assoc"]
         if hasattr(self, "auto_run"):
             s.extend(["run"])
         return s
 
     def allow_run_choice(self):
+        """Configure run selection field based on available runs.
+
+        Sets up the run choice field, considering campaign switches and
+        hiding the field if only one run is available.
+        """
         runs = Run.objects.filter(event=self.params["event"])
 
         # if campaign switch is active, show as runs all of the events sharing the campaign
@@ -192,12 +216,27 @@ class MyForm(forms.ModelForm):
 
 
 class MyFormRun(MyForm):
+    """Form class for run-specific operations.
+
+    Extends MyForm with automatic run handling functionality.
+    Sets auto_run to True by default for run-related forms.
+    """
+
     def __init__(self, *args, **kwargs):
         self.auto_run = True
         super().__init__(*args, **kwargs)
 
 
 def max_selections_validator(max_choices):
+    """Create a validator that limits the number of selectable options.
+
+    Args:
+        max_choices (int): Maximum number of options that can be selected
+
+    Returns:
+        function: Validator function that raises ValidationError if exceeded
+    """
+
     def validator(value):
         if len(value) > max_choices:
             raise ValidationError(_("You have exceeded the maximum number of selectable options"))
@@ -206,6 +245,15 @@ def max_selections_validator(max_choices):
 
 
 def max_length_validator(max_length):
+    """Create a validator that limits text length after stripping HTML tags.
+
+    Args:
+        max_length (int): Maximum allowed text length
+
+    Returns:
+        function: Validator function that raises ValidationError if exceeded
+    """
+
     def validator(value):
         if len(strip_tags(value)) > max_length:
             raise ValidationError(_("You have exceeded the maximum text length"))
@@ -214,6 +262,13 @@ def max_length_validator(max_length):
 
 
 class BaseRegistrationForm(MyFormRun):
+    """Base form class for registration-related forms.
+
+    Provides common functionality for handling registration questions,
+    answers, and form validation. Supports both gift registrations
+    and regular registrations with dynamic form field generation.
+    """
+
     gift = False
     answer_class = RegistrationAnswer
     choice_class = RegistrationChoice
@@ -230,6 +285,12 @@ class BaseRegistrationForm(MyFormRun):
         self.sections = {}
 
     def _init_reg_question(self, instance, event):
+        """Initialize registration questions and answers from existing instance.
+
+        Args:
+            instance: Registration instance to load data from
+            event: Event object for question context
+        """
         if instance and instance.pk:
             for el in self.answer_class.objects.filter(**{self.instance_key: instance.id}):
                 self.answers[el.question_id] = el
@@ -309,6 +370,14 @@ class BaseRegistrationForm(MyFormRun):
         return name, valid
 
     def clean(self):
+        """Validate form data and check registration constraints.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If validation rules are violated
+        """
         form_data = super().clean()
 
         if hasattr(self, "questions"):
@@ -535,6 +604,12 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = field
 
     def save_reg_questions(self, instance, orga=True):
+        """Save registration question answers to database.
+
+        Args:
+            instance: Registration instance to save answers for
+            orga (bool): Whether to save organizational questions
+        """
         for q in self.questions:
             if q.skip(instance, self.params["features"], self.params, orga):
                 continue
@@ -592,6 +667,12 @@ class BaseRegistrationForm(MyFormRun):
 
 
 class MyCssForm(MyForm):
+    """Form class for handling CSS customization.
+
+    Manages CSS file upload, editing, and processing for styling
+    customization with support for backgrounds, fonts, and color themes.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -612,6 +693,11 @@ class MyCssForm(MyForm):
         return instance
 
     def save_css(self, instance):
+        """Save CSS content to file with automatic styling additions.
+
+        Args:
+            instance: Model instance to save CSS for
+        """
         path = self.get_css_path(instance)
         css = self.cleaned_data[self.get_input_css()]
         css += css_delimeter
@@ -646,6 +732,12 @@ class MyCssForm(MyForm):
 
 
 class BaseAccForm(forms.Form):
+    """Base form class for accounting and payment processing.
+
+    Handles payment method selection and fee configuration
+    for association-specific accounting operations.
+    """
+
     def __init__(self, *args, **kwargs):
         self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)

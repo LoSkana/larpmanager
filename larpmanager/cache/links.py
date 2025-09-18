@@ -33,6 +33,17 @@ from larpmanager.utils.auth import is_lm_admin
 
 
 def cache_event_links(request):
+    """Get cached event navigation links for authenticated user.
+
+    Builds and caches navigation context including registrations, roles,
+    and accessible runs for the user within the current association.
+
+    Args:
+        request: Django HTTP request with authenticated user and association
+
+    Returns:
+        dict: Navigation context with reg_menu, roles, and accessible runs
+    """
     ctx = {}
     if not request.user.is_authenticated or request.assoc["id"] == 0:
         return ctx
@@ -103,6 +114,14 @@ def cache_event_links(request):
 
 
 def reset_run_event_links(event):
+    """Reset event link cache for all users with roles in the event.
+
+    Args:
+        event: Event instance to reset links for
+
+    Side effects:
+        Clears link cache for event role members, association executives, and superusers
+    """
     for er in EventRole.objects.filter(event=event):
         for mb in er.members.all():
             reset_event_links(mb.id, event.assoc_id)
@@ -120,6 +139,16 @@ def reset_run_event_links(event):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_event_links(sender, instance, **kwargs):
+    """Reset event links when registration changes.
+
+    Args:
+        sender: Registration model class
+        instance: Registration instance that was saved
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Clears event link cache for the registered member
+    """
     if not instance.member:
         return
 
@@ -128,27 +157,85 @@ def post_save_registration_event_links(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Event)
 def post_save_event_links(sender, instance, **kwargs):
+    """Reset event links when event changes.
+
+    Args:
+        sender: Event model class
+        instance: Event instance that was saved
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Clears event link cache for all related users
+    """
     reset_run_event_links(instance)
 
 
 @receiver(post_delete, sender=Event)
 def post_delete_event_links(sender, instance, **kwargs):
+    """Reset event links when event is deleted.
+
+    Args:
+        sender: Event model class
+        instance: Event instance that was deleted
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Clears event link cache for all related users
+    """
     reset_run_event_links(instance)
 
 
 @receiver(post_save, sender=Run)
 def post_save_run_links(sender, instance, **kwargs):
+    """Reset event links when run changes.
+
+    Args:
+        sender: Run model class
+        instance: Run instance that was saved
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Clears event link cache for all users with access to the event
+    """
     reset_run_event_links(instance.event)
 
 
 @receiver(post_delete, sender=Run)
 def post_delete_run_links(sender, instance, **kwargs):
+    """Reset event links when run is deleted.
+
+    Args:
+        sender: Run model class
+        instance: Run instance that was deleted
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Clears event link cache for all users with access to the event
+    """
     reset_run_event_links(instance.event)
 
 
 def reset_event_links(uid, aid):
+    """Clear event link cache for a specific user and association.
+
+    Args:
+        uid (int): User ID
+        aid (int): Association ID
+
+    Side effects:
+        Removes cached event links from cache
+    """
     cache.delete(get_cache_event_key(uid, aid))
 
 
 def get_cache_event_key(uid, aid):
+    """Generate cache key for user event links.
+
+    Args:
+        uid (int): User ID
+        aid (int): Association ID
+
+    Returns:
+        str: Cache key for user event links
+    """
     return f"ctx_event_links_{uid}_{aid}"

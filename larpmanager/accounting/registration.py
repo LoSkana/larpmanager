@@ -58,6 +58,14 @@ from larpmanager.utils.tasks import background_auto
 
 
 def get_reg_iscr(instance):
+    """Calculate total registration signup fee including discounts.
+
+    Args:
+        instance: Registration instance to calculate fee for
+
+    Returns:
+        int: Total signup fee after applying discounts and surcharges
+    """
     # update registration totatal signup fee
     tot_iscr = 0
 
@@ -87,6 +95,18 @@ def get_reg_iscr(instance):
 
 
 def get_reg_payments(reg, acc_payments=None):
+    """Calculate total payments made for a registration.
+
+    Args:
+        reg: Registration instance
+        acc_payments: Optional queryset of payments, will query if None
+
+    Returns:
+        int: Total amount paid
+
+    Side effects:
+        Sets reg.payments dictionary with payment breakdown
+    """
     if acc_payments is None:
         acc_payments = AccountingItemPayment.objects.filter(
             reg=reg,
@@ -105,6 +125,14 @@ def get_reg_payments(reg, acc_payments=None):
 
 
 def get_reg_transactions(reg):
+    """Calculate total transaction fees for a registration.
+
+    Args:
+        reg: Registration instance to calculate fees for
+
+    Returns:
+        int: Total transaction fees that are user burden
+    """
     tot_trans = 0
 
     acc_transactions = AccountingItemTransaction.objects.filter(reg=reg, user_burden=True)
@@ -116,6 +144,14 @@ def get_reg_transactions(reg):
 
 
 def get_accounting_refund(reg):
+    """Get refund information for a registration.
+
+    Args:
+        reg: Registration instance to get refunds for
+
+    Side effects:
+        Sets reg.refunds dictionary with refund amounts by type
+    """
     reg.refunds = {}
 
     if not hasattr(reg, "acc_refunds"):
@@ -131,6 +167,20 @@ def get_accounting_refund(reg):
 
 
 def quota_check(reg, start, alert, assoc_id):
+    """Check payment quotas and deadlines for a registration.
+
+    Calculates payment quotas based on event start date and registration timing.
+    Sets quota amount and deadline for next payment.
+
+    Args:
+        reg: Registration instance to check quotas for
+        start: Event start date
+        alert: Alert threshold in days
+        assoc_id: Association ID for payment deadline calculation
+
+    Side effects:
+        Sets reg.quota, reg.deadline, and reg.qsr attributes
+    """
     if not start:
         return
 
@@ -180,6 +230,19 @@ def quota_check(reg, start, alert, assoc_id):
 
 
 def installment_check(reg, alert, assoc_id):
+    """Check installment payment schedule for a registration.
+
+    Processes configured installments for the event and determines
+    next payment amount and deadline.
+
+    Args:
+        reg: Registration instance to check installments for
+        alert: Alert threshold in days
+        assoc_id: Association ID for payment deadline calculation
+
+    Side effects:
+        Sets reg.quota and reg.deadline based on installment schedule
+    """
     if not reg.ticket:
         return
 
@@ -232,6 +295,16 @@ def installment_check(reg, alert, assoc_id):
 
 
 def _get_deadline_installment(assoc_id, i, reg):
+    """Calculate deadline for a specific installment.
+
+    Args:
+        assoc_id: Association ID for payment deadline calculation
+        i: RegistrationInstallment instance
+        reg: Registration instance
+
+    Returns:
+        int or None: Days until deadline, None if no deadline configured
+    """
     if i.days_deadline:
         deadline = get_payment_deadline(reg, i.days_deadline, assoc_id)
     elif i.date_deadline:
@@ -242,6 +315,16 @@ def _get_deadline_installment(assoc_id, i, reg):
 
 
 def get_payment_deadline(reg, i, assoc_id):
+    """Calculate payment deadline based on registration and membership dates.
+
+    Args:
+        reg: Registration instance
+        i: Number of days to add to base date
+        assoc_id: Association ID for membership lookup
+
+    Returns:
+        int: Days until payment deadline
+    """
     dd = get_time_diff_today(reg.created.date())
     if not hasattr(reg, "membership"):
         reg.membership = get_user_membership(reg.member, assoc_id)
@@ -251,6 +334,14 @@ def get_payment_deadline(reg, i, assoc_id):
 
 
 def registration_payments_status(reg):
+    """Determine registration payment status and balance.
+
+    Args:
+        reg: Registration instance to check status for
+
+    Returns:
+        tuple: (is_paid, balance) where is_paid is boolean and balance is amount owed
+    """
     reg.payment_status = ""
     if reg.tot_iscr > 0:
         if reg.tot_payed == reg.tot_iscr:
@@ -264,6 +355,15 @@ def registration_payments_status(reg):
 
 
 def cancel_run(instance):
+    """Cancel all registrations for a run and process refunds.
+
+    Args:
+        instance: Run instance to cancel registrations for
+
+    Side effects:
+        Cancels all non-cancelled registrations and processes refunds
+        for non-refunded registrations
+    """
     for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance):
         cancel_reg(r)
     for r in Registration.objects.filter(refunded=False, run=instance):
@@ -285,6 +385,15 @@ def cancel_run(instance):
 
 
 def cancel_reg(reg):
+    """Cancel a specific registration and clean up related data.
+
+    Args:
+        reg: Registration instance to cancel
+
+    Side effects:
+        Sets cancellation date, deletes characters, traits, discounts,
+        bonus items, and resets event links
+    """
     reg.cancellation_date = datetime.now()
     reg.save()
 
@@ -305,6 +414,15 @@ def cancel_reg(reg):
 
 
 def get_display_choice(choices, k):
+    """Get display name for a choice field value.
+
+    Args:
+        choices: List of (key, display_name) tuples
+        k: Key to look up display name for
+
+    Returns:
+        str: Display name for the key, empty string if not found
+    """
     for key, d in choices:
         if key == k:
             return d
@@ -312,6 +430,14 @@ def get_display_choice(choices, k):
 
 
 def round_to_nearest_cent(number):
+    """Round a number to the nearest cent with tolerance for small differences.
+
+    Args:
+        number: Number to round
+
+    Returns:
+        float: Rounded number, original if difference exceeds tolerance
+    """
     rounded = round(number * 10) / 10
     max_rounding = 0.03
     if abs(float(number) - rounded) <= max_rounding:
@@ -326,6 +452,15 @@ def pre_save_registration(sender, instance, *args, **kwargs):
 
 
 def get_date_surcharge(reg, event):
+    """Calculate date-based surcharge for a registration.
+
+    Args:
+        reg: Registration instance (None for current date)
+        event: Event instance to get surcharges for
+
+    Returns:
+        int: Total surcharge amount based on registration date
+    """
     if reg and reg.ticket:
         t = reg.ticket.tier
         if t in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
@@ -399,6 +534,14 @@ def post_save_registration_option(sender, instance, created, **kwargs):
 
 
 def check_reg_events(event):
+    """Trigger background accounting updates for all registrations in an event.
+
+    Args:
+        event: Event instance to update registrations for
+
+    Side effects:
+        Queues background task to update accounting for all registrations
+    """
     regs = []
     for run in event.runs.all():
         for reg_id in run.registrations.values_list("id", flat=True):
@@ -419,6 +562,14 @@ def check_reg_bkg(reg_ids):
 
 
 def check_reg_bkg_go(reg_id):
+    """Update accounting for a single registration in background task.
+
+    Args:
+        reg_id: Registration ID to update
+
+    Side effects:
+        Triggers registration save to update accounting if registration exists
+    """
     if not reg_id:
         return
     try:
@@ -429,6 +580,17 @@ def check_reg_bkg_go(reg_id):
 
 
 def update_registration_accounting(reg):
+    """Update comprehensive accounting information for a registration.
+
+    Calculates total signup fee, payments received, outstanding balance,
+    payment quotas, and deadlines based on event configuration.
+
+    Args:
+        reg: Registration instance to update accounting for
+
+    Side effects:
+        Updates reg.tot_iscr, reg.tot_payed, reg.quota, reg.deadline, reg.alert
+    """
     for s in [DevelopStatus.CANC, DevelopStatus.DONE]:
         if reg.run.development == s:
             return
@@ -481,5 +643,13 @@ def update_registration_accounting(reg):
 
 
 def update_member_registrations(member):
+    """Trigger accounting updates for all registrations of a member.
+
+    Args:
+        member: Member instance to update registrations for
+
+    Side effects:
+        Saves all registrations to trigger accounting recalculation
+    """
     for reg in Registration.objects.filter(member=member):
         reg.save()
