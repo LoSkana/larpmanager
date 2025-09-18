@@ -21,14 +21,12 @@
                 <p>
                     <span class="sidebar-link-wrap"
                           descr="{% trans "Access the event dashboard" %}">
-                        <a class="sidebar-link"
-                           href="{% url 'manage' run.get_slug %}">Dashboard</a>
+                        <a class="sidebar-link" href="{% url 'manage' run.get_slug %}">Dashboard</a>
                         <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
                     </span>
                     <span class="sidebar-link-wrap"
                           descr="{% trans "Set your interface preferences" %}">
-                        <a class="sidebar-link"
-                           href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
+                        <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
                         <a href="#" class="explain-icon" tog="orga_preferences"><i class="fas fa-question-circle"></i></a>
                     </span>
                 </p>
@@ -45,8 +43,7 @@
                                         <span class="sidebar-link-wrap"
                                               descr="{% trans ap.descr %}"
                                               id="{{ ap.slug }}">
-                                            <a class="sidebar-link"
-                                               href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
+                                            <a class="sidebar-link" href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
                                             <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                         </span>
                                     {% endif %}
@@ -106,6 +103,11 @@
                 <div>
                     <p class="centerized">
                         <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
+                    </p>
+                </div>
+                <div>
+                    <p class="centerized">
+                        <a href="{% url 'guides' %}" class="sidebar-link">Guides</a>
                     </p>
                 </div>
             {% endif %}

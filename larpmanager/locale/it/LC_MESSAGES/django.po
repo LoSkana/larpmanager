@@ -504,6 +504,9 @@ msgstr "Footer"
 msgid "Gender"
 msgstr "Genere"
 
+msgid "Guides"
+msgstr "Guide"
+
 msgid "Header"
 msgstr "Intestazione"
 
@@ -6198,6 +6201,9 @@ msgstr "Ora i partecipanti possono inviare le donazioni e tu puoi esaminarle"
 msgid "Quickly configure your organization's most important settings"
 msgstr ""
 "Configurazione rapida delle impostazioni più importanti dell'organizzazione"
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr "Guarda esempi pratici di come LarpManager può aiutare i tuoi eventi"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

@@ -36,6 +36,16 @@ urlpatterns = [
         name="discover",
     ),
     path(
+        "guides/",
+        views_lm.guides,
+        name="guides",
+    ),
+    path(
+        "guide/<slug:slug>/",
+        views_lm.guide,
+        name="guide",
+    ),
+    path(
         "tutorials/",
         views_lm.tutorials,
         name="tutorials",
@@ -69,16 +79,6 @@ urlpatterns = [
         "contact/",
         views_lm.contact,
         name="contact",
-    ),
-    path(
-        "blog/",
-        views_lm.blog,
-        name="blog",
-    ),
-    path(
-        "blog/<slug:slug>",
-        views_lm.blog,
-        name="blog",
     ),
     path(
         "lm/list/",

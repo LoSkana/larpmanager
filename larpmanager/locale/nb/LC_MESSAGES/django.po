@@ -504,6 +504,9 @@ msgstr "Bunntekst"
 msgid "Gender"
 msgstr "Sjanger"
 
+msgid "Guides"
+msgstr "Guider"
+
 msgid "Header"
 msgstr "Overskrift"
 
@@ -6165,6 +6168,10 @@ msgstr "Nå kan deltakerne sende inn donasjoner, og du kan gå gjennom dem"
 
 msgid "Quickly configure your organization's most important settings"
 msgstr "Konfigurer raskt organisasjonens viktigste innstillinger"
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr ""
+"Se praktiske eksempler på hvordan LarpManager kan hjelpe arrangementet ditt"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

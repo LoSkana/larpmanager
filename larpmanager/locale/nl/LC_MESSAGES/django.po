@@ -504,6 +504,9 @@ msgstr "Voettekst"
 msgid "Gender"
 msgstr "Genre"
 
+msgid "Guides"
+msgstr "Gidsen"
+
 msgid "Header"
 msgstr "Kop"
 
@@ -6190,6 +6193,10 @@ msgstr "Deelnemers kunnen nu donaties indienen en jij kunt ze beoordelen"
 
 msgid "Quickly configure your organization's most important settings"
 msgstr "Snel de belangrijkste instellingen van je organisatie configureren"
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr ""
+"Bekijk praktische voorbeelden van hoe LarpManager jouw evenement kan helpen"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""

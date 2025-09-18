@@ -51,8 +51,8 @@ from larpmanager.models.association import Association, AssociationPlan, AssocTe
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
-    LarpManagerBlog,
     LarpManagerDiscover,
+    LarpManagerGuide,
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
@@ -414,21 +414,24 @@ def tutorials(request, slug=None):
 
 
 @cache_page(60 * 15)
-def blog(request, slug=""):
+def guides(request):
     ctx = get_lm_contact(request)
-    ctx["index"] = True
-    if slug:
-        try:
-            ctx["article"] = LarpManagerBlog.objects.get(slug=slug, published=True)
-            ctx["og_image"] = ctx["article"].thumb.url
-            ctx["og_title"] = ctx["article"].title
-            ctx["og_description"] = ctx["article"].description
-        except Exception as err:
-            raise Http404("blog article not found") from err
-    else:
-        ctx["list"] = LarpManagerBlog.objects.filter(published=True)
+    ctx["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    return render(request, "larpmanager/larpmanager/guides.html", ctx)
 
-    return render(request, "larpmanager/larpmanager/blog.html", ctx)
+
+def guide(request, slug):
+    ctx = get_lm_contact(request)
+    try:
+        ctx["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
+    except ObjectDoesNotExist as err:
+        raise Http404("guide not found") from err
+
+    ctx["og_image"] = ctx["article"].thumb.url
+    ctx["og_title"] = ctx["article"].title
+    ctx["og_description"] = ctx["article"].description
+
+    return render(request, "larpmanager/larpmanager/guide.html", ctx)
 
 
 @cache_page(60 * 15)

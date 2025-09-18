@@ -5481,6 +5481,12 @@ msgstr ""
 msgid "Video"
 msgstr ""
 
+msgid "Guides"
+msgstr ""
+
+msgid "See practical examples of how LarpManager can help your event"
+msgstr ""
+
 msgid "Show inactive"
 msgstr ""
 
