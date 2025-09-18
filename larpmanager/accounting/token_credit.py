@@ -150,7 +150,7 @@ def get_regs_paying_incomplete(assoc=None):
     """
     reg_que = get_regs(assoc)
     reg_que = reg_que.annotate(diff=F("tot_payed") - F("tot_iscr"))
-    reg_que = reg_que.filter(Q(diff__gte=-0.05) | Q(diff__gte=0.05))
+    reg_que = reg_que.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
     return reg_que
 
 
@@ -250,8 +250,10 @@ def update_token_credit(instance, token=True):
 
 
 def handle_tokes_credits(assoc_id, features, reg, remaining):
-    if "token_credit" in features:
-        if remaining > 0 and reg.run.event.get_config("token_credit_disable_t", False):
-            registration_tokens_credits_use(reg, remaining, assoc_id)
-        else:
-            registration_tokens_credits_overpay(reg, -remaining, assoc_id)
+    if "token_credit" not in features or reg.run.event.get_config("token_credit_disable_t", False):
+        return
+
+    if remaining > 0:
+        registration_tokens_credits_use(reg, remaining, assoc_id)
+    else:
+        registration_tokens_credits_overpay(reg, -remaining, assoc_id)
