@@ -28,7 +28,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.accounting.token_credit import registration_tokens_credits
+from larpmanager.accounting.token_credit import handle_tokes_credits
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.mail.registration import update_registration_status_bkg
@@ -453,7 +453,7 @@ def update_registration_accounting(reg):
     reg.alert = False
 
     remaining = reg.tot_iscr - reg.tot_payed
-    if remaining <= max_rounding:
+    if -max_rounding < remaining <= max_rounding:
         return
 
     if reg.cancellation_date:
@@ -465,7 +465,7 @@ def update_registration_accounting(reg):
         if reg.membership.status != MembershipStatus.ACCEPTED:
             return
 
-    registration_tokens_credits(reg, remaining, features, assoc_id)
+    handle_tokes_credits(assoc_id, features, reg, remaining)
 
     alert = int(reg.run.event.get_config("payment_alert", 30))
 
