@@ -44,6 +44,11 @@ from larpmanager.models.writing import Character, Faction, FactionType
 
 
 def delete_all_in_path(path):
+    """Recursively delete all contents within a directory path.
+
+    Args:
+        path (str): Directory path to clean
+    """
     if os.path.exists(path):
         # Remove all contents inside the path
         for item in os.listdir(path):
@@ -55,10 +60,26 @@ def delete_all_in_path(path):
 
 
 def get_event_cache_all_key(run):
+    """Generate cache key for event data.
+
+    Args:
+        run: Run instance
+
+    Returns:
+        str: Cache key for event factions and characters
+    """
     return f"event_factions_characters_{run.event.slug}_{run.number}"
 
 
 def init_event_cache_all(ctx):
+    """Initialize complete event cache with characters, factions, and traits.
+
+    Args:
+        ctx: Context dictionary containing event and feature data
+
+    Returns:
+        dict: Cached event data including characters, factions, and traits
+    """
     res = {}
     get_event_cache_characters(ctx, res)
 
@@ -71,6 +92,12 @@ def init_event_cache_all(ctx):
 
 
 def get_event_cache_characters(ctx, res):
+    """Cache character data for an event including assignments and registrations.
+
+    Args:
+        ctx: Context dictionary with event data
+        res: Results dictionary to populate with character data
+    """
     res["chars"] = {}
     mirror = "mirror" in ctx["features"]
 

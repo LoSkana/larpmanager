@@ -66,6 +66,16 @@ from larpmanager.utils.edit import save_log
 
 
 def go_upload(request, ctx, form):
+    """Route uploaded files to appropriate processing functions.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with upload type and settings
+        form: Uploaded file form data
+
+    Returns:
+        str: Result message from processing function
+    """
     # FIX
     # if request.POST.get("upload") == "cover":
     #     # check extension
@@ -90,6 +100,14 @@ def go_upload(request, ctx, form):
 
 
 def _read_uploaded_csv(uploaded_file):
+    """Read CSV file with multiple encoding fallbacks.
+
+    Args:
+        uploaded_file: Django uploaded file object
+
+    Returns:
+        pandas.DataFrame or None: Parsed CSV data or None if failed
+    """
     if not uploaded_file:
         return None
 
@@ -120,6 +138,16 @@ def _read_uploaded_csv(uploaded_file):
 
 
 def _get_file(ctx, file, column_id=None):
+    """Get file path and save uploaded file to media directory.
+
+    Args:
+        ctx: Context dictionary with event information
+        file: Uploaded file object
+        column_id: Optional column identifier for file naming
+
+    Returns:
+        str: Saved file path relative to media root
+    """
     _get_column_names(ctx)
     allowed = []
     if column_id is not None:
@@ -142,6 +170,16 @@ def _get_file(ctx, file, column_id=None):
 
 
 def registrations_load(request, ctx, form):
+    """Load registration data from uploaded CSV file.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with event and form settings
+        form: Form data containing uploaded CSV file
+
+    Returns:
+        str: HTML formatted result message with processing statistics
+    """
     (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
 
     que = ctx["event"].get_elements(RegistrationQuestion).prefetch_related("options")

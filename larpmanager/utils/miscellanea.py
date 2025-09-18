@@ -34,6 +34,19 @@ from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, Wareh
 
 
 def upload_albums_dir(main, cache_subs, name):
+    """Create or find album directory structure for uploaded files.
+
+    Args:
+        main: Main album instance
+        cache_subs (dict): Cache of subdirectory albums
+        name (str): Directory path from zip file
+
+    Returns:
+        Album: Album instance for the directory
+
+    Side effects:
+        Creates new Album instances for directories as needed
+    """
     name = os.path.dirname(name)
     if name not in cache_subs:
         parent = os.path.dirname(name)
@@ -60,6 +73,18 @@ def upload_albums_dir(main, cache_subs, name):
 
 
 def upload_albums_el(f, alb, name, main, o_path):
+    """Upload individual file from zip archive to album.
+
+    Args:
+        f: Zip file object
+        alb: Album instance to upload to
+        name (str): File name from zip archive
+        main: Main album instance
+        o_path (str): Output path for extraction
+
+    Side effects:
+        Creates AlbumUpload and AlbumImage records, moves files to media directory
+    """
     # check if exists already
     u_name = os.path.basename(name)
     for u in alb.uploads.all():
@@ -104,6 +129,15 @@ def upload_albums_el(f, alb, name, main, o_path):
 
 
 def upload_albums(main, el):
+    """Extract and upload all files from zip archive to album structure.
+
+    Args:
+        main: Main album instance
+        el: Zip file to extract
+
+    Side effects:
+        Extracts zip file, creates album structure, uploads all images
+    """
     cache_subs = {}
 
     o_path = os.path.join(conf_settings.MEDIA_ROOT, "zip")
@@ -123,6 +157,15 @@ def upload_albums(main, el):
 
 
 def zipdir(path, ziph):
+    """Recursively add directory contents to zip file.
+
+    Args:
+        path (str): Directory path to compress
+        ziph: Zip file handle to write to
+
+    Side effects:
+        Adds all files in directory tree to zip archive
+    """
     for root, _dirs, files in os.walk(path):
         for file in files:
             ziph.write(
@@ -132,6 +175,19 @@ def zipdir(path, ziph):
 
 
 def check_centauri(request):
+    """Check and display Centauri easter egg feature.
+
+    Random chance to show special content and award badges to users.
+
+    Args:
+        request: Django HTTP request with user and association context
+
+    Returns:
+        HttpResponse or None: Centauri page response if triggered, None otherwise
+
+    Side effects:
+        May award badge to user if Centauri is triggered
+    """
     if "centauri" not in request.assoc["features"]:
         return
 
@@ -153,6 +209,14 @@ def check_centauri(request):
 
 
 def _go_centauri(request):
+    """Determine if Centauri easter egg should be triggered.
+
+    Args:
+        request: Django HTTP request with user and association context
+
+    Returns:
+        bool: True if Centauri should be displayed
+    """
     if not request.user.is_authenticated:
         return False
 
@@ -173,6 +237,15 @@ def _go_centauri(request):
 
 
 def get_warehouse_optionals(ctx, def_cols):
+    """Get warehouse optional field configuration for display.
+
+    Args:
+        ctx (dict): Context dictionary to update
+        def_cols (list): Default column configuration
+
+    Side effects:
+        Updates ctx with optionals configuration and header column settings
+    """
     assoc = Association.objects.get(pk=ctx["a_id"])
     optionals = {}
     active = 0

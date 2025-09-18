@@ -41,6 +41,12 @@ from larpmanager.models.member import Member
 
 
 class ExeAssociationForm(MyForm):
+    """Form for editing main association settings.
+
+    Allows executives to modify core association properties
+    while protecting critical fields like slug and features.
+    """
+
     page_title = _("Settings")
 
     page_info = _("This page allows you to change the main settings of your Organization")
@@ -76,6 +82,12 @@ class ExeAssociationForm(MyForm):
 
 
 class ExeAssocTextForm(MyForm):
+    """Form for managing association text content.
+
+    Handles custom text snippets used throughout the
+    association's interface and communications.
+    """
+
     page_title = _("Texts")
 
     page_info = _("This page allows you to edit organization-specific text")
@@ -170,6 +182,12 @@ class ExeAssocTextForm(MyForm):
 
 
 class ExeAssocRoleForm(MyForm):
+    """Form for managing association roles and permissions.
+
+    Allows configuration of role-based access control
+    including member assignment and permission management.
+    """
+
     page_title = _("Roles")
 
     page_info = _("This page allows you to edit the roles of the association")
@@ -583,6 +601,12 @@ class ExeConfigForm(ConfigForm):
 
 
 class FirstAssociationForm(MyForm):
+    """Form for creating a new association during initial setup.
+
+    Simplified form for first-time association creation
+    with essential fields only.
+    """
+
     class Meta:
         model = Association
         fields = ("name", "profile", "slug")

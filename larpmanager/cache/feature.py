@@ -28,14 +28,35 @@ from larpmanager.models.event import Event
 
 
 def reset_assoc_features(assoc_id):
+    """Clear cached association features.
+
+    Args:
+        assoc_id (int): Association ID to clear cache for
+    """
     cache.delete(cache_assoc_features(assoc_id))
 
 
 def cache_assoc_features(assoc_id):
+    """Generate cache key for association features.
+
+    Args:
+        assoc_id (int): Association ID
+
+    Returns:
+        str: Cache key for association features
+    """
     return f"assoc_features_{assoc_id}"
 
 
 def get_assoc_features(assoc_id):
+    """Get cached association features, updating cache if needed.
+
+    Args:
+        assoc_id (int): Association ID
+
+    Returns:
+        dict: Dictionary of enabled features {feature_slug: 1}
+    """
     key = cache_assoc_features(assoc_id)
     res = cache.get(key)
     if not res:
@@ -45,6 +66,14 @@ def get_assoc_features(assoc_id):
 
 
 def update_assoc_features(assoc_id):
+    """Update association feature cache from database.
+
+    Args:
+        assoc_id (int): Association ID to update cache for
+
+    Returns:
+        dict: Dictionary of enabled features including config-based features
+    """
     res = {}
     try:
         assoc = Association.objects.get(pk=assoc_id)
@@ -82,6 +111,14 @@ def cache_event_features_key(ev_id):
 
 
 def get_event_features(ev_id):
+    """Get cached event features, updating cache if needed.
+
+    Args:
+        ev_id (int): Event ID
+
+    Returns:
+        dict: Dictionary of enabled event features {feature_slug: 1}
+    """
     key = cache_event_features_key(ev_id)
     res = cache.get(key)
     if not res:

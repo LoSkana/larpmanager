@@ -70,6 +70,16 @@ class BaseQuestionType(models.TextChoices):
 
 
 def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+    """Extend Django TextChoices with additional options.
+
+    Args:
+        name: Name for the new TextChoices class
+        base: Base TextChoices to extend
+        extra: List of (name, value, label) tuples to add
+
+    Returns:
+        models.TextChoices: Extended choices class
+    """
     members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
 
@@ -94,10 +104,20 @@ WritingQuestionType = extend_textchoices(
 
 
 def get_def_writing_types():
+    """Get default writing question types.
+
+    Returns:
+        set: Set of default WritingQuestionType values
+    """
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
 
 def get_writing_max_length():
+    """Get maximum length for writing content.
+
+    Returns:
+        int: Maximum character length for writing fields
+    """
     return {
         WritingQuestionType.NAME,
         WritingQuestionType.SHEET,

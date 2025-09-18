@@ -62,11 +62,27 @@ from larpmanager.utils.text import get_assoc_text
 
 
 def fix_filename(s):
+    """Remove special characters from filename for safe PDF generation.
+
+    Args:
+        s (str): Original filename string
+
+    Returns:
+        str: Sanitized filename with only alphanumeric characters and spaces
+    """
     return re.sub(r"[^A-Za-z0-9 ]+", "", s)
 
 
 # reprint if file not exists, older than 1 day, or debug
 def reprint(fp):
+    """Determine if PDF file should be regenerated.
+
+    Args:
+        fp (str): File path to check
+
+    Returns:
+        bool: True if file should be regenerated (debug mode, missing, or older than 1 day)
+    """
     if conf_settings.DEBUG:
         return True
 
@@ -79,6 +95,18 @@ def reprint(fp):
 
 
 def return_pdf(fp, fn):
+    """Return PDF file as HTTP response.
+
+    Args:
+        fp (str): File path to PDF file
+        fn (str): Filename for download
+
+    Returns:
+        HttpResponse: PDF file response with appropriate headers
+
+    Raises:
+        Http404: If PDF file is not found
+    """
     try:
         f = open(fp, "rb")
         response = HttpResponse(f.read(), content_type="application/pdf")
@@ -90,6 +118,18 @@ def return_pdf(fp, fn):
 
 
 def link_callback(uri, rel):
+    """Convert HTML URIs to absolute system paths for xhtml2pdf.
+
+    Resolves static and media URLs to absolute file paths so the PDF
+    generator can access resources like images and stylesheets.
+
+    Args:
+        uri (str): URI from HTML content
+        rel (str): Relative URI reference
+
+    Returns:
+        str: Absolute file path or empty string if file not found
+    """
     """
     Convert HTML URIs to absolute system paths so xhtml2pdf can access those
     resources. Raises an exception if the file doesn't exist.
@@ -113,6 +153,17 @@ def link_callback(uri, rel):
 
 
 def add_pdf_instructions(ctx):
+    """Add PDF generation instructions to template context.
+
+    Processes template variables and utility codes for PDF headers,
+    footers, and CSS styling.
+
+    Args:
+        ctx (dict): Template context dictionary to modify
+
+    Side effects:
+        Updates ctx with processed PDF styling and content instructions
+    """
     for instr in ["page_css", "header_content", "footer_content"]:
         ctx[instr] = ctx["event"].get_config(instr, "")
 
@@ -144,6 +195,16 @@ def add_pdf_instructions(ctx):
 
 
 def xhtml_pdf(context, template_path, output_filename):
+    """Generate PDF from Django template using xhtml2pdf.
+
+    Args:
+        context (dict): Template context dictionary
+        template_path (str): Path to Django template file
+        output_filename (str): Output PDF file path
+
+    Raises:
+        Http404: If PDF generation fails with errors
+    """
     template = get_template(template_path)
 
     html = template.render(context)
@@ -158,6 +219,18 @@ def xhtml_pdf(context, template_path, output_filename):
 
 
 def pdf_template(ctx, tmp, out, small=False, html=False):
+    """Generate PDF from template using pdfkit with configurable options.
+
+    Args:
+        ctx (dict): Template context dictionary
+        tmp (str): Template path or HTML string
+        out (str): Output PDF file path
+        small (bool): Use minimal margins for compact layout
+        html (bool): If True, treat tmp as HTML string; if False, as template path
+
+    Side effects:
+        Creates PDF file at specified output path
+    """
     if small:
         options = {
             "page-size": "A4",
