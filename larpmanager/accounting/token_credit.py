@@ -17,9 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
-from django.db.models import F
-from django.db.models.functions import Abs
+from django.db import transaction
+from django.db.models import Case, F, IntegerField, Q, Value, When
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
@@ -37,7 +36,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 
 
-def registration_tokens_credits(reg, remaining, features, assoc_id):
+def registration_tokens_credits_use(reg, remaining, assoc_id):
     """Apply available tokens and credits to a registration payment.
 
     Automatically uses member's available tokens first, then credits
@@ -53,42 +52,91 @@ def registration_tokens_credits(reg, remaining, features, assoc_id):
         Creates AccountingItemPayment records and updates membership balances
         Updates reg.tot_payed with applied amounts
     """
-    if "token_credit" not in features:
+    if remaining < 0:
         return
 
-    if reg.run.event.get_config("token_credit_disable_t", False):
+    with transaction.atomic():
+        # check token credits
+        member = reg.member
+        membership = get_user_membership(member, assoc_id)
+        if membership.tokens > 0:
+            tk_use = min(remaining, membership.tokens)
+            reg.tot_payed += tk_use
+            membership.tokens -= tk_use
+            membership.save()
+            AccountingItemPayment.objects.create(
+                pay=PaymentChoices.TOKEN,
+                value=tk_use,
+                member=reg.member,
+                reg=reg,
+                assoc_id=assoc_id,
+            )
+            remaining -= tk_use
+
+        if membership.credit > 0:
+            cr_use = min(remaining, membership.credit)
+            reg.tot_payed += cr_use
+            membership.credit -= cr_use
+            membership.save()
+            AccountingItemPayment.objects.create(
+                pay=PaymentChoices.CREDIT,
+                value=cr_use,
+                member=reg.member,
+                reg=reg,
+                assoc_id=assoc_id,
+            )
+
+
+def registration_tokens_credits_overpay(reg, overpay, assoc_id):
+    """
+    Offsets an overpayment by reducing or deleting `AccountingItemPayment`
+    rows with pay=TOKEN or CREDIT.
+
+    Rows are locked (SELECT FOR UPDATE) and ordered by:
+    CREDIT first, then TOKEN, then by value (desc) and id (desc).
+    Each row is reduced until the overpayment is covered, deleting the row
+    if its value reaches zero. Executed inside a single atomic transaction.
+
+    Args:
+        reg : Registration to adjust.
+        overpay : Positive amount to reverse.
+        assoc_id : Association id used to filter payments
+    """
+
+    if overpay <= 0:
         return
 
-    # check token
-    member = reg.member
-    membership = get_user_membership(member, assoc_id)
-    if membership.tokens > 0:
-        tk_use = min(remaining, membership.tokens)
-        reg.tot_payed += tk_use
-        membership.tokens -= tk_use
-        membership.save()
-        AccountingItemPayment.objects.create(
-            pay=PaymentChoices.TOKEN,
-            value=tk_use,
-            member=reg.member,
-            reg=reg,
-            assoc_id=assoc_id,
+    with transaction.atomic():
+        qs = (
+            AccountingItemPayment.objects.select_for_update()
+            .filter(reg=reg, assoc_id=assoc_id, pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+            .annotate(
+                pay_priority=Case(
+                    When(pay=PaymentChoices.CREDIT, then=Value(0)),
+                    When(pay=PaymentChoices.TOKEN, then=Value(1)),
+                    output_field=IntegerField(),
+                )
+            )
+            .order_by("pay_priority", "-value", "-id")
         )
-        remaining -= tk_use
 
-    # check credits
-    if membership.credit > 0:
-        cr_use = min(remaining, membership.credit)
-        reg.tot_payed += cr_use
-        membership.credit -= cr_use
-        membership.save()
-        AccountingItemPayment.objects.create(
-            pay=PaymentChoices.CREDIT,
-            value=cr_use,
-            member=reg.member,
-            reg=reg,
-            assoc_id=assoc_id,
-        )
+        reversed_total = 0
+        remaining = overpay
+
+        for item in qs:
+            if remaining <= 0:
+                break
+            cut = min(remaining, item.value)
+            new_val = item.value - cut
+
+            if new_val <= 0:
+                item.delete()
+            else:
+                item.value = new_val
+                item.save(update_fields=["value"])
+
+            reversed_total += cut
+            remaining -= cut
 
 
 def get_regs_paying_incomplete(assoc=None):
@@ -101,7 +149,8 @@ def get_regs_paying_incomplete(assoc=None):
         QuerySet: Registrations with payment differences > 0.05
     """
     reg_que = get_regs(assoc)
-    reg_que = reg_que.annotate(diff=Abs(F("tot_payed") - F("tot_iscr"))).exclude(diff__lt=0.05)
+    reg_que = reg_que.annotate(diff=F("tot_payed") - F("tot_iscr"))
+    reg_que = reg_que.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
     return reg_que
 
 
@@ -196,10 +245,15 @@ def update_token_credit(instance, token=True):
         membership.save()
 
     # trigger accounting update on registrations with missing remaining
-    available = membership.credit + membership.tokens
     for reg in get_regs_paying_incomplete(instance.assoc).filter(member=instance.member):
-        remaining = reg.tot_iscr - reg.tot_payed
         reg.save()
-        available -= remaining
-        if available < 0:
-            break
+
+
+def handle_tokes_credits(assoc_id, features, reg, remaining):
+    if "token_credit" not in features or reg.run.event.get_config("token_credit_disable_t", False):
+        return
+
+    if remaining > 0:
+        registration_tokens_credits_use(reg, remaining, assoc_id)
+    else:
+        registration_tokens_credits_overpay(reg, -remaining, assoc_id)
