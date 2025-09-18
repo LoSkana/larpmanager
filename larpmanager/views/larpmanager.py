@@ -67,6 +67,14 @@ from larpmanager.views.user.member import get_user_backend
 
 
 def lm_home(request):
+    """Display the LarpManager home page with promoters and reviews.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered home page template with context data
+    """
     ctx = get_lm_contact(request)
     ctx["index"] = True
 
@@ -81,6 +89,15 @@ def lm_home(request):
 
 
 def ludomanager(ctx, request):
+    """Render the LudoManager skin version of the home page.
+
+    Args:
+        ctx: Context dictionary to update
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered LudoManager template
+    """
     ctx["assoc_skin"] = "LudoManager"
     ctx["platform"] = "LudoManager"
     return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
@@ -88,6 +105,17 @@ def ludomanager(ctx, request):
 
 @csrf_exempt
 def contact(request):
+    """Handle contact form submissions and display contact page.
+
+    Processes contact form data and sends emails to administrators when valid
+    submissions are received.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered contact template with form or success state
+    """
     ctx = {}
     done = False
     if request.POST:
@@ -109,6 +137,17 @@ def contact(request):
 
 
 def go_redirect(request, slug, p, base_domain="larpmanager.com"):
+    """Redirect user to association-specific subdomain or main domain.
+
+    Args:
+        request: Django HTTP request object
+        slug: Association slug for subdomain
+        p: Path to append to URL
+        base_domain: Base domain name (default: "larpmanager.com")
+
+    Returns:
+        HttpResponseRedirect: Redirect to appropriate URL
+    """
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
 
@@ -415,12 +454,32 @@ def tutorials(request, slug=None):
 
 @cache_page(60 * 15)
 def guides(request):
+    """Display list of published guides for LarpManager users.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered guides template with list of published guides
+    """
     ctx = get_lm_contact(request)
     ctx["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
     return render(request, "larpmanager/larpmanager/guides.html", ctx)
 
 
 def guide(request, slug):
+    """Display a specific guide article by slug.
+
+    Args:
+        request: Django HTTP request object
+        slug: URL slug of the guide to display
+
+    Returns:
+        HttpResponse: Rendered guide template with article content
+
+    Raises:
+        Http404: If guide with given slug is not found or not published
+    """
     ctx = get_lm_contact(request)
     try:
         ctx["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)

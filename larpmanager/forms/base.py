@@ -31,19 +31,33 @@ from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionStatus,
-    WritingQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion, BaseQuestionType, get_writing_max_length,
+    RegistrationQuestion,
+    WritingQuestionType,
+    get_writing_max_length,
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
 class MyForm(forms.ModelForm):
+    """Base form class with context parameter handling.
+
+    Extends Django's ModelForm to support additional context parameters
+    that can be passed during form initialization.
+    """
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with optional context parameters.
+
+        Args:
+            *args: Positional arguments passed to parent ModelForm
+            **kwargs: Keyword arguments, may include 'ctx' for context data
+        """
         super().__init__()
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
@@ -79,12 +93,22 @@ class MyForm(forms.ModelForm):
         self.max_lengths = {}
 
     def get_automatic_field(self):
+        """Get list of fields that should be automatically populated.
+
+        Returns:
+            list: Field names that are automatically set and hidden from user
+        """
         s = ["event", "assoc"]
         if hasattr(self, "auto_run"):
             s.extend(["run"])
         return s
 
     def allow_run_choice(self):
+        """Configure run selection field based on available runs.
+
+        Sets up the run choice field, considering campaign switches and
+        hiding the field if only one run is available.
+        """
         runs = Run.objects.filter(event=self.params["event"])
 
         # if campaign switch is active, show as runs all of the events sharing the campaign

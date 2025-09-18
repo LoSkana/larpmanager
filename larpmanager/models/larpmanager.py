@@ -139,12 +139,22 @@ class LarpManagerGuide(BaseModel):
     published = models.BooleanField(default=False)
 
     def show_thumb(self):
+        """Generate HTML for displaying thumbnail image.
+
+        Returns:
+            str: HTML string for thumbnail display or empty string if no image
+        """
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
         return ""
 
     def text_red(self):
+        """Get truncated version of text content.
+
+        Returns:
+            str: First 100 characters of the guide text
+        """
         return self.text[:100]
 
 
