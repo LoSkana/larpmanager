@@ -56,15 +56,36 @@ from larpmanager.utils.tasks import notify_admins
 
 
 class Command(BaseCommand):
+    """Django management command for automated background processes.
+
+    Handles periodic tasks including:
+    - Registration accounting updates
+    - Reminder email sending
+    - Badge achievement processing
+    - Payment invoice cleanup
+    - Database maintenance
+    """
+
     help = "Automate processes "
 
     def handle(self, *args, **options):
+        """Main command entry point with exception handling.
+
+        Args:
+            *args: Command arguments
+            **options: Command options
+        """
         try:
             self.go()
         except Exception as e:
             notify_admins("Automate", "", e)
 
     def go(self):
+        """Execute all automated processes.
+
+        Performs database cleanup, accounting updates, reminder checks,
+        badge processing, and payment validation across all associations.
+        """
         self.clean_db()
 
         # update accounting on all registrations
@@ -99,6 +120,10 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_old_payments():
+        """Delete payment invoices older than 60 days with CREATED status.
+
+        Cleans up abandoned payment attempts to prevent database bloat.
+        """
         # delete old payment invoice
         ref = datetime.now() - timedelta(days=60)
         que = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
@@ -107,6 +132,11 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_payment_not_approved():
+        """Notify admins about payment invoices awaiting approval.
+
+        Sends notifications for submitted payment invoices and cleans up
+        orphaned invoices that reference non-existent objects.
+        """
         # Notify payment invoices not approved
         for p in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
@@ -118,6 +148,11 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_password_reset():
+        """Send password reset reminders and clear processed requests.
+
+        Processes pending password reset requests by sending reminder emails
+        and clearing the reset flags from membership records.
+        """
         # check password reset
         que = Membership.objects.exclude(password_reset__exact="")
         for mb in que.exclude(password_reset__isnull=True):
@@ -127,12 +162,25 @@ class Command(BaseCommand):
 
     @staticmethod
     def clean_db():
+        """Execute configured database cleanup operations.
+
+        Runs SQL cleanup commands defined in CLEAN_DB setting to maintain
+        database performance and remove stale data.
+        """
         # PaymentInvoice.objects.filter(txn_id__isnull=True).delete()
         with connection.cursor() as cursor:
             for sql in conf_settings.CLEAN_DB:
                 cursor.execute(sql)
 
     def check_achievements(self, assoc):
+        """Process badge achievements for association members.
+
+        Analyzes past and future event registrations to award badges
+        based on participation and friend referral patterns.
+
+        Args:
+            assoc: Association instance to process badges for
+        """
         cache = {"badges": {}, "players": {}}
         ev = {}
         # past events
@@ -150,6 +198,13 @@ class Command(BaseCommand):
                 self.check_friends_player(reg, cache)
 
     def add_member_badge(self, cod, member, cache):
+        """Award a badge to a member if not already possessed.
+
+        Args:
+            cod (str): Badge code to award
+            member: Member instance to award badge to
+            cache (dict): Badge and player cache for performance
+        """
         # check if it has already
         if cod in self.get_cache_badges_player(cache, member):
             return
@@ -162,10 +217,26 @@ class Command(BaseCommand):
         badge.members.add(member)
 
     def check_event_badge(self, event, m, cache):
+        """Award event-specific badge to member.
+
+        Args:
+            event: Event instance to derive badge from
+            m: Member instance to award badge to
+            cache (dict): Badge cache for performance
+        """
         self.add_member_badge(event.slug, m, cache)
 
     @staticmethod
     def get_cache_badges_player(cache, member):
+        """Get cached list of badge codes for a member.
+
+        Args:
+            cache (dict): Player badge cache
+            member: Member instance to get badges for
+
+        Returns:
+            list: Badge codes already possessed by member
+        """
         if member.id not in cache["players"]:
             ch = []
             for b in member.badges.all():
@@ -175,6 +246,15 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_cache_badge(cache, cod):
+        """Get badge instance from cache or database.
+
+        Args:
+            cache (dict): Badge cache
+            cod (str): Badge code to retrieve
+
+        Returns:
+            Badge or None: Badge instance if found, None otherwise
+        """
         try:
             if cod not in cache["badges"]:
                 cache["badges"][cod] = Badge.objects.get(cod=cod)
@@ -184,6 +264,17 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_count(nm, cache, m, v=1):
+        """Track and increment member activity counters.
+
+        Args:
+            nm (str): Counter name (e.g., 'play', 'staff', 'orga')
+            cache (dict): Activity cache
+            m: Member instance
+            v (int): Value to add to counter
+
+        Returns:
+            int: Updated counter value
+        """
         if nm not in cache:
             cache[nm] = {}
         if m.id not in cache[nm]:
@@ -192,6 +283,12 @@ class Command(BaseCommand):
         return cache[nm][m.id]
 
     def check_friends_player(self, reg, cache):
+        """Check and award friend referral badges.
+
+        Args:
+            reg: Registration instance
+            cache (dict): Activity cache for tracking friend counts
+        """
         # count how many friends you got
         c = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
         count = self.get_count("friend", cache, reg.member, c)
@@ -204,6 +301,12 @@ class Command(BaseCommand):
             self.add_member_badge(k, reg.member, cache)
 
     def check_ach_player(self, reg, cache):
+        """Check and award player participation badges.
+
+        Args:
+            reg: Registration instance
+            cache (dict): Activity cache for tracking play counts
+        """
         # count how many registrations
         count = self.get_count("play", cache, reg.member)
         tp = ["bronze", "silver", "gold", "platinum"]
@@ -215,6 +318,12 @@ class Command(BaseCommand):
             self.add_member_badge(k, reg.member, cache)
 
     def check_badge_help(self, m, cache):
+        """Check and award help/support badges.
+
+        Args:
+            m: Member instance
+            cache (dict): Activity cache for tracking help counts
+        """
         # count how many registration
         count = self.get_count("help", cache, m)
         tp = ["bronze"]
@@ -226,6 +335,12 @@ class Command(BaseCommand):
             self.add_member_badge(k, m, cache)
 
     def check_badge_trad(self, m, cache):
+        """Check and award translation/localization badges.
+
+        Args:
+            m: Member instance
+            cache (dict): Activity cache for tracking translation counts
+        """
         # count how many registrations
         count = self.get_count("trad", cache, m)
         tp = ["bronze"]
@@ -237,6 +352,12 @@ class Command(BaseCommand):
             self.add_member_badge(k, m, cache)
 
     def check_badge_staff(self, m, cache):
+        """Check and award staff participation badges.
+
+        Args:
+            m: Member instance
+            cache (dict): Activity cache for tracking staff counts
+        """
         # count how many registrations
         count = self.get_count("staff", cache, m)
         tp = ["bronze", "silver", "gold", "platinum"]
@@ -248,6 +369,12 @@ class Command(BaseCommand):
             self.add_member_badge(k, m, cache)
 
     def check_badge_orga(self, m, cache):
+        """Check and award organizer badges.
+
+        Args:
+            m: Member instance
+            cache (dict): Activity cache for tracking organizer counts
+        """
         # count how many registrations
         count = self.get_count("orga", cache, m)
         tp = ["bronze", "silver", "gold", "platinum"]
@@ -259,6 +386,11 @@ class Command(BaseCommand):
             self.add_member_badge(k, m, cache)
 
     def check_remind(self, assoc):
+        """Check and send reminder emails for association registrations.
+
+        Args:
+            assoc: Association instance to process reminders for
+        """
         holidays = assoc.get_config("remind_holidays", True)
 
         if not holidays and check_holiday():
@@ -273,6 +405,13 @@ class Command(BaseCommand):
             self.remind_reg(reg, assoc, remind_days)
 
     def remind_reg(self, reg, assoc, remind_days):
+        """Process reminder logic for a specific registration.
+
+        Args:
+            reg: Registration instance to check reminders for
+            assoc: Association instance
+            remind_days (int): Interval for sending reminders
+        """
         ev_features = get_event_features(reg.run.event_id)
 
         get_user_membership(reg.member, assoc.id)
@@ -304,6 +443,11 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_membership_fee(reg):
+        """Check if membership fee reminder should be sent.
+
+        Args:
+            reg: Registration instance to check membership fee for
+        """
         year = datetime.today().year
         if year != reg.run.end.year:
             return
@@ -324,6 +468,11 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_payment(reg):
+        """Check if payment reminder should be sent for registration.
+
+        Args:
+            reg: Registration instance to check payment alerts for
+        """
         # check there is an alert
         if not reg.alert:
             return
@@ -344,6 +493,11 @@ class Command(BaseCommand):
         remember_pay(reg)
 
     def check_deadline(self, run):
+        """Check and send deadline notifications for run.
+
+        Args:
+            run: Run instance to check deadlines for
+        """
         if check_holiday():
             return
 

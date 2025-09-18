@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Language and country code definitions for LarpManager.
+
+Provides ISO language codes and country codes for use in
+user profile configuration and internationalization.
+"""
+
 languages = [
     ("aa", "Afar"),
     ("ab", "Abkhazian"),
@@ -220,6 +226,7 @@ languages = [
     ("zh", "Chinese"),
     ("zu", "Zulu"),
 ]
+"""List of (code, name) tuples for supported languages."""
 
 countries = [
     ("AF", "Afghanistan"),
@@ -472,3 +479,4 @@ countries = [
     ("ZM", "Zambia"),
     ("ZW", "Zimbabwe"),
 ]
+"""List of (code, name) tuples for world countries."""

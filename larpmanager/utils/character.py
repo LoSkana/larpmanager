@@ -41,6 +41,15 @@ from larpmanager.utils.experience import add_char_addit
 
 
 def get_character_relationships(ctx, restrict=True):
+    """Get character relationships with faction and player input data.
+
+    Args:
+        ctx: Context dictionary with character and event data
+        restrict (bool): Whether to restrict relationship visibility
+
+    Side effects:
+        Updates ctx['rel'] with relationship data
+    """
     cache = {}
     data = {}
     for tg_num, text in Relationship.objects.values_list("target__number", "text").filter(source=ctx["character"]):
@@ -90,6 +99,14 @@ def get_character_relationships(ctx, restrict=True):
 
 
 def get_character_sheet(ctx):
+    """Build complete character sheet data for display.
+
+    Args:
+        ctx: Context dictionary with character data
+
+    Returns:
+        dict: Complete character sheet with all sections
+    """
     ctx["sheet_char"] = ctx["character"].show_complete()
 
     get_character_sheet_fields(ctx)
@@ -202,6 +219,21 @@ def get_character_sheet_fields(ctx):
 
 
 def get_char_check(request, ctx, num, restrict=False, bypass=False):
+    """Get character with access control checks.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary
+        num (int): Character number
+        restrict (bool): Whether to apply visibility restrictions
+        bypass (bool): Whether to bypass access checks
+
+    Returns:
+        Character: Character instance if accessible
+
+    Raises:
+        Http404: If character not found or access denied
+    """
     get_event_cache_all(ctx)
     if num not in ctx["chars"]:
         raise NotFoundError()

@@ -30,6 +30,23 @@ from larpmanager.utils.tasks import notify_admins
 
 
 def invoice_verify(request, ctx, csv_upload):
+    """Verify and match payments from CSV upload against pending invoices.
+
+    Processes a CSV file containing payment data and matches entries against
+    pending payment invoices using causal codes, registration codes, or transaction IDs.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary containing todo list of pending invoices
+        csv_upload: Uploaded CSV file containing payment data
+
+    Returns:
+        int: Number of successfully verified payments
+
+    Note:
+        CSV format expected: [amount, causal, ...] where amount uses dot for thousands
+        and comma for decimal separator
+    """
     content = csv_upload.read().decode("utf-8")
     delim = detect_delimiter(content)
     csv_data = csv.reader(StringIO(content), delimiter=delim)
@@ -81,6 +98,24 @@ def invoice_verify(request, ctx, csv_upload):
 
 
 def invoice_received_money(cod, gross=None, fee=None, txn_id=None):
+    """Process received payment for a payment invoice.
+
+    Updates payment invoice status and financial details when money is received
+    from payment processors like PayPal or bank transfers.
+
+    Args:
+        cod: Invoice code to identify the payment
+        gross: Optional gross amount received
+        fee: Optional processing fee charged
+        txn_id: Optional transaction ID from payment processor
+
+    Returns:
+        bool: True if payment was processed successfully, None if invalid invoice
+
+    Side effects:
+        Updates invoice status to CHECKED and saves financial details
+        Sends admin notification for invalid payment codes
+    """
     try:
         invoice = PaymentInvoice.objects.get(cod=cod)
     except ObjectDoesNotExist:

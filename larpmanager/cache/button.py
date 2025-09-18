@@ -24,10 +24,29 @@ from larpmanager.models.event import EventButton
 
 
 def event_button_key(event_id):
+    """Generate cache key for event buttons.
+
+    Args:
+        event_id (int): Event ID
+
+    Returns:
+        str: Cache key for event buttons
+    """
     return f"event_button_{event_id}"
 
 
 def update_event_button(event_id):
+    """Update event button cache from database.
+
+    Args:
+        event_id (int): Event ID to update buttons for
+
+    Returns:
+        list: List of (name, tooltip, link) tuples for event buttons
+
+    Side effects:
+        Updates cache with current button data
+    """
     res = []
     for el in EventButton.objects.filter(event_id=event_id).order_by("number"):
         res.append((el.name, el.tooltip, el.link))
@@ -36,6 +55,14 @@ def update_event_button(event_id):
 
 
 def get_event_button_cache(event_id):
+    """Get cached event buttons, updating if needed.
+
+    Args:
+        event_id (int): Event ID to get buttons for
+
+    Returns:
+        list: List of (name, tooltip, link) tuples for event buttons
+    """
     res = cache.get(event_button_key(event_id))
     if res is None:
         res = update_event_button(event_id)

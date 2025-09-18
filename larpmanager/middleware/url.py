@@ -24,14 +24,24 @@ from django.shortcuts import redirect
 
 
 class CorrectUrlMiddleware:
-    """
-    If the url is incorrect, redirect to a fixed url.
+    """Middleware to fix common URL formatting issues.
+
+    Handles double slashes, trailing 'undefined' segments from social media
+    redirects, and unwanted trailing characters in URLs.
     """
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        """Process request and fix URL issues.
+
+        Args:
+            request: Django HTTP request object
+
+        Returns:
+            HttpResponse: Redirect to corrected URL or normal response
+        """
         path = request.get_full_path()
 
         if "//" in path and "accounts/google/login/" not in path:

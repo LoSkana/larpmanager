@@ -55,8 +55,12 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
-from larpmanager.models.form import RegistrationQuestionType, RegistrationAnswer, RegistrationChoice, \
-    RegistrationQuestion, BaseQuestionType
+from larpmanager.models.form import (
+    BaseQuestionType,
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationQuestion,
+)
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id, get_payment_details
 from larpmanager.utils.base import update_payment_details
@@ -65,6 +69,15 @@ from larpmanager.utils.member import assign_badge
 
 
 def get_payment_fee(assoc, slug):
+    """Get payment processing fee for a specific payment method.
+
+    Args:
+        assoc: Association instance
+        slug (str): Payment method slug
+
+    Returns:
+        float: Payment fee amount, 0.0 if not configured
+    """
     payment_details = get_payment_details(assoc)
     k = slug + "_fee"
     if k not in payment_details or not payment_details[k]:
@@ -74,6 +87,17 @@ def get_payment_fee(assoc, slug):
 
 
 def unique_invoice_cod(length=16):
+    """Generate a unique invoice code.
+
+    Args:
+        length (int): Length of the generated code, defaults to 16
+
+    Returns:
+        str: Unique invoice code
+
+    Raises:
+        Exception: If unable to generate unique code after 5 attempts
+    """
     for _idx in range(5):
         cod = generate_id(length)
         if not PaymentInvoice.objects.filter(cod=cod).exists():
@@ -82,6 +106,15 @@ def unique_invoice_cod(length=16):
 
 
 def set_data_invoice(request, ctx, invoice, form, assoc):
+    """Set invoice data from form submission.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary
+        invoice: PaymentInvoice instance to update
+        form: Form containing invoice data
+        assoc: Association instance
+    """
     member_real = request.user.member.display_real()
     if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
@@ -114,6 +147,13 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
 
 
 def _custom_reason_reg(ctx, invoice, member_real):
+    """Generate custom invoice reason text for registrations.
+
+    Args:
+        ctx: Context dictionary with registration data
+        invoice: PaymentInvoice instance to update
+        member_real: Real member instance for the registration
+    """
     invoice.idx = ctx["reg"].id
     invoice.reg = ctx["reg"]
     custom_reason = ctx["reg"].run.event.get_config("payment_custom_reason")
@@ -153,10 +193,27 @@ def _custom_reason_reg(ctx, invoice, member_real):
 
 
 def round_up_to_two_decimals(number):
+    """Round number up to two decimal places.
+
+    Args:
+        number (float): Number to round
+
+    Returns:
+        float: Number rounded up to 2 decimal places
+    """
     return math.ceil(number * 100) / 100
 
 
 def update_invoice_gross_fee(request, invoice, amount, assoc, pay_method):
+    """Update invoice with gross amount including payment processing fees.
+
+    Args:
+        request: Django HTTP request object
+        invoice: PaymentInvoice instance to update
+        amount (Decimal): Base amount before fees
+        assoc: Association instance
+        pay_method (str): Payment method slug
+    """
     # add fee for paymentmethod
     amount = float(amount)
     fee = get_payment_fee(assoc, pay_method.slug)
@@ -174,6 +231,18 @@ def update_invoice_gross_fee(request, invoice, amount, assoc, pay_method):
 
 
 def get_payment_form(request, form, typ, ctx, key=None):
+    """Create or update payment invoice and return payment gateway form.
+
+    Args:
+        request: Django HTTP request object
+        form: Form containing payment data
+        typ: Payment type
+        ctx: Context dictionary to update
+        key: Optional existing invoice key
+
+    Returns:
+        dict: Payment form data for gateway integration
+    """
     assoc = form.assoc
 
     amount = form.cleaned_data["amount"]
@@ -236,6 +305,14 @@ def get_payment_form(request, form, typ, ctx, key=None):
 
 
 def payment_received(invoice):
+    """Process a received payment and update related records.
+
+    Args:
+        invoice: PaymentInvoice instance that was paid
+
+    Side effects:
+        Creates accounting records, processes collections/donations
+    """
     assoc = Association.objects.get(pk=invoice.assoc_id)
     features = get_assoc_features(invoice.assoc_id)
     fee = get_payment_fee(assoc, invoice.method.slug)
