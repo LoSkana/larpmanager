@@ -883,7 +883,7 @@ class OrgaRunForm(ConfigForm):
 
         shows = _get_writing_elements()
 
-        basics = BaseQuestionType.get_basic_types()
+        basics = BaseQuestionType.get_basic_types() | WritingQuestionType.COMPUTED
         self.set_section("visibility", _("Visibility"))
         for s in shows:
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
