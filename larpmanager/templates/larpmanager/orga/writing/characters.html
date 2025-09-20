@@ -8,10 +8,13 @@
 {% endblock info %}
 {% block nav_fields %}
     {% if user_character_max %}
-        <a href="#" class="table_toggle" tog='player'>{% trans "player" %}</a>
+        <a href="#" class="table_toggle" tog='player'>{% trans "Player" %}</a>
+    {% endif %}
+    {% if features.campaign and event.parent %}
+        <a href="#" class="table_toggle" tog='attended'>{% trans "Attended" %}</a>
     {% endif %}
     {% if user_character_approval %}
-        <a href="#" class="table_toggle" tog='status'>{% trans "status" %}</a>
+        <a href="#" class="table_toggle" tog='status'>{% trans "Status" %}</a>
     {% endif %}
     {% if features.px %}
         <a href="#" class="table_toggle" tog='px'>{% trans "XP" %}</a>
@@ -27,7 +30,7 @@
         <a href="#" class="table_toggle" tog='relationships'>{% trans "Relationships" %}</a>
     {% endif %}
     {% if features.speedlarp %}
-        <a href="#" class="table_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
+        <a href="#" class="table_toggle" tog='speedlarp'>{% trans "Speedlarp" %}</a>
     {% endif %}
 {% endblock nav_fields %}
 {% block thead %}
@@ -36,6 +39,9 @@
     <th></th>
     {% if user_character_max %}
         <th class="player">{% trans "Player" %}</th>
+    {% endif %}
+    {% if features.campaign and event.parent %}
+        <th class="attended">{% trans "Attended" %}</th>
     {% endif %}
     {% if user_character_approval %}
         <th class="status">{% trans "Status" %}</th>
@@ -92,6 +98,11 @@
                 {% endif %}
             </td>
             {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
+            {% if features.campaign and event.parent %}
+                <td class="attended">
+                    {% if el.has_registration %}<i class="fa fa-check"></i>{% endif %}
+                </td>
+            {% endif %}
             {% if user_character_approval %}<td class="status">{{ el.get_status_display }}</td>{% endif %}
             {% if features.px %}
                 <td class="px">{{ el.addit | get:'px_tot' }}</td>

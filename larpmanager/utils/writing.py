@@ -23,7 +23,7 @@ import io
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Model, Prefetch
+from django.db.models import Exists, Model, OuterRef, Prefetch
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -43,6 +43,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -214,7 +215,7 @@ def writing_list(request, ctx, typ, nm):
     text_fields, writing = writing_list_query(ctx, ev, typ)
 
     if issubclass(typ, Character):
-        writing_list_char(ctx, ev, text_fields)
+        writing_list_char(ctx)
 
     if issubclass(typ, Plot):
         writing_list_plot(ctx)
@@ -348,7 +349,7 @@ def writing_list_plot(ctx):
             el.chars = ctx["chars"][el.number]
 
 
-def writing_list_char(ctx, ev, text_fields):
+def writing_list_char(ctx):
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
 
@@ -375,6 +376,16 @@ def writing_list_char(ctx, ev, text_fields):
 
     # add character configs
     char_add_addit(ctx)
+
+    if "campaign" in ctx["features"] and ctx["event"].parent:
+        # add check if the character is signed up to the event
+        ctx["list"] = ctx["list"].annotate(
+            has_registration=Exists(
+                RegistrationCharacterRel.objects.filter(
+                    character=OuterRef("pk"), reg__run_id=ctx["run"].id, reg__cancellation_date__isnull=True
+                )
+            )
+        )
 
 
 def char_add_addit(ctx):
