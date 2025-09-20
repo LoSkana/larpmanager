@@ -56,6 +56,7 @@ from larpmanager.utils.download import (
     _get_column_names,
     export_character_form,
     export_data,
+    export_event,
     export_registration_form,
     export_tickets,
     zip_exports,
@@ -293,6 +294,8 @@ def orga_backup(request, s):
 
 def _prepare_backup(ctx):
     exports = []
+
+    exports.extend(export_event(ctx))
 
     exports.extend(export_data(ctx, Registration))
     exports.extend(export_registration_form(ctx))

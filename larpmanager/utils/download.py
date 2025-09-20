@@ -30,7 +30,9 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.config import get_configs
 from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
+from larpmanager.models.association import Association
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -695,3 +697,22 @@ def export_tickets(ctx):
     vals = _extract_values(keys, que, mappings)
 
     return [("tickets", keys, vals)]
+
+
+def export_event(ctx):
+    keys = ["name", "value"]
+    vals = []
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    for element in [ctx["event"], ctx["run"], assoc]:
+        for name, value in get_configs(element).items():
+            vals.append((name, value))
+    exports = [("configuration", keys, vals)]
+
+    keys = ["name", "slug"]
+    vals = []
+    for element in [ctx["event"], assoc]:
+        for feature in element.features.all():
+            vals.append((feature.name, feature.slug))
+    exports.append(("features", keys, vals))
+
+    return exports
