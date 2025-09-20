@@ -33,6 +33,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs
 from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 from larpmanager.models.association import Association
+from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -716,3 +717,23 @@ def export_event(ctx):
     exports.append(("features", keys, vals))
 
     return exports
+
+
+def export_abilities(ctx):
+    keys = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
+
+    que = (
+        ctx["event"]
+        .get_elements(AbilityPx)
+        .order_by("number")
+        .select_related("typ")
+        .prefetch_related("requirements", "prerequisites")
+    )
+    vals = []
+    for el in que:
+        val = [el.name, el.cost, el.typ.name, el.descr]
+        val.append(", ".join([prereq.name for prereq in el.prerequisites.all()]))
+        val.append(", ".join([req.name for req in el.requirements.all()]))
+        vals.append(val)
+
+    return [("abilities", keys, vals)]
