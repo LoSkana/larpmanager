@@ -642,12 +642,6 @@ msgstr "vydáno"
 msgid "member"
 msgstr "člen"
 
-msgid "player"
-msgstr "hráč"
-
-msgid "status"
-msgstr "stav"
-
 msgid "within"
 msgstr "v rámci"
 
@@ -902,6 +896,9 @@ msgstr "Schváleno"
 
 msgid "Assigned"
 msgstr "Přiřaďte"
+
+msgid "Attended"
+msgstr "Zúčastnil se"
 
 msgid "Calendar"
 msgstr "Kalendář"
@@ -1328,9 +1325,6 @@ msgstr "Workshopy"
 
 msgid "negatives"
 msgstr "negativy"
-
-msgid "speedlarp"
-msgstr "speedlarp"
 
 msgid "surcharge"
 msgstr "příplatek"

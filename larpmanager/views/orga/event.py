@@ -54,8 +54,10 @@ from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.download import (
     _get_column_names,
+    export_abilities,
     export_character_form,
     export_data,
+    export_event,
     export_registration_form,
     export_tickets,
     zip_exports,
@@ -294,6 +296,8 @@ def orga_backup(request, s):
 def _prepare_backup(ctx):
     exports = []
 
+    exports.extend(export_event(ctx))
+
     exports.extend(export_data(ctx, Registration))
     exports.extend(export_registration_form(ctx))
     exports.extend(export_tickets(ctx))
@@ -307,6 +311,9 @@ def _prepare_backup(ctx):
 
     if "plot" in ctx["features"]:
         exports.extend(export_data(ctx, Plot))
+
+    if "px" in ctx["features"]:
+        exports.extend(export_abilities(ctx))
 
     if "questbuilder" in ctx["features"]:
         exports.extend(export_data(ctx, QuestType))

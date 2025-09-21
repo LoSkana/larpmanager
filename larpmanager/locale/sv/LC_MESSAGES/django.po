@@ -642,12 +642,6 @@ msgstr "utfärdade"
 msgid "member"
 msgstr "medlem"
 
-msgid "player"
-msgstr "spelare"
-
-msgid "status"
-msgstr "status"
-
 msgid "within"
 msgstr "inom"
 
@@ -902,6 +896,9 @@ msgstr "Godkänd"
 
 msgid "Assigned"
 msgstr "Tilldela"
+
+msgid "Attended"
+msgstr "Närvarande"
 
 msgid "Calendar"
 msgstr "Kalender"
@@ -1328,9 +1325,6 @@ msgstr "Verkstäder"
 
 msgid "negatives"
 msgstr "negativ"
-
-msgid "speedlarp"
-msgstr "Speedlarp"
 
 msgid "surcharge"
 msgstr "tilläggsavgift"

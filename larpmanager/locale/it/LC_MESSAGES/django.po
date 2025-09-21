@@ -642,12 +642,6 @@ msgstr "emessi"
 msgid "member"
 msgstr "socio"
 
-msgid "player"
-msgstr "giocatore"
-
-msgid "status"
-msgstr "stato"
-
 msgid "within"
 msgstr "all'interno"
 
@@ -902,6 +896,9 @@ msgstr "Approvato"
 
 msgid "Assigned"
 msgstr "Assegnamento"
+
+msgid "Attended"
+msgstr "Partecipato"
 
 msgid "Calendar"
 msgstr "Calendario"
@@ -1328,9 +1325,6 @@ msgstr "Workshops"
 
 msgid "negatives"
 msgstr "negativi"
-
-msgid "speedlarp"
-msgstr "speedlarp"
 
 msgid "surcharge"
 msgstr "sovrapprezzo"

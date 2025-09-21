@@ -7001,13 +7001,7 @@ msgstr ""
 msgid "This page shows the characters of the event"
 msgstr ""
 
-msgid "player"
-msgstr ""
-
-msgid "status"
-msgstr ""
-
-msgid "speedlarp"
+msgid "Attended"
 msgstr ""
 
 msgid "Versions"

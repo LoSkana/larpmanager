@@ -642,12 +642,6 @@ msgstr "uitgegeven"
 msgid "member"
 msgstr "lid"
 
-msgid "player"
-msgstr "speler"
-
-msgid "status"
-msgstr "status"
-
 msgid "within"
 msgstr "binnen"
 
@@ -902,6 +896,9 @@ msgstr "Goedgekeurd"
 
 msgid "Assigned"
 msgstr "Toewijzen"
+
+msgid "Attended"
+msgstr "Bijgewoond"
 
 msgid "Calendar"
 msgstr "Kalender"
@@ -1328,9 +1325,6 @@ msgstr "Workshops"
 
 msgid "negatives"
 msgstr "negatieven"
-
-msgid "speedlarp"
-msgstr "speedlarp"
 
 msgid "surcharge"
 msgstr "toeslag"

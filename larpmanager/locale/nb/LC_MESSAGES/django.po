@@ -642,12 +642,6 @@ msgstr "utstedt"
 msgid "member"
 msgstr "medlem"
 
-msgid "player"
-msgstr "aktør"
-
-msgid "status"
-msgstr "status"
-
 msgid "within"
 msgstr "innenfor"
 
@@ -902,6 +896,9 @@ msgstr "Godkjent"
 
 msgid "Assigned"
 msgstr "Tilordne"
+
+msgid "Attended"
+msgstr "Tilstede"
 
 msgid "Calendar"
 msgstr "Kalender"
@@ -1328,9 +1325,6 @@ msgstr "Verksteder"
 
 msgid "negatives"
 msgstr "negativer"
-
-msgid "speedlarp"
-msgstr "speedlarp"
 
 msgid "surcharge"
 msgstr "tilleggsavgift"
