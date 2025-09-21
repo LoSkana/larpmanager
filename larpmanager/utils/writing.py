@@ -374,9 +374,6 @@ def writing_list_char(ctx):
         for el in ctx["list"]:
             el.factions = el.factions_list.filter(event=fac_event)
 
-    # add character configs
-    char_add_addit(ctx)
-
     if "campaign" in ctx["features"] and ctx["event"].parent:
         # add check if the character is signed up to the event
         ctx["list"] = ctx["list"].annotate(
@@ -386,6 +383,9 @@ def writing_list_char(ctx):
                 )
             )
         )
+
+    # add character configs
+    char_add_addit(ctx)
 
 
 def char_add_addit(ctx):
