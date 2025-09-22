@@ -191,7 +191,7 @@ class PlotForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Plot
 
-        exclude = ("number", "temp", "hide")
+        exclude = ("number", "temp", "hide", "order")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,

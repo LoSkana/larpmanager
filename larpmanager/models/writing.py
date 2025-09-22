@@ -332,6 +332,8 @@ class CharacterConfig(BaseModel):
 class Plot(Writing):
     characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
 
+    order = models.IntegerField(default=0)
+
     class Meta:
         indexes = [models.Index(fields=["number", "event"])]
         constraints = [
@@ -352,6 +354,8 @@ class Plot(Writing):
 
 class PlotCharacterRel(BaseModel):
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
+
+    order = models.IntegerField(default=0)
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 
