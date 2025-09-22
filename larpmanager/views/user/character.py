@@ -30,6 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -201,14 +202,15 @@ def character_form(request, ctx, s, instance, form_class):
             else:
                 mes = _("New character created") + "!"
 
-            element = form.save(commit=False)
-            mes = _update_character(ctx, element, form, mes, request)
-            element.save()
+            with transaction.atomic():
+                element = form.save(commit=False)
+                mes = _update_character(ctx, element, form, mes, request)
+                element.save()
+
+                check_assign_character(request, ctx)
 
             if mes:
                 messages.success(request, mes)
-
-            check_assign_character(request, ctx)
 
             number = None
             if isinstance(element, Character):
@@ -287,8 +289,9 @@ def character_profile_upload(request, s, num):
     n_path = f"registration/{rgr.pk}_{uuid4().hex}.{ext}"
     path = default_storage.save(n_path, ContentFile(img.read()))
 
-    rgr.custom_profile = path
-    rgr.save()
+    with transaction.atomic():
+        rgr.custom_profile = path
+        rgr.save()
 
     return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
 
@@ -318,8 +321,9 @@ def character_profile_rotate(request, s, num, r):
     n_path = f"{os.path.dirname(path)}/{rgr.pk}_{uuid4().hex}.{ext}"
     out.save(n_path)
 
-    rgr.custom_profile = n_path
-    rgr.save()
+    with transaction.atomic():
+        rgr.custom_profile = n_path
+        rgr.save()
 
     return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
 
@@ -443,8 +447,9 @@ def character_abilities_del(request, s, num, id_del):
     if id_del not in undo_abilities:
         raise Http404("ability out of undo window")
 
-    remove_char_ability(ctx["character"], id_del)
-    ctx["character"].save()
+    with transaction.atomic():
+        remove_char_ability(ctx["character"], id_del)
+        ctx["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
     return redirect("character_abilities", s=ctx["run"].get_slug(), num=ctx["character"].number)
@@ -467,8 +472,9 @@ def _save_character_abilities(ctx, request):
         messages.error(request, _("Selezione non valida"))
         return
 
-    ctx["character"].px_ability_list.add(selected_id)
-    ctx["character"].save()
+    with transaction.atomic():
+        ctx["character"].px_ability_list.add(selected_id)
+        ctx["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
     get_undo_abilities(request, ctx, ctx["character"], selected_id)

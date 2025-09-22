@@ -32,6 +32,7 @@ import stripe
 from Crypto.Cipher import DES3
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.dispatch import receiver
 from django.http import Http404
 from django.urls import reverse
@@ -91,8 +92,9 @@ def get_satispay_form(request, ctx, invoice, amount):
         raise Http404("something went wrong :( ")
 
     aux = json.loads(response.content)
-    invoice.cod = aux["id"]
-    invoice.save()
+    with transaction.atomic():
+        invoice.cod = aux["id"]
+        invoice.save()
     ctx["pay_id"] = aux["id"]
 
 

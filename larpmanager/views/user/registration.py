@@ -24,6 +24,7 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.timezone import now as timezone_now
@@ -124,12 +125,13 @@ def pre_register(request, s=""):
         if form.is_valid():
             nr = form.cleaned_data["new_event"]
             if nr != "":
-                PreRegistration(
-                    member=request.user.member,
-                    event_id=nr,
-                    pref=form.cleaned_data["new_pref"],
-                    info=form.cleaned_data["new_info"],
-                ).save()
+                with transaction.atomic():
+                    PreRegistration(
+                        member=request.user.member,
+                        event_id=nr,
+                        pref=form.cleaned_data["new_pref"],
+                        info=form.cleaned_data["new_info"],
+                    ).save()
 
             messages.success(request, _("Pre-registrations saved") + "!")
             return redirect("pre_register")
@@ -171,36 +173,37 @@ def save_registration(request, ctx, form, run, event, reg, gifted=False):
     """
     # pprint(form.cleaned_data)
     # Create / modification registration
-    if not reg:
-        reg = Registration()
-        reg.run = run
-        reg.member = request.user.member
-        if gifted:
-            reg.redeem_code = my_uuid(16)
+    with transaction.atomic():
+        if not reg:
+            reg = Registration()
+            reg.run = run
+            reg.member = request.user.member
+            if gifted:
+                reg.redeem_code = my_uuid(16)
+            reg.save()
+
+        provisional = is_reg_provisional(reg)
+
+        save_registration_standard(ctx, event, form, gifted, provisional, reg)
+
+        # Registration question
+        form.save_reg_questions(reg, False)
+
+        # Confirm saved discounts, signs
+        que = AccountingItemDiscount.objects.filter(member=request.user.member, run=reg.run)
+        for el in que:
+            if el.expires is not None:
+                el.expires = None
+                el.save()
+
+        # save reg
         reg.save()
 
-    provisional = is_reg_provisional(reg)
-
-    save_registration_standard(ctx, event, form, gifted, provisional, reg)
-
-    # Registration question
-    form.save_reg_questions(reg, False)
-
-    # Confirm saved discounts, signs
-    que = AccountingItemDiscount.objects.filter(member=request.user.member, run=reg.run)
-    for el in que:
-        if el.expires is not None:
-            el.expires = None
-            el.save()
-
-    # save reg
-    reg.save()
-
-    # special features
-    if "user_character" in ctx["features"]:
-        check_assign_character(request, ctx)
-    if "bring_friend" in ctx["features"]:
-        save_registration_bring_friend(ctx, form, reg, request)
+        # special features
+        if "user_character" in ctx["features"]:
+            check_assign_character(request, ctx)
+        if "bring_friend" in ctx["features"]:
+            save_registration_bring_friend(ctx, form, reg, request)
 
     # send email to notify of registration update
     update_registration_status_bkg(reg.id)
@@ -303,28 +306,29 @@ def save_registration_bring_friend(ctx, form, reg, request):
     except Exception as err:
         raise Http404("I'm sorry, this friend code was not found") from err
 
-    AccountingItemOther.objects.create(
-        member=request.user.member,
-        value=int(ctx["bring_friend_discount_from"]),
-        run=ctx["run"],
-        oth=OtherChoices.TOKEN,
-        descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
-        assoc_id=ctx["a_id"],
-        ref_addit=reg.id,
-    )
+    with transaction.atomic():
+        AccountingItemOther.objects.create(
+            member=request.user.member,
+            value=int(ctx["bring_friend_discount_from"]),
+            run=ctx["run"],
+            oth=OtherChoices.TOKEN,
+            descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
+            assoc_id=ctx["a_id"],
+            ref_addit=reg.id,
+        )
 
-    AccountingItemOther.objects.create(
-        member=friend.member,
-        value=int(ctx["bring_friend_discount_to"]),
-        run=ctx["run"],
-        oth=OtherChoices.TOKEN,
-        descr=_("Your friend code has been used") + f" - {request.user.member.display_member()} - {cod}",
-        assoc_id=ctx["a_id"],
-        ref_addit=friend.id,
-    )
+        AccountingItemOther.objects.create(
+            member=friend.member,
+            value=int(ctx["bring_friend_discount_to"]),
+            run=ctx["run"],
+            oth=OtherChoices.TOKEN,
+            descr=_("Your friend code has been used") + f" - {request.user.member.display_member()} - {cod}",
+            assoc_id=ctx["a_id"],
+            ref_addit=friend.id,
+        )
 
-    # trigger registration accounting update
-    friend.save()
+        # trigger registration accounting update
+        friend.save()
 
 
 def register_info(request, ctx, form, reg, dis):
@@ -775,9 +779,10 @@ def gift_redeem(request, s, code):
         raise Http404("registration not found") from err
 
     if request.method == "POST":
-        reg.member = request.user.member
-        reg.redeem_code = None
-        reg.save()
+        with transaction.atomic():
+            reg.member = request.user.member
+            reg.redeem_code = None
+            reg.save()
         messages.success(request, _("Your gifted registration has been redeemed!"))
         return redirect("gallery", s=ctx["run"].get_slug())
 
