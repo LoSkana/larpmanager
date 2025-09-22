@@ -267,9 +267,13 @@ class OrgaCharacterForm(CharacterForm):
         self.initial["plots"] = [el.plot_id for el in self.plots]
 
         self.add_char_finder = []
+        self.ordering_up = {}
+        self.ordering_down = {}
         self.field_link = {}
-        for el in self.plots:
-            plot = f"#{el.plot.number} {el.plot.name}"
+
+        count = len(self.plots)
+        for i, el in enumerate(self.plots):
+            plot = el.plot.name
             field = f"pl_{el.plot.id}"
             id_field = f"id_{field}"
             self.fields[field] = forms.CharField(
@@ -288,6 +292,16 @@ class OrgaCharacterForm(CharacterForm):
 
             reverse_args = [self.params["run"].get_slug(), el.plot.id]
             self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
+
+            # if not first, add to ordering up
+            if not i == 0:
+                reverse_args = [self.params["run"].get_slug(), el.id, "0"]
+                self.ordering_up[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
+
+            # if not last, add to ordering down
+            if not i == count - 1:
+                reverse_args = [self.params["run"].get_slug(), el.id, "1"]
+                self.ordering_down[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
 
     def _save_plot(self, instance):
         if "plot" not in self.params["features"]:
