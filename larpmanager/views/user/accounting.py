@@ -93,7 +93,7 @@ def accounting(request):
 
     ctx["delegated_todo"] = False
     if "delegated_members" in request.assoc["features"]:
-        ctx["delegated"] = Member.objects.filter(parent=request.user.member).select_related("user")
+        ctx["delegated"] = Member.objects.filter(parent=request.user.member)
         for el in ctx["delegated"]:
             del_ctx = {"member": el, "a_id": ctx["a_id"]}
             info_accounting(request, del_ctx)

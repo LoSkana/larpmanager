@@ -133,7 +133,7 @@ def _init_payments(assoc, el):
     el["currency_symbol"] = assoc.get_currency_symbol()
     el["methods"] = {}
     payment_details = get_payment_details(assoc)
-    for m in assoc.payment_methods.select_related().all():
+    for m in assoc.payment_methods.all():
         mel = m.as_dict()
         for s in ["fee", "descr"]:
             mel[s] = payment_details.get(f"{m.slug}_{s}")

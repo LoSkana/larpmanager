@@ -424,7 +424,7 @@ def quest(request, s, g):
     )
 
     traits = []
-    for el in ctx["quest"].traits.select_related().all():
+    for el in ctx["quest"].traits.all():
         res = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
         res.update(el.show())
         traits.append(res)
