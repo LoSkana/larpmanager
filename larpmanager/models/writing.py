@@ -276,7 +276,7 @@ class Character(Writing):
         return Relationship.objects.filter(source_id=self.pk)
 
     def get_plot_characters(self):
-        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
+        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
     def get_example_csv(cls, features):
@@ -346,10 +346,12 @@ class Plot(Writing):
         ]
 
     def __str__(self):
-        return f"T{self.number} {self.name}"
+        return self.name
 
     def get_plot_characters(self):
-        return PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character")
+        return (
+            PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character").order_by("character__number")
+        )
 
 
 class PlotCharacterRel(BaseModel):

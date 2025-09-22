@@ -93,6 +93,8 @@ def pre_save_callback(sender, instance, *args, **kwargs):
                 que = instance.__class__.objects.filter(event=instance.event)
             if hasattr(instance, "assoc") and instance.assoc:
                 que = instance.__class__.objects.filter(assoc=instance.assoc)
+            if hasattr(instance, "character") and instance.character:
+                que = instance.__class__.objects.filter(character=instance.character)
             if que is not None:
                 n = que.aggregate(Max(field))[f"{field}__max"]
                 if not n:

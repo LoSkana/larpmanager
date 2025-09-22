@@ -263,7 +263,7 @@ class OrgaCharacterForm(CharacterForm):
         )
         self.fields["plots"].widget.set_event(self.params["event"])
 
-        self.plots = self.instance.get_plot_characters().order_by("plot__number")
+        self.plots = self.instance.get_plot_characters()
         self.initial["plots"] = [el.plot_id for el in self.plots]
 
         self.add_char_finder = []

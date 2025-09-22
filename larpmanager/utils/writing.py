@@ -358,22 +358,6 @@ def writing_list_char(ctx):
             Prefetch("source", queryset=Relationship.objects.filter(deleted=None))
         )
 
-    if "plot" in ctx["features"]:
-        ctx["plots"] = {}
-        for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
-            if el.character.number not in ctx["plots"]:
-                ctx["plots"][el.character.number] = []
-            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.id))
-
-        for el in ctx["list"]:
-            if el.number in ctx["plots"]:
-                el.plts = ctx["plots"][el.number]
-
-    if "faction" in ctx["features"]:
-        fac_event = ctx["event"].get_class_parent("faction")
-        for el in ctx["list"]:
-            el.factions = el.factions_list.filter(event=fac_event)
-
     if "campaign" in ctx["features"] and ctx["event"].parent:
         # add check if the character is signed up to the event
         ctx["list"] = ctx["list"].annotate(
@@ -383,6 +367,23 @@ def writing_list_char(ctx):
                 )
             )
         )
+
+    if "plot" in ctx["features"]:
+        ctx["plots"] = {}
+        que = PlotCharacterRel.objects.filter(character__event=ctx["event"].get_class_parent(Plot))
+        for el in que.select_related("plot", "character").order_by("order"):
+            if el.character.number not in ctx["plots"]:
+                ctx["plots"][el.character.number] = []
+            ctx["plots"][el.character.number].append((el.plot.name, el.plot.id))
+
+        for el in ctx["list"]:
+            if el.number in ctx["plots"]:
+                el.plts = ctx["plots"][el.number]
+
+    if "faction" in ctx["features"]:
+        fac_event = ctx["event"].get_class_parent("faction")
+        for el in ctx["list"]:
+            el.factions = el.factions_list.filter(event=fac_event)
 
     # add character configs
     char_add_addit(ctx)

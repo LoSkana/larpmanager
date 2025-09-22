@@ -190,7 +190,7 @@ def get_character_sheet_plots(ctx):
 
     ctx["sheet_plots"] = []
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
-    for el in que.order_by("plot__number"):
+    for el in que.order_by("order"):
         tx = el.plot.text
         if tx and el.text:
             tx += "<hr />"

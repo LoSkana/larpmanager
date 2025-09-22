@@ -98,6 +98,13 @@ def orga_plots_edit(request, s, num):
 
 
 @login_required
+def orga_plots_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_plots")
+    exchange_order(ctx, Plot, num, order)
+    return redirect("orga_plots", s=ctx["run"].get_slug())
+
+
+@login_required
 def orga_plots_versions(request, s, num):
     ctx = check_event_permission(request, s, "orga_plots")
     get_plot(ctx, num)

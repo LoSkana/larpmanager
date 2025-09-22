@@ -451,6 +451,11 @@ urlpatterns = [
         name="orga_plots_edit",
     ),
     path(
+        "<slug:s>/manage/plots/order/<int:num>/<int:order>/",
+        views_ow.orga_plots_order,
+        name="orga_plots_order",
+    ),
+    path(
         "<slug:s>/manage/plots/<int:num>/versions/",
         views_ow.orga_plots_versions,
         name="orga_plots_versions",
