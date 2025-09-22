@@ -517,7 +517,7 @@ def save_character_option_reset(sender, instance, **kwargs):
 
 
 def update_event_cache_all_runs(event, instance):
-    for r in event.runs.all():
+    for r in event.runs.select_related("event").all():
         update_event_cache_all(r, instance)
 
 
@@ -543,19 +543,19 @@ def del_run_reset(sender, instance, **kwargs):
 
 
 def reset_event_cache_all_runs(event):
-    for r in event.runs.all():
+    for r in event.runs.select_related("event").all():
         reset_run(r)
     # reset also runs of child events
-    for child in Event.objects.filter(parent=event):
+    for child in Event.objects.filter(parent=event).prefetch_related("runs"):
         for r in child.runs.all():
             reset_run(r)
     if event.parent:
         # reset also runs of sibling events
-        for child in Event.objects.filter(parent=event.parent):
+        for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
             for r in child.runs.all():
                 reset_run(r)
         # reset also runs of parent event
-        for r in event.parent.runs.all():
+        for r in event.parent.runs.select_related("event").all():
             reset_run(r)
 
 

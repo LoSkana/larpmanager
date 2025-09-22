@@ -354,7 +354,7 @@ def public(request, n):
         for el in ctx["regs"]:
             el.chars = {}
 
-            for rcr in el.rcrs.all():
+            for rcr in el.rcrs.select_related("character").all():
                 if not rcr.character:
                     continue
                 name = rcr.character.name

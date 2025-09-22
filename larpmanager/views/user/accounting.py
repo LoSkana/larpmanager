@@ -93,7 +93,7 @@ def accounting(request):
 
     ctx["delegated_todo"] = False
     if "delegated_members" in request.assoc["features"]:
-        ctx["delegated"] = Member.objects.filter(parent=request.user.member)
+        ctx["delegated"] = Member.objects.filter(parent=request.user.member).select_related("user")
         for el in ctx["delegated"]:
             del_ctx = {"member": el, "a_id": ctx["a_id"]}
             info_accounting(request, del_ctx)
@@ -415,7 +415,9 @@ def acc_collection_redeem(request, s):
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
 
-    ctx["list"] = AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"])
+    ctx["list"] = AccountingItemCollection.objects.filter(
+        collection=c, collection__assoc_id=request.assoc["id"]
+    ).select_related("member", "collection")
     return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
 
 

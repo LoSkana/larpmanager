@@ -317,8 +317,6 @@ def event(request, s):
 
 
 def event_redirect(request, s):
-    ctx = get_event(request, s)
-    n = Run.objects.filter(event=ctx["event"]).order_by("-end").first().number
     return redirect("event", s=s)
 
 
@@ -426,7 +424,7 @@ def quest(request, s, g):
     )
 
     traits = []
-    for el in ctx["quest"].traits.all():
+    for el in ctx["quest"].traits.select_related().all():
         res = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
         res.update(el.show())
         traits.append(res)
