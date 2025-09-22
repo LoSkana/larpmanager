@@ -104,7 +104,7 @@ def bulk_writing(live_server, page):
 
     # check result
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text [T1] plot")
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text plot")
 
     # remove plot
     page.get_by_role("link", name="Bulk").click()
