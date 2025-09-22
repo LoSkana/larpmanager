@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import re
+
 import pytest
 from playwright.sync_api import expect
 
@@ -241,13 +243,13 @@ def plots_character(live_server, page):
     page.get_by_role("listitem", name="bibi").locator("span").click()
 
     # change second
-    page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show").click()
+    page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
     fill_tinymce(page, "id_pl_2", "ffff")
     page.get_by_role("button", name="Confirm").click()
 
     # check
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
-    page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show")
+    page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
     expect(page.locator("#id_pl_2_tr")).to_contain_text("<p>ffff</p>")
     page.get_by_role("button", name="Confirm").click()
 
