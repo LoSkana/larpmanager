@@ -120,6 +120,7 @@ def pre_register(live_server, page):
 
     # Activate pre-register
     go_to(page, live_server, "/manage/features/32/on")
+    go_to(page, live_server, "/test/manage/features/114/on")
 
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()

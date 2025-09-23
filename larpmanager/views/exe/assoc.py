@@ -23,7 +23,7 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -146,6 +146,8 @@ def exe_features(request):
 def exe_features_go(request, ctx, num, on=True):
     ctx = check_assoc_permission(request, "exe_features")
     get_feature(ctx, num)
+    if not ctx["feature"].overall:
+        raise Http404("not overall feature!")
     f_id = ctx["feature"].id
     assoc = Association.objects.get(pk=request.assoc["id"])
     if on:

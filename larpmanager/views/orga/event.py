@@ -23,7 +23,7 @@ from collections import defaultdict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Prefetch
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -219,6 +219,8 @@ def orga_features(request, s):
 
 def orga_features_go(request, ctx, num, on=True):
     get_feature(ctx, num)
+    if ctx["feature"].overall:
+        raise Http404("overall feature!")
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
     reset_run(ctx["run"])
