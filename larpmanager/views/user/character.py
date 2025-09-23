@@ -70,6 +70,7 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_player_relationship,
+    get_character_inventory
 )
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
@@ -381,6 +382,33 @@ def character_edit(request, s, n, num):
     ctx = get_event_run(request, s, n, status=True, signup=True)
     get_char_check(request, ctx, num, True)
     return character_form(request, ctx, s, n, ctx["character"], CharacterForm)
+
+@login_required
+def character_list_data(request, s, n):
+    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+
+    ctx["list"] = get_player_characters(request.user.member, ctx["event"])
+
+    charList = []
+
+    for char in ctx["list"]:
+        charList.append({"id": char["px"], "name": char["name"]})
+
+    return JsonResponse(charList)
+
+@login_required
+def character_data(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+    get_character_inventory(ctx, num)
+    get_event_cache_all(ctx)
+
+    id = ctx["character"].pk
+    name = ctx["character"].name
+    abilities = ctx["character"].px_ability_list.all()
+    inventory = ctx["character"].character_inventory.get_pool_balances()
+
+    return JsonResponse({"id": id, "name": name, "abilities": abilities, "inventory": inventory})
 
 
 def get_options_dependencies(ctx):

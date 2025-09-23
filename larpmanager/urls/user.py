@@ -405,6 +405,16 @@ urlpatterns = [
         name="character_customize",
     ),
     path(
+        "<slug:s>/<int:n>/character/list/data/",
+        views_uc.character_list_data,
+        name="character_list_data"
+    ),
+    path(
+        "<slug:s>/<int:n>/character/<int:num>/data/",
+        views_uc.character_data,
+        name="character_data"
+    ),
+    path(
         "<slug:s>/<int:n>/character/<int:num>/profile/rotate/<int:r>/",
         views_uc.character_profile_rotate,
         name="character_profile_rotate",
