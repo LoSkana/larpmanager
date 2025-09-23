@@ -24,6 +24,17 @@ from larpmanager.models.accounting import AccountingItemPayment, AccountingItemT
 
 
 def compute_vat(instance):
+    """Compute VAT for a payment based on ticket and options VAT rates.
+
+    Calculates VAT for an accounting item payment by splitting the payment
+    between ticket amount and options, applying different VAT rates to each.
+
+    Args:
+        instance: AccountingItemPayment instance to compute VAT for
+
+    Side effects:
+        Updates the instance's VAT field in the database
+    """
     # Get total previous payments and transactions for the same member and run
     previous_pays = get_previous_sum(instance, AccountingItemPayment)
     previous_trans = get_previous_sum(instance, AccountingItemTransaction)
@@ -54,6 +65,15 @@ def compute_vat(instance):
 
 
 def get_previous_sum(aip, typ):
+    """Calculate sum of previous accounting items for the same member and run.
+
+    Args:
+        aip: AccountingItemPayment instance for reference
+        typ: Model class (AccountingItemPayment or AccountingItemTransaction)
+
+    Returns:
+        int: Sum of values from previous items, or 0 if none found
+    """
     return (
         typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created).aggregate(
             total=Sum("value")

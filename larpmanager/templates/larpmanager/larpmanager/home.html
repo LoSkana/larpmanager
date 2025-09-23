@@ -5,7 +5,7 @@
 {% endblock maintitle %}
 {% block meta %}
     <meta name="description"
-          content="Everything you need to run your LARP - registrations, payments, characters, and more. All in one platform. Free and open source!">
+          content="Everything you need to manage your LARP - registrations, payments, characters, and more. All in one platform. Free and open source!">
     <meta property="og:title" content="LarpManager">
 {% endblock meta %}
 {% block alpha %}
@@ -13,7 +13,7 @@
     <section id="banner">
         <!-- <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo"  width="150" height="150" /></span> -->
         <h2 class="home">LarpManager</h2>
-        <h1 class="home">Everything you need to run your LARP, free & open source!</h1>
+        <h1 class="home">Everything you need to manage your LARP, free & open source!</h1>
     </section>
     <!-- Main -->
     <section id="main" class="container">
@@ -102,11 +102,11 @@
                     <!--
 								<span class="image featured"><img src="images/pic02.jpg" alt="" /></span>
 -->
-                    <h6>Discover</h6>
-                    <p>Explore the full range of features and possibilities.</p>
+                    <h6>Contact</h6>
+                    <p>Got any question? Get in touch, we love to help!</p>
                     <ul class="actions special">
                         <li>
-                            <a href="{% url 'discover' %}" title="Discover list" class="button alt">Learn More</a>
+                            <a href="{% url 'contact' %}" title="Contact us" class="button alt">Learn More</a>
                         </li>
                     </ul>
                 </section>
@@ -116,13 +116,11 @@
                     <!--
 								<span class="image featured"><img src="images/pic03.jpg" alt="" /></span>
 -->
-                    <h6>Tutorial</h6>
-                    <p>Master the platform with our step-by-step guides.</p>
+                    <h6>Guides</h6>
+                    <p>See practical examples on how to configure LarpManager to support your workflow.</p>
                     <ul class="actions special">
                         <li>
-                            <a href="{% url 'tutorials' %}"
-                               title="Video tutorials"
-                               class="button alt">Learn More</a>
+                            <a href="{% url 'guides' %}" title="Read our guides" class="button alt">Learn More</a>
                         </li>
                     </ul>
                 </section>

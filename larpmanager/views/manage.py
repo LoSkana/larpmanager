@@ -36,6 +36,18 @@ from larpmanager.utils.text import get_assoc_text
 
 @login_required
 def manage(request, s=None):
+    """Main management dashboard routing.
+
+    Routes to either executive management or organizer management
+    based on whether an event slug is provided.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Optional event slug for organizer management
+
+    Returns:
+        HttpResponse: Redirect to home or appropriate management view
+    """
     if request.assoc["id"] == 0:
         return redirect("home")
 
@@ -46,6 +58,14 @@ def manage(request, s=None):
 
 
 def _get_registration_status(run):
+    """Get human-readable registration status for a run.
+
+    Args:
+        run: Run instance to check status for
+
+    Returns:
+        str: Localized status message describing registration state
+    """
     features = get_event_features(run.event_id)
     if "register_link" in features and run.event.register_link:
         return _("Registrations on external link")
@@ -83,6 +103,17 @@ def _get_registration_status(run):
 
 
 def _exe_manage(request):
+    """Executive management dashboard view.
+
+    Displays association-level management interface with events,
+    suggestions, actions, and accounting information.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered executive management dashboard
+    """
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
@@ -259,6 +290,18 @@ def _exe_accounting_actions(assoc, ctx, features):
 
 
 def _orga_manage(request, s):
+    """Event organizer management dashboard view.
+
+    Displays event-specific management interface with characters,
+    registrations, and event-level tools.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+
+    Returns:
+        HttpResponse: Rendered organizer management dashboard
+    """
     ctx = get_event_run(request, s)
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:

@@ -885,7 +885,12 @@ msgid ""
 "assigned a character"
 msgstr ""
 
-msgid "Registration form"
+msgid "Disable grouping"
+msgstr ""
+
+msgid ""
+"If checked, all registrations are displayed in a single table rather than "
+"being separated by type"
 msgstr ""
 
 msgid "If checked, adds to all registrations an unique code to reference them"
@@ -950,7 +955,7 @@ msgid ""
 "ticket"
 msgstr ""
 
-msgid "Prerequisites"
+msgid "Requirements"
 msgstr ""
 
 msgid ""
@@ -1230,6 +1235,14 @@ msgstr ""
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
 
+msgid "Disable provisional"
+msgstr ""
+
+msgid ""
+"If checked, all registrations are confirmed even if no payment has been "
+"received"
+msgstr ""
+
 msgid "Disable Tokens"
 msgstr ""
 
@@ -1503,6 +1516,9 @@ msgstr ""
 msgid "Do you want to allow participants to create their own characters"
 msgstr ""
 
+msgid "Do you want to manage character progression through abilities"
+msgstr ""
+
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""
@@ -1543,7 +1559,7 @@ msgstr ""
 msgid "XP"
 msgstr ""
 
-msgid "speedlarp"
+msgid "Prologue"
 msgstr ""
 
 msgid "Traits"
@@ -1568,6 +1584,12 @@ msgid "Rule"
 msgstr ""
 
 msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit an ability modifier. It is triggered "
+"only if all prerequisites and requirements are met. If multiple modifiers "
+"apply, only the first is used"
 msgstr ""
 
 msgid "click on the icon to open the tutorial"
@@ -1647,6 +1669,51 @@ msgid "This page allows you to edit a member's profile"
 msgstr ""
 
 msgid "This page allows you to change a member's membership status"
+msgstr ""
+
+msgid ""
+"This page allows you to upload the invoce of payment of a membership fee"
+msgstr ""
+
+msgid "Upload membership fee"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Membership fee already existing for this user and for this year"
+msgstr ""
+
+msgid "This page allows you to upload a new membership documents"
+msgstr ""
+
+msgid ""
+"Please note that the user must have confirmed it's consent to share their "
+"data with your organization"
+msgstr ""
+
+msgid "Upload membership document"
+msgstr ""
+
+msgid "Membership request"
+msgstr ""
+
+msgid "ID document photo"
+msgstr ""
+
+msgid "Membership ID number"
+msgstr ""
+
+msgid "Date of membership approval"
+msgstr ""
+
+msgid "User is already a member"
+msgstr ""
+
+msgid "There is already a member with this number"
 msgstr ""
 
 msgid "This page allows you to add or edit a badge, or assign it  to users"
@@ -1903,7 +1970,7 @@ msgstr ""
 msgid "Handout"
 msgstr ""
 
-msgid "Prologue"
+msgid "Prologue type"
 msgstr ""
 
 msgid "Speed larp"
@@ -2885,6 +2952,9 @@ msgstr ""
 msgid "Terms and conditions"
 msgstr ""
 
+msgid "Registration form"
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
@@ -2931,6 +3001,9 @@ msgid ""
 "default or customize it"
 msgstr ""
 
+msgid "Note that if the cost is 0, it will be automatically assigned"
+msgstr ""
+
 msgid ""
 "Indicate whether the ability is visible to users, and can be freely purchased"
 msgstr ""
@@ -2941,9 +3014,6 @@ msgstr ""
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "
 "acquire this"
-msgstr ""
-
-msgid "Options required"
 msgstr ""
 
 msgid ""
@@ -2969,6 +3039,12 @@ msgid ""
 msgstr ""
 
 msgid "The character field of computed type that will be updated"
+msgstr ""
+
+msgid "Indicate the prerequisite abilities"
+msgstr ""
+
+msgid "Indicate the required character options"
 msgstr ""
 
 msgid "Single choice"
@@ -3058,6 +3134,9 @@ msgstr ""
 msgid ""
 "Optional – Maximum number of times it can be selected across all characters "
 "(0 = unlimited)"
+msgstr ""
+
+msgid "Prerequisites"
 msgstr ""
 
 msgid ""
@@ -4896,9 +4975,6 @@ msgstr ""
 msgid "This page shows all invoices registered in the system"
 msgstr ""
 
-msgid "Method"
-msgstr ""
-
 msgid "Net"
 msgstr ""
 
@@ -5351,37 +5427,15 @@ msgstr ""
 msgid "Pre-Register"
 msgstr ""
 
-msgid "Show explanation"
+msgid "Registrations for this event are not open yet, but you can pre-register"
+msgstr ""
+
+msgid ""
+"Pre-registration is free. It does not guarantee a spot, but gives you "
+"priority when registration opens"
 msgstr ""
 
 msgid "New pre-registrations"
-msgstr ""
-
-msgid "Operation"
-msgstr ""
-
-msgid "If you like or are interested in an event, you can <b>pre-register</b>"
-msgstr ""
-
-msgid ""
-"This <b>is</b> not binding, and <b>does</b> not automatically secure you a "
-"place at the event, but you will be offered a preferential registration "
-"before the public opening of registration"
-msgstr ""
-
-msgid ""
-"For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new session of an event, spread the voice "
-"and invites others to pre-register to it"
-msgstr ""
-
-msgid ""
-"We only ask you to indicate a <b>order</b> of preference for the your pre-"
-"registrations (imagining you have to choose which one to play, indicates in "
-"what order you want to play them)"
-msgstr ""
-
-msgid "If you wish, you can delete past pre-registrations"
 msgstr ""
 
 msgid "Do you want to tell us something"
@@ -5425,6 +5479,12 @@ msgid ""
 msgstr ""
 
 msgid "Video"
+msgstr ""
+
+msgid "Guides"
+msgstr ""
+
+msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 
 msgid "Show inactive"
@@ -6256,9 +6316,6 @@ msgstr ""
 msgid "This page shows all payments received for this event"
 msgstr ""
 
-msgid "Invoice"
-msgstr ""
-
 msgid "This page shows the uploaded photo albums"
 msgstr ""
 
@@ -6448,9 +6505,6 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
-msgid "Dependencies"
-msgstr ""
-
 msgid "Ability types"
 msgstr ""
 
@@ -6461,6 +6515,17 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
+msgid "Modifiers"
+msgstr ""
+
+msgid ""
+"This page summarizes the modifiers that are applied to abilities based on "
+"other abilities, or character fields"
+msgstr ""
+
+msgid "New cost"
+msgstr ""
+
 msgid "Rules"
 msgstr ""
 
@@ -6468,6 +6533,9 @@ msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 
 msgid "Field"
+msgstr ""
+
+msgid "Operation"
 msgstr ""
 
 msgid "Reading"
@@ -6736,6 +6804,11 @@ msgid ""
 "uploaded data"
 msgstr ""
 
+msgid ""
+"Note that existing abilities with the same name, will be overwritten with "
+"the uploaded data"
+msgstr ""
+
 msgid "You can also upload a second file with the registration options"
 msgstr ""
 
@@ -6928,10 +7001,7 @@ msgstr ""
 msgid "This page shows the characters of the event"
 msgstr ""
 
-msgid "player"
-msgstr ""
-
-msgid "status"
+msgid "Attended"
 msgstr ""
 
 msgid "Versions"
@@ -8176,6 +8246,9 @@ msgstr ""
 msgid "Manage XP rules"
 msgstr ""
 
+msgid "Manage XP modifiers"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -8204,6 +8277,18 @@ msgid "Add to plot"
 msgstr ""
 
 msgid "Remove from plot"
+msgstr ""
+
+msgid "Add prologue"
+msgstr ""
+
+msgid "Remove prologue"
+msgstr ""
+
+msgid "Add to xp delivery"
+msgstr ""
+
+msgid "Remove from xp delivery"
 msgstr ""
 
 msgid "Set quest type"
@@ -8254,7 +8339,7 @@ msgstr ""
 msgid "(Optional) The amount of a voluntary donation"
 msgstr ""
 
-msgid "The ticket's email"
+msgid "The ticket's name"
 msgstr ""
 
 msgid "The tier of the ticket"
@@ -8267,6 +8352,21 @@ msgid "(Optional) The cost of the ticket"
 msgstr ""
 
 msgid "(Optional) Maximun number of spots available"
+msgstr ""
+
+msgid "The name ability"
+msgstr ""
+
+msgid "Cost of the ability"
+msgstr ""
+
+msgid "(Optional) The ability description"
+msgstr ""
+
+msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgstr ""
+
+msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
 msgid "The question name"
@@ -8294,6 +8394,9 @@ msgid "The question visibility to participants, allowed values are"
 msgstr ""
 
 msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
+msgstr ""
+
+msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 
 msgid "First character in the relationship (origin)"
@@ -8486,6 +8589,9 @@ msgid "Member refused!"
 msgstr ""
 
 msgid "Profile updated"
+msgstr ""
+
+msgid "Membership fee of"
 msgstr ""
 
 msgid "Mail added to queue!"

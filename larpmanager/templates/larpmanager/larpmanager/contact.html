@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    {% if contact_form.errors %}
+    {% if form %}
         Contact us
     {% else %}
         Thanks!
     {% endif %}
 {% endblock title %}
 {% block content %}
-    {% if not contact_form.errors %}Thank you for getting in touch with us, we'll contact you very soon!{% endif %}
+    {% if form %}
+        {% include "elements/structure/contact_form.html" with contact_form=form %}
+    {% else %}
+        Thank you for getting in touch with us, we'll contact you very soon!
+    {% endif %}
 {% endblock content %}

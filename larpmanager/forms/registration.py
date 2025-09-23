@@ -37,8 +37,12 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
 )
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import QuestionStatus, WritingQuestionType, RegistrationOption, RegistrationQuestion, \
-    RegistrationQuestionType
+from larpmanager.models.form import (
+    QuestionStatus,
+    RegistrationOption,
+    RegistrationQuestion,
+    RegistrationQuestionType,
+)
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -121,8 +125,7 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         self.fields["additionals"] = forms.ChoiceField(
-            required=False,
-            choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
+            required=False, choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
         )
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
@@ -181,10 +184,7 @@ class RegistrationForm(BaseRegistrationForm):
         if surcharge == 0:
             return
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
-        self.fields["surcharge"] = forms.ChoiceField(
-            required=True,
-            choices=ch
-        )
+        self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
     def init_pay_what(self, run):
         if "pay_what_you_want" not in self.params["features"]:
@@ -193,9 +193,7 @@ class RegistrationForm(BaseRegistrationForm):
         if "waiting" in run.status:
             return
 
-        self.fields["pay_what"] = forms.IntegerField(
-            min_value=0, max_value=1000, required=False
-        )
+        self.fields["pay_what"] = forms.IntegerField(min_value=0, max_value=1000, required=False)
         if self.instance.pk and self.instance.pay_what:
             self.initial["pay_what"] = int(self.instance.pay_what)
         else:
@@ -230,7 +228,6 @@ class RegistrationForm(BaseRegistrationForm):
         if self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
 
-
     def init_ticket(self, event, reg_counts, run):
         # check registration tickets options
         tickets = self.get_available_tickets(event, reg_counts, run)
@@ -244,9 +241,7 @@ class RegistrationForm(BaseRegistrationForm):
             if r.description:
                 ticket_help += f"<p><b>{r.name}</b>: {r.description}</p>"
 
-        self.fields["ticket"] = forms.ChoiceField(
-            required=True, choices=ticket_choices
-        )
+        self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
 
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = self.instance.ticket.id
@@ -469,17 +464,17 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if "character" in self.params["features"]:
             self.init_character(char_section)
 
-        # REGISTRATION OPTIONS
-        keys = self.init_orga_fields(main_section)
-        all_fields = set(self.fields.keys()) - {field.replace("id_", "") for field in self.sections.keys()}
-        for lbl in all_fields - set(keys):
-            self.delete_field(lbl)
-
         if "unique_code" in self.params["features"]:
             self.sections["id_special_cod"] = add_section
             self.reorder_field("special_cod")
         else:
             self.delete_field("special_cod")
+
+        # REGISTRATION OPTIONS
+        keys = self.init_orga_fields(main_section)
+        all_fields = set(self.fields.keys()) - {field.replace("id_", "") for field in self.sections.keys()}
+        for lbl in all_fields - set(keys):
+            self.delete_field(lbl)
 
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
@@ -489,7 +484,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             return
 
         self.sections["id_additionals"] = reg_section
-
 
     def init_pay_what(self, reg_section):
         if "pay_what_you_want" not in self.params["features"]:

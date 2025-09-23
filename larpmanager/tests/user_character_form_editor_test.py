@@ -55,7 +55,7 @@ def prepare(page, live_server):
     page.locator("#id_user_character_max").fill("1")
     page.get_by_role("link", name="Character form ").click()
     page.locator("#id_character_form_wri_que_max").check()
-    page.locator("#id_character_form_wri_que_dependents").check()
+    page.locator("#id_character_form_wri_que_requirements").check()
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/writing/form/")

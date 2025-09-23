@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 import ast
 import json
 import os
@@ -29,6 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -78,7 +80,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.experience import get_available_ability_px
+from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
 from larpmanager.utils.registration import (
     check_assign_character,
     check_character_maximum,
@@ -200,14 +202,15 @@ def character_form(request, ctx, s, instance, form_class):
             else:
                 mes = _("New character created") + "!"
 
-            element = form.save(commit=False)
-            mes = _update_character(ctx, element, form, mes, request)
-            element.save()
+            with transaction.atomic():
+                element = form.save(commit=False)
+                mes = _update_character(ctx, element, form, mes, request)
+                element.save()
+
+                check_assign_character(request, ctx)
 
             if mes:
                 messages.success(request, mes)
-
-            check_assign_character(request, ctx)
 
             number = None
             if isinstance(element, Character):
@@ -286,8 +289,9 @@ def character_profile_upload(request, s, num):
     n_path = f"registration/{rgr.pk}_{uuid4().hex}.{ext}"
     path = default_storage.save(n_path, ContentFile(img.read()))
 
-    rgr.custom_profile = path
-    rgr.save()
+    with transaction.atomic():
+        rgr.custom_profile = path
+        rgr.save()
 
     return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
 
@@ -317,8 +321,9 @@ def character_profile_rotate(request, s, num, r):
     n_path = f"{os.path.dirname(path)}/{rgr.pk}_{uuid4().hex}.{ext}"
     out.save(n_path)
 
-    rgr.custom_profile = n_path
-    rgr.save()
+    with transaction.atomic():
+        rgr.custom_profile = n_path
+        rgr.save()
 
     return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
 
@@ -373,8 +378,8 @@ def get_options_dependencies(ctx):
     question_idxs = que.values_list("id", flat=True)
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
-    for el in que.filter(dependents__isnull=False).distinct():
-        ctx["dependencies"][el.id] = list(el.dependents.values_list("id", flat=True))
+    for el in que.filter(requirements__isnull=False).distinct():
+        ctx["dependencies"][el.id] = list(el.requirements.values_list("id", flat=True))
 
 
 @login_required
@@ -394,10 +399,14 @@ def character_assign(request, s, num):
 def character_abilities(request, s, num):
     ctx = check_char_abilities(request, s, num)
 
-    ctx["available"] = get_available_ability_px(ctx["character"])
+    ctx["available"] = {}
+    for ability in get_available_ability_px(ctx["character"]):
+        if ability.typ_id not in ctx["available"]:
+            ctx["available"][ability.typ_id] = {"name": ability.typ.name, "order": ability.typ.id, "list": {}}
+        ctx["available"][ability.typ_id]["list"][ability.id] = f"{ability.name} - {ability.cost}"
 
     ctx["sheet_abilities"] = {}
-    for el in ctx["character"].px_ability_list.all():
+    for el in get_current_ability_px(ctx["character"]):
         if el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
         ctx["sheet_abilities"][el.typ.name].append(el)
@@ -410,7 +419,7 @@ def character_abilities(request, s, num):
         typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
     }
 
-    ctx["undo_abilities"] = get_undo_abilities(ctx, request)
+    ctx["undo_abilities"] = get_undo_abilities(request, ctx, ctx["character"])
 
     return render(request, "larpmanager/event/character/abilities.html", ctx)
 
@@ -434,12 +443,13 @@ def check_char_abilities(request, s, num):
 @login_required
 def character_abilities_del(request, s, num, id_del):
     ctx = check_char_abilities(request, s, num)
-    undo_abilities = get_undo_abilities(ctx, request)
+    undo_abilities = get_undo_abilities(request, ctx, ctx["character"])
     if id_del not in undo_abilities:
         raise Http404("ability out of undo window")
 
-    ctx["character"].px_ability_list.remove(id_del)
-    ctx["character"].save()
+    with transaction.atomic():
+        remove_char_ability(ctx["character"], id_del)
+        ctx["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
     return redirect("character_abilities", s=ctx["run"].get_slug(), num=ctx["character"].number)
@@ -462,18 +472,18 @@ def _save_character_abilities(ctx, request):
         messages.error(request, _("Selezione non valida"))
         return
 
-    ctx["character"].px_ability_list.add(selected_id)
-    ctx["character"].save()
+    with transaction.atomic():
+        ctx["character"].px_ability_list.add(selected_id)
+        ctx["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
-    get_undo_abilities(ctx, request, selected_id)
+    get_undo_abilities(request, ctx, ctx["character"], selected_id)
 
 
-def get_undo_abilities(ctx, request, new_ability_id=None):
+def get_undo_abilities(request, ctx, char, new_ability_id=None):
     px_undo = int(ctx["event"].get_config("px_undo", 0))
-    config_name = "added_px"
-    member = request.user.member
-    val = member.get_config(config_name, "{}")
+    config_name = f"added_px_{char.id}"
+    val = char.get_config(config_name, "{}")
     added_map = ast.literal_eval(val)
     current_time = int(time.time())
     # clean from abilities out of the undo time windows
@@ -483,7 +493,7 @@ def get_undo_abilities(ctx, request, new_ability_id=None):
     # add newly acquired ability and save it
     if px_undo and new_ability_id:
         added_map[str(new_ability_id)] = current_time
-        save_single_config(member, config_name, json.dumps(added_map))
+        save_single_config(char, config_name, json.dumps(added_map))
 
     # return map of abilities recently added, with int key
     return [int(k) for k in added_map.keys()]

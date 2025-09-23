@@ -48,10 +48,24 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         ordering = ["-updated"]
 
     def upd_js_attr(self, js, nm):
+        """Update JavaScript object with model attribute value.
+
+        Args:
+            js (dict): JavaScript object to update
+            nm (str): Attribute name to get and set
+
+        Returns:
+            dict: Updated JavaScript object
+        """
         js[nm] = get_attr(self, nm)
         return js
 
     def __str__(self):
+        """Return string representation of the model.
+
+        Returns:
+            str: Model name, search field, or default string representation
+        """
         if hasattr(self, "name"):
             return self.name
         if hasattr(self, "search") and self.search:
@@ -59,15 +73,33 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         return super().__str__()
 
     def get_absolute_url(self):
+        """Get absolute URL for the model instance.
+
+        Returns:
+            str: URL for the event view using model slug
+        """
         # noinspection PyUnresolvedReferences
         return reverse("event", kwargs={"s": self.slug})
 
     def small_text(self):
+        """Get truncated text preview.
+
+        Returns:
+            str: First 100 characters of text field or empty string
+        """
         if hasattr(self, "text"):
             return self.text[:100]
         return ""
 
     def as_dict(self, many_to_many=True):
+        """Convert model instance to dictionary representation.
+
+        Args:
+            many_to_many (bool): Whether to include many-to-many relationships
+
+        Returns:
+            dict: Dictionary with field names as keys and values as data
+        """
         # noinspection PyUnresolvedReferences
         opts = self._meta
         data = {}
@@ -133,6 +165,11 @@ class Feature(BaseModel):
         ordering = ["module", "order"]
 
     def __str__(self):
+        """Return string representation of the feature.
+
+        Returns:
+            str: Feature name and module combination
+        """
         return f"{self.name} - {self.module}"
 
 
@@ -161,5 +198,13 @@ class PaymentMethod(BaseModel):
     )
 
     def as_dict(self, **kwargs):
+        """Convert payment method to dictionary with profile image.
+
+        Args:
+            **kwargs: Additional keyword arguments
+
+        Returns:
+            dict: Payment method data with slug, name, and optional profile URL
+        """
         # noinspection PyUnresolvedReferences
         return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}

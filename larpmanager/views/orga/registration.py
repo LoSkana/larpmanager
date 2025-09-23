@@ -62,11 +62,11 @@ from larpmanager.models.event import (
     PreRegistration,
 )
 from larpmanager.models.form import (
-    WritingQuestionType,
+    BaseQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion, BaseQuestionType,
+    RegistrationQuestion,
 )
 from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -117,8 +117,8 @@ def _orga_registrations_traits(r, ctx):
         r.traits[typ] = ",".join(r.traits[typ])
 
 
-def _orga_registrations_tickets(r, ctx):
-    typ = ("1", _("Standard"))
+def _orga_registrations_tickets(reg, ctx):
+    default_typ = ("1", _("Participant"))
 
     ticket_types = {
         TicketTier.FILLER: ("2", _("Filler")),
@@ -130,23 +130,32 @@ def _orga_registrations_tickets(r, ctx):
         TicketTier.SELLER: ("8", _("Seller")),
     }
 
-    if not r.ticket_id or r.ticket_id not in ctx["reg_tickets"]:
-        regs_list_add(ctx, "list_tickets", "e", r.member)
+    typ = default_typ
+
+    if not reg.ticket_id or reg.ticket_id not in ctx["reg_tickets"]:
+        regs_list_add(ctx, "list_tickets", "e", reg.member)
     else:
-        t = ctx["reg_tickets"][r.ticket_id]
-        regs_list_add(ctx, "list_tickets", t.name, r.member)
-        r.ticket_show = t.name
+        ticket = ctx["reg_tickets"][reg.ticket_id]
+        regs_list_add(ctx, "list_tickets", ticket.name, reg.member)
+        reg.ticket_show = ticket.name
 
-        if is_reg_provisional(r, ctx["features"]):
+        if is_reg_provisional(reg, ctx["features"]):
             typ = ("0", _("Provisional"))
-        elif t.tier in ticket_types:
-            typ = ticket_types[t.tier]
+        elif ticket.tier in ticket_types:
+            typ = ticket_types[ticket.tier]
 
-    if typ[0] not in ctx["reg_all"]:
-        ctx["reg_all"][typ[0]] = {"count": 0, "type": typ[1], "list": []}
+    for key in [default_typ, typ]:
+        if key[0] not in ctx["reg_all"]:
+            ctx["reg_all"][key[0]] = {"count": 0, "type": key[1], "list": []}
 
-    ctx["reg_all"][typ[0]]["list"].append(r)
+    # update count
     ctx["reg_all"][typ[0]]["count"] += 1
+
+    # if grouping has been disabled, simply add them to the default type
+    if ctx["no_grouping"]:
+        typ = default_typ
+
+    ctx["reg_all"][typ[0]]["list"].append(reg)
 
 
 def orga_registrations_membership(r, ctx):
@@ -177,24 +186,8 @@ def _orga_registrations_standard(reg, ctx):
         return
 
     regs_list_add(ctx, "list_all", "all", reg.member)
-    if reg.member_id in ctx["reg_chars"]:
-        reg.factions = []
-        reg.chars = ctx["reg_chars"][reg.member_id]
-        for char in reg.chars:
-            if "factions" in char:
-                reg.factions.extend(char["factions"])
-                for fnum in char["factions"]:
-                    if fnum in ctx["factions"]:
-                        regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], reg.member)
 
-            if "custom_character" in ctx["features"]:
-                orga_registrations_custom(reg, ctx, char)
-
-        if "custom_character" in ctx["features"] and reg.custom:
-            for s in ctx["custom_info"]:
-                if not reg.custom[s]:
-                    continue
-                reg.custom[s] = ", ".join(reg.custom[s])
+    _orga_registration_character(ctx, reg)
 
     # membership status
     if "membership" in ctx["features"]:
@@ -204,6 +197,29 @@ def _orga_registrations_standard(reg, ctx):
     if ctx["registration_reg_que_age"]:
         if reg.member.birth_date and ctx["run"].start:
             reg.age = calculate_age(reg.member.birth_date, ctx["run"].start)
+
+
+def _orga_registration_character(ctx, reg):
+    if reg.member_id not in ctx["reg_chars"]:
+        return
+
+    reg.factions = []
+    reg.chars = ctx["reg_chars"][reg.member_id]
+    for char in reg.chars:
+        if "factions" in char:
+            reg.factions.extend(char["factions"])
+            for fnum in char["factions"]:
+                if fnum in ctx["factions"]:
+                    regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], reg.member)
+
+        if "custom_character" in ctx["features"]:
+            orga_registrations_custom(reg, ctx, char)
+
+    if "custom_character" in ctx["features"] and reg.custom:
+        for s in ctx["custom_info"]:
+            if not reg.custom[s]:
+                continue
+            reg.custom[s] = ", ".join(reg.custom[s])
 
 
 def orga_registrations_custom(r, ctx, char):
@@ -259,6 +275,8 @@ def _orga_registrations_prepare(ctx, request):
         t.emails = []
         ctx["reg_tickets"][t.id] = t
     ctx["reg_questions"] = _get_registration_fields(ctx, request.user.member)
+
+    ctx["no_grouping"] = ctx["event"].get_config("registration_no_grouping", False)
 
 
 def _get_registration_fields(ctx, member):

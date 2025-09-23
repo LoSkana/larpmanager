@@ -99,7 +99,7 @@ def plots(live_server, page):
         "Loading performed, see logs Proceed Logs OK - Created plottOK - Plot role characcter plott"
     )
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("T1 plott conceptt textt")
+    expect(page.locator("#one")).to_contain_text("plott conceptt textt")
     page.get_by_role("link", name="").click()
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
     expect(page.locator("#id_char_role_2_tr")).to_contain_text("#2 characcter")

@@ -146,6 +146,8 @@ def del_event_role_reset(sender, instance, **kwargs):
 
 def get_event_roles(request, slug):
     pms = {}
+    # split if provided slug from session
+    slug = slug.split("-", 1)[0]
     if request.user.is_superuser:
         return True, [], ["superuser"]
     ctx = cache_event_links(request)

@@ -28,6 +28,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
 from larpmanager.models.member import Member
@@ -195,6 +196,9 @@ class Character(Writing):
     def __str__(self):
         return f"#{self.number} {self.name}"
 
+    def get_config(self, name, def_v=None):
+        return get_element_config(self, name, def_v)
+
     def show(self, run=None):
         js = super().show(run)
 
@@ -272,7 +276,7 @@ class Character(Writing):
         return Relationship.objects.filter(source_id=self.pk)
 
     def get_plot_characters(self):
-        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
+        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
     def get_example_csv(cls, features):
@@ -328,6 +332,8 @@ class CharacterConfig(BaseModel):
 class Plot(Writing):
     characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
 
+    order = models.IntegerField(default=0)
+
     class Meta:
         indexes = [models.Index(fields=["number", "event"])]
         constraints = [
@@ -340,14 +346,18 @@ class Plot(Writing):
         ]
 
     def __str__(self):
-        return f"T{self.number} {self.name}"
+        return self.name
 
     def get_plot_characters(self):
-        return PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character")
+        return (
+            PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character").order_by("character__number")
+        )
 
 
 class PlotCharacterRel(BaseModel):
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
+
+    order = models.IntegerField(default=0)
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 

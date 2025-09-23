@@ -84,11 +84,27 @@ class AssocRole(BaseModel):
 
 
 def get_assoc_executives(assoc):
+    """Get all executive members of an association.
+
+    Args:
+        assoc: Association instance
+
+    Returns:
+        QuerySet: Members with executive role (role number 1)
+    """
     exe = AssocRole.objects.get(assoc=assoc, number=1)
     return exe.members.all()
 
 
 def get_assoc_inners(assoc):
+    """Get all non-executive members with association roles.
+
+    Args:
+        assoc: Association instance
+
+    Returns:
+        list: List of Member instances with non-executive roles
+    """
     lst = []
     already = {}
     for role in AssocRole.objects.filter(assoc=assoc).exclude(number=1):
@@ -147,11 +163,27 @@ class EventRole(BaseConceptModel):
 
 
 def get_event_organizers(event):
+    """Get all organizer members of an event.
+
+    Args:
+        event: Event instance
+
+    Returns:
+        QuerySet: Members with event organizer role (role number 1)
+    """
     (orga, cr) = EventRole.objects.get_or_create(event=event, number=1)
     return orga.members.all()
 
 
 def get_event_staffers(event):
+    """Get all non-organizer staff members of an event.
+
+    Args:
+        event: Event instance
+
+    Returns:
+        list: List of Member instances with non-organizer event roles
+    """
     lst = []
     already = {}
     for role in EventRole.objects.filter(event=event):

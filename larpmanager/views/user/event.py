@@ -317,8 +317,6 @@ def event(request, s):
 
 
 def event_redirect(request, s):
-    ctx = get_event(request, s)
-    n = Run.objects.filter(event=ctx["event"]).order_by("-end").first().number
     return redirect("event", s=s)
 
 

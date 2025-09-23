@@ -61,10 +61,12 @@ function submitForm(auto) {
     });
     setTimeout(()=>submitForm(true), timeout);
 }
+
 function confirmSubmit() {
     $('#confirm').css('color', 'green');
     setTimeout(endConfirmSubmit, 1000);
 }
+
 function endConfirmSubmit() {
     $('#confirm').css('color', '');
 }
@@ -111,5 +113,13 @@ window.addEventListener('DOMContentLoaded', function() {
             setUpAutoSave('{{ field }}');
         {% endfor %}
     {% endif %}
+
+    $('.trigger_save').on('click', function(e) {
+        e.preventDefault();
+        submitForm(false);
+        window.location.href = $(this).attr('href');
+    });
 });
+
+submitForm(false);
 </script>

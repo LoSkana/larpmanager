@@ -23,7 +23,7 @@ import io
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Model, Prefetch
+from django.db.models import Exists, Model, OuterRef, Prefetch
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -36,8 +36,14 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import QuestionApplicable, WritingQuestionType, WritingAnswer, WritingQuestion, \
-    BaseQuestionType
+from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
+    WritingAnswer,
+    WritingQuestion,
+    WritingQuestionType,
+)
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -49,15 +55,24 @@ from larpmanager.models.writing import (
     replace_chars_all,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
+from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
 from larpmanager.utils.character import get_character_relationships, get_character_sheet
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
-from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
-from larpmanager.utils.exceptions import ReturnNow
+from larpmanager.utils.exceptions import ReturnNowError
 
 
 def orga_list_progress_assign(ctx, typ: type[Model]):
+    """Setup progress and assignment tracking for writing elements.
+
+    Args:
+        ctx: Context dictionary to populate with progress/assignment data
+        typ: Model type being processed (Character, Plot, etc.)
+
+    Side effects:
+        Updates ctx with progress steps, assignments, and mapping counters
+    """
     features = ctx["features"]
     event = ctx["event"]
 
@@ -91,6 +106,16 @@ def orga_list_progress_assign(ctx, typ: type[Model]):
 
 
 def writing_popup_question(ctx, idx, question_idx):
+    """Get writing question data for popup display.
+
+    Args:
+        ctx: Context dictionary with event and writing element data
+        idx (int): Writing element ID
+        question_idx (int): Question index
+
+    Returns:
+        dict: Question data for popup rendering
+    """
     try:
         char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
         question = WritingQuestion.objects.get(pk=question_idx, event=ctx["event"].get_class_parent(WritingQuestion))
@@ -102,6 +127,16 @@ def writing_popup_question(ctx, idx, question_idx):
 
 
 def writing_popup(request, ctx, typ):
+    """Handle writing element popup requests.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with event data
+        typ: Writing element type (character, plot, etc.)
+
+    Returns:
+        JsonResponse: Writing element data for popup display
+    """
     get_event_cache_all(ctx)
 
     idx = int(request.POST.get("idx", ""))
@@ -132,6 +167,15 @@ def writing_popup(request, ctx, typ):
 
 
 def writing_example(ctx, typ):
+    """Generate example writing content for a given type.
+
+    Args:
+        ctx: Context dictionary with event information
+        typ (str): Type of writing element to generate example for
+
+    Returns:
+        dict: Example content and structure for the writing type
+    """
     file_rows = typ.get_example_csv(ctx["features"])
 
     buffer = io.StringIO()
@@ -150,13 +194,13 @@ def writing_post(request, ctx, typ, nm):
         return
 
     if request.POST.get("download") == "1":
-        raise ReturnNow(download(ctx, typ, nm))
+        raise ReturnNowError(download(ctx, typ, nm))
 
     if request.POST.get("example") == "1":
-        raise ReturnNow(writing_example(ctx, typ))
+        raise ReturnNowError(writing_example(ctx, typ))
 
     if request.POST.get("popup") == "1":
-        raise ReturnNow(writing_popup(request, ctx, typ))
+        raise ReturnNowError(writing_popup(request, ctx, typ))
 
 
 def writing_list(request, ctx, typ, nm):
@@ -171,7 +215,7 @@ def writing_list(request, ctx, typ, nm):
     text_fields, writing = writing_list_query(ctx, ev, typ)
 
     if issubclass(typ, Character):
-        writing_list_char(ctx, ev, text_fields)
+        writing_list_char(ctx)
 
     if issubclass(typ, Plot):
         writing_list_plot(ctx)
@@ -196,11 +240,7 @@ def writing_list(request, ctx, typ, nm):
 
 
 def writing_bulk(ctx, request, typ):
-    bulks = {
-        Character: handle_bulk_characters,
-        Quest: handle_bulk_quest,
-        Trait: handle_bulk_trait
-    }
+    bulks = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
     if typ in bulks:
         bulks[typ](request, ctx)
@@ -280,7 +320,9 @@ def retrieve_cache_text_field(ctx, text_fields, typ):
 def _prepare_writing_list(ctx, request):
     try:
         name_que = (
-            ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"], typ=WritingQuestionType.NAME)
+            ctx["event"]
+            .get_elements(WritingQuestion)
+            .filter(applicable=ctx["writing_typ"], typ=WritingQuestionType.NAME)
         )
         ctx["name_que_id"] = name_que.values_list("id", flat=True)[0]
     except Exception:
@@ -307,7 +349,7 @@ def writing_list_plot(ctx):
             el.chars = ctx["chars"][el.number]
 
 
-def writing_list_char(ctx, ev, text_fields):
+def writing_list_char(ctx):
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
 
@@ -316,12 +358,23 @@ def writing_list_char(ctx, ev, text_fields):
             Prefetch("source", queryset=Relationship.objects.filter(deleted=None))
         )
 
+    if "campaign" in ctx["features"] and ctx["event"].parent:
+        # add check if the character is signed up to the event
+        ctx["list"] = ctx["list"].annotate(
+            has_registration=Exists(
+                RegistrationCharacterRel.objects.filter(
+                    character=OuterRef("pk"), reg__run_id=ctx["run"].id, reg__cancellation_date__isnull=True
+                )
+            )
+        )
+
     if "plot" in ctx["features"]:
         ctx["plots"] = {}
-        for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
+        que = PlotCharacterRel.objects.filter(character__event=ctx["event"].get_class_parent(Plot))
+        for el in que.select_related("plot", "character").order_by("order"):
             if el.character.number not in ctx["plots"]:
                 ctx["plots"][el.character.number] = []
-            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.id))
+            ctx["plots"][el.character.number].append((el.plot.name, el.plot.id))
 
         for el in ctx["list"]:
             if el.number in ctx["plots"]:

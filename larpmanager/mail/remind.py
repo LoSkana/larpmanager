@@ -30,6 +30,14 @@ from larpmanager.utils.text import get_assoc_text
 
 
 def remember_membership(reg):
+    """Send membership reminder email to registered user.
+
+    Args:
+        reg: Registration instance needing membership confirmation
+
+    Side effects:
+        Sends email reminder about membership requirement
+    """
     activate(reg.member.language)
 
     subj = hdr(reg.run.event) + _("Confirmation of registration for %(event)s") % {"event": reg.run}
@@ -42,6 +50,14 @@ def remember_membership(reg):
 
 
 def get_remember_membership_body(reg):
+    """Generate default membership reminder email body text.
+
+    Args:
+        reg: Registration instance
+
+    Returns:
+        str: HTML formatted email body for membership reminder
+    """
     body = (
         _(
             "Hello! To confirm your provisional registration for %(event)s, "
@@ -73,6 +89,14 @@ def get_remember_membership_body(reg):
 
 
 def remember_pay(reg):
+    """Send payment reminder email to registered user.
+
+    Args:
+        reg: Registration instance with pending payment
+
+    Side effects:
+        Sends email reminder about payment requirement
+    """
     activate(reg.member.language)
 
     provisional = is_reg_provisional(reg)
@@ -91,6 +115,16 @@ def remember_pay(reg):
 
 
 def get_remember_pay_body(context, provisional, reg):
+    """Generate default payment reminder email body text.
+
+    Args:
+        context (dict): Email context with event information
+        provisional (bool): Whether registration is provisional
+        reg: Registration instance with payment details
+
+    Returns:
+        str: HTML formatted email body for payment reminder
+    """
     symbol = reg.run.event.assoc.get_currency_symbol()
     amount = f"{reg.quota:.2f}{symbol}"
     deadline = reg.deadline
@@ -134,6 +168,14 @@ def get_remember_pay_body(context, provisional, reg):
 
 
 def remember_profile(reg):
+    """Send profile completion reminder email to registered user.
+
+    Args:
+        reg: Registration instance with incomplete profile
+
+    Side effects:
+        Sends email reminder about profile completion requirement
+    """
     activate(reg.member.language)
     context = {"event": reg.run, "url": get_url("profile", reg.run.event)}
 
@@ -145,6 +187,14 @@ def remember_profile(reg):
 
 
 def get_remember_profile_body(context):
+    """Generate default profile completion reminder email body text.
+
+    Args:
+        context (dict): Email context with event and URL information
+
+    Returns:
+        str: HTML formatted email body for profile reminder
+    """
     return (
         _("Hello! You signed up for %(event)s but haven't completed your profile yet") % context
         + ". "
@@ -154,6 +204,14 @@ def get_remember_profile_body(context):
 
 
 def remember_membership_fee(reg):
+    """Send membership fee reminder email to registered user.
+
+    Args:
+        reg: Registration instance needing membership fee payment
+
+    Side effects:
+        Sends email reminder about annual membership fee requirement
+    """
     activate(reg.member.language)
     context = {"event": reg.run}
 
@@ -167,6 +225,15 @@ def remember_membership_fee(reg):
 
 
 def get_remember_membership_fee_body(context, reg):
+    """Generate default membership fee reminder email body text.
+
+    Args:
+        context (dict): Email context with event information
+        reg: Registration instance with fee payment details
+
+    Returns:
+        str: HTML formatted email body for membership fee reminder
+    """
     body = (
         _("Hello! You have registered for %(event)s, but we have not yet received your annual membership payment")
         % context
@@ -197,6 +264,14 @@ def get_remember_membership_fee_body(context, reg):
 
 
 def notify_deadlines(run):
+    """Send deadline notification emails to event organizers.
+
+    Args:
+        run: Run instance with approaching deadlines
+
+    Side effects:
+        Sends deadline reminder emails to all event organizers
+    """
     result = check_run_deadlines([run])
     if not result:
         return

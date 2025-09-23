@@ -6,6 +6,9 @@
 {% block info %}
     {% trans "This page shows the plots of the event" %}
 {% endblock info %}
+{% block table_classes %}
+    ordering_arrow
+{% endblock table_classes %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
@@ -19,6 +22,8 @@
     <th class="stats">
         <i class="fa fa-hashtag"></i>
     </th>
+    <th></th>
+    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
@@ -41,6 +46,20 @@
                 {% endfor %}
             </td>
             <td class="stats">{{ el.characters.all | length }}</td>
+            <td>
+                {% if not forloop.first %}
+                    <a href="{% url 'orga_plots_order' run.get_slug el.id 0 %}">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if not forloop.last %}
+                    <a href="{% url 'orga_plots_order' run.get_slug el.id 1 %}">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
 {% endblock tbody %}

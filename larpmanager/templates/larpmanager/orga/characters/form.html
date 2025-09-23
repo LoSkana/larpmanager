@@ -52,7 +52,11 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.description | truncatechars:50 }}</td>
                     <td>{{ el.get_typ_display }}</td>
-                    {% if status %}<td>{{ el.get_status_display }}</td>{% endif %}
+                    {% if status %}
+                        <td>
+                            {% if el.typ|not_in:"c" %}{{ el.get_status_display }}{% endif %}
+                        </td>
+                    {% endif %}
                     <td>
                         {% if el.typ|not_in:"name,teaser,text,factions_list" %}{{ el.get_visibility_display }}{% endif %}
                     </td>

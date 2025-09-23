@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Guides" %}
+{% endblock title %}
+{% block content %}
+    <p class="blog-intro">{% trans "See practical examples of how LarpManager can help your event" %}!</p>
+    {% if list %}
+        <div class="guide-list">
+            {% for post in list %}
+                <div class="guide-row">
+                    <h3>
+                        <a href="{% url 'guide' post.slug %}">{{ post.title }}</a>
+                    </h3>
+                    {% if post.description %}<p class="blog-description">{{ post.description }}</p>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock content %}

@@ -17,16 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from decimal import Decimal
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
-from larpmanager.models.form import WritingQuestionType, WritingAnswer, WritingOption, WritingQuestion
+from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
@@ -53,7 +51,7 @@ class AbilityPx(BaseConceptModel):
         AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
     )
 
-    cost = models.IntegerField()
+    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
 
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
@@ -71,11 +69,11 @@ class AbilityPx(BaseConceptModel):
         help_text=_("Indicate the prerequisite abilities, which must be possessed before one can acquire this"),
     )
 
-    dependents = models.ManyToManyField(
+    requirements = models.ManyToManyField(
         WritingOption,
         related_name="abilities",
         blank=True,
-        verbose_name=_("Options required"),
+        verbose_name=_("Requirements"),
         help_text=_("Indicate the character options, which must be selected to make the skill available"),
     )
 
@@ -122,48 +120,6 @@ class DeliveryPx(BaseConceptModel):
         return f"{self.name} ({self.amount})"
 
 
-def update_px(char):
-    start = char.event.get_config("px_start", 0)
-
-    addit = {
-        "px_tot": int(start) + sum(char.px_delivery_list.values_list("amount", flat=True)),
-        "px_used": sum(char.px_ability_list.values_list("cost", flat=True)),
-    }
-    addit["px_avail"] = addit["px_tot"] - addit["px_used"]
-
-    save_all_element_configs(char, addit)
-
-    # save computed field
-    event = char.event
-    computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
-    values = {question.id: Decimal(0) for question in computed_ques}
-
-    # apply rules
-    ability_ids = char.px_ability_list.values_list("pk", flat=True)
-    rules = (
-        event.get_elements(RulePx)
-        .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
-        .distinct()
-        .order_by("order")
-    )
-
-    ops = {
-        Operation.ADDITION: lambda x, y: x + y,
-        Operation.SUBTRACTION: lambda x, y: x - y,
-        Operation.MULTIPLICATION: lambda x, y: x * y,
-        Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
-    }
-
-    for rule in rules:
-        f_id = rule.field.id
-        values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
-
-    for question_id, value in values.items():
-        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
-        qa.text = format(value, "f").rstrip("0").rstrip(".")
-        qa.save()
-
-
 class Operation(models.TextChoices):
     ADDITION = "ADD", _("Addition")
     SUBTRACTION = "SUB", _("Subtraction")
@@ -197,3 +153,44 @@ class RulePx(BaseConceptModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     order = models.IntegerField(default=0)
+
+
+class ModifierPx(BaseConceptModel):
+    abilities = models.ManyToManyField(AbilityPx, related_name="modifiers_abilities", blank=True)
+
+    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
+
+    prerequisites = models.ManyToManyField(
+        AbilityPx,
+        related_name="modifiers_prerequisites",
+        blank=True,
+        verbose_name=_("Pre-requisites"),
+        help_text=_("Indicate the prerequisite abilities"),
+    )
+
+    requirements = models.ManyToManyField(
+        WritingOption,
+        related_name="modifiers_requirements",
+        blank=True,
+        verbose_name=_("Requirements"),
+        help_text=_("Indicate the required character options"),
+    )
+
+    order = models.IntegerField()
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_modifier_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_modifier_without_optional",
+            ),
+        ]
+
+    def display(self):
+        return f"{self.name} ({self.cost})"

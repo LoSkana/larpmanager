@@ -53,7 +53,14 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import WritingQuestionType, _get_writing_elements, _get_writing_mapping, BaseQuestionType
+from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
+    WritingQuestion,
+    WritingQuestionType,
+    _get_writing_elements,
+    _get_writing_mapping,
+)
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
@@ -241,6 +248,9 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_registration()
 
     def set_config_gallery(self):
+        if "character" not in self.params["features"]:
+            return
+
         self.set_section("gallery", _("Gallery"))
 
         label = _("Request login")
@@ -267,7 +277,13 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
     def set_config_reg_form(self):
-        self.set_section("reg_form", _("Registration form"))
+        self.set_section("reg_form", _("Registrations"))
+
+        label = _("Disable grouping")
+        help_text = _(
+            "If checked, all registrations are displayed in a single table rather than being separated by type"
+        )
+        self.add_configs("registration_no_grouping", ConfigType.BOOL, label, help_text)
 
         label = _("Unique code")
         help_text = _("If checked, adds to all registrations an unique code to reference them")
@@ -321,9 +337,9 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, allows a option to be visible only to participants with selected ticket")
             self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
 
-            label = _("Prerequisites")
+            label = _("Requirements")
             help_text = _("If checked, allows a option to be visible only if other options are selected")
-            self.add_configs("character_form_wri_que_dependents", ConfigType.BOOL, label, help_text)
+            self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
         if "pre_register" in self.params["features"]:
@@ -548,6 +564,10 @@ class OrgaConfigForm(ConfigForm):
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)
+
+            label = _("Disable provisional")
+            help_text = _("If checked, all registrations are confirmed even if no payment has been received")
+            self.add_configs("payment_no_provisional", ConfigType.BOOL, label, help_text)
 
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))
@@ -864,11 +884,12 @@ class OrgaRunForm(ConfigForm):
         shows = _get_writing_elements()
 
         basics = BaseQuestionType.get_basic_types()
+        basics.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
         for s in shows:
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
                 continue
-            if s[0] == "plot":
+            if s[0] in ["plot", "prologue"]:
                 continue
             fields = self.params["writing_fields"][s[0]]["questions"]
             extra = []
@@ -1066,6 +1087,11 @@ class OrgaQuickSetupForm(QuickSetupForm):
                         _("Player editor"),
                         _("Do you want to allow participants to create their own characters"),
                     ),
+                    "px": (
+                        True,
+                        _("Experience points"),
+                        _("Do you want to manage character progression through abilities"),
+                    ),
                 }
             )
 
@@ -1142,16 +1168,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         fields = self.params["writing_fields"][s[0]]["questions"]
         extra = []
 
-        for _id, field in fields.items():
-            if field["typ"] == "name":
-                continue
-
-            if field["typ"] in basics:
-                tog = f".lq_{field['id']}"
-            else:
-                tog = f"q_{field['id']}"
-
-            extra.append((tog, field["name"]))
+        self._compile_configs(basics, extra, fields)
 
         if s[0] == "character":
             if self.params["event"].get_config("user_character_max", 0):
@@ -1162,8 +1179,14 @@ class OrgaPreferencesForm(ExePreferencesForm):
                 ("px", "px", _("XP")),
                 ("plot", "plots", _("Plots")),
                 ("relationships", "relationships", _("Relationships")),
-                ("speedlarp", "speedlarp", _("speedlarp")),
+                ("speedlarp", "speedlarp", _("Speedlarp")),
+                ("prologue", "prologues", _("Prologue")),
             ]
+            if "faction" in self.params["features"]:
+                questions = self.params["event"].get_elements(WritingQuestion)
+                que = questions.get(applicable=QuestionApplicable.CHARACTER, typ=WritingQuestionType.FACTIONS)
+                feature_fields.insert(0, ("faction", f"q_{que.id}", _("Factions")))
+
             self.add_feature_extra(extra, feature_fields)
         elif s[0] in ["faction", "plot"]:
             extra.append(("characters", _("Characters")))
@@ -1173,6 +1196,18 @@ class OrgaPreferencesForm(ExePreferencesForm):
         extra.append(("stats", "Stats"))
 
         self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+
+    def _compile_configs(self, basics, extra, fields):
+        for _id, field in fields.items():
+            if field["typ"] == "name":
+                continue
+
+            if field["typ"] in basics:
+                tog = f".lq_{field['id']}"
+            else:
+                tog = f"q_{field['id']}"
+
+            extra.append((tog, field["name"]))
 
     def add_feature_extra(self, extra, feature_fields):
         for field in feature_fields:

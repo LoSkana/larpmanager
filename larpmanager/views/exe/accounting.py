@@ -80,6 +80,14 @@ from larpmanager.views.orga.accounting import assign_payment_fee
 
 @login_required
 def exe_outflows(request):
+    """Display paginated list of accounting outflows for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered outflows list template
+    """
     ctx = check_assoc_permission(request, "exe_outflows")
     exe_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
@@ -87,11 +95,28 @@ def exe_outflows(request):
 
 @login_required
 def exe_outflows_edit(request, num):
+    """Edit accounting outflow record.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        num (int): Outflow record ID
+
+    Returns:
+        HttpResponse: Edit form or redirect after save
+    """
     return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
 
 
 @login_required
 def exe_inflows(request):
+    """Display paginated list of accounting inflows for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered inflows list template
+    """
     ctx = check_assoc_permission(request, "exe_inflows")
     exe_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
@@ -104,6 +129,14 @@ def exe_inflows_edit(request, num):
 
 @login_required
 def exe_donations(request):
+    """Display paginated list of donations for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered donations list template
+    """
     ctx = check_assoc_permission(request, "exe_donations")
     exe_paginate(request, ctx, AccountingItemDonation, show_runs=False)
     return render(request, "larpmanager/exe/accounting/donations.html", ctx)

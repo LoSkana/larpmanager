@@ -295,6 +295,16 @@ urlpatterns = [
         name="exe_membership",
     ),
     path(
+        "manage/membership/fee",
+        views_em.exe_membership_fee,
+        name="exe_membership_fee",
+    ),
+    path(
+        "manage/membership/document",
+        views_em.exe_membership_document,
+        name="exe_membership_document",
+    ),
+    path(
         "manage/membership/<int:num>/",
         views_em.exe_member,
         name="exe_member",

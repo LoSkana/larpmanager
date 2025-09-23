@@ -178,7 +178,7 @@ def workshops(request, s):
     ctx = get_event_run(request, s, signup=True, status=True)
     # get modules assigned to this event
     ctx["list"] = []
-    for workshop in ctx["event"].workshops.all().order_by("number"):
+    for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
         dt = workshop.show()
         limit = datetime.now() - timedelta(days=365)
         # print(limit)
@@ -213,12 +213,12 @@ def valid_workshop_answer(request, ctx):
 def workshop_answer(request, s, m):
     ctx = get_event_run(request, s, signup=True, status=True)
     get_workshop(ctx, m)
-    completed = [el.pk for el in request.user.member.workshops.all()]
+    completed = [el.pk for el in request.user.member.workshops.select_related().all()]
     if ctx["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
         return redirect("workshops", s=ctx["run"].get_slug())
     ctx["list"] = []
-    for question in ctx["workshop"].questions.all().order_by("number"):
+    for question in ctx["workshop"].questions.select_related().all().order_by("number"):
         ctx["list"].append(question.show())
     # if only preseting result
     if request.method != "POST":

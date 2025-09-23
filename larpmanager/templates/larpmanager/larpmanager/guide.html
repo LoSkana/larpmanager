@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}
+    {{ guide.title }} - LarpManager
+{% endblock title %}
+{% block content %}
+    <div id="article">
+        {% if guide.photo %}
+            <div class="article-image">
+                <img src="{{ guide.photo.url }}"
+                     alt="{{ guide.title }}"
+                     class="img-responsive" />
+            </div>
+        {% endif %}
+        <div class="article-content">{{ guide.text | safe }}</div>
+    </div>
+{% endblock content %}

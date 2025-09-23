@@ -23,15 +23,15 @@ from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.experience import AbilityPx, AbilityTypePx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 from larpmanager.models.member import Log
 from larpmanager.models.miscellanea import (
     WarehouseContainer,
     WarehouseItem,
     WarehouseTag,
 )
-from larpmanager.models.writing import Character, Faction, Plot
-from larpmanager.utils.exceptions import ReturnNow
+from larpmanager.models.writing import Character, Faction, Plot, Prologue
+from larpmanager.utils.exceptions import ReturnNowError
 
 
 def _get_bulk_params(request, ctx):
@@ -40,7 +40,7 @@ def _get_bulk_params(request, ctx):
     ids = [int(x) for x in request.POST.getlist("ids[]", [])]
 
     if not ids:
-        raise ReturnNow(JsonResponse({"error": "no ids"}, status=400))
+        raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))
 
     eid = ctx["a_id"]
     if "run" in ctx:
@@ -67,6 +67,10 @@ class Operations:
     SET_QUEST_TYPE = 8
     SET_TRAIT_QUEST = 9
     SET_ABILITY_TYPE = 10
+    ADD_CHAR_DELIVERY = 11
+    DEL_CHAR_DELIVERY = 12
+    ADD_CHAR_PROLOGUE = 13
+    DEL_CHAR_PROLOGUE = 14
 
 
 def exec_bulk(request, ctx, mapping):
@@ -108,7 +112,7 @@ def handle_bulk_items(request, ctx):
             Operations.DEL_ITEM_TAG: exec_del_item_tag,
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
-        raise ReturnNow(exec_bulk(request, ctx, mapping))
+        raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
     containers = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
     tags = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
@@ -143,6 +147,26 @@ def exec_del_char_plot(request, ctx, target, ids):
     plot.characters.remove(*_get_chars(ctx, ids))
 
 
+def exec_add_char_delivery(request, ctx, target, ids):
+    delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
+    delivery.characters.add(*_get_chars(ctx, ids))
+
+
+def exec_del_char_delivery(request, ctx, target, ids):
+    delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
+    delivery.characters.remove(*_get_chars(ctx, ids))
+
+
+def exec_add_char_prologue(request, ctx, target, ids):
+    prologue = ctx["event"].get_elements(Prologue).get(pk=target)
+    prologue.characters.add(*_get_chars(ctx, ids))
+
+
+def exec_del_char_prologue(request, ctx, target, ids):
+    prologue = ctx["event"].get_elements(Prologue).get(pk=target)
+    prologue.characters.remove(*_get_chars(ctx, ids))
+
+
 def handle_bulk_characters(request, ctx):
     if request.POST:
         mapping = {
@@ -150,8 +174,12 @@ def handle_bulk_characters(request, ctx):
             Operations.DEL_CHAR_FACT: exec_del_char_fact,
             Operations.ADD_CHAR_PLOT: exec_add_char_plot,
             Operations.DEL_CHAR_PLOT: exec_del_char_plot,
+            Operations.ADD_CHAR_DELIVERY: exec_add_char_delivery,
+            Operations.DEL_CHAR_DELIVERY: exec_del_char_delivery,
+            Operations.ADD_CHAR_PROLOGUE: exec_add_char_prologue,
+            Operations.DEL_CHAR_PROLOGUE: exec_add_char_prologue,
         }
-        raise ReturnNow(exec_bulk(request, ctx, mapping))
+        raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
     ctx["bulk"] = []
 
@@ -173,6 +201,24 @@ def handle_bulk_characters(request, ctx):
             ]
         )
 
+    if "prologue" in ctx["features"]:
+        prologues = ctx["event"].get_elements(Prologue).values("id", "name").order_by("name")
+        ctx["bulk"].extend(
+            [
+                {"idx": Operations.ADD_CHAR_PROLOGUE, "label": _("Add prologue"), "objs": prologues},
+                {"idx": Operations.DEL_CHAR_PROLOGUE, "label": _("Remove prologue"), "objs": prologues},
+            ]
+        )
+
+    if "px" in ctx["features"]:
+        delivery = ctx["event"].get_elements(DeliveryPx).values("id", "name")
+        ctx["bulk"].extend(
+            [
+                {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
+                {"idx": Operations.DEL_CHAR_DELIVERY, "label": _("Remove from xp delivery"), "objs": delivery},
+            ]
+        )
+
 
 def exec_set_quest_type(request, ctx, target, ids):
     quest_type = ctx["event"].get_elements(QuestType).get(pk=target)
@@ -181,7 +227,7 @@ def exec_set_quest_type(request, ctx, target, ids):
 
 def handle_bulk_quest(request, ctx):
     if request.POST:
-        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
+        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
     quest_types = ctx["event"].get_elements(QuestType).values("id", "name").order_by("name")
     ctx["bulk"] = [
@@ -196,7 +242,7 @@ def exec_set_quest(request, ctx, target, ids):
 
 def handle_bulk_trait(request, ctx):
     if request.POST:
-        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
 
     quests = ctx["event"].get_elements(Quest).values("id", "name").order_by("name")
     ctx["bulk"] = [
@@ -211,7 +257,7 @@ def exec_set_ability_type(request, ctx, target, ids):
 
 def handle_bulk_ability(request, ctx):
     if request.POST:
-        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
     quests = ctx["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
     ctx["bulk"] = [

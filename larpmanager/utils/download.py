@@ -30,11 +30,14 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.config import get_configs
 from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
+from larpmanager.models.association import Association
+from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    WritingQuestionType,
     QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
@@ -44,7 +47,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
-    get_ordered_registration_questions, RegistrationQuestionType, BaseQuestionType,
+    get_ordered_registration_questions,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
@@ -120,7 +123,9 @@ def export_plot_rels(ctx):
 
     event_id = ctx["event"].get_class_parent(Plot)
 
-    for rel in PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character"):
+    for rel in (
+        PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character").order_by("order")
+    ):
         vals.append([rel.plot.name, rel.character.name, rel.text])
 
     return [("plot_rels", keys, vals)]
@@ -557,13 +562,26 @@ def _get_column_names(ctx):
     elif ctx["typ"] == "registration_ticket":
         ctx["columns"] = [
             {
-                "name": _("The ticket's email"),
+                "name": _("The ticket's name"),
                 "tier": _("The tier of the ticket"),
                 "description": _("(Optional) The ticket's description"),
                 "price": _("(Optional) The cost of the ticket"),
-                "max_available": _("(Optional) Maximun number of spots available")
+                "max_available": _("(Optional) Maximun number of spots available"),
             }
         ]
+
+    elif ctx["typ"] == "px_abilitie":
+        ctx["columns"] = [
+            {
+                "name": _("The name ability"),
+                "cost": _("Cost of the ability"),
+                "typ": _("Ability type"),
+                "descr": _("(Optional) The ability description"),
+                "prerequisites": _("(Optional) Other ability as prerequisite, comma-separated"),
+                "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            }
+        ]
+        ctx["name"] = "Ability"
 
     elif ctx["typ"] == "registration_form":
         ctx["columns"] = [
@@ -619,6 +637,9 @@ def _get_column_names(ctx):
             },
         ]
 
+        if "wri_que_requirements" in ctx["features"]:
+            ctx["columns"][1]["requirements"] = _("Optional - Other options as requirements, comma-separated")
+
     else:
         _get_writing_names(ctx)
 
@@ -668,6 +689,7 @@ def _get_writing_names(ctx):
 def orga_tickets_download(ctx):
     return zip_exports(ctx, export_tickets(ctx), "Tickets")
 
+
 def export_tickets(ctx):
     mappings = {
         "tier": TicketTier.get_mapping(),
@@ -678,3 +700,42 @@ def export_tickets(ctx):
     vals = _extract_values(keys, que, mappings)
 
     return [("tickets", keys, vals)]
+
+
+def export_event(ctx):
+    keys = ["name", "value"]
+    vals = []
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    for element in [ctx["event"], ctx["run"], assoc]:
+        for name, value in get_configs(element).items():
+            vals.append((name, value))
+    exports = [("configuration", keys, vals)]
+
+    keys = ["name", "slug"]
+    vals = []
+    for element in [ctx["event"], assoc]:
+        for feature in element.features.all():
+            vals.append((feature.name, feature.slug))
+    exports.append(("features", keys, vals))
+
+    return exports
+
+
+def export_abilities(ctx):
+    keys = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
+
+    que = (
+        ctx["event"]
+        .get_elements(AbilityPx)
+        .order_by("number")
+        .select_related("typ")
+        .prefetch_related("requirements", "prerequisites")
+    )
+    vals = []
+    for el in que:
+        val = [el.name, el.cost, el.typ.name, el.descr]
+        val.append(", ".join([prereq.name for prereq in el.prerequisites.all()]))
+        val.append(", ".join([req.name for req in el.requirements.all()]))
+        vals.append(val)
+
+    return [("abilities", keys, vals)]

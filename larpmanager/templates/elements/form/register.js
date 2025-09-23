@@ -180,8 +180,10 @@ $(document).ready(function(){
 
         tx += "</td></tr>";
 
+        {% if not no_provisional %}
         if (window['texts']['payment'] && sum > 0 && tot_payed == 0)
             tx += "<tr class='riep'><td>" + window['texts']['pro'] + "</td></tr>";
+        {% endif %}
 
         $('#riepilogo table > tbody:first-child > tr:first-child').after(tx);
 

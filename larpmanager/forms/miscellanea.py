@@ -217,6 +217,14 @@ class ExeUrlShortnerForm(MyForm):
 
 
 def _delete_optionals_warehouse(form):
+    """Remove optional warehouse fields not enabled in association configuration.
+
+    Args:
+        form: Form instance to modify by removing disabled optional fields
+
+    Side effects:
+        Deletes form fields for warehouse options not enabled in config
+    """
     assoc = Association.objects.get(pk=form.params["a_id"])
     for field in WarehouseItem.get_optional_fields():
         if not assoc.get_config(f"warehouse_{field}", False):
@@ -282,6 +290,11 @@ class OrganizerCastingOptionsForm(forms.Form):
             self.fields["factions"].initial = [str(el[0]) for el in factions]
 
     def get_data(self):
+        """Get form data, either cleaned or initial values.
+
+        Returns:
+            dict: Form data with field names as keys and values as lists
+        """
         if hasattr(self, "cleaned_data"):
             return self.cleaned_data
         dic = {}
@@ -376,6 +389,14 @@ class OrganizerCopyForm(forms.Form):
 
 
 def unique_util_cod():
+    """Generate a unique utility code for new Util instances.
+
+    Returns:
+        str: Unique 16-character code
+
+    Raises:
+        ValueError: If unable to generate unique code after 5 attempts
+    """
     for _idx in range(5):
         cod = generate_id(16)
         if not Util.objects.filter(cod=cod).exists():

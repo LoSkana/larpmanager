@@ -1,0 +1,14 @@
+<form class="contact"
+      action="{% url 'contact' %}"
+      method="post"
+      id="cnt-form">
+    {% csrf_token %}
+    <div class="row gtr-50 gtr-uniform">
+        <p>Would you like to get in touch with us?</p>
+        {{ contact_form.as_p }}
+        <p>
+            <!-- empty space -->
+        </p>
+        <input id="cnt" type="submit" value="Contact us" class="fit" />
+    </div>
+</form>

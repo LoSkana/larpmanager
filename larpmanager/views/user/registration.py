@@ -24,6 +24,7 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.timezone import now as timezone_now
@@ -79,6 +80,18 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 
 @login_required
 def pre_register(request, s=""):
+    """Handle pre-registration for events.
+
+    Allows users to register interest in events before full registration opens.
+    Can target specific events or show all available events.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Optional event slug to pre-register for specific event
+
+    Returns:
+        HttpResponse: Pre-registration form or redirect after processing
+    """
     if s:
         ctx = get_event(request, s)
         ctx["sel"] = ctx["event"].id
@@ -112,12 +125,13 @@ def pre_register(request, s=""):
         if form.is_valid():
             nr = form.cleaned_data["new_event"]
             if nr != "":
-                PreRegistration(
-                    member=request.user.member,
-                    event_id=nr,
-                    pref=form.cleaned_data["new_pref"],
-                    info=form.cleaned_data["new_info"],
-                ).save()
+                with transaction.atomic():
+                    PreRegistration(
+                        member=request.user.member,
+                        event_id=nr,
+                        pref=form.cleaned_data["new_pref"],
+                        info=form.cleaned_data["new_info"],
+                    ).save()
 
             messages.success(request, _("Pre-registrations saved") + "!")
             return redirect("pre_register")
@@ -143,38 +157,53 @@ def register_exclusive(request, s, sc="", dis=""):
 
 
 def save_registration(request, ctx, form, run, event, reg, gifted=False):
+    """Save registration data and handle payment processing.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with form and event data
+        form: Registration form instance
+        run: Run instance being registered for
+        event: Event instance
+        reg: Registration instance to save
+        gifted (bool): Whether this is a gifted registration
+
+    Returns:
+        HttpResponse: Redirect to appropriate next step or error handling
+    """
     # pprint(form.cleaned_data)
     # Create / modification registration
-    if not reg:
-        reg = Registration()
-        reg.run = run
-        reg.member = request.user.member
-        if gifted:
-            reg.redeem_code = my_uuid(16)
+    with transaction.atomic():
+        if not reg:
+            reg = Registration()
+            reg.run = run
+            reg.member = request.user.member
+            if gifted:
+                reg.redeem_code = my_uuid(16)
+            reg.save()
+
+        provisional = is_reg_provisional(reg)
+
+        save_registration_standard(ctx, event, form, gifted, provisional, reg)
+
+        # Registration question
+        form.save_reg_questions(reg, False)
+
+        # Confirm saved discounts, signs
+        que = AccountingItemDiscount.objects.filter(member=request.user.member, run=reg.run)
+        for el in que:
+            if el.expires is not None:
+                el.expires = None
+                el.save()
+
+        # save reg
         reg.save()
 
-    provisional = is_reg_provisional(reg)
-
-    save_registration_standard(ctx, event, form, gifted, provisional, reg)
-
-    # Registration question
-    form.save_reg_questions(reg, False)
-
-    # Confirm saved discounts, signs
-    que = AccountingItemDiscount.objects.filter(member=request.user.member, run=reg.run)
-    for el in que:
-        if el.expires is not None:
-            el.expires = None
-            el.save()
-
-    # save reg
-    reg.save()
-
-    # special features
-    if "user_character" in ctx["features"]:
-        check_assign_character(request, ctx)
-    if "bring_friend" in ctx["features"]:
-        save_registration_bring_friend(ctx, form, reg, request)
+        # special features
+        if "user_character" in ctx["features"]:
+            check_assign_character(request, ctx)
+        if "bring_friend" in ctx["features"]:
+            save_registration_bring_friend(ctx, form, reg, request)
 
     # send email to notify of registration update
     update_registration_status_bkg(reg.id)
@@ -183,6 +212,19 @@ def save_registration(request, ctx, form, run, event, reg, gifted=False):
 
 
 def save_registration_standard(ctx, event, form, gifted, provisional, reg):
+    """Save standard registration with ticket and payment processing.
+
+    Args:
+        ctx: Context dictionary with event and form data
+        event: Event instance
+        form: Registration form instance
+        gifted (bool): Whether this is a gifted registration
+        provisional (bool): Whether registration is provisional
+        reg: Registration instance to process
+
+    Side effects:
+        Creates registration ticket and processes payment calculations
+    """
     if not gifted and not provisional:
         reg.modified = reg.modified + 1
     if "additionals" in form.cleaned_data:
@@ -204,6 +246,17 @@ def save_registration_standard(ctx, event, form, gifted, provisional, reg):
 
 
 def registration_redirect(request, reg, new_reg, run):
+    """Handle post-registration redirect logic.
+
+    Args:
+        request: Django HTTP request object
+        reg: Registration instance
+        new_reg (bool): Whether this is a new registration
+        run: Run instance
+
+    Returns:
+        HttpResponse: Redirect to appropriate next step based on registration state
+    """
     # check if user needs to compile membership
     if "membership" in request.assoc["features"]:
         if not request.user.member.membership.compiled:
@@ -253,28 +306,29 @@ def save_registration_bring_friend(ctx, form, reg, request):
     except Exception as err:
         raise Http404("I'm sorry, this friend code was not found") from err
 
-    AccountingItemOther.objects.create(
-        member=request.user.member,
-        value=int(ctx["bring_friend_discount_from"]),
-        run=ctx["run"],
-        oth=OtherChoices.TOKEN,
-        descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
-        assoc_id=ctx["a_id"],
-        ref_addit=reg.id,
-    )
+    with transaction.atomic():
+        AccountingItemOther.objects.create(
+            member=request.user.member,
+            value=int(ctx["bring_friend_discount_from"]),
+            run=ctx["run"],
+            oth=OtherChoices.TOKEN,
+            descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
+            assoc_id=ctx["a_id"],
+            ref_addit=reg.id,
+        )
 
-    AccountingItemOther.objects.create(
-        member=friend.member,
-        value=int(ctx["bring_friend_discount_to"]),
-        run=ctx["run"],
-        oth=OtherChoices.TOKEN,
-        descr=_("Your friend code has been used") + f" - {request.user.member.display_member()} - {cod}",
-        assoc_id=ctx["a_id"],
-        ref_addit=friend.id,
-    )
+        AccountingItemOther.objects.create(
+            member=friend.member,
+            value=int(ctx["bring_friend_discount_to"]),
+            run=ctx["run"],
+            oth=OtherChoices.TOKEN,
+            descr=_("Your friend code has been used") + f" - {request.user.member.display_member()} - {cod}",
+            assoc_id=ctx["a_id"],
+            ref_addit=friend.id,
+        )
 
-    # trigger registration accounting update
-    friend.save()
+        # trigger registration accounting update
+        friend.save()
 
 
 def register_info(request, ctx, form, reg, dis):
@@ -285,6 +339,7 @@ def register_info(request, ctx, form, reg, dis):
     ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventTextType.TOC)
     ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
     ctx["hide_unavailable"] = ctx["event"].get_config("registration_hide_unavailable", False)
+    ctx["no_provisional"] = ctx["event"].get_config("payment_no_provisional", False)
 
     init_form_submitted(ctx, form, request, reg)
 
@@ -724,9 +779,10 @@ def gift_redeem(request, s, code):
         raise Http404("registration not found") from err
 
     if request.method == "POST":
-        reg.member = request.user.member
-        reg.redeem_code = None
-        reg.save()
+        with transaction.atomic():
+            reg.member = request.user.member
+            reg.redeem_code = None
+            reg.save()
         messages.success(request, _("Your gifted registration has been redeemed!"))
         return redirect("gallery", s=ctx["run"].get_slug())
 

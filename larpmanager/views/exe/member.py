@@ -29,10 +29,13 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
+    ExeMembershipDocumentForm,
+    ExeMembershipFeeForm,
     ExeMembershipForm,
     ExeVolunteerRegistryForm,
     MembershipResponseForm,
@@ -49,6 +52,9 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
     PaymentChoices,
+    PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import (
@@ -347,6 +353,61 @@ def exe_membership_registry(request):
         ctx["list"].append(member)
 
     return render(request, "larpmanager/exe/users/registry.html", ctx)
+
+
+@login_required
+def exe_membership_fee(request):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    if request.method == "POST":
+        form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
+        if form.is_valid():
+            member = form.cleaned_data["member"]
+            assoc = Association.objects.get(pk=ctx["a_id"])
+            fee = assoc.get_config("membership_fee", "0")
+            payment = PaymentInvoice.objects.create(
+                member=member,
+                typ=PaymentType.MEMBERSHIP,
+                invoice=form.cleaned_data["invoice"],
+                method_id=form.cleaned_data["method"],
+                mc_gross=fee,
+                causal=_("Membership fee of") + f" {member}",
+                assoc=assoc,
+                cod=unique_invoice_cod(),
+            )
+            payment.status = PaymentStatus.CONFIRMED
+            payment.save()
+            messages.success(request, _("Operation completed") + "!")
+            return redirect("exe_membership")
+    else:
+        form = ExeMembershipFeeForm(ctx=ctx)
+    ctx["form"] = form
+
+    return render(request, "larpmanager/exe/edit.html", ctx)
+
+
+@login_required
+def exe_membership_document(request):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    if request.method == "POST":
+        form = ExeMembershipDocumentForm(request.POST, request.FILES, ctx=ctx)
+        if form.is_valid():
+            member = form.cleaned_data["member"]
+            membership = Membership.objects.get(assoc_id=ctx["a_id"], member=member)
+            membership.document = form.cleaned_data["document"]
+            membership.request = form.cleaned_data["request"]
+            membership.card_number = form.cleaned_data["card_number"]
+            membership.date = form.cleaned_data["date"]
+            membership.status = MembershipStatus.ACCEPTED
+            membership.save()
+            messages.success(request, _("Operation completed") + "!")
+            return redirect("exe_membership")
+    else:
+        form = ExeMembershipDocumentForm(ctx=ctx)
+    ctx["form"] = form
+
+    return render(request, "larpmanager/exe/edit.html", ctx)
 
 
 @login_required

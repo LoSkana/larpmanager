@@ -718,3 +718,14 @@
     hidden: false
     feature: px
     module: experience
+- model: larpmanager.eventpermission
+  pk: 84
+  fields:
+    name: Modifiers
+    descr: Manage XP modifiers
+    slug: orga_px_modifiers
+    number: 91
+    config: px
+    hidden: false
+    feature: px
+    module: experience

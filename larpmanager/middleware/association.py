@@ -32,14 +32,39 @@ from larpmanager.utils.text import get_assoc_text
 
 
 class AssociationIdentifyMiddleware:
+    """Middleware to identify and load association data from request domain.
+
+    Handles subdomain routing, environment detection, and association
+    context loading for multi-tenant functionality.
+    """
+
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        """Process request through association middleware.
+
+        Args:
+            request: Django HTTP request object
+
+        Returns:
+            HttpResponse: Either a redirect or the normal response
+        """
         return self.get_assoc_info(request) or self.get_response(request)
 
     @classmethod
     def get_assoc_info(cls, request):
+        """Extract association information from request domain.
+
+        Determines environment, extracts subdomain, loads association data,
+        and handles domain redirects for multi-tenant setup.
+
+        Args:
+            request: Django HTTP request object
+
+        Returns:
+            HttpResponse or None: Redirect response if needed, None to continue
+        """
         # get assoc slug from host
         host = request.get_host().split(":")[0]
         domain = host.split(".")[0]
@@ -61,11 +86,7 @@ class AssociationIdentifyMiddleware:
 
         conf_slug = getattr(conf_settings, "SLUG_ASSOC", None)
 
-        assoc_slug = (
-            request.session.get("debug_slug")
-            if "debug_slug" in request.session
-            else conf_slug or domain
-        )
+        assoc_slug = request.session.get("debug_slug") if "debug_slug" in request.session else conf_slug or domain
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
@@ -80,6 +101,18 @@ class AssociationIdentifyMiddleware:
 
     @classmethod
     def get_main_info(cls, request, base_domain):
+        """Handle requests to main domain without specific association.
+
+        Handles demo user logout, skin loading, and default redirects
+        for the main application domain.
+
+        Args:
+            request: Django HTTP request object
+            base_domain (str): Base domain name
+
+        Returns:
+            HttpResponse or None: Redirect/render response or None to continue
+        """
         # if logged in with demo user visiting main page, logout
         user = request.user
         if not request.path.startswith("/after_login/"):
@@ -101,6 +134,15 @@ class AssociationIdentifyMiddleware:
 
     @staticmethod
     def load_assoc(request, assoc):
+        """Load association data into request context.
+
+        Args:
+            request: Django HTTP request object
+            assoc (dict): Association data dictionary
+
+        Side effects:
+            Sets request.assoc with association data and footer text
+        """
         request.assoc = assoc
         lang = get_language()
         request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)

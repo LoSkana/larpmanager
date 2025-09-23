@@ -451,9 +451,19 @@ urlpatterns = [
         name="orga_plots_edit",
     ),
     path(
+        "<slug:s>/manage/plots/order/<int:num>/<int:order>/",
+        views_ow.orga_plots_order,
+        name="orga_plots_order",
+    ),
+    path(
         "<slug:s>/manage/plots/<int:num>/versions/",
         views_ow.orga_plots_versions,
         name="orga_plots_versions",
+    ),
+    path(
+        "<slug:s>/manage/plots/rels/order/<int:num>/<int:order>/",
+        views_ow.orga_plots_rels_order,
+        name="orga_plots_rels_order",
     ),
     path(
         "<slug:s>/manage/factions/",
@@ -759,6 +769,21 @@ urlpatterns = [
         "<slug:s>/manage/px/rules/<int:num>/<int:order>/",
         views_ox.orga_px_rules_order,
         name="orga_px_rules_order",
+    ),
+    path(
+        "<slug:s>/manage/px/modifiers/",
+        views_ox.orga_px_modifiers,
+        name="orga_px_modifiers",
+    ),
+    path(
+        "<slug:s>/manage/px/modifiers/edit/<int:num>/",
+        views_ox.orga_px_modifiers_edit,
+        name="orga_px_modifiers_edit",
+    ),
+    path(
+        "<slug:s>/manage/px/modifiers/<int:num>/<int:order>/",
+        views_ox.orga_px_modifiers_order,
+        name="orga_px_modifiers_order",
     ),
     path(
         "<slug:s>/manage/casting/",

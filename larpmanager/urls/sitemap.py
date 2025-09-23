@@ -28,7 +28,7 @@ from django.views.decorators.cache import cache_page
 
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.larpmanager import LarpManagerBlog, LarpManagerTutorial
+from larpmanager.models.larpmanager import LarpManagerGuide
 
 translation.activate("en")
 
@@ -87,14 +87,11 @@ def _organization_sitemap(request):
 def larpmanager_sitemap():
     urls = []
     # Static pages
-    for el in ["", "discover", "tutorials", "usage", "about-us"]:
+    for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
     # Blog posts
-    for el in LarpManagerBlog.objects.filter(published=True):
-        urls.append(f"https://larpmanager.com/blog/{el.slug}/")
-    # Tutorials
-    for el in LarpManagerTutorial.objects.all():
-        urls.append(f"https://larpmanager.com/tutorials/{el.slug}/")
+    for el in LarpManagerGuide.objects.filter(published=True):
+        urls.append(f"https://larpmanager.com/guide/{el.slug}/")
     return urls
 
 

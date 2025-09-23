@@ -32,6 +32,7 @@ import stripe
 from Crypto.Cipher import DES3
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.dispatch import receiver
 from django.http import Http404
 from django.urls import reverse
@@ -51,6 +52,20 @@ from larpmanager.utils.tasks import my_send_mail, notify_admins
 
 
 def get_satispay_form(request, ctx, invoice, amount):
+    """Create Satispay payment form and initialize payment.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with payment configuration
+        invoice: PaymentInvoice instance
+        amount (float): Payment amount
+
+    Returns:
+        dict: Payment form context data
+
+    Raises:
+        Http404: If Satispay API call fails
+    """
     ctx["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
     ctx["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
 
@@ -77,8 +92,9 @@ def get_satispay_form(request, ctx, invoice, amount):
         raise Http404("something went wrong :( ")
 
     aux = json.loads(response.content)
-    invoice.cod = aux["id"]
-    invoice.save()
+    with transaction.atomic():
+        invoice.cod = aux["id"]
+        invoice.save()
     ctx["pay_id"] = aux["id"]
 
 
@@ -137,6 +153,17 @@ def satispay_webhook(request):
 
 
 def get_paypal_form(request, ctx, invoice, amount):
+    """Create PayPal payment form.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with payment configuration
+        invoice: PaymentInvoice instance
+        amount (float): Payment amount
+
+    Returns:
+        dict: PayPal form context data
+    """
     paypal_dict = {
         "business": ctx["paypal_id"],
         "amount": float(amount),
@@ -184,6 +211,17 @@ def paypal_ko_webhook(sender, **kwargs):
 
 
 def get_stripe_form(request, ctx, invoice, amount):
+    """Create Stripe payment form and session.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with payment configuration
+        invoice: PaymentInvoice instance
+        amount (float): Payment amount
+
+    Returns:
+        dict: Stripe checkout session context data
+    """
     stripe.api_key = ctx["stripe_sk_api"]
 
     prod = stripe.Product.create(name=invoice.causal)
@@ -320,6 +358,17 @@ def redsys_invoice_cod():
 
 
 def get_redsys_form(request, ctx, invoice, amount):
+    """Create Redsys payment form with encrypted parameters.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with payment configuration
+        invoice: PaymentInvoice instance
+        amount (float): Payment amount
+
+    Returns:
+        dict: Redsys form context with encrypted payment data
+    """
     invoice.cod = redsys_invoice_cod()
     invoice.save()
 

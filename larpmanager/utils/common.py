@@ -47,7 +47,6 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event
-from larpmanager.models.experience import update_px
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
     Album,
@@ -64,7 +63,6 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import my_uuid_short, strip_tags
 from larpmanager.models.writing import (
     Character,
-    CharacterConfig,
     Handout,
     HandoutTemplate,
     Plot,
@@ -86,11 +84,29 @@ utc = pytz.UTC
 
 # ## PROFILING CHECK
 def check_already(nm, params):
+    """Check if a background task is already queued.
+
+    Args:
+        nm (str): Task name
+        params: Task parameters
+
+    Returns:
+        bool: True if task already exists in queue
+    """
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.count() > 0
 
 
 def get_channel(a, b):
+    """Generate unique channel ID for two entities.
+
+    Args:
+        a (int): First entity ID
+        b (int): Second entity ID
+
+    Returns:
+        int: Unique channel ID using Cantor pairing
+    """
     a = int(a)
     b = int(b)
     if a > b:
@@ -100,6 +116,15 @@ def get_channel(a, b):
 
 
 def cantor(k1, k2):
+    """Cantor pairing function to map two integers to a unique integer.
+
+    Args:
+        k1 (int): First integer
+        k2 (int): Second integer
+
+    Returns:
+        float: Unique pairing result
+    """
     return ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
 
 
@@ -118,6 +143,14 @@ def check_diff(self, tx1, tx2):
 
 
 def get_assoc(request):
+    """Get association from request context.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        Association: Association instance from request context
+    """
     return get_object_or_404(Association, pk=request.assoc["id"])
 
 
@@ -505,17 +538,6 @@ def pretty_request(request):
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
 
 
-def add_char_addit(char):
-    char.addit = {}
-    configs = CharacterConfig.objects.filter(character__id=char.id)
-    if not configs.count():
-        update_px(char)
-        configs = CharacterConfig.objects.filter(character__id=char.id)
-
-    for config in configs:
-        char.addit[config.name] = config.value
-
-
 def remove_choice(lst, trm):
     new = []
     for el in lst:
@@ -534,51 +556,44 @@ def check_field(cls, check):
 
 def round_to_two_significant_digits(number):
     d = Decimal(number)
-    # Scales the number so that the first significant figure is in the unit
-    shift = d.adjusted()
-    rounded = d.scaleb(-shift).quantize(Decimal("1.0"), rounding=ROUND_DOWN)
-    # Reply to the original position
-    rounded = rounded.scaleb(shift)
-    return float(rounded)
+    threshold = 1000
+    # round by 10
+    if abs(number) < threshold:
+        rounded = d.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
+    # round by 100
+    else:
+        rounded = d.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
+    return int(rounded)
 
 
-def exchange_order(ctx, cls, num, order):
-    elements = ctx["event"].get_elements(cls)
-    # get elements
+def exchange_order(ctx, cls, num, order, elements=None):
+    elements = elements or ctx["event"].get_elements(cls)
     current = elements.get(pk=num)
 
     # order indicates if we have to increase, or reduce, the current_order
-    if order:
-        other = elements.filter(order__gt=current.order).order_by("order")
-    else:
-        other = elements.filter(order__lt=current.order).order_by("-order")
+    qs = elements.filter(order__gt=current.order) if order else elements.filter(order__lt=current.order)
+    qs = qs.order_by("order" if order else "-order")
 
-    if hasattr(current, "question"):
-        other = other.filter(question=current.question)
-    if hasattr(current, "section"):
-        other = other.filter(section=current.section)
-    if hasattr(current, "applicable"):
-        other = other.filter(applicable=current.applicable)
+    for attr in ("question", "section", "applicable"):
+        if hasattr(current, attr):
+            qs = qs.filter(**{attr: getattr(current, attr)})
 
+    other = qs.first()
     # if not element is found, simply increase / reduce the order
-    if len(other) == 0:
-        if order:
-            current.order += 1
-        else:
-            current.order -= 1
+    if not other:
+        current.order += 1 if order else -1
         current.save()
-    else:
-        other = other.first()
-        # exchange ordering
-        current.order = other.order
-        other.order = current.order
-        if current.order == other.order:
-            if order:
-                other.order -= 1
-            else:
-                other.order += 1
-        current.save()
-        other.save()
+        ctx["current"] = current
+        return
+
+    # exchange ordering
+    current.order, other.order = other.order, current.order
+    # if they are the same, something has gone wrong, try to fix it
+    if current.order == other.order:
+        other.order += -1 if order else 1
+
+    current.save()
+    other.save()
     ctx["current"] = current
 
 

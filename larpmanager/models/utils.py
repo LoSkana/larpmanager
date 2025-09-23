@@ -38,21 +38,53 @@ from django.utils.translation import gettext_lazy as _
 
 
 def generate_id(length):
+    """Generate random alphanumeric ID string.
+
+    Args:
+        length (int): Length of ID to generate
+
+    Returns:
+        str: Random lowercase alphanumeric string of specified length
+    """
     return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length))
 
 
 def decimal_to_str(v):
+    """Convert decimal to string with .00 removed.
+
+    Args:
+        v (Decimal): Decimal value to convert
+
+    Returns:
+        str: String representation without trailing .00
+    """
     s = str(v)
     s = s.replace(".00", "")
     return s
 
 
 def slug_url_validator(val):
+    """Validate that string contains only lowercase alphanumeric characters.
+
+    Args:
+        val (str): String to validate
+
+    Raises:
+        ValidationError: If string contains invalid characters
+    """
     if not val.islower() or not val.isalnum():
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
 
 
 def remove_non_ascii(text):
+    """Remove non-ASCII characters from text.
+
+    Args:
+        text (str): Input text
+
+    Returns:
+        str: Text with only ASCII characters (ordinal < 128)
+    """
     max_ascii = 128
     return "".join(char for char in text if ord(char) < max_ascii)
 
@@ -62,6 +94,11 @@ def my_uuid_miny():
 
 
 def my_uuid_short():
+    """Generate short UUID string of 12 characters.
+
+    Returns:
+        str: 12-character UUID string
+    """
     return my_uuid(12)
 
 
@@ -85,6 +122,15 @@ def download(url):
 
 
 def show_thumb(height, text):
+    """Generate HTML img tag for thumbnail display.
+
+    Args:
+        height (int): Height in pixels for the image
+        text (str): URL or path to the image
+
+    Returns:
+        SafeString: HTML img tag with specified height and source
+    """
     s = f'<img style="height:{height}px" src="{text}" />'
     return mark_safe(s)
 

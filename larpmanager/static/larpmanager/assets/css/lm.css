@@ -1,3 +1,9 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .hide {
   display: none;
 }
@@ -866,7 +872,6 @@ table {
 
 #page-wrapper.sidebar {
   margin-left: 21ch;
-  min-height: 100vh;
   width: calc(100% - 21ch);
 }
 
@@ -1855,6 +1860,12 @@ input[type="checkbox"].checkbox_single {
   display: inline-block;
 }
 
+#page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 #sidebar.topbar,
 #page-wrapper.topbar,
 #page-wrapper.topbar header {
@@ -1862,13 +1873,10 @@ input[type="checkbox"].checkbox_single {
 }
 
 #page-wrapper.topbar {
-  position: fixed;
-  overflow: scroll;
+  overflow: auto;
   -ms-overflow-style: none;
 
-  height: 100vh;
-  top: 0;
-  right: 0;
+  flex: 1;
 }
 
 .popup #topbar {
@@ -1899,6 +1907,7 @@ input[type="checkbox"].checkbox_single {
   #topbar {
     margin: 0;
     padding: 0.1em 0;
+    flex-shrink: 0;
   }
 
   #topbar .right,
@@ -2101,10 +2110,15 @@ table.dataTable span.dtcc span.dtcc-button-icon {
   color: rgba(var(--ter-rgb), 0.8) !important;
 }
 
+div.dtcc-dropdown div.dtcc-search > div select option,
+div.dtcc-dropdown div.dtcc-search > div input option {
+  color: var(--pri-clr);
+  background: var(--sec-clr);
+}
+
 #page-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 #wrapper {
@@ -2112,8 +2126,8 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 }
 
 #footer.lm {
-  margin-top: 1em;
-  padding: 0 0 4em 0;
+  flex-shrink: 0;
+  display: flex;
   background: none;
   width: 100%;
 }
@@ -2201,5 +2215,5 @@ input[type="number"] {
 }
 
 .bulk-el {
-    display: inline-block;
+  display: inline-block;
 }

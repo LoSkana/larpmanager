@@ -20,7 +20,7 @@
                 {% if px_user %}
                     <th>{% trans "Visible" %}</th>
                     <th>{% trans "Prerequisites" %}</th>
-                    <th>{% trans "Dependencies" %}</th>
+                    <th>{% trans "Requirements" %}</th>
                 {% endif %}
             </tr>
         </thead>
@@ -58,7 +58,7 @@
                             {% endfor %}
                         </td>
                         <td>
-                            {% for opt in el.dependents.all %}
+                            {% for opt in el.requirements.all %}
                                 {% include "elements/comma.html" %}
                                 {{ opt.name }}
                             {% endfor %}
