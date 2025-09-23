@@ -110,6 +110,12 @@ class CharacterForm(WritingForm, BaseWritingForm):
         return self.instance.status in question.get_editable()
 
     def _init_custom_fields(self):
+        """Initialize custom form fields for character creation.
+
+        Sets up dynamic form fields based on event configuration and custom field definitions,
+        organizing fields into default and custom categories, and handling organizer-specific
+        fields and character completion proposals.
+        """
         event = self.params["event"]
         if event.parent:
             event = event.parent
@@ -252,6 +258,11 @@ class OrgaCharacterForm(CharacterForm):
         self._init_special_fields()
 
     def _init_plots(self):
+        """Initialize plot assignment fields in character forms.
+
+        Sets up plot selection options and plot-related character
+        attributes for story-driven character development.
+        """
         if "plot" not in self.params["features"]:
             return
 

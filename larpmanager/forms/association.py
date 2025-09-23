@@ -290,6 +290,11 @@ class ExeConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
+        """Set up interface configuration options for association settings.
+
+        Manages UI preferences, theme settings, and display options
+        for the association's interface customization.
+        """
         # CALENDAR
         self.set_section("interface", _("Interface"))
 
@@ -354,6 +359,12 @@ class ExeConfigForm(ConfigForm):
         self.set_config_others()
 
     def set_config_others(self):
+        """Configure miscellaneous association settings.
+
+        Sets up custom mail server configuration, easter egg features,
+        and campaign-specific settings based on available features
+        for the association.
+        """
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             help_text = ""
@@ -407,6 +418,17 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
+        """Configure member-related form fields and sections in association settings.
+
+        Sets up various user management options like event history visibility
+        and member interaction features for the association configuration.
+
+        Args:
+            self: AssociationConfigForm instance
+
+        Returns:
+            None: Function modifies form fields in-place
+        """
         # USERS
         self.set_section("users", _("Users"))
 
@@ -480,6 +502,17 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)
 
     def set_config_accounting(self):
+        """Configure accounting-related form fields for association settings.
+
+        Sets up payment options, transaction fee settings, and financial
+        feature configurations for the association.
+
+        Args:
+            self: AssociationConfigForm instance
+
+        Returns:
+            None: Function modifies form fields in-place
+        """
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
@@ -542,6 +575,11 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
+        """Configure electronic invoice settings for associations.
+
+        Sets up Italian e-invoice system parameters and business
+        information for electronic billing compliance.
+        """
         if "e-invoice" not in self.params["features"]:
             return
 

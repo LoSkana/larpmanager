@@ -82,6 +82,11 @@ def download(ctx, typ, nm):
 
 
 def export_data(ctx, typ, member_cover=False):
+    """Export model data to structured format with questions and answers.
+
+    Processes data export for various model types with question handling,
+    answer processing, and cover image support.
+    """
     query = typ.objects.all()
     get_event_cache_all(ctx)
     model = typ.__name__.lower()
@@ -144,6 +149,20 @@ def export_relationships(ctx):
 
 
 def _prepare_export(ctx, model, query):
+    """Prepare data for export operations.
+
+    Processes questions, choices, and answers for data export functionality,
+    organizing the data by question type and element relationships for
+    registration and character model exports.
+
+    Args:
+        ctx (dict): Context dictionary containing export configuration and data
+        model: Django model class to export data from
+        query: QuerySet containing the filtered data to export
+
+    Returns:
+        None: Function modifies ctx in-place, adding prepared export data structures
+    """
     # noinspection PyProtectedMember
     applicable = QuestionApplicable.get_applicable(model)
     choices = {}
@@ -330,6 +349,11 @@ def _get_standard_row(ctx, el):
 
 
 def _writing_field(ctx, k, key, v, val):
+    """Process writing field for export with feature-based filtering.
+
+    Filters and formats writing fields based on enabled features,
+    handling special cases like factions and custom fields.
+    """
     new_val = v
     skip_fields = [
         "id",
@@ -542,6 +566,19 @@ def _orga_registrations_acc_reg(reg, ctx, cache_aip):
 
 
 def _get_column_names(ctx):
+    """Define column mappings and field types for different export contexts.
+
+    Sets up comprehensive dictionaries mapping form fields to export columns
+    based on context type (registration, tickets, abilities, etc.).
+
+    Args:
+        ctx (dict): Context dictionary containing export configuration including:
+            - typ (str): Export type ('registration', 'registration_ticket', etc.)
+            - features (set): Available features for the export context
+
+    Returns:
+        None: Function modifies ctx in-place, adding 'columns' and 'fields' keys
+    """
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {

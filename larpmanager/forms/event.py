@@ -374,6 +374,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("cover_orig", ConfigType.BOOL, label, help_text)
 
     def set_config_writing(self):
+        """Configure writing system settings for events.
+
+        Sets up background writing features, character story elements,
+        and writing deadline configurations for character development.
+        """
         if "character" in self.params["features"]:
             self.set_section("writing", _("Writing"))
 
@@ -504,6 +509,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("custom_character_public", ConfigType.BOOL, label, help_text)
 
     def set_config_casting(self):
+        """Configure casting-related form fields for event settings.
+
+        Sets up casting preferences, assignments, and display options
+        when the casting feature is enabled.
+        """
         if "casting" in self.params["features"]:
             self.set_section("casting", _("Casting"))
 
@@ -543,6 +553,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
     def set_config_accounting(self):
+        """Configure event-specific accounting settings.
+
+        Sets up payment alerts, financial notifications, and event-level
+        payment configurations for event management.
+        """
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
@@ -594,6 +609,12 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("bring_friend_discount_from", ConfigType.INT, label, help_text)
 
     def set_config_registration(self):
+        """Configure event registration settings.
+
+        Sets up ticket tiers, registration options, and staff ticket availability
+        including special ticket types like NPC, collaborator, and seller tiers
+        based on available features.
+        """
         self.set_section("tickets", _("Tickets"))
 
         label = "Staff"
@@ -868,6 +889,11 @@ class OrgaRunForm(ConfigForm):
         self.show_sections = True
 
     def set_configs(self):
+        """Configure event-specific form fields and sections.
+
+        Sets up various event features and their configuration options
+        based on enabled features for character management.
+        """
         ls = []
 
         if "character" not in self.params["features"]:
@@ -1117,6 +1143,11 @@ class OrgaPreferencesForm(ExePreferencesForm):
             self.add_writing_configs(basics, event_id, help_text, s)
 
     def _add_reg_configs(self, event_id, help_text):
+        """Add registration-related configuration fields to the form.
+
+        Configures form fields for registration management including accounting,
+        email settings, chronology, and various registration feature options.
+        """
         if not has_event_permission(
             self.params["request"], self.params, self.params["event"].slug, "orga_registrations"
         ):

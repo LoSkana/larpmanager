@@ -204,6 +204,11 @@ def writing_post(request, ctx, typ, nm):
 
 
 def writing_list(request, ctx, typ, nm):
+    """Handle writing list display with POST processing and bulk operations.
+
+    Manages writing element lists with form submission processing,
+    bulk operations, and proper context preparation for different writing types.
+    """
     writing_post(request, ctx, typ, nm)
 
     writing_bulk(ctx, request, typ)

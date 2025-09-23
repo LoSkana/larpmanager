@@ -46,6 +46,12 @@ def save_log(member, cls, el, dl=False):
 
 
 def save_version(el, tp, mb, dl=False):
+    """Manage versioning of text content.
+
+    Creates and saves new versions of editable text elements with author tracking,
+    handling different content types including character relationships, plot
+    character associations, and question-based text fields.
+    """
     n = TextVersion.objects.filter(tp=tp, eid=el.id).aggregate(Max("version"))["version__max"]
     if n is None:
         n = 1
@@ -187,6 +193,12 @@ def backend_get(ctx, typ, eid, afield=None):
 
 
 def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+    """Handle backend editing operations for various content types.
+
+    Provides unified interface for editing different model types including
+    form processing, validation, logging, and deletion handling for both
+    event-based and association-based content management.
+    """
     typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request

@@ -96,6 +96,11 @@ from larpmanager.views.orga.member import send_mail_batch
 
 @login_required
 def exe_membership(request):
+    """Executive view for managing association memberships.
+
+    Displays membership statistics, fee collection status, and membership
+    administration tools for association executives.
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     fees = set(
@@ -153,6 +158,12 @@ def exe_membership(request):
 
 @login_required
 def exe_membership_evaluation(request, num):
+    """Executive interface for evaluating membership applications.
+
+    Handles membership approval/rejection processes and status updates,
+    including notifications, duplicate checking, and registration updates
+    for approved members.
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     member = Member.objects.get(pk=num)

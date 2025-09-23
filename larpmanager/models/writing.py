@@ -200,6 +200,11 @@ class Character(Writing):
         return get_element_config(self, name, def_v)
 
     def show(self, run=None):
+        """Generate display dictionary with character information and media URLs.
+
+        Creates a comprehensive dictionary containing character details, player info,
+        factions, cover images, mirror characters, and approval status.
+        """
         js = super().show(run)
 
         for s in ["title"]:

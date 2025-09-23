@@ -117,6 +117,12 @@ def language(request):
 
 @login_required
 def profile(request):
+    """Display and manage user profile information.
+
+    Handles profile editing, privacy settings, and personal information updates,
+    including avatar management, membership status updates, and navigation
+    to membership application process when required.
+    """
     if request.assoc["id"] == 0:
         return HttpResponseRedirect("/")
 
@@ -253,6 +259,11 @@ def profile_privacy_rewoke(request, slug):
 
 @login_required
 def membership(request):
+    """User interface for managing their own membership status.
+
+    Handles membership applications, renewals, and membership-related
+    form submissions for individual users.
+    """
     ctx = def_user_ctx(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
@@ -328,6 +339,12 @@ def membership_request_test(request):
 
 @login_required
 def public(request, n):
+    """Display public member profile information.
+
+    Shows publicly visible member data while respecting privacy settings,
+    including badges, registration history, and character information
+    based on association configuration and feature availability.
+    """
     ctx = def_user_ctx(request)
     ctx.update(get_member(n))
 
@@ -385,6 +402,11 @@ def chats(request):
 
 @login_required
 def chat(request, n):
+    """Handle chat functionality between members.
+
+    Manages message exchange, conversation history, and chat permissions
+    within the association context for member-to-member communication.
+    """
     check_assoc_feature(request, "chat")
     mid = request.user.member.id
     if n == mid:
@@ -495,6 +517,11 @@ def unsubscribe(request):
 
 @login_required
 def vote(request):
+    """Handle voting functionality for association members.
+
+    Manages voting processes, ballot submissions, and vote counting
+    for association governance and decision-making.
+    """
     check_assoc_feature(request, "vote")
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
@@ -554,6 +581,11 @@ def vote(request):
 
 @login_required
 def delegated(request):
+    """Manage delegated member functionality.
+
+    Allows users to temporarily login as other members with proper
+    permissions and logging for administrative purposes.
+    """
     check_assoc_feature(request, "delegated_members")
     ctx = def_user_ctx(request)
 

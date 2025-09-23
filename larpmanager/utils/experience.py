@@ -44,6 +44,11 @@ from larpmanager.models.writing import Character, CharacterConfig
 
 
 def _build_px_context(char):
+    """Build context for character experience point calculations.
+
+    Gathers character abilities, choices, and modifiers with optimized queries
+    to create the foundation for PX cost and availability calculations.
+    """
     # get all abilities already learned by the character
     current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
 

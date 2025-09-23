@@ -168,6 +168,18 @@ def exec_del_char_prologue(request, ctx, target, ids):
 
 
 def handle_bulk_characters(request, ctx):
+    """Process bulk operations on character objects.
+
+    Handles mass character modifications, faction assignments, and other
+    batch character management tasks for efficient character administration.
+
+    Args:
+        request: Django HTTP request object containing POST data with operation details
+        ctx (dict): Context dictionary containing event and selection data
+
+    Returns:
+        None: Function modifies ctx in-place, adding operation results and status messages
+    """
     if request.POST:
         mapping = {
             Operations.ADD_CHAR_FACT: exec_add_char_fact,

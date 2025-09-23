@@ -252,6 +252,11 @@ class OrganizerCastingOptionsForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialize casting form with payment, membership, ticket, and faction options.
+
+        Sets up form fields based on enabled features and initializes choices
+        for payments, memberships, tickets, and factions.
+        """
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)

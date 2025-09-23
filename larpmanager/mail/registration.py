@@ -45,6 +45,12 @@ def update_registration_status_bkg(reg_id):
 
 
 def update_registration_status(instance):
+    """Send email notifications for registration status changes.
+
+    Handles automated emails for registration confirmations and updates,
+    sending notifications to both the registering member and event organizers
+    based on association configuration settings.
+    """
     # skip registration not gifted
     if instance.modified == 0:
         return
@@ -92,6 +98,12 @@ def update_registration_status(instance):
 
 
 def registration_options(instance):
+    """Generate email content for registration options.
+
+    Creates formatted text showing selected tickets and registration choices,
+    including payment information, totals, and selected registration options
+    for email notifications.
+    """
     body = ""
 
     if instance.ticket:

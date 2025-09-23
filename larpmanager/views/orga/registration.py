@@ -438,6 +438,11 @@ def orga_registration_form_list(request, s):
 
 @login_required
 def orga_registration_form_email(request, s):
+    """Generate email lists for registration question choices in JSON format.
+
+    Returns email addresses and names of registrants grouped by their
+    answers to single or multiple choice registration questions.
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
 
     eid = request.POST.get("num")
@@ -661,6 +666,11 @@ def orga_cancellations(request, s):
 
 @login_required
 def orga_cancellation_refund(request, s, num):
+    """Handle cancellation refunds for tokens and credits.
+
+    Processes refund requests for cancelled registrations, creating accounting
+    entries for token and credit refunds and marking registration as refunded.
+    """
     ctx = check_event_permission(request, s, "orga_cancellations")
     get_registration(ctx, num)
     if request.method == "POST":
@@ -781,6 +791,11 @@ def calculate_age(born, today):
 
 @require_POST
 def orga_registration_member(request, s):
+    """Handle member registration actions from organizer interface.
+
+    Processes member assignment to events and manages registration status
+    changes including validation and permission checks.
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     member_id = request.POST.get("mid")
 

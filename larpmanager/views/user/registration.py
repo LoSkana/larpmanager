@@ -379,6 +379,11 @@ def init_form_submitted(ctx, form, request, reg=None):
 
 @login_required
 def register(request, s, sc="", dis="", tk=0):
+    """Handle event registration form display and submission.
+
+    Manages the complete registration process including ticket selection,
+    form validation, payment processing, and membership verification.
+    """
     ctx = get_event_run(request, s, status=True)
     run = ctx["run"]
     event = ctx["event"]
