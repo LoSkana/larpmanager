@@ -2053,9 +2053,6 @@ msgstr "Nieukończone"
 msgid "Number events"
 msgstr "Liczba zdarzeń"
 
-msgid "Old interface"
-msgstr "Stary interfejs"
-
 msgid "Passages made"
 msgstr "Wykonane przejścia"
 
@@ -4042,9 +4039,6 @@ msgstr "Opóźnienie rocznej opłaty członkowskiej"
 
 msgid "Font to be used in page titles"
 msgstr "Czcionka używana w tytułach stron"
-
-msgid "If checked: uses old interface"
-msgstr "Jeśli zaznaczone: używa starego interfejsu"
 
 msgid "Manage issues during the event"
 msgstr "Zarządzanie kwestiami podczas wydarzenia"

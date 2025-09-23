@@ -1790,15 +1790,6 @@ input[type="checkbox"].checkbox_single {
   }
 }
 
-#sidebar.interface_old p,
-#sidebar.interface_old h2 {
-  text-align: center;
-}
-
-#sidebar.interface_old .sidebar-link-wrap {
-  display: inline-flex;
-}
-
 :root {
   --topbar-height: 3em;
 }
@@ -1924,19 +1915,10 @@ input[type="checkbox"].checkbox_single {
   .only_mobile {
     display: initial;
   }
-
-  .interface_old #header h1,
-  .interface_old #banner h1 {
-    padding: 0 2em;
-  }
 }
 
 .middlebar {
   display: none !important;
-}
-
-.interface_old .middlebar {
-  display: initial !important;
 }
 
 #sidebar-open img {

@@ -2053,9 +2053,6 @@ msgstr "Nicht abgeschlossen"
 msgid "Number events"
 msgstr "Anzahl der Ereignisse"
 
-msgid "Old interface"
-msgstr "Alte Schnittstelle"
-
 msgid "Passages made"
 msgstr "Ergriffene Maßnahmen"
 
@@ -4042,9 +4039,6 @@ msgstr "Verzögerung des jährlichen Mitgliedsbeitrags"
 
 msgid "Font to be used in page titles"
 msgstr "Schriftart für die Überschriften"
-
-msgid "If checked: uses old interface"
-msgstr "Wenn angekreuzt: verwendet alte Schnittstelle"
 
 msgid "Manage issues during the event"
 msgstr "Bewältigung von Problemen während der Veranstaltung"

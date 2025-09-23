@@ -178,8 +178,7 @@ def prepare_permissions_role(form, typ):
         field_name = f"perm_{module.pk}"
 
         label = _(module.name)
-        if not form.params.get("interface_old") and getattr(module, "icon", None):
-            label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
+        label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
 
         module_ids = [p.pk for p in perms]
         initial_vals = [pid for pid in selected_ids if pid in module_ids]

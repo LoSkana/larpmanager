@@ -66,10 +66,6 @@ def def_user_ctx(request):
     if request and request.resolver_match:
         res["request_func_name"] = request.resolver_match.func.__name__
 
-    # TODO remove
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    res["interface_old"] = assoc.get_config("interface_old", False)
-
     return res
 
 
