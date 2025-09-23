@@ -8857,6 +8857,15 @@ msgstr ""
 msgid "Unknow error on upload"
 msgstr ""
 
+msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+
 msgid "Photos and videos successfully uploaded"
 msgstr ""
 
@@ -8876,6 +8885,20 @@ msgid "Player customisation updated"
 msgstr ""
 
 msgid "Cache reset!"
+msgstr ""
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+
+msgid "You must create at least one quest before you can create traits"
+msgstr ""
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
 msgstr ""
 
 msgid ""

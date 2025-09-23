@@ -6293,6 +6293,9 @@ msgstr "Upozornění: již existuje schválený člen se stejným jménem"
 msgid "You can also upload a second file with the registration options"
 msgstr "Můžete také nahrát druhý soubor s možnostmi registrace"
 
+msgid "You must create at least one quest before you can create traits"
+msgstr "Před vytvořením vlastností musíte vytvořit alespoň jeden úkol"
+
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Obdržíte potvrzení o výsledku hodnocení"
 
@@ -6590,6 +6593,9 @@ msgstr "Po provedení změny vám zašleme potvrzující e-mail"
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Správně jste zrušili registraci na událost %(event)s"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr "Před vytvořením úkolů musíte vytvořit alespoň jeden typ úkolu"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr "Váš uživatel nemá potřebná oprávnění pro přístup na tuto stránku"
@@ -6940,6 +6946,11 @@ msgid ""
 msgstr "Aplikaci jsme předvyplnili na základě údajů, které jste nám poskytli"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Před vytvořením schopností musíte vytvořit alespoň jeden typ schopnosti"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "pokud necháte tuto položku prázdnou, může se jednat o počáteční událost nové"
@@ -7015,6 +7026,10 @@ msgstr ""
 msgid ""
 "You can withdraw your consent to data sharing by clicking the related link"
 msgstr "Souhlas se sdílením údajů můžete odvolat kliknutím na příslušný odkaz"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr "Před vytvořením prologů musíte vytvořit alespoň jeden typ prologu"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7157,6 +7172,11 @@ msgid ""
 "You cannot work on it at the same time: the work of one of you would be lost"
 msgstr ""
 "Nemůžete na něm pracovat současně: práce jednoho z vás by byla ztracena"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Než začnete vytvářet letáky, musíte vytvořit alespoň jednu šablonu letáku"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -8272,6 +8292,13 @@ msgid ""
 msgstr ""
 "Tuto událost považuje za digitální/online událost, která nevyžaduje osobní "
 "registraci"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Před vytvořením možností registrace musíte vytvořit alespoň jednu "
+"registrační otázku"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
