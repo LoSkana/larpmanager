@@ -21,6 +21,7 @@
 import inflection
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -50,6 +51,7 @@ from larpmanager.models.writing import (
     Handout,
     HandoutTemplate,
     Plot,
+    PlotCharacterRel,
     Prologue,
     PrologueType,
     SpeedLarp,
@@ -95,6 +97,27 @@ def orga_plots_edit(request, s, num):
     if num != 0:
         get_element(ctx, num, "plot", Plot)
     return writing_edit(request, ctx, PlotForm, "plot", TextVersionChoices.PLOT)
+
+
+@login_required
+def orga_plots_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_plots")
+    exchange_order(ctx, Plot, num, order)
+    return redirect("orga_plots", s=ctx["run"].get_slug())
+
+
+@login_required
+def orga_plots_rels_order(request, s, num, order):
+    ctx = check_event_permission(request, s, "orga_plots")
+    try:
+        rel = PlotCharacterRel.objects.get(pk=num)
+    except ObjectDoesNotExist as err:
+        raise Http404("plot rel not found") from err
+    if rel.character.event != ctx["event"]:
+        raise Http404("plot rel wrong event")
+    elements = PlotCharacterRel.objects.filter(character=rel.character)
+    exchange_order(ctx, PlotCharacterRel, num, order, elements)
+    return redirect("orga_characters_edit", s=ctx["run"].get_slug(), num=rel.character_id)
 
 
 @login_required

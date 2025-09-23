@@ -123,7 +123,9 @@ def export_plot_rels(ctx):
 
     event_id = ctx["event"].get_class_parent(Plot)
 
-    for rel in PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character"):
+    for rel in (
+        PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character").order_by("order")
+    ):
         vals.append([rel.plot.name, rel.character.name, rel.text])
 
     return [("plot_rels", keys, vals)]

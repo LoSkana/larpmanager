@@ -191,7 +191,7 @@ class PlotForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Plot
 
-        exclude = ("number", "temp", "hide")
+        exclude = ("number", "temp", "hide", "order")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
@@ -214,10 +214,8 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.add_char_finder = []
         self.field_link = {}
         if self.instance.pk:
-            for ch in (
-                self.instance.get_plot_characters()
-                .order_by("character__number")
-                .values_list("character__id", "character__number", "character__name", "text")
+            for ch in self.instance.get_plot_characters().values_list(
+                "character__id", "character__number", "character__name", "text"
             ):
                 char = f"#{ch[1]} {ch[2]}"
                 field = f"char_role_{ch[0]}"

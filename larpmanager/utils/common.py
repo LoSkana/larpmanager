@@ -566,43 +566,34 @@ def round_to_two_significant_digits(number):
     return int(rounded)
 
 
-def exchange_order(ctx, cls, num, order):
-    elements = ctx["event"].get_elements(cls)
-    # get elements
+def exchange_order(ctx, cls, num, order, elements=None):
+    elements = elements or ctx["event"].get_elements(cls)
     current = elements.get(pk=num)
 
     # order indicates if we have to increase, or reduce, the current_order
-    if order:
-        other = elements.filter(order__gt=current.order).order_by("order")
-    else:
-        other = elements.filter(order__lt=current.order).order_by("-order")
+    qs = elements.filter(order__gt=current.order) if order else elements.filter(order__lt=current.order)
+    qs = qs.order_by("order" if order else "-order")
 
-    if hasattr(current, "question"):
-        other = other.filter(question=current.question)
-    if hasattr(current, "section"):
-        other = other.filter(section=current.section)
-    if hasattr(current, "applicable"):
-        other = other.filter(applicable=current.applicable)
+    for attr in ("question", "section", "applicable"):
+        if hasattr(current, attr):
+            qs = qs.filter(**{attr: getattr(current, attr)})
 
+    other = qs.first()
     # if not element is found, simply increase / reduce the order
-    if len(other) == 0:
-        if order:
-            current.order += 1
-        else:
-            current.order -= 1
+    if not other:
+        current.order += 1 if order else -1
         current.save()
-    else:
-        other = other.first()
-        # exchange ordering
-        current.order = other.order
-        other.order = current.order
-        if current.order == other.order:
-            if order:
-                other.order -= 1
-            else:
-                other.order += 1
-        current.save()
-        other.save()
+        ctx["current"] = current
+        return
+
+    # exchange ordering
+    current.order, other.order = other.order, current.order
+    # if they are the same, something has gone wrong, try to fix it
+    if current.order == other.order:
+        other.order += -1 if order else 1
+
+    current.save()
+    other.save()
     ctx["current"] = current
 
 

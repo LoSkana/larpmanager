@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import re
+
 import pytest
 from playwright.sync_api import expect
 
@@ -164,7 +166,7 @@ def plots(live_server, page):
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("T1 testona asadsadas wwwww #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #1 Test Character")
 
     # check it is the same
     page.get_by_role("link", name="").click()
@@ -180,7 +182,7 @@ def plots(live_server, page):
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("T1 testona asadsadas wwwww #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #1 Test Character")
     page.get_by_role("link", name="").click()
     page.wait_for_timeout(2000)
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
@@ -196,7 +198,7 @@ def plots(live_server, page):
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("T1 testona asadsadas wwwww #2 prova")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #2 prova")
 
     # set text
     page.get_by_role("link", name="").click()
@@ -233,32 +235,32 @@ def plots_character(live_server, page):
 
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("[T2] gaga [T3] bibi")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("gaga bibi")
 
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
 
     # remove third
-    page.get_by_role("listitem", name="T3 bibi").locator("span").click()
+    page.get_by_role("listitem", name="bibi").locator("span").click()
 
     # change second
-    page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show").click()
+    page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
     fill_tinymce(page, "id_pl_2", "ffff")
     page.get_by_role("button", name="Confirm").click()
 
     # check
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
-    page.get_by_role("row", name="#2 gaga").get_by_role("link", name="Show")
+    page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
     expect(page.locator("#id_pl_2_tr")).to_contain_text("<p>ffff</p>")
     page.get_by_role("button", name="Confirm").click()
 
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("[T2] gaga")
-    expect(page.locator('[id="\\31 "]')).not_to_contain_text("[T3] bibi")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("gaga")
+    expect(page.locator('[id="\\31 "]')).not_to_contain_text("bibi")
 
     # check second, then remove
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
-    page.get_by_role("listitem", name="T2 gaga").locator("span").click()
+    page.get_by_role("listitem", name="gaga").locator("span").click()
     page.get_by_role("link", name="Instructions").click()
     page.get_by_role("button", name="Confirm").click()
 
-    expect(page.locator('[id="\\31 "]')).not_to_contain_text("[T2] gaga")
+    expect(page.locator('[id="\\31 "]')).not_to_contain_text("gaga")
