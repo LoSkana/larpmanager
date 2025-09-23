@@ -122,11 +122,11 @@ def reset_run_event_links(event):
     Side effects:
         Clears link cache for event role members, association executives, and superusers
     """
-    for er in EventRole.objects.filter(event=event):
+    for er in EventRole.objects.filter(event=event).prefetch_related("members"):
         for mb in er.members.all():
             reset_event_links(mb.id, event.assoc_id)
     try:
-        ar = AssocRole.objects.get(assoc=event.assoc, number=1)
+        ar = AssocRole.objects.prefetch_related("members").get(assoc=event.assoc, number=1)
         for mb in ar.members.all():
             reset_event_links(mb.id, event.assoc_id)
     except ObjectDoesNotExist:

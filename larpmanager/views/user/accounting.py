@@ -415,7 +415,9 @@ def acc_collection_redeem(request, s):
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
 
-    ctx["list"] = AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"])
+    ctx["list"] = AccountingItemCollection.objects.filter(
+        collection=c, collection__assoc_id=request.assoc["id"]
+    ).select_related("member", "collection")
     return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
 
 

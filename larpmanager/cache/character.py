@@ -546,12 +546,12 @@ def reset_event_cache_all_runs(event):
     for r in event.runs.all():
         reset_run(r)
     # reset also runs of child events
-    for child in Event.objects.filter(parent=event):
+    for child in Event.objects.filter(parent=event).prefetch_related("runs"):
         for r in child.runs.all():
             reset_run(r)
     if event.parent:
         # reset also runs of sibling events
-        for child in Event.objects.filter(parent=event.parent):
+        for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
             for r in child.runs.all():
                 reset_run(r)
         # reset also runs of parent event
