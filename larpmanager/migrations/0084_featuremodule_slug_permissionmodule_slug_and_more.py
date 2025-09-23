@@ -19,7 +19,7 @@ def update_slugs(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0078_alter_registrationquestion_typ"),
+        ("larpmanager", "0083_plot_order_plotcharacterrel_order"),
     ]
 
     operations = [
