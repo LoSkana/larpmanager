@@ -43,6 +43,7 @@ def test_upload_download(pw_page):
     check_feature(page, "Factions")
     check_feature(page, "Plots")
     check_feature(page, "Quests and Traits")
+    check_feature(page, "Experience points")
     submit_confirm(page)
 
     char_form(page)
@@ -61,7 +62,38 @@ def test_upload_download(pw_page):
 
     relationships(page)
 
+    abilities(page)
+
     full(page)
+
+
+def abilities(page):
+    # add type
+    page.get_by_role("link", name="Ability type").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("test")
+    page.get_by_role("button", name="Confirm").click()
+
+    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Experience points ").click()
+    page.locator("#id_px_user").check()
+    page.get_by_role("button", name="Confirm").click()
+
+    page.locator("#orga_px_abilities").get_by_role("link", name="Ability", exact=True).click()
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    page.locator("#id_first").click()
+    page.locator("#id_first").set_input_files(get_path("abilities.csv"))
+    page.get_by_role("button", name="Submit").click()
+    expect(page.locator("#one")).to_contain_text(
+        "Loading performed, see logs Proceed Logs OK - Created swordOK - Created shieldOK - Created sneak"
+    )
+    page.get_by_role("link", name="Proceed").click()
+    expect(page.locator("#one")).to_contain_text(
+        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield rrrrrr , trtr"
+    )
+    check_download(page, "Download")
 
 
 def full(page):
