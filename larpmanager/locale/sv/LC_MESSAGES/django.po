@@ -299,9 +299,6 @@ msgstr "Stängt"
 msgid "Cover"
 msgstr "Skydd"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "E-post"
 
@@ -1728,6 +1725,9 @@ msgstr "Biljettlista"
 msgid "Total costs"
 msgstr "Totala kostnader"
 
+msgid "Transaction"
+msgstr "Transaktion"
+
 msgid "Transversal"
 msgstr "Transversal"
 
@@ -2500,9 +2500,6 @@ msgstr "Total samling"
 
 msgid "Color background"
 msgstr "Text bakgrund"
-
-msgid "Confirm payments"
-msgstr "Bekräfta betalningar"
 
 msgid "Current template"
 msgstr "Nuvarande mall"

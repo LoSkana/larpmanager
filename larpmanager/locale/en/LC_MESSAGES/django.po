@@ -4934,18 +4934,9 @@ msgstr ""
 msgid "This page shows all donations recorded in the system"
 msgstr ""
 
-msgid "Descr"
-msgstr ""
-
 msgid ""
 "This page shows all expenses incurred by collaborators, recorded in the "
 "system"
-msgstr ""
-
-msgid "Run"
-msgstr ""
-
-msgid "Approve"
 msgstr ""
 
 msgid "Movements"
@@ -4969,13 +4960,7 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
-msgid "Confirm payments"
-msgstr ""
-
 msgid "This page shows all invoices registered in the system"
-msgstr ""
-
-msgid "Net"
 msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
@@ -5114,6 +5099,9 @@ msgid "Archive mail"
 msgstr ""
 
 msgid "This page shows all emails, both queued and sent"
+msgstr ""
+
+msgid "Run"
 msgstr ""
 
 msgid "Recipient"
@@ -6293,6 +6281,9 @@ msgstr ""
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 msgid "This page shows your personal spending items"
 msgstr ""
 
@@ -6306,6 +6297,9 @@ msgid "This page shows all inflows received for this event"
 msgstr ""
 
 msgid "This page allows you to manually approve payments received"
+msgstr ""
+
+msgid "Net"
 msgstr ""
 
 msgid ""
@@ -8552,6 +8546,9 @@ msgid "Registration completed successfully!"
 msgstr ""
 
 msgid "Request approved"
+msgstr ""
+
+msgid "Transaction"
 msgstr ""
 
 msgid "Element approved"

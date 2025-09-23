@@ -299,9 +299,6 @@ msgstr "Cerrado"
 msgid "Cover"
 msgstr "Portada"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -1728,6 +1725,9 @@ msgstr "Lista de entradas"
 msgid "Total costs"
 msgstr "Costes totales"
 
+msgid "Transaction"
+msgstr "Transacción"
+
 msgid "Transversal"
 msgstr "Transversal"
 
@@ -2500,9 +2500,6 @@ msgstr "Total recolectadol"
 
 msgid "Color background"
 msgstr "Color de fondo"
-
-msgid "Confirm payments"
-msgstr "Confirmar pagos"
 
 msgid "Current template"
 msgstr "Plantilla actual"

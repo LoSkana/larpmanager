@@ -299,9 +299,6 @@ msgstr "Gesloten"
 msgid "Cover"
 msgstr "Omslag"
 
-msgid "Descr"
-msgstr "Beschrijving"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -1728,6 +1725,9 @@ msgstr "Ticketlijst"
 msgid "Total costs"
 msgstr "Totale kosten"
 
+msgid "Transaction"
+msgstr "Transactie"
+
 msgid "Transversal"
 msgstr "Dwars"
 
@@ -2500,9 +2500,6 @@ msgstr "Totale collectie"
 
 msgid "Color background"
 msgstr "Tekst achtergrond"
-
-msgid "Confirm payments"
-msgstr "Betalingen bevestigen"
 
 msgid "Current template"
 msgstr "Huidige sjabloon"
