@@ -6432,6 +6432,9 @@ msgstr ""
 "Vous pouvez également télécharger un deuxième fichier avec les options "
 "d'enregistrement"
 
+msgid "You must create at least one quest before you can create traits"
+msgstr "Vous devez créer au moins une quête avant de pouvoir créer des traits"
+
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Vous recevrez une confirmation du résultat de son évaluation"
 
@@ -6805,6 +6808,10 @@ msgstr ""
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Vous avez correctement annulé l'inscription à l'événement %(event)s"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+"Vous devez créer au moins un type de quête avant de pouvoir créer des quêtes"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr ""
@@ -7224,6 +7231,12 @@ msgstr ""
 "fournies"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Vous devez créer au moins un type de capacité avant de pouvoir créer des "
+"capacités"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "si vous laissez ce champ vide, il peut s'agir de l'événement de départ d'une"
@@ -7312,6 +7325,12 @@ msgid ""
 msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien correspondant"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr ""
+"Vous devez créer au moins un type de prologue avant de pouvoir créer des "
+"prologues"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7470,6 +7489,12 @@ msgid ""
 msgstr ""
 "Vous ne pouvez pas y travailler en même temps : le travail de l'un d'entre "
 "vous serait perdu"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Vous devez créer au moins un modèle de document avant de pouvoir créer des "
+"documents"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -8663,6 +8688,13 @@ msgid ""
 msgstr ""
 "Traite cet événement comme un événement numérique/en ligne qui ne nécessite "
 "pas d'inscription en personne"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Vous devez créer au moins une question d'enregistrement avant de pouvoir "
+"créer des options d'enregistrement"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

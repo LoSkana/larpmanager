@@ -6342,6 +6342,9 @@ msgstr "Advertencia: ¡ya hay un miembro aprobado con el mismo nombre"
 msgid "You can also upload a second file with the registration options"
 msgstr "También puede cargar un segundo archivo con las opciones de registro"
 
+msgid "You must create at least one quest before you can create traits"
+msgstr "Debes crear al menos una búsqueda antes de poder crear rasgos"
+
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Recibirá confirmación del resultado de su evaluación"
 
@@ -6691,6 +6694,9 @@ msgstr ""
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Ha cancelado correctamente la inscripción al evento %(event)s"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr "Debes crear al menos un tipo de misión antes de poder crear misiones"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr ""
@@ -7088,6 +7094,11 @@ msgstr ""
 "proporcionado"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Debes crear al menos un tipo de habilidad antes de poder crear habilidades"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr "si lo deja vacío, puede ser el evento de inicio de una nueva campaña"
 
@@ -7172,6 +7183,10 @@ msgid ""
 msgstr ""
 "Puede retirar su consentimiento para compartir datos haciendo clic en el "
 "enlace correspondiente"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr "Debe crear al menos un tipo de prólogo antes de poder crear prólogos"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7326,6 +7341,11 @@ msgid ""
 msgstr ""
 "No podéis trabajar en él al mismo tiempo: el trabajo de uno de vosotros se "
 "perdería"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Debe crear al menos una plantilla de folleto antes de poder crear folletos"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -8511,6 +8531,13 @@ msgid ""
 msgstr ""
 "Trata este evento como un acontecimiento digital/en línea que no requiere "
 "inscripción en persona"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Debe crear al menos una pregunta de registro antes de poder crear opciones "
+"de registro"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "

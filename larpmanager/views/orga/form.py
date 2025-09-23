@@ -154,6 +154,15 @@ def orga_registration_form_order(request, s, num, order):
 @login_required
 def orga_registration_options_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_registration_form")
+
+    # Check if registration questions exist
+    if not ctx["event"].get_elements(RegistrationQuestion).exists():
+        # Add warning message and redirect to registration questions adding page
+        messages.warning(
+            request, _("You must create at least one registration question before you can create registration options")
+        )
+        return redirect("orga_registration_form_edit", s=s, num=0)
+
     return registration_option_edit(ctx, num, request)
 
 
