@@ -441,7 +441,12 @@ def orga_multichoice_available(request, s):
         )
     else:
         eid = request.POST.get("eid", "")
-        ctx = check_event_permission(request, s, "orga_" + class_name + "s")
+        perms = {"abilitypx": "orga_px_abilities"}
+        if class_name in perms:
+            perm = perms[class_name]
+        else:
+            perm = "orga_" + class_name + "s"
+        ctx = check_event_permission(request, s, perm)
         if eid:
             model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
             taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)

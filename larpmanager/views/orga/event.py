@@ -391,10 +391,32 @@ def orga_upload_template(request, s, typ):
         exports = _writing_template(ctx, typ, value_mapping)
     elif typ == "registration":
         exports = _reg_template(ctx, typ, value_mapping)
+    elif typ == "px_abilitie":
+        exports = _ability_template(ctx)
     else:
         exports = _form_template(ctx)
 
     return zip_exports(ctx, exports, "template")
+
+
+def _ability_template(ctx):
+    exports = []
+    defs = {
+        "name": "Ability name",
+        "cost": "Ability cost",
+        "typ": "Ability type",
+        "descr": "Ability description",
+        "prerequisites": "Ability prerequisite, comma-separated",
+        "requirements": "Character options, comma-separated",
+    }
+    keys = list(ctx["columns"][0].keys())
+    vals = []
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    exports.append(("abilities", keys, [vals]))
+    return exports
 
 
 def _form_template(ctx):
