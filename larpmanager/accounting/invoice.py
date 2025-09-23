@@ -23,6 +23,7 @@ import math
 from io import StringIO
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter
@@ -91,8 +92,9 @@ def invoice_verify(request, ctx, csv_upload):
 
             counter += 1
 
-            el.verified = True
-            el.save()
+            with transaction.atomic():
+                el.verified = True
+                el.save()
 
     return counter
 
@@ -122,23 +124,24 @@ def invoice_received_money(cod, gross=None, fee=None, txn_id=None):
         notify_admins("invalid payment", "wrong invoice: " + cod)
         return
 
-    if gross:
-        invoice.mc_gross = gross
+    with transaction.atomic():
+        if gross:
+            invoice.mc_gross = gross
 
-    if fee:
-        invoice.mc_fee = fee
+        if fee:
+            invoice.mc_fee = fee
 
-    if txn_id:
-        invoice.txn_id = txn_id
+        if txn_id:
+            invoice.txn_id = txn_id
 
-    if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return True
+        if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+            return True
 
-    # ~ invoice.mc_gross = ipn_obj.mc_gross
-    # ~ invoice.mc_fee = ipn_obj.mc_fee
-    # ~ invoice.txn_id = ipn_obj.txn_id
-    invoice.status = PaymentStatus.CHECKED
-    invoice.save()
+        # ~ invoice.mc_gross = ipn_obj.mc_gross
+        # ~ invoice.mc_fee = ipn_obj.mc_fee
+        # ~ invoice.txn_id = ipn_obj.txn_id
+        invoice.status = PaymentStatus.CHECKED
+        invoice.save()
 
     # print(invoice)
 
