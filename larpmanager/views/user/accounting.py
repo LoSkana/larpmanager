@@ -214,6 +214,11 @@ def acc_pay(request, s, method=None):
 
 @login_required
 def acc_reg(request, reg_id, method=None):
+    """Handle registration payment processing.
+
+    Manages payment flows, fee calculations, and transaction recording
+    for event registrations across different payment methods.
+    """
     check_assoc_feature(request, "payment")
 
     try:
@@ -516,6 +521,11 @@ def acc_payed(request, p=0):
 
 @login_required
 def acc_submit(request, s, p):
+    """Handle payment submission and invoice upload for user accounts.
+
+    Processes different payment types (wire transfer, PayPal, any) and handles
+    file uploads with validation and status updates.
+    """
     if not request.method == "POST":
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")

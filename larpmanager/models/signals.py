@@ -504,6 +504,12 @@ def _init_writing_element(instance, def_tps, applicables):
 
 
 def _init_character_form_questions(custom_tps, def_tps, features, instance):
+    """Initialize character form questions during model setup.
+
+    Sets up default and custom question types for character creation forms,
+    managing question creation and deletion based on enabled features and
+    existing question configurations.
+    """
     que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 

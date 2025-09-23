@@ -194,6 +194,11 @@ def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
 
 
 def get_casting_data(request, ctx, typ, form):
+    """Retrieve and process casting-related data for character assignment.
+
+    Handles casting form data and prepares context for casting operations
+    including character assignments and trait management.
+    """
     options = form.get_data()
     # print(options)
 

@@ -65,6 +65,11 @@ class RegistrationForm(BaseRegistrationForm):
         widgets = {"modified": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
+        """Initialize registration form with tickets, questions, and event-specific options.
+
+        Sets up form fields for event registration including ticket selection,
+        quota management, payment options, and registration questions.
+        """
         super().__init__(*args, **kwargs)
         self.questions = []
         self.tickets_map = {}
@@ -523,6 +528,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.sections["id_quotas"] = reg_section
 
     def init_character(self, char_section):
+        """Initialize character selection fields in registration forms.
+
+        Manages character assignment options based on event configuration
+        and user permissions for character-based events.
+        """
         # CHARACTER AND QUESTS
         if "orga_characters" not in self.params or not self.params["orga_characters"]:
             return

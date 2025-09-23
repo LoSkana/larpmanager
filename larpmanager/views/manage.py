@@ -182,6 +182,11 @@ def _exe_suggestions(ctx):
 
 
 def _exe_actions(request, ctx):
+    """Determine available executive actions based on association features.
+
+    Adds action items to the management dashboard based on user permissions
+    and association configuration settings.
+    """
     features = get_assoc_features(ctx["a_id"])
     assoc = Association.objects.get(pk=ctx["a_id"])
 
@@ -353,6 +358,19 @@ def _orga_manage(request, s):
 
 
 def _orga_actions_priorities(request, ctx, assoc):
+    """Determine priority actions for event organizers based on event state.
+
+    Analyzes event features and configuration to suggest next steps in
+    event setup workflow, checking for missing required configurations.
+
+    Args:
+        request: Django HTTP request object
+        ctx (dict): Context dictionary containing event and other data
+        assoc: Association object
+
+    Returns:
+        None: Function modifies ctx in-place, adding priority action recommendations
+    """
     # if there are no characters, suggest to do it
     features = get_event_features(ctx["event"].id)
 
@@ -465,6 +483,11 @@ def _orga_user_actions(ctx, features, request, assoc):
 
 
 def _orga_casting_actions(ctx, features):
+    """Add priority actions related to casting and quest builder setup.
+
+    Checks for missing casting configurations and quest/trait relationships,
+    adding appropriate priority suggestions for event organizers.
+    """
     if "casting" in features:
         if not ctx["event"].get_config("casting_min", 0):
             _add_priority(
@@ -504,6 +527,11 @@ def _orga_casting_actions(ctx, features):
 
 
 def _orga_px_actions(ctx, features):
+    """Add priority actions for experience points system setup.
+
+    Checks for missing PX configurations, ability types, and deliveries,
+    adding appropriate priority suggestions for event organizers.
+    """
     if "px" not in features:
         return
 
@@ -542,6 +570,11 @@ def _orga_px_actions(ctx, features):
 
 
 def _orga_reg_acc_actions(ctx, features):
+    """Add priority actions related to registration and accounting setup.
+
+    Checks for required configurations when certain features are enabled,
+    such as installments, quotas, and accounting systems for events.
+    """
     if "reg_installments" in features and "reg_quotas" in features:
         _add_priority(
             ctx,
@@ -602,6 +635,11 @@ def _orga_reg_acc_actions(ctx, features):
 
 
 def _orga_reg_actions(ctx, features):
+    """Add priority actions for registration management setup.
+
+    Checks registration status, required tickets, and registration features
+    to provide guidance for event organizers.
+    """
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_priority(
             ctx,
@@ -704,6 +742,11 @@ def _get_perm_link(ctx, perm, view):
 
 
 def _compile(request, ctx):
+    """Compile management dashboard with suggestions, actions, and priorities.
+
+    Processes and organizes management content sections, handling empty states
+    and providing appropriate user messaging.
+    """
     section_list = ["suggestions", "actions", "priorities"]
     empty = True
     for section in section_list:

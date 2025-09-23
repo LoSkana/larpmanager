@@ -119,6 +119,17 @@ def _extract_municipality_code(birth_place):
 
 
 def _calculate_check_digit(cf_without_check_digit):
+    """Calculate the check digit for Italian fiscal codes (Codice Fiscale).
+
+    Implements the official algorithm using lookup tables for even and odd
+    position character values to compute the final check digit.
+
+    Args:
+        cf_without_check_digit (str): 15-character fiscal code without check digit
+
+    Returns:
+        str: Single character check digit (A-Z)
+    """
     even_values = {
         "0": 0,
         "1": 1,
@@ -209,6 +220,19 @@ def _calculate_check_digit(cf_without_check_digit):
 
 
 def _go(member, male=True):
+    """Generate Italian fiscal code for a member and validate against existing code.
+
+    Implements the complete fiscal code algorithm including name/surname processing,
+    date encoding, and municipality code lookup. Validates the generated code against
+    the member's existing fiscal code and provides detailed error messages.
+
+    Args:
+        member: Member instance with personal information for fiscal code generation
+        male (bool, optional): Gender flag for date encoding. Defaults to True.
+
+    Returns:
+        tuple: (success_boolean, generated_code, error_message)
+    """
     fiscal_code_length = 16
     name_number = 2
 

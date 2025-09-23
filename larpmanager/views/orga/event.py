@@ -111,6 +111,11 @@ def orga_roles(request, s):
 
 
 def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
+    """Prepare role list with permissions organized by module for display.
+
+    Builds a formatted list of roles with their members and grouped permissions,
+    handling special formatting for administrator roles and module organization.
+    """
     qs_perm = permission_typ.objects.select_related("feature", "feature__module").order_by(
         F("feature__module__order").asc(nulls_last=True),
         F("feature__order").asc(nulls_last=True),

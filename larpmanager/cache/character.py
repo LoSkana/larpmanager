@@ -206,6 +206,19 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
 
 
 def get_event_cache_factions(ctx, res):
+    """Build cached faction data for events.
+
+    Organizes faction information by type and prepares faction selection options,
+    handling characters without primary factions and creating faction-character
+    mappings for the event cache.
+
+    Args:
+        ctx (dict): Context dictionary containing event information
+        res (dict): Result dictionary to be populated with faction data
+
+    Returns:
+        None: Function modifies res in-place, adding faction mappings and metadata
+    """
     res["factions"] = {}
     res["factions_typ"] = {}
 
@@ -250,6 +263,19 @@ def get_event_cache_factions(ctx, res):
 
 
 def get_event_cache_traits(ctx, res):
+    """Build cached trait and quest data for events.
+
+    Organizes character traits, quest types, and related game mechanics data,
+    including trait relationships, character assignments, and quest type
+    mappings for efficient event cache operations.
+
+    Args:
+        ctx (dict): Context dictionary containing event information
+        res (dict): Result dictionary to be populated with trait and quest data
+
+    Returns:
+        None: Function modifies res in-place, adding quest types, traits, and relationships
+    """
     res["quest_types"] = {}
     for qt in QuestType.objects.filter(event=ctx["event"]).order_by("number"):
         res["quest_types"][qt.number] = qt.show()

@@ -191,6 +191,11 @@ def character_your(request, s, p=None):
 
 
 def character_form(request, ctx, s, instance, form_class):
+    """Handle character creation and editing form processing.
+
+    Manages character form submission, validation, saving, and assignment
+    with transaction safety and proper message handling.
+    """
     get_options_dependencies(ctx)
     ctx["elementTyp"] = Character
 

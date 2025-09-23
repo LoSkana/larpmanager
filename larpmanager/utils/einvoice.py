@@ -62,6 +62,21 @@ def prepare_xml(inv, einvoice):
 
 
 def _einvoice_header(einvoice, inv, member, name_number, root):
+    """Create the header section of an electronic invoice XML structure.
+
+    Builds transmission data and supplier/customer information according
+    to Italian e-invoice standards for electronic billing compliance.
+
+    Args:
+        einvoice: Electronic invoice configuration object
+        inv: Invoice instance containing billing data
+        member: Member object with customer information
+        name_number (str): Unique identifier for the invoice
+        root: XML root element to append header data to
+
+    Returns:
+        None: Function modifies root XML element in-place
+    """
     # Invoicelettronicaheader
     header = ET.SubElement(root, "FatturaElettronicaHeader")
 
