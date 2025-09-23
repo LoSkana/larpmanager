@@ -86,9 +86,8 @@ class FeatureForm(MyForm):
             if not choices:
                 continue
             label = _(module.name)
-            if "interface_old" in self.params and not self.params["interface_old"]:
-                if module.icon:
-                    label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
+            if module.icon:
+                label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
             self.fields[f"mod_{module.id}"] = forms.MultipleChoiceField(
                 choices=choices,
                 widget=FeatureCheckboxWidget(help_text=help_text),

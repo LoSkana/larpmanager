@@ -32,13 +32,6 @@ window.jump_to = function(target) {
 
     if (!target.length) return;
 
-    if (window.interface_old) {
-        $('html, body').animate({
-            scrollTop: $(target).offset().top - headerHeight * 3
-        }, 0);
-        return;
-    }
-
     $('#page-wrapper').animate({
         scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 4
     }, 0);
@@ -403,11 +396,6 @@ function show_sidebar_active() {
 
 function data_tables() {
     window.datatables = window.datatables || {};
-
-    if (window.interface_old) {
-        $('table.go_datatable').tablesorter();
-        return;
-    }
 
     $('table.go_datatable').each(function() {
         const $table = $(this);

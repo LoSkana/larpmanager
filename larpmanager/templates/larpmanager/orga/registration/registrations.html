@@ -594,10 +594,6 @@ window.addEventListener('DOMContentLoaded', function() {
                     let vl = data[key][nm];
                     if (parseInt(vl) != 0) {
 
-                        {% if interface_old %}
-                        $('#' + key + ' .' + nm).html(vl);
-                        {% else %}
-
                         Object.keys(window.datatables).forEach(function(dt_key) {
                             var table = window.datatables[dt_key];
                             var cell = table.cell('#' + key, '.' + nm);
@@ -605,7 +601,7 @@ window.addEventListener('DOMContentLoaded', function() {
                                 cell.data(vl).draw(false);
                             }
                         });
-                        {% endif %}
+
                     }
                 }
             }

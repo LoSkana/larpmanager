@@ -2053,9 +2053,6 @@ msgstr "Niet voltooid"
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
 
-msgid "Old interface"
-msgstr "Oude interface"
-
 msgid "Passages made"
 msgstr "Ondernomen stappen"
 
@@ -4042,9 +4039,6 @@ msgstr "Uitstel van jaarlijkse contributie"
 
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
-
-msgid "If checked: uses old interface"
-msgstr "Indien aangevinkt: gebruikt oude interface"
 
 msgid "Manage issues during the event"
 msgstr "Problemen tijdens het evenement beheren"

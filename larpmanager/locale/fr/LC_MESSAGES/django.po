@@ -2053,9 +2053,6 @@ msgstr "Pas terminé"
 msgid "Number events"
 msgstr "Nombre d'événements"
 
-msgid "Old interface"
-msgstr "Ancienne interface"
-
 msgid "Passages made"
 msgstr "Mesures prises"
 
@@ -4042,9 +4039,6 @@ msgstr "Retard dans le paiement de la cotisation annuelle"
 
 msgid "Font to be used in page titles"
 msgstr "police à utiliser dans les titres"
-
-msgid "If checked: uses old interface"
-msgstr "Si la case est cochée : utilise l'ancienne interface"
 
 msgid "Manage issues during the event"
 msgstr "Gérer les problèmes pendant l'événement"

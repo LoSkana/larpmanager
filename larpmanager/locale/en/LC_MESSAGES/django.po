@@ -261,15 +261,6 @@ msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 
-msgid "Interface"
-msgstr ""
-
-msgid "Old interface"
-msgstr ""
-
-msgid "If checked: uses old interface"
-msgstr ""
-
 msgid "Calendar"
 msgstr ""
 
@@ -706,6 +697,9 @@ msgid "Personal preferences"
 msgstr ""
 
 msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+
+msgid "Interface"
 msgstr ""
 
 msgid "Collapse sidebar"
