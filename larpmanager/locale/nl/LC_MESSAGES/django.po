@@ -3431,6 +3431,9 @@ msgstr "Toepassingen"
 msgid "Registration surcharge"
 msgstr "Toeslag"
 
+msgid "Registrations not open"
+msgstr "De inschrijving is nog niet geopend"
+
 msgid "Reimbursement approved"
 msgstr "Vergoeding goedgekeurd"
 
@@ -3797,9 +3800,6 @@ msgstr "Optie niet langer beschikbaar"
 
 msgid "Pre-register to the event!"
 msgstr "Schrijf je in op de voorinschrijvingslijst!"
-
-msgid "Registration not yet open!"
-msgstr "De registratie is nog niet geopend."
 
 msgid "Short name - international"
 msgstr "Korte naam - in het Engels"

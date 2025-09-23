@@ -3431,6 +3431,9 @@ msgstr "Tillämpningar"
 msgid "Registration surcharge"
 msgstr "Tillägg för inresa"
 
+msgid "Registrations not open"
+msgstr "Registreringen är ännu inte öppen"
+
 msgid "Reimbursement approved"
 msgstr "Ersättning godkänd"
 
@@ -3797,9 +3800,6 @@ msgstr "Alternativet är inte längre tillgängligt"
 
 msgid "Pre-register to the event!"
 msgstr "Skriv upp dig på föranmälningslistan!"
-
-msgid "Registration not yet open!"
-msgstr "Registreringen är ännu inte öppen."
 
 msgid "Short name - international"
 msgstr "Kort namn - på engelska"

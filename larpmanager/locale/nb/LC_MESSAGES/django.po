@@ -3431,6 +3431,9 @@ msgstr "Bruksområder"
 msgid "Registration surcharge"
 msgstr "Inngangsavgift"
 
+msgid "Registrations not open"
+msgstr "Registreringen er ennå ikke åpnet"
+
 msgid "Reimbursement approved"
 msgstr "Godkjent refusjon"
 
@@ -3797,9 +3800,6 @@ msgstr "Alternativet er ikke lenger tilgjengelig"
 
 msgid "Pre-register to the event!"
 msgstr "Sett deg selv på forhåndsregistreringslisten!"
-
-msgid "Registration not yet open!"
-msgstr "Registreringen er ennå ikke åpen."
 
 msgid "Short name - international"
 msgstr "Kort navn - på engelsk"

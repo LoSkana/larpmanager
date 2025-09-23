@@ -3431,6 +3431,9 @@ msgstr "Anwendungen"
 msgid "Registration surcharge"
 msgstr "Einreise-Zuschlag"
 
+msgid "Registrations not open"
+msgstr "Die Anmeldung ist noch nicht geöffnet"
+
 msgid "Reimbursement approved"
 msgstr "Rückerstattung genehmigt"
 
@@ -3797,9 +3800,6 @@ msgstr "Option nicht mehr verfügbar"
 
 msgid "Pre-register to the event!"
 msgstr "Tragen Sie sich in die Vorregistrierungsliste ein!"
-
-msgid "Registration not yet open!"
-msgstr "Die Anmeldung ist noch nicht geöffnet."
 
 msgid "Short name - international"
 msgstr "Kurzer Name - auf Englisch"

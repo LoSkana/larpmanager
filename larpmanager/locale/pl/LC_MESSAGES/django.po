@@ -3431,6 +3431,9 @@ msgstr "Pytania dotyczące rejestracji"
 msgid "Registration surcharge"
 msgstr "Dopłata za rejestrację"
 
+msgid "Registrations not open"
+msgstr "Rejestracja nie jest otwarta"
+
 msgid "Reimbursement approved"
 msgstr "Zwrot kosztów zatwierdzony"
 
@@ -3797,9 +3800,6 @@ msgstr "Opcja nie jest już dostępna"
 
 msgid "Pre-register to the event!"
 msgstr "Wstępna rejestracja na wydarzenie!"
-
-msgid "Registration not yet open!"
-msgstr "Rejestracja nie jest jeszcze otwarta!"
 
 msgid "Short name - international"
 msgstr "Nazwa skrócona - międzynarodowy"
