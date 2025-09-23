@@ -3431,6 +3431,9 @@ msgstr "Aplikace"
 msgid "Registration surcharge"
 msgstr "Vstupní příplatek"
 
+msgid "Registrations not open"
+msgstr "Registrace ještě není otevřena"
+
 msgid "Reimbursement approved"
 msgstr "Schválená úhrada"
 
@@ -3797,9 +3800,6 @@ msgstr "Možnost již není k dispozici"
 
 msgid "Pre-register to the event!"
 msgstr "Zapište se na seznam předběžných registrací!"
-
-msgid "Registration not yet open!"
-msgstr "Registrace ještě není otevřena."
 
 msgid "Short name - international"
 msgstr "Krátký název - v angličtině"

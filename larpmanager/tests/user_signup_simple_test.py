@@ -42,6 +42,9 @@ def test_user_signup_simple(pw_page):
 
 
 def signup(live_server, page):
+    # deactivate registration open
+    go_to(page, live_server, "/test/manage/features/114/off")
+
     # sign up
     go_to(page, live_server, "/")
     expect(page.locator("#one")).to_contain_text("Registration is open!")
@@ -120,6 +123,8 @@ def pre_register(live_server, page):
 
     # Activate pre-register
     go_to(page, live_server, "/manage/features/32/on")
+    # Activate registration open
+    go_to(page, live_server, "/test/manage/features/114/on")
 
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
@@ -127,7 +132,6 @@ def pre_register(live_server, page):
     submit_confirm(page)
 
     go_to(page, live_server, "/")
-    expect(page.locator("#one")).to_contain_text("Registration not yet open!")
     expect(page.locator("#one")).to_contain_text("Pre-register to the event!")
     page.get_by_role("link", name="Pre-register to the event!").click()
 

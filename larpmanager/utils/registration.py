@@ -217,24 +217,21 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         return
 
     # check pre-register
-    if not run.registration_open and run.event.get_config("pre_register_active", False):
-        run.status["open"] = False
+    if run.event.get_config("pre_register_active", False):
         mes = _("Pre-register to the event!")
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
-        run.status["details"] = _("Registration not yet open!")
-        return
 
     dt = datetime.today()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:
             run.status["open"] = False
-            run.status["text"] = _("Registrations not open!")
+            run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             return
         elif run.registration_open > dt:
             run.status["open"] = False
-            run.status["text"] = _("Registrations not open!")
+            run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             run.status["details"] = _("Opening at: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime)
             }

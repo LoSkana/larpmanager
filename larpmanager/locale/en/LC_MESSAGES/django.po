@@ -8511,10 +8511,7 @@ msgstr ""
 msgid "Pre-register to the event!"
 msgstr ""
 
-msgid "Registration not yet open!"
-msgstr ""
-
-msgid "Registrations not open!"
+msgid "Registrations not open"
 msgstr ""
 
 #, python-format
@@ -9128,6 +9125,9 @@ msgstr ""
 
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
+msgstr ""
+
+msgid "Registrations not open!"
 msgstr ""
 
 msgid "Gift card cancelled!"

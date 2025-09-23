@@ -3431,6 +3431,9 @@ msgstr "Applications"
 msgid "Registration surcharge"
 msgstr "Supplément d'entrée"
 
+msgid "Registrations not open"
+msgstr "L'inscription n'est pas encore ouverte "
+
 msgid "Reimbursement approved"
 msgstr "Remboursement approuvé"
 
@@ -3797,9 +3800,6 @@ msgstr "L'option n'est plus disponible"
 
 msgid "Pre-register to the event!"
 msgstr "Inscrivez vous sur la liste de pré-inscription !"
-
-msgid "Registration not yet open!"
-msgstr "L'inscription n'est pas encore ouverte."
 
 msgid "Short name - international"
 msgstr "Nom court - en anglais"
