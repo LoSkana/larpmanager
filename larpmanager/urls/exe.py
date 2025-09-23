@@ -215,12 +215,12 @@ urlpatterns = [
         name="exe_features",
     ),
     path(
-        "manage/features/<int:num>/on/",
+        "manage/features/<slug:slug>/on/",
         views_eas.exe_features_on,
         name="exe_features_on",
     ),
     path(
-        "manage/features/<int:num>/off/",
+        "manage/features/<slug:slug>/off/",
         views_eas.exe_features_off,
         name="exe_features_off",
     ),

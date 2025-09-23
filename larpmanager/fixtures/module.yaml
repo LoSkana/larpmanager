@@ -1,60 +1,60 @@
 - model: larpmanager.featuremodule
-  pk: 1
   fields:
     name: Writing
+    slug: writing
     order: 50
     icon: pen-nib
 - model: larpmanager.featuremodule
-  pk: 2
   fields:
     name: Accounting
+    slug: accounting
     order: 40
     icon: calculator
 - model: larpmanager.featuremodule
-  pk: 3
   fields:
     name: Miscellany
+    slug: miscellany
     order: 100
     icon: gear
 - model: larpmanager.featuremodule
-  pk: 4
   fields:
     name: Registration
+    slug: registration
     order: 30
     icon: ticket
 - model: larpmanager.featuremodule
-  pk: 6
   fields:
     name: Appearance
+    slug: appearance
     order: 20
     icon: palette
 - model: larpmanager.featuremodule
-  pk: 7
   fields:
     name: Event
+    slug: event
     order: 10
     icon: calendar-days
 - model: larpmanager.featuremodule
-  pk: 8
   fields:
     name: Users
+    slug: users
     order: 80
     icon: user
 - model: larpmanager.featuremodule
-  pk: 9
   fields:
     name: Organization
+    slug: organization
     order: 0
     icon: building
 - model: larpmanager.featuremodule
-  pk: 10
   fields:
     name: Italy
+    slug: italy
     order: 110
     icon: pizza-slice
 - model: larpmanager.featuremodule
-  pk: 12
   fields:
     name: Events
+    slug: events
     order: 10
     icon: calendar-days
