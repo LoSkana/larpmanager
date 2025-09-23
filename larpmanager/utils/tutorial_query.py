@@ -82,6 +82,12 @@ def get_sorted_permissions(model, query):
 
 
 def query_index(request):
+    """Handle tutorial search queries with translation support.
+
+    Processes search requests and translates content using DeepL API,
+    then searches through both permission-based navigation links and
+    tutorial content to provide relevant results.
+    """
     orig_string = request.POST.get("q", "")
     run_id = int(request.POST.get("r", "0"))
 

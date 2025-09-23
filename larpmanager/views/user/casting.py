@@ -308,6 +308,11 @@ def casting_preferences(request, s, typ=0):
 
 
 def casting_history_characters(ctx):
+    """Build casting history list showing character preferences by registration.
+
+    Creates a comprehensive view of all registrations with their character
+    casting preferences, handling mirror characters and preference ordering.
+    """
     ctx["list"] = []
     ctx["cache"] = {}
     for ch in ctx["event"].get_elements(Character).filter(hide=False).select_related("mirror"):

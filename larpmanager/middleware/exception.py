@@ -52,6 +52,11 @@ class ExceptionHandlingMiddleware:
         return self.get_response(request)
 
     def process_exception(self, request, exception):
+        """Django middleware exception handler.
+
+        Routes different exception types to appropriate error pages and handles
+        permission, not found, and other application-specific errors.
+        """
         handlers = [
             (PermissionError, lambda ex: render(request, "exception/permission.html")),
             (NotFoundError, lambda ex: render(request, "exception/notfound.html")),

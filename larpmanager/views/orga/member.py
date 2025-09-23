@@ -136,6 +136,11 @@ def orga_spam(request, s):
 
 @login_required
 def orga_persuade(request, s):
+    """Display members who can be persuaded to register for the event.
+
+    Shows association members who haven't registered yet, excluding current
+    registrants and staff, with pre-registration status and event history.
+    """
     ctx = check_event_permission(request, s, "orga_persuade")
 
     already = list(

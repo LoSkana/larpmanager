@@ -40,6 +40,11 @@ from larpmanager.utils.exceptions import SignupError, WaitingError
 
 
 def registration_available(r, features=None, reg_counts=None):
+    """Check if registration is available based on capacity and rules.
+
+    Validates registration availability considering maximum participants,
+    ticket quotas, and advanced registration constraints.
+    """
     # check advanced registration rules only if there is a max number of tickets
     if r.event.max_pg == 0:
         r.status["primary"] = True
@@ -162,6 +167,11 @@ def registration_status_signed(run, features, register_url):
 
 
 def _status_payment(register_text, run):
+    """Check payment status and update registration status text accordingly.
+
+    Handles pending payments, wire transfers, and payment alerts with
+    appropriate messaging and links to payment processing pages.
+    """
     pending = PaymentInvoice.objects.filter(
         idx=run.reg.id,
         member_id=run.reg.member_id,
@@ -200,6 +210,21 @@ def _status_payment(register_text, run):
 
 
 def registration_status(run, user, my_regs=None, features_map=None, reg_count=None):
+    """Determine registration status and availability for users.
+
+    Checks registration constraints, deadlines, and feature requirements
+    to determine if a user can register for an event.
+
+    Args:
+        run: Event run object to check registration status for
+        user: User object attempting registration
+        my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
+        features_map (dict, optional): Cached features mapping. Defaults to None.
+        reg_count (int, optional): Pre-calculated registration count. Defaults to None.
+
+    Returns:
+        bool: True if registration status was successfully determined
+    """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
     registration_find(run, user, my_regs)
@@ -289,6 +314,11 @@ def check_character_maximum(event, member):
 
 
 def registration_status_characters(run, features):
+    """Update registration status with character assignment information.
+
+    Displays assigned characters with approval status and provides links
+    for character creation or selection based on event configuration.
+    """
     que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
     approval = run.event.get_config("user_character_approval", False)
     rcrs = que.order_by("character__number").select_related("character")

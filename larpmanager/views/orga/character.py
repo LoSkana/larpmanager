@@ -188,6 +188,11 @@ def orga_characters_summary(request, s, num):
 
 @login_required
 def orga_writing_form_list(request, s, typ):
+    """Generate form list data for writing questions in JSON format.
+
+    Processes writing questions and their answers for display in organizer interface,
+    handling different question types (single, multiple choice, text, paragraph).
+    """
     ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]
@@ -381,6 +386,11 @@ def orga_writing_options_order(request, s, typ, num, order):
 
 @login_required
 def orga_check(request, s):
+    """Perform comprehensive character and writing consistency checks.
+
+    Validates character relationships, writing completeness, speedlarp constraints,
+    and plot assignments to identify potential issues in the event setup.
+    """
     ctx = check_event_permission(request, s)
 
     get_event_cache_all(ctx)
@@ -522,6 +532,12 @@ def orga_character_get_number(request, s):
 
 @require_POST
 def orga_writing_excel_edit(request, s, typ):
+    """Handle Excel-based editing of writing elements.
+
+    Manages bulk editing of character stories and writing content through
+    spreadsheet interface, providing AJAX form rendering with TinyMCE
+    support and character count validation.
+    """
     try:
         ctx = _get_excel_form(request, s, typ)
     except ObjectDoesNotExist:
@@ -594,6 +610,12 @@ def orga_writing_excel_submit(request, s, typ):
 
 
 def _get_excel_form(request, s, typ, submit=False):
+    """Prepare Excel form context for bulk editing operations.
+
+    Sets up form data and validation for spreadsheet-based content editing,
+    filtering forms to show only the requested question field and preparing
+    the context for character, faction, plot, trait, or quest editing.
+    """
     ctx = check_event_permission(request, s, f"orga_{typ}s")
     get_event_cache_all(ctx)
     check_writing_form_type(ctx, typ)
@@ -641,6 +663,11 @@ def _get_excel_form(request, s, typ, submit=False):
 
 
 def _get_question_update(ctx, el):
+    """Generate question update HTML for different question types.
+
+    Creates appropriate HTML content for updating questions based on their type,
+    handling cover questions and other writing question formats.
+    """
     if ctx["question"].typ in [WritingQuestionType.COVER]:
         return f"""
                 <a href="{el.thumb.url}">

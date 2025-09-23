@@ -340,6 +340,17 @@ def check_year(request, ctx):
 
 @login_required
 def exe_balance(request):
+    """Executive view for displaying association balance sheet for a specific year.
+
+    Calculates totals for memberships, donations, tickets, and expenses from
+    various accounting models to generate comprehensive financial reporting.
+
+    Args:
+        request: Django HTTP request object with user authentication and year parameter
+
+    Returns:
+        HttpResponse: Rendered balance sheet template with financial data
+    """
     ctx = check_assoc_permission(request, "exe_balance")
     year = check_year(request, ctx)
 

@@ -509,6 +509,11 @@ class RegistrationQuestion(BaseModel):
         return que
 
     def skip(self, reg, features, params=None, orga=False):
+        """Determine if a question should be skipped based on context and features.
+
+        Evaluates question visibility rules including hidden status, ticket restrictions,
+        faction filtering, and organizer permissions to decide if question should be shown.
+        """
         if self.status == QuestionStatus.HIDDEN and not orga:
             return True
 

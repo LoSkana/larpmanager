@@ -637,6 +637,11 @@ def replace_data(path, char):
 
 
 def update_content(ctx, working_dir, zip_dir, char, aux_template):
+    """Update PDF content for character sheets.
+
+    Modifies LibreOffice document content with character data for PDF
+    generation, handling template replacement and content formatting.
+    """
     # ## NOW CONTENT
     content = os.path.join(zip_dir, "content.xml")
     replace_data(content, char)
