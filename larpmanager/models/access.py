@@ -27,6 +27,14 @@ from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 
 
+class PermissionModule(BaseModel):
+    name = models.CharField(max_length=100)
+
+    icon = models.CharField(max_length=100)
+
+    order = models.IntegerField()
+
+
 class AssocPermission(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -36,15 +44,13 @@ class AssocPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="assoc_permissions")
 
+    module = models.ForeignKey(PermissionModule, on_delete=models.CASCADE, related_name="assoc_permissions")
+
     descr = models.CharField(max_length=1000)
 
     hidden = models.BooleanField(default=False)
 
     config = models.TextField(max_length=100, blank=True, null=True)
-
-    def module(self):
-        # noinspection PyUnresolvedReferences
-        return self.feature.module
 
     def __str__(self):
         return self.name
@@ -76,11 +82,27 @@ class AssocRole(BaseModel):
 
 
 def get_assoc_executives(assoc):
+    """Get all executive members of an association.
+
+    Args:
+        assoc: Association instance
+
+    Returns:
+        QuerySet: Members with executive role (role number 1)
+    """
     exe = AssocRole.objects.get(assoc=assoc, number=1)
     return exe.members.all()
 
 
 def get_assoc_inners(assoc):
+    """Get all non-executive members with association roles.
+
+    Args:
+        assoc: Association instance
+
+    Returns:
+        list: List of Member instances with non-executive roles
+    """
     lst = []
     already = {}
     for role in AssocRole.objects.filter(assoc=assoc).exclude(number=1):
@@ -101,15 +123,13 @@ class EventPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="event_permissions")
 
+    module = models.ForeignKey(PermissionModule, on_delete=models.CASCADE, related_name="event_permissions")
+
     descr = models.CharField(max_length=1000)
 
     hidden = models.BooleanField(default=False)
 
     config = models.TextField(max_length=100, blank=True, null=True)
-
-    def module(self):
-        # noinspection PyUnresolvedReferences
-        return self.feature.module
 
     def __str__(self):
         return self.name
@@ -141,11 +161,27 @@ class EventRole(BaseConceptModel):
 
 
 def get_event_organizers(event):
+    """Get all organizer members of an event.
+
+    Args:
+        event: Event instance
+
+    Returns:
+        QuerySet: Members with event organizer role (role number 1)
+    """
     (orga, cr) = EventRole.objects.get_or_create(event=event, number=1)
     return orga.members.all()
 
 
 def get_event_staffers(event):
+    """Get all non-organizer staff members of an event.
+
+    Args:
+        event: Event instance
+
+    Returns:
+        list: List of Member instances with non-organizer event roles
+    """
     lst = []
     already = {}
     for role in EventRole.objects.filter(event=event):

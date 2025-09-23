@@ -36,6 +36,14 @@ class DefModelAdmin(ImportExportModelAdmin):
 
 
 def reduced(v):
+    """Truncate string to maximum length with ellipsis.
+
+    Args:
+        v (str): String to potentially truncate
+
+    Returns:
+        str: Original string if under 50 chars, otherwise truncated with [...] suffix
+    """
     max_length = 50
     if not v or len(v) < max_length:
         return v

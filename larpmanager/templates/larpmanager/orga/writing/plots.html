@@ -6,6 +6,9 @@
 {% block info %}
     {% trans "This page shows the plots of the event" %}
 {% endblock info %}
+{% block table_classes %}
+    ordering_arrow
+{% endblock table_classes %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
@@ -15,32 +18,48 @@
     <th>{{ fields_name.name }}</th>
     <th></th>
     {% include "elements/writing/questions_header.html" %}
-    <th class="hide characters">{% trans "Characters" %}</th>
-    <th class="hide stats">
+    <th class="characters">{% trans "Characters" %}</th>
+    <th class="stats">
         <i class="fa fa-hashtag"></i>
     </th>
+    <th></th>
+    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
         <tr id="{{ el.id }}">
             <td>
-                <a href="{% url 'orga_plots_edit' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_plots_edit' run.get_slug el.id %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_plots_view' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_plots_view' run.get_slug el.id %}"
                    qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_plots_versions' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_plots_versions' run.get_slug el.id %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
             </td>
             {% include "elements/writing/questions_body.html" %}
-            <td class="hide characters">
-                {% for ch in el.characters.all %}
-                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+            <td class="characters dot_links">
+                {% for ch in el.chars %}
+                    <a href="{% url 'orga_characters_edit' run.get_slug ch.1 %}">{{ ch.0 }}</a>
                 {% endfor %}
             </td>
-            <td class="hide stats">{{ el.characters.all | length }}</td>
+            <td class="stats">{{ el.characters.all | length }}</td>
+            <td>
+                {% if not forloop.first %}
+                    <a href="{% url 'orga_plots_order' run.get_slug el.id 0 %}">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if not forloop.last %}
+                    <a href="{% url 'orga_plots_order' run.get_slug el.id 1 %}">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
 {% endblock tbody %}

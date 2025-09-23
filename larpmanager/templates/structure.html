@@ -18,7 +18,11 @@
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
         <meta property="og:logo" content="{% static 'lm_fav_new.png' %}">
-        <style>html body .hide { display: none; }</style>
+        <style>
+            html body .hide {
+                display: none;
+            }
+        </style>
         {% if assoc.id == 0 %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
@@ -72,6 +76,8 @@
         {% block robots %}
         {% endblock robots %}
         {{ form.media }}
+        {% block css %}
+        {% endblock css %}
         {% if assoc.id == 0 %}
             {% compress css %}
                 <link rel="stylesheet" href="{% static 'alpha/assets/css/main.css' %}" />
@@ -99,8 +105,6 @@
                       href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
             {% endif %}
         {% endif %}
-        {% block css %}
-        {% endblock css %}
         <noscript>
             <link rel="stylesheet"
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
@@ -109,27 +113,32 @@
     <body class="is-preload {% if interface_old %}interface_old{% endif %}"
           id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
-        {% if not interface_old and not frame %}
-            {% if user.is_authenticated %}
-                {% if topbar %}
-                    {% include "elements/structure/topbar-admin.html" %}
+        <div id="page-container">
+            {% if not interface_old and not frame %}
+                {% if user.is_authenticated %}
+                    {% if topbar %}
+                        {% include "elements/structure/topbar-admin.html" %}
+                    {% else %}
+                        {% include "elements/structure/topbar-user.html" %}
+                    {% endif %}
                 {% else %}
-                    {% include "elements/structure/topbar-user.html" %}
+                    {% include "elements/structure/topbar.html" %}
                 {% endif %}
-            {% else %}
-                {% include "elements/structure/topbar.html" %}
             {% endif %}
-        {% endif %}
-        {% include "elements/structure/sidebar.html" %}
-        <!-- Page Wrapper -->
-        <div id="page-wrapper"
-             class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not interface_old %}topbar{% endif %} ">
-            {% block main %}
-            {% endblock main %}
+            {% include "elements/structure/sidebar.html" %}
+            <!-- Page Wrapper -->
+            <div id="page-wrapper"
+                 class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not interface_old %}topbar{% endif %} ">
+                {% block main %}
+                {% endblock main %}
+            </div>
         </div>
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
+    window.interface_old = {{ interface_old | yesno:"true,false" }};
+    window.interface_collapse_sidebar = {{ interface_collapse_sidebar | yesno:"true,false" }};
+    window.enviro = "{{ request.enviro }}";
         </script>
         <!-- Scripts -->
         {% block js-req %}
@@ -177,6 +186,7 @@
                 integrity="sha384-ao+X/Q4zAQelTI1M49AS9DVSo4NiHV4nmS+9y7vU2vqWYWRVeDSuo9UIq2QvZpHx"
                 crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+        {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
         <script>
         function setCookie(name,value,days) {
             var expires = "";

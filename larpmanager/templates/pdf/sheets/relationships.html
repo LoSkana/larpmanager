@@ -7,26 +7,79 @@
         <meta name="keywords" content="none">
         <meta name="description" content="none">
         <style>
-@media print {
-  .new-page {
-    page-break-before: always;
-  }
-}
-body { background: white; text-align: center; padding: 2em; font-size: 10pt; }
-table { margin: 0 auto; width: 100% }
-td { width: 50%; }
-body { background: white; }
-a { color: #6495ED; font-weight:bold; text-decoration: none;}
-td { padding: 1em; border-bottom: 1px solid black; text-align: center; vertical-align:middle; }
-td.left { border-right: 1px solid black }
-td img { margin: 0.5em; height: 10em; float: left; }
-p { display: inline; line-height: 100%; display: block; margin: 0.3em; }
-.name { font-size: 110%; }
-table, tr, td, th, tbody, thead, tfoot {
-    page-break-inside: avoid !important;
-}
-table { border-collapse: collapse; }
+            @media print {
+                .new-page {
+                    page-break-before: always;
+                }
+            }
 
+            body {
+                background: white;
+                text-align: center;
+                padding: 2em;
+                font-size: 10pt;
+            }
+
+            table {
+                margin: 0 auto;
+                width: 100%
+            }
+
+            td {
+                width: 50%;
+            }
+
+            body {
+                background: white;
+            }
+
+            a {
+                color: #6495ED;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            td {
+                padding: 1em;
+                border-bottom: 1px solid black;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            td.left {
+                border-right: 1px solid black
+            }
+
+            td img {
+                margin: 0.5em;
+                height: 10em;
+                float: left;
+            }
+
+            p {
+                display: inline;
+                line-height: 100%;
+                display: block;
+                margin: 0.3em;
+            }
+
+            .name {
+                font-size: 110%;
+            }
+
+            table,
+            tr,
+            td,
+            th,
+            tbody,
+            thead,
+            tfoot {
+                page-break-inside: avoid !important;
+            }
+
+            table {
+                border-collapse: collapse;
+            }
         </style>
     </head>
     <body>
@@ -49,7 +102,7 @@ table { border-collapse: collapse; }
                                  alt="player profile" />
                         {% endif %}
                         <p>
-                            <span class="name"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
+                            <span class="name"><a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a> </span>
                             {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                         </p>
@@ -66,7 +119,7 @@ table { border-collapse: collapse; }
                             {% endfor %}
                         {% endif %}
                         <p class="relationship">
-                            <b>Relationship:</b>  {{ el.text | safe }}
+                            <b>Relationship:</b>  {% show_char el.text run 1 %}
                         </p>
                     </td>
                 {% endfor %}

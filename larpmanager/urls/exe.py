@@ -20,6 +20,7 @@
 
 from django.urls import path
 
+from larpmanager.utils import edit as views_ed
 from larpmanager.views import manage as views_mg
 from larpmanager.views.exe import accounting as views_ea
 from larpmanager.views.exe import assoc as views_eas
@@ -54,19 +55,44 @@ urlpatterns = [
         name="exe_urlshortner_edit",
     ),
     path(
-        "manage/inventory/",
-        views_ems.exe_inventory,
-        name="exe_inventory",
+        "manage/warehouse/containers/",
+        views_ems.exe_warehouse_containers,
+        name="exe_warehouse_containers",
     ),
     path(
-        "manage/inventory/edit/<int:num>/",
-        views_ems.exe_inventory_edit,
-        name="exe_inventory_edit",
+        "manage/warehouse/containers/edit/<int:num>/",
+        views_ems.exe_warehouse_containers_edit,
+        name="exe_warehouse_containers_edit",
     ),
     path(
-        "manage/inventory/<int:num>/history",
-        views_ems.exe_inventory_history,
-        name="exe_inventory_history",
+        "manage/warehouse/tags/",
+        views_ems.exe_warehouse_tags,
+        name="exe_warehouse_tags",
+    ),
+    path(
+        "manage/warehouse/tags/edit/<int:num>/",
+        views_ems.exe_warehouse_tags_edit,
+        name="exe_warehouse_tags_edit",
+    ),
+    path(
+        "manage/warehouse/items/",
+        views_ems.exe_warehouse_items,
+        name="exe_warehouse_items",
+    ),
+    path(
+        "manage/warehouse/items/edit/<int:num>/",
+        views_ems.exe_warehouse_items_edit,
+        name="exe_warehouse_items_edit",
+    ),
+    path(
+        "manage/warehouse/movements/",
+        views_ems.exe_warehouse_movements,
+        name="exe_warehouse_movements",
+    ),
+    path(
+        "manage/warehouse/movements/edit/<int:num>/",
+        views_ems.exe_warehouse_movements_edit,
+        name="exe_warehouse_movements_edit",
     ),
     path(
         "manage/badges/",
@@ -87,6 +113,11 @@ urlpatterns = [
         "manage/mail/archive",
         views_em.exe_archive_email,
         name="exe_archive_email",
+    ),
+    path(
+        "manage/mail/read/<int:nm>",
+        views_em.exe_read_mail,
+        name="exe_read_mail",
     ),
     path(
         "manage/questions/",
@@ -139,9 +170,9 @@ urlpatterns = [
         name="exe_profile",
     ),
     path(
-        "manage/payments/details/",
-        views_eas.exe_payment_details,
-        name="exe_payment_details",
+        "manage/methods/",
+        views_eas.exe_methods,
+        name="exe_methods",
     ),
     path(
         "manage/texts/",
@@ -264,6 +295,16 @@ urlpatterns = [
         name="exe_membership",
     ),
     path(
+        "manage/membership/fee",
+        views_em.exe_membership_fee,
+        name="exe_membership_fee",
+    ),
+    path(
+        "manage/membership/document",
+        views_em.exe_membership_document,
+        name="exe_membership_document",
+    ),
+    path(
         "manage/membership/<int:num>/",
         views_em.exe_member,
         name="exe_member",
@@ -327,11 +368,6 @@ urlpatterns = [
         "manage/vote/",
         views_em.exe_vote,
         name="exe_vote",
-    ),
-    path(
-        "manage/runs/",
-        views_ee.exe_runs,
-        name="exe_runs",
     ),
     path(
         "manage/runs/edit/<int:num>/",
@@ -447,5 +483,15 @@ urlpatterns = [
         "manage/suggestions/<slug:perm>/",
         views_mg.exe_close_suggestion,
         name="exe_close_suggestion",
+    ),
+    path(
+        "manage/preferences/",
+        views_eas.exe_preferences,
+        name="exe_preferences",
+    ),
+    path(
+        "manage/working_ticket/",
+        views_ed.working_ticket,
+        name="working_ticket",
     ),
 ]

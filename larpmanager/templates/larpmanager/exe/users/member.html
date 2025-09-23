@@ -34,7 +34,7 @@
         <table class="writing ">
             <thead>
                 <tr>
-                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Event" %}</th>
                     <th>{% trans "Total" %}</th>
                     <th>{% trans "Given" %}</th>
                 </tr>
@@ -50,11 +50,11 @@
     </div>
     <div class="hide pay">
         <h2>{% trans "Payments" %}</h2>
-        <table id="members_pay"
-               class="writing {% if not interface_old %}go_datatable{% endif %}">
+        <table id="members_pay" class="writing go_datatable">
             <thead>
                 <tr>
                     <th>{% trans "Registration" %}</th>
+                    <th>{% trans "Date" %}</th>
                     <th>{% trans "Value" %}</th>
                     <th>{% trans "Type" %}</th>
                 </tr>
@@ -62,6 +62,7 @@
             {% for el in pays %}
                 <tr>
                     <td>{{ el.reg.run }}</td>
+                    <td>{{ el.created | date:'Y-m-d' }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.typ }}</td>
                 </tr>
@@ -70,11 +71,11 @@
     </div>
     <div class="hide oth">
         <h2>{% trans "Other" %}</h2>
-        <table id="members_other"
-               class="writing {% if not interface_old %}go_datatable{% endif %}">
+        <table id="members_other" class="writing go_datatable">
             <thead>
                 <tr>
-                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Date" %}</th>
                     <th>{% trans "Description" %}</th>
                     <th>{% trans "Value" %}</th>
                     <th>{% trans "Type" %}</th>
@@ -83,6 +84,7 @@
             {% for el in others %}
                 <tr>
                     <td>{{ el.run.search }}</td>
+                    <td>{{ el.created | date:'Y-m-d' }}</td>
                     <td>{{ el.descr }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.typ }}</td>
@@ -92,11 +94,10 @@
     </div>
     <div class="hide dis">
         <h2>{% trans "Discount" %}</h2>
-        <table id="members_discount"
-               class="writing {% if not interface_old %}go_datatable{% endif %}">
+        <table id="members_discount" class="writing go_datatable">
             <thead>
                 <tr>
-                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Event" %}</th>
                     <th>{% trans "Discount" %}</th>
                     <th>{% trans "Detail" %}</th>
                 </tr>

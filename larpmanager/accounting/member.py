@@ -29,6 +29,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     Collection,
+    OtherChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -42,6 +43,19 @@ from larpmanager.models.registration import Registration
 
 
 def info_accounting(request, ctx):
+    """Gather comprehensive accounting information for a member.
+
+    Collects registration history, payment status, membership fees, donations,
+    collections, refunds, and token/credit balances for display in member dashboard.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with member and association ID
+
+    Side effects:
+        Populates ctx with accounting data including reg_list, payments_todo,
+        payments_pending, refunds, and various balance information
+    """
     member = ctx["member"]
     get_user_membership(member, ctx["a_id"])
     ctx["reg_list"] = []
@@ -74,6 +88,18 @@ def info_accounting(request, ctx):
 
 
 def _init_regs(choices, ctx, pending, reg):
+    """Initialize registration options and payment status tracking.
+
+    Args:
+        choices: Dictionary mapping registration IDs to their selected options
+        ctx: Context dictionary to update with payment status
+        pending: Dictionary of pending payment invoices
+        reg: Registration instance to process
+
+    Side effects:
+        Updates ctx with payments_pending and payments_todo lists
+        Sets reg.opts and reg.pending attributes
+    """
     if reg.id not in choices:
         choices[reg.id] = {}
     reg.opts = choices[reg.id]
@@ -92,6 +118,14 @@ def _init_regs(choices, ctx, pending, reg):
 
 
 def _init_pending(member):
+    """Initialize pending payment tracking for a member.
+
+    Args:
+        member: Member instance to check for pending payments
+
+    Returns:
+        dict: Mapping of registration IDs to lists of pending payment invoices
+    """
     pending = {}
     pending_que = PaymentInvoice.objects.filter(
         member_id=member.id,
@@ -106,6 +140,14 @@ def _init_pending(member):
 
 
 def _init_choices(member):
+    """Initialize registration choice tracking for a member.
+
+    Args:
+        member: Member instance to get registration choices for
+
+    Returns:
+        dict: Nested mapping of registration and question IDs to selected options
+    """
     choices = {}
     choice_que = RegistrationChoice.objects.filter(reg__member_id=member.id)
     choice_que = choice_que.select_related("option", "question")
@@ -119,10 +161,19 @@ def _init_choices(member):
 
 
 def _info_token_credit(ctx, member):
+    """Get token and credit balance information for a member.
+
+    Args:
+        ctx: Context dictionary with association ID to update
+        member: Member instance to check balances for
+
+    Side effects:
+        Updates ctx with acc_tokens and acc_credits counts
+    """
     # check if it had any token
     que = AccountingItemOther.objects.filter(
         member=member,
-        oth=AccountingItemOther.TOKEN,
+        oth=OtherChoices.TOKEN,
         assoc_id=ctx["a_id"],
     )
     ctx["acc_tokens"] = que.count()
@@ -131,13 +182,23 @@ def _info_token_credit(ctx, member):
     que_exp = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=ctx["a_id"])
     que_cre = AccountingItemOther.objects.filter(
         member=member,
-        oth=AccountingItemOther.CREDIT,
+        oth=OtherChoices.CREDIT,
         assoc_id=ctx["a_id"],
     )
     ctx["acc_credits"] = que_exp.count() + que_cre.count()
 
 
 def _info_collections(ctx, member, request):
+    """Get collection information if collections feature is enabled.
+
+    Args:
+        ctx: Context dictionary with association ID to update
+        member: Member instance to get collections for
+        request: Django request with association features
+
+    Side effects:
+        Updates ctx with collections and collection_gifts if feature enabled
+    """
     if "collection" not in request.assoc["features"]:
         return
 
@@ -146,6 +207,16 @@ def _info_collections(ctx, member, request):
 
 
 def _info_donations(ctx, member, request):
+    """Get donation history if donations feature is enabled.
+
+    Args:
+        ctx: Context dictionary with association ID to update
+        member: Member instance to get donations for
+        request: Django request with association features
+
+    Side effects:
+        Updates ctx with donations list if feature enabled
+    """
     if "donate" not in request.assoc["features"]:
         return
 
@@ -154,6 +225,17 @@ def _info_donations(ctx, member, request):
 
 
 def _info_membership(ctx, member, request):
+    """Get membership fee information if membership feature is enabled.
+
+    Args:
+        ctx: Context dictionary with association ID to update
+        member: Member instance to get membership info for
+        request: Django request with association features
+
+    Side effects:
+        Updates ctx with membership fee history, current year status,
+        pending status, and grace period information if feature enabled
+    """
     if "membership" not in request.assoc["features"]:
         return
 

@@ -20,6 +20,12 @@ jobs:
 
     env:
       CI: true
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: larpmanager
+      POSTGRES_PASSWORD: larpmanager
+      POSTGRES_DB: larpmanager_test
+      WORKERS: "4"
 
     services:
       postgres:
@@ -65,35 +71,25 @@ jobs:
         python manage.py collectstatic --noinput
         python manage.py compress
 
+    - name: Prepare dbs
+      run: |
+        bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
+
     - name: Run Django tests
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
-        # multiple parallel workers with -n
-        pytest -rs -n auto -vvv
+        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
 
-    - name: Debug contenuto cartelle test
-      run: |
-        echo "Contenuto test_videos:"
-        ls -l test_videos || echo "Empty folder or not found"
-
-        echo "Contenuto test_screenshots:"
-        ls -l test_screenshots || echo "Empty folder or not found"
-
-    - name: Upload test videos
+    - name: Upload Artifacts
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-videos
-        path: test_videos/
-
-    - name: Upload test screenshots
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-screenshots
-        path: test_screenshots/
-
+        name: playwright-artifacts
+        path: |
+          artifacts/playwright/**/*.zip
+          artifacts/playwright/**/*.png
+        if-no-files-found: ignore
   deploy:
     name: CD
     needs: test

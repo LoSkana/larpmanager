@@ -44,6 +44,11 @@ from larpmanager.models.writing import Character, Faction, FactionType
 
 
 def delete_all_in_path(path):
+    """Recursively delete all contents within a directory path.
+
+    Args:
+        path (str): Directory path to clean
+    """
     if os.path.exists(path):
         # Remove all contents inside the path
         for item in os.listdir(path):
@@ -55,10 +60,26 @@ def delete_all_in_path(path):
 
 
 def get_event_cache_all_key(run):
+    """Generate cache key for event data.
+
+    Args:
+        run: Run instance
+
+    Returns:
+        str: Cache key for event factions and characters
+    """
     return f"event_factions_characters_{run.event.slug}_{run.number}"
 
 
 def init_event_cache_all(ctx):
+    """Initialize complete event cache with characters, factions, and traits.
+
+    Args:
+        ctx: Context dictionary containing event and feature data
+
+    Returns:
+        dict: Cached event data including characters, factions, and traits
+    """
     res = {}
     get_event_cache_characters(ctx, res)
 
@@ -71,6 +92,12 @@ def init_event_cache_all(ctx):
 
 
 def get_event_cache_characters(ctx, res):
+    """Cache character data for an event including assignments and registrations.
+
+    Args:
+        ctx: Context dictionary with event data
+        res: Results dictionary to populate with character data
+    """
     res["chars"] = {}
     mirror = "mirror" in ctx["features"]
 
@@ -94,7 +121,7 @@ def get_event_cache_characters(ctx, res):
         data["fields"] = {}
         search_player(ch, data, ctx)
         if hide_uncasted_characters and data["player_id"] == 0:
-            continue
+            data["hide"] = True
 
         res["chars"][int(data["number"])] = data
 
@@ -161,7 +188,7 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = str(question_id)
-        if config not in ctx[f"show_{feature_name}"] and "show_all" not in ctx:
+        if "show_all" not in ctx and config not in ctx[f"show_{feature_name}"]:
             continue
         question_visible.append(question_id)
 
@@ -519,12 +546,12 @@ def reset_event_cache_all_runs(event):
     for r in event.runs.all():
         reset_run(r)
     # reset also runs of child events
-    for child in Event.objects.filter(parent=event):
+    for child in Event.objects.filter(parent=event).prefetch_related("runs"):
         for r in child.runs.all():
             reset_run(r)
     if event.parent:
         # reset also runs of sibling events
-        for child in Event.objects.filter(parent=event.parent):
+        for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
             for r in child.runs.all():
                 reset_run(r)
         # reset also runs of parent event

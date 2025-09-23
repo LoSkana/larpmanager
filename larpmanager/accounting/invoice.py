@@ -23,6 +23,7 @@ import math
 from io import StringIO
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter
@@ -30,6 +31,23 @@ from larpmanager.utils.tasks import notify_admins
 
 
 def invoice_verify(request, ctx, csv_upload):
+    """Verify and match payments from CSV upload against pending invoices.
+
+    Processes a CSV file containing payment data and matches entries against
+    pending payment invoices using causal codes, registration codes, or transaction IDs.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary containing todo list of pending invoices
+        csv_upload: Uploaded CSV file containing payment data
+
+    Returns:
+        int: Number of successfully verified payments
+
+    Note:
+        CSV format expected: [amount, causal, ...] where amount uses dot for thousands
+        and comma for decimal separator
+    """
     content = csv_upload.read().decode("utf-8")
     delim = detect_delimiter(content)
     csv_data = csv.reader(StringIO(content), delimiter=delim)
@@ -74,36 +92,56 @@ def invoice_verify(request, ctx, csv_upload):
 
             counter += 1
 
-            el.verified = True
-            el.save()
+            with transaction.atomic():
+                el.verified = True
+                el.save()
 
     return counter
 
 
 def invoice_received_money(cod, gross=None, fee=None, txn_id=None):
+    """Process received payment for a payment invoice.
+
+    Updates payment invoice status and financial details when money is received
+    from payment processors like PayPal or bank transfers.
+
+    Args:
+        cod: Invoice code to identify the payment
+        gross: Optional gross amount received
+        fee: Optional processing fee charged
+        txn_id: Optional transaction ID from payment processor
+
+    Returns:
+        bool: True if payment was processed successfully, None if invalid invoice
+
+    Side effects:
+        Updates invoice status to CHECKED and saves financial details
+        Sends admin notification for invalid payment codes
+    """
     try:
         invoice = PaymentInvoice.objects.get(cod=cod)
     except ObjectDoesNotExist:
         notify_admins("invalid payment", "wrong invoice: " + cod)
         return
 
-    if gross:
-        invoice.mc_gross = gross
+    with transaction.atomic():
+        if gross:
+            invoice.mc_gross = gross
 
-    if fee:
-        invoice.mc_fee = fee
+        if fee:
+            invoice.mc_fee = fee
 
-    if txn_id:
-        invoice.txn_id = txn_id
+        if txn_id:
+            invoice.txn_id = txn_id
 
-    if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return True
+        if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+            return True
 
-    # ~ invoice.mc_gross = ipn_obj.mc_gross
-    # ~ invoice.mc_fee = ipn_obj.mc_fee
-    # ~ invoice.txn_id = ipn_obj.txn_id
-    invoice.status = PaymentStatus.CHECKED
-    invoice.save()
+        # ~ invoice.mc_gross = ipn_obj.mc_gross
+        # ~ invoice.mc_fee = ipn_obj.mc_fee
+        # ~ invoice.txn_id = ipn_obj.txn_id
+        invoice.status = PaymentStatus.CHECKED
+        invoice.save()
 
     # print(invoice)
 

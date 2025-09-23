@@ -34,9 +34,8 @@ from imagekit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationPlan
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
-from larpmanager.models.larpmanager import LarpManagerPlan
 from larpmanager.models.member import Member
 from larpmanager.models.utils import (
     UploadToPathAndRename,
@@ -80,18 +79,12 @@ class Event(BaseModel):
         help_text=_("Names of the collaborators who are organizing it"),
     )
 
-    description_short = HTMLField(
-        max_length=1000,
-        blank=True,
-        null=True,
-        verbose_name=_("Short description"),
-    )
-
     description = HTMLField(
-        max_length=6000,
+        max_length=10000,
         blank=True,
-        verbose_name=_("Long description"),
-        help_text=_("Will be shown in the event page"),
+        default="",
+        verbose_name=_("Description"),
+        help_text=_("Event description displayed on the event page"),
     )
 
     genre = models.CharField(
@@ -144,8 +137,8 @@ class Event(BaseModel):
 
     max_pg = models.IntegerField(
         default=0,
-        verbose_name=_("Max players"),
-        help_text=_("Maximum number of player spots (0 = unlimited)"),
+        verbose_name=_("Max participants"),
+        help_text=_("Maximum number of participants spots (0 = unlimited)"),
     )
 
     max_filler = models.IntegerField(
@@ -281,7 +274,6 @@ class Event(BaseModel):
             "slug",
             "name",
             "tagline",
-            "description_short",
             "description",
             "website",
             "genre",
@@ -482,7 +474,7 @@ class Run(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
 
-    number = models.IntegerField(help_text=_("Number of event run"))
+    number = models.IntegerField()
 
     start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 
@@ -510,7 +502,7 @@ class Run(BaseModel):
 
     paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    plan = models.CharField(max_length=1, choices=LarpManagerPlan.choices, blank=True, null=True)
+    plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
 
     class Meta:
         constraints = [
@@ -527,6 +519,12 @@ class Run(BaseModel):
         if self.number and self.number != 1:
             s = f"{s} #{self.number}"
         return s
+
+    def get_slug(self):
+        slug = self.event.slug
+        if self.number > 1:
+            slug += f"-{self.number}"
+        return slug
 
     def get_where(self):
         # noinspection PyUnresolvedReferences

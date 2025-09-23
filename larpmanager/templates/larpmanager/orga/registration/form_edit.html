@@ -16,12 +16,11 @@
     {{ form.page_info }}
 {% endblock info %}
 {% block content %}
-    {% include "elements/form/sections.html" %}
+    {% include "elements/form/main.html" %}
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
-        {% include "elements/header/orga.html" %}
-        <table id="registration_options"
-               class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
+        {% include "elements/header/edit.html" %}
+        <table id="registration_options" class="go_datatable writing ordering_arrow">
             <thead>
                 <tr>
                     <th></th>
@@ -37,7 +36,7 @@
                 {% for el in list %}
                     <tr id="{{ el.id }}">
                         <td>
-                            <a href="{% url 'orga_registration_options_edit' run.event.slug run.number el.id %}">
+                            <a href="{% url 'orga_registration_options_edit' run.get_slug el.id %}">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
@@ -51,14 +50,14 @@
                         </td>
                         <td>
                             {% if not forloop.first %}
-                                <a href="{% url 'orga_registration_options_order' run.event.slug run.number el.id 0 %}">
+                                <a href="{% url 'orga_registration_options_order' run.get_slug el.id 0 %}">
                                     <i class="fa-solid fa-arrow-up"></i>
                                 </a>
                             {% endif %}
                         </td>
                         <td>
                             {% if not forloop.last %}
-                                <a href="{% url 'orga_registration_options_order' run.event.slug run.number el.id 1 %}">
+                                <a href="{% url 'orga_registration_options_order' run.get_slug el.id 1 %}">
                                     <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             {% endif %}
@@ -73,7 +72,7 @@
 {% endblock content %}
 {% block js %}
     <script>
-    var newUrl = '{% url 'orga_registration_options_new' run.event.slug run.number num %}';
+    var newUrl = '{% url 'orga_registration_options_new' run.get_slug num %}';
 
     {% include "elements/question_edit.js" %}
 

@@ -188,9 +188,9 @@ TINYMCE_DEFAULT_CONFIG = {
     'license_key': 'gpl',
     'promotion': False,
 
-    'images_upload_url': '/upload_image/',
+    'images_upload_url': '/upload_media/',
     'automatic_uploads': True,
-    'file_picker_types': 'image',
+    'file_picker_types': 'image media',
     'paste_data_images': False,
 }
 
@@ -294,8 +294,8 @@ IGNORABLE_PROFILER_URLS = [
 # PAYMENT SETTINGS
 PAYMENT_SETTING_FOLDER = 'main/payment_settings/'
 
-RECAPTCHA_PUBLIC_KEY = '???'
-RECAPTCHA_PRIVATE_KEY = '???'
+RECAPTCHA_PUBLIC_KEY = ''
+RECAPTCHA_PRIVATE_KEY = ''
 
 # max size of snippet
 FIELD_SNIPPET_LIMIT = 150

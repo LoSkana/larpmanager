@@ -4,9 +4,12 @@
     {% trans "Pre-Register" %}
 {% endblock title %}
 {% block content %}
-    <h4>
-        <a href="#" class="my_toggle" tog='detail'><b>{% trans "Show explanation" %}</b></a>
-    </h4>
+    <div class="detail">
+        <p>{% trans "Registrations for this event are not open yet, but you can pre-register" %}.</p>
+        <p>
+            {% trans "Pre-registration is free. It does not guarantee a spot, but gives you priority when registration opens" %}.
+        </p>
+    </div>
     {% if event %}
         <form action="{{ request.path }}"  method="post">
             {% csrf_token %}
@@ -18,23 +21,6 @@
         </form>
         <hr />
     {% endif %}
-    <div class="hide detail">
-        <hr />
-        <h2>{% trans "Operation" %}</h2>
-        <p>
-            {% trans "If you like or are interested in an event, you can <b>pre-register</b>" %}.
-        </p>
-        <p>
-            {% trans "This <b>is</b> not binding, and <b>does</b> not automatically secure you a place at the event, but you will be offered a preferential registration before the public opening of registration" %}.
-        </p>
-        <p>
-            {% trans "For our part, we will use pre-registrations as a measure of how much an event is desired. If you want a new run of an event, spread the voice and invites others to pre-register to it" %}!
-        </p>
-        <p>
-            {% trans "We only ask you to indicate a <b>order</b> of preference for the your pre-registrations (imagining you have to choose which one to play, indicates in what order you want to play them)" %}.
-        </p>
-        <p>{% trans "If you wish, you can delete past pre-registrations" %}.</p>
-    </div>
     <h2>{% trans "Pre-registration" %}</h2>
     <table class="mob">
         <tr>

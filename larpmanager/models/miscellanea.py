@@ -357,28 +357,40 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class Inventory(BaseModel):
-    cod = models.CharField(max_length=5)
+class WarehouseContainer(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
-    name = models.CharField(max_length=500, help_text=_("Briefly describe what the box contains"))
+    position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, default="")
 
-    shelf = models.CharField(max_length=5)
+    description = models.CharField(max_length=1000, blank=True, default="")
 
-    rack = models.CharField(max_length=5)
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
-    description = models.TextField(
-        help_text=_(
-            "Fully describe what the box contains, especially number of items, main features, state of preservation."
-        )
-    )
 
-    tag = models.CharField(max_length=100, help_text=_("List of content-related tags"))
+class WarehouseTag(BaseModel):
+    name = models.CharField(max_length=100)
+
+    description = models.CharField(max_length=1000, blank=True, default="")
+
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
+
+
+class WarehouseItem(BaseModel):
+    name = models.CharField(max_length=100)
+
+    quantity = models.IntegerField(blank=True, null=True)
+
+    description = models.CharField(max_length=1000, blank=True, default="")
+
+    container = models.ForeignKey(WarehouseContainer, on_delete=models.CASCADE, related_name="items")
+
+    tags = models.ManyToManyField(WarehouseTag, related_name="items", blank=True)
 
     photo = models.ImageField(
         max_length=500,
-        upload_to=UploadToPathAndRename("inventory/"),
+        upload_to=UploadToPathAndRename("warehouse/"),
         verbose_name=_("Photo"),
-        help_text=_("Photo (clear and understandable) of the object"),
+        help_text=_("Photo of the object"),
         null=True,
         blank=True,
     )
@@ -390,48 +402,76 @@ class Inventory(BaseModel):
         options={"quality": 80},
     )
 
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
+
+    @classmethod
+    def get_optional_fields(cls):
+        return ["quantity"]
+
+
+class WarehouseMovement(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
+
+    item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="movements")
+
+    notes = models.CharField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        help_text=_("Where it has been placed? When it is expected to come back?"),
+    )
+
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
+
+    completed = models.BooleanField(default=False)
+
+
+class WarehouseArea(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Name of event area"))
+
+    position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, default="")
+
+    description = models.CharField(max_length=1000, blank=True, default="")
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
+
+
+class WarehouseItemAssignment(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
+
+    item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="assignments")
+
+    area = models.ForeignKey(WarehouseArea, on_delete=models.CASCADE)
+
+    notes = models.CharField(max_length=1000, blank=True, default="")
+
+    loaded = models.BooleanField(default=False)
+
+    deployed = models.BooleanField(default=False)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
     class Meta:
-        abstract = True
+        constraints = [
+            UniqueConstraint(
+                fields=["area", "item", "deleted"],
+                name="unique_warehouse_item_assignment_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["area", "item"],
+                condition=Q(deleted=None),
+                name="unique_warehouse_item_assignment_without_optional",
+            ),
+        ]
 
 
-class InventoryBox(Inventory):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="boxes")
-
-
-class InventoryBoxHistory(Inventory):
-    box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="histories")
-
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="box_histories")
-
-
-class InventoryBoxPhoto(BaseModel):
-    box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="photos")
-
-    photo = models.ImageField(
-        max_length=500,
-        upload_to=UploadToPathAndRename("albums/"),
-        verbose_name=_("Photo"),
-        help_text=_("Photo (clear and understandable) of the object"),
-    )
-
-    thumb = ImageSpecField(
-        source="photo",
-        processors=[ResizeToFit(300)],
-        format="JPEG",
-        options={"quality": 80},
-    )
+class ShuttleStatus(models.TextChoices):
+    OPEN = "0", _("Waiting list")
+    COMING = "1", _("We're coming")
+    DONE = "2", _("Arrived safe and sound")
 
 
 class ShuttleService(BaseModel):
-    OPEN = "0"
-    COMING = "1"
-    DONE = "2"
-    STATUS_CHOICES = [
-        (OPEN, _("Waiting list")),
-        (COMING, _("We're coming")),
-        (DONE, _("Arrived safe and sound")),
-    ]
-
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
 
     passengers = models.IntegerField(
@@ -479,7 +519,7 @@ class ShuttleService(BaseModel):
         null=True,
     )
 
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=OPEN, db_index=True)
+    status = models.CharField(max_length=1, choices=ShuttleStatus.choices, default=ShuttleStatus.OPEN, db_index=True)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
@@ -487,47 +527,41 @@ class ShuttleService(BaseModel):
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
+class ProblemStatus(models.TextChoices):
+    OPEN = "o", "1 - OPEN"
+    WORKING = "w", "2 - WORKING"
+    CLOSED = "c", "3 - CLOSED"
+
+
+class ProblemSeverity(models.TextChoices):
+    RED = "r", "1 - RED"
+    ORANGE = "o", "2 - ORANGE"
+    YELLOW = "y", "3 - YELLOW"
+    GREEN = "g", "4 - GREEN"
+
+
 class Problem(BaseModel):
-    RED = "r"
-    ORANGE = "o"
-    YELLOW = "y"
-    GREEN = "g"
-    SEVERITY_CHOICES = [
-        (RED, "1 - RED"),
-        (ORANGE, "2 - ORANGE"),
-        (YELLOW, "3 - YELLOW"),
-        (GREEN, "4 - GREEN"),
-    ]
-
-    OPEN = "o"
-    WORKING = "w"
-    CLOSED = "c"
-    STATUS_CHOICES = [
-        (OPEN, "1 - OPEN"),
-        (WORKING, "2 - WORKING"),
-        (CLOSED, "3 - CLOSED"),
-    ]
-
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
     number = models.IntegerField()
 
     severity = models.CharField(
         max_length=1,
-        choices=SEVERITY_CHOICES,
-        default=GREEN,
+        choices=ProblemSeverity.choices,
+        default=ProblemSeverity.GREEN,
         verbose_name=_("Severity"),
         help_text=_(
-            "Indicate severity: RED (risks ruining the game for more than half of the "
-            "players), ORANGE (risks ruining the game for more than ten players),  YELLOW "
-            "(risks ruining the game for a few players), GREEN (more than  problems, finesses "
+            "Indicate severity: RED (risks ruining the event for more than half of the "
+            "participants), ORANGE (risks ruining the event for more than ten participants),  YELLOW "
+            "(risks ruining the event for a few participants), GREEN (more than  problems, finesses "
             "to be fixed)"
         ),
     )
 
     status = models.CharField(
         max_length=1,
-        choices=STATUS_CHOICES,
-        default=OPEN,
+        choices=ProblemStatus.choices,
+        default=ProblemStatus.OPEN,
         verbose_name=_("Status"),
         help_text=_(
             "When putting in WORKING, indicate in the comments the specific actions that  are "
@@ -548,12 +582,12 @@ class Problem(BaseModel):
 
     what = models.TextField(
         verbose_name=_("What"),
-        help_text=_("Describe exactly what risks it poses to the game"),
+        help_text=_("Describe exactly what risks it poses to the event"),
     )
 
     who = models.TextField(
         verbose_name=_("Who"),
-        help_text=_("Describe exactly which players are involved"),
+        help_text=_("Describe exactly which participants are involved"),
     )
 
     assigned = models.CharField(max_length=100, help_text=_("Who takes it upon themselves to solve it"))

@@ -43,7 +43,7 @@
         </form>
         <hr />
     {% endif %}
-    {% include "elements/form/sections.html" %}
+    {% include "elements/form/main.html" %}
 {% endblock content %}
 {% block js %}
     {% include "elements/form/max_length.js" %}
@@ -252,12 +252,6 @@
 
     }
 
-    function jump_to(el) {
-        const yOffset = -160;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({top: y, behavior: 'smooth'});
-    }
-
     function check_mandatory() {
 
         for (var ix = 0; ix < mandatory.length; ix++) {
@@ -282,7 +276,7 @@
             el.next('p').remove();
             if (empty) {
                 el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
-                jump_to(document.getElementById(k));
+                window.jump_to('#' + k);
                 return false;
             }
         }
@@ -292,9 +286,9 @@
 
     {% if avatar_form %}
 
-        var upload = '{% url 'character_profile_upload' event.slug run.number character.number %}';
-        var rotate_l = '{% url 'character_profile_rotate' event.slug run.number character.number 1 %}';
-        var rotate_r = '{% url 'character_profile_rotate' event.slug run.number character.number 0 %}';
+        var upload = '{% url 'character_profile_upload' run.get_slug character.number %}';
+        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.number 1 %}';
+        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.number 0 %}';
 
         function profile_update(src) {
             timestamp = (new Date()).getTime();

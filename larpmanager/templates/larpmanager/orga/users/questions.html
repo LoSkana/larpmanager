@@ -4,14 +4,13 @@
     {% trans "Questions" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the questions submitted by players" %}
+    {% trans "This page shows the questions submitted by participants" %}
 {% endblock info %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
     </p>
-    <table id="questions_open"
-           class="{% if not interface_old %}go_datatable{% endif %}">
+    <table id="questions_open" class="go_datatable">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -30,14 +29,14 @@
                     <td>{{ el.text }}</td>
                     <td>
                         {% if el.attachment %}
-                            &nbsp;&nbsp;&nbsp;<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                            <a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_answer' run.event.slug run.number el.member_id %}">{% trans "Answer" %}</a>
+                        <a href="{% url 'orga_questions_answer' run.get_slug el.member_id %}">{% trans "Answer" %}</a>
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_close' run.event.slug run.number el.member_id %}">{% trans "Close" %}</a>
+                        <a href="{% url 'orga_questions_close' run.get_slug el.member_id %}">{% trans "Close" %}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -45,8 +44,7 @@
     </table>
     <div class="hide closed">
         <h2>Domande già risposte</h2>
-        <table id="questions_closed"
-               class="{% if not interface_old %}go_datatable{% endif %}">
+        <table id="questions_closed" class="go_datatable">
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>
@@ -62,7 +60,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'orga_questions_answer' run.event.slug run.number el.member.id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'orga_questions_answer' run.get_slug el.member.id %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

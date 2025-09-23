@@ -4,15 +4,14 @@
     {% trans "Collections" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the collections opened by players" %};
+    {% trans "This page shows the collections opened by participants" %};
     {% trans "You can update them by indicating the recipient and assigning the contributed money" %}
 {% endblock info %}
 {% block content %}
     <p>
         {% trans "Show collections" %} <a href="#" class="my_toggle" tog='done'>{% trans "already delivered" %}</a>
     </p>
-    <table id="collections"
-           class="{% if not interface_old %}go_datatable{% endif %}">
+    <table id="collections" class="go_datatable">
         <thead>
             <tr>
                 <th></th>

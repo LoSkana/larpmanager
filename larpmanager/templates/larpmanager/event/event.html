@@ -33,8 +33,6 @@
         </p>
         <hr />
     {% endif %}
-    <p>{{ data.description_short | safe }}</p>
-    <hr />
     {% if data.description %}
         <p>{{ data.description | safe }}</p>
         <hr />
@@ -57,7 +55,7 @@
         </p>
         <hr />
     {% endif %}
-    <h2>{% trans "Next runs" %}</h2>
+    <h2>{% trans "Next sessions" %}</h2>
     {% if coming %}
         <div class="no-more-tables">
             <table class="mob">
@@ -72,7 +70,7 @@
                     <tr>
                         <td data-title="{% trans "Name" %}">
                             <h3>
-                                <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
+                                <a href="{% url 'gallery' run.get_slug %}">{{ run.search }}</a>
                             </h3>
                         </td>
                         <td data-title="{% trans "Date" %}">
@@ -87,10 +85,10 @@
         <table class="mob">
             <tr>
                 <th>
-                    {% trans "There are no new runs scheduled at this time" %}.
+                    {% trans "There are no new sessions scheduled at this time" %}.
                     {% if features.pre_register %}
                         <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
-                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration" %}!
+                        {% trans "You will be notified when a new session is organized, and you will have fast-track on registration" %}!
                     </th>
                 </tr>
             {% endif %}
@@ -100,7 +98,7 @@
         <br />
         <div class="no-more-tables">
             <h2>
-                <a class="my_toggle" tog="past-runs" href="#">{% trans "Past runs" %}</a>
+                <a class="my_toggle" tog="past-runs" href="#">{% trans "Past sessions" %}</a>
             </h2>
             <table class="hide past-runs">
                 <thead>
@@ -120,11 +118,11 @@
                             <i>{{ run.pretty_dates }} </i>
                         </td>
                         <td data-title="{% trans "Link" %}">
-                            <a href="{% url 'gallery' event.slug run.number %}">{% trans "Gallery" %}</a>
+                            <a href="{% url 'gallery' run.get_slug %}">{% trans "Gallery" %}</a>
                         </td>
                         <td data-title="{% trans "Character" %}">
                             {% if run.reg and run.reg.character %}
-                                <a href="{% url 'character' event.slug run.number run.reg.character.number %}">{{ run.reg.display_character }}</a>
+                                <a href="{% url 'character' run.get_slug run.reg.character.number %}">{{ run.reg.display_character }}</a>
                             {% endif %}
                         </td>
                     </tr>

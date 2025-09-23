@@ -37,7 +37,12 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
 )
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import QuestionStatus, QuestionType, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import (
+    QuestionStatus,
+    RegistrationOption,
+    RegistrationQuestion,
+    RegistrationQuestionType,
+)
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -61,6 +66,8 @@ class RegistrationForm(BaseRegistrationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.questions = []
+        self.tickets_map = {}
         run = self.params["run"]
         event = run.event
         self.event = event
@@ -70,11 +77,9 @@ class RegistrationForm(BaseRegistrationForm):
 
         self.ticket = None
 
-        self.init_quotas(event, run)
-
         reg_counts = get_reg_counts(run)
 
-        self.init_ticket(event, reg_counts, run)
+        ticket_help = self.init_ticket(event, reg_counts, run)
 
         self.waiting_check = (
             self.instance
@@ -84,15 +89,19 @@ class RegistrationForm(BaseRegistrationForm):
             and "waiting" in run.status
         )
 
+        self.init_quotas(event, run)
+
         self.init_additionals()
 
         self.init_pay_what(run)
 
-        self.init_surcharge(event, run)
+        self.init_surcharge(event)
 
-        self.init_questions(event, reg_counts, run)
+        self.init_questions(event, reg_counts)
 
         self.init_bring_friend()
+
+        self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket):
         """
@@ -116,10 +125,7 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         self.fields["additionals"] = forms.ChoiceField(
-            required=False,
-            choices=[(1, "1"), (2, "2"), (3, "3")],
-            label=_("Additional tickets"),
-            help_text=_("Set if you want to reserve tickets in addition to your"),
+            required=False, choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
         )
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
@@ -132,8 +138,8 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         mes = _(
-            "Enter here the 'bring a friend' code given to you by an already registered "
-            "player, and you can receive a discount on your membership of %(amount)d!"
+            "Enter the “bring a friend” code provided by a registered participant "
+            "to receive a %(amount)d discount on your registration fee"
         )
         self.fields["bring_friend"] = forms.CharField(
             required=False,
@@ -142,11 +148,11 @@ class RegistrationForm(BaseRegistrationForm):
             help_text=mes % {"amount": self.params.get("bring_friend_discount_from", 0)},
         )
 
-    def init_questions(self, event, reg_counts, run):
+    def init_questions(self, event, reg_counts):
+        self.tickets_map = {}
         if self.waiting_check:
             return
         self._init_reg_question(self.instance, event)
-        self.tickets_map = {}
         for q in self.questions:
             self.init_question(q, reg_counts)
         self.tickets_map = json.dumps(self.tickets_map)
@@ -156,6 +162,8 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         k = self._init_field(q, reg_counts, orga=False)
+        if not k:
+            return
 
         if q.profile:
             self.profiles["id_" + k] = q.profile_thumb.url
@@ -170,18 +178,13 @@ class RegistrationForm(BaseRegistrationForm):
             if tm:
                 self.tickets_map[k] = tm
 
-    def init_surcharge(self, event, run):
+    def init_surcharge(self, event):
         # date surcharge
         surcharge = get_date_surcharge(self.instance, event)
         if surcharge == 0:
             return
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
-        self.fields["character"] = forms.ChoiceField(
-            required=True,
-            choices=ch,
-            label=_("Surcharge"),
-            help_text=_("Registration surcharge"),
-        )
+        self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
     def init_pay_what(self, run):
         if "pay_what_you_want" not in self.params["features"]:
@@ -190,11 +193,7 @@ class RegistrationForm(BaseRegistrationForm):
         if "waiting" in run.status:
             return
 
-        lbl = run.event.get_config("pay_what_you_want_label", _("Free donation"))
-        help_text = run.event.get_config("pay_what_you_want_descr", _("Freely indicate the amount of your donation"))
-        self.fields["pay_what"] = forms.IntegerField(
-            min_value=0, max_value=1000, label=lbl, help_text=help_text, required=False
-        )
+        self.fields["pay_what"] = forms.IntegerField(min_value=0, max_value=1000, required=False)
         if self.instance.pk and self.instance.pay_what:
             self.initial["pay_what"] = int(self.instance.pay_what)
         else:
@@ -202,6 +201,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     def init_quotas(self, event, run):
         quota_chs = []
+
         if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
             qt_label = [
                 _("Single payment"),
@@ -217,19 +217,16 @@ class RegistrationForm(BaseRegistrationForm):
                     if el.surcharge > 0:
                         label += f" ({el.surcharge}€)"
                     quota_chs.append((el.quotas, label))
+
         if not quota_chs:
             quota_chs.append((1, _("Default")))
-        ht = _("The number of payments to split the fee")
-        ht += " " + _("The ticket will be divided equally in the number of quotas indicated") + "."
-        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration") + "."
-        self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs, label=_("Quotas"), help_text=ht)
+
+        self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs)
         if len(quota_chs) == 1:
             self.fields["quotas"].widget = forms.HiddenInput()
             self.initial["quotas"] = quota_chs[0][0]
         if self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
-            # print(self.initial['quotas'])
-            # print(self.instance.quotas)
 
     def init_ticket(self, event, reg_counts, run):
         # check registration tickets options
@@ -237,26 +234,21 @@ class RegistrationForm(BaseRegistrationForm):
 
         # get ticket names / description
         ticket_choices = []
-        ticket_help = _("Your registration ticket")
+        ticket_help = ""
         for r in tickets:
             name = r.get_form_text(run, cs=self.params["currency_symbol"])
             ticket_choices.append((r.id, name))
             if r.description:
                 ticket_help += f"<p><b>{r.name}</b>: {r.description}</p>"
 
-        self.fields["ticket"] = forms.ChoiceField(
-            required=True, choices=ticket_choices, label=_("Ticket"), help_text=ticket_help
-        )
-        # ~ if len(tickets) == 1:
-        # ~ self.fields['ticket'].widget = forms.HiddenInput()
-        # ~ self.initial['ticket'] = tickets[0].id
-        # ~ self.ticket_price = tickets[0].price
-        # to remove
+        self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
+
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = self.instance.ticket.id
         elif "ticket" in self.params and self.params["ticket"]:
             self.initial["ticket"] = self.params["ticket"]
-            # print(self.initial['ticket'])
+
+        return ticket_help
 
     def has_ticket(self, tier):
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == tier
@@ -332,33 +324,45 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def skip_ticket_type(self, event, run, ticket):
+        result = False
+
+        # skip it ticket already selected
         if "ticket" in self.params:
-            return False
+            result = True
+
+        # do not show new player tickets if already played
+        elif ticket.tier == TicketTier.NEW_PLAYER:
+            past_regs = Registration.objects.filter(cancellation_date__isnull=True)
+            past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
+            past_regs = past_regs.filter(member=self.params["member"]).exclude(run=run)
+            if past_regs.exists():
+                result = True
 
         # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
-        if ticket.tier == TicketTier.WAITING:
+        elif ticket.tier == TicketTier.WAITING:
             if "waiting" not in run.status and not self.has_ticket(TicketTier.WAITING):
-                return True
+                result = True
 
+        # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
         elif ticket.tier == TicketTier.FILLER:
-            filler_alway = event.get_config("filler_alway", False)
+            filler_alway = event.get_config("filler_always", False)
             if filler_alway:
-                # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
                 if (
                     "filler" not in run.status
                     and "primary" not in run.status
                     and not self.has_ticket(TicketTier.FILLER)
                 ):
-                    return True
-            # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
+                    result = True
+
+            # Show Filler Tickets only if you have been fillers, or if the player
             elif "filler" not in run.status and not self.has_ticket(TicketTier.FILLER):
-                return True
+                result = True
 
         # Show Primary Tickets only if he was primary, or if the player is registered
         elif "primary" not in run.status and not self.has_ticket_primary():
-            return True
+            result = True
 
-        return False
+        return result
 
     def clean(self):
         form_data = super().clean()
@@ -395,7 +399,7 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
-    page_info = _("This page allows you to add or edit a signup to this run")
+    page_info = _("This page allows you to add or edit a signup to this event")
 
     page_title = _("Registrations")
 
@@ -456,12 +460,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         self.init_pay_what(reg_section)
 
-        # ## CHARACTERS
+        # CHARACTERS
         if "character" in self.params["features"]:
             self.init_character(char_section)
-
-        # ## REGISTRATION OPTIONS
-        self.init_orga_fields(main_section)
 
         if "unique_code" in self.params["features"]:
             self.sections["id_special_cod"] = add_section
@@ -469,26 +470,32 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         else:
             self.delete_field("special_cod")
 
+        # REGISTRATION OPTIONS
+        keys = self.init_orga_fields(main_section)
+        all_fields = set(self.fields.keys()) - {field.replace("id_", "") for field in self.sections.keys()}
+        for lbl in all_fields - set(keys):
+            self.delete_field(lbl)
+
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
 
     def init_additionals(self, reg_section):
-        if "additional_tickets" in self.params["features"]:
-            self.sections["id_additionals"] = reg_section
-        else:
-            self.delete_field("additionals")
+        if "additional_tickets" not in self.params["features"]:
+            return
+
+        self.sections["id_additionals"] = reg_section
 
     def init_pay_what(self, reg_section):
-        if "pay_what_you_want" in self.params["features"]:
-            self.sections["id_pay_what"] = reg_section
-            self.fields["pay_what"].label = self.params["run"].event.get_config(
-                "pay_what_you_want_label", _("Free donation")
-            )
-            self.fields["pay_what"].help_text = self.params["run"].event.get_config(
-                "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
-            )
-        else:
-            self.delete_field("pay_what")
+        if "pay_what_you_want" not in self.params["features"]:
+            return
+
+        self.sections["id_pay_what"] = reg_section
+        self.fields["pay_what"].label = self.params["run"].event.get_config(
+            "pay_what_you_want_label", _("Free donation")
+        )
+        self.fields["pay_what"].help_text = self.params["run"].event.get_config(
+            "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
+        )
 
     def init_ticket(self, reg_section):
         tickets = [
@@ -503,7 +510,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def init_quotas(self, reg_section):
         if "reg_quotas" not in self.params["features"]:
-            self.delete_field("quotas")
             return
 
         quota_chs = [(1, "Pagamento unico"), (2, "Due quote"), (3, "Tre quote")]
@@ -584,7 +590,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             redeem_code__isnull=True,
         ):
             if reg.pk != self.instance.pk:
-                raise ValidationError("User already has a registration for this run!")
+                raise ValidationError("User already has a registration for this event!")
 
         return data
 
@@ -618,7 +624,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if len(qs) > 0:
                 el = qs.first()
                 raise ValidationError(
-                    f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this run!"
+                    f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this event!"
                 )
 
         return data
@@ -646,7 +652,7 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
-    page_info = _("This page allows you to add or change the types of ticket with which players can register")
+    page_info = _("This page allows you to add or change the types of ticket with which participants can register")
 
     page_title = _("Tickets")
 
@@ -681,6 +687,7 @@ class OrgaRegistrationTicketForm(MyForm):
             TicketTier.FILLER: "filler",
             TicketTier.PATRON: "reduced",
             TicketTier.REDUCED: "reduced",
+            TicketTier.NEW_PLAYER: "new_player",
         }
         ticket_configs = {
             TicketTier.STAFF: "staff",
@@ -736,7 +743,7 @@ class OrgaRegistrationQuestionForm(MyForm):
 
         self.fields["factions"].widget.set_event(self.params["event"])
 
-        self.fields["typ"].choices = [choice for choice in QuestionType.choices if len(choice[0]) == 1]
+        self._init_type()
 
         if "reg_que_sections" not in self.params["features"]:
             self.delete_field("section")
@@ -779,6 +786,32 @@ class OrgaRegistrationQuestionForm(MyForm):
             f"<b>{choice.label}</b>: {text}" for choice, text in help_texts.items() if choice.value in visible_choices
         )
 
+    def _init_type(self):
+        # Add type of registration question to the available types
+        que = self.params["event"].get_elements(RegistrationQuestion)
+        already = list(que.values_list("typ", flat=True).distinct())
+
+        if self.instance.pk and self.instance.typ:
+            already.remove(self.instance.typ)
+            # prevent cancellation if one of the default types
+            self.prevent_canc = len(self.instance.typ) > 1
+
+        choices = []
+        for choice in RegistrationQuestionType.choices:
+            # if it is related to a feature
+            if len(choice[0]) > 1:
+                # check it is not already present
+                if choice[0] in already:
+                    continue
+
+                # check the feature is active
+                elif choice[0] not in ["ticket"]:
+                    if choice[0] not in self.params["features"]:
+                        continue
+
+            choices.append(choice)
+        self.fields["typ"].choices = choices
+
 
 class OrgaRegistrationOptionForm(MyForm):
     page_info = _("This page allows you to add or edit an option in a sign up form question")
@@ -799,7 +832,7 @@ class OrgaRegistrationOptionForm(MyForm):
 
 class OrgaRegistrationQuotaForm(MyForm):
     page_info = _(
-        "This page allows you to add or modify the dynamic instalments with which the player can split the payment"
+        "This page allows you to add or modify the dynamic instalments with which the participant can split the payment"
     )
 
     page_title = _("Dynamic rates")
@@ -810,7 +843,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay")
+    page_info = _("This page allows you to add or change the fixed instalments in which a participant must pay")
 
     page_title = _("Fixed instalments")
 

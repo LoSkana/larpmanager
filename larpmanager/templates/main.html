@@ -18,14 +18,9 @@
                             <a href="{% url 'home' %}" title="Home">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'discover' %}"
-                               title="Discover the platform"
-                               {% if request.resolver_match.url_name == "discover" %}class="sel"{% endif %}>Discover</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'tutorials' %}"
-                               title="Learn how the system works"
-                               {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Tutorials</a>
+                            <a href="{% url 'guides' %}"
+                               title="See practical examples of the system"
+                               {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Guides</a>
                         </li>
                         <li>
                             <a href="{% url 'usage' %}"
@@ -41,6 +36,11 @@
                             <a href="{% url 'demo' %}"
                                title="Test freely the system"
                                {% if request.resolver_match.url_name == "demo" %}class="sel"{% endif %}>Demo</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'contact' %}"
+                               title="Contact us"
+                               {% if request.resolver_match.url_name == "contact" %}class="sel"{% endif %}>Contact</a>
                         </li>
                         <li>
                             <a id="join"
@@ -60,20 +60,7 @@
                 {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
             {% if contact_form %}
                 <h3>Contact us</h3>
-                <form class="contact"
-                      action="{% url 'contact' %}"
-                      method="post"
-                      id="cnt-form">
-                    {% csrf_token %}
-                    <div class="row gtr-50 gtr-uniform">
-                        <p>Would you like to get in touch with us?</p>
-                        {{ contact_form.as_p }}
-                        <p>
-                            <!-- empty space -->
-                        </p>
-                        <input id="cnt" type="submit" value="Contact us" class="fit" />
-                    </div>
-                </form>
+                {% include "elements/structure/contact_form.html" %}
                 {% if contact_form.errors %}
                     <script>
             window.addEventListener('DOMContentLoaded', function() {
@@ -149,7 +136,7 @@
                 </div>
             </div>
             <div id="footer"
-                 {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
+                 class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
                 <div class="inner">
                     {% if assoc.footer %}
                         <div class="footer-text">
@@ -162,7 +149,7 @@
                             {% if 'help' in assoc.features %}
                                 <td>
                                     <p>
-                                        <a href=" {% if run %}{% url 'help' run.event.slug run.number %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
+                                        <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
                                     </p>
                                 </td>
                             {% endif %}
@@ -192,11 +179,11 @@
 {% endblock main %}
 {% block css-req %}
     <style>
-            @font-face {
-                font-family: 'easyreading';
-                src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
-                font-display: swap;
-            }
+        @font-face {
+            font-family: 'easyreading';
+            src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
+            font-display: swap;
+        }
     </style>
     <link rel="preload"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -232,11 +219,11 @@
     {% if assoc.id == 0 %}
         <style>
             @font-face {
-              font-family: 'future_light';
-              src:  url('{% static "fonts/future_light/Future_Light.otf" %}') ,
-                    url('{% static "fonts/future_light/Future_Light.ttf" %}') ;
+                font-family: 'future_light';
+                src: url('{% static "fonts/future_light/Future_Light.otf" %}'),
+                url('{% static "fonts/future_light/Future_Light.ttf" %}');
 
-             font-display: swap;
+                font-display: swap;
             }
         </style>
         <link rel="preload"

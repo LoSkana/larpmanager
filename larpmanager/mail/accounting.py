@@ -33,6 +33,8 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
+    OtherChoices,
+    PaymentChoices,
     PaymentType,
 )
 from larpmanager.models.association import get_url, hdr
@@ -48,7 +50,7 @@ def update_accounting_item_expense_post(sender, instance, created, **kwargs):
     if created and instance.run and instance.run.event:
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
-            body, subj = get_expense_mail(instance)
+            subj, body = get_expense_mail(instance)
             my_send_mail(subj, body, orga, instance.run)
 
 
@@ -70,9 +72,9 @@ def get_expense_mail(instance):
     url = get_url(instance.download(), instance)
     body += f"<br /><br /><a href='{url}'>" + _("download document") + "</a>"
     body += "<br /><br />" + _("Did you check and is it correct") + "?"
-    url = f"{instance.run.event.slug}/{instance.run.number}/manage/expenses/approve/{instance.pk}"
+    url = f"{instance.run.get_slug()}/manage/expenses/approve/{instance.pk}"
     body += f"<a href='{url}'>" + _("Confirmation of expenditure") + "</a>"
-    return body, subj
+    return subj, body
 
 
 @receiver(pre_save, sender=AccountingItemExpense)
@@ -141,23 +143,23 @@ def update_accounting_item_payment(sender, instance, **kwargs):
 
     curr_sym = run.event.assoc.get_currency_symbol()
     if not instance.pk:
-        if instance.pay == AccountingItemPayment.MONEY:
+        if instance.pay == PaymentChoices.MONEY:
             notify_pay_money(curr_sym, instance, member, run)
-        elif instance.pay == AccountingItemPayment.CREDIT:
+        elif instance.pay == PaymentChoices.CREDIT:
             notify_pay_credit(credit_name, instance, member, run)
-        elif instance.pay == AccountingItemPayment.TOKEN:
+        elif instance.pay == PaymentChoices.TOKEN:
             notify_pay_token(instance, member, run, token_name)
 
 
 def notify_pay_token(instance, member, run, token_name):
     # to user
     activate(member.language)
-    body, subj = get_pay_token_email(instance, run, token_name)
+    subj, body = get_pay_token_email(instance, run, token_name)
     my_send_mail(subj, body, member, run)
     # to orga
     for orga in get_event_organizers(run.event):
         activate(orga.language)
-        body, subj = get_pay_token_email(instance, run, token_name)
+        subj, body = get_pay_token_email(instance, run, token_name)
         subj += _(" for %(user)s") % {"user": member}
         my_send_mail(subj, body, orga, run)
 
@@ -175,18 +177,18 @@ def get_pay_token_email(instance, run, token_name):
         }
         + "!"
     )
-    return body, subj
+    return subj, body
 
 
 def notify_pay_credit(credit_name, instance, member, run):
     # to user
     activate(member.language)
-    body, subj = get_pay_credit_email(credit_name, instance, run)
+    subj, body = get_pay_credit_email(credit_name, instance, run)
     my_send_mail(subj, body, member, run)
     # to orga
     for orga in get_event_organizers(run.event):
         activate(orga.language)
-        body, subj = get_pay_credit_email(credit_name, instance, run)
+        subj, body = get_pay_credit_email(credit_name, instance, run)
         subj += _(" for %(user)s") % {"user": member}
         my_send_mail(subj, body, orga, run)
 
@@ -204,24 +206,24 @@ def get_pay_credit_email(credit_name, instance, run):
         }
         + "!"
     )
-    return body, subj
+    return subj, body
 
 
 def notify_pay_money(curr_sym, instance, member, run):
     # to user
     activate(member.language)
-    body, subj = get_pay_money_email(curr_sym, instance, run)
+    subj, body = get_pay_money_email(curr_sym, instance, run)
     my_send_mail(subj, body, member, run)
     # to orga
     for orga in get_event_organizers(run.event):
         activate(orga.language)
-        body, subj = get_pay_money_email(curr_sym, instance, run)
+        subj, body = get_pay_money_email(curr_sym, instance, run)
         subj += _(" for %(user)s") % {"user": member}
         my_send_mail(subj, body, orga, run)
 
 
 def get_pay_money_email(curr_sym, instance, run):
-    subj = hdr(instance) + _("Payment per %(event)s") % {"event": run}
+    subj = hdr(instance) + _("Payment for %(event)s") % {"event": run}
     body = (
         _("A payment of %(amount).2f %(currency)s was received for this event")
         % {
@@ -230,7 +232,7 @@ def get_pay_money_email(curr_sym, instance, run):
         }
         + "!"
     )
-    return body, subj
+    return subj, body
 
 
 @receiver(pre_save, sender=AccountingItemOther)
@@ -241,11 +243,11 @@ def update_accounting_item_other(sender, instance, **kwargs):
     token_name, credit_name = get_token_credit_name(instance.assoc)
 
     if not instance.pk:
-        if instance.oth == AccountingItemOther.TOKEN:
+        if instance.oth == OtherChoices.TOKEN:
             notify_token(instance, token_name)
-        elif instance.oth == AccountingItemOther.CREDIT:
+        elif instance.oth == OtherChoices.CREDIT:
             notify_credit(credit_name, instance)
-        elif instance.oth == AccountingItemOther.REFUND:
+        elif instance.oth == OtherChoices.REFUND:
             notify_refund(credit_name, instance)
 
 
@@ -416,27 +418,29 @@ def notify_invoice_check(inv):
             idx = int(mb)
             orga = Member.objects.get(pk=idx)
             activate(orga.language)
-            body, subj = get_invoice_email(inv)
+            subj, body = get_invoice_email(inv)
             my_send_mail(subj, body, orga, inv)
 
     # if it is for a sign up, send the confirmation to the organizers
     elif inv.typ == PaymentType.REGISTRATION and inv.reg:
         for orga in get_event_organizers(inv.reg.run.event):
             activate(orga.language)
-            body, subj = get_invoice_email(inv)
+            subj, body = get_invoice_email(inv)
             my_send_mail(subj, body, orga, inv)
 
     # if nothing else applies, simply send to the main mail
     else:
-        body, subj = get_invoice_email(inv)
-        notify_organization_exe(subj, body, inv.assoc, inv)
+        notify_organization_exe(get_invoice_email, inv.assoc, inv)
 
 
 def notify_refund_request(p):
+    notify_organization_exe(get_notify_refund_email, p.assoc, p)
+
+
+def get_notify_refund_email(p):
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
     body = _("Details: %(details)s (<b>%(amount).2f</b>)") % {"details": p.details, "amount": p.value}
-    # print(subj)
-    notify_organization_exe(subj, body, p.assoc, p.assoc)
+    return subj, body
 
 
 def get_invoice_email(inv):
@@ -455,4 +459,4 @@ def get_invoice_email(inv):
     if "-" in causal:
         causal = causal.split("-", 1)[1].strip()
     subj = hdr(inv) + _("Payment to check") + ": " + causal
-    return body, subj
+    return subj, body

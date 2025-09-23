@@ -8,7 +8,7 @@
     {% trans "once approved, the corresponding amounts are assigned as " %} {{ credit_name }}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
+    {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}
     <table id="expenses" class="tablesorter">
         <thead>
@@ -20,14 +20,14 @@
                 <th>{% trans "Value" %}</th>
                 <th>{% trans "Approved" %}</th>
                 <th>{% trans "Statement" %}</th>
-                <th></th>
+                {% if not disable_approval %}<th></th>{% endif %}
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_expenses_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_expenses_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.member }}</td>
@@ -38,12 +38,14 @@
                     <td>
                         <a href="{{ el.download }}">{% trans "Download" %}</a>
                     </td>
-                    <td>
-                        {% if not el.is_approved %}
-                            <a href="{% url 'orga_expenses_approve' run.event.slug run.number el.id %}"
-                               class="delete">{% trans "Approve" %}</a>
-                        {% endif %}
-                    </td>
+                    {% if not disable_approval %}
+                        <td>
+                            {% if not el.is_approved %}
+                                <a href="{% url 'orga_expenses_approve' run.get_slug el.id %}"
+                                   class="delete">{% trans "Approve" %}</a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

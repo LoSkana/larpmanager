@@ -7,8 +7,7 @@
     {% trans "This page allows you to manually approve payments received" %}
 {% endblock info %}
 {% block content %}
-    <table id="invoices"
-           class="{% if not interface_old %}go_datatable{% endif %}">
+    <table id="invoices" class="go_datatable">
         <thead>
             <tr>
                 <th>{% trans "Member" %}</th>
@@ -41,7 +40,7 @@
                     <td>{{ el.created | date:"d/m/Y h:m" }}</td>
                     <td>
                         {% if el.status == 'r' or el.status == 's' %}
-                            <a href="{% url 'orga_invoices_confirm' run.event.slug run.number el.id %}">{% trans "Confirm" %}</a>
+                            <a href="{% url 'orga_invoices_confirm' run.get_slug el.id %}">{% trans "Confirm" %}</a>
                         {% endif %}
                     </td>
                 </tr>

@@ -10,8 +10,7 @@
     <p>
         {% trans "Show cancellations" %} <a href="#" class="my_toggle" tog='not_payed'>{% trans "no payment" %}</a>
     </p>
-    <table id="cancellations"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    <table id="cancellations" class="go_datatable writing">
         <thead>
             <tr>
                 <th>{% trans "Registration fee" %}</th>
@@ -90,7 +89,7 @@
                             {% if el.refunded %}
                                 {% trans "Refunded" %}
                             {% else %}
-                                <a href="{% url 'orga_cancellation_refund' event.slug run.number el.id %}">{% trans "Approve reimbursement" %}</a>
+                                <a href="{% url 'orga_cancellation_refund' run.get_slug el.id %}">{% trans "Approve reimbursement" %}</a>
                             {% endif %}
                         </td>
                     {% endif %}

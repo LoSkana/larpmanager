@@ -1,0 +1,9 @@
+{% load i18n tz show_tags static %}
+{% if form.errors %}
+    <p class="form_error">
+        {% trans "Attention! The form contains errors in the fields" %}:&nbsp;
+        {% for field in form.visible_fields %}
+            {% if field.errors %}{{ field.label }}&nbsp;{% endif %}
+        {% endfor %}
+    </p>
+{% endif %}

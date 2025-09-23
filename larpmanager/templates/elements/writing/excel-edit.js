@@ -4,8 +4,6 @@
 
 <script>
 
-const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
-
 window.addEventListener('DOMContentLoaded', function() {
 
     var keyTinyMCE;
@@ -58,7 +56,7 @@ window.addEventListener('DOMContentLoaded', function() {
         formData.append('token', token);
 
         request = $.ajax({
-            url: "{% url 'orga_writing_excel_submit' run.event.slug run.number label_typ %}",
+            url: "{% url 'orga_writing_excel_submit' run.get_slug label_typ %}",
             method: "POST",
             data: formData,
             contentType: false,
@@ -105,11 +103,13 @@ window.addEventListener('DOMContentLoaded', function() {
         $(document).on('dblclick', '.editable', function(event) {
             event.preventDefault();
 
+            if ($("#main_bulk").is(":visible")) return;
+
             eid = $(this).parent().attr("id");
             qid = $(this).attr("qid");
 
             request = $.ajax({
-                url: "{% url 'orga_writing_excel_edit' run.event.slug run.number label_typ %}",
+                url: "{% url 'orga_writing_excel_edit' run.get_slug label_typ %}",
                 method: "POST",
                 data: { qid: qid, eid: eid},
                 datatype: "json",
@@ -120,25 +120,15 @@ window.addEventListener('DOMContentLoaded', function() {
                 $('#excel-edit').empty().append(res.v);
 
                 if (res.tinymce) {
-                    let config = Object.assign({}, tinymceConfig);
-                    config.selector = '#excel-edit textarea' + ':not(.tinymce-initialized)';
-                    config.setup = function (editor) {
-                        editor.on('init', function () {
-                            editor.getElement().classList.add('tinymce-initialized');
-                            keyTinyMCE = editor.id;
-                        });
-                    };
-                    tinymce.init(config);
+                    window.addTinyMCETextarea('#excel-edit textarea').then((editorId) => {
+                        keyTinyMCE = editorId;
+                        setUpCharFinder(editorId);
+                        setUpHighlight(editorId);
+                    });
                 }
 
                 setTimeout(() => {
                     if (res.tinymce) {
-                        // set up char highlight
-                        setUpHighlight(keyTinyMCE);
-
-                        // set up char finder
-                        setUpCharFinder(keyTinyMCE);
-
                         // prepare tinymce count
                         prepare_tinymce(res.key, res.max_length);
                     }

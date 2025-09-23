@@ -7,9 +7,8 @@
     {% trans "This page summarises the customised navigation buttons of the event" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
-    <table id="buttons"
-           class="{% if not interface_old %}go_datatable{% endif %}">
+    {% include "elements/header/edit.html" %}
+    <table id="buttons" class="go_datatable">
         <thead>
             <tr>
                 <th></th>
@@ -22,7 +21,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_buttons_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_buttons_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>

@@ -158,16 +158,33 @@ window.addEventListener('DOMContentLoaded', function() {
 
         const driverObj = driver({
             showProgress: true,
-            steps: steps
+            steps: steps,
+            allowClose: false,
+            popoverClass: 'my-driverjs',
+            doneBtnText: '{% trans "Done" %}',
+            onDestroyed: () => {
+              $.ajax({
+                url: '{% url "set_member_config" %}',
+                method: 'POST',
+                data: {
+                  name: 'intro_driver',
+                  value: "true",
+                }
+              });
+            }
         });
 
         driverObj.drive();
 
     }
 
-    {% if intro_driver %} driverIntro();{% endif %}
-
     jQuery(function(){
+        {% if intro_driver and request.enviro == "prod" %}
+        $(document).on("lm_ready", function() {
+            driverIntro();
+        });
+        {% endif %}
+
         $('#intro_driver').on('click', driverIntro);
     });
 

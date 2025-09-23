@@ -7,11 +7,10 @@
     {% trans "This page shows the uploaded photo albums" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
+    {% include "elements/header/edit.html" %}
     <br />
     <br />
-    <table id="albums"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    <table id="albums" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
@@ -26,19 +25,19 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_albums_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_albums_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.parent }}</td>
                     <td>
-                        <a href="{% url 'orga_albums_upload' run.event.slug run.number el.cod %}">{% trans "Upload" %}</a> (questo link può essere passato all'esterno per far eseguire il caricamento a collaboratori)
+                        <a href="{% url 'orga_albums_upload' run.get_slug el.cod %}">{% trans "Upload" %}</a> (questo link può essere passato all'esterno per far eseguire il caricamento a collaboratori)
                     </td>
                     <td>
                         {% if el.thumb %}<img src="{{ el.thumb.url }}" alt="object photo" />{% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_albums_delete' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_albums_delete' run.get_slug el.id %}"
                            class="delete">{% trans "Delete" %}</a>
                     </td>
                 </tr>

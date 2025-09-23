@@ -2,7 +2,9 @@
 {% if form_questions %}
     {% for key, que in form_questions.items %}
         {% if que.typ == 'teaser' or que.typ == 'text' %}
-            <td class="q_{{ key }} editable" qid="{{ que.id }}">
+            <td class="q_{{ key }} editable"
+                qid="{{ que.id }}"
+                tooltip="{{ que.name }}">
                 {% with ed_id=que.typ|concat:'_red' %}
                     {% lookup el ed_id as value %}
                     {{ value | safe }}
@@ -15,7 +17,9 @@
                 {% endwith %}
             </td>
         {% elif que.typ == 'e' %}
-            <td class="question q_{{ key }} editable" qid="{{ que.id }}">
+            <td class="question q_{{ key }} editable"
+                qid="{{ que.id }}"
+                tooltip="{{ que.name }}">
                 {% with ed_id=key|concat:'_red' %}
                     {% lookup el ed_id as value %}
                     {{ value | safe }}
@@ -27,12 +31,16 @@
                     {{ value }}
                 {% endwith %}
             </td>
-        {% elif que.typ == 's' or que.typ == 'm' or que.typ == 't' or que.typ == 'p' %}
-            <td class="question q_{{ key }} editable" qid="{{ que.id }}">
+        {% elif que.basic_typ or que.typ == 'c' %}
+            <td class="question q_{{ key }} editable"
+                qid="{{ que.id }}"
+                tooltip="{{ que.name }}">
                 <!-- fill later -->
             </td>
         {% else %}
-            <td class="q_{{ key }} editable" qid="{{ que.id }}">
+            <td class="q_{{ key }} editable"
+                qid="{{ que.id }}"
+                tooltip="{{ que.name }}">
                 {% if que.typ == 'progress' %}
                     {% include "elements/show_progress.html" with el=el %}
                 {% elif que.typ == 'title' %}
@@ -41,7 +49,7 @@
                     {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
                 {% elif que.typ == 'faction' %}
                     {% for g in el.factions %}
-                        <a href="{% url 'orga_factions_edit' run.event.slug run.number g.id %}">{{ g.name }}</a>
+                        <a href="{% url 'orga_factions_edit' run.get_slug g.id %}">{{ g.name }}</a>
                         <br />
                     {% endfor %}
                 {% elif que.typ == 'mirror' %}

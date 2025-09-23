@@ -32,11 +32,11 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionType,
     WritingAnswer,
     WritingChoice,
     WritingOption,
     WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import (
@@ -62,17 +62,17 @@ class WritingForm(MyForm):
         for que in self.questions:
             types.add(que.typ)
 
-        if QuestionType.COVER not in types:
+        if WritingQuestionType.COVER not in types:
             if "cover" in self.fields:
                 del self.fields["cover"]
 
-        if QuestionType.ASSIGNED in types:
+        if WritingQuestionType.ASSIGNED in types:
             choices = [(m.id, m.show_nick()) for m in get_event_staffers(self.params["run"].event)]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
         else:
             self.delete_field("assigned")
 
-        if QuestionType.PROGRESS in types:
+        if WritingQuestionType.PROGRESS in types:
             self.fields["progress"].choices = [
                 (el.id, str(el)) for el in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
@@ -184,14 +184,14 @@ class BaseWritingForm(BaseRegistrationForm):
 class PlotForm(WritingForm, BaseWritingForm):
     load_templates = ["plot"]
 
-    load_js = ["characters-choices"]
+    load_js = ["characters-choices", "plot-roles"]
 
     page_title = _("Plot")
 
     class Meta:
         model = Plot
 
-        exclude = ("number", "temp", "hide")
+        exclude = ("number", "temp", "hide", "order")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
@@ -206,24 +206,24 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
         self.initial["characters"] = self.init_characters
 
+        self.role_help_text = _("This text will be added to the sheet of")
+
         self._init_special_fields()
 
         # PLOT CHARACTERS REL
         self.add_char_finder = []
         self.field_link = {}
         if self.instance.pk:
-            for ch in (
-                self.instance.get_plot_characters()
-                .order_by("character__number")
-                .values_list("character__id", "character__number", "character__name", "text")
+            for ch in self.instance.get_plot_characters().values_list(
+                "character__id", "character__number", "character__name", "text"
             ):
                 char = f"#{ch[1]} {ch[2]}"
-                field = f"ch_{ch[0]}"
+                field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
                     widget=WritingTinyMCE(),
                     label=char,
-                    help_text=_("This text will be added to the sheet of {name}".format(name=char)),
+                    help_text=f"{self.role_help_text} {char}",
                     required=False,
                 )
 
@@ -231,29 +231,27 @@ class PlotForm(WritingForm, BaseWritingForm):
 
                 self.show_link.append(id_field)
                 self.add_char_finder.append(id_field)
-                reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
+                reverse_args = [self.params["run"].get_slug(), ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def _save_multi(self, s, instance):
-        new = set(self.cleaned_data["characters"].values_list("pk", flat=True))
-        old = set(self.init_characters)
+        self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
 
-        for ch in old - new:
-            PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
-        for ch in new - old:
-            PlotCharacterRel.objects.get_or_create(character_id=ch, plot_id=instance.pk)
+        PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
     def save(self, commit=True):
         instance = super().save()
 
         instance.save()
-        for pr in self.instance.get_plot_characters():
-            field = f"ch_{pr.character_id}"
-            if field not in self.cleaned_data:
+        for ch_id in self.chars_id:
+            (pr, created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            field = f"char_role_{pr.character_id}"
+            value = self.cleaned_data.get(field, "")
+            if not value:
+                value = self.data.get(field, "")
+            if not value:
                 continue
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
+            pr.text = value
             pr.save()
 
         return instance
@@ -373,13 +371,15 @@ class HandoutTemplateForm(MyForm):
         widgets = {"template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})}
 
 
-class PrologueTypeForm(MyForm):
+class PrologueTypeForm(WritingForm):
+    page_title = _("Prologue type")
+
     class Meta:
         model = PrologueType
-        fields = ["name"]
+        fields = ["name", "event"]
 
 
-class PrologueForm(WritingForm):
+class PrologueForm(WritingForm, BaseWritingForm):
     page_title = _("Prologue")
 
     load_js = ["characters-choices"]
@@ -387,17 +387,22 @@ class PrologueForm(WritingForm):
     class Meta:
         model = Prologue
 
-        exclude = ("teaser", "temp", "hide")
+        exclude = ("number", "teaser", "temp", "hide")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         que = self.params["run"].event.get_elements(PrologueType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
+
+        self.init_orga_fields()
+
+        self.reorder_field("characters")
+
+        self._init_special_fields()
 
 
 class SpeedLarpForm(WritingForm):

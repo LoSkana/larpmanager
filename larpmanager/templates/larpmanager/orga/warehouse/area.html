@@ -1,0 +1,39 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Warehouse area" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the event area where warehouse items needs to be deployed" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    <table id="inv_area" class="go_datatable dot_links" no_header_cols="4">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Position" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_warehouse_area_edit' run.get_slug el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.position }}</td>
+                    <td>{{ el.description | truncatechars:200 }}</td>
+                    <td>
+                        <a href="{% url 'orga_warehouse_area_assignments' run.get_slug el.id %}"
+                           qtip="{% trans "Edit" %}">{% trans "Item assignments" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -22,13 +22,14 @@ from django.contrib import admin
 
 from larpmanager.admin.base import DefModelAdmin
 from larpmanager.models.larpmanager import (
-    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
+    LarpManagerGuide,
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
+    LarpManagerTicket,
     LarpManagerTutorial,
 )
 
@@ -63,7 +64,7 @@ class LarpManagerTutorial(DefModelAdmin):
         return instance.descr[:100]
 
 
-@admin.register(LarpManagerBlog)
+@admin.register(LarpManagerGuide)
 class LarpManagerBlogAdmin(DefModelAdmin):
     list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
 
@@ -94,3 +95,12 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
 @admin.register(LarpManagerReview)
 class LMReviewAdmin(DefModelAdmin):
     list_display = ("text", "author")
+
+
+@admin.register(LarpManagerTicket)
+class LarpManagerTicketAdmin(DefModelAdmin):
+    list_display = ("id", "reason", "assoc", "email", "member", "content_red", "show_thumb")
+
+    @staticmethod
+    def content_red(instance):
+        return instance.content[:100]

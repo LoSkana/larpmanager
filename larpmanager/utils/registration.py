@@ -124,6 +124,8 @@ def registration_status_signed(run, features, register_url):
     provisional = is_reg_provisional(run.reg)
     if provisional:
         register_msg = _("Provisional registration")
+    if run.reg.ticket:
+        register_msg += f" ({run.reg.ticket.name})"
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
     if "membership" in features:
@@ -153,14 +155,7 @@ def registration_status_signed(run, features, register_url):
         run.status["text"] = register_text
         return
 
-    if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
-        mes = _("You are signed up in the waiting list") + "!"
-    elif run.reg.ticket and run.reg.ticket.tier == TicketTier.FILLER:
-        mes = _("You are signed up as Filler") + "!"
-    else:
-        mes = _("You are regularly signed up") + "!"
-
-    run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
+    run.status["text"] = register_text
 
     if run.reg.ticket and run.reg.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support") + "!"
@@ -209,19 +204,16 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
 
     registration_find(run, user, my_regs)
 
-    if not run.end:
-        return
-
     features = _get_features_map(features_map, run)
 
     registration_available(run, features, reg_count)
-    register_url = reverse("register", args=[run.event.slug, run.number])
+    register_url = reverse("register", args=[run.get_slug()])
 
     if run.reg:
         registration_status_signed(run, features, register_url)
         return
 
-    if get_time_diff_today(run.end) < 0:
+    if run.end and get_time_diff_today(run.end) < 0:
         return
 
     # check pre-register
@@ -296,7 +288,7 @@ def check_character_maximum(event, member):
     # check the amount of characters of the character
     current_chars = event.get_elements(Character).filter(player=member).count()
     max_chars = int(event.get_config("user_character_max", 0))
-    return current_chars >= max_chars
+    return current_chars >= max_chars, max_chars
 
 
 def registration_status_characters(run, features):
@@ -306,7 +298,7 @@ def registration_status_characters(run, features):
 
     aux = []
     for el in rcrs:
-        url = reverse("character", args=[run.event.slug, run.number, el.character.number])
+        url = reverse("character", args=[run.get_slug(), el.character.number])
         name = el.character.name
         if el.custom_name:
             name = el.custom_name
@@ -323,14 +315,15 @@ def registration_status_characters(run, features):
     reg_waiting = run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING
 
     if "user_character" in features and not reg_waiting:
-        if not check_character_maximum(run.event, run.reg.member):
-            url = reverse("character_create", args=[run.event.slug, run.number])
+        check, max_chars = check_character_maximum(run.event, run.reg.member)
+        if not check:
+            url = reverse("character_create", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "
             mes = _("Access character creation!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
-        elif len(aux) == 0:
-            url = reverse("character_list", args=[run.event.slug, run.number])
+        elif len(aux) == 0 and max_chars:
+            url = reverse("character_list", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "
             mes = _("Select your character!")
@@ -386,10 +379,10 @@ def get_player_signup(request, ctx):
 def check_signup(request, ctx):
     reg = get_player_signup(request, ctx)
     if not reg:
-        raise SignupError(ctx["event"].slug, ctx["run"].number)
+        raise SignupError(ctx["run"].get_slug())
 
     if reg.ticket and reg.ticket.tier == TicketTier.WAITING:
-        raise WaitingError(ctx["event"].slug, ctx["run"].number)
+        raise WaitingError(ctx["run"].get_slug())
 
 
 def check_assign_character(request, ctx):

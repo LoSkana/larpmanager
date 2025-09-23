@@ -35,6 +35,7 @@ from larpmanager.models.writing import Character
 
 class TicketTier(models.TextChoices):
     STANDARD = "b", _("Standard")
+    NEW_PLAYER = "y", _("New player")
     LOTTERY = "l", _("Lottery")
     WAITING = "w", _("Waiting")
     FILLER = "f", _("Filler")
@@ -44,6 +45,22 @@ class TicketTier(models.TextChoices):
     NPC = "n", _("NPC")
     COLLABORATOR = "c", _("Collaborator")
     SELLER = "s", _("Seller")
+
+    @classmethod
+    def get_mapping(cls):
+        return {
+            TicketTier.STANDARD: "Standard",
+            TicketTier.NEW_PLAYER: "New player",
+            TicketTier.LOTTERY: "Lottery",
+            TicketTier.WAITING: "Waiting",
+            TicketTier.FILLER: "Filler",
+            TicketTier.REDUCED: "Reduced",
+            TicketTier.PATRON: "Patron",
+            TicketTier.STAFF: "Staff",
+            TicketTier.NPC: "NPC",
+            TicketTier.COLLABORATOR: "Collaborator",
+            TicketTier.SELLER: "Seller"
+        }
 
 
 class RegistrationTicket(BaseModel):
@@ -81,7 +98,7 @@ class RegistrationTicket(BaseModel):
         help_text=_("Optional – Maximum number of times it can be requested across all signups (0 = unlimited)"),
     )
 
-    visible = models.BooleanField(default=True, help_text=_("Is it selectable by players") + "?")
+    visible = models.BooleanField(default=True, help_text=_("Is it selectable by participants") + "?")
 
     casting_priority = models.IntegerField(
         default=1,
@@ -89,7 +106,7 @@ class RegistrationTicket(BaseModel):
     )
 
     giftable = models.BooleanField(
-        default=False, help_text=_("Optional - Indicates whether the ticket can be gifted to other players")
+        default=False, help_text=_("Optional - Indicates whether the ticket can be gifted to other participants")
     )
 
     order = models.IntegerField(default=0)
@@ -367,7 +384,7 @@ class RegistrationCharacterRel(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Public"),
-        help_text=_("Indicates public information about your character, which will be shown to all other players"),
+        help_text=_("Indicates public information about your character, which will be shown to all other participants"),
     )
 
     custom_private = models.TextField(

@@ -7,12 +7,33 @@
 {% block css %}
     {% if iframe %}
         <style>
-            #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none }
-            #main { padding: 0; width: 100%; max-width: 100%; }
-            #page-wrapper.topbar { padding: 0; margin-top: 0; }
+            #header,
+            #footer,
+            header,
+            #tutorials .column,
+            #tutorials .navig,
+            .main_nav,
+            #topbar {
+                display: none
+            }
+
+            #main {
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            #page-wrapper.topbar {
+                padding: 0;
+                margin-top: 0;
+            }
         </style>
     {% elif assoc.id != 0 %}
-        <style>#tutorials { margin-top: 1em; }</style>
+        <style>
+            #tutorials {
+                margin-top: 1em;
+            }
+        </style>
     {% endif %}
 {% endblock css %}
 {% block content %}
@@ -102,19 +123,9 @@ window.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             var target = $($(this).attr('href'));
-            var headerHeight = $('header').outerHeight();
 
-            if (target.length) {
-            {% if interface_old %}
-                $('html, body').animate({
-                    scrollTop: target.offset().top - headerHeight
-                }, 0);
-            {% else %}
-                $('#page-wrapper').animate({
-                    scrollTop: target.offset().top - headerHeight * 2
-                }, 0);
-            {% endif %}
-            }
+            window.jump_to(target);
+
         });
 
         // all link open in new page

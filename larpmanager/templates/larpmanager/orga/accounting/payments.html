@@ -4,10 +4,10 @@
     {% trans "Invoices" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows all payments received for this run" %}
+    {% trans "This page shows all payments received for this event" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
+    {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}
     <table id="payments" class="tablesorter">
         <thead>
@@ -30,7 +30,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_payments_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_payments_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.reg.member }}</td>

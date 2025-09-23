@@ -17,7 +17,7 @@
                 <tr>
                     <td>
                         <h3>
-                            <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
+                            <a href="{% url 'gallery' run.get_slug %}">{{ run.search }}</a>
                         </h3>
                     </td>
                     <td>

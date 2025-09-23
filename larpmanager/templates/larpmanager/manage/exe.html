@@ -33,14 +33,14 @@
                 {% for run in ongoing_runs %}
                     <tr>
                         <td>
-                            <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
+                            <a href="{% url 'manage' run.get_slug %}">{{ run }}</a>
                         </td>
                         <td>
                             <i>{{ run.pretty_dates }}</i>
                         </td>
                         <td>{{ run.get_development_display }}</td>
                         <td>
-                            <a href="{% url 'register' run.event.slug run.number %}">{{ run.registration_status }}</a>
+                            <a href="{% url 'register' run.get_slug %}">{{ run.registration_status }}</a>
                         </td>
                         <td>
                             {% if run.counts.count_reg %}
@@ -57,7 +57,7 @@
             </h2>
             <table>
                 <tr>
-                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %}">
+                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
                         <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
                         <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
                     </th>

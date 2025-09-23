@@ -1,12 +1,17 @@
 {% load i18n static %}
-<p>
-    {% trans "Select from the dropdown the characters to be added to the plot" %}.
-    {% trans "For each character added, a specific field will be available to add additional plot information" %}.
-</p>
-<p>
-    {% trans "In the text refer to the other characters solely by their number" %}:
-    <br />
-    <b>#XX</b>: {% trans "if the character belongs to this element" %}.
-    <br />
-    <b>@XX</b>: {% trans "if the character does NOT belong to this element, but is only referenced" %}.
-</p>
+<h4>
+    <a href="#" class="my_toggle" tog='instr'>{% trans "Instructions" %}</a>
+</h4>
+<div class="hide instr">
+    <p>
+        {% trans "Select from the dropdown the characters to be added to the plot" %}.
+        {% trans "For each character added, a specific field will be available to add additional plot information" %}.
+    </p>
+    <p>
+        {% trans "In the text refer to the other characters solely by their number" %}:
+        <br />
+        <b>#XX</b>: {% trans "if the character belongs to this element" %}.
+        <br />
+        <b>@XX</b>: {% trans "if the character does NOT belong to this element, but is only referenced" %}.
+    </p>
+</div>

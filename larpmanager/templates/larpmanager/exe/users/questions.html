@@ -10,8 +10,7 @@
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
     </p>
-    <table id="questions_open"
-           class="{% if not interface_old %}go_datatable{% endif %}">
+    <table id="questions_open" class="go_datatable">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -34,7 +33,7 @@
                     <td>{{ el.text }}</td>
                     <td>
                         {% if el.attachment %}
-                            &nbsp;&nbsp;&nbsp;<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                            <a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
                         {% endif %}
                     </td>
                     <td>
@@ -56,8 +55,7 @@
                 <input type="submit" value="{% trans "Confirm" %}">
             </form>
         </p>
-        <table id="questions_closed"
-               class="{% if not interface_old %}go_datatable{% endif %}">
+        <table id="questions_closed" class="go_datatable">
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>

@@ -39,6 +39,11 @@ from larpmanager.utils.text import get_event_text
 
 
 def check_holiday():
+    """Check if today or adjacent days are holidays in major countries.
+
+    Returns:
+        bool: True if today +/-1 day is a holiday in US, IT, CN, or UK
+    """
     td = datetime.now().date()
     for s in ["US", "IT", "CN", "UK"]:
         for md in [-1, 0, 1]:
@@ -49,19 +54,36 @@ def check_holiday():
 
 
 def join_email(assoc):
+    """Send welcome emails to association executives when they join.
+
+    Args:
+        assoc: Association instance that was just created
+
+    Side effects:
+        Sends welcome and feedback request emails to association executives
+    """
     for member in get_assoc_executives(assoc):
         activate(member.language)
         subj = _("Welcome to LarpManager") + "!"
         body = render_to_string("mails/join_assoc.html", {"member": member, "assoc": assoc})
-        my_send_mail(subj, body, member, assoc)
+        my_send_mail(subj, body, member)
 
         activate(member.language)
         subj = "We'd love your feedback on LarpManager"
         body = render_to_string("mails/help_assoc.html", {"member": member, "assoc": assoc})
-        my_send_mail(subj, body, member, assoc, schedule=3600 * 24 * 2)
+        my_send_mail(subj, body, member, schedule=3600 * 24 * 2)
 
 
 def assoc_roles_changed(sender, **kwargs):
+    """Handle association role changes and send notifications.
+
+    Args:
+        sender: Signal sender
+        **kwargs: Signal arguments including instance, model, action, pk_set
+
+    Side effects:
+        Sends role change notification emails to affected members
+    """
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
@@ -105,6 +127,15 @@ m2m_changed.connect(assoc_roles_changed, sender=AssocRole.members.through)
 
 
 def event_roles_changed(sender, **kwargs):
+    """Handle event role changes and send notifications.
+
+    Args:
+        sender: Signal sender
+        **kwargs: Signal arguments including instance, model, action, pk_set
+
+    Side effects:
+        Sends role change notification emails to affected members and organizers
+    """
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
@@ -150,6 +181,15 @@ m2m_changed.connect(event_roles_changed, sender=EventRole.members.through)
 
 
 def bring_friend_instructions(reg, ctx):
+    """Send friend invitation instructions to registered user.
+
+    Args:
+        reg: Registration instance
+        ctx: Context dictionary with event and discount information
+
+    Side effects:
+        Sends email with friend invitation instructions and discount code
+    """
     activate(reg.member.language)
     subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
     body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
@@ -177,7 +217,7 @@ def bring_friend_instructions(reg, ctx):
     body += (
         "<br /><br />"
         + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
-        % {"url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"}
+        % {"url": f"{reg.run.get_slug()}/limitations/"}
         + "."
     )
 
@@ -188,6 +228,17 @@ def bring_friend_instructions(reg, ctx):
 
 @receiver(post_save, sender=AssignmentTrait)
 def notify_trait_assigned(sender, instance, created, **kwargs):
+    """Notify member when a trait is assigned to them.
+
+    Args:
+        sender: AssignmentTrait model class
+        instance: AssignmentTrait instance that was saved
+        created (bool): Whether this is a new assignment
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Deactivates related casting preferences and sends assignment notification
+    """
     if not instance.member or not created:
         return
 
@@ -207,7 +258,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         "trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
     ) % {"event": instance.run, "trait": t["name"], "quest": q["name"]}
     url = get_url(
-        f"{instance.run.event.slug}/{instance.run.number}/character/your",
+        f"{instance.run.get_slug()}/character/your",
         instance.run.event,
     )
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"
@@ -219,6 +270,18 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
 
 
 def mail_confirm_casting(member, run, gl_name, lst, avoid):
+    """Send casting preference confirmation email to member.
+
+    Args:
+        member: Member instance who submitted preferences
+        run: Run instance for the event
+        gl_name (str): Category name for the casting preferences
+        lst (list): List of selected preference items
+        avoid (str): Items the member wants to avoid
+
+    Side effects:
+        Sends confirmation email with preference summary
+    """
     activate(member.language)
     subj = hdr(run.event) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
         "type": gl_name,
@@ -235,6 +298,16 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
 
 @receiver(pre_save, sender=Character)
 def character_update_status(sender, instance, **kwargs):
+    """Notify player when character approval status changes.
+
+    Args:
+        sender: Character model class
+        instance: Character instance being saved
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Sends status change notification email to character player
+    """
     if not instance.event.get_config("user_character_approval", False):
         return
 
@@ -258,18 +331,38 @@ def character_update_status(sender, instance, **kwargs):
             my_send_mail(subj, body, instance.player, instance.event)
 
 
-def notify_organization_exe(subj, body, assoc, instance):
+def notify_organization_exe(func, assoc, instance):
+    """Send notification to association executives.
+
+    Args:
+        func: Function that generates subject and body for the notification
+        assoc: Association instance
+        instance: Context instance for the notification
+
+    Side effects:
+        Sends notification emails to association executives or main email
+    """
     if assoc.main_mail:
         activate(get_exec_language(assoc))
+        (subj, body) = func(instance)
         my_send_mail(subj, body, assoc.main_mail, instance)
         return
 
     for orga in get_assoc_executives(assoc):
         activate(orga.language)
+        (subj, body) = func(instance)
         my_send_mail(subj, body, orga.email, instance)
 
 
 def get_exec_language(assoc):
+    """Determine the most common language among association executives.
+
+    Args:
+        assoc: Association instance
+
+    Returns:
+        str: Language code preferred by most executives, defaults to 'en'
+    """
     # get most common language between organizers
     langs = {}
     for orga in get_assoc_executives(assoc):

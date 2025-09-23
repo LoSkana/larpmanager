@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
-from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
@@ -23,7 +22,7 @@ from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
-from larpmanager.models.form import QuestionType, RegistrationQuestion, WritingQuestion
+from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
@@ -36,17 +35,37 @@ from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
-def manage(request, s=None, n=None):
+def manage(request, s=None):
+    """Main management dashboard routing.
+
+    Routes to either executive management or organizer management
+    based on whether an event slug is provided.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Optional event slug for organizer management
+
+    Returns:
+        HttpResponse: Redirect to home or appropriate management view
+    """
     if request.assoc["id"] == 0:
         return redirect("home")
 
     if s:
-        return _orga_manage(request, s, n)
+        return _orga_manage(request, s)
     else:
         return _exe_manage(request)
 
 
 def _get_registration_status(run):
+    """Get human-readable registration status for a run.
+
+    Args:
+        run: Run instance to check status for
+
+    Returns:
+        str: Localized status message describing registration state
+    """
     features = get_event_features(run.event_id)
     if "register_link" in features and run.event.register_link:
         return _("Registrations on external link")
@@ -84,6 +103,17 @@ def _get_registration_status(run):
 
 
 def _exe_manage(request):
+    """Executive management dashboard view.
+
+    Displays association-level management interface with events,
+    suggestions, actions, and accounting information.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered executive management dashboard
+    """
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
@@ -97,7 +127,7 @@ def _exe_manage(request):
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
 
-    if has_assoc_permission(request, "exe_accounting"):
+    if has_assoc_permission(request, ctx, "exe_accounting"):
         assoc_accounting(ctx)
 
     # if no event active, suggest to create one
@@ -132,7 +162,7 @@ def _exe_suggestions(ctx):
         _add_priority(ctx, text, perm)
 
     suggestions = {
-        "exe_payment_details": _("Set up the payment methods available to players"),
+        "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions"
@@ -165,7 +195,7 @@ def _exe_actions(request, ctx):
                 "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
             )
             % {"list": ", ".join(runs_conclude)},
-            "exe_runs",
+            "exe_events",
         )
 
     expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
@@ -237,7 +267,7 @@ def _exe_accounting_actions(assoc, ctx, features):
             _add_priority(
                 ctx,
                 _("Set up payment methods"),
-                "exe_payment_details",
+                "exe_methods",
             )
 
     if "organization_tax" in features:
@@ -259,11 +289,23 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
 
-def _orga_manage(request, s, n):
-    ctx = get_event_run(request, s, n)
+def _orga_manage(request, s):
+    """Event organizer management dashboard view.
+
+    Displays event-specific management interface with characters,
+    registrations, and event-level tools.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+
+    Returns:
+        HttpResponse: Rendered organizer management dashboard
+    """
+    ctx = get_event_run(request, s)
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:
-        return redirect("orga_run", s=s, n=n)
+        return redirect("orga_run", s=s)
 
     ctx["orga_page"] = 1
     ctx["manage"] = 1
@@ -275,7 +317,7 @@ def _orga_manage(request, s, n):
 
     ctx["registration_status"] = _get_registration_status(ctx["run"])
 
-    if has_event_permission(ctx, request, s, "orga_registrations"):
+    if has_event_permission(request, ctx, s, "orga_registrations"):
         ctx["counts"] = get_reg_counts(ctx["run"])
         ctx["reg_counts"] = {}
         # TODO simplify
@@ -284,7 +326,7 @@ def _orga_manage(request, s, n):
             if key in ctx["counts"]:
                 ctx["reg_counts"][_(tier.capitalize())] = ctx["counts"][key]
 
-    if has_event_permission(ctx, request, s, "orga_accounting"):
+    if has_event_permission(request, ctx, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
     _exe_actions(request, ctx)
@@ -329,22 +371,20 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_features",
         )
 
-    if "user_character" in features:
-        if ctx["event"].get_config("user_character_max", "") == "":
-            _add_priority(
-                ctx,
-                _("Set up the configuration for the creation or editing of characters by the players"),
-                "orga_character",
-                "config/user_character",
-            )
+    if "user_character" in features and ctx["event"].get_config("user_character_max", "") == "":
+        _add_priority(
+            ctx,
+            _("Set up the configuration for the creation or editing of characters by the participants"),
+            "orga_character",
+            "config/user_character",
+        )
 
-    if "token_credit" not in features:
-        if set(features) & {"expense", "refund", "collection"}:
-            _add_priority(
-                ctx,
-                _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
-                "orga_features",
-            )
+    if "token_credit" not in features and set(features) & {"expense", "refund", "collection"}:
+        _add_priority(
+            ctx,
+            _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
+            "orga_features",
+        )
 
     char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
     if char_proposed:
@@ -354,13 +394,14 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_characters",
         )
 
-    expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
-    if expenses_approve:
-        _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
-            "orga_expenses",
-        )
+    if not assoc.get_config("expense_disable_orga", False):
+        expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
+        if expenses_approve:
+            _add_action(
+                ctx,
+                _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
+                "orga_expenses",
+            )
 
     payments_approve = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED).count()
     if payments_approve:
@@ -374,7 +415,7 @@ def _orga_actions_priorities(request, ctx, assoc):
     empty_reg_questions = (
         ctx["event"]
         .get_elements(RegistrationQuestion)
-        .filter(typ__in=[QuestionType.SINGLE, QuestionType.MULTIPLE])
+        .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
@@ -389,7 +430,7 @@ def _orga_actions_priorities(request, ctx, assoc):
     empty_char_questions = (
         ctx["event"]
         .get_elements(WritingQuestion)
-        .filter(typ__in=[QuestionType.SINGLE, QuestionType.MULTIPLE])
+        .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
@@ -537,7 +578,7 @@ def _orga_reg_acc_actions(ctx, features):
                     _(
                         "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s"
                     )
-                    % {"list": ", ".join([obj.name for obj in both_set])},
+                    % {"list": ", ".join([str(obj) for obj in both_set])},
                     "orga_registration_installments",
                 )
 
@@ -565,14 +606,14 @@ def _orga_reg_actions(ctx, features):
         _add_priority(
             ctx,
             _("Set up a value for registration opening date"),
-            "orga_run",
+            "orga_event",
         )
 
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_priority(
             ctx,
             _("Set up a value for registration secret link"),
-            "orga_run",
+            "orga_event",
         )
 
     if "register_link" in features and not ctx["event"].register_link:
@@ -645,8 +686,8 @@ def _add_suggestion(ctx, text, perm, link=None):
 
 def _has_permission(request, ctx, perm):
     if perm.startswith("exe"):
-        return has_assoc_permission(request, perm)
-    return has_event_permission(ctx, request, ctx["event"].slug, perm)
+        return has_assoc_permission(request, ctx, perm)
+    return has_event_permission(request, ctx, ctx["event"].slug, perm)
 
 
 def _get_href(ctx, perm, name, custom_link):
@@ -659,7 +700,7 @@ def _get_href(ctx, perm, name, custom_link):
 def _get_perm_link(ctx, perm, view):
     if perm.startswith("exe"):
         return reverse(view)
-    return reverse(view, args=[ctx["event"].slug, ctx["run"].number])
+    return reverse(view, args=[ctx["run"].get_slug()])
 
 
 def _compile(request, ctx):
@@ -705,10 +746,10 @@ def exe_close_suggestion(request, perm):
     return redirect("manage")
 
 
-def orga_close_suggestion(request, s, n, perm):
-    ctx = check_event_permission(request, s, n, perm)
+def orga_close_suggestion(request, s, perm):
+    ctx = check_event_permission(request, s, perm)
     set_suggestion(ctx, perm)
-    return redirect("manage", s=s, n=n)
+    return redirect("manage", s=s)
 
 
 def _check_intro_driver(request, ctx):
@@ -721,4 +762,12 @@ def _check_intro_driver(request, ctx):
         return
 
     ctx["intro_driver"] = True
-    save_single_config(member, config_name, True)
+
+
+@login_required
+def orga_redirect(request, s, n, p=None):
+    suffix = f"-{n}" if n > 1 else ""
+    path = f"/{s}{suffix}/"
+    if p:
+        path += f"{p}"
+    return redirect(path)

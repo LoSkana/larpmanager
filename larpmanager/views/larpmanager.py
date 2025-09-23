@@ -41,19 +41,18 @@ from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.forms.association import FirstAssociationForm
-from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicket
+from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import Association, AssociationPlan, AssocTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
-    LarpManagerBlog,
     LarpManagerDiscover,
-    LarpManagerPlan,
+    LarpManagerGuide,
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
@@ -61,13 +60,21 @@ from larpmanager.models.member import Member, MembershipStatus, get_user_members
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.exceptions import PermissionError
+from larpmanager.utils.exceptions import MainPageError, PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 from larpmanager.views.user.member import get_user_backend
 
 
 def lm_home(request):
+    """Display the LarpManager home page with promoters and reviews.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered home page template with context data
+    """
     ctx = get_lm_contact(request)
     ctx["index"] = True
 
@@ -82,6 +89,15 @@ def lm_home(request):
 
 
 def ludomanager(ctx, request):
+    """Render the LudoManager skin version of the home page.
+
+    Args:
+        ctx: Context dictionary to update
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered LudoManager template
+    """
     ctx["assoc_skin"] = "LudoManager"
     ctx["platform"] = "LudoManager"
     return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
@@ -89,6 +105,17 @@ def ludomanager(ctx, request):
 
 @csrf_exempt
 def contact(request):
+    """Handle contact form submissions and display contact page.
+
+    Processes contact form data and sends emails to administrators when valid
+    submissions are received.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered contact template with form or success state
+    """
     ctx = {}
     done = False
     if request.POST:
@@ -102,13 +129,25 @@ def contact(request):
                 done = True
     else:
         form = LarpManagerContact(request=request)
-        
+
     if not done:
-        ctx["contact_form"] = form
+        ctx["form"] = form
+
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
 
 def go_redirect(request, slug, p, base_domain="larpmanager.com"):
+    """Redirect user to association-specific subdomain or main domain.
+
+    Args:
+        request: Django HTTP request object
+        slug: Association slug for subdomain
+        p: Path to append to URL
+        base_domain: Base domain name (default: "larpmanager.com")
+
+    Returns:
+        HttpResponseRedirect: Redirect to appropriate URL
+    """
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
 
@@ -124,6 +163,16 @@ def go_redirect(request, slug, p, base_domain="larpmanager.com"):
 
 
 def choose_assoc(request, p, slugs):
+    """Handle association selection when multiple associations are available.
+
+    Args:
+        request: Django HTTP request object
+        p: URL path to redirect to after selection
+        slugs: List of association slugs to choose from
+
+    Returns:
+        HttpResponse: Redirect to selected association or selection form
+    """
     if len(slugs) == 0:
         return render(request, "larpmanager/larpmanager/na_assoc.html")
     elif len(slugs) == 1:
@@ -146,11 +195,30 @@ def choose_assoc(request, p, slugs):
 
 
 def go_redirect_run(run, p):
-    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.event.slug}/{run.number}/{p}"
+    """Redirect to a specific run's URL on its association's domain.
+
+    Args:
+        run: Run object to redirect to
+        p: URL path to append after the run slug
+
+    Returns:
+        HttpResponseRedirect: Redirect to the run's URL
+    """
+    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.get_slug()}/{p}"
     return redirect(n_p)
 
 
 def choose_run(request, p, event_ids):
+    """Handle run selection when multiple runs are available.
+
+    Args:
+        request: Django HTTP request object
+        p: URL path to redirect to after selection
+        event_ids: List of event IDs to get runs from
+
+    Returns:
+        HttpResponse: Redirect to selected run or selection form
+    """
     runs = []
     slugs = []
 
@@ -182,6 +250,18 @@ def choose_run(request, p, event_ids):
 
 @login_required
 def redr(request, p):
+    """Handle redirects based on user roles and permissions.
+
+    Redirects users to appropriate associations or events based on their
+    assigned roles and the requested path.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        p: URL path to redirect to
+
+    Returns:
+        HttpResponse: Redirect to appropriate association or event selection
+    """
     if not p.startswith("event/"):
         slugs = set()
         for ar in AssocRole.objects.filter(members=request.user.member).select_related("assoc"):
@@ -199,12 +279,26 @@ def redr(request, p):
 
 
 def activate_feature_assoc(request, cod, p=None):
+    """Activate a feature for an association.
+
+    Args:
+        request: Django HTTP request object
+        cod: Feature slug/code to activate
+        p: Optional URL path to redirect to after activation
+
+    Returns:
+        HttpResponseRedirect: Redirect to specified path or feature view
+
+    Raises:
+        Http404: If feature doesn't exist or isn't overall
+        PermissionError: If user lacks exe_features permission
+    """
     feature = get_object_or_404(Feature, slug=cod)
     if not feature.overall:
         raise Http404("feature not overall")
 
     # check the user has the permission to add features
-    if not has_assoc_permission(request, "exe_features"):
+    if not has_assoc_permission(request, {}, "exe_features"):
         raise PermissionError()
 
     # add feature
@@ -221,14 +315,29 @@ def activate_feature_assoc(request, cod, p=None):
     return redirect(reverse(view_name))
 
 
-def activate_feature_event(request, s, n, cod, p=None):
+def activate_feature_event(request, s, cod, p=None):
+    """Activate a feature for a specific event.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        cod: Feature slug/code to activate
+        p: Optional URL path to redirect to after activation
+
+    Returns:
+        HttpResponseRedirect: Redirect to specified path or feature view
+
+    Raises:
+        Http404: If feature doesn't exist or is overall (not event-specific)
+        PermissionError: If user lacks orga_features permission
+    """
     feature = get_object_or_404(Feature, slug=cod)
     if feature.overall:
         raise Http404("feature overall")
 
     # check the user has the permission to add features
-    ctx = get_event_run(request, s, n)
-    if not has_event_permission({}, request, ctx["event"].slug, "orga_features"):
+    ctx = get_event_run(request, s)
+    if not has_event_permission(request, {}, ctx["event"].slug, "orga_features"):
         raise PermissionError()
 
     # add feature
@@ -241,10 +350,18 @@ def activate_feature_event(request, s, n, cod, p=None):
     if p:
         return redirect("/" + p)
     view_name = feature.event_permissions.first().slug
-    return redirect(reverse(view_name, kwargs={"s": s, "n": n}))
+    return redirect(reverse(view_name, kwargs={"s": s}))
 
 
 def toggle_sidebar(request):
+    """Toggle the sidebar open/closed state in user session.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        JsonResponse: Status response indicating success
+    """
     key = "is_sidebar_open"
     if key in request.session:
         request.session[key] = not request.session[key]
@@ -254,6 +371,20 @@ def toggle_sidebar(request):
 
 
 def debug_mail(request):
+    """Send reminder emails to all registrations for debugging.
+
+    Only available in development and test environments.
+    Sends profile, membership, membership fee, and payment reminders.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        JsonResponse: Status response
+
+    Raises:
+        Http404: If not in dev or test environment
+    """
     if request.enviro not in ["dev", "test"]:
         raise Http404()
 
@@ -267,6 +398,21 @@ def debug_mail(request):
 
 
 def debug_slug(request, s=""):
+    """Set debug slug in session for development testing.
+
+    Only available in development and test environments.
+    Sets a debug slug in the session for testing purposes.
+
+    Args:
+        request: Django HTTP request object
+        s: Debug slug to set in session
+
+    Returns:
+        HttpResponseRedirect: Redirect to home page
+
+    Raises:
+        Http404: If not in dev or test environment
+    """
     if request.enviro not in ["dev", "test"]:
         raise Http404()
 
@@ -275,34 +421,64 @@ def debug_slug(request, s=""):
 
 
 def ticket(request, s=""):
+    """Handle support ticket creation and submission.
+
+    Displays ticket form and processes ticket submissions.
+    Associates tickets with current association and user if authenticated.
+
+    Args:
+        request: Django HTTP request object
+        s: Optional reason/category for the ticket
+
+    Returns:
+        HttpResponse: Rendered ticket form or redirect after successful submission
+    """
     ctx = {"reason": s}
     if request.POST:
-        form = LarpManagerTicket(request.POST, request=request)
+        form = LarpManagerTicketForm(request.POST, request.FILES, request=request, ctx=ctx)
         if form.is_valid():
-            for _name, email in conf_settings.ADMINS:
-                subj = f"LarpManager ticket - {request.assoc['name']}"
-                if s:
-                    subj += f" [{s}]"
-                body = f"Email: {form.cleaned_data['email']} <br /><br />"
-                if request.user.is_authenticated:
-                    body += f"User: {request.user.member} ({request.user.member.email}) <br /><br />"
-                body += form.cleaned_data["content"]
-                my_send_mail(subj, body, email)
+            lm_ticket = form.save(commit=False)
+            lm_ticket.assoc_id = request.assoc["id"]
+            if s:
+                lm_ticket.reason = s
+            if request.user.is_authenticated:
+                lm_ticket.member = request.user.member
+            lm_ticket.save()
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
-        form = LarpManagerTicket(request=request)
+        form = LarpManagerTicketForm(request=request, ctx=ctx)
     ctx["form"] = form
     return render(request, "larpmanager/member/ticket.html", ctx)
 
 
 def is_suspicious_user_agent(user_agent):
+    """Check if a user agent string appears to be from a bot.
+
+    Args:
+        user_agent (str): User agent string to check
+
+    Returns:
+        bool: True if user agent appears to be from a bot, False otherwise
+    """
     known_bots = ["bot", "crawler", "spider", "http", "archive", "wget", "curl"]
     return any(bot in user_agent.lower() for bot in known_bots)
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
 def discord(request):
+    """Handle Discord invite page with bot protection.
+
+    Rate-limited endpoint that blocks bots and provides
+    a form-protected redirect to Discord server.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered Discord form or redirect to Discord server
+        HttpResponseForbidden: If bot detected
+    """
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
         return HttpResponseForbidden("Bots not allowed.")
@@ -319,6 +495,17 @@ def discord(request):
 
 @login_required
 def join(request):
+    """Handle user joining an association.
+
+    Processes association joining form and sends welcome messages
+    and emails upon successful joining.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered join form or redirect after successful joining
+    """
     ctx = get_lm_contact(request)
     if "red" in ctx:
         return redirect(ctx["red"])
@@ -337,6 +524,18 @@ def join(request):
 
 
 def _join_form(ctx, request):
+    """Process association creation form for new users.
+
+    Handles form validation, association creation, user role assignment,
+    and admin notifications for new organizations.
+
+    Args:
+        ctx: Context dictionary to update with form data
+        request: Django HTTP request object
+
+    Returns:
+        Association: Created association object if successful, None otherwise
+    """
     if request.method == "POST":
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -374,6 +573,17 @@ def _join_form(ctx, request):
 
 @cache_page(60 * 15)
 def discover(request):
+    """Display discovery page with featured content.
+
+    Cached for 15 minutes. Shows LarpManager discover items
+    ordered by their specified order.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered discover page template
+    """
     ctx = get_lm_contact(request)
     ctx["index"] = True
     ctx["discover"] = LarpManagerDiscover.objects.order_by("order")
@@ -382,7 +592,22 @@ def discover(request):
 
 @override("en")
 def tutorials(request, slug=None):
-    ctx = get_lm_contact(request)
+    """Display tutorial pages with navigation.
+
+    Shows individual tutorials with previous/next navigation.
+    Always rendered in English locale.
+
+    Args:
+        request: Django HTTP request object
+        slug: Optional tutorial slug, defaults to first tutorial
+
+    Returns:
+        HttpResponse: Rendered tutorial page
+
+    Raises:
+        Http404: If tutorial with specified slug doesn't exist
+    """
+    ctx = get_lm_contact(request, False)
     ctx["index"] = True
 
     try:
@@ -416,25 +641,58 @@ def tutorials(request, slug=None):
 
 
 @cache_page(60 * 15)
-def blog(request, slug=""):
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
-    if slug:
-        try:
-            ctx["article"] = LarpManagerBlog.objects.get(slug=slug, published=True)
-            ctx["og_image"] = ctx["article"].thumb.url
-            ctx["og_title"] = ctx["article"].title
-            ctx["og_description"] = ctx["article"].description
-        except Exception as err:
-            raise Http404("blog article not found") from err
-    else:
-        ctx["list"] = LarpManagerBlog.objects.filter(published=True)
+def guides(request):
+    """Display list of published guides for LarpManager users.
 
-    return render(request, "larpmanager/larpmanager/blog.html", ctx)
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered guides template with list of published guides
+    """
+    ctx = get_lm_contact(request)
+    ctx["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    return render(request, "larpmanager/larpmanager/guides.html", ctx)
+
+
+def guide(request, slug):
+    """Display a specific guide article by slug.
+
+    Args:
+        request: Django HTTP request object
+        slug: URL slug of the guide to display
+
+    Returns:
+        HttpResponse: Rendered guide template with article content
+
+    Raises:
+        Http404: If guide with given slug is not found or not published
+    """
+    ctx = get_lm_contact(request)
+    try:
+        ctx["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
+    except ObjectDoesNotExist as err:
+        raise Http404("guide not found") from err
+
+    ctx["og_image"] = ctx["guide"].thumb.url
+    ctx["og_title"] = ctx["guide"].title
+    ctx["og_description"] = ctx["guide"].description
+
+    return render(request, "larpmanager/larpmanager/guide.html", ctx)
 
 
 @cache_page(60 * 15)
 def privacy(request):
+    """Display privacy policy page.
+
+    Cached for 15 minutes. Shows association-specific privacy text.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered privacy policy page
+    """
     ctx = get_lm_contact(request)
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", ctx)
@@ -442,6 +700,16 @@ def privacy(request):
 
 @cache_page(60 * 15)
 def usage(request):
+    """Display usage/terms page.
+
+    Cached for 15 minutes. Shows usage guidelines and terms.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered usage page
+    """
     ctx = get_lm_contact(request)
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/usage.html", ctx)
@@ -449,18 +717,53 @@ def usage(request):
 
 @cache_page(60 * 15)
 def about_us(request):
+    """Display about us page.
+
+    Cached for 15 minutes. Shows information about the platform.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered about us page
+    """
     ctx = get_lm_contact(request)
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
-def get_lm_contact(request):
+def get_lm_contact(request, check=True):
+    """Get base context for LarpManager contact pages.
+
+    Args:
+        request: Django HTTP request object
+        check: Whether to check if user is on main site (default True)
+
+    Returns:
+        dict: Base context with contact form and platform info
+
+    Raises:
+        MainPageError: If check=True and user is on association site
+    """
+    if check and request.assoc["id"] > 0:
+        raise MainPageError(request.path)
     ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
 
 @login_required
 def lm_list(request):
+    """Display list of associations for admin users.
+
+    Shows associations ordered by total registrations count.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object (must be authenticated admin)
+
+    Returns:
+        HttpResponse: Rendered association list page
+    """
     ctx = check_lm_admin(request)
 
     ctx["list"] = Association.objects.annotate(total_registrations=Count("events__runs__registrations")).order_by(
@@ -472,6 +775,17 @@ def lm_list(request):
 
 @login_required
 def lm_payments(request):
+    """Display payment management page for admin users.
+
+    Shows unpaid runs and payment totals by year.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object (must be authenticated admin)
+
+    Returns:
+        HttpResponse: Rendered payments management page
+    """
     ctx = check_lm_admin(request)
     min_registrations = 5
     que = Run.objects.filter(paid__isnull=True).order_by("start")
@@ -502,20 +816,43 @@ def lm_payments(request):
 
 
 def get_run_lm_payment(el):
+    """Calculate payment details for a run.
+
+    Calculates features count, active registrations, and total payment
+    based on association plan.
+
+    Args:
+        el: Run object to calculate payment for
+
+    Side effects:
+        Modifies el object with features, active_registrations, and total attributes
+    """
     el.features = len(get_assoc_features(el.event.assoc_id)) + len(get_event_features(el.event_id))
     el.active_registrations = (
         Registration.objects.filter(run__id=el.id, cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
         .count()
     )
-    if el.plan == LarpManagerPlan.FREE:
+    if el.plan == AssociationPlan.FREE:
         el.total = 0
-    elif el.plan == LarpManagerPlan.SUPPORT:
+    elif el.plan == AssociationPlan.SUPPORT:
         el.total = el.active_registrations
 
 
 @login_required
 def lm_payments_confirm(request, r):
+    """Confirm payment for a specific run.
+
+    Marks a run as paid with calculated total.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object (must be authenticated admin)
+        r: Run ID to confirm payment for
+
+    Returns:
+        HttpResponseRedirect: Redirect to payments list
+    """
     check_lm_admin(request)
     run = Run.objects.get(pk=r)
     get_run_lm_payment(run)
@@ -526,6 +863,17 @@ def lm_payments_confirm(request, r):
 
 @login_required
 def lm_send(request):
+    """Send bulk email to users.
+
+    Provides form for sending emails to multiple recipients.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object (must be authenticated admin)
+
+    Returns:
+        HttpResponse: Rendered email form or redirect after sending
+    """
     ctx = check_lm_admin(request)
     if request.method == "POST":
         form = SendMailForm(request.POST)
@@ -544,6 +892,17 @@ def lm_send(request):
 
 @login_required
 def lm_profile(request):
+    """Display performance profiling data.
+
+    Shows view function performance metrics from the last 72 hours.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object (must be authenticated admin)
+
+    Returns:
+        HttpResponse: Rendered profiling data page
+    """
     ctx = check_lm_admin(request)
     st = datetime.now() - timedelta(hours=72)
     ctx["res"] = LarpManagerProfiler.objects.filter(date__gte=st).order_by("-mean_duration")[:50]
@@ -552,6 +911,18 @@ def lm_profile(request):
 
 @login_required
 def lm_profile_rm(request, func):
+    """Remove profiling data for a specific function.
+
+    Deletes all profiling records for the specified view function.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object (must be authenticated admin)
+        func: View function name to remove profiling data for
+
+    Returns:
+        HttpResponseRedirect: Redirect to profiling page
+    """
     check_lm_admin(request)
     LarpManagerProfiler.objects.filter(view_func_name=func).delete()
     return redirect("lm_profile")
@@ -559,6 +930,18 @@ def lm_profile_rm(request, func):
 
 @ratelimit(key="ip", rate="5/m", block=True)
 def donate(request):
+    """Handle donation page with bot protection.
+
+    Rate-limited endpoint that blocks bots and provides
+    a form-protected redirect to PayPal donation page.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered donation form or redirect to PayPal
+        HttpResponseForbidden: If bot detected
+    """
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
         return HttpResponseForbidden("Bots not allowed.")
@@ -574,6 +957,18 @@ def donate(request):
 
 
 def debug_user(request, mid):
+    """Login as a specific user for debugging purposes.
+
+    Allows admin users to login as another user for debugging.
+    Requires admin permissions.
+
+    Args:
+        request: Django HTTP request object
+        mid: Member ID to login as
+
+    Side effects:
+        Logs in as the specified user
+    """
     check_lm_admin(request)
     member = Member.objects.get(pk=mid)
     login(request, member.user, backend=get_user_backend())
@@ -581,6 +976,18 @@ def debug_user(request, mid):
 
 @ratelimit(key="ip", rate="5/m", block=True)
 def demo(request):
+    """Handle demo organization creation with bot protection.
+
+    Rate-limited endpoint that blocks bots and creates
+    demo organizations for testing purposes.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered demo form or redirect to created demo
+        HttpResponseForbidden: If bot detected
+    """
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
         return HttpResponseForbidden("Bots not allowed.")
@@ -596,6 +1003,17 @@ def demo(request):
 
 
 def _create_demo(request):
+    """Create a demo organization with test user.
+
+    Creates a new demo association with a test admin user
+    and logs the user in automatically.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponseRedirect: Redirect to demo organization management
+    """
     new_pk = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
     new_pk += 1
 

@@ -22,8 +22,8 @@
         <th>{% trans "Selectable" %}</th>
     {% endif %}
     {% include "elements/writing/questions_header.html" %}
-    <th class="hide characters">{% trans "Characters" %}</th>
-    <th class="hide stats">
+    <th class="characters">{% trans "Characters" %}</th>
+    <th class="stats">
         <i class="fa fa-hashtag"></i> {% trans "Characters" %}
     </th>
     <th></th>
@@ -33,14 +33,14 @@
     {% for el in list %}
         <tr id="{{ el.id }}">
             <td>
-                <a href="{% url 'orga_factions_edit' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_factions_edit' run.get_slug el.id %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_factions_view' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_factions_view' run.get_slug el.id %}"
                    qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_factions_versions' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_factions_versions' run.get_slug el.id %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
             </td>
             <td>{{ el.get_typ_display }}</td>
@@ -50,22 +50,22 @@
                 </td>
             {% endif %}
             {% include "elements/writing/questions_body.html" %}
-            <td class="hide characters">
+            <td class="characters dot_links">
                 {% for ch in el.characters.all %}
-                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+                    <a href="{% url 'orga_characters_edit' run.get_slug ch.id %}">{{ ch }}</a>
                 {% endfor %}
             </td>
-            <td class="hide stats">{{ el.characters.all | length }}</td>
+            <td class="stats">{{ el.characters.all | length }}</td>
             <td>
                 {% if not forloop.first %}
-                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 0 %}">
+                    <a href="{% url 'orga_factions_order' run.get_slug el.id 0 %}">
                         <i class="fa-solid fa-arrow-up"></i>
                     </a>
                 {% endif %}
             </td>
             <td>
                 {% if not forloop.last %}
-                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 1 %}">
+                    <a href="{% url 'orga_factions_order' run.get_slug el.id 1 %}">
                         <i class="fa-solid fa-arrow-down"></i>
                     </a>
                 {% endif %}

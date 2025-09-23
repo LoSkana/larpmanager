@@ -8,10 +8,13 @@
 {% endblock info %}
 {% block nav_fields %}
     {% if user_character_max %}
-        <a href="#" class="table_toggle" tog='player'>{% trans "player" %}</a>
+        <a href="#" class="table_toggle" tog='player'>{% trans "Player" %}</a>
+    {% endif %}
+    {% if features.campaign and event.parent %}
+        <a href="#" class="table_toggle" tog='attended'>{% trans "Attended" %}</a>
     {% endif %}
     {% if user_character_approval %}
-        <a href="#" class="table_toggle" tog='status'>{% trans "status" %}</a>
+        <a href="#" class="table_toggle" tog='status'>{% trans "Status" %}</a>
     {% endif %}
     {% if features.px %}
         <a href="#" class="table_toggle" tog='px'>{% trans "XP" %}</a>
@@ -20,11 +23,14 @@
     {% if features.plot %}
         <a href="#" class="table_toggle" tog='plots'>{% trans "Plots" %}</a>
     {% endif %}
+    {% if features.prologue %}
+        <a href="#" class="table_toggle" tog='prologues'>{% trans "Prologues" %}</a>
+    {% endif %}
     {% if features.relationships %}
         <a href="#" class="table_toggle" tog='relationships'>{% trans "Relationships" %}</a>
     {% endif %}
     {% if features.speedlarp %}
-        <a href="#" class="table_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
+        <a href="#" class="table_toggle" tog='speedlarp'>{% trans "Speedlarp" %}</a>
     {% endif %}
 {% endblock nav_fields %}
 {% block thead %}
@@ -33,6 +39,9 @@
     <th></th>
     {% if user_character_max %}
         <th class="player">{% trans "Player" %}</th>
+    {% endif %}
+    {% if features.campaign and event.parent %}
+        <th class="attended">{% trans "Attended" %}</th>
     {% endif %}
     {% if user_character_approval %}
         <th class="status">{% trans "Status" %}</th>
@@ -47,6 +56,12 @@
         <th class="plots">{% trans "Plots" %}</th>
         <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Plots" %}
+        </th>
+    {% endif %}
+    {% if features.prologue %}
+        <th class="prologues">{% trans "Prologues" %}</th>
+        <th class="stats">
+            <i class="fa fa-hashtag"></i> {% trans "Prologues" %}
         </th>
     {% endif %}
     {% if features.relationships %}
@@ -66,23 +81,28 @@
     {% for el in list %}
         <tr id="{{ el.id }}">
             <td>
-                <a href="{% url 'orga_characters_edit' run.event.slug run.number el.id %}"
+                <a href="{% url 'orga_characters_edit' run.get_slug el.id %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_characters_view' run.event.slug run.number el.id %}"
-                   qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a> &nbsp;
-                <a href="{% url 'orga_characters_versions' run.event.slug run.number el.id %}"
-                   qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a> &nbsp;
-                <a href="{% url 'character' run.event.slug run.number el.number %}"
-                   qtip="{% trans "Gallery" %}"><i class="fa-solid fa-eye"></i></a> &nbsp;
+                <a href="{% url 'orga_characters_view' run.get_slug el.id %}"
+                   qtip="{% trans "Read" %}"><i class="fa-solid fa-book-open"></i></a>
+                <a href="{% url 'orga_characters_versions' run.get_slug el.id %}"
+                   qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
+                <a href="{% url 'character' run.get_slug el.number %}"
+                   qtip="{% trans "Gallery" %}"><i class="fa-solid fa-eye"></i></a>
                 {% if writing_external_access %}
-                    <a href="{% url 'character_external' run.event.slug run.number el.access_token %}"
+                    <a href="{% url 'character_external' run.get_slug el.access_token %}"
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
             </td>
             {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
+            {% if features.campaign and event.parent %}
+                <td class="attended">
+                    {% if el.has_registration %}<i class="fa fa-check"></i>{% endif %}
+                </td>
+            {% endif %}
             {% if user_character_approval %}<td class="status">{{ el.get_status_display }}</td>{% endif %}
             {% if features.px %}
                 <td class="px">{{ el.addit | get:'px_tot' }}</td>
@@ -91,25 +111,33 @@
             {% endif %}
             {% include "elements/writing/questions_body.html" %}
             {% if features.plot %}
-                <td class="plots">
+                <td class="plots dot_links">
                     {% for p in el.plts %}
-                        <a href="{% url 'orga_plots_edit' run.event.slug run.number p.1 %}">{{ p.0 }}</a>
+                        <a href="{% url 'orga_plots_edit' run.get_slug p.1 %}">{{ p.0 }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.plts | length }}</td>
             {% endif %}
+            {% if features.prologue %}
+                <td class="prologues dot_links">
+                    {% for p in el.prologues_list.all %}
+                        <a href="{% url 'orga_prologues_edit' run.get_slug p.id %}">{{ p.name }}</a>
+                    {% endfor %}
+                </td>
+                <td class="stats">{{ el.prologues_list.count }}</td>
+            {% endif %}
             {% if features.relationships %}
-                <td class="relationships">
+                <td class="relationships dot_links">
                     {% for rel in el.source.all %}
-                        <a href="{% url 'orga_characters_edit' run.event.slug run.number rel.target_id %}">{{ rel.target }}</a>
+                        <a href="{% url 'orga_characters_edit' run.get_slug rel.target_id %}">{{ rel.target }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.source.count }}</td>
             {% endif %}
             {% if features.speedlarp %}
-                <td class="speedlarp">
+                <td class="speedlarp dot_links">
                     {% for p in el.speedlarps_list.all %}
-                        <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.id %}">{{ p }}</a>
+                        <a href="{% url 'orga_speedlarps_edit' run.get_slug p.id %}">{{ p }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.speedlarps_list.count }}</td>
@@ -133,7 +161,7 @@
         </div>
         {% for key, que in form_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
-                <div class="email_que_{{ key }}">
+                <div class="email_que_{{ key }} hide">
                     <br />
                     <h4>{{ que.name }}</h4>
                     <table>

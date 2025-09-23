@@ -36,6 +36,16 @@ urlpatterns = [
         name="discover",
     ),
     path(
+        "guides/",
+        views_lm.guides,
+        name="guides",
+    ),
+    path(
+        "guide/<slug:slug>/",
+        views_lm.guide,
+        name="guide",
+    ),
+    path(
         "tutorials/",
         views_lm.tutorials,
         name="tutorials",
@@ -69,16 +79,6 @@ urlpatterns = [
         "contact/",
         views_lm.contact,
         name="contact",
-    ),
-    path(
-        "blog/",
-        views_lm.blog,
-        name="blog",
-    ),
-    path(
-        "blog/<slug:slug>",
-        views_lm.blog,
-        name="blog",
     ),
     path(
         "lm/list/",
@@ -126,12 +126,12 @@ urlpatterns = [
         name="activate_feature_assoc",
     ),
     path(
-        "<slug:s>/<int:n>/activate/<slug:cod>/next/<path:p>",
+        "<slug:s>/activate/<slug:cod>/next/<path:p>",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
     path(
-        "<slug:s>/<int:n>/activate/<slug:cod>/",
+        "<slug:s>/activate/<slug:cod>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),

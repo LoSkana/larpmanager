@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "utils.html" %}
 {% load i18n static %}
 {% block special %}
     manage
@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
 {% endblock meta %}
 {% block content %}
-    {% include "elements/header/writing.html" %}
+    {% include "elements/header/edit.html" with writing_header=True %}
     {% if list %}
         <div class="nav fields">
             <b>{% trans "Fields" %}</b>:
@@ -16,7 +16,7 @@
             <a href="#" class="table_toggle" tog='stats'>Stats</a>
         </div>
         <table id="writing_list_{{ run.id }}_{{ typ }}"
-               class="que_load{% if not interface_old %} go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% endif %}">
+               class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}">
             <thead>
                 {% block thead %}
                 {% endblock thead %}
@@ -36,19 +36,18 @@
         </p>
     {% endif %}
 {% endblock content %}
-{% block js %}
+{% block js2 %}
     <script defer src="{% static TINYMCE_JS_URL %}"></script>
-    {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
-    {% include "elements/writing/excel-edit.js" %}
     {% include "elements/form/max_length.js" %}
-    {% include "elements/form/char_highlight.js" %}
     {% if not disable_char_finder %}
         {{ char_finder_media }}
         {% include "elements/form/char_finder.js" %}
     {% endif %}
+    {% include "elements/writing/excel-edit.js" %}
+    {% include "elements/form/char_highlight.js" %}
     <script>
-        var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
-        var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
+        var url_load_questions = "{% url 'orga_writing_form_list' run.get_slug label_typ %}";
+        var url_load_questions_email = "{% url 'orga_writing_form_email' run.get_slug label_typ %}";
 
         var accounting = false;
 
@@ -56,4 +55,4 @@
 
         {% include "elements/questions/load.js" %}
     </script>
-{% endblock js %}
+{% endblock js2 %}

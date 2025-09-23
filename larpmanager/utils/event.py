@@ -30,7 +30,7 @@ from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.base import def_user_ctx, get_index_permissions
@@ -39,6 +39,19 @@ from larpmanager.utils.registration import check_signup, registration_status
 
 
 def get_event(request, slug, number=None):
+    """Get event context from slug and number.
+
+    Args:
+        request: Django HTTP request object or None
+        slug (str): Event slug identifier
+        number (int, optional): Run number to append to slug
+
+    Returns:
+        dict: Event context with run, event, and features
+
+    Raises:
+        Http404: If event doesn't exist or belongs to wrong association
+    """
     if request:
         ctx = def_user_ctx(request)
     else:
@@ -46,9 +59,9 @@ def get_event(request, slug, number=None):
 
     try:
         if number:
-            get_run(ctx, slug, number)
-        else:
-            ctx["event"] = Event.objects.get(slug=slug)
+            slug += f"-{number}"
+
+        get_run(ctx, slug)
 
         if "a_id" in ctx:
             if ctx["event"].assoc_id != ctx["a_id"]:
@@ -69,8 +82,20 @@ def get_event(request, slug, number=None):
         raise Http404("Event does not exist") from err
 
 
-def get_event_run(request, s, n, signup=False, slug=None, status=False):
-    ctx = get_event(request, s, number=n)
+def get_event_run(request, s, signup=False, slug=None, status=False):
+    """Get comprehensive event run context with permissions and features.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+        signup (bool): Whether to check signup eligibility
+        slug (str, optional): Feature slug to check access for
+        status (bool): Whether to include registration status
+
+    Returns:
+        dict: Complete event context with permissions and configuration
+    """
+    ctx = get_event(request, s)
 
     if signup:
         check_signup(request, ctx)
@@ -82,7 +107,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
         registration_status(ctx["run"], request.user)
 
     # check if the user has any role
-    if has_event_permission(ctx, request, s):
+    if has_event_permission(request, ctx, s):
         get_index_event_permissions(ctx, request, s)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -91,7 +116,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     else:
         ctx["assoc_slug"] = ctx["event"].assoc.slug
 
-    if has_event_permission(ctx, request, s, "orga_characters"):
+    if has_event_permission(request, ctx, s, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
 
@@ -101,6 +126,14 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
 
 
 def prepare_run(ctx):
+    """Prepare run context with visibility and field configurations.
+
+    Args:
+        ctx (dict): Event context to update
+
+    Side effects:
+        Updates ctx with run configuration, visibility settings, and writing fields
+    """
     config_run = get_cache_config_run(ctx["run"])
 
     if "staff" in ctx or not ctx["event"].get_config("writing_field_visibility", False):
@@ -116,16 +149,29 @@ def prepare_run(ctx):
             config_name = "show_addit"
             if config_name not in config_run:
                 config_run[config_name] = {}
-            config_run[config_name][el] = True
+            if el in ctx["features"]:
+                config_run[config_name][el] = True
 
     ctx.update(config_run)
 
     ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
 
 
-def get_run(ctx, s, n):
+def get_run(ctx, s):
+    """Load run and event data from cache and database.
+
+    Args:
+        ctx (dict): Context dictionary to update
+        s (str): Run slug identifier
+
+    Side effects:
+        Updates ctx with run and event objects
+
+    Raises:
+        UnknowRunError: If run cannot be found
+    """
     try:
-        res = get_cache_run(ctx["a_id"], s, n)
+        res = get_cache_run(ctx["a_id"], s)
         que = Run.objects.select_related("event")
         fields = [
             "search",
@@ -133,7 +179,6 @@ def get_run(ctx, s, n):
             "event__tagline",
             "event__where",
             "event__authors",
-            "event__description_short",
             "event__description",
             "event__genre",
             "event__cover",
@@ -154,6 +199,16 @@ def get_run(ctx, s, n):
 
 
 def get_character_filter(ch, regs, filters):
+    """Check if character should be included based on filter criteria.
+
+    Args:
+        ch: Character instance to check
+        regs (dict): Mapping of character IDs to registrations
+        filters (list): Filter criteria ('free', 'mirror', etc.)
+
+    Returns:
+        bool: True if character passes all filters
+    """
     if "free" in filters:
         if ch.id in regs:
             return False
@@ -164,6 +219,15 @@ def get_character_filter(ch, regs, filters):
 
 
 def get_event_filter_characters(ctx, filters):
+    """Get filtered characters organized by factions for event display.
+
+    Args:
+        ctx (dict): Event context to update
+        filters (list): Character filter criteria
+
+    Side effects:
+        Updates ctx with filtered factions and characters lists
+    """
     ctx["factions"] = []
 
     regs = {}
@@ -213,7 +277,16 @@ def get_event_filter_characters(ctx, filters):
 
 
 def has_access_character(request, ctx):
-    if has_event_permission(ctx, request, ctx["event"].slug, "orga_characters"):
+    """Check if user has access to view/edit a specific character.
+
+    Args:
+        request: Django HTTP request object
+        ctx (dict): Context with character information
+
+    Returns:
+        bool: True if user has access (organizer, owner, or player)
+    """
+    if has_event_permission(request, ctx, ctx["event"].slug, "orga_characters"):
         return True
 
     member_id = request.user.member.id
@@ -227,16 +300,32 @@ def has_access_character(request, ctx):
     return False
 
 
-def check_event_permission(request, s, n, perm=None):
-    ctx = get_event_run(request, s, n)
-    if not has_event_permission(ctx, request, s, perm):
+def check_event_permission(request, s, perm=None):
+    """Check event permissions and prepare management context.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+        perm (str or list, optional): Required permission(s)
+
+    Returns:
+        dict: Event context with management permissions
+
+    Raises:
+        PermissionError: If user lacks required permissions
+        FeatureError: If required feature is not enabled
+    """
+    ctx = get_event_run(request, s)
+    if not has_event_permission(request, ctx, s, perm):
         raise PermissionError()
     if perm:
+        if isinstance(perm, list):
+            perm = perm[0]
         (feature, tutorial, config) = get_event_permission_feature(perm)
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial
-        if config and has_event_permission(ctx, request, s, "orga_config"):
-            ctx["config"] = reverse("orga_config", args=[ctx["event"].slug, ctx["run"].number, config])
+        if config and has_event_permission(request, ctx, s, "orga_config"):
+            ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config])
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)
@@ -246,11 +335,26 @@ def check_event_permission(request, s, n, perm=None):
 
 
 def get_index_event_permissions(ctx, request, slug, check=True):
+    """Load event permissions and roles for management interface.
+
+    Args:
+        ctx (dict): Context dictionary to update
+        request: Django HTTP request object
+        slug (str): Event slug
+        check (bool): Whether to enforce permission requirements
+
+    Side effects:
+        Updates ctx with role names and event permissions
+
+    Raises:
+        PermissionError: If check=True and user has no permissions
+    """
     (is_organizer, user_event_permissions, names) = get_event_roles(request, slug)
     if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
         is_organizer = True
     if check and not names and not is_organizer:
         raise PermissionError()
-    ctx["role_names"] = names
+    if names:
+        ctx["role_names"] = names
     features = get_event_features(ctx["event"].id)
-    ctx["event_pms"] = get_index_permissions(features, is_organizer, user_event_permissions, "event")
+    ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")

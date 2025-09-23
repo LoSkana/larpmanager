@@ -59,28 +59,34 @@
         </p>
         <hr />
     {% endif %}
-    {% if member.membership.credit > 0 %}
+    {% if member.membership.credit %}
         <h2>{{ credit_name }}</h2>
         <p>
-            {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
-            {% if 'refund' in assoc.features %}
-                <br />
-                {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'acc_refund' %}">{% trans "refund request" %}</a>.
-                {% if refunds %}
-                    <b>{% trans "Requests open" %}: </b>
-                    {% for el in refunds %}
-                        {% include "elements/comma.html" %}
-                        {{ el.details }} ({{ el.value }})
-                    {% endfor %}
+            {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
+            {% if member.membership.credit > 0 %}
+                <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+                {% if 'refund' in assoc.features %}
+                    <br />
+                    {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'acc_refund' %}">{% trans "refund request" %}</a>.
+                    {% if refunds %}
+                        <b>{% trans "Requests open" %}: </b>
+                        {% for el in refunds %}
+                            {% include "elements/comma.html" %}
+                            {{ el.details }} ({{ el.value }})
+                        {% endfor %}
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </p>
         <hr />
     {% endif %}
-    {% if member.membership.tokens > 0 %}
+    {% if member.membership.tokens %}
         <h2>{{ token_name }}</h2>
         <p>
-            {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+            {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>.
+            {% if member.membership.tokens > 0 %}
+                <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+            {% endif %}
         </p>
         <hr />
     {% endif %}

@@ -205,7 +205,7 @@ def event_register(request, s):
         return redirect("pre_register", s=s)
     elif len(runs) == 1:
         run = runs.first()
-        return redirect("register", s=s, n=run.number)
+        return redirect("register", s=run.get_slug())
     ctx["list"] = []
     features_map = {ctx["event"].slug: ctx["features"]}
     for r in runs:
@@ -255,8 +255,10 @@ def check_gallery_visibility(request, ctx):
     return True
 
 
-def gallery(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
+def gallery(request, s):
+    ctx = get_event_run(request, s, status=True)
+    if "character" not in ctx["features"]:
+        return redirect("event", s=ctx["run"].get_slug())
 
     ctx["reg_list"] = []
 
@@ -282,8 +284,8 @@ def gallery(request, s, n):
     return render(request, "larpmanager/event/gallery.html", ctx)
 
 
-def event(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
+def event(request, s):
+    ctx = get_event_run(request, s, status=True)
     ctx["coming"] = []
     ctx["past"] = []
     my_regs = None
@@ -311,21 +313,15 @@ def event(request, s, n):
 
     ctx["data"] = ctx["event"].show()
 
-    # ~ if 'fullscreen' in ctx['features']:
-    # ~ ctx['event'].background = ctx['event'].fullscreen
-    # ~ return render(request, 'larpmanager/general/event_full.html', ctx)
-
     return render(request, "larpmanager/event/event.html", ctx)
 
 
 def event_redirect(request, s):
-    ctx = get_event(request, s)
-    n = Run.objects.filter(event=ctx["event"]).order_by("-end").first().number
-    return redirect("event", s=s, n=n)
+    return redirect("event", s=s)
 
 
-def search(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
+def search(request, s):
+    ctx = get_event_run(request, s, status=True)
 
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
         get_event_cache_all(ctx)
@@ -372,18 +368,18 @@ def check_visibility(ctx, typ, name):
         raise Http404(typ + " not active")
 
     if "staff" not in ctx and not ctx[f"show_{typ}"]:
-        raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
+        raise HiddenError(ctx["run"].get_slug(), name)
 
 
-def factions(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
+def factions(request, s):
+    ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "faction", _("Factions"))
     get_event_cache_all(ctx)
     return render(request, "larpmanager/event/factions.html", ctx)
 
 
-def faction(request, s, n, g):
-    ctx = get_event_run(request, s, n, status=True)
+def faction(request, s, g):
+    ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "faction", _("Factions"))
 
     get_event_cache_all(ctx)
@@ -403,8 +399,8 @@ def faction(request, s, n, g):
     return render(request, "larpmanager/event/faction.html", ctx)
 
 
-def quests(request, s, n, g=None):
-    ctx = get_event_run(request, s, n, status=True)
+def quests(request, s, g=None):
+    ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
     if not g:
@@ -418,8 +414,8 @@ def quests(request, s, n, g=None):
     return render(request, "larpmanager/event/quests.html", ctx)
 
 
-def quest(request, s, n, g):
-    ctx = get_event_run(request, s, n, status=True)
+def quest(request, s, g):
+    ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
     get_element(ctx, g, "quest", Quest, by_number=True)
@@ -437,8 +433,8 @@ def quest(request, s, n, g):
     return render(request, "larpmanager/event/quest.html", ctx)
 
 
-def limitations(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
+def limitations(request, s):
+    ctx = get_event_run(request, s, status=True)
 
     counts = get_reg_counts(ctx["run"])
 

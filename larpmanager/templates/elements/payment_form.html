@@ -38,7 +38,7 @@
                              alt="payment logo {{ el.name }}" />
                     </th>
                     <th>{{ el.name }}</th>
-                    {% if 'payment_fees' in assoc.features and user_fees %}
+                    {% if user_fees %}
                         <th>
                             {% if el.fee %}
                                 {% trans "Fee" %}: +{{ el.fee }}%

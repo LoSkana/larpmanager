@@ -21,7 +21,7 @@
                 $('#id_max_length_tr').fadeOut(speed);
             }
 
-            if (["s", "m", "t", "p", "e"].includes(selectedValue)) {
+            if (["s", "m", "t", "p", "e", "c"].includes(selectedValue)) {
                 $('#id_printable_tr').fadeIn(speed);
                 $('#id_visibility_tr').fadeIn(speed);
             } else {
@@ -33,6 +33,18 @@
                 $('#id_visibility_tr').fadeOut(speed);
             } else {
                 $('#id_visibility_tr').fadeIn(speed);
+            }
+
+            if (["ticket", "c"].includes(selectedValue)) {
+                $('#id_status_tr').fadeOut(speed);
+            } else {
+                $('#id_status_tr').fadeIn(speed);
+            }
+
+            if (["c"].includes(selectedValue)) {
+                $('#id_editable_tr').fadeOut(speed);
+            } else {
+                $('#id_editable_tr').fadeIn(speed);
             }
         }
 

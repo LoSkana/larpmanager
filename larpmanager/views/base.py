@@ -29,6 +29,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
 from larpmanager.utils.common import welcome_user
 from larpmanager.utils.miscellanea import check_centauri
@@ -88,7 +89,7 @@ def tutorial_query(request):
 
 
 @csrf_exempt
-def upload_image(request):
+def upload_media(request):
     if request.method == "POST" and request.FILES.get("file"):
         file = request.FILES["file"]
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -96,3 +97,23 @@ def upload_image(request):
         path = default_storage.save(f"tinymce_uploads/{request.assoc['id']}/{filename}", file)
         return JsonResponse({"location": default_storage.url(path)})
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+@require_POST
+def set_member_config(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"res": "ko", "msg": "not authenticated"})
+    config_name = request.POST.get("name", "").lower()
+    if not config_name:
+        return JsonResponse({"res": "ko", "msg": "empty name"})
+    value = request.POST.get("value", "").lower()
+    if not value:
+        return JsonResponse({"res": "ko", "msg": "empty value"})
+
+    if value == "true":
+        value = True
+    elif value == "false":
+        value = False
+
+    save_single_config(request.user.member, config_name, value)
+    return JsonResponse({"res": "ko"})

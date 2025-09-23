@@ -27,7 +27,8 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
 class PxBaseForm(MyForm):
@@ -42,6 +43,8 @@ class OrgaDeliveryPxForm(PxBaseForm):
     load_js = ["characters-choices"]
 
     page_title = _("Delivery")
+
+    page_info = _("This page allows you to add or edit a px delivery")
 
     class Meta:
         model = DeliveryPx
@@ -58,6 +61,8 @@ class OrgaAbilityPxForm(PxBaseForm):
 
     page_title = _("Ability")
 
+    page_info = _("This page allows you to add or edit a px ability")
+
     class Meta:
         model = AbilityPx
         exclude = ("number",)
@@ -65,13 +70,13 @@ class OrgaAbilityPxForm(PxBaseForm):
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
-            "dependents": EventWritingOptionS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for s in ["prerequisites", "dependents"]:
+        for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
 
         px_user = self.params["event"].get_config("px_user", False)
@@ -81,7 +86,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         ]
 
         if not px_user:
-            self.delete_field("dependents")
+            self.delete_field("requirements")
             self.delete_field("prerequisites")
             self.delete_field("visible")
 
@@ -89,9 +94,55 @@ class OrgaAbilityPxForm(PxBaseForm):
 class OrgaAbilityTypePxForm(MyForm):
     page_title = _("Ability type")
 
+    page_info = _("This page allows you to add or edit a px ability type")
+
     class Meta:
         model = AbilityTypePx
         exclude = ("number",)
+
+
+class OrgaRulePxForm(MyForm):
+    page_title = _("Rule")
+
+    page_info = _("This page allows you to add or edit a rule on computed fields")
+
+    class Meta:
+        model = RulePx
+        exclude = ("number", "order")
+        widgets = {"abilities": AbilityS2WidgetMulti}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.delete_field("name")
+
+        self.fields["abilities"].widget.set_event(self.params["event"])
+        qs = WritingQuestion.objects.filter(event=self.params["event"], typ=WritingQuestionType.COMPUTED)
+        self.fields["field"].queryset = qs
+
+
+class OrgaModifierPxForm(MyForm):
+    page_title = _("Rule")
+
+    page_info = _(
+        "This page allows you to add or edit an ability modifier. It is triggered only if all prerequisites "
+        + "and requirements are met. If multiple modifiers apply, only the first is used"
+    )
+
+    class Meta:
+        model = ModifierPx
+        exclude = ("number", "order")
+        widgets = {
+            "abilities": AbilityS2WidgetMulti,
+            "prerequisites": AbilityS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.delete_field("name")
+
+        for field in ["abilities", "prerequisites", "requirements"]:
+            self.fields[field].widget.set_event(self.params["event"])
 
 
 class SelectNewAbility(forms.Form):

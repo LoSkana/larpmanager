@@ -1,0 +1,34 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Reading" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page allows you to read any writing element, using the table search controls" %}
+{% endblock info %}
+{% block content %}
+    <table id="reading" class="go_datatable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Presentation" %}</th>
+                <th>{% trans "Text" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in alls %}
+                <tr>
+                    <td>
+                        <a href="{{ el.url }}" qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.type }}</td>
+                    <td>{{ el.teaser_red | safe }}</td>
+                    <td>{{ el.text_red | safe }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

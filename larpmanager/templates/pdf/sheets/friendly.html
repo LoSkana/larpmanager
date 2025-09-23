@@ -7,32 +7,83 @@
         <meta name="keywords" content="none">
         <meta name="description" content="none">
         <style>
-@font-face {
-    font-family: 'easyreading';
-    src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
-}
+            @font-face {
+                font-family: 'easyreading';
+                src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
+            }
 
-html { font-family: easyreading; height: 100%; line-height: 1.3; }
-p { margin: 0.3em; padding: 0; }
-body { background: white; height: 100%; }
-h1 { text-align:center; font-size:150%;}
-h2 { margin-left: 40px; margin-top: 1em; margin-bottom: 1em;}
-a { color: inherit; font-weight:bold; text-decoration: none;}
-.head { text-align:center; font-size:120%; font-weight:bold; }
-br {
-   display: block;
-   margin: 1px 0;
-}
+            html {
+                font-family: easyreading;
+                height: 100%;
+                line-height: 1.3;
+            }
 
-#char_title { text-align:center; margin: 0.5em; font-style: italic;  }
+            p {
+                margin: 0.3em;
+                padding: 0;
+            }
 
-table { width: 100%; }
-td, th { text-align: center; }
-.clear { clear: both; }
+            body {
+                background: white;
+                height: 100%;
+            }
 
-#char_name, #char_player, .c { text-align: center; }
-.show_char { display: none; }
+            h1 {
+                text-align: center;
+                font-size: 150%;
+            }
 
+            h2 {
+                margin-left: 40px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+            }
+
+            a {
+                color: inherit;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            .head {
+                text-align: center;
+                font-size: 120%;
+                font-weight: bold;
+            }
+
+            br {
+                display: block;
+                margin: 1px 0;
+            }
+
+            #char_title {
+                text-align: center;
+                margin: 0.5em;
+                font-style: italic;
+            }
+
+            table {
+                width: 100%;
+            }
+
+            td,
+            th {
+                text-align: center;
+            }
+
+            .clear {
+                clear: both;
+            }
+
+            #char_name,
+            #char_player,
+            .c {
+                text-align: center;
+            }
+
+            .show_char {
+                display: none;
+            }
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>

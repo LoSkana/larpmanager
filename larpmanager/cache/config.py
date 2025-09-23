@@ -23,15 +23,39 @@ from django.core.cache import cache
 
 
 def reset_configs(element):
+    """Clear cached configuration for an element.
+
+    Args:
+        element: Model instance to clear configuration cache for
+
+    Side effects:
+        Removes configuration from cache
+    """
     cache.delete(cache_configs_key(element))
 
 
 def cache_configs_key(element):
+    """Generate cache key for element configuration.
+
+    Args:
+        element: Model instance to generate cache key for
+
+    Returns:
+        str: Cache key for element configurations
+    """
     # noinspection PyProtectedMember
     return f"configs_{element._meta.model_name}_{element.id}"
 
 
 def get_configs(element):
+    """Get cached configuration for an element, updating if needed.
+
+    Args:
+        element: Model instance to get configurations for
+
+    Returns:
+        dict: Configuration name-value pairs
+    """
     key = cache_configs_key(element)
     res = cache.get(key)
     if not res:
@@ -41,11 +65,20 @@ def get_configs(element):
 
 
 def update_configs(element):
+    """Update configuration cache from database.
+
+    Args:
+        element: Model instance to update configurations for
+
+    Returns:
+        dict: Configuration name-value pairs from database
+    """
     model_map = {
         "event": ("EventConfig", "event"),
         "association": ("AssociationConfig", "assoc"),
         "run": ("RunConfig", "run"),
         "member": ("MemberConfig", "member"),
+        "character": ("CharacterConfig", "character"),
     }
     # noinspection PyProtectedMember
     model = element._meta.model_name.lower()
@@ -58,6 +91,15 @@ def update_configs(element):
 
 
 def save_all_element_configs(obj, dct):
+    """Save multiple configuration values for an element.
+
+    Args:
+        obj: Model instance to save configurations for
+        dct (dict): Configuration name-value pairs to save
+
+    Side effects:
+        Updates existing configurations and creates new ones
+    """
     fk_field = _get_fkey_config(obj)
 
     existing_configs = {config.name: config for config in obj.configs.all()}
@@ -79,11 +121,29 @@ def save_all_element_configs(obj, dct):
 
 
 def save_single_config(obj, name, value):
+    """Save single configuration value for an element.
+
+    Args:
+        obj: Model instance to save configuration for
+        name (str): Configuration name
+        value: Configuration value
+
+    Side effects:
+        Creates or updates configuration in database
+    """
     fk_field = _get_fkey_config(obj)
     obj.configs.model.objects.update_or_create(defaults={"value": value}, **{fk_field: obj, "name": name})
 
 
 def _get_fkey_config(obj):
+    """Get foreign key field name for configuration model.
+
+    Args:
+        obj: Model instance to determine foreign key for
+
+    Returns:
+        str: Foreign key field name for the configuration model
+    """
     fk_field_map = {
         "Event": "event",
         "Run": "run",
@@ -97,6 +157,16 @@ def _get_fkey_config(obj):
 
 
 def get_element_config(element, name, def_value):
+    """Get configuration value with type conversion and default fallback.
+
+    Args:
+        element: Model instance to get configuration from
+        name (str): Configuration name
+        def_value: Default value and type indicator
+
+    Returns:
+        Configuration value converted to appropriate type, or default value
+    """
     if not hasattr(element, "aux_configs"):
         element.aux_configs = get_configs(element)
 

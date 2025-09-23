@@ -11,6 +11,10 @@
 {% endblock nav %}
 {% block content %}
     <div class="character">
+        {% if missing_fields %}
+            <i>{% trans "The character have missing values in mandatory fields" %}: {{ missing_fields }}</i>
+            <hr />
+        {% endif %}
         <div class="gallery single">
             <div class="el">
                 <div class="icon">

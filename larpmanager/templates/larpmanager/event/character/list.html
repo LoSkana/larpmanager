@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% if not char_maximum %}
-        <a href="{% url 'character_create' run.event.slug run.number %}"
+        <a href="{% url 'character_create' run.get_slug %}"
            class="add-new">{% trans "Create new character" %}</a>
         <br />
     {% endif %}
@@ -38,7 +38,7 @@
                     <td class="hide">{{ el.number }}</td>
                     {% if features.user_character %}
                         <td>
-                            <a href="{% url 'character_change' run.event.slug run.number el.number %}"
+                            <a href="{% url 'character_change' run.get_slug el.number %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                     {% endif %}
@@ -61,12 +61,12 @@
                     {% endif %}
                     {% if px_user %}
                         <td>
-                            <a href="{% url 'character_abilities' run.event.slug run.number el.number %}">{% trans "Ability" %}</a>
+                            <a href="{% url 'character_abilities' run.get_slug el.number %}">{% trans "Ability" %}</a>
                         </td>
                     {% endif %}
                     {% if not assigned %}
                         <td>
-                            <a href="{% url 'character_assign' run.event.slug run.number el.number %}">{% trans "Select" %}</a>
+                            <a href="{% url 'character_assign' run.get_slug el.number %}">{% trans "Select" %}</a>
                         </td>
                     {% endif %}
                 </tr>

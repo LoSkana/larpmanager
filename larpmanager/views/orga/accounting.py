@@ -51,27 +51,27 @@ from larpmanager.utils.paginate import orga_paginate
 
 
 @login_required
-def orga_discounts(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_discounts")
+def orga_discounts(request, s):
+    ctx = check_event_permission(request, s, "orga_discounts")
     ctx["list"] = Discount.objects.filter(event=ctx["event"]).order_by("number")
     return render(request, "larpmanager/orga/accounting/discounts.html", ctx)
 
 
 @login_required
-def orga_discounts_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_discounts", OrgaDiscountForm, num)
+def orga_discounts_edit(request, s, num):
+    return orga_edit(request, s, "orga_discounts", OrgaDiscountForm, num)
 
 
 @login_required
-def orga_expenses_my(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_expenses_my")
+def orga_expenses_my(request, s):
+    ctx = check_event_permission(request, s, "orga_expenses_my")
     ctx["list"] = AccountingItemExpense.objects.filter(run=ctx["run"], member=request.user.member).order_by("-created")
     return render(request, "larpmanager/orga/accounting/expenses_my.html", ctx)
 
 
 @login_required
-def orga_expenses_my_new(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_expenses_my")
+def orga_expenses_my_new(request, s):
+    ctx = check_event_permission(request, s, "orga_expenses_my")
     if request.method == "POST":
         form = OrgaPersonalExpenseForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
@@ -83,8 +83,8 @@ def orga_expenses_my_new(request, s, n):
             messages.success(request, _("Reimbursement request item added"))
 
             if "continue" in request.POST:
-                return redirect("orga_expenses_my_new", s=ctx["event"].slug, n=ctx["run"].number)
-            return redirect("orga_expenses_my", s=ctx["event"].slug, n=ctx["run"].number)
+                return redirect("orga_expenses_my_new", s=ctx["run"].get_slug())
+            return redirect("orga_expenses_my", s=ctx["run"].get_slug())
     else:
         form = OrgaPersonalExpenseForm(ctx=ctx)
 
@@ -93,16 +93,16 @@ def orga_expenses_my_new(request, s, n):
 
 
 @login_required
-def orga_invoices(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_invoices")
+def orga_invoices(request, s):
+    ctx = check_event_permission(request, s, "orga_invoices")
     que = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
     ctx["list"] = que.select_related("member", "method")
     return render(request, "larpmanager/orga/accounting/invoices.html", ctx)
 
 
 @login_required
-def orga_invoices_confirm(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_invoices")
+def orga_invoices_confirm(request, s, num):
+    ctx = check_event_permission(request, s, "orga_invoices")
     backend_get(ctx, PaymentInvoice, num)
 
     if ctx["el"].reg.run != ctx["run"]:
@@ -112,96 +112,100 @@ def orga_invoices_confirm(request, s, n, num):
         ctx["el"].status = PaymentStatus.CONFIRMED
     else:
         messages.warning(request, _("Receipt already confirmed") + ".")
-        return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect("orga_invoices", s=ctx["run"].get_slug())
 
     ctx["el"].save()
     messages.success(request, _("Element approved") + "!")
-    return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_invoices", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_accounting(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_accounting")
+def orga_accounting(request, s):
+    ctx = check_event_permission(request, s, "orga_accounting")
     ctx["dc"] = get_run_accounting(ctx["run"], ctx)
     return render(request, "larpmanager/orga/accounting/accounting.html", ctx)
 
 
 @login_required
-def orga_tokens(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_tokens")
+def orga_tokens(request, s):
+    ctx = check_event_permission(request, s, "orga_tokens")
     orga_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
     return render(request, "larpmanager/orga/accounting/tokens.html", ctx)
 
 
 @login_required
-def orga_tokens_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_tokens", OrgaTokenForm, num)
+def orga_tokens_edit(request, s, num):
+    return orga_edit(request, s, "orga_tokens", OrgaTokenForm, num)
 
 
 @login_required
-def orga_credits(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_credits")
+def orga_credits(request, s):
+    ctx = check_event_permission(request, s, "orga_credits")
     orga_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
     return render(request, "larpmanager/orga/accounting/credits.html", ctx)
 
 
 @login_required
-def orga_credits_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_credits", OrgaCreditForm, num)
+def orga_credits_edit(request, s, num):
+    return orga_edit(request, s, "orga_credits", OrgaCreditForm, num)
 
 
 @login_required
-def orga_payments(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_payments")
+def orga_payments(request, s):
+    ctx = check_event_permission(request, s, "orga_payments")
     sr = ("reg__member", "reg__run", "inv", "inv__method")
     orga_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
     return render(request, "larpmanager/orga/accounting/payments.html", ctx)
 
 
 @login_required
-def orga_payments_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_payments", OrgaPaymentForm, num)
+def orga_payments_edit(request, s, num):
+    return orga_edit(request, s, "orga_payments", OrgaPaymentForm, num)
 
 
 @login_required
-def orga_outflows(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_outflows")
+def orga_outflows(request, s):
+    ctx = check_event_permission(request, s, "orga_outflows")
     orga_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/outflows.html", ctx)
 
 
 @login_required
-def orga_outflows_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_outflows", OrgaOutflowForm, num)
+def orga_outflows_edit(request, s, num):
+    return orga_edit(request, s, "orga_outflows", OrgaOutflowForm, num)
 
 
 @login_required
-def orga_inflows(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_inflows")
+def orga_inflows(request, s):
+    ctx = check_event_permission(request, s, "orga_inflows")
     orga_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/inflows.html", ctx)
 
 
 @login_required
-def orga_inflows_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_inflows", OrgaInflowForm, num)
+def orga_inflows_edit(request, s, num):
+    return orga_edit(request, s, "orga_inflows", OrgaInflowForm, num)
 
 
 @login_required
-def orga_expenses(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_expenses")
+def orga_expenses(request, s):
+    ctx = check_event_permission(request, s, "orga_expenses")
+    ctx["disable_approval"] = ctx["event"].assoc.get_config("expense_disable_orga", False)
     orga_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/expenses.html", ctx)
 
 
 @login_required
-def orga_expenses_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_expenses", OrgaExpenseForm, num)
+def orga_expenses_edit(request, s, num):
+    return orga_edit(request, s, "orga_expenses", OrgaExpenseForm, num)
 
 
 @login_required
-def orga_expenses_approve(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_expenses")
+def orga_expenses_approve(request, s, num):
+    ctx = check_event_permission(request, s, "orga_expenses")
+    if ctx["event"].assoc.get_config("expense_disable_orga", False):
+        raise Http404("eh no caro mio")
+
     try:
         exp = AccountingItemExpense.objects.get(pk=num)
     except Exception as err:
@@ -213,4 +217,4 @@ def orga_expenses_approve(request, s, n, num):
     exp.is_approved = True
     exp.save()
     messages.success(request, _("Request approved"))
-    return redirect("orga_expenses", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_expenses", s=ctx["run"].get_slug())

@@ -24,15 +24,18 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Case, Count, IntegerField, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
+    ExeMembershipDocumentForm,
+    ExeMembershipFeeForm,
     ExeMembershipForm,
     ExeVolunteerRegistryForm,
     MembershipResponseForm,
@@ -47,6 +50,11 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
+    OtherChoices,
+    PaymentChoices,
+    PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import (
@@ -76,6 +84,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import exe_edit
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.member import get_mail
 from larpmanager.utils.paginate import exe_paginate
 from larpmanager.utils.pdf import (
     get_membership_request,
@@ -105,26 +114,39 @@ def exe_membership(request):
     for run_id, member_id in next_regs_qs:
         next_regs[member_id].append(run_id)
 
-    que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
-    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).order_by("member__surname")
+    que = (
+        Membership.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED])
+        .annotate(
+            sort_priority=Case(
+                When(status=MembershipStatus.SUBMITTED, then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("sort_priority", "-updated")
+    )
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
-    for member in que.values_list(*values):
-        v = member[5]
-        if v == "a" and member[0] in fees:
-            v = "p"
-        if v not in ctx:
-            ctx[v] = []
-        run_names = ""
-        if member[0] in next_regs:
-            run_names = ", ".join([next_runs[run_id] for run_id in next_regs[member[0]] if run_id in next_runs])
-        member_val = member + (run_names,)
-        ctx[v].append(member_val)
+    ctx["list"] = []
+    ctx["sum"] = {}
+    for el in que.values(*values):
+        status = el["status"]
+        if status == MembershipStatus.ACCEPTED and el["member__id"] in fees:
+            el["status"] = "p"
+            el["status_display"] = _("Payed")
+        else:
+            el["status_display"] = MembershipStatus(el["status"]).label
 
-    ctx["sum"] = 0
-    if "a" in ctx:
-        ctx["sum"] += len(ctx["a"])
-    if "p" in ctx:
-        ctx["sum"] += len(ctx["p"])
+        if el["status"] not in ctx["sum"]:
+            ctx["sum"][el["status"]] = 0
+        ctx["sum"][el["status"]] += 1
+
+        if el["member__id"] in next_regs:
+            el["run_names"] = ", ".join(
+                [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs]
+            )
+        ctx["list"].append(el)
 
     return render(request, "larpmanager/exe/users/membership.html", ctx)
 
@@ -263,9 +285,9 @@ def member_add_accountingitempayment(ctx, request):
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("reg")
     for el in ctx["pays"]:
-        if el.pay == AccountingItemPayment.TOKEN:
+        if el.pay == PaymentChoices.TOKEN:
             el.typ = ctx.get("token_name", _("Credits"))
-        elif el.pay == AccountingItemPayment.CREDIT:
+        elif el.pay == PaymentChoices.CREDIT:
             el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_pay_display()
@@ -276,9 +298,9 @@ def member_add_accountingitemother(ctx, request):
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("run")
     for el in ctx["others"]:
-        if el.oth == AccountingItemOther.TOKEN:
+        if el.oth == OtherChoices.TOKEN:
             el.typ = ctx.get("token_name", _("Credits"))
-        elif el.oth == AccountingItemOther.CREDIT:
+        elif el.oth == OtherChoices.CREDIT:
             el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_oth_display()
@@ -331,6 +353,61 @@ def exe_membership_registry(request):
         ctx["list"].append(member)
 
     return render(request, "larpmanager/exe/users/registry.html", ctx)
+
+
+@login_required
+def exe_membership_fee(request):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    if request.method == "POST":
+        form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
+        if form.is_valid():
+            member = form.cleaned_data["member"]
+            assoc = Association.objects.get(pk=ctx["a_id"])
+            fee = assoc.get_config("membership_fee", "0")
+            payment = PaymentInvoice.objects.create(
+                member=member,
+                typ=PaymentType.MEMBERSHIP,
+                invoice=form.cleaned_data["invoice"],
+                method_id=form.cleaned_data["method"],
+                mc_gross=fee,
+                causal=_("Membership fee of") + f" {member}",
+                assoc=assoc,
+                cod=unique_invoice_cod(),
+            )
+            payment.status = PaymentStatus.CONFIRMED
+            payment.save()
+            messages.success(request, _("Operation completed") + "!")
+            return redirect("exe_membership")
+    else:
+        form = ExeMembershipFeeForm(ctx=ctx)
+    ctx["form"] = form
+
+    return render(request, "larpmanager/exe/edit.html", ctx)
+
+
+@login_required
+def exe_membership_document(request):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    if request.method == "POST":
+        form = ExeMembershipDocumentForm(request.POST, request.FILES, ctx=ctx)
+        if form.is_valid():
+            member = form.cleaned_data["member"]
+            membership = Membership.objects.get(assoc_id=ctx["a_id"], member=member)
+            membership.document = form.cleaned_data["document"]
+            membership.request = form.cleaned_data["request"]
+            membership.card_number = form.cleaned_data["card_number"]
+            membership.date = form.cleaned_data["date"]
+            membership.status = MembershipStatus.ACCEPTED
+            membership.save()
+            messages.success(request, _("Operation completed") + "!")
+            return redirect("exe_membership")
+    else:
+        form = ExeMembershipDocumentForm(ctx=ctx)
+    ctx["form"] = form
+
+    return render(request, "larpmanager/exe/edit.html", ctx)
 
 
 @login_required
@@ -462,6 +539,14 @@ def exe_archive_email(request):
     ctx = check_assoc_permission(request, "exe_archive_email")
     exe_paginate(request, ctx, Email)
     return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
+
+
+@login_required
+def exe_read_mail(request, nm):
+    ctx = check_assoc_permission(request, "exe_archive_email")
+    ctx["exe"] = True
+    ctx["email"] = get_mail(request, ctx, nm)
+    return render(request, "larpmanager/exe/users/read_mail.html", ctx)
 
 
 @login_required

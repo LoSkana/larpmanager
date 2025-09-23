@@ -156,6 +156,12 @@
             <th>{% trans "IBAN" %}</th>
             <td>{{ wire_iban }}</td>
         </tr>
+        {% if wire_bic %}
+            <tr>
+                <th>{% trans "BIC" %}</th>
+                <td>{{ wire_bic }}</td>
+            </tr>
+        {% endif %}
         {% if wire_swift %}
             <tr>
                 <th>{% trans "Swift" %}</th>

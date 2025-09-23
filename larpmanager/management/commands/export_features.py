@@ -22,7 +22,7 @@ import yaml
 from django.core.management.base import BaseCommand
 from django.db.models import ForeignKey, ImageField
 
-from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.access import AssocPermission, EventPermission, PermissionModule
 from larpmanager.models.association import AssociationSkin
 from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 
@@ -46,7 +46,7 @@ class Command(BaseCommand):
                     "default_optional_fields",
                 ),
             ),
-            "module": (FeatureModule, ("id", "name", "descr", "order", "default", "icon")),
+            "module": (FeatureModule, ("id", "name", "order", "icon")),
             "feature": (
                 Feature,
                 (
@@ -63,8 +63,15 @@ class Command(BaseCommand):
                     "hidden",
                 ),
             ),
-            "assoc_permission": (AssocPermission, ("id", "name", "descr", "slug", "number", "feature", "hidden")),
-            "event_permission": (EventPermission, ("id", "name", "descr", "slug", "number", "feature", "hidden")),
+            "permission_module": (PermissionModule, ("id", "name", "order", "icon")),
+            "assoc_permission": (
+                AssocPermission,
+                ("id", "name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
+            ),
+            "event_permission": (
+                EventPermission,
+                ("id", "name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
+            ),
             "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),
         }
 

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
@@ -38,13 +39,15 @@ from larpmanager.forms.character import (
 from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
 from larpmanager.models.base import Feature
+from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
-    QuestionType,
     WritingAnswer,
     WritingChoice,
     WritingOption,
     WritingQuestion,
+    WritingQuestionType,
     _get_writing_mapping,
 )
 from larpmanager.models.utils import strip_tags
@@ -56,7 +59,7 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
-    TextVersion,
+    TextVersionChoices,
 )
 from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
@@ -71,8 +74,9 @@ from larpmanager.utils.writing import writing_list, writing_versions, writing_vi
 
 
 @login_required
-def orga_characters(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_characters(request, s):
+    ctx = check_event_permission(request, s, "orga_characters")
+
     get_event_cache_all(ctx)
     for config_name in ["user_character_approval", "writing_external_access"]:
         ctx[config_name] = ctx["event"].get_config(config_name, False)
@@ -83,15 +87,15 @@ def orga_characters(request, s, n):
 
 
 @login_required
-def orga_characters_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_characters_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters")
     get_event_cache_all(ctx)
     if num != 0:
         get_element(ctx, num, "character", Character)
 
     _characters_relationships(ctx)
 
-    return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersion.CHARACTER)
+    return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
 def _characters_relationships(ctx):
@@ -142,8 +146,8 @@ def update_relationship(request, ctx, nm, fl):
 
 
 @login_required
-def orga_characters_relationships(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_characters_relationships(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters")
     get_char(ctx, num)
     ctx["direct"] = Relationship.objects.filter(source=ctx["character"]).order_by(
         Length("text").asc(), "target__number"
@@ -155,23 +159,23 @@ def orga_characters_relationships(request, s, n, num):
 
 
 @login_required
-def orga_characters_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_characters_view(request, s, num):
+    ctx = check_event_permission(request, s, ["orga_reading", "orga_characters"])
     get_char(ctx, num)
     get_event_cache_all(ctx)
     return writing_view(request, ctx, "character")
 
 
 @login_required
-def orga_characters_versions(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_characters_versions(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters")
     get_char(ctx, num)
-    return writing_versions(request, ctx, "character", TextVersion.CHARACTER)
+    return writing_versions(request, ctx, "character", TextVersionChoices.CHARACTER)
 
 
 @login_required
-def orga_characters_summary(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_characters_summary(request, s, num):
+    ctx = check_event_permission(request, s, "orga_characters")
     get_char(ctx, num)
     ctx["factions"] = []
     for p in ctx["character"].factions_list.all():
@@ -183,8 +187,8 @@ def orga_characters_summary(request, s, n, num):
 
 
 @login_required
-def orga_writing_form_list(request, s, n, typ):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_writing_form_list(request, s, typ):
+    ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]
     if event.parent:
@@ -200,7 +204,7 @@ def orga_writing_form_list(request, s, n, typ):
     max_length = 100
 
     question = event.get_elements(WritingQuestion).get(pk=eid, applicable=applicable)
-    if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         cho = {}
         for opt in event.get_elements(WritingOption).filter(question=question):
             cho[opt.id] = opt.name
@@ -210,7 +214,7 @@ def orga_writing_form_list(request, s, n, typ):
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif question.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, WritingQuestionType.COMPUTED]:
         que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
@@ -224,8 +228,8 @@ def orga_writing_form_list(request, s, n, typ):
 
 
 @login_required
-def orga_writing_form_email(request, s, n, typ):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_writing_form_email(request, s, typ):
+    ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]
     if event.parent:
@@ -233,7 +237,7 @@ def orga_writing_form_email(request, s, n, typ):
     eid = request.POST.get("num")
     q = event.get_elements(WritingQuestion).get(pk=eid)
 
-    if q.typ not in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return
 
     cho = {}
@@ -267,8 +271,8 @@ def orga_writing_form_email(request, s, n, typ):
 
 
 @login_required
-def orga_character_form(request, s, n):
-    return redirect("orga_writing_form", s=s, n=n, typ="character")
+def orga_character_form(request, s):
+    return redirect("orga_writing_form", s=s, typ="character")
 
 
 def check_writing_form_type(ctx, typ):
@@ -284,8 +288,8 @@ def check_writing_form_type(ctx, typ):
 
 
 @login_required
-def orga_writing_form(request, s, n, typ):
-    ctx = check_event_permission(request, s, n, "orga_character_form")
+def orga_writing_form(request, s, typ):
+    ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
 
     if request.method == "POST" and request.POST.get("download") == "1":
@@ -306,19 +310,27 @@ def orga_writing_form(request, s, n, typ):
 
 
 @login_required
-def orga_writing_form_edit(request, s, n, typ, num):
+def orga_writing_form_edit(request, s, typ, num):
     perm = "orga_character_form"
-    ctx = check_event_permission(request, s, n, perm)
+    ctx = check_event_permission(request, s, perm)
     check_writing_form_type(ctx, typ)
     if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=0)
+            return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), typ=typ, num=0)
+        edit_option = False
         if str(request.POST.get("new_option", "")) == "1":
-            return redirect(
-                orga_writing_options_new, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].id
-            )
-        return redirect("orga_writing_form", s=ctx["event"].slug, n=ctx["run"].number, typ=typ)
+            edit_option = True
+        elif ctx["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+            if not WritingOption.objects.filter(question_id=ctx["saved"].id).exists():
+                edit_option = True
+                messages.warning(
+                    request,
+                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
+                )
+        if edit_option:
+            return redirect(orga_writing_options_new, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].id)
+        return redirect("orga_writing_form", s=ctx["run"].get_slug(), typ=typ)
 
     ctx["list"] = WritingOption.objects.filter(question=ctx["el"], question__applicable=ctx["writing_typ"]).order_by(
         "order"
@@ -328,23 +340,23 @@ def orga_writing_form_edit(request, s, n, typ, num):
 
 
 @login_required
-def orga_writing_form_order(request, s, n, typ, num, order):
-    ctx = check_event_permission(request, s, n, "orga_character_form")
+def orga_writing_form_order(request, s, typ, num, order):
+    ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingQuestion, num, order)
-    return redirect("orga_writing_form", s=ctx["event"].slug, typ=typ, n=ctx["run"].number)
+    return redirect("orga_writing_form", s=ctx["run"].get_slug(), typ=typ)
 
 
 @login_required
-def orga_writing_options_edit(request, s, n, typ, num):
-    ctx = check_event_permission(request, s, n, "orga_character_form")
+def orga_writing_options_edit(request, s, typ, num):
+    ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
     return writing_option_edit(ctx, num, request, typ)
 
 
 @login_required
-def orga_writing_options_new(request, s, n, typ, num):
-    ctx = check_event_permission(request, s, n, "orga_character_form")
+def orga_writing_options_new(request, s, typ, num):
+    ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
     ctx["question_id"] = num
     return writing_option_edit(ctx, 0, request, typ)
@@ -355,25 +367,21 @@ def writing_option_edit(ctx, num, request, typ):
         redirect_target = "orga_writing_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_writing_options_new"
-        return redirect(
-            redirect_target, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].question_id
-        )
+        return redirect(redirect_target, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].question_id)
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
 @login_required
-def orga_writing_options_order(request, s, n, typ, num, order):
-    ctx = check_event_permission(request, s, n, "orga_character_form")
+def orga_writing_options_order(request, s, typ, num, order):
+    ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingOption, num, order)
-    return redirect(
-        "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["current"].question_id
-    )
+    return redirect("orga_writing_form_edit", s=ctx["run"].get_slug(), typ=typ, num=ctx["current"].question_id)
 
 
 @login_required
-def orga_check(request, s, n):
-    ctx = check_event_permission(request, s, n)
+def orga_check(request, s):
+    ctx = check_event_permission(request, s)
 
     get_event_cache_all(ctx)
 
@@ -498,25 +506,29 @@ def check_speedlarp_prepare(el, id_number_map, speeds):
 
 
 @require_POST
-def orga_character_get_number(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+def orga_character_get_number(request, s):
+    ctx = check_event_permission(request, s, "orga_characters")
     idx = request.POST.get("idx")
+    type = request.POST.get("type")
     try:
-        char = ctx["event"].get_elements(Character).get(pk=idx)
-        return JsonResponse({"res": "ok", "number": char.number})
+        if type.lower() == "trait":
+            el = ctx["event"].get_elements(Trait).get(pk=idx)
+        else:
+            el = ctx["event"].get_elements(Character).get(pk=idx)
+        return JsonResponse({"res": "ok", "number": el.number})
     except ObjectDoesNotExist:
         JsonResponse({"res": "ko"})
 
 
 @require_POST
-def orga_writing_excel_edit(request, s, n, typ):
+def orga_writing_excel_edit(request, s, typ):
     try:
-        ctx = _get_excel_form(request, s, n, typ)
+        ctx = _get_excel_form(request, s, typ)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
     tinymce = False
-    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+    if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
         tinymce = True
 
     counter = ""
@@ -554,14 +566,16 @@ def orga_writing_excel_edit(request, s, n, typ):
 
 
 @require_POST
-def orga_writing_excel_submit(request, s, n, typ):
+def orga_writing_excel_submit(request, s, typ):
     try:
-        ctx = _get_excel_form(request, s, n, typ, submit=True)
+        ctx = _get_excel_form(request, s, typ, submit=True)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
     ctx["auto"] = int(request.POST.get("auto"))
     if ctx["auto"]:
+        if request.user.is_superuser:
+            return JsonResponse({"k": 1})
         msg = _check_working_ticket(request, ctx, request.POST["token"])
         if msg:
             return JsonResponse({"warn": msg})
@@ -579,8 +593,8 @@ def orga_writing_excel_submit(request, s, n, typ):
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
 
 
-def _get_excel_form(request, s, n, typ, submit=False):
-    ctx = check_event_permission(request, s, n, f"orga_{typ}s")
+def _get_excel_form(request, s, typ, submit=False):
+    ctx = check_event_permission(request, s, f"orga_{typ}s")
     get_event_cache_all(ctx)
     check_writing_form_type(ctx, typ)
     question_id = int(request.POST.get("qid"))
@@ -609,7 +623,7 @@ def _get_excel_form(request, s, n, typ, submit=False):
 
     # Remove question other than the one requested
     keep_key = f"q{question_id}"
-    if question.typ not in QuestionType.get_basic_types():
+    if question.typ not in BaseQuestionType.get_basic_types():
         keep_key = question.typ
     remove_keys = []
     for key in form.fields:
@@ -627,7 +641,7 @@ def _get_excel_form(request, s, n, typ, submit=False):
 
 
 def _get_question_update(ctx, el):
-    if ctx["question"].typ in [QuestionType.COVER]:
+    if ctx["question"].typ in [WritingQuestionType.COVER]:
         return f"""
                 <a href="{el.thumb.url}">
                     <img src="{el.thumb.url}"
@@ -638,16 +652,16 @@ def _get_question_update(ctx, el):
 
     question_key = f"q{ctx['question'].id}"
     question_slug = str(ctx["question"].id)
-    if ctx["question"].typ not in QuestionType.get_basic_types():
+    if ctx["question"].typ not in BaseQuestionType.get_basic_types():
         question_key = ctx["question"].typ
         question_slug = ctx["question"].typ
 
     value = ctx["form"].cleaned_data[question_key]
 
-    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+    if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
         value = strip_tags(str(value))
 
-    if ctx["question"].typ in [QuestionType.MULTIPLE, QuestionType.SINGLE]:
+    if ctx["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
         option_ids = [int(val) for val in value]
         query = ctx["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")

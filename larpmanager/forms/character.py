@@ -32,6 +32,7 @@ from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     EventCharacterS2WidgetMulti,
+    EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
     TicketS2WidgetMulti,
@@ -42,19 +43,20 @@ from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
     QuestionVisibility,
     WritingOption,
     WritingQuestion,
+    WritingQuestionType,
 )
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
     Faction,
     FactionType,
+    Plot,
     PlotCharacterRel,
     Relationship,
-    TextVersion,
+    TextVersionChoices,
 )
 from larpmanager.utils.edit import save_version
 
@@ -117,6 +119,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         reg_counts = get_reg_counts(self.params["run"])
         for question in self.questions:
             key = self._init_field(question, reg_counts=reg_counts, orga=self.orga)
+            if not key:
+                continue
+
             if len(question.typ) == 1:
                 fields_custom.add(key)
             else:
@@ -250,16 +255,26 @@ class OrgaCharacterForm(CharacterForm):
         if "plot" not in self.params["features"]:
             return
 
-        pcr = {}
-        for el in PlotCharacterRel.objects.filter(character=self.instance):
-            pcr[el.plot_id] = el.text
+        self.fields["plots"] = forms.ModelMultipleChoiceField(
+            label="Plots",
+            queryset=self.params["event"].get_elements(Plot),
+            required=False,
+            widget=EventPlotS2WidgetMulti,
+        )
+        self.fields["plots"].widget.set_event(self.params["event"])
+
+        self.plots = self.instance.get_plot_characters()
+        self.initial["plots"] = [el.plot_id for el in self.plots]
 
         self.add_char_finder = []
+        self.ordering_up = {}
+        self.ordering_down = {}
         self.field_link = {}
-        que = self.instance.plots.order_by("number").values_list("id", "number", "name", "text")
-        for pl in que:
-            plot = f"#{pl[1]} {pl[2]}"
-            field = f"pl_{pl[0]}"
+
+        count = len(self.plots)
+        for i, el in enumerate(self.plots):
+            plot = el.plot.name
+            field = f"pl_{el.plot.id}"
             id_field = f"id_{field}"
             self.fields[field] = forms.CharField(
                 widget=WritingTinyMCE(),
@@ -267,21 +282,45 @@ class OrgaCharacterForm(CharacterForm):
                 help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
             )
-            if pl[0] in pcr:
-                self.initial[field] = pcr[pl[0]]
+            if el.text:
+                self.initial[field] = el.text
 
-            if pl[3]:
-                self.details[id_field] = pl[3]
+            if el.plot.text:
+                self.details[id_field] = el.plot.text
             self.show_link.append(id_field)
             self.add_char_finder.append(id_field)
 
-            reverse_args = [self.params["event"].slug, self.params["run"].number, pl[0]]
+            reverse_args = [self.params["run"].get_slug(), el.plot.id]
             self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
+
+            # if not first, add to ordering up
+            if not i == 0:
+                reverse_args = [self.params["run"].get_slug(), el.id, "0"]
+                self.ordering_up[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
+
+            # if not last, add to ordering down
+            if not i == count - 1:
+                reverse_args = [self.params["run"].get_slug(), el.id, "1"]
+                self.ordering_down[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
 
     def _save_plot(self, instance):
         if "plot" not in self.params["features"]:
             return
 
+        # Add / remove plots
+        selected = set(self.cleaned_data.get("plots", []))
+        current = set(Plot.objects.filter(plotcharacterrel__character=instance))
+
+        to_add = selected - current
+        to_remove = current - selected
+
+        if to_remove:
+            PlotCharacterRel.objects.filter(character=instance, plot__in=[p.pk for p in to_remove]).delete()
+
+        for plot in to_add:
+            PlotCharacterRel.objects.create(character=instance, plot=plot)
+
+        # update texts
         for pr in instance.get_plot_characters():
             field = f"pl_{pr.plot_id}"
             if field not in self.cleaned_data:
@@ -349,15 +388,15 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params["features"]:
             return
 
-        chars_ids = [char["id"] for char in self.params["chars"].values()]
+        chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
         for key, value in rel_data.items():
-            match = re.match(r"rel_(\d+)_(\w+)", key)
+            match = re.match(r"rel_(\d+)", key)
             if not match:
                 continue
             ch_id = int(match.group(1))
-            rel_type = match.group(2)
+            rel_type = "direct"
 
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:
@@ -371,7 +410,7 @@ class OrgaCharacterForm(CharacterForm):
                 # else delete
                 else:
                     rel = self._get_rel(ch_id, instance, rel_type)
-                    save_version(rel, TextVersion.RELATIONSHIP, self.params["member"], True)
+                    save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], True)
                     rel.delete()
                     continue
 
@@ -464,8 +503,8 @@ class OrgaWritingQuestionForm(MyForm):
             help_texts = {
                 QuestionVisibility.SEARCHABLE: "Characters can be filtered according to this question",
                 QuestionVisibility.PUBLIC: "The answer to this question is publicly visible",
-                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the player",
-                QuestionVisibility.HIDDEN: "The answer is hidden to all players",
+                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the participant",
+                QuestionVisibility.HIDDEN: "The answer is hidden to all participants",
             }
 
             self.fields["visibility"].help_text = ", ".join(
@@ -481,23 +520,28 @@ class OrgaWritingQuestionForm(MyForm):
         que = self.params["event"].get_elements(WritingQuestion)
         que = que.filter(applicable=self.params["writing_typ"])
         already = list(que.values_list("typ", flat=True).distinct())
+
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
+            # prevent cancellation if one of the default types
+            self.prevent_canc = len(self.instance.typ) > 1
 
-            # basic_type = self.instance.typ in QuestionType.get_basic_types()
-            def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
-            # type_feature = self.instance.typ in self.params["features"]
-            self.prevent_canc = def_type
         choices = []
-        for choice in QuestionType.choices:
+        for choice in WritingQuestionType.choices:
+            # if it is related to a feature
             if len(choice[0]) > 1:
                 # check it is not already present
                 if choice[0] in already:
                     continue
+
                 # check the feature is active
-                if choice[0] not in ["name", "teaser", "text"]:
+                elif choice[0] not in ["name", "teaser", "text"]:
                     if choice[0] not in self.params["features"]:
                         continue
+
+            elif choice[0] == "c" and "px" not in self.params["features"]:
+                continue
+
             choices.append(choice)
         self.fields["typ"].choices = choices
 
@@ -534,7 +578,7 @@ class OrgaWritingOptionForm(MyForm):
         model = WritingOption
         exclude = ["order"]
         widgets = {
-            "dependents": EventWritingOptionS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
             "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }
@@ -553,7 +597,7 @@ class OrgaWritingOptionForm(MyForm):
         else:
             self.fields["tickets"].widget.set_event(self.params["event"])
 
-        if "wri_que_dependents" not in self.params["features"]:
-            self.delete_field("dependents")
+        if "wri_que_requirements" not in self.params["features"]:
+            self.delete_field("requirements")
         else:
-            self.fields["dependents"].widget.set_event(self.params["event"])
+            self.fields["requirements"].widget.set_event(self.params["event"])

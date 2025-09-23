@@ -7,9 +7,8 @@
     {% trans "This page shows the templates for event handouts" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/writing.html" %}
-    <table id="handout_templates"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    {% include "elements/header/edit.html" %}
+    <table id="handout_templates" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
@@ -22,7 +21,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_handout_templates_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_handout_templates_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i> </a>
                     </td>
                     <td>{{ el }}</td>
@@ -30,7 +29,7 @@
                     <td>
                         {% for p in el.handouts.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_handouts_edit' run.event.slug run.number p.id %}">{{ p }}</a>
+                            <a href="{% url 'orga_handouts_edit' run.get_slug p.id %}">{{ p }}</a>
                         {% endfor %}
                     </td>
                 </tr>

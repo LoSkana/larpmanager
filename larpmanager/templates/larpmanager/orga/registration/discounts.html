@@ -4,47 +4,53 @@
     {% trans "Discounts" %} - {{ registration.member }} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows active discounts on the player, allows you to activate or deactivate them" %}
+    {% trans "This page shows active discounts on the participant, allows you to activate or deactivate them" %}
 {% endblock info %}
 {% block content %}
     {% if active %}
         <h2>{% trans "Discounts active" %}</h2>
-        <table id="discounts_active"
-               class="{% if not interface_old %}go_datatable{% endif %}">
-            <tr>
-                <th>{% trans "Discount" %}</th>
-                <th>{% trans "Value" %}</th>
-                <th></th>
-            </tr>
-            {% for el in active %}
+        <table id="discounts_active" class="go_datatable">
+            <thead>
                 <tr>
-                    <td>{{ el.disc }}</td>
-                    <td>{{ el.value }}</td>
-                    <td>
-                        <a href="{% url 'orga_registration_discount_del' event.slug run.number registration.id el.id %}">{% trans "Delete" %}</a>
-                    </td>
+                    <th>{% trans "Discount" %}</th>
+                    <th>{% trans "Value" %}</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for el in active %}
+                    <tr>
+                        <td>{{ el.disc }}</td>
+                        <td>{{ el.value }}</td>
+                        <td>
+                            <a href="{% url 'orga_registration_discount_del' run.get_slug registration.id el.id %}">{% trans "Delete" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% endif %}
     {% if available %}
         <h2>{% trans "Discounts available" %}</h2>
-        <table id="discounts_availble"
-               class="{% if not interface_old %}go_datatable{% endif %}">
-            <tr>
-                <th>{% trans "Discount" %}</th>
-                <th>{% trans "Value" %}</th>
-                <th></th>
-            </tr>
-            {% for el in available %}
+        <table id="discounts_availble" class="go_datatable">
+            <thead>
                 <tr>
-                    <td>{{ el }}</td>
-                    <td>{{ el.value }}</td>
-                    <td>
-                        <a href="{% url 'orga_registration_discount_add' event.slug run.number registration.id el.id %}">{% trans "Add" %}</a>
-                    </td>
+                    <th>{% trans "Discount" %}</th>
+                    <th>{% trans "Value" %}</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for el in available %}
+                    <tr>
+                        <td>{{ el }}</td>
+                        <td>{{ el.value }}</td>
+                        <td>
+                            <a href="{% url 'orga_registration_discount_add' run.get_slug registration.id el.id %}">{% trans "Add" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     {% endif %}
 {% endblock content %}

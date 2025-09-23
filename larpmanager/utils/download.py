@@ -22,6 +22,7 @@ import csv
 import io
 import zipfile
 
+import pandas as pd
 from bs4 import BeautifulSoup
 from django.db.models import F
 from django.http import HttpResponse
@@ -29,11 +30,14 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.models.accounting import AccountingItemPayment
+from larpmanager.cache.config import get_configs
+from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
+from larpmanager.models.association import Association
+from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
-    QuestionType,
     QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
@@ -45,18 +49,17 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_ordered_registration_questions,
 )
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def _temp_csv_file(key, vals):
+def _temp_csv_file(keys, vals):
+    df = pd.DataFrame(vals, columns=keys)
     buffer = io.StringIO()
-    writer = csv.writer(buffer, delimiter="\t")
-    writer.writerow(key)
-    for val in vals:
-        writer.writerow(val)
+    df.to_csv(buffer, index=False)
+    buffer.seek(0)
     return buffer.getvalue()
 
 
@@ -120,7 +123,9 @@ def export_plot_rels(ctx):
 
     event_id = ctx["event"].get_class_parent(Plot)
 
-    for rel in PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character"):
+    for rel in (
+        PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character").order_by("order")
+    ):
         vals.append([rel.plot.name, rel.character.name, rel.text])
 
     return [("plot_rels", keys, vals)]
@@ -239,7 +244,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(profile)
 
     if model in ["registration", "character"]:
-        key.append(_("Player"))
+        key.append(_("Participant"))
         display = ""
         if member:
             display = member.display_real()
@@ -269,6 +274,10 @@ def _expand_val(val, el, field):
 
 
 def _header_regs(ctx, el, key, val):
+    if "character" in ctx["features"]:
+        key.append(_("Characters"))
+        val.append(", ".join([row.character.name for row in el.rcrs.all()]))
+
     if "pay_what_you_want" in ctx["features"]:
         val.append(el.pay_what)
         key.append("PWYW")
@@ -404,7 +413,7 @@ def orga_registration_form_download(ctx):
 
 def export_registration_form(ctx):
     mappings = {
-        "typ": QuestionType.get_mapping(),
+        "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
     }
 
@@ -447,7 +456,7 @@ def orga_character_form_download(ctx):
 
 def export_character_form(ctx):
     mappings = {
-        "typ": QuestionType.get_mapping(),
+        "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
         "applicable": QuestionApplicable.get_mapping(),
         "visibility": QuestionVisibility.get_mapping(),
@@ -480,7 +489,7 @@ def _orga_registrations_acc(ctx, regs=None):
     cache_aip = {}
     if "token_credit" in ctx["features"]:
         que = AccountingItemPayment.objects.filter(reg__run=ctx["run"])
-        que = que.filter(pay__in=[AccountingItemPayment.TOKEN, AccountingItemPayment.CREDIT])
+        que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
         for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
             if el[0] not in cache_aip:
                 cache_aip[el[0]] = {"total": 0}
@@ -536,7 +545,7 @@ def _get_column_names(ctx):
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {
-                "player": _("The player's email"),
+                "player": _("The participant's email"),
                 "ticket": _("The name of the ticket")
                 + " <i>("
                 + (_("if it doesn't exist, it will be created"))
@@ -549,6 +558,30 @@ def _get_column_names(ctx):
         ctx["fields"] = {el["name"]: el["typ"] for el in que}
         if "pay_what_you_want" not in ctx["features"]:
             del ctx["columns"][0]["donation"]
+
+    elif ctx["typ"] == "registration_ticket":
+        ctx["columns"] = [
+            {
+                "name": _("The ticket's name"),
+                "tier": _("The tier of the ticket"),
+                "description": _("(Optional) The ticket's description"),
+                "price": _("(Optional) The cost of the ticket"),
+                "max_available": _("(Optional) Maximun number of spots available"),
+            }
+        ]
+
+    elif ctx["typ"] == "px_abilitie":
+        ctx["columns"] = [
+            {
+                "name": _("The name ability"),
+                "cost": _("Cost of the ability"),
+                "typ": _("Ability type"),
+                "descr": _("(Optional) The ability description"),
+                "prerequisites": _("(Optional) Other ability as prerequisite, comma-separated"),
+                "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            }
+        ]
+        ctx["name"] = "Ability"
 
     elif ctx["typ"] == "registration_form":
         ctx["columns"] = [
@@ -587,7 +620,7 @@ def _get_column_names(ctx):
                 + ": 'optional', 'mandatory', 'disabled', 'hidden'",
                 "applicable": _("The writing element this question applies to, allowed values are")
                 + ": 'character', 'plot', 'faction', 'quest', 'trait'",
-                "visibility": _("The question visibility to players, allowed values are")
+                "visibility": _("The question visibility to participants, allowed values are")
                 + ": 'searchable', 'public', 'private', 'hidden'",
                 "max_length": _(
                     "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
@@ -604,6 +637,9 @@ def _get_column_names(ctx):
             },
         ]
 
+        if "wri_que_requirements" in ctx["features"]:
+            ctx["columns"][1]["requirements"] = _("Optional - Other options as requirements, comma-separated")
+
     else:
         _get_writing_names(ctx)
 
@@ -619,6 +655,9 @@ def _get_writing_names(ctx):
 
     ctx["columns"] = [{}]
     if ctx["writing_typ"] == QuestionApplicable.CHARACTER:
+        ctx["fields"]["player"] = "skip"
+        ctx["fields"]["email"] = "skip"
+
         if "relationships" in ctx["features"]:
             ctx["columns"].append(
                 {
@@ -645,3 +684,58 @@ def _get_writing_names(ctx):
 
     ctx["allowed"] = list(ctx["columns"][0].keys())
     ctx["allowed"].extend(ctx["fields"].keys())
+
+
+def orga_tickets_download(ctx):
+    return zip_exports(ctx, export_tickets(ctx), "Tickets")
+
+
+def export_tickets(ctx):
+    mappings = {
+        "tier": TicketTier.get_mapping(),
+    }
+    keys = ["name", "tier", "description", "price", "max_available"]
+
+    que = ctx["event"].get_elements(RegistrationTicket).order_by("number")
+    vals = _extract_values(keys, que, mappings)
+
+    return [("tickets", keys, vals)]
+
+
+def export_event(ctx):
+    keys = ["name", "value"]
+    vals = []
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    for element in [ctx["event"], ctx["run"], assoc]:
+        for name, value in get_configs(element).items():
+            vals.append((name, value))
+    exports = [("configuration", keys, vals)]
+
+    keys = ["name", "slug"]
+    vals = []
+    for element in [ctx["event"], assoc]:
+        for feature in element.features.all():
+            vals.append((feature.name, feature.slug))
+    exports.append(("features", keys, vals))
+
+    return exports
+
+
+def export_abilities(ctx):
+    keys = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
+
+    que = (
+        ctx["event"]
+        .get_elements(AbilityPx)
+        .order_by("number")
+        .select_related("typ")
+        .prefetch_related("requirements", "prerequisites")
+    )
+    vals = []
+    for el in que:
+        val = [el.name, el.cost, el.typ.name, el.descr]
+        val.append(", ".join([prereq.name for prereq in el.prerequisites.all()]))
+        val.append(", ".join([req.name for req in el.requirements.all()]))
+        vals.append(val)
+
+    return [("abilities", keys, vals)]

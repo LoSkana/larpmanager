@@ -31,6 +31,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
 from django.utils import translation
@@ -41,10 +42,19 @@ from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
-from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
+from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
+from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.base import FeatureNationality
-from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
+from larpmanager.models.member import (
+    Badge,
+    Member,
+    Membership,
+    MembershipStatus,
+    NewsletterChoices,
+    VolunteerRegistry,
+    get_user_membership,
+)
 from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 
@@ -99,10 +109,10 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         self.fields["newsletter"] = forms.ChoiceField(
             required=True,
-            choices=Member.NEWSLETTER_CHOICES,
+            choices=NewsletterChoices.choices,
             label=Member._meta.get_field("newsletter").verbose_name,
             help_text=Member._meta.get_field("newsletter").help_text,
-            initial=Member.ALL,
+            initial=NewsletterChoices.ALL,
         )
 
         self.fields["share"] = forms.BooleanField(
@@ -479,7 +489,7 @@ class MembershipResponseForm(forms.Form):
         required=False,
         max_length=1000,
         help_text=_(
-            "Optional text to be included in the email sent to the player to notify them of the approval decision"
+            "Optional text to be included in the email sent to the participant to notify them of the approval decision"
         ),
     )
 
@@ -554,6 +564,110 @@ class ExeMembershipForm(MyForm):
         )
 
 
+class ExeMembershipFeeForm(forms.Form):
+    page_info = _("This page allows you to upload the invoce of payment of a membership fee")
+
+    page_title = _("Upload membership fee")
+
+    member = forms.ModelChoiceField(
+        label=_("Member"),
+        queryset=Member.objects.none(),
+        required=False,
+        widget=AssocMemberS2Widget,
+    )
+
+    invoice = forms.FileField(
+        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        label=_("Invoice"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.params = kwargs.pop("ctx", None)
+        super().__init__(*args, **kwargs)
+        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+
+        assoc = Association.objects.get(pk=self.params["a_id"])
+        choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
+        self.fields["method"] = forms.ChoiceField(
+            required=True,
+            choices=choices,
+            label=_("Method"),
+        )
+
+    def clean_member(self):
+        member = self.cleaned_data["member"]
+        year = datetime.today().year
+
+        if AccountingItemMembership.objects.filter(member=member, year=year).exists():
+            self.add_error("member", _("Membership fee already existing for this user and for this year"))
+
+        return member
+
+
+class ExeMembershipDocumentForm(forms.Form):
+    page_info = (
+        _("This page allows you to upload a new membership documents")
+        + " - "
+        + _("Please note that the user must have confirmed it's consent to share their data with your organization")
+    )
+
+    page_title = _("Upload membership document")
+
+    member = forms.ModelChoiceField(
+        label=_("Member"),
+        queryset=Member.objects.none(),
+        required=False,
+        widget=AssocMemberS2Widget,
+    )
+
+    request = forms.FileField(
+        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        label=_("Membership request"),
+    )
+
+    document = forms.FileField(
+        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        label=_("ID document photo"),
+        required=False,
+    )
+
+    card_number = forms.IntegerField(label=_("Membership ID number"))
+
+    date = forms.DateField(widget=DatePickerInput(), label=_("Date of membership approval"))
+
+    def __init__(self, *args, **kwargs):
+        self.params = kwargs.pop("ctx", None)
+        super().__init__(*args, **kwargs)
+        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+
+        number = Membership.objects.filter(assoc_id=self.params["a_id"]).aggregate(Max("card_number"))[
+            "card_number__max"
+        ]
+        if not number:
+            number = 1
+        else:
+            number += 1
+        self.initial["card_number"] = number
+
+    def clean_member(self):
+        member = self.cleaned_data["member"]
+        membership = Membership.objects.get(member=member, assoc_id=self.params["a_id"])
+        if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
+            self.add_error("member", _("User is already a member"))
+
+        return member
+
+    def clean_card_number(self):
+        card_number = self.cleaned_data["card_number"]
+
+        if Membership.objects.filter(assoc_id=self.params["a_id"], card_number=card_number).exists():
+            self.add_error("card_number", _("There is already a member with this number"))
+
+        return card_number
+
+
 class ExeBadgeForm(MyForm):
     page_info = _("This page allows you to add or edit a badge, or assign it  to users")
 
@@ -575,7 +689,7 @@ class ExeBadgeForm(MyForm):
 class ExeProfileForm(MyForm):
     page_title = _("Profile")
 
-    page_info = _("This page allows you to set up the fields that players can fill in in their user profile")
+    page_info = _("This page allows you to set up the fields that participants can fill in in their user profile")
 
     class Meta:
         model = Association

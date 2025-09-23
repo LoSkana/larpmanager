@@ -34,16 +34,17 @@ from larpmanager.forms.utils import (
     TimePickerInput,
     get_run_choices,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
     Album,
     Competence,
     HelpQuestion,
-    InventoryBox,
     Problem,
     ShuttleService,
     UrlShortner,
     Util,
+    WarehouseItem,
     WorkshopModule,
     WorkshopOption,
     WorkshopQuestion,
@@ -65,7 +66,7 @@ class SendMailForm(forms.Form):
     players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     subject = forms.CharField()
     body = forms.CharField(widget=TinyMCE(attrs={"rows": 30}))
-    reply_to = forms.CharField(help_text=_("Optional - email reply to"), required=False)
+    reply_to = forms.EmailField(help_text=_("Optional - email reply to"), required=False)
     raw = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 2}),
         help_text=_("Optional - ram html code (substitute the text before)"),
@@ -106,9 +107,9 @@ class HelpQuestionForm(MyForm):
 
 
 class OrgaHelpQuestionForm(MyForm):
-    page_info = _("This page allows you to answer a player's question")
+    page_info = _("This page allows you to answer a participant's question")
 
-    page_title = _("Player Questions")
+    page_title = _("Participant questions")
 
     class Meta:
         model = HelpQuestion
@@ -215,16 +216,19 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-class ExeInventoryBoxForm(MyForm):
-    page_info = _("This page allows you to add or edit a new item of inventory")
+def _delete_optionals_warehouse(form):
+    """Remove optional warehouse fields not enabled in association configuration.
 
-    page_title = _("Inventory")
+    Args:
+        form: Form instance to modify by removing disabled optional fields
 
-    class Meta:
-        model = InventoryBox
-        exclude = ()
-
-        widgets = {"description": Textarea(attrs={"rows": 5})}
+    Side effects:
+        Deletes form fields for warehouse options not enabled in config
+    """
+    assoc = Association.objects.get(pk=form.params["a_id"])
+    for field in WarehouseItem.get_optional_fields():
+        if not assoc.get_config(f"warehouse_{field}", False):
+            form.delete_field(field)
 
 
 class ExeCompetenceForm(MyForm):
@@ -286,6 +290,11 @@ class OrganizerCastingOptionsForm(forms.Form):
             self.fields["factions"].initial = [str(el[0]) for el in factions]
 
     def get_data(self):
+        """Get form data, either cleaned or initial values.
+
+        Returns:
+            dict: Form data with field names as keys and values as lists
+        """
         if hasattr(self, "cleaned_data"):
             return self.cleaned_data
         dic = {}
@@ -380,6 +389,14 @@ class OrganizerCopyForm(forms.Form):
 
 
 def unique_util_cod():
+    """Generate a unique utility code for new Util instances.
+
+    Returns:
+        str: Unique 16-character code
+
+    Raises:
+        ValueError: If unable to generate unique code after 5 attempts
+    """
     for _idx in range(5):
         cod = generate_id(16)
         if not Util.objects.filter(cod=cod).exists():

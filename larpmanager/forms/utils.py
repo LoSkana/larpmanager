@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from django import forms
+from django.db.models import Q
 from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -28,8 +29,8 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
-from larpmanager.models.access import EventRole
-from larpmanager.models.base import FeatureModule
+from larpmanager.models.access import EventRole, PermissionModule
+from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -40,6 +41,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -48,6 +50,7 @@ from larpmanager.models.writing import (
     Character,
     Faction,
     FactionType,
+    Plot,
 )
 
 # defer script loaded by form
@@ -56,6 +59,14 @@ css_delimeter = "/*@#§*/"
 
 
 def render_js(cls):
+    """Render JavaScript includes with defer attribute for forms.
+
+    Args:
+        cls: Media class containing JavaScript paths
+
+    Returns:
+        list: HTML script tags with defer attributes
+    """
     return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
 
 
@@ -101,67 +112,110 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
         for i, (option_value, option_label) in enumerate(self.choices):
             checkbox_id = f"{attrs.get('id', name)}_{i}"
-            checked = "checked" if str(option_value) in value else ""
+            checked = "checked" if option_value in value else ""
             checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            link_html = f'{option_label}<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
+            label_html = f'<label for="{checkbox_id}">{option_label}</label>'
+            link_html = f'<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
             help_text = self.feature_help.get(option_value, "")
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
                     <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
-                    {checkbox_html} {link_html}
+                    {checkbox_html} {label_html} {link_html}
                 </div>
             """)
 
         return mark_safe("\n".join(output))
 
 
+class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return _(obj.name)
+
+
 def prepare_permissions_role(form, typ):
+    """Prepare permission fields for role forms based on enabled features.
+
+    Creates dynamic form fields for permissions organized by modules,
+    with checkboxes for available permissions based on enabled features.
+
+    Args:
+        form: Form instance to add permission fields to
+        typ: Permission model type (AssocPermission or EventPermission)
+
+    Side effects:
+        Adds permission fields to form.fields and sets form.modules list
+        Sets form.prevent_canc for role number 1 (executives)
+    """
     if form.instance and form.instance.number == 1:
         form.prevent_canc = True
         return
     form.modules = []
-    init = []
-    if form.instance.pk:
-        init = list(form.instance.permissions.values_list("pk", flat=True))
-    for module in FeatureModule.objects.order_by("order"):
-        ch = []
-        help_text = {}
-        feature_map = {}
-        for el in typ.objects.filter(feature__module=module).order_by("number"):
-            if el.hidden:
-                continue
-            if not el.feature.placeholder and el.feature.slug not in form.params["features"]:
-                continue
-            ch.append((el.id, _(el.name)))
-            help_text[el.id] = el.descr
-            feature_map[el.id] = el.feature_id
 
-        if not ch:
+    features = set(form.params.get("features", []))
+
+    selected_ids = set()
+    if getattr(form.instance, "pk", None):
+        selected_ids = set(form.instance.permissions.values_list("pk", flat=True))
+
+    base_qs = (
+        typ.objects.filter(hidden=False)
+        .select_related("feature", "module")
+        .filter(Q(feature__placeholder=True) | Q(feature__slug__in=features))
+        .order_by("module__order", "number", "pk")
+    )
+
+    by_module = defaultdict(list)
+    for p in base_qs:
+        by_module[p.module_id].append(p)
+
+    form.modules = getattr(form, "modules", [])
+
+    for module in PermissionModule.objects.order_by("order"):
+        perms = by_module.get(module.id, [])
+        if not perms:
             continue
 
-        label = _(module.name)
-        if "interface_old" in form.params and not form.params["interface_old"]:
-            if module.icon:
-                label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
+        field_name = f"perm_{module.pk}"
 
-        form.fields[module.name] = forms.MultipleChoiceField(
+        label = _(module.name)
+        if not form.params.get("interface_old") and getattr(module, "icon", None):
+            label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
+
+        module_ids = [p.pk for p in perms]
+        initial_vals = [pid for pid in selected_ids if pid in module_ids]
+
+        form.fields[field_name] = TranslatedModelMultipleChoiceField(
             required=False,
-            choices=ch,
-            widget=RoleCheckboxWidget(help_text=help_text, feature_map=feature_map),
+            queryset=typ.objects.filter(pk__in=module_ids).order_by("number", "pk"),
+            widget=RoleCheckboxWidget(
+                help_text={p.pk: p.descr for p in perms},
+                feature_map={p.pk: p.feature_id for p in perms},
+            ),
             label=label,
+            initial=initial_vals,
         )
-        form.modules.append(module.name)
-        form.initial[module.name] = init
+
+        form.modules.append(field_name)
 
 
 def save_permissions_role(instance, form):
+    """Save selected permissions for a role instance.
+
+    Args:
+        instance: Role instance to save permissions for
+        form: Form containing selected permission data
+
+    Side effects:
+        Clears existing permissions and adds selected ones
+        Skips permission saving for role number 1 (executives)
+    """
     instance.save()
     if form.instance and form.instance.number == 1:
         return
 
     sel = []
     for el in form.modules:
-        sel.extend([int(e) for e in form.cleaned_data[el]])
+        sel.extend([e.pk for e in form.cleaned_data[el]])
 
     instance.permissions.clear()
     instance.permissions.add(*sel)
@@ -276,6 +330,14 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
 
 
 def get_assoc_people(assoc_id):
+    """Get list of people associated with an association for form choices.
+
+    Args:
+        assoc_id: Association ID to get members for
+
+    Returns:
+        list: List of (member_id, display_string) tuples
+    """
     ls = []
     que = Membership.objects.select_related("member").filter(assoc_id=assoc_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
@@ -285,6 +347,16 @@ def get_assoc_people(assoc_id):
 
 
 def get_run_choices(self, past=False):
+    """Generate run choices for form fields.
+
+    Args:
+        self: Form instance with params containing association ID
+        past: If True, filter to recent past runs only
+
+    Side effects:
+        Creates or updates 'run' field in form with run choices
+        Sets initial value if run is in params
+    """
     cho = [("", "-----")]
     runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
     if past:
@@ -294,7 +366,7 @@ def get_run_choices(self, past=False):
         cho.append((r.id, str(r)))
 
     if "run" not in self.fields:
-        self.fields["run"] = forms.ChoiceField(label=_("Event"))
+        self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
     self.fields["run"].choices = cho
     if "run" in self.params:
@@ -374,6 +446,50 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     pass
 
 
+class EventPlotS2:
+    search_fields = [
+        "number__icontains",
+        "name__icontains",
+        "teaser__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(Plot)
+
+
+class EventPlotS2WidgetMulti(EventPlotS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class EventPlotS2Widget(EventPlotS2, s2forms.ModelSelect2Widget):
+    pass
+
+
+class EventTraitS2:
+    search_fields = [
+        "number__icontains",
+        "name__icontains",
+        "teaser__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(Trait)
+
+
+class EventTraitS2WidgetMulti(EventTraitS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
+    pass
+
+
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
         "name__icontains",
@@ -446,13 +562,84 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return Member.objects.filter(pk__in=self.allowed)
 
 
-class InventoryS2Widget(s2forms.ModelSelect2Widget):
+class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
+        "description__icontains",
     ]
+
+    def set_assoc(self, aid):
+        self.aid = aid
+
+    def get_queryset(self):
+        return WarehouseContainer.objects.filter(assoc_id=self.aid)
+
+
+class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(WarehouseArea)
+
+
+class WarehouseItemS2(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_assoc(self, aid):
+        self.aid = aid
+
+    def get_queryset(self):
+        return WarehouseItem.objects.filter(assoc_id=self.aid)
+
+
+class WarehouseItemS2WidgetMulti(WarehouseItemS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class WarehouseItemS2Widget(WarehouseItemS2, s2forms.ModelSelect2Widget):
+    pass
+
+
+class WarehouseTagS2(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_assoc(self, aid):
+        self.aid = aid
+
+    def get_queryset(self):
+        return WarehouseTag.objects.filter(assoc_id=self.aid)
+
+
+class WarehouseTagS2WidgetMulti(WarehouseTagS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
+    pass
 
 
 def remove_choice(ch, typ):
+    """Remove a specific choice from a list of choices.
+
+    Args:
+        ch: List of (key, value) choice tuples
+        typ: Choice key to remove
+
+    Returns:
+        list: New choice list without the specified type
+    """
     new = []
     for k, v in ch:
         if k == typ:
@@ -474,6 +661,14 @@ class RedirectForm(forms.Form):
 
 
 def get_members_queryset(aid):
+    """Get queryset of members for an association with accepted status.
+
+    Args:
+        aid: Association ID to filter members for
+
+    Returns:
+        QuerySet: Members with accepted, submitted, or joined membership status
+    """
     allwd = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     qs = Member.objects.prefetch_related("memberships")
     qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)

@@ -1,7 +1,7 @@
 #  LarpManager
 
 **LarpManager** is a free and open-source platform to manage **LARP (Live Action Role-Playing)** events.
-It has everything you need to run your LARP, free & open source!
+It has Everything you need to manage your LARP, free & open source!
 
 > Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)!
 
@@ -210,6 +210,8 @@ In order to deploy:
 
 ## Develop
 
+The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
+
 In order to develop:
 
 1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`
@@ -282,7 +284,7 @@ Thanks in advance for contributing! Here's the steps:
 If you want to develop a new feature, usually you follow this steps:
 - Create a new `Feature` object that encapsulates the new functionalities. Set `overall` if it applies to whole organization.
 - Create new views. Follow the standard of the prefix `orga_` if it applies to the single event, and the prefix `exe_` if it applies to the whole organization;
-- Create the corresponding `AssocPermission` and/or `EventPermission`. Put the name of the views as `slug`, and the feature object as `feature`.
+- To add sidebar links, create `AssocPermission` (for organization dashboard) and/or `EventPermission` (for event dashboard). Put the name of the views as `slug`, the feature object as `feature`, and the module object as `module`.
 
 Before pushing your changes, run `python manage.py export_features` to update the fixtures with your new elements.
 

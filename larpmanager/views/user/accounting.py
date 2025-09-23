@@ -23,6 +23,7 @@ from datetime import date, datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -58,7 +59,9 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
-    Collection,
+    CollectionStatus,
+    OtherChoices,
+    PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -111,13 +114,13 @@ def accounting_tokens(request):
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.TOKEN,
+                oth=OtherChoices.TOKEN,
                 assoc_id=ctx["a_id"],
             ),
             "used": AccountingItemPayment.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                pay=AccountingItemPayment.TOKEN,
+                pay=PaymentChoices.TOKEN,
                 assoc_id=ctx["a_id"],
             ),
         }
@@ -136,19 +139,19 @@ def accounting_credits(request):
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.CREDIT,
+                oth=OtherChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
             "used": AccountingItemPayment.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                pay=AccountingItemPayment.CREDIT,
+                pay=PaymentChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
             "ref": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.REFUND,
+                oth=OtherChoices.REFUND,
                 assoc_id=ctx["a_id"],
             ),
         }
@@ -166,10 +169,11 @@ def acc_refund(request):
     if request.method == "POST":
         form = RefundRequestForm(request.POST, member=ctx["member"])
         if form.is_valid():
-            p = form.save(commit=False)
-            p.member = ctx["member"]
-            p.assoc_id = ctx["a_id"]
-            p.save()
+            with transaction.atomic():
+                p = form.save(commit=False)
+                p.member = ctx["member"]
+                p.assoc_id = ctx["a_id"]
+                p.save()
             notify_refund_request(p)
             messages.success(
                 request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
@@ -182,9 +186,9 @@ def acc_refund(request):
 
 
 @login_required
-def acc_pay(request, s, n, method=None):
+def acc_pay(request, s, method=None):
     check_assoc_feature(request, "payment")
-    ctx = get_event_run(request, s, n, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, status=True)
 
     if not ctx["run"].reg:
         messages.warning(
@@ -222,14 +226,14 @@ def acc_reg(request, reg_id, method=None):
     except Exception as err:
         raise Http404(f"registration not found {err}") from err
 
-    ctx = get_event_run(request, reg.run.event.slug, reg.run.number)
+    ctx = get_event_run(request, reg.run.get_slug())
     ctx["show_accounting"] = True
 
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
 
     if reg.tot_iscr == reg.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
 
     pending = (
         PaymentInvoice.objects.filter(
@@ -242,12 +246,12 @@ def acc_reg(request, reg_id, method=None):
     )
     if pending:
         messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
 
     if "membership" in ctx["features"] and not reg.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
 
     ctx["reg"] = reg
 
@@ -335,10 +339,11 @@ def acc_collection(request):
     if request.method == "POST":
         form = CollectionNewForm(request.POST)
         if form.is_valid():
-            p = form.save(commit=False)
-            p.organizer = request.user.member
-            p.assoc_id = request.assoc["id"]
-            p.save()
+            with transaction.atomic():
+                p = form.save(commit=False)
+                p.organizer = request.user.member
+                p.assoc_id = request.assoc["id"]
+                p.save()
             messages.success(request, _("The collection has been activated!"))
             return redirect("acc_collection_manage", s=p.contribute_code)
     else:
@@ -369,7 +374,7 @@ def acc_collection_participate(request, s):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
-    if c.status != Collection.OPEN:
+    if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
     if request.method == "POST":
@@ -387,11 +392,12 @@ def acc_collection_close(request, s):
     c = get_collection_partecipate(request, s)
     if request.user.member != c.organizer:
         raise Http404("Collection not yours")
-    if c.status != Collection.OPEN:
+    if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
-    c.status = Collection.DONE
-    c.save()
+    with transaction.atomic():
+        c.status = CollectionStatus.DONE
+        c.save()
 
     messages.success(request, _("Collection closed"))
     return redirect("acc_collection_manage", s=s)
@@ -403,17 +409,20 @@ def acc_collection_redeem(request, s):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
-    if c.status != Collection.DONE:
+    if c.status != CollectionStatus.DONE:
         raise Http404("Collection not found")
 
     if request.method == "POST":
-        c.member = request.user.member
-        c.status = Collection.PAYED
-        c.save()
+        with transaction.atomic():
+            c.member = request.user.member
+            c.status = CollectionStatus.PAYED
+            c.save()
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
 
-    ctx["list"] = AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"])
+    ctx["list"] = AccountingItemCollection.objects.filter(
+        collection=c, collection__assoc_id=request.assoc["id"]
+    ).select_related("member", "collection")
     return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
 
 
@@ -485,7 +494,7 @@ def acc_profile_check(request, mes, inv):
 def acc_redirect(inv):
     if inv.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(id=inv.idx)
-        return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
+        return redirect("gallery", s=reg.run.get_slug())
     return redirect("accounting")
 
 
@@ -530,15 +539,15 @@ def acc_submit(request, s, p):
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + p)
 
-    if s in {"wire", "paypal_nf"}:
-        inv.invoice = form.cleaned_data["invoice"]
-    elif s == "any":
-        inv.text = form.cleaned_data["text"]
+    with transaction.atomic():
+        if s in {"wire", "paypal_nf"}:
+            inv.invoice = form.cleaned_data["invoice"]
+        elif s == "any":
+            inv.text = form.cleaned_data["text"]
 
-    inv.status = PaymentStatus.SUBMITTED
-
-    inv.txn_id = datetime.now().timestamp()
-    inv.save()
+        inv.status = PaymentStatus.SUBMITTED
+        inv.txn_id = datetime.now().timestamp()
+        inv.save()
 
     notify_invoice_check(inv)
 
@@ -571,10 +580,11 @@ def acc_confirm(request, c):
     if not found:
         if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
-            check_event_permission(request, reg.run.event.slug, reg.run.number)
+            check_event_permission(request, reg.run.get_slug())
 
-    inv.status = PaymentStatus.CONFIRMED
-    inv.save()
+    with transaction.atomic():
+        inv.status = PaymentStatus.CONFIRMED
+        inv.save()
 
     messages.success(request, _("Payment confirmed"))
     return redirect("home")

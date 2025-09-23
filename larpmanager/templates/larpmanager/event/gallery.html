@@ -10,7 +10,7 @@
         </p>
     {% elif hide_signup %}
         <p>
-            <i>{% trans "Characters are only visible to registered players" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
+            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.get_slug %}">{% trans "Register" %}</a></i>
         </p>
     {% else %}
         {% if factions %}
@@ -20,7 +20,7 @@
                         {% if f.name %}
                             <h1 class="title">
                                 {% if show_faction %}
-                                    <a href="{% url 'faction' event.slug run.number fnum %}">{{ f.name }}</a>
+                                    <a href="{% url 'faction' run.get_slug fnum %}">{{ f.name }}</a>
                                 {% else %}
                                     {{ f.name }}
                                 {% endif %}
@@ -32,7 +32,7 @@
                                     {% if not ch.hide %}
                                         <div class="el">
                                             <div class="icon">
-                                                <a href="{% url 'character' run.event.slug run.number ch.number %}">
+                                                <a href="{% url 'character' run.get_slug ch.number %}">
                                                     <div class="img_cover"
                                                          style="background-image:url('{% get_char_profile ch %}')">
                                                     </div>

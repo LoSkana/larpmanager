@@ -37,9 +37,16 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText, AssocTextType
+from larpmanager.models.member import Member
 
 
 class ExeAssociationForm(MyForm):
+    """Form for editing main association settings.
+
+    Allows executives to modify core association properties
+    while protecting critical fields like slug and features.
+    """
+
     page_title = _("Settings")
 
     page_info = _("This page allows you to change the main settings of your Organization")
@@ -62,6 +69,7 @@ class ExeAssociationForm(MyForm):
             "images_shared",
             "plan",
             "skin",
+            "demo",
         )
 
     def __init__(self, *args, **kwargs):
@@ -74,6 +82,12 @@ class ExeAssociationForm(MyForm):
 
 
 class ExeAssocTextForm(MyForm):
+    """Form for managing association text content.
+
+    Handles custom text snippets used throughout the
+    association's interface and communications.
+    """
+
     page_title = _("Texts")
 
     page_info = _("This page allows you to edit organization-specific text")
@@ -119,19 +133,23 @@ class ExeAssocTextForm(MyForm):
         help_texts = {
             AssocTextType.PROFILE: _("Added at the top of the user profile page"),
             AssocTextType.HOME: _("Added at the top of the main calendar page"),
-            AssocTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to players"),
+            AssocTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to participants"),
             AssocTextType.MEMBERSHIP: _("Content of the membership request filled with user data"),
             AssocTextType.STATUTE: _("Added to the membership page as the paragraph for statute info"),
             AssocTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
             AssocTextType.FOOTER: _("Added to the bottom of all pages"),
             AssocTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
-            AssocTextType.RECEIPT: _("Content of the receipt created for each payment and sent to players"),
+            AssocTextType.RECEIPT: _("Content of the receipt created for each payment and sent to participants"),
             AssocTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
             AssocTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
-            AssocTextType.REMINDER_MEMBERSHIP: _("Content of mail reminding players to fill their membership request"),
-            AssocTextType.REMINDER_MEMBERSHIP_FEE: _("Content of mail reminding players to pay the membership fee"),
-            AssocTextType.REMINDER_PAY: _("Content of mail reminding players to pay their signup fee"),
-            AssocTextType.REMINDER_PROFILE: _("Content of mail reminding players to fill their profile"),
+            AssocTextType.REMINDER_MEMBERSHIP: _(
+                "Content of mail reminding participants to fill their membership request"
+            ),
+            AssocTextType.REMINDER_MEMBERSHIP_FEE: _(
+                "Content of mail reminding participants to pay the membership fee"
+            ),
+            AssocTextType.REMINDER_PAY: _("Content of mail reminding participants to pay their signup fee"),
+            AssocTextType.REMINDER_PROFILE: _("Content of mail reminding participants to fill their profile"),
         }
         help_text = []
         for choice_typ, text in help_texts.items():
@@ -164,6 +182,12 @@ class ExeAssocTextForm(MyForm):
 
 
 class ExeAssocRoleForm(MyForm):
+    """Form for managing association roles and permissions.
+
+    Allows configuration of role-based access control
+    including member assignment and permission management.
+    """
+
     page_title = _("Roles")
 
     page_info = _("This page allows you to edit the roles of the association")
@@ -229,6 +253,8 @@ class ExeFeatureForm(FeatureForm):
         "This page allows you to select the features activated for the organization, and all its events (click on a feature to show its description)"
     )
 
+    load_js = ["feature-search"]
+
     class Meta:
         model = Association
         fields = []
@@ -282,10 +308,6 @@ class ExeConfigForm(ConfigForm):
         help_text = _("If checked: shows the website for each event")
         self.add_configs("calendar_website", ConfigType.BOOL, label, help_text)
 
-        label = _("Description")
-        help_text = _("If checked: shows the description for each event")
-        self.add_configs("calendar_description", ConfigType.BOOL, label, help_text)
-
         label = _("Where")
         help_text = _("If checked: shows the position for each event")
         self.add_configs("calendar_where", ConfigType.BOOL, label, help_text)
@@ -307,7 +329,7 @@ class ExeConfigForm(ConfigForm):
 
         if self.instance.main_mail:
             label = _("Carbon copy")
-            help_text = _("If checked: Sends the main mail a copy of all mails sent to players")
+            help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
 
         label = _("New signup")
@@ -376,6 +398,13 @@ class ExeConfigForm(ConfigForm):
             label = _("Move registration event")
             help_text = _("Allow to switch registration between events")
             self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
+
+        if "warehouse" in self.params["features"]:
+            self.set_section("warehouse", _("Warehouse"))
+
+            label = _("Quantity")
+            help_text = _("If checked: Add a field to track items quantity")
+            self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
         # USERS
@@ -454,15 +483,15 @@ class ExeConfigForm(ConfigForm):
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
-            label = _("Charge transaction fees to player")
+            label = _("Charge transaction fees to participant")
             help_text = _(
-                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the player covers them instead of the organization"
+                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the participant covers them instead of the organization"
             )
             self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
             label = _("Disable amount change")
             help_text = _(
-                "If checked: Hides the possibility for the player to change the payment amount for his entries"
+                "If checked: Hides the possibility for the participant to change the payment amount for his entries"
             )
             self.add_configs("payment_hide_amount", ConfigType.BOOL, label, help_text)
 
@@ -505,6 +534,12 @@ class ExeConfigForm(ConfigForm):
                 "whole numbers from 0 to 100)"
             )
             self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
+
+        if "expense" in self.params["features"]:
+            self.set_section("expense", _("Expenses"))
+            label = _("Disable event approval")
+            help_text = _("If checked, approval of expenses can be performed only from the organization panel")
+            self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
         if "e-invoice" not in self.params["features"]:
@@ -566,6 +601,12 @@ class ExeConfigForm(ConfigForm):
 
 
 class FirstAssociationForm(MyForm):
+    """Form for creating a new association during initial setup.
+
+    Simplified form for first-time association creation
+    with essential fields only.
+    """
+
     class Meta:
         model = Association
         fields = ("name", "profile", "slug")
@@ -635,3 +676,24 @@ class ExeQuickSetupForm(QuickSetupForm):
             )
 
         self.init_fields(get_assoc_features(self.instance.pk))
+
+
+class ExePreferencesForm(ConfigForm):
+    page_title = _("Personal preferences")
+
+    page_info = _("This page allows you to set your personal preferences on the interface")
+
+    class Meta:
+        model = Member
+        fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True
+        self.show_sections = True
+
+    def set_configs(self):
+        self.set_section("interface", _("Interface"))
+        label = _("Collapse sidebar")
+        help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
+        self.add_configs("interface_collapse_sidebar", ConfigType.BOOL, label, help_text)

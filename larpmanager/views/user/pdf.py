@@ -38,8 +38,8 @@ def check_print_pdf(ctx):
 
 
 @login_required
-def character_pdf_sheet(request, s, n, num):
-    ctx = get_event_run(request, s, n, signup=True)
+def character_pdf_sheet(request, s, num):
+    ctx = get_event_run(request, s, signup=True)
 
     check_print_pdf(ctx)
     get_char_check(request, ctx, num, True)
@@ -47,28 +47,28 @@ def character_pdf_sheet(request, s, n, num):
 
 
 @login_required
-def character_pdf_sheet_friendly(request, s, n, num):
-    ctx = get_event_run(request, s, n, signup=True)
+def character_pdf_sheet_friendly(request, s, num):
+    ctx = get_event_run(request, s, signup=True)
     check_print_pdf(ctx)
     get_char_check(request, ctx, num, True)
     return print_character_friendly(ctx)
 
 
 @login_required
-def character_pdf_relationships(request, s, n, num):
-    ctx = get_event_run(request, s, n, signup=True)
+def character_pdf_relationships(request, s, num):
+    ctx = get_event_run(request, s, signup=True)
     check_print_pdf(ctx)
     get_char_check(request, ctx, num, True)
     return print_character_rel(ctx)
 
 
 @login_required
-def portraits(request, s, n):
-    ctx = get_event_run(request, s, n, signup=True)
+def portraits(request, s):
+    ctx = get_event_run(request, s, signup=True)
     return print_gallery(ctx)
 
 
 @login_required
-def profiles(request, s, n):
-    ctx = get_event_run(request, s, n, signup=True)
+def profiles(request, s):
+    ctx = get_event_run(request, s, signup=True)
     return print_profiles(ctx)

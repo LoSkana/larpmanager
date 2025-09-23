@@ -17,77 +17,55 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import io
 import os
+import zipfile
 from datetime import datetime
 from urllib.parse import urlparse
 
-from playwright.async_api import expect
+import pandas as pd
+from playwright.sync_api import expect
 
 password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
 
 
-async def page_start(p, show=False):
-    browser = await p.chromium.launch(headless=not show)
-    context = await browser.new_context(record_video_dir="test_videos")
-    page = await context.new_page()
-
-    page.set_default_timeout(60000)
-
-    page.on("dialog", lambda dialog: dialog.accept())
-
-    async def on_response(response):
-        error_code = 500
-        if response.status == error_code:
-            raise Exception(f"500 on {response.url}")
-
-    page.on("response", on_response)
-
-    return browser, context, page
+def logout(page):
+    page.locator("a#menu-open").click()
+    page.get_by_role("link", name="Logout").click()
 
 
-async def logout(page, live_server):
-    await page.locator("a#menu-open").click()
-    await page.get_by_role("link", name="Logout").click()
+def login_orga(page, live_server):
+    login(page, live_server, orga_user)
 
 
-async def login_orga(pg, ls):
-    await login(pg, ls, orga_user)
+def login_user(page, live_server):
+    login(page, live_server, test_user)
 
 
-async def login_user(pg, lv):
-    await login(pg, lv, test_user)
+def login(page, live_server, name):
+    go_to(page, live_server, "/login")
+
+    page.locator("#id_username").fill(name)
+    page.locator("#id_password").fill(password)
+    page.get_by_role("button", name="Submit").click()
+    expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
-async def login(pg, live_server, name):
-    await go_to(pg, live_server, "/login")
-
-    await pg.locator("#id_username").fill(name)
-    await pg.locator("#id_password").fill(password)
-    await pg.get_by_role("button", name="Submit").click()
-    await expect(pg.locator("#banner")).not_to_contain_text("Login")
-
-
-async def handle_error(page, e, test_name):
+def handle_error(page, e, test_name):
     print(f"Error on {test_name}: {page.url}\n")
     print(e)
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
-    await page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
-    try:
-        video_path = await page.video.path()
-        os.rename(video_path, f"test_videos/{test_name}_{uid}.webm")
-    except Exception as ve:
-        print(f"[!] Errore video: {ve}")
+    page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
 
-    # print("Captured Visible Page Text:\n")
-    # print(print_text(page))
     raise e
 
 
-async def print_text(page):
-    visible_text = await page.evaluate("""
+def print_text(page):
+    visible_text = page.evaluate("""
         () => {
             function getVisibleText(element) {
                 return [...element.querySelectorAll('*')]
@@ -103,86 +81,111 @@ async def print_text(page):
     print(visible_text)
 
 
-async def go_to(page, live_server, path):
-    await go_to_check(page, f"{live_server.url}/{path}")
+def go_to(page, live_server, path):
+    go_to_check(page, f"{live_server}/{path}")
 
 
-async def go_to_check(page, path):
-    dialog_triggered = False
-
-    def on_dialog(dialog):
-        nonlocal dialog_triggered
-        dialog_triggered = True
-        dialog.dismiss()
-
-    page.on("dialog", on_dialog)
-
-    await page.goto(path)
-    await ooops_check(page)
-
-    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
+def go_to_check(page, path):
+    page.goto(path)
+    ooops_check(page)
 
 
-async def submit(page):
-    await page.get_by_role("button", name="Submit").click()
-    await page.wait_for_load_state("networkidle")
-    await page.wait_for_load_state("load")
-    await ooops_check(page)
+def submit(page):
+    page.get_by_role("button", name="Submit").click()
+    page.wait_for_load_state("networkidle")
+    page.wait_for_load_state("load")
+    ooops_check(page)
 
 
-async def ooops_check(page):
+def ooops_check(page):
     banner = page.locator("#banner")
-    if await banner.count() > 0:
-        await expect(banner).not_to_contain_text("Oops!")
-        await expect(banner).not_to_contain_text("404")
+    if banner.count() > 0:
+        expect(banner).not_to_contain_text("Oops!")
+        expect(banner).not_to_contain_text("404")
 
 
-async def check_download(page, link):
+def check_download(page, link: str) -> None:
     max_tries = 3
     current_try = 0
+
     while current_try < max_tries:
         try:
-            async with page.expect_download(timeout=100000) as download_info:
-                await page.get_by_role("link", name=link).click()
-            download = await download_info.value
-            download_path = await download.path()
+            with page.expect_download(timeout=100_000) as download_info:
+                page.click(f"text={link}")
+            download = download_info.value
+            download_path = download.path()
             assert download_path is not None, "Download failed"
 
             with open(download_path, "rb") as f:
                 content = f.read()
-                print(content[:100])
 
             file_size = os.path.getsize(download_path)
             assert file_size > 0, "File empty"
 
+            # handle zip: extract CSVs, read with pandas
+            if zipfile.is_zipfile(io.BytesIO(content)) or zipfile.is_zipfile(download_path):
+                with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                    csv_members = [m for m in zf.namelist() if m.lower().endswith(".csv")]
+                    assert csv_members, "ZIP contains no CSV files"
+                    for member in csv_members:
+                        with zf.open(member) as f:
+                            df = pd.read_csv(f)
+                            assert not df.empty, f"Empty csv {member}"
+                return
+
+            # if plain CSV, read with pandas
+            lower_name = str(os.path.basename(download.suggested_filename or download_path).lower())
+            if lower_name.endswith(".csv"):
+                df = pd.read_csv(io.BytesIO(content))
+                assert not df.empty, f"Empty csv {lower_name}"
+                return
+
             return
-        except Exception:
+
+        except Exception as err:
+            print(err)
             current_try += 1
+            if current_try >= max_tries:
+                raise
 
 
-async def fill_tinymce(page, iframe_id: str, text: str):
-    frame_locator = page.frame_locator(f"iframe#{iframe_id}")
+def fill_tinymce(page, iframe_id, text):
+    page.wait_for_timeout(2000)
+    locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
+    if locator.count() > 0:
+        locator.click()
+    page.wait_for_timeout(2000)
+    frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
-    await editor.wait_for(state="visible")
-    await editor.fill(text)
+    editor.wait_for(state="visible")
+    editor.fill(text)
+    page.wait_for_timeout(2000)
 
 
-async def _checkboxes(page, check=True):
+def _checkboxes(page, check=True):
     checkboxes = page.locator('input[type="checkbox"]')
-    count = await checkboxes.count()
+    count = checkboxes.count()
     for i in range(count):
         checkbox = checkboxes.nth(i)
-        if await checkbox.is_visible() and await checkbox.is_enabled():
+        if checkbox.is_visible() and checkbox.is_enabled():
             if check:
-                if not await checkbox.is_checked():
-                    await checkbox.check()
-            elif await checkbox.is_checked():
-                await checkbox.uncheck()
-    await page.locator('input[type="submit"][value="Confirm"]').click(force=True)
+                if not checkbox.is_checked():
+                    checkbox.check()
+            elif checkbox.is_checked():
+                checkbox.uncheck()
+
+    submit_confirm(page)
 
 
-async def add_links_to_visit(links_to_visit, page, visited_links):
-    new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
+def submit_confirm(page):
+    submit_btn = page.get_by_role("button", name="Confirm", exact=True)
+    submit_btn.scroll_into_view_if_needed()
+    expect(submit_btn).to_be_visible()
+    submit_btn.click()
+
+
+def add_links_to_visit(links_to_visit, page, visited_links):
+    new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
     for link in new_links:
         if "logout" in link:
             continue
@@ -195,3 +198,8 @@ async def add_links_to_visit(links_to_visit, page, visited_links):
             continue
         if link not in visited_links:
             links_to_visit.add(link)
+
+
+def check_feature(page, name):
+    block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
+    block.get_by_role("checkbox").check()

@@ -39,58 +39,107 @@ from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
 from larpmanager.models.writing import CharacterStatus, Faction
 
 
-class QuestionType(models.TextChoices):
+class BaseQuestionType(models.TextChoices):
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
     TEXT = "t", _("Single-line text")
     PARAGRAPH = "p", _("Multi-line text")
     EDITOR = "e", _("Advanced text editor")
-    NAME = "name", _("Name")
-    TEASER = "teaser", _("Presentation")
-    SHEET = "text", _("Sheet")
-    COVER = "cover", _("Cover")
-    FACTIONS = "faction", _("Factions")
-    TITLE = "title", _("Title")
-    MIRROR = "mirror", _("Mirror")
-    HIDE = "hide", _("Hide")
-    PROGRESS = "progress", _("Progress")
-    ASSIGNED = "assigned", _("Assigned")
+
+    @staticmethod
+    def get_answer_types():
+        return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
+
+    @staticmethod
+    def get_choice_types():
+        return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
     def get_basic_types():
-        return {
-            QuestionType.SINGLE,
-            QuestionType.MULTIPLE,
-            QuestionType.TEXT,
-            QuestionType.PARAGRAPH,
-            QuestionType.EDITOR,
-        }
-
-    @staticmethod
-    def get_def_types():
-        return {QuestionType.NAME, QuestionType.TEASER, QuestionType.SHEET, QuestionType.TITLE}
-
-    @classmethod
-    def get_max_length(cls):
-        return {
-            QuestionType.NAME,
-            QuestionType.SHEET,
-            QuestionType.TEASER,
-            QuestionType.TEXT,
-            QuestionType.PARAGRAPH,
-            QuestionType.MULTIPLE,
-            QuestionType.EDITOR,
-        }
+        return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
     def get_mapping(cls):
         return {
-            QuestionType.SINGLE: "single-choice",
-            QuestionType.MULTIPLE: "multi-choice",
-            QuestionType.TEXT: "short-text",
-            QuestionType.PARAGRAPH: "long-text",
-            QuestionType.EDITOR: "advanced",
+            BaseQuestionType.SINGLE: "single-choice",
+            BaseQuestionType.MULTIPLE: "multi-choice",
+            BaseQuestionType.TEXT: "short-text",
+            BaseQuestionType.PARAGRAPH: "long-text",
+            BaseQuestionType.EDITOR: "advanced",
         }
+
+
+def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+    """Extend Django TextChoices with additional options.
+
+    Args:
+        name: Name for the new TextChoices class
+        base: Base TextChoices to extend
+        extra: List of (name, value, label) tuples to add
+
+    Returns:
+        models.TextChoices: Extended choices class
+    """
+    members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
+    return models.TextChoices(name, members)
+
+
+WritingQuestionType = extend_textchoices(
+    "WritingQuestionType",
+    BaseQuestionType,
+    [
+        ("NAME", "name", _("Name")),
+        ("TEASER", "teaser", _("Presentation")),
+        ("SHEET", "text", _("Sheet")),
+        ("COVER", "cover", _("Cover")),
+        ("FACTIONS", "faction", _("Factions")),
+        ("TITLE", "title", _("Title")),
+        ("MIRROR", "mirror", _("Mirror")),
+        ("HIDE", "hide", _("Hide")),
+        ("PROGRESS", "progress", _("Progress")),
+        ("ASSIGNED", "assigned", _("Assigned")),
+        ("COMPUTED", "c", _("Computed")),
+    ],
+)
+
+
+def get_def_writing_types():
+    """Get default writing question types.
+
+    Returns:
+        set: Set of default WritingQuestionType values
+    """
+    return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
+
+
+def get_writing_max_length():
+    """Get maximum length for writing content.
+
+    Returns:
+        int: Maximum character length for writing fields
+    """
+    return {
+        WritingQuestionType.NAME,
+        WritingQuestionType.SHEET,
+        WritingQuestionType.TEASER,
+        WritingQuestionType.TEXT,
+        WritingQuestionType.PARAGRAPH,
+        WritingQuestionType.MULTIPLE,
+        WritingQuestionType.EDITOR,
+    }
+
+
+RegistrationQuestionType = extend_textchoices(
+    "RegistrationQuestionType",
+    BaseQuestionType,
+    [
+        ("TICKET", "ticket", _("Ticket")),
+        ("ADDITIONAL", "additional_tickets", _("Additional")),
+        ("PWYW", "pay_what_you_want", _("Pay what you want")),
+        ("QUOTA", "reg_quotas", _("Rate")),
+        ("SURCHARGE", "reg_surcharges", _("Surcharge")),
+    ],
+)
 
 
 class QuestionStatus(models.TextChoices):
@@ -131,6 +180,7 @@ class QuestionApplicable(models.TextChoices):
     FACTION = "f", "faction"
     QUEST = "q", "quest"
     TRAIT = "t", "trait"
+    PROLOGUE = "r", "prologue"
 
     @classmethod
     def get_applicable(cls, model_name):
@@ -153,8 +203,8 @@ class QuestionApplicable(models.TextChoices):
 class WritingQuestion(BaseModel):
     typ = models.CharField(
         max_length=10,
-        choices=QuestionType.choices,
-        default=QuestionType.SINGLE,
+        choices=WritingQuestionType.choices,
+        default=BaseQuestionType.SINGLE,
         help_text=_("Question type"),
         verbose_name=_("Type"),
     )
@@ -168,6 +218,7 @@ class WritingQuestion(BaseModel):
     description = models.CharField(
         max_length=1000,
         blank=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
@@ -192,7 +243,7 @@ class WritingQuestion(BaseModel):
         blank=True,
         verbose_name=_("Editable"),
         help_text=_(
-            "This field can be edited by the player only when the character is in one of the selected statuses"
+            "This field can be edited by the participant only when the character is in one of the selected statuses"
         ),
     )
 
@@ -262,7 +313,7 @@ class WritingOption(BaseModel):
     description = models.CharField(
         max_length=500,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
@@ -274,7 +325,7 @@ class WritingOption(BaseModel):
 
     order = models.IntegerField(default=0)
 
-    dependents = models.ManyToManyField(
+    requirements = models.ManyToManyField(
         "self",
         related_name="dependents_inv",
         symmetrical=False,
@@ -289,7 +340,7 @@ class WritingOption(BaseModel):
         blank=True,
         help_text=_(
             "If you select one (or more) tickets, the option will only be available to "
-            "players who have selected that ticket"
+            "participants who have selected that ticket"
         ),
     )
 
@@ -333,9 +384,9 @@ class WritingAnswer(BaseModel):
 
 class RegistrationQuestion(BaseModel):
     typ = models.CharField(
-        max_length=10,
-        choices=QuestionType.choices,
-        default=QuestionType.SINGLE,
+        max_length=50,
+        choices=RegistrationQuestionType.choices,
+        default=BaseQuestionType.SINGLE,
         help_text=_("Question type"),
         verbose_name=_("Type"),
     )
@@ -349,6 +400,7 @@ class RegistrationQuestion(BaseModel):
     description = models.CharField(
         max_length=1000,
         blank=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
@@ -374,7 +426,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Faction list"),
         help_text=_(
-            "Optional - If you select one (or more) factions, the question will only be shown to players "
+            "Optional - If you select one (or more) factions, the question will only be shown to participants "
             "with characters in all chosen factions"
         ),
     )
@@ -401,7 +453,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Ticket list"),
         help_text=_(
-            "If you select one (or more) tickets, the question will only be shown to players "
+            "If you select one (or more) tickets, the question will only be shown to participants "
             "who have selected one of those tickets"
         ),
     )
@@ -424,7 +476,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Allowed"),
         help_text=_(
-            "Staff members who are allowed to be able to see the responses of players (leave blank to let everyone see)"
+            "Staff members who are allowed to be able to see the responses of participants (leave blank to let everyone see)"
         ),
     )
 
@@ -510,7 +562,7 @@ class RegistrationOption(BaseModel):
     description = models.CharField(
         max_length=500,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
@@ -593,6 +645,7 @@ def _get_writing_elements():
         ("plot", _("Plots"), QuestionApplicable.PLOT),
         ("quest", _("Quests"), QuestionApplicable.QUEST),
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
+        ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
     return shows
 
@@ -604,5 +657,6 @@ def _get_writing_mapping():
         "plot": "plot",
         "quest": "questbuilder",
         "trait": "questbuilder",
+        "prologue": "prologue",
     }
     return mapping

@@ -31,19 +31,33 @@ from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionStatus,
-    QuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+    WritingQuestionType,
+    get_writing_max_length,
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
 class MyForm(forms.ModelForm):
+    """Base form class with context parameter handling.
+
+    Extends Django's ModelForm to support additional context parameters
+    that can be passed during form initialization.
+    """
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with optional context parameters.
+
+        Args:
+            *args: Positional arguments passed to parent ModelForm
+            **kwargs: Keyword arguments, may include 'ctx' for context data
+        """
         super().__init__()
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
@@ -79,12 +93,22 @@ class MyForm(forms.ModelForm):
         self.max_lengths = {}
 
     def get_automatic_field(self):
+        """Get list of fields that should be automatically populated.
+
+        Returns:
+            list: Field names that are automatically set and hidden from user
+        """
         s = ["event", "assoc"]
         if hasattr(self, "auto_run"):
             s.extend(["run"])
         return s
 
     def allow_run_choice(self):
+        """Configure run selection field based on available runs.
+
+        Sets up the run choice field, considering campaign switches and
+        hiding the field if only one run is available.
+        """
         runs = Run.objects.filter(event=self.params["event"])
 
         # if campaign switch is active, show as runs all of the events sharing the campaign
@@ -119,8 +143,7 @@ class MyForm(forms.ModelForm):
 
     def clean_event(self):
         if hasattr(self, "choose_event"):
-            event_id = self.cleaned_data["event"]
-            return Event.objects.get(pk=event_id)
+            return self.cleaned_data["event"]
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 
@@ -136,8 +159,8 @@ class MyForm(forms.ModelForm):
     def _validate_unique_event(self, field_name):
         value = self.cleaned_data.get(field_name)
         event = self.params.get("event")
-        if event:
-            typ = self.params["elementTyp"]
+        typ = self.params.get("elementTyp")
+        if event and typ:
             event_id = event.get_class_parent(typ).id
 
             model = self._meta.model
@@ -193,12 +216,27 @@ class MyForm(forms.ModelForm):
 
 
 class MyFormRun(MyForm):
+    """Form class for run-specific operations.
+
+    Extends MyForm with automatic run handling functionality.
+    Sets auto_run to True by default for run-related forms.
+    """
+
     def __init__(self, *args, **kwargs):
         self.auto_run = True
         super().__init__(*args, **kwargs)
 
 
 def max_selections_validator(max_choices):
+    """Create a validator that limits the number of selectable options.
+
+    Args:
+        max_choices (int): Maximum number of options that can be selected
+
+    Returns:
+        function: Validator function that raises ValidationError if exceeded
+    """
+
     def validator(value):
         if len(value) > max_choices:
             raise ValidationError(_("You have exceeded the maximum number of selectable options"))
@@ -207,6 +245,15 @@ def max_selections_validator(max_choices):
 
 
 def max_length_validator(max_length):
+    """Create a validator that limits text length after stripping HTML tags.
+
+    Args:
+        max_length (int): Maximum allowed text length
+
+    Returns:
+        function: Validator function that raises ValidationError if exceeded
+    """
+
     def validator(value):
         if len(strip_tags(value)) > max_length:
             raise ValidationError(_("You have exceeded the maximum text length"))
@@ -215,6 +262,13 @@ def max_length_validator(max_length):
 
 
 class BaseRegistrationForm(MyFormRun):
+    """Base form class for registration-related forms.
+
+    Provides common functionality for handling registration questions,
+    answers, and form validation. Supports both gift registrations
+    and regular registrations with dynamic form field generation.
+    """
+
     gift = False
     answer_class = RegistrationAnswer
     choice_class = RegistrationChoice
@@ -231,14 +285,20 @@ class BaseRegistrationForm(MyFormRun):
         self.sections = {}
 
     def _init_reg_question(self, instance, event):
+        """Initialize registration questions and answers from existing instance.
+
+        Args:
+            instance: Registration instance to load data from
+            event: Event object for question context
+        """
         if instance and instance.pk:
             for el in self.answer_class.objects.filter(**{self.instance_key: instance.id}):
                 self.answers[el.question_id] = el
 
             for el in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related("question"):
-                if el.question.typ == QuestionType.SINGLE:
+                if el.question.typ == BaseQuestionType.SINGLE:
                     self.singles[el.question_id] = el
-                elif el.question.typ == QuestionType.MULTIPLE:
+                elif el.question.typ == BaseQuestionType.MULTIPLE:
                     if el.question_id not in self.multiples:
                         self.multiples[el.question_id] = set()
                     self.multiples[el.question_id].add(el)
@@ -275,6 +335,11 @@ class BaseRegistrationForm(MyFormRun):
                 if not valid:
                     continue
 
+            if reg_count and hasattr(option, "tickets_map"):
+                tickets_id = [i for i in option.tickets_map if i is not None]
+                if tickets_id and run.reg.ticket_id not in tickets_id:
+                    continue
+
             # no problem, go ahead
             choices.append((option.id, name))
             if option.description:
@@ -302,14 +367,17 @@ class BaseRegistrationForm(MyFormRun):
             else:
                 name += " - (" + _("Available") + f" {avail})"
 
-        if hasattr(option, "tickets_map"):
-            tickets_id = [i for i in option.tickets_map if i is not None]
-            if tickets_id and run.reg.ticket_id not in tickets_id:
-                valid = False
-
         return name, valid
 
     def clean(self):
+        """Validate form data and check registration constraints.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If validation rules are violated
+        """
         form_data = super().clean()
 
         if hasattr(self, "questions"):
@@ -317,13 +385,13 @@ class BaseRegistrationForm(MyFormRun):
                 k = "q" + str(q.id)
                 if k not in form_data:
                     continue
-                if q.typ == QuestionType.MULTIPLE:
+                if q.typ == BaseQuestionType.MULTIPLE:
                     for sel in form_data[k]:
                         if not sel:
                             continue
                         if q.id in self.unavail and int(sel) in self.unavail[q.id]:
                             self.add_error(k, _("Option no longer available"))
-                elif q.typ == QuestionType.SINGLE:
+                elif q.typ == BaseQuestionType.SINGLE:
                     if not form_data[k]:
                         continue
                     if q.id in self.unavail and int(form_data[k]) in self.unavail[q.id]:
@@ -346,6 +414,9 @@ class BaseRegistrationForm(MyFormRun):
                 continue
 
             k = self._init_field(question, reg_counts=None, orga=True)
+            if not k:
+                continue
+
             keys.append(k)
 
             sec_name = reg_section
@@ -361,6 +432,10 @@ class BaseRegistrationForm(MyFormRun):
         return True
 
     def _init_field(self, question, reg_counts=None, orga=True):
+        # ignore computed
+        if question.typ == WritingQuestionType.COMPUTED:
+            return None
+
         key = "q" + str(question.id)
 
         active = True
@@ -383,12 +458,14 @@ class BaseRegistrationForm(MyFormRun):
                 required = question.status == QuestionStatus.MANDATORY
 
         key = self.init_type(key, orga, question, reg_counts, required)
+        if not key:
+            return key
 
         if not orga:
             self.fields[key].disabled = not active
 
         if question.max_length:
-            if question.typ in QuestionType.get_max_length():
+            if question.typ in get_writing_max_length():
                 self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
@@ -396,39 +473,54 @@ class BaseRegistrationForm(MyFormRun):
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
 
-        question.basic_typ = question.typ in QuestionType.get_basic_types()
+        question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
 
         return key
 
     def init_type(self, key, orga, question, reg_counts, required):
-        if question.typ == QuestionType.MULTIPLE:
+        if question.typ == BaseQuestionType.MULTIPLE:
             self.init_multiple(key, orga, question, reg_counts, required)
 
-        elif question.typ == QuestionType.SINGLE:
+        elif question.typ == BaseQuestionType.SINGLE:
             self.init_single(key, orga, question, reg_counts, required)
 
-        elif question.typ == QuestionType.TEXT:
+        elif question.typ == BaseQuestionType.TEXT:
             self.init_text(key, question, required)
 
-        elif question.typ == QuestionType.PARAGRAPH:
+        elif question.typ == BaseQuestionType.PARAGRAPH:
             self.init_paragraph(key, question, required)
 
-        elif question.typ == QuestionType.EDITOR:
+        elif question.typ == BaseQuestionType.EDITOR:
             self.init_editor(key, question, required)
 
         else:
-            key = question.typ
-            mapping = {"faction": "factions_list"}
-            if key in mapping:
-                key = mapping[key]
-            self.fields[key].label = question.name
-            self.fields[key].help_text = question.description
-            self.reorder_field(key)
-            self.fields[key].required = required
-            if key in ["name", "teaser", "text"]:
-                self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
+            key = self.init_special(question, required)
 
-        self.fields[key].key = key
+        if key:
+            self.fields[key].key = key
+
+        return key
+
+    def init_special(self, question, required):
+        key = question.typ
+        mapping = {
+            "faction": "factions_list",
+            "additional_tickets": "additionals",
+            "pay_what_you_want": "pay_what",
+            "reg_quotas": "quotas",
+            "reg_surcharges": "surcharge",
+        }
+        if key in mapping:
+            key = mapping[key]
+        if key not in self.fields:
+            return None
+
+        self.fields[key].label = question.name
+        self.fields[key].help_text = question.description
+        self.reorder_field(key)
+        self.fields[key].required = required
+        if key in ["name", "teaser", "text"]:
+            self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
 
         return key
 
@@ -512,6 +604,12 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = field
 
     def save_reg_questions(self, instance, orga=True):
+        """Save registration question answers to database.
+
+        Args:
+            instance: Registration instance to save answers for
+            orga (bool): Whether to save organizational questions
+        """
         for q in self.questions:
             if q.skip(instance, self.params["features"], self.params, orga):
                 continue
@@ -521,11 +619,11 @@ class BaseRegistrationForm(MyFormRun):
                 continue
             oid = self.cleaned_data[k]
 
-            if q.typ == QuestionType.MULTIPLE:
+            if q.typ == BaseQuestionType.MULTIPLE:
                 self.save_reg_multiple(instance, oid, q)
-            elif q.typ == QuestionType.SINGLE:
+            elif q.typ == BaseQuestionType.SINGLE:
                 self.save_reg_single(instance, oid, q)
-            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+            elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
                 self.save_reg_text(instance, oid, q)
 
     def save_reg_text(self, instance, oid, q):
@@ -569,6 +667,12 @@ class BaseRegistrationForm(MyFormRun):
 
 
 class MyCssForm(MyForm):
+    """Form class for handling CSS customization.
+
+    Manages CSS file upload, editing, and processing for styling
+    customization with support for backgrounds, fonts, and color themes.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -589,6 +693,11 @@ class MyCssForm(MyForm):
         return instance
 
     def save_css(self, instance):
+        """Save CSS content to file with automatic styling additions.
+
+        Args:
+            instance: Model instance to save CSS for
+        """
         path = self.get_css_path(instance)
         css = self.cleaned_data[self.get_input_css()]
         css += css_delimeter
@@ -623,6 +732,12 @@ class MyCssForm(MyForm):
 
 
 class BaseAccForm(forms.Form):
+    """Base form class for accounting and payment processing.
+
+    Handles payment method selection and fee configuration
+    for association-specific accounting operations.
+    """
+
     def __init__(self, *args, **kwargs):
         self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)

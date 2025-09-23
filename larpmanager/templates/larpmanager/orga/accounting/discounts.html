@@ -7,9 +7,8 @@
     {% trans "This page shows the discounts activated for this event" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
-    <table id="discounts"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    {% include "elements/header/edit.html" %}
+    <table id="discounts" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
@@ -18,14 +17,14 @@
                 <th>{% trans "Price" %}</th>
                 <th>{% trans "Max uses" %}</th>
                 <th>{% trans "Code" %}</th>
-                <th>{% trans "Run active" %}</th>
+                <th>{% trans "Session active" %}</th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_discounts_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_discounts_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>

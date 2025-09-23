@@ -26,10 +26,12 @@ from django.db.models import Max
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config
-from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
+from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
@@ -205,6 +207,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         ctx["el"] = None
 
     ctx["num"] = eid
+    ctx["type"] = ctx["elementTyp"].__name__.lower()
     if request.method == "POST":
         ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
@@ -233,17 +236,17 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
     return False
 
 
-def orga_edit(request, s, n, perm, form_type, eid, red=None, add_ctx=None):
-    ctx = check_event_permission(request, s, n, perm)
+def orga_edit(request, s, perm, form_type, eid, red=None, add_ctx=None):
+    ctx = check_event_permission(request, s, perm)
     if add_ctx:
         ctx.update(add_ctx)
     if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+            return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
         if not red:
             red = perm
-        return redirect(red, s=ctx["event"].slug, n=ctx["run"].number)
+        return redirect(red, s=ctx["run"].get_slug())
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
@@ -287,6 +290,7 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
         ctx[nm] = None
 
     ctx["type"] = ctx["elementTyp"].__name__.lower()
+    ctx["label_typ"] = ctx["type"]
 
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
@@ -300,19 +304,29 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["add_another"] = True
     ctx["continue_add"] = "continue" in request.POST
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
+    ctx["download"] = 1
 
-    _setup_char_finder(ctx)
+    _setup_char_finder(ctx, ctx["elementTyp"])
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 
 
-def _setup_char_finder(ctx):
-    ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
-    if not ctx["disable_char_finder"]:
-        widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
-        widget.set_event(ctx["event"])
-        ctx["char_finder"] = widget.render(name="char_finder", value="")
-        ctx["char_finder_media"] = widget.media
+def _setup_char_finder(ctx, typ):
+    if ctx["event"].get_config("writing_disable_char_finder", False):
+        return
+
+    if typ == Trait:
+        widget_class = EventTraitS2Widget
+    else:
+        widget_class = EventCharacterS2Widget
+
+    widget = widget_class(attrs={"id": "char_finder"})
+    widget.set_event(ctx["event"])
+
+    ctx["finder_typ"] = typ._meta.model_name
+
+    ctx["char_finder"] = widget.render(name="char_finder", value="")
+    ctx["char_finder_media"] = widget.media
 
 
 def _writing_save(ctx, form, form_type, nm, redr, request, tp):
@@ -339,13 +353,13 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
     messages.success(request, _("Operation completed") + "!")
 
     if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+        return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
     if redr:
         ctx["element"] = p
         return redr(ctx)
 
-    return redirect("orga_" + nm + "s", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_" + nm + "s", s=ctx["run"].get_slug())
 
 
 def writing_edit_cache_key(eid, typ):
@@ -354,6 +368,8 @@ def writing_edit_cache_key(eid, typ):
 
 def writing_edit_save_ajax(form, request, ctx):
     res = {"res": "ok"}
+    if request.user.is_superuser:
+        return JsonResponse(res)
 
     eid = int(request.POST["eid"])
     if eid <= 0:
@@ -404,3 +420,23 @@ def writing_edit_working_ticket(request, tp, eid, token):
     cache.set(key, ticket, ticket_time)
 
     return msg
+
+
+@require_POST
+def working_ticket(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"warn": "User not logged"})
+
+    res = {"res": "ok"}
+    if request.user.is_superuser:
+        return JsonResponse(res)
+
+    eid = request.POST.get("eid")
+    type = request.POST.get("type")
+    token = request.POST.get("token")
+
+    msg = writing_edit_working_ticket(request, type, eid, token)
+    if msg:
+        res["warn"] = msg
+
+    return JsonResponse(res)

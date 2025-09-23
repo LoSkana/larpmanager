@@ -10,7 +10,7 @@
         </p>
     {% elif hide_signup %}
         <p>
-            <i>{% trans "Characters are only visible to registered players" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
+            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.get_slug %}">{% trans "Register" %}</a></i>
         </p>
     {% elif not show_character %}
         <p>
@@ -23,7 +23,7 @@
                 {% trans "Go to the quests of type" %}:
                 {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
-                    <a href="{% url 'quests' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                    <a href="{% url 'quests' run.get_slug qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
@@ -32,7 +32,7 @@
             <a href="#" class="my_toggle" tog='istr'>{% trans "Instructions" %}</a>
             <a href="#" class="my_toggle" tog='text_search'>{% trans "Search" %}</a>
             <a href="#" class="my_toggle" tog='spec'>{% trans "Features" %}</a>
-            {% if factions and factions|length > 2 %}
+            {% if factions and factions|length > 1 %}
                 <a href="#" class="my_toggle" tog='factions'>{% trans "Factions" %}</a>
             {% endif %}
             {% for idq, options in searchable.items %}
@@ -62,7 +62,7 @@
             <hr />
             <input type="text" id="search" placeholder="{% trans "Insert" %}" />
         </div>
-        {% if factions and factions|length > 2 %}
+        {% if factions and factions|length > 1 %}
             <div id="factions" class="c nav hide factions">
                 <hr />
                 {% for fnum in factions_typ.s %}
@@ -137,11 +137,11 @@ window['facs'] = {{ factions_json | safe }};
 
 window['blank'] = "{% static 'larpmanager/assets/blank-avatar.svg' %}";
 
-window['char_url'] = "{% url 'character' event.slug run.number 0 %}";
+window['char_url'] = "{% url 'character' run.get_slug 0 %}";
 
 window['prof_url'] = "{% url 'public' 0 %}";
 
-window['faction_url'] = "{% url 'faction' event.slug run.number 0 %}";
+window['faction_url'] = "{% url 'faction' run.get_slug 0 %}";
 
 window['cover'] = {% if features.cover %} true {% else %} false {% endif %};
 

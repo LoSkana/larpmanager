@@ -39,41 +39,30 @@ from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thu
 from larpmanager.utils.codes import countries
 
 
+class GenderChoices(models.TextChoices):
+    MALE = "m", _("Male")
+    FEMALE = "f", _("Female")
+    OTHER = "o", _("Other")
+
+
+class FirstAidChoices(models.TextChoices):
+    YES = "y", "Yes"
+    NO = "n", "No"
+
+
+class NewsletterChoices(models.TextChoices):
+    ALL = "a", _("Yes, keep me posted!")
+    ONLY = "o", _("Only really important communications")
+    NO = "n", _("No, I don't want updates")
+
+
+class DocumentChoices(models.TextChoices):
+    IDENT = "i", _("ID Card")
+    PATEN = "p", _("Driver's License")
+    PASS = "s", _("Passport")
+
+
 class Member(BaseModel):
-    MALE = "m"
-    FEMALE = "f"
-    OTHER = "o"
-    GENDER_CHOICES = [
-        (MALE, _("Male")),
-        (FEMALE, _("Female")),
-        (OTHER, _("Other")),
-    ]
-
-    YES = "y"
-    NO = "n"
-    FIRSTAID_CHOICES = [
-        (NO, "No"),
-        (YES, "Yes"),
-    ]
-
-    ALL = "a"
-    ONLY = "o"
-    NO = "n"
-    NEWSLETTER_CHOICES = [
-        (ALL, _("Yes, keep me posted!")),
-        (ONLY, _("Only really important communications")),
-        (NO, _("No, I don't want updates")),
-    ]
-
-    IDENT = "i"
-    PATEN = "p"
-    PASS = "s"
-    DOCUMENT_CHOICES = [
-        (IDENT, _("ID Card")),
-        (PATEN, _("Driver's License")),
-        (PASS, _("Passport")),
-    ]
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
 
     email = models.CharField(max_length=200, editable=False)
@@ -99,7 +88,7 @@ class Member(BaseModel):
         help_text=_(
             "If you prefer that your real name and surname not be publicly visible, please "
             "indicate an alias that will be displayed instead. Note: If you register for an "
-            "event, your real first and last name will be shown to other players, and to the "
+            "event, your real first and last name will be shown to other participants, and to the "
             "organisers."
         ),
         blank=True,
@@ -114,7 +103,7 @@ class Member(BaseModel):
             "If for whatever reason the first and last name shown on your documents is "
             "different from the one you prefer to use, then write it here. It will only be "
             "used for internal bureaucratic purposes, and will NEVER be displayed to other "
-            "players."
+            "participants."
         ),
     )
 
@@ -137,8 +126,8 @@ class Member(BaseModel):
 
     gender = models.CharField(
         max_length=1,
-        choices=GENDER_CHOICES,
-        default=OTHER,
+        choices=GenderChoices.choices,
+        default=GenderChoices.OTHER,
         verbose_name=_("Gender"),
         help_text=_("Indicates what gender you identify yourself as"),
         null=True,
@@ -156,8 +145,8 @@ class Member(BaseModel):
         max_length=150,
         verbose_name=_("Contact"),
         help_text=_(
-            "Indicates a way for other players to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others players"
+            "Indicates a way for other participants to contact you. It can be an email, a social "
+            "profile, whatever you want. It will be made public to others participants"
         ),
         blank=True,
         null=True,
@@ -165,8 +154,8 @@ class Member(BaseModel):
 
     first_aid = models.CharField(
         max_length=1,
-        choices=FIRSTAID_CHOICES,
-        default=NO,
+        choices=FirstAidChoices.choices,
+        default=FirstAidChoices.NO,
         verbose_name=_("First aid"),
         help_text=_(
             "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to intervene in "
@@ -189,8 +178,8 @@ class Member(BaseModel):
 
     document_type = models.CharField(
         max_length=1,
-        choices=DOCUMENT_CHOICES,
-        default=IDENT,
+        choices=DocumentChoices.choices,
+        default=DocumentChoices.IDENT,
         verbose_name=_("Document type"),
         null=True,
         help_text=_("Indicates a type of identification document issued by the nation in which you reside"),
@@ -262,8 +251,8 @@ class Member(BaseModel):
 
     newsletter = models.CharField(
         max_length=1,
-        choices=NEWSLETTER_CHOICES,
-        default=ALL,
+        choices=NewsletterChoices.choices,
+        default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
         help_text=_("Do you wish to be always updated on our events") + "?",
         null=True,
@@ -274,10 +263,9 @@ class Member(BaseModel):
         upload_to=UploadToPathAndRename("member/"),
         verbose_name=_("Portrait"),
         help_text=_(
-            "Upload your portrait photo. It will be shown to other players together with the "
-            "your character, so as to help recognize you in the game. Choose a photo that you "
-            "would put in an official document (in which you are alone, centered on your "
-            "face)."
+            "Upload your portrait photo. It will be shown to other participants to help recognize "
+            "you in the event. Choose a photo that you would put in an official document (in which "
+            "you are alone, centered on your face)"
         ),
         blank=True,
         null=True,
@@ -405,12 +393,6 @@ class MembershipStatus(models.TextChoices):
     SUBMITTED = "s", _("Submitted")
     ACCEPTED = "a", _("Accepted")
     REWOKED = "r", _("Kicked out")
-
-
-class NewsletterChoices(models.TextChoices):
-    ALL = "a", _("Yes, keep me posted!")
-    ONLY = "o", _("Only really important communications")
-    NO = "n", _("No, I don't want updates")
 
 
 class Membership(BaseModel):

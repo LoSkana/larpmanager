@@ -7,22 +7,21 @@
     {% trans "This page summarizes px delivery to characters" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
-    <table id="deliveries"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    {% include "elements/header/edit.html" %}
+    <table id="deliveries" class="go_datatable writing">
         <thead>
             <tr>
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Amount" %}</th>
-                <th>{% trans "Players" %}</th>
+                <th>{% trans "Participants" %}</th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_px_deliveries_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_px_deliveries_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
@@ -30,7 +29,7 @@
                     <td>
                         {% for ab in el.characters.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>

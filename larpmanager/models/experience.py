@@ -23,9 +23,8 @@ from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
-from larpmanager.models.form import WritingOption
+from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
@@ -52,7 +51,7 @@ class AbilityPx(BaseConceptModel):
         AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
     )
 
-    cost = models.IntegerField()
+    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
 
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
@@ -70,11 +69,11 @@ class AbilityPx(BaseConceptModel):
         help_text=_("Indicate the prerequisite abilities, which must be possessed before one can acquire this"),
     )
 
-    dependents = models.ManyToManyField(
+    requirements = models.ManyToManyField(
         WritingOption,
         related_name="abilities",
         blank=True,
-        verbose_name=_("Options required"),
+        verbose_name=_("Requirements"),
         help_text=_("Indicate the character options, which must be selected to make the skill available"),
     )
 
@@ -121,13 +120,77 @@ class DeliveryPx(BaseConceptModel):
         return f"{self.name} ({self.amount})"
 
 
-def update_px(char):
-    start = char.event.get_config("px_start", 0)
+class Operation(models.TextChoices):
+    ADDITION = "ADD", _("Addition")
+    SUBTRACTION = "SUB", _("Subtraction")
+    MULTIPLICATION = "MUL", _("Multiplication")
+    DIVISION = "DIV", _("Division")
 
-    addit = {
-        "px_tot": int(start) + sum(char.px_delivery_list.values_list("amount", flat=True)),
-        "px_used": sum(char.px_ability_list.values_list("cost", flat=True)),
-    }
-    addit["px_avail"] = addit["px_tot"] - addit["px_used"]
 
-    save_all_element_configs(char, addit)
+class RulePx(BaseConceptModel):
+    abilities = models.ManyToManyField(
+        AbilityPx,
+        related_name="rules",
+        blank=True,
+        help_text=_(
+            "The rule will be applied, only one time, if the character has any of the abilities. "
+            "If no abilities are chosen, the rule is applied to all characters."
+        ),
+    )
+
+    field = models.ForeignKey(
+        WritingQuestion,
+        on_delete=models.CASCADE,
+        help_text=_("The character field of computed type that will be updated"),
+    )
+
+    operation = models.CharField(
+        max_length=3,
+        choices=Operation.choices,
+        default=Operation.ADDITION,
+    )
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    order = models.IntegerField(default=0)
+
+
+class ModifierPx(BaseConceptModel):
+    abilities = models.ManyToManyField(AbilityPx, related_name="modifiers_abilities", blank=True)
+
+    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
+
+    prerequisites = models.ManyToManyField(
+        AbilityPx,
+        related_name="modifiers_prerequisites",
+        blank=True,
+        verbose_name=_("Pre-requisites"),
+        help_text=_("Indicate the prerequisite abilities"),
+    )
+
+    requirements = models.ManyToManyField(
+        WritingOption,
+        related_name="modifiers_requirements",
+        blank=True,
+        verbose_name=_("Requirements"),
+        help_text=_("Indicate the required character options"),
+    )
+
+    order = models.IntegerField()
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_modifier_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_modifier_without_optional",
+            ),
+        ]
+
+    def display(self):
+        return f"{self.name} ({self.cost})"

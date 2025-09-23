@@ -16,12 +16,11 @@
     {{ form.page_info }}
 {% endblock info %}
 {% block content %}
-    {% include "elements/form/sections.html" %}
+    {% include "elements/form/main.html" %}
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
-        {% include "elements/header/orga.html" %}
-        <table id="character_options"
-               class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
+        {% include "elements/header/edit.html" %}
+        <table id="character_options" class="go_datatable writing ordering_arrow">
             <thead>
                 <tr>
                     <th></th>
@@ -30,10 +29,10 @@
                     {% if features.wri_que_max %}
                         <th>{% trans "Maximum" %}</th>
                     {% endif %}
-                    {% if features.wri_que_tickets %}
-                        <th>{% trans "Prerequisites" %}</th>
+                    {% if features.wri_que_requirements %}
+                        <th>{% trans "Requirements" %}</th>
                     {% endif %}
-                    {% if features.wri_que_dependents %}
+                    {% if features.wri_que_tickets %}
                         <th>{% trans "Tickets" %}</th>
                     {% endif %}
                     <th></th>
@@ -44,22 +43,22 @@
                 {% for el in list %}
                     <tr id="{{ el.id }}">
                         <td>
-                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ el.id %}">
+                            <a href="{% url 'orga_writing_options_edit' run.get_slug typ el.id %}">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
                         <td>{{ el.name }}</td>
                         <td>{{ el.description | truncatechars:50 }}</td>
                         {% if features.wri_que_max %}<td>{{ el.max_available }}</td>{% endif %}
-                        {% if features.wri_que_tickets %}
+                        {% if features.wri_que_requirements %}
                             <td>
-                                {% for opt in el.dependents.all %}
+                                {% for opt in el.requirements.all %}
                                     {% include "elements/comma.html" %}
                                     {{ opt.name }} ({{ opt.question.name | truncatechars:50 }})
                                 {% endfor %}
                             </td>
                         {% endif %}
-                        {% if features.wri_que_dependents %}
+                        {% if features.wri_que_tickets %}
                             <td>
                                 {% for tck in el.tickets.all %}
                                     {% include "elements/comma.html" %}
@@ -69,14 +68,14 @@
                         {% endif %}
                         <td>
                             {% if not forloop.first %}
-                                <a href="{% url 'orga_writing_options_order' run.event.slug run.number typ el.id 0 %}">
+                                <a href="{% url 'orga_writing_options_order' run.get_slug typ el.id 0 %}">
                                     <i class="fa-solid fa-arrow-up"></i>
                                 </a>
                             {% endif %}
                         </td>
                         <td>
                             {% if not forloop.last %}
-                                <a href="{% url 'orga_writing_options_order' run.event.slug run.number typ el.id 1 %}">
+                                <a href="{% url 'orga_writing_options_order' run.get_slug typ el.id 1 %}">
                                     <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             {% endif %}
@@ -91,7 +90,7 @@
 {% endblock content %}
 {% block js %}
     <script>
-    var newUrl = '{% url 'orga_writing_options_new' run.event.slug run.number typ num %}';
+    var newUrl = '{% url 'orga_writing_options_new' run.get_slug typ num %}';
 
     {% include "elements/question_edit.js" %}
 

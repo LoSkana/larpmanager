@@ -18,9 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import traceback
+from collections import defaultdict
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import F, Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -41,20 +43,23 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.forms.writing import UploadElementsForm
-from larpmanager.models.access import EventRole
+from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
-from larpmanager.models.form import QuestionApplicable, QuestionType
+from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.download import (
     _get_column_names,
+    export_abilities,
     export_character_form,
     export_data,
+    export_event,
     export_registration_form,
+    export_tickets,
     zip_exports,
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
@@ -63,78 +68,143 @@ from larpmanager.utils.upload import go_upload
 
 
 @login_required
-def orga_event(request, s, n):
-    return orga_edit(request, s, n, "orga_event", OrgaEventForm, None, "manage", add_ctx={"add_another": False})
+def orga_event(request, s):
+    ctx = check_event_permission(request, s, "orga_event")
+    return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
+
+
+def full_event_edit(ctx, request, event, run, exe=False):
+    ctx["nonum"] = 1
+    if request.method == "POST":
+        form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
+        form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
+        if form_event.is_valid() and form_run.is_valid():
+            form_event.save()
+            form_run.save()
+            messages.success(request, _("Operation completed") + "!")
+            if exe:
+                return redirect("manage")
+            else:
+                return redirect("manage", s=run.get_slug())
+    else:
+        form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
+        form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
+
+    ctx["form1"] = form_event
+    ctx["form2"] = form_run
+    ctx["num"] = event.id
+    ctx["type"] = "event"
+
+    return render(request, "larpmanager/orga/edit_multi.html", ctx)
 
 
 @login_required
-def orga_roles(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_roles")
-    ctx["list"] = list(EventRole.objects.filter(event=ctx["event"]).order_by("number"))
-    if not ctx["list"]:
-        ctx["list"].append(EventRole.objects.create(event=ctx["event"], number=1, name="Organizer"))
+def orga_roles(request, s):
+    ctx = check_event_permission(request, s, "orga_roles")
+
+    def def_callback(ctx):
+        return EventRole.objects.create(event=ctx["event"], number=1, name="Organizer")
+
+    prepare_roles_list(ctx, EventPermission, EventRole.objects.filter(event=ctx["event"]), def_callback)
+
     return render(request, "larpmanager/orga/roles.html", ctx)
 
 
-@login_required
-def orga_roles_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_roles", OrgaEventRoleForm, num)
-
-
-@login_required
-def orga_appearance(request, s, n):
-    return orga_edit(
-        request, s, n, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False}
+def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
+    qs_perm = permission_typ.objects.select_related("feature", "feature__module").order_by(
+        F("feature__module__order").asc(nulls_last=True),
+        F("feature__order").asc(nulls_last=True),
+        "feature__name",
+        "name",
     )
+    roles = role_query.order_by("number").prefetch_related(Prefetch("permissions", queryset=qs_perm))
+    ctx["list"] = []
+    if not roles:
+        ctx["list"].append(def_callback(ctx))
+    for role in roles:
+        role.members_list = ", ".join([str(mb) for mb in role.members.all()])
+        if role.number == "1":
+            role.perms_list = "All"
+        else:
+            buckets = defaultdict(list)
+            for p in role.permissions.all():
+                buckets[p.feature.module].append(p)
+
+            modules = sorted(
+                buckets.keys(),
+                key=lambda m: (
+                    float("inf") if m is None else (m.order if m.order is not None else float("inf")),
+                    "" if m is None else m.name,
+                ),
+            )
+
+            aux = []
+            for module in modules:
+                perms_sorted = sorted(buckets[module], key=lambda p: p.number)
+                perms = ", ".join([str(_(ep.name)) for ep in perms_sorted])
+                aux.append(f"<b>{module}</b> ({perms})")
+            role.perms_list = ", ".join(aux)
+
+        ctx["list"].append(role)
 
 
 @login_required
-def orga_run(request, s, n):
-    run = get_cache_run(request.assoc["id"], s, n)
-    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
+def orga_roles_edit(request, s, num):
+    return orga_edit(request, s, "orga_roles", OrgaEventRoleForm, num)
 
 
 @login_required
-def orga_texts(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_texts")
+def orga_appearance(request, s):
+    return orga_edit(request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False})
+
+
+@login_required
+def orga_run(request, s):
+    run = get_cache_run(request.assoc["id"], s)
+    return orga_edit(request, s, "orga_event", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
+
+
+@login_required
+def orga_texts(request, s):
+    ctx = check_event_permission(request, s, "orga_texts")
     ctx["list"] = EventText.objects.filter(event_id=ctx["event"].id).order_by("typ", "default", "language")
     return render(request, "larpmanager/orga/texts.html", ctx)
 
 
 @login_required
-def orga_texts_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_texts", OrgaEventTextForm, num)
+def orga_texts_edit(request, s, num):
+    return orga_edit(request, s, "orga_texts", OrgaEventTextForm, num)
 
 
 @login_required
-def orga_buttons(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_buttons")
+def orga_buttons(request, s):
+    ctx = check_event_permission(request, s, "orga_buttons")
     ctx["list"] = EventButton.objects.filter(event_id=ctx["event"].id).order_by("number")
     return render(request, "larpmanager/orga/buttons.html", ctx)
 
 
 @login_required
-def orga_buttons_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_buttons", OrgaEventButtonForm, num)
+def orga_buttons_edit(request, s, num):
+    return orga_edit(request, s, "orga_buttons", OrgaEventButtonForm, num)
 
 
 @login_required
-def orga_config(request, s, n, section=None):
+def orga_config(request, s, section=None):
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
-    return orga_edit(request, s, n, "orga_config", OrgaConfigForm, None, "manage", add_ctx=add_ctx)
+    return orga_edit(request, s, "orga_config", OrgaConfigForm, None, "manage", add_ctx=add_ctx)
 
 
 @login_required
-def orga_features(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_features")
+def orga_features(request, s):
+    ctx = check_event_permission(request, s, "orga_features")
     ctx["add_another"] = False
     if backend_edit(request, ctx, OrgaFeatureForm, None, afield=None, assoc=False):
         ctx["new_features"] = Feature.objects.filter(pk__in=ctx["form"].added_features, after_link__isnull=False)
         if not ctx["new_features"]:
-            return redirect("manage", s=ctx["event"].slug, n=ctx["run"].number)
+            return redirect("manage", s=ctx["run"].get_slug())
         for el in ctx["new_features"]:
-            el.follow_link = _orga_feature_after_link(el, s, n)
+            el.follow_link = _orga_feature_after_link(el, s)
         if len(ctx["new_features"]) == 1:
             feature = ctx["new_features"][0]
             msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
@@ -177,56 +247,48 @@ def orga_features_go(request, ctx, num, on=True):
     return ctx["feature"]
 
 
-def _orga_feature_after_link(feature, s, n):
+def _orga_feature_after_link(feature, s):
     after_link = feature.after_link
     if after_link and after_link.startswith("orga"):
-        return reverse(after_link, kwargs={"s": s, "n": n})
-    return reverse("manage", kwargs={"s": s, "n": n}) + (after_link or "")
+        return reverse(after_link, kwargs={"s": s})
+    return reverse("manage", kwargs={"s": s}) + (after_link or "")
 
 
 @login_required
-def orga_features_on(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_features")
+def orga_features_on(request, s, num):
+    ctx = check_event_permission(request, s, "orga_features")
     feature = orga_features_go(request, ctx, num, on=True)
-    return redirect(_orga_feature_after_link(feature, s, n))
+    return redirect(_orga_feature_after_link(feature, s))
 
 
 @login_required
-def orga_features_off(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_features")
+def orga_features_off(request, s, num):
+    ctx = check_event_permission(request, s, "orga_features")
     orga_features_go(request, ctx, num, on=False)
-    return redirect("manage", s=s, n=n)
+    return redirect("manage", s=s)
 
 
 @login_required
-def orga_deadlines(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_deadlines")
+def orga_deadlines(request, s):
+    ctx = check_event_permission(request, s, "orga_deadlines")
     ctx["res"] = check_run_deadlines([ctx["run"]])[0]
     return render(request, "larpmanager/orga/deadlines.html", ctx)
 
 
 @login_required
-def orga_quick(request, s, n):
-    return orga_edit(request, s, n, "orga_quick", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
+def orga_quick(request, s):
+    return orga_edit(request, s, "orga_quick", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
 
 
 @login_required
-def orga_preferences(request, s, n):
-    return orga_edit(
-        request,
-        s,
-        n,
-        "orga_preferences",
-        OrgaPreferencesForm,
-        request.user.member.id,
-        "manage",
-        add_ctx={"add_another": False},
-    )
+def orga_preferences(request, s):
+    m_id = request.user.member.id
+    return orga_edit(request, s, None, OrgaPreferencesForm, m_id, "manage", add_ctx={"add_another": False})
 
 
 @login_required
-def orga_backup(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_event")
+def orga_backup(request, s):
+    ctx = check_event_permission(request, s, "orga_event")
 
     return _prepare_backup(ctx)
 
@@ -234,8 +296,11 @@ def orga_backup(request, s, n):
 def _prepare_backup(ctx):
     exports = []
 
+    exports.extend(export_event(ctx))
+
     exports.extend(export_data(ctx, Registration))
     exports.extend(export_registration_form(ctx))
+    exports.extend(export_tickets(ctx))
 
     if "character" in ctx["features"]:
         exports.extend(export_data(ctx, Character))
@@ -247,6 +312,9 @@ def _prepare_backup(ctx):
     if "plot" in ctx["features"]:
         exports.extend(export_data(ctx, Plot))
 
+    if "px" in ctx["features"]:
+        exports.extend(export_abilities(ctx))
+
     if "questbuilder" in ctx["features"]:
         exports.extend(export_data(ctx, QuestType))
         exports.extend(export_data(ctx, Quest))
@@ -256,14 +324,15 @@ def _prepare_backup(ctx):
 
 
 @login_required
-def orga_upload(request, s, n, typ):
-    ctx = check_event_permission(request, s, n, f"orga_{typ}")
+def orga_upload(request, s, typ):
+    ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
+    ctx["name"] = ctx["typ"]
     _get_column_names(ctx)
 
     if request.POST:
         form = UploadElementsForm(request.POST, request.FILES)
-        redr = reverse(f"orga_{typ}", args=[ctx["event"].slug, ctx["run"].number])
+        redr = reverse(f"orga_{typ}", args=[ctx["run"].get_slug()])
         if form.is_valid():
             try:
                 # print(request.FILES)
@@ -285,26 +354,31 @@ def orga_upload(request, s, n, typ):
 
 
 @login_required
-def orga_upload_template(request, s, n, typ):
-    ctx = check_event_permission(request, s, n)
+def orga_upload_template(request, s, typ):
+    ctx = check_event_permission(request, s)
     ctx["typ"] = typ
     _get_column_names(ctx)
     value_mapping = {
-        QuestionType.SINGLE: "option name",
-        QuestionType.MULTIPLE: "option names (comma separated)",
-        QuestionType.TEXT: "field text",
-        QuestionType.PARAGRAPH: "field long text",
-        QuestionType.EDITOR: "field html text",
-        QuestionType.NAME: "element name",
-        QuestionType.TEASER: "element presentation",
-        QuestionType.SHEET: "element text",
-        QuestionType.COVER: "element cover (utils path)",
-        QuestionType.FACTIONS: "faction names (comma separated)",
-        QuestionType.TITLE: "title short text",
-        QuestionType.MIRROR: "name of mirror character",
-        QuestionType.HIDE: "hide (true or false)",
-        QuestionType.PROGRESS: "name of progress step",
-        QuestionType.ASSIGNED: "name of assigned staff",
+        BaseQuestionType.SINGLE: "option name",
+        BaseQuestionType.MULTIPLE: "option names (comma separated)",
+        BaseQuestionType.TEXT: "field text",
+        BaseQuestionType.PARAGRAPH: "field long text",
+        BaseQuestionType.EDITOR: "field html text",
+        WritingQuestionType.NAME: "element name",
+        WritingQuestionType.TEASER: "element presentation",
+        WritingQuestionType.SHEET: "element text",
+        WritingQuestionType.COVER: "element cover (utils path)",
+        WritingQuestionType.FACTIONS: "faction names (comma separated)",
+        WritingQuestionType.TITLE: "title short text",
+        WritingQuestionType.MIRROR: "name of mirror character",
+        WritingQuestionType.HIDE: "hide (true or false)",
+        WritingQuestionType.PROGRESS: "name of progress step",
+        WritingQuestionType.ASSIGNED: "name of assigned staff",
+        RegistrationQuestionType.TICKET: "name of the ticket",
+        RegistrationQuestionType.ADDITIONAL: "number of additional tickets",
+        RegistrationQuestionType.PWYW: "amount of free donation",
+        RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
+        RegistrationQuestionType.SURCHARGE: "surcharge applied",
     }
     if ctx.get("writing_typ"):
         exports = _writing_template(ctx, typ, value_mapping)
@@ -367,8 +441,8 @@ def _reg_template(ctx, typ, value_mapping):
 
 
 def _writing_template(ctx, typ, value_mapping):
-    keys = list(ctx["fields"].keys())
-    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
+    keys = [k for k, v in ctx["fields"].items() if v != "skip"]
+    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items() if field_typ != "skip"]
 
     if ctx["writing_typ"] == QuestionApplicable.QUEST:
         keys.insert(0, "typ")

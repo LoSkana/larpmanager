@@ -23,35 +23,49 @@ from django.forms import Textarea
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
+from larpmanager.forms.base import MyForm
+from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.common import get_recaptcha_secrets
+
+
+def _get_captcha(form, request):
+    public, private = get_recaptcha_secrets(request)
+    if not public or not private:
+        return
+    form.fields["captcha"] = ReCaptchaField(widget=ReCaptchaV3, label="", public_key=public, private_key=private)
 
 
 class LarpManagerCheck(forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request", None)
         super().__init__(*args, **kwargs)
-        public, private = get_recaptcha_secrets(self.request)
-        self.fields["captcha"] = ReCaptchaField(
-            widget=ReCaptchaV3,
-            label="", 
-            public_key=public, 
-            private_key=private
-        )
+        _get_captcha(self, self.request)
 
 
 class LarpManagerContact(LarpManagerCheck):
-    email = forms.EmailField(required=True, label="", widget=forms.TextInput(attrs={"placeholder": "Email"}))
+    email = forms.EmailField(required=True, label="", widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+
     content = forms.CharField(
         required=True,
         max_length=3000,
         label="",
         widget=Textarea(attrs={"rows": 10, "placeholder": "Content"}),
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class LarpManagerTicket(LarpManagerContact):
+class LarpManagerTicketForm(MyForm):
+    class Meta:
+        model = LarpManagerTicket
+        fields = ("email", "content", "screenshot")
+        widgets = {"content": Textarea(attrs={"rows": 5})}
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if not self.params["request"].user.is_authenticated:
+            _get_captcha(self, self.params["request"])
+
+        if self.params.get("reason"):
+            del self.fields["screenshot"]

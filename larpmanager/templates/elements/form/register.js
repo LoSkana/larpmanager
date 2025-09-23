@@ -8,8 +8,8 @@ var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
 
 {% if not gift %}
 
-    var discount_url = '{% url "discount" event.slug run.number %}';
-    var discount_list_url  = '{% url "discount_list" event.slug run.number %}';
+    var discount_url = '{% url "discount" run.get_slug %}';
+    var discount_list_url  = '{% url "discount_list" run.get_slug %}';
 
     var discount_apply = '{{ discount_apply }}';
 
@@ -32,11 +32,6 @@ function parseLocalNum(num) {
 }
 
 var submitted = {{ submitted | safe }};
-
-function go_down() {
-window.scrollTo(0,document.body.scrollHeight);
-// alert('coa');
-}
 
  var price_regex = /(\d+(?:\.\d+)?){{ currency_symbol }}/g;
 
@@ -88,7 +83,7 @@ $(document).ready(function(){
         });
     });
 
-    for (const el of ['id_quotas', 'id_ticket', 'id_additionals']) {
+    for (const el of ['id_quotas', 'id_ticket']) {
         if ( $( "#" + el ).length ) mandatory.unshift(el);
     }
 
@@ -121,12 +116,25 @@ $(document).ready(function(){
         var s = $('select[name =\"signup\"] option:selected').val();
 
         var sum = ticket_price;
-        $('select').each(function(index, value) {
-           var sel = $(this).val();
-           if ( !sel ) return;
-           var text = $(this).find(":selected").text();
-           sum += get_price(text);
+        var price_map = {};
+
+        $('select').each(function() {
+            var sel = $(this).val();
+            if (!sel) return;
+
+            var text = $(this).find(":selected").text();
+            var price = get_price(text);
+
+            price_map[this.id] = price; // usa this.id
+            sum += price;
         });
+
+        // check additionals
+        const additionals = $("#id_additionals");
+        if (additionals.length && additionals.val()) {
+            const addTickets = additionals.val();
+            sum += price_map["id_ticket"] * addTickets;
+        }
 
         $('input:checked').each(function () {
            sum += get_price($(this).parent().text());
@@ -172,8 +180,10 @@ $(document).ready(function(){
 
         tx += "</td></tr>";
 
+        {% if not no_provisional %}
         if (window['texts']['payment'] && sum > 0 && tot_payed == 0)
             tx += "<tr class='riep'><td>" + window['texts']['pro'] + "</td></tr>";
+        {% endif %}
 
         $('#riepilogo table > tbody:first-child > tr:first-child').after(tx);
 
@@ -181,7 +191,7 @@ $(document).ready(function(){
             $('#register_go').click();
         } else {
             $('#riepilogo').show(200);
-            setTimeout(go_down, 500);
+            setTimeout(() => jump_to($('#riepilogo')), 300);
         }
     });
 
@@ -221,12 +231,6 @@ $(document).ready(function(){
 
 });
 
-function jump_to(el) {
-    const yOffset = -160;
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-}
-
 function slugify(text) {
   return text
     .toString()
@@ -264,7 +268,7 @@ function check_mandatory() {
         if (empty) {
             el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
             if (k in sections) $(".sec_" + slugify(sections[k])).show();
-            jump_to(document.getElementById(k));
+            window.jump_to($('#' + k));
             return false;
         }
     }

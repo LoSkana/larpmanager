@@ -2,6 +2,8 @@
 
 <script>
 
+var type = "{{ finder_typ }}";
+
 function setUpCharFinder(key) {
     const editor = tinymce.get(key);
     if (!editor) return;
@@ -137,8 +139,8 @@ window.addEventListener('DOMContentLoaded', function() {
             if (value == null || value == '') return;
 
             request = $.ajax({
-                url: "{% url 'orga_character_get_number' event.slug run.number %}",
-                data: { idx: value },
+                url: "{% url 'orga_character_get_number' run.get_slug %}",
+                data: { idx: value, type: type },
                 method: "POST",
                 datatype: "json",
             });

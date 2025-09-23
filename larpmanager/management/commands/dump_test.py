@@ -43,9 +43,11 @@ class Command(BaseCommand):
             "larpmanager",
             "-h",
             "localhost",
-            "--inserts",
             "-d",
             "larpmanager",
+            "--inserts",
+            "--no-owner",
+            "--no-privileges",
             "-f",
             "larpmanager/tests/test_db.sql",
         ]
@@ -54,3 +56,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Database dump completed: test_db.sql"))
         except subprocess.CalledProcessError as e:
             self.stderr.write(self.style.ERROR(f"Dump failed: {e}"))
+
+        clean_cmd = ["sed", "-i", r"/^\\restrict/d;/^\\unrestrict/d", "larpmanager/tests/test_db.sql"]
+        subprocess.run(clean_cmd, check=True, env=env)

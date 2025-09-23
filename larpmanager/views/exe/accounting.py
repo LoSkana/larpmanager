@@ -46,7 +46,6 @@ from larpmanager.forms.writing import (
     UploadElementsForm,
 )
 from larpmanager.models.accounting import (
-    AccountingItem,
     AccountingItemDonation,
     AccountingItemExpense,
     AccountingItemInflow,
@@ -55,7 +54,10 @@ from larpmanager.models.accounting import (
     AccountingItemOutflow,
     AccountingItemPayment,
     AccountingItemTransaction,
+    BalanceChoices,
     Collection,
+    OtherChoices,
+    PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -79,6 +81,14 @@ from larpmanager.utils.paginate import exe_paginate
 
 @login_required
 def exe_outflows(request):
+    """Display paginated list of accounting outflows for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered outflows list template
+    """
     ctx = check_assoc_permission(request, "exe_outflows")
     ctx.update(
         {
@@ -104,11 +114,28 @@ def exe_outflows(request):
 
 @login_required
 def exe_outflows_edit(request, num):
+    """Edit accounting outflow record.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        num (int): Outflow record ID
+
+    Returns:
+        HttpResponse: Edit form or redirect after save
+    """
     return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
 
 
 @login_required
 def exe_inflows(request):
+    """Display paginated list of accounting inflows for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered inflows list template
+    """
     ctx = check_assoc_permission(request, "exe_inflows")
     ctx.update(
         {
@@ -137,6 +164,14 @@ def exe_inflows_edit(request, num):
 
 @login_required
 def exe_donations(request):
+    """Display paginated list of donations for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered donations list template
+    """
     ctx = check_assoc_permission(request, "exe_donations")
     ctx.update(
         {
@@ -471,7 +506,7 @@ def exe_balance(request):
     ctx["tickets"] = get_sum(
         AccountingItemPayment.objects.filter(
             assoc_id=ctx["a_id"],
-            pay=AccountingItemPayment.MONEY,
+            pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
         )
@@ -490,14 +525,13 @@ def exe_balance(request):
             assoc_id=ctx["a_id"],
             created__gte=start,
             created__lt=end,
-            oth=AccountingItemOther.REFUND,
+            oth=OtherChoices.REFUND,
         )
     )
 
     # add personal expenses
-    for el in AccountingItem.BALANCE_CHOICES:
-        (bl, descr) = el
-        ctx["expenditure"][bl] = {"name": descr, "value": 0}
+    for value, label in BalanceChoices.choices:
+        ctx["expenditure"][value] = {"name": label, "value": 0}
 
     for el in (
         AccountingItemExpense.objects.filter(
@@ -515,8 +549,7 @@ def exe_balance(request):
     ctx["out"] = 0
     if tot:
         # round for actual reimbursed
-        for el in AccountingItem.BALANCE_CHOICES:
-            (bl, descr) = el
+        for bl, _descr in BalanceChoices.choices:
             v = ctx["expenditure"][bl]["value"]
             # resample value on given out credits
             v = (v / tot) * ctx["rimb"]

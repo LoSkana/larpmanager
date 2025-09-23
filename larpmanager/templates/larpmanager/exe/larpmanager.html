@@ -4,15 +4,14 @@
     LarpManager - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows larpmanager usage costs, total and divided by individual run" %}
+    {% trans "This page shows larpmanager usage costs, total and divided by individual event" %}
 {% endblock info %}
 {% block content %}
     <h2>{% trans "Balance" %}: {{ remaining | format_decimal }}€</h2>
-    <table id="lm_balance"
-           class="{% if not interface_old %}go_datatable{% endif %}">
+    <table id="lm_balance" class="go_datatable">
         <thead>
             <tr>
-                <th>{% trans "Run" %}</th>
+                <th>{% trans "Event" %}</th>
                 <th>{% trans "Start" %}</th>
                 <th>{% trans "End" %}</th>
                 <th>{% trans "Features" %}</th>

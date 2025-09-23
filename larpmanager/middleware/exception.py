@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -29,10 +30,12 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.exceptions import (
     FeatureError,
     HiddenError,
+    MainPageError,
     MembershipError,
     NotFoundError,
     PermissionError,
     RedirectError,
+    ReturnNowError,
     SignupError,
     UnknowRunError,
     WaitingError,
@@ -71,13 +74,13 @@ class ExceptionHandlingMiddleware:
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
-                    request, _("To access this feature, you must first register!"), "register", [ex.slug, ex.number]
+                    request, _("To access this feature, you must first register!"), "register", [ex.slug]
                 ),
             ),
             (
                 WaitingError,
                 lambda ex: self._redirect_with_message(
-                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug, ex.number]
+                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug]
                 ),
             ),
             (
@@ -86,11 +89,13 @@ class ExceptionHandlingMiddleware:
                     request,
                     ex.name + " " + _("not visible at this time"),
                     "gallery",
-                    [ex.slug, ex.number],
+                    [ex.slug],
                     level="warning",
                 ),
             ),
             (RedirectError, lambda ex: redirect(ex.view)),
+            (MainPageError, lambda ex: redirect("/")),
+            (ReturnNowError, lambda ex: ex.value),
         ]
 
         for exc_type, handler in handlers:
@@ -106,14 +111,18 @@ class ExceptionHandlingMiddleware:
 
     @staticmethod
     def _handle_feature_error(request, ex):
+        # error is association skin is managed
+        if request.assoc["skin_managed"]:
+            raise Http404("not allowed")
+
         feature = Feature.objects.get(slug=ex.feature)
         ctx = {"exe": ex, "feature": feature}
 
         if feature.overall:
-            ctx["permission"] = has_assoc_permission(request, "exe_features")
+            ctx["permission"] = has_assoc_permission(request, {}, "exe_features")
         else:
             run = Run.objects.get(pk=ex.run)
             ctx["run"] = run
-            ctx["permission"] = has_event_permission({}, request, run.event.slug, "orga_features")
+            ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
 
         return render(request, "exception/feature.html", ctx)

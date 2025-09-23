@@ -23,16 +23,33 @@ from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import QuestionApplicable
+from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
+    QuestionStatus,
+    WritingAnswer,
+    WritingChoice,
+    WritingQuestion,
+)
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
-from larpmanager.utils.common import add_char_addit, get_char
+from larpmanager.utils.common import get_char
 from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
+from larpmanager.utils.experience import add_char_addit
 
 
 def get_character_relationships(ctx, restrict=True):
+    """Get character relationships with faction and player input data.
+
+    Args:
+        ctx: Context dictionary with character and event data
+        restrict (bool): Whether to restrict relationship visibility
+
+    Side effects:
+        Updates ctx['rel'] with relationship data
+    """
     cache = {}
     data = {}
     for tg_num, text in Relationship.objects.values_list("target__number", "text").filter(source=ctx["character"]):
@@ -47,12 +64,13 @@ def get_character_relationships(ctx, restrict=True):
 
         show["factions_list"] = []
         for fac_num in show["factions"]:
-            if not fac_num:
+            if not fac_num or fac_num not in ctx["factions"]:
                 continue
             fac = ctx["factions"][fac_num]
             if not fac["name"] or fac["typ"] == FactionType.SECRET:
                 continue
             show["factions_list"].append(fac["name"])
+        show["factions_list"] = ", ".join(show["factions_list"])
         data[show["id"]] = show
         cache[show["id"]] = text
 
@@ -81,6 +99,14 @@ def get_character_relationships(ctx, restrict=True):
 
 
 def get_character_sheet(ctx):
+    """Build complete character sheet data for display.
+
+    Args:
+        ctx: Context dictionary with character data
+
+    Returns:
+        dict: Complete character sheet with all sections
+    """
     ctx["sheet_char"] = ctx["character"].show_complete()
 
     get_character_sheet_fields(ctx)
@@ -104,7 +130,7 @@ def get_character_sheet_px(ctx):
 
     ctx["sheet_abilities"] = {}
     for el in ctx["character"].px_ability_list.all():
-        if el.typ.name not in ctx["sheet_abilities"]:
+        if el.typ and el.typ.name and el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
         ctx["sheet_abilities"][el.typ.name].append(el)
 
@@ -164,7 +190,7 @@ def get_character_sheet_plots(ctx):
 
     ctx["sheet_plots"] = []
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
-    for el in que.order_by("plot__number"):
+    for el in que.order_by("order"):
         tx = el.plot.text
         if tx and el.text:
             tx += "<hr />"
@@ -193,6 +219,21 @@ def get_character_sheet_fields(ctx):
 
 
 def get_char_check(request, ctx, num, restrict=False, bypass=False):
+    """Get character with access control checks.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary
+        num (int): Character number
+        restrict (bool): Whether to apply visibility restrictions
+        bypass (bool): Whether to bypass access checks
+
+    Returns:
+        Character: Character instance if accessible
+
+    Raises:
+        Http404: If character not found or access denied
+    """
     get_event_cache_all(ctx)
     if num not in ctx["chars"]:
         raise NotFoundError()
@@ -203,6 +244,9 @@ def get_char_check(request, ctx, num, restrict=False, bypass=False):
         get_char(ctx, num, True)
         ctx["check"] = 1
         return
+
+    if ctx["char"].get("hide", False):
+        raise NotFoundError()
 
     if restrict:
         raise Http404("Not your character")
@@ -231,3 +275,21 @@ def get_chars_relations(text, chs_numbers):
             extinct.append(number)
 
     return chs, extinct
+
+
+def check_missing_mandatory(ctx):
+    ctx["missing_fields"] = []
+    aux = []
+
+    models = {
+        **{t: WritingAnswer for t in BaseQuestionType.get_answer_types()},
+        **{t: WritingChoice for t in BaseQuestionType.get_choice_types()},
+    }
+
+    questions = ctx["event"].get_elements(WritingQuestion)
+    for que in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
+        model = models.get(que.typ)
+        if model and not model.objects.filter(element_id=ctx["char"]["id"], question=que).exists():
+            aux.append(que.name)
+
+    ctx["missing_fields"] = ", ".join(aux)

@@ -10,13 +10,20 @@ DATABASES = {
         'NAME': 'larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
-        'HOST': 'postgres',
+        "HOST": os.getenv("DB_HOST", "postgres"),
         'PORT': '5432',
         'TEST': {
             'NAME': 'test_larpmanager',
         },
    }
 }
+
+name = os.getenv("POSTGRES_DB","larp_test")
+worker = os.getenv("PYTEST_XDIST_WORKER")
+if worker:
+    name = f"{name}_{worker}"
+    DATABASES["default"]["NAME"] = name
+    DATABASES["default"]["TEST"] = {"NAME": name}
 
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
@@ -47,3 +54,9 @@ LOGGING = {
 # ALTER USER larpmanager CREATEDB;
 # ALTER DATABASE larpmanager OWNER TO larpmanager;
 # GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
+
+FORMS_URLFIELD_ASSUME_HTTPS = True
+
+ADMINS = [
+    ('test', 'test@test.it')
+]

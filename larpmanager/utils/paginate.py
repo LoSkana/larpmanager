@@ -10,9 +10,9 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.models.accounting import (
     AccountingItem,
     AccountingItemExpense,
-    AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
+    OtherChoices,
     PaymentInvoice,
     PaymentStatus,
     RefundRequest,
@@ -271,10 +271,10 @@ def _apply_custom_queries(ctx, elements, typ):
 
     subtype = ctx.get("subtype")
     if subtype == "credits":
-        elements = elements.filter(oth=AccountingItemOther.CREDIT)
-    elif subtype == "tokens":
-        elements = elements.filter(oth=AccountingItemOther.TOKEN)
+        elements = elements.filter(oth=OtherChoices.CREDIT)
 
+    elif subtype == "tokens":
+        elements = elements.filter(oth=OtherChoices.TOKEN)
     return elements
 
 

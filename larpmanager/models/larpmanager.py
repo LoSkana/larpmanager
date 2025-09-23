@@ -24,16 +24,19 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel
+from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
 
 
-class LarpManagerPlan(models.TextChoices):
-    FREE = "f", _("Free")
-    SUPPORT = "p", _("Support")
-
-
 class LarpManagerTutorial(BaseModel):
+    """Model for managing LARP tutorials and guides.
+
+    Represents educational content for LARP management,
+    including tutorials with descriptions and ordering.
+    """
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, blank=True)
@@ -44,18 +47,36 @@ class LarpManagerTutorial(BaseModel):
 
 
 class LarpManagerReview(BaseModel):
+    """Model for storing user reviews and testimonials.
+
+    Contains review text and author information for
+    displaying user feedback about the platform.
+    """
+
     text = models.CharField(max_length=1000)
 
     author = models.CharField(max_length=100)
 
 
 class LarpManagerFaqType(BaseModel):
+    """Model for categorizing FAQ entries.
+
+    Provides organization structure for frequently
+    asked questions with ordering and naming.
+    """
+
     order = models.IntegerField()
 
     name = models.CharField(max_length=100)
 
 
 class LarpManagerFaq(BaseModel):
+    """Model for storing frequently asked questions.
+
+    Contains question-answer pairs with optional
+    categorization through FaqType relationship.
+    """
+
     number = models.IntegerField(blank=True, null=True)
 
     question = models.CharField(max_length=1000)
@@ -72,6 +93,12 @@ class LarpManagerFaq(BaseModel):
 
 
 class LarpManagerShowcase(BaseModel):
+    """Model for displaying showcase items with photos.
+
+    Represents featured content with images, text,
+    and metadata for promotional displays.
+    """
+
     number = models.IntegerField(blank=True, null=True)
 
     title = models.CharField(max_length=1000)
@@ -94,15 +121,33 @@ class LarpManagerShowcase(BaseModel):
     )
 
     def show_reduced(self):
+        """Generate HTML for displaying reduced-size image.
+
+        Returns:
+            str: HTML string for reduced image display or empty string if no image
+        """
         if self.reduced:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.reduced.url)
         return ""
 
     def text_red(self):
+        """Get truncated version of showcase text.
+
+        Returns:
+            str: First 100 characters of the showcase text
+        """
         return self.text[:100]
 
     def as_dict(self, many_to_many=True):
+        """Convert model instance to dictionary with image URL.
+
+        Args:
+            many_to_many (bool): Whether to include many-to-many relationships
+
+        Returns:
+            dict: Model data as dictionary with reduced image URL if available
+        """
         res = super().as_dict(many_to_many)
         if self.reduced:
             # noinspection PyUnresolvedReferences
@@ -110,7 +155,13 @@ class LarpManagerShowcase(BaseModel):
         return res
 
 
-class LarpManagerBlog(BaseModel):
+class LarpManagerGuide(BaseModel):
+    """Model for managing published guides and articles.
+
+    Represents detailed guides with images, text content,
+    and publication status for user education.
+    """
+
     number = models.IntegerField(blank=True, null=True)
 
     title = models.CharField(max_length=1000)
@@ -122,9 +173,7 @@ class LarpManagerBlog(BaseModel):
     text = HTMLField(blank=True, null=True)
 
     photo = models.ImageField(
-        max_length=500,
-        upload_to=UploadToPathAndRename("albums/"),
-        verbose_name=_("Photo"),
+        max_length=500, upload_to=UploadToPathAndRename("albums/"), verbose_name=_("Photo"), blank=True, null=True
     )
 
     reduced = ImageSpecField(
@@ -144,16 +193,32 @@ class LarpManagerBlog(BaseModel):
     published = models.BooleanField(default=False)
 
     def show_thumb(self):
+        """Generate HTML for displaying thumbnail image.
+
+        Returns:
+            str: HTML string for thumbnail display or empty string if no image
+        """
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
         return ""
 
     def text_red(self):
+        """Get truncated version of text content.
+
+        Returns:
+            str: First 100 characters of the guide text
+        """
         return self.text[:100]
 
 
 class LarpManagerProfiler(BaseModel):
+    """Model for storing performance profiling data.
+
+    Tracks view function performance metrics including
+    call counts and duration for optimization analysis.
+    """
+
     num_calls = models.IntegerField(default=0)
 
     mean_duration = models.FloatField(default=0)
@@ -169,6 +234,12 @@ class LarpManagerProfiler(BaseModel):
 
 
 class LarpManagerDiscover(BaseModel):
+    """Model for discovery/feature showcase content.
+
+    Represents highlighted features or content for
+    user discovery with ordering and visual elements.
+    """
+
     order = models.IntegerField()
 
     name = models.CharField(max_length=100)
@@ -180,3 +251,51 @@ class LarpManagerDiscover(BaseModel):
     profile_thumb = ImageSpecField(
         source="profile", processors=[ResizeToFill(500, 500)], format="JPEG", options={"quality": 90}
     )
+
+
+class LarpManagerTicket(BaseModel):
+    """Model for managing support tickets and requests.
+
+    Handles user support requests with contact information,
+    content, and optional screenshots for issue tracking.
+    """
+
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+
+    reason = models.CharField(max_length=100, null=True)
+
+    email = models.EmailField(
+        null=True,
+        help_text=_("How can we contact you"),
+    )
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True)
+
+    content = models.CharField(max_length=1000, verbose_name=_("Request"), help_text=_("Describe how we can help you"))
+
+    screenshot = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("tickets/"),
+        verbose_name=_("Screenshot"),
+        help_text=_("Optional - A screenshot of the error / bug / problem"),
+        null=True,
+        blank=True,
+    )
+
+    screenshot_reduced = ImageSpecField(
+        source="screenshot",
+        processors=[ResizeToFit(1000)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+
+    def show_thumb(self):
+        """Generate HTML for displaying screenshot thumbnail.
+
+        Returns:
+            str: HTML string for screenshot thumbnail or empty string if no image
+        """
+        if self.screenshot_reduced:
+            # noinspection PyUnresolvedReferences
+            return show_thumb(100, self.screenshot_reduced.url)
+        return ""

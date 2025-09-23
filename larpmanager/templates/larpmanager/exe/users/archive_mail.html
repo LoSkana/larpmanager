@@ -16,6 +16,7 @@
     <table id="emails" class="tablesorter">
         <thead>
             <tr>
+                <th></th>
                 {% if exe %}
                     <th>{% trans "Run" %}</th>
                 {% endif %}
@@ -28,6 +29,14 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
+                    <td>
+                        {% if exe %}
+                            <a href="{% url 'exe_read_mail' el.id %}" qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
+                        {% else %}
+                            <a href="{% url 'orga_read_mail' run.get_slug el.id %}"
+                               qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
+                        {% endif %}
+                    </td>
                     {% if exe %}
                         <td>
                             {% if el.run %}{{ el.run }}{% endif %}

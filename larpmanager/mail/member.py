@@ -40,6 +40,15 @@ from larpmanager.utils.tasks import my_send_mail
 
 
 def send_membership_confirm(request, membership):
+    """Send confirmation email when membership application is submitted.
+
+    Args:
+        request: Django HTTP request object with user context
+        membership: Membership instance that was submitted
+
+    Side effects:
+        Sends confirmation email to member about application status
+    """
     profile = request.user.member
     # Send email when it is completed
     activate(profile.language)
@@ -69,6 +78,17 @@ def send_membership_confirm(request, membership):
 
 @receiver(pre_save, sender=AccountingItemMembership)
 def save_accounting_item_membership(sender, instance, *args, **kwargs):
+    """Send notification when membership fee payment is received.
+
+    Args:
+        sender: AccountingItemMembership model class
+        instance: AccountingItemMembership instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Sends payment confirmation email to member
+    """
     if instance.hide:
         return
     if instance.pk:
@@ -81,6 +101,15 @@ def save_accounting_item_membership(sender, instance, *args, **kwargs):
 
 
 def badges_changed(sender, **kwargs):
+    """Handle badge assignment notifications.
+
+    Args:
+        sender: Signal sender
+        **kwargs: Signal arguments including action, instance, pk_set
+
+    Side effects:
+        Sends badge achievement notification emails to members
+    """
     action = kwargs.pop("action", None)
     if action != "post_add":
         return
@@ -104,7 +133,16 @@ m2m_changed.connect(badges_changed, sender=Badge.members.through)
 
 
 def notify_membership_approved(member, resp):
-    # Manda Mail
+    """Send notification when membership application is approved.
+
+    Args:
+        member: Member instance whose membership was approved
+        resp (str): Optional response message from board
+
+    Side effects:
+        Sends approval email with payment instructions and card number
+    """
+    # send Mail
     activate(member.language)
     subj = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
     body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
@@ -114,32 +152,33 @@ def notify_membership_approved(member, resp):
     if resp:
         body += " " + _("More details") + f": {resp}"
 
-        # Check if you have payments to make
-    regs = member.registrations.filter(run__start__gte=datetime.now().date())
-
+    # Check if you have payments to make
+    assoc = member.membership.assoc
+    regs = member.registrations.filter(run__event__assoc=assoc, run__start__gte=datetime.now().date())
     membership_fee = False
-    if regs:
+    reg_list = []
+    for registration in regs:
+        features = get_event_features(registration.run.event_id)
+        run_start = registration.run.start and registration.run.start.year == datetime.today().year
+        if run_start and "laog" not in features:
+            membership_fee = True
+
+        if not registration.tot_iscr:
+            continue
+
+        url = get_url("accounting/pay", member.membership)
+        href = f"{url}/{registration.run.get_slug()}"
+        reg_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
+
+    if reg_list:
         body += (
             "<br /><br />"
             + _("To confirm your event registration, please complete your payment within one week. You can do so here")
             + ": "
+            + ", ".join(reg_list)
         )
-        first = True
-        for r in regs:
-            if first:
-                first = False
-            else:
-                body += ","
-            url = get_url("accounting/pay", member.membership)
-            href = f"{url}/{r.run.event.slug}/{r.run.number}"
-            body += f" <a href='{href}'><b>{r.run.search}</b></a>"
 
-            features = get_event_features(r.run.event_id)
-            run_start = r.run.start and r.run.start.year == datetime.today().year
-            if run_start and "laog" not in features:
-                membership_fee = True
-
-    if membership_fee:
+    if membership_fee and assoc.get_config("membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
@@ -151,6 +190,15 @@ def notify_membership_approved(member, resp):
 
 
 def notify_membership_reject(member, resp):
+    """Send notification when membership application is rejected.
+
+    Args:
+        member: Member instance whose membership was rejected
+        resp (str): Optional response message explaining rejection
+
+    Side effects:
+        Sends rejection notification email
+    """
     # Manda Mail
     activate(member.language)
     subj = hdr(member.membership) + _("Membership of the Organization refused") + "!"
@@ -163,6 +211,16 @@ def notify_membership_reject(member, resp):
 
 @receiver(pre_save, sender=HelpQuestion)
 def notify_help_question(sender, instance, **kwargs):
+    """Send notifications for help questions and answers.
+
+    Args:
+        sender: HelpQuestion model class
+        instance: HelpQuestion instance being saved
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Sends notifications to organizers for questions or to users for answers
+    """
     if instance.pk:
         return
 
@@ -172,20 +230,19 @@ def notify_help_question(sender, instance, **kwargs):
         if instance.run:
             for organizer in get_event_organizers(instance.run.event):
                 activate(organizer.language)
-                body, subj = get_help_email(instance, mb)
+                subj, body = get_help_email(instance)
                 subj += " " + _("for %(event)s") % {"event": instance.run}
                 url = get_url(
-                    f"{instance.run.event.slug}/{instance.run.number}/manage/questions/",
+                    f"{instance.run.get_slug()}/manage/questions/",
                     instance,
                 )
                 body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
                 my_send_mail(subj, body, organizer, instance.run)
 
         elif instance.assoc:
-            body, subj = get_help_email(instance, mb)
-            notify_organization_exe(subj, body, instance.assoc, instance)
+            notify_organization_exe(get_help_email, instance.assoc, instance)
         else:
-            body, subj = get_help_email(instance, mb)
+            subj, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
                 my_send_mail(subj, body, email, instance)
 
@@ -197,7 +254,7 @@ def notify_help_question(sender, instance, **kwargs):
 
         if instance.run:
             url = get_url(
-                f"{instance.run.event.slug}/{instance.run.number}/help",
+                f"{instance.run.get_slug()}/help",
                 instance,
             )
         else:
@@ -208,15 +265,33 @@ def notify_help_question(sender, instance, **kwargs):
         my_send_mail(subj, body, mb, instance)
 
 
-def get_help_email(instance, mb):
-    subj = hdr(instance) + _("New question by %(user)s") % {"user": mb}
-    body = _("A question was asked by: %(user)s") % {"user": mb}
+def get_help_email(instance):
+    """Generate subject and body for help question notification.
+
+    Args:
+        instance: HelpQuestion instance
+
+    Returns:
+        tuple: (subject, body) for the notification email
+    """
+    subj = hdr(instance) + _("New question by %(user)s") % {"user": instance.member}
+    body = _("A question was asked by: %(user)s") % {"user": instance.member}
     body += "<br /><br />" + instance.text
-    return body, subj
+    return subj, body
 
 
 @receiver(pre_save, sender=ChatMessage)
 def notify_chat_message(sender, instance, **kwargs):
+    """Send notification for new chat messages.
+
+    Args:
+        sender: ChatMessage model class
+        instance: ChatMessage instance being saved
+        **kwargs: Additional keyword arguments
+
+    Side effects:
+        Sends notification email to message receiver
+    """
     if instance.pk:
         return
     activate(instance.receiver.language)
@@ -231,6 +306,14 @@ REGISTRATION_SALT = getattr(conf_settings, "REGISTRATION_SALT", "registration")
 
 
 def get_activation_key(user):
+    """Generate the activation key which will be emailed to the user.
+
+    Args:
+        user: User instance to generate key for
+
+    Returns:
+        str: Signed activation key for email verification
+    """
     """
     Generate the activation key which will be emailed to the user.
     """
@@ -238,6 +321,15 @@ def get_activation_key(user):
 
 
 def get_email_context(activation_key, request):
+    """Build the template context used for the activation email.
+
+    Args:
+        activation_key (str): Generated activation key
+        request: Django HTTP request object
+
+    Returns:
+        dict: Context dictionary for activation email template
+    """
     """
     Build the template context used for the activation email.
     """
@@ -251,16 +343,37 @@ def get_email_context(activation_key, request):
 
 
 def send_password_reset_remainder(mb):
+    """Send password reset reminder to association executives and admins.
+
+    Args:
+        mb: Membership instance with pending password reset
+
+    Side effects:
+        Sends reminder emails to association executives and system admins
+    """
+    assoc = mb.assoc
+    notify_organization_exe(get_password_reminder_email, assoc, mb)
+
+    for _name, email in conf_settings.ADMINS:
+        (subject, body) = get_password_reminder_email(mb)
+        my_send_mail(subject, body, email, assoc)
+
+
+def get_password_reminder_email(mb):
+    """Generate subject and body for password reset reminder.
+
+    Args:
+        mb: Membership instance with password reset request
+
+    Returns:
+        tuple: (subject, body) for the reminder email
+    """
     assoc = mb.assoc
     memb = mb.member
     aux = mb.password_reset.split("#")
     url = get_url(f"reset/{aux[0]}/{aux[1]}/", assoc)
-    subject = _("Password reset of user %(user)s") % {"user": memb}
+    subj = _("Password reset of user %(user)s") % {"user": memb}
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
         "url": url
     }
-
-    notify_organization_exe(subject, body, assoc, assoc)
-
-    for _name, email in conf_settings.ADMINS:
-        my_send_mail(subject, body, email, assoc)
+    return subj, body

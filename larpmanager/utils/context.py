@@ -24,6 +24,17 @@ from larpmanager.models.association import Association
 
 
 def cache_association(request):
+    """Cache association context for template rendering.
+
+    Prepares association-specific context including interface settings,
+    staging environment flags, and language options.
+
+    Args:
+        request: Django HTTP request with association context
+
+    Returns:
+        dict: Context dictionary with association and environment data
+    """
     ctx = {}
     if hasattr(request, "assoc"):
         ctx["assoc"] = request.assoc

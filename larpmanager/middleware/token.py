@@ -29,10 +29,24 @@ from larpmanager.views.user.member import get_user_backend
 
 
 class TokenAuthMiddleware:
+    """Middleware to handle token-based authentication.
+
+    Processes 'token' query parameters for automatic user login,
+    then redirects to clean URL without the token.
+    """
+
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+        """Process token authentication from query parameters.
+
+        Args:
+            request: Django HTTP request object
+
+        Returns:
+            HttpResponse: Redirect to clean URL or normal response
+        """
         token = request.GET.get("token")
         if token:
             user_id = cache.get(f"session_token:{token}")

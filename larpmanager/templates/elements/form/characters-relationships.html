@@ -13,7 +13,7 @@
     <div id="form_relationships">
         {% for key, item in relationships.items %}
             <h3>
-                <a href="{% url 'orga_characters_edit' run.event.slug run.number item.char.id %}">{{ item.char }}</a>
+                <a href="{% url 'orga_characters_edit' run.get_slug item.char.id %}">{{ item.char }}</a>
             </h3>
             <table>
                 <tr>
@@ -23,7 +23,7 @@
                             <a href="#" class="my_toggle" tog="f_{{ key }}_direct">{% trans "Show" %}</a>
                         </p>
                         <div class="hide hide_later f_{{ key }}_direct">
-                            <textarea name="rel_{{ key }}_direct">
+                            <textarea name="rel_{{ key }}">
                                 {{ item.direct | safe }}
                             </textarea>
                         </div>

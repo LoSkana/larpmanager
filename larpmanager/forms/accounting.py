@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -43,6 +44,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Collection,
     Discount,
+    OtherChoices,
     PaymentInvoice,
     RefundRequest,
 )
@@ -54,6 +56,12 @@ from larpmanager.utils.common import FileTypeValidator
 
 
 class OrgaPersonalExpenseForm(MyFormRun):
+    """Form for contributors to add/edit their personal expenses.
+
+    Allows expense tracking with optional balance integration
+    based on enabled features.
+    """
+
     page_info = _("This page allows you to add or edit an expense item of a contributor")
 
     page_title = _("Expenses")
@@ -69,6 +77,12 @@ class OrgaPersonalExpenseForm(MyFormRun):
 
 
 class OrgaExpenseForm(MyFormRun):
+    """Form for organizers to manage contributor expenses.
+
+    Full expense management including approval workflow
+    and member assignment capabilities.
+    """
+
     page_title = _("Expenses collaborators")
 
     page_info = _("This page allows you to add or edit the expense of a contributor")
@@ -85,8 +99,17 @@ class OrgaExpenseForm(MyFormRun):
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
+        if self.params["event"].assoc.get_config("expense_disable_orga", False):
+            self.delete_field("is_approved")
+
 
 class OrgaTokenForm(MyFormRun):
+    """Form for managing token accounting items.
+
+    Handles token-based payments and transactions
+    within the event accounting system.
+    """
+
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
@@ -96,7 +119,7 @@ class OrgaTokenForm(MyFormRun):
         super().__init__(*args, **kwargs)
         self.page_info = _("This page allows you to add or edit an assignment of") + f" {self.params['token_name']}"
         self.page_title = self.params["token_name"]
-        self.initial["oth"] = AccountingItemOther.TOKEN
+        self.initial["oth"] = OtherChoices.TOKEN
         self.fields["member"].widget.set_run(self.params["run"])
 
 
@@ -111,11 +134,17 @@ class OrgaCreditForm(MyFormRun):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.page_title = self.params["credit_name"]
-        self.initial["oth"] = AccountingItemOther.CREDIT
+        self.initial["oth"] = OtherChoices.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
 
 
 class OrgaPaymentForm(MyFormRun):
+    """Form for managing payment accounting records.
+
+    Handles payment processing, validation, and
+    integration with accounting workflows.
+    """
+
     page_title = _("Payments")
 
     page_info = _("This page allows you to add or edit a payment item")
@@ -166,7 +195,7 @@ class OrgaOutflowForm(ExeOutflowForm):
 class ExeInflowForm(MyForm):
     page_title = _("Inflows")
 
-    page_info = _("This page allows you to add or edit an event revenue other than the players' registration fee")
+    page_info = _("This page allows you to add or edit an event revenue other than the participants' registration fee")
 
     class Meta:
         model = AccountingItemInflow
@@ -250,7 +279,7 @@ class ExeCreditForm(MyForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
         self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = AccountingItemOther.CREDIT
+        self.initial["oth"] = OtherChoices.CREDIT
 
 
 class ExeTokenForm(MyForm):
@@ -267,7 +296,7 @@ class ExeTokenForm(MyForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
         self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = AccountingItemOther.TOKEN
+        self.initial["oth"] = OtherChoices.TOKEN
 
 
 class ExeExpenseForm(MyForm):
@@ -354,7 +383,7 @@ class OrgaDiscountForm(MyForm):
             choices=choices,
             widget=widget,
             required=False,
-            help_text=_("Indicates the runs for which the discount is available"),
+            help_text=_("Indicates the sessions for which the discount is available"),
         )
 
         if self.instance and self.instance.pk:
@@ -441,6 +470,7 @@ class ExePaymentSettingsForm(MyForm):
         self.all_methods = self.methods
 
         self.sections = {}
+        self.fee_fields = set()
         self.payment_details = self.get_payment_details_fields()
         for method in self.methods:
             for el in self.payment_details[method.slug]:
@@ -466,6 +496,9 @@ class ExePaymentSettingsForm(MyForm):
                 if label in repl_dict:
                     label = repl_dict[label]
                 self.fields[el].label = label
+
+                if el.endswith("_fee"):
+                    self.fee_fields.add(el)
 
         res = get_payment_details(self.instance)
         for el in res:
@@ -531,3 +564,21 @@ class ExePaymentSettingsForm(MyForm):
             return first_three + masked_middle + last_three
         else:
             return data_string
+
+    def clean(self):
+        cleaned = super().clean()
+        for name in self.fee_fields:
+            val = cleaned.get(name)
+            if val in (None, ""):
+                continue
+            s = str(val).strip().replace("%", "").replace(",", ".")
+            try:
+                d = Decimal(s)
+            except InvalidOperation:
+                self.add_error(name, _("Enter a valid numeric value"))
+                continue
+            if d < 0:
+                self.add_error(name, _("Value must be greater than or equal to 0"))
+                continue
+            cleaned[name] = str(d.normalize())
+        return cleaned
