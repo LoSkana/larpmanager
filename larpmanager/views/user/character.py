@@ -383,33 +383,6 @@ def character_edit(request, s, n, num):
     get_char_check(request, ctx, num, True)
     return character_form(request, ctx, s, n, ctx["character"], CharacterForm)
 
-@login_required
-def character_list_data(request, s, n):
-    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
-
-    ctx["list"] = get_player_characters(request.user.member, ctx["event"])
-
-    charList = []
-
-    for char in ctx["list"]:
-        charList.append({"id": char["px"], "name": char["name"]})
-
-    return JsonResponse(charList)
-
-@login_required
-def character_data(request, s, n, num):
-    ctx = get_event_run(request, s, n, status=True, signup=True)
-    get_char_check(request, ctx, num, True)
-    get_character_inventory(ctx, num)
-    get_event_cache_all(ctx)
-
-    id = ctx["character"].pk
-    name = ctx["character"].name
-    abilities = ctx["character"].px_ability_list.all()
-    inventory = ctx["character"].character_inventory.get_pool_balances()
-
-    return JsonResponse({"id": id, "name": name, "abilities": abilities, "inventory": inventory})
-
 
 def get_options_dependencies(ctx):
     ctx["dependencies"] = {}
@@ -591,3 +564,31 @@ def show_char(request, s, n):
     ch = ctx["chars"][search]
     tooltip = get_tooltip(ctx, ch)
     return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})
+
+
+@login_required
+def api_character_list(request, s, n):
+    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+
+    ctx["list"] = get_player_characters(request.user.member, ctx["event"])
+
+    charList = []
+
+    for char in ctx["list"]:
+        charList.append({"id": char["px"], "name": char["name"]})
+
+    return JsonResponse(charList)
+
+@login_required
+def api_character(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+    get_character_inventory(ctx, num)
+    get_event_cache_all(ctx)
+
+    id = ctx["character"].pk
+    name = ctx["character"].name
+    abilities = ctx["character"].px_ability_list.all()
+    inventory = ctx["character"].character_inventory.get_pool_balances()
+
+    return JsonResponse({"id": id, "name": name, "abilities": abilities, "inventory": inventory})
