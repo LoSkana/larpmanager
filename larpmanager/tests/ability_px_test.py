@@ -35,13 +35,15 @@ def test_px(pw_page):
 
     setup(live_server, page)
 
-    ability_delivery(live_server, page)
+    ability(live_server, page)
+
+    delivery(live_server, page)
 
     rules(page)
 
     player_choice_undo(page, live_server)
 
-    modifiers(page)
+    modifiers(page, live_server)
 
 
 def setup(live_server, page):
@@ -97,7 +99,7 @@ def setup(live_server, page):
     page.get_by_role("button", name="Confirm").click()
 
 
-def ability_delivery(live_server, page):
+def ability(live_server, page):
     # set up xp
     go_to(page, live_server, "/test/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
@@ -121,11 +123,14 @@ def ability_delivery(live_server, page):
     page.locator("#id_name").fill("double shield")
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("2")
-    # row.get_by_role("searchbox").click()
-    # row.get_by_role("searchbox").fill("swo")
+    row = page.get_by_role("row", name="Pre-requisites")
+    row.get_by_role("searchbox").click()
+    row.get_by_role("searchbox").fill("swo")
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
+
+def delivery(live_server, page):
     go_to(page, live_server, "/test/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -231,7 +236,7 @@ def player_choice_undo(page, live_server):
 
     # get ability
     page.locator("#ability_select").select_option("2")
-    page.locator("#ability_select").click()
+    page.get_by_role("button", name="Submit", exact=True).click()
     expect(page.locator("#one")).to_contain_text(
         "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )
@@ -245,7 +250,8 @@ def player_choice_undo(page, live_server):
     expect(page.locator("#ability_select")).to_contain_text("--- Select abilitydouble shield - 2")
 
 
-def modifiers(page):
+def modifiers(page, live_server):
+    go_to(page, live_server, "/test/manage")
     # add modifier on ability
     page.get_by_role("link", name="Modifiers").click()
     page.get_by_role("link", name="New").click()
@@ -256,29 +262,37 @@ def modifiers(page):
     page.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("ro")
     page.get_by_role("option", name="Test Larp - Class Rogue").click()
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name=" User").click()
+
+    # test out free ability
+    go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Ability").click()
+
+    # ability is not there
     expect(page.locator("#one")).to_contain_text(
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit"
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Change").click()
-    page.locator("#id_q7").select_option("2")
+    page.locator("#id_q5").select_option("2")
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Ability").click()
+    # ability is there (i got the correct class)
     expect(page.locator("#one")).to_contain_text(
         "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Change").click()
-    page.locator("#id_q7").select_option("1")
+    page.locator("#id_q5").select_option("1")
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Ability").click()
+    # ability is not there (changed class)
     expect(page.locator("#one")).to_contain_text(
-        "Test Larp Organization Home Event Discover what this event is about! Gallery View the list of characters and participants! Search Filter or search the characters! Characters Access the list of your characters! Registration Update here the registration options! Provisional registration (Standard), to confirm it proceed with payment. (Accounting) Total registration fee: 80. Next payment: 80€, expected within 8 days Your character is Test Character Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit"
+        "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit"
     )
-    page.get_by_role("link", name=" Admin").click()
+
+    # now test increase cost modifiers
+    go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Modifiers").click()
     page.get_by_role("link", name="New").click()
     page.get_by_role("row", name="Abilities", exact=True).get_by_role("searchbox").click()
@@ -290,11 +304,11 @@ def modifiers(page):
     page.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("mage")
     page.get_by_role("option", name="Test Larp - Class Mage").click()
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name=" User").click()
+
+    go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Ability").click()
     page.locator("#ability_select").select_option("2")
-    page.once("dialog", lambda dialog: dialog.dismiss())
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
         "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
