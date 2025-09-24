@@ -90,7 +90,7 @@ def larpmanager_sitemap():
     for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
     # Blog posts
-    for el in LarpManagerGuide.objects.filter(published=True):
+    for el in LarpManagerGuide.objects.all():
         urls.append(f"https://larpmanager.com/guide/{el.slug}/")
     return urls
 

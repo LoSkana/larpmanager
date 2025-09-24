@@ -675,8 +675,8 @@ def guide(request, slug):
         raise Http404("guide not found") from err
 
     ctx["og_image"] = ctx["guide"].thumb.url
-    ctx["og_title"] = ctx["guide"].title
-    ctx["og_description"] = ctx["guide"].description
+    ctx["og_title"] = f"{ctx['guide'].title} - LarpManager"
+    ctx["og_description"] = f"{ctx['guide'].description} - LarpManager"
 
     return render(request, "larpmanager/larpmanager/guide.html", ctx)
 

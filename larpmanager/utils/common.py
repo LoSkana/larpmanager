@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import html
+import logging
 import os
 import random
 import re
@@ -74,6 +75,8 @@ from larpmanager.models.writing import (
 from larpmanager.utils.exceptions import (
     NotFoundError,
 )
+
+logger = logging.getLogger(__name__)
 
 format_date = "%d/%m/%y"
 
@@ -611,26 +614,29 @@ def copy_class(target_id, source_id, cls):
     cls.objects.filter(event_id=target_id).delete()
 
     for obj in cls.objects.filter(event_id=source_id):
-        # save a copy of m2m relations
-        m2m_data = {}
+        try:
+            # save a copy of m2m relations
+            m2m_data = {}
 
-        # noinspection PyProtectedMember
-        for field in obj._meta.many_to_many:
-            m2m_data[field.name] = list(getattr(obj, field.name).all())
+            # noinspection PyProtectedMember
+            for field in obj._meta.many_to_many:
+                m2m_data[field.name] = list(getattr(obj, field.name).all())
 
-        obj.pk = None
-        obj.event_id = target_id
-        # noinspection PyProtectedMember
-        obj._state.adding = True
-        for field_name, func in {"access_token": my_uuid_short}.items():
-            if not hasattr(obj, field_name):
-                continue
-            setattr(obj, field_name, func())
-        obj.save()
+            obj.pk = None
+            obj.event_id = target_id
+            # noinspection PyProtectedMember
+            obj._state.adding = True
+            for field_name, func in {"access_token": my_uuid_short}.items():
+                if not hasattr(obj, field_name):
+                    continue
+                setattr(obj, field_name, func())
+            obj.save()
 
-        # copy m2m relations
-        for field_name, values in m2m_data.items():
-            getattr(obj, field_name).set(values)
+            # copy m2m relations
+            for field_name, values in m2m_data.items():
+                getattr(obj, field_name).set(values)
+        except Exception as err:
+            logging.warning(f"found exp: {err}")
 
 
 def get_payment_methods_ids(ctx):
