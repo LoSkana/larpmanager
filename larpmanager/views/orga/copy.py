@@ -103,6 +103,12 @@ def correct_rels(e_id, p_id, cls_p, cls, field, rel_field="number"):
 
 
 def correct_relationship(e_id, p_id):
+    """Correct character relationships after event copying.
+
+    Args:
+        e_id: Target event ID with copied characters
+        p_id: Source parent event ID with original characters
+    """
     cache_f = {}
     cache_t = {}
     for obj in Character.objects.filter(event_id=p_id):

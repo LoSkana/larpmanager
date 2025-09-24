@@ -456,6 +456,12 @@ class ExePaymentSettingsForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize PaymentMethodForm with dynamic payment method configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         self.prevent_canc = True

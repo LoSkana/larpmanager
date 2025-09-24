@@ -293,6 +293,14 @@ def _expand_val(val, el, field):
 
 
 def _header_regs(ctx, el, key, val):
+    """Generate header row data for registration download with feature-based columns.
+
+    Args:
+        ctx: Context dictionary containing features and configuration
+        el: Registration element object
+        key: List to append column headers to
+        val: List to append column values to
+    """
     if "character" in ctx["features"]:
         key.append(_("Characters"))
         val.append(", ".join([row.character.name for row in el.rcrs.all()]))
@@ -682,6 +690,12 @@ def _get_column_names(ctx):
 
 
 def _get_writing_names(ctx):
+    """Get writing field names and types for download context.
+
+    Args:
+        ctx: Context dictionary to populate with writing field information
+            including event, typ, and fields data
+    """
     ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
     ctx["fields"] = {}
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
