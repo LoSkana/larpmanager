@@ -432,6 +432,16 @@ class BaseRegistrationForm(MyFormRun):
         return True
 
     def _init_field(self, question, reg_counts=None, orga=True):
+        """Initialize form field for a writing question.
+
+        Args:
+            question: WritingQuestion instance to create field for
+            reg_counts: Registration count data (optional)
+            orga: Whether this is an organizer form (default: True)
+
+        Returns:
+            Form field instance or None for computed questions
+        """
         # ignore computed
         if question.typ == WritingQuestionType.COMPUTED:
             return None

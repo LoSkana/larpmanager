@@ -289,6 +289,14 @@ def registration_redirect(request, reg, new_reg, run):
 
 
 def save_registration_bring_friend(ctx, form, reg, request):
+    """Process bring-a-friend registration functionality.
+
+    Args:
+        ctx: Context dictionary with event and feature information
+        form: Registration form with bring_friend field
+        reg: Registration instance
+        request: Django HTTP request object
+    """
     # send mail
     bring_friend_instructions(reg, ctx)
     if "bring_friend" not in form.cleaned_data:
@@ -554,6 +562,15 @@ def register_conditions(request, s=None):
 @login_required
 @require_POST
 def discount(request, s):
+    """Handle discount code application for user registration.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        JsonResponse: Success or error response for discount application
+    """
     def error(msg):
         return JsonResponse({"res": "ko", "msg": msg})
 

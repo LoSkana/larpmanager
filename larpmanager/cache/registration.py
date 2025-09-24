@@ -60,6 +60,14 @@ def add_count(s, param, v=1):
 
 
 def update_reg_counts(r):
+    """Update registration counts cache for the given run.
+
+    Args:
+        r: Run instance to update registration counts for
+
+    Returns:
+        dict: Updated registration counts data by ticket tier
+    """
     s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
     que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
     for reg in que.select_related("ticket"):

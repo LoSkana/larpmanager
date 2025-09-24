@@ -325,6 +325,15 @@ def _orga_registrations_text_fields(ctx):
 
 @login_required
 def orga_registrations(request, s):
+    """Display and manage event registrations for organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered registrations page or download/popup response
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
 
     if request.method == "POST":
@@ -393,6 +402,15 @@ def orga_registrations_accounting(request, s):
 
 @login_required
 def orga_registration_form_list(request, s):
+    """Handle registration form list management for event organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        JsonResponse: Registration form data for organizer interface
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
 
     eid = request.POST.get("num")
@@ -621,6 +639,15 @@ def orga_registration_discount_del(request, s, num, dis):
 
 @login_required
 def orga_cancellations(request, s):
+    """Display cancelled registrations for event organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        HttpResponse: Rendered cancellations page with cancelled registration list
+    """
     ctx = check_event_permission(request, s, "orga_cancellations")
     ctx["list"] = (
         Registration.objects.filter(run=ctx["run"])

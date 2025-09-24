@@ -465,6 +465,12 @@ class OrgaWritingQuestionForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize WritingQuestionForm with dynamic field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         self._init_type()

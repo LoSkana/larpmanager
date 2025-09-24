@@ -104,6 +104,16 @@ def casting_details(ctx, typ):
 
 @login_required
 def casting(request, s, typ=0):
+    """Handle user casting preferences for LARP events.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        typ: Casting type identifier (default: 0)
+
+    Returns:
+        HttpResponse: Rendered casting form or redirect response
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     check_event_feature(request, ctx, "casting")
 

@@ -192,6 +192,16 @@ def orga_warehouse_area_edit(request, s, num):
 
 @login_required
 def orga_warehouse_area_assignments(request, s, num):
+    """Manage warehouse area item assignments for event organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        num: Warehouse area ID number
+
+    Returns:
+        HttpResponse: Rendered warehouse area assignments page
+    """
     ctx = check_event_permission(request, s, "orga_warehouse_area")
     get_element(ctx, num, "area", WarehouseArea)
 

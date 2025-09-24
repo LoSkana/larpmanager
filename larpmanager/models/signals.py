@@ -815,6 +815,13 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
 def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
+    """Automatically rotate vertical photos in warehouse items before saving.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The WarehouseItem instance being saved
+        **kwargs: Additional keyword arguments
+    """
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
         field = instance._meta.get_field("photo")

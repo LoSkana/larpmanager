@@ -277,6 +277,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
     def set_config_reg_form(self):
+        """Configure registration form settings and display options.
+
+        Sets up configuration fields for registration form display,
+        grouping options, and participant visibility settings.
+        """
         self.set_section("reg_form", _("Registrations"))
 
         label = _("Disable grouping")
@@ -434,6 +439,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("writing_external_access", ConfigType.BOOL, label, help_text)
 
     def set_config_character(self):
+        """Configure character-related settings including campaign and faction options.
+
+        Sets up configuration fields for campaign management, faction
+        independence, and character creation settings.
+        """
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
             label = _("Independent factions")
@@ -838,6 +848,12 @@ class OrgaRunForm(ConfigForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize RunForm with event-specific configuration and field setup.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         super().__init__(*args, **kwargs)
 
         self.main_class = ""
@@ -1061,6 +1077,12 @@ class OrgaQuickSetupForm(QuickSetupForm):
         fields = []
 
     def __init__(self, *args, **kwargs):
+        """Initialize OrgaQuickSetupForm with event feature configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         self.setup = {
@@ -1186,6 +1208,14 @@ class OrgaPreferencesForm(ExePreferencesForm):
         )
 
     def add_writing_configs(self, basics, event_id, help_text, s):
+        """Add writing-related configuration fields to the event form.
+
+        Args:
+            basics: Basic configuration settings
+            event_id: Event identifier
+            help_text: Help text for the configuration
+            s: Writing section configuration tuple
+        """
         mapping = _get_writing_mapping()
         if mapping.get(s[0]) not in self.params["features"]:
             return
