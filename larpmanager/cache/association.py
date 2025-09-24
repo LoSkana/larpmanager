@@ -50,6 +50,14 @@ def get_cache_assoc(s):
 
 
 def init_cache_assoc(a_slug):
+    """Initialize association cache with configuration data.
+
+    Args:
+        a_slug: Association slug identifier
+
+    Returns:
+        dict: Association cache data or None if not found
+    """
     try:
         assoc = Association.objects.get(slug=a_slug)
     except ObjectDoesNotExist:

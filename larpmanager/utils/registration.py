@@ -121,6 +121,16 @@ def get_match_reg(r, my_regs):
 
 
 def registration_status_signed(run, features, register_url):
+    """Generate registration status information for signed up users.
+
+    Args:
+        run: Run instance for the registered user
+        features: Available features configuration
+        register_url: URL for registration management
+
+    Returns:
+        dict: Registration status data including messages and membership info
+    """
     registration_status_characters(run, features)
     member = run.reg.member
     mb = get_user_membership(member, run.event.assoc_id)

@@ -440,6 +440,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         return s
 
     def __init__(self, *args, **kwargs):
+        """Initialize registration form with run and event specific configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         super().__init__(*args, **kwargs)
 
         self.run = self.params["run"]
@@ -749,6 +755,12 @@ class OrgaRegistrationQuestionForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize RegistrationQuestionForm with event-specific question configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["factions"].widget.set_event(self.params["event"])

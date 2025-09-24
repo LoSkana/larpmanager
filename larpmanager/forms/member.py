@@ -79,6 +79,12 @@ class MyAuthForm(AuthenticationForm):
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
+        """Initialize RegistrationFormUniqueEmail with custom field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments, including 'request'
+        """
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()

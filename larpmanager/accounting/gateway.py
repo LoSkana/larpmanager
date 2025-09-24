@@ -251,6 +251,14 @@ def get_stripe_form(request, ctx, invoice, amount):
 
 
 def stripe_webhook(request):
+    """Handle Stripe webhook events for payment processing.
+
+    Args:
+        request: Django HTTP request object containing Stripe webhook data
+
+    Returns:
+        HttpResponse: Success or error response for webhook processing
+    """
     ctx = def_user_ctx(request)
     update_payment_details(request, ctx)
     stripe.api_key = ctx["stripe_sk_api"]
@@ -293,6 +301,17 @@ def stripe_webhook(request):
 
 
 def get_sumup_form(request, ctx, invoice, amount):
+    """Generate SumUp payment form for invoice processing.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with payment configuration
+        invoice: Invoice instance to process payment for
+        amount: Payment amount to charge
+
+    Returns:
+        str: HTML form for SumUp payment processing
+    """
     # ## GET AUTH TOKEN
 
     url = "https://api.sumup.com/token"

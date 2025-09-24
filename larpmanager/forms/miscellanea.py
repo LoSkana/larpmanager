@@ -350,6 +350,12 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
 
 class OrganizerCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        """Initialize organizer copy form with source event choices.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
 
