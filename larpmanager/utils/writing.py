@@ -323,6 +323,12 @@ def retrieve_cache_text_field(ctx, text_fields, typ):
 
 
 def _prepare_writing_list(ctx, request):
+    """Prepare context data for writing list display and configuration.
+
+    Args:
+        ctx: Template context dictionary to update
+        request: HTTP request object with user information
+    """
     try:
         name_que = (
             ctx["event"]
@@ -355,6 +361,11 @@ def writing_list_plot(ctx):
 
 
 def writing_list_char(ctx):
+    """Enhance character list with feature-specific data and relationships.
+
+    Args:
+        ctx: Context dictionary containing character list, features, and event data
+    """
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
 

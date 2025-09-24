@@ -389,6 +389,15 @@ class ProfileForm(BaseProfileForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize member form with dynamic field validation and configuration.
+
+        Sets mandatory fields, handles voting candidates, and adds required
+        data sharing consent field based on membership status.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments including request context
+        """
         super().__init__(*args, **kwargs)
 
         for f in self.fields:
@@ -760,6 +769,14 @@ class ExeProfileForm(MyForm):
         return choices
 
     def save(self, commit=True):
+        """Save form data and update member field configurations.
+
+        Args:
+            commit: Whether to save the instance to database
+
+        Returns:
+            The saved form instance
+        """
         instance = super().save(commit=commit)
 
         mandatory = []

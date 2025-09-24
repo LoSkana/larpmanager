@@ -150,6 +150,11 @@ def _exe_manage(request):
 
 
 def _exe_suggestions(ctx):
+    """Add priority tasks and suggestions to the executive management context.
+
+    Args:
+        ctx: Context dictionary containing association ID and other data
+    """
     assoc = Association.objects.get(pk=ctx["a_id"])
 
     priorities = {

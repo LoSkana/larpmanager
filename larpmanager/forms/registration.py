@@ -329,6 +329,16 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def skip_ticket_type(self, event, run, ticket):
+        """Determine if a ticket type should be skipped for the current member.
+
+        Args:
+            event: Event instance
+            run: Run instance
+            ticket: RegistrationTicket instance to check
+
+        Returns:
+            Boolean indicating if the ticket should be skipped
+        """
         result = False
 
         # skip it ticket already selected
@@ -910,6 +920,12 @@ class OrgaRegistrationSurchargeForm(MyForm):
 
 class PreRegistrationForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        """Initialize PreRegistrationForm with context-based field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments including 'ctx' context data
+        """
         super().__init__()
         self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)

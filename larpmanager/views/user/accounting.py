@@ -286,6 +286,15 @@ def acc_reg(request, reg_id, method=None):
 
 @login_required
 def acc_membership(request, method=None):
+    """Process membership fee payment for the current year.
+
+    Args:
+        request: HTTP request object with user data
+        method: Optional payment method to use by default
+
+    Returns:
+        Rendered membership payment form or redirect on success
+    """
     check_assoc_feature(request, "membership")
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
@@ -410,6 +419,15 @@ def acc_collection_close(request, s):
 
 @login_required
 def acc_collection_redeem(request, s):
+    """Handle redemption of completed accounting collections.
+
+    Args:
+        request: HTTP request object
+        s: Collection slug identifier
+
+    Returns:
+        Redirect to home on POST success or rendered redemption template
+    """
     c = get_collection_redeem(request, s)
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True

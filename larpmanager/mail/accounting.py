@@ -44,6 +44,14 @@ from larpmanager.utils.tasks import my_send_mail
 
 @receiver(post_save, sender=AccountingItemExpense)
 def update_accounting_item_expense_post(sender, instance, created, **kwargs):
+    """Handle post-save events for expense accounting items.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: AccountingItemExpense instance that was saved
+        created: Boolean indicating if instance was created
+        **kwargs: Additional keyword arguments
+    """
     if instance.hide:
         return
     # Send email when the expenditure item is created the first time
@@ -55,6 +63,14 @@ def update_accounting_item_expense_post(sender, instance, created, **kwargs):
 
 
 def get_expense_mail(instance):
+    """Generate email subject and body for expense reimbursement requests.
+
+    Args:
+        instance: AccountingItemExpense instance
+
+    Returns:
+        Tuple of (subject, body) strings for expense notification email
+    """
     subj = hdr(instance) + _("Reimbursement request for %(event)s") % {"event": instance.run}
     body = _("Staff member %(user)s added a new reimbursement request for %(event)s") % {
         "user": instance.member,
@@ -79,6 +95,13 @@ def get_expense_mail(instance):
 
 @receiver(pre_save, sender=AccountingItemExpense)
 def update_accounting_item_expense_pre(sender, instance, **kwargs):
+    """Handle pre-save events for expense accounting items.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: AccountingItemExpense instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if instance.hide:
         return
     if not instance.pk:
@@ -119,6 +142,14 @@ def update_accounting_item_expense_pre(sender, instance, **kwargs):
 
 
 def get_token_credit_name(assoc):
+    """Get token and credit names from association configuration.
+
+    Args:
+        assoc: Association object with configuration
+
+    Returns:
+        Tuple of (token_name, credit_name) strings with defaults if not configured
+    """
     token_name = assoc.get_config("token_credit_token_name", None)
     credit_name = assoc.get_config("token_credit_credit_name", None)
     if not token_name:
@@ -130,6 +161,13 @@ def get_token_credit_name(assoc):
 
 @receiver(pre_save, sender=AccountingItemPayment)
 def update_accounting_item_payment(sender, instance, **kwargs):
+    """Handle pre-save events for payment accounting items.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: AccountingItemPayment instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if instance.hide:
         return
 
@@ -152,6 +190,14 @@ def update_accounting_item_payment(sender, instance, **kwargs):
 
 
 def notify_pay_token(instance, member, run, token_name):
+    """Send token payment notifications to user and organizers.
+
+    Args:
+        instance: Payment accounting item instance
+        member: Member who made the payment
+        run: Event run object
+        token_name: Name of the token currency
+    """
     # to user
     activate(member.language)
     subj, body = get_pay_token_email(instance, run, token_name)
@@ -165,6 +211,16 @@ def notify_pay_token(instance, member, run, token_name):
 
 
 def get_pay_token_email(instance, run, token_name):
+    """Generate email content for token payment notifications.
+
+    Args:
+        instance: Payment accounting item instance
+        run: Event run object
+        token_name: Name of the token currency
+
+    Returns:
+        Tuple of (subject, body) strings for token payment email
+    """
     subj = hdr(instance) + _("Utilisation %(tokens)s per %(event)s") % {
         "tokens": token_name,
         "event": run,
@@ -181,6 +237,14 @@ def get_pay_token_email(instance, run, token_name):
 
 
 def notify_pay_credit(credit_name, instance, member, run):
+    """Send credit payment notifications to user and organizers.
+
+    Args:
+        credit_name: Name of the credit currency
+        instance: Payment accounting item instance
+        member: Member who made the payment
+        run: Event run object
+    """
     # to user
     activate(member.language)
     subj, body = get_pay_credit_email(credit_name, instance, run)
@@ -194,6 +258,16 @@ def notify_pay_credit(credit_name, instance, member, run):
 
 
 def get_pay_credit_email(credit_name, instance, run):
+    """Generate email content for credit payment notifications.
+
+    Args:
+        credit_name: Name of the credit currency
+        instance: Payment accounting item instance
+        run: Event run object
+
+    Returns:
+        Tuple of (subject, body) strings for credit payment email
+    """
     subj = hdr(instance) + _("Utilisation %(credits)s per %(event)s") % {
         "credits": credit_name,
         "event": run,
@@ -210,6 +284,14 @@ def get_pay_credit_email(credit_name, instance, run):
 
 
 def notify_pay_money(curr_sym, instance, member, run):
+    """Send money payment notifications to user and organizers.
+
+    Args:
+        curr_sym: Currency symbol
+        instance: Payment accounting item instance
+        member: Member who made the payment
+        run: Event run object
+    """
     # to user
     activate(member.language)
     subj, body = get_pay_money_email(curr_sym, instance, run)
@@ -223,6 +305,16 @@ def notify_pay_money(curr_sym, instance, member, run):
 
 
 def get_pay_money_email(curr_sym, instance, run):
+    """Generate email content for money payment notifications.
+
+    Args:
+        curr_sym: Currency symbol
+        instance: Payment accounting item instance
+        run: Event run object
+
+    Returns:
+        Tuple of (subject, body) strings for money payment email
+    """
     subj = hdr(instance) + _("Payment for %(event)s") % {"event": run}
     body = (
         _("A payment of %(amount).2f %(currency)s was received for this event")
@@ -237,6 +329,13 @@ def get_pay_money_email(curr_sym, instance, run):
 
 @receiver(pre_save, sender=AccountingItemOther)
 def update_accounting_item_other(sender, instance, **kwargs):
+    """Handle pre-save events for other accounting items.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: AccountingItemOther instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if instance.hide:
         return
 
@@ -252,6 +351,12 @@ def update_accounting_item_other(sender, instance, **kwargs):
 
 
 def notify_refund(credit_name, instance):
+    """Send refund notifications to user and organizers.
+
+    Args:
+        credit_name: Name of the credit currency
+        instance: Accounting item instance for refund
+    """
     # to user
     activate(instance.member.language)
     subj = hdr(instance) + _("Issued Reimbursement")
@@ -438,12 +543,28 @@ def notify_refund_request(p):
 
 
 def get_notify_refund_email(p):
+    """Generate email subject and body for refund request notification.
+
+    Args:
+        p: Payment object containing refund request details
+
+    Returns:
+        Tuple of (subject, body) strings for refund notification email
+    """
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
     body = _("Details: %(details)s (<b>%(amount).2f</b>)") % {"details": p.details, "amount": p.value}
     return subj, body
 
 
 def get_invoice_email(inv):
+    """Generate email subject and body for invoice payment verification.
+
+    Args:
+        inv: Invoice object to generate email content for
+
+    Returns:
+        Tuple of (subject, body) strings for the payment verification email
+    """
     body = _("Verify that the data are correct") + ":"
     body += "<br /><br />" + _("Reason for payment") + f": <b>{inv.causal}</b>"
     body += "<br /><br />" + _("Amount") + f": <b>{inv.mc_gross:.2f}</b>"

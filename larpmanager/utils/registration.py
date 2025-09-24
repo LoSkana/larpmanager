@@ -368,6 +368,14 @@ def registration_status_characters(run, features):
 
 
 def get_registration_options(instance):
+    """Get formatted list of registration options and answers for display.
+
+    Args:
+        instance: Registration instance
+
+    Returns:
+        List of tuples containing (question_name, answer_text) pairs
+    """
     res = []
     rqs = []
     cache = []
@@ -448,6 +456,13 @@ def get_reduced_available_count(run):
 
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender, instance, **kwargs):
+    """Handle registration updates when switching between events.
+
+    Args:
+        sender: The model class sending the signal
+        instance: The Registration instance being saved
+        **kwargs: Additional keyword arguments from the signal
+    """
     if not instance.pk:
         return
 

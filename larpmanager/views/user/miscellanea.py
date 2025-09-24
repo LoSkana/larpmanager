@@ -247,6 +247,14 @@ def workshop_answer(request, s, m):
 
 @login_required
 def shuttle(request):
+    """Display shuttle service requests for the current association.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered shuttle template with active and recent requests
+    """
     check_assoc_feature(request, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
@@ -269,6 +277,14 @@ def shuttle(request):
 
 @login_required
 def shuttle_new(request):
+    """Handle creation of new shuttle service requests.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Redirect to shuttle list on success or form template on GET/invalid POST
+    """
     check_assoc_feature(request, "shuttle")
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})
