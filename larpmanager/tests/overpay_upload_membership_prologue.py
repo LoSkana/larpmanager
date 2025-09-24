@@ -40,6 +40,7 @@ def test_overpay_upload_membership_prologue(pw_page):
     check_special_cod(page, live_server)
 
     upload_membership(page, live_server)
+    upload_membership_fee(page, live_server)
 
 
 def check_overpay(page, live_server):
@@ -130,7 +131,7 @@ def check_overpay_2(page, live_server):
 
 def check_special_cod(page, live_server):
     go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Configuration").click()
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Registrations ").click()
     page.locator("#id_registration_unique_code").check()
     page.locator("#id_registration_no_grouping").check()
@@ -140,7 +141,7 @@ def check_special_cod(page, live_server):
     expect(page.locator("#one")).to_contain_text("Admin Test Standard")
     page.get_by_role("link", name="").click()
     expect(page.locator("#main_form")).to_contain_text(
-        "Registration Member Admin Test - Admin Test - Details Unique code Confirm"
+        "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it Details Unique code Confirm"
     )
     page.get_by_role("button", name="Confirm").click()
     expect(page.locator("#one")).to_contain_text("Admin Test Standard")
@@ -192,6 +193,7 @@ def upload_membership(page, live_server):
     # Upload membership
     page.get_by_role("link", name="Membership").click()
     page.get_by_role("link", name="Upload membership document").click()
+    page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
     image_path = Path(__file__).parent / "image.jpg"
@@ -205,17 +207,21 @@ def upload_membership(page, live_server):
     # Check result
     expect(page.locator("#one")).to_contain_text("Test Admin orga@test.it Accepted 1")
     go_to(page, live_server, "/membership")
-    expect(page.locator("#one")).to_contain_text(
-        "Test Larp Organization Home Members of the Organization You are a regular member of our Organization"
-    )
+    page.get_by_role("checkbox", name="Authorisation").check()
+    page.get_by_role("button", name="Submit").click()
+    go_to(page, live_server, "/membership")
+
+    expect(page.locator("#one")).to_contain_text("You are a regular member of our Organization")
     expect(page.locator("#one")).to_contain_text("In the membership book the number of your membership card is: 0001")
     expect(page.locator("#one")).to_contain_text(
         "The payment of your membership fee for this year has NOT been receive"
     )
 
+
+def upload_membership_fee(page, live_server):
     # upload fee
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").click()
+    page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     page.get_by_role("button", name="Confirm").click()
@@ -235,7 +241,8 @@ def upload_membership(page, live_server):
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
-    page.locator("#id_method").set_input_files(str(image_path))
+    image_path = Path(__file__).parent / "image.jpg"
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.get_by_role("button", name="Confirm").click()
 
     # check

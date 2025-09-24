@@ -128,7 +128,11 @@ def correct_relationship(e_id, p_id):
 
         v = rel.source_id
         # print(rel.source_id)
+        if v not in cache_f:
+            continue
         v = cache_f[v]
+        if v not in cache_t:
+            continue
         v = cache_t[v]
         rel.source_id = v
 
