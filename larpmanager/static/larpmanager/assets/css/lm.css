@@ -2217,3 +2217,11 @@ input[type="number"] {
 .bulk-el {
   display: inline-block;
 }
+
+.guide-list h3 a {
+  color: #35a9b7;
+}
+
+.guide-list h3 a:hover {
+  color: #a5dee5;
+}
