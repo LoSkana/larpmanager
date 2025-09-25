@@ -277,8 +277,8 @@ def get_casting_data(request, ctx, typ, form):
     ctx["nopes"] = json.dumps(nopes)
     ctx["avoids"] = json.dumps(avoids)
 
-    ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 1))
-    ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 1))
+    ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 0))
+    ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 0))
 
 
 def _casting_prepare(ctx, request, typ):

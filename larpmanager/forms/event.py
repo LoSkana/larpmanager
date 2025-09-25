@@ -576,12 +576,14 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
             label = _("Registration priority")
-            help_text = _("A measure of how much to favor earlier registrants (1=default, 0=disabled, 10=strong)")
+            help_text = _(
+                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong)"
+            )
             self.add_configs("casting_reg_priority", ConfigType.INT, label, help_text)
 
             label = _("Payment priority")
             help_text = _(
-                "A measure of how much to favor participants who completed full payment earlier (1=default, 0=disabled, 10=strong)"
+                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong)"
             )
             self.add_configs("casting_pay_priority", ConfigType.INT, label, help_text)
 
