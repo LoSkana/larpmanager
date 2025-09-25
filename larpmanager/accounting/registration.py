@@ -617,7 +617,7 @@ def update_registration_accounting(reg):
     remaining = reg.tot_iscr - reg.tot_payed
     if -max_rounding < remaining <= max_rounding:
         if not reg.payment_date:
-            reg.payment_date = datetime.now().date()
+            reg.payment_date = datetime.now()
         return
 
     if reg.cancellation_date:

@@ -305,9 +305,9 @@ def _get_player_info(players, reg):
     if reg.ticket:
         players[reg.member.id]["prior"] = reg.ticket.casting_priority
     # set registration days (number of days from registration created)
-    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date())
+    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date()) + 1
     # set payment days (number of days from full payment date, or default value 1)
-    players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) if reg.payment_date else 1
+    players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) + 1 if reg.payment_date else 1
 
 
 def _get_player_preferences(allowed, castings, chosen, nopes, reg):
