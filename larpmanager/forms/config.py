@@ -3,6 +3,7 @@ from enum import IntEnum
 
 from django import forms
 from django.forms import Textarea
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
@@ -27,10 +28,10 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
         value = value or []
 
         for i, (option_value, option_label) in enumerate(self.choices):
-            checkbox_id = f"{attrs.get('id', name)}_{i}"
+            checkbox_id = f"{escape(attrs.get('id', name))}_{i}"
             checked = "checked" if str(option_value) in value else ""
-            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            link_html = f'<label for="{checkbox_id}">{option_label}</label>'
+            checkbox_html = f'<input type="checkbox" name="{escape(name)}" value="{escape(option_value)}" id="{checkbox_id}" {checked}>'
+            link_html = f'<label for="{checkbox_id}">{escape(option_label)}</label>'
             output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
 
         return mark_safe("\n".join(output))

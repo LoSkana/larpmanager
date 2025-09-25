@@ -35,9 +35,22 @@ from larpmanager.utils.exceptions import ReturnNowError
 
 
 def _get_bulk_params(request, ctx):
-    operation = int(request.POST.get("operation", "0"))
-    target = int(request.POST.get("target", "0"))
-    ids = [int(x) for x in request.POST.getlist("ids[]", [])]
+    try:
+        operation = int(request.POST.get("operation", "0"))
+    except (ValueError, TypeError):
+        operation = 0
+
+    try:
+        target = int(request.POST.get("target", "0"))
+    except (ValueError, TypeError):
+        target = 0
+
+    ids = []
+    for x in request.POST.getlist("ids[]", []):
+        try:
+            ids.append(int(x))
+        except (ValueError, TypeError):
+            continue
 
     if not ids:
         raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))

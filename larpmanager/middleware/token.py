@@ -51,10 +51,13 @@ class TokenAuthMiddleware:
         if token:
             user_id = cache.get(f"session_token:{token}")
             if user_id:
-                user = get_user_model().objects.get(pk=user_id)
-                if user:
+                try:
+                    user = get_user_model().objects.get(pk=user_id)
                     welcome_user(request, user)
                     login(request, user, backend=get_user_backend())
+                except get_user_model().DoesNotExist:
+                    # Invalid user_id, ignore
+                    pass
 
             # remove token and redirect
             parsed = urlparse(request.get_full_path())

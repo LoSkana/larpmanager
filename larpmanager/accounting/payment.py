@@ -23,6 +23,7 @@ import re
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -388,8 +389,8 @@ def _process_payment(invoice):
         acc.assoc = invoice.assoc
         acc.save()
 
-        reg.num_payments += 1
-        reg.save()
+        Registration.objects.filter(pk=reg.pk).update(num_payments=F("num_payments") + 1)
+        reg.refresh_from_db()
 
         # e-invoice emission
         if "e-invoice" in get_assoc_features(invoice.assoc_id):

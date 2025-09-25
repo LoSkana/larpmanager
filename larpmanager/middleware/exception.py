@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -120,13 +121,21 @@ class ExceptionHandlingMiddleware:
         if request.assoc["skin_managed"]:
             raise Http404("not allowed")
 
-        feature = Feature.objects.get(slug=ex.feature)
+        try:
+            feature = Feature.objects.get(slug=ex.feature)
+        except ObjectDoesNotExist as err:
+            raise Http404("Feature not found") from err
+
         ctx = {"exe": ex, "feature": feature}
 
         if feature.overall:
             ctx["permission"] = has_assoc_permission(request, {}, "exe_features")
         else:
-            run = Run.objects.get(pk=ex.run)
+            try:
+                run = Run.objects.get(pk=ex.run)
+            except ObjectDoesNotExist as err:
+                raise Http404("Run not found") from err
+
             ctx["run"] = run
             ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
 
