@@ -18,9 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.urls import (
-    path,
-)
+from django.urls import path
 
 from larpmanager.views import larpmanager as views_lm
 

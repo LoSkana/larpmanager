@@ -138,7 +138,10 @@ def query_index(request):
     tutorial content to provide relevant results.
     """
     orig_string = request.POST.get("q", "")
-    run_id = int(request.POST.get("r", "0"))
+    try:
+        run_id = int(request.POST.get("r", "0"))
+    except (ValueError, TypeError):
+        run_id = 0
 
     # translate it
     translator = deepl.Translator(conf_settings.DEEPL_API_KEY)

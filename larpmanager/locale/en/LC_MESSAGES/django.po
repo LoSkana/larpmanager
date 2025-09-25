@@ -8319,24 +8319,6 @@ msgstr ""
 msgid "Set ability type"
 msgstr ""
 
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
-"assignments/media-types/media-types.xhtml"
-msgstr ""
-
 msgid "Welcome"
 msgstr ""
 
@@ -8562,6 +8544,24 @@ msgstr ""
 msgid ""
 "Do you want to unsubscribe from our communication lists? <a "
 "href='%(url)s'>Unsubscribe</a>"
+msgstr ""
+
+#, python-format
+msgid ""
+"File type '%(detected_type)s' is not allowed.Allowed types are: "
+"'%(allowed_types)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
+"assignments/media-types/media-types.xhtml"
 msgstr ""
 
 msgid "Registration completed successfully!"

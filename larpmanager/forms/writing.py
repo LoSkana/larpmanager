@@ -49,7 +49,7 @@ from larpmanager.models.writing import (
     PrologueType,
     SpeedLarp,
 )
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class WritingForm(MyForm):

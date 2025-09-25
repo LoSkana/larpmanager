@@ -52,9 +52,7 @@ from larpmanager.models.writing import (
     Relationship,
 )
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import (
-    get_handout,
-)
+from larpmanager.utils.common import get_handout
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
@@ -603,11 +601,18 @@ def get_odt_content(ctx, working_dir, aux_template):
     os.system("unzip -q ../aux.odt")
     # get data from content
     doc = lxml.etree.parse("content.xml")
-    txt = doc.xpath('//*[local-name()="text"]')[0]
-    auto = doc.xpath('//*[local-name()="automatic-styles"]')[0]
+    txt_elements = doc.xpath('//*[local-name()="text"]')
+    auto_elements = doc.xpath('//*[local-name()="automatic-styles"]')
+    if not txt_elements or not auto_elements:
+        raise ValueError("Required XML elements not found in content.xml")
+    txt = txt_elements[0]
+    auto = auto_elements[0]
     # get data from styles
     doc = lxml.etree.parse("styles.xml")
-    styles = doc.xpath('//*[local-name()="styles"]')[0]
+    styles_elements = doc.xpath('//*[local-name()="styles"]')
+    if not styles_elements:
+        raise ValueError("Required XML elements not found in styles.xml")
+    styles = styles_elements[0]
     return {
         "txt": txt.getchildren(),
         "auto": auto.getchildren(),
@@ -648,7 +653,10 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
     doc = lxml.etree.parse(content)
     elements = get_odt_content(ctx, working_dir, aux_template)
 
-    styles = doc.xpath('//*[local-name()="automatic-styles"]')[0]
+    styles_elements = doc.xpath('//*[local-name()="automatic-styles"]')
+    if not styles_elements:
+        raise ValueError("automatic-styles element not found in content.xml")
+    styles = styles_elements[0]
     for ch in styles.getchildren():
         styles.remove(ch)
     for ch in elements["auto"]:
@@ -676,7 +684,10 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
     content = os.path.join(zip_dir, "styles.xml")
     replace_data(content, char)
     doc = lxml.etree.parse(content)
-    styles = doc.xpath('//*[local-name()="styles"]')[0]
+    styles_elements = doc.xpath('//*[local-name()="styles"]')
+    if not styles_elements:
+        raise ValueError("styles element not found in styles.xml")
+    styles = styles_elements[0]
     # pprint(styles)
     for ch in elements["styles"]:
         # ~ Skip = false

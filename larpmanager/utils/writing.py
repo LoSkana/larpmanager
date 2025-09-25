@@ -139,7 +139,10 @@ def writing_popup(request, ctx, typ):
     """
     get_event_cache_all(ctx)
 
-    idx = int(request.POST.get("idx", ""))
+    try:
+        idx = int(request.POST.get("idx", ""))
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid idx parameter"}, status=400)
     tp = request.POST.get("tp", "")
 
     # check if it is a character question

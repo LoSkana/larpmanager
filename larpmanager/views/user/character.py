@@ -40,30 +40,18 @@ from PIL import Image
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.cache.config import save_single_config
-from larpmanager.forms.character import (
-    CharacterForm,
-)
-from larpmanager.forms.member import (
-    AvatarForm,
-)
-from larpmanager.forms.registration import (
-    RegistrationCharacterRelForm,
-)
-from larpmanager.forms.writing import (
-    PlayerRelationshipForm,
-)
+from larpmanager.forms.character import CharacterForm
+from larpmanager.forms.member import AvatarForm
+from larpmanager.forms.registration import RegistrationCharacterRelForm
+from larpmanager.forms.writing import PlayerRelationshipForm
 from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.miscellanea import (
-    PlayerRelationship,
-)
-from larpmanager.models.registration import (
-    RegistrationCharacterRel,
-)
+from larpmanager.models.miscellanea import PlayerRelationship
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -75,9 +63,7 @@ from larpmanager.utils.character import (
     get_character_relationships,
     get_character_sheet,
 )
-from larpmanager.utils.common import (
-    get_player_relationship,
-)
+from larpmanager.utils.common import get_player_relationship
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px, remove_char_ability

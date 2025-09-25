@@ -52,7 +52,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
 from larpmanager.models.utils import get_payment_details, save_payment_details
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class OrgaPersonalExpenseForm(MyFormRun):

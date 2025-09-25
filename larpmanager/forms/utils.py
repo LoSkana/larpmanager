@@ -37,9 +37,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import (
-    WritingOption,
-)
+from larpmanager.models.form import WritingOption
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (

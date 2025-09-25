@@ -41,9 +41,7 @@ from larpmanager.forms.accounting import (
     ExeRefundRequestForm,
     ExeTokenForm,
 )
-from larpmanager.forms.writing import (
-    UploadElementsForm,
-)
+from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.accounting import (
     AccountingItemDonation,
     AccountingItemExpense,
@@ -65,12 +63,8 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import (
-    Run,
-)
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.event import Run
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
@@ -298,7 +292,10 @@ def exe_accounting(request):
 @login_required
 def exe_year_accounting(request):
     ctx = check_assoc_permission(request, "exe_accounting")
-    year = int(request.POST.get("year"))
+    try:
+        year = int(request.POST.get("year"))
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid year parameter"}, status=400)
     res = {"a_id": ctx["a_id"]}
     assoc_accounting_data(res, year)
     return JsonResponse({"res": res})
@@ -331,7 +328,10 @@ def check_year(request, ctx):
     ctx["years"] = list(range(datetime.today().year, assoc.created.year - 1, -1))
 
     if request.POST:
-        ctx["year"] = int(request.POST.get("year"))
+        try:
+            ctx["year"] = int(request.POST.get("year"))
+        except (ValueError, TypeError):
+            ctx["year"] = ctx["years"][0]
     else:
         ctx["year"] = ctx["years"][0]
 

@@ -27,9 +27,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
-from larpmanager.models.writing import (
-    Character,
-)
+from larpmanager.models.writing import Character
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.pdf import (

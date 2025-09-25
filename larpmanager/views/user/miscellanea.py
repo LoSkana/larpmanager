@@ -33,9 +33,7 @@ from larpmanager.forms.miscellanea import (
     ShuttleServiceEditForm,
     ShuttleServiceForm,
 )
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.miscellanea import (
     Album,
     AlbumUpload,
@@ -47,14 +45,9 @@ from larpmanager.models.miscellanea import (
     WorkshopMemberRel,
     WorkshopModule,
 )
-from larpmanager.models.writing import (
-    Handout,
-)
+from larpmanager.models.writing import Handout
 from larpmanager.utils.base import def_user_ctx, is_shuttle
-from larpmanager.utils.common import (
-    get_album,
-    get_workshop,
-)
+from larpmanager.utils.common import get_album, get_workshop
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.pdf import (
