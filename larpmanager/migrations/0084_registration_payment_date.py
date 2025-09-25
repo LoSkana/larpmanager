@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0083_plot_order_plotcharacterrel_order"),
+        ("larpmanager", "0084_alter_association_font_and_more"),
     ]
 
     operations = [
