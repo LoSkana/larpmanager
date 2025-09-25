@@ -1806,6 +1806,9 @@ msgstr "Vorm element"
 msgid "Form section"
 msgstr "Formulier sectie"
 
+msgid "Full payment"
+msgstr "Volledige betaling"
+
 msgid "Host Address"
 msgstr "Adres"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Gereduceerd"
 msgid "Payment currency"
 msgstr "Betaling Valuta"
 
+msgid "Payment priority"
+msgstr "Prioriteit betaling"
+
 msgid "Payment to check"
 msgstr "Te controleren betaling"
 
@@ -3310,6 +3316,9 @@ msgstr "Inschrijvingen zijn geopend!"
 
 msgid "Registration not open"
 msgstr "Registratie niet geopend"
+
+msgid "Registration priority"
+msgstr "Voorrang bij registratie"
 
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
@@ -8418,6 +8427,13 @@ msgstr ""
 "goedgekeurd"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Een maatstaf voor de mate waarin eerdere inschrijvers worden bevoordeeld "
+"(0=standaard uitgeschakeld, 1=normaal, 10=sterk)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -9603,6 +9619,14 @@ msgid ""
 msgstr ""
 "Je hebt een aantal vaste termijnen met zowel datum als dagen ingesteld, maar"
 " die waarden kunnen niet tegelijkertijd worden ingesteld: %(list)s"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Een maatstaf voor de mate waarin deelnemers worden bevoordeeld die de "
+"volledige betaling eerder hebben voltooid (0=standaard uitgeschakeld, "
+"1=normaal, 10=sterk)"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

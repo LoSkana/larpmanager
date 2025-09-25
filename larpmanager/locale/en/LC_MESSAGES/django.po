@@ -1216,6 +1216,22 @@ msgstr ""
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 
+msgid "Registration priority"
+msgstr ""
+
+msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+
+msgid "Payment priority"
+msgstr ""
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+
 msgid "Alert"
 msgstr ""
 
@@ -6682,6 +6698,9 @@ msgid "Additions"
 msgstr ""
 
 msgid "Last change"
+msgstr ""
+
+msgid "Full payment"
 msgstr ""
 
 msgid "PWYW"

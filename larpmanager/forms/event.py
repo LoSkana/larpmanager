@@ -575,6 +575,18 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, shows participants the histories of preferences entered")
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
+            label = _("Registration priority")
+            help_text = _(
+                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong)"
+            )
+            self.add_configs("casting_reg_priority", ConfigType.INT, label, help_text)
+
+            label = _("Payment priority")
+            help_text = _(
+                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong)"
+            )
+            self.add_configs("casting_pay_priority", ConfigType.INT, label, help_text)
+
     def set_config_accounting(self):
         """Configure event-specific accounting settings.
 

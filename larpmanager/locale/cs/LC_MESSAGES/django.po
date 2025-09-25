@@ -1806,6 +1806,9 @@ msgstr "Prvek formuláře"
 msgid "Form section"
 msgstr "Sekce formuláře"
 
+msgid "Full payment"
+msgstr "Úplná platba"
+
 msgid "Host Address"
 msgstr "Adresa hostitele"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Snížené"
 msgid "Payment currency"
 msgstr "Platební měna"
 
+msgid "Payment priority"
+msgstr "Priorita platby"
+
 msgid "Payment to check"
 msgstr "Platba, která má být zkontrolována"
 
@@ -3310,6 +3316,9 @@ msgstr "Registrace jsou otevřeny!"
 
 msgid "Registration not open"
 msgstr "Registrace není otevřena"
+
+msgid "Registration priority"
+msgstr "Přednostní registrace"
 
 msgid "Registration sections"
 msgstr "Sekce členství"
@@ -8140,6 +8149,13 @@ msgstr ""
 "schválena"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Měřítko, jak moc zvýhodnit dříve registrované (0=přednastaveno zakázáno, "
+"1=normální, 10=silné)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -9313,6 +9329,13 @@ msgid ""
 msgstr ""
 "Máte některé pevné splátky s nastaveným datem i dny, ale tyto hodnoty nelze "
 "nastavit současně: %(list)s"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Měřítko, jak moc zvýhodnit účastníky, kteří dokončili plnou platbu dříve (0 "
+"= výchozí zakázáno, 1 = normální, 10 = silné)"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

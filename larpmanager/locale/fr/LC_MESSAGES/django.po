@@ -1806,6 +1806,9 @@ msgstr "Élément de formulaire"
 msgid "Form section"
 msgstr "Section du formulaire"
 
+msgid "Full payment"
+msgstr "Paiement intégral"
+
 msgid "Host Address"
 msgstr "Adresse de l'hôte"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Réduit"
 msgid "Payment currency"
 msgstr "Devise de paiement"
 
+msgid "Payment priority"
+msgstr "Priorité de paiement"
+
 msgid "Payment to check"
 msgstr "Paiement à vérifier"
 
@@ -3310,6 +3316,9 @@ msgstr "Les inscriptions sont ouvertes !"
 
 msgid "Registration not open"
 msgstr "L'inscription n'est pas ouverte"
+
+msgid "Registration priority"
+msgstr "Priorité d'inscription"
 
 msgid "Registration sections"
 msgstr "Sections des membres"
@@ -8534,6 +8543,13 @@ msgstr ""
 "a été approuvée"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Mesure de la préférence à accorder aux personnes qui se sont inscrites plus "
+"tôt (0=désactivé par défaut, 1=normal, 10=fort)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -9727,6 +9743,13 @@ msgid ""
 msgstr ""
 "Vous avez des versements fixes dont la date et les jours sont définis, mais "
 "ces valeurs ne peuvent pas être définies en même temps : %(list)s"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Mesure de l'importance de favoriser les participants qui ont effectué le "
+"paiement intégral plus tôt (0 = désactivé par défaut, 1 = normal, 10 = fort)"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

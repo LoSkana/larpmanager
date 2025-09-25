@@ -1806,6 +1806,9 @@ msgstr "Skjemaelement"
 msgid "Form section"
 msgstr "Skjemadelen"
 
+msgid "Full payment"
+msgstr "Full betaling"
+
 msgid "Host Address"
 msgstr "Vertsadresse"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Redusert"
 msgid "Payment currency"
 msgstr "Betalingsvaluta"
 
+msgid "Payment priority"
+msgstr "Betalingsprioritet"
+
 msgid "Payment to check"
 msgstr "Betaling som skal kontrolleres"
 
@@ -3310,6 +3316,9 @@ msgstr "Registreringen er åpen!"
 
 msgid "Registration not open"
 msgstr "Registreringen er ikke åpen"
+
+msgid "Registration priority"
+msgstr "Prioritet ved registrering"
 
 msgid "Registration sections"
 msgstr "Seksjonene for medlemskap"
@@ -8249,6 +8258,13 @@ msgstr ""
 " godkjent"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Et mål på hvor mye man skal favorisere tidligere registranter (0=standard "
+"deaktivert, 1=normal, 10=sterk)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -9430,6 +9446,13 @@ msgid ""
 msgstr ""
 "Du har noen faste avdrag med både dato og dager angitt, men disse verdiene "
 "kan ikke angis samtidig: %(list)s"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Et mål på hvor mye man skal favorisere deltakere som fullførte full betaling"
+" tidligere (0=standard deaktivert, 1=normal, 10=sterk)"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

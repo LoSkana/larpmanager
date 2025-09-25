@@ -1806,6 +1806,9 @@ msgstr "Formulärelement"
 msgid "Form section"
 msgstr "Formulär sektion"
 
+msgid "Full payment"
+msgstr "Full betalning"
+
 msgid "Host Address"
 msgstr "Värdadress"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Reducerad"
 msgid "Payment currency"
 msgstr "Valuta för betalning"
 
+msgid "Payment priority"
+msgstr "Betalningsprioritet"
+
 msgid "Payment to check"
 msgstr "Betalning ska kontrolleras"
 
@@ -3310,6 +3316,9 @@ msgstr "Registreringarna är öppna!"
 
 msgid "Registration not open"
 msgstr "Registreringen är inte öppen"
+
+msgid "Registration priority"
+msgstr "Prioritet vid registrering"
 
 msgid "Registration sections"
 msgstr "Medlemskapets sektioner"
@@ -8283,6 +8292,13 @@ msgstr ""
 "har godkänts"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Ett mått på hur mycket tidigare registrerade ska gynnas "
+"(0=standardinaktiverad, 1=normal, 10=stark)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -9464,6 +9480,13 @@ msgid ""
 msgstr ""
 "Du har några fasta delbetalningar med både datum och dagar inställda, men "
 "dessa värden kan inte ställas in samtidigt: %(list)s"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Ett mått på hur mycket man ska gynna deltagare som slutförde full betalning "
+"tidigare (0=standardinaktiverad, 1=normal, 10=stark)"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
