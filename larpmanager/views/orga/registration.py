@@ -87,6 +87,16 @@ from larpmanager.views.orga.member import member_field_correct
 
 
 def check_time(times, step, start=None):
+    """Record timing information for performance monitoring.
+
+    Args:
+        times: Dictionary to store timing data
+        step: Current step name
+        start: Start time reference
+
+    Returns:
+        float: Current time
+    """
     if step not in times:
         times[step] = []
     now = time.time()
@@ -95,6 +105,12 @@ def check_time(times, step, start=None):
 
 
 def _orga_registrations_traits(r, ctx):
+    """Process and organize character traits for registration display.
+
+    Args:
+        r: Registration instance to process
+        ctx: Context dictionary with traits and quest data
+    """
     if "questbuilder" not in ctx["features"]:
         return
 
@@ -165,6 +181,12 @@ def _orga_registrations_tickets(reg, ctx):
 
 
 def orga_registrations_membership(r, ctx):
+    """Process membership status for registration display.
+
+    Args:
+        r: Registration instance
+        ctx: Context dictionary with membership data
+    """
     member = r.member
     if member.id in ctx["memberships"]:
         member.membership = ctx["memberships"][member.id]
@@ -176,6 +198,14 @@ def orga_registrations_membership(r, ctx):
 
 
 def regs_list_add(ctx, list, name, member):
+    """Add member to categorized registration lists.
+
+    Args:
+        ctx: Context dictionary containing lists
+        list: List key to add to
+        name: Category name
+        member: Member instance to add
+    """
     key = slugify(name)
     if list not in ctx:
         ctx[list] = {}
@@ -187,6 +217,12 @@ def regs_list_add(ctx, list, name, member):
 
 
 def _orga_registrations_standard(reg, ctx):
+    """Process standard registration data including characters and membership.
+
+    Args:
+        reg: Registration instance to process
+        ctx: Context dictionary with event data
+    """
     # skip if it is gift
     if reg.redeem_code:
         return
@@ -206,6 +242,12 @@ def _orga_registrations_standard(reg, ctx):
 
 
 def _orga_registration_character(ctx, reg):
+    """Process character data for registration including factions and customizations.
+
+    Args:
+        ctx: Context dictionary with character data
+        reg: Registration instance to update
+    """
     if reg.member_id not in ctx["reg_chars"]:
         return
 
@@ -229,6 +271,13 @@ def _orga_registration_character(ctx, reg):
 
 
 def orga_registrations_custom(r, ctx, char):
+    """Process custom character information for registration.
+
+    Args:
+        r: Registration instance
+        ctx: Context dictionary with custom field info
+        char: Character data dictionary
+    """
     if not hasattr(r, "custom"):
         r.custom = {}
 
@@ -245,6 +294,15 @@ def orga_registrations_custom(r, ctx, char):
 
 
 def registrations_popup(request, ctx):
+    """Handle AJAX popup requests for registration details.
+
+    Args:
+        request: HTTP request with popup parameters
+        ctx: Context dictionary with registration data
+
+    Returns:
+        dict: Response data for popup
+    """
     idx = int(request.POST.get("idx", ""))
     tp = request.POST.get("tp", "")
 

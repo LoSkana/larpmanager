@@ -144,6 +144,15 @@ def pre_register(request, s=""):
 
 @login_required
 def pre_register_remove(request, s):
+    """Remove user's pre-registration for an event.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Event slug to remove pre-registration from
+
+    Returns:
+        HttpResponse: Redirect to pre-registration list
+    """
     ctx = get_event(request, s)
     element = PreRegistration.objects.get(member=request.user.member, event=ctx["event"])
     element.delete()
@@ -153,6 +162,17 @@ def pre_register_remove(request, s):
 
 @login_required
 def register_exclusive(request, s, sc="", dis=""):
+    """Handle exclusive event registration (delegates to main register function).
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug
+        sc: Secret code (optional)
+        dis: Discount code (optional)
+
+    Returns:
+        HttpResponse: Result from register function
+    """
     return register(request, s, sc, dis)
 
 
@@ -289,6 +309,14 @@ def registration_redirect(request, reg, new_reg, run):
 
 
 def save_registration_bring_friend(ctx, form, reg, request):
+    """Process bring-a-friend discount codes for registration.
+
+    Args:
+        ctx: Context dictionary with bring friend configuration
+        form: Registration form with bring_friend field
+        reg: Registration instance
+        request: Django HTTP request object
+    """
     """Process bring-a-friend registration functionality.
 
     Args:
@@ -571,6 +599,7 @@ def discount(request, s):
     Returns:
         JsonResponse: Success or error response for discount application
     """
+
     def error(msg):
         return JsonResponse({"res": "ko", "msg": msg})
 

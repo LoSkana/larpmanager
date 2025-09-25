@@ -74,7 +74,7 @@ def go_upload(request, ctx, form):
         form: Uploaded file form data
 
     Returns:
-        str: Result message from processing function
+        list: Result messages from processing function
     """
     # FIX
     # if request.POST.get("upload") == "cover":
@@ -138,6 +138,16 @@ def _read_uploaded_csv(uploaded_file):
 
 
 def _get_file(ctx, file, column_id=None):
+    """Get file path and save uploaded file to media directory.
+
+    Args:
+        ctx: Context dictionary with event information
+        file: Uploaded file object
+        column_id: Optional column identifier for file naming
+
+    Returns:
+        tuple: (DataFrame, error_list) or (None, error_list) if failed
+    """
     """Get file path and save uploaded file to media directory.
 
     Args:
@@ -236,6 +246,16 @@ def _reg_load(request, ctx, row, questions):
 
 
 def _reg_field_load(ctx, reg, field, value, questions, logs):
+    """Load individual registration field from CSV data.
+
+    Args:
+        ctx: Context dictionary with event data
+        reg: Registration instance to update
+        field: Field name from CSV
+        value: Field value from CSV
+        questions: Dictionary of registration questions
+        logs: List to append error messages to
+    """
     if field == "player":
         return
 

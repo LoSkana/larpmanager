@@ -56,6 +56,15 @@ from larpmanager.utils.edit import _get_values_mapping
 
 
 def _temp_csv_file(keys, vals):
+    """Create CSV content from keys and values.
+
+    Args:
+        keys: Column headers
+        vals: Data rows
+
+    Returns:
+        str: CSV formatted string
+    """
     df = pd.DataFrame(vals, columns=keys)
     buffer = io.StringIO()
     df.to_csv(buffer, index=False)
@@ -64,6 +73,16 @@ def _temp_csv_file(keys, vals):
 
 
 def zip_exports(ctx, exports, filename):
+    """Create ZIP file containing multiple CSV exports.
+
+    Args:
+        ctx: Context dictionary with run information
+        exports: List of (name, keys, values) tuples
+        filename: Base filename for ZIP
+
+    Returns:
+        HttpResponse: ZIP file download response
+    """
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
         for name, key, vals in exports:
@@ -77,6 +96,16 @@ def zip_exports(ctx, exports, filename):
 
 
 def download(ctx, typ, nm):
+    """Generate downloadable ZIP export for model type.
+
+    Args:
+        ctx: Context dictionary with event data
+        typ: Model class to export
+        nm: Name prefix for file
+
+    Returns:
+        HttpResponse: ZIP download response
+    """
     exports = export_data(ctx, typ)
     return zip_exports(ctx, exports, nm.capitalize())
 
@@ -123,6 +152,14 @@ def export_data(ctx, typ, member_cover=False):
 
 
 def export_plot_rels(ctx):
+    """Export plot-character relationships.
+
+    Args:
+        ctx: Context dictionary with event data
+
+    Returns:
+        list: Export tuple with plot relationship data
+    """
     keys = ["plot", "character", "text"]
     vals = []
 
@@ -137,6 +174,14 @@ def export_plot_rels(ctx):
 
 
 def export_relationships(ctx):
+    """Export character relationships.
+
+    Args:
+        ctx: Context dictionary with event data
+
+    Returns:
+        list: Export tuple with relationship data
+    """
     keys = ["source", "target", "text"]
     vals = []
 

@@ -226,6 +226,15 @@ def get_char(ctx, n, by_number=False):
 
 
 def get_registration(ctx, n):
+    """Get registration by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Registration ID
+
+    Raises:
+        Http404: If registration does not exist
+    """
     try:
         ctx["registration"] = Registration.objects.get(run=ctx["run"], pk=n)
         ctx["name"] = str(ctx["registration"])
@@ -234,6 +243,15 @@ def get_registration(ctx, n):
 
 
 def get_discount(ctx, n):
+    """Get discount by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Discount ID
+
+    Raises:
+        Http404: If discount does not exist
+    """
     try:
         ctx["discount"] = Discount.objects.get(pk=n)
         ctx["name"] = str(ctx["discount"])
@@ -242,6 +260,15 @@ def get_discount(ctx, n):
 
 
 def get_album(ctx, n):
+    """Get album by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Album ID
+
+    Raises:
+        Http404: If album does not exist
+    """
     try:
         ctx["album"] = Album.objects.get(pk=n)
     except ObjectDoesNotExist as err:

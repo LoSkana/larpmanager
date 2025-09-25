@@ -99,6 +99,12 @@ def get_satispay_form(request, ctx, invoice, amount):
 
 
 def satispay_check(request, ctx):
+    """Check status of pending Satispay payments.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with payment configuration
+    """
     update_payment_details(request, ctx)
 
     if "satispay_key_id" not in ctx:
@@ -116,6 +122,12 @@ def satispay_check(request, ctx):
 
 
 def satispay_verify(request, cod):
+    """Verify Satispay payment status and process if accepted.
+
+    Args:
+        request: Django HTTP request object
+        cod: Payment code to verify
+    """
     ctx = {}
     update_payment_details(request, ctx)
 
@@ -148,6 +160,11 @@ def satispay_verify(request, cod):
 
 
 def satispay_webhook(request):
+    """Handle Satispay webhook notifications.
+
+    Args:
+        request: Django HTTP request with payment_id parameter
+    """
     cod = request.GET.get("payment_id", "")
     satispay_verify(request, cod)
 
@@ -180,6 +197,15 @@ def get_paypal_form(request, ctx, invoice, amount):
 
 @receiver(valid_ipn_received)
 def paypal_webhook(sender, **kwargs):
+    """Handle valid PayPal IPN notifications.
+
+    Args:
+        sender: IPN object from PayPal
+        **kwargs: Additional keyword arguments
+
+    Returns:
+        Result from invoice_received_money or None
+    """
     ipn_obj = sender
     if ipn_obj.payment_status == ST_PP_COMPLETED:
         # WARNING !
@@ -201,6 +227,12 @@ def paypal_webhook(sender, **kwargs):
 
 @receiver(invalid_ipn_received)
 def paypal_ko_webhook(sender, **kwargs):
+    """Handle invalid PayPal IPN notifications.
+
+    Args:
+        sender: Invalid IPN object from PayPal
+        **kwargs: Additional keyword arguments
+    """
     ipn_obj = sender
     if ipn_obj:
         print(ipn_obj)
