@@ -77,34 +77,63 @@ forms.widgets.Media.render_js = render_js
 
 
 class ReadOnlyWidget(Widget):
+    """Widget for displaying read-only form fields."""
+
     input_type = None
     template_name = "forms/widgets/read_only.html"
 
 
 class DatePickerInput(forms.TextInput):
+    """Date picker input widget for forms."""
+
     input_type = "date_p"
 
 
 class DateTimePickerInput(forms.TextInput):
+    """Date and time picker input widget for forms."""
+
     input_type = "datetime_p"
 
 
 class TimePickerInput(forms.TextInput):
+    """Time picker input widget for forms."""
+
     input_type = "time_p"
 
 
 class SlugInput(forms.TextInput):
+    """Slug input widget with special formatting."""
+
     input_type = "slug"
     template_name = "forms/widgets/slug.html"
 
 
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
+    """Custom checkbox widget for role permission selection with help text."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize widget with feature help text and mapping.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Arbitrary keyword arguments including help_text and feature_map
+        """
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
+        """Render checkbox widget with tooltips and help links.
+
+        Args:
+            name: Field name
+            value: Selected values
+            attrs: HTML attributes
+            renderer: Form renderer
+
+        Returns:
+            str: Rendered HTML for checkbox widget
+        """
         output = []
         value = value or []
 
@@ -128,7 +157,17 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    """Model multiple choice field with translated labels."""
+
     def label_from_instance(self, obj):
+        """Get translated label for model instance.
+
+        Args:
+            obj: Model instance
+
+        Returns:
+            str: Translated name of the instance
+        """
         return _(obj.name)
 
 

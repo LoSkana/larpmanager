@@ -2247,3 +2247,8 @@ input[type="number"] {
     height: 100%;
   }
 }
+
+.article-content h4 {
+  color: black;
+  font-weight: 600;
+}

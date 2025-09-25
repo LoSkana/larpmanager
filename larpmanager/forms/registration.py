@@ -59,6 +59,8 @@ from larpmanager.utils.registration import get_reduced_available_count
 
 
 class RegistrationForm(BaseRegistrationForm):
+    """Form for handling event registration with tickets, quotas, and questions."""
+
     class Meta:
         model = Registration
         fields = ("modified",)
@@ -109,6 +111,11 @@ class RegistrationForm(BaseRegistrationForm):
         self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket):
+        """Update question requirements based on selected ticket type.
+
+        Args:
+            ticket: Selected ticket instance
+        """
         """
         Check if given the selected ticket, we need to not require questions reserved
         to other tickets.
@@ -126,6 +133,7 @@ class RegistrationForm(BaseRegistrationForm):
                 self.fields[k].required = False
 
     def init_additionals(self):
+        """Initialize additional tickets field if feature is enabled."""
         if "additional_tickets" not in self.params["features"]:
             return
 
@@ -136,6 +144,7 @@ class RegistrationForm(BaseRegistrationForm):
             self.initial["additionals"] = self.instance.additionals
 
     def init_bring_friend(self):
+        """Initialize bring-a-friend code field for discounts."""
         if "bring_friend" not in self.params["features"]:
             return
 
@@ -154,6 +163,12 @@ class RegistrationForm(BaseRegistrationForm):
         )
 
     def init_questions(self, event, reg_counts):
+        """Initialize registration questions and ticket mapping.
+
+        Args:
+            event: Event instance
+            reg_counts: Registration count data
+        """
         self.tickets_map = {}
         if self.waiting_check:
             return
@@ -163,6 +178,12 @@ class RegistrationForm(BaseRegistrationForm):
         self.tickets_map = json.dumps(self.tickets_map)
 
     def init_question(self, q, reg_counts):
+        """Initialize a single registration question field.
+
+        Args:
+            q: Registration question instance
+            reg_counts: Registration count data
+        """
         if q.skip(self.instance, self.params["features"]):
             return
 
@@ -184,6 +205,11 @@ class RegistrationForm(BaseRegistrationForm):
                 self.tickets_map[k] = tm
 
     def init_surcharge(self, event):
+        """Initialize date-based surcharge field if applicable.
+
+        Args:
+            event: Event instance
+        """
         # date surcharge
         surcharge = get_date_surcharge(self.instance, event)
         if surcharge == 0:
@@ -192,6 +218,11 @@ class RegistrationForm(BaseRegistrationForm):
         self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
     def init_pay_what(self, run):
+        """Initialize pay-what-you-want donation field.
+
+        Args:
+            run: Run instance
+        """
         if "pay_what_you_want" not in self.params["features"]:
             return
 
@@ -205,6 +236,12 @@ class RegistrationForm(BaseRegistrationForm):
             self.initial["pay_what"] = 0
 
     def init_quotas(self, event, run):
+        """Initialize payment quotas field based on event configuration.
+
+        Args:
+            event: Event instance
+            run: Run instance
+        """
         quota_chs = []
 
         if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
@@ -234,6 +271,16 @@ class RegistrationForm(BaseRegistrationForm):
             self.initial["quotas"] = self.instance.quotas
 
     def init_ticket(self, event, reg_counts, run):
+        """Initialize ticket selection field with available options.
+
+        Args:
+            event: Event instance
+            reg_counts: Registration count data
+            run: Run instance
+
+        Returns:
+            str: Help text for ticket descriptions
+        """
         # check registration tickets options
         tickets = self.get_available_tickets(event, reg_counts, run)
 
@@ -256,13 +303,34 @@ class RegistrationForm(BaseRegistrationForm):
         return ticket_help
 
     def has_ticket(self, tier):
+        """Check if registration has ticket of specified tier.
+
+        Args:
+            tier: TicketTier to check
+
+        Returns:
+            bool: True if registration has ticket of given tier
+        """
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == tier
 
     def has_ticket_primary(self):
+        """Check if registration has a primary (non-waiting/filler) ticket.
+
+        Returns:
+            bool: True if registration has primary ticket
+        """
         not_primary_tiers = [TicketTier.WAITING, TicketTier.FILLER]
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in not_primary_tiers
 
     def check_ticket_visibility(self, ticket):
+        """Check if ticket should be visible to current user.
+
+        Args:
+            ticket: RegistrationTicket instance
+
+        Returns:
+            bool: True if ticket should be visible
+        """
         if ticket.visible:
             return True
 
@@ -275,6 +343,16 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def get_available_tickets(self, event, reg_counts, run):
+        """Get list of available tickets for registration.
+
+        Args:
+            event: Event instance
+            reg_counts: Registration count data
+            run: Run instance
+
+        Returns:
+            QuerySet: Available registration tickets
+        """
         for tier in [TicketTier.STAFF, TicketTier.NPC]:
             # If the user is registered as a staff, show those options
             if self.has_ticket(tier):
@@ -308,6 +386,15 @@ class RegistrationForm(BaseRegistrationForm):
         return tickets
 
     def skip_ticket_reduced(self, run, ticket):
+        """Check if reduced ticket should be skipped due to availability.
+
+        Args:
+            run: Run instance
+            ticket: RegistrationTicket instance
+
+        Returns:
+            bool: True if ticket should be skipped
+        """
         # if this reduced, check count
         if ticket.tier == TicketTier.REDUCED:
             if not self.instance or ticket != self.instance.ticket:
@@ -317,6 +404,15 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def skip_ticket_max(self, reg_counts, ticket):
+        """Check if ticket should be skipped due to maximum limit reached.
+
+        Args:
+            reg_counts: Registration count data
+            ticket: RegistrationTicket instance
+
+        Returns:
+            bool: True if ticket should be skipped
+        """
         # If the option has a maximum roof, check has not been reached
         if ticket.max_available > 0:
             if not self.instance or ticket != self.instance.ticket:

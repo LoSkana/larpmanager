@@ -67,6 +67,8 @@ from larpmanager.views.orga.registration import _get_registration_fields
 
 
 class EventCharactersPdfForm(ConfigForm):
+    """Form for configuring PDF export settings for event characters."""
+
     class Meta:
         model = Event
         fields = ()
@@ -84,6 +86,8 @@ class EventCharactersPdfForm(ConfigForm):
 
 
 class OrgaEventForm(MyForm):
+    """Form for managing general event settings and basic configuration."""
+
     page_title = _("Event")
 
     page_info = _("This page allows you to change general event settings")
@@ -167,6 +171,8 @@ class OrgaEventForm(MyForm):
 
 
 class OrgaFeatureForm(FeatureForm):
+    """Form for selecting and managing event features."""
+
     page_title = _("Event features")
 
     page_info = _(
@@ -191,6 +197,8 @@ class OrgaFeatureForm(FeatureForm):
 
 
 class OrgaConfigForm(ConfigForm):
+    """Form for configuring event-specific settings and feature options."""
+
     page_title = _("Event Configuration")
 
     page_info = _("This page allows you to edit the configuration of the activated features")
@@ -679,6 +687,8 @@ class OrgaConfigForm(ConfigForm):
 
 
 class OrgaAppearanceForm(MyCssForm):
+    """Form for customizing event appearance and styling."""
+
     page_title = _("Event Appearance")
 
     page_info = _("This page allows you to change the appearance and presentation of the event")
@@ -727,14 +737,29 @@ class OrgaAppearanceForm(MyCssForm):
 
     @staticmethod
     def get_input_css():
+        """Get the CSS input field name.
+
+        Returns:
+            str: CSS input field identifier
+        """
         return "event_css"
 
     @staticmethod
     def get_css_path(instance):
+        """Generate CSS file path for event styling.
+
+        Args:
+            instance: Event instance
+
+        Returns:
+            str: Path to CSS file
+        """
         return f"css/{instance.assoc.slug}_{instance.slug}_{instance.css_code}.css"
 
 
 class OrgaEventTextForm(MyForm):
+    """Form for managing event-specific text content and messages."""
+
     page_title = _("Texts")
 
     page_info = _("This page allows you to edit event-specific texts")
@@ -795,6 +820,14 @@ class OrgaEventTextForm(MyForm):
         self.fields["typ"].help_text = " - ".join(help_text)
 
     def clean(self):
+        """Validate event text uniqueness by type and language.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If default or language conflicts exist
+        """
         cleaned_data = super().clean()
 
         default = cleaned_data.get("default")
@@ -816,6 +849,8 @@ class OrgaEventTextForm(MyForm):
 
 
 class OrgaEventRoleForm(MyForm):
+    """Form for managing event access roles and permissions."""
+
     page_title = _("Roles")
 
     page_info = _("This page allows you to change the access roles for the event")
@@ -839,6 +874,8 @@ class OrgaEventRoleForm(MyForm):
 
 
 class OrgaEventButtonForm(MyForm):
+    """Form for editing event navigation buttons."""
+
     page_title = _("Navigation")
 
     page_info = _("This page allows you to edit the event navigation buttons")
@@ -849,6 +886,8 @@ class OrgaEventButtonForm(MyForm):
 
 
 class OrgaRunForm(ConfigForm):
+    """Form for managing event sessions/runs with dates and configuration."""
+
     page_title = _("Session")
 
     class Meta:
@@ -998,6 +1037,8 @@ class OrgaRunForm(ConfigForm):
 
 
 class OrgaProgressStepForm(MyForm):
+    """Form for managing event progression steps."""
+
     page_title = _("Progression")
 
     class Meta:
@@ -1006,7 +1047,15 @@ class OrgaProgressStepForm(MyForm):
 
 
 class ExeEventForm(OrgaEventForm):
+    """Extended event form for executors with template support."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize ExeEventForm with template event selection.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:
@@ -1027,6 +1076,14 @@ class ExeEventForm(OrgaEventForm):
                 self.initial["template_event"] = qs.first()
 
     def save(self, commit=True):
+        """Save event with optional template copying.
+
+        Args:
+            commit: Whether to commit changes to database
+
+        Returns:
+            Event: Saved event instance
+        """
         instance = super().save(commit=False)
 
         if "template" in self.params["features"] and not self.instance.pk:
@@ -1044,6 +1101,8 @@ class ExeEventForm(OrgaEventForm):
 
 
 class ExeTemplateForm(FeatureForm):
+    """Form for creating and managing event templates."""
+
     page_title = _("Event Template")
 
     page_info = _(
@@ -1076,12 +1135,22 @@ class ExeTemplateForm(FeatureForm):
 
 
 class ExeTemplateRolesForm(OrgaEventRoleForm):
+    """Form for managing template event roles with optional members."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize template roles form with optional member requirement.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
 
 
 class OrgaQuickSetupForm(QuickSetupForm):
+    """Form for quick setup of essential event settings."""
+
     page_title = _("Quick Setup")
 
     page_info = _("This page allows you to perform a quick setup of the most important settings for your new event")
@@ -1161,7 +1230,13 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
 
 class OrgaPreferencesForm(ExePreferencesForm):
+    """Form for setting event organizer preferences and field visibility."""
+
     def set_configs(self):
+        """Configure organizer preference settings and field display options.
+
+        Sets up default field visibility options for registration and character forms.
+        """
         super().set_configs()
 
         basics = BaseQuestionType.get_basic_types()
@@ -1273,6 +1348,13 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
     def _compile_configs(self, basics, extra, fields):
+        """Compile configuration options from field definitions.
+
+        Args:
+            basics: Set of basic question types
+            extra: List to append compiled configurations
+            fields: Dictionary of field definitions
+        """
         for _id, field in fields.items():
             if field["typ"] == "name":
                 continue
@@ -1285,6 +1367,12 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra.append((tog, field["name"]))
 
     def add_feature_extra(self, extra, feature_fields):
+        """Add feature-specific extra fields to configuration.
+
+        Args:
+            extra: List to append extra field configurations
+            feature_fields: List of feature field tuples (feature, field_id, label)
+        """
         for field in feature_fields:
             if field[0] and field[0] not in self.params["features"]:
                 continue
