@@ -47,9 +47,7 @@ from larpmanager.forms.member import (
     ProfileForm,
 )
 from larpmanager.mail.member import send_membership_confirm
-from larpmanager.models.accounting import (
-    AccountingItemMembership,
-)
+from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import (
     Badge,
@@ -64,20 +62,14 @@ from larpmanager.models.miscellanea import (
     ChatMessage,
     Contact,
 )
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import def_user_ctx
 from larpmanager.utils.common import get_badge, get_channel, get_contact, get_member
-from larpmanager.utils.exceptions import (
-    check_assoc_feature,
-)
+from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.member import get_leaderboard
-from larpmanager.utils.pdf import (
-    get_membership_request,
-)
+from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text
 

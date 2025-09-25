@@ -54,10 +54,7 @@ from larpmanager.models.miscellanea import (
     WorkshopQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.utils.common import (
-    get_album_cod,
-    get_element,
-)
+from larpmanager.utils.common import get_album_cod, get_element
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.miscellanea import get_warehouse_optionals, upload_albums

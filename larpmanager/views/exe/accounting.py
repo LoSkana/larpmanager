@@ -41,9 +41,7 @@ from larpmanager.forms.accounting import (
     ExeRefundRequestForm,
     ExeTokenForm,
 )
-from larpmanager.forms.writing import (
-    UploadElementsForm,
-)
+from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.accounting import (
     AccountingItemDonation,
     AccountingItemExpense,
@@ -65,12 +63,8 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import (
-    Run,
-)
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.event import Run
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
