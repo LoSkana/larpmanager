@@ -118,6 +118,12 @@ def _orga_registrations_traits(r, ctx):
 
 
 def _orga_registrations_tickets(reg, ctx):
+    """Process registration ticket information and categorize by type.
+
+    Args:
+        reg: Registration instance to process
+        ctx: Context dictionary containing ticket and feature data
+    """
     default_typ = ("1", _("Participant"))
 
     ticket_types = {
@@ -501,6 +507,16 @@ def orga_registration_form_email(request, s):
 
 @login_required
 def orga_registrations_edit(request, s, num):
+    """Edit or create a registration for an event.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        num: Registration ID (0 for new registration)
+
+    Returns:
+        Rendered registration edit form or redirect on success
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
     ctx["orga_characters"] = has_event_permission(request, ctx, ctx["event"].slug, "orga_characters")

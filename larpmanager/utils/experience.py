@@ -171,6 +171,15 @@ def check_available_ability_px(ability, current_char_abilities, current_char_cho
 
 
 def get_available_ability_px(char, px_avail=None):
+    """Get list of abilities available for purchase with character's PX.
+
+    Args:
+        char: Character instance
+        px_avail: Available PX points (calculated if None)
+
+    Returns:
+        List of AbilityPx instances that can be purchased
+    """
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
     if px_avail is None:

@@ -60,6 +60,12 @@ def casting_characters(ctx, reg):
 
 
 def casting_quest_traits(ctx, typ):
+    """Populate context with available quest traits for casting.
+
+    Args:
+        ctx: Template context dictionary to update
+        typ: Quest type identifier
+    """
     choices = {}
     factions = []
     num = 0
@@ -81,6 +87,15 @@ def casting_quest_traits(ctx, typ):
 
 
 def casting_details(ctx, typ):
+    """Prepare casting context with configuration details and labels.
+
+    Args:
+        ctx: Template context dictionary to update
+        typ: Quest type identifier (>0 for quests, 0 for characters)
+
+    Returns:
+        Updated context dictionary
+    """
     get_event_cache_all(ctx)
 
     if typ > 0:

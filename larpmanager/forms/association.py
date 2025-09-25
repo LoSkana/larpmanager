@@ -683,6 +683,15 @@ class ExeQuickSetupForm(QuickSetupForm):
         fields = []
 
     def __init__(self, *args, **kwargs):
+        """Initialize association setup form with feature configuration options.
+
+        Sets up available features and configuration options based on
+        association settings and skin preferences.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments
+        """
         super().__init__(*args, **kwargs)
 
         self.setup = {

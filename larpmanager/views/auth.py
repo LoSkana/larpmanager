@@ -33,6 +33,14 @@ from larpmanager.models.member import Membership, MembershipStatus, get_user_mem
 
 class MyRegistrationView(RegistrationView):
     def register(self, form):
+        """Register a new user and set up membership if needed.
+
+        Args:
+            form: Registration form with validated user data
+
+        Returns:
+            User: The newly created and authenticated user
+        """
         new_user = form.save()
         new_user = authenticate(
             **{
@@ -52,12 +60,25 @@ class MyRegistrationView(RegistrationView):
         return new_user
 
     def get_success_url(self, user=None):
+        """Get URL to redirect to after successful registration.
+
+        Args:
+            user: User instance (optional)
+
+        Returns:
+            str: URL to redirect to after registration
+        """
         next_url = self.request.POST.get("next") or self.request.GET.get("next")
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
             return next_url
         return self.success_url or reverse("home")
 
     def get_form_kwargs(self):
+        """Get keyword arguments for form initialization.
+
+        Returns:
+            dict: Form kwargs including request object
+        """
         kwargs = super().get_form_kwargs()
         kwargs["request"] = self.request
         return kwargs
@@ -65,6 +86,14 @@ class MyRegistrationView(RegistrationView):
 
 class MyPasswordResetConfirmView(PasswordResetConfirmView):
     def form_valid(self, form):
+        """Handle valid password reset form submission.
+
+        Args:
+            form: Valid password reset confirmation form
+
+        Returns:
+            HttpResponse: Response after processing form
+        """
         res = super().form_valid(form)
 
         for mb in (

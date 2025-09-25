@@ -304,6 +304,14 @@ def copy_registration(all, e_id, element, p_id):
 
 
 def copy_writing(all, e_id, element, p_id):
+    """Copy writing elements from parent to child event.
+
+    Args:
+        all: Boolean to copy all elements or specific type
+        e_id: Target event ID
+        element: Specific element type to copy (character, faction, etc.)
+        p_id: Parent event ID to copy from
+    """
     if all or element == "character":
         copy_class(e_id, p_id, Character)
         # correct relationship

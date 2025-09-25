@@ -213,6 +213,17 @@ def _prepare_export(ctx, model, query):
 
 
 def _get_applicable_row(ctx, el, model, member_cover=False):
+    """Build row data for export with question answers and element information.
+
+    Args:
+        ctx: Context dictionary with questions, answers, and choices data
+        el: Element instance (registration, character, etc.)
+        model: Model type string ('registration', 'character')
+        member_cover: Boolean to include member profile images
+
+    Returns:
+        Tuple of (values list, headers list) for the row
+    """
     val = []
     key = []
 
@@ -248,6 +259,16 @@ def _get_applicable_row(ctx, el, model, member_cover=False):
 
 
 def _row_header(ctx, el, key, member_cover, model, val):
+    """Build header row data with member information and basic element data.
+
+    Args:
+        ctx: Context dictionary with assignments data
+        el: Element instance to process
+        key: List to append header names to
+        member_cover: Boolean to include member profile images
+        model: Model type string ('registration', 'character')
+        val: List to append values to
+    """
     member = None
     if model == "registration":
         member = el.member

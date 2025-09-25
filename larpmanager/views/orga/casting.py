@@ -105,6 +105,15 @@ def assign_casting(request, ctx, typ):
 
 
 def get_casting_choices_characters(ctx, options):
+    """Get character choices for casting with filtering and availability status.
+
+    Args:
+        ctx: Context dictionary containing event, run, and features data
+        options: Dictionary containing faction filtering options
+
+    Returns:
+        Tuple of (choices dict, taken list, mirrors dict, allowed list)
+    """
     choices = {}
     mirrors = {}
     taken = []
@@ -159,6 +168,19 @@ def check_player_skip_quests(reg, typ):
 
 
 def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
+    """Check if player should be skipped in casting based on various criteria.
+
+    Args:
+        ctx: Context dictionary with features data
+        reg: Registration instance
+        options: Dictionary with casting filter options
+        typ: Casting type (0 for characters, other for quests)
+        cache_membs: Cached membership statuses
+        cache_aim: Cached aim membership data
+
+    Returns:
+        Boolean indicating if player should be skipped
+    """
     # check if select the player given the ticket
     if "tickets" in options and str(reg.ticket_id) not in options["tickets"]:
         return True

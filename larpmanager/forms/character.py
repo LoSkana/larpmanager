@@ -396,6 +396,11 @@ class OrgaCharacterForm(CharacterForm):
             self.initial["factions_list"].append(fc[0])
 
     def _save_relationships(self, instance):
+        """Save character relationships from form data.
+
+        Args:
+            instance: Character instance being saved
+        """
         if "relationships" not in self.params["features"]:
             return
 
