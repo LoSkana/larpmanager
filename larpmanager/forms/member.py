@@ -60,6 +60,8 @@ from larpmanager.utils.tasks import my_send_mail
 
 
 class MyAuthForm(AuthenticationForm):
+    """Custom authentication form with styled fields."""
+
     class Meta:
         model = User
         fields = ["username", "password"]
@@ -77,6 +79,8 @@ class MyAuthForm(AuthenticationForm):
 
 
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
+    """Custom registration form with unique email validation and GDPR compliance."""
+
     # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
         """Initialize RegistrationFormUniqueEmail with custom field configuration.
@@ -150,6 +154,14 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         return data
 
     def save(self, commit=True):
+        """Save user and associated member profile.
+
+        Args:
+            commit: Whether to save to database
+
+        Returns:
+            User: Created user instance
+        """
         user = super(RegistrationFormUniqueEmail, self).save()
 
         user.member.newsletter = self.cleaned_data["newsletter"]
@@ -162,13 +174,29 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
 
 class MyPasswordResetConfirmForm(SetPasswordForm):
+    """Custom password reset confirmation form with field limits."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with password field constraints.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["new_password1"].widget.attrs["maxlength"] = 70
 
 
 class MyPasswordResetForm(PasswordResetForm):
+    """Custom password reset form with association-specific handling."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with email field constraints.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
@@ -216,10 +244,14 @@ class MyPasswordResetForm(PasswordResetForm):
 
 
 class AvatarForm(forms.Form):
+    """Form for uploading user avatar images."""
+
     image = forms.ImageField(label="Select an image")
 
 
 class LanguageForm(forms.Form):
+    """Form for selecting user interface language."""
+
     language = forms.ChoiceField(
         choices=conf_settings.LANGUAGES,
         label=_("Select Language"),

@@ -709,6 +709,15 @@ def _orga_suggestions(ctx):
 
 
 def _add_item(ctx, list_name, text, perm, link):
+    """Add item to specific list in management context.
+
+    Args:
+        ctx: Context dictionary to modify
+        list_name: Name of list to add item to
+        text: Item message text
+        perm: Permission key
+        link: Optional custom link
+    """
     if list_name not in ctx:
         ctx[list_name] = []
 
@@ -716,24 +725,69 @@ def _add_item(ctx, list_name, text, perm, link):
 
 
 def _add_priority(ctx, text, perm, link=None):
+    """Add priority item to management dashboard.
+
+    Args:
+        ctx: Context dictionary to modify
+        text: Priority message text
+        perm: Permission key for the action
+        link: Optional custom link
+    """
     _add_item(ctx, "priorities_list", text, perm, link)
 
 
 def _add_action(ctx, text, perm, link=None):
+    """Add action item to management dashboard.
+
+    Args:
+        ctx: Context dictionary to modify
+        text: Action message text
+        perm: Permission key for the action
+        link: Optional custom link
+    """
     _add_item(ctx, "actions_list", text, perm, link)
 
 
 def _add_suggestion(ctx, text, perm, link=None):
+    """Add suggestion item to management dashboard.
+
+    Args:
+        ctx: Context dictionary to modify
+        text: Suggestion message text
+        perm: Permission key for the action
+        link: Optional custom link
+    """
     _add_item(ctx, "suggestions_list", text, perm, link)
 
 
 def _has_permission(request, ctx, perm):
+    """Check if user has required permission for action.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary
+        perm: Permission string to check
+
+    Returns:
+        bool: True if user has permission
+    """
     if perm.startswith("exe"):
         return has_assoc_permission(request, ctx, perm)
     return has_event_permission(request, ctx, ctx["event"].slug, perm)
 
 
 def _get_href(ctx, perm, name, custom_link):
+    """Generate href and title for management dashboard links.
+
+    Args:
+        ctx: Context dictionary
+        perm: Permission string
+        name: Display name
+        custom_link: Optional custom link suffix
+
+    Returns:
+        tuple: (title, href) for dashboard link
+    """
     if custom_link:
         return _("Configuration"), _get_perm_link(ctx, perm, "manage") + custom_link
 
