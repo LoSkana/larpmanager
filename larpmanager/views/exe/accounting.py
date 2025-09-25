@@ -298,7 +298,10 @@ def exe_accounting(request):
 @login_required
 def exe_year_accounting(request):
     ctx = check_assoc_permission(request, "exe_accounting")
-    year = int(request.POST.get("year"))
+    try:
+        year = int(request.POST.get("year"))
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid year parameter"}, status=400)
     res = {"a_id": ctx["a_id"]}
     assoc_accounting_data(res, year)
     return JsonResponse({"res": res})
@@ -331,7 +334,10 @@ def check_year(request, ctx):
     ctx["years"] = list(range(datetime.today().year, assoc.created.year - 1, -1))
 
     if request.POST:
-        ctx["year"] = int(request.POST.get("year"))
+        try:
+            ctx["year"] = int(request.POST.get("year"))
+        except (ValueError, TypeError):
+            ctx["year"] = ctx["years"][0]
     else:
         ctx["year"] = ctx["years"][0]
 

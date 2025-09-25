@@ -35,6 +35,7 @@ from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class HelpQuestion(BaseModel):
@@ -70,6 +71,19 @@ class HelpQuestion(BaseModel):
         null=True,
         verbose_name=_("Attachment"),
         help_text=_("If you need to attach a file, indicate it here, otherwise leave blank"),
+        validators=[
+            FileTypeValidator(
+                [
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "text/plain",
+                    "image/jpeg",
+                    "image/png",
+                    "image/gif",
+                ]
+            )
+        ],
     )
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)

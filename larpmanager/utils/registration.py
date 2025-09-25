@@ -359,7 +359,7 @@ def registration_status_characters(run, features):
                 run.status["details"] += " - "
             mes = _("Access character creation!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
-        elif len(aux) == 0 and max_chars:
+        elif not aux and max_chars:
             url = reverse("character_list", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "

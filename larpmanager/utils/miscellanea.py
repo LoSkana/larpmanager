@@ -101,7 +101,8 @@ def upload_albums_el(f, alb, name, main, o_path):
     img = AlbumImage()
     img.upload = upl
 
-    ext = u_name.split(".")[-1]
+    parts = u_name.split(".")
+    ext = parts[-1] if len(parts) > 1 and parts[-1] else "tmp"
     filename = f"{uuid4().hex}.{ext}"
 
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "albums")

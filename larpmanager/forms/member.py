@@ -30,7 +30,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
@@ -55,8 +55,9 @@ from larpmanager.models.member import (
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
+from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class MyAuthForm(AuthenticationForm):
@@ -225,11 +226,15 @@ class MyPasswordResetForm(PasswordResetForm):
         assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
         assoc = None
         if assoc_slug:
-            assoc = Association.objects.get(slug=assoc_slug)
-            user = context["user"]
-            mb = get_user_membership(user.member, assoc.id)
-            mb.password_reset = f"{context['uid']}#{context['token']}"
-            mb.save()
+            try:
+                assoc = Association.objects.get(slug=assoc_slug)
+                user = context["user"]
+                mb = get_user_membership(user.member, assoc.id)
+                mb.password_reset = f"{context['uid']}#{context['token']}"
+                mb.save()
+            except ObjectDoesNotExist:
+                # Invalid association slug - continue with None assoc
+                pass
 
         # print(context)
 
