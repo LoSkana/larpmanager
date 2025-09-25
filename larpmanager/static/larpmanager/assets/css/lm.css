@@ -2225,3 +2225,25 @@ input[type="number"] {
 .guide-list h3 a:hover {
   color: #a5dee5;
 }
+
+.guide-container {
+  position: relative;
+  width: 70%;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+}
+
+.guide-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 1000px) {
+  .guide-container {
+    width: 100%;
+    height: 100%;
+  }
+}
