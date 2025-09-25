@@ -193,6 +193,16 @@ def orga_questions(request, s):
 
 @login_required
 def orga_questions_answer(request, s, r):
+    """Handle organizer responses to member help questions.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        r: Member ID who submitted the question
+
+    Returns:
+        Rendered template for answering help questions
+    """
     ctx = check_event_permission(request, s, "orga_questions")
 
     member = Member.objects.get(pk=r)
@@ -282,6 +292,15 @@ def orga_read_mail(request, s, nm):
 
 @login_required
 def orga_sensitive(request, s):
+    """Display sensitive member information for event organizers.
+
+    Args:
+        request: HTTP request object with user and association data
+        s: Event/run identifier
+
+    Returns:
+        Rendered template with member sensitive data and character assignments
+    """
     ctx = check_event_permission(request, s, "orga_sensitive")
 
     get_event_cache_all(ctx)

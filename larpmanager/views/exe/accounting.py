@@ -432,6 +432,14 @@ def exe_balance(request):
 
 @login_required
 def exe_verification(request):
+    """Handle payment verification process with invoice upload and processing.
+
+    Args:
+        request: HTTP request object with file upload capability
+
+    Returns:
+        Rendered verification template with pending payments and upload form
+    """
     ctx = check_assoc_permission(request, "exe_verification")
 
     ctx["todo"] = (

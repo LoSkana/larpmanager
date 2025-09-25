@@ -223,6 +223,17 @@ def orga_features(request, s):
 
 
 def orga_features_go(request, ctx, num, on=True):
+    """Activate or deactivate a feature for an event.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing event and run data
+        num: Feature number/ID to toggle
+        on: Boolean indicating whether to activate (True) or deactivate (False) the feature
+
+    Returns:
+        The feature object that was toggled
+    """
     get_feature(ctx, num)
     if ctx["feature"].overall:
         raise Http404("overall feature!")
@@ -362,6 +373,16 @@ def orga_upload(request, s, typ):
 
 @login_required
 def orga_upload_template(request, s, typ):
+    """Generate and download template files for data upload.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        typ: Template type (writing, registration, px_abilitie, form)
+
+    Returns:
+        ZIP file response containing template files
+    """
     ctx = check_event_permission(request, s)
     ctx["typ"] = typ
     _get_column_names(ctx)
@@ -420,6 +441,14 @@ def _ability_template(ctx):
 
 
 def _form_template(ctx):
+    """Generate template files for form questions and options upload.
+
+    Args:
+        ctx: Context dictionary with column definitions
+
+    Returns:
+        List of tuples containing template data for questions and options
+    """
     exports = []
     defs = {
         "name": "Question Name",
@@ -470,6 +499,16 @@ def _reg_template(ctx, typ, value_mapping):
 
 
 def _writing_template(ctx, typ, value_mapping):
+    """Generate template data for writing export with field mappings.
+
+    Args:
+        ctx: Context dictionary containing fields, writing type, and features
+        typ: Type string for the template name
+        value_mapping: Dictionary mapping field types to example values
+
+    Returns:
+        List of tuples containing template data (name, keys, values)
+    """
     keys = [k for k, v in ctx["fields"].items() if v != "skip"]
     vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items() if field_typ != "skip"]
 

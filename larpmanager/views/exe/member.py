@@ -251,6 +251,15 @@ def exe_membership_check(request):
 
 @login_required
 def exe_member(request, num):
+    """Display and edit member profile with accounting and membership data.
+
+    Args:
+        request: HTTP request object
+        num: Member ID to edit
+
+    Returns:
+        Rendered member edit template with forms and member data
+    """
     ctx = check_assoc_permission(request, "exe_membership")
     ctx.update(get_member(num))
 
@@ -423,6 +432,14 @@ def exe_membership_document(request):
 
 @login_required
 def exe_enrolment(request):
+    """Display yearly enrollment list with membership card numbers.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered template with enrolled members list for current year
+    """
     ctx = check_assoc_permission(request, "exe_enrolment")
     split_two_names = 2
 

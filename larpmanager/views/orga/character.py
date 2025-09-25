@@ -99,6 +99,11 @@ def orga_characters_edit(request, s, num):
 
 
 def _characters_relationships(ctx):
+    """Setup character relationships data and widgets for editing.
+
+    Args:
+        ctx: Context dictionary to populate with relationship data
+    """
     ctx["relationships"] = {}
     if "relationships" not in ctx["features"]:
         return
@@ -234,6 +239,16 @@ def orga_writing_form_list(request, s, typ):
 
 @login_required
 def orga_writing_form_email(request, s, typ):
+    """Generate email data for writing form options by character choices.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        typ: Writing form type
+
+    Returns:
+        JsonResponse with email data organized by option choices
+    """
     ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]

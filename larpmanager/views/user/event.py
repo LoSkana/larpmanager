@@ -73,6 +73,15 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
 def calendar(request, lang):
+    """Display the event calendar with open and future runs for an association.
+
+    Args:
+        request: HTTP request object containing user and association data
+        lang: Language code for filtering events
+
+    Returns:
+        Rendered calendar template with events and registration status
+    """
     aid = request.assoc["id"]
     my_regs = None
     my_runs_list = []

@@ -61,6 +61,15 @@ def exe_events(request):
 
 @login_required
 def exe_events_edit(request, num):
+    """Handle editing of existing events or creation of new executive events.
+
+    Args:
+        request: HTTP request object
+        num: Event number (0 for new event, >0 for existing)
+
+    Returns:
+        Redirect to appropriate page or rendered event form
+    """
     ctx = check_assoc_permission(request, "exe_events")
 
     if num:

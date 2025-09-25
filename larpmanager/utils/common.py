@@ -132,10 +132,23 @@ def cantor(k1, k2):
 
 
 def compute_diff(self, other):
+    """Compute differences between this instance and another.
+
+    Args:
+        self: Current instance
+        other: Other instance to compare against
+    """
     check_diff(self, other.text, self.text)
 
 
 def check_diff(self, tx1, tx2):
+    """Generate HTML diff between two text strings.
+
+    Args:
+        self: Instance to store diff result
+        tx1: First text string
+        tx2: Second text string
+    """
     if tx1 == tx2:
         self.diff = None
         return
@@ -158,6 +171,17 @@ def get_assoc(request):
 
 
 def get_member(n):
+    """Get member by ID with proper error handling.
+
+    Args:
+        n: Member ID
+
+    Returns:
+        dict: Dictionary containing member instance
+
+    Raises:
+        Http404: If member does not exist
+    """
     try:
         return {"member": Member.objects.get(pk=n)}
     except ObjectDoesNotExist as err:
@@ -165,6 +189,15 @@ def get_member(n):
 
 
 def get_contact(mid, yid):
+    """Get contact relationship between two members.
+
+    Args:
+        mid: ID of first member
+        yid: ID of second member
+
+    Returns:
+        Contact: Contact instance or None if not found
+    """
     try:
         return Contact.objects.get(me_id=mid, you_id=yid)
     except ObjectDoesNotExist:
@@ -172,6 +205,12 @@ def get_contact(mid, yid):
 
 
 def get_event_template(ctx, n):
+    """Get event template by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Event template ID
+    """
     try:
         ctx["event"] = Event.objects.get(pk=n, template=True, assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
@@ -179,6 +218,13 @@ def get_event_template(ctx, n):
 
 
 def get_char(ctx, n, by_number=False):
+    """Get character by ID or number and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Character ID or number
+        by_number: Whether to search by number instead of ID
+    """
     get_element(ctx, n, "character", Character, by_number)
 
 

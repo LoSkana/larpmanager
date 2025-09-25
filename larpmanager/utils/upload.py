@@ -286,6 +286,16 @@ def _reg_assign_character(ctx, reg, value, logs):
 
 
 def writing_load(request, ctx, form):
+    """Load writing data from uploaded files and process relationships.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event and writing type data
+        form: Form object containing uploaded files
+
+    Returns:
+        List of log messages from the loading process
+    """
     logs = []
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:

@@ -208,6 +208,11 @@ class OrgaConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
+        """Configure form fields for event settings and features.
+
+        Sets up various configuration sections including email notifications,
+        visualization options, and event-specific settings.
+        """
         self.set_section("email", _("Email notifications"))
         label = _("Disable assignment")
         help_text = _("If checked: Does not send communication to the participant when the character is assigned")
@@ -740,6 +745,15 @@ class OrgaEventTextForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
+        """Initialize event text form with feature-based field filtering.
+
+        Filters available text types based on activated features and
+        event configuration, setting appropriate choices and help texts.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments including event and features
+        """
         super().__init__(*args, **kwargs)
         ch = EventTextType.choices
         delete_choice = []
