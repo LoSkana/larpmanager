@@ -535,6 +535,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             "tot_payed",
             "tot_iscr",
             "quota",
+            "payment_date",
         )
 
         widgets = {"member": AssocMemberS2Widget}

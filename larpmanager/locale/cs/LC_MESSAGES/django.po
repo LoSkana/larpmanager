@@ -1806,6 +1806,9 @@ msgstr "Prvek formuláře"
 msgid "Form section"
 msgstr "Sekce formuláře"
 
+msgid "Full payment"
+msgstr "Úplná platba"
+
 msgid "Host Address"
 msgstr "Adresa hostitele"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Snížené"
 msgid "Payment currency"
 msgstr "Platební měna"
 
+msgid "Payment priority"
+msgstr "Priorita platby"
+
 msgid "Payment to check"
 msgstr "Platba, která má být zkontrolována"
 
@@ -3310,6 +3316,9 @@ msgstr "Registrace jsou otevřeny!"
 
 msgid "Registration not open"
 msgstr "Registrace není otevřena"
+
+msgid "Registration priority"
+msgstr "Přednostní registrace"
 
 msgid "Registration sections"
 msgstr "Sekce členství"
@@ -7760,6 +7769,13 @@ msgstr ""
 "organizaci a událostem"
 
 msgid ""
+"A measure of how much to favor earlier registrants (1=default, 0=disabled, "
+"10=strong)"
+msgstr ""
+"Měřítko, jak moc zvýhodnit dříve registrované (1 = výchozí, 0 = zakázáno, 10"
+" = silné)"
+
+msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -9091,6 +9107,13 @@ msgid ""
 msgstr ""
 "Jste na čekací listině, musíte být zaregistrováni s běžnou vstupenkou, "
 "abyste si mohli vybrat své preference!"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (1=default, 0=disabled, 10=strong)"
+msgstr ""
+"Měřítko, jak moc zvýhodnit účastníky, kteří dokončili plnou platbu dříve (1 "
+"= výchozí, 0 = zakázáno, 10 = silné)"
 
 #, python-format
 msgid ""

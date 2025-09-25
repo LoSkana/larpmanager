@@ -1806,6 +1806,9 @@ msgstr "Formular-Element"
 msgid "Form section"
 msgstr "Abschnitt Formular"
 
+msgid "Full payment"
+msgstr "Vollständige Bezahlung"
+
 msgid "Host Address"
 msgstr "Host-Adresse"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Ermäßigt"
 msgid "Payment currency"
 msgstr "Zahlungswährung"
 
+msgid "Payment priority"
+msgstr "Priorität der Zahlung"
+
 msgid "Payment to check"
 msgstr "Zu überprüfende Zahlung"
 
@@ -3310,6 +3316,9 @@ msgstr "Anmeldungen sind möglich!"
 
 msgid "Registration not open"
 msgstr "Registrierung nicht geöffnet"
+
+msgid "Registration priority"
+msgstr "Priorität der Anmeldung"
 
 msgid "Registration sections"
 msgstr "Abschnitte zur Mitgliedschaft"
@@ -8211,6 +8220,13 @@ msgstr ""
 "Organisation und Veranstaltungen zugreifen zu können"
 
 msgid ""
+"A measure of how much to favor earlier registrants (1=default, 0=disabled, "
+"10=strong)"
+msgstr ""
+"Ein Maß für die Bevorzugung von Frühanmeldern (1=Standard, 0=deaktiviert, "
+"10=stark)"
+
+msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -9575,6 +9591,13 @@ msgid ""
 msgstr ""
 "Sie stehen auf der Warteliste, Sie müssen mit einer regulären Eintrittskarte"
 " registriert sein, um Ihre Präferenzen auswählen zu können!"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (1=default, 0=disabled, 10=strong)"
+msgstr ""
+"Ein Maß dafür, wie sehr Teilnehmer, die die vollständige Zahlung früher "
+"abgeschlossen haben, zu bevorzugen sind (1=Standard, 0=behindert, 10=stark)"
 
 #, python-format
 msgid ""

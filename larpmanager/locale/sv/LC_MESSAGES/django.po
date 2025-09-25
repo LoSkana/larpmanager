@@ -1806,6 +1806,9 @@ msgstr "Formulärelement"
 msgid "Form section"
 msgstr "Formulär sektion"
 
+msgid "Full payment"
+msgstr "Full betalning"
+
 msgid "Host Address"
 msgstr "Värdadress"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Reducerad"
 msgid "Payment currency"
 msgstr "Valuta för betalning"
 
+msgid "Payment priority"
+msgstr "Betalningsprioritet"
+
 msgid "Payment to check"
 msgstr "Betalning ska kontrolleras"
 
@@ -3310,6 +3316,9 @@ msgstr "Registreringarna är öppna!"
 
 msgid "Registration not open"
 msgstr "Registreringen är inte öppen"
+
+msgid "Registration priority"
+msgstr "Prioritet vid registrering"
 
 msgid "Registration sections"
 msgstr "Medlemskapets sektioner"
@@ -7887,6 +7896,13 @@ msgstr ""
 "din organisation och dina evenemang"
 
 msgid ""
+"A measure of how much to favor earlier registrants (1=default, 0=disabled, "
+"10=strong)"
+msgstr ""
+"Ett mått på hur mycket tidigare registrerade ska gynnas (1=standard, "
+"0=inaktiverad, 10=stark)"
+
+msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -9241,6 +9257,13 @@ msgid ""
 msgstr ""
 "Du står på väntelistan, du måste vara registrerad med en ordinarie biljett "
 "för att kunna välja dina preferenser!"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (1=default, 0=disabled, 10=strong)"
+msgstr ""
+"Ett mått på hur mycket man ska gynna deltagare som slutförde full betalning "
+"tidigare (1=default, 0=disabled, 10=strong)"
 
 #, python-format
 msgid ""

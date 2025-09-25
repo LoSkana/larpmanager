@@ -1806,6 +1806,9 @@ msgstr "Élément de formulaire"
 msgid "Form section"
 msgstr "Section du formulaire"
 
+msgid "Full payment"
+msgstr "Paiement intégral"
+
 msgid "Host Address"
 msgstr "Adresse de l'hôte"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Réduit"
 msgid "Payment currency"
 msgstr "Devise de paiement"
 
+msgid "Payment priority"
+msgstr "Priorité de paiement"
+
 msgid "Payment to check"
 msgstr "Paiement à vérifier"
 
@@ -3310,6 +3316,9 @@ msgstr "Les inscriptions sont ouvertes !"
 
 msgid "Registration not open"
 msgstr "L'inscription n'est pas ouverte"
+
+msgid "Registration priority"
+msgstr "Priorité d'inscription"
 
 msgid "Registration sections"
 msgstr "Sections des membres"
@@ -8136,6 +8145,13 @@ msgstr ""
 "votre organisation et à vos événements"
 
 msgid ""
+"A measure of how much to favor earlier registrants (1=default, 0=disabled, "
+"10=strong)"
+msgstr ""
+"Mesure de la préférence à accorder aux personnes qui se sont inscrites plus "
+"tôt (1=par défaut, 0=désactivé, 10=fort)"
+
+msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -9500,6 +9516,13 @@ msgid ""
 msgstr ""
 "Vous êtes sur liste d'attente, vous devez être enregistré avec un billet "
 "régulier pour pouvoir sélectionner vos préférences !"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (1=default, 0=disabled, 10=strong)"
+msgstr ""
+"Mesure de la préférence à accorder aux participants qui ont effectué le "
+"paiement intégral plus tôt (1=par défaut, 0=désactivé, 10=fort)"
 
 #, python-format
 msgid ""

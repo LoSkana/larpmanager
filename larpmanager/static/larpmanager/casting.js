@@ -36,6 +36,9 @@ var toggle_url = window['toggle_url'];
 
 var trads = window['trads'];
 
+var reg_priority = window['reg_priority'];
+var pay_priority = window['pay_priority'];
+
     /*
 $('form').submit(function() {
     var c = confirm("{% trans "Confermi l'assegnazione" %}?");
@@ -86,7 +89,7 @@ function load_grid() {
     var order = {};
 
     for (key in preferences) {
-        ord = players[key]['prior'] * 1000 + players[key]['reg_days'];
+        ord = players[key]['prior'] * 1000 + players[key]['reg_days'] + players[key]['pay_days'];
         order[key] = ord;
     }
 
@@ -240,15 +243,14 @@ function exec_assigner() {
                 var dis = 99999;
                 if (iy != null) {
                     dis = disappoint[iy];
-                    dis *= (50 + players[key]['reg_days']);
+                    dis *= (players[key]['reg_days'] * reg_priority / 30.0);
+                    dis *= (players[key]['pay_days'] * pay_priority / 30.0);
                     var prior = players[key]['prior'];
                     dis *= prior;
                 }
 
-                if (key == 1) dis *= 10;
-
                 v = {}
-                v['disappoint'] = dis;
+                v['disappoint'] = Math.floor(dis);
                 v['p' + key] = '1';
                 v['c' + ch] = '1';
                 if (iy != null) v['o' + key] = '0'; else v['o' + key] = '1';

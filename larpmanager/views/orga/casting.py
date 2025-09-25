@@ -277,6 +277,9 @@ def get_casting_data(request, ctx, typ, form):
     ctx["nopes"] = json.dumps(nopes)
     ctx["avoids"] = json.dumps(avoids)
 
+    ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 1))
+    ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 1))
+
 
 def _casting_prepare(ctx, request, typ):
     cache_aim = get_membership_fee_year(request.assoc["id"])
@@ -301,8 +304,10 @@ def _get_player_info(players, reg):
     }
     if reg.ticket:
         players[reg.member.id]["prior"] = reg.ticket.casting_priority
-    # set registration days
+    # set registration days (number of days from registration created)
     players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date())
+    # set payment days (number of days from full payment date, or default value 1)
+    players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) if reg.payment_date else 1
 
 
 def _get_player_preferences(allowed, castings, chosen, nopes, reg):

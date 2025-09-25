@@ -1806,6 +1806,9 @@ msgstr "Skjemaelement"
 msgid "Form section"
 msgstr "Skjemadelen"
 
+msgid "Full payment"
+msgstr "Full betaling"
+
 msgid "Host Address"
 msgstr "Vertsadresse"
 
@@ -2588,6 +2591,9 @@ msgstr "Maecenas / Redusert"
 msgid "Payment currency"
 msgstr "Betalingsvaluta"
 
+msgid "Payment priority"
+msgstr "Betalingsprioritet"
+
 msgid "Payment to check"
 msgstr "Betaling som skal kontrolleres"
 
@@ -3310,6 +3316,9 @@ msgstr "Registreringen er åpen!"
 
 msgid "Registration not open"
 msgstr "Registreringen er ikke åpen"
+
+msgid "Registration priority"
+msgstr "Prioritet ved registrering"
 
 msgid "Registration sections"
 msgstr "Seksjonene for medlemskap"
@@ -7855,6 +7864,13 @@ msgstr ""
 "organisasjonen og arrangementene dine"
 
 msgid ""
+"A measure of how much to favor earlier registrants (1=default, 0=disabled, "
+"10=strong)"
+msgstr ""
+"Et mål på hvor mye man skal favorisere tidligere registranter (1=standard, "
+"0=deaktivert, 10=sterk)"
+
+msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -9204,6 +9220,13 @@ msgid ""
 msgstr ""
 "Du står på venteliste, du må være registrert med en vanlig billett for å "
 "kunne velge dine preferanser!"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (1=default, 0=disabled, 10=strong)"
+msgstr ""
+"Et mål på hvor mye man skal favorisere deltakere som fullførte full betaling"
+" tidligere (1=default, 0=disabled, 10=strong)"
 
 #, python-format
 msgid ""

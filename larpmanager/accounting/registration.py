@@ -505,7 +505,7 @@ def post_save_registration_accounting(sender, instance, **kwargs):
 
     # update accounting without triggering a new save
     updates = {}
-    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline"]:
+    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
         updates[field] = getattr(instance, field)
     Registration.objects.filter(pk=instance.pk).update(**updates)
 
@@ -616,6 +616,8 @@ def update_registration_accounting(reg):
 
     remaining = reg.tot_iscr - reg.tot_payed
     if -max_rounding < remaining <= max_rounding:
+        if not reg.payment_date:
+            reg.payment_date = datetime.now().date()
         return
 
     if reg.cancellation_date:

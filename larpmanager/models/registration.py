@@ -59,7 +59,7 @@ class TicketTier(models.TextChoices):
             TicketTier.STAFF: "Staff",
             TicketTier.NPC: "NPC",
             TicketTier.COLLABORATOR: "Collaborator",
-            TicketTier.SELLER: "Seller"
+            TicketTier.SELLER: "Seller",
         }
 
 
@@ -307,6 +307,9 @@ class Registration(BaseModel):
     )
 
     redeem_code = models.CharField(max_length=16, null=True, blank=True)
+
+    # Date when first full payment is detected
+    payment_date = models.DateTimeField(null=True, blank=True)
 
     characters = models.ManyToManyField(
         Character,
