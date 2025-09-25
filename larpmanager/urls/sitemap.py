@@ -80,7 +80,7 @@ def _organization_sitemap(request):
         cache_ev[el.event_id] = 1
         assoc = el.event.assoc
         domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-        urls.append(f"https://{assoc.slug}.{domain}/{el.event.slug}/{el.number}/event/")
+        urls.append(f"https://{assoc.slug}.{domain}/{el.get_slug()}/event/")
     return urls
 
 

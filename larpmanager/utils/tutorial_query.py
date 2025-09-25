@@ -14,13 +14,22 @@ from whoosh.qparser import QueryParser
 
 from larpmanager.models.access import AssocPermission, EventPermission
 from larpmanager.models.event import Run
-from larpmanager.models.larpmanager import LarpManagerTutorial
+from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
 from larpmanager.utils.tasks import background_auto, notify_admins
 
-INDEX_DIR = "data/whoosh_index"
+TUTORIAL_INDEX = "data/whoosh/tutorial_index"
+
+GUIDE_INDEX = "data/whoosh/GUIDE_INDEX"
 
 
-def get_or_create_index(index_dir):
+def _save_index(index_dir, schema):
+    if not os.path.exists(index_dir):
+        os.makedirs(index_dir, exist_ok=True)
+        return create_in(index_dir, schema, "MAIN")
+    return open_dir(index_dir, "MAIN")
+
+
+def get_or_create_index_tutorial(index_dir):
     schema = Schema(
         tutorial_id=ID(stored=True),
         slug=TEXT(stored=True),
@@ -28,10 +37,7 @@ def get_or_create_index(index_dir):
         section_title=TEXT(stored=True),
         content=TEXT(stored=True),
     )
-    if not os.path.exists(index_dir):
-        os.mkdir(index_dir)
-        return create_in(index_dir, schema, "MAIN")
-    return open_dir(index_dir, "MAIN")
+    return _save_index(index_dir, schema)
 
 
 @background_auto(queue="whoosh")
@@ -41,7 +47,7 @@ def index_tutorial(tutorial_id):
     except ObjectDoesNotExist:
         return
 
-    ix = get_or_create_index(INDEX_DIR)
+    ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     writer = ix.writer()
     writer.delete_by_term("tutorial_id", str(tutorial_id))
 
@@ -63,10 +69,53 @@ def index_tutorial(tutorial_id):
 
 
 @background_auto(queue="whoosh")
-def delete_index(tutorial_id):
-    ix = get_or_create_index(INDEX_DIR)
+def delete_index_tutorial(tutorial_id):
+    ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     writer = ix.writer()
     writer.delete_by_term("tutorial_id", str(tutorial_id))
+    writer.commit()
+
+
+def get_or_create_index_guide(index_dir):
+    schema = Schema(
+        guide_id=ID(stored=True),
+        slug=TEXT(stored=True),
+        title=TEXT(stored=True),
+        content=TEXT(stored=True),
+    )
+    return _save_index(index_dir, schema)
+
+
+@background_auto(queue="whoosh")
+def index_guide(guide_id):
+    try:
+        instance = LarpManagerGuide.objects.get(pk=guide_id)
+    except ObjectDoesNotExist:
+        return
+
+    if not instance.published:
+        return
+
+    ix = get_or_create_index_guide(GUIDE_INDEX)
+    writer = ix.writer()
+    writer.delete_by_term("guide_id", str(guide_id))
+
+    soup = BeautifulSoup(instance.text, "html.parser")
+    text = soup.get_text(" ", strip=True)
+    writer.add_document(
+        guide_id=str(guide_id),
+        slug=instance.slug,
+        title=instance.title,
+        content=text,
+    )
+    writer.commit()
+
+
+@background_auto(queue="whoosh")
+def delete_index_guide(guide_id):
+    ix = get_or_create_index_guide(GUIDE_INDEX)
+    writer = ix.writer()
+    writer.delete_by_term("guide_id", str(guide_id))
     writer.commit()
 
 
@@ -82,10 +131,10 @@ def get_sorted_permissions(model, query):
 
 
 def query_index(request):
-    """Handle tutorial search queries with translation support.
+    """Handle search queries with translation support.
 
     Processes search requests and translates content using DeepL API,
-    then searches through both permission-based navigation links and
+    then searches through both permission-based navigation links, guides and
     tutorial content to provide relevant results.
     """
     orig_string = request.POST.get("q", "")
@@ -120,8 +169,15 @@ def query_index(request):
             {"name": perm["name"], "descr": perm["descr"], "href": reverse(perm["slug"])} for perm in sorted_permissions
         ]
 
+    # get guides
+    ix = get_or_create_index_tutorial(GUIDE_INDEX)
+    with ix.searcher() as searcher:
+        query = QueryParser("content", ix.schema).parse(query_string)
+        results = searcher.search(query, limit=5)
+        guides = [{"slug": r["slug"], "title": r["title"], "snippet": r["content"][:300]} for r in results]
+
     # get tutorials
-    ix = get_or_create_index(INDEX_DIR)
+    ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     with ix.searcher() as searcher:
         query = QueryParser("content", ix.schema).parse(query_string)
         results = searcher.search(query, limit=10)
@@ -129,4 +185,4 @@ def query_index(request):
             {"slug": r["slug"], "title": r["title"], "section": r["section_title"], "snippet": r["content"][:300]}
             for r in results
         ]
-    return JsonResponse({"tutorials": tutorials, "links": links}, safe=False)
+    return JsonResponse({"guides": guides, "tutorials": tutorials, "links": links}, safe=False)

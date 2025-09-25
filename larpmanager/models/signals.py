@@ -63,14 +63,14 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
+from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.tutorial_query import delete_index, index_tutorial
+from larpmanager.utils.tutorial_query import delete_index_guide, delete_index_tutorial, index_guide, index_tutorial
 
 
 @receiver(pre_save)
@@ -785,7 +785,17 @@ def post_save_index_tutorial(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=LarpManagerTutorial)
 def delete_tutorial_from_index(sender, instance, **kwargs):
-    delete_index(instance.id)
+    delete_index_tutorial(instance.id)
+
+
+@receiver(post_save, sender=LarpManagerGuide)
+def post_save_index_guide(sender, instance, **kwargs):
+    index_guide(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerGuide)
+def delete_guide_from_index(sender, instance, **kwargs):
+    delete_index_guide(instance.id)
 
 
 @receiver(post_save, sender=WritingQuestion)
