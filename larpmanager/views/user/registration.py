@@ -66,9 +66,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.utils import my_uuid
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.common import (
-    get_assoc,
-)
+from larpmanager.utils.common import get_assoc
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,

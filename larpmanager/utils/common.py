@@ -58,9 +58,7 @@ from larpmanager.models.miscellanea import (
     WorkshopOption,
     WorkshopQuestion,
 )
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import my_uuid_short, strip_tags
 from larpmanager.models.writing import (
     Character,
@@ -72,9 +70,7 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
-from larpmanager.utils.exceptions import (
-    NotFoundError,
-)
+from larpmanager.utils.exceptions import NotFoundError
 
 logger = logging.getLogger(__name__)
 

@@ -52,9 +52,7 @@ from larpmanager.models.writing import (
     Relationship,
 )
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import (
-    get_handout,
-)
+from larpmanager.utils.common import get_handout
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto

@@ -57,9 +57,7 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.member import (
     Badge,
     Member,
@@ -73,9 +71,7 @@ from larpmanager.models.miscellanea import (
     Email,
     HelpQuestion,
 )
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     _get_help_questions,

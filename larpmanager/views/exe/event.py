@@ -38,9 +38,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx
-from larpmanager.utils.common import (
-    get_event_template,
-)
+from larpmanager.utils.common import get_event_template
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
 from larpmanager.views.manage import _get_registration_status

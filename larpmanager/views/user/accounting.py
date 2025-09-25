@@ -49,9 +49,7 @@ from larpmanager.forms.accounting import (
     RefundRequestForm,
     WireInvoiceSubmitForm,
 )
-from larpmanager.forms.member import (
-    MembershipForm,
-)
+from larpmanager.forms.member import MembershipForm
 from larpmanager.mail.accounting import notify_invoice_check, notify_refund_request
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -68,9 +66,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.utils.base import def_user_ctx
 from larpmanager.utils.common import (
     get_assoc,
@@ -78,9 +74,7 @@ from larpmanager.utils.common import (
     get_collection_redeem,
 )
 from larpmanager.utils.event import check_event_permission, get_event_run
-from larpmanager.utils.exceptions import (
-    check_assoc_feature,
-)
+from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.text import get_assoc_text
 

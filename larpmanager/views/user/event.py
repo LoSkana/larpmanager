@@ -65,9 +65,7 @@ from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import def_user_ctx
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event, get_event_run
-from larpmanager.utils.exceptions import (
-    HiddenError,
-)
+from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
