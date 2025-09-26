@@ -93,6 +93,51 @@ def get_expense_mail(instance):
     return subj, body
 
 
+def handle_expense_item_approval_notification(expense_item):
+    """Handle expense item approval notifications.
+
+    Args:
+        expense_item: AccountingItemExpense instance being saved
+    """
+    if expense_item.hide:
+        return
+    if not expense_item.pk:
+        return
+
+    previous_appr = AccountingItemExpense.objects.get(pk=expense_item.pk).is_approved
+    # Send email when the spending item is approved
+    if not (expense_item.member and expense_item.is_approved and not previous_appr):
+        return
+
+    subj = hdr(expense_item) + _("Reimbursement approved")
+    if expense_item.run:
+        subj += " " + _("for") + f" {expense_item.run}"
+    body = (
+        _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
+        % {
+            "amount": expense_item.value,
+            "reason": expense_item.descr,
+        }
+        + "!"
+    )
+
+    token_name, credit_name = get_token_credit_name(expense_item.assoc)
+
+    if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
+        body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
+        body += " " + _("This is automatically deducted from the registration of a future event") + "."
+        body += (
+            " "
+            + _(
+                "Alternatively, you can request to receive it with a formal request in the <a "
+                "href='%(url)s'>your accounting.</a>."
+            )
+            % {"url": get_url("accounting", expense_item)}
+            + "</i>"
+        )
+    my_send_mail(subj, body, expense_item.member, expense_item.run)
+
+
 @receiver(pre_save, sender=AccountingItemExpense)
 def update_accounting_item_expense_pre(sender, instance, **kwargs):
     """Handle pre-save events for expense accounting items.
@@ -102,43 +147,7 @@ def update_accounting_item_expense_pre(sender, instance, **kwargs):
         instance: AccountingItemExpense instance being saved
         **kwargs: Additional keyword arguments
     """
-    if instance.hide:
-        return
-    if not instance.pk:
-        return
-
-    previous_appr = AccountingItemExpense.objects.get(pk=instance.pk).is_approved
-    # Send email when the spending item is approved
-    if not (instance.member and instance.is_approved and not previous_appr):
-        return
-
-    subj = hdr(instance) + _("Reimbursement approved")
-    if instance.run:
-        subj += " " + _("for") + f" {instance.run}"
-    body = (
-        _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
-        % {
-            "amount": instance.value,
-            "reason": instance.descr,
-        }
-        + "!"
-    )
-
-    token_name, credit_name = get_token_credit_name(instance.assoc)
-
-    if instance.run and "token_credit" in get_event_features(instance.run.event_id):
-        body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
-        body += " " + _("This is automatically deducted from the registration of a future event") + "."
-        body += (
-            " "
-            + _(
-                "Alternatively, you can request to receive it with a formal request in the <a "
-                "href='%(url)s'>your accounting.</a>."
-            )
-            % {"url": get_url("accounting", instance)}
-            + "</i>"
-        )
-    my_send_mail(subj, body, instance.member, instance.run)
+    handle_expense_item_approval_notification(instance)
 
 
 def get_token_credit_name(assoc):
@@ -159,6 +168,33 @@ def get_token_credit_name(assoc):
     return token_name, credit_name
 
 
+def handle_payment_item_pre_save(payment_item):
+    """Handle pre-save events for payment accounting items.
+
+    Args:
+        payment_item: AccountingItemPayment instance being saved
+    """
+    if payment_item.hide:
+        return
+
+    run = payment_item.reg.run
+    member = payment_item.reg.member
+
+    if not run.event.assoc.get_config("mail_payment", False):
+        return
+
+    token_name, credit_name = get_token_credit_name(payment_item.assoc)
+
+    curr_sym = run.event.assoc.get_currency_symbol()
+    if not payment_item.pk:
+        if payment_item.pay == PaymentChoices.MONEY:
+            notify_pay_money(curr_sym, payment_item, member, run)
+        elif payment_item.pay == PaymentChoices.CREDIT:
+            notify_pay_credit(credit_name, payment_item, member, run)
+        elif payment_item.pay == PaymentChoices.TOKEN:
+            notify_pay_token(payment_item, member, run, token_name)
+
+
 @receiver(pre_save, sender=AccountingItemPayment)
 def update_accounting_item_payment(sender, instance, **kwargs):
     """Handle pre-save events for payment accounting items.
@@ -168,25 +204,7 @@ def update_accounting_item_payment(sender, instance, **kwargs):
         instance: AccountingItemPayment instance being saved
         **kwargs: Additional keyword arguments
     """
-    if instance.hide:
-        return
-
-    run = instance.reg.run
-    member = instance.reg.member
-
-    if not run.event.assoc.get_config("mail_payment", False):
-        return
-
-    token_name, credit_name = get_token_credit_name(instance.assoc)
-
-    curr_sym = run.event.assoc.get_currency_symbol()
-    if not instance.pk:
-        if instance.pay == PaymentChoices.MONEY:
-            notify_pay_money(curr_sym, instance, member, run)
-        elif instance.pay == PaymentChoices.CREDIT:
-            notify_pay_credit(credit_name, instance, member, run)
-        elif instance.pay == PaymentChoices.TOKEN:
-            notify_pay_token(instance, member, run, token_name)
+    handle_payment_item_pre_save(instance)
 
 
 def notify_pay_token(instance, member, run, token_name):

@@ -460,6 +460,54 @@ def get_reduced_available_count(run):
     return math.floor(pat * ratio / 10.0) - red
 
 
+def handle_registration_event_switch(registration):
+    """Handle registration updates when switching between events.
+
+    Args:
+        registration: The Registration instance being saved
+    """
+    if not registration.pk:
+        return
+
+    try:
+        prev = Registration.objects.get(pk=registration.pk)
+    except ObjectDoesNotExist:
+        return
+
+    if prev.run.event_id == registration.run.event_id:
+        return
+
+    # look for similar ticket to update
+    ticket_name = registration.ticket.name
+    try:
+        registration.ticket = registration.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
+    except ObjectDoesNotExist:
+        registration.ticket = None
+
+    # look for similar registration choice
+    for choice in RegistrationChoice.objects.filter(reg=registration):
+        question_name = choice.question.name
+        option_name = choice.option.name
+        try:
+            choice.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
+            choice.option = registration.run.event.get_elements(RegistrationOption).get(
+                question=choice.question, name__iexact=option_name
+            )
+            choice.save()
+        except ObjectDoesNotExist:
+            choice.question = None
+            choice.option = None
+
+    # look for similar registration answer
+    for answer in RegistrationAnswer.objects.filter(reg=registration):
+        question_name = answer.question.name
+        try:
+            answer.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
+            answer.save()
+        except ObjectDoesNotExist:
+            answer.question = None
+
+
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender, instance, **kwargs):
     """Handle registration updates when switching between events.
@@ -469,46 +517,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
         instance: The Registration instance being saved
         **kwargs: Additional keyword arguments from the signal
     """
-    if not instance.pk:
-        return
-
-    try:
-        prev = Registration.objects.get(pk=instance.pk)
-    except ObjectDoesNotExist:
-        return
-
-    if prev.run.event_id == instance.run.event_id:
-        return
-
-    # look for similar ticket to update
-    ticket_name = instance.ticket.name
-    try:
-        instance.ticket = instance.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
-    except ObjectDoesNotExist:
-        instance.ticket = None
-
-    # look for similar registration choice
-    for choice in RegistrationChoice.objects.filter(reg=instance):
-        question_name = choice.question.name
-        option_name = choice.option.name
-        try:
-            choice.question = instance.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
-            choice.option = instance.run.event.get_elements(RegistrationOption).get(
-                question=choice.question, name__iexact=option_name
-            )
-            choice.save()
-        except ObjectDoesNotExist:
-            choice.question = None
-            choice.option = None
-
-    # look for similar registration answer
-    for answer in RegistrationAnswer.objects.filter(reg=instance):
-        question_name = answer.question.name
-        try:
-            answer.question = instance.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
-            answer.save()
-        except ObjectDoesNotExist:
-            answer.question = None
+    handle_registration_event_switch(instance)
 
 
 def check_character_ticket_options(reg, char):

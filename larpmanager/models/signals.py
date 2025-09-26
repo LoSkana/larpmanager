@@ -78,18 +78,11 @@ from larpmanager.utils.tutorial_query import delete_index_guide, delete_index_tu
 log = logging.getLogger(__name__)
 
 
-@receiver(pre_save)
-def pre_save_callback(sender, instance, *args, **kwargs):
-    """Generic pre-save handler for automatic field population.
-
-    Automatically sets number/order fields and updates search fields
-    for models that have them.
+def auto_populate_number_order_fields(instance):
+    """Auto-populate number and order fields for model instances.
 
     Args:
-        sender: Model class sending the signal
-        instance: Model instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
+        instance: Model instance to populate fields for
     """
     for field in ["number", "order"]:
         if hasattr(instance, field) and not getattr(instance, field):
@@ -107,9 +100,33 @@ def pre_save_callback(sender, instance, *args, **kwargs):
                 else:
                     setattr(instance, field, n + 1)
 
+
+def update_search_field(instance):
+    """Update search field for model instances that have one.
+
+    Args:
+        instance: Model instance to update search field for
+    """
     if hasattr(instance, "search"):
         instance.search = None
         instance.search = str(instance)
+
+
+@receiver(pre_save)
+def pre_save_callback(sender, instance, *args, **kwargs):
+    """Generic pre-save handler for automatic field population.
+
+    Automatically sets number/order fields and updates search fields
+    for models that have them.
+
+    Args:
+        sender: Model class sending the signal
+        instance: Model instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
+    auto_populate_number_order_fields(instance)
+    update_search_field(instance)
 
 
 @receiver(pre_save, sender=Association)
@@ -125,6 +142,21 @@ def pre_save_association_generate_fernet(sender, instance, **kwargs):
         instance.key = Fernet.generate_key()
 
 
+def assign_assoc_permission_number(assoc_permission):
+    """Assign number to association permission if not set.
+
+    Args:
+        assoc_permission: AssocPermission instance to assign number to
+    """
+    if not assoc_permission.number:
+        n = AssocPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(Max("number"))[
+            "number__max"
+        ]
+        if not n:
+            n = 1
+        assoc_permission.number = n + 10
+
+
 @receiver(pre_save, sender=AssocPermission)
 def pre_save_assoc_permission(sender, instance, **kwargs):
     """Handle association permission changes and cache updates.
@@ -134,13 +166,22 @@ def pre_save_assoc_permission(sender, instance, **kwargs):
         instance: AssocPermission instance being saved
         **kwargs: Additional keyword arguments
     """
-    if not instance.number:
-        n = AssocPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
+    assign_assoc_permission_number(instance)
+
+
+def assign_event_permission_number(event_permission):
+    """Assign number to event permission if not set.
+
+    Args:
+        event_permission: EventPermission instance to assign number to
+    """
+    if not event_permission.number:
+        n = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(Max("number"))[
             "number__max"
         ]
         if not n:
             n = 1
-        instance.number = n + 10
+        event_permission.number = n + 10
 
 
 @receiver(pre_save, sender=EventPermission)
@@ -152,13 +193,7 @@ def pre_save_event_permission(sender, instance, **kwargs):
         instance: EventPermission instance being saved
         **kwargs: Additional keyword arguments
     """
-    if not instance.number:
-        n = EventPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
-            "number__max"
-        ]
-        if not n:
-            n = 1
-        instance.number = n + 10
+    assign_event_permission_number(instance)
 
 
 @receiver(pre_save, sender=Plot)
@@ -306,16 +341,38 @@ def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
         instance.slug = slugify(instance.name)
 
 
-@receiver(pre_save, sender=LarpManagerFaq)
-def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
-    if instance.number:
+def assign_faq_number(faq):
+    """Assign number to FAQ if not already set.
+
+    Args:
+        faq: LarpManagerFaq instance to assign number to
+    """
+    if faq.number:
         return
-    n = LarpManagerFaq.objects.filter(typ=instance.typ).aggregate(Max("number"))["number__max"]
+    n = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
     if not n:
         n = 1
     else:
         n = ((n / 10) + 1) * 10
-    instance.number = n
+    faq.number = n
+
+
+@receiver(pre_save, sender=LarpManagerFaq)
+def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
+    assign_faq_number(instance)
+
+
+def handle_user_profile_creation(user, created):
+    """Create member profile and sync email when user is saved.
+
+    Args:
+        user: User instance that was saved
+        created: Whether this is a new user
+    """
+    if created:
+        Member.objects.create(user=user)
+    user.member.email = user.email
+    user.member.save()
 
 
 @receiver(post_save, sender=User)
@@ -328,10 +385,29 @@ def create_user_profile(sender, instance, created, **kwargs):
         created (bool): Whether this is a new user
         **kwargs: Additional keyword arguments
     """
-    if created:
-        Member.objects.create(user=instance)
-    instance.member.email = instance.email
-    instance.member.save()
+    handle_user_profile_creation(instance, created)
+
+
+def handle_membership_status_changes(membership):
+    """Handle membership status changes and card numbering.
+
+    Args:
+        membership: Membership instance being saved
+    """
+    if membership.status == MembershipStatus.ACCEPTED:
+        if not membership.card_number:
+            n = Membership.objects.filter(assoc=membership.assoc).aggregate(Max("card_number"))["card_number__max"]
+            if not n:
+                n = 0
+            membership.card_number = n + 1
+        if not membership.date:
+            membership.date = date.today()
+
+    if membership.status == MembershipStatus.EMPTY:
+        if membership.card_number:
+            membership.card_number = None
+        if membership.date:
+            membership.date = None
 
 
 @receiver(pre_save, sender=Membership)
@@ -343,20 +419,7 @@ def pre_save_membership(sender, instance, **kwargs):
         instance: Membership instance being saved
         **kwargs: Additional keyword arguments
     """
-    if instance.status == MembershipStatus.ACCEPTED:
-        if not instance.card_number:
-            n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
-            if not n:
-                n = 0
-            instance.card_number = n + 1
-        if not instance.date:
-            instance.date = date.today()
-
-    if instance.status == MembershipStatus.EMPTY:
-        if instance.card_number:
-            instance.card_number = None
-        if instance.date:
-            instance.date = None
+    handle_membership_status_changes(instance)
 
 
 @receiver(post_save, sender=EventButton)
@@ -381,43 +444,61 @@ def pre_save_event_prepare_campaign(sender, instance, **kwargs):
         instance._old_parent_id = None
 
 
-@receiver(post_save, sender=Event)
-def post_save_event_campaign(sender, instance, **kwargs):
-    if instance.parent_id:
+def setup_campaign_event(event):
+    """Setup campaign event by copying from parent.
+
+    Args:
+        event: Event instance that was saved
+    """
+    if event.parent_id:
         # noinspection PyProtectedMember
-        if instance._old_parent_id != instance.parent_id:
+        if event._old_parent_id != event.parent_id:
             # copy config, texts, roles, features
-            copy_class(instance.pk, instance.parent_id, EventConfig)
-            copy_class(instance.pk, instance.parent_id, EventText)
-            copy_class(instance.pk, instance.parent_id, EventRole)
-            for fn in instance.parent.features.all():
-                instance.features.add(fn)
+            copy_class(event.pk, event.parent_id, EventConfig)
+            copy_class(event.pk, event.parent_id, EventText)
+            copy_class(event.pk, event.parent_id, EventRole)
+            for fn in event.parent.features.all():
+                event.features.add(fn)
 
             # Temporarily disconnect signal
             post_save.disconnect(post_save_event_campaign, sender=Event)
-            instance.save()
+            event.save()
             post_save.connect(post_save_event_campaign, sender=Event)
 
 
 @receiver(post_save, sender=Event)
-def save_event_update(sender, instance, **kwargs):
-    if instance.template:
+def post_save_event_campaign(sender, instance, **kwargs):
+    setup_campaign_event(instance)
+
+
+def setup_event_after_save(event):
+    """Setup event with runs, tickets, and forms after save.
+
+    Args:
+        event: Event instance that was saved
+    """
+    if event.template:
         return
 
-    if instance.runs.count() == 0:
-        Run.objects.create(event=instance, number=1)
+    if event.runs.count() == 0:
+        Run.objects.create(event=event, number=1)
 
-    features = get_event_features(instance.id)
+    features = get_event_features(event.id)
 
-    save_event_tickets(features, instance)
+    save_event_tickets(features, event)
 
-    save_event_registration_form(features, instance)
+    save_event_registration_form(features, event)
 
-    save_event_character_form(features, instance)
+    save_event_character_form(features, event)
 
-    reset_event_features(instance.id)
+    reset_event_features(event.id)
 
-    reset_event_fields_cache(instance.id)
+    reset_event_fields_cache(event.id)
+
+
+@receiver(post_save, sender=Event)
+def save_event_update(sender, instance, **kwargs):
+    setup_event_after_save(instance)
 
 
 def save_event_tickets(features, instance):
@@ -634,6 +715,52 @@ def _activate_orga_lang(instance):
     activate(max_lang)
 
 
+def auto_assign_campaign_character(registration):
+    """Auto-assign last character for campaign registrations.
+
+    Args:
+        registration: Registration instance to assign character to
+    """
+    if not registration.member:
+        return
+
+    if registration.cancellation_date:
+        return
+
+    # auto assign last character if campaign
+    if "campaign" not in get_event_features(registration.run.event_id):
+        return
+    if not registration.run.event.parent:
+        return
+
+    # if already has a character, do not proceed
+    if RegistrationCharacterRel.objects.filter(reg__run=registration.run).count() > 0:
+        return
+
+    # get last run of campaign
+    last = (
+        Run.objects.filter(
+            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
+        )
+        .exclude(event_id=registration.run.event_id)
+        .order_by("-end")
+        .first()
+    )
+    if not last:
+        return
+
+    try:
+        old_rcr = RegistrationCharacterRel.objects.get(reg__member=registration.member, reg__run=last)
+        rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
+        for s in ["name", "pronoun", "song", "public", "private"]:
+            if hasattr(old_rcr, "custom_" + s):
+                value = getattr(old_rcr, "custom_" + s)
+                setattr(rcr, "custom_" + s, value)
+        rcr.save()
+    except ObjectDoesNotExist:
+        pass
+
+
 @receiver(post_save, sender=Registration)
 def post_save_registration_campaign(sender, instance, **kwargs):
     """Auto-assign last character for campaign registrations.
@@ -643,42 +770,7 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         instance: Registration instance that was saved
         **kwargs: Additional keyword arguments
     """
-    if not instance.member:
-        return
-
-    if instance.cancellation_date:
-        return
-
-    # auto assign last character if campaign
-    if "campaign" not in get_event_features(instance.run.event_id):
-        return
-    if not instance.run.event.parent:
-        return
-
-    # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__run=instance.run).count() > 0:
-        return
-
-    # get last run of campaign
-    last = (
-        Run.objects.filter(Q(event__parent=instance.run.event.parent) | Q(event_id=instance.run.event.parent_id))
-        .exclude(event_id=instance.run.event_id)
-        .order_by("-end")
-        .first()
-    )
-    if not last:
-        return
-
-    try:
-        old_rcr = RegistrationCharacterRel.objects.get(reg__member=instance.member, reg__run=last)
-        rcr = RegistrationCharacterRel.objects.create(reg=instance, character=old_rcr.character)
-        for s in ["name", "pronoun", "song", "public", "private"]:
-            if hasattr(old_rcr, "custom_" + s):
-                value = getattr(old_rcr, "custom_" + s)
-                setattr(rcr, "custom_" + s, value)
-        rcr.save()
-    except ObjectDoesNotExist:
-        pass
+    auto_assign_campaign_character(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)

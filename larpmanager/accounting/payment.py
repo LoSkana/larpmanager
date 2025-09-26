@@ -413,23 +413,64 @@ def _process_fee(features, fee, invoice):
         trans.save()
 
 
-@receiver(pre_save, sender=PaymentInvoice)
-def update_payment_invoice(sender, instance, **kwargs):
-    if not instance.pk:
+def process_payment_invoice_status_change(invoice):
+    """Process payment invoice status changes and trigger payment received.
+
+    Args:
+        invoice: PaymentInvoice instance being saved
+    """
+    if not invoice.pk:
         return
 
     try:
-        prev = PaymentInvoice.objects.get(pk=instance.pk)
+        prev = PaymentInvoice.objects.get(pk=invoice.pk)
     except Exception:
         return
 
     if prev.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    if instance.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+    if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    payment_received(instance)
+    payment_received(invoice)
+
+
+@receiver(pre_save, sender=PaymentInvoice)
+def update_payment_invoice(sender, instance, **kwargs):
+    process_payment_invoice_status_change(instance)
+
+
+def process_refund_request_status_change(refund_request):
+    """Process refund request status changes.
+
+    Args:
+        refund_request: RefundRequest instance being updated
+
+    Side effects:
+        Creates accounting item when refund status changes to PAYED
+    """
+    if not refund_request.pk:
+        return
+
+    try:
+        prev = RefundRequest.objects.get(pk=refund_request.pk)
+    except Exception:
+        return
+
+    if prev.status == RefundStatus.PAYED:
+        return
+
+    if refund_request.status != RefundStatus.PAYED:
+        return
+
+    acc = AccountingItemOther()
+    acc.member = refund_request.member
+    acc.value = refund_request.value
+    acc.oth = OtherChoices.REFUND
+    acc.descr = f"Delivered refund of {refund_request.value:.2f}"
+    acc.assoc = refund_request.assoc
+    acc.save()
 
 
 @receiver(pre_save, sender=RefundRequest)
@@ -444,26 +485,39 @@ def update_refund_request(sender, instance, **kwargs):
     Side effects:
         Creates accounting item when refund status changes to PAYED
     """
-    if not instance.pk:
+    process_refund_request_status_change(instance)
+
+
+def process_collection_status_change(collection):
+    """Update payment collection status and metadata.
+
+    Args:
+        collection: Collection instance being updated
+
+    Side effects:
+        Creates accounting item credit when collection status changes to PAYED
+    """
+    if not collection.pk:
         return
 
     try:
-        prev = RefundRequest.objects.get(pk=instance.pk)
+        prev = Collection.objects.get(pk=collection.pk)
     except Exception:
         return
 
-    if prev.status == RefundStatus.PAYED:
+    if prev.status == CollectionStatus.PAYED:
         return
 
-    if instance.status != RefundStatus.PAYED:
+    if collection.status != CollectionStatus.PAYED:
         return
 
     acc = AccountingItemOther()
-    acc.member = instance.member
-    acc.value = instance.value
-    acc.oth = OtherChoices.REFUND
-    acc.descr = f"Delivered refund of {instance.value:.2f}"
-    acc.assoc = instance.assoc
+    acc.assoc = collection.assoc
+    acc.member = collection.member
+    acc.run = collection.run
+    acc.value = collection.total
+    acc.oth = OtherChoices.CREDIT
+    acc.descr = f"Collection of {collection.organizer}"
     acc.save()
 
 
@@ -479,25 +533,4 @@ def update_collection(sender, instance, **kwargs):
     Side effects:
         Creates accounting item credit when collection status changes to PAYED
     """
-    if not instance.pk:
-        return
-
-    try:
-        prev = Collection.objects.get(pk=instance.pk)
-    except Exception:
-        return
-
-    if prev.status == CollectionStatus.PAYED:
-        return
-
-    if instance.status != CollectionStatus.PAYED:
-        return
-
-    acc = AccountingItemOther()
-    acc.assoc = instance.assoc
-    acc.member = instance.member
-    acc.run = instance.run
-    acc.value = instance.total
-    acc.oth = OtherChoices.CREDIT
-    acc.descr = f"Collection of {instance.organizer}"
-    acc.save()
+    process_collection_status_change(instance)

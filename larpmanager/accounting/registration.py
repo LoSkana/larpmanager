@@ -448,10 +448,19 @@ def round_to_nearest_cent(number):
     return float(number)
 
 
+def process_registration_pre_save(registration):
+    """Process registration before saving.
+
+    Args:
+        registration: Registration instance being saved
+    """
+    registration.surcharge = get_date_surcharge(registration, registration.run.event)
+    registration.member.join(registration.run.event.assoc)
+
+
 @receiver(pre_save, sender=Registration)
 def pre_save_registration(sender, instance, *args, **kwargs):
-    instance.surcharge = get_date_surcharge(instance, instance.run.event)
-    instance.member.join(instance.run.event.assoc)
+    process_registration_pre_save(instance)
 
 
 def get_date_surcharge(reg, event):
@@ -484,6 +493,43 @@ def get_date_surcharge(reg, event):
     return tot
 
 
+def handle_registration_accounting_updates(registration):
+    """Handle post-save accounting updates for registrations.
+
+    Args:
+        registration: Registration instance that was saved
+    """
+    if not registration.member:
+        return
+
+    # find cancelled registrations to transfer payments
+    if not registration.cancellation_date:
+        cancelled = Registration.objects.filter(
+            run=registration.run, member=registration.member, cancellation_date__isnull=False
+        )
+        cancelled = list(cancelled.values_list("pk", flat=True))
+        if cancelled:
+            for typ in [AccountingItemPayment, AccountingItemTransaction]:
+                for el in typ.objects.filter(reg__id__in=cancelled):
+                    el.reg = registration
+                    el.save()
+
+    old_provisional = is_reg_provisional(registration)
+
+    # update accounting
+    update_registration_accounting(registration)
+
+    # update accounting without triggering a new save
+    updates = {}
+    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
+        updates[field] = getattr(registration, field)
+    Registration.objects.filter(pk=registration.pk).update(**updates)
+
+    # send mail if not provisional anymore
+    if old_provisional and not is_reg_provisional(registration):
+        update_registration_status_bkg(registration.id)
+
+
 @receiver(post_save, sender=Registration)
 def post_save_registration_accounting(sender, instance, **kwargs):
     """
@@ -494,54 +540,53 @@ def post_save_registration_accounting(sender, instance, **kwargs):
         instance: Registration instance that was saved
         **kwargs: Additional signal arguments
     """
-    if not instance.member:
-        return
+    handle_registration_accounting_updates(instance)
 
-    # find cancelled registrations to transfer payments
-    if not instance.cancellation_date:
-        cancelled = Registration.objects.filter(
-            run=instance.run, member=instance.member, cancellation_date__isnull=False
-        )
-        cancelled = list(cancelled.values_list("pk", flat=True))
-        if cancelled:
-            for typ in [AccountingItemPayment, AccountingItemTransaction]:
-                for el in typ.objects.filter(reg__id__in=cancelled):
-                    el.reg = instance
-                    el.save()
 
-    old_provisional = is_reg_provisional(instance)
+def process_accounting_discount_post_save(discount_item):
+    """Process accounting discount item after save.
 
-    # update accounting
-    update_registration_accounting(instance)
-
-    # update accounting without triggering a new save
-    updates = {}
-    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
-        updates[field] = getattr(instance, field)
-    Registration.objects.filter(pk=instance.pk).update(**updates)
-
-    # send mail if not provisional anymore
-    if old_provisional and not is_reg_provisional(instance):
-        update_registration_status_bkg(instance.id)
+    Args:
+        discount_item: AccountingItemDiscount instance that was saved
+    """
+    if discount_item.run and not discount_item.expires:
+        for reg in Registration.objects.filter(member=discount_item.member, run=discount_item.run):
+            reg.save()
 
 
 @receiver(post_save, sender=AccountingItemDiscount)
 def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
-    if instance.run and not instance.expires:
-        for reg in Registration.objects.filter(member=instance.member, run=instance.run):
-            reg.save()
+    process_accounting_discount_post_save(instance)
+
+
+def process_registration_ticket_post_save(ticket):
+    """Process registration ticket after save.
+
+    Args:
+        ticket: RegistrationTicket instance that was saved
+    """
+    logger.debug(f"RegistrationTicket saved: {ticket} at {datetime.now()}")
+    check_reg_events(ticket.event)
 
 
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_registration_ticket(sender, instance, created, **kwargs):
-    logger.debug(f"RegistrationTicket saved: {instance} at {datetime.now()}")
-    check_reg_events(instance.event)
+    process_registration_ticket_post_save(instance)
+
+
+def process_registration_option_post_save(option):
+    """Process registration option after save.
+
+    Args:
+        option: RegistrationOption instance that was saved
+    """
+    logger.debug(f"RegistrationOption saved: {option} at {datetime.now()}")
+    check_reg_events(option.question.event)
 
 
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender, instance, created, **kwargs):
-    logger.debug(f"RegistrationOption saved: {instance} at {datetime.now()}")
-    check_reg_events(instance.question.event)
+    process_registration_option_post_save(instance)
 
 
 def check_reg_events(event):
