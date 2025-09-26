@@ -43,11 +43,28 @@ class MyLoginView(LoginView):
     authentication_form = MyAuthForm
 
     def form_valid(self, form):
+        """Handle valid login form submission.
+
+        Args:
+            form: Valid authentication form
+
+        Returns:
+            HttpResponse: Response after successful login
+        """
         welcome_user(self.request, form.get_user())
         return super().form_valid(form)
 
 
 def home(request, lang=None):
+    """Handle home page routing based on association.
+
+    Args:
+        request: HTTP request object
+        lang: Optional language code
+
+    Returns:
+        HttpResponse: Rendered home page or calendar view
+    """
     if request.assoc["id"] == 0:
         return lm_home(request)
 
@@ -55,14 +72,41 @@ def home(request, lang=None):
 
 
 def error_404(request, exception):
+    """Handle 404 errors with custom template.
+
+    Args:
+        request: HTTP request object
+        exception: The exception that caused the 404
+
+    Returns:
+        HttpResponse: Rendered 404 error page
+    """
     return render(request, "404.html", {"exe": exception})
 
 
 def error_500(request):
+    """Handle 500 errors with custom template.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered 500 error page
+    """
     return render(request, "500.html")
 
 
 def after_login(request, subdomain, path=""):
+    """Handle post-login redirect based on subdomain.
+
+    Args:
+        request: HTTP request object
+        subdomain: Target subdomain
+        path: Optional path to append
+
+    Returns:
+        HttpResponse: Redirect to appropriate subdomain
+    """
     user = request.user
     if not user.is_authenticated:
         return redirect("/login/")

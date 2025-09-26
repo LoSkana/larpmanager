@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import html
-import os
+import logging
 import random
 import re
 import string
@@ -28,17 +28,15 @@ from datetime import datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 
-import magic
 import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -57,9 +55,7 @@ from larpmanager.models.miscellanea import (
     WorkshopOption,
     WorkshopQuestion,
 )
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import my_uuid_short, strip_tags
 from larpmanager.models.writing import (
     Character,
@@ -71,9 +67,9 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
-from larpmanager.utils.exceptions import (
-    NotFoundError,
-)
+from larpmanager.utils.exceptions import NotFoundError
+
+logger = logging.getLogger(__name__)
 
 format_date = "%d/%m/%y"
 
@@ -84,11 +80,29 @@ utc = pytz.UTC
 
 # ## PROFILING CHECK
 def check_already(nm, params):
+    """Check if a background task is already queued.
+
+    Args:
+        nm (str): Task name
+        params: Task parameters
+
+    Returns:
+        bool: True if task already exists in queue
+    """
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.count() > 0
 
 
 def get_channel(a, b):
+    """Generate unique channel ID for two entities.
+
+    Args:
+        a (int): First entity ID
+        b (int): Second entity ID
+
+    Returns:
+        int: Unique channel ID using Cantor pairing
+    """
     a = int(a)
     b = int(b)
     if a > b:
@@ -98,14 +112,36 @@ def get_channel(a, b):
 
 
 def cantor(k1, k2):
+    """Cantor pairing function to map two integers to a unique integer.
+
+    Args:
+        k1 (int): First integer
+        k2 (int): Second integer
+
+    Returns:
+        float: Unique pairing result
+    """
     return ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
 
 
 def compute_diff(self, other):
+    """Compute differences between this instance and another.
+
+    Args:
+        self: Current instance
+        other: Other instance to compare against
+    """
     check_diff(self, other.text, self.text)
 
 
 def check_diff(self, tx1, tx2):
+    """Generate HTML diff between two text strings.
+
+    Args:
+        self: Instance to store diff result
+        tx1: First text string
+        tx2: Second text string
+    """
     if tx1 == tx2:
         self.diff = None
         return
@@ -116,10 +152,29 @@ def check_diff(self, tx1, tx2):
 
 
 def get_assoc(request):
+    """Get association from request context.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        Association: Association instance from request context
+    """
     return get_object_or_404(Association, pk=request.assoc["id"])
 
 
 def get_member(n):
+    """Get member by ID with proper error handling.
+
+    Args:
+        n: Member ID
+
+    Returns:
+        dict: Dictionary containing member instance
+
+    Raises:
+        Http404: If member does not exist
+    """
     try:
         return {"member": Member.objects.get(pk=n)}
     except ObjectDoesNotExist as err:
@@ -127,6 +182,15 @@ def get_member(n):
 
 
 def get_contact(mid, yid):
+    """Get contact relationship between two members.
+
+    Args:
+        mid: ID of first member
+        yid: ID of second member
+
+    Returns:
+        Contact: Contact instance or None if not found
+    """
     try:
         return Contact.objects.get(me_id=mid, you_id=yid)
     except ObjectDoesNotExist:
@@ -134,6 +198,12 @@ def get_contact(mid, yid):
 
 
 def get_event_template(ctx, n):
+    """Get event template by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Event template ID
+    """
     try:
         ctx["event"] = Event.objects.get(pk=n, template=True, assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
@@ -141,10 +211,26 @@ def get_event_template(ctx, n):
 
 
 def get_char(ctx, n, by_number=False):
+    """Get character by ID or number and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Character ID or number
+        by_number: Whether to search by number instead of ID
+    """
     get_element(ctx, n, "character", Character, by_number)
 
 
 def get_registration(ctx, n):
+    """Get registration by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Registration ID
+
+    Raises:
+        Http404: If registration does not exist
+    """
     try:
         ctx["registration"] = Registration.objects.get(run=ctx["run"], pk=n)
         ctx["name"] = str(ctx["registration"])
@@ -153,6 +239,15 @@ def get_registration(ctx, n):
 
 
 def get_discount(ctx, n):
+    """Get discount by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Discount ID
+
+    Raises:
+        Http404: If discount does not exist
+    """
     try:
         ctx["discount"] = Discount.objects.get(pk=n)
         ctx["name"] = str(ctx["discount"])
@@ -161,6 +256,15 @@ def get_discount(ctx, n):
 
 
 def get_album(ctx, n):
+    """Get album by ID and add to context.
+
+    Args:
+        ctx: Template context dictionary
+        n: Album ID
+
+    Raises:
+        Http404: If album does not exist
+    """
     try:
         ctx["album"] = Album.objects.get(pk=n)
     except ObjectDoesNotExist as err:
@@ -364,130 +468,6 @@ def rmdir(directory):
     directory.rmdir()
 
 
-# max bytes to read for file type detection
-READ_SIZE = 5 * (1024 * 1024)  # 5MB
-
-
-@deconstructible
-class FileTypeValidator:
-    """
-    File type validator for validating mimetypes and extensions
-
-    Args:
-        allowed_types (list): list of acceptable mimetypes e.g; ['image/jpeg', 'application/pdf']
-                    see https://www.iana.org/assignments/media-types/media-types.xhtml
-        allowed_extensions (list, optional): list of allowed file extensions e.g; ['.jpeg', '.pdf', '.docx']
-    """
-
-    type_message = _("File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'.")
-
-    extension_message = _(
-        "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'."
-    )
-
-    invalid_message = _(
-        "Allowed type '%(allowed_type)s' is not a valid type.See "
-        "https://www.iana.org/assignments/media-types/media-types.xhtml"
-    )
-
-    def __init__(self, allowed_types, allowed_extensions=()):
-        self.input_allowed_types = allowed_types
-        self.allowed_mimes = self._normalize(allowed_types)
-        self.allowed_exts = allowed_extensions
-
-    def __call__(self, fileobj):
-        detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
-        root, extension = os.path.splitext(fileobj.name.lower())
-
-        # seek back to start so a valid file could be read
-        # later without resetting the position
-        fileobj.seek(0)
-
-        # some versions of libmagic do not report proper mimes for Office subtypes
-        # use detection details to transform it to proper mime
-        if detected_type in ("application/octet-stream", "application/vnd.ms-office"):
-            detected_type = self._check_word_or_excel(fileobj, detected_type, extension)
-
-        if detected_type not in self.allowed_mimes and detected_type.split("/")[0] not in self.allowed_mimes:
-            raise ValidationError(
-                message=self.type_message,
-                params={
-                    "detected_type": detected_type,
-                    "allowed_types": ", ".join(self.input_allowed_types),
-                },
-                code="invalid_type",
-            )
-
-        if self.allowed_exts and (extension not in self.allowed_exts):
-            raise ValidationError(
-                message=self.extension_message,
-                params={
-                    "extension": extension,
-                    "allowed_extensions": ", ".join(self.allowed_exts),
-                },
-                code="invalid_extension",
-            )
-
-    def _normalize(self, allowed_types):
-        """
-        Validate and transforms given allowed types
-        e.g; wildcard character specification will be normalized as text/* -> text
-        """
-        allowed_mimes = []
-        for allowed_type_orig in allowed_types:
-            allowed_type = allowed_type_orig.decode() if type(allowed_type_orig) is bytes else allowed_type_orig
-            parts = allowed_type.split("/")
-            max_parts = 2
-            if len(parts) == max_parts:
-                if parts[1] == "*":
-                    allowed_mimes.append(parts[0])
-                else:
-                    allowed_mimes.append(allowed_type)
-            else:
-                raise ValidationError(
-                    message=self.invalid_message,
-                    params={"allowed_type": allowed_type},
-                    code="invalid_input",
-                )
-
-        return allowed_mimes
-
-    @staticmethod
-    def _check_word_or_excel(fileobj, detected_type, extension):
-        """
-        Returns proper mimetype in case of word or excel files
-        """
-        word_strings = [
-            "Microsoft Word",
-            "Microsoft Office Word",
-            "Microsoft Macintosh Word",
-        ]
-        excel_strings = [
-            "Microsoft Excel",
-            "Microsoft Office Excel",
-            "Microsoft Macintosh Excel",
-        ]
-        office_strings = ["Microsoft OOXML"]
-
-        file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
-
-        fileobj.seek(0)
-
-        if any(string in file_type_details for string in word_strings):
-            detected_type = "application/msword"
-        elif any(string in file_type_details for string in excel_strings):
-            detected_type = "application/vnd.ms-excel"
-        elif any(string in file_type_details for string in office_strings) or (
-            detected_type == "application/vnd.ms-office"
-        ):
-            if extension in (".doc", ".docx"):
-                detected_type = "application/msword"
-            if extension in (".xls", ".xlsx"):
-                detected_type = "application/vnd.ms-excel"
-
-        return detected_type
-
-
 def average(lst):
     return sum(lst) / len(lst)
 
@@ -531,43 +511,44 @@ def round_to_two_significant_digits(number):
     return int(rounded)
 
 
-def exchange_order(ctx, cls, num, order):
-    elements = ctx["event"].get_elements(cls)
-    # get elements
+def exchange_order(ctx, cls, num, order, elements=None):
+    """
+    Exchange ordering positions between two elements.
+
+    Args:
+        ctx: Context dictionary to store current element
+        cls: Model class of elements to reorder
+        num: Primary key of element to move
+        order: Direction to move (True for up, False for down)
+        elements: Optional queryset of elements (defaults to event elements)
+    """
+    elements = elements or ctx["event"].get_elements(cls)
     current = elements.get(pk=num)
 
     # order indicates if we have to increase, or reduce, the current_order
-    if order:
-        other = elements.filter(order__gt=current.order).order_by("order")
-    else:
-        other = elements.filter(order__lt=current.order).order_by("-order")
+    qs = elements.filter(order__gt=current.order) if order else elements.filter(order__lt=current.order)
+    qs = qs.order_by("order" if order else "-order")
 
-    if hasattr(current, "question"):
-        other = other.filter(question=current.question)
-    if hasattr(current, "section"):
-        other = other.filter(section=current.section)
-    if hasattr(current, "applicable"):
-        other = other.filter(applicable=current.applicable)
+    for attr in ("question", "section", "applicable"):
+        if hasattr(current, attr):
+            qs = qs.filter(**{attr: getattr(current, attr)})
 
+    other = qs.first()
     # if not element is found, simply increase / reduce the order
-    if len(other) == 0:
-        if order:
-            current.order += 1
-        else:
-            current.order -= 1
+    if not other:
+        current.order += 1 if order else -1
         current.save()
-    else:
-        other = other.first()
-        # exchange ordering
-        current.order = other.order
-        other.order = current.order
-        if current.order == other.order:
-            if order:
-                other.order -= 1
-            else:
-                other.order += 1
-        current.save()
-        other.save()
+        ctx["current"] = current
+        return
+
+    # exchange ordering
+    current.order, other.order = other.order, current.order
+    # if they are the same, something has gone wrong, try to fix it
+    if current.order == other.order:
+        other.order += -1 if order else 1
+
+    current.save()
+    other.save()
     ctx["current"] = current
 
 
@@ -582,36 +563,68 @@ def normalize_string(value):
 
 
 def copy_class(target_id, source_id, cls):
+    """
+    Copy all objects of a given class from source event to target event.
+
+    Args:
+        target_id: Target event ID to copy objects to
+        source_id: Source event ID to copy objects from
+        cls: Django model class to copy instances of
+    """
     cls.objects.filter(event_id=target_id).delete()
 
     for obj in cls.objects.filter(event_id=source_id):
-        # save a copy of m2m relations
-        m2m_data = {}
+        try:
+            # save a copy of m2m relations
+            m2m_data = {}
 
-        # noinspection PyProtectedMember
-        for field in obj._meta.many_to_many:
-            m2m_data[field.name] = list(getattr(obj, field.name).all())
+            # noinspection PyProtectedMember
+            for field in obj._meta.many_to_many:
+                m2m_data[field.name] = list(getattr(obj, field.name).all())
 
-        obj.pk = None
-        obj.event_id = target_id
-        # noinspection PyProtectedMember
-        obj._state.adding = True
-        for field_name, func in {"access_token": my_uuid_short}.items():
-            if not hasattr(obj, field_name):
-                continue
-            setattr(obj, field_name, func())
-        obj.save()
+            obj.pk = None
+            obj.event_id = target_id
+            # noinspection PyProtectedMember
+            obj._state.adding = True
+            for field_name, func in {"access_token": my_uuid_short}.items():
+                if not hasattr(obj, field_name):
+                    continue
+                setattr(obj, field_name, func())
+            obj.save()
 
-        # copy m2m relations
-        for field_name, values in m2m_data.items():
-            getattr(obj, field_name).set(values)
+            # copy m2m relations
+            for field_name, values in m2m_data.items():
+                getattr(obj, field_name).set(values)
+        except Exception as err:
+            logging.warning(f"found exp: {err}")
 
 
 def get_payment_methods_ids(ctx):
+    """
+    Get set of payment method IDs for an association.
+
+    Args:
+        ctx: Context dictionary containing association ID
+
+    Returns:
+        set: Set of payment method primary keys
+    """
     return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):
+    """
+    Detect CSV delimiter from content header line.
+
+    Args:
+        content: CSV content string
+
+    Returns:
+        str: Detected delimiter character
+
+    Raises:
+        Exception: If no delimiter is found
+    """
     header = content.split("\n")[0]
     for d in ["\t", ";", ","]:
         if d in header:
@@ -620,6 +633,15 @@ def detect_delimiter(content):
 
 
 def clean(s):
+    """
+    Clean and normalize string by removing symbols, spaces, and accents.
+
+    Args:
+        s: String to clean
+
+    Returns:
+        str: Cleaned string with normalized characters
+    """
     s = s.lower()
     s = re.sub(r"[^\w]", " ", s)  # remove symbols
     s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
@@ -629,6 +651,14 @@ def clean(s):
 
 
 def _search_char_reg(ctx, char, js):
+    """
+    Populate character search result with registration and player data.
+
+    Args:
+        ctx: Context dictionary with run information
+        char: Character instance with registration data
+        js: JSON object to populate with search results
+    """
     js["name"] = char.name
     if char.rcr and char.rcr.custom_name:
         js["name"] = char.rcr.custom_name

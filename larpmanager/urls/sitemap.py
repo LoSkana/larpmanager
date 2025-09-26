@@ -28,7 +28,7 @@ from django.views.decorators.cache import cache_page
 
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.larpmanager import LarpManagerBlog
+from larpmanager.models.larpmanager import LarpManagerGuide
 
 translation.activate("en")
 
@@ -80,7 +80,7 @@ def _organization_sitemap(request):
         cache_ev[el.event_id] = 1
         assoc = el.event.assoc
         domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-        urls.append(f"https://{assoc.slug}.{domain}/{el.event.slug}/{el.number}/event/")
+        urls.append(f"https://{assoc.slug}.{domain}/{el.get_slug()}/event/")
     return urls
 
 
@@ -90,8 +90,8 @@ def larpmanager_sitemap():
     for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
     # Blog posts
-    for el in LarpManagerBlog.objects.filter(published=True):
-        urls.append(f"https://larpmanager.com/blog/{el.slug}/")
+    for el in LarpManagerGuide.objects.all():
+        urls.append(f"https://larpmanager.com/guide/{el.slug}/")
     return urls
 
 

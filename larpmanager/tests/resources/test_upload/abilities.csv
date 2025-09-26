@@ -1,0 +1,4 @@
+name,cost,typ,descr,prerequisites,requirements
+sword,2,test,baba,,
+shield,3,test,bibi,sword,
+sneak,4,test,bubu ,"sword, shield","rrrrrr, trtr"

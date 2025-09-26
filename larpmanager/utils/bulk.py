@@ -31,16 +31,42 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.models.writing import Character, Faction, Plot, Prologue
-from larpmanager.utils.exceptions import ReturnNow
+from larpmanager.utils.exceptions import ReturnNowError
 
 
 def _get_bulk_params(request, ctx):
-    operation = int(request.POST.get("operation", "0"))
-    target = int(request.POST.get("target", "0"))
-    ids = [int(x) for x in request.POST.getlist("ids[]", [])]
+    """
+    Extract and validate bulk operation parameters from request.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event/run information
+
+    Returns:
+        tuple: (ids, operation, target) extracted from request
+
+    Raises:
+        ReturnNowError: If no valid IDs are provided
+    """
+    try:
+        operation = int(request.POST.get("operation", "0"))
+    except (ValueError, TypeError):
+        operation = 0
+
+    try:
+        target = int(request.POST.get("target", "0"))
+    except (ValueError, TypeError):
+        target = 0
+
+    ids = []
+    for x in request.POST.getlist("ids[]", []):
+        try:
+            ids.append(int(x))
+        except (ValueError, TypeError):
+            continue
 
     if not ids:
-        raise ReturnNow(JsonResponse({"error": "no ids"}, status=400))
+        raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))
 
     eid = ctx["a_id"]
     if "run" in ctx:
@@ -112,7 +138,7 @@ def handle_bulk_items(request, ctx):
             Operations.DEL_ITEM_TAG: exec_del_item_tag,
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
-        raise ReturnNow(exec_bulk(request, ctx, mapping))
+        raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
     containers = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
     tags = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
@@ -168,6 +194,18 @@ def exec_del_char_prologue(request, ctx, target, ids):
 
 
 def handle_bulk_characters(request, ctx):
+    """Process bulk operations on character objects.
+
+    Handles mass character modifications, faction assignments, and other
+    batch character management tasks for efficient character administration.
+
+    Args:
+        request: Django HTTP request object containing POST data with operation details
+        ctx (dict): Context dictionary containing event and selection data
+
+    Returns:
+        None: Function modifies ctx in-place, adding operation results and status messages
+    """
     if request.POST:
         mapping = {
             Operations.ADD_CHAR_FACT: exec_add_char_fact,
@@ -179,7 +217,7 @@ def handle_bulk_characters(request, ctx):
             Operations.ADD_CHAR_PROLOGUE: exec_add_char_prologue,
             Operations.DEL_CHAR_PROLOGUE: exec_add_char_prologue,
         }
-        raise ReturnNow(exec_bulk(request, ctx, mapping))
+        raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
     ctx["bulk"] = []
 
@@ -227,7 +265,7 @@ def exec_set_quest_type(request, ctx, target, ids):
 
 def handle_bulk_quest(request, ctx):
     if request.POST:
-        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
+        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
     quest_types = ctx["event"].get_elements(QuestType).values("id", "name").order_by("name")
     ctx["bulk"] = [
@@ -242,7 +280,7 @@ def exec_set_quest(request, ctx, target, ids):
 
 def handle_bulk_trait(request, ctx):
     if request.POST:
-        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
 
     quests = ctx["event"].get_elements(Quest).values("id", "name").order_by("name")
     ctx["bulk"] = [
@@ -257,7 +295,7 @@ def exec_set_ability_type(request, ctx, target, ids):
 
 def handle_bulk_ability(request, ctx):
     if request.POST:
-        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
     quests = ctx["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
     ctx["bulk"] = [

@@ -52,7 +52,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 PAY_CHOICES = (
     ("t", _("Over")),
@@ -217,6 +217,14 @@ class ExeUrlShortnerForm(MyForm):
 
 
 def _delete_optionals_warehouse(form):
+    """Remove optional warehouse fields not enabled in association configuration.
+
+    Args:
+        form: Form instance to modify by removing disabled optional fields
+
+    Side effects:
+        Deletes form fields for warehouse options not enabled in config
+    """
     assoc = Association.objects.get(pk=form.params["a_id"])
     for field in WarehouseItem.get_optional_fields():
         if not assoc.get_config(f"warehouse_{field}", False):
@@ -244,6 +252,11 @@ class OrganizerCastingOptionsForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialize casting form with payment, membership, ticket, and faction options.
+
+        Sets up form fields based on enabled features and initializes choices
+        for payments, memberships, tickets, and factions.
+        """
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
@@ -282,6 +295,11 @@ class OrganizerCastingOptionsForm(forms.Form):
             self.fields["factions"].initial = [str(el[0]) for el in factions]
 
     def get_data(self):
+        """Get form data, either cleaned or initial values.
+
+        Returns:
+            dict: Form data with field names as keys and values as lists
+        """
         if hasattr(self, "cleaned_data"):
             return self.cleaned_data
         dic = {}
@@ -332,6 +350,12 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
 
 class OrganizerCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        """Initialize organizer copy form with source event choices.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
 
@@ -376,6 +400,14 @@ class OrganizerCopyForm(forms.Form):
 
 
 def unique_util_cod():
+    """Generate a unique utility code for new Util instances.
+
+    Returns:
+        str: Unique 16-character code
+
+    Raises:
+        ValueError: If unable to generate unique code after 5 attempts
+    """
     for _idx in range(5):
         cod = generate_id(16)
         if not Util.objects.filter(cod=cod).exists():

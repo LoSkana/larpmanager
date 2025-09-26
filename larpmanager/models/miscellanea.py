@@ -35,9 +35,12 @@ from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class HelpQuestion(BaseModel):
+    """Model for storing user help questions and support requests."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="questions")
 
     run = models.ForeignKey(
@@ -68,6 +71,19 @@ class HelpQuestion(BaseModel):
         null=True,
         verbose_name=_("Attachment"),
         help_text=_("If you need to attach a file, indicate it here, otherwise leave blank"),
+        validators=[
+            FileTypeValidator(
+                [
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "text/plain",
+                    "image/jpeg",
+                    "image/png",
+                    "image/gif",
+                ]
+            )
+        ],
     )
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
@@ -77,6 +93,8 @@ class HelpQuestion(BaseModel):
 
 
 class Contact(BaseModel):
+    """Model for managing private messaging contacts between members."""
+
     channel = models.IntegerField(default=0)
 
     me = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="FIRST_CONTACT")
@@ -200,6 +218,8 @@ class Album(BaseModel):
 
 
 class AlbumUpload(BaseModel):
+    """Model for tracking uploaded content to albums."""
+
     name = models.CharField(max_length=70)
 
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="uploads")
@@ -212,6 +232,8 @@ class AlbumUpload(BaseModel):
 
 
 class AlbumImage(BaseModel):
+    """Model for storing and processing album images with thumbnails."""
+
     upload = models.OneToOneField(AlbumUpload, on_delete=models.CASCADE, related_name="image")
 
     original = models.ImageField(upload_to=UploadToPathAndRename("albums/"))
@@ -249,6 +271,8 @@ class AlbumImage(BaseModel):
 
 
 class Competence(BaseModel):
+    """Model for managing member competences and skills within associations."""
+
     name = models.CharField(max_length=100, help_text=_("The name of the competence"))
 
     descr = models.CharField(max_length=5000, help_text=_("A description of the skills / abilities involved"))
@@ -259,6 +283,8 @@ class Competence(BaseModel):
 
 
 class CompetenceMemberRel(BaseModel):
+    """Through model linking members to competences with experience levels."""
+
     competence = models.ForeignKey(Competence, on_delete=models.CASCADE)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
@@ -275,6 +301,8 @@ class CompetenceMemberRel(BaseModel):
 
 
 class WorkshopModule(BaseModel):
+    """Model for managing workshop modules and member participation."""
+
     search = models.CharField(max_length=150, editable=False)
 
     is_generic = models.BooleanField(default=False)

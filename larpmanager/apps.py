@@ -27,4 +27,4 @@ class LarpManagerConfig(AppConfig):
     # Import signals
     def ready(self):
         _ = __import__("larpmanager.models.signals")
-        _ = __import__("larpmanager.utils.profiler.receivers") 
+        _ = __import__("larpmanager.utils.profiler.receivers")

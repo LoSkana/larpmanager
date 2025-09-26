@@ -1216,6 +1216,22 @@ msgstr ""
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 
+msgid "Registration priority"
+msgstr ""
+
+msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+
+msgid "Payment priority"
+msgstr ""
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+
 msgid "Alert"
 msgstr ""
 
@@ -5427,37 +5443,15 @@ msgstr ""
 msgid "Pre-Register"
 msgstr ""
 
-msgid "Show explanation"
+msgid "Registrations for this event are not open yet, but you can pre-register"
+msgstr ""
+
+msgid ""
+"Pre-registration is free. It does not guarantee a spot, but gives you "
+"priority when registration opens"
 msgstr ""
 
 msgid "New pre-registrations"
-msgstr ""
-
-msgid "Operation"
-msgstr ""
-
-msgid "If you like or are interested in an event, you can <b>pre-register</b>"
-msgstr ""
-
-msgid ""
-"This <b>is</b> not binding, and <b>does</b> not automatically secure you a "
-"place at the event, but you will be offered a preferential registration "
-"before the public opening of registration"
-msgstr ""
-
-msgid ""
-"For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new session of an event, spread the voice "
-"and invites others to pre-register to it"
-msgstr ""
-
-msgid ""
-"We only ask you to indicate a <b>order</b> of preference for the your pre-"
-"registrations (imagining you have to choose which one to play, indicates in "
-"what order you want to play them)"
-msgstr ""
-
-msgid "If you wish, you can delete past pre-registrations"
 msgstr ""
 
 msgid "Do you want to tell us something"
@@ -5501,6 +5495,12 @@ msgid ""
 msgstr ""
 
 msgid "Video"
+msgstr ""
+
+msgid "Guides"
+msgstr ""
+
+msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 
 msgid "Show inactive"
@@ -6551,6 +6551,9 @@ msgstr ""
 msgid "Field"
 msgstr ""
 
+msgid "Operation"
+msgstr ""
+
 msgid "Reading"
 msgstr ""
 
@@ -6695,6 +6698,9 @@ msgid "Additions"
 msgstr ""
 
 msgid "Last change"
+msgstr ""
+
+msgid "Full payment"
 msgstr ""
 
 msgid "PWYW"
@@ -7014,13 +7020,7 @@ msgstr ""
 msgid "This page shows the characters of the event"
 msgstr ""
 
-msgid "player"
-msgstr ""
-
-msgid "status"
-msgstr ""
-
-msgid "speedlarp"
+msgid "Attended"
 msgstr ""
 
 msgid "Versions"
@@ -8319,24 +8319,6 @@ msgstr ""
 msgid "Set ability type"
 msgstr ""
 
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
-"assignments/media-types/media-types.xhtml"
-msgstr ""
-
 msgid "Welcome"
 msgstr ""
 
@@ -8530,10 +8512,7 @@ msgstr ""
 msgid "Pre-register to the event!"
 msgstr ""
 
-msgid "Registration not yet open!"
-msgstr ""
-
-msgid "Registrations not open!"
+msgid "Registrations not open"
 msgstr ""
 
 #, python-format
@@ -8565,6 +8544,24 @@ msgstr ""
 msgid ""
 "Do you want to unsubscribe from our communication lists? <a "
 "href='%(url)s'>Unsubscribe</a>"
+msgstr ""
+
+#, python-format
+msgid ""
+"File type '%(detected_type)s' is not allowed.Allowed types are: "
+"'%(allowed_types)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
+"assignments/media-types/media-types.xhtml"
 msgstr ""
 
 msgid "Registration completed successfully!"
@@ -8879,6 +8876,15 @@ msgstr ""
 msgid "Unknow error on upload"
 msgstr ""
 
+msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+
 msgid "Photos and videos successfully uploaded"
 msgstr ""
 
@@ -8898,6 +8904,20 @@ msgid "Player customisation updated"
 msgstr ""
 
 msgid "Cache reset!"
+msgstr ""
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+
+msgid "You must create at least one quest before you can create traits"
+msgstr ""
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
 msgstr ""
 
 msgid ""
@@ -9147,6 +9167,9 @@ msgstr ""
 
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
+msgstr ""
+
+msgid "Registrations not open!"
 msgstr ""
 
 msgid "Gift card cancelled!"

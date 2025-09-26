@@ -59,11 +59,11 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
+from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
+from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.experience import (
     modifier_abilities_changed,
@@ -73,13 +73,24 @@ from larpmanager.utils.experience import (
 )
 from larpmanager.utils.miscellanea import rotate_vertical_photo
 from larpmanager.utils.registration import save_registration_character_form
-from larpmanager.utils.tutorial_query import delete_index, index_tutorial
+from larpmanager.utils.tutorial_query import delete_index_guide, delete_index_tutorial, index_guide, index_tutorial
 
 log = logging.getLogger(__name__)
 
 
 @receiver(pre_save)
 def pre_save_callback(sender, instance, *args, **kwargs):
+    """Generic pre-save handler for automatic field population.
+
+    Automatically sets number/order fields and updates search fields
+    for models that have them.
+
+    Args:
+        sender: Model class sending the signal
+        instance: Model instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     for field in ["number", "order"]:
         if hasattr(instance, field) and not getattr(instance, field):
             que = None
@@ -87,6 +98,8 @@ def pre_save_callback(sender, instance, *args, **kwargs):
                 que = instance.__class__.objects.filter(event=instance.event)
             if hasattr(instance, "assoc") and instance.assoc:
                 que = instance.__class__.objects.filter(assoc=instance.assoc)
+            if hasattr(instance, "character") and instance.character:
+                que = instance.__class__.objects.filter(character=instance.character)
             if que is not None:
                 n = que.aggregate(Max(field))[f"{field}__max"]
                 if not n:
@@ -101,12 +114,26 @@ def pre_save_callback(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=Association)
 def pre_save_association_generate_fernet(sender, instance, **kwargs):
+    """Generate Fernet encryption key for new associations.
+
+    Args:
+        sender: Association model class
+        instance: Association instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.key:
         instance.key = Fernet.generate_key()
 
 
 @receiver(pre_save, sender=AssocPermission)
 def pre_save_assoc_permission(sender, instance, **kwargs):
+    """Handle association permission changes and cache updates.
+
+    Args:
+        sender: AssocPermission model class
+        instance: AssocPermission instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.number:
         n = AssocPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
             "number__max"
@@ -118,6 +145,13 @@ def pre_save_assoc_permission(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=EventPermission)
 def pre_save_event_permission(sender, instance, **kwargs):
+    """Handle event permission changes and numbering.
+
+    Args:
+        sender: EventPermission model class
+        instance: EventPermission instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.number:
         n = EventPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
             "number__max"
@@ -129,21 +163,52 @@ def pre_save_event_permission(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Plot)
 def pre_save_plot(sender, instance, *args, **kwargs):
+    """Replace character references in plot text before saving.
+
+    Args:
+        sender: Plot model class
+        instance: Plot instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender, instance, *args, **kwargs):
+    """Replace character references in faction text before saving.
+
+    Args:
+        sender: Faction model class
+        instance: Faction instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Prologue)
 def pre_save_prologue(sender, instance, *args, **kwargs):
+    """Replace character references in prologue text before saving.
+
+    Args:
+        sender: Prologue model class
+        instance: Prologue instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     replace_chars_all(instance)
 
 
 @receiver(post_save, sender=Run)
 def save_run_plan(sender, instance, **kwargs):
+    """Set run plan from association default if not already set.
+
+    Args:
+        sender: Run model class
+        instance: Run instance that was saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.plan and instance.event:
         updates = {"plan": instance.event.assoc.plan}
         Run.objects.filter(pk=instance.pk).update(**updates)
@@ -151,16 +216,38 @@ def save_run_plan(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Trait)
 def update_trait(sender, instance, **kwargs):
+    """Update trait relationships after trait is saved.
+
+    Args:
+        sender: Trait model class
+        instance: Trait instance that was saved
+        **kwargs: Additional keyword arguments
+    """
     update_traits_all(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment_updatereg(sender, instance, created, **kwargs):
+    """Update registration totals when payment items are saved.
+
+    Args:
+        sender: AccountingItemPayment model class
+        instance: AccountingItemPayment instance that was saved
+        created (bool): Whether this is a new instance
+        **kwargs: Additional keyword arguments
+    """
     instance.reg.save()
 
 
 @receiver(pre_save, sender=AccountingItemPayment)
 def update_accounting_item_payment_member(sender, instance, **kwargs):
+    """Update payment member and handle registration changes.
+
+    Args:
+        sender: AccountingItemPayment model class
+        instance: AccountingItemPayment instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.member:
         instance.member = instance.reg.member
 
@@ -178,6 +265,13 @@ def update_accounting_item_payment_member(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Collection)
 def pre_save_collection(sender, instance, **kwargs):
+    """Generate unique codes and calculate collection totals.
+
+    Args:
+        sender: Collection model class
+        instance: Collection instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.pk:
         instance.unique_contribute_code()
         instance.unique_redeem_code()
@@ -189,6 +283,14 @@ def pre_save_collection(sender, instance, **kwargs):
 
 @receiver(post_save, sender=AccountingItemCollection)
 def post_save_accounting_item_collection(sender, instance, created, **kwargs):
+    """Update collection total when items are added.
+
+    Args:
+        sender: AccountingItemCollection model class
+        instance: AccountingItemCollection instance that was saved
+        created (bool): Whether this is a new instance
+        **kwargs: Additional keyword arguments
+    """
     if instance.collection:
         instance.collection.save()
 
@@ -218,6 +320,14 @@ def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
+    """Create member profile and sync email when user is saved.
+
+    Args:
+        sender: User model class
+        instance: User instance that was saved
+        created (bool): Whether this is a new user
+        **kwargs: Additional keyword arguments
+    """
     if created:
         Member.objects.create(user=instance)
     instance.member.email = instance.email
@@ -226,6 +336,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender, instance, **kwargs):
+    """Handle membership status changes and card numbering.
+
+    Args:
+        sender: Membership model class
+        instance: Membership instance being saved
+        **kwargs: Additional keyword arguments
+    """
     if instance.status == MembershipStatus.ACCEPTED:
         if not instance.card_number:
             n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
@@ -304,6 +421,12 @@ def save_event_update(sender, instance, **kwargs):
 
 
 def save_event_tickets(features, instance):
+    """Create default registration tickets for event.
+
+    Args:
+        features (dict): Enabled features for the event
+        instance: Event instance to create tickets for
+    """
     # create tickets if not exists
     tickets = [
         ("", TicketTier.STANDARD, "Standard"),
@@ -318,6 +441,12 @@ def save_event_tickets(features, instance):
 
 
 def save_event_character_form(features, instance):
+    """Create character form questions based on enabled features.
+
+    Args:
+        features (dict): Enabled features for the event
+        instance: Event instance to create form for
+    """
     # create fields if not exists / delete if feature not active
     if "character" not in features:
         return
@@ -380,6 +509,12 @@ def _init_writing_element(instance, def_tps, applicables):
 
 
 def _init_character_form_questions(custom_tps, def_tps, features, instance):
+    """Initialize character form questions during model setup.
+
+    Sets up default and custom question types for character creation forms,
+    managing question creation and deletion based on enabled features and
+    existing question configurations.
+    """
     que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 
@@ -422,6 +557,12 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
 
 
 def save_event_registration_form(features, instance):
+    """Create registration form questions based on enabled features.
+
+    Args:
+        features (dict): Enabled features for the event
+        instance: Event instance to create form for
+    """
     _activate_orga_lang(instance)
 
     def_tps = {RegistrationQuestionType.TICKET}
@@ -495,6 +636,13 @@ def _activate_orga_lang(instance):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_campaign(sender, instance, **kwargs):
+    """Auto-assign last character for campaign registrations.
+
+    Args:
+        sender: Registration model class
+        instance: Registration instance that was saved
+        **kwargs: Additional keyword arguments
+    """
     if not instance.member:
         return
 
@@ -535,6 +683,14 @@ def post_save_registration_campaign(sender, instance, **kwargs):
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
+    """Calculate VAT for payment items when VAT feature is enabled.
+
+    Args:
+        sender: AccountingItemPayment model class
+        instance: AccountingItemPayment instance that was saved
+        created (bool): Whether this is a new instance
+        **kwargs: Additional keyword arguments
+    """
     if "vat" not in get_assoc_features(instance.assoc_id):
         return
 
@@ -581,6 +737,16 @@ def post_delete_reset_member_config(sender, instance, **kwargs):
     reset_configs(instance.member)
 
 
+@receiver(post_save, sender=CharacterConfig)
+def post_save_reset_character_config(sender, instance, **kwargs):
+    reset_configs(instance.character)
+
+
+@receiver(post_delete, sender=CharacterConfig)
+def post_delete_reset_character_config(sender, instance, **kwargs):
+    reset_configs(instance.character)
+
+
 @receiver(pre_save, sender=Association)
 def pre_save_association_set_skin_features(sender, instance, **kwargs):
     if not instance.skin:
@@ -617,7 +783,24 @@ def post_save_association_set_skin_features(sender, instance, created, **kwargs)
     transaction.on_commit(update_features)
 
 
-# Writing
+@receiver(post_save, sender=LarpManagerTutorial)
+def post_save_index_tutorial(sender, instance, **kwargs):
+    index_tutorial(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerTutorial)
+def delete_tutorial_from_index(sender, instance, **kwargs):
+    delete_index_tutorial(instance.id)
+
+
+@receiver(post_save, sender=LarpManagerGuide)
+def post_save_index_guide(sender, instance, **kwargs):
+    index_guide(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerGuide)
+def delete_guide_from_index(sender, instance, **kwargs):
+    delete_index_guide(instance.id)
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -685,16 +868,6 @@ m2m_changed.connect(modifier_abilities_changed, sender=ModifierPx.abilities.thro
 m2m_changed.connect(rule_abilities_changed, sender=RulePx.abilities.through)
 
 # LarpManager
-
-
-@receiver(post_save, sender=LarpManagerTutorial)
-def post_save_index_tutorial(sender, instance, **kwargs):
-    index_tutorial(instance.id)
-
-
-@receiver(post_delete, sender=LarpManagerTutorial)
-def delete_tutorial_from_index(sender, instance, **kwargs):
-    delete_index(instance.id)
 
 
 @receiver(post_save, sender=LarpManagerTicket)

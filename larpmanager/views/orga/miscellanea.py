@@ -54,10 +54,7 @@ from larpmanager.models.miscellanea import (
     WorkshopQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.utils.common import (
-    get_album_cod,
-    get_element,
-)
+from larpmanager.utils.common import get_album_cod, get_element
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.miscellanea import get_warehouse_optionals, upload_albums
@@ -192,6 +189,16 @@ def orga_warehouse_area_edit(request, s, num):
 
 @login_required
 def orga_warehouse_area_assignments(request, s, num):
+    """Manage warehouse area item assignments for event organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        num: Warehouse area ID number
+
+    Returns:
+        HttpResponse: Rendered warehouse area assignments page
+    """
     ctx = check_event_permission(request, s, "orga_warehouse_area")
     get_element(ctx, num, "area", WarehouseArea)
 

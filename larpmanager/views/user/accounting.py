@@ -18,11 +18,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import date, datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -48,9 +50,7 @@ from larpmanager.forms.accounting import (
     RefundRequestForm,
     WireInvoiceSubmitForm,
 )
-from larpmanager.forms.member import (
-    MembershipForm,
-)
+from larpmanager.forms.member import MembershipForm
 from larpmanager.mail.accounting import notify_invoice_check, notify_refund_request
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -67,9 +67,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.utils.base import def_user_ctx
 from larpmanager.utils.common import (
     get_assoc,
@@ -77,11 +75,11 @@ from larpmanager.utils.common import (
     get_collection_redeem,
 )
 from larpmanager.utils.event import check_event_permission, get_event_run
-from larpmanager.utils.exceptions import (
-    check_assoc_feature,
-)
+from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.text import get_assoc_text
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -129,6 +127,15 @@ def accounting_tokens(request):
 
 @login_required
 def accounting_credits(request):
+    """
+    Display user's accounting credits including expenses, credits given/used, and refunds.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered accounting credits template
+    """
     ctx = def_user_ctx(request)
     ctx.update(
         {
@@ -160,6 +167,14 @@ def accounting_credits(request):
 
 @login_required
 def acc_refund(request):
+    """Handle refund request form processing and notifications.
+
+    Args:
+        request: HTTP request with user data
+
+    Returns:
+        HttpResponse: Refund form template or redirect after successful submission
+    """
     check_assoc_feature(request, "refund")
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
@@ -168,10 +183,11 @@ def acc_refund(request):
     if request.method == "POST":
         form = RefundRequestForm(request.POST, member=ctx["member"])
         if form.is_valid():
-            p = form.save(commit=False)
-            p.member = ctx["member"]
-            p.assoc_id = ctx["a_id"]
-            p.save()
+            with transaction.atomic():
+                p = form.save(commit=False)
+                p.member = ctx["member"]
+                p.assoc_id = ctx["a_id"]
+                p.save()
             notify_refund_request(p)
             messages.success(
                 request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
@@ -212,6 +228,11 @@ def acc_pay(request, s, method=None):
 
 @login_required
 def acc_reg(request, reg_id, method=None):
+    """Handle registration payment processing.
+
+    Manages payment flows, fee calculations, and transaction recording
+    for event registrations across different payment methods.
+    """
     check_assoc_feature(request, "payment")
 
     try:
@@ -224,7 +245,7 @@ def acc_reg(request, reg_id, method=None):
     except Exception as err:
         raise Http404(f"registration not found {err}") from err
 
-    ctx = get_event_run(request, reg.run.event.slug, reg.run.number)
+    ctx = get_event_run(request, reg.run.get_slug())
     ctx["show_accounting"] = True
 
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
@@ -279,6 +300,15 @@ def acc_reg(request, reg_id, method=None):
 
 @login_required
 def acc_membership(request, method=None):
+    """Process membership fee payment for the current year.
+
+    Args:
+        request: HTTP request object with user data
+        method: Optional payment method to use by default
+
+    Returns:
+        Rendered membership payment form or redirect on success
+    """
     check_assoc_feature(request, "membership")
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
@@ -337,10 +367,11 @@ def acc_collection(request):
     if request.method == "POST":
         form = CollectionNewForm(request.POST)
         if form.is_valid():
-            p = form.save(commit=False)
-            p.organizer = request.user.member
-            p.assoc_id = request.assoc["id"]
-            p.save()
+            with transaction.atomic():
+                p = form.save(commit=False)
+                p.organizer = request.user.member
+                p.assoc_id = request.assoc["id"]
+                p.save()
             messages.success(request, _("The collection has been activated!"))
             return redirect("acc_collection_manage", s=p.contribute_code)
     else:
@@ -392,8 +423,9 @@ def acc_collection_close(request, s):
     if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
-    c.status = CollectionStatus.DONE
-    c.save()
+    with transaction.atomic():
+        c.status = CollectionStatus.DONE
+        c.save()
 
     messages.success(request, _("Collection closed"))
     return redirect("acc_collection_manage", s=s)
@@ -401,6 +433,15 @@ def acc_collection_close(request, s):
 
 @login_required
 def acc_collection_redeem(request, s):
+    """Handle redemption of completed accounting collections.
+
+    Args:
+        request: HTTP request object
+        s: Collection slug identifier
+
+    Returns:
+        Redirect to home on POST success or rendered redemption template
+    """
     c = get_collection_redeem(request, s)
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
@@ -409,13 +450,16 @@ def acc_collection_redeem(request, s):
         raise Http404("Collection not found")
 
     if request.method == "POST":
-        c.member = request.user.member
-        c.status = CollectionStatus.PAYED
-        c.save()
+        with transaction.atomic():
+            c.member = request.user.member
+            c.status = CollectionStatus.PAYED
+            c.save()
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
 
-    ctx["list"] = AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"])
+    ctx["list"] = AccountingItemCollection.objects.filter(
+        collection=c, collection__assoc_id=request.assoc["id"]
+    ).select_related("member", "collection")
     return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
 
 
@@ -509,6 +553,11 @@ def acc_payed(request, p=0):
 
 @login_required
 def acc_submit(request, s, p):
+    """Handle payment submission and invoice upload for user accounts.
+
+    Processes different payment types (wire transfer, PayPal, any) and handles
+    file uploads with validation and status updates.
+    """
     if not request.method == "POST":
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
@@ -521,7 +570,7 @@ def acc_submit(request, s, p):
         raise Http404("unknown value: " + s)
 
     if not form.is_valid():
-        # print(form.errors)
+        # logger.debug(f"Form errors: {form.errors}")
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + p)
@@ -532,15 +581,15 @@ def acc_submit(request, s, p):
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + p)
 
-    if s in {"wire", "paypal_nf"}:
-        inv.invoice = form.cleaned_data["invoice"]
-    elif s == "any":
-        inv.text = form.cleaned_data["text"]
+    with transaction.atomic():
+        if s in {"wire", "paypal_nf"}:
+            inv.invoice = form.cleaned_data["invoice"]
+        elif s == "any":
+            inv.text = form.cleaned_data["text"]
 
-    inv.status = PaymentStatus.SUBMITTED
-
-    inv.txn_id = datetime.now().timestamp()
-    inv.save()
+        inv.status = PaymentStatus.SUBMITTED
+        inv.txn_id = datetime.now().timestamp()
+        inv.save()
 
     notify_invoice_check(inv)
 
@@ -550,6 +599,16 @@ def acc_submit(request, s, p):
 
 @login_required
 def acc_confirm(request, c):
+    """
+    Confirm accounting payment invoice with authorization checks.
+
+    Args:
+        request: HTTP request object with user authentication
+        c: Invoice confirmation code
+
+    Returns:
+        HttpResponse: Redirect to home page
+    """
     try:
         inv = PaymentInvoice.objects.get(cod=c, assoc_id=request.assoc["id"])
     except ObjectDoesNotExist:
@@ -573,10 +632,11 @@ def acc_confirm(request, c):
     if not found:
         if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
-            check_event_permission(request, reg.run.event.slug, reg.run.number)
+            check_event_permission(request, reg.run.get_slug())
 
-    inv.status = PaymentStatus.CONFIRMED
-    inv.save()
+    with transaction.atomic():
+        inv.status = PaymentStatus.CONFIRMED
+        inv.save()
 
     messages.success(request, _("Payment confirmed"))
     return redirect("home")

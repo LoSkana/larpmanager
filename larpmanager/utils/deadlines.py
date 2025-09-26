@@ -30,6 +30,14 @@ from larpmanager.models.registration import Registration, TicketTier
 
 
 def get_users_data(ids):
+    """Get user display names and emails for deadline notifications.
+
+    Args:
+        ids (list): List of member IDs
+
+    Returns:
+        list: List of (display_name, email) tuples
+    """
     return [
         (str(mb), mb.email)
         for mb in Member.objects.filter(pk__in=ids).order_by("surname").only("name", "surname", "email", "nickname")
@@ -37,6 +45,15 @@ def get_users_data(ids):
 
 
 def get_membership_fee_year(assoc_id, year=None):
+    """Get set of member IDs who paid membership fee for given year.
+
+    Args:
+        assoc_id (int): Association ID
+        year (int, optional): Year to check, defaults to current year
+
+    Returns:
+        set: Set of member IDs who paid fee for the year
+    """
     if not year:
         year = datetime.now().year
     return set(
@@ -45,6 +62,17 @@ def get_membership_fee_year(assoc_id, year=None):
 
 
 def check_run_deadlines(runs):
+    """Check deadline compliance for registrations across multiple runs.
+
+    Analyzes registrations to identify users missing deadlines for
+    membership, payments, profile completion, and casting preferences.
+
+    Args:
+        runs (list): List of Run instances to check
+
+    Returns:
+        list: List of dictionaries with deadline violation data per run
+    """
     if not runs:
         return []
 
@@ -107,6 +135,20 @@ def check_run_deadlines(runs):
 
 
 def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):
+    """Check profile completion deadlines for registration.
+
+    Args:
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        memberships (dict): Member ID to membership mapping
+        now (datetime): Current datetime
+        reg: Registration instance
+        run: Run instance
+        tolerance (int): Tolerance days for deadlines
+
+    Side effects:
+        Updates collect with profile deadline violations
+    """
     membership = memberships.get(reg.member_id)
     if not membership:
         return
@@ -121,6 +163,21 @@ def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):
 
 
 def deadlines_membership(collect, features, fees, memberships, now, reg, run, tolerance):
+    """Check membership and fee deadlines for registration.
+
+    Args:
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        fees (set): Set of member IDs who paid membership fee
+        memberships (dict): Member ID to membership mapping
+        now (datetime): Current datetime
+        reg: Registration instance
+        run: Run instance
+        tolerance (int): Tolerance days for deadlines
+
+    Side effects:
+        Updates collect with membership and fee deadline violations
+    """
     membership = memberships.get(reg.member_id)
     if not membership:
         return
@@ -144,6 +201,17 @@ def deadlines_membership(collect, features, fees, memberships, now, reg, run, to
 
 
 def deadlines_payment(collect, features, reg, tolerance):
+    """Check payment deadlines for registration.
+
+    Args:
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        reg: Registration instance with deadline attribute
+        tolerance (int): Tolerance days for deadlines
+
+    Side effects:
+        Updates collect with payment deadline violations
+    """
     # check payments
     if "payment" not in features:
         return
@@ -155,6 +223,17 @@ def deadlines_payment(collect, features, reg, tolerance):
 
 
 def deadlines_casting(collect, features, player_ids, run):
+    """Check casting preference submission for players.
+
+    Args:
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        player_ids (list): List of player member IDs
+        run: Run instance
+
+    Side effects:
+        Updates collect with casting preference violations
+    """
     # check casting
     if "casting" not in features:
         return

@@ -37,9 +37,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import (
-    WritingOption,
-)
+from larpmanager.models.form import WritingOption
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
@@ -49,7 +47,8 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import (
     Character,
     Faction,
-    FactionType, Plot,
+    FactionType,
+    Plot,
 )
 
 # defer script loaded by form
@@ -58,6 +57,14 @@ css_delimeter = "/*@#§*/"
 
 
 def render_js(cls):
+    """Render JavaScript includes with defer attribute for forms.
+
+    Args:
+        cls: Media class containing JavaScript paths
+
+    Returns:
+        list: HTML script tags with defer attributes
+    """
     return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
 
 
@@ -68,34 +75,63 @@ forms.widgets.Media.render_js = render_js
 
 
 class ReadOnlyWidget(Widget):
+    """Widget for displaying read-only form fields."""
+
     input_type = None
     template_name = "forms/widgets/read_only.html"
 
 
 class DatePickerInput(forms.TextInput):
+    """Date picker input widget for forms."""
+
     input_type = "date_p"
 
 
 class DateTimePickerInput(forms.TextInput):
+    """Date and time picker input widget for forms."""
+
     input_type = "datetime_p"
 
 
 class TimePickerInput(forms.TextInput):
+    """Time picker input widget for forms."""
+
     input_type = "time_p"
 
 
 class SlugInput(forms.TextInput):
+    """Slug input widget with special formatting."""
+
     input_type = "slug"
     template_name = "forms/widgets/slug.html"
 
 
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
+    """Custom checkbox widget for role permission selection with help text."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize widget with feature help text and mapping.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Arbitrary keyword arguments including help_text and feature_map
+        """
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
+        """Render checkbox widget with tooltips and help links.
+
+        Args:
+            name: Field name
+            value: Selected values
+            attrs: HTML attributes
+            renderer: Form renderer
+
+        Returns:
+            str: Rendered HTML for checkbox widget
+        """
         output = []
         value = value or []
 
@@ -119,11 +155,34 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    """Model multiple choice field with translated labels."""
+
     def label_from_instance(self, obj):
+        """Get translated label for model instance.
+
+        Args:
+            obj: Model instance
+
+        Returns:
+            str: Translated name of the instance
+        """
         return _(obj.name)
 
 
 def prepare_permissions_role(form, typ):
+    """Prepare permission fields for role forms based on enabled features.
+
+    Creates dynamic form fields for permissions organized by modules,
+    with checkboxes for available permissions based on enabled features.
+
+    Args:
+        form: Form instance to add permission fields to
+        typ: Permission model type (AssocPermission or EventPermission)
+
+    Side effects:
+        Adds permission fields to form.fields and sets form.modules list
+        Sets form.prevent_canc for role number 1 (executives)
+    """
     if form.instance and form.instance.number == 1:
         form.prevent_canc = True
         return
@@ -177,6 +236,16 @@ def prepare_permissions_role(form, typ):
 
 
 def save_permissions_role(instance, form):
+    """Save selected permissions for a role instance.
+
+    Args:
+        instance: Role instance to save permissions for
+        form: Form containing selected permission data
+
+    Side effects:
+        Clears existing permissions and adds selected ones
+        Skips permission saving for role number 1 (executives)
+    """
     instance.save()
     if form.instance and form.instance.number == 1:
         return
@@ -298,6 +367,14 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
 
 
 def get_assoc_people(assoc_id):
+    """Get list of people associated with an association for form choices.
+
+    Args:
+        assoc_id: Association ID to get members for
+
+    Returns:
+        list: List of (member_id, display_string) tuples
+    """
     ls = []
     que = Membership.objects.select_related("member").filter(assoc_id=assoc_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
@@ -307,6 +384,16 @@ def get_assoc_people(assoc_id):
 
 
 def get_run_choices(self, past=False):
+    """Generate run choices for form fields.
+
+    Args:
+        self: Form instance with params containing association ID
+        past: If True, filter to recent past runs only
+
+    Side effects:
+        Creates or updates 'run' field in form with run choices
+        Sets initial value if run is in params
+    """
     cho = [("", "-----")]
     runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
     if past:
@@ -581,6 +668,15 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
 
 
 def remove_choice(ch, typ):
+    """Remove a specific choice from a list of choices.
+
+    Args:
+        ch: List of (key, value) choice tuples
+        typ: Choice key to remove
+
+    Returns:
+        list: New choice list without the specified type
+    """
     new = []
     for k, v in ch:
         if k == typ:
@@ -602,6 +698,14 @@ class RedirectForm(forms.Form):
 
 
 def get_members_queryset(aid):
+    """Get queryset of members for an association with accepted status.
+
+    Args:
+        aid: Association ID to filter members for
+
+    Returns:
+        QuerySet: Members with accepted, submitted, or joined membership status
+    """
     allwd = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     qs = Member.objects.prefetch_related("memberships")
     qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)

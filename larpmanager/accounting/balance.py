@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -48,8 +49,25 @@ from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
 
+logger = logging.getLogger(__name__)
+
 
 def get_acc_detail(nm, run, descr, cls, cho, typ, filters=None, reg=False):
+    """Get detailed accounting breakdown for a specific accounting item type.
+
+    Args:
+        nm: Display name for the accounting category
+        run: Run instance to filter accounting items
+        descr: Description of the accounting category
+        cls: Model class for accounting items (e.g., AccountingItemPayment)
+        cho: Choices enumeration for display names
+        typ: Field name to group items by (e.g., 'pay', 'exp')
+        filters: Optional additional filters to apply
+        reg: If True, filter by reg__run instead of run
+
+    Returns:
+        dict: Breakdown with totals, counts, and details by type
+    """
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
     if reg:
         lst = cls.objects.filter(reg__run=run)
@@ -71,6 +89,14 @@ def get_acc_detail(nm, run, descr, cls, cho, typ, filters=None, reg=False):
 
 
 def get_acc_reg_type(el):
+    """Determine registration type for accounting categorization.
+
+    Args:
+        el: Registration instance to categorize
+
+    Returns:
+        tuple: (type_code, display_name) for the registration type
+    """
     if el.cancellation_date:
         return "can", "Disdetta"
     if not el.ticket:
@@ -82,6 +108,16 @@ def get_acc_reg_type(el):
 
 
 def get_acc_reg_detail(nm, run, descr):
+    """Get detailed registration accounting breakdown by ticket tier.
+
+    Args:
+        nm: Display name for the accounting category
+        run: Run instance to get registrations for
+        descr: Description of the accounting category
+
+    Returns:
+        dict: Breakdown of registrations by ticket tier with totals and counts
+    """
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
     for reg in Registration.objects.filter(run=run).select_related("ticket").filter(cancellation_date__isnull=True):
         (tp, descr) = get_acc_reg_type(reg)
@@ -96,6 +132,15 @@ def get_acc_reg_detail(nm, run, descr):
 
 
 def get_token_details(nm, run):
+    """Get token accounting details for a run.
+
+    Args:
+        nm: Display name for the token category
+        run: Run instance to get token details for
+
+    Returns:
+        dict: Token totals and counts
+    """
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm}
     for a in AccountingItemOther.objects.filter(run=run):
         dc["num"] += 1
@@ -104,6 +149,21 @@ def get_token_details(nm, run):
 
 
 def get_run_accounting(run, ctx):
+    """Generate comprehensive accounting report for a run.
+
+    Calculates revenue, costs, and balance for a run based on enabled features.
+    Includes payments, expenses, inflows, outflows, refunds, tokens, and credits.
+
+    Args:
+        run: Run instance to generate accounting for
+        ctx: Context dictionary with optional token/credit names
+
+    Returns:
+        dict: Complete accounting breakdown by category
+
+    Side effects:
+        Updates run.revenue, run.costs, run.balance, and run.tax fields
+    """
     dc = {}
     features = get_event_features(run.event_id)
 
@@ -230,18 +290,43 @@ def get_run_accounting(run, ctx):
 
 
 def check_accounting(assoc_id):
+    """Perform association-wide accounting check and record results.
+
+    Args:
+        assoc_id: Association ID to check accounting for
+
+    Side effects:
+        Creates RecordAccounting entry with global and bank sums
+    """
     ctx = {"a_id": assoc_id}
     assoc_accounting(ctx)
     RecordAccounting.objects.create(assoc_id=assoc_id, global_sum=ctx["global_sum"], bank_sum=ctx["bank_sum"])
 
 
 def check_run_accounting(run):
+    """Perform run-specific accounting check and record results.
+
+    Args:
+        run: Run instance to check accounting for
+
+    Side effects:
+        Updates run accounting and creates RecordAccounting entry
+    """
     get_run_accounting(run, {})
-    # print(run)
+    logger.debug(f"Recording accounting for run: {run}")
     RecordAccounting.objects.create(assoc=run.event.assoc, run=run, global_sum=run.balance, bank_sum=0)
 
 
 def assoc_accounting_data(ctx, year=None):
+    """Gather association accounting data for a specific year or all time.
+
+    Args:
+        ctx: Context dictionary with association ID to update
+        year: Optional year to filter data, if None uses all years
+
+    Side effects:
+        Updates ctx with various sum fields for inflows, outflows, payments, etc.
+    """
     if year:
         s = date(year, 1, 1)
         e = date(year, 12, 31)
@@ -303,6 +388,18 @@ def assoc_accounting_data(ctx, year=None):
 
 
 def assoc_accounting(ctx):
+    """Generate comprehensive association accounting summary.
+
+    Calculates member balances, run balances, and overall financial position
+    for an association across all years.
+
+    Args:
+        ctx: Context dictionary with association ID to update
+
+    Side effects:
+        Updates ctx with member lists, run lists, balance sums, and yearly data
+        Sets global_sum and bank_sum for overall financial position
+    """
     ctx.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})
     for el in (
         Membership.objects.filter(assoc_id=ctx["a_id"])

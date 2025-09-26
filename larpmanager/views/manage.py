@@ -36,6 +36,18 @@ from larpmanager.utils.text import get_assoc_text
 
 @login_required
 def manage(request, s=None):
+    """Main management dashboard routing.
+
+    Routes to either executive management or organizer management
+    based on whether an event slug is provided.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Optional event slug for organizer management
+
+    Returns:
+        HttpResponse: Redirect to home or appropriate management view
+    """
     if request.assoc["id"] == 0:
         return redirect("home")
 
@@ -46,6 +58,14 @@ def manage(request, s=None):
 
 
 def _get_registration_status(run):
+    """Get human-readable registration status for a run.
+
+    Args:
+        run: Run instance to check status for
+
+    Returns:
+        str: Localized status message describing registration state
+    """
     features = get_event_features(run.event_id)
     if "register_link" in features and run.event.register_link:
         return _("Registrations on external link")
@@ -83,6 +103,17 @@ def _get_registration_status(run):
 
 
 def _exe_manage(request):
+    """Executive management dashboard view.
+
+    Displays association-level management interface with events,
+    suggestions, actions, and accounting information.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered executive management dashboard
+    """
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
@@ -119,6 +150,11 @@ def _exe_manage(request):
 
 
 def _exe_suggestions(ctx):
+    """Add priority tasks and suggestions to the executive management context.
+
+    Args:
+        ctx: Context dictionary containing association ID and other data
+    """
     assoc = Association.objects.get(pk=ctx["a_id"])
 
     priorities = {
@@ -151,6 +187,11 @@ def _exe_suggestions(ctx):
 
 
 def _exe_actions(request, ctx):
+    """Determine available executive actions based on association features.
+
+    Adds action items to the management dashboard based on user permissions
+    and association configuration settings.
+    """
     features = get_assoc_features(ctx["a_id"])
     assoc = Association.objects.get(pk=ctx["a_id"])
 
@@ -205,6 +246,15 @@ def _exe_actions(request, ctx):
 
 
 def _exe_users_actions(request, assoc, ctx, features):
+    """
+    Process user management actions and setup tasks for executives.
+
+    Args:
+        request: HTTP request object
+        assoc: Association instance
+        ctx: Context dictionary to populate with actions
+        features: Set of enabled features
+    """
     if "membership" in features:
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
@@ -231,6 +281,14 @@ def _exe_users_actions(request, assoc, ctx, features):
 
 
 def _exe_accounting_actions(assoc, ctx, features):
+    """
+    Process accounting-related setup actions for executives.
+
+    Args:
+        assoc: Association instance
+        ctx: Context dictionary to populate with priority actions
+        features: Set of enabled features for the association
+    """
     if "payment" in features:
         if not assoc.payment_methods.count():
             _add_priority(
@@ -259,6 +317,18 @@ def _exe_accounting_actions(assoc, ctx, features):
 
 
 def _orga_manage(request, s):
+    """Event organizer management dashboard view.
+
+    Displays event-specific management interface with characters,
+    registrations, and event-level tools.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+
+    Returns:
+        HttpResponse: Rendered organizer management dashboard
+    """
     ctx = get_event_run(request, s)
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:
@@ -310,6 +380,19 @@ def _orga_manage(request, s):
 
 
 def _orga_actions_priorities(request, ctx, assoc):
+    """Determine priority actions for event organizers based on event state.
+
+    Analyzes event features and configuration to suggest next steps in
+    event setup workflow, checking for missing required configurations.
+
+    Args:
+        request: Django HTTP request object
+        ctx (dict): Context dictionary containing event and other data
+        assoc: Association object
+
+    Returns:
+        None: Function modifies ctx in-place, adding priority action recommendations
+    """
     # if there are no characters, suggest to do it
     features = get_event_features(ctx["event"].id)
 
@@ -422,6 +505,11 @@ def _orga_user_actions(ctx, features, request, assoc):
 
 
 def _orga_casting_actions(ctx, features):
+    """Add priority actions related to casting and quest builder setup.
+
+    Checks for missing casting configurations and quest/trait relationships,
+    adding appropriate priority suggestions for event organizers.
+    """
     if "casting" in features:
         if not ctx["event"].get_config("casting_min", 0):
             _add_priority(
@@ -461,6 +549,11 @@ def _orga_casting_actions(ctx, features):
 
 
 def _orga_px_actions(ctx, features):
+    """Add priority actions for experience points system setup.
+
+    Checks for missing PX configurations, ability types, and deliveries,
+    adding appropriate priority suggestions for event organizers.
+    """
     if "px" not in features:
         return
 
@@ -499,6 +592,11 @@ def _orga_px_actions(ctx, features):
 
 
 def _orga_reg_acc_actions(ctx, features):
+    """Add priority actions related to registration and accounting setup.
+
+    Checks for required configurations when certain features are enabled,
+    such as installments, quotas, and accounting systems for events.
+    """
     if "reg_installments" in features and "reg_quotas" in features:
         _add_priority(
             ctx,
@@ -559,6 +657,11 @@ def _orga_reg_acc_actions(ctx, features):
 
 
 def _orga_reg_actions(ctx, features):
+    """Add priority actions for registration management setup.
+
+    Checks registration status, required tickets, and registration features
+    to provide guidance for event organizers.
+    """
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_priority(
             ctx,
@@ -623,6 +726,15 @@ def _orga_suggestions(ctx):
 
 
 def _add_item(ctx, list_name, text, perm, link):
+    """Add item to specific list in management context.
+
+    Args:
+        ctx: Context dictionary to modify
+        list_name: Name of list to add item to
+        text: Item message text
+        perm: Permission key
+        link: Optional custom link
+    """
     if list_name not in ctx:
         ctx[list_name] = []
 
@@ -630,24 +742,69 @@ def _add_item(ctx, list_name, text, perm, link):
 
 
 def _add_priority(ctx, text, perm, link=None):
+    """Add priority item to management dashboard.
+
+    Args:
+        ctx: Context dictionary to modify
+        text: Priority message text
+        perm: Permission key for the action
+        link: Optional custom link
+    """
     _add_item(ctx, "priorities_list", text, perm, link)
 
 
 def _add_action(ctx, text, perm, link=None):
+    """Add action item to management dashboard.
+
+    Args:
+        ctx: Context dictionary to modify
+        text: Action message text
+        perm: Permission key for the action
+        link: Optional custom link
+    """
     _add_item(ctx, "actions_list", text, perm, link)
 
 
 def _add_suggestion(ctx, text, perm, link=None):
+    """Add suggestion item to management dashboard.
+
+    Args:
+        ctx: Context dictionary to modify
+        text: Suggestion message text
+        perm: Permission key for the action
+        link: Optional custom link
+    """
     _add_item(ctx, "suggestions_list", text, perm, link)
 
 
 def _has_permission(request, ctx, perm):
+    """Check if user has required permission for action.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary
+        perm: Permission string to check
+
+    Returns:
+        bool: True if user has permission
+    """
     if perm.startswith("exe"):
         return has_assoc_permission(request, ctx, perm)
     return has_event_permission(request, ctx, ctx["event"].slug, perm)
 
 
 def _get_href(ctx, perm, name, custom_link):
+    """Generate href and title for management dashboard links.
+
+    Args:
+        ctx: Context dictionary
+        perm: Permission string
+        name: Display name
+        custom_link: Optional custom link suffix
+
+    Returns:
+        tuple: (title, href) for dashboard link
+    """
     if custom_link:
         return _("Configuration"), _get_perm_link(ctx, perm, "manage") + custom_link
 
@@ -661,6 +818,11 @@ def _get_perm_link(ctx, perm, view):
 
 
 def _compile(request, ctx):
+    """Compile management dashboard with suggestions, actions, and priorities.
+
+    Processes and organizes management content sections, handling empty states
+    and providing appropriate user messaging.
+    """
     section_list = ["suggestions", "actions", "priorities"]
     empty = True
     for section in section_list:

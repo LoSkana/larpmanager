@@ -32,6 +32,18 @@ class Command(BaseCommand):
 
     # noinspection PyProtectedMember
     def handle(self, *args, **options):
+        """Django management command handler for exporting features and related data.
+
+        Defines export models and their fields for serialization to JSON format,
+        creating comprehensive data dumps for system migration or backup.
+
+        Args:
+            *args: Positional arguments passed by Django management command framework
+            **options: Keyword arguments parsed from command line options
+
+        Returns:
+            None: Outputs JSON data to stdout
+        """
         export_models = {
             "skin": (
                 AssociationSkin,

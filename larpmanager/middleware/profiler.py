@@ -18,9 +18,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django.utils.timezone import now
 
 from larpmanager.utils.profiler.signals import profiler_response_signal
+
+logger = logging.getLogger(__name__)
 
 
 class ProfilerMiddleware:
@@ -45,8 +49,8 @@ class ProfilerMiddleware:
                         duration=duration,
                     )
                 except Exception as err:
-                    # pass  # fail silently
-                    print(f"ProfilerMiddleware fail: {err}")
+                    # fail silently in production, but log for debugging
+                    logger.warning(f"ProfilerMiddleware fail: {err}")
 
         return response
 

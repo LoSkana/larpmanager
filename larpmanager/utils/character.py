@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
@@ -39,8 +41,19 @@ from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.experience import add_char_addit
 
+logger = logging.getLogger(__name__)
+
 
 def get_character_relationships(ctx, restrict=True):
+    """Get character relationships with faction and player input data.
+
+    Args:
+        ctx: Context dictionary with character and event data
+        restrict (bool): Whether to restrict relationship visibility
+
+    Side effects:
+        Updates ctx['rel'] with relationship data
+    """
     cache = {}
     data = {}
     for tg_num, text in Relationship.objects.values_list("target__number", "text").filter(source=ctx["character"]):
@@ -75,9 +88,7 @@ def get_character_relationships(ctx, restrict=True):
     ctx["rel"] = []
     for idx in sorted(cache, key=lambda k: len(cache[k]), reverse=True):
         if idx not in data:
-            # print(idx)
-            # print(data)
-            # print(cache)
+            logger.debug(f"Character index {idx} not found in data keys: {list(data.keys())[:5]}...")
             continue
         el = data[idx]
         if restrict and len(cache[idx]) == 0:
@@ -90,6 +101,14 @@ def get_character_relationships(ctx, restrict=True):
 
 
 def get_character_sheet(ctx):
+    """Build complete character sheet data for display.
+
+    Args:
+        ctx: Context dictionary with character data
+
+    Returns:
+        dict: Complete character sheet with all sections
+    """
     ctx["sheet_char"] = ctx["character"].show_complete()
 
     get_character_sheet_fields(ctx)
@@ -113,7 +132,7 @@ def get_character_sheet_px(ctx):
 
     ctx["sheet_abilities"] = {}
     for el in ctx["character"].px_ability_list.all():
-        if el.typ.name not in ctx["sheet_abilities"]:
+        if el.typ and el.typ.name and el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
         ctx["sheet_abilities"][el.typ.name].append(el)
 
@@ -141,6 +160,14 @@ def get_character_sheet_speedlarp(ctx):
 
 
 def get_character_sheet_questbuilder(ctx):
+    """Build character sheet with quest and trait relationships.
+
+    Args:
+        ctx: Context dictionary with character, quest, and trait data
+
+    Side effects:
+        Updates ctx with sheet_traits containing complete trait and quest information
+    """
     if "questbuilder" not in ctx["features"]:
         return
 
@@ -173,7 +200,7 @@ def get_character_sheet_plots(ctx):
 
     ctx["sheet_plots"] = []
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
-    for el in que.order_by("plot__number"):
+    for el in que.order_by("order"):
         tx = el.plot.text
         if tx and el.text:
             tx += "<hr />"
@@ -202,6 +229,21 @@ def get_character_sheet_fields(ctx):
 
 
 def get_char_check(request, ctx, num, restrict=False, bypass=False):
+    """Get character with access control checks.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary
+        num (int): Character number
+        restrict (bool): Whether to apply visibility restrictions
+        bypass (bool): Whether to bypass access checks
+
+    Returns:
+        Character: Character instance if accessible
+
+    Raises:
+        Http404: If character not found or access denied
+    """
     get_event_cache_all(ctx)
     if num not in ctx["chars"]:
         raise NotFoundError()
@@ -221,6 +263,15 @@ def get_char_check(request, ctx, num, restrict=False, bypass=False):
 
 
 def get_chars_relations(text, chs_numbers):
+    """Retrieve character relationship data.
+
+    Args:
+        text: Text content to search for character references
+        chs_numbers: List of valid character numbers
+
+    Returns:
+        tuple: (active_characters, extinct_characters) found in text
+    """
     chs = []
     extinct = []
 

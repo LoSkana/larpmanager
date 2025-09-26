@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
@@ -39,8 +41,16 @@ from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText, AssocTextType
 from larpmanager.models.member import Member
 
+logger = logging.getLogger(__name__)
+
 
 class ExeAssociationForm(MyForm):
+    """Form for editing main association settings.
+
+    Allows executives to modify core association properties
+    while protecting critical fields like slug and features.
+    """
+
     page_title = _("Settings")
 
     page_info = _("This page allows you to change the main settings of your Organization")
@@ -76,6 +86,12 @@ class ExeAssociationForm(MyForm):
 
 
 class ExeAssocTextForm(MyForm):
+    """Form for managing association text content.
+
+    Handles custom text snippets used throughout the
+    association's interface and communications.
+    """
+
     page_title = _("Texts")
 
     page_info = _("This page allows you to edit organization-specific text")
@@ -86,6 +102,12 @@ class ExeAssocTextForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
+        """Initialize AssocTextForm with feature-based field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
         ch = AssocTextType.choices
         delete_choice = [AssocTextType.PRIVACY]
@@ -170,6 +192,12 @@ class ExeAssocTextForm(MyForm):
 
 
 class ExeAssocRoleForm(MyForm):
+    """Form for managing association roles and permissions.
+
+    Allows configuration of role-based access control
+    including member assignment and permission management.
+    """
+
     page_title = _("Roles")
 
     page_info = _("This page allows you to edit the roles of the association")
@@ -272,6 +300,11 @@ class ExeConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
+        """Set up interface configuration options for association settings.
+
+        Manages UI preferences, theme settings, and display options
+        for the association's interface customization.
+        """
         # CALENDAR
         self.set_section("interface", _("Interface"))
 
@@ -336,6 +369,12 @@ class ExeConfigForm(ConfigForm):
         self.set_config_others()
 
     def set_config_others(self):
+        """Configure miscellaneous association settings.
+
+        Sets up custom mail server configuration, easter egg features,
+        and campaign-specific settings based on available features
+        for the association.
+        """
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             help_text = ""
@@ -389,6 +428,17 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
+        """Configure member-related form fields and sections in association settings.
+
+        Sets up various user management options like event history visibility
+        and member interaction features for the association configuration.
+
+        Args:
+            self: AssociationConfigForm instance
+
+        Returns:
+            None: Function modifies form fields in-place
+        """
         # USERS
         self.set_section("users", _("Users"))
 
@@ -462,6 +512,17 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)
 
     def set_config_accounting(self):
+        """Configure accounting-related form fields for association settings.
+
+        Sets up payment options, transaction fee settings, and financial
+        feature configurations for the association.
+
+        Args:
+            self: AssociationConfigForm instance
+
+        Returns:
+            None: Function modifies form fields in-place
+        """
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
@@ -524,6 +585,11 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
+        """Configure electronic invoice settings for associations.
+
+        Sets up Italian e-invoice system parameters and business
+        information for electronic billing compliance.
+        """
         if "e-invoice" not in self.params["features"]:
             return
 
@@ -583,6 +649,12 @@ class ExeConfigForm(ConfigForm):
 
 
 class FirstAssociationForm(MyForm):
+    """Form for creating a new association during initial setup.
+
+    Simplified form for first-time association creation
+    with essential fields only.
+    """
+
     class Meta:
         model = Association
         fields = ("name", "profile", "slug")
@@ -592,7 +664,7 @@ class FirstAssociationForm(MyForm):
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
-        # print(data)
+        logger.debug(f"Validating association slug: {data}")
         # check if already used
         lst = Association.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:
@@ -615,6 +687,15 @@ class ExeQuickSetupForm(QuickSetupForm):
         fields = []
 
     def __init__(self, *args, **kwargs):
+        """Initialize association setup form with feature configuration options.
+
+        Sets up available features and configuration options based on
+        association settings and skin preferences.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments
+        """
         super().__init__(*args, **kwargs)
 
         self.setup = {

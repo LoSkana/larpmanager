@@ -99,6 +99,11 @@ def orga_characters_edit(request, s, num):
 
 
 def _characters_relationships(ctx):
+    """Setup character relationships data and widgets for editing.
+
+    Args:
+        ctx: Context dictionary to populate with relationship data
+    """
     ctx["relationships"] = {}
     if "relationships" not in ctx["features"]:
         return
@@ -188,6 +193,11 @@ def orga_characters_summary(request, s, num):
 
 @login_required
 def orga_writing_form_list(request, s, typ):
+    """Generate form list data for writing questions in JSON format.
+
+    Processes writing questions and their answers for display in organizer interface,
+    handling different question types (single, multiple choice, text, paragraph).
+    """
     ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]
@@ -229,6 +239,16 @@ def orga_writing_form_list(request, s, typ):
 
 @login_required
 def orga_writing_form_email(request, s, typ):
+    """Generate email data for writing form options by character choices.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        typ: Writing form type
+
+    Returns:
+        JsonResponse with email data organized by option choices
+    """
     ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]
@@ -311,6 +331,17 @@ def orga_writing_form(request, s, typ):
 
 @login_required
 def orga_writing_form_edit(request, s, typ, num):
+    """Edit writing form questions with validation and option handling.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        typ: Writing form type identifier
+        num: Question number/ID
+
+    Returns:
+        HttpResponse: Form edit template or redirect to options/form list
+    """
     perm = "orga_character_form"
     ctx = check_event_permission(request, s, perm)
     check_writing_form_type(ctx, typ)
@@ -381,6 +412,11 @@ def orga_writing_options_order(request, s, typ, num, order):
 
 @login_required
 def orga_check(request, s):
+    """Perform comprehensive character and writing consistency checks.
+
+    Validates character relationships, writing completeness, speedlarp constraints,
+    and plot assignments to identify potential issues in the event setup.
+    """
     ctx = check_event_permission(request, s)
 
     get_event_cache_all(ctx)
@@ -441,6 +477,18 @@ def check_relations(cache, checks, chs_numbers, ctx, number_map):
 
 
 def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
+    """Validate writing submissions and requirements for different element types.
+
+    Args:
+        cache: Dictionary to store validation results
+        checks: Dictionary to store validation issues found
+        chs_numbers: Set of valid character numbers
+        ctx: Context with event and features data
+        id_number_map: Mapping from character IDs to numbers
+
+    Side effects:
+        Updates checks with extinct, missing, and interloper character issues
+    """
     for el in [Faction, Plot, Prologue, SpeedLarp]:
         nm = str(el.__name__).lower()
         if nm not in ctx["features"]:
@@ -469,6 +517,16 @@ def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
 
 
 def check_speedlarp(checks, ctx, id_number_map):
+    """Validate speedlarp character configurations.
+
+    Args:
+        checks: Dictionary to store validation issues
+        ctx: Context with event features and character data
+        id_number_map: Mapping from character IDs to numbers
+
+    Side effects:
+        Updates checks with speedlarp double assignments and missing configurations
+    """
     if "speedlarp" not in ctx["features"]:
         return
 
@@ -522,6 +580,12 @@ def orga_character_get_number(request, s):
 
 @require_POST
 def orga_writing_excel_edit(request, s, typ):
+    """Handle Excel-based editing of writing elements.
+
+    Manages bulk editing of character stories and writing content through
+    spreadsheet interface, providing AJAX form rendering with TinyMCE
+    support and character count validation.
+    """
     try:
         ctx = _get_excel_form(request, s, typ)
     except ObjectDoesNotExist:
@@ -567,6 +631,16 @@ def orga_writing_excel_edit(request, s, typ):
 
 @require_POST
 def orga_writing_excel_submit(request, s, typ):
+    """Handle Excel submission for writing data with validation.
+
+    Args:
+        request: HTTP request with form data
+        s: Event slug
+        typ: Writing type identifier
+
+    Returns:
+        JsonResponse: Success status, element updates, or validation errors
+    """
     try:
         ctx = _get_excel_form(request, s, typ, submit=True)
     except ObjectDoesNotExist:
@@ -594,6 +668,12 @@ def orga_writing_excel_submit(request, s, typ):
 
 
 def _get_excel_form(request, s, typ, submit=False):
+    """Prepare Excel form context for bulk editing operations.
+
+    Sets up form data and validation for spreadsheet-based content editing,
+    filtering forms to show only the requested question field and preparing
+    the context for character, faction, plot, trait, or quest editing.
+    """
     ctx = check_event_permission(request, s, f"orga_{typ}s")
     get_event_cache_all(ctx)
     check_writing_form_type(ctx, typ)
@@ -641,6 +721,11 @@ def _get_excel_form(request, s, typ, submit=False):
 
 
 def _get_question_update(ctx, el):
+    """Generate question update HTML for different question types.
+
+    Creates appropriate HTML content for updating questions based on their type,
+    handling cover questions and other writing question formats.
+    """
     if ctx["question"].typ in [WritingQuestionType.COVER]:
         return f"""
                 <a href="{el.thumb.url}">

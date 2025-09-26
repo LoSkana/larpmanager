@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import re
 import traceback
 from functools import wraps
@@ -36,10 +37,25 @@ from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Email
 from larpmanager.utils.text import get_assoc_text
 
+logger = logging.getLogger(__name__)
+
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
 
 def background_auto(schedule=0, **background_kwargs):
+    """Decorator to conditionally run functions as background tasks.
+
+    Creates a decorator that can run functions either synchronously
+    (if AUTO_BACKGROUND_TASKS is True) or as background tasks.
+
+    Args:
+        schedule (int): Seconds to delay before execution
+        **background_kwargs: Additional arguments for background task
+
+    Returns:
+        function: Decorator function
+    """
+
     def decorator(func):
         task = background(schedule=schedule, **background_kwargs)(func)
 
@@ -62,10 +78,19 @@ def background_auto(schedule=0, **background_kwargs):
 
 
 def mail_error(subj, body, e=None):
-    print("mail error")
-    print(subj)
-    print(body)
-    print(e)
+    """Handle email sending errors and notify administrators.
+
+    Args:
+        subj (str): Email subject that failed
+        body (str): Email body that failed
+        e (Exception, optional): Exception that caused the failure
+
+    Side effects:
+        Prints error details and sends error notification to admins
+    """
+    logger.error(f"Mail error: {e}")
+    logger.error(f"Subject: {subj}")
+    logger.error(f"Body: {body}")
     if e:
         body = f"{traceback.format_exc()} <br /><br /> {subj} <br /><br /> {body}"
     else:
@@ -77,6 +102,19 @@ def mail_error(subj, body, e=None):
 
 @background_auto()
 def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=None):
+    """Send bulk emails to multiple recipients with staggered delivery.
+
+    Args:
+        players (str): Comma-separated list of email addresses
+        subj (str): Email subject
+        body (str): Email body content
+        assoc_id (int, optional): Association ID for context
+        run_id (int, optional): Run ID for context
+        reply_to (str, optional): Reply-to email address
+
+    Side effects:
+        Schedules individual emails with delays to prevent spam issues
+    """
     aux = {}
 
     if assoc_id:
@@ -84,7 +122,7 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
     elif run_id:
         obj = Run.objects.filter(pk=run_id).first()
     else:
-        print(f"obj not found! {assoc_id} {run_id}")
+        logger.warning(f"Object not found! assoc_id: {assoc_id}, run_id: {run_id}")
         return
 
     subj = f"[{obj}] {subj}"
@@ -107,13 +145,21 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
 
 @background_auto(queue="mail")
 def my_send_mail_bkg(email_pk):
+    """Background task to send a queued email.
+
+    Args:
+        email_pk (int): Primary key of Email model instance to send
+
+    Side effects:
+        Sends the email and marks it as sent in database
+    """
     try:
         email = Email.objects.get(pk=email_pk)
     except ObjectDoesNotExist:
         return
 
     if email.sent:
-        print("email already sent!")
+        logger.info("Email already sent!")
         return
 
     my_send_simple_mail(email.subj, email.body, email.recipient, email.assoc_id, email.run_id, email.reply_to)
@@ -123,6 +169,14 @@ def my_send_mail_bkg(email_pk):
 
 
 def clean_sender(name):
+    """Clean sender name for email headers by removing special characters.
+
+    Args:
+        name (str): Original sender name
+
+    Returns:
+        str: Sanitized sender name safe for email headers
+    """
     name = name.replace(":", " ")
     name = name.split(",")[0]
     name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", name)
@@ -131,6 +185,25 @@ def clean_sender(name):
 
 
 def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_to=None):
+    """Send email with association/event-specific configuration.
+
+    Handles custom SMTP settings, sender addresses, BCC lists, and email formatting
+    based on association and event configuration.
+
+    Args:
+        subj (str): Email subject
+        body (str): Email body (HTML)
+        m_email (str): Recipient email address
+        assoc_id (int, optional): Association ID for custom settings
+        run_id (int, optional): Run ID for event-specific settings
+        reply_to (str, optional): Reply-to email address
+
+    Side effects:
+        Sends email using configured SMTP settings
+
+    Raises:
+        Exception: Re-raises email sending exceptions after logging
+    """
     hdr = {}
     bcc = []
 
@@ -205,9 +278,9 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
         email.send()
 
         if conf_settings.DEBUG:
-            print(m_email)
-            print(subj)
-            print(body)
+            logger.info(f"Sending email to: {m_email}")
+            logger.info(f"Subject: {subj}")
+            logger.debug(f"Body: {body}")
 
     except Exception as e:
         mail_error(subj, body, e)
@@ -215,6 +288,14 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
 
 
 def add_unsubscribe_body(assoc):
+    """Add unsubscribe footer to email body.
+
+    Args:
+        assoc: Association instance for unsubscribe URL
+
+    Returns:
+        str: HTML footer with unsubscribe link
+    """
     txt = "<br /><br />======================"
     txt += "<br /><br />" + _(
         "Do you want to unsubscribe from our communication lists? <a href='%(url)s'>Unsubscribe</a>"
@@ -223,6 +304,22 @@ def add_unsubscribe_body(assoc):
 
 
 def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
+    """Queue email for sending with context-aware formatting.
+
+    Main email sending function that adds signatures, unsubscribe links,
+    and queues email for background delivery.
+
+    Args:
+        subj (str): Email subject
+        body (str): Email body content
+        recipient (str or Member): Email recipient
+        obj (optional): Context object (Run, Event, Association, etc.)
+        reply_to (str, optional): Reply-to email address
+        schedule (int): Seconds to delay before sending
+
+    Side effects:
+        Creates Email record and schedules background task for delivery
+    """
     subj = subj.replace("  ", " ")
 
     run_id = None
@@ -266,6 +363,16 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
 
 
 def notify_admins(subj, text, exception=None):
+    """Send notification email to system administrators.
+
+    Args:
+        subj (str): Notification subject
+        text (str): Notification message
+        exception (Exception, optional): Exception to include in notification
+
+    Side effects:
+        Sends notification emails to all configured ADMINS
+    """
     if exception:
         tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
         text += "\n" + tb

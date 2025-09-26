@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
@@ -31,8 +33,10 @@ from larpmanager.forms.experience import (
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.utils.bulk import handle_bulk_ability
 from larpmanager.utils.common import exchange_order
+from larpmanager.utils.download import export_abilities, zip_exports
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.exceptions import ReturnNowError
 
 
 @login_required
@@ -50,18 +54,36 @@ def orga_px_deliveries_edit(request, s, num):
 @login_required
 def orga_px_abilities(request, s):
     ctx = check_event_permission(request, s, "orga_px_abilities")
+
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(ctx, export_abilities(ctx), "Abilities"))
+
     handle_bulk_ability(request, ctx)
 
     ctx["upload"] = "px_abilities"
     ctx["download"] = 1
 
     ctx["px_user"] = ctx["event"].get_config("px_user", False)
-    ctx["list"] = ctx["event"].get_elements(AbilityPx).order_by("number").select_related("typ")
+    ctx["list"] = (
+        ctx["event"]
+        .get_elements(AbilityPx)
+        .order_by("number")
+        .select_related("typ")
+        .prefetch_related("requirements", "prerequisites")
+    )
     return render(request, "larpmanager/orga/px/abilities.html", ctx)
 
 
 @login_required
 def orga_px_abilities_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_px_abilities")
+
+    # Check if ability types exist
+    if not ctx["event"].get_elements(AbilityTypePx).exists():
+        # Add warning message and redirect to ability types adding page
+        messages.warning(request, _("You must create at least one ability type before you can create abilities"))
+        return redirect("orga_px_ability_types_edit", s=s, num=0)
+
     return orga_edit(request, s, "orga_px_abilities", OrgaAbilityPxForm, num)
 
 

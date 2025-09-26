@@ -18,9 +18,9 @@
                             <a href="{% url 'home' %}" title="Home">Home</a>
                         </li>
                         <li>
-                            <a href="{% url 'tutorials' %}"
-                               title="Learn how the system works"
-                               {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Tutorials</a>
+                            <a href="{% url 'guides' %}"
+                               title="See practical examples of the system"
+                               {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Guides</a>
                         </li>
                         <li>
                             <a href="{% url 'usage' %}"

@@ -57,9 +57,7 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.member import (
     Badge,
     Member,
@@ -73,9 +71,7 @@ from larpmanager.models.miscellanea import (
     Email,
     HelpQuestion,
 )
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     _get_help_questions,
@@ -96,6 +92,11 @@ from larpmanager.views.orga.member import send_mail_batch
 
 @login_required
 def exe_membership(request):
+    """Executive view for managing association memberships.
+
+    Displays membership statistics, fee collection status, and membership
+    administration tools for association executives.
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     fees = set(
@@ -153,6 +154,12 @@ def exe_membership(request):
 
 @login_required
 def exe_membership_evaluation(request, num):
+    """Executive interface for evaluating membership applications.
+
+    Handles membership approval/rejection processes and status updates,
+    including notifications, duplicate checking, and registration updates
+    for approved members.
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     member = Member.objects.get(pk=num)
@@ -240,6 +247,15 @@ def exe_membership_check(request):
 
 @login_required
 def exe_member(request, num):
+    """Display and edit member profile with accounting and membership data.
+
+    Args:
+        request: HTTP request object
+        num: Member ID to edit
+
+    Returns:
+        Rendered member edit template with forms and member data
+    """
     ctx = check_assoc_permission(request, "exe_membership")
     ctx.update(get_member(num))
 
@@ -357,6 +373,15 @@ def exe_membership_registry(request):
 
 @login_required
 def exe_membership_fee(request):
+    """
+    Process membership fee payments for executives.
+
+    Args:
+        request: HTTP request object with form data
+
+    Returns:
+        HttpResponse: Form page or redirect after successful processing
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
@@ -412,6 +437,14 @@ def exe_membership_document(request):
 
 @login_required
 def exe_enrolment(request):
+    """Display yearly enrollment list with membership card numbers.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered template with enrolled members list for current year
+    """
     ctx = check_assoc_permission(request, "exe_enrolment")
     split_two_names = 2
 
@@ -479,6 +512,15 @@ def exe_volunteer_registry_print(request):
 
 @login_required
 def exe_vote(request):
+    """
+    Handle voting functionality for executives.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Voting interface or results page
+    """
     ctx = check_assoc_permission(request, "exe_vote")
     ctx["year"] = datetime.today().year
     assoc = Association.objects.get(pk=ctx["a_id"])
@@ -567,6 +609,16 @@ def exe_questions(request):
 
 @login_required
 def exe_questions_answer(request, r):
+    """
+    Handle question answering for executives.
+
+    Args:
+        request: HTTP request object
+        r: Member ID for question answering
+
+    Returns:
+        HttpResponse: Question answer form or redirect after submission
+    """
     ctx = check_assoc_permission(request, "exe_questions")
 
     # Get last question by that user

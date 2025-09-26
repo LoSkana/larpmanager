@@ -44,6 +44,11 @@ from larpmanager.models.writing import Character, Faction, FactionType
 
 
 def delete_all_in_path(path):
+    """Recursively delete all contents within a directory path.
+
+    Args:
+        path (str): Directory path to clean
+    """
     if os.path.exists(path):
         # Remove all contents inside the path
         for item in os.listdir(path):
@@ -55,10 +60,26 @@ def delete_all_in_path(path):
 
 
 def get_event_cache_all_key(run):
+    """Generate cache key for event data.
+
+    Args:
+        run: Run instance
+
+    Returns:
+        str: Cache key for event factions and characters
+    """
     return f"event_factions_characters_{run.event.slug}_{run.number}"
 
 
 def init_event_cache_all(ctx):
+    """Initialize complete event cache with characters, factions, and traits.
+
+    Args:
+        ctx: Context dictionary containing event and feature data
+
+    Returns:
+        dict: Cached event data including characters, factions, and traits
+    """
     res = {}
     get_event_cache_characters(ctx, res)
 
@@ -71,6 +92,12 @@ def init_event_cache_all(ctx):
 
 
 def get_event_cache_characters(ctx, res):
+    """Cache character data for an event including assignments and registrations.
+
+    Args:
+        ctx: Context dictionary with event data
+        res: Results dictionary to populate with character data
+    """
     res["chars"] = {}
     mirror = "mirror" in ctx["features"]
 
@@ -109,6 +136,14 @@ def get_event_cache_characters(ctx, res):
 
 
 def get_event_cache_fields(ctx, res, only_visible=True):
+    """
+    Retrieve and cache writing fields for characters in an event.
+
+    Args:
+        ctx: Context dictionary containing features and questions
+        res: Result dictionary with character data
+        only_visible: Whether to include only visible fields (default: True)
+    """
     if "character" not in ctx["features"]:
         return
 
@@ -155,6 +190,19 @@ def get_character_element_fields(ctx, character_id, only_visible=True):
 
 
 def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
+    """
+    Get writing fields for a specific element with visibility filtering.
+
+    Args:
+        ctx: Context dictionary with event and configuration data
+        feature_name: Name of the feature (e.g., 'character', 'faction')
+        applicable: QuestionApplicable enum value
+        element_id: ID of the element to get fields for
+        only_visible: Whether to include only visible fields (default: True)
+
+    Returns:
+        dict: Dictionary with questions, options, and field values
+    """
     visible_writing_fields(ctx, applicable, only_visible=only_visible)
 
     # remove not visible questions
@@ -179,6 +227,19 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
 
 
 def get_event_cache_factions(ctx, res):
+    """Build cached faction data for events.
+
+    Organizes faction information by type and prepares faction selection options,
+    handling characters without primary factions and creating faction-character
+    mappings for the event cache.
+
+    Args:
+        ctx (dict): Context dictionary containing event information
+        res (dict): Result dictionary to be populated with faction data
+
+    Returns:
+        None: Function modifies res in-place, adding faction mappings and metadata
+    """
     res["factions"] = {}
     res["factions_typ"] = {}
 
@@ -223,6 +284,19 @@ def get_event_cache_factions(ctx, res):
 
 
 def get_event_cache_traits(ctx, res):
+    """Build cached trait and quest data for events.
+
+    Organizes character traits, quest types, and related game mechanics data,
+    including trait relationships, character assignments, and quest type
+    mappings for efficient event cache operations.
+
+    Args:
+        ctx (dict): Context dictionary containing event information
+        res (dict): Result dictionary to be populated with trait and quest data
+
+    Returns:
+        None: Function modifies res in-place, adding quest types, traits, and relationships
+    """
     res["quest_types"] = {}
     for qt in QuestType.objects.filter(event=ctx["event"]).order_by("number"):
         res["quest_types"][qt.number] = qt.show()
@@ -519,12 +593,12 @@ def reset_event_cache_all_runs(event):
     for r in event.runs.all():
         reset_run(r)
     # reset also runs of child events
-    for child in Event.objects.filter(parent=event):
+    for child in Event.objects.filter(parent=event).prefetch_related("runs"):
         for r in child.runs.all():
             reset_run(r)
     if event.parent:
         # reset also runs of sibling events
-        for child in Event.objects.filter(parent=event.parent):
+        for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
             for r in child.runs.all():
                 reset_run(r)
         # reset also runs of parent event

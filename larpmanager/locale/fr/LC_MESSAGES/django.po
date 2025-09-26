@@ -504,6 +504,9 @@ msgstr "Pied de page"
 msgid "Gender"
 msgstr "Genre"
 
+msgid "Guides"
+msgstr "Guides"
+
 msgid "Header"
 msgstr "En-tête"
 
@@ -638,12 +641,6 @@ msgstr "émis"
 
 msgid "member"
 msgstr "membre"
-
-msgid "player"
-msgstr "joueur"
-
-msgid "status"
-msgstr "statut"
 
 msgid "within"
 msgstr "à l'intérieur"
@@ -899,6 +896,9 @@ msgstr "Approuvé"
 
 msgid "Assigned"
 msgstr "Attribuer"
+
+msgid "Attended"
+msgstr "Présents"
 
 msgid "Calendar"
 msgstr "Calendrier"
@@ -1325,9 +1325,6 @@ msgstr "Ateliers"
 
 msgid "negatives"
 msgstr "négatifs"
-
-msgid "speedlarp"
-msgstr "speedlarp"
 
 msgid "surcharge"
 msgstr "surtaxe"
@@ -1808,6 +1805,9 @@ msgstr "Élément de formulaire"
 
 msgid "Form section"
 msgstr "Section du formulaire"
+
+msgid "Full payment"
+msgstr "Paiement intégral"
 
 msgid "Host Address"
 msgstr "Adresse de l'hôte"
@@ -2591,6 +2591,9 @@ msgstr "Maecenas / Réduit"
 msgid "Payment currency"
 msgstr "Devise de paiement"
 
+msgid "Payment priority"
+msgstr "Priorité de paiement"
+
 msgid "Payment to check"
 msgstr "Paiement à vérifier"
 
@@ -2626,9 +2629,6 @@ msgstr "Définir le type de capacité"
 
 msgid "Show collections"
 msgstr "Afficher les collections"
-
-msgid "Show explanation"
-msgstr "Montrer l'explication"
 
 msgid "Single-line text"
 msgstr "Texte sur une seule ligne"
@@ -3317,6 +3317,9 @@ msgstr "Les inscriptions sont ouvertes !"
 msgid "Registration not open"
 msgstr "L'inscription n'est pas ouverte"
 
+msgid "Registration priority"
+msgstr "Priorité d'inscription"
+
 msgid "Registration sections"
 msgstr "Sections des membres"
 
@@ -3436,6 +3439,9 @@ msgstr "Applications"
 
 msgid "Registration surcharge"
 msgstr "Supplément d'entrée"
+
+msgid "Registrations not open"
+msgstr "L'inscription n'est pas encore ouverte "
 
 msgid "Reimbursement approved"
 msgstr "Remboursement approuvé"
@@ -3803,9 +3809,6 @@ msgstr "L'option n'est plus disponible"
 
 msgid "Pre-register to the event!"
 msgstr "Inscrivez vous sur la liste de pré-inscription !"
-
-msgid "Registration not yet open!"
-msgstr "L'inscription n'est pas encore ouverte."
 
 msgid "Short name - international"
 msgstr "Nom court - en anglais"
@@ -5519,10 +5522,6 @@ msgstr ""
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Si vous le souhaitez, indiquez un pronom pour votre personnage"
 
-msgid "If you wish, you can delete past pre-registrations"
-msgstr ""
-"Si vous le souhaitez, vous pouvez annuler les préinscriptions antérieures"
-
 msgid "Indicate the color that will be used for the links"
 msgstr "Indique la couleur qui sera utilisée pour les liens"
 
@@ -6255,6 +6254,11 @@ msgstr ""
 "Configurez rapidement les paramètres les plus importants de votre "
 "organisation"
 
+msgid "See practical examples of how LarpManager can help your event"
+msgstr ""
+"Voir des exemples pratiques de la façon dont LarpManager peut aider votre "
+"événement"
+
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""
 "Définit la fréquence d'envoi des courriels de rappel, en jours (valeur par "
@@ -6436,6 +6440,9 @@ msgid "You can also upload a second file with the registration options"
 msgstr ""
 "Vous pouvez également télécharger un deuxième fichier avec les options "
 "d'enregistrement"
+
+msgid "You must create at least one quest before you can create traits"
+msgstr "Vous devez créer au moins une quête avant de pouvoir créer des traits"
 
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Vous recevrez une confirmation du résultat de son évaluation"
@@ -6811,6 +6818,10 @@ msgstr ""
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Vous avez correctement annulé l'inscription à l'événement %(event)s"
 
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+"Vous devez créer au moins un type de quête avant de pouvoir créer des quêtes"
+
 msgid "Your user does not have the required permissions to access this page"
 msgstr ""
 "Votre utilisateur n'a pas les permissions requises pour accéder à cette page"
@@ -6952,11 +6963,6 @@ msgstr ""
 "Si vous avez conclu un accord séparé avec nous, vous pouvez ignorer cet "
 "e-mail"
 
-msgid "If you like or are interested in an event, you can <b>pre-register</b>"
-msgstr ""
-"Si vous aimez ou êtes intéressé par un événement, vous pouvez vous <b>pré-"
-"inscrire</b>"
-
 msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "La première ligne du fichier contient les noms des champs que vous souhaitez"
@@ -7031,6 +7037,12 @@ msgid ""
 msgstr ""
 "Seuls les minuscules et les chiffres sont autorisés, sans espaces ni "
 "symboles"
+
+msgid ""
+"Registrations for this event are not open yet, but you can pre-register"
+msgstr ""
+"Les inscriptions à cet événement ne sont pas encore ouvertes, mais vous "
+"pouvez vous préinscrire"
 
 msgid ""
 "The request of removal from further communication has been successfull!"
@@ -7228,6 +7240,12 @@ msgstr ""
 "fournies"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Vous devez créer au moins un type de capacité avant de pouvoir créer des "
+"capacités"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "si vous laissez ce champ vide, il peut s'agir de l'événement de départ d'une"
@@ -7316,6 +7334,12 @@ msgid ""
 msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien correspondant"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr ""
+"Vous devez créer au moins un type de prologue avant de pouvoir créer des "
+"prologues"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7474,6 +7498,12 @@ msgid ""
 msgstr ""
 "Vous ne pouvez pas y travailler en même temps : le travail de l'un d'entre "
 "vous serait perdu"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Vous devez créer au moins un modèle de document avant de pouvoir créer des "
+"documents"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -8513,6 +8543,13 @@ msgstr ""
 "a été approuvée"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Mesure de la préférence à accorder aux personnes qui se sont inscrites plus "
+"tôt (0=désactivé par défaut, 1=normal, 10=fort)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -8667,6 +8704,13 @@ msgid ""
 msgstr ""
 "Traite cet événement comme un événement numérique/en ligne qui ne nécessite "
 "pas d'inscription en personne"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Vous devez créer au moins une question d'enregistrement avant de pouvoir "
+"créer des options d'enregistrement"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
@@ -9113,6 +9157,13 @@ msgid ""
 msgstr ""
 "Permet de gérer l'entrée de recettes pour un événement qui ne proviennent "
 "pas des inscriptions des participants"
+
+msgid ""
+"Pre-registration is free. It does not guarantee a spot, but gives you "
+"priority when registration opens"
+msgstr ""
+"La préinscription est gratuite. Elle ne garantit pas une place, mais vous "
+"donne la priorité lors de l'ouverture des inscriptions"
 
 msgid ""
 "This field can be edited by the participant only when the character is in "
@@ -9692,6 +9743,13 @@ msgid ""
 msgstr ""
 "Vous avez des versements fixes dont la date et les jours sont définis, mais "
 "ces valeurs ne peuvent pas être définies en même temps : %(list)s"
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Mesure de l'importance de favoriser les participants qui ont effectué le "
+"paiement intégral plus tôt (0 = désactivé par défaut, 1 = normal, 10 = fort)"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
@@ -10370,26 +10428,6 @@ msgstr ""
 "voir le nom du personnage"
 
 msgid ""
-"We only ask you to indicate a <b>order</b> of preference for the your pre-"
-"registrations (imagining you have to choose which one to play, indicates in "
-"what order you want to play them)"
-msgstr ""
-"Tout ce que nous vous demandons, c'est d'indiquer un <b>ordre</b> de "
-"préférence pour vos pré-inscriptions (en supposant que vous deviez choisir "
-"les pièces à jouer, veuillez indiquer l'ordre dans lequel vous aimeriez les "
-"jouer)"
-
-msgid ""
-"For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new session of an event, spread the voice "
-"and invites others to pre-register to it"
-msgstr ""
-"Pour notre part, nous utiliserons les préinscriptions comme une mesure de "
-"l'intérêt suscité par un événement. Si vous souhaitez une nouvelle session "
-"d'un événement, faites-le savoir et invitez les autres à s'y inscrire à "
-"l'avance"
-
-msgid ""
 "As per the statutes, we will review your request at the next board meeting "
 "and send you an update e-mail as soon as possible (you should receive a "
 "reply within a few weeks at the latest)."
@@ -10407,15 +10445,6 @@ msgstr ""
 "Vous n'avez pas encore soumis votre demande d'adhésion à l'Association. Si "
 "vous n'êtes pas membre, nous ne pouvons pas accepter de paiement de votre "
 "part et vous ne pouvez pas confirmer vos inscriptions aux événements"
-
-msgid ""
-"This <b>is</b> not binding, and <b>does</b> not automatically secure you a "
-"place at the event, but you will be offered a preferential registration "
-"before the public opening of registration"
-msgstr ""
-"Ceci <b>n'est</b> pas contraignant, et <b>n'assure</b> pas automatiquement "
-"une place à l'événement, mais une inscription préférentielle vous sera "
-"proposée avant l'ouverture publique des inscriptions"
 
 msgid ""
 "You have submitted a deposit, and it is being reviewed by the staff. You "

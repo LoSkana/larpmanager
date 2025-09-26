@@ -38,9 +38,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx
-from larpmanager.utils.common import (
-    get_event_template,
-)
+from larpmanager.utils.common import get_event_template
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
 from larpmanager.views.manage import _get_registration_status
@@ -61,6 +59,15 @@ def exe_events(request):
 
 @login_required
 def exe_events_edit(request, num):
+    """Handle editing of existing events or creation of new executive events.
+
+    Args:
+        request: HTTP request object
+        num: Event number (0 for new event, >0 for existing)
+
+    Returns:
+        Redirect to appropriate page or rendered event form
+    """
     ctx = check_assoc_permission(request, "exe_events")
 
     if num:

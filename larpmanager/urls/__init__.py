@@ -21,12 +21,8 @@
 from django.conf import (
     settings as conf_settings,
 )
-from django.conf.urls.static import (
-    static,
-)
-from django.urls import (
-    path,
-)
+from django.conf.urls.static import static
+from django.urls import path
 
 from larpmanager.views.user import event as views_ue
 

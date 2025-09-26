@@ -52,10 +52,16 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
 from larpmanager.models.utils import get_payment_details, save_payment_details
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class OrgaPersonalExpenseForm(MyFormRun):
+    """Form for contributors to add/edit their personal expenses.
+
+    Allows expense tracking with optional balance integration
+    based on enabled features.
+    """
+
     page_info = _("This page allows you to add or edit an expense item of a contributor")
 
     page_title = _("Expenses")
@@ -71,6 +77,12 @@ class OrgaPersonalExpenseForm(MyFormRun):
 
 
 class OrgaExpenseForm(MyFormRun):
+    """Form for organizers to manage contributor expenses.
+
+    Full expense management including approval workflow
+    and member assignment capabilities.
+    """
+
     page_title = _("Expenses collaborators")
 
     page_info = _("This page allows you to add or edit the expense of a contributor")
@@ -92,6 +104,12 @@ class OrgaExpenseForm(MyFormRun):
 
 
 class OrgaTokenForm(MyFormRun):
+    """Form for managing token accounting items.
+
+    Handles token-based payments and transactions
+    within the event accounting system.
+    """
+
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
@@ -121,6 +139,12 @@ class OrgaCreditForm(MyFormRun):
 
 
 class OrgaPaymentForm(MyFormRun):
+    """Form for managing payment accounting records.
+
+    Handles payment processing, validation, and
+    integration with accounting workflows.
+    """
+
     page_title = _("Payments")
 
     page_info = _("This page allows you to add or edit a payment item")
@@ -432,6 +456,12 @@ class ExePaymentSettingsForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize PaymentMethodForm with dynamic payment method configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         self.prevent_canc = True
@@ -486,6 +516,14 @@ class ExePaymentSettingsForm(MyForm):
             self.initial[el] = data_string
 
     def save(self, commit=True):
+        """Save payment form with details masking and change tracking.
+
+        Args:
+            commit: Whether to commit changes to database
+
+        Returns:
+            Payment instance with updated details and change history
+        """
         instance = super().save(commit=commit)
 
         res = get_payment_details(self.instance)

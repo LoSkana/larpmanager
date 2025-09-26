@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os.path
 import re
 import shutil
@@ -52,21 +53,37 @@ from larpmanager.models.writing import (
     Relationship,
 )
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import (
-    get_handout,
-)
+from larpmanager.utils.common import get_handout
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_assoc_text
 
+logger = logging.getLogger(__name__)
+
 
 def fix_filename(s):
+    """Remove special characters from filename for safe PDF generation.
+
+    Args:
+        s (str): Original filename string
+
+    Returns:
+        str: Sanitized filename with only alphanumeric characters and spaces
+    """
     return re.sub(r"[^A-Za-z0-9 ]+", "", s)
 
 
 # reprint if file not exists, older than 1 day, or debug
 def reprint(fp):
+    """Determine if PDF file should be regenerated.
+
+    Args:
+        fp (str): File path to check
+
+    Returns:
+        bool: True if file should be regenerated (debug mode, missing, or older than 1 day)
+    """
     if conf_settings.DEBUG:
         return True
 
@@ -79,6 +96,18 @@ def reprint(fp):
 
 
 def return_pdf(fp, fn):
+    """Return PDF file as HTTP response.
+
+    Args:
+        fp (str): File path to PDF file
+        fn (str): Filename for download
+
+    Returns:
+        HttpResponse: PDF file response with appropriate headers
+
+    Raises:
+        Http404: If PDF file is not found
+    """
     try:
         f = open(fp, "rb")
         response = HttpResponse(f.read(), content_type="application/pdf")
@@ -90,6 +119,18 @@ def return_pdf(fp, fn):
 
 
 def link_callback(uri, rel):
+    """Convert HTML URIs to absolute system paths for xhtml2pdf.
+
+    Resolves static and media URLs to absolute file paths so the PDF
+    generator can access resources like images and stylesheets.
+
+    Args:
+        uri (str): URI from HTML content
+        rel (str): Relative URI reference
+
+    Returns:
+        str: Absolute file path or empty string if file not found
+    """
     """
     Convert HTML URIs to absolute system paths so xhtml2pdf can access those
     resources. Raises an exception if the file doesn't exist.
@@ -113,6 +154,17 @@ def link_callback(uri, rel):
 
 
 def add_pdf_instructions(ctx):
+    """Add PDF generation instructions to template context.
+
+    Processes template variables and utility codes for PDF headers,
+    footers, and CSS styling.
+
+    Args:
+        ctx (dict): Template context dictionary to modify
+
+    Side effects:
+        Updates ctx with processed PDF styling and content instructions
+    """
     for instr in ["page_css", "header_content", "footer_content"]:
         ctx[instr] = ctx["event"].get_config(instr, "")
 
@@ -140,10 +192,20 @@ def add_pdf_instructions(ctx):
             cod = x.replace("#", "")
             util = get_object_or_404(Util, cod=cod)
             ctx[s] = ctx[s].replace(x, util.util.url)
-        # print(ctx['page_css'])
+        logger.debug(f"Processed PDF context for key '{s}': {len(ctx[s])} characters")
 
 
 def xhtml_pdf(context, template_path, output_filename):
+    """Generate PDF from Django template using xhtml2pdf.
+
+    Args:
+        context (dict): Template context dictionary
+        template_path (str): Path to Django template file
+        output_filename (str): Output PDF file path
+
+    Raises:
+        Http404: If PDF generation fails with errors
+    """
     template = get_template(template_path)
 
     html = template.render(context)
@@ -158,6 +220,18 @@ def xhtml_pdf(context, template_path, output_filename):
 
 
 def pdf_template(ctx, tmp, out, small=False, html=False):
+    """Generate PDF from template using pdfkit with configurable options.
+
+    Args:
+        ctx (dict): Template context dictionary
+        tmp (str): Template path or HTML string
+        out (str): Output PDF file path
+        small (bool): Use minimal margins for compact layout
+        html (bool): If True, treat tmp as HTML string; if False, as template path
+
+    Side effects:
+        Creates PDF file at specified output path
+    """
     if small:
         options = {
             "page-size": "A4",
@@ -191,12 +265,12 @@ def pdf_template(ctx, tmp, out, small=False, html=False):
         else:
             template = get_template(tmp)
             html = template.render(ctx)
-            # print(html)
+            logger.debug(f"Generated HTML for PDF: {len(html)} characters")
         # html = html.replace(conf_settings.STATIC_URL, request.build_absolute_uri(conf_settings.STATIC_URL))
         # html = html.replace(conf_settings.MEDIA_URL, request.build_absolute_uri(conf_settings.MEDIA_URL))
         pdfkit.from_string(html, out, options)
     except Exception as e:
-        print(e)
+        logger.error(f"PDF generation error: {e}")
 
 
 # ##print
@@ -465,28 +539,36 @@ def odt_template(ctx, char, fp, template, aux_template):
             exec_odt_template(ctx, char, fp, template, aux_template)
             return
         except Exception as e:
-            print("Error in pdf creation")
-            print(e)
-            print(char)
-            print(template)
+            logger.error(f"Error in PDF creation: {e}")
+            logger.error(f"Character: {char}")
+            logger.error(f"Template: {template}")
             attempt += 1
             excepts.append(e)
             time.sleep(2)
-    print("ERROR IN odt_template")
-    print(excepts)
+    logger.error(f"ERROR IN odt_template: {excepts}")
 
 
 def exec_odt_template(ctx, char, fp, template, aux_template):
+    """
+    Process ODT template to generate PDF for character data.
+
+    Args:
+        ctx: Context dictionary with template data
+        char: Character data dictionary
+        fp: Output file path for generated PDF
+        template: ODT template file object
+        aux_template: Auxiliary template for content processing
+    """
     working_dir = os.path.dirname(fp)
     working_dir = os.path.join(working_dir, str(char["number"]))
-    # print(working_dir)
+    logger.debug(f"Character PDF working directory: {working_dir}")
     # deletes file if existing
     if os.path.exists(fp):
         os.remove(fp)
     working_dir += "-work"
     # deletes directory if existing
     if os.path.exists(working_dir):
-        # print("delete")
+        logger.debug(f"Cleaning up existing character directory: {working_dir}")
         shutil.rmtree(working_dir)
     os.makedirs(working_dir)
     zip_dir = os.path.join(working_dir, "zipdd")
@@ -512,6 +594,17 @@ def exec_odt_template(ctx, char, fp, template, aux_template):
 
 # translate html markup to odt
 def get_odt_content(ctx, working_dir, aux_template):
+    """
+    Extract ODT content from HTML template for PDF generation.
+
+    Args:
+        ctx: Template context dictionary
+        working_dir: Working directory for file operations
+        aux_template: Django template object
+
+    Returns:
+        dict: ODT content with txt, auto, and styles elements
+    """
     html = aux_template.render(ctx)
     # get odt teaser
     o_html = os.path.join(working_dir, "auxiliary.html")
@@ -530,11 +623,18 @@ def get_odt_content(ctx, working_dir, aux_template):
     os.system("unzip -q ../aux.odt")
     # get data from content
     doc = lxml.etree.parse("content.xml")
-    txt = doc.xpath('//*[local-name()="text"]')[0]
-    auto = doc.xpath('//*[local-name()="automatic-styles"]')[0]
+    txt_elements = doc.xpath('//*[local-name()="text"]')
+    auto_elements = doc.xpath('//*[local-name()="automatic-styles"]')
+    if not txt_elements or not auto_elements:
+        raise ValueError("Required XML elements not found in content.xml")
+    txt = txt_elements[0]
+    auto = auto_elements[0]
     # get data from styles
     doc = lxml.etree.parse("styles.xml")
-    styles = doc.xpath('//*[local-name()="styles"]')[0]
+    styles_elements = doc.xpath('//*[local-name()="styles"]')
+    if not styles_elements:
+        raise ValueError("Required XML elements not found in styles.xml")
+    styles = styles_elements[0]
     return {
         "txt": txt.getchildren(),
         "auto": auto.getchildren(),
@@ -543,6 +643,15 @@ def get_odt_content(ctx, working_dir, aux_template):
 
 
 def clean_tag(tag):
+    """
+    Clean XML tag by removing namespace prefix.
+
+    Args:
+        tag: XML tag string to clean
+
+    Returns:
+        str: Cleaned tag without namespace prefix
+    """
     i = tag.find("}")
     if i >= 0:
         tag = tag[i + 1 :]
@@ -550,6 +659,13 @@ def clean_tag(tag):
 
 
 def replace_data(path, char):
+    """
+    Replace character data placeholders in template file.
+
+    Args:
+        path: Path to template file
+        char: Character data dictionary with replacement values
+    """
     with open(path) as file:
         filedata = file.read()
 
@@ -564,13 +680,21 @@ def replace_data(path, char):
 
 
 def update_content(ctx, working_dir, zip_dir, char, aux_template):
+    """Update PDF content for character sheets.
+
+    Modifies LibreOffice document content with character data for PDF
+    generation, handling template replacement and content formatting.
+    """
     # ## NOW CONTENT
     content = os.path.join(zip_dir, "content.xml")
     replace_data(content, char)
     doc = lxml.etree.parse(content)
     elements = get_odt_content(ctx, working_dir, aux_template)
 
-    styles = doc.xpath('//*[local-name()="automatic-styles"]')[0]
+    styles_elements = doc.xpath('//*[local-name()="automatic-styles"]')
+    if not styles_elements:
+        raise ValueError("automatic-styles element not found in content.xml")
+    styles = styles_elements[0]
     for ch in styles.getchildren():
         styles.remove(ch)
     for ch in elements["auto"]:
@@ -598,7 +722,10 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
     content = os.path.join(zip_dir, "styles.xml")
     replace_data(content, char)
     doc = lxml.etree.parse(content)
-    styles = doc.xpath('//*[local-name()="styles"]')[0]
+    styles_elements = doc.xpath('//*[local-name()="styles"]')
+    if not styles_elements:
+        raise ValueError("styles element not found in styles.xml")
+    styles = styles_elements[0]
     # pprint(styles)
     for ch in elements["styles"]:
         # ~ Skip = false

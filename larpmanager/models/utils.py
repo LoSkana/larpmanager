@@ -37,21 +37,53 @@ from django.utils.translation import gettext_lazy as _
 
 
 def generate_id(length):
+    """Generate random alphanumeric ID string.
+
+    Args:
+        length (int): Length of ID to generate
+
+    Returns:
+        str: Random lowercase alphanumeric string of specified length
+    """
     return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length))
 
 
 def decimal_to_str(v):
+    """Convert decimal to string with .00 removed.
+
+    Args:
+        v (Decimal): Decimal value to convert
+
+    Returns:
+        str: String representation without trailing .00
+    """
     s = str(v)
     s = s.replace(".00", "")
     return s
 
 
 def slug_url_validator(val):
+    """Validate that string contains only lowercase alphanumeric characters.
+
+    Args:
+        val (str): String to validate
+
+    Raises:
+        ValidationError: If string contains invalid characters
+    """
     if not val.islower() or not val.isalnum():
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
 
 
 def remove_non_ascii(text):
+    """Remove non-ASCII characters from text.
+
+    Args:
+        text (str): Input text
+
+    Returns:
+        str: Text with only ASCII characters (ordinal < 128)
+    """
     max_ascii = 128
     return "".join(char for char in text if ord(char) < max_ascii)
 
@@ -61,6 +93,11 @@ def my_uuid_miny():
 
 
 def my_uuid_short():
+    """Generate short UUID string of 12 characters.
+
+    Returns:
+        str: 12-character UUID string
+    """
     return my_uuid(12)
 
 
@@ -84,6 +121,15 @@ def download(url):
 
 
 def show_thumb(height, text):
+    """Generate HTML img tag for thumbnail display.
+
+    Args:
+        height (int): Height in pixels for the image
+        text (str): URL or path to the image
+
+    Returns:
+        SafeString: HTML img tag with specified height and source
+    """
     s = f'<img style="height:{height}px" src="{text}" />'
     return mark_safe(s)
 
@@ -110,6 +156,16 @@ class UploadToPathAndRename:
         self.sub_path = sub_path
 
     def __call__(self, instance, filename):
+        """
+        Generate upload path for file with backup handling.
+
+        Args:
+            instance: Model instance being saved
+            filename: Original filename
+
+        Returns:
+            str: Generated file path for upload
+        """
         ext = filename.split(".")[-1].lower()
         filename = f"{uuid4().hex}.{ext}"
         if instance.pk:
@@ -150,11 +206,29 @@ class UploadToPathAndRename:
 
 
 def get_payment_details_path(assoc):
+    """
+    Get encrypted payment details file path for association.
+
+    Args:
+        assoc: Association instance
+
+    Returns:
+        str: Path to encrypted payment details file
+    """
     os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
     return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, os.path.basename(assoc.slug) + ".enc")
 
 
 def get_payment_details(assoc):
+    """
+    Decrypt and retrieve payment details for association.
+
+    Args:
+        assoc: Association instance with encryption key
+
+    Returns:
+        dict: Decrypted payment details dictionary
+    """
     cipher = Fernet(assoc.key)
     encrypted_file_path = get_payment_details_path(assoc)
     if not os.path.exists(encrypted_file_path):
@@ -167,6 +241,13 @@ def get_payment_details(assoc):
 
 
 def save_payment_details(assoc, payment_details):
+    """
+    Encrypt and save payment details for association.
+
+    Args:
+        assoc: Association instance with encryption key
+        payment_details: Dictionary of payment details to encrypt
+    """
     cipher = Fernet(assoc.key)
     data_bytes = json.dumps(payment_details).encode("utf-8")
     encrypted_data = cipher.encrypt(data_bytes)
@@ -176,6 +257,15 @@ def save_payment_details(assoc, payment_details):
 
 
 def strip_tags(html):
+    """
+    Strip HTML tags from text content.
+
+    Args:
+        html: HTML string to process
+
+    Returns:
+        str: Plain text with HTML tags removed
+    """
     s = MLStripper()
     s.feed(html)
     return s.get_data()

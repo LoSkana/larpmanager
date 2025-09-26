@@ -41,9 +41,7 @@ from larpmanager.forms.accounting import (
     ExeRefundRequestForm,
     ExeTokenForm,
 )
-from larpmanager.forms.writing import (
-    UploadElementsForm,
-)
+from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.accounting import (
     AccountingItemDonation,
     AccountingItemExpense,
@@ -65,12 +63,8 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import (
-    Run,
-)
-from larpmanager.models.registration import (
-    Registration,
-)
+from larpmanager.models.event import Run
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
@@ -80,6 +74,14 @@ from larpmanager.views.orga.accounting import assign_payment_fee
 
 @login_required
 def exe_outflows(request):
+    """Display paginated list of accounting outflows for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered outflows list template
+    """
     ctx = check_assoc_permission(request, "exe_outflows")
     exe_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
@@ -87,11 +89,28 @@ def exe_outflows(request):
 
 @login_required
 def exe_outflows_edit(request, num):
+    """Edit accounting outflow record.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        num (int): Outflow record ID
+
+    Returns:
+        HttpResponse: Edit form or redirect after save
+    """
     return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
 
 
 @login_required
 def exe_inflows(request):
+    """Display paginated list of accounting inflows for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered inflows list template
+    """
     ctx = check_assoc_permission(request, "exe_inflows")
     exe_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
@@ -104,6 +123,14 @@ def exe_inflows_edit(request, num):
 
 @login_required
 def exe_donations(request):
+    """Display paginated list of donations for association.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+
+    Returns:
+        HttpResponse: Rendered donations list template
+    """
     ctx = check_assoc_permission(request, "exe_donations")
     exe_paginate(request, ctx, AccountingItemDonation, show_runs=False)
     return render(request, "larpmanager/exe/accounting/donations.html", ctx)
@@ -265,7 +292,10 @@ def exe_accounting(request):
 @login_required
 def exe_year_accounting(request):
     ctx = check_assoc_permission(request, "exe_accounting")
-    year = int(request.POST.get("year"))
+    try:
+        year = int(request.POST.get("year"))
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid year parameter"}, status=400)
     res = {"a_id": ctx["a_id"]}
     assoc_accounting_data(res, year)
     return JsonResponse({"res": res})
@@ -298,7 +328,10 @@ def check_year(request, ctx):
     ctx["years"] = list(range(datetime.today().year, assoc.created.year - 1, -1))
 
     if request.POST:
-        ctx["year"] = int(request.POST.get("year"))
+        try:
+            ctx["year"] = int(request.POST.get("year"))
+        except (ValueError, TypeError):
+            ctx["year"] = ctx["years"][0]
     else:
         ctx["year"] = ctx["years"][0]
 
@@ -307,6 +340,17 @@ def check_year(request, ctx):
 
 @login_required
 def exe_balance(request):
+    """Executive view for displaying association balance sheet for a specific year.
+
+    Calculates totals for memberships, donations, tickets, and expenses from
+    various accounting models to generate comprehensive financial reporting.
+
+    Args:
+        request: Django HTTP request object with user authentication and year parameter
+
+    Returns:
+        HttpResponse: Rendered balance sheet template with financial data
+    """
     ctx = check_assoc_permission(request, "exe_balance")
     year = check_year(request, ctx)
 
@@ -388,6 +432,14 @@ def exe_balance(request):
 
 @login_required
 def exe_verification(request):
+    """Handle payment verification process with invoice upload and processing.
+
+    Args:
+        request: HTTP request object with file upload capability
+
+    Returns:
+        Rendered verification template with pending payments and upload form
+    """
     ctx = check_assoc_permission(request, "exe_verification")
 
     ctx["todo"] = (

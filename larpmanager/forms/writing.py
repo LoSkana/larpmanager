@@ -49,7 +49,7 @@ from larpmanager.models.writing import (
     PrologueType,
     SpeedLarp,
 )
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class WritingForm(MyForm):
@@ -191,13 +191,18 @@ class PlotForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Plot
 
-        exclude = ("number", "temp", "hide")
+        exclude = ("number", "temp", "hide", "order")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize plot form with character relationships and dynamic fields.
+
+        Sets up plot editing form with character selection, role text fields,
+        and character finder functionality for plot management.
+        """
         super().__init__(*args, **kwargs)
 
         self.init_orga_fields()
@@ -214,10 +219,8 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.add_char_finder = []
         self.field_link = {}
         if self.instance.pk:
-            for ch in (
-                self.instance.get_plot_characters()
-                .order_by("character__number")
-                .values_list("character__id", "character__number", "character__name", "text")
+            for ch in self.instance.get_plot_characters().values_list(
+                "character__id", "character__number", "character__name", "text"
             ):
                 char = f"#{ch[1]} {ch[2]}"
                 field = f"char_role_{ch[0]}"

@@ -18,9 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.urls import (
-    path,
-)
+from django.urls import path
 
 from larpmanager.views import larpmanager as views_lm
 
@@ -34,6 +32,16 @@ urlpatterns = [
         "discover/",
         views_lm.discover,
         name="discover",
+    ),
+    path(
+        "guides/",
+        views_lm.guides,
+        name="guides",
+    ),
+    path(
+        "guides/<slug:slug>/",
+        views_lm.guide,
+        name="guide",
     ),
     path(
         "tutorials/",
@@ -69,16 +77,6 @@ urlpatterns = [
         "contact/",
         views_lm.contact,
         name="contact",
-    ),
-    path(
-        "blog/",
-        views_lm.blog,
-        name="blog",
-    ),
-    path(
-        "blog/<slug:slug>",
-        views_lm.blog,
-        name="blog",
     ),
     path(
         "lm/list/",

@@ -60,6 +60,14 @@ def add_count(s, param, v=1):
 
 
 def update_reg_counts(r):
+    """Update registration counts cache for the given run.
+
+    Args:
+        r: Run instance to update registration counts for
+
+    Returns:
+        dict: Updated registration counts data by ticket tier
+    """
     s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
     que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
     for reg in que.select_related("ticket"):
@@ -129,6 +137,14 @@ def post_save_event_cache(sender, instance, created, **kwargs):
 
 
 def search_player(char, js, ctx):
+    """
+    Search for players in registration cache and populate results.
+
+    Args:
+        char: Character instance with player data
+        js: JSON object to populate with search results
+        ctx: Context dictionary with search parameters and assignments
+    """
     if "assignments" in ctx:
         if char.number in ctx["assignments"]:
             char.rcr = ctx["assignments"][char.number]

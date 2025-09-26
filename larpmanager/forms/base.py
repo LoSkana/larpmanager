@@ -31,19 +31,33 @@ from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionStatus,
-    WritingQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
-    RegistrationQuestion, BaseQuestionType, get_writing_max_length,
+    RegistrationQuestion,
+    WritingQuestionType,
+    get_writing_max_length,
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
 class MyForm(forms.ModelForm):
+    """Base form class with context parameter handling.
+
+    Extends Django's ModelForm to support additional context parameters
+    that can be passed during form initialization.
+    """
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with optional context parameters.
+
+        Args:
+            *args: Positional arguments passed to parent ModelForm
+            **kwargs: Keyword arguments, may include 'ctx' for context data
+        """
         super().__init__()
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
@@ -79,12 +93,22 @@ class MyForm(forms.ModelForm):
         self.max_lengths = {}
 
     def get_automatic_field(self):
+        """Get list of fields that should be automatically populated.
+
+        Returns:
+            list: Field names that are automatically set and hidden from user
+        """
         s = ["event", "assoc"]
         if hasattr(self, "auto_run"):
             s.extend(["run"])
         return s
 
     def allow_run_choice(self):
+        """Configure run selection field based on available runs.
+
+        Sets up the run choice field, considering campaign switches and
+        hiding the field if only one run is available.
+        """
         runs = Run.objects.filter(event=self.params["event"])
 
         # if campaign switch is active, show as runs all of the events sharing the campaign
@@ -133,6 +157,18 @@ class MyForm(forms.ModelForm):
         return self._validate_unique_event("display")
 
     def _validate_unique_event(self, field_name):
+        """
+        Validate field uniqueness within event scope.
+
+        Args:
+            field_name: Name of the field to validate for uniqueness
+
+        Returns:
+            value: Validated field value
+
+        Raises:
+            ValidationError: If value is not unique within the event
+        """
         value = self.cleaned_data.get(field_name)
         event = self.params.get("event")
         typ = self.params.get("elementTyp")
@@ -192,12 +228,27 @@ class MyForm(forms.ModelForm):
 
 
 class MyFormRun(MyForm):
+    """Form class for run-specific operations.
+
+    Extends MyForm with automatic run handling functionality.
+    Sets auto_run to True by default for run-related forms.
+    """
+
     def __init__(self, *args, **kwargs):
         self.auto_run = True
         super().__init__(*args, **kwargs)
 
 
 def max_selections_validator(max_choices):
+    """Create a validator that limits the number of selectable options.
+
+    Args:
+        max_choices (int): Maximum number of options that can be selected
+
+    Returns:
+        function: Validator function that raises ValidationError if exceeded
+    """
+
     def validator(value):
         if len(value) > max_choices:
             raise ValidationError(_("You have exceeded the maximum number of selectable options"))
@@ -206,6 +257,15 @@ def max_selections_validator(max_choices):
 
 
 def max_length_validator(max_length):
+    """Create a validator that limits text length after stripping HTML tags.
+
+    Args:
+        max_length (int): Maximum allowed text length
+
+    Returns:
+        function: Validator function that raises ValidationError if exceeded
+    """
+
     def validator(value):
         if len(strip_tags(value)) > max_length:
             raise ValidationError(_("You have exceeded the maximum text length"))
@@ -214,6 +274,13 @@ def max_length_validator(max_length):
 
 
 class BaseRegistrationForm(MyFormRun):
+    """Base form class for registration-related forms.
+
+    Provides common functionality for handling registration questions,
+    answers, and form validation. Supports both gift registrations
+    and regular registrations with dynamic form field generation.
+    """
+
     gift = False
     answer_class = RegistrationAnswer
     choice_class = RegistrationChoice
@@ -230,6 +297,12 @@ class BaseRegistrationForm(MyFormRun):
         self.sections = {}
 
     def _init_reg_question(self, instance, event):
+        """Initialize registration questions and answers from existing instance.
+
+        Args:
+            instance: Registration instance to load data from
+            event: Event object for question context
+        """
         if instance and instance.pk:
             for el in self.answer_class.objects.filter(**{self.instance_key: instance.id}):
                 self.answers[el.question_id] = el
@@ -258,6 +331,18 @@ class BaseRegistrationForm(MyFormRun):
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
     def get_choice_options(self, all_options, question, chosen=None, reg_count=None):
+        """
+        Build form choice options for a question with availability and ticket validation.
+
+        Args:
+            all_options: Dictionary of all available options by question ID
+            question: Question instance to get options for
+            chosen: Previously chosen options (optional)
+            reg_count: Registration count data for availability checking (optional)
+
+        Returns:
+            tuple: (choices list, help_text string)
+        """
         choices = []
         help_text = question.description
         run = self.params["run"]
@@ -287,6 +372,19 @@ class BaseRegistrationForm(MyFormRun):
         return choices, help_text
 
     def check_option(self, chosen, name, option, reg_count, run):
+        """
+        Check option availability and update display name with availability info.
+
+        Args:
+            chosen: Previously chosen options list
+            name: Display name for the option
+            option: Option instance to check
+            reg_count: Registration count data
+            run: Run instance
+
+        Returns:
+            tuple: (updated_name, is_valid) with availability information
+        """
         found = False
         valid = True
         if chosen:
@@ -309,6 +407,14 @@ class BaseRegistrationForm(MyFormRun):
         return name, valid
 
     def clean(self):
+        """Validate form data and check registration constraints.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If validation rules are violated
+        """
         form_data = super().clean()
 
         if hasattr(self, "questions"):
@@ -331,10 +437,28 @@ class BaseRegistrationForm(MyFormRun):
         return form_data
 
     def get_option_key_count(self, option):
+        """
+        Generate counting key for option availability tracking.
+
+        Args:
+            option: Option instance to generate key for
+
+        Returns:
+            str: Key string for tracking option usage
+        """
         key = f"option_{option.id}"
         return key
 
     def init_orga_fields(self, reg_section=None):
+        """
+        Initialize form fields for organizer view with registration questions.
+
+        Args:
+            reg_section: Optional registration section name override
+
+        Returns:
+            list: List of initialized field keys
+        """
         event = self.params["run"].event
         self._init_reg_question(self.instance, event)
 
@@ -363,6 +487,16 @@ class BaseRegistrationForm(MyFormRun):
         return True
 
     def _init_field(self, question, reg_counts=None, orga=True):
+        """Initialize form field for a writing question.
+
+        Args:
+            question: WritingQuestion instance to create field for
+            reg_counts: Registration count data (optional)
+            orga: Whether this is an organizer form (default: True)
+
+        Returns:
+            Form field instance or None for computed questions
+        """
         # ignore computed
         if question.typ == WritingQuestionType.COMPUTED:
             return None
@@ -433,6 +567,15 @@ class BaseRegistrationForm(MyFormRun):
         return key
 
     def init_special(self, question, required):
+        """Initialize special form field configurations.
+
+        Args:
+            question: Question object with type and configuration data
+            required: Whether the field should be required
+
+        Returns:
+            str or None: The field key if successfully initialized, None otherwise
+        """
         key = question.typ
         mapping = {
             "faction": "factions_list",
@@ -509,6 +652,18 @@ class BaseRegistrationForm(MyFormRun):
             self.initial[key] = self.singles[question.id].option_id
 
     def init_multiple(self, key, orga, question, reg_counts, required):
+        """Set up multiple choice form field handling.
+
+        Args:
+            key: Form field key
+            orga: Whether this is an organizational form
+            question: Question object with choices configuration
+            reg_counts: Registration counts for quota tracking
+            required: Whether field is required
+
+        Side effects:
+            Creates multiple choice field with checkboxes and sets initial values
+        """
         if orga:
             (choices, help_text) = self.get_choice_options(self.choices, question)
         else:
@@ -535,6 +690,12 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = field
 
     def save_reg_questions(self, instance, orga=True):
+        """Save registration question answers to database.
+
+        Args:
+            instance: Registration instance to save answers for
+            orga (bool): Whether to save organizational questions
+        """
         for q in self.questions:
             if q.skip(instance, self.params["features"], self.params, orga):
                 continue
@@ -592,6 +753,12 @@ class BaseRegistrationForm(MyFormRun):
 
 
 class MyCssForm(MyForm):
+    """Form class for handling CSS customization.
+
+    Manages CSS file upload, editing, and processing for styling
+    customization with support for backgrounds, fonts, and color themes.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -612,6 +779,11 @@ class MyCssForm(MyForm):
         return instance
 
     def save_css(self, instance):
+        """Save CSS content to file with automatic styling additions.
+
+        Args:
+            instance: Model instance to save CSS for
+        """
         path = self.get_css_path(instance)
         css = self.cleaned_data[self.get_input_css()]
         css += css_delimeter
@@ -646,6 +818,12 @@ class MyCssForm(MyForm):
 
 
 class BaseAccForm(forms.Form):
+    """Base form class for accounting and payment processing.
+
+    Handles payment method selection and fee configuration
+    for association-specific accounting operations.
+    """
+
     def __init__(self, *args, **kwargs):
         self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)

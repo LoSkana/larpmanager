@@ -29,6 +29,13 @@ class Command(BaseCommand):
     help = "Dump test db"
 
     def handle(self, *args, **kwargs):
+        """
+        Django management command handler to dump test database.
+
+        Args:
+            *args: Command line arguments
+            **kwargs: Command line keyword arguments
+        """
         check_branch()
 
         call_command("reset", verbosity=0)
@@ -56,3 +63,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Database dump completed: test_db.sql"))
         except subprocess.CalledProcessError as e:
             self.stderr.write(self.style.ERROR(f"Dump failed: {e}"))
+
+        clean_cmd = ["sed", "-i", r"/^\\restrict/d;/^\\unrestrict/d", "larpmanager/tests/test_db.sql"]
+        subprocess.run(clean_cmd, check=True, env=env)

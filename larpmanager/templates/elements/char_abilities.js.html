@@ -14,7 +14,11 @@ window.addEventListener('DOMContentLoaded', function() {
         $('#ability_type').on('change', function () {
             const typeId = $(this).val();
             const $abilitySelect = $('#ability_select');
-            $abilitySelect.empty().append('<option value="" disabled selected>--- {% trans "Select ability" %}</option>');
+            var selectAbilityLabel = "{% trans 'Select ability' %}";
+            selectAbilityLabel = selectAbilityLabel.replace(/["']/g, function(m){return m === '"' ? '&quot;' : '&#39;'})
+            $abilitySelect.empty().append(
+                '<option value="" disabled selected>--- ' + selectAbilityLabel + '</option>'
+            );
             if (abilities[typeId] && abilities[typeId]['list']) {
                 $.each(abilities[typeId]['list'], function (id, label) {
                     $abilitySelect.append($('<option>', { value: id, text: label }));

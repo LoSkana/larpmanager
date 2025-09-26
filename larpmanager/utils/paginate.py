@@ -15,6 +15,24 @@ from larpmanager.models.member import Membership
 
 
 def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
+    """Implement pagination logic for various list views.
+
+    Handles sorting, filtering, and page navigation for different model types
+    across the application with comprehensive search and ordering capabilities.
+
+    Args:
+        request: Django HTTP request object containing pagination parameters
+        ctx (dict): Context dictionary to be updated with pagination data
+        typ: Model class or queryset to paginate
+        exe (bool): Whether to use executive view filtering
+        selrel (list): Selected related fields for optimization
+        show_runs (bool): Whether to display run information
+        afield (str): Additional field name for filtering
+        subtype (str): Subtype identifier for specialized filtering
+
+    Returns:
+        None: Function modifies ctx in-place, adding paginated data and metadata
+    """
     cls = typ
     if hasattr(typ, "objects"):
         cls = typ.objects
@@ -97,6 +115,18 @@ def _apply_run_queries(afield, ctx, elements, exe, run):
 
 
 def _apply_custom_queries(ctx, elements, subtype, typ):
+    """
+    Apply model-specific custom queries and optimizations to paginated data.
+
+    Args:
+        ctx: Context dictionary with pagination settings
+        elements: QuerySet to optimize
+        subtype: Subtype filter to apply
+        typ: Model class type
+
+    Returns:
+        QuerySet: Optimized queryset with custom filtering and ordering
+    """
     if issubclass(typ, AccountingItem):
         elements = elements.select_related("member")
     if issubclass(typ, AccountingItemExpense):

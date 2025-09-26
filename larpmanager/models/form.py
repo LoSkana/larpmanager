@@ -40,6 +40,8 @@ from larpmanager.models.writing import CharacterStatus, Faction
 
 
 class BaseQuestionType(models.TextChoices):
+    """Base question types for forms with static utility methods."""
+
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
     TEXT = "t", _("Single-line text")
@@ -48,14 +50,29 @@ class BaseQuestionType(models.TextChoices):
 
     @staticmethod
     def get_answer_types():
+        """Get question types that use text answers.
+
+        Returns:
+            set: Question types requiring text input
+        """
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
     @staticmethod
     def get_choice_types():
+        """Get question types that use choice options.
+
+        Returns:
+            set: Question types with predefined choices
+        """
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
     def get_basic_types():
+        """Get all basic question types.
+
+        Returns:
+            set: All basic question type values
+        """
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
@@ -70,6 +87,16 @@ class BaseQuestionType(models.TextChoices):
 
 
 def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+    """Extend Django TextChoices with additional options.
+
+    Args:
+        name: Name for the new TextChoices class
+        base: Base TextChoices to extend
+        extra: List of (name, value, label) tuples to add
+
+    Returns:
+        models.TextChoices: Extended choices class
+    """
     members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
 
@@ -94,10 +121,20 @@ WritingQuestionType = extend_textchoices(
 
 
 def get_def_writing_types():
+    """Get default writing question types.
+
+    Returns:
+        set: Set of default WritingQuestionType values
+    """
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
 
 def get_writing_max_length():
+    """Get maximum length for writing content.
+
+    Returns:
+        int: Maximum character length for writing fields
+    """
     return {
         WritingQuestionType.NAME,
         WritingQuestionType.SHEET,
@@ -123,6 +160,8 @@ RegistrationQuestionType = extend_textchoices(
 
 
 class QuestionStatus(models.TextChoices):
+    """Status choices for form questions determining requirement level."""
+
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
     DISABLED = "d", _("Disabled")
@@ -139,6 +178,8 @@ class QuestionStatus(models.TextChoices):
 
 
 class QuestionVisibility(models.TextChoices):
+    """Visibility choices for form questions controlling access level."""
+
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
@@ -155,6 +196,8 @@ class QuestionVisibility(models.TextChoices):
 
 
 class QuestionApplicable(models.TextChoices):
+    """Defines which models questions can be applied to."""
+
     CHARACTER = "c", "character"
     PLOT = "p", "plot"
     FACTION = "f", "faction"
@@ -181,6 +224,8 @@ class QuestionApplicable(models.TextChoices):
 
 
 class WritingQuestion(BaseModel):
+    """Form questions for character writing and story elements."""
+
     typ = models.CharField(
         max_length=10,
         choices=WritingQuestionType.choices,
@@ -489,6 +534,11 @@ class RegistrationQuestion(BaseModel):
         return que
 
     def skip(self, reg, features, params=None, orga=False):
+        """Determine if a question should be skipped based on context and features.
+
+        Evaluates question visibility rules including hidden status, ticket restrictions,
+        faction filtering, and organizer permissions to decide if question should be shown.
+        """
         if self.status == QuestionStatus.HIDDEN and not orga:
             return True
 

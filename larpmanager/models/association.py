@@ -31,6 +31,7 @@ from tinymce.models import HTMLField
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
 from larpmanager.models.utils import UploadToPathAndRename
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class MemberFieldType(models.TextChoices):
@@ -181,6 +182,11 @@ class Association(BaseModel):
         help_text=_("Font to be used in page titles"),
         blank=True,
         null=True,
+        validators=[
+            FileTypeValidator(
+                ["font/ttf", "font/otf", "application/font-woff", "application/font-woff2", "font/woff", "font/woff2"]
+            )
+        ],
     )
 
     css_code = models.CharField(max_length=32, editable=False, default="")
@@ -208,7 +214,12 @@ class Association(BaseModel):
 
     plan = models.CharField(max_length=1, choices=AssociationPlan.choices, default=AssociationPlan.FREE)
 
-    gdpr_contract = models.FileField(upload_to=UploadToPathAndRename("contract/gdpr/"), null=True, blank=True)
+    gdpr_contract = models.FileField(
+        upload_to=UploadToPathAndRename("contract/gdpr/"),
+        null=True,
+        blank=True,
+        validators=[FileTypeValidator(["application/pdf"])],
+    )
 
     review_done = models.BooleanField(default=False)
 

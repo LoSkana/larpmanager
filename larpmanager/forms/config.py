@@ -3,6 +3,7 @@ from enum import IntEnum
 
 from django import forms
 from django.forms import Textarea
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
@@ -27,10 +28,10 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
         value = value or []
 
         for i, (option_value, option_label) in enumerate(self.choices):
-            checkbox_id = f"{attrs.get('id', name)}_{i}"
+            checkbox_id = f"{escape(attrs.get('id', name))}_{i}"
             checked = "checked" if str(option_value) in value else ""
-            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            link_html = f'<label for="{checkbox_id}">{option_label}</label>'
+            checkbox_html = f'<input type="checkbox" name="{escape(name)}" value="{escape(option_value)}" id="{checkbox_id}" {checked}>'
+            link_html = f'<label for="{checkbox_id}">{escape(option_label)}</label>'
             output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
 
         return mark_safe("\n".join(output))
@@ -54,11 +55,32 @@ class ConfigForm(MyForm):
         pass
 
     def set_section(self, slug, name):
+        """Set the current section for grouping configuration fields.
+
+        Args:
+            slug: Section slug identifier
+            name: Display name for the section
+
+        Side effects:
+            Sets internal section state and jump_section if matches params
+        """
         self._section = name
         if self.params.get("jump_section", "") == slug:
             self.jump_section = name
 
     def add_configs(self, key, config_type, label, help_text, extra=None):
+        """Add a configuration field to be rendered in the form.
+
+        Args:
+            key: Configuration key name
+            config_type: Type of configuration field (ConfigType enum)
+            label: Display label for the field
+            help_text: Help text to show with the field
+            extra: Additional data for specific field types
+
+        Side effects:
+            Appends field definition to config_fields list
+        """
         self.config_fields.append(
             {
                 "key": key,
@@ -83,6 +105,15 @@ class ConfigForm(MyForm):
         return instance
 
     def _get_custom_field(self, el, res):
+        """Extract and format configuration field value from form data.
+
+        Args:
+            el: Configuration field definition
+            res: Dictionary to store extracted values
+
+        Side effects:
+            Updates res dictionary with formatted field value
+        """
         k = el["key"]
 
         val = self.cleaned_data[k]
@@ -99,6 +130,17 @@ class ConfigForm(MyForm):
 
     @staticmethod
     def _get_form_field(field_type: ConfigType, label, help_text, extra=None):
+        """Create appropriate Django form field based on configuration type.
+
+        Args:
+            field_type: Type of configuration field
+            label: Field label
+            help_text: Field help text
+            extra: Additional configuration for specific field types
+
+        Returns:
+            forms.Field: Django form field instance or None if type unknown
+        """
         field_map = {
             ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
             ConfigType.BOOL: lambda: forms.BooleanField(
@@ -137,6 +179,16 @@ class ConfigForm(MyForm):
         return factory() if factory else None
 
     def _add_custom_field(self, config, res):
+        """Add a custom configuration field to the form.
+
+        Args:
+            config: Configuration field definition
+            res: Dictionary of existing configuration values
+
+        Side effects:
+            Adds field to form.fields and sets initial values
+            Updates sections mapping for UI organization
+        """
         key = config["key"]
         init = str(res[key]) if key in res else None
 
@@ -164,6 +216,11 @@ class ConfigForm(MyForm):
             self.initial[key] = init
 
     def _get_all_element_configs(self):
+        """Get all existing configuration values for the instance.
+
+        Returns:
+            dict: Mapping of configuration names to their current values
+        """
         res = {}
         if self.instance.pk:
             for config in self.instance.configs.all():
