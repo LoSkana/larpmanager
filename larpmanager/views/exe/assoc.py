@@ -135,6 +135,21 @@ def exe_features(request):
 
 
 def exe_features_go(request, ctx, num, on=True):
+    """
+    Toggle association features on/off for executives.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with association data
+        num: Feature number/ID
+        on: Whether to turn feature on (True) or off (False)
+
+    Returns:
+        Feature: The feature object that was toggled
+
+    Raises:
+        Http404: If feature is not an overall feature
+    """
     ctx = check_assoc_permission(request, "exe_features")
     get_feature(ctx, num)
     if not ctx["feature"].overall:

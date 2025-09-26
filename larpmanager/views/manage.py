@@ -246,6 +246,15 @@ def _exe_actions(request, ctx):
 
 
 def _exe_users_actions(request, assoc, ctx, features):
+    """
+    Process user management actions and setup tasks for executives.
+
+    Args:
+        request: HTTP request object
+        assoc: Association instance
+        ctx: Context dictionary to populate with actions
+        features: Set of enabled features
+    """
     if "membership" in features:
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
@@ -272,6 +281,14 @@ def _exe_users_actions(request, assoc, ctx, features):
 
 
 def _exe_accounting_actions(assoc, ctx, features):
+    """
+    Process accounting-related setup actions for executives.
+
+    Args:
+        assoc: Association instance
+        ctx: Context dictionary to populate with priority actions
+        features: Set of enabled features for the association
+    """
     if "payment" in features:
         if not assoc.payment_methods.count():
             _add_priority(

@@ -115,6 +115,18 @@ def _apply_run_queries(afield, ctx, elements, exe, run):
 
 
 def _apply_custom_queries(ctx, elements, subtype, typ):
+    """
+    Apply model-specific custom queries and optimizations to paginated data.
+
+    Args:
+        ctx: Context dictionary with pagination settings
+        elements: QuerySet to optimize
+        subtype: Subtype filter to apply
+        typ: Model class type
+
+    Returns:
+        QuerySet: Optimized queryset with custom filtering and ordering
+    """
     if issubclass(typ, AccountingItem):
         elements = elements.select_related("member")
     if issubclass(typ, AccountingItemExpense):

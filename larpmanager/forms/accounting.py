@@ -516,6 +516,14 @@ class ExePaymentSettingsForm(MyForm):
             self.initial[el] = data_string
 
     def save(self, commit=True):
+        """Save payment form with details masking and change tracking.
+
+        Args:
+            commit: Whether to commit changes to database
+
+        Returns:
+            Payment instance with updated details and change history
+        """
         instance = super().save(commit=commit)
 
         res = get_payment_details(self.instance)

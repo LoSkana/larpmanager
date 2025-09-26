@@ -803,6 +803,15 @@ class OrgaRegistrationTicketForm(MyForm):
 
     @staticmethod
     def get_tier_available(event):
+        """
+        Get available ticket tiers based on event features and configuration.
+
+        Args:
+            event: Event instance to check tier availability for
+
+        Returns:
+            list: List of available ticket tier tuples (value, label)
+        """
         aux = []
         ticket_features = {
             TicketTier.LOTTERY: "lottery",

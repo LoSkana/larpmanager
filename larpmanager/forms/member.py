@@ -781,6 +781,12 @@ class ExeProfileForm(MyForm):
 
     @staticmethod
     def get_members_fields():
+        """
+        Get available member fields for form configuration.
+
+        Returns:
+            list: List of tuples containing field information (name, verbose_name, help_text)
+        """
         skip = [
             "id",
             "deleted",

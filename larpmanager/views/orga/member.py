@@ -52,6 +52,15 @@ def orga_newsletter(request, s):
 
 @login_required
 def orga_safety(request, s):
+    """Process safety-related member data forms.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Safety information template with member data and characters
+    """
     ctx = check_event_permission(request, s, "orga_safety")
     get_event_cache_all(ctx)
     min_length = 3
@@ -80,6 +89,15 @@ def orga_safety(request, s):
 
 @login_required
 def orga_diet(request, s):
+    """Handle dietary preference management forms.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Diet preferences template with member data and characters
+    """
     ctx = check_event_permission(request, s, "orga_diet")
     get_event_cache_all(ctx)
     min_length = 3
@@ -108,6 +126,15 @@ def orga_diet(request, s):
 
 @login_required
 def orga_spam(request, s):
+    """Manage spam/newsletter preference settings.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Newsletter management template with grouped email lists
+    """
     ctx = check_event_permission(request, s, "orga_spam")
 
     already = list(

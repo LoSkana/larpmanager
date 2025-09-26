@@ -369,6 +369,18 @@ def save_registration_bring_friend(ctx, form, reg, request):
 
 
 def register_info(request, ctx, form, reg, dis):
+    """Display registration information and status.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary to populate with registration data
+        form: Registration form instance
+        reg: Registration object if exists
+        dis: Discount information
+
+    Side effects:
+        Updates ctx with form data, terms, conditions, and membership status
+    """
     ctx["form"] = form
     ctx["lang"] = request.user.member.language
     ctx["discount_apply"] = dis
@@ -771,6 +783,16 @@ def check_registration_open(ctx, request):
 
 @login_required
 def gift_edit(request, s, r):
+    """Handle gift registration modifications.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        r: Registration ID
+
+    Returns:
+        HttpResponse: Gift edit form template or redirect after save/cancel
+    """
     ctx = get_event_run(request, s, False, "gift", status=True)
     check_registration_open(ctx, request)
 
@@ -816,6 +838,20 @@ def get_registration_gift(ctx, r, request):
 
 @login_required
 def gift_redeem(request, s, code):
+    """
+    Handle gift code redemption for event registrations.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        code: Gift redemption code
+
+    Returns:
+        HttpResponse: Redemption form or redirect after successful redemption
+
+    Raises:
+        Http404: If registration with code is not found
+    """
     ctx = get_event_run(request, s, False, "gift", status=True)
 
     if ctx["run"].reg:

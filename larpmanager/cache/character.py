@@ -136,6 +136,14 @@ def get_event_cache_characters(ctx, res):
 
 
 def get_event_cache_fields(ctx, res, only_visible=True):
+    """
+    Retrieve and cache writing fields for characters in an event.
+
+    Args:
+        ctx: Context dictionary containing features and questions
+        res: Result dictionary with character data
+        only_visible: Whether to include only visible fields (default: True)
+    """
     if "character" not in ctx["features"]:
         return
 
@@ -182,6 +190,19 @@ def get_character_element_fields(ctx, character_id, only_visible=True):
 
 
 def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
+    """
+    Get writing fields for a specific element with visibility filtering.
+
+    Args:
+        ctx: Context dictionary with event and configuration data
+        feature_name: Name of the feature (e.g., 'character', 'faction')
+        applicable: QuestionApplicable enum value
+        element_id: ID of the element to get fields for
+        only_visible: Whether to include only visible fields (default: True)
+
+    Returns:
+        dict: Dictionary with questions, options, and field values
+    """
     visible_writing_fields(ctx, applicable, only_visible=only_visible)
 
     # remove not visible questions

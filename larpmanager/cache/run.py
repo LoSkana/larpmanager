@@ -94,6 +94,15 @@ def get_cache_config_run(run):
 
 
 def init_cache_config_run(run):
+    """
+    Initialize and build cache configuration data for a run.
+
+    Args:
+        run: Run instance to initialize cache for
+
+    Returns:
+        dict: Cache configuration context with buttons, limitations, and display settings
+    """
     ev_features = get_event_features(run.event_id)
     ctx = {
         "buttons": get_event_button_cache(run.event_id),

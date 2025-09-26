@@ -160,6 +160,14 @@ def get_character_sheet_speedlarp(ctx):
 
 
 def get_character_sheet_questbuilder(ctx):
+    """Build character sheet with quest and trait relationships.
+
+    Args:
+        ctx: Context dictionary with character, quest, and trait data
+
+    Side effects:
+        Updates ctx with sheet_traits containing complete trait and quest information
+    """
     if "questbuilder" not in ctx["features"]:
         return
 
@@ -255,6 +263,15 @@ def get_char_check(request, ctx, num, restrict=False, bypass=False):
 
 
 def get_chars_relations(text, chs_numbers):
+    """Retrieve character relationship data.
+
+    Args:
+        text: Text content to search for character references
+        chs_numbers: List of valid character numbers
+
+    Returns:
+        tuple: (active_characters, extinct_characters) found in text
+    """
     chs = []
     extinct = []
 

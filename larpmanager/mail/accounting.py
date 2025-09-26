@@ -375,6 +375,15 @@ def notify_refund(credit_name, instance):
 
 
 def notify_credit(credit_name, instance):
+    """Send credit notification emails to users.
+
+    Args:
+        credit_name: Name of the credit type being assigned
+        instance: Credit instance with member and amount information
+
+    Side effects:
+        Sends email notifications to user and event organizers
+    """
     # to user
     activate(instance.member.language)
     subj, body = get_credit_email(credit_name, instance)
@@ -489,6 +498,14 @@ def send_collection_activation_email(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=AccountingItemCollection)
 def save_collection_gift(sender, instance, **kwargs):
+    """
+    Send notification emails when gift collection participation is saved.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: Collection gift instance
+        **kwargs: Additional signal arguments
+    """
     if not instance.pk:
         activate(instance.member.language)
         subj = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {

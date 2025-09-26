@@ -75,6 +75,15 @@ from larpmanager.utils.text import get_assoc_text
 
 
 def language(request):
+    """
+    Handle language selection and preference setting for users.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered language form or redirect response
+    """
     if request.user.is_authenticated:
         current_language = request.user.member.language
     else:
@@ -647,6 +656,15 @@ def get_user_backend():
 
 @login_required
 def registrations(request):
+    """
+    Display user's registrations with status information.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered registrations template
+    """
     nt = []
     # get all registrations in the future
     for reg in Registration.objects.filter(member=request.user.member, run__event_id=request.assoc["id"]):

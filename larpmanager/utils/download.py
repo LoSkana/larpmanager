@@ -510,6 +510,14 @@ def orga_registration_form_download(ctx):
 
 
 def export_registration_form(ctx):
+    """Export registration data to Excel format.
+
+    Args:
+        ctx: Context dictionary with event and form data
+
+    Returns:
+        list: List of tuples containing sheet names, headers, and data for Excel export
+    """
     mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
@@ -553,6 +561,15 @@ def orga_character_form_download(ctx):
 
 
 def export_character_form(ctx):
+    """
+    Export character form questions and options to CSV format.
+
+    Args:
+        ctx: Context dictionary with event and column information
+
+    Returns:
+        list: List of export tuples (name, keys, values) for character form data
+    """
     mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
@@ -579,6 +596,16 @@ def export_character_form(ctx):
 
 
 def _orga_registrations_acc(ctx, regs=None):
+    """
+    Process registration accounting data for organizer reports.
+
+    Args:
+        ctx: Context dictionary with event and feature information
+        regs: Optional list of registrations to process (defaults to all active registrations)
+
+    Returns:
+        dict: Processed accounting data keyed by registration ID
+    """
     ctx["reg_tickets"] = {}
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
         t.emails = []
@@ -607,6 +634,17 @@ def _orga_registrations_acc(ctx, regs=None):
 
 
 def _orga_registrations_acc_reg(reg, ctx, cache_aip):
+    """
+    Process registration accounting data for organizer downloads.
+
+    Args:
+        reg: Registration instance to process
+        ctx: Context dictionary with ticket and feature information
+        cache_aip: Cached accounting payment data
+
+    Returns:
+        dict: Processed accounting data dictionary
+    """
     dt = {}
 
     max_rounding = 0.05

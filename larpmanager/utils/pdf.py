@@ -549,6 +549,16 @@ def odt_template(ctx, char, fp, template, aux_template):
 
 
 def exec_odt_template(ctx, char, fp, template, aux_template):
+    """
+    Process ODT template to generate PDF for character data.
+
+    Args:
+        ctx: Context dictionary with template data
+        char: Character data dictionary
+        fp: Output file path for generated PDF
+        template: ODT template file object
+        aux_template: Auxiliary template for content processing
+    """
     working_dir = os.path.dirname(fp)
     working_dir = os.path.join(working_dir, str(char["number"]))
     logger.debug(f"Character PDF working directory: {working_dir}")
@@ -584,6 +594,17 @@ def exec_odt_template(ctx, char, fp, template, aux_template):
 
 # translate html markup to odt
 def get_odt_content(ctx, working_dir, aux_template):
+    """
+    Extract ODT content from HTML template for PDF generation.
+
+    Args:
+        ctx: Template context dictionary
+        working_dir: Working directory for file operations
+        aux_template: Django template object
+
+    Returns:
+        dict: ODT content with txt, auto, and styles elements
+    """
     html = aux_template.render(ctx)
     # get odt teaser
     o_html = os.path.join(working_dir, "auxiliary.html")
@@ -622,6 +643,15 @@ def get_odt_content(ctx, working_dir, aux_template):
 
 
 def clean_tag(tag):
+    """
+    Clean XML tag by removing namespace prefix.
+
+    Args:
+        tag: XML tag string to clean
+
+    Returns:
+        str: Cleaned tag without namespace prefix
+    """
     i = tag.find("}")
     if i >= 0:
         tag = tag[i + 1 :]
@@ -629,6 +659,13 @@ def clean_tag(tag):
 
 
 def replace_data(path, char):
+    """
+    Replace character data placeholders in template file.
+
+    Args:
+        path: Path to template file
+        char: Character data dictionary with replacement values
+    """
     with open(path) as file:
         filedata = file.read()
 

@@ -42,6 +42,15 @@ def get_or_create_index_tutorial(index_dir):
 
 @background_auto(queue="whoosh")
 def index_tutorial(tutorial_id):
+    """
+    Index tutorial content for search functionality.
+
+    Args:
+        tutorial_id: ID of the tutorial to index
+
+    Returns:
+        None: Function performs indexing operations but returns nothing
+    """
     try:
         instance = LarpManagerTutorial.objects.get(pk=tutorial_id)
     except ObjectDoesNotExist:

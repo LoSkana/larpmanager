@@ -243,6 +243,17 @@ def _casting_update(ctx, prefs, request, typ):
 
 
 def get_casting_preferences(number, ctx, typ=0, casts=None):
+    """Calculate and return casting preference statistics.
+
+    Args:
+        number: Character/element number to calculate preferences for
+        ctx: Context dictionary with run and casting configuration
+        typ: Casting type (default 0)
+        casts: Optional pre-filtered casting queryset
+
+    Returns:
+        tuple: (total_preferences, average_preference, distribution_dict)
+    """
     tot_pref = 0
     sum_pref = 0
     distr = {}
@@ -267,6 +278,14 @@ def get_casting_preferences(number, ctx, typ=0, casts=None):
 
 
 def casting_preferences_characters(ctx):
+    """Process character casting preferences with filtering.
+
+    Args:
+        ctx: Context dictionary containing run and casting data
+
+    Side effects:
+        Updates ctx with filtered character list and casting preferences
+    """
     filters = {"png": True}
     if not "staff" not in ctx:
         filters["free"] = True
@@ -382,6 +401,12 @@ def casting_history_characters(ctx):
 
 
 def casting_history_traits(ctx):
+    """
+    Process casting history and character traits for display.
+
+    Args:
+        ctx: Context dictionary to populate with casting data
+    """
     ctx["list"] = []
     ctx["cache"] = {}
 

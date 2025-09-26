@@ -29,6 +29,13 @@ class Command(BaseCommand):
     help = "Dump test db"
 
     def handle(self, *args, **kwargs):
+        """
+        Django management command handler to dump test database.
+
+        Args:
+            *args: Command line arguments
+            **kwargs: Command line keyword arguments
+        """
         check_branch()
 
         call_command("reset", verbosity=0)

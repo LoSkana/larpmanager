@@ -486,6 +486,14 @@ def get_date_surcharge(reg, event):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_accounting(sender, instance, **kwargs):
+    """
+    Handle post-save accounting updates for registrations.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: Registration instance that was saved
+        **kwargs: Additional signal arguments
+    """
     if not instance.member:
         return
 

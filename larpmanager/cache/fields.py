@@ -98,6 +98,14 @@ def get_event_fields_cache(event_id):
 
 
 def visible_writing_fields(ctx, applicable, only_visible=True):
+    """
+    Filter and cache visible writing fields based on visibility settings.
+
+    Args:
+        ctx: Context dictionary to store filtered results
+        applicable: QuestionApplicable enum value for field type
+        only_visible: Whether to include only visible fields (default: True)
+    """
     key = QuestionApplicable(applicable).label
 
     ctx["questions"] = {}
