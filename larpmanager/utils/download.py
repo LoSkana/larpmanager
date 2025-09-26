@@ -822,7 +822,7 @@ def export_tickets(ctx):
 def export_event(ctx):
     keys = ["name", "value"]
     vals = []
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc = Association.objects.get(pk=ctx["event"].assoc_id)
     for element in [ctx["event"], ctx["run"], assoc]:
         for name, value in get_configs(element).items():
             vals.append((name, value))
