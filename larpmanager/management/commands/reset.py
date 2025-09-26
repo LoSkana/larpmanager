@@ -31,6 +31,15 @@ class Command(BaseCommand):
 
     # noinspection PyProtectedMember
     def handle(self, *args, **options):
+        """Database reset command with fixtures loading.
+
+        Args:
+            *args: Command line arguments
+            **options: Command options dictionary
+
+        Side effects:
+            Truncates all database tables and loads initial fixtures
+        """
         check_branch()
 
         self.stdout.write("Resetting database...")

@@ -261,6 +261,9 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_registration()
 
     def set_config_gallery(self):
+        """
+        Configure gallery settings for event forms.
+        """
         if "character" not in self.params["features"]:
             return
 
@@ -360,6 +363,9 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
+        """
+        Configure structural event settings including pre-registration, mail server, and cover options.
+        """
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             label = _("Active")
@@ -499,6 +505,9 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("user_character_player_relationships", ConfigType.BOOL, label, help_text)
 
     def set_config_custom(self):
+        """
+        Configure character customization form fields for event settings.
+        """
         if "custom_character" in self.params["features"]:
             self.set_section("custom_character", _("Character customisation"))
 

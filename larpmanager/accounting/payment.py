@@ -434,6 +434,16 @@ def update_payment_invoice(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=RefundRequest)
 def update_refund_request(sender, instance, **kwargs):
+    """Process refund request status changes.
+
+    Args:
+        sender: Model class sending the signal
+        instance: RefundRequest instance being updated
+        **kwargs: Additional signal arguments
+
+    Side effects:
+        Creates accounting item when refund status changes to PAYED
+    """
     if not instance.pk:
         return
 
@@ -459,6 +469,16 @@ def update_refund_request(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Collection)
 def update_collection(sender, instance, **kwargs):
+    """Update payment collection status and metadata.
+
+    Args:
+        sender: Model class sending the signal
+        instance: Collection instance being updated
+        **kwargs: Additional signal arguments
+
+    Side effects:
+        Creates accounting item credit when collection status changes to PAYED
+    """
     if not instance.pk:
         return
 

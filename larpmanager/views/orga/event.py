@@ -74,6 +74,18 @@ def orga_event(request, s):
 
 
 def full_event_edit(ctx, request, event, run, exe=False):
+    """Comprehensive event editing with validation.
+
+    Args:
+        ctx: Context dictionary for template rendering
+        request: HTTP request object
+        event: Event instance to edit
+        run: Run instance associated with the event
+        exe: Whether this is an executive-level edit
+
+    Returns:
+        HttpResponse: Edit form template or redirect after successful save
+    """
     ctx["nonum"] = 1
     if request.method == "POST":
         form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
@@ -312,6 +324,15 @@ def orga_backup(request, s):
 
 
 def _prepare_backup(ctx):
+    """
+    Prepare comprehensive event data backup by exporting various components.
+
+    Args:
+        ctx: Context dictionary with event and feature information
+
+    Returns:
+        HttpResponse: ZIP file containing exported event data
+    """
     exports = []
 
     exports.extend(export_event(ctx))
@@ -343,6 +364,17 @@ def _prepare_backup(ctx):
 
 @login_required
 def orga_upload(request, s, typ):
+    """
+    Handle file uploads for organizers with element processing.
+
+    Args:
+        request: HTTP request object with file data
+        s: Event slug
+        typ: Type of elements to upload
+
+    Returns:
+        HttpResponse: Upload form or processing results page
+    """
     ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
     ctx["name"] = ctx["typ"]

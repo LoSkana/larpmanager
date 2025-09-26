@@ -56,6 +56,15 @@ class FileTypeValidator:
         self.allowed_exts = allowed_extensions
 
     def __call__(self, fileobj):
+        """
+        Validate file type and extension against allowed types.
+
+        Args:
+            fileobj: File object to validate
+
+        Raises:
+            ValidationError: If file type or extension is not allowed
+        """
         detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
         root, extension = os.path.splitext(fileobj.name.lower())
 

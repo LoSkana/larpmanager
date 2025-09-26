@@ -117,6 +117,17 @@ def orga_registration_form(request, s):
 
 @login_required
 def orga_registration_form_edit(request, s, num):
+    """
+    Handle registration form question editing for organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Question number/ID to edit
+
+    Returns:
+        HttpResponse: Form edit page or redirect after save
+    """
     perm = "orga_registration_form"
     ctx = check_event_permission(request, s, perm)
     if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
@@ -172,6 +183,17 @@ def orga_registration_options_new(request, s, num):
 
 
 def registration_option_edit(ctx, num, request):
+    """
+    Handle editing of registration option with form processing and redirect logic.
+
+    Args:
+        ctx: Context dictionary with event and form data
+        num: Option number/ID being edited
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Redirect to next step or rendered edit form
+    """
     if backend_edit(request, ctx, OrgaRegistrationOptionForm, num, assoc=False):
         redirect_target = "orga_registration_form_edit"
         if "continue" in request.POST:

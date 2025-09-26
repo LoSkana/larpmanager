@@ -24,6 +24,7 @@ import subprocess
 
 import pytest
 from django.conf import settings
+from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
 
@@ -56,8 +57,6 @@ def _cache_isolation(settings):
             "LOCATION": "unique-for-pytest",
         }
     }
-    from django.core.cache import cache
-
     cache.clear()
 
 

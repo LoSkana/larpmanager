@@ -12,17 +12,35 @@ def update(apps, schema_editor):
         features = get_event_features(instance.id)
         save_event_registration_form(features, instance)
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
-        ('larpmanager', '0076_warehouseitem_rename_inventoryarea_warehousearea_and_more'),
+        ("larpmanager", "0076_warehouseitem_rename_inventoryarea_warehousearea_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='registrationquestion',
-            name='typ',
-            field=models.CharField(choices=[('s', 'Single choice'), ('m', 'Multiple choice'), ('t', 'Single-line text'), ('p', 'Multi-line text'), ('e', 'Advanced text editor'), ('ticket', 'Ticket'), ('additional_tickets', 'Additional'), ('pay_what_you_want', 'Free donation'), ('discount', 'discount'), ('reg_quotas', 'Quota'), ('reg_surcharges', 'Surcharge')], default='s', help_text='Question type', max_length=50, verbose_name='Type'),
+            model_name="registrationquestion",
+            name="typ",
+            field=models.CharField(
+                choices=[
+                    ("s", "Single choice"),
+                    ("m", "Multiple choice"),
+                    ("t", "Single-line text"),
+                    ("p", "Multi-line text"),
+                    ("e", "Advanced text editor"),
+                    ("ticket", "Ticket"),
+                    ("additional_tickets", "Additional"),
+                    ("pay_what_you_want", "Free donation"),
+                    ("discount", "discount"),
+                    ("reg_quotas", "Quota"),
+                    ("reg_surcharges", "Surcharge"),
+                ],
+                default="s",
+                help_text="Question type",
+                max_length=50,
+                verbose_name="Type",
+            ),
         ),
         migrations.RunPython(update),
     ]

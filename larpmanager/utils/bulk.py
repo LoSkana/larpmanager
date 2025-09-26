@@ -35,6 +35,19 @@ from larpmanager.utils.exceptions import ReturnNowError
 
 
 def _get_bulk_params(request, ctx):
+    """
+    Extract and validate bulk operation parameters from request.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event/run information
+
+    Returns:
+        tuple: (ids, operation, target) extracted from request
+
+    Raises:
+        ReturnNowError: If no valid IDs are provided
+    """
     try:
         operation = int(request.POST.get("operation", "0"))
     except (ValueError, TypeError):

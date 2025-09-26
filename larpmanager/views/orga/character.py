@@ -331,6 +331,17 @@ def orga_writing_form(request, s, typ):
 
 @login_required
 def orga_writing_form_edit(request, s, typ, num):
+    """Edit writing form questions with validation and option handling.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        typ: Writing form type identifier
+        num: Question number/ID
+
+    Returns:
+        HttpResponse: Form edit template or redirect to options/form list
+    """
     perm = "orga_character_form"
     ctx = check_event_permission(request, s, perm)
     check_writing_form_type(ctx, typ)
@@ -466,6 +477,18 @@ def check_relations(cache, checks, chs_numbers, ctx, number_map):
 
 
 def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
+    """Validate writing submissions and requirements for different element types.
+
+    Args:
+        cache: Dictionary to store validation results
+        checks: Dictionary to store validation issues found
+        chs_numbers: Set of valid character numbers
+        ctx: Context with event and features data
+        id_number_map: Mapping from character IDs to numbers
+
+    Side effects:
+        Updates checks with extinct, missing, and interloper character issues
+    """
     for el in [Faction, Plot, Prologue, SpeedLarp]:
         nm = str(el.__name__).lower()
         if nm not in ctx["features"]:
@@ -494,6 +517,16 @@ def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
 
 
 def check_speedlarp(checks, ctx, id_number_map):
+    """Validate speedlarp character configurations.
+
+    Args:
+        checks: Dictionary to store validation issues
+        ctx: Context with event features and character data
+        id_number_map: Mapping from character IDs to numbers
+
+    Side effects:
+        Updates checks with speedlarp double assignments and missing configurations
+    """
     if "speedlarp" not in ctx["features"]:
         return
 
@@ -598,6 +631,16 @@ def orga_writing_excel_edit(request, s, typ):
 
 @require_POST
 def orga_writing_excel_submit(request, s, typ):
+    """Handle Excel submission for writing data with validation.
+
+    Args:
+        request: HTTP request with form data
+        s: Event slug
+        typ: Writing type identifier
+
+    Returns:
+        JsonResponse: Success status, element updates, or validation errors
+    """
     try:
         ctx = _get_excel_form(request, s, typ, submit=True)
     except ObjectDoesNotExist:

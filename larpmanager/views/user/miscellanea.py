@@ -81,6 +81,16 @@ def help_red(request, n):
 
 @login_required
 def help(request, s=None):
+    """
+    Display help page with question submission form and user's previous questions.
+
+    Args:
+        request: HTTP request object
+        s: Optional event slug for event-specific help
+
+    Returns:
+        HttpResponse: Rendered help template with form and question list
+    """
     if s:
         ctx = get_event_run(request, s, status=True)
     else:
@@ -204,6 +214,17 @@ def valid_workshop_answer(request, ctx):
 
 @login_required
 def workshop_answer(request, s, m):
+    """
+    Handle workshop answer submission and validation.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        m: Workshop module number
+
+    Returns:
+        HttpResponse: Rendered template or redirect response
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     get_workshop(ctx, m)
     completed = [el.pk for el in request.user.member.workshops.select_related().all()]

@@ -134,6 +134,14 @@ def _einvoice_header(einvoice, inv, member, name_number, root):
 
 
 def _einvoice_body(einvoice, inv, root):
+    """
+    Build the body section of electronic invoice XML structure.
+
+    Args:
+        einvoice: Electronic invoice instance
+        inv: Invoice data object
+        root: XML root element to append body to
+    """
     # Invoicelettronicabody
     body = ET.SubElement(root, "FatturaElettronicaBody")
     dati_generali = ET.SubElement(body, "DatiGenerali")

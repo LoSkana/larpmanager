@@ -144,6 +144,15 @@ def home_json(request, lang="it"):
 
 
 def carousel(request):
+    """
+    Display event carousel with recent and upcoming events.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered carousel template with event list
+    """
     ctx = def_user_ctx(request)
     ctx.update({"list": []})
     cache = {}
@@ -263,6 +272,15 @@ def check_gallery_visibility(request, ctx):
 
 
 def gallery(request, s):
+    """Event gallery display with permissions.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Gallery template with character and registration data
+    """
     ctx = get_event_run(request, s, status=True)
     if "character" not in ctx["features"]:
         return redirect("event", s=ctx["run"].get_slug())
@@ -292,6 +310,16 @@ def gallery(request, s):
 
 
 def event(request, s):
+    """
+    Display main event page with runs, registration status, and event details.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered event template
+    """
     ctx = get_event_run(request, s, status=True)
     ctx["coming"] = []
     ctx["past"] = []
@@ -441,6 +469,16 @@ def quest(request, s, g):
 
 
 def limitations(request, s):
+    """
+    Display event limitations including ticket availability and discounts.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered limitations template
+    """
     ctx = get_event_run(request, s, status=True)
 
     counts = get_reg_counts(ctx["run"])

@@ -32,6 +32,18 @@ class EmailOrUsernameModelBackend(ModelBackend):
     """
 
     def authenticate(self, request, username=None, password=None, **kwargs):
+        """
+        Authenticate user with username/password allowing email or username.
+
+        Args:
+            request: HTTP request object
+            username: Username or email for authentication
+            password: Password for authentication
+            **kwargs: Additional authentication parameters
+
+        Returns:
+            User: Authenticated user object or None
+        """
         # n.b. Django <2.1 does not pass the `request`
 
         user_model = get_user_model()
