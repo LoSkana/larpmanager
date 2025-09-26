@@ -598,12 +598,18 @@ def api_character(request, s, n, num):
 
     parsed_abilities = {}
     for ability in abilities:
-        if ability.typ.name not in parsed_abilities:
-            parsed_abilities[ability.typ.name] = []
-        parsed_abilities[ability.typ.name].append({"name": ability.name, "template": ability.template.name})
+        if ability.typ.pk not in parsed_abilities.keys():
+            parsed_abilities[ability.typ.pk] = {"id": ability.typ.pk, "name": ability.typ.name, "abilities": []}
+
+        if ability.template == None:
+            ability_template = {}
+        else:
+            ability_template = {"id": ability.template.pk, "name": ability.template.name}
+
+        parsed_abilities[ability.typ.pk]["abilities"].append({"id": ability.pk, "name": ability.name, "template": ability_template})
 
     parsed_pools = []
     for pool in pools:
         parsed_pools.append({"type": pool["type"].name, "balance": pool["balance"].amount })
 
-    return JsonResponse({"id": id, "name": name, "abilities": parsed_abilities, "inventory": parsed_pools})
+    return JsonResponse({"id": id, "name": name, "ability_types": parsed_abilities, "inventory": parsed_pools})
