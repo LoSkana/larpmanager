@@ -315,6 +315,12 @@ def registrations_popup(request, ctx):
 
 
 def _orga_registrations_custom_character(ctx):
+    """
+    Prepare custom character information for registration display.
+
+    Args:
+        ctx: Context dictionary to populate with custom character info
+    """
     if "custom_character" not in ctx["features"]:
         return
     ctx["custom_info"] = []
@@ -325,6 +331,13 @@ def _orga_registrations_custom_character(ctx):
 
 
 def _orga_registrations_prepare(ctx, request):
+    """
+    Prepare registration data including characters, tickets, and questions.
+
+    Args:
+        ctx: Context dictionary to populate with registration data
+        request: HTTP request object
+    """
     ctx["reg_chars"] = {}
     for _chnum, char in ctx["chars"].items():
         if "player_id" not in char:
@@ -861,6 +874,15 @@ def lottery_info(request, ctx):
 
 @login_required
 def orga_lottery(request, s):
+    """Manage registration lottery system.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Lottery template with chosen registrations or form
+    """
     ctx = check_event_permission(request, s, "orga_lottery")
 
     if request.method == "POST" and request.POST.get("submit"):

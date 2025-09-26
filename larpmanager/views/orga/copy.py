@@ -155,6 +155,13 @@ def correct_relationship(e_id, p_id):
 
 
 def correct_workshop(e_id, p_id):
+    """
+    Correct workshop data mappings during event copying process.
+
+    Args:
+        e_id: Target event ID to copy to
+        p_id: Source event ID to copy from
+    """
     cache_f = {}
     cache_t = {}
     for obj in WorkshopModule.objects.filter(event_id=p_id):
@@ -257,6 +264,18 @@ def copy(request, ctx, parent, event, element):
 
 
 def copy_event(all, ctx, e_id, element, event, p_id, parent):
+    """
+    Copy event data and related objects from parent to new event.
+
+    Args:
+        all: Whether to copy all elements
+        ctx: Context dictionary with form information
+        e_id: Target event ID
+        element: Specific element to copy
+        event: Target event instance
+        p_id: Source parent event ID
+        parent: Source parent event instance
+    """
     if all or element == "event":
         for s in get_all_fields_from_form(OrgaEventForm, ctx):
             if s == "slug":

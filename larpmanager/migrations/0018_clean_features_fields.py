@@ -3,6 +3,13 @@ from django.db import migrations, models
 
 
 def remove_obsolete_features(apps, schema_editor):
+    """
+    Django migration function to remove obsolete features and migrate data.
+
+    Args:
+        apps: Django apps registry for accessing models
+        schema_editor: Database schema editor for migration operations
+    """
     Feature = apps.get_model("larpmanager", "Feature")
     EventConfig = apps.get_model("larpmanager", "EventConfig")
     features = {

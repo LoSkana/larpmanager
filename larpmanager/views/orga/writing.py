@@ -429,6 +429,19 @@ def orga_progress_steps_order(request, s, num, order):
 
 @login_required
 def orga_multichoice_available(request, s):
+    """
+    Handle AJAX requests for available multichoice options for organizers.
+
+    Args:
+        request: HTTP request object with POST data
+        s: Event slug
+
+    Returns:
+        JsonResponse: Available character options for selection
+
+    Raises:
+        Http404: If request method is not POST
+    """
     if not request.method == "POST":
         return Http404()
 

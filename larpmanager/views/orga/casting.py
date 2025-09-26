@@ -75,6 +75,14 @@ def orga_casting_history(request, s, typ=0):
 
 
 def assign_casting(request, ctx, typ):
+    """
+    Handle character casting assignment for organizers.
+
+    Args:
+        request: HTTP request object with assignment data
+        ctx: Context dictionary with casting information
+        typ: Type of casting assignment (0 for characters, other for traits)
+    """
     # TODO Assign member to mirror_inv
     mirror = "mirror" in ctx["features"]
     res = request.POST.get("res")
@@ -344,6 +352,17 @@ def _fill_not_chosen(choices, chosen, ctx, preferences, taken):
 
 @login_required
 def orga_casting(request, s, typ=None, tick=""):
+    """Handle organizational casting assignments.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        typ: Casting type identifier (defaults to 0 if None)
+        tick: Ticket identifier string
+
+    Returns:
+        HttpResponse: Casting template with form and data or redirect after assignment
+    """
     ctx = check_event_permission(request, s, "orga_casting")
     if typ is None:
         return redirect("orga_casting", s=ctx["run"].get_slug(), typ=0)

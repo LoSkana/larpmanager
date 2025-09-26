@@ -124,6 +124,15 @@ def accounting_tokens(request):
 
 @login_required
 def accounting_credits(request):
+    """
+    Display user's accounting credits including expenses, credits given/used, and refunds.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered accounting credits template
+    """
     ctx = def_user_ctx(request)
     ctx.update(
         {
@@ -155,6 +164,14 @@ def accounting_credits(request):
 
 @login_required
 def acc_refund(request):
+    """Handle refund request form processing and notifications.
+
+    Args:
+        request: HTTP request with user data
+
+    Returns:
+        HttpResponse: Refund form template or redirect after successful submission
+    """
     check_assoc_feature(request, "refund")
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
@@ -579,6 +596,16 @@ def acc_submit(request, s, p):
 
 @login_required
 def acc_confirm(request, c):
+    """
+    Confirm accounting payment invoice with authorization checks.
+
+    Args:
+        request: HTTP request object with user authentication
+        c: Invoice confirmation code
+
+    Returns:
+        HttpResponse: Redirect to home page
+    """
     try:
         inv = PaymentInvoice.objects.get(cod=c, assoc_id=request.assoc["id"])
     except ObjectDoesNotExist:

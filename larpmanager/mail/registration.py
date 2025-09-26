@@ -156,6 +156,16 @@ def registration_options(instance):
 
 
 def registration_payments(instance, currency):
+    """
+    Generate payment information HTML for registration emails.
+
+    Args:
+        instance: Registration instance with payment details
+        currency: Currency symbol/code for payment display
+
+    Returns:
+        str: HTML formatted payment information with links and deadlines
+    """
     f_url = get_url("accounting/pay", instance.run.event)
     url = f"{f_url}/{instance.run.get_slug()}"
     data = {"url": url, "amount": instance.quota, "currency": currency, "deadline": instance.deadline}
@@ -184,6 +194,15 @@ def registration_payments(instance, currency):
 
 @receiver(post_save, sender=RegistrationCharacterRel)
 def update_registration_character_rel_post(sender, instance, created, **kwargs):
+    """
+    Send character assignment email when registration-character relation is created.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: RegistrationCharacterRel instance
+        created: Whether the instance was created
+        **kwargs: Additional keyword arguments
+    """
     if not created:
         return
 

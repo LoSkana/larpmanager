@@ -373,6 +373,15 @@ def exe_membership_registry(request):
 
 @login_required
 def exe_membership_fee(request):
+    """
+    Process membership fee payments for executives.
+
+    Args:
+        request: HTTP request object with form data
+
+    Returns:
+        HttpResponse: Form page or redirect after successful processing
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
@@ -503,6 +512,15 @@ def exe_volunteer_registry_print(request):
 
 @login_required
 def exe_vote(request):
+    """
+    Handle voting functionality for executives.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Voting interface or results page
+    """
     ctx = check_assoc_permission(request, "exe_vote")
     ctx["year"] = datetime.today().year
     assoc = Association.objects.get(pk=ctx["a_id"])
@@ -591,6 +609,16 @@ def exe_questions(request):
 
 @login_required
 def exe_questions_answer(request, r):
+    """
+    Handle question answering for executives.
+
+    Args:
+        request: HTTP request object
+        r: Member ID for question answering
+
+    Returns:
+        HttpResponse: Question answer form or redirect after submission
+    """
     ctx = check_assoc_permission(request, "exe_questions")
 
     # Get last question by that user

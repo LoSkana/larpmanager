@@ -137,6 +137,14 @@ def post_save_event_cache(sender, instance, created, **kwargs):
 
 
 def search_player(char, js, ctx):
+    """
+    Search for players in registration cache and populate results.
+
+    Args:
+        char: Character instance with player data
+        js: JSON object to populate with search results
+        ctx: Context dictionary with search parameters and assignments
+    """
     if "assignments" in ctx:
         if char.number in ctx["assignments"]:
             char.rcr = ctx["assignments"][char.number]

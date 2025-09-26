@@ -481,6 +481,17 @@ def element_load(request, ctx, row, questions):
 
 
 def _writing_load_field(ctx, element, field, value, questions, logs):
+    """
+    Load writing field data during upload processing.
+
+    Args:
+        ctx: Context dictionary with event and field information
+        element: Writing element to update
+        field: Field name to process
+        value: Field value from upload
+        questions: Dictionary of available questions
+        logs: List to append error messages to
+    """
     if pd.isna(value):
         return
 
@@ -552,6 +563,17 @@ def _assign_faction(ctx, element, value, logs):
 
 
 def form_load(request, ctx, form, is_registration=True):
+    """Load form questions and options from uploaded files.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event data
+        form: Upload form with file data
+        is_registration: Whether loading registration or writing questions
+
+    Returns:
+        list: Log messages from the upload processing operations
+    """
     logs = []
 
     # upload questions
@@ -736,6 +758,16 @@ def get_csv_upload_tmp(csv_upload, run):
 
 
 def cover_load(ctx, z_obj):
+    """Handle cover image upload and processing from ZIP archive.
+
+    Args:
+        ctx: Context dictionary containing run and event information
+        z_obj: ZIP file object containing character cover images
+
+    Side effects:
+        Extracts ZIP contents, processes images, updates character cover fields,
+        and moves files to proper media directory structure
+    """
     # extract images
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
     fpath = os.path.join(fpath, ctx["run"].event.slug)

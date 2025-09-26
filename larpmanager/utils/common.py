@@ -512,6 +512,16 @@ def round_to_two_significant_digits(number):
 
 
 def exchange_order(ctx, cls, num, order, elements=None):
+    """
+    Exchange ordering positions between two elements.
+
+    Args:
+        ctx: Context dictionary to store current element
+        cls: Model class of elements to reorder
+        num: Primary key of element to move
+        order: Direction to move (True for up, False for down)
+        elements: Optional queryset of elements (defaults to event elements)
+    """
     elements = elements or ctx["event"].get_elements(cls)
     current = elements.get(pk=num)
 
@@ -553,6 +563,14 @@ def normalize_string(value):
 
 
 def copy_class(target_id, source_id, cls):
+    """
+    Copy all objects of a given class from source event to target event.
+
+    Args:
+        target_id: Target event ID to copy objects to
+        source_id: Source event ID to copy objects from
+        cls: Django model class to copy instances of
+    """
     cls.objects.filter(event_id=target_id).delete()
 
     for obj in cls.objects.filter(event_id=source_id):
@@ -582,10 +600,31 @@ def copy_class(target_id, source_id, cls):
 
 
 def get_payment_methods_ids(ctx):
+    """
+    Get set of payment method IDs for an association.
+
+    Args:
+        ctx: Context dictionary containing association ID
+
+    Returns:
+        set: Set of payment method primary keys
+    """
     return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):
+    """
+    Detect CSV delimiter from content header line.
+
+    Args:
+        content: CSV content string
+
+    Returns:
+        str: Detected delimiter character
+
+    Raises:
+        Exception: If no delimiter is found
+    """
     header = content.split("\n")[0]
     for d in ["\t", ";", ","]:
         if d in header:
@@ -594,6 +633,15 @@ def detect_delimiter(content):
 
 
 def clean(s):
+    """
+    Clean and normalize string by removing symbols, spaces, and accents.
+
+    Args:
+        s: String to clean
+
+    Returns:
+        str: Cleaned string with normalized characters
+    """
     s = s.lower()
     s = re.sub(r"[^\w]", " ", s)  # remove symbols
     s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
@@ -603,6 +651,14 @@ def clean(s):
 
 
 def _search_char_reg(ctx, char, js):
+    """
+    Populate character search result with registration and player data.
+
+    Args:
+        ctx: Context dictionary with run information
+        char: Character instance with registration data
+        js: JSON object to populate with search results
+    """
     js["name"] = char.name
     if char.rcr and char.rcr.custom_name:
         js["name"] = char.rcr.custom_name

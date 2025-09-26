@@ -36,6 +36,15 @@ class Command(BaseCommand):
         parser.add_argument("--path", type=str, required=True, help="Backup path")
 
     def handle(self, *args, **options):
+        """Database backup command with compression.
+
+        Args:
+            *args: Command line arguments
+            **options: Command options including output path
+
+        Side effects:
+            Creates compressed backup files for all active runs in organized directory structure
+        """
         now_date = timezone.now().date()
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             ctx = {"run": run, "event": run.event, "features": get_event_features(run.event_id)}
