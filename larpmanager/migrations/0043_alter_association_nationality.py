@@ -4,15 +4,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('larpmanager', '0042_alter_association_main_mail_and_more'),
+        ("larpmanager", "0042_alter_association_main_mail_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='association',
-            name='nationality',
-            field=models.CharField(blank=True, choices=[('it', 'Italy')], default='', help_text='(Optional) Indicate the organization nationality to activate nation-specific features', max_length=2, null=True, verbose_name='Nationality'),
+            model_name="association",
+            name="nationality",
+            field=models.CharField(
+                blank=True,
+                choices=[("it", "Italy")],
+                default="",
+                help_text="(Optional) Indicate the organization nationality to activate nation-specific features",
+                max_length=2,
+                null=True,
+                verbose_name="Nationality",
+            ),
         ),
     ]

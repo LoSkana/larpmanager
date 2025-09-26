@@ -4,15 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('larpmanager', '0077_alter_registrationquestion_typ'),
+        ("larpmanager", "0077_alter_registrationquestion_typ"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='registrationquestion',
-            name='typ',
-            field=models.CharField(choices=[('s', 'Single choice'), ('m', 'Multiple choice'), ('t', 'Single-line text'), ('p', 'Multi-line text'), ('e', 'Advanced text editor'), ('ticket', 'Ticket'), ('additional_tickets', 'Additional'), ('pay_what_you_want', 'Pay what you want'), ('reg_quotas', 'Rate'), ('reg_surcharges', 'Surcharge')], default='s', help_text='Question type', max_length=50, verbose_name='Type'),
+            model_name="registrationquestion",
+            name="typ",
+            field=models.CharField(
+                choices=[
+                    ("s", "Single choice"),
+                    ("m", "Multiple choice"),
+                    ("t", "Single-line text"),
+                    ("p", "Multi-line text"),
+                    ("e", "Advanced text editor"),
+                    ("ticket", "Ticket"),
+                    ("additional_tickets", "Additional"),
+                    ("pay_what_you_want", "Pay what you want"),
+                    ("reg_quotas", "Rate"),
+                    ("reg_surcharges", "Surcharge"),
+                ],
+                default="s",
+                help_text="Question type",
+                max_length=50,
+                verbose_name="Type",
+            ),
         ),
     ]

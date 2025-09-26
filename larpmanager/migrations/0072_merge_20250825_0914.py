@@ -4,11 +4,9 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('larpmanager', '0071_alter_inventoryassignment_options_and_more'),
-        ('larpmanager', '0071_associationskin_managed'),
+        ("larpmanager", "0071_alter_inventoryassignment_options_and_more"),
+        ("larpmanager", "0071_associationskin_managed"),
     ]
 
-    operations = [
-    ]
+    operations = []

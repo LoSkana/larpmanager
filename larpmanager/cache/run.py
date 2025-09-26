@@ -51,7 +51,7 @@ def get_cache_run(a, s):
 def init_cache_run(a, s):
     try:
         try:
-            s, n = s.split('-')
+            s, n = s.split("-")
             n = int(n)
         except ValueError:
             n = 1
