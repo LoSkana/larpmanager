@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
 import re
 from collections import OrderedDict
@@ -58,6 +59,8 @@ from larpmanager.models.member import (
 from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.validators import FileTypeValidator
+
+logger = logging.getLogger(__name__)
 
 
 class MyAuthForm(AuthenticationForm):
@@ -148,7 +151,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
     def clean_username(self):
         data = self.cleaned_data["username"].strip()
-        # print(data)
+        logger.debug(f"Validating username/email: {data}")
         # check if already used in user or email
         if User.objects.filter(email__iexact=data).count() > 0:
             raise ValidationError("Email already used! It seems you already have an account!")
@@ -236,7 +239,7 @@ class MyPasswordResetForm(PasswordResetForm):
                 # Invalid association slug - continue with None assoc
                 pass
 
-        # print(context)
+        logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
 
         my_send_mail(subject, body, to_email, assoc)
 
@@ -477,7 +480,7 @@ class ProfileForm(BaseProfileForm):
 
     def clean_birth_date(self):
         data = self.cleaned_data["birth_date"]
-        # print(data)
+        logger.debug(f"Validating birth date: {data}")
 
         assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
         if "membership" in get_assoc_features(assoc.id):
@@ -485,7 +488,7 @@ class ProfileForm(BaseProfileForm):
             if min_age:
                 min_age = int(min_age)
                 # ~ d = date.fromisoformat(data)
-                # print(d)
+                logger.debug(f"Checking minimum age {min_age} against birth date {data}")
                 dif = relativedelta(datetime.now(), data).years
                 if dif < min_age:
                     raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})

@@ -22,6 +22,7 @@ import base64
 import hashlib
 import hmac
 import json
+import logging
 import math
 import re
 from pprint import pformat
@@ -49,6 +50,8 @@ from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import def_user_ctx, update_payment_details
 from larpmanager.utils.common import generate_number
 from larpmanager.utils.tasks import my_send_mail, notify_admins
+
+logger = logging.getLogger(__name__)
 
 
 def get_satispay_form(request, ctx, invoice, amount):
@@ -134,22 +137,22 @@ def satispay_verify(request, cod):
     try:
         invoice = PaymentInvoice.objects.get(cod=cod)
     except ObjectDoesNotExist:
-        print(f"Not found - invoice {cod}")
+        logger.warning(f"Not found - invoice {cod}")
         return
 
     if invoice.method.slug != "satispay":
-        print(f"Wrong slug method - invoice {cod}")
+        logger.warning(f"Wrong slug method - invoice {cod}")
         return
 
     if invoice.status != PaymentStatus.CREATED:
-        print(f"Already confirmed - invoice {cod}")
+        logger.warning(f"Already confirmed - invoice {cod}")
         return
 
     key_id = ctx["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
     response = satispaython.get_payment_details(key_id, rsa_key, invoice.cod)
-    # print(response)
+    # logger.debug(f"Response: {response}")
     correct_response_code = 200
     if response.status_code != correct_response_code:
         return
@@ -191,7 +194,7 @@ def get_paypal_form(request, ctx, invoice, amount):
         "return": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
         "cancel_return": request.build_absolute_uri(reverse("acc_cancelled")),
     }
-    # print(paypal_dict)
+    # logger.debug(f"PayPal dict: {paypal_dict}")
     ctx["paypal_form"] = PayPalPaymentsForm(initial=paypal_dict)
 
 
@@ -216,11 +219,11 @@ def paypal_webhook(sender, **kwargs):
         # ~ # Not a valid payment
         # ~ return
 
-        # print(ipn_obj.receiver_email)
-        # print(ipn_obj)
+        # logger.debug(f"IPN receiver email: {ipn_obj.receiver_email}")
+        # logger.debug(f"IPN object: {ipn_obj}")
         # ~ Print (ipn_obj)
-        # print(ipn_obj.mc_fee)
-        # print(ipn_obj.mc_gross)
+        # logger.debug(f"IPN fee: {ipn_obj.mc_fee}")
+        # logger.debug(f"IPN gross: {ipn_obj.mc_gross}")
 
         return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
 
@@ -235,10 +238,10 @@ def paypal_ko_webhook(sender, **kwargs):
     """
     ipn_obj = sender
     if ipn_obj:
-        print(ipn_obj)
+        logger.info(f"PayPal IPN object: {ipn_obj}")
     # TODO send mail
     body = pformat(ipn_obj)
-    print(body)
+    logger.info(f"PayPal IPN body: {body}")
     notify_admins("paypal ko", body)
 
 
@@ -317,9 +320,9 @@ def stripe_webhook(request):
         line_items = session.line_items
         # assume only one
         item = line_items["data"][0]
-        # print(item)
+        # logger.debug(f"Processing item: {item}")
         cod = item["price"]["id"]
-        # print(cod)
+        # logger.debug(f"Code: {cod}")
         return invoice_received_money(cod)
     # ~ elif event['type'] == 'checkout.session.async_payment_failed':
     # ~ return True
@@ -356,9 +359,9 @@ def get_sumup_form(request, ctx, invoice, amount):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     aux = json.loads(response.text)
-    # print(response.text)
+    # logger.debug(f"Response text: {response.text}")
     token = aux["access_token"]
-    # print(token)
+    # logger.debug(f"Token: {token}")
 
     # ## GET CHECKOUT
 
@@ -376,9 +379,9 @@ def get_sumup_form(request, ctx, invoice, amount):
         }
     )
     headers = {"Content-Type": "application/json", "Accept": "application/json", "Authorization": f"Bearer {token}"}
-    # print(payload)
+    # logger.debug(f"Payload: {payload}")
     response = requests.request("POST", url, headers=headers, data=payload)
-    # print(response.text)
+    # logger.debug(f"SumUp response: {response.text}")
     aux = json.loads(response.text)
     ctx["sumup_checkout_id"] = aux["id"]
     invoice.cod = aux["id"]
@@ -423,8 +426,8 @@ def get_redsys_form(request, ctx, invoice, amount):
     invoice.cod = redsys_invoice_cod()
     invoice.save()
 
-    # print(invoice)
-    # print(invoice.cod)
+    # logger.debug(f"Invoice: {invoice}")
+    # logger.debug(f"Invoice code: {invoice.cod}")
 
     # ~ client = RedirectClient(ctx['redsys_secret_key'])
 
@@ -463,18 +466,18 @@ def get_redsys_form(request, ctx, invoice, amount):
     if "key" in ctx and ctx["key"]:
         values["DS_MERCHANT_PAYMETHODS"] = ctx["key"]
 
-    # print(ctx)
+    # logger.debug(f"Context: {ctx}")
     redsys_sandbox = False
     if int(ctx["redsys_sandbox"]) == 1:
         redsys_sandbox = True
-    # print(redsys_sandbox)
+    # logger.debug(f"Redsys sandbox: {redsys_sandbox}")
     redsyspayment = RedSysClient(
         business_code=ctx["redsys_merchant_code"],
         secret_key=ctx["redsys_secret_key"],
         sandbox=redsys_sandbox,
     )
     ctx["redsys_form"] = redsyspayment.redsys_generate_request(values)
-    # print(ctx['redsys_form'])
+    # logger.debug(f"Redsys form: {ctx['redsys_form']}")
 
     # ~ values = {
     # ~ 'DS_MERCHANT_AMOUNT': 10.0,
@@ -493,7 +496,7 @@ def get_redsys_form(request, ctx, invoice, amount):
 
     # ~ redsyspayment = Client(business_code=REDSYS_MERCHANT_CODE, secret_key=REDSYS_SECRET_KEY, sandbox=SANDBOX)
     # ~ redsys_form = redsyspayment.redsys_generate_request(values)
-    # print(redsys_form)
+    # logger.debug(f"Redsys form data: {redsys_form}")
 
     # ~ invoice.cod = unique_invoice_cod(24)
     # ~ invoice.save()
@@ -515,10 +518,10 @@ def get_redsys_form(request, ctx, invoice, amount):
     # ~ msg = msg.replace('/', '\/')
 
     # ~ # encode in base 64
-    # print(msg)
+    # logger.debug(f"Message: {msg}")
     # ~ msg = msg.encode('ascii')
     # ~ msg = base64.b64encode(msg)
-    # print(msg.decode('ascii'))
+    # logger.debug(f"Decoded message: {msg.decode('ascii')}")
     # ~ ctx['merchant_parameters'] = msg.decode('ascii')
 
     # ~ # 3DES encryption between the merchant key (decoded in BASE 64) and the order
@@ -532,8 +535,8 @@ def get_redsys_form(request, ctx, invoice, amount):
     # ~ #print(code)
     # ~ k = pyDes.triple_des(key, pyDes.CBC, b"\0\0\0\0\0\0\0\0", "\0")
     # ~ ds = k.encrypt(code)
-    # print(ds)
-    # print(ds.hex())
+    # logger.debug(f"DS: {ds}")
+    # logger.debug(f"DS hex: {ds.hex()}")
 
     # ~ # HMAC SHA256 of the value of the Ds_MerchantParameters parameter and the key obtained
     # ~ dig = HMAC.new(ds, msg=msg, digestmod=SHA256).digest()
@@ -696,7 +699,7 @@ class RedSysClient:
         merchant_parameters = json.loads(base64.b64decode(b64_merchant_parameters).decode())
 
         assoc = Association.objects.get(pk=ctx["a_id"])
-        # print(merchant_parameters)
+        # logger.debug(f"Merchant parameters: {merchant_parameters}")
 
         if "Ds_Response" not in merchant_parameters:
             subj = "Ds_Response not found"
@@ -715,36 +718,36 @@ class RedSysClient:
                 my_send_mail(subj, body, member, assoc)
             return None
 
-            # print(merchant_parameters)
+            # logger.debug(f"Merchant parameters decoded: {merchant_parameters}")
 
-        # print(base64.b64decode(b64_merchant_parameters))
+        # logger.debug(f"Base64 decoded: {base64.b64decode(b64_merchant_parameters)}")
 
-        # print(base64.b64decode(b64_merchant_parameters).decode())
+        # logger.debug(f"Base64 decoded text: {base64.b64decode(b64_merchant_parameters).decode()}")
 
         order = merchant_parameters["Ds_Order"]
 
         encrypted_order = self.encrypt_order(order)
 
-        # print(encrypted_order)
+        # logger.debug(f"Encrypted order: {encrypted_order}")
 
         b64_params = base64.b64encode(json.dumps(merchant_parameters).encode())
 
-        # print(b64_params)
+        # logger.debug(f"Base64 params: {b64_params}")
 
         computed_signature = self.sign_hmac256(encrypted_order, b64_params)
 
-        # print(computed_signature)
+        # logger.debug(f"Computed signature: {computed_signature}")
 
         # signature = re.sub(ALPHANUMERIC_CHARACTERS, b'', signature)
 
-        # print(signature)
+        # logger.debug(f"Signature: {signature}")
 
         # computed_signature = re.sub(ALPHANUMERIC_CHARACTERS, b'', computed_signature)
 
         if signature != computed_signature:
             mes = f"Different signature redsys: {signature} vs {computed_signature}"
             mes += pformat(merchant_parameters)
-            print(mes)
+            logger.error(f"Redsys signature verification failed: {mes}")
             for _name, email in conf_settings.ADMINS:
                 my_send_mail("redsys signature", mes, email)
 

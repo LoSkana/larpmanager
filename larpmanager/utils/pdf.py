@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os.path
 import re
 import shutil
@@ -57,6 +58,8 @@ from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_assoc_text
+
+logger = logging.getLogger(__name__)
 
 
 def fix_filename(s):
@@ -189,7 +192,7 @@ def add_pdf_instructions(ctx):
             cod = x.replace("#", "")
             util = get_object_or_404(Util, cod=cod)
             ctx[s] = ctx[s].replace(x, util.util.url)
-        # print(ctx['page_css'])
+        logger.debug(f"Processed PDF context for key '{s}': {len(ctx[s])} characters")
 
 
 def xhtml_pdf(context, template_path, output_filename):
@@ -262,12 +265,12 @@ def pdf_template(ctx, tmp, out, small=False, html=False):
         else:
             template = get_template(tmp)
             html = template.render(ctx)
-            # print(html)
+            logger.debug(f"Generated HTML for PDF: {len(html)} characters")
         # html = html.replace(conf_settings.STATIC_URL, request.build_absolute_uri(conf_settings.STATIC_URL))
         # html = html.replace(conf_settings.MEDIA_URL, request.build_absolute_uri(conf_settings.MEDIA_URL))
         pdfkit.from_string(html, out, options)
     except Exception as e:
-        print(e)
+        logger.error(f"PDF generation error: {e}")
 
 
 # ##print
@@ -536,28 +539,26 @@ def odt_template(ctx, char, fp, template, aux_template):
             exec_odt_template(ctx, char, fp, template, aux_template)
             return
         except Exception as e:
-            print("Error in pdf creation")
-            print(e)
-            print(char)
-            print(template)
+            logger.error(f"Error in PDF creation: {e}")
+            logger.error(f"Character: {char}")
+            logger.error(f"Template: {template}")
             attempt += 1
             excepts.append(e)
             time.sleep(2)
-    print("ERROR IN odt_template")
-    print(excepts)
+    logger.error(f"ERROR IN odt_template: {excepts}")
 
 
 def exec_odt_template(ctx, char, fp, template, aux_template):
     working_dir = os.path.dirname(fp)
     working_dir = os.path.join(working_dir, str(char["number"]))
-    # print(working_dir)
+    logger.debug(f"Character PDF working directory: {working_dir}")
     # deletes file if existing
     if os.path.exists(fp):
         os.remove(fp)
     working_dir += "-work"
     # deletes directory if existing
     if os.path.exists(working_dir):
-        # print("delete")
+        logger.debug(f"Cleaning up existing character directory: {working_dir}")
         shutil.rmtree(working_dir)
     os.makedirs(working_dir)
     zip_dir = os.path.join(working_dir, "zipdd")

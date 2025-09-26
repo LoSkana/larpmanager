@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import datetime, timedelta
 
 from django.contrib import messages
@@ -54,6 +55,8 @@ from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def url_short(request, s):
@@ -174,7 +177,7 @@ def workshops(request, s):
     for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
         dt = workshop.show()
         limit = datetime.now() - timedelta(days=365)
-        # print(limit)
+        logger.debug(f"Workshop completion limit date: {limit}")
         dt["done"] = (
             WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
             >= 1
