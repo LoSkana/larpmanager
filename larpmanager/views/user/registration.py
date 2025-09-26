@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import traceback
 from datetime import datetime, timedelta
 
@@ -74,6 +75,8 @@ from larpmanager.utils.exceptions import (
 )
 from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
 from larpmanager.utils.text import get_assoc_text, get_event_text
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -327,11 +330,11 @@ def save_registration_bring_friend(ctx, form, reg, request):
     bring_friend_instructions(reg, ctx)
     if "bring_friend" not in form.cleaned_data:
         return
-    # print(form.cleaned_data)
+    logger.debug(f"Bring friend form data: {form.cleaned_data}")
 
     # check if it has put a valid code
     cod = form.cleaned_data["bring_friend"]
-    # print(cod)
+    logger.debug(f"Processing bring friend code: {cod}")
     if not cod:
         return
 
@@ -622,7 +625,8 @@ def discount(request, s):
     try:
         disc = Discount.objects.get(runs__in=[ctx["run"]], cod=cod)
     except ObjectDoesNotExist:
-        print(traceback.format_exc())
+        logger.warning(f"Discount code not found: {cod}")
+        logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 
     now = timezone_now()

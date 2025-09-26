@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
@@ -38,6 +40,8 @@ from larpmanager.forms.utils import (
 from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText, AssocTextType
 from larpmanager.models.member import Member
+
+logger = logging.getLogger(__name__)
 
 
 class ExeAssociationForm(MyForm):
@@ -660,7 +664,7 @@ class FirstAssociationForm(MyForm):
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
-        # print(data)
+        logger.debug(f"Validating association slug: {data}")
         # check if already used
         lst = Association.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:

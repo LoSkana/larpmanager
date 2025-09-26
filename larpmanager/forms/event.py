@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
@@ -64,6 +66,8 @@ from larpmanager.models.form import (
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
+
+logger = logging.getLogger(__name__)
 
 
 class EventCharactersPdfForm(ConfigForm):
@@ -155,7 +159,7 @@ class OrgaEventForm(MyForm):
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
-        # print(data)
+        logger.debug(f"Validating event slug: {data}")
         # check if already used
         lst = Event.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:

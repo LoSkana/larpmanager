@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import json
+import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -36,6 +37,8 @@ from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters, get_event_run
 from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
+
+logger = logging.getLogger(__name__)
 
 
 def casting_characters(ctx, reg):
@@ -147,7 +150,9 @@ def casting(request, s, typ=0):
         return redirect("gallery", s=ctx["run"].get_slug())
 
     casting_details(ctx, typ)
-    # print(ctx)
+    logger.debug(
+        f"Casting context for typ {typ}: {ctx.get('gl_name', 'Unknown')}, features: {list(ctx.get('features', {}).keys())}"
+    )
 
     red = "larpmanager/event/casting/casting.html"
 
@@ -299,7 +304,7 @@ def casting_preferences_characters(ctx):
             cc = []
             if ch.id in casts:
                 cc = casts[ch.id]
-            # print(cc)
+            logger.debug(f"Character {ch.id} casting preferences: {len(cc)} entries")
             el = {
                 "group_dis": fac.data["name"],
                 "name_dis": ch.data["name"],
@@ -432,7 +437,9 @@ def casting_history_traits(ctx):
             reg.prefs[c.pref + 1] = ctx["cache"][c.element]
         ctx["list"].append(reg)
 
-    # print(ctx)
+    logger.debug(
+        f"Casting history context for typ {ctx.get('typ', 0)}: {len(ctx.get('list', []))} registrations processed"
+    )
 
 
 @login_required

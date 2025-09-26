@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import date, datetime
 
 from django.contrib import messages
@@ -77,6 +78,8 @@ from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.text import get_assoc_text
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -567,7 +570,7 @@ def acc_submit(request, s, p):
         raise Http404("unknown value: " + s)
 
     if not form.is_valid():
-        # print(form.errors)
+        # logger.debug(f"Form errors: {form.errors}")
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + p)

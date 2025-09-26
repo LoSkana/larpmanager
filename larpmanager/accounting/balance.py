@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -47,6 +48,8 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
+
+logger = logging.getLogger(__name__)
 
 
 def get_acc_detail(nm, run, descr, cls, cho, typ, filters=None, reg=False):
@@ -310,7 +313,7 @@ def check_run_accounting(run):
         Updates run accounting and creates RecordAccounting entry
     """
     get_run_accounting(run, {})
-    # print(run)
+    logger.debug(f"Recording accounting for run: {run}")
     RecordAccounting.objects.create(assoc=run.event.assoc, run=run, global_sum=run.balance, bank_sum=0)
 
 
