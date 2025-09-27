@@ -55,8 +55,9 @@ from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, WarehouseI
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp
 
+pytestmark = pytest.mark.django_db(reset_sequences=True)
 
-@pytest.mark.django_db_reset_sequences
+
 class TestPreSaveSignals(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", email="test@example.com")
@@ -287,7 +288,6 @@ class TestPreSaveSignals(TestCase):
         self.assertTrue(hasattr(assoc, "_update_skin_features"))
 
 
-@pytest.mark.django_db_reset_sequences
 class TestPostSaveSignals(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", email="test@example.com")
@@ -457,7 +457,6 @@ class TestPostSaveSignals(TestCase):
         self.assertEqual(child_rcr.custom_pronoun, "they/them")
 
 
-@pytest.mark.django_db_reset_sequences
 class TestPreDeleteSignals(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", email="test@example.com")
@@ -496,7 +495,6 @@ class TestPreDeleteSignals(TestCase):
         mock_reset.assert_called_with(self.event.id)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestPostDeleteSignals(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", email="test@example.com")
@@ -518,7 +516,6 @@ class TestPostDeleteSignals(TestCase):
         mock_reset.assert_called_with(self.user.member)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestCacheSignals(TestCase):
     """Test cache-related signal handlers"""
 
@@ -550,7 +547,6 @@ class TestCacheSignals(TestCase):
         AssignmentTrait.objects.create(character=char, trait=trait)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestMailSignals(TestCase):
     """Test mail-related signal handlers"""
 
@@ -571,7 +567,6 @@ class TestMailSignals(TestCase):
         RegistrationCharacterRel.objects.create(reg=reg, character=char)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestSpecializedSignals(TestCase):
     """Test specialized signal handlers for specific business logic"""
 
@@ -648,7 +643,6 @@ class TestSpecializedSignals(TestCase):
         self.assertEqual(char.player, self.user.member)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestSignalInteractions(TestCase):
     """Test complex interactions between multiple signals"""
 
@@ -703,7 +697,6 @@ class TestSignalInteractions(TestCase):
         self.assertTrue(RegistrationCharacterRel.objects.filter(reg=child_reg, character=char).exists())
 
 
-@pytest.mark.django_db_reset_sequences
 class TestMailSignalHandlers(TestCase):
     """Test mail-related signal handlers that weren't covered before"""
 
@@ -887,7 +880,6 @@ class TestMailSignalHandlers(TestCase):
         self.assertEqual(message.message, "Test message")
 
 
-@pytest.mark.django_db_reset_sequences
 class TestAccountingSignalHandlers(TestCase):
     """Test accounting-related signal handlers"""
 
@@ -1008,7 +1000,6 @@ class TestAccountingSignalHandlers(TestCase):
         self.assertEqual(expense.description, "Test expense")
 
 
-@pytest.mark.django_db_reset_sequences
 class TestCacheSignalHandlers(TestCase):
     """Test cache-related signal handlers that weren't covered before"""
 
@@ -1165,7 +1156,6 @@ class TestCacheSignalHandlers(TestCase):
         self.assertEqual(event.assoc, self.assoc)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestMissingConfigSignals(TestCase):
     """Test config-related signals that weren't covered before"""
 
@@ -1255,7 +1245,6 @@ class TestMissingConfigSignals(TestCase):
         self.assertEqual(event.assoc, self.assoc)
 
 
-@pytest.mark.django_db_reset_sequences
 class TestBusinessLogicSignalIntegration(TestCase):
     """Test complex business logic interactions involving multiple signals"""
 
