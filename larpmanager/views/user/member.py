@@ -39,6 +39,7 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from larpmanager.accounting.member import info_accounting
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.member import (
     AvatarForm,
     LanguageForm,
@@ -169,7 +170,7 @@ def profile(request):
     # ~ ctx["membership"] = True
 
     if "vote" in request.assoc["features"]:
-        ctx["vote_open"] = ctx["membership"].assoc.get_config("vote_open", False)
+        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False)
 
     ctx["disable_join"] = True
 
@@ -374,8 +375,8 @@ def public(request, n):
         for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
             ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("player_larp_history", False):
+    assoc_id = ctx["a_id"]
+    if get_assoc_config(assoc_id, "player_larp_history", False):
         ctx["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
@@ -567,12 +568,12 @@ def vote(request):
         ctx["done"] = True
         return render(request, "larpmanager/member/vote.html", ctx)
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc_id = ctx["a_id"]
 
-    ctx["vote_open"] = assoc.get_config("vote_open", False)
-    ctx["vote_cands"] = assoc.get_config("vote_candidates", "").split(",")
-    ctx["vote_min"] = assoc.get_config("vote_min", "1")
-    ctx["vote_max"] = assoc.get_config("vote_max", "1")
+    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False)
+    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "").split(",")
+    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1")
+    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1")
 
     if request.method == "POST":
         cnt = 0

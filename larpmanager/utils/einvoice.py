@@ -23,6 +23,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.utils.tasks import background_auto
 
@@ -93,27 +94,29 @@ def _einvoice_header(einvoice, inv, member, name_number, root):
     dati_trasmissione = ET.SubElement(header, "DatiTrasmissione")
     id_trasmittente = ET.SubElement(dati_trasmissione, "IdTrasmittente")
     ET.SubElement(id_trasmittente, "IdPaese").text = "IT"
-    ET.SubElement(id_trasmittente, "IdCodice").text = inv.assoc.get_config("einvoice_idcodice")
+    ET.SubElement(id_trasmittente, "IdCodice").text = get_assoc_config(inv.assoc_id, "einvoice_idcodice")
     ET.SubElement(dati_trasmissione, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     ET.SubElement(dati_trasmissione, "FormatoTrasmissione").text = "FPR12"
-    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = inv.assoc.get_config("einvoice_codicedestinatario")
+    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = get_assoc_config(
+        inv.assoc_id, "einvoice_codicedestinatario"
+    )
 
     # Transferor (data of the association)
     cedente_prestatore = ET.SubElement(header, "CedentePrestatore")
     dati_anagrafici = ET.SubElement(cedente_prestatore, "DatiAnagrafici")
     id_fiscale_iva = ET.SubElement(dati_anagrafici, "IdFiscaleIVA")
     ET.SubElement(id_fiscale_iva, "IdPaese").text = "IT"
-    ET.SubElement(id_fiscale_iva, "IdCodice").text = inv.assoc.get_config("einvoice_partitaiva")
+    ET.SubElement(id_fiscale_iva, "IdCodice").text = get_assoc_config(inv.assoc_id, "einvoice_partitaiva")
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
-    ET.SubElement(anagrafica, "Denominazione").text = inv.assoc.get_config("einvoice_denominazione")
-    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = inv.assoc.get_config("einvoice_regimefiscale")
+    ET.SubElement(anagrafica, "Denominazione").text = get_assoc_config(inv.assoc_id, "einvoice_denominazione")
+    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = get_assoc_config(inv.assoc_id, "einvoice_regimefiscale")
     sede = ET.SubElement(cedente_prestatore, "Sede")
-    ET.SubElement(sede, "Indirizzo").text = inv.assoc.get_config("einvoice_indirizzo")
-    ET.SubElement(sede, "NumeroCivico").text = inv.assoc.get_config("einvoice_numerocivico")
-    ET.SubElement(sede, "Cap").text = inv.assoc.get_config("einvoice_cap")
-    ET.SubElement(sede, "Comune").text = inv.assoc.get_config("einvoice_comune")
-    ET.SubElement(sede, "Provincia").text = inv.assoc.get_config("einvoice_provincia")
-    ET.SubElement(sede, "Nazione").text = inv.assoc.get_config("einvoice_nazione")
+    ET.SubElement(sede, "Indirizzo").text = get_assoc_config(inv.assoc_id, "einvoice_indirizzo")
+    ET.SubElement(sede, "NumeroCivico").text = get_assoc_config(inv.assoc_id, "einvoice_numerocivico")
+    ET.SubElement(sede, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap")
+    ET.SubElement(sede, "Comune").text = get_assoc_config(inv.assoc_id, "einvoice_comune")
+    ET.SubElement(sede, "Provincia").text = get_assoc_config(inv.assoc_id, "einvoice_provincia")
+    ET.SubElement(sede, "Nazione").text = get_assoc_config(inv.assoc_id, "einvoice_nazione")
 
     # Referred
     cessionario_committente = ET.SubElement(header, "CessionarioCommittente")
@@ -168,9 +171,9 @@ def _einvoice_body(einvoice, inv, root):
     ET.SubElement(dettaglio_linee, "Quantita").text = "1"
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
     ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
-    aliquotaiva = inv.assoc.get_config("einvoice_aliquotaiva", "")
+    aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "")
     ET.SubElement(dettaglio_linee, "AliquotaIVA").text = aliquotaiva
-    natura = inv.assoc.get_config("einvoice_natura", "")
+    natura = get_assoc_config(inv.assoc_id, "einvoice_natura", "")
     if natura:
         ET.SubElement(dettaglio_linee, "Natura").text = natura
 

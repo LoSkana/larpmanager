@@ -40,6 +40,7 @@ from larpmanager.accounting.gateway import (
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.payment import get_payment_form
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.accounting import (
     AnyInvoiceSubmitForm,
@@ -655,9 +656,9 @@ def acc_confirm(request, c):
 
     # check authorization
     found = False
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    if "treasurer" in get_assoc_features(assoc.id):
-        for mb in assoc.get_config("treasurer_appointees", "").split(", "):
+    assoc_id = request.assoc["id"]
+    if "treasurer" in get_assoc_features(assoc_id):
+        for mb in get_assoc_config(assoc_id, "treasurer_appointees", "").split(", "):
             if not mb:
                 continue
             if request.user.member.id == int(mb):

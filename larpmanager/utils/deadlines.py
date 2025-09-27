@@ -22,6 +22,7 @@ from datetime import datetime, timedelta
 
 from django.db.models import Count
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
@@ -92,7 +93,7 @@ def check_run_deadlines(runs):
         members_id.append(reg.member_id)
         all_regs[reg.run_id].append(reg)
 
-    tolerance = int(runs[0].event.assoc.get_config("deadlines_tolerance", "30"))
+    tolerance = int(get_assoc_config(runs[0].event.assoc_id, "deadlines_tolerance", "30"))
 
     assoc_id = runs[0].event.assoc_id
     now = datetime.now()

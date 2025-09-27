@@ -23,6 +23,7 @@ from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
@@ -123,7 +124,7 @@ def handle_expense_item_approval_notification(expense_item):
         + "!"
     )
 
-    token_name, credit_name = get_token_credit_name(expense_item.assoc)
+    token_name, credit_name = get_token_credit_name(expense_item.assoc_id)
 
     if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
         body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
@@ -145,17 +146,17 @@ def update_accounting_item_expense_pre(sender, instance, **kwargs):
     handle_expense_item_approval_notification(instance)
 
 
-def get_token_credit_name(assoc):
+def get_token_credit_name(assoc_id):
     """Get token and credit names from association configuration.
 
     Args:
-        assoc: Association object with configuration
+        assoc_id: id of Association
 
     Returns:
         Tuple of (token_name, credit_name) strings with defaults if not configured
     """
-    token_name = assoc.get_config("token_credit_token_name", None)
-    credit_name = assoc.get_config("token_credit_credit_name", None)
+    token_name = get_assoc_config(assoc_id, "token_credit_token_name", None)
+    credit_name = get_assoc_config(assoc_id, "token_credit_credit_name", None)
     if not token_name:
         token_name = _("Tokens")
     if not credit_name:
@@ -175,10 +176,10 @@ def handle_payment_item_pre_save(payment_item):
     run = payment_item.reg.run
     member = payment_item.reg.member
 
-    if not run.event.assoc.get_config("mail_payment", False):
+    if not get_assoc_config(run.event.assoc_id, "mail_payment", False):
         return
 
-    token_name, credit_name = get_token_credit_name(payment_item.assoc)
+    token_name, credit_name = get_token_credit_name(payment_item.assoc_id)
 
     curr_sym = run.event.assoc.get_currency_symbol()
     if not payment_item.pk:
@@ -342,7 +343,7 @@ def handle_accounting_item_other_pre_save(instance):
     if instance.hide:
         return
 
-    token_name, credit_name = get_token_credit_name(instance.assoc)
+    token_name, credit_name = get_token_credit_name(instance.assoc_id)
 
     if not instance.pk:
         if instance.oth == OtherChoices.TOKEN:
@@ -580,13 +581,13 @@ def notify_invoice_check(inv):
     Args:
         inv: Invoice object to send notifications for
     """
-    if not inv.assoc.get_config("mail_payment", False):
+    if not get_assoc_config(inv.assoc_id, "mail_payment", False):
         return
 
     # if there is treasurer features, send to them
     features = get_assoc_features(inv.assoc_id)
     if "treasurer" in features:
-        for mb in inv.assoc.get_config("treasurer_appointees", "").split(", "):
+        for mb in get_assoc_config(inv.assoc_id, "treasurer_appointees", "").split(", "):
             idx = int(mb)
             orga = Member.objects.get(pk=idx)
             activate(orga.language)

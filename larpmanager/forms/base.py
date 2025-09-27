@@ -27,6 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
@@ -112,7 +113,7 @@ class MyForm(forms.ModelForm):
         runs = Run.objects.filter(event=self.params["event"])
 
         # if campaign switch is active, show as runs all of the events sharing the campaign
-        if self.params["event"].assoc.get_config("campaign_switch"):
+        if get_assoc_config(self.params["event"].assoc_id, "campaign_switch", False):
             event_ids = {self.params["event"].id}
             child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
             event_ids.update(child)

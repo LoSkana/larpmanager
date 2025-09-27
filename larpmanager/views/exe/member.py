@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
@@ -413,8 +414,8 @@ def exe_membership_fee(request):
         form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
             member = form.cleaned_data["member"]
-            assoc = Association.objects.get(pk=ctx["a_id"])
-            fee = assoc.get_config("membership_fee", "0")
+            assoc_id = ctx["a_id"]
+            fee = get_assoc_config(assoc_id, "membership_fee", "0")
             payment = PaymentInvoice.objects.create(
                 member=member,
                 typ=PaymentType.MEMBERSHIP,
@@ -422,7 +423,7 @@ def exe_membership_fee(request):
                 method_id=form.cleaned_data["method"],
                 mc_gross=fee,
                 causal=_("Membership fee of") + f" {member}",
-                assoc=assoc,
+                assoc_id=assoc_id,
                 cod=unique_invoice_cod(),
             )
             payment.status = PaymentStatus.CONFIRMED
@@ -556,10 +557,10 @@ def exe_vote(request):
     """
     ctx = check_assoc_permission(request, "exe_vote")
     ctx["year"] = datetime.today().year
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc_id = ctx["a_id"]
 
     idxs = []
-    for el in assoc.get_config("vote_candidates", "").split(","):
+    for el in get_assoc_config(assoc_id, "vote_candidates", "").split(","):
         if el.strip():
             idxs.append(el.strip())
 

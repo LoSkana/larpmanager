@@ -25,6 +25,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import get_run_accounting
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.accounting import (
     OrgaCreditForm,
     OrgaDiscountForm,
@@ -227,7 +228,7 @@ def orga_inflows_edit(request, s, num):
 @login_required
 def orga_expenses(request, s):
     ctx = check_event_permission(request, s, "orga_expenses")
-    ctx["disable_approval"] = ctx["event"].assoc.get_config("expense_disable_orga", False)
+    ctx["disable_approval"] = get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False)
     orga_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/expenses.html", ctx)
 
@@ -250,7 +251,7 @@ def orga_expenses_approve(request, s, num):
         HttpResponseRedirect: Redirect to expenses list
     """
     ctx = check_event_permission(request, s, "orga_expenses")
-    if ctx["event"].assoc.get_config("expense_disable_orga", False):
+    if get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False):
         raise Http404("eh no caro mio")
 
     try:

@@ -20,6 +20,7 @@
 
 from django.db.models import Sum
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction
 
@@ -44,8 +45,8 @@ def compute_vat(instance):
     previous_trans = get_previous_sum(instance, AccountingItemTransaction)
     previous_paid = previous_pays - previous_trans
     # Get VAT configuration (e.g. 22 becomes 0.22)
-    vat_ticket = int(instance.assoc.get_config("vat_ticket", 0)) / 100.0
-    vat_options = int(instance.assoc.get_config("vat_options", 0)) / 100.0
+    vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0)) / 100.0
+    vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0)) / 100.0
     # Determine the full ticket amount (either from pay_what or ticket price)
     ticket_total = 0
     if instance.reg.pay_what is not None:

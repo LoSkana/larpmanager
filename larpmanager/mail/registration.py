@@ -26,6 +26,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
@@ -86,14 +87,15 @@ def update_registration_status(instance):
     my_send_mail(subj, body, instance.member, instance.run)
 
     # to orga
-    if instance.modified == 1 and instance.run.event.assoc.get_config("mail_signup_new", False):
+    assoc_id = instance.run.event.assoc_id
+    if instance.modified == 1 and get_assoc_config(assoc_id, "mail_signup_new", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % context
             body = _("The user has confirmed its registration for this event") + "!"
             body += registration_options(instance)
             my_send_mail(subj, body, orga, instance.run)
-    elif instance.run.event.assoc.get_config("mail_signup_update", False):
+    elif get_assoc_config(assoc_id, "mail_signup_update", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % context
@@ -248,8 +250,6 @@ def update_registration_cancellation(instance):
     if is_reg_provisional(instance):
         return
 
-    context = {"event": instance.run, "user": instance.member}
-
     # to user
     context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
@@ -258,7 +258,7 @@ def update_registration_cancellation(instance):
     my_send_mail(subj, body, instance.member, instance.run)
 
     # to orga
-    if instance.run.event.assoc.get_config("mail_signup_del", False):
+    if get_assoc_config(instance.run.event.assoc_id, "mail_signup_del", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
@@ -312,7 +312,7 @@ def handle_registration_pre_delete(instance):
     body = _("We confirm that your registration for this event has been cancelled") + "."
     my_send_mail(subj, body, instance.member, instance.run)
 
-    if instance.run.event.assoc.get_config("mail_signup_del", False):
+    if get_assoc_config(instance.run.event.assoc_id, "mail_signup_del", False):
         # to orga
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)

@@ -24,6 +24,7 @@ from decimal import Decimal, InvalidOperation
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
@@ -99,7 +100,7 @@ class OrgaExpenseForm(MyFormRun):
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
-        if self.params["event"].assoc.get_config("expense_disable_orga", False):
+        if get_assoc_config(self.params["event"].assoc_id, "expense_disable_orga", False):
             self.delete_field("is_approved")
 
 
