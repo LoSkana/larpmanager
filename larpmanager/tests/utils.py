@@ -213,6 +213,10 @@ def check_feature(page, name):
 
 def load_image(page, element_id):
     image_path = Path(__file__).parent / "image.jpg"
+    upload(page, element_id, image_path)
+
+
+def upload(page, element_id, path):
     inp = page.locator(element_id)
     inp.wait_for(state="attached")
-    inp.set_input_files(str(image_path))
+    inp.set_input_files(str(path))
