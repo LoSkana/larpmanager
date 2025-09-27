@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga
+from larpmanager.tests.utils import go_to, load_image, login_orga
 
 pytestmark = pytest.mark.e2e
 
@@ -97,8 +96,7 @@ def add_items(page):
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("ele")
     page.locator(".select2-results__option").first.click()
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_photo").set_input_files(str(image_path))
+    load_image(page, "#id_photo")
     page.get_by_role("button", name="Confirm").click()
 
     expect(page.locator("#one")).to_contain_text("Item 1 sadsada Box A Electrical")

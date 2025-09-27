@@ -22,6 +22,7 @@ import io
 import os
 import zipfile
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import urlparse
 
 import pandas as pd
@@ -87,6 +88,9 @@ def go_to(page, live_server, path):
 
 def go_to_check(page, path):
     page.goto(path)
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
+    page.wait_for_load_state("networkidle")
     ooops_check(page)
 
 
@@ -150,16 +154,18 @@ def check_download(page, link: str) -> None:
 
 
 def fill_tinymce(page, iframe_id, text):
-    page.wait_for_timeout(2000)
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
+    page.wait_for_load_state("networkidle")
     locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
     if locator.count() > 0:
+        expect(locator).to_be_visible(timeout=5000)
         locator.click()
-    page.wait_for_timeout(2000)
     frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
+    expect(editor).to_be_visible(timeout=5000)
     editor.wait_for(state="visible")
     editor.fill(text)
-    page.wait_for_timeout(2000)
 
 
 def _checkboxes(page, check=True):
@@ -203,3 +209,10 @@ def add_links_to_visit(links_to_visit, page, visited_links):
 def check_feature(page, name):
     block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
     block.get_by_role("checkbox").check()
+
+
+def load_image(page, element_id):
+    image_path = Path(__file__).parent / "image.jpg"
+    inp = page.locator(element_id)
+    inp.wait_for(state="attached")
+    inp.set_input_files(str(image_path))
