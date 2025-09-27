@@ -365,6 +365,12 @@ class ResidenceField(forms.MultiValueField):
 
 class BaseProfileForm(MyForm):
     def __init__(self, *args, **kwargs):
+        """Initialize base profile form with field filtering based on association settings.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         self.allowed = self.params["request"].assoc["members_fields"]
@@ -751,6 +757,12 @@ class ExeProfileForm(MyForm):
         fields = ()
 
     def __init__(self, *args, **kwargs):
+        """Initialize member field configuration form.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 

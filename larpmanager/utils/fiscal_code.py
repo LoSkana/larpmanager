@@ -10,6 +10,14 @@ from larpmanager.utils.member import almost_equal, count_differences
 
 
 def calculate_fiscal_code(member):
+    """Calculate and validate Italian fiscal code for a member.
+
+    Args:
+        member: Member object with personal data for fiscal code calculation
+
+    Returns:
+        dict: Dictionary containing fiscal code validation results
+    """
     # ignore non-italian citizens
     if member.nationality and member.nationality.lower() != "it":
         return {}
@@ -71,6 +79,14 @@ def _clean_birth_place(birth_place):
 
 
 def _slugify(text):
+    """Normalize text for fiscal code generation by removing accents and special characters.
+
+    Args:
+        text: Input text to be normalized
+
+    Returns:
+        str: Normalized text with accents removed, lowercased, and special characters replaced
+    """
     # Remove accents
     for char in ["à", "è", "é", "ì", "ò", "ù"]:
         text = text.replace(char, "")
@@ -90,6 +106,14 @@ def _slugify(text):
 
 
 def _extract_municipality_code(birth_place):
+    """Extract municipality code from birth place name using ISTAT data.
+
+    Args:
+        birth_place: Name of the birth place (city/nation)
+
+    Returns:
+        str: ISTAT code for the municipality, or empty string if not found
+    """
     slug = _slugify(birth_place)
     # look for nations
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")

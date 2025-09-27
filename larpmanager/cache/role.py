@@ -145,6 +145,15 @@ def del_event_role_reset(sender, instance, **kwargs):
 
 
 def get_event_roles(request, slug):
+    """Get user's event roles and permissions for a specific event slug.
+
+    Args:
+        request: Django HTTP request object with authenticated user
+        slug: Event slug identifier
+
+    Returns:
+        tuple: (is_organizer, permissions_dict, role_names_list)
+    """
     pms = {}
     # split if provided slug from session
     slug = slug.split("-", 1)[0]
@@ -181,6 +190,16 @@ def has_event_permission(request, ctx, slug, perm=None):
 
 
 def check_managed(ctx, perm, assoc=True):
+    """Check if permission is restricted for managed association skins.
+
+    Args:
+        ctx: Context dictionary with skin_managed and is_staff flags
+        perm: Permission string to check
+        assoc: Whether to check association permissions (True) or event permissions (False)
+
+    Returns:
+        bool: True if permission is restricted due to managed skin, False otherwise
+    """
     # check if the association skin is managed and the user is not staff
     if not ctx.get("skin_managed", False) or ctx.get("is_staff", False):
         return False

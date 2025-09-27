@@ -699,6 +699,11 @@ def _orga_reg_actions(ctx, features):
 
 
 def _orga_suggestions(ctx):
+    """Add priority suggestions for event organization.
+
+    Args:
+        ctx: Context dictionary to add suggestions to
+    """
     priorities = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),

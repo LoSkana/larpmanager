@@ -117,9 +117,12 @@ def post_save_registration_cache(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Character)
 def post_save_registration_character_rel_cache(sender, instance, created, **kwargs):
+    handle_update_registration_character_rel(instance)
+
+
+def handle_update_registration_character_rel(instance):
     for run in instance.event.runs.all():
         reset_cache_reg_counts(run)
-
     if instance.event.get_config("user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()

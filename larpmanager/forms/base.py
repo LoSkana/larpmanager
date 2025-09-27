@@ -543,6 +543,18 @@ class BaseRegistrationForm(MyFormRun):
         return key
 
     def init_type(self, key, orga, question, reg_counts, required):
+        """Initialize form field based on question type.
+
+        Args:
+            key: Field key identifier
+            orga: Organization context flag
+            question: Question object with type information
+            reg_counts: Registration count data
+            required: Whether field is required
+
+        Returns:
+            Field key identifier
+        """
         if question.typ == BaseQuestionType.MULTIPLE:
             self.init_multiple(key, orga, question, reg_counts, required)
 
@@ -633,6 +645,18 @@ class BaseRegistrationForm(MyFormRun):
             self.initial[key] = self.answers[question.id].text
 
     def init_single(self, key, orga, question, reg_counts, required):
+        """Initialize single choice form field.
+
+        Args:
+            key: Form field key
+            orga: Whether this is an organizational form
+            question: Question object with choices configuration
+            reg_counts: Registration counts for quota tracking
+            required: Whether field is required
+
+        Side effects:
+            Creates single choice field and sets initial value if available
+        """
         if orga:
             (choices, help_text) = self.get_choice_options(self.choices, question)
             if question.id not in self.singles:

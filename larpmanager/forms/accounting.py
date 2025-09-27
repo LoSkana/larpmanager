@@ -580,6 +580,11 @@ class ExePaymentSettingsForm(MyForm):
             return data_string
 
     def clean(self):
+        """Validate and normalize fee field values.
+
+        Returns:
+            dict: Cleaned form data with normalized fee values
+        """
         cleaned = super().clean()
         for name in self.fee_fields:
             val = cleaned.get(name)

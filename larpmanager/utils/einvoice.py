@@ -43,6 +43,15 @@ def process_payment(invoice_id):
 
 
 def prepare_xml(inv, einvoice):
+    """Generate XML structure for Italian electronic invoice.
+
+    Args:
+        inv: Invoice instance containing billing data
+        einvoice: Electronic invoice configuration object
+
+    Returns:
+        str: XML string formatted according to Italian e-invoice standards
+    """
     member = inv.member
     name_number = 2
 

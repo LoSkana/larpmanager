@@ -40,6 +40,12 @@ class Command(BaseCommand):
         self.stdout.write(str(self.translator.get_usage()))
 
     def translate_entry(self, entry, tgt):
+        """Translate a single entry using DeepL API.
+
+        Args:
+            entry: The POFile entry to translate
+            tgt: Target language code (e.g., 'EN', 'PT')
+        """
         usage = self.translator.get_usage()
         if usage.any_limit_reached:
             raise Exception("LIMIT EXCEEDED!")
