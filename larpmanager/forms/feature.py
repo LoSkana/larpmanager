@@ -34,6 +34,17 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         super().__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
+        """Render feature checkboxes with tooltips and help links.
+
+        Args:
+            name: Field name for the HTML input
+            value: List of selected feature values
+            attrs: HTML attributes dict
+            renderer: Form renderer (unused)
+
+        Returns:
+            str: HTML string with feature checkboxes and tooltips
+        """
         output = []
         value = value or []
 
@@ -153,6 +164,14 @@ class QuickSetupForm(MyForm):
             self.initial[key] = init
 
     def save(self, commit=True):
+        """Save form data and update feature assignments and configurations.
+
+        Args:
+            commit: Whether to save to database
+
+        Returns:
+            Saved instance with updated features and configurations
+        """
         instance = super().save(commit=commit)
 
         features = {}

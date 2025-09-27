@@ -109,6 +109,12 @@ def _init_skin(assoc, el):
 
 
 def _init_features(assoc, el):
+    """Initialize association features and related configuration in cache element.
+
+    Args:
+        assoc: Association object to get features from
+        el: Cache element dictionary to populate with features and configs
+    """
     el["features"] = get_assoc_features(assoc.id)
 
     if "custom_mail" in el["features"]:

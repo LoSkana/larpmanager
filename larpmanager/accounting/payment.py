@@ -377,6 +377,11 @@ def _process_membership(invoice):
 
 
 def _process_payment(invoice):
+    """Process a payment from an invoice and create accounting entries.
+
+    Args:
+        invoice: Invoice object to process payment for
+    """
     if AccountingItemPayment.objects.filter(inv=invoice).count() == 0:
         reg = Registration.objects.get(pk=invoice.idx)
 

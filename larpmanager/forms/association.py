@@ -169,6 +169,14 @@ class ExeAssocTextForm(MyForm):
         self.fields["typ"].help_text = " - ".join(help_text)
 
     def clean(self):
+        """Validate association text form to prevent duplicates and enforce default rules.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If duplicate default or language+type combination exists
+        """
         cleaned_data = super().clean()
 
         default = cleaned_data.get("default")

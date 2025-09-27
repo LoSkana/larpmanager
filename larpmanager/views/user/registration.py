@@ -408,6 +408,14 @@ def register_info(request, ctx, form, reg, dis):
 
 
 def init_form_submitted(ctx, form, request, reg=None):
+    """Initialize form submission data in context.
+
+    Args:
+        ctx: Context dictionary to update
+        form: Form object containing questions
+        request: HTTP request object with POST data
+        reg: Registration object (optional)
+    """
     ctx["submitted"] = request.POST.dict()
     if hasattr(form, "questions"):
         for question in form.questions:
@@ -487,6 +495,20 @@ def _apply_ticket(ctx, tk):
 
 
 def _check_redirect_registration(request, ctx, event, secret_code):
+    """Check if registration should be redirected based on event status and settings.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with event and run data
+        event: Event instance
+        secret_code: Optional secret code for registration access
+
+    Returns:
+        HttpResponse for redirect/error or None if registration can proceed
+
+    Raises:
+        Http404: If wrong registration secret code is provided
+    """
     if "closed" in ctx["run"].status:
         return render(request, "larpmanager/event/closed.html", ctx)
 
@@ -517,6 +539,15 @@ def _add_bring_friend_discounts(ctx):
 
 
 def _register_prepare(ctx, reg):
+    """Prepare registration context with payment information and locks.
+
+    Args:
+        ctx: Context dictionary to update
+        reg: Existing registration instance or None for new registration
+
+    Returns:
+        bool: True if this is a new registration, False if updating existing
+    """
     new_reg = True
     ctx["tot_payed"] = 0
     if reg:
@@ -660,6 +691,17 @@ def discount(request, s):
 
 
 def _check_discount(disc, member, run, event):
+    """Validate if a discount can be applied to a member's registration.
+
+    Args:
+        disc: Discount object to validate
+        member: Member attempting to use discount
+        run: Event run instance
+        event: Event instance
+
+    Returns:
+        str or None: Error message if invalid, None if valid
+    """
     if _is_discount_invalid_for_registration(disc, member, run):
         return _("Discounts only applicable with new registrations")
 
@@ -728,6 +770,15 @@ def discount_list(request, s):
 
 @login_required
 def unregister(request, s):
+    """Handle user self-unregistration from an event.
+
+    Args:
+        request: HTTP request object from authenticated user
+        s: Event slug string
+
+    Returns:
+        HttpResponse: Confirmation form or redirect to accounting page after cancellation
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
 
     # check if user is actually registered
@@ -750,6 +801,15 @@ def unregister(request, s):
 
 @login_required
 def gift(request, s):
+    """Display gift registrations and their payment status for the current user.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+
+    Returns:
+        Rendered gift.html template with registration list and payment info
+    """
     ctx = get_event_run(request, s, signup=False, slug="gift", status=True)
     check_registration_open(ctx, request)
 

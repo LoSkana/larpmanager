@@ -263,6 +263,12 @@ def get_warehouse_optionals(ctx, def_cols):
 
 
 def rotate_vertical_photo(instance, sender):
+    """Automatically rotate vertical photos to landscape orientation.
+
+    Args:
+        instance: Model instance with a 'photo' ImageField
+        sender: Model class that sent the signal
+    """
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
         field = instance._meta.get_field("photo")

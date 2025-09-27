@@ -185,6 +185,14 @@ def load_profile(request, img, ext):
 
 @login_required
 def profile_upload(request):
+    """Handle profile image upload for authenticated users.
+
+    Args:
+        request: HTTP request object containing POST data and uploaded image file
+
+    Returns:
+        JsonResponse: Success/failure status and image URL on success
+    """
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
@@ -207,6 +215,15 @@ def profile_upload(request):
 
 @login_required
 def profile_rotate(request, n):
+    """Rotate user's profile image 90 degrees clockwise or counterclockwise.
+
+    Args:
+        request: Django HTTP request object
+        n: Rotation direction (1 for clockwise, other for counterclockwise)
+
+    Returns:
+        JsonResponse with success/failure status and new image URL
+    """
     path = str(request.user.member.profile)
     if not path:
         return JsonResponse({"res": "ko"})
@@ -484,6 +501,15 @@ def badge(request, n, p=1):
 
 @login_required
 def leaderboard(request, p=1):
+    """Display paginated leaderboard of members with badge scores.
+
+    Args:
+        request: Django HTTP request object
+        p: Page number for pagination (default: 1)
+
+    Returns:
+        Rendered leaderboard page with member rankings
+    """
     check_assoc_feature(request, "badge")
     member_list = get_leaderboard(request.assoc["id"])
     num_el = 25

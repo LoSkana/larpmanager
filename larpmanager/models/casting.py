@@ -171,6 +171,14 @@ class CastingAvoid(BaseModel):
 
 
 def update_traits_text(instance):
+    """Extract and return trait references from instance text using pattern matching.
+
+    Args:
+        instance: Model instance with event and text attributes containing trait references
+
+    Returns:
+        list: List of Trait objects found by parsing #number patterns in text
+    """
     trait_search = re.findall(r"#([\d]+)", instance.text, re.IGNORECASE)
     traits = []
     for pid in set(trait_search):

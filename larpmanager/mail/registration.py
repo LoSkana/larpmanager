@@ -240,6 +240,11 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
 
 
 def update_registration_cancellation(instance):
+    """Send cancellation notification emails to user and organizers.
+
+    Args:
+        instance: Registration instance that was cancelled
+    """
     if is_reg_provisional(instance):
         return
 

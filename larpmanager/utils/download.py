@@ -472,6 +472,17 @@ def _clean(new_val):
 
 
 def _download_prepare(ctx, nm, query, typ):
+    """Prepare and filter query for CSV download based on type and context.
+
+    Args:
+        ctx: Context dictionary containing event/run information
+        nm: Name/type of the model being downloaded
+        query: Initial queryset to filter
+        typ: Type configuration for filtering
+
+    Returns:
+        Filtered and optimized queryset ready for CSV export
+    """
     if check_field(typ, "event"):
         query = query.filter(event=ctx["event"])
 
@@ -858,6 +869,14 @@ def export_tickets(ctx):
 
 
 def export_event(ctx):
+    """Export event configuration and features data.
+
+    Args:
+        ctx: Context dictionary containing event and run information
+
+    Returns:
+        list: List of tuples containing configuration and features export data
+    """
     keys = ["name", "value"]
     vals = []
     assoc = Association.objects.get(pk=ctx["event"].assoc_id)
@@ -877,6 +896,15 @@ def export_event(ctx):
 
 
 def export_abilities(ctx):
+    """Export abilities data for an event.
+
+    Args:
+        ctx: Context dictionary containing event information
+
+    Returns:
+        list: Single-item list containing tuple of ("abilities", keys, values)
+              where keys are column headers and values are ability data rows
+    """
     keys = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
 
     que = (

@@ -532,6 +532,13 @@ def save_event_character_form(features, instance):
 
 
 def _init_writing_element(instance, def_tps, applicables):
+    """Initialize writing questions for specific applicables in an event instance.
+
+    Args:
+        instance: Event instance to initialize writing elements for
+        def_tps: Dictionary of default question types and their configurations
+        applicables: List of QuestionApplicable types to create questions for
+    """
     for applicable in applicables:
         # if there are already questions for this applicable, skip
         if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():

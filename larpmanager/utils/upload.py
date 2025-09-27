@@ -286,6 +286,14 @@ def _assign_elem(ctx, obj, field, value, typ, logs):
 
 
 def _reg_assign_character(ctx, reg, value, logs):
+    """Assign a character to a registration during upload processing.
+
+    Args:
+        ctx: Context dictionary containing event and run data
+        reg: Registration object to assign character to
+        value: Character name string to look up
+        logs: List to append error messages to
+    """
     try:
         char = Character.objects.get(event=ctx["event"], name__iexact=value)
     except ObjectDoesNotExist:
@@ -521,6 +529,17 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
 
 
 def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
+    """Process and load writing question values into element fields.
+
+    Args:
+        ctx: Context dictionary
+        element: Target writing element to update
+        field: Field identifier
+        field_type: WritingQuestionType enum value
+        logs: List to collect processing logs
+        questions: Dictionary of questions
+        value: Value to assign to the field
+    """
     if field_type == WritingQuestionType.MIRROR:
         _get_mirror_instance(ctx, element, value, logs)
     elif field_type == WritingQuestionType.HIDE:
@@ -728,6 +747,17 @@ def _options_load(ctx, row, questions, is_registration):
 
 
 def _get_option(ctx, is_registration, name, question_id):
+    """Get or create a question option for registration or writing forms.
+
+    Args:
+        ctx: Context dictionary containing event data
+        is_registration: Boolean indicating if this is for registration (True) or writing (False)
+        name: Name of the option
+        question_id: ID of the parent question
+
+    Returns:
+        tuple: (created, instance) where created is bool and instance is the option object
+    """
     if is_registration:
         instance, created = RegistrationOption.objects.get_or_create(
             event=ctx["event"],

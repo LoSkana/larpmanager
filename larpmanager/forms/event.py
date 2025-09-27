@@ -121,6 +121,12 @@ class OrgaEventForm(MyForm):
         widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
 
     def __init__(self, *args, **kwargs):
+        """Initialize event form with field configuration based on context.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         if "exe" not in self.params:
@@ -345,6 +351,11 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, label, help_text)
 
     def set_config_char_form(self):
+        """Configure character form options for events with character feature enabled.
+
+        Sets up configuration fields for character form behavior including
+        visibility options, maximum selections, ticket requirements, and dependencies.
+        """
         if "character" in self.params["features"]:
             self.set_section("char_form", _("Character form"))
 

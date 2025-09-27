@@ -415,6 +415,15 @@ def notify_credit(credit_name, instance):
 
 
 def get_credit_email(credit_name, instance):
+    """Generate email subject and body for credit assignment notification.
+
+    Args:
+        credit_name: Name of the credit type being assigned
+        instance: AccountingItem instance containing credit details
+
+    Returns:
+        tuple: (subject, body) strings for the email
+    """
     subj = hdr(instance) + _("Assignment %(elements)s") % {
         "elements": credit_name,
     }
@@ -448,6 +457,15 @@ def notify_token(instance, token_name):
 
 
 def get_token_email(instance, token_name):
+    """Generate email subject and body for token assignment notification.
+
+    Args:
+        instance: AccountingItem instance containing token details
+        token_name: Name of the token type being assigned
+
+    Returns:
+        tuple: (subject, body) strings for the email
+    """
     subj = hdr(instance) + _("Assignment %(elements)s") % {
         "elements": token_name,
     }
@@ -557,6 +575,11 @@ def save_collection_gift(sender, instance, **kwargs):
 
 
 def notify_invoice_check(inv):
+    """Send invoice check notifications to appropriate recipients.
+
+    Args:
+        inv: Invoice object to send notifications for
+    """
     if not inv.assoc.get_config("mail_payment", False):
         return
 

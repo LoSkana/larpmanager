@@ -137,6 +137,14 @@ def exe_templates_roles(request, eid, num):
 
 @login_required
 def exe_pre_registrations(request):
+    """Display pre-registration statistics for all association events.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        Rendered page showing pre-registration counts by preference level
+    """
     ctx = check_assoc_permission(request, "exe_pre_registrations")
     ctx["list"] = []
     ctx["pr"] = []

@@ -42,6 +42,12 @@ logger = logging.getLogger(__name__)
 
 
 def casting_characters(ctx, reg):
+    """Populate context with character choices available for casting based on registration.
+
+    Args:
+        ctx: Context dictionary to be populated with character choices and factions
+        reg: Registration object containing ticket tier information
+    """
     filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != TicketTier.FILLER
     filters = {"png": True, "free": True, "mirror": True, "filler": filter_filler, "nonfiller": not filter_filler}
     get_event_filter_characters(ctx, filters)
@@ -182,6 +188,13 @@ def casting(request, s, typ=0):
 
 
 def _get_previous(ctx, request, typ):
+    """Retrieve previous casting choices and avoidance preferences.
+
+    Args:
+        ctx: Context dictionary to update
+        request: HTTP request object
+        typ: Casting type (0 for characters, other for quest types)
+    """
     # compila already
     already = [
         c.element for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref")
@@ -218,6 +231,14 @@ def _check_already_done(ctx, request, typ):
 
 
 def _casting_update(ctx, prefs, request, typ):
+    """Update casting preferences for a member and send confirmation email.
+
+    Args:
+        ctx: Context dictionary containing run and other data
+        prefs: Dictionary of casting preferences
+        request: HTTP request object
+        typ: Casting type (0 for character, 1 for trait)
+    """
     # delete all castings
     Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
     for i, pref in prefs.items():
@@ -314,6 +335,18 @@ def casting_preferences_characters(ctx):
 
 
 def casting_preferences_traits(ctx, typ):
+    """Load casting preferences data for traits.
+
+    Args:
+        ctx: Context dictionary to populate with trait preference data
+        typ: Quest type number to filter traits
+
+    Raises:
+        Http404: If the quest type doesn't exist for the event
+
+    Side effects:
+        Populates ctx["list"] with trait preference data
+    """
     try:
         qtyp = QuestType.objects.get(event=ctx["event"], number=typ)
     except ObjectDoesNotExist as err:
@@ -335,6 +368,19 @@ def casting_preferences_traits(ctx, typ):
 
 @login_required
 def casting_preferences(request, s, typ=0):
+    """Display casting preferences interface for characters or traits.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        typ: Preference type (0 for characters, other for traits)
+
+    Returns:
+        Rendered casting preferences page
+
+    Raises:
+        Http404: If preferences not enabled or user not registered
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     casting_details(ctx, typ)
 
@@ -444,6 +490,19 @@ def casting_history_traits(ctx):
 
 @login_required
 def casting_history(request, s, typ=0):
+    """Display casting history for characters or traits.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        typ: History type (0 for characters, 1 for traits)
+
+    Returns:
+        HttpResponse: Rendered casting history template
+
+    Raises:
+        Http404: If casting history is not enabled or user is not registered
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     casting_details(ctx, typ)
 
