@@ -33,6 +33,7 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
+from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Event,
     Run,
@@ -143,18 +144,25 @@ def exe_pre_registrations(request):
 
     ctx["seen"] = []
 
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
         if not r.get_config("pre_register_active", False):
             continue
 
         pr = get_pre_registration(r)
-        r.count = {}
-        # print (pr)
-        for idx in range(1, 6):
-            r.count[idx] = 0
-            if idx in pr:
-                r.count[idx] = pr[idx]
+        if ctx["preferences"]:
+            r.count = {}
+            # print (pr)
+            for idx in range(1, 6):
+                r.count[idx] = 0
+                if idx in pr:
+                    r.count[idx] = pr[idx]
+        else:
+            r.total = len(pr["list"])
         ctx["list"].append(r)
+
     return render(request, "larpmanager/exe/pre_registrations.html", ctx)
 
 

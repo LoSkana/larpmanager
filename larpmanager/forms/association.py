@@ -394,6 +394,12 @@ class ExeConfigForm(ConfigForm):
             label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
 
+        if "pre_register" in self.params["features"]:
+            self.set_section("pre_reg", _("Pre-registration"))
+            label = _("Enable preferences")
+            help_text = _("If checked, participants give a preference value when adding pre-registrations")
+            self.add_configs("pre_reg_preferences", ConfigType.BOOL, label, help_text)
+
         if "centauri" in self.params["features"]:
             self.set_section("centauri", _("Easter egg"))
 
