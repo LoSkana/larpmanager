@@ -63,17 +63,17 @@ def init_cache_assoc(a_slug):
     except ObjectDoesNotExist:
         return None
 
-    el = assoc.as_dict()
+    assoc_dict = assoc.as_dict()
 
-    _init_payments(assoc, el)
+    _init_payments(assoc, assoc_dict)
 
-    _init_member_fields(assoc, el)
+    _init_member_fields(assoc, assoc_dict)
 
     if assoc.profile:
         try:
-            el["favicon"] = assoc.profile_fav.url
-            el["logo"] = assoc.profile_thumb.url
-            el["image"] = assoc.profile.url
+            assoc_dict["favicon"] = assoc.profile_fav.url
+            assoc_dict["logo"] = assoc.profile_thumb.url
+            assoc_dict["image"] = assoc.profile.url
         except FileNotFoundError:
             pass
 
@@ -87,17 +87,17 @@ def init_cache_assoc(a_slug):
         "activated",
         "key",
     ]:
-        if m in el:
-            del el[m]
+        if m in assoc_dict:
+            del assoc_dict[m]
 
-    _init_features(assoc, el)
+    _init_features(assoc, assoc_dict)
 
-    _init_skin(assoc, el)
+    _init_skin(assoc, assoc_dict)
 
     max_demo = 10
-    el["demo"] = Registration.objects.filter(run__event__assoc_id=assoc.id).count() < max_demo
+    assoc_dict["demo"] = Registration.objects.filter(run__event__assoc_id=assoc.id).count() < max_demo
 
-    return el
+    return assoc_dict
 
 
 def _init_skin(assoc, el):
@@ -109,6 +109,12 @@ def _init_skin(assoc, el):
 
 
 def _init_features(assoc, el):
+    """Initialize association features and related configuration in cache element.
+
+    Args:
+        assoc: Association object to get features from
+        el: Cache element dictionary to populate with features and configs
+    """
     el["features"] = get_assoc_features(assoc.id)
 
     if "custom_mail" in el["features"]:

@@ -214,6 +214,15 @@ def orga_config(request, s, section=None):
 
 @login_required
 def orga_features(request, s):
+    """Manage event features activation and configuration.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered features form or redirect after activation
+    """
     ctx = check_event_permission(request, s, "orga_features")
     ctx["add_another"] = False
     if backend_edit(request, ctx, OrgaFeatureForm, None, afield=None, assoc=False):
@@ -453,6 +462,14 @@ def orga_upload_template(request, s, typ):
 
 
 def _ability_template(ctx):
+    """Generate template for ability uploads with example data.
+
+    Args:
+        ctx: Context dictionary containing column definitions
+
+    Returns:
+        list: Export data containing ability template with example values
+    """
     exports = []
     defs = {
         "name": "Ability name",

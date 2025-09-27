@@ -125,6 +125,16 @@ def _get_values_mapping(el):
 
 
 def check_run(el, ctx, afield=None):
+    """Validate that element belongs to the correct run and event.
+
+    Args:
+        el: Model instance to validate
+        ctx: Context dictionary containing run and event information
+        afield: Optional field name to access nested element
+
+    Raises:
+        Http404: If element doesn't belong to the expected run or event
+    """
     if "run" not in ctx:
         return
 
@@ -420,6 +430,16 @@ def writing_edit_cache_key(eid, typ):
 
 
 def writing_edit_save_ajax(form, request, ctx):
+    """Handle AJAX save requests for writing elements with locking validation.
+
+    Args:
+        form: Form instance to save
+        request: HTTP request object
+        ctx: Context dictionary
+
+    Returns:
+        JSON response with success/warning status
+    """
     res = {"res": "ok"}
     if request.user.is_superuser:
         return JsonResponse(res)
@@ -489,6 +509,14 @@ def writing_edit_working_ticket(request, tp, eid, token):
 
 @require_POST
 def working_ticket(request):
+    """Handle working ticket requests to prevent concurrent editing conflicts.
+
+    Args:
+        request: HTTP POST request with eid, type, and token parameters
+
+    Returns:
+        JsonResponse: Status response with optional warning if other users are editing
+    """
     if not request.user.is_authenticated:
         return JsonResponse({"warn": "User not logged"})
 

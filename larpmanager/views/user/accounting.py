@@ -40,6 +40,7 @@ from larpmanager.accounting.gateway import (
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.payment import get_payment_form
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.accounting import (
     AnyInvoiceSubmitForm,
@@ -84,6 +85,14 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def accounting(request):
+    """Display user accounting information including balances and payment status.
+
+    Args:
+        request: HTTP request object from authenticated user
+
+    Returns:
+        HttpResponse: Rendered accounting page with balance, payments, and delegated member info
+    """
     ctx = def_user_ctx(request)
     if ctx["a_id"] == 0:
         return redirect("home")
@@ -105,6 +114,14 @@ def accounting(request):
 
 @login_required
 def accounting_tokens(request):
+    """Display user's token accounting information including given and used tokens.
+
+    Args:
+        request: HTTP request object from authenticated user
+
+    Returns:
+        HttpResponse: Rendered token accounting page with given/used token lists
+    """
     ctx = def_user_ctx(request)
     ctx.update(
         {
@@ -201,6 +218,16 @@ def acc_refund(request):
 
 @login_required
 def acc_pay(request, s, method=None):
+    """Handle payment redirection for event registration.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+        method: Optional payment method
+
+    Returns:
+        Redirect to appropriate payment page
+    """
     check_assoc_feature(request, "payment")
     ctx = get_event_run(request, s, signup=True, status=True)
 
@@ -362,6 +389,14 @@ def acc_donate(request):
 
 @login_required
 def acc_collection(request):
+    """Handle member collection creation and payment processing.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered collection form template
+    """
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     if request.method == "POST":
@@ -621,9 +656,9 @@ def acc_confirm(request, c):
 
     # check authorization
     found = False
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    if "treasurer" in get_assoc_features(assoc.id):
-        for mb in assoc.get_config("treasurer_appointees", "").split(", "):
+    assoc_id = request.assoc["id"]
+    if "treasurer" in get_assoc_features(assoc_id):
+        for mb in get_assoc_config(assoc_id, "treasurer_appointees", "").split(", "):
             if not mb:
                 continue
             if request.user.member.id == int(mb):

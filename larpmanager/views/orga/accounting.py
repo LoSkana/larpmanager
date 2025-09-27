@@ -25,6 +25,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import get_run_accounting
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.accounting import (
     OrgaCreditForm,
     OrgaDiscountForm,
@@ -72,6 +73,15 @@ def orga_expenses_my(request, s):
 
 @login_required
 def orga_expenses_my_new(request, s):
+    """Create a new personal expense reimbursement request.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered form for creating new expense or redirect to expenses list
+    """
     ctx = check_event_permission(request, s, "orga_expenses_my")
     if request.method == "POST":
         form = OrgaPersonalExpenseForm(request.POST, request.FILES, ctx=ctx)
@@ -161,6 +171,11 @@ def orga_payments(request, s):
 
 
 def assign_payment_fee(ctx):
+    """Calculate and assign payment transaction fees to accounting items.
+
+    Args:
+        ctx: Context dictionary containing list of AccountingItemPayment objects
+    """
     inv_ids = set()
     for el in ctx["list"]:
         if el.inv_id:
@@ -213,7 +228,7 @@ def orga_inflows_edit(request, s, num):
 @login_required
 def orga_expenses(request, s):
     ctx = check_event_permission(request, s, "orga_expenses")
-    ctx["disable_approval"] = ctx["event"].assoc.get_config("expense_disable_orga", False)
+    ctx["disable_approval"] = get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False)
     orga_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/expenses.html", ctx)
 
@@ -225,8 +240,18 @@ def orga_expenses_edit(request, s, num):
 
 @login_required
 def orga_expenses_approve(request, s, num):
+    """Approve an expense request.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Expense ID
+
+    Returns:
+        HttpResponseRedirect: Redirect to expenses list
+    """
     ctx = check_event_permission(request, s, "orga_expenses")
-    if ctx["event"].assoc.get_config("expense_disable_orga", False):
+    if get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False):
         raise Http404("eh no caro mio")
 
     try:

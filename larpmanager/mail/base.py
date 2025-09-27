@@ -21,6 +21,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import holidays
+from django.conf import settings as conf_settings
 from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
@@ -226,15 +227,12 @@ def bring_friend_instructions(reg, ctx):
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-@receiver(post_save, sender=AssignmentTrait)
-def notify_trait_assigned(sender, instance, created, **kwargs):
+def handle_trait_assignment_notification(instance, created):
     """Notify member when a trait is assigned to them.
 
     Args:
-        sender: AssignmentTrait model class
         instance: AssignmentTrait instance that was saved
         created (bool): Whether this is a new assignment
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Deactivates related casting preferences and sends assignment notification
@@ -269,6 +267,11 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
     my_send_mail(subj, body, instance.member, instance.run)
 
 
+@receiver(post_save, sender=AssignmentTrait)
+def notify_trait_assigned(sender, instance, created, **kwargs):
+    handle_trait_assignment_notification(instance, created)
+
+
 def mail_confirm_casting(member, run, gl_name, lst, avoid):
     """Send casting preference confirmation email to member.
 
@@ -296,14 +299,11 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
     my_send_mail(subj, body, member, run)
 
 
-@receiver(pre_save, sender=Character)
-def character_update_status(sender, instance, **kwargs):
+def handle_character_status_update_notification(instance):
     """Notify player when character approval status changes.
 
     Args:
-        sender: Character model class
         instance: Character instance being saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends status change notification email to character player
@@ -329,6 +329,11 @@ def character_update_status(sender, instance, **kwargs):
             subj = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
 
             my_send_mail(subj, body, instance.player, instance.event)
+
+
+@receiver(pre_save, sender=Character)
+def character_update_status(sender, instance, **kwargs):
+    handle_character_status_update_notification(instance)
 
 
 def notify_organization_exe(func, assoc, instance):
@@ -376,3 +381,17 @@ def get_exec_language(assoc):
     else:
         max_lang = "en"
     return max_lang
+
+
+def mail_larpmanager_ticket(instance):
+    for _name, email in conf_settings.ADMINS:
+        subj = f"LarpManager ticket - {instance.assoc.name}"
+        if instance.reason:
+            subj += f" [{instance.reason}]"
+        body = f"Email: {instance.email} <br /><br />"
+        if instance.member:
+            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
+        body += instance.content
+        if instance.screenshot:
+            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
+        my_send_mail(subj, body, email)

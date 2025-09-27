@@ -27,6 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
@@ -112,7 +113,7 @@ class MyForm(forms.ModelForm):
         runs = Run.objects.filter(event=self.params["event"])
 
         # if campaign switch is active, show as runs all of the events sharing the campaign
-        if self.params["event"].assoc.get_config("campaign_switch"):
+        if get_assoc_config(self.params["event"].assoc_id, "campaign_switch", False):
             event_ids = {self.params["event"].id}
             child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
             event_ids.update(child)
@@ -543,6 +544,18 @@ class BaseRegistrationForm(MyFormRun):
         return key
 
     def init_type(self, key, orga, question, reg_counts, required):
+        """Initialize form field based on question type.
+
+        Args:
+            key: Field key identifier
+            orga: Organization context flag
+            question: Question object with type information
+            reg_counts: Registration count data
+            required: Whether field is required
+
+        Returns:
+            Field key identifier
+        """
         if question.typ == BaseQuestionType.MULTIPLE:
             self.init_multiple(key, orga, question, reg_counts, required)
 
@@ -633,6 +646,18 @@ class BaseRegistrationForm(MyFormRun):
             self.initial[key] = self.answers[question.id].text
 
     def init_single(self, key, orga, question, reg_counts, required):
+        """Initialize single choice form field.
+
+        Args:
+            key: Form field key
+            orga: Whether this is an organizational form
+            question: Question object with choices configuration
+            reg_counts: Registration counts for quota tracking
+            required: Whether field is required
+
+        Side effects:
+            Creates single choice field and sets initial value if available
+        """
         if orga:
             (choices, help_text) = self.get_choice_options(self.choices, question)
             if question.id not in self.singles:

@@ -26,6 +26,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import get_display_choice
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -281,7 +282,7 @@ def get_run_accounting(run, ctx):
     run.balance = run.revenue - run.costs
 
     if "organization_tax" in features:
-        tax = int(run.event.assoc.get_config("organization_tax_perc", "10"))
+        tax = int(get_assoc_config(run.event.assoc_id, "organization_tax_perc", "10"))
         run.tax = run.revenue * tax / 100
 
     run.save()

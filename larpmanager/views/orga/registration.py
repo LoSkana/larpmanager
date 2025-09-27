@@ -380,6 +380,11 @@ def _orga_registrations_discount(ctx):
 
 
 def _orga_registrations_text_fields(ctx):
+    """Process editor-type registration questions and add them to context.
+
+    Args:
+        ctx: Context dictionary containing event and registration data
+    """
     # add editor type questions
     text_fields = []
     que = RegistrationQuestion.objects.filter(event=ctx["event"])
@@ -627,6 +632,13 @@ def orga_registrations_edit(request, s, num):
 
 
 def _save_questbuilder(ctx, form, reg):
+    """Save quest type assignments from questbuilder form.
+
+    Args:
+        ctx: Context dictionary containing event and run data
+        form: Form containing quest type selections
+        reg: Registration object for the member
+    """
     for qt in QuestType.objects.filter(event=ctx["event"]):
         qt_id = f"qt_{qt.number}"
         tid = int(form.cleaned_data[qt_id])
@@ -647,6 +659,16 @@ def _save_questbuilder(ctx, form, reg):
 
 @login_required
 def orga_registrations_customization(request, s, num):
+    """Handle organization customization of player registration character relationships.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+        num: Character number identifier
+
+    Returns:
+        HttpResponse: Rendered edit form or redirect to registrations page
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
     get_char(ctx, num)
@@ -691,6 +713,17 @@ def orga_registration_discounts(request, s, num):
 
 @login_required
 def orga_registration_discount_add(request, s, num, dis):
+    """Add a discount to a member's registration.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Registration ID
+        dis: Discount ID
+
+    Returns:
+        HttpResponseRedirect: Redirect to registration discounts page
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     get_registration(ctx, num)
     get_discount(ctx, dis)

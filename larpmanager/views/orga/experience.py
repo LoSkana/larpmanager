@@ -53,6 +53,15 @@ def orga_px_deliveries_edit(request, s, num):
 
 @login_required
 def orga_px_abilities(request, s):
+    """Display and manage PX (experience) abilities for organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered abilities management page or file export
+    """
     ctx = check_event_permission(request, s, "orga_px_abilities")
 
     if request.POST and request.POST.get("download") == "1":

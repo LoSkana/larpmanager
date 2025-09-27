@@ -97,6 +97,11 @@ def get_or_create_index_guide(index_dir):
 
 @background_auto(queue="whoosh")
 def index_guide(guide_id):
+    """Index a guide document for search functionality.
+
+    Args:
+        guide_id: ID of the LarpManagerGuide to index
+    """
     try:
         instance = LarpManagerGuide.objects.get(pk=guide_id)
     except ObjectDoesNotExist:

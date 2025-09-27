@@ -32,6 +32,14 @@ class ProfilerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        """Process request and measure view function execution time.
+
+        Args:
+            request: HTTP request object
+
+        Returns:
+            HttpResponse: Response from the view function
+        """
         request._profiler_start_ts = now()
         response = self.get_response(request)
 
