@@ -13,28 +13,38 @@ var timeout = 10 * 1000;
 var post_url = '{{ request.path }}';
 
 function submitForm(auto) {
-    if (eid == 0) {
-        $.toast({
-            text: 'Not available for new elements',
-            showHideTransition: 'slide',
-            icon: 'warning',
-            position: 'top-center',
-            textAlign: 'center',
-            hideAfter: 1000
-        });
-        return;
-    }
-    tinyMCE.triggerSave();
-    var formData = $('form').serialize() + "&ajax=1";
-    if (typeof eid !== 'undefined' && eid > 0) {
-        formData += "&eid=" + eid + "&type=" + type + "&token=" + token;
-    }
-    $.ajax({
-        type: "POST",
-        url: post_url,
-        data: formData,
-        success: function(msg) {
+    return new Promise(function(resolve, reject) {
+        if (eid == 0) {
+            $.toast({
+                text: 'Not available for new elements',
+                showHideTransition: 'slide',
+                icon: 'warning',
+                position: 'top-center',
+                textAlign: 'center',
+                hideAfter: 1000
+            });
+            reject('no-eid');
+            return;
+        }
+
+        if (window.tinyMCE && typeof tinyMCE.triggerSave === 'function') {
+            tinyMCE.triggerSave();
+        }
+
+        var formData = $('form').serialize() + "&ajax=1";
+        if (typeof eid !== 'undefined' && eid > 0) {
+            formData += "&eid=" + eid + "&type=" + type + "&token=" + token;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: post_url,
+            data: formData,
+            dataType: "json",
+            timeout: timeout
+        }).done(function(msg) {
             setTimeout(confirmSubmit, 100);
+
             if (!auto) {
                 $.toast({
                     text: 'Saved!',
@@ -45,9 +55,10 @@ function submitForm(auto) {
                     hideAfter: 1000
                 });
             }
-            if (msg.warn) {
+
+            if (msg && (msg.warn || msg.error === true)) {
                 $.toast({
-                    text: msg.warn,
+                    text: msg.warn || 'Save failed',
                     showHideTransition: 'slide',
                     icon: 'error',
                     position: 'mid-center',
@@ -56,10 +67,26 @@ function submitForm(auto) {
                     hideAfter: false,
                     stack: 1
                 });
+                reject('server-warn');
+            } else {
+                resolve(true);
             }
-        }
+        }).fail(function(xhr) {
+            $.toast({
+                text: 'Network or server error',
+                showHideTransition: 'slide',
+                icon: 'error',
+                position: 'mid-center',
+                textAlign: 'center',
+                allowToastClose: true,
+                hideAfter: false,
+                stack: 1
+            });
+            reject('ajax-fail');
+        }).always(function() {
+            setTimeout(()=>submitForm(true).catch(()=>{}), timeout);
+        });
     });
-    setTimeout(()=>submitForm(true), timeout);
 }
 
 function confirmSubmit() {
@@ -116,8 +143,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $('.trigger_save').on('click', function(e) {
         e.preventDefault();
-        submitForm(false);
-        window.location.href = $(this).attr('href');
+        var href = $(this).attr('href');
+        submitForm(false)
+            .then(function() {
+                window.location.href = href;
+            })
+            .catch(function() {
+                // do nothing; stay on page
+            });
     });
 });
 
