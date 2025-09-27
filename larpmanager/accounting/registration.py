@@ -532,14 +532,6 @@ def handle_registration_accounting_updates(registration):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_accounting(sender, instance, **kwargs):
-    """
-    Handle post-save accounting updates for registrations.
-
-    Args:
-        sender: Model class that sent the signal
-        instance: Registration instance that was saved
-        **kwargs: Additional signal arguments
-    """
     handle_registration_accounting_updates(instance)
 
 

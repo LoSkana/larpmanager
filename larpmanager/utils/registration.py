@@ -510,13 +510,6 @@ def handle_registration_event_switch(registration):
 
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender, instance, **kwargs):
-    """Handle registration updates when switching between events.
-
-    Args:
-        sender: The model class sending the signal
-        instance: The Registration instance being saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     handle_registration_event_switch(instance)
 
 

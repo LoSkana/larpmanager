@@ -62,17 +62,35 @@ def init_cache_run(a, s):
         return None
 
 
-@receiver(pre_save, sender=Run)
-def pre_save_run(sender, instance, **kwargs):
+def handle_run_pre_save(instance):
+    """Handle run pre-save cache invalidation.
+
+    Args:
+        instance: Run instance being saved
+    """
     if instance.pk:
         reset_cache_run(instance.event.assoc_id, instance.get_slug())
 
 
-@receiver(pre_save, sender=Event)
-def pre_save_event(sender, instance, **kwargs):
+@receiver(pre_save, sender=Run)
+def pre_save_run(sender, instance, **kwargs):
+    handle_run_pre_save(instance)
+
+
+def handle_event_pre_save(instance):
+    """Handle event pre-save cache invalidation.
+
+    Args:
+        instance: Event instance being saved
+    """
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_run(instance.assoc_id, run.get_slug())
+
+
+@receiver(pre_save, sender=Event)
+def pre_save_event(sender, instance, **kwargs):
+    handle_event_pre_save(instance)
 
 
 def reset_cache_config_run(run):
@@ -134,14 +152,32 @@ def init_cache_config_run(run):
     return ctx
 
 
-@receiver(post_save, sender=Run)
-def post_run_reset_cache_config_run(sender, instance, **kwargs):
+def handle_run_post_save_cache_reset(instance):
+    """Handle run post-save cache reset.
+
+    Args:
+        instance: Run instance that was saved
+    """
     if instance.pk:
         reset_cache_config_run(instance)
 
 
-@receiver(post_save, sender=Event)
-def post_event_reset_cache_config_run(sender, instance, **kwargs):
+@receiver(post_save, sender=Run)
+def post_run_reset_cache_config_run(sender, instance, **kwargs):
+    handle_run_post_save_cache_reset(instance)
+
+
+def handle_event_post_save_cache_reset(instance):
+    """Handle event post-save cache reset.
+
+    Args:
+        instance: Event instance that was saved
+    """
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_config_run(run)
+
+
+@receiver(post_save, sender=Event)
+def post_event_reset_cache_config_run(sender, instance, **kwargs):
+    handle_event_post_save_cache_reset(instance)

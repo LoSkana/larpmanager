@@ -76,15 +76,11 @@ def send_membership_confirm(request, membership):
     my_send_mail(subj, body, profile, membership)
 
 
-@receiver(pre_save, sender=AccountingItemMembership)
-def save_accounting_item_membership(sender, instance, *args, **kwargs):
+def handle_membership_payment_notification(instance):
     """Send notification when membership fee payment is received.
 
     Args:
-        sender: AccountingItemMembership model class
         instance: AccountingItemMembership instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends payment confirmation email to member
@@ -98,6 +94,33 @@ def save_accounting_item_membership(sender, instance, *args, **kwargs):
     subj = hdr(instance) + _("Membership fee payment %(year)s") % {"year": instance.year}
     body = _("The payment of your membership fee for this year has been received") + "!"
     my_send_mail(subj, body, instance.member, instance)
+
+
+@receiver(pre_save, sender=AccountingItemMembership)
+def save_accounting_item_membership(sender, instance, *args, **kwargs):
+    handle_membership_payment_notification(instance)
+
+
+def handle_badge_assignment_notifications(instance, pk_set):
+    """Handle badge assignment notifications for a set of members.
+
+    Args:
+        instance: Badge instance that was assigned
+        pk_set: Set of member IDs who received the badge
+
+    Side effects:
+        Sends badge achievement notification emails to members
+    """
+    for pk in pk_set:
+        m = Member.objects.get(pk=pk)
+        activate(m.language)
+        badge = instance.show(m.language)
+        subj = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
+        body = _("You have been awarded an achievement") + "!" + "<br /><br />"
+        body += _("Description") + f": {badge['descr']}<br /><br />"
+        url = get_url(f"public/{m.id}/", instance)
+        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": url} + "."
+        my_send_mail(subj, body, m, instance)
 
 
 def badges_changed(sender, **kwargs):
@@ -117,16 +140,7 @@ def badges_changed(sender, **kwargs):
     # model = kwargs.pop("model", None)
     pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
 
-    for pk in pk_set:
-        m = Member.objects.get(pk=pk)
-        activate(m.language)
-        badge = instance.show(m.language)
-        subj = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
-        body = _("You have been awarded an achievement") + "!" + "<br /><br />"
-        body += _("Description") + f": {badge['descr']}<br /><br />"
-        url = get_url(f"public/{m.id}/", instance)
-        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": url} + "."
-        my_send_mail(subj, body, m, instance)
+    handle_badge_assignment_notifications(instance, pk_set)
 
 
 m2m_changed.connect(badges_changed, sender=Badge.members.through)
@@ -209,14 +223,11 @@ def notify_membership_reject(member, resp):
     my_send_mail(subj, body, member, member.membership)
 
 
-@receiver(pre_save, sender=HelpQuestion)
-def notify_help_question(sender, instance, **kwargs):
+def handle_help_question_notification(instance):
     """Send notifications for help questions and answers.
 
     Args:
-        sender: HelpQuestion model class
         instance: HelpQuestion instance being saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends notifications to organizers for questions or to users for answers
@@ -265,6 +276,11 @@ def notify_help_question(sender, instance, **kwargs):
         my_send_mail(subj, body, mb, instance)
 
 
+@receiver(pre_save, sender=HelpQuestion)
+def notify_help_question(sender, instance, **kwargs):
+    handle_help_question_notification(instance)
+
+
 def get_help_email(instance):
     """Generate subject and body for help question notification.
 
@@ -280,14 +296,11 @@ def get_help_email(instance):
     return subj, body
 
 
-@receiver(pre_save, sender=ChatMessage)
-def notify_chat_message(sender, instance, **kwargs):
+def handle_chat_message_notification(instance):
     """Send notification for new chat messages.
 
     Args:
-        sender: ChatMessage model class
         instance: ChatMessage instance being saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends notification email to message receiver
@@ -299,6 +312,11 @@ def notify_chat_message(sender, instance, **kwargs):
     url = get_url(f"chat/{instance.sender.id}/", instance)
     body = f"<br /><br />{instance.message} (<a href='{url}'>" + _("reply here") + "</a>)"
     my_send_mail(subj, body, instance.receiver, instance)
+
+
+@receiver(pre_save, sender=ChatMessage)
+def notify_chat_message(sender, instance, **kwargs):
+    handle_chat_message_notification(instance)
 
 
 # ACTIVATION ACCOUNT

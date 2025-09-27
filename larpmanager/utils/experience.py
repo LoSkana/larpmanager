@@ -28,6 +28,7 @@ from django.db.models import Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
 
 from larpmanager.cache.config import save_all_element_configs, save_single_config
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, Operation, RulePx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -115,6 +116,9 @@ def update_px(char):
     Args:
         char: Character instance to update
     """
+    if "px" not in get_event_features(char.event_id):
+        return
+
     start = char.event.get_config("px_start", 0)
 
     _handle_free_abilities(char)

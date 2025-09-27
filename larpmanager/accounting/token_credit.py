@@ -170,16 +170,35 @@ def get_regs(assoc):
     return reg_que
 
 
+def handle_accounting_item_payment_post_save(instance, created):
+    """Handle accounting item payment post-save token/credit updates.
+
+    Args:
+        instance: AccountingItemPayment instance that was saved
+        created: Boolean indicating if instance was created
+    """
+    if not created and instance.reg:
+        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
+
+
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment(sender, instance, created, **kwargs):
-    if not created and instance.reg:
+    handle_accounting_item_payment_post_save(instance, created)
+
+
+def handle_accounting_item_payment_post_delete(instance):
+    """Handle accounting item payment post-delete token/credit updates.
+
+    Args:
+        instance: AccountingItemPayment instance that was deleted
+    """
+    if instance.reg:
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
 def post_delete_accounting_item_payment(sender, instance, **kwargs):
-    if instance.reg:
-        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
+    handle_accounting_item_payment_post_delete(instance)
 
 
 def handle_accounting_item_other_save(accounting_item):

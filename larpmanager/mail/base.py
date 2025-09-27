@@ -227,15 +227,12 @@ def bring_friend_instructions(reg, ctx):
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-@receiver(post_save, sender=AssignmentTrait)
-def notify_trait_assigned(sender, instance, created, **kwargs):
+def handle_trait_assignment_notification(instance, created):
     """Notify member when a trait is assigned to them.
 
     Args:
-        sender: AssignmentTrait model class
         instance: AssignmentTrait instance that was saved
         created (bool): Whether this is a new assignment
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Deactivates related casting preferences and sends assignment notification
@@ -270,6 +267,11 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
     my_send_mail(subj, body, instance.member, instance.run)
 
 
+@receiver(post_save, sender=AssignmentTrait)
+def notify_trait_assigned(sender, instance, created, **kwargs):
+    handle_trait_assignment_notification(instance, created)
+
+
 def mail_confirm_casting(member, run, gl_name, lst, avoid):
     """Send casting preference confirmation email to member.
 
@@ -297,14 +299,11 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
     my_send_mail(subj, body, member, run)
 
 
-@receiver(pre_save, sender=Character)
-def character_update_status(sender, instance, **kwargs):
+def handle_character_status_update_notification(instance):
     """Notify player when character approval status changes.
 
     Args:
-        sender: Character model class
         instance: Character instance being saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends status change notification email to character player
@@ -330,6 +329,11 @@ def character_update_status(sender, instance, **kwargs):
             subj = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
 
             my_send_mail(subj, body, instance.player, instance.event)
+
+
+@receiver(pre_save, sender=Character)
+def character_update_status(sender, instance, **kwargs):
+    handle_character_status_update_notification(instance)
 
 
 def notify_organization_exe(func, assoc, instance):

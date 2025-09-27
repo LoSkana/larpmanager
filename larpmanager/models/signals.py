@@ -35,7 +35,7 @@ from slugify import slugify
 from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
 from larpmanager.cache.config import reset_configs
-from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
+from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.mail.base import mail_larpmanager_ticket
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
@@ -129,17 +129,19 @@ def pre_save_callback(sender, instance, *args, **kwargs):
     update_search_field(instance)
 
 
-@receiver(pre_save, sender=Association)
-def pre_save_association_generate_fernet(sender, instance, **kwargs):
+def handle_association_fernet_key_generation(instance):
     """Generate Fernet encryption key for new associations.
 
     Args:
-        sender: Association model class
         instance: Association instance being saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.key:
         instance.key = Fernet.generate_key()
+
+
+@receiver(pre_save, sender=Association)
+def pre_save_association_generate_fernet(sender, instance, **kwargs):
+    handle_association_fernet_key_generation(instance)
 
 
 def assign_assoc_permission_number(assoc_permission):
@@ -159,13 +161,6 @@ def assign_assoc_permission_number(assoc_permission):
 
 @receiver(pre_save, sender=AssocPermission)
 def pre_save_assoc_permission(sender, instance, **kwargs):
-    """Handle association permission changes and cache updates.
-
-    Args:
-        sender: AssocPermission model class
-        instance: AssocPermission instance being saved
-        **kwargs: Additional keyword arguments
-    """
     assign_assoc_permission_number(instance)
 
 
@@ -186,102 +181,55 @@ def assign_event_permission_number(event_permission):
 
 @receiver(pre_save, sender=EventPermission)
 def pre_save_event_permission(sender, instance, **kwargs):
-    """Handle event permission changes and numbering.
-
-    Args:
-        sender: EventPermission model class
-        instance: EventPermission instance being saved
-        **kwargs: Additional keyword arguments
-    """
     assign_event_permission_number(instance)
 
 
 @receiver(pre_save, sender=Plot)
 def pre_save_plot(sender, instance, *args, **kwargs):
-    """Replace character references in plot text before saving.
-
-    Args:
-        sender: Plot model class
-        instance: Plot instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender, instance, *args, **kwargs):
-    """Replace character references in faction text before saving.
-
-    Args:
-        sender: Faction model class
-        instance: Faction instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Prologue)
 def pre_save_prologue(sender, instance, *args, **kwargs):
-    """Replace character references in prologue text before saving.
-
-    Args:
-        sender: Prologue model class
-        instance: Prologue instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
     replace_chars_all(instance)
 
 
-@receiver(post_save, sender=Run)
-def save_run_plan(sender, instance, **kwargs):
+def handle_run_post_save(instance):
     """Set run plan from association default if not already set.
 
     Args:
-        sender: Run model class
         instance: Run instance that was saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.plan and instance.event:
         updates = {"plan": instance.event.assoc.plan}
         Run.objects.filter(pk=instance.pk).update(**updates)
 
 
+@receiver(post_save, sender=Run)
+def save_run_plan(sender, instance, **kwargs):
+    handle_run_post_save(instance)
+
+
 @receiver(post_save, sender=Trait)
 def update_trait(sender, instance, **kwargs):
-    """Update trait relationships after trait is saved.
-
-    Args:
-        sender: Trait model class
-        instance: Trait instance that was saved
-        **kwargs: Additional keyword arguments
-    """
     update_traits_all(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment_updatereg(sender, instance, created, **kwargs):
-    """Update registration totals when payment items are saved.
-
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
-    """
     instance.reg.save()
 
 
-@receiver(pre_save, sender=AccountingItemPayment)
-def update_accounting_item_payment_member(sender, instance, **kwargs):
+def handle_accounting_item_payment_pre_save(instance):
     """Update payment member and handle registration changes.
 
     Args:
-        sender: AccountingItemPayment model class
         instance: AccountingItemPayment instance being saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.member:
         instance.member = instance.reg.member
@@ -298,14 +246,16 @@ def update_accounting_item_payment_member(sender, instance, **kwargs):
             trans.save()
 
 
-@receiver(pre_save, sender=Collection)
-def pre_save_collection(sender, instance, **kwargs):
+@receiver(pre_save, sender=AccountingItemPayment)
+def update_accounting_item_payment_member(sender, instance, **kwargs):
+    handle_accounting_item_payment_pre_save(instance)
+
+
+def handle_collection_pre_save(instance):
     """Generate unique codes and calculate collection totals.
 
     Args:
-        sender: Collection model class
         instance: Collection instance being saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.pk:
         instance.unique_contribute_code()
@@ -316,18 +266,24 @@ def pre_save_collection(sender, instance, **kwargs):
         instance.total += el.value
 
 
-@receiver(post_save, sender=AccountingItemCollection)
-def post_save_accounting_item_collection(sender, instance, created, **kwargs):
+@receiver(pre_save, sender=Collection)
+def pre_save_collection(sender, instance, **kwargs):
+    handle_collection_pre_save(instance)
+
+
+def handle_accounting_item_collection_post_save(instance):
     """Update collection total when items are added.
 
     Args:
-        sender: AccountingItemCollection model class
         instance: AccountingItemCollection instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
     """
     if instance.collection:
         instance.collection.save()
+
+
+@receiver(post_save, sender=AccountingItemCollection)
+def post_save_accounting_item_collection(sender, instance, created, **kwargs):
+    handle_accounting_item_collection_post_save(instance)
 
 
 @receiver(pre_save, sender=SpeedLarp)
@@ -335,10 +291,19 @@ def pre_save_speed_larp(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
-@receiver(pre_save, sender=LarpManagerTutorial)
-def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
+def handle_tutorial_slug_generation(instance):
+    """Generate slug for tutorial if not already set.
+
+    Args:
+        instance: LarpManagerTutorial instance being saved
+    """
     if not instance.slug:
         instance.slug = slugify(instance.name)
+
+
+@receiver(pre_save, sender=LarpManagerTutorial)
+def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
+    handle_tutorial_slug_generation(instance)
 
 
 def assign_faq_number(faq):
@@ -377,14 +342,6 @@ def handle_user_profile_creation(user, created):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    """Create member profile and sync email when user is saved.
-
-    Args:
-        sender: User model class
-        instance: User instance that was saved
-        created (bool): Whether this is a new user
-        **kwargs: Additional keyword arguments
-    """
     handle_user_profile_creation(instance, created)
 
 
@@ -412,28 +369,29 @@ def handle_membership_status_changes(membership):
 
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender, instance, **kwargs):
-    """Handle membership status changes and card numbering.
-
-    Args:
-        sender: Membership model class
-        instance: Membership instance being saved
-        **kwargs: Additional keyword arguments
-    """
     handle_membership_status_changes(instance)
 
 
 @receiver(post_save, sender=EventButton)
 def save_event_button(sender, instance, created, **kwargs):
-    cache.delete(event_button_key(instance.event_id))
+    reset_event_button(instance)
 
 
 @receiver(pre_delete, sender=EventButton)
 def delete_event_button(sender, instance, **kwargs):
+    reset_event_button(instance)
+
+
+def reset_event_button(instance):
     cache.delete(event_button_key(instance.event_id))
 
 
-@receiver(pre_save, sender=Event)
-def pre_save_event_prepare_campaign(sender, instance, **kwargs):
+def handle_event_pre_save_prepare_campaign(instance):
+    """Prepare campaign event data before saving.
+
+    Args:
+        instance: Event instance being saved
+    """
     if instance.pk:
         try:
             old_instance = Event.objects.get(pk=instance.pk)
@@ -442,6 +400,11 @@ def pre_save_event_prepare_campaign(sender, instance, **kwargs):
             instance._old_parent_id = None
     else:
         instance._old_parent_id = None
+
+
+@receiver(pre_save, sender=Event)
+def pre_save_event_prepare_campaign(sender, instance, **kwargs):
+    handle_event_pre_save_prepare_campaign(instance)
 
 
 def setup_campaign_event(event):
@@ -763,29 +726,11 @@ def auto_assign_campaign_character(registration):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_campaign(sender, instance, **kwargs):
-    """Auto-assign last character for campaign registrations.
-
-    Args:
-        sender: Registration model class
-        instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
-    """
     auto_assign_campaign_character(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
-    """Calculate VAT for payment items when VAT feature is enabled.
-
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
-    """
-    if "vat" not in get_assoc_features(instance.assoc_id):
-        return
-
     compute_vat(instance)
 
 
@@ -839,8 +784,12 @@ def post_delete_reset_character_config(sender, instance, **kwargs):
     reset_configs(instance.character)
 
 
-@receiver(pre_save, sender=Association)
-def pre_save_association_set_skin_features(sender, instance, **kwargs):
+def handle_association_skin_features_pre_save(instance):
+    """Handle association skin feature setup before saving.
+
+    Args:
+        instance: Association instance being saved
+    """
     if not instance.skin:
         return
 
@@ -864,8 +813,17 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
         instance.mandatory_fields = instance.skin.default_mandatory_fields
 
 
-@receiver(post_save, sender=Association)
-def post_save_association_set_skin_features(sender, instance, created, **kwargs):
+@receiver(pre_save, sender=Association)
+def pre_save_association_set_skin_features(sender, instance, **kwargs):
+    handle_association_skin_features_pre_save(instance)
+
+
+def handle_association_skin_features_post_save(instance):
+    """Handle association skin feature setup after saving.
+
+    Args:
+        instance: Association instance that was saved
+    """
     if not hasattr(instance, "_update_skin_features"):
         return
 
@@ -873,6 +831,11 @@ def post_save_association_set_skin_features(sender, instance, created, **kwargs)
         instance.features.set(instance.skin.default_features.all())
 
     transaction.on_commit(update_features)
+
+
+@receiver(post_save, sender=Association)
+def post_save_association_set_skin_features(sender, instance, created, **kwargs):
+    handle_association_skin_features_post_save(instance)
 
 
 @receiver(post_save, sender=LarpManagerTutorial)
@@ -923,24 +886,35 @@ def post_save_registration_character_form(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
 def post_character_update_px(sender, instance, *args, **kwargs):
-    if "px" in get_event_features(instance.event_id):
-        update_px(instance)
+    update_px(instance)
 
 
 @receiver(post_save, sender=AbilityPx)
 def post_save_ability_px(sender, instance, *args, **kwargs):
+    handle_ability_save(instance)
+
+
+def handle_ability_save(instance):
     for char in instance.characters.all():
         update_px(char)
 
 
 @receiver(post_save, sender=DeliveryPx)
 def post_save_delivery_px(sender, instance, *args, **kwargs):
+    handle_delivery_save(instance)
+
+
+def handle_delivery_save(instance):
     for char in instance.characters.all():
         char.save()
 
 
 @receiver(post_save, sender=RulePx)
 def post_save_rule_px(sender, instance, *args, **kwargs):
+    handle_rule_save(instance)
+
+
+def handle_rule_save(instance):
     event = instance.event.get_class_parent(RulePx)
     for char in event.get_elements(Character).all():
         update_px(char)
@@ -948,6 +922,10 @@ def post_save_rule_px(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=ModifierPx)
 def post_save_modifier_px(sender, instance, *args, **kwargs):
+    handle_modifier_save(instance)
+
+
+def handle_modifier_save(instance):
     event = instance.event.get_class_parent(ModifierPx)
     for char in event.get_elements(Character).all():
         update_px(char)

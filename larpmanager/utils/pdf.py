@@ -351,20 +351,58 @@ def print_volunteer_registry(ctx):
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
+def handle_handout_pre_delete(instance):
+    """Handle handout pre-delete PDF cleanup.
+
+    Args:
+        instance: Handout instance being deleted
+    """
+    for run in instance.event.runs.all():
+        os.remove(instance.get_filepath(run))
+
+
 @receiver(pre_delete, sender=Handout)
 def pre_delete_pdf_handout(sender, instance, **kwargs):
+    handle_handout_pre_delete(instance)
+
+
+def handle_handout_post_save(instance):
+    """Handle handout post-save PDF cleanup.
+
+    Args:
+        instance: Handout instance that was saved
+    """
     for run in instance.event.runs.all():
         os.remove(instance.get_filepath(run))
 
 
 @receiver(post_save, sender=Handout)
 def post_save_pdf_handout(sender, instance, **kwargs):
+    handle_handout_post_save(instance)
+
+
+def handle_handout_template_pre_delete(instance):
+    """Handle handout template pre-delete PDF cleanup.
+
+    Args:
+        instance: HandoutTemplate instance being deleted
+    """
     for run in instance.event.runs.all():
-        os.remove(instance.get_filepath(run))
+        for el in instance.handouts.all():
+            os.remove(el.get_filepath(run))
 
 
 @receiver(pre_delete, sender=HandoutTemplate)
 def pre_delete_pdf_handout_template(sender, instance, **kwargs):
+    handle_handout_template_pre_delete(instance)
+
+
+def handle_handout_template_post_save(instance):
+    """Handle handout template post-save PDF cleanup.
+
+    Args:
+        instance: HandoutTemplate instance that was saved
+    """
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             os.remove(el.get_filepath(run))
@@ -372,9 +410,7 @@ def pre_delete_pdf_handout_template(sender, instance, **kwargs):
 
 @receiver(post_save, sender=HandoutTemplate)
 def post_save_pdf_handout_template(sender, instance, **kwargs):
-    for run in instance.event.runs.all():
-        for el in instance.handouts.all():
-            os.remove(el.get_filepath(run))
+    handle_handout_template_post_save(instance)
 
 
 def safe_remove(path):
@@ -401,28 +437,64 @@ def remove_char_pdf(instance, single=None, runs=None):
         safe_remove(instance.get_relationships_filepath(run))
 
 
+def handle_character_pre_delete(instance):
+    """Handle character pre-delete PDF cleanup.
+
+    Args:
+        instance: Character instance being deleted
+    """
+    remove_run_pdf(instance.event)
+    remove_char_pdf(instance)
+
+
 @receiver(pre_delete, sender=Character)
 def pre_delete_pdf_character(sender, instance, **kwargs):
+    handle_character_pre_delete(instance)
+
+
+def handle_character_post_save(instance):
+    """Handle character post-save PDF cleanup.
+
+    Args:
+        instance: Character instance that was saved
+    """
     remove_run_pdf(instance.event)
     remove_char_pdf(instance)
 
 
 @receiver(post_save, sender=Character)
 def post_save_pdf_character(sender, instance, **kwargs):
-    remove_run_pdf(instance.event)
-    remove_char_pdf(instance)
+    handle_character_post_save(instance)
+
+
+def handle_player_relationship_pre_delete(instance):
+    """Handle player relationship pre-delete PDF cleanup.
+
+    Args:
+        instance: PlayerRelationship instance being deleted
+    """
+    for el in instance.reg.rcrs.all():
+        remove_char_pdf(el.character, instance.reg.run)
 
 
 @receiver(pre_delete, sender=PlayerRelationship)
 def pre_delete_pdf_player_relationship(sender, instance, **kwargs):
+    handle_player_relationship_pre_delete(instance)
+
+
+def handle_player_relationship_post_save(instance):
+    """Handle player relationship post-save PDF cleanup.
+
+    Args:
+        instance: PlayerRelationship instance that was saved
+    """
     for el in instance.reg.rcrs.all():
         remove_char_pdf(el.character, instance.reg.run)
 
 
 @receiver(post_save, sender=PlayerRelationship)
 def post_save_pdf_player_relationship(sender, instance, **kwargs):
-    for el in instance.reg.rcrs.all():
-        remove_char_pdf(el.character, instance.reg.run)
+    handle_player_relationship_post_save(instance)
 
 
 @receiver(pre_delete, sender=Relationship)
@@ -435,17 +507,35 @@ def post_save_pdf_relationship(sender, instance, **kwargs):
     remove_char_pdf(instance.source)
 
 
-@receiver(pre_delete, sender=Faction)
-def pre_delete_pdf_faction(sender, instance, **kwargs):
+def handle_faction_pre_delete(instance):
+    """Handle faction pre-delete PDF cleanup.
+
+    Args:
+        instance: Faction instance being deleted
+    """
     for char in instance.event.characters.all():
         remove_char_pdf(char)
 
 
-@receiver(post_save, sender=Faction)
-def post_save_pdf_faction(sender, instance, **kwargs):
+@receiver(pre_delete, sender=Faction)
+def pre_delete_pdf_faction(sender, instance, **kwargs):
+    handle_faction_pre_delete(instance)
+
+
+def handle_faction_post_save(instance):
+    """Handle faction post-save PDF cleanup.
+
+    Args:
+        instance: Faction instance that was saved
+    """
     runs = instance.event.runs.all()
     for char in instance.characters.all():
         remove_char_pdf(char, runs=runs)
+
+
+@receiver(post_save, sender=Faction)
+def post_save_pdf_faction(sender, instance, **kwargs):
+    handle_faction_post_save(instance)
 
 
 def remove_pdf_assignment_trait(instance):
@@ -463,12 +553,22 @@ def pre_delete_pdf_assignment_trait(sender, instance, **kwargs):
     remove_pdf_assignment_trait(instance)
 
 
-@receiver(post_save, sender=AssignmentTrait)
-def post_save_assignment_trait(sender, instance, created, **kwargs):
+def handle_assignment_trait_post_save(instance, created):
+    """Handle assignment trait post-save PDF cleanup.
+
+    Args:
+        instance: AssignmentTrait instance that was saved
+        created: Boolean indicating if instance was created
+    """
     if not instance.member or not created:
         return
 
     remove_pdf_assignment_trait(instance)
+
+
+@receiver(post_save, sender=AssignmentTrait)
+def post_save_assignment_trait(sender, instance, created, **kwargs):
+    handle_assignment_trait_post_save(instance, created)
 
 
 # ## TASKS

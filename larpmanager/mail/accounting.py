@@ -42,15 +42,12 @@ from larpmanager.models.member import Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-@receiver(post_save, sender=AccountingItemExpense)
-def update_accounting_item_expense_post(sender, instance, created, **kwargs):
+def handle_expense_item_post_save(instance, created):
     """Handle post-save events for expense accounting items.
 
     Args:
-        sender: Model class that sent the signal
         instance: AccountingItemExpense instance that was saved
         created: Boolean indicating if instance was created
-        **kwargs: Additional keyword arguments
     """
     if instance.hide:
         return
@@ -60,6 +57,11 @@ def update_accounting_item_expense_post(sender, instance, created, **kwargs):
             activate(orga.language)
             subj, body = get_expense_mail(instance)
             my_send_mail(subj, body, orga, instance.run)
+
+
+@receiver(post_save, sender=AccountingItemExpense)
+def update_accounting_item_expense_post(sender, instance, created, **kwargs):
+    handle_expense_item_post_save(instance, created)
 
 
 def get_expense_mail(instance):
@@ -140,13 +142,6 @@ def handle_expense_item_approval_notification(expense_item):
 
 @receiver(pre_save, sender=AccountingItemExpense)
 def update_accounting_item_expense_pre(sender, instance, **kwargs):
-    """Handle pre-save events for expense accounting items.
-
-    Args:
-        sender: Model class that sent the signal
-        instance: AccountingItemExpense instance being saved
-        **kwargs: Additional keyword arguments
-    """
     handle_expense_item_approval_notification(instance)
 
 
@@ -197,13 +192,6 @@ def handle_payment_item_pre_save(payment_item):
 
 @receiver(pre_save, sender=AccountingItemPayment)
 def update_accounting_item_payment(sender, instance, **kwargs):
-    """Handle pre-save events for payment accounting items.
-
-    Args:
-        sender: Model class that sent the signal
-        instance: AccountingItemPayment instance being saved
-        **kwargs: Additional keyword arguments
-    """
     handle_payment_item_pre_save(instance)
 
 
@@ -345,14 +333,11 @@ def get_pay_money_email(curr_sym, instance, run):
     return subj, body
 
 
-@receiver(pre_save, sender=AccountingItemOther)
-def update_accounting_item_other(sender, instance, **kwargs):
+def handle_accounting_item_other_pre_save(instance):
     """Handle pre-save events for other accounting items.
 
     Args:
-        sender: Model class that sent the signal
         instance: AccountingItemOther instance being saved
-        **kwargs: Additional keyword arguments
     """
     if instance.hide:
         return
@@ -366,6 +351,11 @@ def update_accounting_item_other(sender, instance, **kwargs):
             notify_credit(credit_name, instance)
         elif instance.oth == OtherChoices.REFUND:
             notify_refund(credit_name, instance)
+
+
+@receiver(pre_save, sender=AccountingItemOther)
+def update_accounting_item_other(sender, instance, **kwargs):
+    handle_accounting_item_other_pre_save(instance)
 
 
 def notify_refund(credit_name, instance):
@@ -475,13 +465,17 @@ def get_token_email(instance, token_name):
     return subj, body
 
 
-@receiver(pre_save, sender=AccountingItemDonation)
-def save_accounting_item_donation(sender, instance, *args, **kwargs):
+def handle_donation_item_pre_save(instance):
+    """Handle pre-save events for donation accounting items.
+
+    Args:
+        instance: AccountingItemDonation instance being saved
+    """
     if instance.hide:
         return
     if instance.pk:
         return
-        # to user
+
     activate(instance.member.language)
     subj = hdr(instance) + _("Donation given")
     body = _(
@@ -491,8 +485,18 @@ def save_accounting_item_donation(sender, instance, *args, **kwargs):
     my_send_mail(subj, body, instance.member, instance)
 
 
-@receiver(post_save, sender=Collection)
-def send_collection_activation_email(sender, instance, created, **kwargs):
+@receiver(pre_save, sender=AccountingItemDonation)
+def save_accounting_item_donation(sender, instance, *args, **kwargs):
+    handle_donation_item_pre_save(instance)
+
+
+def handle_collection_post_save(instance, created):
+    """Handle post-save events for collection instances.
+
+    Args:
+        instance: Collection instance that was saved
+        created: Boolean indicating if instance was created
+    """
     if not created:
         return
 
@@ -511,18 +515,19 @@ def send_collection_activation_email(sender, instance, created, **kwargs):
         % context
     )
     my_send_mail(subj, body, instance.organizer, instance)
-    return
 
 
-@receiver(pre_save, sender=AccountingItemCollection)
-def save_collection_gift(sender, instance, **kwargs):
+@receiver(post_save, sender=Collection)
+def send_collection_activation_email(sender, instance, created, **kwargs):
+    handle_collection_post_save(instance, created)
+
+
+def handle_collection_gift_pre_save(instance):
     """
     Send notification emails when gift collection participation is saved.
 
     Args:
-        sender: Model class that sent the signal
         instance: Collection gift instance
-        **kwargs: Additional signal arguments
     """
     if not instance.pk:
         activate(instance.member.language)
@@ -544,7 +549,11 @@ def save_collection_gift(sender, instance, **kwargs):
             _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience") + "!"
         )
         my_send_mail(subj, body, instance.collection.organizer, instance.collection)
-        return
+
+
+@receiver(pre_save, sender=AccountingItemCollection)
+def save_collection_gift(sender, instance, **kwargs):
+    handle_collection_gift_pre_save(instance)
 
 
 def notify_invoice_check(inv):
