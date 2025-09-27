@@ -87,6 +87,9 @@ def go_to(page, live_server, path):
 
 def go_to_check(page, path):
     page.goto(path)
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
+    page.wait_for_load_state("networkidle")
     ooops_check(page)
 
 
