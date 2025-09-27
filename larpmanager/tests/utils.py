@@ -22,6 +22,7 @@ import io
 import os
 import zipfile
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import urlparse
 
 import pandas as pd
@@ -208,3 +209,10 @@ def add_links_to_visit(links_to_visit, page, visited_links):
 def check_feature(page, name):
     block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
     block.get_by_role("checkbox").check()
+
+
+def load_image(page, element_id):
+    image_path = Path(__file__).parent / "image.jpg"
+    inp = page.locator(element_id)
+    inp.wait_for(state="attached")
+    inp.set_input_files(str(image_path))

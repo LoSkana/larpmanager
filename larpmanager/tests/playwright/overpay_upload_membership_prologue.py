@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga
+from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga
 
 pytestmark = pytest.mark.e2e
 
@@ -196,9 +195,8 @@ def upload_membership(page, live_server):
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_request").set_input_files(str(image_path))
-    page.locator("#id_document").set_input_files(str(image_path))
+    load_image(page, "#id_request")
+    load_image(page, "#id_document")
     page.locator("#id_date").fill("2024-06-11")
     page.wait_for_timeout(2000)
     page.locator("#id_date").click()
@@ -241,8 +239,7 @@ def upload_membership_fee(page, live_server):
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     page.get_by_role("button", name="Confirm").click()
 
     # check

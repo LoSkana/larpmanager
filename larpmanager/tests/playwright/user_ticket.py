@@ -18,11 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from pathlib import Path
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_user, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -49,8 +48,7 @@ def test_user_ticket(pw_page):
     page.get_by_role("textbox", name="Request").click()
     page.get_by_role("textbox", name="Request").fill("sadsadsadsad")
     page.get_by_role("button", name="Screenshot").click()
-    image_path = Path(__file__).parent / "image.jpg"
-    page.get_by_role("button", name="Screenshot").set_input_files(str(image_path))
+    load_image(page, "#id_screenshot")
     submit_confirm(page)
 
     login_user(page, live_server)
@@ -70,7 +68,7 @@ def test_user_ticket(pw_page):
     page.get_by_role("textbox", name="Email").press("Tab")
     page.get_by_role("textbox", name="Request").fill("asdasdas")
     page.get_by_role("button", name="Screenshot").click()
-    page.get_by_role("button", name="Screenshot").set_input_files(str(image_path))
+    load_image(page, "#id_screenshot")
     submit_confirm(page)
 
     # change email
