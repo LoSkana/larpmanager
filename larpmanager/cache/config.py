@@ -146,7 +146,7 @@ def get_element_config(element, name, def_value):
     if not hasattr(element, "aux_configs"):
         element.aux_configs = get_configs(element)
 
-    evaluate_config(element, name, def_value)
+    return evaluate_config(element, name, def_value)
 
 
 def get_assoc_config(assoc_id, name, def_value=None, holder=None):
@@ -156,7 +156,7 @@ def get_assoc_config(assoc_id, name, def_value=None, holder=None):
     if not hasattr(holder, "aux_configs"):
         holder.aux_configs = get_element_configs(assoc_id, "association")
 
-    evaluate_config(holder, name, def_value)
+    return evaluate_config(holder, name, def_value)
 
 
 def evaluate_config(element, name, def_value):
