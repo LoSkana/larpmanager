@@ -150,16 +150,25 @@ def check_download(page, link: str) -> None:
 
 
 def fill_tinymce(page, iframe_id, text):
-    page.wait_for_timeout(2000)
+    # Wait for the toggle button to be available and click if present
     locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
     if locator.count() > 0:
+        locator.wait_for(state="visible")
         locator.click()
-    page.wait_for_timeout(2000)
+        # Wait for the iframe to appear after toggling
+        page.locator(f"iframe#{iframe_id}_ifr").wait_for(state="visible")
+
+    # Wait for iframe and editor to be ready
     frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
     editor.wait_for(state="visible")
+
+    # Clear existing content and fill with new text
+    editor.clear()
     editor.fill(text)
-    page.wait_for_timeout(2000)
+
+    # Wait for the content to be actually set
+    editor.wait_for(lambda: editor.inner_text().strip() != "", timeout=5000)
 
 
 def _checkboxes(page, check=True):
@@ -182,6 +191,9 @@ def submit_confirm(page):
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
+    # Wait for the form submission to complete
+    page.wait_for_load_state("networkidle")
+    ooops_check(page)
 
 
 def add_links_to_visit(links_to_visit, page, visited_links):
