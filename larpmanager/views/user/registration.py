@@ -53,7 +53,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import AssocTextType
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.event import (
     Event,
     EventTextType,
@@ -105,6 +105,9 @@ def pre_register(request, s=""):
     ctx["choices"] = []
     ctx["already"] = []
     ctx["member"] = request.user.member
+
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
 
     ch = {}
     que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])

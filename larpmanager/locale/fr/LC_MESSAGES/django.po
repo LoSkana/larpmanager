@@ -314,6 +314,9 @@ msgstr "Événement"
 msgid "Field"
 msgstr "Champ d'application"
 
+msgid "Fifth"
+msgstr "Cinquième"
+
 msgid "First"
 msgstr "Première"
 
@@ -408,6 +411,9 @@ msgstr "Impôts"
 msgid "Texts"
 msgstr "Textes"
 
+msgid "Third"
+msgstr "Troisièmement"
+
 msgid "Title"
 msgstr "Titre"
 
@@ -501,6 +507,9 @@ msgstr "Remplisseur"
 msgid "Footer"
 msgstr "Pied de page"
 
+msgid "Fourth"
+msgstr "Quatrième"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +596,9 @@ msgstr "Sécurité"
 
 msgid "Search"
 msgstr "Recherche"
+
+msgid "Second"
+msgstr "Deuxième"
 
 msgid "Secret"
 msgstr "Secret"
@@ -2860,6 +2872,9 @@ msgstr "Désactiver l'affectation"
 
 msgid "Electronic invoice"
 msgstr "Facture électronique"
+
+msgid "Enable preferences"
+msgstr "Activer les préférences"
 
 msgid "Go to the form for"
 msgstr "Accéder au formulaire pour"
@@ -7623,6 +7638,13 @@ msgid ""
 msgstr ""
 "Si cette option est cochée, elle permet aux participants de personnaliser "
 "l'image de profil de leur personnage"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Si cette case est cochée, les participants donnent une valeur de préférence "
+"lorsqu'ils ajoutent des pré-inscriptions"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "

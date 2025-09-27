@@ -314,6 +314,9 @@ msgstr "Událost"
 msgid "Field"
 msgstr "Pole"
 
+msgid "Fifth"
+msgstr "Pátý"
+
 msgid "First"
 msgstr "První"
 
@@ -408,6 +411,9 @@ msgstr "Daně"
 msgid "Texts"
 msgstr "Texty"
 
+msgid "Third"
+msgstr "Třetí"
+
 msgid "Title"
 msgstr "Název"
 
@@ -501,6 +507,9 @@ msgstr "Výplň"
 msgid "Footer"
 msgstr "Zápatí"
 
+msgid "Fourth"
+msgstr "Čtvrtý"
+
 msgid "Gender"
 msgstr "Žánr"
 
@@ -587,6 +596,9 @@ msgstr "Bezpečnost"
 
 msgid "Search"
 msgstr "Vyhledávání"
+
+msgid "Second"
+msgstr "Druhý"
 
 msgid "Secret"
 msgstr "Tajné"
@@ -2860,6 +2872,9 @@ msgstr "Zakázat přiřazení"
 
 msgid "Electronic invoice"
 msgstr "Elektronická faktura"
+
+msgid "Enable preferences"
+msgstr "Povolení předvoleb"
 
 msgid "Go to the form for"
 msgstr "Přejděte na formulář pro"
@@ -7290,6 +7305,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje účastníkům přizpůsobit si profilový obrázek "
 "své postavy"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Pokud je zaškrtnuto, účastníci při přidávání předběžných registrací uvedou "
+"hodnotu preference"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "

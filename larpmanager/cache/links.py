@@ -53,7 +53,7 @@ def cache_event_links(request):
 
     ctx = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
     if ctx:
-        logger.debug(f"Retrieved cached event links for user {request.user.id}, assoc {request.assoc['id']}")
+        # logger.debug(f"Retrieved cached event links for user {request.user.id}, assoc {request.assoc['id']}")
         return ctx
 
     ctx = {}

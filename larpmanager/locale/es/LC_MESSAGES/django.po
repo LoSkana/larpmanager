@@ -314,6 +314,9 @@ msgstr "Evento"
 msgid "Field"
 msgstr "Campo"
 
+msgid "Fifth"
+msgstr "Quinta"
+
 msgid "First"
 msgstr "Primero"
 
@@ -408,6 +411,9 @@ msgstr "Impuestos"
 msgid "Texts"
 msgstr "Textos"
 
+msgid "Third"
+msgstr "Tercera"
+
 msgid "Title"
 msgstr "Título"
 
@@ -501,6 +507,9 @@ msgstr "Relleno"
 msgid "Footer"
 msgstr "Pie de página"
 
+msgid "Fourth"
+msgstr "Cuarto"
+
 msgid "Gender"
 msgstr "Género"
 
@@ -587,6 +596,9 @@ msgstr "Seguridad"
 
 msgid "Search"
 msgstr "Buscar en"
+
+msgid "Second"
+msgstr "Segundo"
 
 msgid "Secret"
 msgstr "Secreto"
@@ -2860,6 +2872,9 @@ msgstr "Desactivar asignación"
 
 msgid "Electronic invoice"
 msgstr "Factura electrónica"
+
+msgid "Enable preferences"
+msgstr "Activar preferencias"
 
 msgid "Go to the form for"
 msgstr "Ir al formulario de"
@@ -7469,6 +7484,13 @@ msgid ""
 msgstr ""
 "Si está marcada, permite a los participantes personalizar la foto de perfil "
 "de sus personajes"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Si está marcada, los participantes dan un valor de preferencia al añadir "
+"preinscripciones"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "

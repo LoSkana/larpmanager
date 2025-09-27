@@ -314,6 +314,9 @@ msgstr "Wydarzenie"
 msgid "Field"
 msgstr "Pole"
 
+msgid "Fifth"
+msgstr "Piąty"
+
 msgid "First"
 msgstr "Pierwszy"
 
@@ -408,6 +411,9 @@ msgstr "Podatki"
 msgid "Texts"
 msgstr "Teksty"
 
+msgid "Third"
+msgstr "Trzeci"
+
 msgid "Title"
 msgstr "Tytuł"
 
@@ -501,6 +507,9 @@ msgstr "Wypełniacz"
 msgid "Footer"
 msgstr "Stopka"
 
+msgid "Fourth"
+msgstr "Czwarty"
+
 msgid "Gender"
 msgstr "Płeć"
 
@@ -587,6 +596,9 @@ msgstr "Bezpieczeństwo"
 
 msgid "Search"
 msgstr "Wyszukiwanie"
+
+msgid "Second"
+msgstr "Drugi"
 
 msgid "Secret"
 msgstr "Sekret"
@@ -2860,6 +2872,9 @@ msgstr "Wyłącz przypisanie"
 
 msgid "Electronic invoice"
 msgstr "Faktura elektroniczna"
+
+msgid "Enable preferences"
+msgstr "Włącz preferencje"
 
 msgid "Go to the form for"
 msgstr "Przejdź do formularza dla"
@@ -7406,6 +7421,13 @@ msgid ""
 msgstr ""
 "Jeśli opcja ta jest zaznaczona, umożliwia uczestnikom dostosowanie zdjęcia "
 "profilowego ich postaci"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Jeśli opcja jest zaznaczona, uczestnicy podają wartość preferencji podczas "
+"dodawania rejestracji wstępnych"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "

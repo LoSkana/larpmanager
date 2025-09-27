@@ -314,6 +314,9 @@ msgstr "Evenement"
 msgid "Field"
 msgstr "Veld"
 
+msgid "Fifth"
+msgstr "Vijfde"
+
 msgid "First"
 msgstr "Eerste"
 
@@ -408,6 +411,9 @@ msgstr "Belastingen"
 msgid "Texts"
 msgstr "Teksten"
 
+msgid "Third"
+msgstr "Derde"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -501,6 +507,9 @@ msgstr "Vulstof"
 msgid "Footer"
 msgstr "Voettekst"
 
+msgid "Fourth"
+msgstr "Vierde"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +596,9 @@ msgstr "Veiligheid"
 
 msgid "Search"
 msgstr "Zoek op"
+
+msgid "Second"
+msgstr "Tweede"
 
 msgid "Secret"
 msgstr "Geheim"
@@ -2860,6 +2872,9 @@ msgstr "Toekenning uitschakelen"
 
 msgid "Electronic invoice"
 msgstr "Elektronische factuur"
+
+msgid "Enable preferences"
+msgstr "Voorkeuren inschakelen"
 
 msgid "Go to the form for"
 msgstr "Ga naar het formulier voor"
@@ -7510,6 +7525,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, kunnen deelnemers de profielfoto van hun "
 "personage aanpassen"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Indien aangevinkt, geven deelnemers een voorkeurswaarde op bij het toevoegen"
+" van preregistraties"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "

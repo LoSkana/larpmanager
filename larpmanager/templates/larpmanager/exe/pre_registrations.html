@@ -11,11 +11,15 @@
         <thead>
             <tr>
                 <td>{% trans "Name" %}</td>
-                <td>Prima scelta</td>
-                <td>Seconda scelta</td>
-                <td>Terza scelta</td>
-                <td>Quarta scelta</td>
-                <td>Quinta scelta</td>
+                {% if preferences %}
+                    <td>{% trans "First" %}</td>
+                    <td>{% trans "Second" %}</td>
+                    <td>{% trans "Third" %}</td>
+                    <td>{% trans "Fourth" %}</td>
+                    <td>{% trans "Fifth" %}</td>
+                {% else %}
+                    <td>{% trans "Total" %}</td>
+                {% endif %}
             </tr>
         </thead>
         {% for el in list %}
@@ -23,7 +27,11 @@
                 <td>
                     <a href="{% url 'orga_pre_registrations' el.slug %}">{{ el }}</a>
                 </td>
-                {% for k, v in el.count.items %}<td>{{ v }}</td>{% endfor %}
+                {% if preferences %}
+                    {% for k, v in el.count.items %}<td>{{ v }}</td>{% endfor %}
+                {% else %}
+                    <td>{{ el.total }}</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>

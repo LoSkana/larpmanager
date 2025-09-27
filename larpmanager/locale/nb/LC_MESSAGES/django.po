@@ -314,6 +314,9 @@ msgstr "Arrangement"
 msgid "Field"
 msgstr "Felt"
 
+msgid "Fifth"
+msgstr "Femte"
+
 msgid "First"
 msgstr "Første"
 
@@ -408,6 +411,9 @@ msgstr "Skatter og avgifter"
 msgid "Texts"
 msgstr "Tekster"
 
+msgid "Third"
+msgstr "Tredje"
+
 msgid "Title"
 msgstr "Tittel"
 
@@ -501,6 +507,9 @@ msgstr "Fyllstoff"
 msgid "Footer"
 msgstr "Bunntekst"
 
+msgid "Fourth"
+msgstr "Fjerde"
+
 msgid "Gender"
 msgstr "Sjanger"
 
@@ -587,6 +596,9 @@ msgstr "Sikkerhet"
 
 msgid "Search"
 msgstr "Søk"
+
+msgid "Second"
+msgstr "Andre"
 
 msgid "Secret"
 msgstr "Hemmelig"
@@ -2860,6 +2872,9 @@ msgstr "Deaktiver tildeling"
 
 msgid "Electronic invoice"
 msgstr "Elektronisk faktura"
+
+msgid "Enable preferences"
+msgstr "Aktiver innstillinger"
 
 msgid "Go to the form for"
 msgstr "Gå til skjemaet for"
@@ -7365,6 +7380,13 @@ msgid ""
 "picture"
 msgstr ""
 "Hvis avkrysset, kan deltakerne tilpasse profilbildet til karakterene sine"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Hvis avkrysset, oppgir deltakerne en preferanseverdi når de legger til "
+"forhåndsregistreringer"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
