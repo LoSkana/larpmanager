@@ -83,12 +83,16 @@ def get_assoc_permission_feature(slug):
 
 @receiver(post_save, sender=AssocPermission)
 def post_save_assoc_permission_reset(sender, instance, **kwargs):
+    reset_assoc_permission(instance)
+
+
+def reset_assoc_permission(instance):
     cache.delete(assoc_permission_feature_key(instance.slug))
 
 
 @receiver(post_delete, sender=AssocPermission)
 def post_delete_assoc_permission_reset(sender, instance, **kwargs):
-    cache.delete(assoc_permission_feature_key(instance.slug))
+    reset_assoc_permission(instance)
 
 
 def event_permission_feature_key(slug):
@@ -131,12 +135,16 @@ def get_event_permission_feature(slug):
 
 @receiver(post_save, sender=EventPermission)
 def post_save_event_permission_reset(sender, instance, **kwargs):
+    reset_event_permission(instance)
+
+
+def reset_event_permission(instance):
     cache.delete(event_permission_feature_key(instance.slug))
 
 
 @receiver(post_delete, sender=EventPermission)
 def post_delete_event_permission_reset(sender, instance, **kwargs):
-    cache.delete(event_permission_feature_key(instance.slug))
+    reset_event_permission(instance)
 
 
 def index_permission_key(typ):

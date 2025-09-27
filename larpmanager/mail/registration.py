@@ -192,16 +192,13 @@ def registration_payments(instance, currency):
     )
 
 
-@receiver(post_save, sender=RegistrationCharacterRel)
-def update_registration_character_rel_post(sender, instance, created, **kwargs):
+def handle_registration_character_rel_post_save(instance, created):
     """
     Send character assignment email when registration-character relation is created.
 
     Args:
-        sender: Model class that sent the signal
         instance: RegistrationCharacterRel instance
         created: Whether the instance was created
-        **kwargs: Additional keyword arguments
     """
     if not created:
         return
@@ -237,6 +234,11 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
     my_send_mail(subj, body, instance.reg.member, instance.reg.run)
 
 
+@receiver(post_save, sender=RegistrationCharacterRel)
+def update_registration_character_rel_post(sender, instance, created, **kwargs):
+    handle_registration_character_rel_post_save(instance, created)
+
+
 def update_registration_cancellation(instance):
     if is_reg_provisional(instance):
         return
@@ -259,8 +261,12 @@ def update_registration_cancellation(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-@receiver(pre_save, sender=Registration)
-def update_registration(sender, instance, **kwargs):
+def handle_registration_pre_save(instance):
+    """Handle pre-save events for registration instances.
+
+    Args:
+        instance: Registration instance being saved
+    """
     if instance.run and instance.run.development == DevelopStatus.DONE:
         return
 
@@ -276,8 +282,17 @@ def update_registration(sender, instance, **kwargs):
         update_registration_cancellation(instance)
 
 
-@receiver(pre_delete, sender=Registration)
-def delete_registration(sender, instance, *args, **kwargs):
+@receiver(pre_save, sender=Registration)
+def update_registration(sender, instance, **kwargs):
+    handle_registration_pre_save(instance)
+
+
+def handle_registration_pre_delete(instance):
+    """Handle registration deletion notifications.
+
+    Args:
+        instance: Registration instance being deleted
+    """
     if instance.cancellation_date:
         return
 
@@ -301,11 +316,24 @@ def delete_registration(sender, instance, *args, **kwargs):
             my_send_mail(subj, body, orga, instance.run)
 
 
-@receiver(pre_save, sender=PreRegistration)
-def update_pre_registration(sender, instance, **kwargs):
-    # Send email when the profile is created the first time
+@receiver(pre_delete, sender=Registration)
+def delete_registration(sender, instance, *args, **kwargs):
+    handle_registration_pre_delete(instance)
+
+
+def handle_pre_registration_pre_save(instance):
+    """Handle pre-registration pre-save notifications.
+
+    Args:
+        instance: PreRegistration instance being saved
+    """
     context = {"event": instance.event}
     if not instance.pk:
         subj = hdr(instance.event) + _("Pre-registration at %(event)s") % context
         body = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>") % context + "!"
         my_send_mail(subj, body, instance.member, instance.event)
+
+
+@receiver(pre_save, sender=PreRegistration)
+def update_pre_registration(sender, instance, **kwargs):
+    handle_pre_registration_pre_save(instance)
