@@ -276,8 +276,6 @@ def installment_check(reg, alert, assoc_id):
 
         reg.quota = max(tot - reg.tot_payed, 0)
 
-        logger.debug(f"Registration {reg.id} installment quota calculated: {reg.quota}")
-
         if reg.quota <= 0:
             continue
 
@@ -534,13 +532,11 @@ def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
 
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_registration_ticket(sender, instance, created, **kwargs):
-    logger.debug(f"RegistrationTicket saved: {instance} at {datetime.now()}")
     check_reg_events(instance.event)
 
 
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender, instance, created, **kwargs):
-    logger.debug(f"RegistrationOption saved: {instance} at {datetime.now()}")
     check_reg_events(instance.question.event)
 
 

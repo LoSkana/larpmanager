@@ -287,4 +287,4 @@ def check_user_fee(live_server, page):
 
 
 def get_path(file):
-    return Path(__file__).parent / "resources" / "test_upload" / file
+    return Path(__file__).parent.parent / "resources" / "test_upload" / file
