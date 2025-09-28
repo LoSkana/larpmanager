@@ -125,6 +125,7 @@ def relationships(live_server, page):
     option = page.get_by_role("option", name="#1 Test Character")
     option.wait_for(state="visible")
     option.click()
+    page.wait_for_timeout(5000)
     fill_tinymce(page, "rel_1_direct", "ciaaoooooo")
     submit_confirm(page)
 
@@ -171,7 +172,7 @@ def plots(live_server, page):
     option = page.get_by_role("option", name="#1 Test Character")
     option.wait_for(state="visible")
     option.click()
-
+    page.wait_for_timeout(5000)
     fill_tinymce(page, "ch_1", "prova")
 
     submit_confirm(page)
