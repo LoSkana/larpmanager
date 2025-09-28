@@ -25,12 +25,14 @@ import pytest
 
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.form import BaseQuestionType
+from larpmanager.models.form import (
+    BaseQuestionType,
+    RegistrationOption,
+    RegistrationQuestion,
+)
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
-    RegistrationOption,
-    RegistrationQuestion,
     RegistrationTicket,
     TicketTier,
 )

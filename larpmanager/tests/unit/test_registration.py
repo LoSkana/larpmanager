@@ -22,25 +22,28 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 
 import pytest
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, models
 
 from larpmanager.models.association import Association
-from larpmanager.models.character import Character
 from larpmanager.models.event import DevelopStatus, Event, Run
-from larpmanager.models.form import BaseQuestionType
-from larpmanager.models.member import Member, Membership, MembershipStatus
-from larpmanager.models.registration import (
-    Registration,
+from larpmanager.models.form import (
+    BaseQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
-    RegistrationInstallment,
     RegistrationOption,
     RegistrationQuestion,
+)
+from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.registration import (
+    Registration,
+    RegistrationInstallment,
     RegistrationSurcharge,
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.models.writing import Character
 
 
 @pytest.mark.django_db
@@ -681,11 +684,23 @@ class TestRegistrationQueries:
             end=date.today() + timedelta(days=32),
         )
 
-        member1 = Member.objects.create(username="member1", email="member1@test.com")
+        user1 = User.objects.create_user(username="member1", email="member1@test.com")
+        member1 = user1.member
+        member1.name = "Member"
+        member1.surname = "One"
+        member1.save()
 
-        member2 = Member.objects.create(username="member2", email="member2@test.com")
+        user2 = User.objects.create_user(username="member2", email="member2@test.com")
+        member2 = user2.member
+        member2.name = "Member"
+        member2.surname = "Two"
+        member2.save()
 
-        member3 = Member.objects.create(username="member3", email="member3@test.com")
+        user3 = User.objects.create_user(username="member3", email="member3@test.com")
+        member3 = user3.member
+        member3.name = "Member"
+        member3.surname = "Three"
+        member3.save()
 
         # Create registrations with different payment statuses
         unpaid_reg = Registration.objects.create(
@@ -756,12 +771,17 @@ def association():
 
 @pytest.fixture
 def member():
-    return Member.objects.create(username="testuser", email="test@example.com", first_name="Test", last_name="User")
+    user = User.objects.create_user(username="testuser", email="test@example.com", first_name="Test", last_name="User")
+    member = user.member
+    member.name = "Test"
+    member.surname = "User"
+    member.save()
+    return member
 
 
 @pytest.fixture
 def event(association):
-    return Event.objects.create(name="Test Event", assoc=association, number=1)
+    return Event.objects.create(name="Test Event", assoc=association)
 
 
 @pytest.fixture
@@ -769,7 +789,6 @@ def run(event):
     return Run.objects.create(
         event=event,
         number=1,
-        name="Test Run",
         start=date.today() + timedelta(days=30),
         end=date.today() + timedelta(days=32),
     )

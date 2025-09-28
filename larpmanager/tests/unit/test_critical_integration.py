@@ -23,6 +23,7 @@ from decimal import Decimal
 from unittest.mock import Mock, patch
 
 import pytest
+from django.contrib.auth.models import User
 
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -38,14 +39,16 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import DevelopStatus, Event, Run
-from larpmanager.models.form import BaseQuestionType
-from larpmanager.models.member import Member, Membership, MembershipStatus
-from larpmanager.models.registration import (
-    Registration,
+from larpmanager.models.form import (
+    BaseQuestionType,
     RegistrationChoice,
-    RegistrationInstallment,
     RegistrationOption,
     RegistrationQuestion,
+)
+from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.registration import (
+    Registration,
+    RegistrationInstallment,
     RegistrationSurcharge,
     RegistrationTicket,
     TicketTier,
@@ -293,7 +296,11 @@ class TestCompleteRegistrationToPaymentWorkflow:
         )
 
         # Step 3: Create first member who gets the standard ticket
-        first_member = Member.objects.create(username="first_member", email="first@test.com")
+        first_user = User.objects.create_user(username="first_member", email="first@test.com")
+        first_member = first_user.member
+        first_member.name = "First"
+        first_member.surname = "Member"
+        first_member.save()
 
         first_registration = Registration.objects.create(
             member=first_member,
@@ -308,7 +315,11 @@ class TestCompleteRegistrationToPaymentWorkflow:
         standard_ticket.save()
 
         # Step 4: Create second member on waitlist
-        second_member = Member.objects.create(username="second_member", email="second@test.com")
+        second_user = User.objects.create_user(username="second_member", email="second@test.com")
+        second_member = second_user.member
+        second_member.name = "Second"
+        second_member.surname = "Member"
+        second_member.save()
 
         waitlist_registration = Registration.objects.create(
             member=second_member, run=run, ticket=waitlist_ticket, tot_iscr=Decimal("0.00"), tot_payed=Decimal("0.00")
@@ -606,6 +617,11 @@ def association():
 
 @pytest.fixture
 def member():
-    return Member.objects.create(
+    user = User.objects.create_user(
         username="integration_user", email="integration@test.com", first_name="Integration", last_name="Test"
     )
+    member = user.member
+    member.name = "Integration"
+    member.surname = "Test"
+    member.save()
+    return member

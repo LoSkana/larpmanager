@@ -26,19 +26,21 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import Client, RequestFactory
 
 from larpmanager.models.association import Association
-from larpmanager.models.character import Character
 from larpmanager.models.event import Event, Run
-from larpmanager.models.form import BaseQuestionType
-from larpmanager.models.member import Member
-from larpmanager.models.registration import (
-    Registration,
+from larpmanager.models.form import (
+    BaseQuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+)
+from larpmanager.models.member import Member
+from larpmanager.models.registration import (
+    Registration,
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.models.writing import Character
 
 
 @pytest.mark.django_db

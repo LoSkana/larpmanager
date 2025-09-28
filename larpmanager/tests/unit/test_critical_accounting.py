@@ -23,6 +23,7 @@ from decimal import Decimal
 from unittest.mock import Mock, patch
 
 import pytest
+from django.contrib.auth.models import User
 from django.db import transaction
 
 from larpmanager.models.accounting import (
@@ -39,14 +40,16 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.form import BaseQuestionType
+from larpmanager.models.form import (
+    BaseQuestionType,
+    RegistrationChoice,
+    RegistrationOption,
+    RegistrationQuestion,
+)
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
-    RegistrationChoice,
     RegistrationInstallment,
-    RegistrationOption,
-    RegistrationQuestion,
     RegistrationSurcharge,
     RegistrationTicket,
     TicketTier,
@@ -728,7 +731,8 @@ def association():
 
 @pytest.fixture
 def member():
-    return Member.objects.create(username="testuser", email="test@example.com", first_name="Test", last_name="User")
+    user = User.objects.create_user(username="testuser", email="test@example.com", first_name="Test", last_name="User")
+    return Member.objects.create(user=user, name="Test", surname="User", email="test@example.com")
 
 
 @pytest.fixture
