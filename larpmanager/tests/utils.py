@@ -153,13 +153,13 @@ def check_download(page, link: str) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text):
+def fill_tinymce(page, iframe_id, text, show=True):
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_load_state("networkidle")
-    locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
-    if locator.count() > 0:
+    if show:
+        locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
         expect(locator).to_be_visible(timeout=5000)
+        locator.wait_for(state="visible")
         locator.click()
     frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
