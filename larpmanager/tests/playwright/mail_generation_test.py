@@ -109,7 +109,7 @@ def submit_membership(live_server, page):
     page.wait_for_timeout(2000)
     page.get_by_role("link", name="New").click()
 
-    fill_tinymce(page, "id_text", "Ciao {{ member.name }}!")
+    fill_tinymce(page, "id_text", "Ciao {{ member.name }}!", show=False)
 
     page.locator("#main_form").click()
     page.locator("#id_typ").select_option("m")

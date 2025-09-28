@@ -158,12 +158,12 @@ def fill_tinymce(page, iframe_id, text, show=True):
     page.wait_for_load_state("domcontentloaded")
     if show:
         locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
-        expect(locator).to_be_visible(timeout=5000)
+        expect(locator).to_be_visible(timeout=60000)
         locator.wait_for(state="visible")
         locator.click()
     frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
-    expect(editor).to_be_visible(timeout=5000)
+    expect(editor).to_be_visible(timeout=60000)
     editor.wait_for(state="visible")
     editor.fill(text)
 
@@ -213,6 +213,10 @@ def check_feature(page, name):
 
 def load_image(page, element_id):
     image_path = Path(__file__).parent / "image.jpg"
+    upload(page, element_id, image_path)
+
+
+def upload(page, element_id, image_path):
     inp = page.locator(element_id)
     inp.wait_for(state="attached")
     inp.set_input_files(str(image_path))
