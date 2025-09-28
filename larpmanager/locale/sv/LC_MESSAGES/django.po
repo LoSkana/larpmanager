@@ -314,6 +314,9 @@ msgstr "Händelse"
 msgid "Field"
 msgstr "Fält"
 
+msgid "Fifth"
+msgstr "Femte"
+
 msgid "First"
 msgstr "Första"
 
@@ -408,6 +411,9 @@ msgstr "Skatter"
 msgid "Texts"
 msgstr "Texter"
 
+msgid "Third"
+msgstr "Tredje"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -501,6 +507,9 @@ msgstr "Fyllmedel"
 msgid "Footer"
 msgstr "Sidfot"
 
+msgid "Fourth"
+msgstr "Fjärde"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +596,9 @@ msgstr "Säkerhet"
 
 msgid "Search"
 msgstr "Sök"
+
+msgid "Second"
+msgstr "Andra"
 
 msgid "Secret"
 msgstr "Hemlighet"
@@ -2860,6 +2872,9 @@ msgstr "Inaktivera tilldelning"
 
 msgid "Electronic invoice"
 msgstr "Elektronisk faktura"
+
+msgid "Enable preferences"
+msgstr "Aktivera inställningar"
 
 msgid "Go to the form for"
 msgstr "Gå till formuläret för"
@@ -7384,6 +7399,13 @@ msgid ""
 "picture"
 msgstr ""
 "Om markerad, tillåter deltagarna att anpassa sina karaktärers profilbild"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Om markerat, anger deltagarna ett preferensvärde när de lägger till "
+"förregistreringar"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "

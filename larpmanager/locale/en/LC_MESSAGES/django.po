@@ -367,6 +367,17 @@ msgstr ""
 msgid "Password of account"
 msgstr ""
 
+msgid "Pre-registration"
+msgstr ""
+
+msgid "Enable preferences"
+msgstr ""
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+
 msgid "Easter egg"
 msgstr ""
 
@@ -960,9 +971,6 @@ msgstr ""
 
 msgid ""
 "If checked, allows a option to be visible only if other options are selected"
-msgstr ""
-
-msgid "Pre-registration"
 msgstr ""
 
 msgid "If checked, makes pre-registration for this event available"
@@ -5099,6 +5107,21 @@ msgstr ""
 msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 
+msgid "First"
+msgstr ""
+
+msgid "Second"
+msgstr ""
+
+msgid "Third"
+msgstr ""
+
+msgid "Fourth"
+msgstr ""
+
+msgid "Fifth"
+msgstr ""
+
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
@@ -5417,9 +5440,6 @@ msgid "Register to"
 msgstr ""
 
 msgid "May the best win"
-msgstr ""
-
-msgid "First"
 msgstr ""
 
 msgid "Prev"

@@ -116,7 +116,7 @@ def ability(live_server, page):
     page.locator("#id_name").fill("sword1")
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("1")
-    fill_tinymce(page, "id_descr", "sdsfdsfds")
+    fill_tinymce(page, "id_descr", "sdsfdsfds", False)
     submit_confirm(page)
 
     page.get_by_role("link", name="New").click()

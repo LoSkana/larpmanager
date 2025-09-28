@@ -19,12 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -86,8 +85,7 @@ def help_questions(live_server, page):
     page.get_by_role("link", name="Need help?").click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("please help me")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_attachment").set_input_files(str(image_path))
+    load_image(page, "#id_attachment")
     page.get_by_label("Event").select_option("1")
     submit_confirm(page)
 

@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -115,8 +114,7 @@ def add_exe(page, live_server):
     page.locator("#id_value").fill("10")
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("babe")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     page.get_by_role("cell", name="--------- Indicate the").click()
     page.locator("#id_exp").select_option("a")
     submit_confirm(page)
@@ -128,7 +126,7 @@ def add_exe(page, live_server):
     page.get_by_role("option", name="Test Larp").click()
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("bibi")
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     page.locator("#id_exp").select_option("c")
     submit_confirm(page)
 
@@ -142,7 +140,7 @@ def add_exe(page, live_server):
     page.get_by_role("option", name="Test Larp").click()
     page.get_by_role("combobox", name="×Test Larp").press("Tab")
     page.locator("#id_descr").fill("ggg")
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
@@ -150,7 +148,7 @@ def add_exe(page, live_server):
     page.locator("#id_value").press("Tab")
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("sdfs")
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     submit_confirm(page)
 
 
@@ -161,8 +159,7 @@ def add_orga(page, live_server):
     page.locator("#id_value").fill("13")
     page.locator("#id_value").press("Tab")
     page.locator("#id_descr").fill("asdsada")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     submit_confirm(page)
     expect(page.locator('[id="\\33 "]')).to_contain_text("13.00")
     expect(page.locator('[id="\\31 "]')).to_contain_text("50.00")
@@ -175,7 +172,7 @@ def add_orga(page, live_server):
     page.locator("#id_value").fill("47")
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("asdsad")
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     page.locator("#id_exp").select_option("e")
     submit_confirm(page)
 
