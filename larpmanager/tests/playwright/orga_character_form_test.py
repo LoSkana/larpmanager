@@ -165,6 +165,7 @@ def check_first_char(page, live_server):
     submit_confirm(page)
     page.wait_for_timeout(2000)
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.wait_for_timeout(2000)
     expect(page.locator("#id_q4")).to_have_value("cccccccccc")
     expect(page.get_by_text("dddddddddd")).to_have_value("dddddddddd")
     expect(page.locator("#id_q6")).to_have_value("2")

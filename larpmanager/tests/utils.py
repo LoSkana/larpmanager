@@ -153,23 +153,35 @@ def check_download(page, link: str) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show=True):
+def fill_tinymce(page, iframe_id, text, show=True, timeout=10000):
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_load_state("networkidle")
+
     if show:
-        locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
-        locator.scroll_into_view_if_needed()
-        locator.wait_for(state="visible", timeout=5000)
-        locator.click()
-        page.wait_for_load_state("load")
-        page.wait_for_load_state("domcontentloaded")
-        page.wait_for_load_state("networkidle")
-    frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
-    editor = frame_locator.locator("body#tinymce")
-    editor.scroll_into_view_if_needed()
-    expect(editor).to_be_visible(timeout=5000)
-    editor.fill(text)
+        show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
+        page.wait_for_selector(show_link_selector, timeout=timeout)
+        show_link = page.locator(show_link_selector)
+        show_link.wait_for(state="attached", timeout=timeout)
+        show_link.scroll_into_view_if_needed()
+        show_link.click()
+
+    # Wait for TinyMCE to initialize the editor instance
+    page.wait_for_function(
+        """(id) => window.tinymce && tinymce.get(id) && tinymce.get(id).initialized === true""",
+        arg=iframe_id,
+        timeout=timeout,
+    )
+
+    # Set content via TinyMCE API and mark dirty/change
+    page.evaluate(
+        """([id, html]) => {
+            const ed = tinymce.get(id);
+            ed.setContent(html);
+            ed.fire('change');
+            ed.undoManager.add();
+        }""",
+        [iframe_id, text],
+    )
 
 
 def _checkboxes(page, check=True):

@@ -155,6 +155,8 @@ def plots(live_server, page):
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
+    page.wait_for_load_state("networkidle")
+
     page.locator("#id_name").click()
     page.locator("#id_name").fill("testona")
 
