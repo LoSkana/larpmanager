@@ -110,10 +110,22 @@ class TestPreSaveSignals(TestCase):
 
     def test_pre_save_assoc_permission(self):
         """Test AssocPermission numbering on pre_save"""
-        module = FeatureModule.objects.create(name="test_module_assoc_perm", order=1)
-        feature = Feature.objects.create(name="test_feature_assoc_perm", module=module)
+        # Use an existing module or create if none exists
+        module = FeatureModule.objects.first()
+        if not module:
+            module = FeatureModule.objects.create(name="test_module_assoc_perm", order=999)
+        feature, _ = Feature.objects.get_or_create(
+            name="test_feature_assoc_perm",
+            defaults={'module': module, 'order': 999}
+        )
 
-        perm = AssocPermission(feature=feature, assoc=self.assoc)
+        from larpmanager.models.access import PermissionModule
+        permission_module = PermissionModule.objects.first()
+        if not permission_module:
+            permission_module = PermissionModule.objects.create(
+                name="test_permission_module", order=999, icon='test'
+            )
+        perm = AssocPermission(feature=feature, name="test_permission", module=permission_module)
         # Number should be None before saving
         self.assertIsNone(perm.number)
         perm.save()

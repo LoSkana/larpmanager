@@ -44,14 +44,16 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-@pytest.mark.django_db
-class TestRegistrationModel:
+class TestRegistrationModel(BaseTestCase):
     """Test Registration model functionality"""
 
-    def test_registration_creation(self, member, run):
+    def test_registration_creation(self):
         """Test basic registration creation"""
+        member = self.member()
+        run = self.run()
         registration = Registration.objects.create(
             member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"), quotas=1
         )
@@ -70,15 +72,20 @@ class TestRegistrationModel:
         assert db_registration.member == member, "Registration not properly saved to database"
         assert db_registration.run == run, "Run association not properly saved"
 
-    def test_registration_str_representation(self, member, run):
+    def test_registration_str_representation(self):
         """Test string representation of registration"""
+        member = self.member()
+        run = self.run()
         registration = Registration(member=member, run=run, tot_iscr=Decimal("100.00"))
 
-        expected = f"Registration of {member} for {run}"
+        expected = f"{run} - {member}"
         assert str(registration) == expected
 
-    def test_registration_with_ticket(self, member, run, ticket):
+    def test_registration_with_ticket(self):
         """Test registration with ticket"""
+        member = self.member()
+        run = self.run()
+        ticket = self.ticket()
         registration = Registration.objects.create(
             member=member, run=run, ticket=ticket, tot_iscr=ticket.price, tot_payed=Decimal("0.00")
         )
@@ -86,16 +93,18 @@ class TestRegistrationModel:
         assert registration.ticket == ticket
         assert registration.tot_iscr == ticket.price
 
-    def test_registration_cancellation(self, registration):
+    def test_registration_cancellation(self):
         """Test registration cancellation"""
+        registration = self.registration()
         cancellation_date = datetime.now()
         registration.cancellation_date = cancellation_date
         registration.save()
 
         assert registration.cancellation_date == cancellation_date
 
-    def test_registration_payment_calculations(self, registration):
+    def test_registration_payment_calculations(self):
         """Test payment status calculations"""
+        registration = self.registration()
         initial_iscr = Decimal("100.00")
         partial_payment = Decimal("50.00")
         full_payment = Decimal("100.00")
@@ -130,8 +139,11 @@ class TestRegistrationModel:
         )
         assert overpaid_amount == Decimal("20.00"), f"Expected overpayment of 20.00, got {overpaid_amount}"
 
-    def test_registration_with_additionals(self, member, run, ticket):
+    def test_registration_with_additionals(self):
         """Test registration with additional tickets"""
+        member = self.member()
+        run = self.run()
+        ticket = self.ticket()
         registration = Registration.objects.create(
             member=member,
             run=run,
@@ -144,8 +156,10 @@ class TestRegistrationModel:
         assert registration.additionals == 2
         assert registration.tot_iscr == ticket.price * 3
 
-    def test_registration_with_pay_what(self, member, run):
+    def test_registration_with_pay_what(self):
         """Test registration with pay-what-you-want amount"""
+        member = self.member()
+        run = self.run()
         pay_what_amount = Decimal("75.00")
         registration = Registration.objects.create(
             member=member, run=run, pay_what=pay_what_amount, tot_iscr=pay_what_amount, tot_payed=Decimal("0.00")
@@ -153,31 +167,51 @@ class TestRegistrationModel:
 
         assert registration.pay_what == pay_what_amount
 
-    def test_registration_surcharge(self, registration):
+    def test_registration_surcharge(self):
         """Test registration surcharge handling"""
+        registration = self.registration()
         surcharge = Decimal("15.00")
         registration.surcharge = surcharge
         registration.save()
 
         assert registration.surcharge == surcharge
 
-    def test_registration_unique_constraint(self, member, run):
+    def test_registration_unique_constraint(self):
         """Test that member can only have one registration per run"""
-        # Create first registration
+        # Create a fresh user and get the auto-created member
+        user = self.create_user(username="unique_test_user", email="unique@test.com")
+        member = user.member  # Django auto-creates this via OneToOneField
+        # Create a fresh event and run to avoid unique constraint conflicts
+        event = self.create_event(name="Unique Test Event")
+        run = self.create_run(event=event, number=99)  # Use unique number
+
+        # Create first registration with explicit field values
         first_registration = Registration.objects.create(
-            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+            member=member,
+            run=run,
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("0.00"),
+            cancellation_date=None,
+            redeem_code=None
         )
 
         # Verify first registration was created successfully
         assert first_registration.id is not None, "First registration should be created successfully"
 
         # Verify only one registration exists for this member/run combination
-        existing_registrations = Registration.objects.filter(member=member, run=run)
+        existing_registrations = Registration.objects.filter(member=member, run=run, cancellation_date=None)
         assert existing_registrations.count() == 1, f"Expected 1 registration, found {existing_registrations.count()}"
 
-        # Try to create second registration for same member and run
+        # Try to create second registration for same member and run with same constraint fields
         with pytest.raises(IntegrityError) as excinfo:
-            Registration.objects.create(member=member, run=run, tot_iscr=Decimal("50.00"), tot_payed=Decimal("0.00"))
+            Registration.objects.create(
+                member=member,
+                run=run,
+                tot_iscr=Decimal("50.00"),
+                tot_payed=Decimal("0.00"),
+                cancellation_date=None,
+                redeem_code=None
+            )
 
         # Verify the IntegrityError was raised and still only one registration exists
         assert "unique" in str(excinfo.value).lower() or "duplicate" in str(excinfo.value).lower(), (
@@ -194,29 +228,31 @@ class TestRegistrationModel:
         )
 
 
-@pytest.mark.django_db
-class TestRegistrationTicket:
+class TestRegistrationTicket(BaseTestCase):
     """Test RegistrationTicket model"""
 
-    def test_ticket_creation(self, event):
+    def test_ticket_creation(self):
         """Test ticket creation"""
+        event = self.event()
         ticket = RegistrationTicket.objects.create(
             event=event,
             tier=TicketTier.STANDARD,
             name="Standard Ticket",
             price=Decimal("100.00"),
             description="Standard event ticket",
-            available=50,
+            max_available=50,
+            number=1,
         )
 
         assert ticket.event == event
         assert ticket.tier == TicketTier.STANDARD
         assert ticket.name == "Standard Ticket"
         assert ticket.price == Decimal("100.00")
-        assert ticket.available == 50
+        assert ticket.max_available == 50
 
-    def test_ticket_str_representation(self, event):
+    def test_ticket_str_representation(self):
         """Test ticket string representation"""
+        event = self.event()
         ticket = RegistrationTicket(
             event=event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00")
         )
@@ -224,8 +260,9 @@ class TestRegistrationTicket:
         expected = f"Standard Ticket - {event} (Standard - €100.00)"
         assert str(ticket) == expected
 
-    def test_ticket_tiers(self, event):
+    def test_ticket_tiers(self):
         """Test different ticket tiers"""
+        event = self.event()
         tiers = [
             (TicketTier.STANDARD, "Standard"),
             (TicketTier.EARLY_BIRD, "Early Bird"),
@@ -237,74 +274,75 @@ class TestRegistrationTicket:
 
         for tier, name in tiers:
             ticket = RegistrationTicket.objects.create(
-                event=event, tier=tier, name=f"{name} Ticket", price=Decimal("100.00"), available=10
+                event=event, tier=tier, name=f"{name} Ticket", price=Decimal("100.00"), max_available=10, number=tier
             )
             assert ticket.tier == tier
 
-    def test_ticket_validation(self, event):
+    def test_ticket_validation(self):
         """Test ticket validation"""
+        event = self.event()
         # Test negative price validation
         with pytest.raises(ValidationError):
             ticket = RegistrationTicket(
-                event=event, tier=TicketTier.STANDARD, name="Invalid Ticket", price=Decimal("-50.00"), available=10
+                event=event, tier=TicketTier.STANDARD, name="Invalid Ticket", price=Decimal("-50.00"), max_available=10, number=1
             )
             ticket.full_clean()
 
-    def test_ticket_availability(self, ticket):
-        """Test ticket availability tracking"""
-        initial_available = ticket.available
-        expected_after_purchase = initial_available - 1
+    def test_ticket_max_available(self):
+        """Test ticket max_available field"""
+        ticket = self.ticket()
+        initial_max = 50  # From BaseTestCase default
 
         # Verify initial state
-        assert initial_available > 0, f"Ticket should have initial availability > 0, got {initial_available}"
+        assert ticket.max_available == initial_max, f"Ticket should have max_available {initial_max}, got {ticket.max_available}"
 
-        # Simulate ticket purchase
-        ticket.available -= 1
+        # Test updating max_available
+        new_max = 75
+        ticket.max_available = new_max
         ticket.save()
 
-        # Verify availability decreased by exactly 1
-        assert ticket.available == expected_after_purchase, (
-            f"Expected availability {expected_after_purchase}, got {ticket.available}"
+        # Verify change
+        assert ticket.max_available == new_max, (
+            f"Expected max_available {new_max}, got {ticket.max_available}"
         )
 
         # Verify the change persists in database
         db_ticket = RegistrationTicket.objects.get(id=ticket.id)
-        assert db_ticket.available == expected_after_purchase, (
-            f"Database should reflect new availability {expected_after_purchase}, got {db_ticket.available}"
+        assert db_ticket.max_available == new_max, (
+            f"Database should reflect new max_available {new_max}, got {db_ticket.max_available}"
         )
 
-        # Test boundary condition - cannot go below 0
-        if ticket.available > 0:
-            ticket.available = 0
-            ticket.save()
-            assert ticket.available == 0, "Availability should be able to reach 0"
-
-            # In real system, business logic should prevent going negative
-            # Here we just verify the state is as expected
+        # Test unlimited availability (0 means unlimited)
+        ticket.max_available = 0
+        ticket.save()
+        assert ticket.max_available == 0, "max_available should be able to be set to 0 (unlimited)"
 
 
-@pytest.mark.django_db
-class TestRegistrationQuestions:
+class TestRegistrationQuestions(BaseTestCase):
     """Test registration questions and answers"""
 
-    def test_question_creation(self, event):
+    def test_question_creation(self):
         """Test registration question creation"""
+        from larpmanager.models.form import QuestionStatus
+
+        event = self.event()
         question = RegistrationQuestion.objects.create(
             event=event,
             name="dietary_requirements",
-            text="Do you have any dietary requirements?",
+            description="Do you have any dietary requirements?",
             typ=BaseQuestionType.TEXT,
-            required=True,
+            status=QuestionStatus.MANDATORY,
             order=1,
         )
 
         assert question.event == event
         assert question.name == "dietary_requirements"
         assert question.typ == BaseQuestionType.TEXT
-        assert question.required is True
+        assert question.status == QuestionStatus.MANDATORY
 
-    def test_question_types(self, event):
+    def test_question_types(self):
         """Test different question types"""
+        event = self.event()
         types = [
             BaseQuestionType.TEXT,
             BaseQuestionType.TEXTAREA,
@@ -321,32 +359,37 @@ class TestRegistrationQuestions:
 
         for i, question_type in enumerate(types):
             question = RegistrationQuestion.objects.create(
-                event=event, name=f"question_{i}", text=f"Question {i}", typ=question_type, order=i
+                event=event, name=f"question_{i}", description=f"Question {i}", typ=question_type, order=i
             )
             assert question.typ == question_type
 
-    def test_question_with_options(self, event):
+    def test_question_with_options(self):
         """Test question with multiple choice options"""
+        from larpmanager.models.form import QuestionStatus
+
+        event = self.event()
         question = RegistrationQuestion.objects.create(
             event=event,
             name="accommodation",
-            text="What accommodation do you prefer?",
+            description="What accommodation do you prefer?",
             typ=BaseQuestionType.SINGLE,
-            required=True,
+            status=QuestionStatus.MANDATORY,
             order=1,
         )
 
-        option1 = RegistrationOption.objects.create(question=question, name="Hotel", price=Decimal("50.00"), order=1)
+        option1 = RegistrationOption.objects.create(event=event, question=question, name="Hotel", price=Decimal("50.00"), order=1)
 
-        option2 = RegistrationOption.objects.create(question=question, name="Camping", price=Decimal("20.00"), order=2)
+        option2 = RegistrationOption.objects.create(event=event, question=question, name="Camping", price=Decimal("20.00"), order=2)
 
         assert option1.question == question
         assert option2.question == question
         assert option1.price == Decimal("50.00")
         assert option2.price == Decimal("20.00")
 
-    def test_registration_answer_text(self, registration, question):
+    def test_registration_answer_text(self):
         """Test text answer to registration question"""
+        registration = self.registration()
+        question = self.question()
         answer_text = "I am vegetarian"
 
         # Create answer and verify creation
@@ -374,9 +417,10 @@ class TestRegistrationQuestions:
         question_answers = RegistrationAnswer.objects.filter(question=question)
         assert answer in question_answers, "Answer should be retrievable through question filter"
 
-    def test_registration_choice_single(self, registration, question_with_options):
+    def test_registration_choice_single(self):
         """Test single choice answer"""
-        question, option1, option2 = question_with_options
+        registration = self.registration()
+        question, option1, option2 = self.question_with_options()
 
         choice = RegistrationChoice.objects.create(reg=registration, question=question, option=option1)
 
@@ -384,9 +428,10 @@ class TestRegistrationQuestions:
         assert choice.question == question
         assert choice.option == option1
 
-    def test_registration_choice_multiple(self, registration, question_with_options):
+    def test_registration_choice_multiple(self):
         """Test multiple choice answers"""
-        question, option1, option2 = question_with_options
+        registration = self.registration()
+        question, option1, option2 = self.question_with_options()
 
         # Configure question for multiple choice
         question.typ = BaseQuestionType.MULTIPLE
@@ -434,12 +479,12 @@ class TestRegistrationQuestions:
         assert option2_choices.count() == 1, f"Should have exactly 1 choice for option2, got {option2_choices.count()}"
 
 
-@pytest.mark.django_db
-class TestRegistrationInstallments:
+class TestRegistrationInstallments(BaseTestCase):
     """Test registration installment payments"""
 
-    def test_installment_creation(self, event):
+    def test_installment_creation(self):
         """Test installment creation"""
+        event = self.event()
         installment = RegistrationInstallment.objects.create(
             event=event, order=1, amount=Decimal("50.00"), days_deadline=30, description="First installment"
         )
@@ -449,8 +494,9 @@ class TestRegistrationInstallments:
         assert installment.amount == Decimal("50.00")
         assert installment.days_deadline == 30
 
-    def test_installment_with_date_deadline(self, event):
+    def test_installment_with_date_deadline(self):
         """Test installment with specific date deadline"""
+        event = self.event()
         deadline_date = date.today() + timedelta(days=30)
         installment = RegistrationInstallment.objects.create(
             event=event, order=1, amount=Decimal("50.00"), date_deadline=deadline_date, description="First installment"
@@ -458,8 +504,10 @@ class TestRegistrationInstallments:
 
         assert installment.date_deadline == deadline_date
 
-    def test_installment_ticket_specific(self, event, ticket):
+    def test_installment_ticket_specific(self):
         """Test installment specific to certain tickets"""
+        event = self.event()
+        ticket = self.ticket()
         installment = RegistrationInstallment.objects.create(
             event=event, order=1, amount=Decimal("50.00"), days_deadline=30, description="Ticket-specific installment"
         )
@@ -468,8 +516,9 @@ class TestRegistrationInstallments:
 
         assert ticket in installment.tickets.all()
 
-    def test_installment_ordering(self, event):
+    def test_installment_ordering(self):
         """Test installment ordering"""
+        event = self.event()
         installment2 = RegistrationInstallment.objects.create(
             event=event, order=2, amount=Decimal("50.00"), days_deadline=15
         )
@@ -483,12 +532,12 @@ class TestRegistrationInstallments:
         assert list(installments) == [installment1, installment2]
 
 
-@pytest.mark.django_db
-class TestRegistrationSurcharges:
+class TestRegistrationSurcharges(BaseTestCase):
     """Test registration surcharges"""
 
-    def test_surcharge_creation(self, event):
+    def test_surcharge_creation(self):
         """Test surcharge creation"""
+        event = self.event()
         surcharge_date = date.today() + timedelta(days=30)
         surcharge = RegistrationSurcharge.objects.create(
             event=event, date=surcharge_date, amount=Decimal("25.00"), description="Late registration fee"
@@ -498,8 +547,9 @@ class TestRegistrationSurcharges:
         assert surcharge.date == surcharge_date
         assert surcharge.amount == Decimal("25.00")
 
-    def test_multiple_surcharges(self, event):
+    def test_multiple_surcharges(self):
         """Test multiple surcharges for an event"""
+        event = self.event()
         surcharge1 = RegistrationSurcharge.objects.create(
             event=event, date=date.today() + timedelta(days=30), amount=Decimal("15.00"), description="First surcharge"
         )
@@ -513,8 +563,9 @@ class TestRegistrationSurcharges:
         assert surcharge1 in surcharges
         assert surcharge2 in surcharges
 
-    def test_surcharge_date_ordering(self, event):
+    def test_surcharge_date_ordering(self):
         """Test surcharges are properly ordered by date"""
+        event = self.event()
         later_surcharge = RegistrationSurcharge.objects.create(
             event=event, date=date.today() + timedelta(days=60), amount=Decimal("25.00")
         )
@@ -528,24 +579,26 @@ class TestRegistrationSurcharges:
         assert list(surcharges) == [earlier_surcharge, later_surcharge]
 
 
-@pytest.mark.django_db
-class TestRegistrationWithCharacters:
+class TestRegistrationWithCharacters(BaseTestCase):
     """Test registration with character assignment"""
 
-    def test_registration_with_character(self, registration, character):
+    def test_registration_with_character(self):
         """Test linking character to registration"""
         from larpmanager.models.registration import RegistrationCharacterRel
 
+        registration = self.registration()
+        character = self.character()
         char_rel = RegistrationCharacterRel.objects.create(reg=registration, character=character, principal=True)
 
         assert char_rel.reg == registration
         assert char_rel.character == character
         assert char_rel.principal is True
 
-    def test_multiple_characters_per_registration(self, registration):
+    def test_multiple_characters_per_registration(self):
         """Test registration with multiple characters"""
         from larpmanager.models.registration import RegistrationCharacterRel
 
+        registration = self.registration()
         character1 = Character.objects.create(name="Character 1", assoc=registration.run.event.assoc)
 
         character2 = Character.objects.create(name="Character 2", assoc=registration.run.event.assoc)
@@ -562,13 +615,13 @@ class TestRegistrationWithCharacters:
         assert principal_chars.first().character == character1
 
 
-@pytest.mark.django_db
-class TestRegistrationValidation:
+class TestRegistrationValidation(BaseTestCase):
     """Test registration validation and business rules"""
 
-    def test_registration_for_cancelled_event(self, member):
+    def test_registration_for_cancelled_event(self):
         """Test registration attempt for cancelled event"""
-        event = Event.objects.create(name="Cancelled Event", assoc_id=1, number=1)
+        member = self.member()
+        event = Event.objects.create(name="Cancelled Event", assoc_id=1)
 
         run = Run.objects.create(
             event=event,
@@ -586,8 +639,9 @@ class TestRegistrationValidation:
         # Model allows it, but business logic should handle it
         assert registration.run.development == DevelopStatus.CANC
 
-    def test_registration_payment_status_calculation(self, registration):
+    def test_registration_payment_status_calculation(self):
         """Test payment status calculation"""
+        registration = self.registration()
         # Not paid
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("0.00")
@@ -610,8 +664,10 @@ class TestRegistrationValidation:
         remaining = registration.tot_iscr - registration.tot_payed
         assert remaining == Decimal("-20.00")
 
-    def test_registration_with_membership_requirement(self, member, run):
+    def test_registration_with_membership_requirement(self):
         """Test registration requiring membership"""
+        member = self.member()
+        run = self.run()
         # Mock membership check
         membership = Membership.objects.create(
             member=member, assoc=run.event.assoc, status=MembershipStatus.ACCEPTED, date=date.today()
@@ -625,14 +681,15 @@ class TestRegistrationValidation:
         assert membership.status == MembershipStatus.ACCEPTED
 
 
-@pytest.mark.django_db
-class TestRegistrationQueries:
+class TestRegistrationQueries(BaseTestCase):
     """Test registration query methods and managers"""
 
-    def test_active_registrations(self, member, association):
+    def test_active_registrations(self):
         """Test querying active registrations"""
+        member = self.member()
+        association = self.association()
         # Create active event
-        active_event = Event.objects.create(name="Active Event", assoc=association, number=1)
+        active_event = Event.objects.create(name="Active Event", assoc=association)
 
         active_run = Run.objects.create(
             event=active_event,
@@ -644,7 +701,7 @@ class TestRegistrationQueries:
         )
 
         # Create cancelled event
-        cancelled_event = Event.objects.create(name="Cancelled Event", assoc=association, number=2)
+        cancelled_event = Event.objects.create(name="Cancelled Event", assoc=association)
 
         cancelled_run = Run.objects.create(
             event=cancelled_event,
@@ -672,9 +729,10 @@ class TestRegistrationQueries:
         assert active_reg in active_registrations
         assert cancelled_reg not in active_registrations
 
-    def test_registrations_by_payment_status(self, association):
+    def test_registrations_by_payment_status(self):
         """Test querying registrations by payment status"""
-        event = Event.objects.create(name="Test Event", assoc=association, number=1)
+        association = self.association()
+        event = Event.objects.create(name="Test Event", assoc=association)
 
         run = Run.objects.create(
             event=event,
@@ -762,83 +820,3 @@ class TestRegistrationQueries:
                     f"Partial paid registration should have 50.00 balance, got {balance}"
                 )
 
-
-# Fixtures
-@pytest.fixture
-def association():
-    return Association.objects.create(name="Test Association", slug="test-assoc", email="test@example.com")
-
-
-@pytest.fixture
-def member():
-    user = User.objects.create_user(username="testuser", email="test@example.com", first_name="Test", last_name="User")
-    member = user.member
-    member.name = "Test"
-    member.surname = "User"
-    member.save()
-    return member
-
-
-@pytest.fixture
-def event(association):
-    return Event.objects.create(name="Test Event", assoc=association)
-
-
-@pytest.fixture
-def run(event):
-    return Run.objects.create(
-        event=event,
-        number=1,
-        start=date.today() + timedelta(days=30),
-        end=date.today() + timedelta(days=32),
-    )
-
-
-@pytest.fixture
-def ticket(event):
-    return RegistrationTicket.objects.create(
-        event=event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), available=50
-    )
-
-
-@pytest.fixture
-def registration(member, run):
-    return Registration.objects.create(
-        member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"), quotas=1
-    )
-
-
-@pytest.fixture
-def question(event):
-    return RegistrationQuestion.objects.create(
-        event=event,
-        name="dietary_requirements",
-        text="Do you have any dietary requirements?",
-        typ=BaseQuestionType.TEXT,
-        required=True,
-        order=1,
-    )
-
-
-@pytest.fixture
-def question_with_options(event):
-    """Question with multiple choice options"""
-    question = RegistrationQuestion.objects.create(
-        event=event,
-        name="accommodation",
-        text="What accommodation do you prefer?",
-        typ=BaseQuestionType.SINGLE,
-        required=True,
-        order=1,
-    )
-
-    option1 = RegistrationOption.objects.create(question=question, name="Hotel", price=Decimal("50.00"), order=1)
-
-    option2 = RegistrationOption.objects.create(question=question, name="Camping", price=Decimal("20.00"), order=2)
-
-    return question, option1, option2
-
-
-@pytest.fixture
-def character(association):
-    return Character.objects.create(name="Test Character", assoc=association)

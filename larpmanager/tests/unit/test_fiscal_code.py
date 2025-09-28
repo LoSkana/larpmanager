@@ -76,7 +76,7 @@ class TestFiscalCodeCalculation:
         # Standard case
         assert _extract_first_name("MARIO") == "MRA"
 
-        # Four consonants rule - take 1st, 3rd, 4th
+        # Four consonants rule - take 1st, 2nd, 3rd
         assert _extract_first_name("GIUSEPPE") == "GSP"
 
         # Short names

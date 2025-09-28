@@ -40,33 +40,30 @@ from larpmanager.forms.accounting import (
     RefundRequestForm,
     WireInvoiceSubmitForm,
 )
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
-from larpmanager.models.registration import Registration
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-@pytest.mark.django_db
-class TestOrgaPersonalExpenseForm:
-    def test_init_without_balance_feature(self, run):
+class TestOrgaPersonalExpenseForm(BaseTestCase):
+    def test_init_without_balance_feature(self):
         params = {
             "features": [],  # No ita_balance feature
-            "run": run,
+            "run": self.run(),
         }
-        form = OrgaPersonalExpenseForm(ctx={"params": params})
+        form = OrgaPersonalExpenseForm(ctx=params)
 
         # Should not have balance field
         assert "balance" not in form.fields
 
-    def test_init_with_balance_feature(self, run):
-        params = {"features": ["ita_balance"], "run": run}
-        form = OrgaPersonalExpenseForm(ctx={"params": params})
+    def test_init_with_balance_feature(self):
+        params = {"features": ["ita_balance"], "run": self.run()}
+        form = OrgaPersonalExpenseForm(ctx=params)
 
         # Should have balance field
         assert "balance" in form.fields
 
-    def test_valid_form_data(self, run):
-        params = {"features": ["ita_balance"], "run": run}
+    def test_valid_form_data(self):
+        run = self.run()
+        params = {"features": ["ita_balance"], "run": run, "a_id": run.event.assoc.id}
 
         # Create uploaded file for testing
         test_file = SimpleUploadedFile("test_invoice.pdf", b"test content", content_type="application/pdf")
@@ -78,104 +75,103 @@ class TestOrgaPersonalExpenseForm:
             "balance": "1",  # MATER
         }
 
-        form = OrgaPersonalExpenseForm(data=form_data, files={"invoice": test_file}, ctx={"params": params})
+        form = OrgaPersonalExpenseForm(data=form_data, files={"invoice": test_file}, ctx=params)
 
         assert form.is_valid()
 
 
-@pytest.mark.django_db
-class TestOrgaExpenseForm:
-    def test_init_sets_member_widget_run(self, run, event):
-        params = {"features": ["ita_balance"], "run": run, "event": event}
+class TestOrgaExpenseForm(BaseTestCase):
+    def test_init_sets_member_widget_run(self):
+        params = {"features": ["ita_balance"], "run": self.run(), "event": self.event()}
 
         with patch.object(OrgaExpenseForm, "delete_field") as mock_delete:
-            form = OrgaExpenseForm(ctx={"params": params})
+            form = OrgaExpenseForm(ctx=params)
 
             # Check that member widget has run set
             assert hasattr(form.fields["member"].widget, "set_run")
 
-    def test_init_without_balance_feature(self, run, event):
+    def test_init_without_balance_feature(self):
         params = {
             "features": [],  # No ita_balance
-            "run": run,
-            "event": event,
+            "run": self.run(),
+            "event": self.event(),
         }
 
         with patch.object(OrgaExpenseForm, "delete_field") as mock_delete:
-            form = OrgaExpenseForm(ctx={"params": params})
+            form = OrgaExpenseForm(ctx=params)
             mock_delete.assert_called_with("balance")
 
-    def test_init_expense_disable_orga(self, run, event):
+    def test_init_expense_disable_orga(self):
         # Mock event.assoc.get_config to return True for expense_disable_orga
+        event = self.event()
         event.assoc.get_config = Mock(return_value=True)
 
-        params = {"features": ["ita_balance"], "run": run, "event": event}
+        params = {"features": ["ita_balance"], "run": self.run(), "event": event}
 
         with patch.object(OrgaExpenseForm, "delete_field") as mock_delete:
-            form = OrgaExpenseForm(ctx={"params": params})
+            form = OrgaExpenseForm(ctx=params)
             mock_delete.assert_called_with("is_approved")
 
 
-@pytest.mark.django_db
-class TestOrgaTokenForm:
-    def test_init_sets_token_data(self, run):
-        params = {"token_name": "Game Tokens", "run": run}
+class TestOrgaTokenForm(BaseTestCase):
+    def test_init_sets_token_data(self):
+        params = {"token_name": "Game Tokens", "run": self.run()}
 
-        form = OrgaTokenForm(ctx={"params": params})
+        form = OrgaTokenForm(ctx=params)
 
         assert form.page_title == "Game Tokens"
-        assert form.initial["oth"] == "c"  # TOKEN choice
+        assert form.initial["oth"] == "t"  # TOKEN choice
         assert "Game Tokens" in form.page_info
 
 
-@pytest.mark.django_db
-class TestOrgaCreditForm:
-    def test_init_sets_credit_data(self, run):
-        params = {"credit_name": "Event Credits", "run": run}
+class TestOrgaCreditForm(BaseTestCase):
+    def test_init_sets_credit_data(self):
+        params = {"credit_name": "Event Credits", "run": self.run()}
 
-        form = OrgaCreditForm(ctx={"params": params})
+        form = OrgaCreditForm(ctx=params)
 
         assert form.page_title == "Event Credits"
         assert form.initial["oth"] == "c"  # CREDIT choice
 
 
-@pytest.mark.django_db
-class TestOrgaPaymentForm:
-    def test_init_sets_event_widget(self, run, event):
-        params = {"run": run, "event": event}
+class TestOrgaPaymentForm(BaseTestCase):
+    def test_init_sets_event_widget(self):
+        params = {"run": self.run(), "event": self.event()}
 
-        form = OrgaPaymentForm(ctx={"params": params})
+        form = OrgaPaymentForm(ctx=params)
 
         # Check that reg field is required and widget has event set
         assert form.fields["reg"].required is True
 
 
-@pytest.mark.django_db
-class TestExeOutflowForm:
-    def test_init_sets_default_payment_date(self, association):
-        params = {"features": ["ita_balance"], "a_id": association.id}
+class TestExeOutflowForm(BaseTestCase):
+    def test_init_sets_default_payment_date(self):
+        params = {"features": ["ita_balance"], "a_id": self.association().id}
 
-        form = ExeOutflowForm(ctx={"params": params})
+        form = ExeOutflowForm(ctx=params)
 
         # Should have today's date as initial payment_date
         assert "payment_date" in form.initial
         assert form.fields["invoice"].required is True
 
-    def test_init_without_balance_feature(self, association):
+    def test_init_without_balance_feature(self):
         params = {
             "features": [],  # No ita_balance
-            "a_id": association.id,
+            "a_id": self.association().id,
         }
 
         with patch.object(ExeOutflowForm, "delete_field") as mock_delete:
-            form = ExeOutflowForm(ctx={"params": params})
+            form = ExeOutflowForm(ctx=params)
             mock_delete.assert_called_with("balance")
 
 
-@pytest.mark.django_db
-class TestDonateForm:
+class TestDonateForm(BaseTestCase):
     def test_form_fields(self):
-        form = DonateForm()
+        ctx = {
+            "methods": {"test": {"name": "Test Method"}},
+            "association": self.association()
+        }
+        form = DonateForm(ctx=ctx)
 
         # Should have amount and descr fields
         assert "amount" in form.fields
@@ -183,85 +179,115 @@ class TestDonateForm:
 
         # Amount should have proper validation
         amount_field = form.fields["amount"]
-        assert amount_field.min_value == Decimal("0.01")
-        assert amount_field.max_value == Decimal("1000")
+        assert amount_field.min_value == 0.01
+        assert amount_field.max_value == 1000
         assert amount_field.decimal_places == 2
 
     def test_valid_data(self):
-        form_data = {"amount": "50.00", "descr": "Donation for a good cause"}
-
-        form = DonateForm(data=form_data)
+        form_data = {"amount": "50.00", "descr": "Donation for a good cause", "method": "test"}
+        ctx = {
+            "methods": {"test": {"name": "Test Method"}},
+            "association": self.association()
+        }
+        form = DonateForm(data=form_data, ctx=ctx)
         assert form.is_valid()
 
     def test_invalid_amount_too_low(self):
-        form_data = {"amount": "0.00", "descr": "Invalid donation"}
-
-        form = DonateForm(data=form_data)
+        form_data = {"amount": "0.00", "descr": "Invalid donation", "method": "test"}
+        ctx = {
+            "methods": {"test": {"name": "Test Method"}},
+            "association": self.association()
+        }
+        form = DonateForm(data=form_data, ctx=ctx)
         assert not form.is_valid()
         assert "amount" in form.errors
 
     def test_invalid_amount_too_high(self):
-        form_data = {"amount": "1001.00", "descr": "Too much donation"}
-
-        form = DonateForm(data=form_data)
+        form_data = {"amount": "1001.00", "descr": "Too much donation", "method": "test"}
+        ctx = {
+            "methods": {"test": {"name": "Test Method"}},
+            "association": self.association()
+        }
+        form = DonateForm(data=form_data, ctx=ctx)
         assert not form.is_valid()
         assert "amount" in form.errors
 
 
-@pytest.mark.django_db
-class TestCollectionForm:
+class TestCollectionForm(BaseTestCase):
     def test_form_fields(self):
-        form = CollectionForm()
+        ctx = {
+            "methods": {"test": {"name": "Test Method"}},
+            "association": self.association()
+        }
+        form = CollectionForm(ctx=ctx)
 
         assert "amount" in form.fields
 
         amount_field = form.fields["amount"]
-        assert amount_field.min_value == Decimal("0.01")
-        assert amount_field.max_value == Decimal("1000")
+        assert amount_field.min_value == 0.01
+        assert amount_field.max_value == 1000
 
     def test_valid_data(self):
-        form_data = {"amount": "25.00"}
-
-        form = CollectionForm(data=form_data)
+        form_data = {"amount": "25.00", "method": "test"}
+        ctx = {
+            "methods": {"test": {"name": "Test Method"}},
+            "association": self.association()
+        }
+        form = CollectionForm(data=form_data, ctx=ctx)
         assert form.is_valid()
 
 
-@pytest.mark.django_db
-class TestPaymentForm:
-    def test_init_with_registration(self, registration):
+class TestPaymentForm(BaseTestCase):
+    def test_init_with_registration(self):
         # Mock registration values
+        registration = self.registration()
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("30.00")
 
-        ctx = {"quota": Decimal("70.00")}
+        ctx = {
+            "quota": Decimal("70.00"),
+            "methods": {"test": {"name": "Test Method"}},
+            "association": registration.run.event.assoc
+        }
 
         form = PaymentForm(reg=registration, ctx=ctx)
 
         # Check amount field configuration
         amount_field = form.fields["amount"]
-        assert amount_field.min_value == Decimal("0.01")
-        assert amount_field.max_value == Decimal("70.00")  # tot_iscr - tot_payed
+        assert amount_field.min_value == 0.01
+        assert amount_field.max_value == 70.00  # tot_iscr - tot_payed
         assert amount_field.initial == Decimal("70.00")  # quota
 
-    def test_valid_payment_amount(self, registration):
+    def test_valid_payment_amount(self):
+        registration = self.registration()
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("30.00")
 
-        ctx = {"quota": Decimal("70.00")}
+        ctx = {
+            "quota": Decimal("70.00"),
+            "methods": {"test": {"name": "Test Method"}},
+            "association": registration.run.event.assoc
+        }
 
-        form_data = {"amount": "50.00"}
+        form_data = {"amount": "50.00", "method": "test"}
 
         form = PaymentForm(data=form_data, reg=registration, ctx=ctx)
         assert form.is_valid()
 
-    def test_invalid_payment_amount_too_high(self, registration):
+    def test_invalid_payment_amount_too_high(self):
+        registration = self.registration()
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("30.00")
 
-        ctx = {"quota": Decimal("70.00")}
+        ctx = {
+            "quota": Decimal("70.00"),
+            "methods": {"test": {"name": "Test Method"}},
+            "association": registration.run.event.assoc
+        }
 
         form_data = {
-            "amount": "80.00"  # More than max allowed
+            "amount": "80.00",  # More than max allowed
+            "method": "test"
         }
 
         form = PaymentForm(data=form_data, reg=registration, ctx=ctx)
@@ -269,9 +295,9 @@ class TestPaymentForm:
         assert "amount" in form.errors
 
 
-@pytest.mark.django_db
-class TestOrgaDiscountForm:
-    def test_init_creates_runs_choices(self, run, event):
+class TestOrgaDiscountForm(BaseTestCase):
+    def test_init_creates_runs_choices(self):
+        run = self.run()
         params = {"run": run}
 
         # Mock Run.objects.filter to return the run
@@ -279,29 +305,31 @@ class TestOrgaDiscountForm:
             mock_filter.return_value = [run]
             run.__str__ = lambda: "Test Run"
 
-            form = OrgaDiscountForm(ctx={"params": params})
+            form = OrgaDiscountForm(ctx=params)
 
             # Should have runs field with choices
             assert "runs" in form.fields
             runs_field = form.fields["runs"]
             assert len(runs_field.choices) == 1
 
-    def test_init_with_existing_instance(self, run, event, discount):
+    def test_init_with_existing_instance(self):
+        run = self.run()
         params = {"run": run}
 
+        # Create a mock discount since it's not in the base class
+        discount = Mock()
         discount.runs.all = Mock(return_value=[run])
 
         with patch("larpmanager.forms.accounting.Run.objects.filter") as mock_filter:
             mock_filter.return_value = [run]
 
-            form = OrgaDiscountForm(instance=discount, ctx={"params": params})
+            form = OrgaDiscountForm(instance=discount, ctx=params)
 
             # Should set initial runs
             assert form.initial["runs"] == [run.id]
 
 
-@pytest.mark.django_db
-class TestWireInvoiceSubmitForm:
+class TestWireInvoiceSubmitForm(BaseTestCase):
     def test_form_fields(self):
         form = WireInvoiceSubmitForm()
 
@@ -327,8 +355,7 @@ class TestWireInvoiceSubmitForm:
         assert form.fields["cod"].initial == "TEST456"
 
 
-@pytest.mark.django_db
-class TestAnyInvoiceSubmitForm:
+class TestAnyInvoiceSubmitForm(BaseTestCase):
     def test_form_fields(self):
         form = AnyInvoiceSubmitForm()
 
@@ -342,10 +369,10 @@ class TestAnyInvoiceSubmitForm:
         assert form.is_valid()
 
 
-@pytest.mark.django_db
-class TestRefundRequestForm:
-    def test_init_sets_max_value(self, member):
+class TestRefundRequestForm(BaseTestCase):
+    def test_init_sets_max_value(self):
         # Mock member.membership.credit
+        member = self.member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
         member.membership = mock_membership
@@ -356,7 +383,8 @@ class TestRefundRequestForm:
         value_field = form.fields["value"]
         assert value_field.max_value == Decimal("150.00")
 
-    def test_valid_refund_request(self, member):
+    def test_valid_refund_request(self):
+        member = self.member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
         member.membership = mock_membership
@@ -366,7 +394,8 @@ class TestRefundRequestForm:
         form = RefundRequestForm(data=form_data, member=member)
         assert form.is_valid()
 
-    def test_invalid_refund_amount(self, member):
+    def test_invalid_refund_amount(self):
+        member = self.member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
         member.membership = mock_membership
@@ -381,9 +410,8 @@ class TestRefundRequestForm:
         assert "value" in form.errors
 
 
-@pytest.mark.django_db
-class TestExePaymentSettingsForm:
-    def test_init_creates_payment_details_fields(self, association):
+class TestExePaymentSettingsForm(BaseTestCase):
+    def test_init_creates_payment_details_fields(self):
         # Mock payment methods
         mock_method1 = Mock()
         mock_method1.slug = "wire"
@@ -407,7 +435,7 @@ class TestExePaymentSettingsForm:
                 with patch("larpmanager.forms.accounting.get_payment_details") as mock_get_details:
                     mock_get_details.return_value = {}
 
-                    form = ExePaymentSettingsForm(instance=association)
+                    form = ExePaymentSettingsForm(instance=self.association())
 
                     # Should create fields for payment details
                     assert "wire_descr" in form.fields
@@ -431,8 +459,8 @@ class TestExePaymentSettingsForm:
         assert masked.endswith("ked")
         assert "*" in masked
 
-    def test_clean_validates_fee_fields(self, association):
-        form = ExePaymentSettingsForm(instance=association)
+    def test_clean_validates_fee_fields(self):
+        form = ExePaymentSettingsForm(instance=self.association())
         form.fee_fields = {"test_fee"}
 
         # Test valid fee
@@ -454,13 +482,14 @@ class TestExePaymentSettingsForm:
             form.clean()
             mock_add_error.assert_called()
 
-    def test_save_updates_payment_details(self, association):
+    def test_save_updates_payment_details(self):
         with patch("larpmanager.forms.accounting.get_payment_details") as mock_get:
             mock_get.return_value = {}
             with patch("larpmanager.forms.accounting.save_payment_details") as mock_save:
                 with patch.object(ExePaymentSettingsForm, "get_payment_details_fields") as mock_fields:
                     mock_fields.return_value = {"test": ["test_field"]}
 
+                    association = self.association()
                     form = ExePaymentSettingsForm(instance=association)
                     form.cleaned_data = {"test_field": "new_value"}
 
@@ -471,34 +500,3 @@ class TestExePaymentSettingsForm:
 
                         mock_save.assert_called_once()
                         assert result == association
-
-
-# Fixtures
-@pytest.fixture
-def association():
-    return Association.objects.create(name="Test Association", slug="test-assoc", email="test@example.com")
-
-
-@pytest.fixture
-def member():
-    return Member.objects.create(username="testuser", email="test@example.com", first_name="Test", last_name="User")
-
-
-@pytest.fixture
-def event(association):
-    return Event.objects.create(name="Test Event", assoc=association, number=1)
-
-
-@pytest.fixture
-def run(event):
-    return Run.objects.create(event=event, number=1, name="Test Run", start="2025-01-01", end="2025-01-02")
-
-
-@pytest.fixture
-def registration(member, run):
-    return Registration.objects.create(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
-
-
-@pytest.fixture
-def discount(event):
-    return Mock(pk=1, runs=Mock(), event=event)

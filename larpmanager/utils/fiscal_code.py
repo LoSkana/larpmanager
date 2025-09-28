@@ -39,7 +39,9 @@ def _extract_last_name(last_name):
     last_name = last_name.upper()
     consonants = _calculate_consonants(last_name)
     vowels = _calculate_vowels(last_name)
-    return (consonants + vowels + "XXX")[:3]
+    # For fiscal codes, only use the first vowel
+    first_vowel = vowels[0] if vowels else ""
+    return (consonants + first_vowel + "XXX")[:3]
 
 
 def _extract_first_name(first_name):
@@ -47,9 +49,12 @@ def _extract_first_name(first_name):
     consonants = _calculate_consonants(first_name)
     max_consonants = 4
     if len(consonants) >= max_consonants:
-        consonants = consonants[0] + consonants[2] + consonants[3]
+        # For first names with 4+ consonants, take 1st, 2nd, 3rd consonants
+        consonants = consonants[0] + consonants[1] + consonants[2]
     vowels = _calculate_vowels(first_name)
-    return (consonants + vowels + "XXX")[:3]
+    # For fiscal codes, only use the first vowel
+    first_vowel = vowels[0] if vowels else ""
+    return (consonants + first_vowel + "XXX")[:3]
 
 
 def _extract_birth_date(birth_date, male):

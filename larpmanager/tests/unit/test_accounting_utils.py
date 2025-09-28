@@ -22,8 +22,6 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from unittest.mock import Mock, patch
 
-import pytest
-
 from larpmanager.accounting.balance import (
     assoc_accounting,
     assoc_accounting_data,
@@ -59,18 +57,17 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
-from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.registration import TicketTier
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-@pytest.mark.django_db
-class TestMemberAccountingUtils:
+class TestMemberAccountingUtils(BaseTestCase):
     """Test member accounting utility functions"""
 
-    def test_info_accounting(self, member, association):
+    def test_info_accounting(self):
         """Test main info_accounting function"""
+        member = self.member()
+        association = self.association()
         request = Mock()
         request.assoc = {"features": [], "id": association.id}
 
@@ -98,7 +95,7 @@ class TestMemberAccountingUtils:
                                 assert "payments_pending" in ctx
                                 assert "refunds" in ctx
 
-    def test_init_pending(self, member):
+    def test_init_pending(self):
         """Test pending payment initialization"""
         # Create mock pending invoices
         invoice1 = Mock()
@@ -111,7 +108,7 @@ class TestMemberAccountingUtils:
         with patch("larpmanager.accounting.member.PaymentInvoice.objects.filter") as mock_filter:
             mock_filter.return_value = [invoice1, invoice2, invoice3]
 
-            result = _init_pending(member)
+            result = _init_pending(self.member())
 
             # Should group by idx
             assert 1 in result
@@ -119,7 +116,7 @@ class TestMemberAccountingUtils:
             assert len(result[1]) == 2  # Two invoices for idx 1
             assert len(result[2]) == 1  # One invoice for idx 2
 
-    def test_init_choices(self, member):
+    def test_init_choices(self):
         """Test registration choice initialization"""
         # Create mock registration choices
         choice1 = Mock()
@@ -143,7 +140,7 @@ class TestMemberAccountingUtils:
         with patch("larpmanager.accounting.member.RegistrationChoice.objects.filter") as mock_filter:
             mock_filter.return_value.select_related.return_value = [choice1, choice2, choice3]
 
-            result = _init_choices(member)
+            result = _init_choices(self.member())
 
             # Should group by reg_id and question_id
             assert 1 in result
@@ -152,12 +149,13 @@ class TestMemberAccountingUtils:
             assert len(result[1][10]["l"]) == 2  # Two options for question 10
             assert len(result[1][20]["l"]) == 1  # One option for question 20
 
-    def test_init_regs(self, registration):
+    def test_init_regs(self):
         """Test registration initialization"""
         choices = {}
         ctx = {"reg_list": [], "payments_pending": [], "payments_todo": [], "reg_years": {}}
         pending = {}
 
+        registration = self.registration()
         registration.id = 1
         registration.quota = 50
         registration.run.start = date(2025, 6, 15)
@@ -174,10 +172,11 @@ class TestMemberAccountingUtils:
             # Should add year to reg_years
             assert 2025 in ctx["reg_years"]
 
-    def test_init_regs_pending(self, registration):
+    def test_init_regs_pending(self):
         """Test registration initialization with pending payment"""
         choices = {}
         ctx = {"reg_list": [], "payments_pending": [], "payments_todo": [], "reg_years": {}}
+        registration = self.registration()
         pending = {registration.id: [Mock()]}  # Has pending payment
 
         registration.id = 1
@@ -190,8 +189,10 @@ class TestMemberAccountingUtils:
         assert registration not in ctx["payments_todo"]
         assert registration.pending is True
 
-    def test_info_token_credit(self, member, association):
+    def test_info_token_credit(self):
         """Test token and credit balance calculation"""
+        member = self.member()
+        association = self.association()
         ctx = {"a_id": association.id}
 
         # Mock queries
@@ -205,8 +206,10 @@ class TestMemberAccountingUtils:
                 assert ctx["acc_tokens"] == 5
                 assert ctx["acc_credits"] == 8  # 3 expenses + 5 credits
 
-    def test_info_collections_feature_disabled(self, member, association):
+    def test_info_collections_feature_disabled(self):
         """Test collections info when feature is disabled"""
+        member = self.member()
+        association = self.association()
         request = Mock()
         request.assoc = {"features": []}  # No collection feature
 
@@ -218,8 +221,10 @@ class TestMemberAccountingUtils:
         assert "collections" not in ctx
         assert "collection_gifts" not in ctx
 
-    def test_info_collections_feature_enabled(self, member, association):
+    def test_info_collections_feature_enabled(self):
         """Test collections info when feature is enabled"""
+        member = self.member()
+        association = self.association()
         request = Mock()
         request.assoc = {"features": ["collection"]}
 
@@ -235,8 +240,10 @@ class TestMemberAccountingUtils:
                 assert "collections" in ctx
                 assert "collection_gifts" in ctx
 
-    def test_info_donations_feature_enabled(self, member, association):
+    def test_info_donations_feature_enabled(self):
         """Test donations info when feature is enabled"""
+        member = self.member()
+        association = self.association()
         request = Mock()
         request.assoc = {"features": ["donate"]}
 
@@ -249,15 +256,21 @@ class TestMemberAccountingUtils:
 
             assert "donations" in ctx
 
-    def test_info_membership_feature_enabled(self, member, association):
+    def test_info_membership_feature_enabled(self):
         """Test membership info when feature is enabled"""
+        member = self.member()
+        association = self.association()
         request = Mock()
         request.assoc = {"features": ["membership"]}
 
         ctx = {"a_id": association.id}
 
         with patch("larpmanager.accounting.member.datetime") as mock_datetime:
-            mock_datetime.now.return_value.year = 2025
+            mock_now = Mock()
+            mock_now.year = 2025
+            mock_datetime.now.return_value = mock_now
+            mock_datetime.strptime = datetime.strptime
+            mock_datetime.now.return_value.__lt__ = Mock(return_value=True)
 
             with patch("larpmanager.accounting.member.AccountingItemMembership.objects.filter") as mock_membership:
                 with patch("larpmanager.accounting.member.PaymentInvoice.objects.filter") as mock_invoices:
@@ -280,12 +293,12 @@ class TestMemberAccountingUtils:
                         assert "grazing" in ctx
 
 
-@pytest.mark.django_db
-class TestInvoiceUtils:
+class TestInvoiceUtils(BaseTestCase):
     """Test invoice utility functions"""
 
-    def test_invoice_verify_successful_match(self, payment_invoice):
+    def test_invoice_verify_successful_match(self):
         """Test successful invoice verification from CSV"""
+        payment_invoice = self.payment_invoice()
         request = Mock()
         ctx = {"todo": [payment_invoice]}
 
@@ -310,8 +323,9 @@ class TestInvoiceUtils:
                 assert result == 1
                 assert payment_invoice.verified is True
 
-    def test_invoice_verify_amount_mismatch(self, payment_invoice):
+    def test_invoice_verify_amount_mismatch(self):
         """Test invoice verification with amount mismatch"""
+        payment_invoice = self.payment_invoice()
         request = Mock()
         ctx = {"todo": [payment_invoice]}
 
@@ -334,8 +348,9 @@ class TestInvoiceUtils:
                 assert result == 0  # No matches due to amount mismatch
                 assert payment_invoice.verified is False
 
-    def test_invoice_verify_by_registration_code(self, payment_invoice):
+    def test_invoice_verify_by_registration_code(self):
         """Test invoice verification using registration code"""
+        payment_invoice = self.payment_invoice()
         request = Mock()
         ctx = {"todo": [payment_invoice]}
 
@@ -399,11 +414,10 @@ class TestInvoiceUtils:
                 mock_notify.assert_called_once()
 
 
-@pytest.mark.django_db
-class TestBalanceUtils:
+class TestBalanceUtils(BaseTestCase):
     """Test balance and accounting calculation utilities"""
 
-    def test_get_acc_detail(self, run):
+    def test_get_acc_detail(self):
         """Test accounting detail calculation"""
         # Mock accounting items
         item1 = Mock()
@@ -419,7 +433,7 @@ class TestBalanceUtils:
 
             result = get_acc_detail(
                 nm="Test Payments",
-                run=run,
+                run=self.run(),
                 descr="Test description",
                 cls=AccountingItemPayment,
                 cho=PaymentChoices.choices,
@@ -434,16 +448,18 @@ class TestBalanceUtils:
             assert PaymentChoices.MONEY in result["detail"]
             assert PaymentChoices.CREDIT in result["detail"]
 
-    def test_get_acc_reg_type_cancelled(self, registration):
+    def test_get_acc_reg_type_cancelled(self):
         """Test registration type for cancelled registration"""
+        registration = self.registration()
         registration.cancellation_date = date.today()
 
         result = get_acc_reg_type(registration)
 
         assert result == ("can", "Disdetta")
 
-    def test_get_acc_reg_type_with_ticket(self, registration):
+    def test_get_acc_reg_type_with_ticket(self):
         """Test registration type with ticket"""
+        registration = self.registration()
         mock_ticket = Mock()
         mock_ticket.tier = TicketTier.STANDARD
 
@@ -457,7 +473,7 @@ class TestBalanceUtils:
 
             assert result == (TicketTier.STANDARD, "Standard Ticket")
 
-    def test_get_acc_reg_detail(self, run):
+    def test_get_acc_reg_detail(self):
         """Test registration detail calculation"""
         # Mock registrations
         reg1 = Mock()
@@ -476,13 +492,13 @@ class TestBalanceUtils:
             with patch("larpmanager.accounting.balance.get_acc_reg_type") as mock_get_type:
                 mock_get_type.return_value = (TicketTier.STANDARD, "Standard")
 
-                result = get_acc_reg_detail("Registrations", run, "Test registrations")
+                result = get_acc_reg_detail("Registrations", self.run(), "Test registrations")
 
                 assert result["tot"] == Decimal("180.00")  # 100 + 80
                 assert result["num"] == 2
                 assert TicketTier.STANDARD in result["detail"]
 
-    def test_get_run_accounting(self, run):
+    def test_get_run_accounting(self):
         """Test comprehensive run accounting calculation"""
         ctx = {"token_name": "Game Tokens", "credit_name": "Event Credits"}
 
@@ -505,6 +521,7 @@ class TestBalanceUtils:
                 with patch("larpmanager.accounting.balance.get_acc_reg_detail") as mock_reg_detail:
                     mock_reg_detail.return_value = {"tot": Decimal("600.00"), "num": 6}
 
+                    run = self.run()
                     result = get_run_accounting(run, ctx)
 
                     # Check that revenue, costs, and balance are calculated
@@ -512,7 +529,7 @@ class TestBalanceUtils:
                     assert run.costs == Decimal("200.00")  # 50 + 100 + 10 + 40
                     assert run.balance == Decimal("245.00")  # 445 - 200
 
-    def test_check_accounting(self, association):
+    def test_check_accounting(self):
         """Test association accounting check"""
         with patch("larpmanager.accounting.balance.assoc_accounting") as mock_assoc:
             with patch("larpmanager.accounting.balance.RecordAccounting.objects.create") as mock_create:
@@ -523,6 +540,7 @@ class TestBalanceUtils:
 
                 mock_assoc.side_effect = update_ctx
 
+                association = self.association()
                 check_accounting(association.id)
 
                 mock_assoc.assert_called_once()
@@ -530,10 +548,11 @@ class TestBalanceUtils:
                     assoc_id=association.id, global_sum=Decimal("1000.00"), bank_sum=Decimal("950.00")
                 )
 
-    def test_check_run_accounting(self, run):
+    def test_check_run_accounting(self):
         """Test run accounting check"""
         with patch("larpmanager.accounting.balance.get_run_accounting") as mock_get_run:
             with patch("larpmanager.accounting.balance.RecordAccounting.objects.create") as mock_create:
+                run = self.run()
                 run.balance = Decimal("100.00")
 
                 check_run_accounting(run)
@@ -541,8 +560,9 @@ class TestBalanceUtils:
                 mock_get_run.assert_called_once_with(run, {})
                 mock_create.assert_called_once()
 
-    def test_assoc_accounting_data(self, association):
+    def test_assoc_accounting_data(self):
         """Test association accounting data gathering"""
+        association = self.association()
         ctx = {"a_id": association.id}
         year = 2025
 
@@ -560,8 +580,9 @@ class TestBalanceUtils:
             assert ctx["in_sum"] == Decimal("400.00")  # Sum of income sources minus transactions
             assert ctx["out_sum"] == Decimal("200.00")  # Sum of outflows and refunds
 
-    def test_assoc_accounting(self, association):
+    def test_assoc_accounting(self):
         """Test comprehensive association accounting"""
+        association = self.association()
         ctx = {"a_id": association.id}
 
         # Mock membership data
@@ -621,32 +642,33 @@ class TestBalanceUtils:
                             assert "sum_year" in ctx
 
 
-@pytest.mark.django_db
-class TestBaseUtils:
+class TestBaseUtils(BaseTestCase):
     """Test base accounting utility functions"""
 
-    def test_is_reg_provisional_no_payment_feature(self, registration):
+    def test_is_reg_provisional_no_payment_feature(self):
         """Test registration is not provisional without payment feature"""
         from larpmanager.accounting.base import is_reg_provisional
 
         features = []  # No payment feature
-        result = is_reg_provisional(registration, features)
+        result = is_reg_provisional(self.registration(), features)
         assert result is False
 
-    def test_is_reg_provisional_payment_disabled(self, registration):
+    def test_is_reg_provisional_payment_disabled(self):
         """Test registration is not provisional when provisional is disabled"""
         from larpmanager.accounting.base import is_reg_provisional
 
+        registration = self.registration()
         registration.run.event.get_config = Mock(return_value=True)
         features = ["payment"]
 
         result = is_reg_provisional(registration, features)
         assert result is False
 
-    def test_is_reg_provisional_with_payment(self, registration):
+    def test_is_reg_provisional_with_payment(self):
         """Test registration is provisional with payment feature and unpaid balance"""
         from larpmanager.accounting.base import is_reg_provisional
 
+        registration = self.registration()
         registration.run.event.get_config = Mock(return_value=False)
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("0.00")
@@ -655,10 +677,11 @@ class TestBaseUtils:
         result = is_reg_provisional(registration, features)
         assert result is True
 
-    def test_is_reg_provisional_fully_paid(self, registration):
+    def test_is_reg_provisional_fully_paid(self):
         """Test registration is not provisional when fully paid"""
         from larpmanager.accounting.base import is_reg_provisional
 
+        registration = self.registration()
         registration.run.event.get_config = Mock(return_value=False)
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("100.00")
@@ -668,14 +691,14 @@ class TestBaseUtils:
         assert result is False
 
 
-@pytest.mark.django_db
-class TestVatUtils:
+class TestVatUtils(BaseTestCase):
     """Test VAT calculation utilities"""
 
-    def test_compute_vat_basic(self, payment_item):
+    def test_compute_vat_basic(self):
         """Test basic VAT computation"""
         from larpmanager.accounting.vat import compute_vat
 
+        payment_item = self.payment_item()
         payment_item.assoc.get_config = Mock(
             side_effect=lambda key, default: {"vat_ticket": "22", "vat_options": "10"}.get(key, default)
         )
@@ -693,7 +716,7 @@ class TestVatUtils:
                     compute_vat(payment_item)
                     mock_update.assert_called_once()
 
-    def test_get_previous_sum(self, payment_item):
+    def test_get_previous_sum(self):
         """Test getting sum of previous payments"""
         from larpmanager.accounting.vat import get_previous_sum
         from larpmanager.models.accounting import AccountingItemPayment
@@ -703,10 +726,10 @@ class TestVatUtils:
             mock_queryset.aggregate.return_value = {"total": Decimal("50.00")}
             mock_filter.return_value = mock_queryset
 
-            result = get_previous_sum(payment_item, AccountingItemPayment)
+            result = get_previous_sum(self.payment_item(), AccountingItemPayment)
             assert result == Decimal("50.00")
 
-    def test_get_previous_sum_none(self, payment_item):
+    def test_get_previous_sum_none(self):
         """Test getting sum when no previous payments"""
         from larpmanager.accounting.vat import get_previous_sum
         from larpmanager.models.accounting import AccountingItemPayment
@@ -716,24 +739,23 @@ class TestVatUtils:
             mock_queryset.aggregate.return_value = {"total": None}
             mock_filter.return_value = mock_queryset
 
-            result = get_previous_sum(payment_item, AccountingItemPayment)
+            result = get_previous_sum(self.payment_item(), AccountingItemPayment)
             assert result == 0
 
 
-@pytest.mark.django_db
-class TestTokenCreditUtils:
+class TestTokenCreditUtils(BaseTestCase):
     """Test token and credit utility functions"""
 
-    def test_registration_tokens_credits_use_no_remaining(self, registration):
+    def test_registration_tokens_credits_use_no_remaining(self):
         """Test token/credit use with no remaining balance"""
         from larpmanager.accounting.token_credit import registration_tokens_credits_use
 
         remaining = Decimal("-10.00")  # Negative remaining
 
-        registration_tokens_credits_use(registration, remaining, 1)
+        registration_tokens_credits_use(self.registration(), remaining, 1)
         # Should do nothing with negative remaining
 
-    def test_registration_tokens_credits_use_tokens_only(self, registration, member):
+    def test_registration_tokens_credits_use_tokens_only(self):
         """Test using tokens for payment"""
         from larpmanager.accounting.token_credit import registration_tokens_credits_use
 
@@ -744,12 +766,12 @@ class TestTokenCreditUtils:
         with patch("larpmanager.accounting.token_credit.get_user_membership") as mock_get_membership:
             mock_get_membership.return_value = mock_membership
             with patch("larpmanager.accounting.token_credit.AccountingItemPayment.objects.create") as mock_create:
-                registration_tokens_credits_use(registration, Decimal("5.00"), 1)
+                registration_tokens_credits_use(self.registration(), Decimal("5.00"), 1)
 
                 assert mock_membership.tokens == Decimal("5")  # 10 - 5
                 mock_create.assert_called_once()
 
-    def test_registration_tokens_credits_overpay(self, registration):
+    def test_registration_tokens_credits_overpay(self):
         """Test reversing overpayments"""
         from larpmanager.accounting.token_credit import registration_tokens_credits_overpay
 
@@ -765,12 +787,12 @@ class TestTokenCreditUtils:
             mock_queryset.order_by.return_value = [mock_payment]
             mock_select.return_value = mock_queryset
 
-            registration_tokens_credits_overpay(registration, Decimal("5.00"), 1)
+            registration_tokens_credits_overpay(self.registration(), Decimal("5.00"), 1)
 
             assert mock_payment.value == Decimal("5.00")  # 10 - 5
             mock_payment.save.assert_called_once()
 
-    def test_get_regs_paying_incomplete(self, association):
+    def test_get_regs_paying_incomplete(self):
         """Test getting registrations with incomplete payments"""
         from larpmanager.accounting.token_credit import get_regs_paying_incomplete
 
@@ -780,10 +802,10 @@ class TestTokenCreditUtils:
             mock_queryset.annotate.return_value = mock_queryset
             mock_queryset.filter.return_value = []
 
-            result = get_regs_paying_incomplete(association)
-            mock_get_regs.assert_called_once_with(association)
+            result = get_regs_paying_incomplete(self.association())
+            mock_get_regs.assert_called_once_with(self.association())
 
-    def test_update_token_credit_tokens(self, other_item_token):
+    def test_update_token_credit_tokens(self):
         """Test updating member token balance"""
         from larpmanager.accounting.token_credit import update_token_credit
 
@@ -798,12 +820,12 @@ class TestTokenCreditUtils:
                 with patch("larpmanager.accounting.token_credit.get_sum") as mock_get_sum:
                     mock_get_sum.side_effect = [Decimal("10"), Decimal("5")]  # given, used
 
-                    update_token_credit(other_item_token, token=True)
+                    update_token_credit(self.other_item_token(), token=True)
 
                     assert mock_membership.tokens == Decimal("5")  # 10 - 5
                     mock_membership.save.assert_called_once()
 
-    def test_update_token_credit_credits(self, other_item_credit):
+    def test_update_token_credit_credits(self):
         """Test updating member credit balance"""
         from larpmanager.accounting.token_credit import update_token_credit
 
@@ -823,44 +845,43 @@ class TestTokenCreditUtils:
                         Decimal("2"),
                     ]  # expenses, given, used, refunded
 
-                    update_token_credit(other_item_credit, token=False)
+                    update_token_credit(self.other_item_credit(), token=False)
 
                     assert mock_membership.credit == Decimal("23")  # 20 + 10 - 5 - 2
                     mock_membership.save.assert_called_once()
 
-    def test_handle_tokes_credits_disabled(self, registration):
+    def test_handle_tokes_credits_disabled(self):
         """Test token/credit handling when feature is disabled"""
         from larpmanager.accounting.token_credit import handle_tokes_credits
 
         features = []  # No token_credit feature
 
         with patch("larpmanager.accounting.token_credit.registration_tokens_credits_use") as mock_use:
-            handle_tokes_credits(1, features, registration, Decimal("10.00"))
+            handle_tokes_credits(1, features, self.registration(), Decimal("10.00"))
             mock_use.assert_not_called()
 
 
-@pytest.mark.django_db
-class TestPaymentUtils:
+class TestPaymentUtils(BaseTestCase):
     """Test payment utility functions"""
 
-    def test_get_payment_fee(self, association):
+    def test_get_payment_fee(self):
         """Test getting payment fee for method"""
         from larpmanager.accounting.payment import get_payment_fee
 
         with patch("larpmanager.accounting.payment.get_payment_details") as mock_get_details:
             mock_get_details.return_value = {"paypal_fee": "2.5"}
 
-            result = get_payment_fee(association, "paypal")
+            result = get_payment_fee(self.association(), "paypal")
             assert result == 2.5
 
-    def test_get_payment_fee_no_config(self, association):
+    def test_get_payment_fee_no_config(self):
         """Test getting payment fee when not configured"""
         from larpmanager.accounting.payment import get_payment_fee
 
         with patch("larpmanager.accounting.payment.get_payment_details") as mock_get_details:
             mock_get_details.return_value = {}
 
-            result = get_payment_fee(association, "paypal")
+            result = get_payment_fee(self.association(), "paypal")
             assert result == 0.0
 
     def test_unique_invoice_cod(self):
@@ -895,10 +916,12 @@ class TestPaymentUtils:
         assert round_up_to_two_decimals(1.231) == 1.24
         assert round_up_to_two_decimals(1.200) == 1.20
 
-    def test_update_invoice_gross_fee(self, payment_invoice, association):
+    def test_update_invoice_gross_fee(self):
         """Test updating invoice with gross amount and fees"""
         from larpmanager.accounting.payment import update_invoice_gross_fee
 
+        payment_invoice = self.payment_invoice()
+        association = self.association()
         request = Mock()
         pay_method = Mock()
         pay_method.slug = "paypal"
@@ -913,11 +936,12 @@ class TestPaymentUtils:
             assert payment_invoice.mc_gross == result
             assert payment_invoice.mc_fee > 0
 
-    def test_payment_received_registration(self, payment_invoice):
+    def test_payment_received_registration(self):
         """Test processing received registration payment"""
         from larpmanager.accounting.payment import payment_received
         from larpmanager.models.accounting import PaymentType
 
+        payment_invoice = self.payment_invoice()
         payment_invoice.typ = PaymentType.REGISTRATION
         payment_invoice.idx = 1
 
@@ -934,14 +958,14 @@ class TestPaymentUtils:
                     mock_process.assert_called_once()
 
 
-@pytest.mark.django_db
-class TestRegistrationUtils:
+class TestRegistrationUtils(BaseTestCase):
     """Test registration accounting utility functions"""
 
-    def test_get_reg_iscr_basic(self, registration):
+    def test_get_reg_iscr_basic(self):
         """Test basic registration signup fee calculation"""
         from larpmanager.accounting.registration import get_reg_iscr
 
+        registration = self.registration()
         registration.ticket = Mock()
         registration.ticket.price = Decimal("100.00")
         registration.additionals = 0
@@ -958,10 +982,11 @@ class TestRegistrationUtils:
                 result = get_reg_iscr(registration)
                 assert result == Decimal("110.00")  # 100 + 10
 
-    def test_get_reg_iscr_with_discounts(self, registration):
+    def test_get_reg_iscr_with_discounts(self):
         """Test registration fee with discounts"""
         from larpmanager.accounting.registration import get_reg_iscr
 
+        registration = self.registration()
         registration.ticket = Mock()
         registration.ticket.price = Decimal("100.00")
         registration.additionals = 0
@@ -982,7 +1007,7 @@ class TestRegistrationUtils:
                 result = get_reg_iscr(registration)
                 assert result == Decimal("80.00")  # 100 - 20
 
-    def test_get_reg_payments(self, registration):
+    def test_get_reg_payments(self):
         """Test calculating total payments for registration"""
         from larpmanager.accounting.registration import get_reg_payments
 
@@ -996,11 +1021,12 @@ class TestRegistrationUtils:
 
         mock_payments = [mock_payment1, mock_payment2]
 
+        registration = self.registration()
         result = get_reg_payments(registration, mock_payments)
         assert result == Decimal("80.00")
         assert registration.payments == {"money": Decimal("50.00"), "credit": Decimal("30.00")}
 
-    def test_get_reg_transactions(self, registration):
+    def test_get_reg_transactions(self):
         """Test calculating transaction fees for registration"""
         from larpmanager.accounting.registration import get_reg_transactions
 
@@ -1010,25 +1036,29 @@ class TestRegistrationUtils:
         with patch("larpmanager.accounting.registration.AccountingItemTransaction.objects.filter") as mock_filter:
             mock_filter.return_value = [mock_transaction]
 
-            result = get_reg_transactions(registration)
+            result = get_reg_transactions(self.registration())
             assert result == Decimal("2.50")
 
-    def test_get_date_surcharge_staff_ticket(self, registration, event):
+    def test_get_date_surcharge_staff_ticket(self):
         """Test no surcharge for staff tickets"""
         from larpmanager.accounting.registration import get_date_surcharge
         from larpmanager.models.registration import TicketTier
 
+        registration = self.registration()
+        event = self.event()
         registration.ticket = Mock()
         registration.ticket.tier = TicketTier.STAFF
 
         result = get_date_surcharge(registration, event)
         assert result == 0
 
-    def test_get_date_surcharge_with_surcharges(self, registration, event):
+    def test_get_date_surcharge_with_surcharges(self):
         """Test surcharge calculation with date-based surcharges"""
         from larpmanager.accounting.registration import get_date_surcharge
         from larpmanager.models.registration import TicketTier
 
+        registration = self.registration()
+        event = self.event()
         registration.ticket = Mock()
         registration.ticket.tier = TicketTier.STANDARD
         registration.created = date.today()
@@ -1044,10 +1074,11 @@ class TestRegistrationUtils:
             result = get_date_surcharge(registration, event)
             assert result == Decimal("15.00")  # 10 + 5
 
-    def test_quota_check(self, registration):
+    def test_quota_check(self):
         """Test payment quota calculation"""
         from larpmanager.accounting.registration import quota_check
 
+        registration = self.registration()
         registration.quotas = 4
         registration.tot_iscr = Decimal("400.00")
         registration.tot_payed = Decimal("100.00")
@@ -1071,7 +1102,7 @@ class TestRegistrationUtils:
                     assert hasattr(registration, "quota")
                     assert hasattr(registration, "deadline")
 
-    def test_cancel_reg(self, registration):
+    def test_cancel_reg(self):
         """Test registration cancellation"""
         from larpmanager.accounting.registration import cancel_reg
 
@@ -1084,6 +1115,7 @@ class TestRegistrationUtils:
                         "larpmanager.accounting.registration.AccountingItemOther.objects.filter"
                     ) as mock_other_filter:
                         with patch("larpmanager.accounting.registration.reset_event_links") as mock_reset:
+                            registration = self.registration()
                             cancel_reg(registration)
 
                             assert registration.cancellation_date is not None
@@ -1100,71 +1132,3 @@ class TestRegistrationUtils:
         assert round_to_nearest_cent(10.02) == 10.0
         assert round_to_nearest_cent(10.04) == 10.0  # Within tolerance
         assert round_to_nearest_cent(10.05) == 10.05  # Outside tolerance
-
-
-# Fixtures
-@pytest.fixture
-def association():
-    return Association.objects.create(name="Test Association", slug="test-assoc", email="test@example.com")
-
-
-@pytest.fixture
-def member():
-    return Member.objects.create(username="testuser", email="test@example.com", first_name="Test", last_name="User")
-
-
-@pytest.fixture
-def event(association):
-    return Event.objects.create(name="Test Event", assoc=association, number=1)
-
-
-@pytest.fixture
-def run(event):
-    return Run.objects.create(event=event, number=1, name="Test Run", start=date.today(), end=date.today())
-
-
-@pytest.fixture
-def registration(member, run):
-    return Registration.objects.create(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
-
-
-@pytest.fixture
-def payment_invoice(member, association):
-    return PaymentInvoice(
-        member=member,
-        assoc=association,
-        typ=PaymentType.REGISTRATION,
-        status=PaymentStatus.CREATED,
-        mc_gross=Decimal("100.00"),
-        mc_fee=Decimal("5.00"),
-        causal="Test payment",
-        cod="TEST123",
-        txn_id="TXN456",
-        verified=False,
-    )
-
-
-@pytest.fixture
-def payment_item(member, association, registration):
-    return AccountingItemPayment(
-        member=member,
-        value=Decimal("100.00"),
-        assoc=association,
-        reg=registration,
-        pay=PaymentChoices.MONEY,
-        created=datetime.now(),
-    )
-
-
-@pytest.fixture
-def other_item_token(member, association, run):
-    return AccountingItemOther(
-        member=member, value=Decimal("5"), assoc=association, run=run, oth=OtherChoices.TOKEN, descr="Test tokens"
-    )
-
-
-@pytest.fixture
-def other_item_credit(member, association, run):
-    return AccountingItemOther(
-        member=member, value=Decimal("50.00"), assoc=association, run=run, oth=OtherChoices.CREDIT, descr="Test credits"
-    )

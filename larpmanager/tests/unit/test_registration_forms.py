@@ -21,8 +21,6 @@
 from datetime import date, timedelta
 from decimal import Decimal
 
-import pytest
-
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -36,10 +34,10 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-@pytest.mark.django_db
-class TestRegistrationFormValidation:
+class TestRegistrationFormValidation(BaseTestCase):
     """Test registration form validation"""
 
     def test_registration_form_basic_validation(self, member, run, ticket):

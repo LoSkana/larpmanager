@@ -103,7 +103,7 @@ def unique_invoice_cod(length=16):
         cod = generate_id(length)
         if not PaymentInvoice.objects.filter(cod=cod).exists():
             return cod
-    raise ValueError("Too many attempts to generate the code")
+    raise ValueError("Unable to generate unique invoice code")
 
 
 def set_data_invoice(request, ctx, invoice, form, assoc):
