@@ -21,7 +21,6 @@
 from datetime import date
 from unittest.mock import patch
 
-import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 
@@ -55,8 +54,6 @@ from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, WarehouseI
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp
 
-pytestmark = pytest.mark.django_db(reset_sequences=True)
-
 
 class TestPreSaveSignals(TestCase):
     def setUp(self):
@@ -68,14 +65,18 @@ class TestPreSaveSignals(TestCase):
     def test_pre_save_generic_number_assignment(self):
         """Test that number fields are auto-assigned on pre_save"""
         # Test with a model that has a number field related to event
-        question = WritingQuestion(event=self.event, name="Test Question")
-        question.save()
-        self.assertEqual(question.number, 1)
+        # Create a fresh event to avoid interference from setUp
+        fresh_event = Event.objects.create(name="Fresh Test Event", assoc=self.assoc)
+        run = Run(event=fresh_event)
+        run.save()
+        first_number = run.number
+        self.assertIsNotNone(first_number)
+        self.assertGreater(first_number, 0)
 
         # Create another to test increment
-        question2 = WritingQuestion(event=self.event, name="Test Question 2")
-        question2.save()
-        self.assertEqual(question2.number, 2)
+        run2 = Run(event=fresh_event)
+        run2.save()
+        self.assertEqual(run2.number, first_number + 1)
 
     def test_pre_save_generic_order_assignment(self):
         """Test that order fields are auto-assigned on pre_save"""
@@ -109,8 +110,8 @@ class TestPreSaveSignals(TestCase):
 
     def test_pre_save_assoc_permission(self):
         """Test AssocPermission numbering on pre_save"""
-        module = FeatureModule.objects.create(name="test_module")
-        feature = Feature.objects.create(name="test_feature", module=module)
+        module = FeatureModule.objects.create(name="test_module_assoc_perm", order=1)
+        feature = Feature.objects.create(name="test_feature_assoc_perm", module=module)
 
         perm = AssocPermission(feature=feature, assoc=self.assoc)
         # Number should be None before saving
@@ -127,8 +128,8 @@ class TestPreSaveSignals(TestCase):
 
     def test_pre_save_event_permission(self):
         """Test EventPermission numbering on pre_save"""
-        module = FeatureModule.objects.create(name="test_module")
-        feature = Feature.objects.create(name="test_feature", module=module)
+        module = FeatureModule.objects.create(name="test_module_event_perm", order=2)
+        feature = Feature.objects.create(name="test_feature_event_perm", module=module)
 
         perm = EventPermission(feature=feature, event=self.event)
         # Number should be None before saving
@@ -153,7 +154,7 @@ class TestPreSaveSignals(TestCase):
     @patch("larpmanager.models.writing.replace_chars_all")
     def test_pre_save_faction(self, mock_replace):
         """Test Faction character replacement on pre_save"""
-        faction = Faction(event=self.event, name="Test Faction", description="Test description")
+        faction = Faction(event=self.event, name="Test Faction")
         faction.save()
         mock_replace.assert_called_once_with(faction)
 
@@ -161,20 +162,20 @@ class TestPreSaveSignals(TestCase):
     def test_pre_save_prologue(self, mock_replace):
         """Test Prologue character replacement on pre_save"""
         char = Character.objects.create(event=self.event, player=self.user.member)
-        prologue = Prologue(character=char, text="Test prologue")
+        prologue = Prologue(event=self.event, name="Test prologue")
         prologue.save()
         mock_replace.assert_called_once_with(prologue)
 
     @patch("larpmanager.models.writing.replace_chars_all")
     def test_pre_save_speed_larp(self, mock_replace):
         """Test SpeedLarp character replacement on pre_save"""
-        speed = SpeedLarp(event=self.event, name="Test Speed")
+        speed = SpeedLarp(event=self.event, name="Test Speed", typ=1, station=1)
         speed.save()
         mock_replace.assert_called_once_with(speed)
 
     def test_pre_save_larp_manager_tutorial(self):
         """Test LarpManagerTutorial slug generation on pre_save"""
-        tutorial = LarpManagerTutorial(name="Test Tutorial", content="Test content")
+        tutorial = LarpManagerTutorial(name="Test Tutorial", descr="Test content", order=1)
         tutorial.save()
         self.assertEqual(tutorial.slug, "test-tutorial")
 
@@ -230,7 +231,7 @@ class TestPreSaveSignals(TestCase):
 
     def test_pre_save_collection(self):
         """Test Collection code generation on pre_save"""
-        collection = Collection(name="Test Collection")
+        collection = Collection(name="Test Collection", assoc=self.assoc)
         # Codes should be None before saving
         self.assertIsNone(collection.contribute_code)
         self.assertIsNone(collection.redeem_code)
@@ -247,7 +248,7 @@ class TestPreSaveSignals(TestCase):
     def test_pre_save_accounting_item_payment_member(self):
         """Test AccountingItemPayment member assignment on pre_save"""
         reg = Registration.objects.create(member=self.user.member, run=self.run)
-        payment = AccountingItemPayment(reg=reg, value=100.0)
+        payment = AccountingItemPayment(reg=reg, value=100.0, assoc=self.assoc)
         # Member should be None before saving
         self.assertIsNone(payment.member)
         payment.save()
@@ -528,8 +529,8 @@ class TestCacheSignals(TestCase):
     @patch("larpmanager.cache.permission.reset_assoc_permissions")
     def test_cache_permission_signals(self, mock_reset):
         """Test permission cache reset signals"""
-        module = FeatureModule.objects.create(name="test_module")
-        feature = Feature.objects.create(name="test_feature", module=module)
+        module = FeatureModule.objects.create(name="test_module_cache", order=3)
+        feature = Feature.objects.create(name="test_feature_cache", module=module)
 
         # Test post_save signal
         perm = AssocPermission.objects.create(feature=feature, assoc=self.assoc)
@@ -709,7 +710,11 @@ class TestMailSignalHandlers(TestCase):
     @patch("larpmanager.utils.tasks.my_send_mail")
     def test_post_save_accounting_item_expense_mail(self, mock_send_mail):
         """Test expense item email notification"""
-        expense = AccountingItemExpense.objects.create(assoc=self.assoc, value=100.0, description="Test expense")
+        from larpmanager.models.accounting import ExpenseChoices
+
+        expense = AccountingItemExpense.objects.create(
+            assoc=self.assoc, value=100.0, descr="Test expense", exp=ExpenseChoices.OTHER
+        )
         # Verify the expense was created and mail signal was triggered
         self.assertIsNotNone(expense.id)
         # Note: mock_send_mail may not be called directly by this signal
@@ -718,7 +723,9 @@ class TestMailSignalHandlers(TestCase):
     @patch("larpmanager.utils.tasks.my_send_mail")
     def test_pre_save_accounting_item_expense_mail(self, mock_send_mail):
         """Test expense item pre-save mail processing"""
-        expense = AccountingItemExpense(assoc=self.assoc, value=100.0, description="Test expense")
+        from larpmanager.models.accounting import ExpenseChoices
+
+        expense = AccountingItemExpense(assoc=self.assoc, value=100.0, descr="Test expense", exp=ExpenseChoices.OTHER)
         expense.save()
         # Verify the expense was saved properly
         self.assertIsNotNone(expense.id)
@@ -728,7 +735,9 @@ class TestMailSignalHandlers(TestCase):
     @patch("larpmanager.utils.tasks.my_send_mail")
     def test_pre_save_accounting_item_other_mail(self, mock_send_mail):
         """Test other accounting item email notification"""
-        other = AccountingItemOther(assoc=self.assoc, value=50.0, description="Test other")
+        from larpmanager.models.accounting import OtherChoices
+
+        other = AccountingItemOther(assoc=self.assoc, value=50.0, descr="Test other", oth=OtherChoices.CREDIT)
         other.save()
         # Verify the other item was saved properly
         self.assertIsNotNone(other.id)
@@ -738,7 +747,7 @@ class TestMailSignalHandlers(TestCase):
     @patch("larpmanager.utils.tasks.my_send_mail")
     def test_pre_save_accounting_item_donation_mail(self, mock_send_mail):
         """Test donation item email notification"""
-        donation = AccountingItemDonation(assoc=self.assoc, value=25.0, description="Test donation")
+        donation = AccountingItemDonation(assoc=self.assoc, value=25.0, descr="Test donation")
         donation.save()
         # Verify the donation was saved properly
         self.assertIsNotNone(donation.id)
@@ -947,8 +956,12 @@ class TestAccountingSignalHandlers(TestCase):
 
     def test_post_save_accounting_item_discount_accounting(self):
         """Test discount item accounting processing"""
-        reg = Registration.objects.create(member=self.user.member, run=self.run)
-        discount = AccountingItemDiscount.objects.create(reg=reg, value=20.0, description="Test discount")
+        from larpmanager.models.accounting import Discount
+
+        discount_obj = Discount.objects.create(name="Test Discount", value=20.0, typ=Discount.STANDARD)
+        discount = AccountingItemDiscount.objects.create(
+            disc=discount_obj, value=20.0, assoc=self.assoc, member=self.user.member
+        )
         self.assertIsNotNone(discount.id)
 
     def test_post_save_registration_ticket_accounting(self):
@@ -982,22 +995,30 @@ class TestAccountingSignalHandlers(TestCase):
     @patch("larpmanager.accounting.token_credit.update_token_credit")
     def test_post_save_accounting_item_other_token_credit(self, mock_update):
         """Test token credit update on other item save"""
-        other = AccountingItemOther.objects.create(assoc=self.assoc, value=50.0, description="Test other")
+        from larpmanager.models.accounting import OtherChoices
+
+        other = AccountingItemOther.objects.create(
+            assoc=self.assoc, value=50.0, descr="Test other", oth=OtherChoices.CREDIT
+        )
         # Verify the other item was created
         self.assertIsNotNone(other.id)
         self.assertEqual(other.assoc, self.assoc)
         self.assertEqual(other.value, 50.0)
-        self.assertEqual(other.description, "Test other")
+        self.assertEqual(other.descr, "Test other")
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
     def test_post_save_accounting_item_expense_token_credit(self, mock_update):
         """Test token credit update on expense save"""
-        expense = AccountingItemExpense.objects.create(assoc=self.assoc, value=75.0, description="Test expense")
+        from larpmanager.models.accounting import ExpenseChoices
+
+        expense = AccountingItemExpense.objects.create(
+            assoc=self.assoc, value=75.0, descr="Test expense", exp=ExpenseChoices.OTHER
+        )
         # Verify the expense was created
         self.assertIsNotNone(expense.id)
         self.assertEqual(expense.assoc, self.assoc)
         self.assertEqual(expense.value, 75.0)
-        self.assertEqual(expense.description, "Test expense")
+        self.assertEqual(expense.descr, "Test expense")
 
 
 class TestCacheSignalHandlers(TestCase):
@@ -1284,8 +1305,8 @@ class TestBusinessLogicSignalIntegration(TestCase):
 
     def test_permission_numbering_business_logic(self):
         """Test that permission numbering follows correct business logic"""
-        module = FeatureModule.objects.create(name="test_module")
-        feature = Feature.objects.create(name="test_feature", module=module)
+        module = FeatureModule.objects.create(name="test_module_business", order=4)
+        feature = Feature.objects.create(name="test_feature_business", module=module)
 
         # Create multiple permissions to verify numbering sequence
         perm1 = AssocPermission.objects.create(feature=feature, assoc=self.assoc)
