@@ -299,9 +299,6 @@ msgstr "Uzavřeno"
 msgid "Cover"
 msgstr "Obálka"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -1170,9 +1167,6 @@ msgstr "platby"
 msgid "positive"
 msgstr "pozitivní"
 
-msgid "residues"
-msgstr "rezidua"
-
 msgid "--- Empty"
 msgstr "--- Prázdný"
 
@@ -1739,6 +1733,9 @@ msgstr "Seznam vstupenek"
 
 msgid "Total costs"
 msgstr "Celkové náklady"
+
+msgid "Transaction"
+msgstr "Transakce"
 
 msgid "Transversal"
 msgstr "Příčná"
@@ -2513,8 +2510,8 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Confirm payments"
-msgstr "Potvrzení plateb"
+msgid "Credits residues"
+msgstr "Zbytky úvěrů"
 
 msgid "Current template"
 msgstr "Aktuální šablona"

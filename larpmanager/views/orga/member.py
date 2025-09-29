@@ -34,7 +34,7 @@ from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.common import _get_help_questions
+from larpmanager.utils.common import _get_help_questions, format_email_body
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.member import get_mail
 from larpmanager.utils.paginate import orga_paginate
@@ -305,8 +305,23 @@ def orga_send_mail(request, s):
 @login_required
 def orga_archive_email(request, s):
     ctx = check_event_permission(request, s, "orga_archive_email")
-    orga_paginate(request, ctx, Email)
-    return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
+    ctx.update(
+        {
+            "fields": [
+                ("run", _("Run")),
+                ("recipient", _("Recipient")),
+                ("subj", _("Subject")),
+                ("body", _("Body")),
+                ("sent", _("Sent")),
+            ],
+            "callbacks": {
+                "body": format_email_body,
+                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+                "run": lambda el: str(el.run) if el.run else "",
+            },
+        }
+    )
+    return orga_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 
 # TODO

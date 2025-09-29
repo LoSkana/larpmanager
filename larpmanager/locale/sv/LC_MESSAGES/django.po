@@ -299,9 +299,6 @@ msgstr "Stängt"
 msgid "Cover"
 msgstr "Skydd"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "E-post"
 
@@ -1170,9 +1167,6 @@ msgstr "betalningar"
 msgid "positive"
 msgstr "positiv"
 
-msgid "residues"
-msgstr "restprodukter"
-
 msgid "--- Empty"
 msgstr "--- Tom"
 
@@ -1739,6 +1733,9 @@ msgstr "Biljettlista"
 
 msgid "Total costs"
 msgstr "Totala kostnader"
+
+msgid "Transaction"
+msgstr "Transaktion"
 
 msgid "Transversal"
 msgstr "Transversal"
@@ -2513,8 +2510,8 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
-msgid "Confirm payments"
-msgstr "Bekräfta betalningar"
+msgid "Credits residues"
+msgstr "Restprodukter från krediter"
 
 msgid "Current template"
 msgstr "Nuvarande mall"
