@@ -2068,9 +2068,6 @@ msgstr "No completado"
 msgid "Number events"
 msgstr "Número de eventos"
 
-msgid "Old interface"
-msgstr "Interfaz antigua"
-
 msgid "Passages made"
 msgstr "Medidas adoptadas"
 
@@ -4072,9 +4069,6 @@ msgstr "Retraso en la cuota anual de afiliación"
 
 msgid "Font to be used in page titles"
 msgstr "Fuente que se utilizará en los títulos"
-
-msgid "If checked: uses old interface"
-msgstr "Si está marcada: utiliza la interfaz antigua"
 
 msgid "Manage issues during the event"
 msgstr "Gestionar los problemas durante el acto"

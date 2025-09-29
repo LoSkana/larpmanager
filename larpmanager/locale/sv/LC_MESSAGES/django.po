@@ -2068,9 +2068,6 @@ msgstr "Ej slutfört"
 msgid "Number events"
 msgstr "Antal evenemang"
 
-msgid "Old interface"
-msgstr "Gammalt gränssnitt"
-
 msgid "Passages made"
 msgstr "Åtgärder som vidtagits"
 
@@ -4072,9 +4069,6 @@ msgstr "Försening av årlig medlemsavgift"
 
 msgid "Font to be used in page titles"
 msgstr "teckensnitt som ska användas i titlar"
-
-msgid "If checked: uses old interface"
-msgstr "Om markerat: använder gammalt gränssnitt"
 
 msgid "Manage issues during the event"
 msgstr "Hantera problem under evenemanget"

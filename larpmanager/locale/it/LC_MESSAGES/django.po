@@ -2068,9 +2068,6 @@ msgstr "Non completati"
 msgid "Number events"
 msgstr "Numero eventi"
 
-msgid "Old interface"
-msgstr "Vecchia interfaccia"
-
 msgid "Passages made"
 msgstr "Passaggi effettuati"
 
@@ -4072,9 +4069,6 @@ msgstr "Ritardo nella quota associativa annuale"
 
 msgid "Font to be used in page titles"
 msgstr "font da utilizzare nei titoli"
-
-msgid "If checked: uses old interface"
-msgstr "Se selezionato: utilizza la vecchia interfaccia"
 
 msgid "Manage issues during the event"
 msgstr "Gestisci i problemi durante l'evento"
