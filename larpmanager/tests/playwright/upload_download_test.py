@@ -98,6 +98,10 @@ def abilities(page):
 
 def full(page):
     page.get_by_role("link", name="Dashboard").click()
+
+    # there will be quick setup just confirm
+    submit_confirm(page)
+
     check_download(page, "Full backup")
 
 
