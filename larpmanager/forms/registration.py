@@ -1067,13 +1067,18 @@ class PreRegistrationForm(forms.Form):
         max_existing = max(existing) if existing else 1
         prefs = [r for r in range(1, max_existing + 4) if r not in existing]
         cho_pref = [(r, r) for r in prefs]
-        self.fields["new_pref"] = forms.ChoiceField(
-            required=False,
-            choices=cho_pref,
-            label=_("Preference"),
-            help_text=_("Enter the order of preference of your pre-registration (1 is the maximum)"),
-        )
-        self.initial["new_pref"] = min(prefs)
+
+        # Check if preference editing is disabled via config
+        if self.ctx.get("event") and self.ctx["event"].assoc.get_config("pre_reg_preferences", False):
+            self.fields["new_pref"] = forms.ChoiceField(
+                required=False,
+                choices=cho_pref,
+                label=_("Preference"),
+                help_text=_("Enter the order of preference of your pre-registration (1 is the maximum)"),
+            )
+            self.initial["new_pref"] = min(prefs)
+        else:
+            self.fields["new_pref"] = forms.CharField(widget=forms.HiddenInput(), initial=min(prefs))
 
         self.fields["new_info"] = forms.CharField(
             required=False,

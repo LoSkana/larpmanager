@@ -22,7 +22,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, check_feature, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import check_download, check_feature, go_to, login_orga, submit_confirm, upload
 
 pytestmark = pytest.mark.e2e
 
@@ -84,7 +84,7 @@ def abilities(page):
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
-    page.locator("#id_first").set_input_files(get_path("abilities.csv"))
+    upload(page, "#id_first", get_path("abilities.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created swordOK - Created shieldOK - Created sneak"
@@ -108,7 +108,7 @@ def relationships(page):
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_second").click()
-    page.locator("#id_second").set_input_files(get_path("relationships.csv"))
+    upload(page, "#id_second", get_path("relationships.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("OK - Relationship characcter test character")
     page.get_by_role("link", name="Proceed").click()
@@ -123,9 +123,9 @@ def plots(live_server, page):
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
-    page.locator("#id_first").set_input_files(get_path("plot.csv"))
+    upload(page, "#id_first", get_path("plot.csv"))
     page.locator("#id_second").click()
-    page.locator("#id_second").set_input_files(get_path("roles.csv"))
+    upload(page, "#id_second", get_path("roles.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created plottOK - Plot role characcter plott"
@@ -152,7 +152,7 @@ def quest_trait(page):
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("quest.csv"))
+    upload(page, "#id_first", get_path("quest.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("Loading performed, see logs Proceed Logs OK - Created questt")
     page.get_by_role("link", name="Proceed").click()
@@ -161,7 +161,7 @@ def quest_trait(page):
     page.locator("#orga_traits").get_by_role("link", name="Traits").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("trait.csv"))
+    upload(page, "#id_first", get_path("trait.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("Loading performed, see logs Proceed Logs OK - Created traitt")
     page.get_by_role("link", name="Proceed").click()
@@ -173,7 +173,7 @@ def registrations(page):
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("registration.csv"))
+    upload(page, "#id_first", get_path("registration.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
@@ -185,9 +185,9 @@ def reg_form(page):
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("reg-questions.csv"))
+    upload(page, "#id_first", get_path("reg-questions.csv"))
     page.locator("#id_second").click()
-    page.locator("#id_second").set_input_files(get_path("reg-options.csv"))
+    upload(page, "#id_second", get_path("reg-options.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created tbmobwOK - Created qmhcufOK - Created holdmfOK - Created lyucezOK - Created bamkzwOK - Created npyrxdOK - Created rdtbggOK - Created qkcyjrOK - Created fjxkum"
@@ -203,7 +203,7 @@ def characters(page):
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("character.csv"))
+    upload(page, "#id_first", get_path("character.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
@@ -217,7 +217,7 @@ def factions(page):
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("faction.csv"))
+    upload(page, "#id_first", get_path("faction.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("OK - Created facction")
     page.get_by_role("link", name="Proceed").click()
@@ -229,8 +229,8 @@ def char_form(page):
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
-    page.locator("#id_first").set_input_files(get_path("char-questions.csv"))
-    page.locator("#id_second").set_input_files(get_path("char-options.csv"))
+    upload(page, "#id_first", get_path("char-questions.csv"))
+    upload(page, "#id_second", get_path("char-options.csv"))
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created bibiOK - Created babaOK - Created werOK - Created asdOK - Created poiOK - Created huhuOK - Created trtrOK - Created rrrrrrOK - Created tttttt"
@@ -288,4 +288,4 @@ def check_user_fee(live_server, page):
 
 
 def get_path(file):
-    return Path(__file__).parent / "resources" / "test_upload" / file
+    return Path(__file__).parent.parent / "resources" / "test_upload" / file

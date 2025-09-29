@@ -57,6 +57,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.casting import AssignmentTrait, QuestType
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
@@ -874,6 +875,10 @@ def get_pre_registration(event):
 def orga_pre_registrations(request, s):
     ctx = check_event_permission(request, s, "orga_pre_registrations")
     ctx["dc"] = get_pre_registration(ctx["event"])
+
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 
 

@@ -335,5 +335,10 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'deepl': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
     },
 }

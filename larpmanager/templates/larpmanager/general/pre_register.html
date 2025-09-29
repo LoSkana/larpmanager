@@ -25,14 +25,16 @@
     <table class="mob">
         <tr>
             <th>{% trans "Event" %}</th>
-            <th>{% trans "Order" %}</th>
+            {% if preferences %}
+                <th>{% trans "Order" %}</th>
+            {% endif %}
             <th>{% trans "Do you want to tell us something" %}?</th>
             <th></th>
         </tr>
         {% for al in already %}
             <tr>
                 <td>{{ al.event }}</td>
-                <td>{{ al.pref }}</td>
+                {% if preferences %}<td>{{ al.pref }}</td>{% endif %}
                 <td>{{ al.info }}</td>
                 <td>
                     <a href="{% url 'pre_register_remove' al.event.slug %}">{% trans "Delete" %}</a>

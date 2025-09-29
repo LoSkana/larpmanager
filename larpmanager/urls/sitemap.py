@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from datetime import datetime
 from io import StringIO
 
 from django.http import HttpResponse
@@ -83,6 +83,7 @@ def _organization_sitemap(request):
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
         .filter(event__assoc_id=request.assoc["id"])
+        .filter(end__gte=datetime.now())
         .select_related("event", "event__assoc")
         .order_by("-end")
     )

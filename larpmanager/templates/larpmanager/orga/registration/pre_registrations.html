@@ -28,7 +28,9 @@
             <tr>
                 <th>{% trans "Member" %}</th>
                 <th>{% trans "Mail" %}</th>
-                <th>{% trans "Preference" %}</th>
+                {% if preferences %}
+                    <th>{% trans "Preference" %}</th>
+                {% endif %}
                 <th>{% trans "Joined" %}</th>
                 <th>{% trans "Info" %}</th>
                 <th>{% trans "Date" %}</th>
@@ -38,7 +40,7 @@
             <tr>
                 <td>{{ el.member }}</td>
                 <td>{{ el.member.email }}</td>
-                <td>{{ el.pref }}</td>
+                {% if preferences %}<td>{{ el.pref }}</td>{% endif %}
                 <td>
                     {% if el.signed %}<i class="fa-solid fa-check"></i>{% endif %}
                 </td>

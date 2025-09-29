@@ -314,6 +314,9 @@ msgstr "Arrangement"
 msgid "Field"
 msgstr "Felt"
 
+msgid "Fifth"
+msgstr "Femte"
+
 msgid "First"
 msgstr "Første"
 
@@ -408,6 +411,9 @@ msgstr "Skatter og avgifter"
 msgid "Texts"
 msgstr "Tekster"
 
+msgid "Third"
+msgstr "Tredje"
+
 msgid "Title"
 msgstr "Tittel"
 
@@ -501,6 +507,9 @@ msgstr "Fyllstoff"
 msgid "Footer"
 msgstr "Bunntekst"
 
+msgid "Fourth"
+msgstr "Fjerde"
+
 msgid "Gender"
 msgstr "Sjanger"
 
@@ -587,6 +596,9 @@ msgstr "Sikkerhet"
 
 msgid "Search"
 msgstr "Søk"
+
+msgid "Second"
+msgstr "Andre"
 
 msgid "Secret"
 msgstr "Hemmelig"
@@ -2056,9 +2068,6 @@ msgstr "Ikke fullført"
 msgid "Number events"
 msgstr "Antall hendelser"
 
-msgid "Old interface"
-msgstr "Gammelt grensesnitt"
-
 msgid "Passages made"
 msgstr "Tiltak som er iverksatt"
 
@@ -2860,6 +2869,9 @@ msgstr "Deaktiver tildeling"
 
 msgid "Electronic invoice"
 msgstr "Elektronisk faktura"
+
+msgid "Enable preferences"
+msgstr "Aktiver innstillinger"
 
 msgid "Go to the form for"
 msgstr "Gå til skjemaet for"
@@ -3916,6 +3928,9 @@ msgstr "Tilbakeholdelse som transaksjonskostnad"
 msgid "Would you like to change it"
 msgstr "Ønsker du å endre det"
 
+msgid "Your event has been created"
+msgstr "Arrangementet ditt har blitt opprettet"
+
 msgid "please fill in your profile"
 msgstr "vennligst fyll ut profilen din"
 
@@ -4036,6 +4051,9 @@ msgstr "Transport - bensin, motorvei"
 msgid "Unconverted pre-registrations"
 msgstr "Ikke-konverterte forhåndsregistreringer"
 
+msgid "You don’t have any events yet"
+msgstr "Du har ingen arrangementer ennå"
+
 msgid "Your account is now activated"
 msgstr "Kontoen din er nå aktiv"
 
@@ -4051,9 +4069,6 @@ msgstr "Forsinkelse i årlig medlemsavgift"
 
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
-
-msgid "If checked: uses old interface"
-msgstr "Hvis avkrysset: bruker gammelt grensesnitt"
 
 msgid "Manage issues during the event"
 msgstr "Håndtere problemer under arrangementet"
@@ -5169,6 +5184,9 @@ msgstr "Nå kan du angi åpningsdato for registrering"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Fødested ikke inkludert i ISTAT-listen"
 
+msgid "Please create your first event to get started"
+msgstr "Opprett ditt første arrangement for å komme i gang"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Oppdatert oppføring av %(event)s etter %(user)s"
@@ -6168,9 +6186,6 @@ msgstr "Merk at hvis kostnaden er 0, vil den automatisk bli tildelt"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nå kan deltakerne sende inn donasjoner, og du kan gå gjennom dem"
-
-msgid "Quickly configure your organization's most important settings"
-msgstr "Konfigurer raskt organisasjonens viktigste innstillinger"
 
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
@@ -7224,6 +7239,12 @@ msgstr ""
 "I fraksjonen er det nevnt en karakter, men den ser ikke ut til å eksistere"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Siste trinn er å fullføre oppsettet av arrangementet ved å legge til start- "
+"og sluttdatoer"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "En del av registreringsavgiften stammer kun fra de valgte "
@@ -7365,6 +7386,13 @@ msgid ""
 "picture"
 msgstr ""
 "Hvis avkrysset, kan deltakerne tilpasse profilbildet til karakterene sine"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Hvis avkrysset, oppgir deltakerne en preferanseverdi når de legger til "
+"forhåndsregistreringer"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8011,6 +8039,13 @@ msgid ""
 "amount calculated"
 msgstr ""
 "Angi verdien av rabatten, den vil bli trukket fra det beregnede totalbeløpet"
+
+msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Fullfør nå hurtigoppsettet ved å velge de funksjonene som er mest nyttige "
+"for dette arrangementet"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -9470,6 +9505,13 @@ msgstr ""
 "forespørslene"
 
 msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Før du åpner dashbordet for arrangementet, må du fullføre hurtigoppsettet "
+"ved å velge de funksjonene som er mest nyttige for arrangementet ditt"
+
+msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers"
 msgstr ""
@@ -9744,6 +9786,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Hvis du velger én (eller flere) fraksjoner, vil spørsmålet bare "
 "vises til deltakere med karakterer i alle de valgte fraksjonene"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Før du åpner organisasjonens dashbord, må du fullføre hurtigoppsettet ved å "
+"velge de funksjonene som er mest nyttige for organisasjonen din"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

@@ -77,6 +77,8 @@
 
                     $form.append($hiddenInput);
 
+                    console.log($form.action);
+
                     $form.submit();
                 });
             {% endif %}

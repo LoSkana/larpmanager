@@ -1204,38 +1204,8 @@ class OrgaQuickSetupForm(QuickSetupForm):
         """
         super().__init__(*args, **kwargs)
 
-        self.setup = {
-            "registration_open": (
-                True,
-                _("Registration opening date"),
-                _("Do you want to open registrations at a specific date and time instead of immediately"),
-            ),
-            "registration_secret": (
-                True,
-                _("Early registration link"),
-                _("Do you want to enable a secret registration link to allow early sign-ups"),
-            ),
-            "player_cancellation": (
-                True,
-                _("Signup cancellation"),
-                _("Do you want to allow users to cancel their registrations on their own"),
-            ),
-            "reg_installments": (
-                True,
-                _("Payment installments"),
-                _("Do you want to split the registration fee into fixed payment installments"),
-            ),
-            "reg_quotas": (
-                True,
-                _("Payment quotas"),
-                _("Do you want to split the registration fee into dynamic payment quotas"),
-            ),
-            "pay_what_you_want": (
-                True,
-                _("Voluntary donation"),
-                _("Do you want to allow users to add a voluntary donation to their registration fee"),
-            ),
-        }
+        self.setup = {}
+
         if self.instance.assoc.skin_id == 1:
             self.setup.update(
                 {
@@ -1261,6 +1231,41 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     ),
                 }
             )
+
+        self.setup.update(
+            {
+                "registration_open": (
+                    True,
+                    _("Registration opening date"),
+                    _("Do you want to open registrations at a specific date and time instead of immediately"),
+                ),
+                "registration_secret": (
+                    True,
+                    _("Early registration link"),
+                    _("Do you want to enable a secret registration link to allow early sign-ups"),
+                ),
+                "player_cancellation": (
+                    True,
+                    _("Signup cancellation"),
+                    _("Do you want to allow users to cancel their registrations on their own"),
+                ),
+                "reg_installments": (
+                    True,
+                    _("Payment installments"),
+                    _("Do you want to split the registration fee into fixed payment installments"),
+                ),
+                "reg_quotas": (
+                    True,
+                    _("Payment quotas"),
+                    _("Do you want to split the registration fee into dynamic payment quotas"),
+                ),
+                "pay_what_you_want": (
+                    True,
+                    _("Voluntary donation"),
+                    _("Do you want to allow users to add a voluntary donation to their registration fee"),
+                ),
+            }
+        )
 
         self.init_fields(get_event_features(self.instance.pk))
 

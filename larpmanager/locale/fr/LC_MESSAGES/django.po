@@ -314,6 +314,9 @@ msgstr "Événement"
 msgid "Field"
 msgstr "Champ d'application"
 
+msgid "Fifth"
+msgstr "Cinquième"
+
 msgid "First"
 msgstr "Première"
 
@@ -408,6 +411,9 @@ msgstr "Impôts"
 msgid "Texts"
 msgstr "Textes"
 
+msgid "Third"
+msgstr "Troisièmement"
+
 msgid "Title"
 msgstr "Titre"
 
@@ -501,6 +507,9 @@ msgstr "Remplisseur"
 msgid "Footer"
 msgstr "Pied de page"
 
+msgid "Fourth"
+msgstr "Quatrième"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +596,9 @@ msgstr "Sécurité"
 
 msgid "Search"
 msgstr "Recherche"
+
+msgid "Second"
+msgstr "Deuxième"
 
 msgid "Secret"
 msgstr "Secret"
@@ -2056,9 +2068,6 @@ msgstr "Pas terminé"
 msgid "Number events"
 msgstr "Nombre d'événements"
 
-msgid "Old interface"
-msgstr "Ancienne interface"
-
 msgid "Passages made"
 msgstr "Mesures prises"
 
@@ -2860,6 +2869,9 @@ msgstr "Désactiver l'affectation"
 
 msgid "Electronic invoice"
 msgstr "Facture électronique"
+
+msgid "Enable preferences"
+msgstr "Activer les préférences"
 
 msgid "Go to the form for"
 msgstr "Accéder au formulaire pour"
@@ -3916,6 +3928,9 @@ msgstr "La rétention comme coût de transaction"
 msgid "Would you like to change it"
 msgstr "Souhaitez-vous le modifier"
 
+msgid "Your event has been created"
+msgstr "Votre événement a été créé"
+
 msgid "please fill in your profile"
 msgstr "veuillez remplir votre profil"
 
@@ -4036,6 +4051,9 @@ msgstr "Transport - essence, autoroute"
 msgid "Unconverted pre-registrations"
 msgstr "Préinscriptions non converties"
 
+msgid "You don’t have any events yet"
+msgstr "Vous n'avez pas encore d'événements"
+
 msgid "Your account is now activated"
 msgstr "Votre compte est maintenant actif"
 
@@ -4051,9 +4069,6 @@ msgstr "Retard dans le paiement de la cotisation annuelle"
 
 msgid "Font to be used in page titles"
 msgstr "police à utiliser dans les titres"
-
-msgid "If checked: uses old interface"
-msgstr "Si la case est cochée : utilise l'ancienne interface"
 
 msgid "Manage issues during the event"
 msgstr "Gérer les problèmes pendant l'événement"
@@ -5175,6 +5190,9 @@ msgstr "Vous pouvez maintenant fixer la date d'ouverture de l'inscription"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lieu de naissance ne figurant pas dans la liste ISTAT"
 
+msgid "Please create your first event to get started"
+msgstr "Veuillez créer votre premier événement pour commencer"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Entrée mise à jour en %(event)s par %(user)s"
@@ -6248,11 +6266,6 @@ msgid "Now participants can submit donation, and you can review them"
 msgstr ""
 "Les participants peuvent désormais soumettre des dons et vous pouvez les "
 "examiner"
-
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-"Configurez rapidement les paramètres les plus importants de votre "
-"organisation"
 
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
@@ -7470,6 +7483,12 @@ msgstr ""
 "exister"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Dernière étape, veuillez compléter la configuration de l'événement en "
+"ajoutant les dates de début et de fin"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Partie des droits d'inscription provenant uniquement des options "
@@ -7623,6 +7642,13 @@ msgid ""
 msgstr ""
 "Si cette option est cochée, elle permet aux participants de personnaliser "
 "l'image de profil de leur personnage"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Si cette case est cochée, les participants donnent une valeur de préférence "
+"lorsqu'ils ajoutent des pré-inscriptions"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8295,6 +8321,13 @@ msgid ""
 "amount calculated"
 msgstr ""
 "Indiquez la valeur de la remise, elle sera déduite du montant total calculé"
+
+msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Veuillez maintenant compléter la configuration rapide en sélectionnant les "
+"fonctions les plus utiles pour cet événement"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -9767,6 +9800,14 @@ msgstr ""
 "logistique de ramassage), et le personnel peut gérer l'état de ces demandes"
 
 msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Avant d'accéder au tableau de bord de l'événement, veuillez procéder à la "
+"configuration rapide en sélectionnant les fonctions les plus utiles pour "
+"votre événement"
+
+msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers"
 msgstr ""
@@ -10054,6 +10095,14 @@ msgstr ""
 "Facultatif - Si vous sélectionnez une (ou plusieurs) faction(s), la question"
 " ne sera posée qu'aux participants dont les personnages appartiennent à "
 "toutes les factions choisies"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Avant d'accéder au tableau de bord de l'organisation, veuillez procéder à la"
+" configuration rapide en sélectionnant les fonctionnalités les plus utiles "
+"pour votre organisation"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

@@ -314,6 +314,9 @@ msgstr "Událost"
 msgid "Field"
 msgstr "Pole"
 
+msgid "Fifth"
+msgstr "Pátý"
+
 msgid "First"
 msgstr "První"
 
@@ -408,6 +411,9 @@ msgstr "Daně"
 msgid "Texts"
 msgstr "Texty"
 
+msgid "Third"
+msgstr "Třetí"
+
 msgid "Title"
 msgstr "Název"
 
@@ -501,6 +507,9 @@ msgstr "Výplň"
 msgid "Footer"
 msgstr "Zápatí"
 
+msgid "Fourth"
+msgstr "Čtvrtý"
+
 msgid "Gender"
 msgstr "Žánr"
 
@@ -587,6 +596,9 @@ msgstr "Bezpečnost"
 
 msgid "Search"
 msgstr "Vyhledávání"
+
+msgid "Second"
+msgstr "Druhý"
 
 msgid "Secret"
 msgstr "Tajné"
@@ -2056,9 +2068,6 @@ msgstr "Není dokončeno"
 msgid "Number events"
 msgstr "Počet událostí"
 
-msgid "Old interface"
-msgstr "Staré rozhraní"
-
 msgid "Passages made"
 msgstr "Přijaté kroky"
 
@@ -2860,6 +2869,9 @@ msgstr "Zakázat přiřazení"
 
 msgid "Electronic invoice"
 msgstr "Elektronická faktura"
+
+msgid "Enable preferences"
+msgstr "Povolení předvoleb"
 
 msgid "Go to the form for"
 msgstr "Přejděte na formulář pro"
@@ -3916,6 +3928,9 @@ msgstr "Zadržení jako transakční náklady"
 msgid "Would you like to change it"
 msgstr "Chcete to změnit"
 
+msgid "Your event has been created"
+msgstr "Vaše událost byla vytvořena"
+
 msgid "please fill in your profile"
 msgstr "vyplňte prosím svůj profil"
 
@@ -4036,6 +4051,9 @@ msgstr "Doprava - benzín, dálnice"
 msgid "Unconverted pre-registrations"
 msgstr "Nepřepočtené předběžné registrace"
 
+msgid "You don’t have any events yet"
+msgstr "Zatím nemáte žádné události"
+
 msgid "Your account is now activated"
 msgstr "Váš účet je nyní aktivní"
 
@@ -4051,9 +4069,6 @@ msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Font to be used in page titles"
 msgstr "písmo, které se má použít v nadpisech"
-
-msgid "If checked: uses old interface"
-msgstr "Pokud je zaškrtnuto: používá staré rozhraní"
 
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
@@ -5166,6 +5181,9 @@ msgstr "Nyní můžete nastavit datum zahájení registrace"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
+msgid "Please create your first event to get started"
+msgstr "Vytvořte svou první událost a začněte"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Aktualizované zadání %(event)s podle %(user)s"
@@ -6151,9 +6169,6 @@ msgstr "Všimněte si, že pokud jsou náklady 0, budou automaticky přiřazeny"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nyní mohou účastníci zasílat dary a vy si je můžete prohlédnout"
-
-msgid "Quickly configure your organization's most important settings"
-msgstr "Rychlá konfigurace nejdůležitějších nastavení organizace"
 
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
@@ -7155,6 +7170,11 @@ msgid ""
 msgstr "Ve frakci byla zmíněna postava, ale zdá se, že neexistuje"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"V posledním kroku dokončete nastavení události přidáním data začátku a konce"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Část registračního poplatku odvozená pouze od zvolených doplňkových možností"
@@ -7290,6 +7310,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje účastníkům přizpůsobit si profilový obrázek "
 "své postavy"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Pokud je zaškrtnuto, účastníci při přidávání předběžných registrací uvedou "
+"hodnotu preference"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -7909,6 +7936,13 @@ msgid ""
 "Indicate the value of the discount, it will be deducted from the total "
 "amount calculated"
 msgstr "Uveďte hodnotu slevy, bude odečtena od celkové vypočtené částky"
+
+msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Nyní dokončete rychlé nastavení výběrem funkcí, které jsou pro tuto událost "
+"nejužitečnější"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -9352,6 +9386,13 @@ msgstr ""
 " vyzvednutí) a pracovníci mohou spravovat stav těchto požadavků"
 
 msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Před přístupem k ovládacímu panelu události dokončete rychlé nastavení "
+"výběrem funkcí, které jsou pro vaši událost nejužitečnější"
+
+msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers"
 msgstr ""
@@ -9621,6 +9662,13 @@ msgid ""
 msgstr ""
 "Nepovinné - pokud vyberete jednu (nebo více) frakcí, otázka se zobrazí pouze"
 " účastníkům s postavami ze všech vybraných frakcí"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Před přístupem na řídicí panel organizace dokončete rychlé nastavení výběrem"
+" funkcí, které jsou pro vaši organizaci nejužitečnější"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
