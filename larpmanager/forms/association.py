@@ -306,13 +306,6 @@ class ExeConfigForm(ConfigForm):
         for the association's interface customization.
         """
         # CALENDAR
-        self.set_section("interface", _("Interface"))
-
-        label = _("Old interface")
-        help_text = _("If checked: uses old interface")
-        self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
-
-        # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
         label = _("Past events")

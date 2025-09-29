@@ -2068,9 +2068,6 @@ msgstr "Není dokončeno"
 msgid "Number events"
 msgstr "Počet událostí"
 
-msgid "Old interface"
-msgstr "Staré rozhraní"
-
 msgid "Passages made"
 msgstr "Přijaté kroky"
 
@@ -4066,9 +4063,6 @@ msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Font to be used in page titles"
 msgstr "písmo, které se má použít v nadpisech"
-
-msgid "If checked: uses old interface"
-msgstr "Pokud je zaškrtnuto: používá staré rozhraní"
 
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
