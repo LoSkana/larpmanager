@@ -540,7 +540,6 @@ def post_save_registration_ticket(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender, instance, created, **kwargs):
-    logger.debug(f"RegistrationOption saved: {instance} at {datetime.now()}")
     check_reg_events(instance.question.event)
 
 

@@ -204,7 +204,7 @@ def backend_get(ctx, typ, eid, afield=None):
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, quiet=False):
     """Handle backend editing operations for various content types.
 
     Provides unified interface for editing different model types including
@@ -237,7 +237,8 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
 
         if ctx["form"].is_valid():
             p = ctx["form"].save()
-            messages.success(request, _("Operation completed") + "!")
+            if not quiet:
+                messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)

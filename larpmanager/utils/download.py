@@ -342,7 +342,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(email)
 
     if model == "registration":
-        val.append(el.ticket.name)
+        val.append(el.ticket.name if el.ticket is not None else "")
         key.append(_("Ticket"))
 
         _header_regs(ctx, el, key, val)
