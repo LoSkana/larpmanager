@@ -2513,6 +2513,9 @@ msgstr "Gesamte Sammlung"
 msgid "Color background"
 msgstr "Text-Hintergrund"
 
+msgid "Credits residues"
+msgstr "Kreditrückstände"
+
 msgid "Current template"
 msgstr "Aktuelle Vorlage"
 

@@ -101,9 +101,8 @@ def exe_outflows(request):
             },
         }
     )
-    return exe_paginate(
-        request, ctx, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
-    )
+    exe_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
+    return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
 
 
 @login_required
@@ -146,9 +145,8 @@ def exe_inflows(request):
             },
         }
     )
-    return exe_paginate(
-        request, ctx, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
-    )
+    exe_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
+    return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
 
 
 @login_required
@@ -177,9 +175,8 @@ def exe_donations(request):
             ],
         }
     )
-    return exe_paginate(
-        request, ctx, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
-    )
+    exe_paginate(request, ctx, AccountingItemDonation)
+    return render(request, "larpmanager/exe/accounting/donations.html", ctx)
 
 
 @login_required
@@ -203,9 +200,8 @@ def exe_credits(request):
             ],
         }
     )
-    return exe_paginate(
-        request, ctx, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
-    )
+    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
+    return render(request, "larpmanager/exe/accounting/credits.html", ctx)
 
 
 @login_required
@@ -230,7 +226,8 @@ def exe_tokens(request):
             ],
         }
     )
-    return exe_paginate(request, ctx, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit")
+    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
+    return render(request, "larpmanager/exe/accounting/tokens.html", ctx)
 
 
 @login_required
@@ -264,9 +261,8 @@ def exe_expenses(request):
             },
         }
     )
-    return exe_paginate(
-        request, ctx, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
-    )
+    exe_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
+    return render(request, "larpmanager/exe/accounting/expenses.html", ctx)
 
 
 @login_required
@@ -323,9 +319,10 @@ def exe_payments(request):
             },
         }
     )
-    return exe_paginate(
-        request, ctx, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
+    exe_paginate(
+        request, ctx, AccountingItemPayment, selrel=("reg__member", "reg__run", "inv", "inv__method"), afield="reg"
     )
+    return render(request, "larpmanager/exe/accounting/payments.html", ctx)
 
 
 @login_required
@@ -366,7 +363,8 @@ def exe_invoices(request):
             },
         }
     )
-    return exe_paginate(request, ctx, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit")
+    exe_paginate(request, ctx, PaymentInvoice, selrel=("method", "member"))
+    return render(request, "larpmanager/exe/accounting/invoices.html", ctx)
 
 
 @login_required
@@ -406,12 +404,26 @@ def exe_collections_edit(request, num):
 @login_required
 def exe_refunds(request):
     ctx = check_assoc_permission(request, "exe_refunds")
-    exe_paginate(
-        request,
-        ctx,
-        RefundRequest,
-        show_runs=False,
+    done = _("Done")
+    ctx.update(
+        {
+            "fields": [
+                ("details", _("Informations")),
+                ("member", _("Member")),
+                ("value", _("Total required")),
+                ("credits", _("Credits residues")),
+                ("status", _("Status")),
+                ("action", _("Action")),
+            ],
+            "callbacks": {
+                "status": lambda el: el.get_status_display(),
+                "action": lambda el: f"<a href='{reverse('exe_refunds_confirm', args=[el.id])}'>{done}</a>"
+                if el.status != RefundStatus.PAYED
+                else "",
+            },
+        }
     )
+    exe_paginate(request, ctx, RefundRequest)
     return render(request, "larpmanager/exe/accounting/refunds.html", ctx)
 
 

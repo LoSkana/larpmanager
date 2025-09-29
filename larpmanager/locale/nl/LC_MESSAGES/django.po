@@ -2513,6 +2513,9 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
+msgid "Credits residues"
+msgstr "Credits residuen"
+
 msgid "Current template"
 msgstr "Huidige sjabloon"
 

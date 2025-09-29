@@ -2513,6 +2513,9 @@ msgstr "Total innsamling"
 msgid "Color background"
 msgstr "Tekstbakgrunn"
 
+msgid "Credits residues"
+msgstr "Kreditter rester"
+
 msgid "Current template"
 msgstr "Gjeldende mal"
 

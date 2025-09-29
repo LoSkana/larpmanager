@@ -8584,6 +8584,9 @@ msgstr ""
 msgid "Element approved"
 msgstr ""
 
+msgid "Credits residues"
+msgstr ""
+
 msgid "Verified payments"
 msgstr ""
 

@@ -2513,6 +2513,9 @@ msgstr "Total recolectadol"
 msgid "Color background"
 msgstr "Color de fondo"
 
+msgid "Credits residues"
+msgstr "Residuos de créditos"
+
 msgid "Current template"
 msgstr "Plantilla actual"
 

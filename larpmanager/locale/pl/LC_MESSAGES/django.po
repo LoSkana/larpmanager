@@ -2513,6 +2513,9 @@ msgstr "Łączna kolekcja"
 msgid "Color background"
 msgstr "Kolor tła"
 
+msgid "Credits residues"
+msgstr "Pozostałości kredytów"
+
 msgid "Current template"
 msgstr "Aktualny szablon"
 

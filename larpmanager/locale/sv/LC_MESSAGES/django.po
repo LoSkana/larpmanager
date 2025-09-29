@@ -2513,6 +2513,9 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
+msgid "Credits residues"
+msgstr "Restprodukter från krediter"
+
 msgid "Current template"
 msgstr "Nuvarande mall"
 

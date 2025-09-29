@@ -2513,6 +2513,9 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
+msgid "Credits residues"
+msgstr "Zbytky úvěrů"
+
 msgid "Current template"
 msgstr "Aktuální šablona"
 
