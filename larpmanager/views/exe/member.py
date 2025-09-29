@@ -75,6 +75,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     _get_help_questions,
+    format_email_body,
     get_member,
     normalize_string,
 )
@@ -579,8 +580,24 @@ def exe_send_mail(request):
 @login_required
 def exe_archive_email(request):
     ctx = check_assoc_permission(request, "exe_archive_email")
-    exe_paginate(request, ctx, Email)
-    return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
+    ctx["exe"] = True
+    ctx.update(
+        {
+            "fields": [
+                ("run", _("Run")),
+                ("recipient", _("Recipient")),
+                ("subj", _("Subject")),
+                ("body", _("Body")),
+                ("sent", _("Sent")),
+            ],
+            "callbacks": {
+                "body": format_email_body,
+                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+                "run": lambda el: str(el.run) if el.run else "",
+            },
+        }
+    )
+    return exe_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
 @login_required

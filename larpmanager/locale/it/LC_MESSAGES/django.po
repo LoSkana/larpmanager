@@ -1167,9 +1167,6 @@ msgstr "pagamenti"
 msgid "positive"
 msgstr "positivi"
 
-msgid "residues"
-msgstr "residui"
-
 msgid "--- Empty"
 msgstr "--- Vuoto"
 

@@ -1167,9 +1167,6 @@ msgstr "betalningar"
 msgid "positive"
 msgstr "positiv"
 
-msgid "residues"
-msgstr "restprodukter"
-
 msgid "--- Empty"
 msgstr "--- Tom"
 

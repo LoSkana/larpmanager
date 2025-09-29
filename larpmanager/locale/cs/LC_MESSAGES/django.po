@@ -1167,9 +1167,6 @@ msgstr "platby"
 msgid "positive"
 msgstr "pozitivní"
 
-msgid "residues"
-msgstr "rezidua"
-
 msgid "--- Empty"
 msgstr "--- Prázdný"
 

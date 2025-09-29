@@ -4993,12 +4993,6 @@ msgstr ""
 msgid "you can review, edit, and mark them as assigned"
 msgstr ""
 
-msgid "Total required"
-msgstr ""
-
-msgid "residues"
-msgstr ""
-
 msgid "This page summarises the system entries of"
 msgstr ""
 
@@ -5132,24 +5126,6 @@ msgid "Archive mail"
 msgstr ""
 
 msgid "This page shows all emails, both queued and sent"
-msgstr ""
-
-msgid "Run"
-msgstr ""
-
-msgid "Recipient"
-msgstr ""
-
-msgid "Subject"
-msgstr ""
-
-msgid "Body"
-msgstr ""
-
-msgid "Sent"
-msgstr ""
-
-msgid "Read"
 msgstr ""
 
 msgid ""
@@ -5752,6 +5728,9 @@ msgstr ""
 msgid "Returned"
 msgstr ""
 
+msgid "Run"
+msgstr ""
+
 msgid "Indicate the amount of your donation"
 msgstr ""
 
@@ -6311,9 +6290,6 @@ msgstr ""
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 
-msgid "Approve"
-msgstr ""
-
 msgid "This page shows your personal spending items"
 msgstr ""
 
@@ -6568,6 +6544,9 @@ msgstr ""
 msgid ""
 "This page allows you to read any writing element, using the table search "
 "controls"
+msgstr ""
+
+msgid "Read"
 msgstr ""
 
 msgid ""
@@ -8575,6 +8554,9 @@ msgstr ""
 msgid "Registration completed successfully!"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 msgid "Request approved"
 msgstr ""
 
@@ -8582,6 +8564,9 @@ msgid "Transaction"
 msgstr ""
 
 msgid "Element approved"
+msgstr ""
+
+msgid "Total required"
 msgstr ""
 
 msgid "Credits residues"
@@ -8633,6 +8618,18 @@ msgid "Membership fee of"
 msgstr ""
 
 msgid "Mail added to queue!"
+msgstr ""
+
+msgid "Recipient"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"

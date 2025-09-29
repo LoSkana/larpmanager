@@ -51,7 +51,7 @@ def expense(live_server, page):
 
     # expenses
     go_to(page, live_server, "/manage/features/106/on")
-    go_to(page, live_server, "/test/manage/expenses/my")
+    go_to(page, live_server, "/test/manage/upload/expenses/")
     page.get_by_role("link", name="New").click()
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("10")

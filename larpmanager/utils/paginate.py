@@ -26,7 +26,10 @@ def paginate(request, ctx, typ, template, view, exe=True):
     class_name = typ._meta.model_name
 
     if request.method != "POST":
-        ctx["table_name"] = f"{class_name}_{ctx['a_id'] if exe else ctx['run'].id}"
+        if exe:
+            ctx["table_name"] = f"{class_name}_{ctx['a_id']}"
+        else:
+            ctx["table_name"] = f"{class_name}_{ctx['run'].get_slug()}"
 
         return render(request, template, ctx)
 
@@ -38,7 +41,7 @@ def paginate(request, ctx, typ, template, view, exe=True):
     records_filtered = len(elements)
 
     edit = _("Edit")
-    data = _prepare_data_json(ctx, elements, view, edit)
+    data = _prepare_data_json(ctx, elements, view, edit, exe)
 
     return JsonResponse(
         {
@@ -178,7 +181,7 @@ def _get_query_params(request):
     return start, length, order, filters
 
 
-def _prepare_data_json(ctx, elements, view, edit):
+def _prepare_data_json(ctx, elements, view, edit, exe=True):
     data = []
 
     field_map = {
@@ -194,7 +197,11 @@ def _prepare_data_json(ctx, elements, view, edit):
         field_map.update(ctx["callbacks"])
 
     for row in elements:
-        url = reverse(view, args=[row.id])
+        if exe:
+            url = reverse(view, args=[row.id])
+        else:
+            # For orga views, we need both slug and ID
+            url = reverse(view, args=[ctx["run"].get_slug(), row.id])
         res = {"0": f'<a href="{url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
         for idx, (field, _name) in enumerate(ctx["fields"], start=1):
             res[str(idx)] = field_map.get(field, lambda r: "")(row)

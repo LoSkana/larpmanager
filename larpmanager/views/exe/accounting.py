@@ -101,8 +101,9 @@ def exe_outflows(request):
             },
         }
     )
-    exe_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
-    return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
+    return exe_paginate(
+        request, ctx, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
+    )
 
 
 @login_required
@@ -423,8 +424,7 @@ def exe_refunds(request):
             },
         }
     )
-    exe_paginate(request, ctx, RefundRequest)
-    return render(request, "larpmanager/exe/accounting/refunds.html", ctx)
+    return exe_paginate(request, ctx, RefundRequest, "larpmanager/exe/accounting/refunds.html", "exe_refunds_edit")
 
 
 @login_required
