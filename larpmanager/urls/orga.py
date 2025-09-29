@@ -1126,4 +1126,9 @@ urlpatterns = [
         views_ox.orga_api_px_ability_templates,
         name="orga_api_px_ability_templates",
     ),
+    path(
+        "api/<slug:s>/<int:n>/manage/ci/pool_types/",
+        views_ci.orga_api_ci_pool_types,
+        name="orga_api_ci_pool_types",
+    ),
 ]

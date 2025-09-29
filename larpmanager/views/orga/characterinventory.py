@@ -19,6 +19,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import models
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.http import require_POST
 
@@ -117,3 +118,15 @@ def orga_ci_transfer(request, s, n):
 
     redirect_pk = source_inventory.id if source_inventory else (target_inventory.id if target_inventory else 0)
     return redirect("orga_ci_character_inventory_view", s=s, n=n, num=redirect_pk)
+
+
+@login_required
+def orga_api_ci_pool_types(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_ci_pool_types")
+    ctx["list"] = ctx["event"].get_elements(PoolTypeCI).order_by("number")
+
+    parsed_types = []
+    for type in ctx["list"]:
+        parsed_types.append({"id": type.pk, "name": type.name})
+
+    return JsonResponse(parsed_types, safe=False)
