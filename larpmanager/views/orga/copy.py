@@ -143,7 +143,11 @@ def correct_relationship(e_id, p_id):
         rel.source_id = v
 
         v = rel.target_id
+        if v not in cache_f:
+            continue
         v = cache_f[v]
+        if v not in cache_t:
+            continue
         v = cache_t[v]
         rel.target_id = v
 
