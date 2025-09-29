@@ -4051,6 +4051,9 @@ msgstr "Doprava - benzín, dálnice"
 msgid "Unconverted pre-registrations"
 msgstr "Nepřepočtené předběžné registrace"
 
+msgid "You don’t have any events yet"
+msgstr "Zatím nemáte žádné události"
+
 msgid "Your account is now activated"
 msgstr "Váš účet je nyní aktivní"
 
@@ -5180,6 +5183,9 @@ msgstr "Nyní můžete nastavit datum zahájení registrace"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
+
+msgid "Please create your first event to get started"
+msgstr "Vytvořte svou první událost a začněte"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"

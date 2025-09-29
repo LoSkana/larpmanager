@@ -4051,6 +4051,9 @@ msgstr "Vervoer - benzine, snelweg"
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
 
+msgid "You don’t have any events yet"
+msgstr "Je hebt nog geen evenementen"
+
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
@@ -5183,6 +5186,9 @@ msgstr "Nu kun je de openingsdatum van de registratie instellen"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
+
+msgid "Please create your first event to get started"
+msgstr "Maak je eerste evenement aan om te beginnen"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"

@@ -4051,6 +4051,9 @@ msgstr "Transporte - gasolina, autopista"
 msgid "Unconverted pre-registrations"
 msgstr "Preinscripciones no convertidas"
 
+msgid "You don’t have any events yet"
+msgstr "Aún no tienes ningún evento"
+
 msgid "Your account is now activated"
 msgstr "Tu cuenta ha sido activada"
 
@@ -5180,6 +5183,9 @@ msgstr "Ahora puede fijar la fecha de apertura de la inscripción"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lugar de nacimiento no incluido en la lista ISTAT"
+
+msgid "Please create your first event to get started"
+msgstr "Cree su primer evento para empezar"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"

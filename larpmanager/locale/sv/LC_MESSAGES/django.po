@@ -4051,6 +4051,9 @@ msgstr "Transport - bensin, motorväg"
 msgid "Unconverted pre-registrations"
 msgstr "Förhandsregistreringar som inte konverterats"
 
+msgid "You don’t have any events yet"
+msgstr "Du har inga evenemang ännu"
+
 msgid "Your account is now activated"
 msgstr "Ditt konto är nu aktivt"
 
@@ -5182,6 +5185,9 @@ msgstr "Nu kan du ställa in öppningsdatum för registrering"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
+
+msgid "Please create your first event to get started"
+msgstr "Skapa ditt första event för att komma igång"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"

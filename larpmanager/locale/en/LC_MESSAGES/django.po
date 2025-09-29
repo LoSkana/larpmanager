@@ -8672,6 +8672,12 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
+msgid "You don’t have any events yet"
+msgstr ""
+
+msgid "Please create your first event to get started"
+msgstr ""
+
 msgid "No events are present, create one"
 msgstr ""
 

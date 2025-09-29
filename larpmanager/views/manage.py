@@ -1,4 +1,5 @@
 from datetime import datetime
+from pyexpat.errors import messages
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -88,14 +89,14 @@ def _get_registration_status(run):
 
     # signup open, not already signed in
     status = run.status
-    messages = {
+    reg_messages = {
         "primary": _("Registrations open"),
         "filler": _("Filler registrations"),
         "waiting": _("Waiting list registrations"),
     }
 
     # pick the first matching message (or None)
-    mes = next((msg for key, msg in messages.items() if key in status), None)
+    mes = next((msg for key, msg in reg_messages.items() if key in status), None)
     if mes:
         return mes
     else:
@@ -118,8 +119,21 @@ def _exe_manage(request):
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
     ctx["manage"] = 1
+    features = get_assoc_features(ctx["a_id"])
 
     ctx["event_counts"] = Event.objects.filter(assoc_id=ctx["a_id"]).count()
+    # if no events, and exe_events is present, redirect to create one
+    if not ctx["event_counts"] and "exe_events" in features:
+        msg = (
+            _("Welcome")
+            + "! "
+            + _("You don’t have any events yet")
+            + ". "
+            + _("Please create your first event to get started")
+            + "!"
+        )
+        messages.success(request, msg)
+        return redirect("exe_events_edit", num=0)
 
     que = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW])
     ctx["ongoing_runs"] = que.select_related("event").order_by("end")
@@ -138,7 +152,7 @@ def _exe_manage(request):
             "exe_events",
         )
 
-    _exe_actions(request, ctx)
+    _exe_actions(request, ctx, features)
 
     _exe_suggestions(ctx)
 
@@ -186,13 +200,14 @@ def _exe_suggestions(ctx):
         _add_suggestion(ctx, text, perm)
 
 
-def _exe_actions(request, ctx):
+def _exe_actions(request, ctx, features=None):
     """Determine available executive actions based on association features.
 
     Adds action items to the management dashboard based on user permissions
     and association configuration settings.
     """
-    features = get_assoc_features(ctx["a_id"])
+    if not features:
+        features = get_assoc_features(ctx["a_id"])
     assoc = Association.objects.get(pk=ctx["a_id"])
 
     runs_conclude = Run.objects.filter(
