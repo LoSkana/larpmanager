@@ -6173,9 +6173,6 @@ msgstr "Všimněte si, že pokud jsou náklady 0, budou automaticky přiřazeny"
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nyní mohou účastníci zasílat dary a vy si je můžete prohlédnout"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr "Rychlá konfigurace nejdůležitějších nastavení organizace"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 "Podívejte se na praktické příklady, jak může LarpManager pomoci vaší akci"
@@ -9649,6 +9646,13 @@ msgid ""
 msgstr ""
 "Nepovinné - pokud vyberete jednu (nebo více) frakcí, otázka se zobrazí pouze"
 " účastníkům s postavami ze všech vybraných frakcí"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Před přístupem na řídicí panel organizace dokončete rychlé nastavení výběrem"
+" funkcí, které jsou pro vaši organizaci nejužitečnější"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

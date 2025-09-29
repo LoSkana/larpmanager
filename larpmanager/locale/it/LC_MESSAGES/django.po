@@ -6222,10 +6222,6 @@ msgstr "Si noti che se il costo è 0, verrà assegnato automaticamente"
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Ora i partecipanti possono inviare le donazioni e tu puoi esaminarle"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-"Configurazione rapida delle impostazioni più importanti dell'organizzazione"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr "Guarda esempi pratici di come LarpManager può aiutare i tuoi eventi"
 
@@ -9980,6 +9976,14 @@ msgid ""
 msgstr ""
 "Opzionale - Se si seleziona una (o più) fazioni, la domanda verrà mostrata "
 "solo ai partecipanti con personaggi appartenenti a tutte le fazioni scelte"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Prima di accedere alla dashboard dell'organizzazione, completa la "
+"configurazione rapida selezionando le funzionalità più utili per "
+"l'organizzazione"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

@@ -135,6 +135,16 @@ def _exe_manage(request):
         messages.success(request, msg)
         return redirect("exe_events_edit", num=0)
 
+    # if quick setup was not completed, redirect
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    if not assoc.get_config("exe_quick_suggestion", False):
+        msg = _(
+            "Before accessing the organization dashboard, please complete the quick setup by selecting "
+            "the features most useful for your organization"
+        )
+        messages.success(request, msg)
+        return redirect("exe_quick")
+
     que = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW])
     ctx["ongoing_runs"] = que.select_related("event").order_by("end")
     for run in ctx["ongoing_runs"]:
@@ -169,17 +179,6 @@ def _exe_suggestions(ctx):
     Args:
         ctx: Context dictionary containing association ID and other data
     """
-    assoc = Association.objects.get(pk=ctx["a_id"])
-
-    priorities = {
-        "exe_quick": _("Quickly configure your organization's most important settings"),
-    }
-
-    for perm, text in priorities.items():
-        if assoc.get_config(f"{perm}_suggestion"):
-            continue
-        _add_priority(ctx, text, perm)
-
     suggestions = {
         "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),

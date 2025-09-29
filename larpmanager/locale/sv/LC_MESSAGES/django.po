@@ -6191,9 +6191,6 @@ msgstr "Observera att om kostnaden är 0, kommer den automatiskt att tilldelas"
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nu kan deltagarna skicka in donationer och du kan granska dem"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr "Konfigurera snabbt din organisations viktigaste inställningar"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr "Se praktiska exempel på hur LarpManager kan hjälpa ditt evenemang"
 
@@ -9806,6 +9803,13 @@ msgid ""
 msgstr ""
 "Valfritt - Om du väljer en (eller flera) fraktioner kommer frågan endast att"
 " visas för deltagare med karaktärer i alla valda fraktioner"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Innan du öppnar organisationspanelen ska du slutföra snabbinställningen "
+"genom att välja de funktioner som är mest användbara för din organisation"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
