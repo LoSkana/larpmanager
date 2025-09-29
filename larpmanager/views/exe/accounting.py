@@ -146,8 +146,9 @@ def exe_inflows(request):
             },
         }
     )
-    exe_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
-    return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
+    return exe_paginate(
+        request, ctx, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
+    )
 
 
 @login_required
@@ -172,12 +173,13 @@ def exe_donations(request):
                 ("member", _("Member")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
-                ("date", _("Date")),
+                ("created", _("Date")),
             ],
         }
     )
-    exe_paginate(request, ctx, AccountingItemDonation)
-    return render(request, "larpmanager/exe/accounting/donations.html", ctx)
+    return exe_paginate(
+        request, ctx, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
+    )
 
 
 @login_required
@@ -201,8 +203,9 @@ def exe_credits(request):
             ],
         }
     )
-    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
-    return render(request, "larpmanager/exe/accounting/credits.html", ctx)
+    return exe_paginate(
+        request, ctx, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
+    )
 
 
 @login_required
@@ -227,8 +230,7 @@ def exe_tokens(request):
             ],
         }
     )
-    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
-    return render(request, "larpmanager/exe/accounting/tokens.html", ctx)
+    return exe_paginate(request, ctx, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit")
 
 
 @login_required
@@ -262,8 +264,9 @@ def exe_expenses(request):
             },
         }
     )
-    exe_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
-    return render(request, "larpmanager/exe/accounting/expenses.html", ctx)
+    return exe_paginate(
+        request, ctx, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
+    )
 
 
 @login_required
@@ -320,10 +323,9 @@ def exe_payments(request):
             },
         }
     )
-    exe_paginate(
-        request, ctx, AccountingItemPayment, selrel=("reg__member", "reg__run", "inv", "inv__method"), afield="reg"
+    return exe_paginate(
+        request, ctx, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
     )
-    return render(request, "larpmanager/exe/accounting/payments.html", ctx)
 
 
 @login_required
@@ -364,8 +366,7 @@ def exe_invoices(request):
             },
         }
     )
-    exe_paginate(request, ctx, PaymentInvoice, selrel=("method", "member"))
-    return render(request, "larpmanager/exe/accounting/invoices.html", ctx)
+    return exe_paginate(request, ctx, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit")
 
 
 @login_required
