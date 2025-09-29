@@ -62,17 +62,17 @@ def check_delete(live_server, page):
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
-    page.get_by_role("row", name=" Admin Test Test Larp teeest").get_by_role("link").click()
+    page.get_by_role("row", name="Admin Test Test Larp teeest").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/credits")
-    page.get_by_role("row", name=" Admin Test Test Larp testet").get_by_role("link").click()
+    page.get_by_role("row", name="Admin Test Test Larp testet").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("row", name=" Admin Test test").get_by_role("link").click()
+    page.get_by_role("row", name="Admin Test").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
@@ -124,6 +124,7 @@ def discount(live_server, page):
     expect(page.locator("#discount_tbl")).to_contain_text("20.00€")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("Your updated registration total is: 80€.")
+    page.wait_for_timeout(2000)
     page.locator("#register_go").click()
 
 
