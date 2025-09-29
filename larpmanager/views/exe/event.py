@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
@@ -88,6 +90,12 @@ def exe_events_edit(request, num):
             er.save()
             # reload cache event links
             reset_event_links(request.user.id, ctx["a_id"])
+            msg = (
+                _("Your event has been created")
+                + "!"
+                + _("Now please complete the quick setup by selecting the features most useful for this event")
+            )
+            messages.success(request, msg)
             return redirect("orga_quick", s=ctx["saved"].slug)
         return redirect("exe_events")
     ctx["add_another"] = False

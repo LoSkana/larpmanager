@@ -343,10 +343,23 @@ def _orga_manage(request, s):
     Returns:
         HttpResponse: Rendered organizer management dashboard
     """
+
     ctx = get_event_run(request, s)
+
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:
+        msg = _("Last step, please complete the event setup by adding the start and end dates")
+        messages.success(request, msg)
         return redirect("orga_run", s=s)
+
+    # if quick setup is not done, redirect
+    if not ctx["event"].get_config("orga_quick_suggestion", False):
+        msg = _(
+            "Before accessing the event dashboard, please complete the quick setup by selecting "
+            "the features most useful for your event"
+        )
+        messages.success(request, msg)
+        return redirect("orga_quick", s=s)
 
     ctx["orga_page"] = 1
     ctx["manage"] = 1
