@@ -651,7 +651,7 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__run=instance.run).count() > 0:
+    if RegistrationCharacterRel.objects.filter(reg__member=instance.member).count() > 0:
         return
 
     # get last run of campaign
