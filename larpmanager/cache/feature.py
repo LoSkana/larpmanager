@@ -128,6 +128,14 @@ def get_event_features(ev_id):
 
 
 def update_event_features(ev_id):
+    """Update event feature cache with dependencies.
+
+    Args:
+        ev_id: Event ID to update features for
+
+    Returns:
+        dict: Feature dictionary with enabled features marked as 1
+    """
     try:
         ev = Event.objects.get(pk=ev_id)
         res = get_assoc_features(ev.assoc_id)

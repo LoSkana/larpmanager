@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
@@ -38,6 +40,8 @@ from larpmanager.utils.common import get_char
 from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.experience import add_char_addit
+
+logger = logging.getLogger(__name__)
 
 
 def get_character_relationships(ctx, restrict=True):
@@ -84,9 +88,7 @@ def get_character_relationships(ctx, restrict=True):
     ctx["rel"] = []
     for idx in sorted(cache, key=lambda k: len(cache[k]), reverse=True):
         if idx not in data:
-            # print(idx)
-            # print(data)
-            # print(cache)
+            logger.debug(f"Character index {idx} not found in data keys: {list(data.keys())[:5]}...")
             continue
         el = data[idx]
         if restrict and len(cache[idx]) == 0:
@@ -158,6 +160,14 @@ def get_character_sheet_speedlarp(ctx):
 
 
 def get_character_sheet_questbuilder(ctx):
+    """Build character sheet with quest and trait relationships.
+
+    Args:
+        ctx: Context dictionary with character, quest, and trait data
+
+    Side effects:
+        Updates ctx with sheet_traits containing complete trait and quest information
+    """
     if "questbuilder" not in ctx["features"]:
         return
 
@@ -253,6 +263,15 @@ def get_char_check(request, ctx, num, restrict=False, bypass=False):
 
 
 def get_chars_relations(text, chs_numbers):
+    """Retrieve character relationship data.
+
+    Args:
+        text: Text content to search for character references
+        chs_numbers: List of valid character numbers
+
+    Returns:
+        tuple: (active_characters, extinct_characters) found in text
+    """
     chs = []
     extinct = []
 

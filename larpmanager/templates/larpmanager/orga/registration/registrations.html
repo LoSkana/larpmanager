@@ -141,6 +141,7 @@
                             {% endif %}
                             <th class="date">{% trans "Creation" %} (y/m/d)</th>
                             <th class="date">{% trans "Last change" %} (y/m/d)</th>
+                            <th class="date">{% trans "Full payment" %} (y/m/d)</th>
                             {% if features.pay_what_you_want %}
                                 <th class="acc pay_what">{% trans "PWYW" %}</th>
                             {% endif %}
@@ -268,6 +269,9 @@
                                 {% endif %}
                                 <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>
                                 <td class="date">{{ reg.updated | date:"y/m/d H:i" }}</td>
+                                <td class="date">
+                                    {% if reg.payment_date %}{{ reg.payment_date | date:"y/m/d H:i" }}{% endif %}
+                                </td>
                                 {% if features.pay_what_you_want %}
                                     <td class="acc pay_what"
                                         tooltip="{% trans "Additional free payment fee" %}">
@@ -594,10 +598,6 @@ window.addEventListener('DOMContentLoaded', function() {
                     let vl = data[key][nm];
                     if (parseInt(vl) != 0) {
 
-                        {% if interface_old %}
-                        $('#' + key + ' .' + nm).html(vl);
-                        {% else %}
-
                         Object.keys(window.datatables).forEach(function(dt_key) {
                             var table = window.datatables[dt_key];
                             var cell = table.cell('#' + key, '.' + nm);
@@ -605,7 +605,7 @@ window.addEventListener('DOMContentLoaded', function() {
                                 cell.data(vl).draw(false);
                             }
                         });
-                        {% endif %}
+
                     }
                 }
             }

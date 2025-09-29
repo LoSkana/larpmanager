@@ -91,6 +91,15 @@ class Writing(BaseConceptModel):
 
     @classmethod
     def get_example_csv(cls, features):
+        """
+        Generate example CSV structure for writing element imports.
+
+        Args:
+            features: Set of enabled features to include in CSV template
+
+        Returns:
+            list: List of CSV rows with headers and example data
+        """
         rows = [
             ["number", "name", "presentation", "text"],
             [
@@ -200,6 +209,11 @@ class Character(Writing):
         return get_element_config(self, name, def_v)
 
     def show(self, run=None):
+        """Generate display dictionary with character information and media URLs.
+
+        Creates a comprehensive dictionary containing character details, player info,
+        factions, cover images, mirror characters, and approval status.
+        """
         js = super().show(run)
 
         for s in ["title"]:
@@ -587,6 +601,12 @@ def replace_chars_el(el, chars):
 
 
 def replace_chars_all(instance):
+    """
+    Replace character names in writing content with character numbers.
+
+    Args:
+        instance: Writing model instance to process for character substitution
+    """
     if not instance.pk:
         return
 

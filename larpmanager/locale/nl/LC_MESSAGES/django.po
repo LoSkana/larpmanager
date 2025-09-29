@@ -311,6 +311,9 @@ msgstr "Evenement"
 msgid "Field"
 msgstr "Veld"
 
+msgid "Fifth"
+msgstr "Vijfde"
+
 msgid "First"
 msgstr "Eerste"
 
@@ -405,6 +408,9 @@ msgstr "Belastingen"
 msgid "Texts"
 msgstr "Teksten"
 
+msgid "Third"
+msgstr "Derde"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -498,6 +504,9 @@ msgstr "Vulstof"
 msgid "Footer"
 msgstr "Voettekst"
 
+msgid "Fourth"
+msgstr "Vierde"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -584,6 +593,9 @@ msgstr "Veiligheid"
 
 msgid "Search"
 msgstr "Zoek op"
+
+msgid "Second"
+msgstr "Tweede"
 
 msgid "Secret"
 msgstr "Geheim"
@@ -1806,6 +1818,9 @@ msgstr "Vorm element"
 msgid "Form section"
 msgstr "Formulier sectie"
 
+msgid "Full payment"
+msgstr "Volledige betaling"
+
 msgid "Host Address"
 msgstr "Adres"
 
@@ -2052,9 +2067,6 @@ msgstr "Niet voltooid"
 
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
-
-msgid "Old interface"
-msgstr "Oude interface"
 
 msgid "Passages made"
 msgstr "Ondernomen stappen"
@@ -2585,6 +2597,9 @@ msgstr "Maecenas / Gereduceerd"
 msgid "Payment currency"
 msgstr "Betaling Valuta"
 
+msgid "Payment priority"
+msgstr "Prioriteit betaling"
+
 msgid "Payment to check"
 msgstr "Te controleren betaling"
 
@@ -2851,6 +2866,9 @@ msgstr "Toekenning uitschakelen"
 
 msgid "Electronic invoice"
 msgstr "Elektronische factuur"
+
+msgid "Enable preferences"
+msgstr "Voorkeuren inschakelen"
 
 msgid "Go to the form for"
 msgstr "Ga naar het formulier voor"
@@ -3308,6 +3326,9 @@ msgstr "Inschrijvingen zijn geopend!"
 msgid "Registration not open"
 msgstr "Registratie niet geopend"
 
+msgid "Registration priority"
+msgstr "Voorrang bij registratie"
+
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
 
@@ -3427,6 +3448,9 @@ msgstr "Toepassingen"
 
 msgid "Registration surcharge"
 msgstr "Toeslag"
+
+msgid "Registrations not open"
+msgstr "De inschrijving is nog niet geopend"
 
 msgid "Reimbursement approved"
 msgstr "Vergoeding goedgekeurd"
@@ -3795,9 +3819,6 @@ msgstr "Optie niet langer beschikbaar"
 msgid "Pre-register to the event!"
 msgstr "Schrijf je in op de voorinschrijvingslijst!"
 
-msgid "Registration not yet open!"
-msgstr "De registratie is nog niet geopend."
-
 msgid "Short name - international"
 msgstr "Korte naam - in het Engels"
 
@@ -3903,6 +3924,9 @@ msgstr "Inhouding als transactiekosten"
 
 msgid "Would you like to change it"
 msgstr "Wil je het veranderen"
+
+msgid "Your event has been created"
+msgstr "Je evenement is aangemaakt"
 
 msgid "please fill in your profile"
 msgstr "vul je profiel in"
@@ -4024,6 +4048,9 @@ msgstr "Vervoer - benzine, snelweg"
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
 
+msgid "You don’t have any events yet"
+msgstr "Je hebt nog geen evenementen"
+
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
@@ -4039,9 +4066,6 @@ msgstr "Uitstel van jaarlijkse contributie"
 
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
-
-msgid "If checked: uses old interface"
-msgstr "Indien aangevinkt: gebruikt oude interface"
 
 msgid "Manage issues during the event"
 msgstr "Problemen tijdens het evenement beheren"
@@ -5157,6 +5181,9 @@ msgstr "Nu kun je de openingsdatum van de registratie instellen"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 
+msgid "Please create your first event to get started"
+msgstr "Maak je eerste evenement aan om te beginnen"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
@@ -6182,9 +6209,6 @@ msgstr "Merk op dat als de kosten 0 zijn, ze automatisch worden toegewezen"
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Deelnemers kunnen nu donaties indienen en jij kunt ze beoordelen"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr "Snel de belangrijkste instellingen van je organisatie configureren"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 "Bekijk praktische voorbeelden van hoe LarpManager jouw evenement kan helpen"
@@ -6353,6 +6377,10 @@ msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Je kunt ook een tweede bestand uploaden met de registratieopties"
+
+msgid "You must create at least one quest before you can create traits"
+msgstr ""
+"Je moet minstens één queeste maken voordat je eigenschappen kunt maken"
 
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Je ontvangt een bevestiging van de uitkomst van de evaluatie"
@@ -6707,6 +6735,9 @@ msgstr ""
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Je hebt de registratie voor het %(event)s-evenement correct geannuleerd"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr "Je moet minstens één questtype maken voordat je quests kunt maken"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr "Uw gebruiker heeft niet de vereiste rechten om deze pagina te openen"
@@ -7111,6 +7142,12 @@ msgstr ""
 "hebt verstrekt"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Je moet minstens één type vaardigheid maken voordat je vaardigheden kunt "
+"maken"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "als je dit leeg laat, kan dit de startgebeurtenis van een nieuwe campagne "
@@ -7197,6 +7234,10 @@ msgid ""
 msgstr ""
 "U kunt uw toestemming voor het delen van gegevens intrekken door op de "
 "betreffende link te klikken"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr "Je moet minstens één proloogtype maken voordat je prologen kunt maken"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7331,6 +7372,12 @@ msgstr ""
 "In de factie wordt een personage genoemd, maar het lijkt niet te bestaan"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Voltooi als laatste stap de instelling van het evenement door de begin- en "
+"einddatum toe te voegen"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Deel van het inschrijfgeld dat alleen is afgeleid van de gekozen extra "
@@ -7358,6 +7405,12 @@ msgid ""
 msgstr ""
 "Je kunt er niet tegelijkertijd aan werken: het werk van een van jullie zou "
 "verloren gaan"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Je moet minstens één sjabloon voor handouts maken voordat je handouts kunt "
+"maken"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -7475,6 +7528,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, kunnen deelnemers de profielfoto van hun "
 "personage aanpassen"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Indien aangevinkt, geven deelnemers een voorkeurswaarde op bij het toevoegen"
+" van preregistraties"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8145,6 +8205,13 @@ msgstr ""
 "berekende bedrag"
 
 msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Voltooi nu de snelle installatie door de functies te selecteren die het "
+"meest nuttig zijn voor dit evenement"
+
+msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
 msgstr ""
@@ -8392,6 +8459,13 @@ msgstr ""
 "goedgekeurd"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Een maatstaf voor de mate waarin eerdere inschrijvers worden bevoordeeld "
+"(0=standaard uitgeschakeld, 1=normaal, 10=sterk)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -8546,6 +8620,13 @@ msgid ""
 msgstr ""
 "Behandelt dit evenement als een digitale/online gebeurtenis waarvoor geen "
 "persoonlijke registratie nodig is"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Je moet minstens één registratievraag maken voordat je registratieopties "
+"kunt maken"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
@@ -9572,6 +9653,14 @@ msgstr ""
 " die waarden kunnen niet tegelijkertijd worden ingesteld: %(list)s"
 
 msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Een maatstaf voor de mate waarin deelnemers worden bevoordeeld die de "
+"volledige betaling eerder hebben voltooid (0=standaard uitgeschakeld, "
+"1=normaal, 10=sterk)"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
@@ -9585,6 +9674,14 @@ msgid ""
 msgstr ""
 "Deelnemers kunnen shuttleverzoeken indienen (bijv. afhaallogistiek) en het "
 "personeel kan de status van deze verzoeken beheren"
+
+msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Voordat je het evenementendashboard opent, moet je de snelle installatie "
+"voltooien door de functies te selecteren die het meest nuttig zijn voor je "
+"evenement"
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
@@ -9868,6 +9965,14 @@ msgid ""
 msgstr ""
 "Optioneel - Als je één (of meer) facties selecteert, wordt de vraag alleen "
 "getoond aan deelnemers met personages in alle gekozen facties"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Voordat je het organisatiedashboard opent, moet je de snelle installatie "
+"voltooien door de functies te selecteren die het handigst zijn voor je "
+"organisatie"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

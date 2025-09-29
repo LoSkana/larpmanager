@@ -21,6 +21,14 @@ from django.conf import settings
 
 
 def is_ajax(request):
+    """Check if request is an AJAX request.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        bool: True if request is AJAX, False otherwise
+    """
     return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 

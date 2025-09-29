@@ -49,7 +49,7 @@ from larpmanager.models.writing import (
     PrologueType,
     SpeedLarp,
 )
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class WritingForm(MyForm):
@@ -198,6 +198,11 @@ class PlotForm(WritingForm, BaseWritingForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize plot form with character relationships and dynamic fields.
+
+        Sets up plot editing form with character selection, role text fields,
+        and character finder functionality for plot management.
+        """
         super().__init__(*args, **kwargs)
 
         self.init_orga_fields()

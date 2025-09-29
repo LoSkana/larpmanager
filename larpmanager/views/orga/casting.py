@@ -75,6 +75,14 @@ def orga_casting_history(request, s, typ=0):
 
 
 def assign_casting(request, ctx, typ):
+    """
+    Handle character casting assignment for organizers.
+
+    Args:
+        request: HTTP request object with assignment data
+        ctx: Context dictionary with casting information
+        typ: Type of casting assignment (0 for characters, other for traits)
+    """
     # TODO Assign member to mirror_inv
     mirror = "mirror" in ctx["features"]
     res = request.POST.get("res")
@@ -105,6 +113,15 @@ def assign_casting(request, ctx, typ):
 
 
 def get_casting_choices_characters(ctx, options):
+    """Get character choices for casting with filtering and availability status.
+
+    Args:
+        ctx: Context dictionary containing event, run, and features data
+        options: Dictionary containing faction filtering options
+
+    Returns:
+        Tuple of (choices dict, taken list, mirrors dict, allowed list)
+    """
     choices = {}
     mirrors = {}
     taken = []
@@ -159,6 +176,19 @@ def check_player_skip_quests(reg, typ):
 
 
 def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
+    """Check if player should be skipped in casting based on various criteria.
+
+    Args:
+        ctx: Context dictionary with features data
+        reg: Registration instance
+        options: Dictionary with casting filter options
+        typ: Casting type (0 for characters, other for quests)
+        cache_membs: Cached membership statuses
+        cache_aim: Cached aim membership data
+
+    Returns:
+        Boolean indicating if player should be skipped
+    """
     # check if select the player given the ticket
     if "tickets" in options and str(reg.ticket_id) not in options["tickets"]:
         return True
@@ -194,6 +224,11 @@ def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
 
 
 def get_casting_data(request, ctx, typ, form):
+    """Retrieve and process casting-related data for character assignment.
+
+    Handles casting form data and prepares context for casting operations
+    including character assignments and trait management.
+    """
     options = form.get_data()
     # print(options)
 
@@ -250,6 +285,9 @@ def get_casting_data(request, ctx, typ, form):
     ctx["nopes"] = json.dumps(nopes)
     ctx["avoids"] = json.dumps(avoids)
 
+    ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 0))
+    ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 0))
+
 
 def _casting_prepare(ctx, request, typ):
     cache_aim = get_membership_fee_year(request.assoc["id"])
@@ -274,8 +312,10 @@ def _get_player_info(players, reg):
     }
     if reg.ticket:
         players[reg.member.id]["prior"] = reg.ticket.casting_priority
-    # set registration days
-    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date())
+    # set registration days (number of days from registration created)
+    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date()) + 1
+    # set payment days (number of days from full payment date, or default value 1)
+    players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) + 1 if reg.payment_date else 1
 
 
 def _get_player_preferences(allowed, castings, chosen, nopes, reg):
@@ -312,6 +352,17 @@ def _fill_not_chosen(choices, chosen, ctx, preferences, taken):
 
 @login_required
 def orga_casting(request, s, typ=None, tick=""):
+    """Handle organizational casting assignments.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        typ: Casting type identifier (defaults to 0 if None)
+        tick: Ticket identifier string
+
+    Returns:
+        HttpResponse: Casting template with form and data or redirect after assignment
+    """
     ctx = check_event_permission(request, s, "orga_casting")
     if typ is None:
         return redirect("orga_casting", s=ctx["run"].get_slug(), typ=0)

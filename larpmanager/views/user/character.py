@@ -40,30 +40,18 @@ from PIL import Image
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.cache.config import save_single_config
-from larpmanager.forms.character import (
-    CharacterForm,
-)
-from larpmanager.forms.member import (
-    AvatarForm,
-)
-from larpmanager.forms.registration import (
-    RegistrationCharacterRelForm,
-)
-from larpmanager.forms.writing import (
-    PlayerRelationshipForm,
-)
+from larpmanager.forms.character import CharacterForm
+from larpmanager.forms.member import AvatarForm
+from larpmanager.forms.registration import RegistrationCharacterRelForm
+from larpmanager.forms.writing import PlayerRelationshipForm
 from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.miscellanea import (
-    PlayerRelationship,
-)
-from larpmanager.models.registration import (
-    RegistrationCharacterRel,
-)
+from larpmanager.models.miscellanea import PlayerRelationship
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -75,9 +63,7 @@ from larpmanager.utils.character import (
     get_character_relationships,
     get_character_sheet,
 )
-from larpmanager.utils.common import (
-    get_player_relationship,
-)
+from larpmanager.utils.common import get_player_relationship
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
@@ -167,6 +153,16 @@ def character_your_link(ctx, char, p=None):
 
 @login_required
 def character_your(request, s, p=None):
+    """Display user's character information.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        p: Optional character parameter
+
+    Returns:
+        HttpResponse: Character template, character list, or redirect if no characters
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
 
     rcrs = ctx["run"].reg.rcrs.all()
@@ -191,6 +187,11 @@ def character_your(request, s, p=None):
 
 
 def character_form(request, ctx, s, instance, form_class):
+    """Handle character creation and editing form processing.
+
+    Manages character form submission, validation, saving, and assignment
+    with transaction safety and proper message handling.
+    """
     get_options_dependencies(ctx)
     ctx["elementTyp"] = Character
 
@@ -248,6 +249,20 @@ def _update_character(ctx, element, form, mes, request):
 
 @login_required
 def character_customize(request, s, num):
+    """
+    Handle character customization form with profile and custom fields.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+
+    Returns:
+        HttpResponse: Character customization form
+
+    Raises:
+        Http404: If character doesn't belong to user
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
 
     get_char_check(request, ctx, num, True)
@@ -267,6 +282,17 @@ def character_customize(request, s, num):
 
 @login_required
 def character_profile_upload(request, s, num):
+    """
+    Handle character profile image upload via AJAX.
+
+    Args:
+        request: HTTP request object with uploaded file
+        s: Event slug
+        num: Character number
+
+    Returns:
+        JsonResponse: Success/failure status and image URL
+    """
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
@@ -298,6 +324,18 @@ def character_profile_upload(request, s, num):
 
 @login_required
 def character_profile_rotate(request, s, num, r):
+    """
+    Rotate character profile image by specified degrees.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+        r: Rotation angle in degrees
+
+    Returns:
+        JsonResponse: Success status and new image URL
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     get_char_check(request, ctx, num, True)
 
@@ -330,6 +368,16 @@ def character_profile_rotate(request, s, num, r):
 
 @login_required
 def character_list(request, s):
+    """
+    Display list of player's characters for an event with customization fields.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered character list template
+    """
     ctx = get_event_run(request, s, status=True, signup=True, slug="user_character")
 
     ctx["list"] = get_player_characters(request.user.member, ctx["event"])
@@ -350,6 +398,16 @@ def character_list(request, s):
 
 @login_required
 def character_create(request, s):
+    """
+    Handle character creation with maximum character validation.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Character creation form or redirect
+    """
     ctx = get_event_run(request, s, status=True, signup=True, slug="user_character")
 
     check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
@@ -363,6 +421,17 @@ def character_create(request, s):
 
 @login_required
 def character_edit(request, s, num):
+    """
+    Handle character editing form for specific character.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+
+    Returns:
+        HttpResponse: Character editing form
+    """
     ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
     return character_form(request, ctx, s, ctx["character"], CharacterForm)
@@ -384,6 +453,17 @@ def get_options_dependencies(ctx):
 
 @login_required
 def character_assign(request, s, num):
+    """
+    Assign character to user's registration if not already assigned.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+
+    Returns:
+        HttpResponse: Redirect to character list
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     get_char_check(request, ctx, num, True)
     if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count():
@@ -397,6 +477,17 @@ def character_assign(request, s, num):
 
 @login_required
 def character_abilities(request, s, num):
+    """
+    Display character abilities with available and current abilities organized by type.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+
+    Returns:
+        HttpResponse: Rendered character abilities template
+    """
     ctx = check_char_abilities(request, s, num)
 
     ctx["available"] = {}
@@ -442,6 +533,21 @@ def check_char_abilities(request, s, num):
 
 @login_required
 def character_abilities_del(request, s, num, id_del):
+    """
+    Remove character ability with validation and dependency handling.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+        id_del: Ability ID to delete
+
+    Returns:
+        HttpResponse: Redirect to character abilities page
+
+    Raises:
+        Http404: If ability is outside undo window
+    """
     ctx = check_char_abilities(request, s, num)
     undo_abilities = get_undo_abilities(request, ctx, ctx["character"])
     if id_del not in undo_abilities:
@@ -456,6 +562,13 @@ def character_abilities_del(request, s, num, id_del):
 
 
 def _save_character_abilities(ctx, request):
+    """
+    Process character ability selection and save to character.
+
+    Args:
+        ctx: Context dictionary with character and available abilities
+        request: HTTP request object with POST data
+    """
     selected_type = request.POST.get("ability_type")
     if not selected_type:
         messages.error(request, _("Ability type missing"))
@@ -501,6 +614,17 @@ def get_undo_abilities(request, ctx, char, new_ability_id=None):
 
 @login_required
 def character_relationships(request, s, num):
+    """
+    Display character relationships with other characters in the event.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+
+    Returns:
+        HttpResponse: Rendered character relationships template
+    """
     ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
     get_event_cache_all(ctx)
@@ -526,6 +650,18 @@ def character_relationships(request, s, num):
 
 @login_required
 def character_relationships_edit(request, s, num, oth):
+    """
+    Handle editing of character relationship with another character.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+        oth: Other character number for relationship
+
+    Returns:
+        HttpResponse: Relationship edit form or redirect
+    """
     ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
 

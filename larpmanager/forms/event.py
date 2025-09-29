@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
@@ -65,8 +67,12 @@ from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
 
+logger = logging.getLogger(__name__)
+
 
 class EventCharactersPdfForm(ConfigForm):
+    """Form for configuring PDF export settings for event characters."""
+
     class Meta:
         model = Event
         fields = ()
@@ -84,6 +90,8 @@ class EventCharactersPdfForm(ConfigForm):
 
 
 class OrgaEventForm(MyForm):
+    """Form for managing general event settings and basic configuration."""
+
     page_title = _("Event")
 
     page_info = _("This page allows you to change general event settings")
@@ -151,7 +159,7 @@ class OrgaEventForm(MyForm):
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
-        # print(data)
+        logger.debug(f"Validating event slug: {data}")
         # check if already used
         lst = Event.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:
@@ -167,6 +175,8 @@ class OrgaEventForm(MyForm):
 
 
 class OrgaFeatureForm(FeatureForm):
+    """Form for selecting and managing event features."""
+
     page_title = _("Event features")
 
     page_info = _(
@@ -191,6 +201,8 @@ class OrgaFeatureForm(FeatureForm):
 
 
 class OrgaConfigForm(ConfigForm):
+    """Form for configuring event-specific settings and feature options."""
+
     page_title = _("Event Configuration")
 
     page_info = _("This page allows you to edit the configuration of the activated features")
@@ -208,6 +220,11 @@ class OrgaConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
+        """Configure form fields for event settings and features.
+
+        Sets up various configuration sections including email notifications,
+        visualization options, and event-specific settings.
+        """
         self.set_section("email", _("Email notifications"))
         label = _("Disable assignment")
         help_text = _("If checked: Does not send communication to the participant when the character is assigned")
@@ -248,6 +265,9 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_registration()
 
     def set_config_gallery(self):
+        """
+        Configure gallery settings for event forms.
+        """
         if "character" not in self.params["features"]:
             return
 
@@ -277,6 +297,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
     def set_config_reg_form(self):
+        """Configure registration form settings and display options.
+
+        Sets up configuration fields for registration form display,
+        grouping options, and participant visibility settings.
+        """
         self.set_section("reg_form", _("Registrations"))
 
         label = _("Disable grouping")
@@ -342,6 +367,9 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
+        """
+        Configure structural event settings including pre-registration, mail server, and cover options.
+        """
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             label = _("Active")
@@ -374,6 +402,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("cover_orig", ConfigType.BOOL, label, help_text)
 
     def set_config_writing(self):
+        """Configure writing system settings for events.
+
+        Sets up background writing features, character story elements,
+        and writing deadline configurations for character development.
+        """
         if "character" in self.params["features"]:
             self.set_section("writing", _("Writing"))
 
@@ -429,6 +462,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("writing_external_access", ConfigType.BOOL, label, help_text)
 
     def set_config_character(self):
+        """Configure character-related settings including campaign and faction options.
+
+        Sets up configuration fields for campaign management, faction
+        independence, and character creation settings.
+        """
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
             label = _("Independent factions")
@@ -471,6 +509,9 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("user_character_player_relationships", ConfigType.BOOL, label, help_text)
 
     def set_config_custom(self):
+        """
+        Configure character customization form fields for event settings.
+        """
         if "custom_character" in self.params["features"]:
             self.set_section("custom_character", _("Character customisation"))
 
@@ -504,6 +545,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("custom_character_public", ConfigType.BOOL, label, help_text)
 
     def set_config_casting(self):
+        """Configure casting-related form fields for event settings.
+
+        Sets up casting preferences, assignments, and display options
+        when the casting feature is enabled.
+        """
         if "casting" in self.params["features"]:
             self.set_section("casting", _("Casting"))
 
@@ -542,7 +588,24 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, shows participants the histories of preferences entered")
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
+            label = _("Registration priority")
+            help_text = _(
+                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong)"
+            )
+            self.add_configs("casting_reg_priority", ConfigType.INT, label, help_text)
+
+            label = _("Payment priority")
+            help_text = _(
+                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong)"
+            )
+            self.add_configs("casting_pay_priority", ConfigType.INT, label, help_text)
+
     def set_config_accounting(self):
+        """Configure event-specific accounting settings.
+
+        Sets up payment alerts, financial notifications, and event-level
+        payment configurations for event management.
+        """
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
@@ -594,6 +657,12 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("bring_friend_discount_from", ConfigType.INT, label, help_text)
 
     def set_config_registration(self):
+        """Configure event registration settings.
+
+        Sets up ticket tiers, registration options, and staff ticket availability
+        including special ticket types like NPC, collaborator, and seller tiers
+        based on available features.
+        """
         self.set_section("tickets", _("Tickets"))
 
         label = "Staff"
@@ -643,6 +712,8 @@ class OrgaConfigForm(ConfigForm):
 
 
 class OrgaAppearanceForm(MyCssForm):
+    """Form for customizing event appearance and styling."""
+
     page_title = _("Event Appearance")
 
     page_info = _("This page allows you to change the appearance and presentation of the event")
@@ -691,14 +762,29 @@ class OrgaAppearanceForm(MyCssForm):
 
     @staticmethod
     def get_input_css():
+        """Get the CSS input field name.
+
+        Returns:
+            str: CSS input field identifier
+        """
         return "event_css"
 
     @staticmethod
     def get_css_path(instance):
+        """Generate CSS file path for event styling.
+
+        Args:
+            instance: Event instance
+
+        Returns:
+            str: Path to CSS file
+        """
         return f"css/{instance.assoc.slug}_{instance.slug}_{instance.css_code}.css"
 
 
 class OrgaEventTextForm(MyForm):
+    """Form for managing event-specific text content and messages."""
+
     page_title = _("Texts")
 
     page_info = _("This page allows you to edit event-specific texts")
@@ -709,6 +795,15 @@ class OrgaEventTextForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
+        """Initialize event text form with feature-based field filtering.
+
+        Filters available text types based on activated features and
+        event configuration, setting appropriate choices and help texts.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments including event and features
+        """
         super().__init__(*args, **kwargs)
         ch = EventTextType.choices
         delete_choice = []
@@ -750,6 +845,14 @@ class OrgaEventTextForm(MyForm):
         self.fields["typ"].help_text = " - ".join(help_text)
 
     def clean(self):
+        """Validate event text uniqueness by type and language.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If default or language conflicts exist
+        """
         cleaned_data = super().clean()
 
         default = cleaned_data.get("default")
@@ -771,6 +874,8 @@ class OrgaEventTextForm(MyForm):
 
 
 class OrgaEventRoleForm(MyForm):
+    """Form for managing event access roles and permissions."""
+
     page_title = _("Roles")
 
     page_info = _("This page allows you to change the access roles for the event")
@@ -794,6 +899,8 @@ class OrgaEventRoleForm(MyForm):
 
 
 class OrgaEventButtonForm(MyForm):
+    """Form for editing event navigation buttons."""
+
     page_title = _("Navigation")
 
     page_info = _("This page allows you to edit the event navigation buttons")
@@ -804,6 +911,8 @@ class OrgaEventButtonForm(MyForm):
 
 
 class OrgaRunForm(ConfigForm):
+    """Form for managing event sessions/runs with dates and configuration."""
+
     page_title = _("Session")
 
     class Meta:
@@ -817,6 +926,12 @@ class OrgaRunForm(ConfigForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize RunForm with event-specific configuration and field setup.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         super().__init__(*args, **kwargs)
 
         self.main_class = ""
@@ -868,6 +983,11 @@ class OrgaRunForm(ConfigForm):
         self.show_sections = True
 
     def set_configs(self):
+        """Configure event-specific form fields and sections.
+
+        Sets up various event features and their configuration options
+        based on enabled features for character management.
+        """
         ls = []
 
         if "character" not in self.params["features"]:
@@ -942,6 +1062,8 @@ class OrgaRunForm(ConfigForm):
 
 
 class OrgaProgressStepForm(MyForm):
+    """Form for managing event progression steps."""
+
     page_title = _("Progression")
 
     class Meta:
@@ -950,7 +1072,15 @@ class OrgaProgressStepForm(MyForm):
 
 
 class ExeEventForm(OrgaEventForm):
+    """Extended event form for executors with template support."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize ExeEventForm with template event selection.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:
@@ -971,6 +1101,14 @@ class ExeEventForm(OrgaEventForm):
                 self.initial["template_event"] = qs.first()
 
     def save(self, commit=True):
+        """Save event with optional template copying.
+
+        Args:
+            commit: Whether to commit changes to database
+
+        Returns:
+            Event: Saved event instance
+        """
         instance = super().save(commit=False)
 
         if "template" in self.params["features"] and not self.instance.pk:
@@ -988,6 +1126,8 @@ class ExeEventForm(OrgaEventForm):
 
 
 class ExeTemplateForm(FeatureForm):
+    """Form for creating and managing event templates."""
+
     page_title = _("Event Template")
 
     page_info = _(
@@ -1020,12 +1160,22 @@ class ExeTemplateForm(FeatureForm):
 
 
 class ExeTemplateRolesForm(OrgaEventRoleForm):
+    """Form for managing template event roles with optional members."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize template roles form with optional member requirement.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
 
 
 class OrgaQuickSetupForm(QuickSetupForm):
+    """Form for quick setup of essential event settings."""
+
     page_title = _("Quick Setup")
 
     page_info = _("This page allows you to perform a quick setup of the most important settings for your new event")
@@ -1035,40 +1185,16 @@ class OrgaQuickSetupForm(QuickSetupForm):
         fields = []
 
     def __init__(self, *args, **kwargs):
+        """Initialize OrgaQuickSetupForm with event feature configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
-        self.setup = {
-            "registration_open": (
-                True,
-                _("Registration opening date"),
-                _("Do you want to open registrations at a specific date and time instead of immediately"),
-            ),
-            "registration_secret": (
-                True,
-                _("Early registration link"),
-                _("Do you want to enable a secret registration link to allow early sign-ups"),
-            ),
-            "player_cancellation": (
-                True,
-                _("Signup cancellation"),
-                _("Do you want to allow users to cancel their registrations on their own"),
-            ),
-            "reg_installments": (
-                True,
-                _("Payment installments"),
-                _("Do you want to split the registration fee into fixed payment installments"),
-            ),
-            "reg_quotas": (
-                True,
-                _("Payment quotas"),
-                _("Do you want to split the registration fee into dynamic payment quotas"),
-            ),
-            "pay_what_you_want": (
-                True,
-                _("Voluntary donation"),
-                _("Do you want to allow users to add a voluntary donation to their registration fee"),
-            ),
-        }
+        self.setup = {}
+
         if self.instance.assoc.skin_id == 1:
             self.setup.update(
                 {
@@ -1095,11 +1221,52 @@ class OrgaQuickSetupForm(QuickSetupForm):
                 }
             )
 
+        self.setup.update(
+            {
+                "registration_open": (
+                    True,
+                    _("Registration opening date"),
+                    _("Do you want to open registrations at a specific date and time instead of immediately"),
+                ),
+                "registration_secret": (
+                    True,
+                    _("Early registration link"),
+                    _("Do you want to enable a secret registration link to allow early sign-ups"),
+                ),
+                "player_cancellation": (
+                    True,
+                    _("Signup cancellation"),
+                    _("Do you want to allow users to cancel their registrations on their own"),
+                ),
+                "reg_installments": (
+                    True,
+                    _("Payment installments"),
+                    _("Do you want to split the registration fee into fixed payment installments"),
+                ),
+                "reg_quotas": (
+                    True,
+                    _("Payment quotas"),
+                    _("Do you want to split the registration fee into dynamic payment quotas"),
+                ),
+                "pay_what_you_want": (
+                    True,
+                    _("Voluntary donation"),
+                    _("Do you want to allow users to add a voluntary donation to their registration fee"),
+                ),
+            }
+        )
+
         self.init_fields(get_event_features(self.instance.pk))
 
 
 class OrgaPreferencesForm(ExePreferencesForm):
+    """Form for setting event organizer preferences and field visibility."""
+
     def set_configs(self):
+        """Configure organizer preference settings and field display options.
+
+        Sets up default field visibility options for registration and character forms.
+        """
         super().set_configs()
 
         basics = BaseQuestionType.get_basic_types()
@@ -1117,6 +1284,11 @@ class OrgaPreferencesForm(ExePreferencesForm):
             self.add_writing_configs(basics, event_id, help_text, s)
 
     def _add_reg_configs(self, event_id, help_text):
+        """Add registration-related configuration fields to the form.
+
+        Configures form fields for registration management including accounting,
+        email settings, chronology, and various registration feature options.
+        """
         if not has_event_permission(
             self.params["request"], self.params, self.params["event"].slug, "orga_registrations"
         ):
@@ -1155,6 +1327,14 @@ class OrgaPreferencesForm(ExePreferencesForm):
         )
 
     def add_writing_configs(self, basics, event_id, help_text, s):
+        """Add writing-related configuration fields to the event form.
+
+        Args:
+            basics: Basic configuration settings
+            event_id: Event identifier
+            help_text: Help text for the configuration
+            s: Writing section configuration tuple
+        """
         mapping = _get_writing_mapping()
         if mapping.get(s[0]) not in self.params["features"]:
             return
@@ -1198,6 +1378,13 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
     def _compile_configs(self, basics, extra, fields):
+        """Compile configuration options from field definitions.
+
+        Args:
+            basics: Set of basic question types
+            extra: List to append compiled configurations
+            fields: Dictionary of field definitions
+        """
         for _id, field in fields.items():
             if field["typ"] == "name":
                 continue
@@ -1210,6 +1397,12 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra.append((tog, field["name"]))
 
     def add_feature_extra(self, extra, feature_fields):
+        """Add feature-specific extra fields to configuration.
+
+        Args:
+            extra: List to append extra field configurations
+            feature_fields: List of feature field tuples (feature, field_id, label)
+        """
         for field in feature_fields:
             if field[0] and field[0] not in self.params["features"]:
                 continue

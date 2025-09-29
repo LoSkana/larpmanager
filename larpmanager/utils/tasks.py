@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import re
 import traceback
 from functools import wraps
@@ -35,6 +36,8 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Email
 from larpmanager.utils.text import get_assoc_text
+
+logger = logging.getLogger(__name__)
 
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
@@ -85,10 +88,9 @@ def mail_error(subj, body, e=None):
     Side effects:
         Prints error details and sends error notification to admins
     """
-    print("mail error")
-    print(subj)
-    print(body)
-    print(e)
+    logger.error(f"Mail error: {e}")
+    logger.error(f"Subject: {subj}")
+    logger.error(f"Body: {body}")
     if e:
         body = f"{traceback.format_exc()} <br /><br /> {subj} <br /><br /> {body}"
     else:
@@ -120,7 +122,7 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
     elif run_id:
         obj = Run.objects.filter(pk=run_id).first()
     else:
-        print(f"obj not found! {assoc_id} {run_id}")
+        logger.warning(f"Object not found! assoc_id: {assoc_id}, run_id: {run_id}")
         return
 
     subj = f"[{obj}] {subj}"
@@ -157,7 +159,7 @@ def my_send_mail_bkg(email_pk):
         return
 
     if email.sent:
-        print("email already sent!")
+        logger.info("Email already sent!")
         return
 
     my_send_simple_mail(email.subj, email.body, email.recipient, email.assoc_id, email.run_id, email.reply_to)
@@ -276,9 +278,9 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
         email.send()
 
         if conf_settings.DEBUG:
-            print(m_email)
-            print(subj)
-            print(body)
+            logger.info(f"Sending email to: {m_email}")
+            logger.info(f"Subject: {subj}")
+            logger.debug(f"Body: {body}")
 
     except Exception as e:
         mail_error(subj, body, e)

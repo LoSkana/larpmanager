@@ -311,6 +311,9 @@ msgstr "Událost"
 msgid "Field"
 msgstr "Pole"
 
+msgid "Fifth"
+msgstr "Pátý"
+
 msgid "First"
 msgstr "První"
 
@@ -405,6 +408,9 @@ msgstr "Daně"
 msgid "Texts"
 msgstr "Texty"
 
+msgid "Third"
+msgstr "Třetí"
+
 msgid "Title"
 msgstr "Název"
 
@@ -498,6 +504,9 @@ msgstr "Výplň"
 msgid "Footer"
 msgstr "Zápatí"
 
+msgid "Fourth"
+msgstr "Čtvrtý"
+
 msgid "Gender"
 msgstr "Žánr"
 
@@ -584,6 +593,9 @@ msgstr "Bezpečnost"
 
 msgid "Search"
 msgstr "Vyhledávání"
+
+msgid "Second"
+msgstr "Druhý"
 
 msgid "Secret"
 msgstr "Tajné"
@@ -1806,6 +1818,9 @@ msgstr "Prvek formuláře"
 msgid "Form section"
 msgstr "Sekce formuláře"
 
+msgid "Full payment"
+msgstr "Úplná platba"
+
 msgid "Host Address"
 msgstr "Adresa hostitele"
 
@@ -2052,9 +2067,6 @@ msgstr "Není dokončeno"
 
 msgid "Number events"
 msgstr "Počet událostí"
-
-msgid "Old interface"
-msgstr "Staré rozhraní"
 
 msgid "Passages made"
 msgstr "Přijaté kroky"
@@ -2585,6 +2597,9 @@ msgstr "Maecenas / Snížené"
 msgid "Payment currency"
 msgstr "Platební měna"
 
+msgid "Payment priority"
+msgstr "Priorita platby"
+
 msgid "Payment to check"
 msgstr "Platba, která má být zkontrolována"
 
@@ -2851,6 +2866,9 @@ msgstr "Zakázat přiřazení"
 
 msgid "Electronic invoice"
 msgstr "Elektronická faktura"
+
+msgid "Enable preferences"
+msgstr "Povolení předvoleb"
 
 msgid "Go to the form for"
 msgstr "Přejděte na formulář pro"
@@ -3308,6 +3326,9 @@ msgstr "Registrace jsou otevřeny!"
 msgid "Registration not open"
 msgstr "Registrace není otevřena"
 
+msgid "Registration priority"
+msgstr "Přednostní registrace"
+
 msgid "Registration sections"
 msgstr "Sekce členství"
 
@@ -3427,6 +3448,9 @@ msgstr "Aplikace"
 
 msgid "Registration surcharge"
 msgstr "Vstupní příplatek"
+
+msgid "Registrations not open"
+msgstr "Registrace ještě není otevřena"
 
 msgid "Reimbursement approved"
 msgstr "Schválená úhrada"
@@ -3795,9 +3819,6 @@ msgstr "Možnost již není k dispozici"
 msgid "Pre-register to the event!"
 msgstr "Zapište se na seznam předběžných registrací!"
 
-msgid "Registration not yet open!"
-msgstr "Registrace ještě není otevřena."
-
 msgid "Short name - international"
 msgstr "Krátký název - v angličtině"
 
@@ -3903,6 +3924,9 @@ msgstr "Zadržení jako transakční náklady"
 
 msgid "Would you like to change it"
 msgstr "Chcete to změnit"
+
+msgid "Your event has been created"
+msgstr "Vaše událost byla vytvořena"
 
 msgid "please fill in your profile"
 msgstr "vyplňte prosím svůj profil"
@@ -4024,6 +4048,9 @@ msgstr "Doprava - benzín, dálnice"
 msgid "Unconverted pre-registrations"
 msgstr "Nepřepočtené předběžné registrace"
 
+msgid "You don’t have any events yet"
+msgstr "Zatím nemáte žádné události"
+
 msgid "Your account is now activated"
 msgstr "Váš účet je nyní aktivní"
 
@@ -4039,9 +4066,6 @@ msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Font to be used in page titles"
 msgstr "písmo, které se má použít v nadpisech"
-
-msgid "If checked: uses old interface"
-msgstr "Pokud je zaškrtnuto: používá staré rozhraní"
 
 msgid "Manage issues during the event"
 msgstr "Správa problémů během akce"
@@ -5154,6 +5178,9 @@ msgstr "Nyní můžete nastavit datum zahájení registrace"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
+msgid "Please create your first event to get started"
+msgstr "Vytvořte svou první událost a začněte"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Aktualizované zadání %(event)s podle %(user)s"
@@ -6140,9 +6167,6 @@ msgstr "Všimněte si, že pokud jsou náklady 0, budou automaticky přiřazeny"
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nyní mohou účastníci zasílat dary a vy si je můžete prohlédnout"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr "Rychlá konfigurace nejdůležitějších nastavení organizace"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 "Podívejte se na praktické příklady, jak může LarpManager pomoci vaší akci"
@@ -6289,6 +6313,9 @@ msgstr "Upozornění: již existuje schválený člen se stejným jménem"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Můžete také nahrát druhý soubor s možnostmi registrace"
+
+msgid "You must create at least one quest before you can create traits"
+msgstr "Před vytvořením vlastností musíte vytvořit alespoň jeden úkol"
 
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Obdržíte potvrzení o výsledku hodnocení"
@@ -6587,6 +6614,9 @@ msgstr "Po provedení změny vám zašleme potvrzující e-mail"
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Správně jste zrušili registraci na událost %(event)s"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr "Před vytvořením úkolů musíte vytvořit alespoň jeden typ úkolu"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr "Váš uživatel nemá potřebná oprávnění pro přístup na tuto stránku"
@@ -6937,6 +6967,11 @@ msgid ""
 msgstr "Aplikaci jsme předvyplnili na základě údajů, které jste nám poskytli"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Před vytvořením schopností musíte vytvořit alespoň jeden typ schopnosti"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "pokud necháte tuto položku prázdnou, může se jednat o počáteční událost nové"
@@ -7012,6 +7047,10 @@ msgstr ""
 msgid ""
 "You can withdraw your consent to data sharing by clicking the related link"
 msgstr "Souhlas se sdílením údajů můžete odvolat kliknutím na příslušný odkaz"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr "Před vytvořením prologů musíte vytvořit alespoň jeden typ prologu"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7128,6 +7167,11 @@ msgid ""
 msgstr "Ve frakci byla zmíněna postava, ale zdá se, že neexistuje"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"V posledním kroku dokončete nastavení události přidáním data začátku a konce"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Část registračního poplatku odvozená pouze od zvolených doplňkových možností"
@@ -7154,6 +7198,11 @@ msgid ""
 "You cannot work on it at the same time: the work of one of you would be lost"
 msgstr ""
 "Nemůžete na něm pracovat současně: práce jednoho z vás by byla ztracena"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Než začnete vytvářet letáky, musíte vytvořit alespoň jednu šablonu letáku"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -7258,6 +7307,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje účastníkům přizpůsobit si profilový obrázek "
 "své postavy"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Pokud je zaškrtnuto, účastníci při přidávání předběžných registrací uvedou "
+"hodnotu preference"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -7879,6 +7935,13 @@ msgid ""
 msgstr "Uveďte hodnotu slevy, bude odečtena od celkové vypočtené částky"
 
 msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Nyní dokončete rychlé nastavení výběrem funkcí, které jsou pro tuto událost "
+"nejužitečnější"
+
+msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
 msgstr ""
@@ -8117,6 +8180,13 @@ msgstr ""
 "schválena"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Měřítko, jak moc zvýhodnit dříve registrované (0=přednastaveno zakázáno, "
+"1=normální, 10=silné)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -8269,6 +8339,13 @@ msgid ""
 msgstr ""
 "Tuto událost považuje za digitální/online událost, která nevyžaduje osobní "
 "registraci"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Před vytvořením možností registrace musíte vytvořit alespoň jednu "
+"registrační otázku"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
@@ -9285,6 +9362,13 @@ msgstr ""
 "nastavit současně: %(list)s"
 
 msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Měřítko, jak moc zvýhodnit účastníky, kteří dokončili plnou platbu dříve (0 "
+"= výchozí zakázáno, 1 = normální, 10 = silné)"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
@@ -9297,6 +9381,13 @@ msgid ""
 msgstr ""
 "Umožňuje účastníkům zadávat požadavky na kyvadlovou dopravu (např. logistiku"
 " vyzvednutí) a pracovníci mohou spravovat stav těchto požadavků"
+
+msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Před přístupem k ovládacímu panelu události dokončete rychlé nastavení "
+"výběrem funkcí, které jsou pro vaši událost nejužitečnější"
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
@@ -9568,6 +9659,13 @@ msgid ""
 msgstr ""
 "Nepovinné - pokud vyberete jednu (nebo více) frakcí, otázka se zobrazí pouze"
 " účastníkům s postavami ze všech vybraných frakcí"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Před přístupem na řídicí panel organizace dokončete rychlé nastavení výběrem"
+" funkcí, které jsou pro vaši organizaci nejužitečnější"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

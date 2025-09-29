@@ -139,7 +139,10 @@ def writing_popup(request, ctx, typ):
     """
     get_event_cache_all(ctx)
 
-    idx = int(request.POST.get("idx", ""))
+    try:
+        idx = int(request.POST.get("idx", ""))
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid idx parameter"}, status=400)
     tp = request.POST.get("tp", "")
 
     # check if it is a character question
@@ -190,6 +193,17 @@ def writing_example(ctx, typ):
 
 
 def writing_post(request, ctx, typ, nm):
+    """Handle POST requests for writing operations.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with event data
+        typ: Writing element type class
+        nm: Template name
+
+    Raises:
+        ReturnNowError: When download operation needs to return immediately
+    """
     if not request.POST:
         return
 
@@ -204,6 +218,11 @@ def writing_post(request, ctx, typ, nm):
 
 
 def writing_list(request, ctx, typ, nm):
+    """Handle writing list display with POST processing and bulk operations.
+
+    Manages writing element lists with form submission processing,
+    bulk operations, and proper context preparation for different writing types.
+    """
     writing_post(request, ctx, typ, nm)
 
     writing_bulk(ctx, request, typ)
@@ -240,6 +259,16 @@ def writing_list(request, ctx, typ, nm):
 
 
 def writing_bulk(ctx, request, typ):
+    """Handle bulk operations for different writing element types.
+
+    Args:
+        ctx: Context dictionary with event data
+        request: Django HTTP request object
+        typ: Writing element type class
+
+    Side effects:
+        Executes bulk operations through type-specific handlers
+    """
     bulks = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
     if typ in bulks:
@@ -247,6 +276,14 @@ def writing_bulk(ctx, request, typ):
 
 
 def _get_custom_form(ctx):
+    """Setup custom form questions and field names for writing elements.
+
+    Args:
+        ctx: Context dictionary to populate with form data
+
+    Side effects:
+        Updates ctx with form_questions and fields_name dictionaries
+    """
     if not ctx["writing_typ"]:
         return
 
@@ -265,6 +302,17 @@ def _get_custom_form(ctx):
 
 
 def writing_list_query(ctx, ev, typ):
+    """
+    Build optimized database query for writing element lists.
+
+    Args:
+        ctx: Context dictionary to store query results
+        ev: Event instance
+        typ: Writing element model class
+
+    Returns:
+        tuple: (text_fields list, writing boolean flag)
+    """
     writing = issubclass(typ, Writing)
     text_fields = ["teaser", "text"]
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
@@ -296,6 +344,14 @@ def writing_list_query(ctx, ev, typ):
 
 
 def writing_list_text_fields(ctx, text_fields, typ):
+    """
+    Add editor-type question fields to text fields list and retrieve cached data.
+
+    Args:
+        ctx: Context dictionary with event and writing type information
+        text_fields: List of text field names to extend
+        typ: Writing element model class
+    """
     # add editor type questions
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
     for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
@@ -305,6 +361,14 @@ def writing_list_text_fields(ctx, text_fields, typ):
 
 
 def retrieve_cache_text_field(ctx, text_fields, typ):
+    """
+    Retrieve and attach cached text field data to writing elements.
+
+    Args:
+        ctx: Context dictionary with list of elements
+        text_fields: List of text field names to cache
+        typ: Writing element model class
+    """
     gctf = get_cache_text_field(typ, ctx["event"])
     for el in ctx["list"]:
         if el.id not in gctf:
@@ -318,6 +382,12 @@ def retrieve_cache_text_field(ctx, text_fields, typ):
 
 
 def _prepare_writing_list(ctx, request):
+    """Prepare context data for writing list display and configuration.
+
+    Args:
+        ctx: Template context dictionary to update
+        request: HTTP request object with user information
+    """
     try:
         name_que = (
             ctx["event"]
@@ -339,6 +409,14 @@ def _prepare_writing_list(ctx, request):
 
 
 def writing_list_plot(ctx):
+    """Build character associations for plot list display.
+
+    Args:
+        ctx: Context dictionary with list of plots and event data
+
+    Side effects:
+        Adds chars dictionary to context and attaches character lists to plot objects
+    """
     ctx["chars"] = {}
     for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
         if el.plot.number not in ctx["chars"]:
@@ -350,6 +428,11 @@ def writing_list_plot(ctx):
 
 
 def writing_list_char(ctx):
+    """Enhance character list with feature-specific data and relationships.
+
+    Args:
+        ctx: Context dictionary containing character list, features, and event data
+    """
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
 
@@ -390,6 +473,12 @@ def writing_list_char(ctx):
 
 
 def char_add_addit(ctx):
+    """
+    Add additional configuration data to all characters in the context list.
+
+    Args:
+        ctx: Context dictionary containing character list and event information
+    """
     addits = {}
     event = ctx["event"].get_class_parent(Character)
     for config in CharacterConfig.objects.filter(character__event=event):
@@ -405,6 +494,17 @@ def char_add_addit(ctx):
 
 
 def writing_view(request, ctx, nm):
+    """
+    Display writing element view with character data and relationships.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with element data
+        nm: Name of the writing element type
+
+    Returns:
+        HttpResponse: Rendered writing view template
+    """
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
@@ -431,6 +531,17 @@ def writing_view(request, ctx, nm):
 
 
 def writing_versions(request, ctx, nm, tp):
+    """Display text versions with diff comparison for writing elements.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with writing element data
+        nm: Name of the writing element
+        tp: Type identifier for text versions
+
+    Returns:
+        HttpResponse: Rendered versions template with diff data
+    """
     ctx["versions"] = TextVersion.objects.filter(tp=tp, eid=ctx[nm].id).order_by("version").select_related("member")
     last = None
     for v in ctx["versions"]:
@@ -446,6 +557,14 @@ def writing_versions(request, ctx, nm, tp):
 
 @receiver(pre_save, sender=Character)
 def pre_save_character(sender, instance, *args, **kwargs):
+    """Django signal handler to replace character names before saving.
+
+    Args:
+        sender: Model class sending the signal
+        instance: Character instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
     if not instance.pk:
         return
 

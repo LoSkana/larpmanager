@@ -34,6 +34,14 @@ from larpmanager.utils.exceptions import FeatureError, MembershipError, Permissi
 
 
 def def_user_ctx(request):
+    """Build default user context with association data and permissions.
+
+    Args:
+        request: HTTP request object with user and association information
+
+    Returns:
+        Dictionary containing user context, membership, permissions, and settings
+    """
     # check the home page has been reached, redirect to the correct organization page
     if request.assoc["id"] == 0:
         if hasattr(request, "user") and hasattr(request.user, "member"):
@@ -65,10 +73,6 @@ def def_user_ctx(request):
 
     if request and request.resolver_match:
         res["request_func_name"] = request.resolver_match.func.__name__
-
-    # TODO remove
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    res["interface_old"] = assoc.get_config("interface_old", False)
 
     return res
 

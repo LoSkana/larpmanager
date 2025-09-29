@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
@@ -38,6 +40,8 @@ from larpmanager.forms.utils import (
 from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText, AssocTextType
 from larpmanager.models.member import Member
+
+logger = logging.getLogger(__name__)
 
 
 class ExeAssociationForm(MyForm):
@@ -98,6 +102,12 @@ class ExeAssocTextForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
+        """Initialize AssocTextForm with feature-based field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
         ch = AssocTextType.choices
         delete_choice = [AssocTextType.PRIVACY]
@@ -290,13 +300,11 @@ class ExeConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
-        # CALENDAR
-        self.set_section("interface", _("Interface"))
+        """Set up interface configuration options for association settings.
 
-        label = _("Old interface")
-        help_text = _("If checked: uses old interface")
-        self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
-
+        Manages UI preferences, theme settings, and display options
+        for the association's interface customization.
+        """
         # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
@@ -354,6 +362,12 @@ class ExeConfigForm(ConfigForm):
         self.set_config_others()
 
     def set_config_others(self):
+        """Configure miscellaneous association settings.
+
+        Sets up custom mail server configuration, easter egg features,
+        and campaign-specific settings based on available features
+        for the association.
+        """
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             help_text = ""
@@ -372,6 +386,12 @@ class ExeConfigForm(ConfigForm):
 
             label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
+
+        if "pre_register" in self.params["features"]:
+            self.set_section("pre_reg", _("Pre-registration"))
+            label = _("Enable preferences")
+            help_text = _("If checked, participants give a preference value when adding pre-registrations")
+            self.add_configs("pre_reg_preferences", ConfigType.BOOL, label, help_text)
 
         if "centauri" in self.params["features"]:
             self.set_section("centauri", _("Easter egg"))
@@ -407,6 +427,17 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
+        """Configure member-related form fields and sections in association settings.
+
+        Sets up various user management options like event history visibility
+        and member interaction features for the association configuration.
+
+        Args:
+            self: AssociationConfigForm instance
+
+        Returns:
+            None: Function modifies form fields in-place
+        """
         # USERS
         self.set_section("users", _("Users"))
 
@@ -480,6 +511,17 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)
 
     def set_config_accounting(self):
+        """Configure accounting-related form fields for association settings.
+
+        Sets up payment options, transaction fee settings, and financial
+        feature configurations for the association.
+
+        Args:
+            self: AssociationConfigForm instance
+
+        Returns:
+            None: Function modifies form fields in-place
+        """
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
@@ -542,6 +584,11 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
+        """Configure electronic invoice settings for associations.
+
+        Sets up Italian e-invoice system parameters and business
+        information for electronic billing compliance.
+        """
         if "e-invoice" not in self.params["features"]:
             return
 
@@ -616,7 +663,7 @@ class FirstAssociationForm(MyForm):
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
-        # print(data)
+        logger.debug(f"Validating association slug: {data}")
         # check if already used
         lst = Association.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:
@@ -639,31 +686,18 @@ class ExeQuickSetupForm(QuickSetupForm):
         fields = []
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        """Initialize association setup form with feature configuration options.
 
-        self.setup = {
-            "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
-            "payment_fees_user": (
-                False,
-                _("Transaction fees"),
-                _(
-                    "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
-                ),
-            ),
-            "membership": (True, _("Membership"), _("Do you want users to join events only after an approval process")),
-            "deadlines": (
-                True,
-                _("Deadlines"),
-                _("Do you want a dashboard to track and manage deadlines missed by registered users"),
-            ),
-            "remind": (
-                True,
-                _("Reminders"),
-                _("Do you want to enable an automatic email reminder system for registered users who miss a deadline"),
-            ),
-            "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
-            "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
-        }
+        Sets up available features and configuration options based on
+        association settings and skin preferences.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments
+        """
+        super().__init__(*args, **kwargs)
+        self.setup = {}
+
         if self.instance.skin_id == 1:
             self.setup.update(
                 {
@@ -674,6 +708,38 @@ class ExeQuickSetupForm(QuickSetupForm):
                     ),
                 }
             )
+
+        self.setup.update(
+            {
+                "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
+                "payment_fees_user": (
+                    False,
+                    _("Transaction fees"),
+                    _(
+                        "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
+                    ),
+                ),
+                "membership": (
+                    True,
+                    _("Membership"),
+                    _("Do you want users to join events only after an approval process"),
+                ),
+                "deadlines": (
+                    True,
+                    _("Deadlines"),
+                    _("Do you want a dashboard to track and manage deadlines missed by registered users"),
+                ),
+                "remind": (
+                    True,
+                    _("Reminders"),
+                    _(
+                        "Do you want to enable an automatic email reminder system for registered users who miss a deadline"
+                    ),
+                ),
+                "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
+                "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
+            }
+        )
 
         self.init_fields(get_assoc_features(self.instance.pk))
 

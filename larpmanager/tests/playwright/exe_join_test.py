@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, submit
+from larpmanager.tests.utils import go_to, load_image, submit
 
 pytestmark = pytest.mark.e2e
 
@@ -64,8 +63,7 @@ def test_exe_join(pw_page):
     page.get_by_role("textbox", name="Name").click()
     page.get_by_role("textbox", name="Name").fill("Prova Larp")
     page.locator("#id_profile").wait_for(state="visible")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_profile").set_input_files(str(image_path))
+    load_image(page, "#id_profile")
     page.locator("#slug").fill("prova")
     submit(page)
 

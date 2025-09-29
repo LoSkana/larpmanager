@@ -311,6 +311,9 @@ msgstr "Evento"
 msgid "Field"
 msgstr "Campo"
 
+msgid "Fifth"
+msgstr "Quinta"
+
 msgid "First"
 msgstr "Primero"
 
@@ -405,6 +408,9 @@ msgstr "Impuestos"
 msgid "Texts"
 msgstr "Textos"
 
+msgid "Third"
+msgstr "Tercera"
+
 msgid "Title"
 msgstr "Título"
 
@@ -498,6 +504,9 @@ msgstr "Relleno"
 msgid "Footer"
 msgstr "Pie de página"
 
+msgid "Fourth"
+msgstr "Cuarto"
+
 msgid "Gender"
 msgstr "Género"
 
@@ -584,6 +593,9 @@ msgstr "Seguridad"
 
 msgid "Search"
 msgstr "Buscar en"
+
+msgid "Second"
+msgstr "Segundo"
 
 msgid "Secret"
 msgstr "Secreto"
@@ -1806,6 +1818,9 @@ msgstr "Elemento del formulario"
 msgid "Form section"
 msgstr "Sección de formularios"
 
+msgid "Full payment"
+msgstr "Pago completo"
+
 msgid "Host Address"
 msgstr "Dirección del host"
 
@@ -2052,9 +2067,6 @@ msgstr "No completado"
 
 msgid "Number events"
 msgstr "Número de eventos"
-
-msgid "Old interface"
-msgstr "Interfaz antigua"
 
 msgid "Passages made"
 msgstr "Medidas adoptadas"
@@ -2585,6 +2597,9 @@ msgstr "Mentor / Solidaria"
 msgid "Payment currency"
 msgstr "Moneda de pago"
 
+msgid "Payment priority"
+msgstr "Prioridad de pago"
+
 msgid "Payment to check"
 msgstr "Pago que debe comprobarse"
 
@@ -2851,6 +2866,9 @@ msgstr "Desactivar asignación"
 
 msgid "Electronic invoice"
 msgstr "Factura electrónica"
+
+msgid "Enable preferences"
+msgstr "Activar preferencias"
 
 msgid "Go to the form for"
 msgstr "Ir al formulario de"
@@ -3308,6 +3326,9 @@ msgstr "¡Inscripciones abiertas!"
 msgid "Registration not open"
 msgstr "Inscripción no abierta"
 
+msgid "Registration priority"
+msgstr "Prioridad de inscripción"
+
 msgid "Registration sections"
 msgstr "Secciones de inscripción"
 
@@ -3427,6 +3448,9 @@ msgstr "Aplicaciones"
 
 msgid "Registration surcharge"
 msgstr "Suplemento de inscripción"
+
+msgid "Registrations not open"
+msgstr "¡La inscripción aún no está abierta"
 
 msgid "Reimbursement approved"
 msgstr "Reembolso aprobado"
@@ -3795,9 +3819,6 @@ msgstr "Opción ya no disponible"
 msgid "Pre-register to the event!"
 msgstr "¡Preinscríbete al evento!"
 
-msgid "Registration not yet open!"
-msgstr "¡La inscripción aún no está abierta!"
-
 msgid "Short name - international"
 msgstr "Nombre corto - internacional"
 
@@ -3903,6 +3924,9 @@ msgstr "Retención como coste de transacción"
 
 msgid "Would you like to change it"
 msgstr "¿Quiere cambiarlo"
+
+msgid "Your event has been created"
+msgstr "Su evento ha sido creado"
 
 msgid "please fill in your profile"
 msgstr "rellene su perfil"
@@ -4024,6 +4048,9 @@ msgstr "Transporte - gasolina, autopista"
 msgid "Unconverted pre-registrations"
 msgstr "Preinscripciones no convertidas"
 
+msgid "You don’t have any events yet"
+msgstr "Aún no tienes ningún evento"
+
 msgid "Your account is now activated"
 msgstr "Tu cuenta ha sido activada"
 
@@ -4039,9 +4066,6 @@ msgstr "Retraso en la cuota anual de afiliación"
 
 msgid "Font to be used in page titles"
 msgstr "Fuente que se utilizará en los títulos"
-
-msgid "If checked: uses old interface"
-msgstr "Si está marcada: utiliza la interfaz antigua"
 
 msgid "Manage issues during the event"
 msgstr "Gestionar los problemas durante el acto"
@@ -5154,6 +5178,9 @@ msgstr "Ahora puede fijar la fecha de apertura de la inscripción"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lugar de nacimiento no incluido en la lista ISTAT"
 
+msgid "Please create your first event to get started"
+msgstr "Cree su primer evento para empezar"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Inscripción a %(event)s actualizada por %(user)s"
@@ -6174,10 +6201,6 @@ msgid "Now participants can submit donation, and you can review them"
 msgstr ""
 "Ahora los participantes pueden enviar donaciones, y usted puede revisarlas"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-"Configure rápidamente los parámetros más importantes de su organización"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr "Vea ejemplos prácticos de cómo LarpManager puede ayudar a su evento"
 
@@ -6338,6 +6361,9 @@ msgstr "Advertencia: ¡ya hay un miembro aprobado con el mismo nombre"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "También puede cargar un segundo archivo con las opciones de registro"
+
+msgid "You must create at least one quest before you can create traits"
+msgstr "Debes crear al menos una búsqueda antes de poder crear rasgos"
 
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Recibirá confirmación del resultado de su evaluación"
@@ -6688,6 +6714,9 @@ msgstr ""
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Ha cancelado correctamente la inscripción al evento %(event)s"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr "Debes crear al menos un tipo de misión antes de poder crear misiones"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr ""
@@ -7085,6 +7114,11 @@ msgstr ""
 "proporcionado"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Debes crear al menos un tipo de habilidad antes de poder crear habilidades"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr "si lo deja vacío, puede ser el evento de inicio de una nueva campaña"
 
@@ -7169,6 +7203,10 @@ msgid ""
 msgstr ""
 "Puede retirar su consentimiento para compartir datos haciendo clic en el "
 "enlace correspondiente"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr "Debe crear al menos un tipo de prólogo antes de poder crear prólogos"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7295,6 +7333,12 @@ msgid ""
 msgstr "En la facción se ha mencionado un personaje, pero no parece existir"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Último paso: complete la configuración del evento añadiendo las fechas de "
+"inicio y fin"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Parte de la cuota de inscripción derivada únicamente de las opciones "
@@ -7323,6 +7367,11 @@ msgid ""
 msgstr ""
 "No podéis trabajar en él al mismo tiempo: el trabajo de uno de vosotros se "
 "perdería"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Debe crear al menos una plantilla de folleto antes de poder crear folletos"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -7437,6 +7486,13 @@ msgid ""
 msgstr ""
 "Si está marcada, permite a los participantes personalizar la foto de perfil "
 "de sus personajes"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Si está marcada, los participantes dan un valor de preferencia al añadir "
+"preinscripciones"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8107,6 +8163,13 @@ msgstr ""
 "Indica el valor del descuento, se deducirá del importe total calculado"
 
 msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Ahora, por favor, complete la configuración rápida seleccionando las "
+"características más útiles para este evento"
+
+msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
 msgstr ""
@@ -8354,6 +8417,13 @@ msgstr ""
 "sido aprobada"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Una medida de cuánto favorecer a los que se registran antes (0=desactivado "
+"por defecto, 1=normal, 10=fuerte)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -8508,6 +8578,13 @@ msgid ""
 msgstr ""
 "Trata este evento como un acontecimiento digital/en línea que no requiere "
 "inscripción en persona"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Debe crear al menos una pregunta de registro antes de poder crear opciones "
+"de registro"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
@@ -9533,6 +9610,13 @@ msgstr ""
 "no pueden establecerse al mismo tiempo: %(list)s"
 
 msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Una medida de cuánto favorecer a los participantes que completaron el pago "
+"total antes (0=desactivado por defecto, 1=normal, 10=fuerte)"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
@@ -9547,6 +9631,13 @@ msgstr ""
 "Permite a los participantes enviar solicitudes de lanzaderas (por ejemplo, "
 "logística de recogida), y el personal puede gestionar el estado de esas "
 "solicitudes"
+
+msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Antes de acceder al panel de control del evento, complete la configuración "
+"rápida seleccionando las funciones más útiles para su evento"
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
@@ -9828,6 +9919,14 @@ msgid ""
 msgstr ""
 "Opcional - Si seleccionas una (o más) facciones, la pregunta sólo se "
 "mostrará a los participantes con personajes de todas las facciones elegidas"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Antes de acceder al panel de control de la organización, complete la "
+"configuración rápida seleccionando las funciones más útiles para su "
+"organización"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

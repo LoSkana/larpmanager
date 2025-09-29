@@ -23,6 +23,7 @@ import re
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -388,8 +389,8 @@ def _process_payment(invoice):
         acc.assoc = invoice.assoc
         acc.save()
 
-        reg.num_payments += 1
-        reg.save()
+        Registration.objects.filter(pk=reg.pk).update(num_payments=F("num_payments") + 1)
+        reg.refresh_from_db()
 
         # e-invoice emission
         if "e-invoice" in get_assoc_features(invoice.assoc_id):
@@ -433,6 +434,16 @@ def update_payment_invoice(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=RefundRequest)
 def update_refund_request(sender, instance, **kwargs):
+    """Process refund request status changes.
+
+    Args:
+        sender: Model class sending the signal
+        instance: RefundRequest instance being updated
+        **kwargs: Additional signal arguments
+
+    Side effects:
+        Creates accounting item when refund status changes to PAYED
+    """
     if not instance.pk:
         return
 
@@ -458,6 +469,16 @@ def update_refund_request(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Collection)
 def update_collection(sender, instance, **kwargs):
+    """Update payment collection status and metadata.
+
+    Args:
+        sender: Model class sending the signal
+        instance: Collection instance being updated
+        **kwargs: Additional signal arguments
+
+    Side effects:
+        Creates accounting item credit when collection status changes to PAYED
+    """
     if not instance.pk:
         return
 

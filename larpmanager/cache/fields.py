@@ -41,6 +41,14 @@ def reset_event_fields_cache(event_id):
 
 
 def update_event_fields(event_id):
+    """Update cached event fields including writing questions and registration data.
+
+    Args:
+        event_id: Event ID to update fields cache for
+
+    Returns:
+        dict: Updated event fields cache data
+    """
     res = {}
     event = Event.objects.get(pk=event_id)
 
@@ -90,6 +98,14 @@ def get_event_fields_cache(event_id):
 
 
 def visible_writing_fields(ctx, applicable, only_visible=True):
+    """
+    Filter and cache visible writing fields based on visibility settings.
+
+    Args:
+        ctx: Context dictionary to store filtered results
+        applicable: QuestionApplicable enum value for field type
+        only_visible: Whether to include only visible fields (default: True)
+    """
     key = QuestionApplicable(applicable).label
 
     ctx["questions"] = {}

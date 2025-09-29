@@ -23,7 +23,7 @@ from collections import defaultdict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Prefetch
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -74,6 +74,18 @@ def orga_event(request, s):
 
 
 def full_event_edit(ctx, request, event, run, exe=False):
+    """Comprehensive event editing with validation.
+
+    Args:
+        ctx: Context dictionary for template rendering
+        request: HTTP request object
+        event: Event instance to edit
+        run: Run instance associated with the event
+        exe: Whether this is an executive-level edit
+
+    Returns:
+        HttpResponse: Edit form template or redirect after successful save
+    """
     ctx["nonum"] = 1
     if request.method == "POST":
         form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
@@ -111,6 +123,11 @@ def orga_roles(request, s):
 
 
 def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
+    """Prepare role list with permissions organized by module for display.
+
+    Builds a formatted list of roles with their members and grouped permissions,
+    handling special formatting for administrator roles and module organization.
+    """
     qs_perm = permission_typ.objects.select_related("feature", "feature__module").order_by(
         F("feature__module__order").asc(nulls_last=True),
         F("feature__order").asc(nulls_last=True),
@@ -218,7 +235,20 @@ def orga_features(request, s):
 
 
 def orga_features_go(request, ctx, num, on=True):
+    """Activate or deactivate a feature for an event.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing event and run data
+        num: Feature number/ID to toggle
+        on: Boolean indicating whether to activate (True) or deactivate (False) the feature
+
+    Returns:
+        The feature object that was toggled
+    """
     get_feature(ctx, num)
+    if ctx["feature"].overall:
+        raise Http404("overall feature!")
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
     reset_run(ctx["run"])
@@ -294,6 +324,15 @@ def orga_backup(request, s):
 
 
 def _prepare_backup(ctx):
+    """
+    Prepare comprehensive event data backup by exporting various components.
+
+    Args:
+        ctx: Context dictionary with event and feature information
+
+    Returns:
+        HttpResponse: ZIP file containing exported event data
+    """
     exports = []
 
     exports.extend(export_event(ctx))
@@ -325,6 +364,17 @@ def _prepare_backup(ctx):
 
 @login_required
 def orga_upload(request, s, typ):
+    """
+    Handle file uploads for organizers with element processing.
+
+    Args:
+        request: HTTP request object with file data
+        s: Event slug
+        typ: Type of elements to upload
+
+    Returns:
+        HttpResponse: Upload form or processing results page
+    """
     ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
     ctx["name"] = ctx["typ"]
@@ -355,6 +405,16 @@ def orga_upload(request, s, typ):
 
 @login_required
 def orga_upload_template(request, s, typ):
+    """Generate and download template files for data upload.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        typ: Template type (writing, registration, px_abilitie, form)
+
+    Returns:
+        ZIP file response containing template files
+    """
     ctx = check_event_permission(request, s)
     ctx["typ"] = typ
     _get_column_names(ctx)
@@ -384,13 +444,43 @@ def orga_upload_template(request, s, typ):
         exports = _writing_template(ctx, typ, value_mapping)
     elif typ == "registration":
         exports = _reg_template(ctx, typ, value_mapping)
+    elif typ == "px_abilitie":
+        exports = _ability_template(ctx)
     else:
         exports = _form_template(ctx)
 
     return zip_exports(ctx, exports, "template")
 
 
+def _ability_template(ctx):
+    exports = []
+    defs = {
+        "name": "Ability name",
+        "cost": "Ability cost",
+        "typ": "Ability type",
+        "descr": "Ability description",
+        "prerequisites": "Ability prerequisite, comma-separated",
+        "requirements": "Character options, comma-separated",
+    }
+    keys = list(ctx["columns"][0].keys())
+    vals = []
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    exports.append(("abilities", keys, [vals]))
+    return exports
+
+
 def _form_template(ctx):
+    """Generate template files for form questions and options upload.
+
+    Args:
+        ctx: Context dictionary with column definitions
+
+    Returns:
+        List of tuples containing template data for questions and options
+    """
     exports = []
     defs = {
         "name": "Question Name",
@@ -441,6 +531,16 @@ def _reg_template(ctx, typ, value_mapping):
 
 
 def _writing_template(ctx, typ, value_mapping):
+    """Generate template data for writing export with field mappings.
+
+    Args:
+        ctx: Context dictionary containing fields, writing type, and features
+        typ: Type string for the template name
+        value_mapping: Dictionary mapping field types to example values
+
+    Returns:
+        List of tuples containing template data (name, keys, values)
+    """
     keys = [k for k, v in ctx["fields"].items() if v != "skip"]
     vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items() if field_typ != "skip"]
 

@@ -39,12 +39,23 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 
 @background_auto(queue="acc")
 def update_registration_status_bkg(reg_id):
+    """Background task to update registration status with delay.
+
+    Args:
+        reg_id: ID of the registration to update
+    """
     time.sleep(1)
     instance = Registration.objects.get(pk=reg_id)
     update_registration_status(instance)
 
 
 def update_registration_status(instance):
+    """Send email notifications for registration status changes.
+
+    Handles automated emails for registration confirmations and updates,
+    sending notifications to both the registering member and event organizers
+    based on association configuration settings.
+    """
     # skip registration not gifted
     if instance.modified == 0:
         return
@@ -92,6 +103,12 @@ def update_registration_status(instance):
 
 
 def registration_options(instance):
+    """Generate email content for registration options.
+
+    Creates formatted text showing selected tickets and registration choices,
+    including payment information, totals, and selected registration options
+    for email notifications.
+    """
     body = ""
 
     if instance.ticket:
@@ -139,6 +156,16 @@ def registration_options(instance):
 
 
 def registration_payments(instance, currency):
+    """
+    Generate payment information HTML for registration emails.
+
+    Args:
+        instance: Registration instance with payment details
+        currency: Currency symbol/code for payment display
+
+    Returns:
+        str: HTML formatted payment information with links and deadlines
+    """
     f_url = get_url("accounting/pay", instance.run.event)
     url = f"{f_url}/{instance.run.get_slug()}"
     data = {"url": url, "amount": instance.quota, "currency": currency, "deadline": instance.deadline}
@@ -167,6 +194,15 @@ def registration_payments(instance, currency):
 
 @receiver(post_save, sender=RegistrationCharacterRel)
 def update_registration_character_rel_post(sender, instance, created, **kwargs):
+    """
+    Send character assignment email when registration-character relation is created.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: RegistrationCharacterRel instance
+        created: Whether the instance was created
+        **kwargs: Additional keyword arguments
+    """
     if not created:
         return
 

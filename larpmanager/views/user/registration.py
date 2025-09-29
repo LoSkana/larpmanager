@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import traceback
 from datetime import datetime, timedelta
 
@@ -52,7 +53,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import AssocTextType
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.event import (
     Event,
     EventTextType,
@@ -66,9 +67,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.utils import my_uuid
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.common import (
-    get_assoc,
-)
+from larpmanager.utils.common import get_assoc
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,
@@ -76,6 +75,8 @@ from larpmanager.utils.exceptions import (
 )
 from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
 from larpmanager.utils.text import get_assoc_text, get_event_text
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -104,6 +105,9 @@ def pre_register(request, s=""):
     ctx["choices"] = []
     ctx["already"] = []
     ctx["member"] = request.user.member
+
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
 
     ch = {}
     que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])
@@ -144,6 +148,15 @@ def pre_register(request, s=""):
 
 @login_required
 def pre_register_remove(request, s):
+    """Remove user's pre-registration for an event.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        s: Event slug to remove pre-registration from
+
+    Returns:
+        HttpResponse: Redirect to pre-registration list
+    """
     ctx = get_event(request, s)
     element = PreRegistration.objects.get(member=request.user.member, event=ctx["event"])
     element.delete()
@@ -153,6 +166,17 @@ def pre_register_remove(request, s):
 
 @login_required
 def register_exclusive(request, s, sc="", dis=""):
+    """Handle exclusive event registration (delegates to main register function).
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug
+        sc: Secret code (optional)
+        dis: Discount code (optional)
+
+    Returns:
+        HttpResponse: Result from register function
+    """
     return register(request, s, sc, dis)
 
 
@@ -289,15 +313,31 @@ def registration_redirect(request, reg, new_reg, run):
 
 
 def save_registration_bring_friend(ctx, form, reg, request):
+    """Process bring-a-friend discount codes for registration.
+
+    Args:
+        ctx: Context dictionary with bring friend configuration
+        form: Registration form with bring_friend field
+        reg: Registration instance
+        request: Django HTTP request object
+    """
+    """Process bring-a-friend registration functionality.
+
+    Args:
+        ctx: Context dictionary with event and feature information
+        form: Registration form with bring_friend field
+        reg: Registration instance
+        request: Django HTTP request object
+    """
     # send mail
     bring_friend_instructions(reg, ctx)
     if "bring_friend" not in form.cleaned_data:
         return
-    # print(form.cleaned_data)
+    logger.debug(f"Bring friend form data: {form.cleaned_data}")
 
     # check if it has put a valid code
     cod = form.cleaned_data["bring_friend"]
-    # print(cod)
+    logger.debug(f"Processing bring friend code: {cod}")
     if not cod:
         return
 
@@ -332,6 +372,18 @@ def save_registration_bring_friend(ctx, form, reg, request):
 
 
 def register_info(request, ctx, form, reg, dis):
+    """Display registration information and status.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary to populate with registration data
+        form: Registration form instance
+        reg: Registration object if exists
+        dis: Discount information
+
+    Side effects:
+        Updates ctx with form data, terms, conditions, and membership status
+    """
     ctx["form"] = form
     ctx["lang"] = request.user.member.language
     ctx["discount_apply"] = dis
@@ -379,6 +431,11 @@ def init_form_submitted(ctx, form, request, reg=None):
 
 @login_required
 def register(request, s, sc="", dis="", tk=0):
+    """Handle event registration form display and submission.
+
+    Manages the complete registration process including ticket selection,
+    form validation, payment processing, and membership verification.
+    """
     ctx = get_event_run(request, s, status=True)
     run = ctx["run"]
     event = ctx["event"]
@@ -549,6 +606,16 @@ def register_conditions(request, s=None):
 @login_required
 @require_POST
 def discount(request, s):
+    """Handle discount code application for user registration.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        JsonResponse: Success or error response for discount application
+    """
+
     def error(msg):
         return JsonResponse({"res": "ko", "msg": msg})
 
@@ -561,7 +628,8 @@ def discount(request, s):
     try:
         disc = Discount.objects.get(runs__in=[ctx["run"]], cod=cod)
     except ObjectDoesNotExist:
-        print(traceback.format_exc())
+        logger.warning(f"Discount code not found: {cod}")
+        logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 
     now = timezone_now()
@@ -718,6 +786,16 @@ def check_registration_open(ctx, request):
 
 @login_required
 def gift_edit(request, s, r):
+    """Handle gift registration modifications.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        r: Registration ID
+
+    Returns:
+        HttpResponse: Gift edit form template or redirect after save/cancel
+    """
     ctx = get_event_run(request, s, False, "gift", status=True)
     check_registration_open(ctx, request)
 
@@ -763,6 +841,20 @@ def get_registration_gift(ctx, r, request):
 
 @login_required
 def gift_redeem(request, s, code):
+    """
+    Handle gift code redemption for event registrations.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        code: Gift redemption code
+
+    Returns:
+        HttpResponse: Redemption form or redirect after successful redemption
+
+    Raises:
+        Http404: If registration with code is not found
+    """
     ctx = get_event_run(request, s, False, "gift", status=True)
 
     if ctx["run"].reg:

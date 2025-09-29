@@ -19,12 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -148,8 +147,7 @@ def pay(live_server, page):
     expect(page.locator("#one")).to_contain_text("48")
     expect(page.locator("#one")).to_contain_text("52")
     submit(page)
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     expect(page.locator("#one")).to_contain_text("52")
     submit(page)
 

@@ -20,6 +20,7 @@
 
 import inflection
 from django.apps import apps
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
@@ -206,6 +207,13 @@ def orga_quests_view(request, s, num):
 @login_required
 def orga_quests_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_quests")
+
+    # Check if quest types exist
+    if not ctx["event"].get_elements(QuestType).exists():
+        # Add warning message and redirect to quest types adding page
+        messages.warning(request, _("You must create at least one quest type before you can create quests"))
+        return redirect("orga_quest_types_edit", s=s, num=0)
+
     if num != 0:
         get_element(ctx, num, "quest", Quest)
     return writing_edit(request, ctx, QuestForm, "quest", TextVersionChoices.QUEST)
@@ -234,6 +242,13 @@ def orga_traits_view(request, s, num):
 @login_required
 def orga_traits_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_traits")
+
+    # Check if quests exist
+    if not ctx["event"].get_elements(Quest).exists():
+        # Add warning message and redirect to quests adding page
+        messages.warning(request, _("You must create at least one quest before you can create traits"))
+        return redirect("orga_quests_edit", s=s, num=0)
+
     if num != 0:
         get_trait(ctx, num)
     return writing_edit(request, ctx, TraitForm, "trait", TextVersionChoices.TRAIT)
@@ -277,6 +292,13 @@ def orga_handouts_view(request, s, num):
 @login_required
 def orga_handouts_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_handouts")
+
+    # Check if handout templates exist
+    if not ctx["event"].get_elements(HandoutTemplate).exists():
+        # Add warning message and redirect to handout templates adding page
+        messages.warning(request, _("You must create at least one handout template before you can create handouts"))
+        return redirect("orga_handout_templates_edit", s=s, num=0)
+
     if num != 0:
         get_handout(ctx, num)
     return writing_edit(request, ctx, HandoutForm, "handout", TextVersionChoices.HANDOUT)
@@ -333,6 +355,13 @@ def orga_prologues_view(request, s, num):
 @login_required
 def orga_prologues_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_prologues")
+
+    # Check if prologue types exist
+    if not ctx["event"].get_elements(PrologueType).exists():
+        # Add warning message and redirect to prologue types adding page
+        messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
+        return redirect("orga_prologue_types_edit", s=s, num=0)
+
     if num != 0:
         get_prologue(ctx, num)
     return writing_edit(request, ctx, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)
@@ -400,6 +429,19 @@ def orga_progress_steps_order(request, s, num, order):
 
 @login_required
 def orga_multichoice_available(request, s):
+    """
+    Handle AJAX requests for available multichoice options for organizers.
+
+    Args:
+        request: HTTP request object with POST data
+        s: Event slug
+
+    Returns:
+        JsonResponse: Available character options for selection
+
+    Raises:
+        Http404: If request method is not POST
+    """
     if not request.method == "POST":
         return Http404()
 
@@ -412,7 +454,12 @@ def orga_multichoice_available(request, s):
         )
     else:
         eid = request.POST.get("eid", "")
-        ctx = check_event_permission(request, s, "orga_" + class_name + "s")
+        perms = {"abilitypx": "orga_px_abilities"}
+        if class_name in perms:
+            perm = perms[class_name]
+        else:
+            perm = "orga_" + class_name + "s"
+        ctx = check_event_permission(request, s, perm)
         if eid:
             model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
             taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)

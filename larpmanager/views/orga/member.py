@@ -52,6 +52,15 @@ def orga_newsletter(request, s):
 
 @login_required
 def orga_safety(request, s):
+    """Process safety-related member data forms.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Safety information template with member data and characters
+    """
     ctx = check_event_permission(request, s, "orga_safety")
     get_event_cache_all(ctx)
     min_length = 3
@@ -80,6 +89,15 @@ def orga_safety(request, s):
 
 @login_required
 def orga_diet(request, s):
+    """Handle dietary preference management forms.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Diet preferences template with member data and characters
+    """
     ctx = check_event_permission(request, s, "orga_diet")
     get_event_cache_all(ctx)
     min_length = 3
@@ -108,6 +126,15 @@ def orga_diet(request, s):
 
 @login_required
 def orga_spam(request, s):
+    """Manage spam/newsletter preference settings.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Newsletter management template with grouped email lists
+    """
     ctx = check_event_permission(request, s, "orga_spam")
 
     already = list(
@@ -136,6 +163,11 @@ def orga_spam(request, s):
 
 @login_required
 def orga_persuade(request, s):
+    """Display members who can be persuaded to register for the event.
+
+    Shows association members who haven't registered yet, excluding current
+    registrants and staff, with pre-registration status and event history.
+    """
     ctx = check_event_permission(request, s, "orga_persuade")
 
     already = list(
@@ -188,6 +220,16 @@ def orga_questions(request, s):
 
 @login_required
 def orga_questions_answer(request, s, r):
+    """Handle organizer responses to member help questions.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        r: Member ID who submitted the question
+
+    Returns:
+        Rendered template for answering help questions
+    """
     ctx = check_event_permission(request, s, "orga_questions")
 
     member = Member.objects.get(pk=r)
@@ -277,6 +319,15 @@ def orga_read_mail(request, s, nm):
 
 @login_required
 def orga_sensitive(request, s):
+    """Display sensitive member information for event organizers.
+
+    Args:
+        request: HTTP request object with user and association data
+        s: Event/run identifier
+
+    Returns:
+        Rendered template with member sensitive data and character assignments
+    """
     ctx = check_event_permission(request, s, "orga_sensitive")
 
     get_event_cache_all(ctx)

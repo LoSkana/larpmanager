@@ -35,9 +35,35 @@ from larpmanager.utils.exceptions import ReturnNowError
 
 
 def _get_bulk_params(request, ctx):
-    operation = int(request.POST.get("operation", "0"))
-    target = int(request.POST.get("target", "0"))
-    ids = [int(x) for x in request.POST.getlist("ids[]", [])]
+    """
+    Extract and validate bulk operation parameters from request.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event/run information
+
+    Returns:
+        tuple: (ids, operation, target) extracted from request
+
+    Raises:
+        ReturnNowError: If no valid IDs are provided
+    """
+    try:
+        operation = int(request.POST.get("operation", "0"))
+    except (ValueError, TypeError):
+        operation = 0
+
+    try:
+        target = int(request.POST.get("target", "0"))
+    except (ValueError, TypeError):
+        target = 0
+
+    ids = []
+    for x in request.POST.getlist("ids[]", []):
+        try:
+            ids.append(int(x))
+        except (ValueError, TypeError):
+            continue
 
     if not ids:
         raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))
@@ -168,6 +194,18 @@ def exec_del_char_prologue(request, ctx, target, ids):
 
 
 def handle_bulk_characters(request, ctx):
+    """Process bulk operations on character objects.
+
+    Handles mass character modifications, faction assignments, and other
+    batch character management tasks for efficient character administration.
+
+    Args:
+        request: Django HTTP request object containing POST data with operation details
+        ctx (dict): Context dictionary containing event and selection data
+
+    Returns:
+        None: Function modifies ctx in-place, adding operation results and status messages
+    """
     if request.POST:
         mapping = {
             Operations.ADD_CHAR_FACT: exec_add_char_fact,

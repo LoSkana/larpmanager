@@ -103,6 +103,12 @@ def correct_rels(e_id, p_id, cls_p, cls, field, rel_field="number"):
 
 
 def correct_relationship(e_id, p_id):
+    """Correct character relationships after event copying.
+
+    Args:
+        e_id: Target event ID with copied characters
+        p_id: Source parent event ID with original characters
+    """
     cache_f = {}
     cache_t = {}
     for obj in Character.objects.filter(event_id=p_id):
@@ -128,7 +134,11 @@ def correct_relationship(e_id, p_id):
 
         v = rel.source_id
         # print(rel.source_id)
+        if v not in cache_f:
+            continue
         v = cache_f[v]
+        if v not in cache_t:
+            continue
         v = cache_t[v]
         rel.source_id = v
 
@@ -145,6 +155,13 @@ def correct_relationship(e_id, p_id):
 
 
 def correct_workshop(e_id, p_id):
+    """
+    Correct workshop data mappings during event copying process.
+
+    Args:
+        e_id: Target event ID to copy to
+        p_id: Source event ID to copy from
+    """
     cache_f = {}
     cache_t = {}
     for obj in WorkshopModule.objects.filter(event_id=p_id):
@@ -247,6 +264,18 @@ def copy(request, ctx, parent, event, element):
 
 
 def copy_event(all, ctx, e_id, element, event, p_id, parent):
+    """
+    Copy event data and related objects from parent to new event.
+
+    Args:
+        all: Whether to copy all elements
+        ctx: Context dictionary with form information
+        e_id: Target event ID
+        element: Specific element to copy
+        event: Target event instance
+        p_id: Source parent event ID
+        parent: Source parent event instance
+    """
     if all or element == "event":
         for s in get_all_fields_from_form(OrgaEventForm, ctx):
             if s == "slug":
@@ -294,6 +323,14 @@ def copy_registration(all, e_id, element, p_id):
 
 
 def copy_writing(all, e_id, element, p_id):
+    """Copy writing elements from parent to child event.
+
+    Args:
+        all: Boolean to copy all elements or specific type
+        e_id: Target event ID
+        element: Specific element type to copy (character, faction, etc.)
+        p_id: Parent event ID to copy from
+    """
     if all or element == "character":
         copy_class(e_id, p_id, Character)
         # correct relationship

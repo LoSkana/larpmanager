@@ -56,6 +56,15 @@ from larpmanager.utils.edit import _get_values_mapping
 
 
 def _temp_csv_file(keys, vals):
+    """Create CSV content from keys and values.
+
+    Args:
+        keys: Column headers
+        vals: Data rows
+
+    Returns:
+        str: CSV formatted string
+    """
     df = pd.DataFrame(vals, columns=keys)
     buffer = io.StringIO()
     df.to_csv(buffer, index=False)
@@ -64,6 +73,16 @@ def _temp_csv_file(keys, vals):
 
 
 def zip_exports(ctx, exports, filename):
+    """Create ZIP file containing multiple CSV exports.
+
+    Args:
+        ctx: Context dictionary with run information
+        exports: List of (name, keys, values) tuples
+        filename: Base filename for ZIP
+
+    Returns:
+        HttpResponse: ZIP file download response
+    """
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
         for name, key, vals in exports:
@@ -77,11 +96,26 @@ def zip_exports(ctx, exports, filename):
 
 
 def download(ctx, typ, nm):
+    """Generate downloadable ZIP export for model type.
+
+    Args:
+        ctx: Context dictionary with event data
+        typ: Model class to export
+        nm: Name prefix for file
+
+    Returns:
+        HttpResponse: ZIP download response
+    """
     exports = export_data(ctx, typ)
     return zip_exports(ctx, exports, nm.capitalize())
 
 
 def export_data(ctx, typ, member_cover=False):
+    """Export model data to structured format with questions and answers.
+
+    Processes data export for various model types with question handling,
+    answer processing, and cover image support.
+    """
     query = typ.objects.all()
     get_event_cache_all(ctx)
     model = typ.__name__.lower()
@@ -118,6 +152,14 @@ def export_data(ctx, typ, member_cover=False):
 
 
 def export_plot_rels(ctx):
+    """Export plot-character relationships.
+
+    Args:
+        ctx: Context dictionary with event data
+
+    Returns:
+        list: Export tuple with plot relationship data
+    """
     keys = ["plot", "character", "text"]
     vals = []
 
@@ -132,6 +174,14 @@ def export_plot_rels(ctx):
 
 
 def export_relationships(ctx):
+    """Export character relationships.
+
+    Args:
+        ctx: Context dictionary with event data
+
+    Returns:
+        list: Export tuple with relationship data
+    """
     keys = ["source", "target", "text"]
     vals = []
 
@@ -144,6 +194,20 @@ def export_relationships(ctx):
 
 
 def _prepare_export(ctx, model, query):
+    """Prepare data for export operations.
+
+    Processes questions, choices, and answers for data export functionality,
+    organizing the data by question type and element relationships for
+    registration and character model exports.
+
+    Args:
+        ctx (dict): Context dictionary containing export configuration and data
+        model: Django model class to export data from
+        query: QuerySet containing the filtered data to export
+
+    Returns:
+        None: Function modifies ctx in-place, adding prepared export data structures
+    """
     # noinspection PyProtectedMember
     applicable = QuestionApplicable.get_applicable(model)
     choices = {}
@@ -194,6 +258,17 @@ def _prepare_export(ctx, model, query):
 
 
 def _get_applicable_row(ctx, el, model, member_cover=False):
+    """Build row data for export with question answers and element information.
+
+    Args:
+        ctx: Context dictionary with questions, answers, and choices data
+        el: Element instance (registration, character, etc.)
+        model: Model type string ('registration', 'character')
+        member_cover: Boolean to include member profile images
+
+    Returns:
+        Tuple of (values list, headers list) for the row
+    """
     val = []
     key = []
 
@@ -229,6 +304,16 @@ def _get_applicable_row(ctx, el, model, member_cover=False):
 
 
 def _row_header(ctx, el, key, member_cover, model, val):
+    """Build header row data with member information and basic element data.
+
+    Args:
+        ctx: Context dictionary with assignments data
+        el: Element instance to process
+        key: List to append header names to
+        member_cover: Boolean to include member profile images
+        model: Model type string ('registration', 'character')
+        val: List to append values to
+    """
     member = None
     if model == "registration":
         member = el.member
@@ -257,7 +342,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(email)
 
     if model == "registration":
-        val.append(el.ticket.name)
+        val.append(el.ticket.name if el.ticket is not None else "")
         key.append(_("Ticket"))
 
         _header_regs(ctx, el, key, val)
@@ -274,6 +359,14 @@ def _expand_val(val, el, field):
 
 
 def _header_regs(ctx, el, key, val):
+    """Generate header row data for registration download with feature-based columns.
+
+    Args:
+        ctx: Context dictionary containing features and configuration
+        el: Registration element object
+        key: List to append column headers to
+        val: List to append column values to
+    """
     if "character" in ctx["features"]:
         key.append(_("Characters"))
         val.append(", ".join([row.character.name for row in el.rcrs.all()]))
@@ -330,6 +423,11 @@ def _get_standard_row(ctx, el):
 
 
 def _writing_field(ctx, k, key, v, val):
+    """Process writing field for export with feature-based filtering.
+
+    Filters and formats writing fields based on enabled features,
+    handling special cases like factions and custom fields.
+    """
     new_val = v
     skip_fields = [
         "id",
@@ -412,6 +510,14 @@ def orga_registration_form_download(ctx):
 
 
 def export_registration_form(ctx):
+    """Export registration data to Excel format.
+
+    Args:
+        ctx: Context dictionary with event and form data
+
+    Returns:
+        list: List of tuples containing sheet names, headers, and data for Excel export
+    """
     mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
@@ -455,6 +561,15 @@ def orga_character_form_download(ctx):
 
 
 def export_character_form(ctx):
+    """
+    Export character form questions and options to CSV format.
+
+    Args:
+        ctx: Context dictionary with event and column information
+
+    Returns:
+        list: List of export tuples (name, keys, values) for character form data
+    """
     mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
@@ -481,6 +596,16 @@ def export_character_form(ctx):
 
 
 def _orga_registrations_acc(ctx, regs=None):
+    """
+    Process registration accounting data for organizer reports.
+
+    Args:
+        ctx: Context dictionary with event and feature information
+        regs: Optional list of registrations to process (defaults to all active registrations)
+
+    Returns:
+        dict: Processed accounting data keyed by registration ID
+    """
     ctx["reg_tickets"] = {}
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
         t.emails = []
@@ -509,6 +634,17 @@ def _orga_registrations_acc(ctx, regs=None):
 
 
 def _orga_registrations_acc_reg(reg, ctx, cache_aip):
+    """
+    Process registration accounting data for organizer downloads.
+
+    Args:
+        reg: Registration instance to process
+        ctx: Context dictionary with ticket and feature information
+        cache_aip: Cached accounting payment data
+
+    Returns:
+        dict: Processed accounting data dictionary
+    """
     dt = {}
 
     max_rounding = 0.05
@@ -542,6 +678,19 @@ def _orga_registrations_acc_reg(reg, ctx, cache_aip):
 
 
 def _get_column_names(ctx):
+    """Define column mappings and field types for different export contexts.
+
+    Sets up comprehensive dictionaries mapping form fields to export columns
+    based on context type (registration, tickets, abilities, etc.).
+
+    Args:
+        ctx (dict): Context dictionary containing export configuration including:
+            - typ (str): Export type ('registration', 'registration_ticket', etc.)
+            - features (set): Available features for the export context
+
+    Returns:
+        None: Function modifies ctx in-place, adding 'columns' and 'fields' keys
+    """
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {
@@ -645,6 +794,12 @@ def _get_column_names(ctx):
 
 
 def _get_writing_names(ctx):
+    """Get writing field names and types for download context.
+
+    Args:
+        ctx: Context dictionary to populate with writing field information
+            including event, typ, and fields data
+    """
     ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
     ctx["fields"] = {}
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
@@ -705,7 +860,7 @@ def export_tickets(ctx):
 def export_event(ctx):
     keys = ["name", "value"]
     vals = []
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc = Association.objects.get(pk=ctx["event"].assoc_id)
     for element in [ctx["event"], ctx["run"], assoc]:
         for name, value in get_configs(element).items():
             vals.append((name, value))

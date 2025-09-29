@@ -268,6 +268,11 @@ class Event(BaseModel):
         return self.name
 
     def show(self):
+        """Generate display dictionary with event information and media URLs.
+
+        Creates a comprehensive dictionary containing event details, cover images,
+        carousel images, fonts, and backgrounds with their respective URLs.
+        """
         dc = {}
 
         for s in [

@@ -40,6 +40,8 @@ from larpmanager.models.writing import CharacterStatus, Faction
 
 
 class BaseQuestionType(models.TextChoices):
+    """Base question types for forms with static utility methods."""
+
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
     TEXT = "t", _("Single-line text")
@@ -48,14 +50,29 @@ class BaseQuestionType(models.TextChoices):
 
     @staticmethod
     def get_answer_types():
+        """Get question types that use text answers.
+
+        Returns:
+            set: Question types requiring text input
+        """
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
     @staticmethod
     def get_choice_types():
+        """Get question types that use choice options.
+
+        Returns:
+            set: Question types with predefined choices
+        """
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
     def get_basic_types():
+        """Get all basic question types.
+
+        Returns:
+            set: All basic question type values
+        """
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
@@ -143,6 +160,8 @@ RegistrationQuestionType = extend_textchoices(
 
 
 class QuestionStatus(models.TextChoices):
+    """Status choices for form questions determining requirement level."""
+
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
     DISABLED = "d", _("Disabled")
@@ -159,6 +178,8 @@ class QuestionStatus(models.TextChoices):
 
 
 class QuestionVisibility(models.TextChoices):
+    """Visibility choices for form questions controlling access level."""
+
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
@@ -175,6 +196,8 @@ class QuestionVisibility(models.TextChoices):
 
 
 class QuestionApplicable(models.TextChoices):
+    """Defines which models questions can be applied to."""
+
     CHARACTER = "c", "character"
     PLOT = "p", "plot"
     FACTION = "f", "faction"
@@ -201,6 +224,8 @@ class QuestionApplicable(models.TextChoices):
 
 
 class WritingQuestion(BaseModel):
+    """Form questions for character writing and story elements."""
+
     typ = models.CharField(
         max_length=10,
         choices=WritingQuestionType.choices,
@@ -509,6 +534,11 @@ class RegistrationQuestion(BaseModel):
         return que
 
     def skip(self, reg, features, params=None, orga=False):
+        """Determine if a question should be skipped based on context and features.
+
+        Evaluates question visibility rules including hidden status, ticket restrictions,
+        faction filtering, and organizer permissions to decide if question should be shown.
+        """
         if self.status == QuestionStatus.HIDDEN and not orga:
             return True
 

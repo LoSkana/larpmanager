@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
@@ -74,6 +76,14 @@ def orga_px_abilities(request, s):
 
 @login_required
 def orga_px_abilities_edit(request, s, num):
+    ctx = check_event_permission(request, s, "orga_px_abilities")
+
+    # Check if ability types exist
+    if not ctx["event"].get_elements(AbilityTypePx).exists():
+        # Add warning message and redirect to ability types adding page
+        messages.warning(request, _("You must create at least one ability type before you can create abilities"))
+        return redirect("orga_px_ability_types_edit", s=s, num=0)
+
     return orga_edit(request, s, "orga_px_abilities", OrgaAbilityPxForm, num)
 
 

@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
 import re
 from collections import OrderedDict
@@ -30,7 +31,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
@@ -55,11 +56,16 @@ from larpmanager.models.member import (
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
+from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.validators import FileTypeValidator
+
+logger = logging.getLogger(__name__)
 
 
 class MyAuthForm(AuthenticationForm):
+    """Custom authentication form with styled fields."""
+
     class Meta:
         model = User
         fields = ["username", "password"]
@@ -77,8 +83,16 @@ class MyAuthForm(AuthenticationForm):
 
 
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
+    """Custom registration form with unique email validation and GDPR compliance."""
+
     # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
+        """Initialize RegistrationFormUniqueEmail with custom field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments, including 'request'
+        """
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
@@ -137,13 +151,21 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
     def clean_username(self):
         data = self.cleaned_data["username"].strip()
-        # print(data)
+        logger.debug(f"Validating username/email: {data}")
         # check if already used in user or email
         if User.objects.filter(email__iexact=data).count() > 0:
             raise ValidationError("Email already used! It seems you already have an account!")
         return data
 
     def save(self, commit=True):
+        """Save user and associated member profile.
+
+        Args:
+            commit: Whether to save to database
+
+        Returns:
+            User: Created user instance
+        """
         user = super(RegistrationFormUniqueEmail, self).save()
 
         user.member.newsletter = self.cleaned_data["newsletter"]
@@ -156,13 +178,29 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
 
 class MyPasswordResetConfirmForm(SetPasswordForm):
+    """Custom password reset confirmation form with field limits."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with password field constraints.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["new_password1"].widget.attrs["maxlength"] = 70
 
 
 class MyPasswordResetForm(PasswordResetForm):
+    """Custom password reset form with association-specific handling."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with email field constraints.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
@@ -191,13 +229,17 @@ class MyPasswordResetForm(PasswordResetForm):
         assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
         assoc = None
         if assoc_slug:
-            assoc = Association.objects.get(slug=assoc_slug)
-            user = context["user"]
-            mb = get_user_membership(user.member, assoc.id)
-            mb.password_reset = f"{context['uid']}#{context['token']}"
-            mb.save()
+            try:
+                assoc = Association.objects.get(slug=assoc_slug)
+                user = context["user"]
+                mb = get_user_membership(user.member, assoc.id)
+                mb.password_reset = f"{context['uid']}#{context['token']}"
+                mb.save()
+            except ObjectDoesNotExist:
+                # Invalid association slug - continue with None assoc
+                pass
 
-        # print(context)
+        logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
 
         my_send_mail(subject, body, to_email, assoc)
 
@@ -210,10 +252,14 @@ class MyPasswordResetForm(PasswordResetForm):
 
 
 class AvatarForm(forms.Form):
+    """Form for uploading user avatar images."""
+
     image = forms.ImageField(label="Select an image")
 
 
 class LanguageForm(forms.Form):
+    """Form for selecting user interface language."""
+
     language = forms.ChoiceField(
         choices=conf_settings.LANGUAGES,
         label=_("Select Language"),
@@ -383,6 +429,15 @@ class ProfileForm(BaseProfileForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize member form with dynamic field validation and configuration.
+
+        Sets mandatory fields, handles voting candidates, and adds required
+        data sharing consent field based on membership status.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments including request context
+        """
         super().__init__(*args, **kwargs)
 
         for f in self.fields:
@@ -425,7 +480,7 @@ class ProfileForm(BaseProfileForm):
 
     def clean_birth_date(self):
         data = self.cleaned_data["birth_date"]
-        # print(data)
+        logger.debug(f"Validating birth date: {data}")
 
         assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
         if "membership" in get_assoc_features(assoc.id):
@@ -433,7 +488,7 @@ class ProfileForm(BaseProfileForm):
             if min_age:
                 min_age = int(min_age)
                 # ~ d = date.fromisoformat(data)
-                # print(d)
+                logger.debug(f"Checking minimum age {min_age} against birth date {data}")
                 dif = relativedelta(datetime.now(), data).years
                 if dif < min_age:
                     raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
@@ -726,6 +781,12 @@ class ExeProfileForm(MyForm):
 
     @staticmethod
     def get_members_fields():
+        """
+        Get available member fields for form configuration.
+
+        Returns:
+            list: List of tuples containing field information (name, verbose_name, help_text)
+        """
         skip = [
             "id",
             "deleted",
@@ -754,6 +815,14 @@ class ExeProfileForm(MyForm):
         return choices
 
     def save(self, commit=True):
+        """Save form data and update member field configurations.
+
+        Args:
+            commit: Whether to save the instance to database
+
+        Returns:
+            The saved form instance
+        """
         instance = super().save(commit=commit)
 
         mandatory = []

@@ -49,6 +49,12 @@ class BrokenLinkEmailsMiddleware:
         return any(pattern.search(uri) for pattern in conf_settings.IGNORABLE_404_URLS)
 
     def check(self, request, response):
+        """Middleware for detecting and logging broken links.
+
+        Monitors for 404 errors and tracks problematic URLs for debugging,
+        filtering out bot traffic and ignorable URLs, and sending detailed
+        error reports to administrators.
+        """
         domain = request.get_host()
         path = request.get_full_path()
 
