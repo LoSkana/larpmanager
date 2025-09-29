@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.db.models.functions import Length, Substr
 from django.http import Http404, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -34,6 +34,9 @@ from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
     OrgaWritingQuestionForm,
+)
+from larpmanager.models.characterinventory import (
+    CharacterInventory,
 )
 from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
@@ -679,3 +682,41 @@ def _check_working_ticket(request, ctx, token):
         msg = writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", token)
 
     return msg
+
+@login_required
+def orga_api_characters(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_characters")
+    get_event_cache_all(ctx)
+
+    charEvent = ctx["event"].get_class_parent(Character)
+
+    parsed_chars = []
+
+    for pk in ctx["chars"]:
+        char = Character.objects.get(event=charEvent, pk=pk)
+        #char = ctx["chars"][pk]
+        id = char.pk
+        name = char.name
+        abilities = char.px_ability_list.all()
+        ci = get_object_or_404(CharacterInventory, pk=char.pk, event=ctx["event"])
+        pools = ci.get_pool_balances()
+
+        parsed_abilities = {}
+        for ability in abilities:
+            if ability.typ.pk not in parsed_abilities.keys():
+                parsed_abilities[ability.typ.pk] = {"id": ability.typ.pk, "name": ability.typ.name, "abilities": []}
+
+            if ability.template == None:
+                ability_template = {}
+            else:
+                ability_template = {"id": ability.template.pk, "name": ability.template.name}
+
+            parsed_abilities[ability.typ.pk]["abilities"].append({"id": ability.pk, "name": ability.name, "template": ability_template})
+
+        parsed_pools = []
+        for pool in pools:
+            parsed_pools.append({"type": pool["type"].name, "balance": pool["balance"].amount })
+
+        parsed_chars.append({"id": id, "name": name, "ability_types": parsed_abilities, "inventory": parsed_pools})
+
+    return JsonResponse(parsed_chars, safe=False)

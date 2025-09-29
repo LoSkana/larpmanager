@@ -1107,6 +1107,11 @@ urlpatterns = [
         name="orga_inventory_assignment_item_edit",
     ),
     path(
+        "api/<slug:s>/<int:n>/manage/characters/",
+        views_oc.orga_api_characters,
+        name="orga_api_characters",
+    ),
+    path(
         "api/<slug:s>/<int:n>/manage/px/abilities/",
         views_ox.orga_api_px_abilities,
         name="orga_api_px_abilities",
