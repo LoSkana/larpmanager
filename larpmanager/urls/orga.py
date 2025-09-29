@@ -1116,4 +1116,14 @@ urlpatterns = [
         views_ox.orga_api_px_abilities,
         name="orga_api_px_abilities",
     ),
+    path(
+        "api/<slug:s>/<int:n>/manage/px/ability_types/",
+        views_ox.orga_api_px_ability_types,
+        name="orga_api_px_ability_types",
+    ),
+    path(
+        "api/<slug:s>/<int:n>/manage/px/ability_templates/",
+        views_ox.orga_api_px_ability_templates,
+        name="orga_api_px_ability_templates",
+    ),
 ]
