@@ -59,7 +59,7 @@ def check_delete(live_server, page):
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/cancellations")
-    expect(page.get_by_role("row")).to_contain_text("orga@test.it")
+    expect(page.get_by_role("row", name="100 52 24 4 Admin Test")).to_contain_text("orga@test.it")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
@@ -73,7 +73,7 @@ def check_delete(live_server, page):
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/payments")
-    page.locator("a:has(i.fas.fa-edit)").click(force=True)
+    page.get_by_role("row", name="Admin Test Wire Money").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
