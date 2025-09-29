@@ -62,17 +62,17 @@ def check_delete(live_server, page):
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.get_by_role("row", name=" Admin Test Test Larp teeest").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/credits")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.get_by_role("row", name=" Admin Test Test Larp testet").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/payments")
-    page.locator('[id="\\35 "]').get_by_role("link", name="").click()
+    page.get_by_role("row", name=" Admin Test test").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
@@ -117,6 +117,7 @@ def discount(live_server, page):
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
+    page.wait_for_timeout(2000)
     expect(page.locator("#discount_res")).to_contain_text(
         "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed"
     )
