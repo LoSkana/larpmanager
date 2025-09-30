@@ -56,6 +56,10 @@ function load_question(el) {
 
         el.next().trigger('click');
 
+        // Batch updates by table to minimize DOM operations
+        const tableUpdates = {};
+
+        // Collect all updates first
         for (let r in data) {
             let vl = data[r];
             if (vl.constructor === Array) vl = vl.join(", ");
@@ -64,14 +68,37 @@ function load_question(el) {
                 vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num);
 
             Object.keys(window.datatables).forEach(function(key) {
-                var table = window.datatables[key];
-                var cell = table.cell('#' + r, '.q_' + num);
+                const table = window.datatables[key];
+                const row = table.row('#' + r);
+
+                if (row.length > 0) {
+                    if (!tableUpdates[key]) {
+                        tableUpdates[key] = [];
+                    }
+                    tableUpdates[key].push({
+                        rowSelector: '#' + r,
+                        columnClass: '.q_' + num,
+                        value: vl
+                    });
+                }
+            });
+        }
+
+        // Apply all updates per table and draw once
+        Object.keys(tableUpdates).forEach(function(key) {
+            const table = window.datatables[key];
+            const updates = tableUpdates[key];
+
+            updates.forEach(function(update) {
+                const cell = table.cell(update.rowSelector, update.columnClass);
                 if (cell && cell.node()) {
-                    cell.data(vl).draw(false);
+                    cell.data(update.value);
                 }
             });
 
-        }
+            // Single draw call per table instead of multiple
+            table.draw(false);
+        });
 
          done[num.toString()] = 1;
 
