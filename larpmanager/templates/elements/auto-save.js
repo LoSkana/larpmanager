@@ -154,5 +154,4 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-submitForm(false);
 </script>

@@ -112,11 +112,11 @@
             {% include "elements/writing/questions_body.html" %}
             {% if features.plot %}
                 <td class="plots dot_links">
-                    {% for p in el.plts %}
-                        <a href="{% url 'orga_plots_edit' run.get_slug p.1 %}">{{ p.0 }}</a>
+                    {% for p in el.plot_rels %}
+                        <a href="{% url 'orga_plots_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
-                <td class="stats">{{ el.plts | length }}</td>
+                <td class="stats">{{ el.plot_rels | length }}</td>
             {% endif %}
             {% if features.prologue %}
                 <td class="prologues dot_links">

@@ -67,8 +67,6 @@ def _get_elements_query(cls, ctx, request, typ):
         for e in selrel:
             elements = elements.select_related(e)
 
-    # elements, run = _apply_run_queries(ctx, elements, exe, run)
-
     elements = _apply_custom_queries(ctx, elements, typ)
 
     elements = _set_filtering(ctx, elements, filters)
@@ -208,25 +206,6 @@ def _prepare_data_json(ctx, elements, view, edit, exe=True):
         data.append(res)
 
     return data
-
-
-def _apply_run_queries(ctx, elements, exe, run):
-    if not exe:
-        run = ctx["run"].id
-    afield = ctx.get("afield")
-    if run >= 0:
-        if run == 0:
-            if afield:
-                kwargs = {f"{afield}__run__isnull": True}
-                elements = elements.filter(**kwargs)
-            else:
-                elements = elements.filter(run__isnull=True)
-        elif afield:
-            kwargs = {f"{afield}__run": run}
-            elements = elements.filter(**kwargs)
-        else:
-            elements = elements.filter(run=run)
-    return elements, run
 
 
 def _apply_custom_queries(ctx, elements, typ):
