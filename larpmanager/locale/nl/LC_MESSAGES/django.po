@@ -299,9 +299,6 @@ msgstr "Gesloten"
 msgid "Cover"
 msgstr "Omslag"
 
-msgid "Descr"
-msgstr "Beschrijving"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -1170,9 +1167,6 @@ msgstr "betalingen"
 msgid "positive"
 msgstr "positief"
 
-msgid "residues"
-msgstr "residuen"
-
 msgid "--- Empty"
 msgstr "--- Leeg"
 
@@ -1739,6 +1733,9 @@ msgstr "Ticketlijst"
 
 msgid "Total costs"
 msgstr "Totale kosten"
+
+msgid "Transaction"
+msgstr "Transactie"
 
 msgid "Transversal"
 msgstr "Dwars"
@@ -2513,8 +2510,8 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Confirm payments"
-msgstr "Betalingen bevestigen"
+msgid "Credits residues"
+msgstr "Credits residuen"
 
 msgid "Current template"
 msgstr "Huidige sjabloon"

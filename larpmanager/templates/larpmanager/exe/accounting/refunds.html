@@ -10,36 +10,4 @@
 {% block content %}
     {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}
-    <table id="tb" class="tablesorter">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{% trans "Informations" %}</th>
-                <th>{% trans "Member" %}</th>
-                <th>{% trans "Total required" %}</th>
-                <th>{{ credit_name }} {% trans "residues" %}</th>
-                <th>{% trans "Status" %}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
-                <tr>
-                    <td>
-                        <a href="{% url 'exe_refunds_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td>{{ el.details }}</td>
-                    <td>{{ el.member }}</td>
-                    <td>{{ el.value }}</td>
-                    <td>{{ el.credits }}</td>
-                    <td>{{ el.get_status_display }}</td>
-                    <td>
-                        {% if el.status != 'p' %}
-                            <a href="{% url 'exe_refunds_confirm' el.id %}">{% trans "Done" %}</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock content %}

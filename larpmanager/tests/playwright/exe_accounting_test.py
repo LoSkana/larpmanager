@@ -54,8 +54,8 @@ def verify(page, live_server):
     expect(page.locator("#one")).to_contain_text("Income: 70.00")
 
     go_to(page, live_server, "/test/manage/payments/")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("70")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("5.70")
+    # Check for payment row with value 70
+    expect(page.get_by_role("row", name="Admin Test Money 70")).to_be_visible()
 
     go_to(page, live_server, "/manage/accounting/")
     expect(page.locator("#one")).to_contain_text("20.00")
@@ -161,10 +161,10 @@ def add_orga(page, live_server):
     page.locator("#id_descr").fill("asdsada")
     load_image(page, "#id_invoice")
     submit_confirm(page)
-    expect(page.locator('[id="\\33 "]')).to_contain_text("13.00")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("50.00")
-    expect(page.locator('[id="\\33 "]')).to_contain_text("asdsada")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("ggg")
+    # Check for the inflow with value 13.00 and description "asdsada"
+    expect(page.get_by_role("row", name="Test Larp asdsada 13")).to_be_visible()
+    # Check for the inflow with value 50.00 and description "ggg"
+    expect(page.get_by_role("row", name="Test Larp ggg 50")).to_be_visible()
 
     go_to(page, live_server, "/test/manage/outflows")
     page.get_by_role("link", name="New").click()

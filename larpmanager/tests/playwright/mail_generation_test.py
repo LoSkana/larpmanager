@@ -51,7 +51,7 @@ def expense(live_server, page):
 
     # expenses
     go_to(page, live_server, "/manage/features/106/on")
-    go_to(page, live_server, "/test/manage/expenses/my")
+    go_to(page, live_server, "/test/manage/upload_expenses/")
     page.get_by_role("link", name="New").click()
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("10")
@@ -74,7 +74,10 @@ def resubmit_membership(live_server, page):
 
     # signup
     go_to(page, live_server, "/test/manage/tickets/")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.wait_for_selector("table.go_datatable")
+    # Wait for the edit button to appear and click it
+    page.wait_for_selector("tbody tr:first-child td:first-child a i.fas.fa-edit", timeout=10000)
+    page.locator("tbody tr:first-child td:first-child a i.fas.fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100")
     submit_confirm(page)
