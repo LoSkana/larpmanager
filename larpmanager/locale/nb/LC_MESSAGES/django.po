@@ -4051,6 +4051,9 @@ msgstr "Ikke-konverterte forhåndsregistreringer"
 msgid "You don’t have any events yet"
 msgstr "Du har ingen arrangementer ennå"
 
+msgid "You're not allowed to sign up"
+msgstr "Du har ikke lov til å registrere deg"
+
 msgid "Your account is now activated"
 msgstr "Kontoen din er nå aktiv"
 
@@ -5363,6 +5366,9 @@ msgstr "På denne siden kan du legge til eller redigere et tegn"
 msgid "This page allows you to edit a member's profile"
 msgstr "På denne siden kan du redigere et medlems profil"
 
+msgid "To access this feature, you must first register"
+msgstr "For å få tilgang til denne funksjonen må du først registrere deg"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 
@@ -5435,9 +5441,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Denne siden oppsummerer hvilke typer oppdrag som inngår i arrangementet"
 
-msgid "To access this feature, you must first register!"
-msgstr "For å få tilgang til denne funksjonen må du først registrere deg!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Du har allerede betalt årets medlemskontingent"
 
@@ -5488,6 +5491,9 @@ msgstr "Summen er %(amount).2f, med årsak '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det er <b>%(number)s</b> tegn som skal godkjennes"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "På denne siden kan du legge til eller redigere en px-levering"
@@ -5558,9 +5564,6 @@ msgstr "Påmeldingen til arrangementet ble avlyst"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finnes skrivefelt uten alternativer: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "På denne siden kan du legge til eller redigere en betalingspost"

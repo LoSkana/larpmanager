@@ -4051,6 +4051,9 @@ msgstr "Niekonwertowane rejestracje wstępne"
 msgid "You don’t have any events yet"
 msgstr "Nie masz jeszcze żadnych wydarzeń"
 
+msgid "You're not allowed to sign up"
+msgstr "Nie możesz się zarejestrować"
+
 msgid "Your account is now activated"
 msgstr "Twoje konto zostało aktywowane"
 
@@ -5360,6 +5363,9 @@ msgstr "Ta strona umożliwia dodawanie lub edytowanie postaci"
 msgid "This page allows you to edit a member's profile"
 msgstr "Ta strona umożliwia edycję profilu użytkownika"
 
+msgid "To access this feature, you must first register"
+msgstr "Aby uzyskać dostęp do tej funkcji, musisz się najpierw zarejestrować"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Ostrzeżenie. Formularz zawiera błędy w polach"
 
@@ -5433,9 +5439,6 @@ msgstr "Ta strona zawiera szablony materiałów informacyjnych dla wydarzeń"
 msgid "This page shows the types of quests in the event"
 msgstr "Ta strona przedstawia rodzaje zadań w wydarzeniu"
 
-msgid "To access this feature, you must first register!"
-msgstr "Aby uzyskać dostęp do tej funkcji, musisz się najpierw zarejestrować!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Opłaciłeś już tegoroczną składkę członkowską"
 
@@ -5486,6 +5489,9 @@ msgstr "Suma wynosi %(amount).2f, z powodem \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Istnieją <b>%(number)s</b> znaki do zatwierdzenia"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Ta funkcja jest dostępna dla biletów, które nie oczekują"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Ta strona umożliwia dodanie lub edycję dostawy px"
@@ -5556,9 +5562,6 @@ msgstr "Rejestracja na to wydarzenie została anulowana"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Istnieją pola zapisu bez opcji: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Ta funkcja jest dostępna dla biletów, które nie oczekują!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "Ta strona umożliwia dodanie lub edycję pozycji płatności"

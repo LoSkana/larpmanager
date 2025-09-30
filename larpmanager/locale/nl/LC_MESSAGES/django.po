@@ -4051,6 +4051,9 @@ msgstr "Niet omgezette voorregistraties"
 msgid "You don’t have any events yet"
 msgstr "Je hebt nog geen evenementen"
 
+msgid "You're not allowed to sign up"
+msgstr "Je mag je niet aanmelden"
+
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
@@ -5368,6 +5371,9 @@ msgstr "Op deze pagina kun je een personage toevoegen of bewerken"
 msgid "This page allows you to edit a member's profile"
 msgstr "Op deze pagina kun je het profiel van een lid bewerken"
 
+msgid "To access this feature, you must first register"
+msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
 
@@ -5441,9 +5447,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Deze pagina geeft een overzicht van de soorten quests in het evenement"
 
-msgid "To access this feature, you must first register!"
-msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
 
@@ -5494,6 +5497,9 @@ msgstr "De som is %(amount).2f, met reden '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Er zijn <b>%(number)s</b> tekens om goed te keuren"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Op deze pagina kunt u een px-levering toevoegen of bewerken"
@@ -5565,9 +5571,6 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Er zijn schrijfvelden zonder opties: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "Op deze pagina kun je een betalingsitem toevoegen of bewerken"

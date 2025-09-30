@@ -36,7 +36,7 @@ from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
-from larpmanager.utils.exceptions import SignupError, WaitingError
+from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 
 def registration_available(r, features=None, reg_counts=None):
@@ -144,6 +144,9 @@ def registration_status_signed(run, features, register_url):
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
     if "membership" in features:
+        if mb.status in [MembershipStatus.REWOKED]:
+            raise RewokedMembershipError()
+
         if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
             mes = _("please upload your membership application to proceed") + "."
@@ -243,6 +246,10 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
 
     registration_available(run, features, reg_count)
     register_url = reverse("register", args=[run.get_slug()])
+
+    mb = get_user_membership(user.member, run.event.assoc_id)
+    if mb.status in [MembershipStatus.REWOKED]:
+        return
 
     if run.reg:
         registration_status_signed(run, features, register_url)
