@@ -593,22 +593,48 @@ window.addEventListener('DOMContentLoaded', function() {
         start_spinner();
 
         request.done(function(data) {
+            // Batch updates by table to minimize DOM operations
+            const tableUpdates = {};
+
+            // Collect all updates first
             for (let key in data) {
                 for (let nm in data[key]) {
                     let vl = data[key][nm];
                     if (parseInt(vl) != 0) {
-
                         Object.keys(window.datatables).forEach(function(dt_key) {
-                            var table = window.datatables[dt_key];
-                            var cell = table.cell('#' + key, '.' + nm);
-                            if (cell && cell.node()) {
-                                cell.data(vl).draw(false);
+                            const table = window.datatables[dt_key];
+                            const row = table.row('#' + key);
+
+                            if (row.length > 0) {
+                                if (!tableUpdates[dt_key]) {
+                                    tableUpdates[dt_key] = [];
+                                }
+                                tableUpdates[dt_key].push({
+                                    rowSelector: '#' + key,
+                                    columnClass: '.' + nm,
+                                    value: vl
+                                });
                             }
                         });
-
                     }
                 }
             }
+
+            // Apply all updates per table and draw once
+            Object.keys(tableUpdates).forEach(function(dt_key) {
+                const table = window.datatables[dt_key];
+                const updates = tableUpdates[dt_key];
+
+                updates.forEach(function(update) {
+                    const cell = table.cell(update.rowSelector, update.columnClass);
+                    if (cell && cell.node()) {
+                        cell.data(update.value);
+                    }
+                });
+
+                // Single draw call per table instead of multiple
+                table.draw(false);
+            });
 
             done['acc'] = 1;
 
