@@ -29,9 +29,9 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
+from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs
-from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 from larpmanager.models.association import Association
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
@@ -49,7 +49,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_ordered_registration_questions,
 )
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
+from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
@@ -606,31 +606,18 @@ def _orga_registrations_acc(ctx, regs=None):
     Returns:
         dict: Processed accounting data keyed by registration ID
     """
-    ctx["reg_tickets"] = {}
-    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
-        t.emails = []
-        ctx["reg_tickets"][t.id] = t
+    # Use cached accounting data for efficiency
+    cached_data = get_registration_accounting_cache(ctx["run"])
 
-    cache_aip = {}
-    if "token_credit" in ctx["features"]:
-        que = AccountingItemPayment.objects.filter(reg__run=ctx["run"])
-        que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
-        for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
-            if el[0] not in cache_aip:
-                cache_aip[el[0]] = {"total": 0}
-            cache_aip[el[0]]["total"] += el[1]
-            if el[2] not in cache_aip[el[0]]:
-                cache_aip[el[0]][el[2]] = 0
-            cache_aip[el[0]][el[2]] += el[1]
+    # If specific registrations are requested, filter the cached data
+    if regs:
+        res = {}
+        for r in regs:
+            if r.id in cached_data:
+                res[r.id] = cached_data[r.id]
+        return res
 
-    if not regs:
-        regs = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    res = {}
-    for r in regs:
-        dt = _orga_registrations_acc_reg(r, ctx, cache_aip)
-        res[r.id] = {key: f"{value:g}" for key, value in dt.items()}
-
-    return res
+    return cached_data
 
 
 def _orga_registrations_acc_reg(reg, ctx, cache_aip):

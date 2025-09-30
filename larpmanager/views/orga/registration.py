@@ -471,9 +471,7 @@ def orga_registrations(request, s):
 @login_required
 def orga_registrations_accounting(request, s):
     ctx = check_event_permission(request, s, "orga_registrations")
-
     res = _orga_registrations_acc(ctx)
-
     return JsonResponse(res)
 
 
