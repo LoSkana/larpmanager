@@ -181,7 +181,7 @@ def plots(live_server, page):
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
 
     # check it is the same
     page.get_by_role("link", name="").click()
@@ -198,7 +198,7 @@ def plots(live_server, page):
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
     page.get_by_role("link", name="").click()
     # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
@@ -219,7 +219,7 @@ def plots(live_server, page):
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #2 prova")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww prova")
 
     # set text
     page.get_by_role("link", name="").click()
