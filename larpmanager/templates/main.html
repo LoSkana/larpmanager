@@ -83,29 +83,12 @@
         <!-- Header -->
         <header id="header"
                 class="alt {% if manage and is_sidebar_open %}sidebar{% endif %}">
-            {% block sidebar_logo %}
-                {% if manage and interface_old %}
-                    <nav id="sidebar-nav">
-                        <a id="sidebar-open" href="#sidebar">
-                            <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
-                            <span>Sidebar</span>
-                        </a>
-                    </nav>
-                {% endif %}
-            {% endblock sidebar_logo %}
             <h1>
                 <span>
                     {% block title %}
                     {% endblock title %}
                 </span>
             </h1>
-            {% if interface_old %}
-                <nav id="menu-bar">
-                    <a id="menu-open" href="#menu"><span>Menu</span>
-                        <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
-                    </a>
-                </nav>
-            {% endif %}
         </header>
         <!-- Menu -->
         {% include "elements/structure/menu.html" %}

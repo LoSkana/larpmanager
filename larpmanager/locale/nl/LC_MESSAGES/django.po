@@ -314,6 +314,9 @@ msgstr "Evenement"
 msgid "Field"
 msgstr "Veld"
 
+msgid "Fifth"
+msgstr "Vijfde"
+
 msgid "First"
 msgstr "Eerste"
 
@@ -408,6 +411,9 @@ msgstr "Belastingen"
 msgid "Texts"
 msgstr "Teksten"
 
+msgid "Third"
+msgstr "Derde"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -501,6 +507,9 @@ msgstr "Vulstof"
 msgid "Footer"
 msgstr "Voettekst"
 
+msgid "Fourth"
+msgstr "Vierde"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +596,9 @@ msgstr "Veiligheid"
 
 msgid "Search"
 msgstr "Zoek op"
+
+msgid "Second"
+msgstr "Tweede"
 
 msgid "Secret"
 msgstr "Geheim"
@@ -2056,9 +2068,6 @@ msgstr "Niet voltooid"
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
 
-msgid "Old interface"
-msgstr "Oude interface"
-
 msgid "Passages made"
 msgstr "Ondernomen stappen"
 
@@ -2860,6 +2869,9 @@ msgstr "Toekenning uitschakelen"
 
 msgid "Electronic invoice"
 msgstr "Elektronische factuur"
+
+msgid "Enable preferences"
+msgstr "Voorkeuren inschakelen"
 
 msgid "Go to the form for"
 msgstr "Ga naar het formulier voor"
@@ -3916,6 +3928,9 @@ msgstr "Inhouding als transactiekosten"
 msgid "Would you like to change it"
 msgstr "Wil je het veranderen"
 
+msgid "Your event has been created"
+msgstr "Je evenement is aangemaakt"
+
 msgid "please fill in your profile"
 msgstr "vul je profiel in"
 
@@ -4036,6 +4051,9 @@ msgstr "Vervoer - benzine, snelweg"
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
 
+msgid "You don’t have any events yet"
+msgstr "Je hebt nog geen evenementen"
+
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
@@ -4051,9 +4069,6 @@ msgstr "Uitstel van jaarlijkse contributie"
 
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
-
-msgid "If checked: uses old interface"
-msgstr "Indien aangevinkt: gebruikt oude interface"
 
 msgid "Manage issues during the event"
 msgstr "Problemen tijdens het evenement beheren"
@@ -4564,6 +4579,10 @@ msgstr "Controleer de geldigheid van de fiscale code"
 
 msgid "End date cannot be before start date!"
 msgstr "Einddatum kan niet voor startdatum liggen!"
+
+#, python-format
+msgid "Expected %(expected)s, got %(actual)s"
+msgstr "Verwachte %(expected)s, gekregen %(actual)s"
 
 msgid "Hide participants without a character"
 msgstr "Deelnemers zonder teken verbergen"
@@ -5168,6 +5187,9 @@ msgstr "Nu kun je de openingsdatum van de registratie instellen"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
+
+msgid "Please create your first event to get started"
+msgstr "Maak je eerste evenement aan om te beginnen"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
@@ -6193,9 +6215,6 @@ msgstr "Merk op dat als de kosten 0 zijn, ze automatisch worden toegewezen"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Deelnemers kunnen nu donaties indienen en jij kunt ze beoordelen"
-
-msgid "Quickly configure your organization's most important settings"
-msgstr "Snel de belangrijkste instellingen van je organisatie configureren"
 
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
@@ -7360,6 +7379,12 @@ msgstr ""
 "In de factie wordt een personage genoemd, maar het lijkt niet te bestaan"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Voltooi als laatste stap de instelling van het evenement door de begin- en "
+"einddatum toe te voegen"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Deel van het inschrijfgeld dat alleen is afgeleid van de gekozen extra "
@@ -7510,6 +7535,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, kunnen deelnemers de profielfoto van hun "
 "personage aanpassen"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Indien aangevinkt, geven deelnemers een voorkeurswaarde op bij het toevoegen"
+" van preregistraties"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8178,6 +8210,13 @@ msgid ""
 msgstr ""
 "Geef de waarde van de korting aan, deze wordt afgetrokken van het totaal "
 "berekende bedrag"
+
+msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Voltooi nu de snelle installatie door de functies te selecteren die het "
+"meest nuttig zijn voor dit evenement"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -9644,6 +9683,14 @@ msgstr ""
 "personeel kan de status van deze verzoeken beheren"
 
 msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Voordat je het evenementendashboard opent, moet je de snelle installatie "
+"voltooien door de functies te selecteren die het meest nuttig zijn voor je "
+"evenement"
+
+msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers"
 msgstr ""
@@ -9925,6 +9972,14 @@ msgid ""
 msgstr ""
 "Optioneel - Als je één (of meer) facties selecteert, wordt de vraag alleen "
 "getoond aan deelnemers met personages in alle gekozen facties"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Voordat je het organisatiedashboard opent, moet je de snelle installatie "
+"voltooien door de functies te selecteren die het handigst zijn voor je "
+"organisatie"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

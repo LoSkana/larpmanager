@@ -715,11 +715,19 @@ class BaseRegistrationForm(MyFormRun):
     def save_reg_text(self, instance, oid, q):
         if q.id in self.answers:
             if not oid:
-                self.answers[q.id].delete()
+                # For disabled questions in organizer forms, don't delete existing answers
+                # unless the organizer explicitly submitted an empty value for an editable field
+                orga = getattr(self, "orga", False)
+                is_disabled = hasattr(q, "status") and q.status == "d"
+                if orga and is_disabled:
+                    # Keep existing value for disabled fields in organizer forms
+                    pass
+                else:
+                    self.answers[q.id].delete()
             elif oid != self.answers[q.id].text:
                 self.answers[q.id].text = oid
                 self.answers[q.id].save()
-        else:
+        elif oid:  # Only create new answers if there's actually content
             self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
 
     def save_reg_single(self, instance, oid, q):
