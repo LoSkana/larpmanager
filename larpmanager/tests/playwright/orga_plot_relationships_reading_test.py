@@ -97,7 +97,7 @@ def reading(live_server, page):
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("only for testt Primary #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("only for testt Primary Test Character")
 
     # check reading for prova
     page.get_by_role("link", name="Reading").click()
