@@ -38,12 +38,17 @@ function load_question(el) {
         datatype: "json",
     });
 
-    if (!spinner) {
-        start_spinner();
-        spinner = true;
-    }
+    // Show spinner only after 500ms delay
+    let spinnerTimeout = setTimeout(function() {
+        if (!spinner) {
+            start_spinner();
+            spinner = true;
+        }
+    }, 500);
 
     request.done(function(result) {
+        // Clear the spinner timeout since request completed
+        clearTimeout(spinnerTimeout);
 
         num = result['num'];
         data = result['res'];
@@ -94,9 +99,14 @@ function load_question_email(el) {
         datatype: "json",
     });
 
-    start_spinner();
+    // Show spinner only after 500ms delay
+    let spinnerTimeout = setTimeout(function() {
+        start_spinner();
+    }, 500);
 
     request.done(function(data) {
+        // Clear the spinner timeout since request completed
+        clearTimeout(spinnerTimeout);
 
         let t = '.email_que_{0} table tbody'.format(key)
         let tbl = $(t);
