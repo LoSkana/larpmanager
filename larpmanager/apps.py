@@ -28,3 +28,17 @@ class LarpManagerConfig(AppConfig):
     def ready(self):
         _ = __import__("larpmanager.models.signals")
         _ = __import__("larpmanager.utils.profiler.receivers")
+        # Import cache modules individually to register signal handlers
+        _ = __import__("larpmanager.cache.accounting")
+        _ = __import__("larpmanager.cache.association")
+        _ = __import__("larpmanager.cache.character")
+        _ = __import__("larpmanager.cache.feature")
+        _ = __import__("larpmanager.cache.fields")
+        _ = __import__("larpmanager.cache.larpmanager")
+        _ = __import__("larpmanager.cache.links")
+        _ = __import__("larpmanager.cache.permission")
+        _ = __import__("larpmanager.cache.registration")
+        _ = __import__("larpmanager.cache.role")
+        _ = __import__("larpmanager.cache.run")
+        _ = __import__("larpmanager.cache.skin")
+        _ = __import__("larpmanager.cache.text_fields")
