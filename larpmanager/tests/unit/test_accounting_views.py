@@ -24,7 +24,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 from django.http import Http404, JsonResponse
-from django.test import Client, RequestFactory
+from django.test import Client, RequestFactory, TestCase
 
 from larpmanager.models.accounting import (
     CollectionStatus,
@@ -41,7 +41,7 @@ from larpmanager.views.orga import accounting as orga_accounting
 from larpmanager.views.user import accounting as user_accounting
 
 
-class TestOrgaAccountingViews(BaseTestCase):
+class TestOrgaAccountingViews(TestCase, BaseTestCase):
     """Test organizer accounting views"""
 
     def setup_method(self):
@@ -50,11 +50,11 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_discounts(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/discounts/")
         request.user = user_with_permissions
-        request.assoc = {"id": self.event().assoc_id}
+        request.assoc = {"id": self.get_event().assoc_id}
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -75,11 +75,11 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_expenses_my(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/expenses_my/")
         request.user = user_with_permissions
-        request.user.member = self.member()
+        request.user.member = self.get_member()
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -90,11 +90,11 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_expenses_my_new_get(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/expenses_my/new/")
         request.user = user_with_permissions
-        request.user.member = self.member()
+        request.user.member = self.get_member()
         request.assoc = {"id": 1}
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
@@ -108,11 +108,11 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_expenses_my_new_post_valid(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.post("/test/manage/expenses_my/new/", {"descr": "Test expense"})
         request.user = user_with_permissions
-        request.user.member = self.member()
+        request.user.member = self.get_member()
         request.assoc = {"id": 1}
 
         mock_expense = Mock()
@@ -131,8 +131,8 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_invoices(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/invoices/")
         request.user = user_with_permissions
 
@@ -145,11 +145,11 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_invoices_confirm(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         payment_invoice = self.payment_invoice()
         # Set up a registration for the payment invoice
-        payment_invoice.reg = self.registration()
+        payment_invoice.reg = self.get_registration()
         payment_invoice.reg.run = run
         request = self.factory.get("/test/manage/invoices/1/confirm/")
         request.user = user_with_permissions
@@ -169,22 +169,22 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_invoices_confirm_wrong_run(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         payment_invoice = self.payment_invoice()
         request = self.factory.get("/test/manage/invoices/1/confirm/")
         request.user = user_with_permissions
 
         # Create different run - use another registration with a different run
-        other_registration = self.registration()
+        other_registration = self.get_registration()
         # Create another run that's different from the main run
         from larpmanager.models.event import Run
-        from datetime import date
+
         other_run = Run.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             number=999,  # Use a different number
             start=date(2024, 1, 1),
-            end=date(2024, 1, 2)
+            end=date(2024, 1, 2),
         )
         other_registration.run = other_run
         payment_invoice.reg = other_registration
@@ -200,8 +200,8 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_accounting(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/accounting/")
         request.user = user_with_permissions
 
@@ -252,8 +252,8 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_expenses_approve(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/expenses/1/approve/")
         request.user = user_with_permissions
 
@@ -274,13 +274,13 @@ class TestOrgaAccountingViews(BaseTestCase):
 
     def test_orga_expenses_approve_disabled(self):
         user_with_permissions = self.user_with_permissions()
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         request = self.factory.get("/test/manage/expenses/1/approve/")
         request.user = user_with_permissions
 
         # Mock association config to disable expense approval
-        self.event().assoc.get_config = Mock(return_value=True)
+        self.get_event().assoc.get_config = Mock(return_value=True)
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -289,7 +289,7 @@ class TestOrgaAccountingViews(BaseTestCase):
                 orga_accounting.orga_expenses_approve(request, "test-slug", 1)
 
 
-class TestExeAccountingViews(BaseTestCase):
+class TestExeAccountingViews(TestCase, BaseTestCase):
     """Test executive accounting views"""
 
     def setup_method(self):
@@ -344,7 +344,7 @@ class TestExeAccountingViews(BaseTestCase):
 
     def test_exe_run_accounting(self):
         user_with_permissions = self.user_with_permissions()
-        run = self.run()
+        run = self.get_run()
         request = self.factory.get(f"/manage/run/{run.id}/accounting/")
         request.user = user_with_permissions
 
@@ -362,7 +362,7 @@ class TestExeAccountingViews(BaseTestCase):
 
     def test_exe_run_accounting_wrong_assoc(self):
         user_with_permissions = self.user_with_permissions()
-        run = self.run()
+        run = self.get_run()
         request = self.factory.get(f"/manage/run/{run.id}/accounting/")
         request.user = user_with_permissions
 
@@ -376,7 +376,7 @@ class TestExeAccountingViews(BaseTestCase):
 
     def test_exe_balance(self):
         user_with_permissions = self.user_with_permissions()
-        association = self.association()
+        association = self.get_association()
         request = self.factory.get("/manage/balance/")
         request.user = user_with_permissions
 
@@ -393,7 +393,7 @@ class TestExeAccountingViews(BaseTestCase):
                         mock_render.assert_called_once()
 
     def test_check_year_with_post(self):
-        association = self.association()
+        association = self.get_association()
         request = self.factory.post("/test/", {"year": "2024"})
         ctx = {"a_id": association.id}
 
@@ -406,7 +406,7 @@ class TestExeAccountingViews(BaseTestCase):
             assert ctx["year"] == 2024
 
     def test_check_year_invalid_year(self):
-        association = self.association()
+        association = self.get_association()
         request = self.factory.post("/test/", {"year": "invalid"})
         ctx = {"a_id": association.id}
 
@@ -433,7 +433,7 @@ class TestExeAccountingViews(BaseTestCase):
                 mock_model.objects.get.return_value = payment_invoice
                 with patch("larpmanager.views.exe.accounting.messages"):
                     with patch("larpmanager.views.exe.accounting.redirect") as mock_redirect:
-                        with patch.object(payment_invoice, 'save') as mock_save:
+                        with patch.object(payment_invoice, "save") as mock_save:
                             exe_accounting.exe_verification_manual(request, payment_invoice.id)
                             assert payment_invoice.verified is True
                             mock_save.assert_called_once()
@@ -470,7 +470,7 @@ class TestExeAccountingViews(BaseTestCase):
                         mock_redirect.assert_called_once()
 
 
-class TestUserAccountingViews(BaseTestCase):
+class TestUserAccountingViews(TestCase, BaseTestCase):
     """Test user accounting views"""
 
     def setup_method(self):
@@ -675,7 +675,6 @@ class TestUserAccountingViews(BaseTestCase):
                     mock_satispay.assert_called_once()
                     mock_profile.assert_called_once_with(request, "You have completed the payment!", None)
 
-
     # Helper methods for creating specific test objects when needed
     def user_with_permissions(self):
         """Create a mock user with permissions"""
@@ -690,7 +689,7 @@ class TestUserAccountingViews(BaseTestCase):
 
     def payment_invoice(self):
         """Create a payment invoice for testing"""
-        association = self.association()
+        association = self.get_association()
         payment_method = self.payment_method()
         invoice = PaymentInvoice.objects.create(
             member_id=1,

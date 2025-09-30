@@ -22,13 +22,10 @@ from decimal import Decimal
 from unittest.mock import Mock, patch
 
 import pytest
-from django.contrib.auth.models import User
+from django.test import TestCase
 
 from larpmanager.accounting.payment import get_payment_fee, unique_invoice_cod
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.association import Association
-from larpmanager.models.base import PaymentMethod
-from larpmanager.models.member import Member
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -150,7 +147,7 @@ class TestUniqueInvoiceCodeGeneration:
         assert mock_generate_id.call_count == 5, "Should have tried 5 times"
 
 
-class TestPaymentInvoiceModel(BaseTestCase):
+class TestPaymentInvoiceModel(TestCase, BaseTestCase):
     """Test PaymentInvoice model functionality"""
 
     def test_payment_invoice_creation(self):
@@ -234,8 +231,8 @@ class TestPaymentInvoiceModel(BaseTestCase):
         """Test that invoice codes must be unique"""
         # Create first invoice
         PaymentInvoice.objects.create(
-            member=self.member(),
-            assoc=self.association(),
+            member=self.get_member(),
+            assoc=self.get_association(),
             method=self.payment_method(),
             typ=PaymentType.REGISTRATION,
             status=PaymentStatus.CREATED,
@@ -247,8 +244,8 @@ class TestPaymentInvoiceModel(BaseTestCase):
         # Attempt to create second invoice with same code should fail
         with pytest.raises(Exception):  # IntegrityError or similar
             PaymentInvoice.objects.create(
-                member=self.member(),
-                assoc=self.association(),
+                member=self.get_member(),
+                assoc=self.get_association(),
                 method=self.payment_method(),
                 typ=PaymentType.REGISTRATION,
                 status=PaymentStatus.CREATED,

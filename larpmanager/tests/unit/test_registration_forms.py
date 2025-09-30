@@ -37,15 +37,15 @@ from larpmanager.models.registration import (
 from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestRegistrationFormValidation(BaseTestCase):
+class TestRegistrationFormValidation(TestCase, BaseTestCase):
     """Test registration form validation"""
 
     def test_registration_form_basic_validation(self):
         """Test basic registration form validation"""
         # Mock form data
         form_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "ticket": self.ticket().id,
             "additionals": 0,
             "pay_what": None,
@@ -59,24 +59,34 @@ class TestRegistrationFormValidation(BaseTestCase):
         """Test self.ticket() selection validation"""
         # Create tickets with different availability
         available_ticket = RegistrationTicket.objects.create(
-            event=self.run().event, tier=TicketTier.STANDARD, name="Available Ticket", price=Decimal("100.00"), max_available=10, number=1
+            event=self.get_run().event,
+            tier=TicketTier.STANDARD,
+            name="Available Ticket",
+            price=Decimal("100.00"),
+            max_available=10,
+            number=1,
         )
 
         sold_out_ticket = RegistrationTicket.objects.create(
-            event=self.run().event, tier=TicketTier.STANDARD, name="Sold Out Ticket", price=Decimal("100.00"), max_available=0, number=2
+            event=self.get_run().event,
+            tier=TicketTier.STANDARD,
+            name="Sold Out Ticket",
+            price=Decimal("100.00"),
+            max_available=0,
+            number=2,
         )
 
         # Test valid ticket selection
         valid_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "ticket": available_ticket.id,
         }
 
         # Test sold out ticket selection (should be validated in form)
         invalid_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "ticket": sold_out_ticket.id,
         }
 
@@ -88,16 +98,16 @@ class TestRegistrationFormValidation(BaseTestCase):
         """Test additional tickets validation"""
         # Test valid additionals
         valid_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "ticket": self.ticket().id,
             "additionals": 2,
         }
 
         # Test negative additionals (should be invalid)
         invalid_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "ticket": self.ticket().id,
             "additionals": -1,
         }
@@ -109,15 +119,15 @@ class TestRegistrationFormValidation(BaseTestCase):
         """Test pay-what-you-want validation"""
         # Test valid pay_what amount
         valid_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "pay_what": Decimal("75.00"),
         }
 
         # Test negative pay_what (should be invalid)
         invalid_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "pay_what": Decimal("-10.00"),
         }
 
@@ -131,29 +141,35 @@ class TestRegistrationFormValidation(BaseTestCase):
         """Test duplicate registration validation"""
         # Create first registration
         existing_reg = Registration.objects.create(
-            member=self.member(), run=self.run(), ticket=self.ticket(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+            member=self.get_member(),
+            run=self.get_run(),
+            ticket=self.ticket(),
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("0.00"),
         )
 
         # Test attempt to create duplicate registration
         duplicate_data = {
-            "member": self.member().id,
-            "run": self.run().id,
+            "member": self.get_member().id,
+            "run": self.get_run().id,
             "ticket": self.ticket().id,
         }
 
         # Form should validate that member doesn't already have registration for this run
-        existing_registrations = Registration.objects.filter(member=self.member(), run=self.run(), cancellation_date__isnull=True)
+        existing_registrations = Registration.objects.filter(
+            member=self.get_member(), run=self.get_run(), cancellation_date__isnull=True
+        )
 
         assert existing_registrations.exists()
 
 
-class TestRegistrationQuestionForms(BaseTestCase):
+class TestRegistrationQuestionForms(TestCase, BaseTestCase):
     """Test registration self.question() and answer forms"""
 
     def test_text_question_answer(self):
         """Test text question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="dietary_requirements",
             description="Do you have any dietary requirements?",
             typ=BaseQuestionType.TEXT,
@@ -172,7 +188,7 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_single_choice_question_answer(self):
         """Test single choice question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="accommodation",
             description="What accommodation do you prefer?",
             typ=BaseQuestionType.SINGLE,
@@ -180,9 +196,13 @@ class TestRegistrationQuestionForms(BaseTestCase):
             order=1,
         )
 
-        option1 = RegistrationOption.objects.create(event=self.event(), question=question, name="Hotel", price=Decimal("50.00"), order=1)
+        option1 = RegistrationOption.objects.create(
+            event=self.get_event(), question=question, name="Hotel", price=Decimal("50.00"), order=1
+        )
 
-        option2 = RegistrationOption.objects.create(event=self.event(), question=question, name="Camping", price=Decimal("20.00"), order=2)
+        option2 = RegistrationOption.objects.create(
+            event=self.get_event(), question=question, name="Camping", price=Decimal("20.00"), order=2
+        )
 
         # Valid single choice
         valid_choice = option1.id
@@ -196,7 +216,7 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_multiple_choice_question_answer(self):
         """Test multiple choice question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="meals",
             description="Which meals do you want?",
             typ=BaseQuestionType.MULTIPLE,
@@ -205,12 +225,16 @@ class TestRegistrationQuestionForms(BaseTestCase):
         )
 
         breakfast = RegistrationOption.objects.create(
-            event=self.event(), question=question, name="Breakfast", price=Decimal("15.00"), order=1
+            event=self.get_event(), question=question, name="Breakfast", price=Decimal("15.00"), order=1
         )
 
-        lunch = RegistrationOption.objects.create(event=self.event(), question=question, name="Lunch", price=Decimal("20.00"), order=2)
+        lunch = RegistrationOption.objects.create(
+            event=self.get_event(), question=question, name="Lunch", price=Decimal("20.00"), order=2
+        )
 
-        dinner = RegistrationOption.objects.create(event=self.event(), question=question, name="Dinner", price=Decimal("25.00"), order=3)
+        dinner = RegistrationOption.objects.create(
+            event=self.get_event(), question=question, name="Dinner", price=Decimal("25.00"), order=3
+        )
 
         # Valid multiple choices
         valid_choices = [breakfast.id, dinner.id]
@@ -222,7 +246,7 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_boolean_question_answer(self):
         """Test boolean question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="newsletter",
             description="Do you want to receive our newsletter?",
             typ=BaseQuestionType.TEXT,  # No BOOLEAN type in RegistrationQuestionType
@@ -245,7 +269,12 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_integer_question_answer(self):
         """Test integer question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(), name="age", description="What is your age?", typ=BaseQuestionType.TEXT, status="m", order=1
+            event=self.get_event(),
+            name="age",
+            description="What is your age?",
+            typ=BaseQuestionType.TEXT,
+            status="m",
+            order=1,
         )
 
         # Valid integer answers
@@ -269,7 +298,7 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_decimal_question_answer(self):
         """Test decimal question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="contribution",
             description="How much would you like to contribute?",
             typ=BaseQuestionType.TEXT,  # No DECIMAL type in RegistrationQuestionType
@@ -300,7 +329,7 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_email_question_answer(self):
         """Test email question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="emergency_contact",
             description="Emergency contact email:",
             typ=BaseQuestionType.TEXT,  # No EMAIL type in RegistrationQuestionType
@@ -326,7 +355,7 @@ class TestRegistrationQuestionForms(BaseTestCase):
     def test_date_question_answer(self):
         """Test date question answer form"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="arrival_date",
             description="When will you arrive?",
             typ=BaseQuestionType.TEXT,  # No DATE type in RegistrationQuestionType
@@ -343,13 +372,18 @@ class TestRegistrationQuestionForms(BaseTestCase):
             assert len(date_str) > 0
 
 
-class TestRegistrationFormCalculations(BaseTestCase):
+class TestRegistrationFormCalculations(TestCase, BaseTestCase):
     """Test registration form price calculations"""
 
     def test_ticket_price_calculation(self):
         """Test ticket price calculation in form"""
         ticket = RegistrationTicket.objects.create(
-            event=self.run().event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), max_available=50, number=1
+            event=self.get_run().event,
+            tier=TicketTier.STANDARD,
+            name="Standard Ticket",
+            price=Decimal("100.00"),
+            max_available=50,
+            number=1,
         )
 
         # Base price
@@ -364,14 +398,21 @@ class TestRegistrationFormCalculations(BaseTestCase):
     def test_options_price_calculation(self):
         """Test options price calculation"""
         question = RegistrationQuestion.objects.create(
-            event=self.event(), name="meals", description="Select your meals:", typ=BaseQuestionType.MULTIPLE, status="o", order=1
+            event=self.get_event(),
+            name="meals",
+            description="Select your meals:",
+            typ=BaseQuestionType.MULTIPLE,
+            status="o",
+            order=1,
         )
 
         breakfast = RegistrationOption.objects.create(
-            event=self.event(), question=question, name="Breakfast", price=Decimal("15.00"), order=1
+            event=self.get_event(), question=question, name="Breakfast", price=Decimal("15.00"), order=1
         )
 
-        lunch = RegistrationOption.objects.create(event=self.event(), question=question, name="Lunch", price=Decimal("20.00"), order=2)
+        lunch = RegistrationOption.objects.create(
+            event=self.get_event(), question=question, name="Lunch", price=Decimal("20.00"), order=2
+        )
 
         # Selected options
         selected_options = [breakfast, lunch]
@@ -391,12 +432,17 @@ class TestRegistrationFormCalculations(BaseTestCase):
         # Create ticket
         base_ticket_price = Decimal("100.00")
         ticket = RegistrationTicket.objects.create(
-            event=self.run().event, tier=TicketTier.STANDARD, name="Standard Ticket", price=base_ticket_price, max_available=50, number=1
+            event=self.get_run().event,
+            tier=TicketTier.STANDARD,
+            name="Standard Ticket",
+            price=base_ticket_price,
+            max_available=50,
+            number=1,
         )
 
         # Create option
         question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="accommodation",
             description="Select accommodation:",
             typ=BaseQuestionType.SINGLE,
@@ -406,7 +452,7 @@ class TestRegistrationFormCalculations(BaseTestCase):
 
         accommodation_price = Decimal("50.00")
         accommodation = RegistrationOption.objects.create(
-            event=self.event(), question=question, name="Hotel", price=accommodation_price, order=1
+            event=self.get_event(), question=question, name="Hotel", price=accommodation_price, order=1
         )
 
         # Define calculation components
@@ -454,32 +500,32 @@ class TestRegistrationFormCalculations(BaseTestCase):
 
         # Create surcharges with different dates
         applicable_surcharge1 = RegistrationSurcharge.objects.create(
-            event=self.run().event,
+            event=self.get_run().event,
             date=yesterday,  # Should apply
             amount=25,  # Integer field, not Decimal
             number=1,
         )
 
         applicable_surcharge2 = RegistrationSurcharge.objects.create(
-            event=self.run().event,
+            event=self.get_run().event,
             date=week_ago,  # Should apply
             amount=15,  # Integer field, not Decimal
             number=2,
         )
 
         future_surcharge = RegistrationSurcharge.objects.create(
-            event=self.run().event,
+            event=self.get_run().event,
             date=tomorrow,  # Should NOT apply
             amount=50,  # Integer field, not Decimal
             number=3,
         )
 
         # Verify surcharges were created
-        all_surcharges = RegistrationSurcharge.objects.filter(event=self.run().event)
+        all_surcharges = RegistrationSurcharge.objects.filter(event=self.get_run().event)
         assert all_surcharges.count() == 3, f"Expected 3 surcharges created, got {all_surcharges.count()}"
 
         # Registration today would include past surcharges only
-        applicable_surcharges = RegistrationSurcharge.objects.filter(event=self.run().event, date__lt=today)
+        applicable_surcharges = RegistrationSurcharge.objects.filter(event=self.get_run().event, date__lt=today)
 
         # Verify correct surcharges are identified as applicable
         applicable_surcharge_ids = list(applicable_surcharges.values_list("id", flat=True))
@@ -504,14 +550,14 @@ class TestRegistrationFormCalculations(BaseTestCase):
 
         # Test edge case: registration on same day as surcharge
         today_surcharge = RegistrationSurcharge.objects.create(
-            event=self.run().event,
+            event=self.get_run().event,
             date=today,  # Same day - should NOT apply (date__lt=today)
             amount=10,  # Integer field, not Decimal
             number=4,
         )
 
         same_day_applicable = RegistrationSurcharge.objects.filter(
-            event=self.run().event,
+            event=self.get_run().event,
             date__lt=today,  # Still less than today
         )
 
@@ -525,14 +571,14 @@ class TestRegistrationFormCalculations(BaseTestCase):
         )
 
 
-class TestRegistrationFormPermissions(BaseTestCase):
+class TestRegistrationFormPermissions(TestCase, BaseTestCase):
     """Test registration form permissions and access control"""
 
     def test_registration_form_member_access(self):
         """Test that member can access registration form"""
         # Member should be able to register for open events
-        assert self.run().event is not None
-        assert self.member() is not None
+        assert self.get_run().event is not None
+        assert self.get_member() is not None
 
         # Check if member can register (business logic)
         can_register = True  # Simplified check
@@ -557,7 +603,7 @@ class TestRegistrationFormPermissions(BaseTestCase):
         )
 
         # Closed event
-        closed_event = Event.objects.create(name="Closed Event", assoc=self.association())
+        closed_event = Event.objects.create(name="Closed Event", assoc=self.get_association())
 
         closed_run = Run.objects.create(
             event=closed_event,
@@ -569,7 +615,7 @@ class TestRegistrationFormPermissions(BaseTestCase):
         )
 
         # Cancelled event
-        cancelled_event = Event.objects.create(name="Cancelled Event", assoc=self.association())
+        cancelled_event = Event.objects.create(name="Cancelled Event", assoc=self.get_association())
 
         cancelled_run = Run.objects.create(
             event=cancelled_event,
@@ -591,7 +637,7 @@ class TestRegistrationFormPermissions(BaseTestCase):
 
         # Check if membership already exists for this member and association
         existing_membership = Membership.objects.filter(
-            member=self.member(), assoc=self.run().event.assoc
+            member=self.get_member(), assoc=self.get_run().event.assoc
         ).first()
 
         if existing_membership:
@@ -600,18 +646,28 @@ class TestRegistrationFormPermissions(BaseTestCase):
         else:
             # Create membership
             membership = Membership.objects.create(
-                member=self.member(), assoc=self.run().event.assoc, status=MembershipStatus.ACCEPTED, date=date.today()
+                member=self.get_member(),
+                assoc=self.get_run().event.assoc,
+                status=MembershipStatus.ACCEPTED,
+                date=date.today(),
             )
 
         # Test that member with accepted membership can register (check actual status from BaseTestCase)
         # The existing membership from BaseTestCase might have a different status
-        assert membership.status in [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.EMPTY]  # Allow existing statuses
+        assert membership.status in [
+            MembershipStatus.ACCEPTED,
+            MembershipStatus.SUBMITTED,
+            MembershipStatus.EMPTY,
+        ]  # Allow existing statuses
 
         # Test member with submitted (pending) membership
         pending_member = Member.objects.create(username="pending_test_member", email="pending@test.com")
 
         pending_membership = Membership.objects.create(
-            member=pending_member, assoc=self.run().event.assoc, status=MembershipStatus.SUBMITTED, date=date.today()
+            member=pending_member,
+            assoc=self.get_run().event.assoc,
+            status=MembershipStatus.SUBMITTED,
+            date=date.today(),
         )
 
         # Submitted membership should not allow registration (consider as pending)

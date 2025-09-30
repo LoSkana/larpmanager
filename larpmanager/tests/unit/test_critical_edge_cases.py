@@ -26,6 +26,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.test import TestCase
 
 from larpmanager.accounting.registration import get_reg_iscr
 from larpmanager.models.accounting import AccountingItemDiscount
@@ -33,20 +34,24 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.member import almost_equal, count_differences
 from larpmanager.utils.validators import FileTypeValidator
-from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestCriticalEdgeCases(BaseTestCase):
+class TestCriticalEdgeCases(TestCase, BaseTestCase):
     """Test critical edge cases and error conditions"""
 
     def test_registration_fee_with_corrupted_data(self):
         """Test registration fee calculation with corrupted or missing data"""
         # Registration with no ticket
         reg_no_ticket = Registration.objects.create(
-            member=self.member(), run=self.run(), ticket=None, tot_iscr=Decimal("0.00"), tot_payed=Decimal("0.00")
+            member=self.get_member(),
+            run=self.get_run(),
+            ticket=None,
+            tot_iscr=Decimal("0.00"),
+            tot_payed=Decimal("0.00"),
         )
 
         result = get_reg_iscr(reg_no_ticket)
@@ -55,8 +60,8 @@ class TestCriticalEdgeCases(BaseTestCase):
 
         # Registration with None values
         reg_none_values = Registration.objects.create(
-            member=self.member(),
-            run=self.run(),
+            member=self.get_member(),
+            run=self.get_run(),
             ticket=None,
             additionals=None,
             pay_what=None,
@@ -73,12 +78,16 @@ class TestCriticalEdgeCases(BaseTestCase):
         """Test registration fee calculation with extreme values"""
         # Create ticket with maximum reasonable price
         max_ticket = RegistrationTicket.objects.create(
-            event=self.event(), tier=TicketTier.STANDARD, name="Expensive Ticket", price=Decimal("99999.99"), available=1
+            event=self.get_event(),
+            tier=TicketTier.STANDARD,
+            name="Expensive Ticket",
+            price=Decimal("99999.99"),
+            available=1,
         )
 
         reg = Registration.objects.create(
-            member=self.member(),
-            run=self.run(),
+            member=self.get_member(),
+            run=self.get_run(),
             ticket=max_ticket,
             additionals=0,
             pay_what=Decimal("0.01"),  # Minimum amount
@@ -106,7 +115,7 @@ class TestCriticalEdgeCases(BaseTestCase):
         """Test decimal precision handling in edge cases"""
         # Test with many decimal places
         precise_ticket = RegistrationTicket.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             tier=TicketTier.STANDARD,
             name="Precise Ticket",
             price=Decimal("99.999999"),  # Many decimal places
@@ -114,8 +123,8 @@ class TestCriticalEdgeCases(BaseTestCase):
         )
 
         reg = Registration.objects.create(
-            member=self.member(),
-            run=self.run(),
+            member=self.get_member(),
+            run=self.get_run(),
             ticket=precise_ticket,
             pay_what=Decimal("0.000001"),  # Very small amount
             tot_iscr=Decimal("0.00"),
@@ -137,7 +146,9 @@ class TestCriticalEdgeCases(BaseTestCase):
         # Test with very long strings
         long_string1 = "A" * 1000
         long_string2 = "A" * 999 + "B"
-        assert count_differences(long_string1, long_string2) == 1, "Same length strings with 1 difference should return 1"
+        assert count_differences(long_string1, long_string2) == 1, (
+            "Same length strings with 1 difference should return 1"
+        )
 
         long_string3 = "A" * 999
         assert almost_equal(long_string1, long_string3) is True, "Should handle long strings"
@@ -243,7 +254,7 @@ class TestCriticalEdgeCases(BaseTestCase):
         """Test database transaction edge cases"""
         # Test concurrent registration creation
         ticket = RegistrationTicket.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             tier=TicketTier.STANDARD,
             name="Concurrent Test",
             price=Decimal("100.00"),
@@ -252,7 +263,11 @@ class TestCriticalEdgeCases(BaseTestCase):
 
         # First registration should succeed
         reg1 = Registration.objects.create(
-            member=self.member(), run=self.run(), ticket=ticket, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+            member=self.get_member(),
+            run=self.get_run(),
+            ticket=ticket,
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("0.00"),
         )
 
         assert reg1.id is not None, "First registration should succeed"
@@ -291,7 +306,7 @@ class TestCriticalEdgeCases(BaseTestCase):
 
         try:
             ticket = RegistrationTicket.objects.create(
-                event=self.event(),
+                event=self.get_event(),
                 tier=TicketTier.STANDARD,
                 name=long_name[:50],  # Truncate to field max length
                 price=Decimal("100.00"),
@@ -305,7 +320,7 @@ class TestCriticalEdgeCases(BaseTestCase):
         # Test with negative prices (should be prevented by business logic)
         try:
             RegistrationTicket.objects.create(
-                event=self.event(),
+                event=self.get_event(),
                 tier=TicketTier.STANDARD,
                 name="Negative Test",
                 price=Decimal("-100.00"),  # Negative price

@@ -33,24 +33,25 @@ from larpmanager.models.registration import Registration
 class BaseTestCase:
     """Base test case with common test object accessors"""
 
-    def association(self):
+    def get_association(self):
         """Get the first association from test fixtures, or create one"""
         association = Association.objects.first()
         if not association:
             association = self.create_association()
         return association
 
-    def user(self):
+    def get_user(self):
         """Get the first user from test fixtures, or create one"""
         user = User.objects.first()
         if not user:
             user = self.create_user()
         return user
 
-    def member(self):
+    def get_member(self):
         """Get the first member from test fixtures, or create one"""
-        from larpmanager.models.member import Membership
         from decimal import Decimal
+
+        from larpmanager.models.member import Membership
 
         member = Member.objects.first()
         if not member:
@@ -65,28 +66,28 @@ class BaseTestCase:
                 member = self.create_member(user=user)
 
         # Ensure the member has a membership attribute set
-        if not hasattr(member, 'membership') or member.membership is None:
-            association = self.association()
+        if not hasattr(member, "membership") or member.membership is None:
+            association = self.get_association()
             membership, _ = Membership.objects.get_or_create(
                 member=member,
                 assoc=association,
                 defaults={
-                    'credit': Decimal('100.00'),
-                    'tokens': Decimal('50.00'),
-                }
+                    "credit": Decimal("100.00"),
+                    "tokens": Decimal("50.00"),
+                },
             )
             member.membership = membership
 
         return member
 
-    def event(self):
+    def get_event(self):
         """Get the first event from test fixtures, or create one"""
         event = Event.objects.first()
         if not event:
             event = self.create_event()
         return event
 
-    def run(self):
+    def get_run(self):
         """Get the first run from test fixtures, or create one"""
         run = Run.objects.first()
         if not run:
@@ -100,7 +101,7 @@ class BaseTestCase:
                 run = self.create_run(event=event)
         return run
 
-    def registration(self):
+    def get_registration(self):
         """Get the first registration from test fixtures, or create one"""
         registration = Registration.objects.first()
         if not registration:
@@ -110,49 +111,37 @@ class BaseTestCase:
     # Helper methods for creating specific test objects when needed
     def create_association(self, **kwargs):
         """Create a new association with defaults"""
-        defaults = {
-            'name': 'Test Association',
-            'slug': 'test-assoc',
-            'email': 'test@example.com'
-        }
+        defaults = {"name": "Test Association", "slug": "test-assoc", "email": "test@example.com"}
         defaults.update(kwargs)
         return Association.objects.create(**defaults)
 
     def create_user(self, **kwargs):
         """Create a new user with defaults"""
-        defaults = {
-            'username': 'testuser',
-            'email': 'test@example.com',
-            'first_name': 'Test',
-            'last_name': 'User'
-        }
+        defaults = {"username": "testuser", "email": "test@example.com", "first_name": "Test", "last_name": "User"}
         defaults.update(kwargs)
         return User.objects.create_user(**defaults)
 
     def create_member(self, user=None, **kwargs):
         """Create a new member with defaults"""
-        from larpmanager.models.member import Membership
         from decimal import Decimal
+
+        from larpmanager.models.member import Membership
 
         if user is None:
             user = self.create_user()
-        defaults = {
-            'user': user,
-            'name': 'Test',
-            'surname': 'Member'
-        }
+        defaults = {"user": user, "name": "Test", "surname": "Member"}
         defaults.update(kwargs)
         member = Member.objects.create(**defaults)
 
         # Create a membership for this member
-        association = self.association()
+        association = self.get_association()
         membership, _ = Membership.objects.get_or_create(
             member=member,
             assoc=association,
             defaults={
-                'credit': Decimal('100.00'),
-                'tokens': Decimal('50.00'),
-            }
+                "credit": Decimal("100.00"),
+                "tokens": Decimal("50.00"),
+            },
         )
 
         # Set the dynamic membership attribute like the function does
@@ -163,111 +152,109 @@ class BaseTestCase:
     def create_event(self, association=None, **kwargs):
         """Create a new event with defaults"""
         if association is None:
-            association = self.association()
-        defaults = {
-            'name': 'Test Event',
-            'assoc': association
-        }
+            association = self.get_association()
+        defaults = {"name": "Test Event", "assoc": association}
         defaults.update(kwargs)
         return Event.objects.create(**defaults)
 
     def create_run(self, event=None, **kwargs):
         """Create a new run with defaults"""
         if event is None:
-            event = self.event()
+            event = self.get_event()
         from datetime import date
-        defaults = {
-            'event': event,
-            'number': 1,
-            'start': date.today(),
-            'end': date.today()
-        }
+
+        defaults = {"event": event, "number": 1, "start": date.today(), "end": date.today()}
         defaults.update(kwargs)
         return Run.objects.create(**defaults)
 
     def create_registration(self, member=None, run=None, **kwargs):
         """Create a new registration with defaults"""
         if member is None:
-            member = self.member()
+            member = self.get_member()
         if run is None:
-            run = self.run()
+            run = self.get_run()
         from decimal import Decimal
+
         defaults = {
-            'member': member,
-            'run': run,
-            'tot_iscr': Decimal('100.00'),
-            'tot_payed': Decimal('0.00'),
-            'quotas': 1
+            "member": member,
+            "run": run,
+            "tot_iscr": Decimal("100.00"),
+            "tot_payed": Decimal("0.00"),
+            "quotas": 1,
         }
         defaults.update(kwargs)
         return Registration.objects.create(**defaults)
 
     def payment_invoice(self, **kwargs):
         """Create a payment invoice for testing"""
-        from larpmanager.models.accounting import PaymentInvoice, PaymentType, PaymentStatus
         from decimal import Decimal
 
+        from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
+
         defaults = {
-            'member': self.member(),
-            'assoc': self.association(),
-            'method': self.payment_method(),
-            'typ': PaymentType.REGISTRATION,
-            'status': PaymentStatus.CREATED,
-            'mc_gross': Decimal('100.00'),
-            'mc_fee': Decimal('5.00'),
-            'causal': 'Test payment',
-            'cod': 'TEST123',
-            'txn_id': 'TXN456',
-            'verified': False,
+            "member": self.get_member(),
+            "assoc": self.get_association(),
+            "method": self.payment_method(),
+            "typ": PaymentType.REGISTRATION,
+            "status": PaymentStatus.CREATED,
+            "mc_gross": Decimal("100.00"),
+            "mc_fee": Decimal("5.00"),
+            "causal": "Test payment",
+            "cod": "TEST123",
+            "txn_id": "TXN456",
+            "verified": False,
         }
         defaults.update(kwargs)
         return PaymentInvoice(**defaults)
 
     def payment_item(self, **kwargs):
         """Create a payment item for testing"""
-        from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
-        from decimal import Decimal
         from datetime import datetime
+        from decimal import Decimal
+
+        from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 
         defaults = {
-            'member': self.member(),
-            'value': Decimal('100.00'),
-            'assoc': self.association(),
-            'reg': self.registration(),
-            'pay': PaymentChoices.MONEY,
-            'created': datetime.now(),
+            "member": self.get_member(),
+            "value": Decimal("100.00"),
+            "assoc": self.get_association(),
+            "reg": self.get_registration(),
+            "pay": PaymentChoices.MONEY,
+            "created": datetime.now(),
         }
         defaults.update(kwargs)
         return AccountingItemPayment(**defaults)
 
     def other_item_token(self, **kwargs):
         """Create an other item for tokens"""
-        from larpmanager.models.accounting import AccountingItemOther, OtherChoices
         from decimal import Decimal
 
+        from larpmanager.models.accounting import AccountingItemOther, OtherChoices
+
         defaults = {
-            'member': self.member(),
-            'value': Decimal('5'),
-            'assoc': self.association(),
-            'run': self.run(),
-            'oth': OtherChoices.TOKEN,
-            'descr': 'Test tokens'
+            "member": self.get_member(),
+            "value": Decimal("5"),
+            "assoc": self.get_association(),
+            "run": self.get_run(),
+            "oth": OtherChoices.TOKEN,
+            "descr": "Test tokens",
         }
         defaults.update(kwargs)
         return AccountingItemOther(**defaults)
 
     def other_item_credit(self, **kwargs):
         """Create an other item for credits"""
-        from larpmanager.models.accounting import AccountingItemOther, OtherChoices
         from decimal import Decimal
 
+        from larpmanager.models.accounting import AccountingItemOther, OtherChoices
+
         defaults = {
-            'member': self.member(),
-            'value': Decimal('50.00'),
-            'assoc': self.association(),
-            'run': self.run(),
-            'oth': OtherChoices.CREDIT,
-            'descr': 'Test credits'
+            "member": self.get_member(),
+            "value": Decimal("50.00"),
+            "assoc": self.get_association(),
+            "run": self.get_run(),
+            "oth": OtherChoices.CREDIT,
+            "descr": "Test credits",
         }
         defaults.update(kwargs)
         return AccountingItemOther(**defaults)
@@ -276,73 +263,71 @@ class BaseTestCase:
         """Create a payment method for testing"""
         from larpmanager.models.base import PaymentMethod
 
-        defaults = {
-            'name': 'Test Method',
-            'slug': 'test',
-            'fields': 'field1,field2'
-        }
+        defaults = {"name": "Test Method", "slug": "test", "fields": "field1,field2"}
         defaults.update(kwargs)
         return PaymentMethod.objects.create(**defaults)
 
     def ticket(self, event=None, **kwargs):
         """Create a registration ticket for testing"""
-        from larpmanager.models.registration import RegistrationTicket, TicketTier
         from decimal import Decimal
 
+        from larpmanager.models.registration import RegistrationTicket, TicketTier
+
         if event is None:
-            event = self.event()
+            event = self.get_event()
         defaults = {
-            'event': event,
-            'tier': TicketTier.STANDARD,
-            'name': 'Standard Ticket',
-            'price': Decimal('100.00'),
-            'number': 1,
-            'max_available': 50
+            "event": event,
+            "tier": TicketTier.STANDARD,
+            "name": "Standard Ticket",
+            "price": Decimal("100.00"),
+            "number": 1,
+            "max_available": 50,
         }
         defaults.update(kwargs)
         return RegistrationTicket.objects.create(**defaults)
 
     def question(self, event=None, **kwargs):
         """Create a registration question for testing"""
-        from larpmanager.models.form import RegistrationQuestion, BaseQuestionType, QuestionStatus
+        from larpmanager.models.form import BaseQuestionType, QuestionStatus, RegistrationQuestion
 
         if event is None:
-            event = self.event()
+            event = self.get_event()
         defaults = {
-            'event': event,
-            'name': 'dietary_requirements',
-            'description': 'Do you have any dietary requirements?',
-            'typ': BaseQuestionType.TEXT,
-            'status': QuestionStatus.MANDATORY,
-            'order': 1
+            "event": event,
+            "name": "dietary_requirements",
+            "description": "Do you have any dietary requirements?",
+            "typ": BaseQuestionType.TEXT,
+            "status": QuestionStatus.MANDATORY,
+            "order": 1,
         }
         defaults.update(kwargs)
         return RegistrationQuestion.objects.create(**defaults)
 
     def question_with_options(self, event=None, **kwargs):
         """Create a question with multiple choice options for testing"""
-        from larpmanager.models.form import RegistrationQuestion, RegistrationOption, BaseQuestionType, QuestionStatus
         from decimal import Decimal
 
+        from larpmanager.models.form import BaseQuestionType, QuestionStatus, RegistrationOption, RegistrationQuestion
+
         if event is None:
-            event = self.event()
+            event = self.get_event()
 
         question_defaults = {
-            'event': event,
-            'name': 'accommodation',
-            'description': 'What accommodation do you prefer?',
-            'typ': BaseQuestionType.SINGLE,
-            'status': QuestionStatus.MANDATORY,
-            'order': 1
+            "event": event,
+            "name": "accommodation",
+            "description": "What accommodation do you prefer?",
+            "typ": BaseQuestionType.SINGLE,
+            "status": QuestionStatus.MANDATORY,
+            "order": 1,
         }
         question_defaults.update(kwargs)
         question = RegistrationQuestion.objects.create(**question_defaults)
 
         option1 = RegistrationOption.objects.create(
-            event=event, question=question, name='Hotel', price=Decimal('50.00'), order=1
+            event=event, question=question, name="Hotel", price=Decimal("50.00"), order=1
         )
         option2 = RegistrationOption.objects.create(
-            event=event, question=question, name='Camping', price=Decimal('20.00'), order=2
+            event=event, question=question, name="Camping", price=Decimal("20.00"), order=2
         )
 
         return question, option1, option2
@@ -352,17 +337,15 @@ class BaseTestCase:
         from larpmanager.models.writing import Character
 
         if association is None:
-            association = self.association()
-        defaults = {
-            'name': 'Test Character',
-            'assoc': association
-        }
+            association = self.get_association()
+        defaults = {"name": "Test Character", "assoc": association}
         defaults.update(kwargs)
         return Character.objects.create(**defaults)
 
     def invoice(self):
         """Get or create a payment invoice for testing"""
         from larpmanager.models.accounting import PaymentInvoice
+
         invoice = PaymentInvoice.objects.first()
         if not invoice:
             invoice = self.payment_invoice()
@@ -371,118 +354,115 @@ class BaseTestCase:
 
     def accounting_item(self):
         """Get or create an accounting item for testing"""
-        from larpmanager.models.accounting import AccountingItemExpense
         from decimal import Decimal
+
+        from larpmanager.models.accounting import AccountingItemExpense
+
         item = AccountingItemExpense.objects.first()
         if not item:
             item = AccountingItemExpense.objects.create(
-                member=self.member(),
-                value=Decimal('50.00'),
-                assoc=self.association(),
-                descr='Test expense'
+                member=self.get_member(), value=Decimal("50.00"), assoc=self.get_association(), descr="Test expense"
             )
         return item
 
     def collection(self):
         """Get or create a collection for testing"""
         from larpmanager.models.accounting import Collection
+
         collection = Collection.objects.first()
         if not collection:
             collection = Collection.objects.create(
-                name='Test Collection',
-                assoc=self.association(),
-                organizer=self.organizer()
+                name="Test Collection", assoc=self.get_association(), organizer=self.organizer()
             )
         return collection
 
     def collection_item(self):
         """Get or create a collection item for testing"""
-        from larpmanager.models.accounting import AccountingItemCollection
         from decimal import Decimal
+
+        from larpmanager.models.accounting import AccountingItemCollection
+
         item = AccountingItemCollection.objects.first()
         if not item:
             item = AccountingItemCollection.objects.create(
-                member=self.member(),
-                value=Decimal('25.00'),
-                assoc=self.association(),
-                collection=self.collection()
+                member=self.get_member(),
+                value=Decimal("25.00"),
+                assoc=self.get_association(),
+                collection=self.collection(),
             )
         return item
 
     def organizer(self):
         """Get or create an organizer (member) for testing"""
         from larpmanager.models.member import Member
-        organizer = Member.objects.filter(name='Organizer').first()
+
+        organizer = Member.objects.filter(name="Organizer").first()
         if not organizer:
             # Try to get existing organizer user or create new one
             organizer_user, created = User.objects.get_or_create(
-                username='organizer',
-                defaults={
-                    'email': 'organizer@example.com',
-                    'first_name': 'Test',
-                    'last_name': 'Organizer'
-                }
+                username="organizer",
+                defaults={"email": "organizer@example.com", "first_name": "Test", "last_name": "Organizer"},
             )
             # Check if this user already has a member
             try:
                 organizer = organizer_user.member
             except Member.DoesNotExist:
-                organizer = Member.objects.create(
-                    user=organizer_user,
-                    name='Organizer',
-                    surname='Test',
-                    language='en'
-                )
+                organizer = Member.objects.create(user=organizer_user, name="Organizer", surname="Test", language="en")
         return organizer
 
     def refund_request(self):
         """Get or create a refund request for testing"""
-        from larpmanager.models.accounting import RefundRequest
         from decimal import Decimal
+
+        from larpmanager.models.accounting import RefundRequest
+
         refund = RefundRequest.objects.first()
         if not refund:
             refund = RefundRequest.objects.create(
-                member=self.member(),
-                value=Decimal('30.00'),
-                details='Test refund request',
-                assoc=self.association()
+                member=self.get_member(),
+                value=Decimal("30.00"),
+                details="Test refund request",
+                assoc=self.get_association(),
             )
         return refund
 
     def other_item_refund(self):
         """Create an other item for refunds"""
-        from larpmanager.models.accounting import AccountingItemOther, OtherChoices
         from decimal import Decimal
 
+        from larpmanager.models.accounting import AccountingItemOther, OtherChoices
+
         return AccountingItemOther(
-            member=self.member(),
-            value=Decimal('30.00'),
-            assoc=self.association(),
-            run=self.run(),
+            member=self.get_member(),
+            value=Decimal("30.00"),
+            assoc=self.get_association(),
+            run=self.get_run(),
             oth=OtherChoices.REFUND,
-            descr='Test refund'
+            descr="Test refund",
         )
 
     def discount(self):
         """Get or create a discount for testing"""
-        from larpmanager.models.accounting import Discount
         from decimal import Decimal
+
+        from larpmanager.models.accounting import Discount
+
         discount = Discount.objects.first()
         if not discount:
             discount = Discount.objects.create(
-                name='Test Discount',
-                value=Decimal('10.00'),
+                name="Test Discount",
+                value=Decimal("10.00"),
                 max_redeem=10,
                 typ=Discount.STANDARD,
-                event=self.event(),
-                number=1
+                event=self.get_event(),
+                number=1,
             )
             # Add the current run to the discount
-            discount.runs.add(self.run())
+            discount.runs.add(self.get_run())
         return discount
 
     def user_with_permissions(self):
         """Get or create a user with permissions for testing"""
         # This can return the same as member().user for simplicity
         # or create a specific user with permissions if needed
-        return self.member().user
+        return self.get_member().user

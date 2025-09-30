@@ -20,9 +20,9 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.test import TestCase
 
 from larpmanager.models.association import Association
 from larpmanager.models.member import Badge, Member, Membership
@@ -118,7 +118,7 @@ class TestStringComparisonFunctions:
         assert almost_equal("SHORT", "VERYLONGSTRING") is False  # Too different
 
 
-class TestLeaderboardFunctions(BaseTestCase):
+class TestLeaderboardFunctions(TestCase, BaseTestCase):
     """Test leaderboard utility functions"""
 
     def test_leaderboard_key(self):
@@ -198,12 +198,12 @@ class TestLeaderboardFunctions(BaseTestCase):
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Mock profile with thumb URL
-        self.member().profile = Mock()
-        self.member().profile_thumb = Mock()
-        self.member().profile_thumb.url = "/media/profiles/thumb_test.jpg"
+        self.get_member().profile = Mock()
+        self.get_member().profile_thumb = Mock()
+        self.get_member().profile_thumb.url = "/media/profiles/thumb_test.jpg"
 
-        Membership.objects.create(member=self.member(), assoc=assoc)
-        badge.members.add(self.member())
+        Membership.objects.create(member=self.get_member(), assoc=assoc)
+        badge.members.add(self.get_member())
 
         result = update_leaderboard(assoc.id)
 
@@ -281,7 +281,7 @@ class TestLeaderboardFunctions(BaseTestCase):
         # (more recent memberships first when badge counts are equal)
 
 
-class TestBadgeAssignment(BaseTestCase):
+class TestBadgeAssignment(TestCase, BaseTestCase):
     """Test badge assignment functionality"""
 
     def test_assign_badge_success(self):
@@ -294,10 +294,10 @@ class TestBadgeAssignment(BaseTestCase):
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Assign badge
-        assign_badge(self.member(), "supporter")
+        assign_badge(self.get_member(), "supporter")
 
         # Verify assignment
-        assert badge.members.filter(id=self.member().id).exists()
+        assert badge.members.filter(id=self.get_member().id).exists()
 
     def test_assign_badge_nonexistent_badge(self):
         """Test badge assignment with nonexistent badge code"""
@@ -305,10 +305,10 @@ class TestBadgeAssignment(BaseTestCase):
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Should not raise exception, just silently fail
-        assign_badge(self.member(), "nonexistent")
+        assign_badge(self.get_member(), "nonexistent")
 
         # Verify no badges assigned
-        assert self.member().badges.count() == 0
+        assert self.get_member().badges.count() == 0
 
     @patch("builtins.print")
     def test_assign_badge_exception_handling(self, mock_print):
@@ -317,7 +317,7 @@ class TestBadgeAssignment(BaseTestCase):
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # This should trigger the exception handler
-        assign_badge(self.member(), "nonexistent")
+        assign_badge(self.get_member(), "nonexistent")
 
         # Should have printed the exception
         mock_print.assert_called_once()
@@ -329,29 +329,29 @@ class TestBadgeAssignment(BaseTestCase):
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Assign badge multiple times
-        assign_badge(self.member(), "supporter")
-        assign_badge(self.member(), "supporter")
-        assign_badge(self.member(), "supporter")
+        assign_badge(self.get_member(), "supporter")
+        assign_badge(self.get_member(), "supporter")
+        assign_badge(self.get_member(), "supporter")
 
         # Should only be assigned once (many-to-many relationship)
-        assert badge.members.filter(id=self.member().id).count() == 1
+        assert badge.members.filter(id=self.get_member().id).count() == 1
 
     def test_assign_multiple_badges_to_member(self):
-        """Test assigning multiple different badges to same self.member()"""
+        """Test assigning multiple different badges to same self.get_member()"""
         badge1 = Badge.objects.create(name="Supporter", cod="supporter")
         badge2 = Badge.objects.create(name="Donor", cod="donor")
         badge3 = Badge.objects.create(name="Volunteer", cod="volunteer")
 
-        user = User.objects.create_user(username="member", email="self.member()@test.com")
-        member = Member.objects.create(user=self.user(), name="Test", surname="Member")
+        user = User.objects.create_user(username="member", email="self.get_member()@test.com")
+        member = Member.objects.create(user=self.get_user(), name="Test", surname="Member")
 
         # Assign multiple badges
-        assign_badge(self.member(), "supporter")
-        assign_badge(self.member(), "donor")
-        assign_badge(self.member(), "volunteer")
+        assign_badge(self.get_member(), "supporter")
+        assign_badge(self.get_member(), "donor")
+        assign_badge(self.get_member(), "volunteer")
 
         # Verify all badges assigned
-        assert self.member().badges.count() == 3
-        assert badge1.members.filter(id=self.member().id).exists()
-        assert badge2.members.filter(id=self.member().id).exists()
-        assert badge3.members.filter(id=self.member().id).exists()
+        assert self.get_member().badges.count() == 3
+        assert badge1.members.filter(id=self.get_member().id).exists()
+        assert badge2.members.filter(id=self.get_member().id).exists()
+        assert badge3.members.filter(id=self.get_member().id).exists()

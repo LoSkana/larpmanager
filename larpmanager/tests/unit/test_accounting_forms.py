@@ -21,8 +21,8 @@
 from decimal import Decimal
 from unittest.mock import Mock, patch
 
-import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 
 from larpmanager.forms.accounting import (
     AnyInvoiceSubmitForm,
@@ -43,11 +43,11 @@ from larpmanager.forms.accounting import (
 from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestOrgaPersonalExpenseForm(BaseTestCase):
+class TestOrgaPersonalExpenseForm(TestCase, BaseTestCase):
     def test_init_without_balance_feature(self):
         params = {
             "features": [],  # No ita_balance feature
-            "run": self.run(),
+            "run": self.get_run(),
         }
         form = OrgaPersonalExpenseForm(ctx=params)
 
@@ -55,14 +55,14 @@ class TestOrgaPersonalExpenseForm(BaseTestCase):
         assert "balance" not in form.fields
 
     def test_init_with_balance_feature(self):
-        params = {"features": ["ita_balance"], "run": self.run()}
+        params = {"features": ["ita_balance"], "run": self.get_run()}
         form = OrgaPersonalExpenseForm(ctx=params)
 
         # Should have balance field
         assert "balance" in form.fields
 
     def test_valid_form_data(self):
-        run = self.run()
+        run = self.get_run()
         params = {"features": ["ita_balance"], "run": run, "a_id": run.event.assoc.id}
 
         # Create uploaded file for testing
@@ -80,9 +80,9 @@ class TestOrgaPersonalExpenseForm(BaseTestCase):
         assert form.is_valid()
 
 
-class TestOrgaExpenseForm(BaseTestCase):
+class TestOrgaExpenseForm(TestCase, BaseTestCase):
     def test_init_sets_member_widget_run(self):
-        params = {"features": ["ita_balance"], "run": self.run(), "event": self.event()}
+        params = {"features": ["ita_balance"], "run": self.get_run(), "event": self.get_event()}
 
         with patch.object(OrgaExpenseForm, "delete_field") as mock_delete:
             form = OrgaExpenseForm(ctx=params)
@@ -93,8 +93,8 @@ class TestOrgaExpenseForm(BaseTestCase):
     def test_init_without_balance_feature(self):
         params = {
             "features": [],  # No ita_balance
-            "run": self.run(),
-            "event": self.event(),
+            "run": self.get_run(),
+            "event": self.get_event(),
         }
 
         with patch.object(OrgaExpenseForm, "delete_field") as mock_delete:
@@ -103,19 +103,19 @@ class TestOrgaExpenseForm(BaseTestCase):
 
     def test_init_expense_disable_orga(self):
         # Mock event.assoc.get_config to return True for expense_disable_orga
-        event = self.event()
+        event = self.get_event()
         event.assoc.get_config = Mock(return_value=True)
 
-        params = {"features": ["ita_balance"], "run": self.run(), "event": event}
+        params = {"features": ["ita_balance"], "run": self.get_run(), "event": event}
 
         with patch.object(OrgaExpenseForm, "delete_field") as mock_delete:
             form = OrgaExpenseForm(ctx=params)
             mock_delete.assert_called_with("is_approved")
 
 
-class TestOrgaTokenForm(BaseTestCase):
+class TestOrgaTokenForm(TestCase, BaseTestCase):
     def test_init_sets_token_data(self):
-        params = {"token_name": "Game Tokens", "run": self.run()}
+        params = {"token_name": "Game Tokens", "run": self.get_run()}
 
         form = OrgaTokenForm(ctx=params)
 
@@ -124,9 +124,9 @@ class TestOrgaTokenForm(BaseTestCase):
         assert "Game Tokens" in form.page_info
 
 
-class TestOrgaCreditForm(BaseTestCase):
+class TestOrgaCreditForm(TestCase, BaseTestCase):
     def test_init_sets_credit_data(self):
-        params = {"credit_name": "Event Credits", "run": self.run()}
+        params = {"credit_name": "Event Credits", "run": self.get_run()}
 
         form = OrgaCreditForm(ctx=params)
 
@@ -134,9 +134,9 @@ class TestOrgaCreditForm(BaseTestCase):
         assert form.initial["oth"] == "c"  # CREDIT choice
 
 
-class TestOrgaPaymentForm(BaseTestCase):
+class TestOrgaPaymentForm(TestCase, BaseTestCase):
     def test_init_sets_event_widget(self):
-        params = {"run": self.run(), "event": self.event()}
+        params = {"run": self.get_run(), "event": self.get_event()}
 
         form = OrgaPaymentForm(ctx=params)
 
@@ -144,9 +144,9 @@ class TestOrgaPaymentForm(BaseTestCase):
         assert form.fields["reg"].required is True
 
 
-class TestExeOutflowForm(BaseTestCase):
+class TestExeOutflowForm(TestCase, BaseTestCase):
     def test_init_sets_default_payment_date(self):
-        params = {"features": ["ita_balance"], "a_id": self.association().id}
+        params = {"features": ["ita_balance"], "a_id": self.get_association().id}
 
         form = ExeOutflowForm(ctx=params)
 
@@ -157,7 +157,7 @@ class TestExeOutflowForm(BaseTestCase):
     def test_init_without_balance_feature(self):
         params = {
             "features": [],  # No ita_balance
-            "a_id": self.association().id,
+            "a_id": self.get_association().id,
         }
 
         with patch.object(ExeOutflowForm, "delete_field") as mock_delete:
@@ -165,12 +165,9 @@ class TestExeOutflowForm(BaseTestCase):
             mock_delete.assert_called_with("balance")
 
 
-class TestDonateForm(BaseTestCase):
+class TestDonateForm(TestCase, BaseTestCase):
     def test_form_fields(self):
-        ctx = {
-            "methods": {"test": {"name": "Test Method"}},
-            "association": self.association()
-        }
+        ctx = {"methods": {"test": {"name": "Test Method"}}, "association": self.get_association()}
         form = DonateForm(ctx=ctx)
 
         # Should have amount and descr fields
@@ -185,40 +182,28 @@ class TestDonateForm(BaseTestCase):
 
     def test_valid_data(self):
         form_data = {"amount": "50.00", "descr": "Donation for a good cause", "method": "test"}
-        ctx = {
-            "methods": {"test": {"name": "Test Method"}},
-            "association": self.association()
-        }
+        ctx = {"methods": {"test": {"name": "Test Method"}}, "association": self.get_association()}
         form = DonateForm(data=form_data, ctx=ctx)
         assert form.is_valid()
 
     def test_invalid_amount_too_low(self):
         form_data = {"amount": "0.00", "descr": "Invalid donation", "method": "test"}
-        ctx = {
-            "methods": {"test": {"name": "Test Method"}},
-            "association": self.association()
-        }
+        ctx = {"methods": {"test": {"name": "Test Method"}}, "association": self.get_association()}
         form = DonateForm(data=form_data, ctx=ctx)
         assert not form.is_valid()
         assert "amount" in form.errors
 
     def test_invalid_amount_too_high(self):
         form_data = {"amount": "1001.00", "descr": "Too much donation", "method": "test"}
-        ctx = {
-            "methods": {"test": {"name": "Test Method"}},
-            "association": self.association()
-        }
+        ctx = {"methods": {"test": {"name": "Test Method"}}, "association": self.get_association()}
         form = DonateForm(data=form_data, ctx=ctx)
         assert not form.is_valid()
         assert "amount" in form.errors
 
 
-class TestCollectionForm(BaseTestCase):
+class TestCollectionForm(TestCase, BaseTestCase):
     def test_form_fields(self):
-        ctx = {
-            "methods": {"test": {"name": "Test Method"}},
-            "association": self.association()
-        }
+        ctx = {"methods": {"test": {"name": "Test Method"}}, "association": self.get_association()}
         form = CollectionForm(ctx=ctx)
 
         assert "amount" in form.fields
@@ -229,25 +214,22 @@ class TestCollectionForm(BaseTestCase):
 
     def test_valid_data(self):
         form_data = {"amount": "25.00", "method": "test"}
-        ctx = {
-            "methods": {"test": {"name": "Test Method"}},
-            "association": self.association()
-        }
+        ctx = {"methods": {"test": {"name": "Test Method"}}, "association": self.get_association()}
         form = CollectionForm(data=form_data, ctx=ctx)
         assert form.is_valid()
 
 
-class TestPaymentForm(BaseTestCase):
+class TestPaymentForm(TestCase, BaseTestCase):
     def test_init_with_registration(self):
         # Mock registration values
-        registration = self.registration()
+        registration = self.get_registration()
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("30.00")
 
         ctx = {
             "quota": Decimal("70.00"),
             "methods": {"test": {"name": "Test Method"}},
-            "association": registration.run.event.assoc
+            "association": registration.run.event.assoc,
         }
 
         form = PaymentForm(reg=registration, ctx=ctx)
@@ -259,14 +241,14 @@ class TestPaymentForm(BaseTestCase):
         assert amount_field.initial == Decimal("70.00")  # quota
 
     def test_valid_payment_amount(self):
-        registration = self.registration()
+        registration = self.get_registration()
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("30.00")
 
         ctx = {
             "quota": Decimal("70.00"),
             "methods": {"test": {"name": "Test Method"}},
-            "association": registration.run.event.assoc
+            "association": registration.run.event.assoc,
         }
 
         form_data = {"amount": "50.00", "method": "test"}
@@ -275,19 +257,19 @@ class TestPaymentForm(BaseTestCase):
         assert form.is_valid()
 
     def test_invalid_payment_amount_too_high(self):
-        registration = self.registration()
+        registration = self.get_registration()
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("30.00")
 
         ctx = {
             "quota": Decimal("70.00"),
             "methods": {"test": {"name": "Test Method"}},
-            "association": registration.run.event.assoc
+            "association": registration.run.event.assoc,
         }
 
         form_data = {
             "amount": "80.00",  # More than max allowed
-            "method": "test"
+            "method": "test",
         }
 
         form = PaymentForm(data=form_data, reg=registration, ctx=ctx)
@@ -295,9 +277,9 @@ class TestPaymentForm(BaseTestCase):
         assert "amount" in form.errors
 
 
-class TestOrgaDiscountForm(BaseTestCase):
+class TestOrgaDiscountForm(TestCase, BaseTestCase):
     def test_init_creates_runs_choices(self):
-        run = self.run()
+        run = self.get_run()
         params = {"run": run}
 
         # Mock Run.objects.filter to return the run
@@ -313,7 +295,7 @@ class TestOrgaDiscountForm(BaseTestCase):
             assert len(runs_field.choices) == 1
 
     def test_init_with_existing_instance(self):
-        run = self.run()
+        run = self.get_run()
         params = {"run": run}
 
         # Use a real discount instance
@@ -328,7 +310,7 @@ class TestOrgaDiscountForm(BaseTestCase):
             assert form.initial["runs"] == [run.id]
 
 
-class TestWireInvoiceSubmitForm(BaseTestCase):
+class TestWireInvoiceSubmitForm(TestCase, BaseTestCase):
     def test_form_fields(self):
         form = WireInvoiceSubmitForm()
 
@@ -356,7 +338,7 @@ class TestWireInvoiceSubmitForm(BaseTestCase):
         assert form.fields["cod"].initial == "TEST456"
 
 
-class TestAnyInvoiceSubmitForm(BaseTestCase):
+class TestAnyInvoiceSubmitForm(TestCase, BaseTestCase):
     def test_form_fields(self):
         form = AnyInvoiceSubmitForm()
 
@@ -370,10 +352,10 @@ class TestAnyInvoiceSubmitForm(BaseTestCase):
         assert form.is_valid()
 
 
-class TestRefundRequestForm(BaseTestCase):
+class TestRefundRequestForm(TestCase, BaseTestCase):
     def test_init_sets_max_value(self):
-        # Mock self.member().membership.credit
-        member = self.member()
+        # Mock self.get_member().membership.credit
+        member = self.get_member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
         member.membership = mock_membership
@@ -385,7 +367,7 @@ class TestRefundRequestForm(BaseTestCase):
         assert value_field.max_value == Decimal("150.00")
 
     def test_valid_refund_request(self):
-        member = self.member()
+        member = self.get_member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
         member.membership = mock_membership
@@ -396,7 +378,7 @@ class TestRefundRequestForm(BaseTestCase):
         assert form.is_valid()
 
     def test_invalid_refund_amount(self):
-        member = self.member()
+        member = self.get_member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
         member.membership = mock_membership
@@ -411,7 +393,7 @@ class TestRefundRequestForm(BaseTestCase):
         assert "value" in form.errors
 
 
-class TestExePaymentSettingsForm(BaseTestCase):
+class TestExePaymentSettingsForm(TestCase, BaseTestCase):
     def test_init_creates_payment_details_fields(self):
         # Mock payment methods
         mock_method1 = Mock()
@@ -436,7 +418,7 @@ class TestExePaymentSettingsForm(BaseTestCase):
                 with patch("larpmanager.forms.accounting.get_payment_details") as mock_get_details:
                     mock_get_details.return_value = {}
 
-                    form = ExePaymentSettingsForm(instance=self.association())
+                    form = ExePaymentSettingsForm(instance=self.get_association())
 
                     # Should create fields for payment details
                     assert "wire_descr" in form.fields
@@ -461,7 +443,7 @@ class TestExePaymentSettingsForm(BaseTestCase):
         assert "*" in masked
 
     def test_clean_validates_fee_fields(self):
-        form = ExePaymentSettingsForm(instance=self.association())
+        form = ExePaymentSettingsForm(instance=self.get_association())
         form.fee_fields = {"test_fee"}
 
         # Test valid fee
@@ -499,7 +481,7 @@ class TestExePaymentSettingsForm(BaseTestCase):
                     with patch.object(ExePaymentSettingsForm, "get_payment_details_fields") as mock_fields:
                         mock_fields.return_value = {"test": ["test_field"]}
 
-                        association = self.association()
+                        association = self.get_association()
                         form = ExePaymentSettingsForm(instance=association)
                         form.cleaned_data = {"test_field": "new_value"}
 

@@ -21,11 +21,8 @@
 from unittest.mock import Mock, patch
 
 import pytest
-from django.contrib.auth.models import User
-from django.http import HttpRequest
+from django.test import TestCase
 
-from larpmanager.models.association import Association
-from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.base import (
     check_assoc_permission,
@@ -39,7 +36,7 @@ from larpmanager.utils.base import (
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
 
-class TestUserContextGeneration(BaseTestCase):
+class TestUserContextGeneration(TestCase, BaseTestCase):
     """Test user context generation functions"""
 
     def test_def_user_ctx_home_page_redirect(self):
@@ -182,7 +179,7 @@ class TestUserContextGeneration(BaseTestCase):
             mock_get_payment_details.assert_called_once_with(mock_assoc)
 
 
-class TestPermissionChecking(BaseTestCase):
+class TestPermissionChecking(TestCase, BaseTestCase):
     """Test permission checking functions"""
 
     @patch("larpmanager.utils.base.def_user_ctx")

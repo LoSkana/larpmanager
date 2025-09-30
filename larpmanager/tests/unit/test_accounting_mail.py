@@ -18,13 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from decimal import Decimal
 from unittest.mock import Mock, patch
 
-import pytest
+from django.test import TestCase
 
-# Import the mail functions to test
-from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.mail.accounting import (
     get_credit_email,
     get_expense_mail,
@@ -55,35 +52,30 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
-    OtherChoices,
     PaymentChoices,
-    PaymentInvoice,
     PaymentType,
 )
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
-from larpmanager.models.registration import Registration
+
+# Import the mail functions to test
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestExpenseMailSignals(BaseTestCase):
+class TestExpenseMailSignals(TestCase, BaseTestCase):
     """Test expense-related email notifications"""
 
     @patch("larpmanager.mail.accounting.get_event_organizers")
     @patch("larpmanager.mail.accounting.my_send_mail")
     @patch("larpmanager.mail.accounting.activate")
-    def test_expense_post_save_created(
-        self, mock_activate, mock_send_mail, mock_get_organizers
-    ):
+    def test_expense_post_save_created(self, mock_activate, mock_send_mail, mock_get_organizers):
         """Test email sent when expense is created"""
         mock_get_organizers.return_value = [self.organizer()]
 
         # Trigger the signal
         expense_item = self.accounting_item()
-        expense_item.run = self.run()  # Add run to make the function work
+        expense_item.run = self.get_run()  # Add run to make the function work
 
         # Mock the download method to avoid file issues
-        with patch.object(expense_item, 'download', return_value="/test/path"):
+        with patch.object(expense_item, "download", return_value="/test/path"):
             update_accounting_item_expense_post(sender=AccountingItemExpense, instance=expense_item, created=True)
 
             mock_activate.assert_called_once_with(self.organizer().language)
@@ -94,14 +86,18 @@ class TestExpenseMailSignals(BaseTestCase):
         self.accounting_item().hide = True
 
         with patch("larpmanager.mail.accounting.my_send_mail") as mock_send_mail:
-            update_accounting_item_expense_post(sender=AccountingItemExpense, instance=self.accounting_item(), created=True)
+            update_accounting_item_expense_post(
+                sender=AccountingItemExpense, instance=self.accounting_item(), created=True
+            )
 
             mock_send_mail.assert_not_called()
 
     def test_expense_post_save_not_created(self):
         """Test no email sent when expense is updated (not created)"""
         with patch("larpmanager.mail.accounting.my_send_mail") as mock_send_mail:
-            update_accounting_item_expense_post(sender=AccountingItemExpense, instance=self.accounting_item(), created=False)
+            update_accounting_item_expense_post(
+                sender=AccountingItemExpense, instance=self.accounting_item(), created=False
+            )
 
             mock_send_mail.assert_not_called()
 
@@ -113,9 +109,9 @@ class TestExpenseMailSignals(BaseTestCase):
                 mock_get_url.return_value = "http://example.com/download"
 
                 expense_item = self.accounting_item()
-                expense_item.run = self.run()  # Add run to avoid NoneType error
+                expense_item.run = self.get_run()  # Add run to avoid NoneType error
                 # Mock the download method to avoid file issues
-                with patch.object(expense_item, 'download', return_value="/test/path"):
+                with patch.object(expense_item, "download", return_value="/test/path"):
                     subj, body = get_expense_mail(expense_item)
 
                     assert "[TEST]" in subj
@@ -138,7 +134,7 @@ class TestExpenseMailSignals(BaseTestCase):
         expense_item = self.accounting_item()
         expense_item.pk = 1
         expense_item.is_approved = True
-        expense_item.member = self.member()
+        expense_item.member = self.get_member()
 
         with patch("larpmanager.mail.accounting.get_token_credit_name") as mock_get_names:
             mock_get_names.return_value = ("Tokens", "Credits")
@@ -162,7 +158,7 @@ class TestExpenseMailSignals(BaseTestCase):
 
     def test_get_token_credit_name_with_config(self):
         """Test token/credit name retrieval with custom config"""
-        association = self.association()
+        association = self.get_association()
         association.get_config = Mock(
             side_effect=lambda key, default: {
                 "token_credit_token_name": "Game Points",
@@ -177,7 +173,7 @@ class TestExpenseMailSignals(BaseTestCase):
 
     def test_get_token_credit_name_with_defaults(self):
         """Test token/credit name retrieval with defaults"""
-        association = self.association()
+        association = self.get_association()
         association.get_config = Mock(return_value=None)
 
         token_name, credit_name = get_token_credit_name(association)
@@ -186,7 +182,7 @@ class TestExpenseMailSignals(BaseTestCase):
         assert credit_name == "Credits"
 
 
-class TestPaymentMailSignals(BaseTestCase):
+class TestPaymentMailSignals(TestCase, BaseTestCase):
     """Test payment-related email notifications"""
 
     @patch("larpmanager.mail.accounting.notify_pay_money")
@@ -240,14 +236,12 @@ class TestPaymentMailSignals(BaseTestCase):
     @patch("larpmanager.mail.accounting.get_event_organizers")
     @patch("larpmanager.mail.accounting.my_send_mail")
     @patch("larpmanager.mail.accounting.activate")
-    def test_notify_pay_token(
-        self, mock_activate, mock_send_mail, mock_get_organizers
-    ):
+    def test_notify_pay_token(self, mock_activate, mock_send_mail, mock_get_organizers):
         """Test token payment notification to user and self.organizer()s"""
         mock_get_organizers.return_value = [self.organizer()]
 
         payment_item = self.payment_item()
-        notify_pay_token(payment_item, self.member(), payment_item.reg.run, "Game Tokens")
+        notify_pay_token(payment_item, self.get_member(), payment_item.reg.run, "Game Tokens")
 
         # Should send email to user and self.organizer()
         assert mock_send_mail.call_count == 2
@@ -292,7 +286,7 @@ class TestPaymentMailSignals(BaseTestCase):
             assert "€" in body
 
 
-class TestOtherAccountingMailSignals(BaseTestCase):
+class TestOtherAccountingMailSignals(TestCase, BaseTestCase):
     """Test other accounting item email notifications"""
 
     @patch("larpmanager.mail.accounting.notify_token")
@@ -376,7 +370,7 @@ class TestOtherAccountingMailSignals(BaseTestCase):
             assert "Game Tokens" in body
 
 
-class TestDonationMailSignals(BaseTestCase):
+class TestDonationMailSignals(TestCase, BaseTestCase):
     """Test donation-related email notifications"""
 
     @patch("larpmanager.mail.accounting.my_send_mail")
@@ -413,7 +407,7 @@ class TestDonationMailSignals(BaseTestCase):
             mock_send_mail.assert_not_called()
 
 
-class TestCollectionMailSignals(BaseTestCase):
+class TestCollectionMailSignals(TestCase, BaseTestCase):
     """Test self.collection()-related email notifications"""
 
     @patch("larpmanager.mail.accounting.my_send_mail")
@@ -460,26 +454,25 @@ class TestCollectionMailSignals(BaseTestCase):
         assert mock_send_mail.call_count >= 1
 
 
-class TestInvoiceAndRefundMails(BaseTestCase):
+class TestInvoiceAndRefundMails(TestCase, BaseTestCase):
     """Test invoice and refund notification functions"""
 
     @patch("larpmanager.mail.accounting.get_assoc_features")
     @patch("larpmanager.mail.accounting.my_send_mail")
     @patch("larpmanager.mail.accounting.activate")
-    def test_notify_invoice_check_treasurer(
-        self, mock_activate, mock_send_mail, mock_get_features
-    ):
+    def test_notify_invoice_check_treasurer(self, mock_activate, mock_send_mail, mock_get_features):
         """Test invoice notification to treasurer"""
         mock_get_features.return_value = ["treasurer"]
         invoice = self.invoice()
         invoice.assoc.get_config = Mock(
-            side_effect=lambda key, default: {"mail_payment": True, "treasurer_appointees": f"{self.member().id}"}.get(
-                key, default
-            )
+            side_effect=lambda key, default: {
+                "mail_payment": True,
+                "treasurer_appointees": f"{self.get_member().id}",
+            }.get(key, default)
         )
 
         with patch("larpmanager.mail.accounting.Member.objects.get") as mock_get_member:
-            mock_get_member.return_value = self.member()
+            mock_get_member.return_value = self.get_member()
 
             notify_invoice_check(invoice)
 
@@ -489,13 +482,11 @@ class TestInvoiceAndRefundMails(BaseTestCase):
     @patch("larpmanager.mail.accounting.get_event_organizers")
     @patch("larpmanager.mail.accounting.my_send_mail")
     @patch("larpmanager.mail.accounting.activate")
-    def test_notify_invoice_check_organizers(
-        self, mock_activate, mock_send_mail, mock_get_organizers
-    ):
+    def test_notify_invoice_check_organizers(self, mock_activate, mock_send_mail, mock_get_organizers):
         """Test invoice notification to event self.organizer()s"""
         invoice = self.invoice()
         invoice.typ = PaymentType.REGISTRATION
-        invoice.reg = self.registration()
+        invoice.reg = self.get_registration()
         invoice.assoc.get_config = Mock(return_value=True)
 
         mock_get_organizers.return_value = [self.organizer()]

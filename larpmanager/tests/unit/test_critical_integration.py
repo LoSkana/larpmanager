@@ -210,7 +210,7 @@ class TestCompleteRegistrationToPaymentWorkflow:
             status=PaymentStatus.CREATED,
             mc_gross=remaining_balance,
             mc_fee=Decimal("8.55"),  # 3% fee
-            causal=f"Registration for {self.event().name}",
+            causal=f"Registration for {self.get_event().name}",
             cod="REG12345",
         )
 
@@ -378,7 +378,11 @@ class TestCompleteRegistrationToPaymentWorkflow:
 
         # Step 2: Create ticket
         ticket = RegistrationTicket.objects.create(
-            event=self.event(), tier=TicketTier.STANDARD, name="Installment Ticket", price=Decimal("300.00"), available=50
+            event=self.get_event(),
+            tier=TicketTier.STANDARD,
+            name="Installment Ticket",
+            price=Decimal("300.00"),
+            available=50,
         )
 
         # Step 3: Create installment schedule
@@ -508,7 +512,11 @@ class TestCompleteRegistrationToPaymentWorkflow:
         )
 
         ticket = RegistrationTicket.objects.create(
-            event=self.event(), tier=TicketTier.STANDARD, name="Refundable Ticket", price=Decimal("150.00"), available=50
+            event=self.get_event(),
+            tier=TicketTier.STANDARD,
+            name="Refundable Ticket",
+            price=Decimal("150.00"),
+            available=50,
         )
 
         registration = Registration.objects.create(
@@ -558,7 +566,7 @@ class TestCompleteRegistrationToPaymentWorkflow:
             assert discounts.count() == 0, "Discounts should be deleted"
 
             # Verify event links were reset
-            mock_reset_links.assert_called_once_with(self.member().id, association.id)
+            mock_reset_links.assert_called_once_with(self.get_member().id, association.id)
 
         # Step 5: Process refunds
         # Delete token/credit payments (simulating refund processing)
@@ -621,7 +629,7 @@ def member():
         username="integration_user", email="integration@test.com", first_name="Integration", last_name="Test"
     )
     member = user.member
-    self.member().name = "Integration"
-    self.member().surname = "Test"
-    self.member().save()
+    self.get_member().name = "Integration"
+    self.get_member().surname = "Test"
+    self.get_member().save()
     return member

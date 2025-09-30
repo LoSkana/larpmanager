@@ -25,7 +25,6 @@ import pytest
 from django.contrib.auth.models import User
 
 from larpmanager.models.member import Member
-from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.fiscal_code import (
     _calculate_check_digit,
     _calculate_consonants,
@@ -218,7 +217,7 @@ class TestFiscalCodeCalculation:
 
     @pytest.mark.django_db
     def test_calculate_fiscal_code_na_fiscal_code(self):
-        """Test fiscal code calculation when self.member() has N/A fiscal code"""
+        """Test fiscal code calculation when self.get_member() has N/A fiscal code"""
         user = User.objects.create_user(username="na_user", email="na@test.com")
         member = Member.objects.create(
             user=user,

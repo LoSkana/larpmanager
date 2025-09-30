@@ -24,57 +24,58 @@ from decimal import Decimal
 import pytest
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.test import TestCase
 
 from larpmanager.models.accounting import ElectronicInvoice
 from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Run
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
 from larpmanager.models.utils import decimal_to_str
 from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestElectronicInvoiceLogic(BaseTestCase):
+class TestElectronicInvoiceLogic(TestCase, BaseTestCase):
     """Test electronic invoice business logic"""
 
     def test_electronic_invoice_auto_progressive_generation(self):
         """Test automatic progressive number generation"""
         # Create first invoice
-        invoice1 = ElectronicInvoice.objects.create(assoc=self.association(), year=2023)
+        invoice1 = ElectronicInvoice.objects.create(assoc=self.get_association(), year=2023)
 
         assert invoice1.progressive == 1, f"First progressive should be 1, got {invoice1.progressive}"
 
         # Create second invoice
-        invoice2 = ElectronicInvoice.objects.create(assoc=self.association(), year=2023)
+        invoice2 = ElectronicInvoice.objects.create(assoc=self.get_association(), year=2023)
 
         assert invoice2.progressive == 2, f"Second progressive should be 2, got {invoice2.progressive}"
 
     def test_electronic_invoice_auto_number_generation_by_year(self):
-        """Test automatic number generation per year and self.association()"""
+        """Test automatic number generation per year and self.get_association()"""
         # Create invoice for 2023
-        invoice_2023 = ElectronicInvoice.objects.create(assoc=self.association(), year=2023)
+        invoice_2023 = ElectronicInvoice.objects.create(assoc=self.get_association(), year=2023)
 
         assert invoice_2023.number == 1, f"First number for 2023 should be 1, got {invoice_2023.number}"
 
         # Create another invoice for 2023
-        invoice_2023_2 = ElectronicInvoice.objects.create(assoc=self.association(), year=2023)
+        invoice_2023_2 = ElectronicInvoice.objects.create(assoc=self.get_association(), year=2023)
 
         assert invoice_2023_2.number == 2, f"Second number for 2023 should be 2, got {invoice_2023_2.number}"
 
         # Create invoice for 2024 (should restart numbering)
-        invoice_2024 = ElectronicInvoice.objects.create(assoc=self.association(), year=2024)
+        invoice_2024 = ElectronicInvoice.objects.create(assoc=self.get_association(), year=2024)
 
         assert invoice_2024.number == 1, f"First number for 2024 should be 1, got {invoice_2024.number}"
 
     def test_electronic_invoice_unique_constraints(self):
         """Test unique constraints on electronic invoices"""
         # Create first invoice
-        ElectronicInvoice.objects.create(assoc=self.association(), year=2023, number=1, progressive=1)
+        ElectronicInvoice.objects.create(assoc=self.get_association(), year=2023, number=1, progressive=1)
 
         # Attempt to create duplicate (same number, year, assoc) should fail
         with pytest.raises(IntegrityError):
             ElectronicInvoice.objects.create(
-                assoc=self.association(),
+                assoc=self.get_association(),
                 year=2023,
                 number=1,  # Same number for same year/assoc
                 progressive=2,
@@ -83,7 +84,7 @@ class TestElectronicInvoiceLogic(BaseTestCase):
         # Attempt to create duplicate progressive should fail
         with pytest.raises(IntegrityError):
             ElectronicInvoice.objects.create(
-                assoc=self.association(),
+                assoc=self.get_association(),
                 year=2024,
                 number=1,
                 progressive=1,  # Same progressive
@@ -107,14 +108,14 @@ class TestElectronicInvoiceLogic(BaseTestCase):
         assert invoice1.progressive != invoice2.progressive, "Progressives should be different"
 
 
-class TestRegistrationBusinessLogic(BaseTestCase):
-    """Test self.registration() business logic"""
+class TestRegistrationBusinessLogic(TestCase, BaseTestCase):
+    """Test self.get_registration() business logic"""
 
     def test_registration_ticket_availability_check(self):
         """Test ticket availability constraints"""
         # Create ticket with limited availability
         ticket = RegistrationTicket.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             tier=TicketTier.STANDARD,
             name="Limited Ticket",
             price=Decimal("100.00"),
@@ -127,17 +128,17 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         user2 = User.objects.create_user(username="user2", email="user2@test.com")
         member2 = Member.objects.create(user=user2, name="User", surname="Two")
 
-        run = Run.objects.create(event=self.event(), number=1, name="Test Run")
+        run = Run.objects.create(event=self.get_event(), number=1, name="Test Run")
 
-        # First self.registration() should work
+        # First self.get_registration() should work
         reg1 = Registration.objects.create(member=member1, run=run, ticket=self.ticket())
-        assert reg1.id is not None, "First self.registration() should succeed"
+        assert reg1.id is not None, "First self.get_registration() should succeed"
 
-        # Second self.registration() should work
-        reg2 = Registration.objects.create(member=member2, run=self.run(), ticket=self.ticket())
-        assert reg2.id is not None, "Second self.registration() should succeed"
+        # Second self.get_registration() should work
+        reg2 = Registration.objects.create(member=member2, run=self.get_run(), ticket=self.ticket())
+        assert reg2.id is not None, "Second self.get_registration() should succeed"
 
-        # Business logic should prevent third self.registration() (handled at application level)
+        # Business logic should prevent third self.get_registration() (handled at application level)
         # Model level allows it, but application should check availability
         registrations_count = Registration.objects.filter(ticket=self.ticket()).count()
         assert registrations_count <= self.ticket().max_available or self.ticket().max_available == 0, (
@@ -145,8 +146,8 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         )
 
     def test_registration_price_calculation_components(self):
-        """Test self.registration() price calculation with all components"""
-        reg = self.registration()
+        """Test self.get_registration() price calculation with all components"""
+        reg = self.get_registration()
 
         # Verify all components are present
         assert reg.ticket is not None, "Registration should have ticket"
@@ -165,7 +166,7 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         """Test that different self.ticket() tiers have appropriate characteristics"""
         # Staff ticket should typically be free
         staff_ticket = RegistrationTicket.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             tier=TicketTier.STAFF,
             name="Staff Ticket",
             price=Decimal("0.00"),
@@ -174,7 +175,11 @@ class TestRegistrationBusinessLogic(BaseTestCase):
 
         # Standard ticket should have normal price
         standard_ticket = RegistrationTicket.objects.create(
-            event=self.event(), tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), visible=True
+            event=self.get_event(),
+            tier=TicketTier.STANDARD,
+            name="Standard Ticket",
+            price=Decimal("100.00"),
+            visible=True,
         )
 
         # Verify characteristics
@@ -184,13 +189,13 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         assert standard_ticket.visible, "Standard tickets should be visible"
 
     def test_registration_cancellation_workflow(self):
-        """Test self.registration() cancellation business logic"""
-        reg = self.registration()
+        """Test self.get_registration() cancellation business logic"""
+        reg = self.get_registration()
 
         # Initial state
-        assert reg.cancellation_date is None, "New self.registration() should not be cancelled"
+        assert reg.cancellation_date is None, "New self.get_registration() should not be cancelled"
 
-        # Cancel self.registration()
+        # Cancel self.get_registration()
         reg.cancellation_date = datetime.now()
         reg.save()
 
@@ -200,17 +205,17 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         # Business rule: cancelled registrations should not be included in active counts
         active_registrations = Registration.objects.filter(run=reg.run, cancellation_date__isnull=True)
 
-        assert reg not in active_registrations, "Cancelled self.registration() should not be in active list"
+        assert reg not in active_registrations, "Cancelled self.get_registration() should not be in active list"
 
 
-class TestMembershipBusinessLogic(BaseTestCase):
+class TestMembershipBusinessLogic(TestCase, BaseTestCase):
     """Test membership business logic"""
 
     def test_membership_status_workflow(self):
         """Test membership status transitions"""
         # Create pending membership
         membership = Membership.objects.create(
-            member=self.member(), assoc=self.association(), status=MembershipStatus.PENDING, date=date.today()
+            member=self.get_member(), assoc=self.get_association(), status=MembershipStatus.PENDING, date=date.today()
         )
 
         assert membership.status == MembershipStatus.PENDING, "New membership should be pending"
@@ -222,7 +227,7 @@ class TestMembershipBusinessLogic(BaseTestCase):
         assert membership.status == MembershipStatus.ACCEPTED, "Membership should be accepted"
 
         # Business rule: only accepted memberships should grant privileges
-        accepted_memberships = Membership.objects.filter(member=self.member(), status=MembershipStatus.ACCEPTED)
+        accepted_memberships = Membership.objects.filter(member=self.get_member(), status=MembershipStatus.ACCEPTED)
 
         assert membership in accepted_memberships, "Accepted membership should be in accepted list"
 
@@ -230,7 +235,10 @@ class TestMembershipBusinessLogic(BaseTestCase):
         """Test membership date business logic"""
         # Recent membership
         recent_membership = Membership.objects.create(
-            member=self.member(), assoc=self.association(), status=MembershipStatus.ACCEPTED, date=date.today() - timedelta(days=5)
+            member=self.get_member(),
+            assoc=self.get_association(),
+            status=MembershipStatus.ACCEPTED,
+            date=date.today() - timedelta(days=5),
         )
 
         # Old membership (different member to avoid conflicts)
@@ -238,13 +246,16 @@ class TestMembershipBusinessLogic(BaseTestCase):
         member2 = Member.objects.create(user=user2, name="Old", surname="Member")
 
         old_membership = Membership.objects.create(
-            member=member2, assoc=self.association(), status=MembershipStatus.ACCEPTED, date=date.today() - timedelta(days=365)
+            member=member2,
+            assoc=self.get_association(),
+            status=MembershipStatus.ACCEPTED,
+            date=date.today() - timedelta(days=365),
         )
 
         # Verify dates
         assert recent_membership.date > old_membership.date, "Recent membership should have later date"
 
-        # Business logic: membership date affects benefits like early self.registration()
+        # Business logic: membership date affects benefits like early self.get_registration()
         days_since_recent = (date.today() - recent_membership.date).days
         days_since_old = (date.today() - old_membership.date).days
 
@@ -254,7 +265,11 @@ class TestMembershipBusinessLogic(BaseTestCase):
     def test_membership_token_credit_initialization(self):
         """Test membership token and credit initialization"""
         membership = Membership.objects.create(
-            member=self.member(), assoc=self.association(), status=MembershipStatus.ACCEPTED, tokens=Decimal("0"), credit=Decimal("0")
+            member=self.get_member(),
+            assoc=self.get_association(),
+            status=MembershipStatus.ACCEPTED,
+            tokens=Decimal("0"),
+            credit=Decimal("0"),
         )
 
         # Verify initialization
@@ -271,7 +286,7 @@ class TestMembershipBusinessLogic(BaseTestCase):
         assert membership.credit == Decimal("25.50"), "Credits should be updated with decimal precision"
 
 
-class TestUtilityFunctions(BaseTestCase):
+class TestUtilityFunctions(TestCase, BaseTestCase):
     """Test utility functions"""
 
     def test_decimal_to_str_formatting(self):

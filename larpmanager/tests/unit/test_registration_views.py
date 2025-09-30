@@ -23,11 +23,8 @@ from decimal import Decimal
 
 import pytest
 from django.contrib.auth.models import AnonymousUser
-from django.test import Client, RequestFactory
+from django.test import Client, RequestFactory, TestCase
 
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
-from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -42,9 +39,10 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestRegistrationViews(BaseTestCase):
+class TestRegistrationViews(TestCase, BaseTestCase):
     """Test registration view functionality"""
 
     def setup_method(self):
@@ -55,17 +53,17 @@ class TestRegistrationViews(BaseTestCase):
         """Test registration list view"""
         # Create some registrations
         reg1 = Registration.objects.create(
-            member=self.member(), run=self.run(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00")
+            member=self.get_member(), run=self.get_run(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00")
         )
 
         other_member = Member.objects.create(username="other", email="other@test.com")
 
         reg2 = Registration.objects.create(
-            member=other_member, run=self.run(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00")
+            member=other_member, run=self.get_run(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00")
         )
 
         # Test that registrations are listed
-        registrations = Registration.objects.filter(run=self.run())
+        registrations = Registration.objects.filter(run=self.get_run())
         assert registrations.count() == 2
         assert reg1 in registrations
         assert reg2 in registrations
@@ -73,31 +71,37 @@ class TestRegistrationViews(BaseTestCase):
     def test_registration_detail_view(self):
         """Test registration detail view"""
         # Test accessing registration detail
-        assert self.registration().id is not None
-        assert self.registration().member is not None
-        assert self.registration().run is not None
+        assert self.get_registration().id is not None
+        assert self.get_registration().member is not None
+        assert self.get_registration().run is not None
 
         # Mock view context
         context = {
-            "registration": self.registration(),
-            "member": self.registration().member,
-            "run": self.registration().run,
-            "event": self.registration().run.event,
+            "registration": self.get_registration(),
+            "member": self.get_registration().member,
+            "run": self.get_registration().run,
+            "event": self.get_registration().run.event,
         }
 
-        assert context["registration"] == self.registration()
+        assert context["registration"] == self.get_registration()
 
     def test_registration_create_view_get(self):
         """Test GET request to registration create view"""
         request = self.factory.get("/register/")
-        request.user = self.member().user
-        request.member = self.member()
+        request.user = self.get_member().user
+        request.member = self.get_member()
 
         # Mock view context for GET request
-        context = {"run": self.run(), "event": self.run().event, "tickets": [self.ticket()], "member": self.member(), "questions": []}
+        context = {
+            "run": self.get_run(),
+            "event": self.get_run().event,
+            "tickets": [self.ticket()],
+            "member": self.get_member(),
+            "questions": [],
+        }
 
         # Should display registration form
-        assert context["run"] == self.run()
+        assert context["run"] == self.get_run()
         assert self.ticket() in context["tickets"]
 
     def test_registration_create_view_post_valid(self):
@@ -106,12 +110,17 @@ class TestRegistrationViews(BaseTestCase):
 
         # Simulate successful registration creation
         registration = Registration(
-            member=self.member(), run=self.run(), ticket=self.ticket(), additionals=0, tot_iscr=self.ticket().price, tot_payed=Decimal("0.00")
+            member=self.get_member(),
+            run=self.get_run(),
+            ticket=self.ticket(),
+            additionals=0,
+            tot_iscr=self.ticket().price,
+            tot_payed=Decimal("0.00"),
         )
 
-        assert self.registration().member == self.member()
-        assert self.registration().run == self.run()
-        assert self.registration().ticket == self.ticket()
+        assert self.get_registration().member == self.get_member()
+        assert self.get_registration().run == self.get_run()
+        assert self.get_registration().ticket == self.ticket()
 
     def test_registration_create_view_post_invalid(self):
         """Test POST request with invalid data"""
@@ -133,32 +142,32 @@ class TestRegistrationViews(BaseTestCase):
     def test_registration_edit_view(self):
         """Test registration edit view"""
         # Test that registration can be edited
-        original_additionals = self.registration().additionals
+        original_additionals = self.get_registration().additionals
         new_additionals = original_additionals + 1
 
         # Update registration
-        self.registration().additionals = new_additionals
-        self.registration().save()
+        self.get_registration().additionals = new_additionals
+        self.get_registration().save()
 
-        assert self.registration().additionals == new_additionals
+        assert self.get_registration().additionals == new_additionals
 
     def test_registration_cancel_view(self):
         """Test registration cancellation view"""
-        assert self.registration().cancellation_date is None
+        assert self.get_registration().cancellation_date is None
 
         # Simulate cancellation
-        self.registration().cancellation_date = datetime.now()
-        self.registration().save()
+        self.get_registration().cancellation_date = datetime.now()
+        self.get_registration().save()
 
-        assert self.registration().cancellation_date is not None
+        assert self.get_registration().cancellation_date is not None
 
     def test_registration_payment_view(self):
         """Test registration payment view"""
         # Test payment status display
-        balance = self.registration().tot_iscr - self.registration().tot_payed
+        balance = self.get_registration().tot_iscr - self.get_registration().tot_payed
 
         payment_context = {
-            "registration": self.registration(),
+            "registration": self.get_registration(),
             "balance": balance,
             "payment_methods": [],
             "can_pay": balance > 0,
@@ -175,7 +184,7 @@ class TestRegistrationViews(BaseTestCase):
         )
 
         choice_question = RegistrationQuestion.objects.create(
-            event=self.event(),
+            event=self.get_event(),
             name="accommodation",
             text="Accommodation preference?",
             typ=BaseQuestionType.SINGLE,
@@ -188,7 +197,7 @@ class TestRegistrationViews(BaseTestCase):
         )
 
         # Test questions are displayed
-        questions = RegistrationQuestion.objects.filter(event=self.event()).order_by("order")
+        questions = RegistrationQuestion.objects.filter(event=self.get_event()).order_by("order")
         assert questions.count() == 2
         assert text_question in questions
         assert choice_question in questions
@@ -202,14 +211,16 @@ class TestRegistrationViews(BaseTestCase):
 
         # Submit answer
         answer_text = "I am vegetarian"
-        answer = RegistrationAnswer.objects.create(reg=self.registration(), question=self.question(), text=answer_text)
+        answer = RegistrationAnswer.objects.create(
+            reg=self.get_registration(), question=self.question(), text=answer_text
+        )
 
-        assert answer.reg == self.registration()
+        assert answer.reg == self.get_registration()
         assert answer.question == self.question()
         assert answer.text == answer_text
 
 
-class TestRegistrationPermissions(BaseTestCase):
+class TestRegistrationPermissions(TestCase, BaseTestCase):
     """Test registration view permissions"""
 
     def setup_method(self):
@@ -225,30 +236,30 @@ class TestRegistrationPermissions(BaseTestCase):
 
     def test_member_access_own_registration(self):
         """Test member can access their own registration"""
-        request = self.factory.get(f"/self.registration()/{self.registration().id}/")
-        request.user = self.member()
-        request.member = self.member()
+        request = self.factory.get(f"/self.get_registration()/{self.get_registration().id}/")
+        request.user = self.get_member()
+        request.member = self.get_member()
 
         # Member should be able to access their own registration
-        assert self.registration().member == self.member()
+        assert self.get_registration().member == self.get_member()
 
     def test_member_access_other_registration(self):
-        """Test member cannot access other self.member()'s registration"""
+        """Test member cannot access other self.get_member()'s registration"""
         other_member = Member.objects.create(username="other", email="other@test.com")
 
-        request = self.factory.get(f"/self.registration()/{self.registration().id}/")
+        request = self.factory.get(f"/self.get_registration()/{self.get_registration().id}/")
         request.user = other_member
         request.member = other_member
 
         # Should not have access to other member's registration
-        assert self.registration().member != other_member
+        assert self.get_registration().member != other_member
 
     def test_organizer_access_registrations(self):
         """Test event organizer can access all registrations"""
         # Mock organizer permissions
         request = self.factory.get("/registrations/")
-        request.user = self.member().user
-        request.member = self.member()
+        request.user = self.get_member().user
+        request.member = self.get_member()
 
         # Organizer should see all registrations for their events
         organizer_events = []  # Would be populated by permission system
@@ -257,7 +268,7 @@ class TestRegistrationPermissions(BaseTestCase):
         assert can_view_all or registration.run.event in organizer_events
 
     def test_registration_deadline_check(self):
-        """Test self.registration() deadline enforcement"""
+        """Test self.get_registration() deadline enforcement"""
         # Set registration deadline in the past
         past_date = date.today() - timedelta(days=1)
 
@@ -271,7 +282,7 @@ class TestRegistrationPermissions(BaseTestCase):
         assert registration_open  # Registration should be open
 
 
-class TestRegistrationBusinessLogic(BaseTestCase):
+class TestRegistrationBusinessLogic(TestCase, BaseTestCase):
     """Test registration business logic"""
 
     def test_registration_capacity_check(self):
@@ -294,7 +305,11 @@ class TestRegistrationBusinessLogic(BaseTestCase):
 
         # Create first registration
         reg1 = Registration.objects.create(
-            member=member, run=self.run(), ticket=self.ticket(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+            member=member,
+            run=self.get_run(),
+            ticket=self.ticket(),
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("0.00"),
         )
 
         # Update ticket availability and verify
@@ -308,16 +323,20 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         )
 
         # Verify registration was created successfully
-        assert reg1.id is not None, "First self.registration() should be created successfully"
-        assert Registration.objects.filter(run=self.run()).count() == 1, (
-            "Should have exactly 1 self.registration() after first signup"
+        assert reg1.id is not None, "First self.get_registration() should be created successfully"
+        assert Registration.objects.filter(run=self.get_run()).count() == 1, (
+            "Should have exactly 1 self.get_registration() after first signup"
         )
 
         # Create second member and registration
         member2 = Member.objects.create(username="member2", email="member2@test.com")
 
         reg2 = Registration.objects.create(
-            member=member2, run=self.run(), ticket=self.ticket(), tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+            member=member2,
+            run=self.get_run(),
+            ticket=self.ticket(),
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("0.00"),
         )
 
         # Update ticket availability and verify sold out state
@@ -326,55 +345,57 @@ class TestRegistrationBusinessLogic(BaseTestCase):
 
         # Verify ticket is now sold out
         assert self.ticket().available == 0, (
-            f"After second self.registration(), self.ticket() should be sold out (0), got {self.ticket().available}"
+            f"After second self.get_registration(), self.ticket() should be sold out (0), got {self.ticket().available}"
         )
 
         # Verify both registrations exist
-        all_registrations = Registration.objects.filter(run=self.run())
+        all_registrations = Registration.objects.filter(run=self.get_run())
         assert all_registrations.count() == 2, f"Should have exactly 2 registrations, got {all_registrations.count()}"
-        assert reg1 in all_registrations, "First self.registration() should still exist"
-        assert reg2 in all_registrations, "Second self.registration() should exist"
+        assert reg1 in all_registrations, "First self.get_registration() should still exist"
+        assert reg2 in all_registrations, "Second self.get_registration() should exist"
 
         # Third registration should not be possible
         member3 = Member.objects.create(username="member3", email="member3@test.com")
 
         # Verify business logic prevents further registration
         can_register = self.ticket().available > 0
-        assert not can_register, f"Third self.member() should not be able to register when self.ticket().available={self.ticket().available}"
+        assert not can_register, (
+            f"Third self.get_member() should not be able to register when self.ticket().available={self.ticket().available}"
+        )
 
         # If we were to simulate the business logic check in a real system:
         # This would typically be handled by the view/form validation
         if can_register:
-            pytest.fail("Business logic should prevent self.registration() when tickets are sold out")
+            pytest.fail("Business logic should prevent self.get_registration() when tickets are sold out")
 
         # Verify final state: still only 2 registrations
-        final_registrations = Registration.objects.filter(run=self.run())
+        final_registrations = Registration.objects.filter(run=self.get_run())
         assert final_registrations.count() == 2, (
             f"Should still have exactly 2 registrations after capacity check, got {final_registrations.count()}"
         )
 
     def test_registration_payment_status_updates(self):
-        """Test self.registration() payment status updates"""
+        """Test self.get_registration() payment status updates"""
         initial_total = registration.tot_iscr
-        initial_paid = self.registration().tot_payed
+        initial_paid = self.get_registration().tot_payed
         payment_amount = Decimal("50.00")
 
         # Verify initial unpaid state
         initial_remaining = initial_total - initial_paid
-        assert self.registration().tot_payed < self.registration().tot_iscr, (
-            f"Initially should be unpaid: paid={self.registration().tot_payed}, total={self.registration().tot_iscr}"
+        assert self.get_registration().tot_payed < self.get_registration().tot_iscr, (
+            f"Initially should be unpaid: paid={self.get_registration().tot_payed}, total={self.get_registration().tot_iscr}"
         )
         assert initial_remaining > 0, f"Should have positive remaining balance: {initial_remaining}"
 
         # Make partial payment and verify state change
-        self.registration().tot_payed += payment_amount
-        self.registration().save()
+        self.get_registration().tot_payed += payment_amount
+        self.get_registration().save()
 
         # Verify partial payment state
-        partial_remaining = self.registration().tot_iscr - self.registration().tot_payed
+        partial_remaining = self.get_registration().tot_iscr - self.get_registration().tot_payed
         expected_partial_remaining = initial_remaining - payment_amount
-        assert self.registration().tot_payed == initial_paid + payment_amount, (
-            f"Paid amount should be {initial_paid + payment_amount}, got {self.registration().tot_payed}"
+        assert self.get_registration().tot_payed == initial_paid + payment_amount, (
+            f"Paid amount should be {initial_paid + payment_amount}, got {self.get_registration().tot_payed}"
         )
         assert partial_remaining == expected_partial_remaining, (
             f"Remaining should be {expected_partial_remaining}, got {partial_remaining}"
@@ -382,23 +403,25 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         assert partial_remaining > 0, "Should still have positive remaining balance after partial payment"
 
         # Verify database persistence of partial payment
-        db_registration = Registration.objects.get(id=self.registration().id)
-        assert db_registration.tot_payed == self.registration().tot_payed, "Partial payment should persist in database"
+        db_registration = Registration.objects.get(id=self.get_registration().id)
+        assert db_registration.tot_payed == self.get_registration().tot_payed, (
+            "Partial payment should persist in database"
+        )
 
         # Make full payment and verify complete payment state
-        self.registration().tot_payed = self.registration().tot_iscr
-        self.registration().save()
+        self.get_registration().tot_payed = self.get_registration().tot_iscr
+        self.get_registration().save()
 
         # Verify full payment state
-        final_remaining = self.registration().tot_iscr - self.registration().tot_payed
-        assert self.registration().tot_payed == self.registration().tot_iscr, (
-            f"After full payment: paid={self.registration().tot_payed} should equal total={self.registration().tot_iscr}"
+        final_remaining = self.get_registration().tot_iscr - self.get_registration().tot_payed
+        assert self.get_registration().tot_payed == self.get_registration().tot_iscr, (
+            f"After full payment: paid={self.get_registration().tot_payed} should equal total={self.get_registration().tot_iscr}"
         )
         assert final_remaining == Decimal("0.00"), f"No remaining balance expected, got {final_remaining}"
 
         # Verify database persistence of full payment
-        db_registration = Registration.objects.get(id=self.registration().id)
-        assert db_registration.tot_payed == self.registration().tot_iscr, "Full payment should persist in database"
+        db_registration = Registration.objects.get(id=self.get_registration().id)
+        assert db_registration.tot_payed == self.get_registration().tot_iscr, "Full payment should persist in database"
         assert db_registration.tot_iscr - db_registration.tot_payed == Decimal("0.00"), (
             "Database should show no remaining balance"
         )
@@ -412,12 +435,16 @@ class TestRegistrationBusinessLogic(BaseTestCase):
 
         # Create standard ticket
         standard_ticket = RegistrationTicket.objects.create(
-            event=self.run().event, tier=TicketTier.STANDARD, name="Standard", price=Decimal("100.00"), available=1
+            event=self.get_run().event, tier=TicketTier.STANDARD, name="Standard", price=Decimal("100.00"), available=1
         )
 
         # Create waitlist registration
         waitlist_reg = Registration.objects.create(
-            member=member, run=self.run(), ticket=waitlist_ticket, tot_iscr=Decimal("0.00"), tot_payed=Decimal("0.00")
+            member=member,
+            run=self.get_run(),
+            ticket=waitlist_ticket,
+            tot_iscr=Decimal("0.00"),
+            tot_payed=Decimal("0.00"),
         )
 
         assert waitlist_reg.ticket.tier == TicketTier.WAITING
@@ -434,12 +461,14 @@ class TestRegistrationBusinessLogic(BaseTestCase):
         from larpmanager.models.registration import RegistrationCharacterRel
 
         # Create character
-        character = Character.objects.create(name="Test Character", assoc=self.registration().run.event.assoc)
+        character = Character.objects.create(name="Test Character", assoc=self.get_registration().run.event.assoc)
 
         # Assign character to registration
-        char_rel = RegistrationCharacterRel.objects.create(reg=self.registration(), character=self.character(), principal=True)
+        char_rel = RegistrationCharacterRel.objects.create(
+            reg=self.get_registration(), character=self.character(), principal=True
+        )
 
-        assert char_rel.reg == self.registration()
+        assert char_rel.reg == self.get_registration()
         assert char_rel.character == self.character()
         assert char_rel.principal is True
 
@@ -454,54 +483,56 @@ class TestRegistrationBusinessLogic(BaseTestCase):
             question=self.question(), name="Breakfast", price=Decimal("15.00"), order=1
         )
 
-        lunch = RegistrationOption.objects.create(question=self.question(), name="Lunch", price=Decimal("20.00"), order=2)
+        lunch = RegistrationOption.objects.create(
+            question=self.question(), name="Lunch", price=Decimal("20.00"), order=2
+        )
 
         # Select options
         choice1 = RegistrationChoice.objects.create(reg=registration, question=self.question(), option=breakfast)
 
-        choice2 = RegistrationChoice.objects.create(reg=self.registration(), question=self.question(), option=lunch)
+        choice2 = RegistrationChoice.objects.create(reg=self.get_registration(), question=self.question(), option=lunch)
 
         # Calculate total option price
-        choices = RegistrationChoice.objects.filter(reg=self.registration())
+        choices = RegistrationChoice.objects.filter(reg=self.get_registration())
         option_total = sum(choice.option.price for choice in choices)
 
         assert option_total == Decimal("35.00")  # 15 + 20
 
         # Update registration total
-        original_total = self.registration().tot_iscr
+        original_total = self.get_registration().tot_iscr
         new_total = original_total + option_total
-        self.registration().tot_iscr = new_total
-        self.registration().save()
+        self.get_registration().tot_iscr = new_total
+        self.get_registration().save()
 
-        assert self.registration().tot_iscr == new_total
+        assert self.get_registration().tot_iscr == new_total
 
 
-class TestRegistrationNotifications(BaseTestCase):
-    """Test self.registration() notification system"""
+class TestRegistrationNotifications(TestCase, BaseTestCase):
+    """Test self.get_registration() notification system"""
 
     def test_registration_confirmation_email(self):
         """Test registration confirmation email"""
         # Mock email sending
         email_sent = False
-        email_recipient = self.registration().member.email
-        email_subject = f"Registration confirmed for {self.registration().run.event.name}"
+        email_recipient = self.get_registration().member.email
+        email_subject = f"Registration confirmed for {self.get_registration().run.event.name}"
 
         # Simulate email sending
-        if self.registration() and self.registration().member.email:
+        if self.get_registration() and self.get_registration().member.email:
             email_sent = True
 
         assert email_sent
-        assert email_recipient == self.registration().member.email
+        assert email_recipient == self.get_registration().member.email
 
     def test_payment_reminder_email(self):
         """Test payment reminder email"""
         # Registration with outstanding balance
-        balance = registration.tot_iscr - self.registration().tot_payed
+        balance = registration.tot_iscr - self.get_registration().tot_payed
 
         if balance > 0:
             # Mock reminder email
             reminder_sent = True
-            reminder_subject = f"Payment reminder for {self.registration().run.event.name}"
+            reminder_subject = f"Payment reminder for {self.get_registration().run.event.name}"
         else:
             reminder_sent = False
 
@@ -511,30 +542,30 @@ class TestRegistrationNotifications(BaseTestCase):
         """Test cancellation notification"""
         # Cancel registration
         registration.cancellation_date = datetime.now()
-        self.registration().save()
+        self.get_registration().save()
 
         # Mock cancellation email
-        cancellation_email_sent = self.registration().cancellation_date is not None
+        cancellation_email_sent = self.get_registration().cancellation_date is not None
 
         assert cancellation_email_sent
 
     def test_waitlist_promotion_notification(self):
         """Test waitlist promotion notification"""
         # Simulate promotion from waitlist
-        was_waitlist = self.registration().ticket.tier == TicketTier.WAITING
+        was_waitlist = self.get_registration().ticket.tier == TicketTier.WAITING
 
         if was_waitlist:
             # Change to standard ticket
             standard_ticket = RegistrationTicket.objects.create(
-                event=self.registration().run.event,
+                event=self.get_registration().run.event,
                 tier=TicketTier.STANDARD,
                 name="Standard",
                 price=Decimal("100.00"),
                 available=1,
             )
 
-            self.registration().ticket = standard_ticket
-            self.registration().save()
+            self.get_registration().ticket = standard_ticket
+            self.get_registration().save()
 
             # Mock promotion email
             promotion_email_sent = True

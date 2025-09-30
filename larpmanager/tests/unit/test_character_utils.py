@@ -20,28 +20,23 @@
 
 from unittest.mock import Mock, patch
 
-import pytest
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase
 
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import PlayerRelationship
-from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, FactionType, Relationship
-from larpmanager.utils.character import get_character_relationships
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.utils.character import get_character_relationships
 
 
-class TestCharacterRelationships(BaseTestCase):
+class TestCharacterRelationships(TestCase, BaseTestCase):
     """Test character relationship utilities"""
 
     def test_get_character_relationships_empty(self):
         """Test relationship retrieval with no relationships"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         # Create source character
         source_char = Character.objects.create(event=event, number=2, name="Source Character")
@@ -57,8 +52,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_with_faction_data(self):
         """Test relationship retrieval with character and faction data"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         # Create characters
         source_char = Character.objects.create(event=event, number=10, name="Source Character")
@@ -99,8 +94,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_secret_faction_filtered(self):
         """Test that secret factions are filtered out"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=30, name="Source")
         target_char = Character.objects.create(event=event, number=40, name="Target")
@@ -141,8 +136,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_character_lookup(self, mock_char_get):
         """Test relationship retrieval with self.character() lookup fallback"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=50, name="Source")
         target_char = Character.objects.create(event=event, number=60, name="Target")
@@ -170,8 +165,8 @@ class TestCharacterRelationships(BaseTestCase):
         mock_char_get.side_effect = ObjectDoesNotExist
 
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=70, name="Source")
 
@@ -189,8 +184,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_with_player_relationships(self):
         """Test relationship retrieval including player-inputted relationships"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=80, name="Source")
         target_char = Character.objects.create(event=event, number=90, name="Target")
@@ -200,7 +195,7 @@ class TestCharacterRelationships(BaseTestCase):
 
         # Create player relationship
         PlayerRelationship.objects.create(
-            reg=self.registration(), target=target_char, text="Player-defined relationship details"
+            reg=self.get_registration(), target=target_char, text="Player-defined relationship details"
         )
 
         target_show_data = {"id": target_char.id, "name": "Target Character", "factions": []}
@@ -211,7 +206,7 @@ class TestCharacterRelationships(BaseTestCase):
             "run": run,
             "chars": {target_char.number: target_show_data},
             "factions": {},
-            "char": {"player_id": self.member().id},  # Player context
+            "char": {"player_id": self.get_member().id},  # Player context
         }
 
         get_character_relationships(ctx)
@@ -228,8 +223,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_restrict_empty(self):
         """Test relationship restriction filtering empty relationships"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=100, name="Source")
         target_char = Character.objects.create(event=event, number=110, name="Target")
@@ -263,8 +258,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_sorting_by_length(self):
         """Test that relationships are sorted by text length (descending)"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=120, name="Source")
 
@@ -314,8 +309,8 @@ class TestCharacterRelationships(BaseTestCase):
     def test_get_character_relationships_font_size_calculation(self):
         """Test font size calculation based on text length"""
         # Create test data
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
 
         source_char = Character.objects.create(event=event, number=160, name="Source")
         target_char = Character.objects.create(event=event, number=170, name="Target")

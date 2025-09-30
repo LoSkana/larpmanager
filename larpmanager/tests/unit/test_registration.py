@@ -25,8 +25,8 @@ import pytest
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, models
+from django.test import TestCase
 
-from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -47,13 +47,13 @@ from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestRegistrationModel(BaseTestCase):
+class TestRegistrationModel(TestCase, BaseTestCase):
     """Test Registration model functionality"""
 
     def test_registration_creation(self):
         """Test basic registration creation"""
-        member = self.member()
-        run = self.run()
+        member = self.get_member()
+        run = self.get_run()
         registration = Registration.objects.create(
             member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"), quotas=1
         )
@@ -74,8 +74,8 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_str_representation(self):
         """Test string representation of registration"""
-        member = self.member()
-        run = self.run()
+        member = self.get_member()
+        run = self.get_run()
         registration = Registration(member=member, run=run, tot_iscr=Decimal("100.00"))
 
         expected = f"{run} - {member}"
@@ -83,8 +83,8 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_with_ticket(self):
         """Test registration with ticket"""
-        member = self.member()
-        run = self.run()
+        member = self.get_member()
+        run = self.get_run()
         ticket = self.ticket()
         registration = Registration.objects.create(
             member=member, run=run, ticket=ticket, tot_iscr=ticket.price, tot_payed=Decimal("0.00")
@@ -95,7 +95,7 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_cancellation(self):
         """Test registration cancellation"""
-        registration = self.registration()
+        registration = self.get_registration()
         cancellation_date = datetime.now()
         registration.cancellation_date = cancellation_date
         registration.save()
@@ -104,7 +104,7 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_payment_calculations(self):
         """Test payment status calculations"""
-        registration = self.registration()
+        registration = self.get_registration()
         initial_iscr = Decimal("100.00")
         partial_payment = Decimal("50.00")
         full_payment = Decimal("100.00")
@@ -141,8 +141,8 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_with_additionals(self):
         """Test registration with additional tickets"""
-        member = self.member()
-        run = self.run()
+        member = self.get_member()
+        run = self.get_run()
         ticket = self.ticket()
         registration = Registration.objects.create(
             member=member,
@@ -158,8 +158,8 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_with_pay_what(self):
         """Test registration with pay-what-you-want amount"""
-        member = self.member()
-        run = self.run()
+        member = self.get_member()
+        run = self.get_run()
         pay_what_amount = Decimal("75.00")
         registration = Registration.objects.create(
             member=member, run=run, pay_what=pay_what_amount, tot_iscr=pay_what_amount, tot_payed=Decimal("0.00")
@@ -169,7 +169,7 @@ class TestRegistrationModel(BaseTestCase):
 
     def test_registration_surcharge(self):
         """Test registration surcharge handling"""
-        registration = self.registration()
+        registration = self.get_registration()
         surcharge = Decimal("15.00")
         registration.surcharge = surcharge
         registration.save()
@@ -192,7 +192,7 @@ class TestRegistrationModel(BaseTestCase):
             tot_iscr=Decimal("100.00"),
             tot_payed=Decimal("0.00"),
             cancellation_date=None,
-            redeem_code=None
+            redeem_code=None,
         )
 
         # Verify first registration was created successfully
@@ -210,7 +210,7 @@ class TestRegistrationModel(BaseTestCase):
                 tot_iscr=Decimal("50.00"),
                 tot_payed=Decimal("0.00"),
                 cancellation_date=None,
-                redeem_code=None
+                redeem_code=None,
             )
 
         # Verify the IntegrityError was raised and still only one registration exists
@@ -228,12 +228,12 @@ class TestRegistrationModel(BaseTestCase):
         )
 
 
-class TestRegistrationTicket(BaseTestCase):
+class TestRegistrationTicket(TestCase, BaseTestCase):
     """Test RegistrationTicket model"""
 
     def test_ticket_creation(self):
         """Test ticket creation"""
-        event = self.event()
+        event = self.get_event()
         ticket = RegistrationTicket.objects.create(
             event=event,
             tier=TicketTier.STANDARD,
@@ -252,7 +252,7 @@ class TestRegistrationTicket(BaseTestCase):
 
     def test_ticket_str_representation(self):
         """Test ticket string representation"""
-        event = self.event()
+        event = self.get_event()
         ticket = RegistrationTicket(
             event=event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00")
         )
@@ -265,7 +265,7 @@ class TestRegistrationTicket(BaseTestCase):
 
     def test_ticket_tiers(self):
         """Test different ticket tiers"""
-        event = self.event()
+        event = self.get_event()
         tiers = [
             (TicketTier.STANDARD, "Standard"),
             (TicketTier.EARLY_BIRD, "Early Bird"),
@@ -277,17 +277,22 @@ class TestRegistrationTicket(BaseTestCase):
 
         for tier, name in tiers:
             ticket = RegistrationTicket.objects.create(
-            event=event, tier=tier, name=f"{name} Ticket", price=Decimal("100.00"), max_available=10, number=tier
+                event=event, tier=tier, name=f"{name} Ticket", price=Decimal("100.00"), max_available=10, number=tier
             )
             assert ticket.tier == tier
 
     def test_ticket_validation(self):
         """Test ticket validation"""
-        event = self.event()
+        event = self.get_event()
         # Test negative price validation
         with pytest.raises(ValidationError):
             ticket = RegistrationTicket(
-                event=event, tier=TicketTier.STANDARD, name="Invalid Ticket", price=Decimal("-50.00"), max_available=10, number=1
+                event=event,
+                tier=TicketTier.STANDARD,
+                name="Invalid Ticket",
+                price=Decimal("-50.00"),
+                max_available=10,
+                number=1,
             )
             ticket.full_clean()
 
@@ -297,7 +302,9 @@ class TestRegistrationTicket(BaseTestCase):
         initial_max = 50  # From BaseTestCase default
 
         # Verify initial state
-        assert ticket.max_available == initial_max, f"Ticket should have max_available {initial_max}, got {ticket.max_available}"
+        assert ticket.max_available == initial_max, (
+            f"Ticket should have max_available {initial_max}, got {ticket.max_available}"
+        )
 
         # Test updating max_available
         new_max = 75
@@ -305,9 +312,7 @@ class TestRegistrationTicket(BaseTestCase):
         ticket.save()
 
         # Verify change
-        assert ticket.max_available == new_max, (
-            f"Expected max_available {new_max}, got {ticket.max_available}"
-        )
+        assert ticket.max_available == new_max, f"Expected max_available {new_max}, got {ticket.max_available}"
 
         # Verify the change persists in database
         db_ticket = RegistrationTicket.objects.get(id=ticket.id)
@@ -321,14 +326,14 @@ class TestRegistrationTicket(BaseTestCase):
         assert ticket.max_available == 0, "max_available should be able to be set to 0 (unlimited)"
 
 
-class TestRegistrationQuestions(BaseTestCase):
+class TestRegistrationQuestions(TestCase, BaseTestCase):
     """Test registration questions and answers"""
 
     def test_question_creation(self):
         """Test registration question creation"""
         from larpmanager.models.form import QuestionStatus
 
-        event = self.event()
+        event = self.get_event()
         question = RegistrationQuestion.objects.create(
             event=event,
             name="dietary_requirements",
@@ -345,7 +350,7 @@ class TestRegistrationQuestions(BaseTestCase):
 
     def test_question_types(self):
         """Test different question types"""
-        event = self.event()
+        event = self.get_event()
         types = [
             BaseQuestionType.TEXT,
             BaseQuestionType.TEXTAREA,
@@ -370,7 +375,7 @@ class TestRegistrationQuestions(BaseTestCase):
         """Test question with multiple choice options"""
         from larpmanager.models.form import QuestionStatus
 
-        event = self.event()
+        event = self.get_event()
         question = RegistrationQuestion.objects.create(
             event=event,
             name="accommodation",
@@ -380,9 +385,13 @@ class TestRegistrationQuestions(BaseTestCase):
             order=1,
         )
 
-        option1 = RegistrationOption.objects.create(event=event, question=question, name="Hotel", price=Decimal("50.00"), order=1)
+        option1 = RegistrationOption.objects.create(
+            event=event, question=question, name="Hotel", price=Decimal("50.00"), order=1
+        )
 
-        option2 = RegistrationOption.objects.create(event=event, question=question, name="Camping", price=Decimal("20.00"), order=2)
+        option2 = RegistrationOption.objects.create(
+            event=event, question=question, name="Camping", price=Decimal("20.00"), order=2
+        )
 
         assert option1.question == question
         assert option2.question == question
@@ -391,7 +400,7 @@ class TestRegistrationQuestions(BaseTestCase):
 
     def test_registration_answer_text(self):
         """Test text answer to registration question"""
-        registration = self.registration()
+        registration = self.get_registration()
         question = self.question()
         answer_text = "I am vegetarian"
 
@@ -422,7 +431,7 @@ class TestRegistrationQuestions(BaseTestCase):
 
     def test_registration_choice_single(self):
         """Test single choice answer"""
-        registration = self.registration()
+        registration = self.get_registration()
         question, option1, option2 = self.question_with_options()
 
         choice = RegistrationChoice.objects.create(reg=registration, question=question, option=option1)
@@ -433,7 +442,7 @@ class TestRegistrationQuestions(BaseTestCase):
 
     def test_registration_choice_multiple(self):
         """Test multiple choice answers"""
-        registration = self.registration()
+        registration = self.get_registration()
         question, option1, option2 = self.question_with_options()
 
         # Configure question for multiple choice
@@ -482,12 +491,12 @@ class TestRegistrationQuestions(BaseTestCase):
         assert option2_choices.count() == 1, f"Should have exactly 1 choice for option2, got {option2_choices.count()}"
 
 
-class TestRegistrationInstallments(BaseTestCase):
+class TestRegistrationInstallments(TestCase, BaseTestCase):
     """Test registration installment payments"""
 
     def test_installment_creation(self):
         """Test installment creation"""
-        event = self.event()
+        event = self.get_event()
         installment = RegistrationInstallment.objects.create(
             event=event, order=1, number=1, amount=50, days_deadline=30
         )
@@ -499,7 +508,7 @@ class TestRegistrationInstallments(BaseTestCase):
 
     def test_installment_with_date_deadline(self):
         """Test installment with specific date deadline"""
-        event = self.event()
+        event = self.get_event()
         deadline_date = date.today() + timedelta(days=30)
         installment = RegistrationInstallment.objects.create(
             event=event, order=1, number=2, amount=50, date_deadline=deadline_date
@@ -509,7 +518,7 @@ class TestRegistrationInstallments(BaseTestCase):
 
     def test_installment_ticket_specific(self):
         """Test installment specific to certain tickets"""
-        event = self.event()
+        event = self.get_event()
         ticket = self.ticket()
         installment = RegistrationInstallment.objects.create(
             event=event, order=1, number=3, amount=50, days_deadline=30
@@ -521,7 +530,7 @@ class TestRegistrationInstallments(BaseTestCase):
 
     def test_installment_ordering(self):
         """Test installment ordering"""
-        event = self.event()
+        event = self.get_event()
         installment2 = RegistrationInstallment.objects.create(
             event=event, order=2, number=4, amount=50, days_deadline=15
         )
@@ -535,16 +544,14 @@ class TestRegistrationInstallments(BaseTestCase):
         assert list(installments) == [installment1, installment2]
 
 
-class TestRegistrationSurcharges(BaseTestCase):
+class TestRegistrationSurcharges(TestCase, BaseTestCase):
     """Test registration surcharges"""
 
     def test_surcharge_creation(self):
         """Test surcharge creation"""
-        event = self.event()
+        event = self.get_event()
         surcharge_date = date.today() + timedelta(days=30)
-        surcharge = RegistrationSurcharge.objects.create(
-            event=event, number=1, date=surcharge_date, amount=25
-        )
+        surcharge = RegistrationSurcharge.objects.create(event=event, number=1, date=surcharge_date, amount=25)
 
         assert surcharge.event == event
         assert surcharge.date == surcharge_date
@@ -552,7 +559,7 @@ class TestRegistrationSurcharges(BaseTestCase):
 
     def test_multiple_surcharges(self):
         """Test multiple surcharges for an event"""
-        event = self.event()
+        event = self.get_event()
         surcharge1 = RegistrationSurcharge.objects.create(
             event=event, number=2, date=date.today() + timedelta(days=30), amount=15
         )
@@ -568,7 +575,7 @@ class TestRegistrationSurcharges(BaseTestCase):
 
     def test_surcharge_date_ordering(self):
         """Test surcharges are properly ordered by date"""
-        event = self.event()
+        event = self.get_event()
         later_surcharge = RegistrationSurcharge.objects.create(
             event=event, number=4, date=date.today() + timedelta(days=60), amount=25
         )
@@ -582,14 +589,14 @@ class TestRegistrationSurcharges(BaseTestCase):
         assert list(surcharges) == [earlier_surcharge, later_surcharge]
 
 
-class TestRegistrationWithCharacters(BaseTestCase):
+class TestRegistrationWithCharacters(TestCase, BaseTestCase):
     """Test registration with character assignment"""
 
     def test_registration_with_character(self):
         """Test linking character to registration"""
         from larpmanager.models.registration import RegistrationCharacterRel
 
-        registration = self.registration()
+        registration = self.get_registration()
         character = Character.objects.create(name="Test Character", event=registration.run.event, number=10)
         char_rel = RegistrationCharacterRel.objects.create(reg=registration, character=character, principal=True)
 
@@ -601,7 +608,7 @@ class TestRegistrationWithCharacters(BaseTestCase):
         """Test registration with multiple characters"""
         from larpmanager.models.registration import RegistrationCharacterRel
 
-        registration = self.registration()
+        registration = self.get_registration()
         character1 = Character.objects.create(name="Character 1", event=registration.run.event, number=1)
 
         character2 = Character.objects.create(name="Character 2", event=registration.run.event, number=2)
@@ -618,13 +625,13 @@ class TestRegistrationWithCharacters(BaseTestCase):
         assert principal_chars.first().character == character1
 
 
-class TestRegistrationValidation(BaseTestCase):
+class TestRegistrationValidation(TestCase, BaseTestCase):
     """Test registration validation and business rules"""
 
     def test_registration_for_cancelled_event(self):
         """Test registration attempt for cancelled event"""
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         event = Event.objects.create(name="Cancelled Event", assoc=association)
 
         run = Run.objects.create(
@@ -645,7 +652,7 @@ class TestRegistrationValidation(BaseTestCase):
 
     def test_registration_payment_status_calculation(self):
         """Test payment status calculation"""
-        registration = self.registration()
+        registration = self.get_registration()
         # Not paid
         registration.tot_iscr = Decimal("100.00")
         registration.tot_payed = Decimal("0.00")
@@ -670,8 +677,8 @@ class TestRegistrationValidation(BaseTestCase):
 
     def test_registration_with_membership_requirement(self):
         """Test registration requiring membership"""
-        member = self.member()
-        run = self.run()
+        member = self.get_member()
+        run = self.get_run()
         # Mock membership check
         membership = Membership.objects.create(
             member=member, assoc=run.event.assoc, status=MembershipStatus.ACCEPTED, date=date.today()
@@ -685,13 +692,13 @@ class TestRegistrationValidation(BaseTestCase):
         assert membership.status == MembershipStatus.ACCEPTED
 
 
-class TestRegistrationQueries(BaseTestCase):
+class TestRegistrationQueries(TestCase, BaseTestCase):
     """Test registration query methods and managers"""
 
     def test_active_registrations(self):
         """Test querying active registrations"""
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         # Create active event
         active_event = Event.objects.create(name="Active Event", assoc=association)
 
@@ -735,7 +742,7 @@ class TestRegistrationQueries(BaseTestCase):
 
     def test_registrations_by_payment_status(self):
         """Test querying registrations by payment status"""
-        association = self.association()
+        association = self.get_association()
         event = Event.objects.create(name="Test Event", assoc=association)
 
         run = Run.objects.create(
@@ -823,4 +830,3 @@ class TestRegistrationQueries(BaseTestCase):
                 assert balance == Decimal("50.00"), (
                     f"Partial paid registration should have 50.00 balance, got {balance}"
                 )
-

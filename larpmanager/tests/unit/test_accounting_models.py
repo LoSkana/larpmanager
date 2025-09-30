@@ -20,7 +20,7 @@
 
 from datetime import date, datetime
 from decimal import Decimal
-from unittest.mock import Mock, patch, PropertyMock
+from unittest.mock import Mock, PropertyMock, patch
 
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -36,18 +36,14 @@ from larpmanager.models.accounting import (
     ElectronicInvoice,
     ExpenseChoices,
     OtherChoices,
-    PaymentInvoice,
-    PaymentStatus,
-    PaymentType,
     RecordAccounting,
     RefundRequest,
     RefundStatus,
 )
-from larpmanager.models.base import PaymentMethod
 from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestPaymentInvoice(BaseTestCase):
+class TestPaymentInvoice(TestCase, BaseTestCase):
     def test_str_representation(self):
         invoice = self.invoice()
         expected = f"({self.invoice().status}) Invoice for {self.invoice().member} - {self.invoice().causal} - {self.invoice().txn_id} {self.invoice().mc_gross} {self.invoice().mc_fee}"
@@ -81,7 +77,7 @@ class TestPaymentInvoice(BaseTestCase):
     def test_get_details_no_method(self):
         invoice = self.invoice()
         # Mock the method property to return None using PropertyMock
-        with patch.object(type(self.invoice()), 'method', new_callable=PropertyMock) as mock_method:
+        with patch.object(type(self.invoice()), "method", new_callable=PropertyMock) as mock_method:
             mock_method.return_value = None
             assert self.invoice().get_details() == ""
 
@@ -100,15 +96,15 @@ class TestPaymentInvoice(BaseTestCase):
             assert " TEST123" in result
 
 
-class TestElectronicInvoice(BaseTestCase):
+class TestElectronicInvoice(TestCase, BaseTestCase):
     def test_save_auto_progressive(self):
-        association = self.association()
+        association = self.get_association()
         invoice = ElectronicInvoice(number=1, year=2025, assoc=association)
         invoice.save()
         assert invoice.progressive == 1
 
     def test_save_auto_progressive_increments(self):
-        association = self.association()
+        association = self.get_association()
         # Create first invoice
         ElectronicInvoice.objects.create(progressive=5, number=1, year=2025, assoc=association)
 
@@ -118,13 +114,13 @@ class TestElectronicInvoice(BaseTestCase):
         assert invoice.progressive == 6
 
     def test_save_auto_number(self):
-        association = self.association()
+        association = self.get_association()
         invoice = ElectronicInvoice(year=2025, assoc=association)
         invoice.save()
         assert invoice.number == 1
 
     def test_save_auto_number_increments(self):
-        association = self.association()
+        association = self.get_association()
         # Create first invoice for the year
         ElectronicInvoice.objects.create(progressive=1, number=5, year=2025, assoc=association)
 
@@ -134,9 +130,9 @@ class TestElectronicInvoice(BaseTestCase):
         assert invoice.number == 6
 
 
-class TestAccountingItem(BaseTestCase):
+class TestAccountingItem(TestCase, BaseTestCase):
     def test_str_representation(self):
-        member = self.member()
+        member = self.get_member()
         item = AccountingItemTransaction(member=member, value=Decimal("100.00"), assoc_id=1)
         # Since we can't save abstract class, test the string logic
         result = str(item)
@@ -145,12 +141,12 @@ class TestAccountingItem(BaseTestCase):
         assert str(member) in result
 
     def test_short_descr_no_attribute(self):
-        member = self.member()
+        member = self.get_member()
         item = AccountingItemTransaction(member=member, value=Decimal("100.00"), assoc_id=1)
         assert item.short_descr() == ""
 
     def test_short_descr_with_attribute(self):
-        member = self.member()
+        member = self.get_member()
         item = AccountingItemDonation(
             member=member,
             value=Decimal("100.00"),
@@ -159,13 +155,16 @@ class TestAccountingItem(BaseTestCase):
         )
         result = item.short_descr()
         assert len(result) == 100
-        assert result == "This is a very long description that should be truncated at one hundred characters to test the short"
+        assert (
+            result
+            == "This is a very long description that should be truncated at one hundred characters to test the short"
+        )
 
 
-class TestAccountingItemOther(BaseTestCase):
+class TestAccountingItemOther(TestCase, BaseTestCase):
     def test_str_credit_assignment(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         item = AccountingItemOther(
             member=member, value=Decimal("50.00"), assoc=association, oth=OtherChoices.CREDIT, descr="Test credit"
         )
@@ -174,8 +173,8 @@ class TestAccountingItemOther(BaseTestCase):
         assert str(member) in result
 
     def test_str_token_assignment(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         item = AccountingItemOther(
             member=member, value=Decimal("5"), assoc=association, oth=OtherChoices.TOKEN, descr="Test tokens"
         )
@@ -184,8 +183,8 @@ class TestAccountingItemOther(BaseTestCase):
         assert str(member) in result
 
     def test_str_refund(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         item = AccountingItemOther(
             member=member, value=Decimal("100.00"), assoc=association, oth=OtherChoices.REFUND, descr="Test refund"
         )
@@ -194,11 +193,11 @@ class TestAccountingItemOther(BaseTestCase):
         assert str(member) in result
 
 
-class TestAccountingItemExpense(BaseTestCase):
+class TestAccountingItemExpense(TestCase, BaseTestCase):
     @patch("larpmanager.models.accounting.download")
     def test_download(self, mock_download):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         item = AccountingItemExpense(
             member=member, value=Decimal("100.00"), assoc=association, descr="Test expense", exp=ExpenseChoices.COST
         )
@@ -212,12 +211,12 @@ class TestAccountingItemExpense(BaseTestCase):
         assert result == "download_link"
 
 
-class TestAccountingItemFlow(BaseTestCase):
+class TestAccountingItemFlow(TestCase, BaseTestCase):
     @patch("larpmanager.models.accounting.download")
     def test_download_with_invoice(self, mock_download):
-        member = self.member()
-        association = self.association()
-        run = self.run()
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
         item = AccountingItemOutflow(
             member=member,
             value=Decimal("100.00"),
@@ -238,9 +237,9 @@ class TestAccountingItemFlow(BaseTestCase):
         assert result == "download_link"
 
     def test_download_no_invoice(self):
-        member = self.member()
-        association = self.association()
-        run = self.run()
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
         item = AccountingItemOutflow(
             member=member,
             value=Decimal("100.00"),
@@ -255,9 +254,9 @@ class TestAccountingItemFlow(BaseTestCase):
         assert item.download() == ""
 
 
-class TestDiscount(BaseTestCase):
+class TestDiscount(TestCase, BaseTestCase):
     def test_str_representation(self):
-        event = self.event()
+        event = self.get_event()
         discount = Discount(
             name="Early Bird",
             value=Decimal("20.00"),
@@ -275,7 +274,7 @@ class TestDiscount(BaseTestCase):
         assert "20.00" in result
 
     def test_show(self):
-        event = self.event()
+        event = self.get_event()
         discount = Discount(
             name="Early Bird",
             value=Decimal("20.00"),
@@ -292,8 +291,8 @@ class TestDiscount(BaseTestCase):
         assert result == expected
 
     def test_show_event_with_runs(self):
-        event = self.event()
-        run = self.run()
+        event = self.get_event()
+        run = self.get_run()
         discount = Discount(
             name="Early Bird",
             value=Decimal("20.00"),
@@ -312,12 +311,12 @@ class TestDiscount(BaseTestCase):
         assert str(run) in result
 
 
-class TestAccountingItemDiscount(BaseTestCase):
+class TestAccountingItemDiscount(TestCase, BaseTestCase):
     def test_show_with_expires(self):
-        member = self.member()
-        association = self.association()
-        run = self.run()
-        event = self.event()
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        event = self.get_event()
         discount = Discount.objects.create(
             name="Test Discount",
             value=Decimal("10.00"),
@@ -340,10 +339,10 @@ class TestAccountingItemDiscount(BaseTestCase):
         assert result == expected
 
     def test_show_no_expires(self):
-        member = self.member()
-        association = self.association()
-        run = self.run()
-        event = self.event()
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        event = self.get_event()
         discount = Discount.objects.create(
             name="Test Discount",
             value=Decimal("10.00"),
@@ -365,10 +364,10 @@ class TestAccountingItemDiscount(BaseTestCase):
         assert result == expected
 
 
-class TestCollection(BaseTestCase):
+class TestCollection(TestCase, BaseTestCase):
     def test_str_with_member(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         collection = Collection(
             member=member, organizer=member, assoc=association, total=0, status=CollectionStatus.OPEN
         )
@@ -376,8 +375,8 @@ class TestCollection(BaseTestCase):
         assert f"Colletta per {member}" == result
 
     def test_str_with_name(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         collection = Collection(
             name="Birthday Gift", organizer=member, assoc=association, total=0, status=CollectionStatus.OPEN
         )
@@ -385,8 +384,8 @@ class TestCollection(BaseTestCase):
         assert "Colletta per Birthday Gift" == result
 
     def test_display_member_with_member(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         collection = Collection(
             member=member, organizer=member, assoc=association, total=0, status=CollectionStatus.OPEN
         )
@@ -395,8 +394,8 @@ class TestCollection(BaseTestCase):
             assert result == "Member Display"
 
     def test_display_member_with_name(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         collection = Collection(
             name="Birthday Gift", organizer=member, assoc=association, total=0, status=CollectionStatus.OPEN
         )
@@ -405,8 +404,8 @@ class TestCollection(BaseTestCase):
 
     @patch("larpmanager.models.accounting.generate_id")
     def test_unique_contribute_code(self, mock_generate_id):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         mock_generate_id.return_value = "UNIQUE123CODE456"
         collection = Collection(
             name="Test Collection", organizer=member, assoc=association, total=0, status=CollectionStatus.OPEN
@@ -415,8 +414,8 @@ class TestCollection(BaseTestCase):
         assert collection.contribute_code == "UNIQUE123CODE456"
 
     def test_unique_contribute_code_collision(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         # Create existing collection with first code (no mocking yet)
         existing_collection = Collection(
             name="Existing",
@@ -444,8 +443,8 @@ class TestCollection(BaseTestCase):
 
     @patch("larpmanager.models.accounting.generate_id")
     def test_unique_redeem_code(self, mock_generate_id):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         mock_generate_id.return_value = "REDEEM123CODE456"
         collection = Collection(
             name="Test Collection", organizer=member, assoc=association, total=0, status=CollectionStatus.OPEN
@@ -454,10 +453,10 @@ class TestCollection(BaseTestCase):
         assert collection.redeem_code == "REDEEM123CODE456"
 
 
-class TestRefundRequest(BaseTestCase):
+class TestRefundRequest(TestCase, BaseTestCase):
     def test_str_representation(self):
-        member = self.member()
-        association = self.association()
+        member = self.get_member()
+        association = self.get_association()
         refund = RefundRequest(
             member=member,
             assoc=association,
@@ -469,10 +468,10 @@ class TestRefundRequest(BaseTestCase):
         assert f"Refund request of {member}" == result
 
 
-class TestRecordAccounting(BaseTestCase):
+class TestRecordAccounting(TestCase, BaseTestCase):
     def test_creation(self):
-        association = self.association()
-        run = self.run()
+        association = self.get_association()
+        run = self.get_run()
         record = RecordAccounting.objects.create(
             assoc=association, run=run, global_sum=Decimal("1000.00"), bank_sum=Decimal("950.00")
         )
@@ -480,5 +479,3 @@ class TestRecordAccounting(BaseTestCase):
         assert record.run == run
         assert record.global_sum == Decimal("1000.00")
         assert record.bank_sum == Decimal("950.00")
-
-

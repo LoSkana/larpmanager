@@ -24,16 +24,13 @@ from unittest.mock import Mock, patch
 
 import pytest
 from django.http import Http404
-from django.test import RequestFactory
+from django.test import RequestFactory, TestCase
 
-from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.association import Association
-from larpmanager.models.base import PaymentMethod
-from larpmanager.models.member import Member
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.tests.unit.base import BaseTestCase
 
 
-class TestSatispayGateway(BaseTestCase):
+class TestSatispayGateway(TestCase, BaseTestCase):
     """Test Satispay payment gateway functions"""
 
     def setup_method(self):
@@ -112,8 +109,10 @@ class TestSatispayGateway(BaseTestCase):
         with patch("larpmanager.accounting.gateway.PaymentInvoice.objects.get") as mock_get_invoice:
             mock_get_invoice.return_value = mock_invoice
             with patch("larpmanager.accounting.gateway.update_payment_details") as mock_update:
+
                 def update_ctx(request, ctx):
                     ctx["satispay_key_id"] = "test_key_id"
+
                 mock_update.side_effect = update_ctx
 
                 satispay_verify(request, "SAT123456")
@@ -143,7 +142,7 @@ class TestSatispayGateway(BaseTestCase):
             mock_verify.assert_called_once_with(request, "SAT123456")
 
 
-class TestPayPalGateway(BaseTestCase):
+class TestPayPalGateway(TestCase, BaseTestCase):
     """Test PayPal payment gateway functions"""
 
     def setup_method(self):
@@ -197,7 +196,7 @@ class TestPayPalGateway(BaseTestCase):
         mock_notify.assert_called_once()
 
 
-class TestStripeGateway(BaseTestCase):
+class TestStripeGateway(TestCase, BaseTestCase):
     """Test Stripe payment gateway functions"""
 
     def setup_method(self):
@@ -268,7 +267,7 @@ class TestStripeGateway(BaseTestCase):
                 mock_invoice_received.assert_called_once_with("price_123")
 
 
-class TestSumUpGateway(BaseTestCase):
+class TestSumUpGateway(TestCase, BaseTestCase):
     """Test SumUp payment gateway functions"""
 
     def setup_method(self):
@@ -327,7 +326,7 @@ class TestSumUpGateway(BaseTestCase):
         assert result is False
 
 
-class TestRedsysGateway(BaseTestCase):
+class TestRedsysGateway(TestCase, BaseTestCase):
     """Test Redsys payment gateway functions"""
 
     def setup_method(self):
@@ -400,7 +399,7 @@ class TestRedsysGateway(BaseTestCase):
                     assert result == "12345ABCDEFG"
 
 
-class TestRedSysClient(BaseTestCase):
+class TestRedSysClient(TestCase, BaseTestCase):
     """Test RedSysClient utility class"""
 
     def test_decode_parameters(self):
