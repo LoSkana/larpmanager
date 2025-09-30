@@ -590,11 +590,18 @@ window.addEventListener('DOMContentLoaded', function() {
             datatype: "json",
         });
 
-        start_spinner();
+        // Show spinner only after 500ms delay
+        let spinnerTimeout = setTimeout(function() {
+            start_spinner();
+        }, 500);
 
         request.done(function(data) {
+            // Clear the spinner timeout since request completed
+            clearTimeout(spinnerTimeout);
+
             // Batch updates by table to minimize DOM operations
             const tableUpdates = {};
+            let totalUpdates = 0;
 
             // Collect all updates first
             for (let key in data) {
@@ -614,6 +621,7 @@ window.addEventListener('DOMContentLoaded', function() {
                                     columnClass: '.' + nm,
                                     value: vl
                                 });
+                                totalUpdates++;
                             }
                         });
                     }
@@ -642,9 +650,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
             el.next().trigger('click');
 
+            clearTimeout(spinnerTimeout);
             stop_spinner();
 
             setTimeout(reload_table, 1000);
+        }).fail(function() {
+            // Clear the spinner timeout and handle errors gracefully
+            clearTimeout(spinnerTimeout);
+            stop_spinner();
+            console.error('Failed to load accounting data');
         });
 
     }
