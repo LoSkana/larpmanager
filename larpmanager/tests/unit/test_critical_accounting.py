@@ -523,7 +523,7 @@ class TestCriticalTokenCreditOperations:
 
         # Create membership
         membership = Membership.objects.create(
-            member=member, assoc=association, tokens=Decimal("0"), credit=Decimal("0"), status=MembershipStatus.ACCEPTED
+            member=self.member(), assoc=self.association(), tokens=Decimal("0"), credit=Decimal("0"), status=MembershipStatus.ACCEPTED
         )
 
         # Create accounting items that should affect balances
@@ -576,7 +576,7 @@ class TestCriticalValidationAndBusinessRules:
 
         # Setup complex pricing scenario
         ticket = RegistrationTicket.objects.create(
-            event=event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), available=50
+            event=self.event(), tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), available=50
         )
 
         registration.ticket = ticket
@@ -633,7 +633,7 @@ class TestCriticalValidationAndBusinessRules:
         from larpmanager.accounting.registration import get_reg_iscr
 
         ticket = RegistrationTicket.objects.create(
-            event=event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), available=50
+            event=self.event(), tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("100.00"), available=50
         )
 
         registration.ticket = ticket
@@ -689,7 +689,7 @@ class TestCriticalValidationAndBusinessRules:
         from larpmanager.accounting.registration import installment_check
 
         ticket = RegistrationTicket.objects.create(
-            event=event, tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("200.00"), available=50
+            event=self.event(), tier=TicketTier.STANDARD, name="Standard Ticket", price=Decimal("200.00"), available=50
         )
 
         registration.ticket = ticket

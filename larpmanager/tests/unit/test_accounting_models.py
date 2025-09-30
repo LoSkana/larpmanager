@@ -49,51 +49,52 @@ from larpmanager.tests.unit.base import BaseTestCase
 
 class TestPaymentInvoice(BaseTestCase):
     def test_str_representation(self):
-        payment_invoice = self.payment_invoice()
-        expected = f"({payment_invoice.status}) Invoice for {payment_invoice.member} - {payment_invoice.causal} - {payment_invoice.txn_id} {payment_invoice.mc_gross} {payment_invoice.mc_fee}"
-        assert str(payment_invoice) == expected
+        invoice = self.invoice()
+        expected = f"({self.invoice().status}) Invoice for {self.invoice().member} - {self.invoice().causal} - {self.invoice().txn_id} {self.invoice().mc_gross} {self.invoice().mc_fee}"
+        assert str(self.invoice()) == expected
 
     def test_download_no_invoice(self):
-        payment_invoice = self.payment_invoice()
-        payment_invoice.invoice = None
-        assert payment_invoice.download() == ""
+        invoice = self.invoice()
+        self.invoice().invoice = None
+        assert self.invoice().download() == ""
 
     def test_download_no_name(self):
-        payment_invoice = self.payment_invoice()
+        invoice = self.invoice()
         mock_invoice = Mock()
         mock_invoice.name = ""
-        payment_invoice.invoice = mock_invoice
-        assert payment_invoice.download() == ""
+        self.invoice().invoice = mock_invoice
+        assert self.invoice().download() == ""
 
     @patch("larpmanager.models.accounting.download")
     def test_download_with_file(self, mock_download):
-        payment_invoice = self.payment_invoice()
+        invoice = self.invoice()
         mock_invoice = Mock()
         mock_invoice.name = "test.pdf"
         mock_invoice.url = "http://example.com/test.pdf"
-        payment_invoice.invoice = mock_invoice
+        invoice.invoice = mock_invoice
         mock_download.return_value = "download_link"
 
-        result = payment_invoice.download()
+        result = invoice.download()
         mock_download.assert_called_once_with("http://example.com/test.pdf")
         assert result == "download_link"
 
     def test_get_details_no_method(self):
-        payment_invoice = self.payment_invoice()
+        invoice = self.invoice()
         # Mock the method property to return None using PropertyMock
-        with patch.object(type(payment_invoice), 'method', new_callable=PropertyMock) as mock_method:
+        with patch.object(type(self.invoice()), 'method', new_callable=PropertyMock) as mock_method:
             mock_method.return_value = None
-            assert payment_invoice.get_details() == ""
+            assert self.invoice().get_details() == ""
 
     def test_get_details_with_invoice(self):
-        payment_invoice = self.payment_invoice()
-        payment_invoice.invoice = Mock()
-        payment_invoice.invoice.url = "http://example.com/test.pdf"
-        payment_invoice.text = "Test text"
-        payment_invoice.cod = "TEST123"
+        invoice = self.invoice()
+        mock_invoice = Mock()
+        mock_invoice.url = "http://example.com/test.pdf"
+        invoice.invoice = mock_invoice
+        invoice.text = "Test text"
+        invoice.cod = "TEST123"
 
-        with patch.object(payment_invoice, "download", return_value="download_link"):
-            result = payment_invoice.get_details()
+        with patch.object(invoice, "download", return_value="download_link"):
+            result = invoice.get_details()
             assert " <a href='download_link'>Download</a>" in result
             assert " Test text" in result
             assert " TEST123" in result

@@ -31,21 +31,20 @@ from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, FactionType, Relationship
 from larpmanager.utils.character import get_character_relationships
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-@pytest.mark.django_db
-class TestCharacterRelationships:
+class TestCharacterRelationships(BaseTestCase):
     """Test character relationship utilities"""
 
     def test_get_character_relationships_empty(self):
         """Test relationship retrieval with no relationships"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
         # Create source character
-        source_char = Character.objects.create(event=event, number=1, name="Source Character")
+        source_char = Character.objects.create(event=event, number=2, name="Source Character")
 
         # Setup context
         ctx = {"character": source_char, "event": event, "run": run, "factions": {}, "char": {}}
@@ -58,17 +57,16 @@ class TestCharacterRelationships:
     def test_get_character_relationships_with_faction_data(self):
         """Test relationship retrieval with character and faction data"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
         # Create characters
-        source_char = Character.objects.create(event=event, number=1, name="Source Character")
+        source_char = Character.objects.create(event=event, number=10, name="Source Character")
 
-        target_char = Character.objects.create(event=event, number=2, name="Target Character")
+        target_char = Character.objects.create(event=event, number=20, name="Target Character")
 
         # Create faction
-        faction = Faction.objects.create(event=event, number=1, name="Test Faction", typ=FactionType.PUBLIC)
+        faction = Faction.objects.create(event=event, number=1, name="Test Faction", typ=FactionType.PRIM)
 
         # Create relationship
         relationship = Relationship.objects.create(
@@ -84,7 +82,7 @@ class TestCharacterRelationships:
             "event": event,
             "run": run,
             "chars": {target_char.number: target_show_data},
-            "factions": {faction.number: {"name": "Test Faction", "typ": FactionType.PUBLIC}},
+            "factions": {faction.number: {"name": "Test Faction", "typ": FactionType.PRIM}},
             "char": {},
         }
 
@@ -101,18 +99,17 @@ class TestCharacterRelationships:
     def test_get_character_relationships_secret_faction_filtered(self):
         """Test that secret factions are filtered out"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        source_char = Character.objects.create(event=event, number=1, name="Source")
-        target_char = Character.objects.create(event=event, number=2, name="Target")
+        source_char = Character.objects.create(event=event, number=30, name="Source")
+        target_char = Character.objects.create(event=event, number=40, name="Target")
 
         # Create secret faction
-        secret_faction = Faction.objects.create(event=event, number=1, name="Secret Faction", typ=FactionType.SECRET)
+        secret_faction = Faction.objects.create(event=event, number=11, name="Secret Faction", typ=FactionType.SECRET)
 
         # Create public faction
-        public_faction = Faction.objects.create(event=event, number=2, name="Public Faction", typ=FactionType.PUBLIC)
+        public_faction = Faction.objects.create(event=event, number=21, name="Public Faction", typ=FactionType.PRIM)
 
         Relationship.objects.create(source=source_char, target=target_char, text="Connected character")
 
@@ -129,7 +126,7 @@ class TestCharacterRelationships:
             "chars": {target_char.number: target_show_data},
             "factions": {
                 secret_faction.number: {"name": "Secret Faction", "typ": FactionType.SECRET},
-                public_faction.number: {"name": "Public Faction", "typ": FactionType.PUBLIC},
+                public_faction.number: {"name": "Public Faction", "typ": FactionType.PRIM},
             },
             "char": {},
         }
@@ -142,14 +139,13 @@ class TestCharacterRelationships:
 
     @patch("larpmanager.utils.character.Character.objects.get")
     def test_get_character_relationships_character_lookup(self, mock_char_get):
-        """Test relationship retrieval with character lookup fallback"""
+        """Test relationship retrieval with self.character() lookup fallback"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        source_char = Character.objects.create(event=event, number=1, name="Source")
-        target_char = Character.objects.create(event=event, number=2, name="Target")
+        source_char = Character.objects.create(event=event, number=50, name="Source")
+        target_char = Character.objects.create(event=event, number=60, name="Target")
 
         # Create relationship
         Relationship.objects.create(source=source_char, target=target_char, text="Test relationship")
@@ -174,11 +170,10 @@ class TestCharacterRelationships:
         mock_char_get.side_effect = ObjectDoesNotExist
 
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        source_char = Character.objects.create(event=event, number=1, name="Source")
+        source_char = Character.objects.create(event=event, number=70, name="Source")
 
         # Create relationship with non-existent target
         target_char = Character.objects.create(event=event, number=999, name="NonExistent")
@@ -194,24 +189,18 @@ class TestCharacterRelationships:
     def test_get_character_relationships_with_player_relationships(self):
         """Test relationship retrieval including player-inputted relationships"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        user = User.objects.create_user(username="player", email="player@test.com")
-        member = Member.objects.create(user=user, name="Player", surname="User")
-
-        registration = Registration.objects.create(member=member, run=run)
-
-        source_char = Character.objects.create(event=event, number=1, name="Source")
-        target_char = Character.objects.create(event=event, number=2, name="Target")
+        source_char = Character.objects.create(event=event, number=80, name="Source")
+        target_char = Character.objects.create(event=event, number=90, name="Target")
 
         # Create game master relationship
         Relationship.objects.create(source=source_char, target=target_char, text="Official GM relationship")
 
         # Create player relationship
         PlayerRelationship.objects.create(
-            reg=registration, target=target_char, text="Player-defined relationship details"
+            reg=self.registration(), target=target_char, text="Player-defined relationship details"
         )
 
         target_show_data = {"id": target_char.id, "name": "Target Character", "factions": []}
@@ -222,7 +211,7 @@ class TestCharacterRelationships:
             "run": run,
             "chars": {target_char.number: target_show_data},
             "factions": {},
-            "char": {"player_id": member.id},  # Player context
+            "char": {"player_id": self.member().id},  # Player context
         }
 
         get_character_relationships(ctx)
@@ -239,12 +228,11 @@ class TestCharacterRelationships:
     def test_get_character_relationships_restrict_empty(self):
         """Test relationship restriction filtering empty relationships"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        source_char = Character.objects.create(event=event, number=1, name="Source")
-        target_char = Character.objects.create(event=event, number=2, name="Target")
+        source_char = Character.objects.create(event=event, number=100, name="Source")
+        target_char = Character.objects.create(event=event, number=110, name="Target")
 
         # Create relationship with empty text
         Relationship.objects.create(
@@ -275,16 +263,15 @@ class TestCharacterRelationships:
     def test_get_character_relationships_sorting_by_length(self):
         """Test that relationships are sorted by text length (descending)"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        source_char = Character.objects.create(event=event, number=1, name="Source")
+        source_char = Character.objects.create(event=event, number=120, name="Source")
 
         # Create target characters with different relationship lengths
-        target1 = Character.objects.create(event=event, number=2, name="Target1")
-        target2 = Character.objects.create(event=event, number=3, name="Target2")
-        target3 = Character.objects.create(event=event, number=4, name="Target3")
+        target1 = Character.objects.create(event=event, number=130, name="Target1")
+        target2 = Character.objects.create(event=event, number=140, name="Target2")
+        target3 = Character.objects.create(event=event, number=150, name="Target3")
 
         # Create relationships with different text lengths
         Relationship.objects.create(
@@ -327,12 +314,11 @@ class TestCharacterRelationships:
     def test_get_character_relationships_font_size_calculation(self):
         """Test font size calculation based on text length"""
         # Create test data
-        assoc = Association.objects.create(name="Test Assoc", slug="test")
-        event = Event.objects.create(name="Test Event", assoc=assoc, number=1)
-        run = Run.objects.create(event=event, number=1, name="Test Run")
+        event = self.event()
+        run = self.run()
 
-        source_char = Character.objects.create(event=event, number=1, name="Source")
-        target_char = Character.objects.create(event=event, number=2, name="Target")
+        source_char = Character.objects.create(event=event, number=160, name="Source")
+        target_char = Character.objects.create(event=event, number=170, name="Target")
 
         # Create relationship with specific text length
         relationship_text = "A" * 100  # 100 characters
@@ -354,35 +340,3 @@ class TestCharacterRelationships:
         # Font size calculation: 100 - ((100 / 50) * 4) = 100 - 8 = 92
         expected_font_size = int(100 - ((100 / 50) * 4))
         assert ctx["rel"][0]["font_size"] == expected_font_size
-
-
-# Fixtures
-@pytest.fixture
-def association():
-    """Create test association"""
-    return Association.objects.create(name="Test Association", slug="test")
-
-
-@pytest.fixture
-def event(association):
-    """Create test event"""
-    return Event.objects.create(name="Test Event", assoc=association, number=1)
-
-
-@pytest.fixture
-def run(event):
-    """Create test run"""
-    return Run.objects.create(event=event, number=1, name="Test Run")
-
-
-@pytest.fixture
-def character(event):
-    """Create test character"""
-    return Character.objects.create(event=event, number=1, name="Test Character")
-
-
-@pytest.fixture
-def member():
-    """Create test member"""
-    user = User.objects.create_user(username="testmember", email="test@test.com")
-    return Member.objects.create(user=user, name="Test", surname="Member")

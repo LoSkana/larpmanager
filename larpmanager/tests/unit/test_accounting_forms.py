@@ -316,9 +316,8 @@ class TestOrgaDiscountForm(BaseTestCase):
         run = self.run()
         params = {"run": run}
 
-        # Create a mock discount since it's not in the base class
-        discount = Mock()
-        discount.runs.all = Mock(return_value=[run])
+        # Use a real discount instance
+        discount = self.discount()
 
         with patch("larpmanager.forms.accounting.Run.objects.filter") as mock_filter:
             mock_filter.return_value = [run]
@@ -340,7 +339,9 @@ class TestWireInvoiceSubmitForm(BaseTestCase):
         assert form.fields["cod"].widget.__class__.__name__ == "HiddenInput"
 
     def test_valid_file_upload(self):
-        test_file = SimpleUploadedFile("test_invoice.pdf", b"test content", content_type="application/pdf")
+        # Create a minimal PDF content (PDF signature)
+        pdf_content = b"%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n>>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000010 00000 n \n0000000079 00000 n \n0000000173 00000 n \ntrailer\n<<\n/Size 4\n/Root 1 0 R\n>>\nstartxref\n253\n%%EOF"
+        test_file = SimpleUploadedFile("test_invoice.pdf", pdf_content, content_type="application/pdf")
 
         form_data = {"cod": "TEST123"}
 
@@ -371,7 +372,7 @@ class TestAnyInvoiceSubmitForm(BaseTestCase):
 
 class TestRefundRequestForm(BaseTestCase):
     def test_init_sets_max_value(self):
-        # Mock member.membership.credit
+        # Mock self.member().membership.credit
         member = self.member()
         mock_membership = Mock()
         mock_membership.credit = Decimal("150.00")
@@ -486,17 +487,26 @@ class TestExePaymentSettingsForm(BaseTestCase):
         with patch("larpmanager.forms.accounting.get_payment_details") as mock_get:
             mock_get.return_value = {}
             with patch("larpmanager.forms.accounting.save_payment_details") as mock_save:
-                with patch.object(ExePaymentSettingsForm, "get_payment_details_fields") as mock_fields:
-                    mock_fields.return_value = {"test": ["test_field"]}
+                # Mock payment methods
+                mock_method = Mock()
+                mock_method.slug = "test"
+                mock_method.name = "Test Method"
+                mock_method.instructions = "Test instructions"
 
-                    association = self.association()
-                    form = ExePaymentSettingsForm(instance=association)
-                    form.cleaned_data = {"test_field": "new_value"}
+                with patch("larpmanager.forms.accounting.PaymentMethod.objects.order_by") as mock_order:
+                    mock_order.return_value = [mock_method]
 
-                    with patch("django.forms.ModelForm.save") as mock_super_save:
-                        mock_super_save.return_value = association
+                    with patch.object(ExePaymentSettingsForm, "get_payment_details_fields") as mock_fields:
+                        mock_fields.return_value = {"test": ["test_field"]}
 
-                        result = form.save()
+                        association = self.association()
+                        form = ExePaymentSettingsForm(instance=association)
+                        form.cleaned_data = {"test_field": "new_value"}
 
-                        mock_save.assert_called_once()
-                        assert result == association
+                        with patch("django.forms.ModelForm.save") as mock_super_save:
+                            mock_super_save.return_value = association
+
+                            result = form.save()
+
+                            mock_save.assert_called_once()
+                            assert result == association

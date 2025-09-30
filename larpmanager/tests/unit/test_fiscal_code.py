@@ -25,6 +25,7 @@ import pytest
 from django.contrib.auth.models import User
 
 from larpmanager.models.member import Member
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.fiscal_code import (
     _calculate_check_digit,
     _calculate_consonants,
@@ -182,7 +183,7 @@ class TestFiscalCodeCalculation:
 
         result2 = _calculate_check_digit("BNCGPP85T45F205")
         assert isinstance(result2, str), "Check digit should be a string"
-        assert len(result2) == 1, "Check digit should be single character"
+        assert len(result2) == 1, "Check digit should be single self.character()"
 
         # Test with all numbers (edge case)
         result3 = _calculate_check_digit("123456789012345")
@@ -217,7 +218,7 @@ class TestFiscalCodeCalculation:
 
     @pytest.mark.django_db
     def test_calculate_fiscal_code_na_fiscal_code(self):
-        """Test fiscal code calculation when member has N/A fiscal code"""
+        """Test fiscal code calculation when self.member() has N/A fiscal code"""
         user = User.objects.create_user(username="na_user", email="na@test.com")
         member = Member.objects.create(
             user=user,
@@ -425,13 +426,3 @@ class TestFiscalCodeCalculation:
 
         # Test number handling
         assert _slugify("Test123City") == "test123city", "Should preserve numbers"
-
-
-# Fixtures
-@pytest.fixture
-def italian_member():
-    """Create a test Italian member"""
-    user = User.objects.create_user(username="testitalian", email="test@test.com")
-    return Member.objects.create(
-        user=user, name="Mario", surname="Rossi", nationality="IT", birth_date=date(1990, 5, 15), birth_place="Milano"
-    )

@@ -26,6 +26,7 @@ from django.http import HttpRequest
 
 from larpmanager.models.association import Association
 from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.base import (
     check_assoc_permission,
     def_user_ctx,
@@ -38,25 +39,29 @@ from larpmanager.utils.base import (
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
 
-@pytest.mark.django_db
-class TestUserContextGeneration:
+class TestUserContextGeneration(BaseTestCase):
     """Test user context generation functions"""
 
     def test_def_user_ctx_home_page_redirect(self):
         """Test home page redirect when association ID is 0"""
-        request = Mock()
-        request.assoc = {"id": 0}
 
         # Test with no user
+        request = Mock(spec=[])
+        request.assoc = {"id": 0}
         with pytest.raises(MembershipError):
             def_user_ctx(request)
 
         # Test with user but no member
-        request.user = Mock()
+        request = Mock()
+        request.assoc = {"id": 0}
+        request.user = Mock(spec=[])
         with pytest.raises(MembershipError):
             def_user_ctx(request)
 
         # Test with user and member
+        request = Mock()
+        request.assoc = {"id": 0}
+        request.user = Mock()
         request.user.member = Mock()
         request.user.member.memberships.all.return_value = []
 
@@ -177,8 +182,7 @@ class TestUserContextGeneration:
             mock_get_payment_details.assert_called_once_with(mock_assoc)
 
 
-@pytest.mark.django_db
-class TestPermissionChecking:
+class TestPermissionChecking(BaseTestCase):
     """Test permission checking functions"""
 
     @patch("larpmanager.utils.base.def_user_ctx")
@@ -365,32 +369,3 @@ class TestPermissionChecking:
 
         # Should always be allowed for non-placeholder features
         assert is_allowed_managed(ar, ctx) is True
-
-
-# Fixtures
-@pytest.fixture
-def association():
-    """Create test association"""
-    return Association.objects.create(name="Test Association", slug="test")
-
-
-@pytest.fixture
-def member():
-    """Create test member"""
-    user = User.objects.create_user(username="testmember", email="test@test.com")
-    return Member.objects.create(user=user, name="Test", surname="Member")
-
-
-@pytest.fixture
-def membership(member, association):
-    """Create test membership"""
-    return Membership.objects.create(member=member, assoc=association, status=MembershipStatus.ACCEPTED)
-
-
-@pytest.fixture
-def mock_request():
-    """Create mock request object"""
-    request = Mock(spec=HttpRequest)
-    request.user = Mock()
-    request.session = {}
-    return request

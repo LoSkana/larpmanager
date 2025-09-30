@@ -30,10 +30,10 @@ from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, Payment
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.member import Member
+from larpmanager.tests.unit.base import BaseTestCase
 
 
-@pytest.mark.django_db
-class TestSatispayGateway:
+class TestSatispayGateway(BaseTestCase):
     """Test Satispay payment gateway functions"""
 
     def setup_method(self):
@@ -41,7 +41,7 @@ class TestSatispayGateway:
 
     @patch("larpmanager.accounting.gateway.satispaython.create_payment")
     @patch("larpmanager.accounting.gateway.load_key")
-    def test_get_satispay_form_success(self, mock_load_key, mock_create_payment, payment_invoice):
+    def test_get_satispay_form_success(self, mock_load_key, mock_create_payment):
         """Test successful Satispay payment form creation"""
         from larpmanager.accounting.gateway import get_satispay_form
 
@@ -56,16 +56,16 @@ class TestSatispayGateway:
         mock_response.content = json.dumps({"id": "SAT123456"}).encode()
         mock_create_payment.return_value = mock_response
 
-        get_satispay_form(request, ctx, payment_invoice, 100.0)
+        get_satispay_form(request, ctx, self.invoice(), 100.0)
 
-        assert payment_invoice.cod == "SAT123456"
+        assert self.invoice().cod == "SAT123456"
         assert ctx["pay_id"] == "SAT123456"
         mock_create_payment.assert_called_once()
 
     @patch("larpmanager.accounting.gateway.satispaython.create_payment")
     @patch("larpmanager.accounting.gateway.load_key")
     @patch("larpmanager.accounting.gateway.notify_admins")
-    def test_get_satispay_form_error(self, mock_notify, mock_load_key, mock_create_payment, payment_invoice):
+    def test_get_satispay_form_error(self, mock_notify, mock_load_key, mock_create_payment):
         """Test Satispay payment form creation error"""
         from larpmanager.accounting.gateway import get_satispay_form
 
@@ -81,7 +81,7 @@ class TestSatispayGateway:
         mock_create_payment.return_value = mock_response
 
         with pytest.raises(Http404):
-            get_satispay_form(request, ctx, payment_invoice, 100.0)
+            get_satispay_form(request, ctx, self.invoice(), 100.0)
 
         mock_notify.assert_called_once()
 
@@ -111,7 +111,11 @@ class TestSatispayGateway:
 
         with patch("larpmanager.accounting.gateway.PaymentInvoice.objects.get") as mock_get_invoice:
             mock_get_invoice.return_value = mock_invoice
-            with patch("larpmanager.accounting.gateway.update_payment_details"):
+            with patch("larpmanager.accounting.gateway.update_payment_details") as mock_update:
+                def update_ctx(request, ctx):
+                    ctx["satispay_key_id"] = "test_key_id"
+                mock_update.side_effect = update_ctx
+
                 satispay_verify(request, "SAT123456")
 
                 mock_invoice_received.assert_called_once_with("SAT123456", 100.0)
@@ -139,15 +143,14 @@ class TestSatispayGateway:
             mock_verify.assert_called_once_with(request, "SAT123456")
 
 
-@pytest.mark.django_db
-class TestPayPalGateway:
+class TestPayPalGateway(BaseTestCase):
     """Test PayPal payment gateway functions"""
 
     def setup_method(self):
         self.factory = RequestFactory()
 
     @patch("larpmanager.accounting.gateway.PayPalPaymentsForm")
-    def test_get_paypal_form(self, mock_form_class, payment_invoice):
+    def test_get_paypal_form(self, mock_form_class):
         """Test PayPal form creation"""
         from larpmanager.accounting.gateway import get_paypal_form
 
@@ -160,7 +163,7 @@ class TestPayPalGateway:
         mock_form = Mock()
         mock_form_class.return_value = mock_form
 
-        get_paypal_form(request, ctx, payment_invoice, 100.0)
+        get_paypal_form(request, ctx, self.invoice(), 100.0)
 
         assert ctx["paypal_form"] == mock_form
         mock_form_class.assert_called_once()
@@ -194,8 +197,7 @@ class TestPayPalGateway:
         mock_notify.assert_called_once()
 
 
-@pytest.mark.django_db
-class TestStripeGateway:
+class TestStripeGateway(BaseTestCase):
     """Test Stripe payment gateway functions"""
 
     def setup_method(self):
@@ -204,7 +206,7 @@ class TestStripeGateway:
     @patch("larpmanager.accounting.gateway.stripe.checkout.Session.create")
     @patch("larpmanager.accounting.gateway.stripe.Price.create")
     @patch("larpmanager.accounting.gateway.stripe.Product.create")
-    def test_get_stripe_form(self, mock_product, mock_price, mock_session, payment_invoice):
+    def test_get_stripe_form(self, mock_product, mock_price, mock_session):
         """Test Stripe checkout session creation"""
         from larpmanager.accounting.gateway import get_stripe_form
 
@@ -214,14 +216,27 @@ class TestStripeGateway:
             "payment_currency": "EUR",
         }
 
-        mock_product.return_value.id = "prod_123"
-        mock_price.return_value.id = "price_123"
+        # Create real mock objects with string IDs to avoid Django aggregate function issues
+        mock_product_obj = Mock()
+        mock_product_obj.id = "prod_123"
+        mock_product.return_value = mock_product_obj
+
+        mock_price_obj = Mock()
+        mock_price_obj.id = "price_123"
+        mock_price.return_value = mock_price_obj
+
         mock_session.return_value = Mock(id="cs_123")
 
+        invoice = self.invoice()
         with patch("larpmanager.accounting.gateway.stripe") as mock_stripe:
-            get_stripe_form(request, ctx, payment_invoice, 100.0)
+            # Set up the stripe module mock
+            mock_stripe.Product.create = mock_product
+            mock_stripe.Price.create = mock_price
+            mock_stripe.checkout.Session.create = mock_session
 
-            assert payment_invoice.cod == "price_123"
+            get_stripe_form(request, ctx, invoice, 100.0)
+
+            assert invoice.cod == "price_123"
             assert ctx["stripe_ck"] is not None
             mock_product.assert_called_once()
             mock_price.assert_called_once()
@@ -253,15 +268,14 @@ class TestStripeGateway:
                 mock_invoice_received.assert_called_once_with("price_123")
 
 
-@pytest.mark.django_db
-class TestSumUpGateway:
+class TestSumUpGateway(BaseTestCase):
     """Test SumUp payment gateway functions"""
 
     def setup_method(self):
         self.factory = RequestFactory()
 
     @patch("larpmanager.accounting.gateway.requests.request")
-    def test_get_sumup_form(self, mock_request, payment_invoice):
+    def test_get_sumup_form(self, mock_request):
         """Test SumUp checkout creation"""
         from larpmanager.accounting.gateway import get_sumup_form
 
@@ -283,9 +297,9 @@ class TestSumUpGateway:
 
         mock_request.side_effect = [token_response, checkout_response]
 
-        get_sumup_form(request, ctx, payment_invoice, 100.0)
+        get_sumup_form(request, ctx, self.invoice(), 100.0)
 
-        assert payment_invoice.cod == "checkout_123"
+        assert self.invoice().cod == "checkout_123"
         assert ctx["sumup_checkout_id"] == "checkout_123"
         assert mock_request.call_count == 2
 
@@ -313,15 +327,14 @@ class TestSumUpGateway:
         assert result is False
 
 
-@pytest.mark.django_db
-class TestRedsysGateway:
+class TestRedsysGateway(BaseTestCase):
     """Test Redsys payment gateway functions"""
 
     def setup_method(self):
         self.factory = RequestFactory()
 
     @patch("larpmanager.accounting.gateway.RedSysClient")
-    def test_get_redsys_form(self, mock_client_class, payment_invoice):
+    def test_get_redsys_form(self, mock_client_class):
         """Test Redsys form creation"""
         from larpmanager.accounting.gateway import get_redsys_form
 
@@ -345,9 +358,9 @@ class TestRedsysGateway:
         with patch("larpmanager.accounting.gateway.redsys_invoice_cod") as mock_cod:
             mock_cod.return_value = "REDSYS123"
 
-            get_redsys_form(request, ctx, payment_invoice, 100.0)
+            get_redsys_form(request, ctx, self.invoice(), 100.0)
 
-            assert payment_invoice.cod == "REDSYS123"
+            assert self.invoice().cod == "REDSYS123"
             assert ctx["redsys_form"] is not None
             mock_client.redsys_generate_request.assert_called_once()
 
@@ -387,8 +400,7 @@ class TestRedsysGateway:
                     assert result == "12345ABCDEFG"
 
 
-@pytest.mark.django_db
-class TestRedSysClient:
+class TestRedSysClient(BaseTestCase):
     """Test RedSysClient utility class"""
 
     def test_decode_parameters(self):
@@ -409,7 +421,9 @@ class TestRedSysClient:
 
         from larpmanager.accounting.gateway import RedSysClient
 
-        client = RedSysClient("MERCHANT123", base64.b64encode(b"test_secret_key_32_bytes_long!").decode())
+        # Create a valid 24-byte TDES key (3DES) with different parts
+        valid_key = b"12345678abcdefgh87654321"  # 24 bytes with different 8-byte parts
+        client = RedSysClient("MERCHANT123", base64.b64encode(valid_key).decode())
 
         result = client.encrypt_order("ORDER123")
         assert isinstance(result, bytes)
@@ -431,7 +445,9 @@ class TestRedSysClient:
 
         from larpmanager.accounting.gateway import RedSysClient
 
-        client = RedSysClient("MERCHANT123", base64.b64encode(b"test_secret_key_32_bytes_long!").decode())
+        # Create a valid 24-byte TDES key (3DES) with different parts
+        valid_key = b"12345678abcdefgh87654321"  # 24 bytes with different 8-byte parts
+        client = RedSysClient("MERCHANT123", base64.b64encode(valid_key).decode())
 
         params = {
             "DS_MERCHANT_AMOUNT": 100.0,
@@ -454,38 +470,3 @@ class TestRedSysClient:
         assert "Ds_Signature" in result
         assert "Ds_SignatureVersion" in result
         assert "Ds_Redsys_Url" in result
-
-
-# Fixtures
-@pytest.fixture
-def association():
-    return Association.objects.create(name="Test Association", slug="test-assoc", email="test@example.com")
-
-
-@pytest.fixture
-def member():
-    return Member.objects.create(username="testuser", email="test@example.com", first_name="Test", last_name="User")
-
-
-@pytest.fixture
-def payment_method():
-    return PaymentMethod.objects.create(name="Test Method", slug="test", fields="field1,field2")
-
-
-@pytest.fixture
-def payment_invoice(member, association, payment_method):
-    invoice = PaymentInvoice.objects.create(
-        member=member,
-        assoc=association,
-        method=payment_method,
-        typ=PaymentType.REGISTRATION,
-        status=PaymentStatus.CREATED,
-        mc_gross=Decimal("100.00"),
-        mc_fee=Decimal("5.00"),
-        causal="Test payment",
-        cod="TEST123",
-        txn_id="TXN456",
-    )
-    # Mock save method to avoid database operations in tests
-    invoice.save = Mock()
-    return invoice

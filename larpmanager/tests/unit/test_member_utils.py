@@ -26,6 +26,7 @@ from django.core.cache import cache
 
 from larpmanager.models.association import Association
 from larpmanager.models.member import Badge, Member, Membership
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.member import (
     almost_equal,
     assign_badge,
@@ -117,8 +118,7 @@ class TestStringComparisonFunctions:
         assert almost_equal("SHORT", "VERYLONGSTRING") is False  # Too different
 
 
-@pytest.mark.django_db
-class TestLeaderboardFunctions:
+class TestLeaderboardFunctions(BaseTestCase):
     """Test leaderboard utility functions"""
 
     def test_leaderboard_key(self):
@@ -198,12 +198,12 @@ class TestLeaderboardFunctions:
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Mock profile with thumb URL
-        member.profile = Mock()
-        member.profile_thumb = Mock()
-        member.profile_thumb.url = "/media/profiles/thumb_test.jpg"
+        self.member().profile = Mock()
+        self.member().profile_thumb = Mock()
+        self.member().profile_thumb.url = "/media/profiles/thumb_test.jpg"
 
-        Membership.objects.create(member=member, assoc=assoc)
-        badge.members.add(member)
+        Membership.objects.create(member=self.member(), assoc=assoc)
+        badge.members.add(self.member())
 
         result = update_leaderboard(assoc.id)
 
@@ -281,8 +281,7 @@ class TestLeaderboardFunctions:
         # (more recent memberships first when badge counts are equal)
 
 
-@pytest.mark.django_db
-class TestBadgeAssignment:
+class TestBadgeAssignment(BaseTestCase):
     """Test badge assignment functionality"""
 
     def test_assign_badge_success(self):
@@ -295,10 +294,10 @@ class TestBadgeAssignment:
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Assign badge
-        assign_badge(member, "supporter")
+        assign_badge(self.member(), "supporter")
 
         # Verify assignment
-        assert badge.members.filter(id=member.id).exists()
+        assert badge.members.filter(id=self.member().id).exists()
 
     def test_assign_badge_nonexistent_badge(self):
         """Test badge assignment with nonexistent badge code"""
@@ -306,10 +305,10 @@ class TestBadgeAssignment:
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Should not raise exception, just silently fail
-        assign_badge(member, "nonexistent")
+        assign_badge(self.member(), "nonexistent")
 
         # Verify no badges assigned
-        assert member.badges.count() == 0
+        assert self.member().badges.count() == 0
 
     @patch("builtins.print")
     def test_assign_badge_exception_handling(self, mock_print):
@@ -318,7 +317,7 @@ class TestBadgeAssignment:
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # This should trigger the exception handler
-        assign_badge(member, "nonexistent")
+        assign_badge(self.member(), "nonexistent")
 
         # Should have printed the exception
         mock_print.assert_called_once()
@@ -330,49 +329,29 @@ class TestBadgeAssignment:
         member = Member.objects.create(user=user, name="Test", surname="Member")
 
         # Assign badge multiple times
-        assign_badge(member, "supporter")
-        assign_badge(member, "supporter")
-        assign_badge(member, "supporter")
+        assign_badge(self.member(), "supporter")
+        assign_badge(self.member(), "supporter")
+        assign_badge(self.member(), "supporter")
 
         # Should only be assigned once (many-to-many relationship)
-        assert badge.members.filter(id=member.id).count() == 1
+        assert badge.members.filter(id=self.member().id).count() == 1
 
     def test_assign_multiple_badges_to_member(self):
-        """Test assigning multiple different badges to same member"""
+        """Test assigning multiple different badges to same self.member()"""
         badge1 = Badge.objects.create(name="Supporter", cod="supporter")
         badge2 = Badge.objects.create(name="Donor", cod="donor")
         badge3 = Badge.objects.create(name="Volunteer", cod="volunteer")
 
-        user = User.objects.create_user(username="member", email="member@test.com")
-        member = Member.objects.create(user=user, name="Test", surname="Member")
+        user = User.objects.create_user(username="member", email="self.member()@test.com")
+        member = Member.objects.create(user=self.user(), name="Test", surname="Member")
 
         # Assign multiple badges
-        assign_badge(member, "supporter")
-        assign_badge(member, "donor")
-        assign_badge(member, "volunteer")
+        assign_badge(self.member(), "supporter")
+        assign_badge(self.member(), "donor")
+        assign_badge(self.member(), "volunteer")
 
         # Verify all badges assigned
-        assert member.badges.count() == 3
-        assert badge1.members.filter(id=member.id).exists()
-        assert badge2.members.filter(id=member.id).exists()
-        assert badge3.members.filter(id=member.id).exists()
-
-
-# Fixtures
-@pytest.fixture
-def association():
-    """Create test association"""
-    return Association.objects.create(name="Test Association", slug="test")
-
-
-@pytest.fixture
-def member():
-    """Create test member"""
-    user = User.objects.create_user(username="testmember", email="test@test.com")
-    return Member.objects.create(user=user, name="Test", surname="Member")
-
-
-@pytest.fixture
-def badge():
-    """Create test badge"""
-    return Badge.objects.create(name="Test Badge", cod="test")
+        assert self.member().badges.count() == 3
+        assert badge1.members.filter(id=self.member().id).exists()
+        assert badge2.members.filter(id=self.member().id).exists()
+        assert badge3.members.filter(id=self.member().id).exists()

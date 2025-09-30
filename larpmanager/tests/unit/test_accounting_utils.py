@@ -108,7 +108,8 @@ class TestMemberAccountingUtils(BaseTestCase):
         with patch("larpmanager.accounting.member.PaymentInvoice.objects.filter") as mock_filter:
             mock_filter.return_value = [invoice1, invoice2, invoice3]
 
-            result = _init_pending(self.member())
+            member = self.member()
+            result = _init_pending(member)
 
             # Should group by idx
             assert 1 in result
@@ -140,7 +141,8 @@ class TestMemberAccountingUtils(BaseTestCase):
         with patch("larpmanager.accounting.member.RegistrationChoice.objects.filter") as mock_filter:
             mock_filter.return_value.select_related.return_value = [choice1, choice2, choice3]
 
-            result = _init_choices(self.member())
+            member = self.member()
+            result = _init_choices(member)
 
             # Should group by reg_id and question_id
             assert 1 in result
@@ -177,10 +179,9 @@ class TestMemberAccountingUtils(BaseTestCase):
         choices = {}
         ctx = {"reg_list": [], "payments_pending": [], "payments_todo": [], "reg_years": {}}
         registration = self.registration()
-        pending = {registration.id: [Mock()]}  # Has pending payment
-
         registration.id = 1
         registration.quota = 50
+        pending = {registration.id: [Mock()]}  # Has pending payment
 
         _init_regs(choices, ctx, pending, registration)
 
@@ -279,7 +280,7 @@ class TestMemberAccountingUtils(BaseTestCase):
 
                     with patch("larpmanager.accounting.member.Association.objects.get") as mock_assoc:
                         mock_assoc.return_value = association
-                        association.get_config = Mock(
+                        self.association().get_config = Mock(
                             side_effect=lambda key, default: {"membership_day": "01-01", "membership_grazing": "3"}.get(
                                 key, default
                             )
@@ -303,7 +304,7 @@ class TestInvoiceUtils(BaseTestCase):
         ctx = {"todo": [payment_invoice]}
 
         # Create CSV content
-        csv_content = "100,00,Test payment reference,other,data\n"
+        csv_content = "100,00,Test payment,other,data\n"
         csv_upload = Mock()
         csv_upload.read.return_value.decode.return_value = csv_content
 
@@ -431,9 +432,10 @@ class TestBalanceUtils(BaseTestCase):
         with patch("larpmanager.accounting.balance.AccountingItemPayment.objects.filter") as mock_filter:
             mock_filter.return_value = [item1, item2]
 
+            run = self.run()
             result = get_acc_detail(
                 nm="Test Payments",
-                run=self.run(),
+                run=run,
                 descr="Test description",
                 cls=AccountingItemPayment,
                 cho=PaymentChoices.choices,
@@ -460,11 +462,13 @@ class TestBalanceUtils(BaseTestCase):
     def test_get_acc_reg_type_with_ticket(self):
         """Test registration type with ticket"""
         registration = self.registration()
+        registration.cancellation_date = None
+
+        # Mock the ticket using a simple attribute assignment bypass
         mock_ticket = Mock()
         mock_ticket.tier = TicketTier.STANDARD
-
-        registration.cancellation_date = None
-        registration.ticket = mock_ticket
+        # Bypass Django's model validation by setting directly on __dict__
+        registration.__dict__['ticket'] = mock_ticket
 
         with patch("larpmanager.accounting.balance.get_display_choice") as mock_display:
             mock_display.return_value = "Standard Ticket"
@@ -492,7 +496,8 @@ class TestBalanceUtils(BaseTestCase):
             with patch("larpmanager.accounting.balance.get_acc_reg_type") as mock_get_type:
                 mock_get_type.return_value = (TicketTier.STANDARD, "Standard")
 
-                result = get_acc_reg_detail("Registrations", self.run(), "Test registrations")
+                run = self.run()
+                result = get_acc_reg_detail("Registrations", run, "Test registrations")
 
                 assert result["tot"] == Decimal("180.00")  # 100 + 80
                 assert result["num"] == 2
@@ -650,7 +655,8 @@ class TestBaseUtils(BaseTestCase):
         from larpmanager.accounting.base import is_reg_provisional
 
         features = []  # No payment feature
-        result = is_reg_provisional(self.registration(), features)
+        registration = self.registration()
+        result = is_reg_provisional(registration, features)
         assert result is False
 
     def test_is_reg_provisional_payment_disabled(self):
@@ -704,9 +710,11 @@ class TestVatUtils(BaseTestCase):
         )
 
         payment_item.reg.pay_what = Decimal("50.00")
-        payment_item.reg.ticket = Mock()
-        payment_item.reg.ticket.price = Decimal("50.00")
+        mock_ticket = Mock()
+        mock_ticket.price = Decimal("50.00")
         payment_item.value = Decimal("100.00")
+        # Bypass Django's model validation by setting directly on __dict__
+        payment_item.reg.__dict__['ticket'] = mock_ticket
 
         with patch("larpmanager.accounting.vat.get_previous_sum") as mock_get_sum:
             mock_get_sum.return_value = 0
@@ -751,8 +759,8 @@ class TestTokenCreditUtils(BaseTestCase):
         from larpmanager.accounting.token_credit import registration_tokens_credits_use
 
         remaining = Decimal("-10.00")  # Negative remaining
-
-        registration_tokens_credits_use(self.registration(), remaining, 1)
+        registration = self.registration()
+        registration_tokens_credits_use(registration, remaining, 1)
         # Should do nothing with negative remaining
 
     def test_registration_tokens_credits_use_tokens_only(self):
@@ -766,7 +774,8 @@ class TestTokenCreditUtils(BaseTestCase):
         with patch("larpmanager.accounting.token_credit.get_user_membership") as mock_get_membership:
             mock_get_membership.return_value = mock_membership
             with patch("larpmanager.accounting.token_credit.AccountingItemPayment.objects.create") as mock_create:
-                registration_tokens_credits_use(self.registration(), Decimal("5.00"), 1)
+                registration = self.registration()
+                registration_tokens_credits_use(registration, Decimal("5.00"), 1)
 
                 assert mock_membership.tokens == Decimal("5")  # 10 - 5
                 mock_create.assert_called_once()
@@ -787,7 +796,8 @@ class TestTokenCreditUtils(BaseTestCase):
             mock_queryset.order_by.return_value = [mock_payment]
             mock_select.return_value = mock_queryset
 
-            registration_tokens_credits_overpay(self.registration(), Decimal("5.00"), 1)
+            registration = self.registration()
+            registration_tokens_credits_overpay(registration, Decimal("5.00"), 1)
 
             assert mock_payment.value == Decimal("5.00")  # 10 - 5
             mock_payment.save.assert_called_once()
@@ -802,8 +812,9 @@ class TestTokenCreditUtils(BaseTestCase):
             mock_queryset.annotate.return_value = mock_queryset
             mock_queryset.filter.return_value = []
 
-            result = get_regs_paying_incomplete(self.association())
-            mock_get_regs.assert_called_once_with(self.association())
+            association = self.association()
+            result = get_regs_paying_incomplete(association)
+            mock_get_regs.assert_called_once_with(association)
 
     def test_update_token_credit_tokens(self):
         """Test updating member token balance"""
@@ -857,7 +868,8 @@ class TestTokenCreditUtils(BaseTestCase):
         features = []  # No token_credit feature
 
         with patch("larpmanager.accounting.token_credit.registration_tokens_credits_use") as mock_use:
-            handle_tokes_credits(1, features, self.registration(), Decimal("10.00"))
+            registration = self.registration()
+            handle_tokes_credits(1, features, registration, Decimal("10.00"))
             mock_use.assert_not_called()
 
 
@@ -871,7 +883,8 @@ class TestPaymentUtils(BaseTestCase):
         with patch("larpmanager.accounting.payment.get_payment_details") as mock_get_details:
             mock_get_details.return_value = {"paypal_fee": "2.5"}
 
-            result = get_payment_fee(self.association(), "paypal")
+            association = self.association()
+            result = get_payment_fee(association, "paypal")
             assert result == 2.5
 
     def test_get_payment_fee_no_config(self):
@@ -881,7 +894,8 @@ class TestPaymentUtils(BaseTestCase):
         with patch("larpmanager.accounting.payment.get_payment_details") as mock_get_details:
             mock_get_details.return_value = {}
 
-            result = get_payment_fee(self.association(), "paypal")
+            association = self.association()
+            result = get_payment_fee(association, "paypal")
             assert result == 0.0
 
     def test_unique_invoice_cod(self):
@@ -921,12 +935,12 @@ class TestPaymentUtils(BaseTestCase):
         from larpmanager.accounting.payment import update_invoice_gross_fee
 
         payment_invoice = self.payment_invoice()
-        association = self.association()
+        association = association
         request = Mock()
         pay_method = Mock()
         pay_method.slug = "paypal"
 
-        association.get_config = Mock(side_effect=lambda key, default: {"payment_fees_user": True}.get(key, default))
+        self.association().get_config = Mock(side_effect=lambda key, default: {"payment_fees_user": True}.get(key, default))
 
         with patch("larpmanager.accounting.payment.get_payment_fee") as mock_get_fee:
             mock_get_fee.return_value = 2.5
@@ -1035,8 +1049,8 @@ class TestRegistrationUtils(BaseTestCase):
 
         with patch("larpmanager.accounting.registration.AccountingItemTransaction.objects.filter") as mock_filter:
             mock_filter.return_value = [mock_transaction]
-
-            result = get_reg_transactions(self.registration())
+            registration = self.registration()
+            result = get_reg_transactions(registration)
             assert result == Decimal("2.50")
 
     def test_get_date_surcharge_staff_ticket(self):

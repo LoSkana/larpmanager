@@ -54,7 +54,7 @@ class TestOrgaAccountingViews(BaseTestCase):
         run = self.run()
         request = self.factory.get("/test/manage/discounts/")
         request.user = user_with_permissions
-        request.assoc = {"id": event.assoc_id}
+        request.assoc = {"id": self.event().assoc_id}
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -79,7 +79,7 @@ class TestOrgaAccountingViews(BaseTestCase):
         run = self.run()
         request = self.factory.get("/test/manage/expenses_my/")
         request.user = user_with_permissions
-        request.user.member = Mock()
+        request.user.member = self.member()
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -94,7 +94,7 @@ class TestOrgaAccountingViews(BaseTestCase):
         run = self.run()
         request = self.factory.get("/test/manage/expenses_my/new/")
         request.user = user_with_permissions
-        request.user.member = Mock()
+        request.user.member = self.member()
         request.assoc = {"id": 1}
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
@@ -112,7 +112,7 @@ class TestOrgaAccountingViews(BaseTestCase):
         run = self.run()
         request = self.factory.post("/test/manage/expenses_my/new/", {"descr": "Test expense"})
         request.user = user_with_permissions
-        request.user.member = Mock()
+        request.user.member = self.member()
         request.assoc = {"id": 1}
 
         mock_expense = Mock()
@@ -148,6 +148,9 @@ class TestOrgaAccountingViews(BaseTestCase):
         event = self.event()
         run = self.run()
         payment_invoice = self.payment_invoice()
+        # Set up a registration for the payment invoice
+        payment_invoice.reg = self.registration()
+        payment_invoice.reg.run = run
         request = self.factory.get("/test/manage/invoices/1/confirm/")
         request.user = user_with_permissions
         payment_invoice.status = PaymentStatus.SUBMITTED
@@ -172,11 +175,19 @@ class TestOrgaAccountingViews(BaseTestCase):
         request = self.factory.get("/test/manage/invoices/1/confirm/")
         request.user = user_with_permissions
 
-        # Create different run
-        other_run = Mock()
-        other_run.id = 999
-        payment_invoice.reg = Mock()
-        payment_invoice.reg.run = other_run
+        # Create different run - use another registration with a different run
+        other_registration = self.registration()
+        # Create another run that's different from the main run
+        from larpmanager.models.event import Run
+        from datetime import date
+        other_run = Run.objects.create(
+            event=self.event(),
+            number=999,  # Use a different number
+            start=date(2024, 1, 1),
+            end=date(2024, 1, 2)
+        )
+        other_registration.run = other_run
+        payment_invoice.reg = other_registration
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -269,7 +280,7 @@ class TestOrgaAccountingViews(BaseTestCase):
         request.user = user_with_permissions
 
         # Mock association config to disable expense approval
-        event.assoc.get_config = Mock(return_value=True)
+        self.event().assoc.get_config = Mock(return_value=True)
 
         with patch("larpmanager.views.orga.accounting.check_event_permission") as mock_check:
             mock_check.return_value = {"event": event, "run": run}
@@ -422,10 +433,11 @@ class TestExeAccountingViews(BaseTestCase):
                 mock_model.objects.get.return_value = payment_invoice
                 with patch("larpmanager.views.exe.accounting.messages"):
                     with patch("larpmanager.views.exe.accounting.redirect") as mock_redirect:
-                        exe_accounting.exe_verification_manual(request, payment_invoice.id)
-                        assert payment_invoice.verified is True
-                        payment_invoice.save.assert_called_once()
-                        mock_redirect.assert_called_once()
+                        with patch.object(payment_invoice, 'save') as mock_save:
+                            exe_accounting.exe_verification_manual(request, payment_invoice.id)
+                            assert payment_invoice.verified is True
+                            mock_save.assert_called_once()
+                            mock_redirect.assert_called_once()
 
     def test_exe_verification_manual_wrong_assoc(self):
         user_with_permissions = self.user_with_permissions()
@@ -526,6 +538,7 @@ class TestUserAccountingViews(BaseTestCase):
         request = self.factory.get("/accounting/refund/")
         request.user = user_with_permissions
         request.user.member = Mock()
+        request.assoc = {"id": 1}
 
         with patch("larpmanager.views.user.accounting.check_assoc_feature") as mock_check:
             with patch("larpmanager.views.user.accounting.def_user_ctx") as mock_ctx:
@@ -544,6 +557,7 @@ class TestUserAccountingViews(BaseTestCase):
         request = self.factory.post("/accounting/refund/", {"details": "Bank details", "value": "50.00"})
         request.user = user_with_permissions
         request.user.member = Mock()
+        request.assoc = {"id": 1}
 
         mock_refund = Mock()
         mock_form = Mock()
@@ -588,6 +602,7 @@ class TestUserAccountingViews(BaseTestCase):
         user_with_permissions = self.user_with_permissions()
         request = self.factory.post("/accounting/collection/ABC123/redeem/")
         request.user = user_with_permissions
+        request.user.member = user_with_permissions  # Set the member to match expectations
         request.assoc = {"id": 1}
 
         mock_collection = Mock()
@@ -601,7 +616,7 @@ class TestUserAccountingViews(BaseTestCase):
                     with patch("larpmanager.views.user.accounting.messages"):
                         with patch("larpmanager.views.user.accounting.redirect") as mock_redirect:
                             user_accounting.acc_collection_redeem(request, "ABC123")
-                            assert mock_collection.member == user_with_permissions
+                            assert mock_collection.member == request.user.member
                             assert mock_collection.status == CollectionStatus.PAYED
                             mock_collection.save.assert_called_once()
                             mock_redirect.assert_called_once_with("home")
