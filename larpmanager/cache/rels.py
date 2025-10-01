@@ -160,7 +160,7 @@ def update_event_char_rels(char: Character) -> None:
         reset_event_rels_cache(char.event_id)
 
 
-def get_event_char_rels(char: Character, features: dict) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
