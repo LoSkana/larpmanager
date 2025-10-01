@@ -35,10 +35,9 @@ def paginate(request, ctx, typ, template, view, exe=True):
 
     draw = int(request.POST.get("draw", 0))
 
-    elements = _get_elements_query(cls, ctx, request, typ)
+    elements, records_filtered = _get_elements_query(cls, ctx, request, typ)
 
     records_total = typ.objects.count()
-    records_filtered = len(elements)
 
     edit = _("Edit")
     data = _prepare_data_json(ctx, elements, view, edit, exe)
@@ -71,12 +70,16 @@ def _get_elements_query(cls, ctx, request, typ):
 
     elements = _set_filtering(ctx, elements, filters)
 
+    # Count filtered records before pagination
+    records_filtered = elements.count()
+
     ordering = _get_ordering(ctx, order)
-    elements = elements.order_by(*ordering)
+    if ordering:
+        elements = elements.order_by(*ordering)
 
     elements = elements[start : start + length]
 
-    return elements
+    return elements, records_filtered
 
 
 def _set_filtering(ctx, elements, filters):
@@ -143,7 +146,6 @@ def _get_ordering(ctx, order):
             else:
                 ordering.append(f"-{el}")
 
-    ordering.append("-created")
     return ordering
 
 
@@ -215,7 +217,7 @@ def _apply_custom_queries(ctx, elements, typ):
     if issubclass(typ, AccountingItemExpense):
         elements = elements.select_related("member").order_by("is_approved", "-created")
 
-    if issubclass(typ, PaymentInvoice):
+    elif issubclass(typ, PaymentInvoice):
         elements = elements.annotate(
             is_submitted=Case(
                 When(status=PaymentStatus.SUBMITTED, then=Value(0)),
@@ -225,7 +227,7 @@ def _apply_custom_queries(ctx, elements, typ):
         )
         elements = elements.order_by("is_submitted", "-created")
 
-    if issubclass(typ, RefundRequest):
+    elif issubclass(typ, RefundRequest):
         elements = elements.prefetch_related("member__memberships")
         elements = elements.order_by("-status", "-updated")
 
@@ -234,7 +236,7 @@ def _apply_custom_queries(ctx, elements, typ):
         ]
         elements = elements.annotate(credits=Subquery(memberships.values("credit")))
 
-    if issubclass(typ, AccountingItemPayment):
+    elif issubclass(typ, AccountingItemPayment):
         # noinspection PyUnresolvedReferences, PyProtectedMember
         val_field = AccountingItemPayment._meta.get_field("value")
         dec = DecimalField(max_digits=val_field.max_digits, decimal_places=val_field.decimal_places)
@@ -254,6 +256,8 @@ def _apply_custom_queries(ctx, elements, typ):
             trans=Coalesce(subq, zero),
             net=ExpressionWrapper(F("value") - Coalesce(subq, zero), output_field=dec),
         )
+    else:
+        elements = elements.order_by("-created")
 
     subtype = ctx.get("subtype")
     if subtype == "credits":

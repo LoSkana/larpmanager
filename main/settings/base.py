@@ -340,5 +340,9 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': False,
         },
+        'django.security.DisallowedHost': {
+            'handlers': [],
+            'propagate': False,
+        },
     },
 }
