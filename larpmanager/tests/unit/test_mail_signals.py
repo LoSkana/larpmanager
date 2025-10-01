@@ -31,8 +31,10 @@ from larpmanager.models.accounting import (
     Collection,
 )
 from larpmanager.models.casting import AssignmentTrait, Trait
-from larpmanager.models.form import ChatMessage, HelpQuestion
-from larpmanager.models.registration import PreRegistration, Registration, RegistrationCharacterRel
+from larpmanager.models.miscellanea import ChatMessage
+from larpmanager.models.miscellanea import HelpQuestion
+from larpmanager.models.event import PreRegistration
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 

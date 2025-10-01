@@ -23,7 +23,7 @@
 from unittest.mock import patch
 
 from larpmanager.models.association import Association
-from larpmanager.models.feature import Feature, FeatureModule
+from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase

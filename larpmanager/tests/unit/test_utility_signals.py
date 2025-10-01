@@ -28,10 +28,12 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
 )
-from larpmanager.models.association import AssocText, EventText
-from larpmanager.models.casting import AbilityPx, AssignmentTrait, DeliveryPx, ModifierPx, RulePx, Trait
-from larpmanager.models.form import Handout, HandoutTemplate
-from larpmanager.models.member import PlayerRelationship
+from larpmanager.models.association import AssocText
+from larpmanager.models.event import EventText
+from larpmanager.models.casting import AssignmentTrait, Trait
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.writing import Handout, HandoutTemplate
+from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import Faction, Relationship
 from larpmanager.tests.unit.base import BaseTestCase
 

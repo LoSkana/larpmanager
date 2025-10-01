@@ -23,33 +23,14 @@
 from decimal import Decimal
 from unittest.mock import patch
 
-from larpmanager.models.accounting import PaymentGateway, PaymentTransaction
+# PaymentGateway and PaymentTransaction no longer exist - using available models
 from larpmanager.tests.unit.base import BaseTestCase
 
 
 class TestGatewaySignals(BaseTestCase):
     """Test cases for gateway and other remaining signal receivers"""
 
-    @patch("larpmanager.accounting.gateway.process_payment_transaction")
-    def test_payment_transaction_post_save_processes_transaction(self, mock_process):
-        """Test that PaymentTransaction post_save signal processes transaction"""
-
-        member = self.get_member()
-        transaction = PaymentTransaction(
-            member=member, amount=Decimal("100.00"), currency="EUR", status="pending", transaction_id="TEST123"
-        )
-        transaction.save()
-
-        mock_process.assert_called_once_with(transaction)
-
-    @patch("larpmanager.accounting.gateway.validate_payment_gateway")
-    def test_payment_gateway_pre_save_validates_gateway(self, mock_validate):
-        """Test that PaymentGateway pre_save signal validates gateway configuration"""
-
-        gateway = PaymentGateway(name="Test Gateway", active=True, config={"api_key": "test_key"})
-        gateway.save()
-
-        mock_validate.assert_called_once_with(gateway)
+    # PaymentGateway and PaymentTransaction tests removed - models no longer exist
 
     def test_signal_integration_with_real_models(self):
         """Test signal integration with real model operations"""
