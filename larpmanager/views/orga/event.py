@@ -518,7 +518,7 @@ def _form_template(ctx):
 def _reg_template(ctx, typ, value_mapping):
     keys = list(ctx["columns"][0].keys())
     vals = []
-    defs = {"player": "user@test.it", "ticket": "Standard", "character": "Test Character", "donation": "5"}
+    defs = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
     for field, value in defs.items():
         if field not in keys:
             continue
