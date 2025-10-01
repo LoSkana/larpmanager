@@ -136,11 +136,11 @@
             {% endif %}
             {% if features.speedlarp %}
                 <td class="speedlarp dot_links">
-                    {% for p in el.speedlarps_list.all %}
-                        <a href="{% url 'orga_speedlarps_edit' run.get_slug p.id %}">{{ p }}</a>
+                    {% for p in el.speedlarp_rels.list %}
+                        <a href="{% url 'orga_speedlarps_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
-                <td class="stats">{{ el.speedlarps_list.count }}</td>
+                <td class="stats">{{ el.speedlarp_rels.count }}</td>
             {% endif %}
         </tr>
     {% endfor %}
