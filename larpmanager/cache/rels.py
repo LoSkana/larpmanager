@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -28,7 +28,7 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event
-from larpmanager.models.writing import Character, Faction, Plot
+from larpmanager.models.writing import Character, Faction, Plot, Relationship
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +160,7 @@ def update_event_char_rels(char: Character) -> None:
         reset_event_rels_cache(char.event_id)
 
 
-def get_event_char_rels(char: Character, features: Optional[set] = None) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
@@ -173,8 +173,8 @@ def get_event_char_rels(char: Character, features: Optional[set] = None) -> dict
     Returns:
         Dict[str, Any]: Dictionary containing relationship data:
             {
-                'plot_rels': [(plot_id, plot_name), ...],
-                'faction_rels': [(faction_id, faction_name), ...]
+                'plot_rels': {'list': [(plot_id, plot_name), ...], 'count': int},
+                'faction_rels': {'list': [(faction_id, faction_name), ...], 'count': int}
             }
     """
     if features is None:
@@ -185,15 +185,22 @@ def get_event_char_rels(char: Character, features: Optional[set] = None) -> dict
     try:
         if "plot" in features:
             rel_plots = char.get_plot_characters()
-            relations["plot_rels"] = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
+            plot_list = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
+            relations["plot_rels"] = {"list": plot_list, "count": len(plot_list)}
 
         if "faction" in features:
             fac_event = char.event.get_class_parent("faction")
             if fac_event:
                 factions = char.factions_list.filter(event=fac_event)
-                relations["faction_rels"] = [(faction.id, faction.name) for faction in factions]
+                faction_list = [(faction.id, faction.name) for faction in factions]
             else:
-                relations["faction_rels"] = []
+                faction_list = []
+            relations["faction_rels"] = {"list": faction_list, "count": len(faction_list)}
+
+        if "relationships" in features:
+            relationships = Relationship.objects.filter(deleted=None, source=char)
+            rel_list = [(rel.target.id, rel.target.name) for rel in relationships]
+            relations["relationships_rels"] = {"list": rel_list, "count": len(rel_list)}
 
     except Exception as e:
         logger.error(f"Error getting relationships for character {char.id}: {e}")
@@ -211,14 +218,15 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
     Returns:
         Dict[str, Any]: Dictionary containing relationship data:
             {
-                'character_rels': [(char_id, char_name), ...]
+                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
             }
     """
     relations = {}
 
     try:
         characters = faction.characters.all()
-        relations["character_rels"] = [(char.id, char.name) for char in characters]
+        char_list = [(char.id, char.name) for char in characters]
+        relations["character_rels"] = {"list": char_list, "count": len(char_list)}
 
     except Exception as e:
         logger.error(f"Error getting relationships for faction {faction.id}: {e}")
@@ -236,14 +244,15 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
     Returns:
         Dict[str, Any]: Dictionary containing relationship data:
             {
-                'character_rels': [(char_id, char_name), ...]
+                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
             }
     """
     relations = {}
 
     try:
         char_rels = plot.get_plot_characters()
-        relations["character_rels"] = [(rel.character.id, rel.character.name) for rel in char_rels]
+        char_list = [(rel.character.id, rel.character.name) for rel in char_rels]
+        relations["character_rels"] = {"list": char_list, "count": len(char_list)}
 
     except Exception as e:
         logger.error(f"Error getting relationships for plot {plot.id}: {e}")
@@ -322,6 +331,8 @@ def post_save_character_reset_rels(sender, instance, **kwargs):
         **kwargs: Additional keyword arguments from the signal
     """
     update_event_char_rels(instance)
+    for rel in Relationship.objects.filter(target=instance):
+        update_event_char_rels(rel.source)
 
 
 @receiver(post_delete, sender=Character)
@@ -337,6 +348,8 @@ def post_delete_character_reset_rels(sender, instance, **kwargs):
         **kwargs: Additional keyword arguments from the signal
     """
     reset_event_rels_cache(instance.event_id)
+    for rel in Relationship.objects.filter(target=instance):
+        update_event_char_rels(rel.source)
 
 
 @receiver(post_save, sender=Faction)
@@ -491,6 +504,36 @@ def post_delete_plot_reset_rels(sender, instance, **kwargs):
     except Exception as e:
         logger.error(f"Error removing plot {instance.id} from cache: {e}")
         reset_event_rels_cache(instance.event_id)
+
+
+@receiver(post_save, sender=Relationship)
+def post_save_relationship_reset_rels(sender, instance, **kwargs):
+    """Handle relationship save to update character caches.
+
+    Updates cache for both source and target characters when relationship changes.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Relationship instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update cache for source character
+    update_event_char_rels(instance.source)
+
+
+@receiver(post_delete, sender=Relationship)
+def post_delete_relationship_reset_rels(sender, instance, **kwargs):
+    """Handle relationship deletion to update character caches.
+
+    Updates cache for both source and target characters when relationship is deleted.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Relationship instance that was deleted
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update cache for source character
+    update_event_char_rels(instance.source)
 
 
 # Connect M2M signals manually for better control

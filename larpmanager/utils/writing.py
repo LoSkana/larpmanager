@@ -23,7 +23,7 @@ import io
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Exists, Model, OuterRef, Prefetch
+from django.db.models import Exists, Model, OuterRef
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -51,7 +51,6 @@ from larpmanager.models.writing import (
     Faction,
     Plot,
     PlotCharacterRel,
-    Relationship,
     TextVersion,
     Writing,
     replace_chars_all,
@@ -444,11 +443,6 @@ def writing_list_char(ctx):
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
 
-    if "relationships" in ctx["features"]:
-        ctx["list"] = ctx["list"].prefetch_related(
-            Prefetch("source", queryset=Relationship.objects.filter(deleted=None))
-        )
-
     if "campaign" in ctx["features"] and ctx["event"].parent:
         # add check if the character is signed up to the event
         ctx["list"] = ctx["list"].annotate(
@@ -460,6 +454,10 @@ def writing_list_char(ctx):
         )
 
     rels = get_event_rels_cache(ctx["event"]).get("characters", {})
+
+    if "relationships" in ctx["features"]:
+        for el in ctx["list"]:
+            el.relationships_rels = rels.get(el.id, {}).get("relationships_rels", [])
 
     if "plot" in ctx["features"]:
         for el in ctx["list"]:
