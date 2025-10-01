@@ -681,12 +681,12 @@ def _get_column_names(ctx):
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {
-                "player": _("The participant's email"),
+                "email": _("The participant's email"),
                 "ticket": _("The name of the ticket")
                 + " <i>("
                 + (_("if it doesn't exist, it will be created"))
                 + ")</i>",
-                "character": _("(Optional) The character name to assign to the player"),
+                "characters": _("(Optional) The character names to assign to the player, separated by commas"),
                 "donation": _("(Optional) The amount of a voluntary donation"),
             }
         ]

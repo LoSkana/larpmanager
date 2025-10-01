@@ -5755,9 +5755,6 @@ msgstr ""
 msgid "please upload your membership application to proceed"
 msgstr "Bitte laden Sie Ihren Mitgliedsantrag hoch, um fortzufahren"
 
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Optional) Der Charaktername, der dem Spieler zugewiesen werden soll"
-
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-Präferenzen gespeichert auf '%(type)s' für %(event)s"
@@ -7423,6 +7420,12 @@ msgid ""
 msgstr ""
 "Sie müssen mindestens einen Prologtyp erstellen, bevor Sie Prologe erstellen"
 " können"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Optional) Die Charakternamen, die dem Spieler zugewiesen werden sollen, "
+"getrennt durch Kommas"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
