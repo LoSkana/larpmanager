@@ -96,9 +96,33 @@ def orga_expenses_my_new(request, s):
 
 @login_required
 def orga_invoices(request, s):
+    """
+    Optimized view for displaying payment invoices awaiting confirmation.
+
+    Shows submitted payment invoices for the current run with optimized
+    database queries to minimize N+1 query problems.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+
+    Returns:
+        HttpResponse: Rendered invoices template with paginated results
+    """
     ctx = check_event_permission(request, s, "orga_invoices")
-    que = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
-    ctx["list"] = que.select_related("member", "method")
+
+    que = (
+        PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
+        .select_related(
+            "member",  # For {{ el.member }} in template
+            "method",  # For {{ el.method }} in template
+            "reg",  # For confirmation URL generation
+            "reg__run",  # For run.get_slug() in confirmation URL
+        )
+        .order_by("-created")
+    )
+
+    ctx["list"] = que
     return render(request, "larpmanager/orga/accounting/invoices.html", ctx)
 
 

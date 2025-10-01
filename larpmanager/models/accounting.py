@@ -108,7 +108,12 @@ class PaymentInvoice(BaseModel):
     key = models.CharField(max_length=500, null=True)
 
     class Meta:
-        indexes = [models.Index(fields=["key", "status"]), models.Index(fields=["assoc", "cod"])]
+        indexes = [
+            models.Index(fields=["key", "status"]),
+            models.Index(fields=["assoc", "cod"]),
+            models.Index(fields=["reg", "status", "-created"]),
+            models.Index(fields=["status", "-created"]),
+        ]
 
     def __str__(self):
         return (
