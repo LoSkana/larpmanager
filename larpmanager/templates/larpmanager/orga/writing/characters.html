@@ -120,11 +120,11 @@
             {% endif %}
             {% if features.prologue %}
                 <td class="prologues dot_links">
-                    {% for p in el.prologues_list.all %}
-                        <a href="{% url 'orga_prologues_edit' run.get_slug p.id %}">{{ p.name }}</a>
+                    {% for p in el.prologue_rels.list %}
+                        <a href="{% url 'orga_prologues_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
-                <td class="stats">{{ el.prologues_list.count }}</td>
+                <td class="stats">{{ el.prologue_rels.count }}</td>
             {% endif %}
             {% if features.relationships %}
                 <td class="relationships dot_links">

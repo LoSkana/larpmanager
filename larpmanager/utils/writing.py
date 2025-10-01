@@ -51,6 +51,7 @@ from larpmanager.models.writing import (
     Faction,
     Plot,
     PlotCharacterRel,
+    Prologue,
     SpeedLarp,
     TextVersion,
     Writing,
@@ -246,6 +247,9 @@ def writing_list(request, ctx, typ, nm):
 
     if issubclass(typ, SpeedLarp):
         writing_list_speedlarp(ctx)
+
+    if issubclass(typ, Prologue):
+        writing_list_prologue(ctx)
 
     if issubclass(typ, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
@@ -445,6 +449,13 @@ def writing_list_speedlarp(ctx):
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
+def writing_list_prologue(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("prologues", {})
+
+    for el in ctx["list"]:
+        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+
+
 def writing_list_char(ctx):
     """Enhance character list with feature-specific data and relationships.
 
@@ -481,6 +492,10 @@ def writing_list_char(ctx):
     if "speedlarp" in ctx["features"]:
         for el in ctx["list"]:
             el.speedlarp_rels = rels.get(el.id, {}).get("speedlarp_rels", [])
+
+    if "prologue" in ctx["features"]:
+        for el in ctx["list"]:
+            el.prologue_rels = rels.get(el.id, {}).get("prologue_rels", [])
 
     # add character configs
     char_add_addit(ctx)

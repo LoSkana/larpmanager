@@ -28,7 +28,7 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event
-from larpmanager.models.writing import Character, Faction, Plot, Relationship, SpeedLarp
+from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 
 logger = logging.getLogger(__name__)
 
@@ -138,6 +138,10 @@ def update_character_related_caches(char: Character) -> None:
     for speedlarp in char.speedlarps_list.all():
         update_event_speedlarp_rels(speedlarp)
 
+    # Update prologues that this character is part of
+    for prologue in char.prologues_list.all():
+        update_event_prologue_rels(prologue)
+
 
 def update_m2m_related_characters(instance, pk_set, action: str, update_func) -> None:
     """Update character caches for M2M relationship changes.
@@ -240,6 +244,13 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
                 res["speedlarps"][speedlarp.id] = get_event_speedlarp_rels(speedlarp)
             logger.debug(f"Initialized {len(speedlarps)} speedlarp relationships for event {event.id}")
 
+        if "prologue" in features:
+            res["prologues"] = {}
+            prologues = event.get_elements(Prologue)
+            for prologue in prologues:
+                res["prologues"][prologue.id] = get_event_prologue_rels(prologue)
+            logger.debug(f"Initialized {len(prologues)} prologue relationships for event {event.id}")
+
         cache_key = get_event_rels_key(event.id)
         cache.set(cache_key, res)
         logger.debug(f"Cached relationships for event {event.id}")
@@ -328,6 +339,11 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             speedlarp_list = [(speedlarp.id, speedlarp.name) for speedlarp in speedlarps]
             relations["speedlarp_rels"] = build_relationship_dict(speedlarp_list)
 
+        if "prologue" in features:
+            prologues = char.prologues_list.all()
+            prologue_list = [(prologue.id, prologue.name) for prologue in prologues]
+            relations["prologue_rels"] = build_relationship_dict(prologue_list)
+
     except Exception as e:
         logger.error(f"Error getting relationships for character {char.id}: {e}")
         relations = {}
@@ -413,6 +429,32 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
     return relations
 
 
+def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
+    """Get prologue relationships for a specific prologue.
+
+    Args:
+        prologue: The Prologue instance to get relationships for
+
+    Returns:
+        Dict[str, Any]: Dictionary containing relationship data:
+            {
+                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
+            }
+    """
+    relations = {}
+
+    try:
+        characters = prologue.characters.all()
+        char_list = [(char.id, char.name) for char in characters]
+        relations["character_rels"] = build_relationship_dict(char_list)
+
+    except Exception as e:
+        logger.error(f"Error getting relationships for prologue {prologue.id}: {e}")
+        relations = {}
+
+    return relations
+
+
 def update_event_faction_rels(faction: Faction) -> None:
     """Update faction relationships in cache.
 
@@ -450,6 +492,19 @@ def update_event_speedlarp_rels(speedlarp: SpeedLarp) -> None:
     """
     speedlarp_data = get_event_speedlarp_rels(speedlarp)
     update_cache_section(speedlarp.event_id, "speedlarps", speedlarp.id, speedlarp_data)
+
+
+def update_event_prologue_rels(prologue: Prologue) -> None:
+    """Update prologue relationships in cache.
+
+    Updates the cached relationship data for a specific prologue.
+    If the cache doesn't exist, it will be initialized for the entire event.
+
+    Args:
+        prologue: The Prologue instance to update relationships for
+    """
+    prologue_data = get_event_prologue_rels(prologue)
+    update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_data)
 
 
 @receiver(post_save, sender=Character)
@@ -572,6 +627,21 @@ def handle_speedlarp_characters_changed(sender, instance, action, pk_set, **kwar
     update_m2m_related_characters(instance, pk_set, action, update_event_speedlarp_rels)
 
 
+def handle_prologue_characters_changed(sender, instance, action, pk_set, **kwargs):
+    """Handle prologue-character relationship changes.
+
+    Updates both prologue cache and character caches when relationships change.
+
+    Args:
+        sender: The through model class
+        instance: The Prologue instance
+        action: The type of change ('post_add', 'post_remove', 'post_clear', etc.)
+        pk_set: Set of primary keys of the Character objects
+        **kwargs: Additional keyword arguments from the signal
+    """
+    update_m2m_related_characters(instance, pk_set, action, update_event_prologue_rels)
+
+
 @receiver(post_save, sender=Plot)
 def post_save_plot_reset_rels(sender, instance, **kwargs):
     """Handle plot save to update related caches.
@@ -648,6 +718,44 @@ def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
     remove_from_cache_section(instance.event_id, "speedlarps", instance.id)
 
 
+@receiver(post_save, sender=Prologue)
+def post_save_prologue_reset_rels(sender, instance, **kwargs):
+    """Handle prologue save to update related caches.
+
+    Updates both prologue cache and related character caches.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Prologue instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update prologue cache
+    update_event_prologue_rels(instance)
+
+    # Update cache for all characters in this prologue
+    for char in instance.characters.all():
+        update_event_char_rels(char)
+
+
+@receiver(post_delete, sender=Prologue)
+def post_delete_prologue_reset_rels(sender, instance, **kwargs):
+    """Handle prologue deletion to update related caches.
+
+    Removes prologue from cache and updates related character caches.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Prologue instance that was deleted
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update cache for all characters that were in this prologue
+    for char in instance.characters.all():
+        update_event_char_rels(char)
+
+    # Remove prologue from cache
+    remove_from_cache_section(instance.event_id, "prologues", instance.id)
+
+
 @receiver(post_save, sender=Relationship)
 def post_save_relationship_reset_rels(sender, instance, **kwargs):
     """Handle relationship save to update character caches.
@@ -682,3 +790,4 @@ def post_delete_relationship_reset_rels(sender, instance, **kwargs):
 m2m_changed.connect(handle_faction_characters_changed, sender=Faction.characters.through)
 m2m_changed.connect(handle_plot_characters_changed, sender=Plot.characters.through)
 m2m_changed.connect(handle_speedlarp_characters_changed, sender=SpeedLarp.characters.through)
+m2m_changed.connect(handle_prologue_characters_changed, sender=Prologue.characters.through)
