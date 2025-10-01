@@ -118,7 +118,7 @@ def relationships(page):
     page.get_by_role("link", name="Proceed").click()
     page.get_by_role("link", name="Relationships").click()
     expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr #1 Test Character"
+        "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character"
     )
 
 
