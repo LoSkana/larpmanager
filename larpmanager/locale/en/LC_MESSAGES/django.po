@@ -8321,7 +8321,8 @@ msgstr ""
 msgid "if it doesn't exist, it will be created"
 msgstr ""
 
-msgid "(Optional) The character name to assign to the player"
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
 msgstr ""
 
 msgid "(Optional) The amount of a voluntary donation"

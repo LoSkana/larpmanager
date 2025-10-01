@@ -5706,9 +5706,6 @@ msgstr "Będziemy ci dozgonnie wdzięczni za to, że w nas uwierzyłeś"
 msgid "please upload your membership application to proceed"
 msgstr "Aby kontynuować, prosimy o przesłanie wniosku o członkostwo"
 
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Opcjonalnie) Nazwa postaci do przypisania do gracza"
-
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Preferencje rzutowania zapisane w '%(type)s' dla %(event)s"
@@ -7149,6 +7146,11 @@ msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr ""
 "Przed utworzeniem prologów należy utworzyć co najmniej jeden typ prologu"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Opcjonalnie) Nazwy postaci do przypisania graczowi, oddzielone przecinkami"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

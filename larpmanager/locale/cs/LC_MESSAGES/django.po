@@ -5706,9 +5706,6 @@ msgstr "Za to, že jste nám věřili, vám patří náš věčný dík"
 msgid "please upload your membership application to proceed"
 msgstr "pro pokračování nahrajte svou členskou přihlášku"
 
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Nepovinné) Jméno postavy, které se přiřadí hráči"
-
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Předvolby obsazení uložené na '%(type)s' pro %(event)s"
@@ -7051,6 +7048,11 @@ msgstr "Souhlas se sdílením údajů můžete odvolat kliknutím na příslušn
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Před vytvořením prologů musíte vytvořit alespoň jeden typ prologu"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Nepovinné) Jména postav, která se mají hráči přiřadit, oddělená čárkami"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
