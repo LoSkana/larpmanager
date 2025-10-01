@@ -112,11 +112,11 @@
             {% include "elements/writing/questions_body.html" %}
             {% if features.plot %}
                 <td class="plots dot_links">
-                    {% for p in el.plot_rels %}
+                    {% for p in el.plot_rels.list %}
                         <a href="{% url 'orga_plots_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
-                <td class="stats">{{ el.plot_rels | length }}</td>
+                <td class="stats">{{ el.plot_rels.count }}</td>
             {% endif %}
             {% if features.prologue %}
                 <td class="prologues dot_links">
@@ -128,19 +128,19 @@
             {% endif %}
             {% if features.relationships %}
                 <td class="relationships dot_links">
-                    {% for rel in el.source.all %}
-                        <a href="{% url 'orga_characters_edit' run.get_slug rel.target_id %}">{{ rel.target }}</a>
+                    {% for rel in el.relationships_rels.list %}
+                        <a href="{% url 'orga_characters_edit' run.get_slug rel.0 %}">{{ rel.1 }}</a>
                     {% endfor %}
                 </td>
-                <td class="stats">{{ el.source.count }}</td>
+                <td class="stats">{{ el.relationships_rels.count }}</td>
             {% endif %}
             {% if features.speedlarp %}
                 <td class="speedlarp dot_links">
-                    {% for p in el.speedlarps_list.all %}
-                        <a href="{% url 'orga_speedlarps_edit' run.get_slug p.id %}">{{ p }}</a>
+                    {% for p in el.speedlarp_rels.list %}
+                        <a href="{% url 'orga_speedlarps_edit' run.get_slug p.0 %}">{{ p.1 }}</a>
                     {% endfor %}
                 </td>
-                <td class="stats">{{ el.speedlarps_list.count }}</td>
+                <td class="stats">{{ el.speedlarp_rels.count }}</td>
             {% endif %}
         </tr>
     {% endfor %}

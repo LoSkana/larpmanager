@@ -131,7 +131,7 @@ def relationships(live_server, page):
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
