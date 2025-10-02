@@ -652,6 +652,7 @@ def guides(request):
     """
     ctx = get_lm_contact(request)
     ctx["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    ctx["index"] = True
     return render(request, "larpmanager/larpmanager/guides.html", ctx)
 
 
@@ -669,6 +670,8 @@ def guide(request, slug):
         Http404: If guide with given slug is not found or not published
     """
     ctx = get_lm_contact(request)
+    ctx["index"] = True
+
     try:
         ctx["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
     except ObjectDoesNotExist as err:

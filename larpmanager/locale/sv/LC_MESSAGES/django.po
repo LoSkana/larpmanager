@@ -5708,9 +5708,6 @@ msgstr "Du kommer att få vårt eviga tack för att du trodde på oss"
 msgid "please upload your membership application to proceed"
 msgstr "vänligen ladda upp din medlemsansökan för att fortsätta"
 
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Valfritt) Det karaktärsnamn som ska tilldelas spelaren"
-
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Castingpreferenser sparade på \"%(type)s\" för %(event)s"
@@ -7134,6 +7131,12 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Du måste skapa minst en prologtyp innan du kan skapa prologer"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Valfritt) De karaktärsnamn som ska tilldelas spelaren, åtskilda med "
+"kommatecken"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

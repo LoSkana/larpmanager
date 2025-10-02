@@ -516,6 +516,7 @@ function data_tables() {
                 type: 'POST'
             },
             serverSide: true,
+            stateSave: true,
             columnControl: [
                 {
                     target: 0,
