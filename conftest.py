@@ -175,9 +175,6 @@ def _reload_fixtures():
 @pytest.fixture(autouse=True, scope="function")
 def _e2e_db_setup(request, django_db_blocker):
     """Setup database for e2e tests with single database per worker."""
-    # Only run for e2e marked tests
-    if not request.node.get_closest_marker("e2e"):
-        return
 
     # Get worker ID for parallel execution
     worker_id = os.environ.get("PYTEST_XDIST_WORKER", "master")
@@ -187,12 +184,12 @@ def _e2e_db_setup(request, django_db_blocker):
     # Check if this worker's database is already initialized
     if cache_key not in _DB_INITIALIZED:
         with django_db_blocker.unblock():
-            if _database_has_tables():
-                # Tables exist - truncate and init
-                _reload_fixtures()
-            else:
+            if not _database_has_tables():
                 # No tables - load from SQL dump
                 _load_test_db_sql()
+            elif request.node.get_closest_marker("e2e"):
+                # Tables exist - truncate and init
+                _reload_fixtures()
 
             _DB_INITIALIZED[cache_key] = True
 
