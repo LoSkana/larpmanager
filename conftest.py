@@ -146,6 +146,21 @@ def pytest_sessionstart(session):
     host = settings.DATABASES["default"].get("HOST") or "localhost"
     user = settings.DATABASES["default"]["USER"]
 
+    # For pytest-xdist workers, ensure the worker-specific database exists
+    if os.getenv("PYTEST_XDIST_WORKER"):
+        # Database name already has worker suffix from settings/ci.py
+        # Just ensure it exists and populate it
+        try:
+            # Create database if it doesn't exist
+            env_copy = env.copy()
+            create_db_cmd = [
+                "psql", "-U", user, "-h", host, "-d", "postgres", "-c",
+                f"CREATE DATABASE {name} OWNER {user};"
+            ]
+            subprocess.run(create_db_cmd, env=env_copy, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        except Exception:
+            pass  # Database might already exist
+
     clean_db(host, env, name, user)
     sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
     psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", sql_path], env)

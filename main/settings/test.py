@@ -15,6 +15,13 @@ DATABASES = {
    }
 }
 
+# Support for pytest-xdist parallel execution
+worker = os.getenv("PYTEST_XDIST_WORKER")
+if worker:
+    name = f"{DATABASES['default']['NAME']}_{worker}"
+    DATABASES["default"]["NAME"] = name
+    DATABASES["default"]["TEST"] = {"NAME": name}
+
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 COMPRESS_ENABLED = False

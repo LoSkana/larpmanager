@@ -80,7 +80,7 @@ jobs:
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
         rm -rf .pytest_cache larpmanager/tests/**/__pycache__
-        pytest -n "$WORKERS" --dist=loadgroup --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
+        pytest -n "$WORKERS" --dist=loadfile --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
 
     - name: Upload Artifacts
       if: always()
