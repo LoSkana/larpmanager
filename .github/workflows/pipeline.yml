@@ -84,7 +84,7 @@ jobs:
 
     - name: Run Plawright Django tests
       run: |
-        ash scripts/test_playwright.sh
+        bash scripts/test_playwright.sh
 
 
     - name: Upload Artifacts
