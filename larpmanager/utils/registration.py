@@ -247,9 +247,10 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
     registration_available(run, features, reg_count)
     register_url = reverse("register", args=[run.get_slug()])
 
-    mb = get_user_membership(user.member, run.event.assoc_id)
-    if mb.status in [MembershipStatus.REWOKED]:
-        return
+    if user.is_authenticated:
+        mb = get_user_membership(user.member, run.event.assoc_id)
+        if mb.status in [MembershipStatus.REWOKED]:
+            return
 
     if run.reg:
         registration_status_signed(run, features, register_url)
