@@ -19,7 +19,6 @@ jobs:
         password: ${{ secrets.REPO_TOKEN }}
 
     env:
-      CI: true
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
       POSTGRES_USER: larpmanager
@@ -76,9 +75,7 @@ jobs:
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
         rm -rf .pytest_cache larpmanager/tests/**/__pycache__
-        bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
-        sleep 2
-        pytest -n "$WORKERS" --dist=loadfile --no-migrations --reuse-db
+        pytest -n "$WORKERS" --dist=loadfile
 
     - name: Upload Artifacts
       if: always()
