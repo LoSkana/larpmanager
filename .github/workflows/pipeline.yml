@@ -74,11 +74,15 @@ jobs:
     - name: Prepare dbs
       run: |
         bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
+        export PYTEST_CURRENT_TEST="true"
+        export HOME=$(mktemp -d)
+
+    - name: Run Unit Django tests
+      run: |
+        bash scripts/test_unit.sh
 
     - name: Run Plawright Django tests
       run: |
-        export PYTEST_CURRENT_TEST="true"
-        export HOME=$(mktemp -d)
         ash scripts/test_playwright.sh
 
 

@@ -3,7 +3,10 @@ from .base import *
 
 RUNNING_PYTEST = 'pytest' in sys.modules or any('pytest' in arg for arg in sys.argv)
 
-if os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true' or RUNNING_PYTEST:
+if os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true':
+    from .test import *
+    COMPRESS_ENABLED = True
+elif RUNNING_PYTEST:
     from .test import *
 else:
     if 'env' in os.environ:

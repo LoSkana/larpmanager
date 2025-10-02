@@ -211,7 +211,7 @@ def _reg_load(request, ctx, row, questions):
         return "ERR - There is no email column"
 
     try:
-        user = User.objects.get(email__iexact=row["player"].strip())
+        user = User.objects.get(email__iexact=row["email"].strip())
     except ObjectDoesNotExist:
         return "ERR - Email not found"
 
