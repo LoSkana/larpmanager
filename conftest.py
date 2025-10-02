@@ -78,7 +78,7 @@ def pw_page(pytestconfig, browser_type, live_server):
     )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(60000)
+    page.set_default_timeout(10000)
 
     page.on("dialog", lambda dialog: dialog.accept())
 
@@ -118,15 +118,22 @@ def _truncate_app_tables():
 
 
 @pytest.fixture(autouse=True, scope="function")
-def _db_teardown_between_tests(django_db_blocker, request):
-    yield
-    # For e2e tests (Playwright), truncate tables to reset the database
+def _db_setup_before_e2e_tests(django_db_blocker, request):
+    # For e2e tests (Playwright), truncate tables and reload fixtures before the test
     # Unit tests use transactions which are automatically rolled back
     marker = request.node.get_closest_marker("e2e")
     if marker:
         with django_db_blocker.unblock():
             _truncate_app_tables()
-            # Reload fixtures after truncation
+            # Reload fixtures before the test
+            call_command("init_db")
+
+    yield
+
+    if marker:
+        with django_db_blocker.unblock():
+            _truncate_app_tables()
+            # Reload fixtures before the test
             call_command("init_db")
 
 
