@@ -10,7 +10,7 @@ DATABASES = {
         'NAME': 'larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
-        "HOST": "localhost",
+        "HOST": os.getenv("DB_HOST", "localhost"),
         'PORT': '5432',
    }
 }

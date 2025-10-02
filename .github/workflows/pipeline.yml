@@ -25,6 +25,7 @@ jobs:
       POSTGRES_USER: larpmanager
       POSTGRES_PASSWORD: larpmanager
       POSTGRES_DB: larpmanager_test
+      DB_HOST: postgres
       WORKERS: "4"
 
     services:

@@ -178,12 +178,10 @@ def _e2e_db_setup(request, django_db_blocker):
 
     with django_db_blocker.unblock():
         if not _database_has_tables():
-            print("### LOAD TEST DB @@@")
             # No tables - load from SQL dump
             _load_test_db_sql()
         elif request.node.get_closest_marker("e2e"):
             # Tables exist - truncate and init
-            print("### RELOAD FIXTURES @@@")
             _reload_fixtures()
 
     yield
