@@ -2584,13 +2584,16 @@ msgstr ""
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
 
-msgid "To access this feature, you must first register!"
+msgid "To access this feature, you must first register"
 msgstr ""
 
-msgid "This feature is available for non-waiting tickets!"
+msgid "This feature is available for non-waiting tickets"
 msgstr ""
 
 msgid "not visible at this time"
+msgstr ""
+
+msgid "You're not allowed to sign up"
 msgstr ""
 
 msgid "Statement"

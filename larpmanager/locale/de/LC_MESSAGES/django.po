@@ -4051,6 +4051,9 @@ msgstr "Nicht umgewandelte Vorregistrierungen"
 msgid "You don’t have any events yet"
 msgstr "Sie haben noch keine Veranstaltungen"
 
+msgid "You're not allowed to sign up"
+msgstr "Du darfst dich nicht anmelden"
+
 msgid "Your account is now activated"
 msgstr "Ihr Konto ist jetzt aktiv"
 
@@ -5378,6 +5381,11 @@ msgstr "Auf dieser Seite können Sie ein Zeichen hinzufügen oder bearbeiten"
 msgid "This page allows you to edit a member's profile"
 msgstr "Auf dieser Seite können Sie das Profil eines Mitglieds bearbeiten"
 
+msgid "To access this feature, you must first register"
+msgstr ""
+"Um auf diese Funktion zugreifen zu können, müssen Sie sich zunächst "
+"registrieren"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Achtung! Das Formular enthält Fehler in den Feldern"
 
@@ -5457,11 +5465,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Auf dieser Seite sind die Arten von Quests des Ereignisses zusammengefasst"
 
-msgid "To access this feature, you must first register!"
-msgstr ""
-"Um auf diese Funktion zugreifen zu können, müssen Sie sich zunächst "
-"registrieren!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Sie haben den diesjährigen Mitgliedsbeitrag bereits bezahlt"
 
@@ -5514,6 +5517,9 @@ msgstr "Die Summe ist %(amount).2f, mit Grund '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Es sind <b>%(number)s</b> Zeichen zu genehmigen"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Diese Funktion ist für nicht wartende Tickets verfügbar"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr ""
@@ -5592,9 +5598,6 @@ msgstr "Die Anmeldung für die Veranstaltung wurde storniert"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Es gibt Schreibfelder ohne Optionen: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Diese Funktion ist für nicht wartende Tickets verfügbar!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr ""

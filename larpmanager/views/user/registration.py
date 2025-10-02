@@ -71,6 +71,7 @@ from larpmanager.utils.common import get_assoc
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,
+    RewokedMembershipError,
     check_event_feature,
 )
 from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
@@ -458,7 +459,9 @@ def register(request, s, sc="", dis="", tk=0):
 
     _add_bring_friend_discounts(ctx)
 
-    get_user_membership(request.user.member, request.assoc["id"])
+    mb = get_user_membership(request.user.member, request.assoc["id"])
+    if mb.status in [MembershipStatus.REWOKED]:
+        raise RewokedMembershipError()
     ctx["member"] = request.user.member
 
     if request.method == "POST":

@@ -37,6 +37,7 @@ from larpmanager.utils.exceptions import (
     PermissionError,
     RedirectError,
     ReturnNowError,
+    RewokedMembershipError,
     SignupError,
     UnknowRunError,
     WaitingError,
@@ -80,13 +81,13 @@ class ExceptionHandlingMiddleware:
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
-                    request, _("To access this feature, you must first register!"), "register", [ex.slug]
+                    request, _("To access this feature, you must first register") + "!", "register", [ex.slug]
                 ),
             ),
             (
                 WaitingError,
                 lambda ex: self._redirect_with_message(
-                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug]
+                    request, _("This feature is available for non-waiting tickets") + "!", "register", [ex.slug]
                 ),
             ),
             (
@@ -102,6 +103,10 @@ class ExceptionHandlingMiddleware:
             (RedirectError, lambda ex: redirect(ex.view)),
             (MainPageError, lambda ex: redirect("/")),
             (ReturnNowError, lambda ex: ex.value),
+            (
+                RewokedMembershipError,
+                lambda ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),
+            ),
         ]
 
         for exc_type, handler in handlers:
