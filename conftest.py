@@ -25,6 +25,7 @@ import subprocess
 import pytest
 from django.conf import settings
 from django.core.cache import cache
+from django.core.management import call_command
 from django.db import connection, connections
 
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
@@ -126,14 +127,7 @@ def _db_teardown_between_tests(django_db_blocker, request):
         with django_db_blocker.unblock():
             _truncate_app_tables()
             # Reload fixtures after truncation
-            env = os.environ.copy()
-            db_cfg = connections.databases["default"]
-            env["PGPASSWORD"] = db_cfg["PASSWORD"]
-            host = db_cfg.get("HOST") or "localhost"
-            user = db_cfg["USER"]
-            db_name = db_cfg["NAME"]
-            sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
-            psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", db_name, "-f", sql_path], env)
+            call_command("init_db")
 
 
 @pytest.fixture(autouse=True, scope="session")
