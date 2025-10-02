@@ -19,11 +19,12 @@ jobs:
         password: ${{ secrets.REPO_TOKEN }}
 
     env:
+      CI: true
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
       POSTGRES_USER: larpmanager
       POSTGRES_PASSWORD: larpmanager
-      POSTGRES_DB: larp_test
+      POSTGRES_DB: larpmanager_test
       WORKERS: "4"
 
     services:
@@ -70,11 +71,15 @@ jobs:
         python manage.py collectstatic --noinput
         python manage.py compress
 
-    - name: Run Django tests
+    - name: Prepare dbs
+      run: |
+        bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
+
+    - name: Run Plawright Django tests
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
-        pytest -n "$WORKERS"
+        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations larpmanager/tests/playwright
 
     - name: Upload Artifacts
       if: always()

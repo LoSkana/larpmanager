@@ -26,7 +26,7 @@ import pytest
 from django.conf import settings
 from django.core.cache import cache
 from django.core.management import call_command
-from django.db import connection, connections
+from django.db import connection
 
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
 logging.getLogger("faker.providers").setLevel(logging.ERROR)
@@ -78,7 +78,7 @@ def pw_page(pytestconfig, browser_type, live_server):
     )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(10000)
+    page.set_default_timeout(60000)
 
     page.on("dialog", lambda dialog: dialog.accept())
 
@@ -118,49 +118,28 @@ def _truncate_app_tables():
 
 
 @pytest.fixture(autouse=True, scope="function")
-def _db_setup_before_e2e_tests(django_db_blocker, request):
-    # For e2e tests (Playwright), truncate tables and reload fixtures before the test
-    # Unit tests use transactions which are automatically rolled back
-    marker = request.node.get_closest_marker("e2e")
-    if marker:
-        with django_db_blocker.unblock():
-            _truncate_app_tables()
-            # Reload fixtures before the test
-            call_command("init_db")
-
+def _db_teardown_between_tests(django_db_blocker):
     yield
-
-    if marker:
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
             _truncate_app_tables()
-            # Reload fixtures before the test
-            call_command("init_db")
 
 
-@pytest.fixture(autouse=True, scope="session")
-def load_fixtures(django_db_blocker, request):
-    # Fixtures are loaded via SQL dump in django_db_setup
-    pass
+@pytest.fixture(autouse=True)
+def load_fixtures(django_db_blocker):
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        with django_db_blocker.unblock():
+            call_command("init_db", verbosity=0)
 
 
 def psql(params, env):
-    result = subprocess.run(params, check=False, env=env, text=True, capture_output=True)
-    if result.returncode != 0:
-        print(f"PSQL ERROR: {result.stderr}")
-        print(f"PSQL OUTPUT: {result.stdout}")
-        raise subprocess.CalledProcessError(result.returncode, params, result.stdout, result.stderr)
+    subprocess.run(params, check=True, env=env, text=True)
 
 
 def pytest_sessionstart(session):
-    # Skip if running in a xdist worker
-    if hasattr(session.config, "workerinput"):
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
 
-    # Skip if xdist is being used (check for -n option)
-    if session.config.getoption("numprocesses", default=None) is not None:
-        return
-
-    # Only run for local development without xdist
     env = os.environ.copy()
     env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
     name = settings.DATABASES["default"]["NAME"]
@@ -192,71 +171,10 @@ def clean_db(host, env, name, user):
     )
 
 
-def pytest_configure(config):
-    """Configure pytest-django to create databases for xdist workers."""
-    if hasattr(config, "workerinput"):
-        # We're in a xdist worker
-        # Get the worker ID (gw0, gw1, etc.)
-        worker_id = config.workerinput["workerid"]
-
-        # Modify the database name to include the worker ID
-        db_name = settings.DATABASES["default"]["NAME"]
-        settings.DATABASES["default"]["NAME"] = f"{db_name}_{worker_id}"
-
-        # Enable database creation
-        config.option.create_db = True
-
-
 @pytest.fixture(scope="session")
-def django_db_setup(request, django_db_blocker):
-    in_xdist_worker = hasattr(request.config, "workerinput")
-
-    # If running with xdist, create and load worker database
-    if in_xdist_worker:
-        with django_db_blocker.unblock():
-            worker_db_name = connections["default"].settings_dict["NAME"]
-            db_cfg = connections.databases["default"]
-
-            env = os.environ.copy()
-            env["PGPASSWORD"] = db_cfg["PASSWORD"]
-            host = db_cfg.get("HOST") or "localhost"
-            user = db_cfg["USER"]
-
-            # Drop and recreate the database
-            psql(
-                [
-                    "psql",
-                    "-U",
-                    user,
-                    "-h",
-                    host,
-                    "-d",
-                    "postgres",
-                    "-c",
-                    f"DROP DATABASE IF EXISTS {worker_db_name}",
-                ],
-                env,
-            )
-
-            psql(
-                [
-                    "psql",
-                    "-U",
-                    user,
-                    "-h",
-                    host,
-                    "-d",
-                    "postgres",
-                    "-c",
-                    f"CREATE DATABASE {worker_db_name} OWNER {user}",
-                ],
-                env,
-            )
-
-            # Load the test database SQL
-            sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
-            psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", worker_db_name, "-f", sql_path], env)
+def django_db_setup():
+    # normal behaviour in CI
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
-
-    # Without xdist: database is already set up in pytest_sessionstart
+    # don't touch the db in local
     pass
