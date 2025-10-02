@@ -345,6 +345,7 @@ class OrgaCharacterForm(CharacterForm):
         if "px" not in self.params["features"]:
             return
 
+        # px ability
         self.fields["px_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
             queryset=self.params["run"].event.get_elements(AbilityPx),
@@ -352,10 +353,10 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        # Optimized: directly use pk values without converting to strings
         self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("pk", flat=True))
         self.show_link.append("id_px_ability_list")
 
+        # delivery list
         self.fields["px_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Delivery"),
             queryset=self.params["run"].event.get_elements(DeliveryPx),
@@ -363,7 +364,6 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        # Optimized: directly use pk values without converting to strings
         self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
         self.show_link.append("id_px_delivery_list")
 
@@ -371,7 +371,6 @@ class OrgaCharacterForm(CharacterForm):
         if "px" not in self.params["features"]:
             return
 
-        # Fixed: use correct field names from _init_px
         if "px_ability_list" in self.cleaned_data:
             instance.px_ability_list.set(self.cleaned_data["px_ability_list"])
         if "px_delivery_list" in self.cleaned_data:
