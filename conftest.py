@@ -96,11 +96,8 @@ def pw_page(pytestconfig, browser_type, live_server):
 
 
 def _truncate_app_tables():
-    # Rollback any failed transaction before truncating
-    from django.db import transaction
-    if connection.in_atomic_block:
-        transaction.set_rollback(True)
-    connection.rollback()
+    # Close any existing connection to clear aborted transactions
+    connection.close()
 
     with connection.cursor() as cur:
         cur.execute(r"""
@@ -135,11 +132,8 @@ def _db_teardown_between_tests(django_db_blocker):
 def load_fixtures(django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
-            # Rollback any failed transaction before loading fixtures
-            from django.db import transaction
-            if connection.in_atomic_block:
-                transaction.set_rollback(True)
-            connection.rollback()
+            # Close any existing connection to clear aborted transactions
+            connection.close()
             call_command("init_db", verbosity=0)
 
 
