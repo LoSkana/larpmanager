@@ -64,5 +64,10 @@ class Command(BaseCommand):
         except subprocess.CalledProcessError as e:
             self.stderr.write(self.style.ERROR(f"Dump failed: {e}"))
 
-        clean_cmd = ["sed", "-i", r"/^\\restrict/d;/^\\unrestrict/d", "larpmanager/tests/test_db.sql"]
+        clean_cmd = [
+            "sed",
+            "-i",
+            r"/^\\restrict/d;/^\\unrestrict/d;/COMMENT ON SCHEMA public/d",
+            "larpmanager/tests/test_db.sql",
+        ]
         subprocess.run(clean_cmd, check=True, env=env)
