@@ -25,6 +25,7 @@ jobs:
       POSTGRES_USER: larpmanager
       POSTGRES_PASSWORD: larpmanager
       POSTGRES_DB: larpmanager_test
+      DB_HOST: postgres
       WORKERS: "4"
 
     services:
@@ -74,12 +75,17 @@ jobs:
     - name: Prepare dbs
       run: |
         bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
-
-    - name: Run Django tests
-      run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
-        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
+
+    - name: Run Unit Django tests
+      run: |
+        bash scripts/test_unit.sh
+
+    - name: Run Plawright Django tests
+      run: |
+        bash scripts/test_playwright.sh
+
 
     - name: Upload Artifacts
       if: always()
