@@ -161,6 +161,11 @@ def pytest_sessionstart(session):
         except Exception:
             pass  # Database might already exist
 
+        # Small delay to prevent race conditions during parallel startup
+        import time
+        import random
+        time.sleep(random.uniform(0.1, 0.5))
+
     clean_db(host, env, name, user)
     sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
     psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", sql_path], env)

@@ -71,16 +71,14 @@ jobs:
         python manage.py collectstatic --noinput
         python manage.py compress
 
-    - name: Prepare dbs
-      run: |
-        bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
-
     - name: Run Django tests
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
         rm -rf .pytest_cache larpmanager/tests/**/__pycache__
-        pytest -n "$WORKERS" --dist=loadfile --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
+        bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
+        sleep 2
+        pytest -n "$WORKERS" --dist=loadfile --no-migrations --reuse-db
 
     - name: Upload Artifacts
       if: always()
