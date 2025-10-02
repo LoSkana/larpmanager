@@ -96,9 +96,6 @@ def pw_page(pytestconfig, browser_type, live_server):
 
 
 def _truncate_app_tables():
-    # Close any existing connection to clear aborted transactions
-    connection.close()
-
     with connection.cursor() as cur:
         cur.execute(r"""
         DO $$
@@ -132,8 +129,6 @@ def _db_teardown_between_tests(django_db_blocker):
 def load_fixtures(django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         with django_db_blocker.unblock():
-            # Close any existing connection to clear aborted transactions
-            connection.close()
             call_command("init_db", verbosity=0)
 
 
@@ -150,26 +145,6 @@ def pytest_sessionstart(session):
     name = settings.DATABASES["default"]["NAME"]
     host = settings.DATABASES["default"].get("HOST") or "localhost"
     user = settings.DATABASES["default"]["USER"]
-
-    # For pytest-xdist workers, ensure the worker-specific database exists
-    if os.getenv("PYTEST_XDIST_WORKER"):
-        # Database name already has worker suffix from settings/ci.py
-        # Just ensure it exists and populate it
-        try:
-            # Create database if it doesn't exist
-            env_copy = env.copy()
-            create_db_cmd = [
-                "psql", "-U", user, "-h", host, "-d", "postgres", "-c",
-                f"CREATE DATABASE {name} OWNER {user};"
-            ]
-            subprocess.run(create_db_cmd, env=env_copy, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-        except Exception:
-            pass  # Database might already exist
-
-        # Small delay to prevent race conditions during parallel startup
-        import time
-        import random
-        time.sleep(random.uniform(0.1, 0.5))
 
     clean_db(host, env, name, user)
     sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
