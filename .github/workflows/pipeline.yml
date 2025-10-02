@@ -24,7 +24,7 @@ jobs:
       POSTGRES_PORT: "5432"
       POSTGRES_USER: larpmanager
       POSTGRES_PASSWORD: larpmanager
-      POSTGRES_DB: larpmanager_test
+      POSTGRES_DB: larp_test
       WORKERS: "4"
 
     services:
@@ -80,7 +80,7 @@ jobs:
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
         rm -rf .pytest_cache larpmanager/tests/**/__pycache__
-        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
+        pytest -n "$WORKERS" --dist=loadgroup --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
 
     - name: Upload Artifacts
       if: always()
