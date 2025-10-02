@@ -81,9 +81,11 @@ class TestMailSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(item.id)
 
+    @patch("larpmanager.mail.base.get_assoc_executives")
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_help_question_can_be_created(self, mock_mail):
+    def test_help_question_can_be_created(self, mock_mail, mock_get_executives):
         """Test that HelpQuestion can be created"""
+        mock_get_executives.return_value = []  # No executives
         member = self.get_member()
 
         question = HelpQuestion(
@@ -338,9 +340,11 @@ class TestMailSignals(BaseTestCase):
             # Should be created successfully
             self.assertIsNotNone(payment.id)
 
+    @patch("larpmanager.mail.base.get_assoc_executives")
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_help_questions_can_be_created(self, mock_mail):
+    def test_help_questions_can_be_created(self, mock_mail, mock_get_executives):
         """Test that help questions can be created"""
+        mock_get_executives.return_value = []  # No executives
         member = self.get_member()
 
         # Create a help question

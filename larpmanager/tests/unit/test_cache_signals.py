@@ -74,14 +74,17 @@ class TestCacheSignals(BaseTestCase):
     def test_character_pre_delete_resets_character_cache(self, mock_reset):
         """Test that Character pre_delete signal resets character cache"""
         character = self.character()
-        character.delete()
+        event = character.event  # Store event before delete
+        mock_reset.reset_mock()  # Reset mock after setup
+        character.delete(force_policy=HARD_DELETE)  # HARD_DELETE to trigger pre_delete signal
 
-        mock_reset.assert_called_once_with(character.event)
+        mock_reset.assert_called_once_with(event)
 
     @patch("larpmanager.cache.character.reset_event_cache_all_runs")
     def test_faction_pre_save_resets_character_cache(self, mock_reset):
         """Test that Faction pre_save signal resets character cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         faction = Faction(name="Test Faction", event=event)
         faction.save()
 
@@ -101,6 +104,7 @@ class TestCacheSignals(BaseTestCase):
     def test_quest_type_pre_save_resets_character_cache(self, mock_reset):
         """Test that QuestType pre_save signal resets character cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         quest_type = QuestType(name="Test Quest Type", event=event)
         quest_type.save()
 
@@ -142,6 +146,7 @@ class TestCacheSignals(BaseTestCase):
     def test_trait_pre_save_resets_character_cache(self, mock_reset):
         """Test that Trait pre_save signal resets character cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         trait = Trait(name="Test Trait", event=event)
         trait.save()
 
@@ -180,6 +185,7 @@ class TestCacheSignals(BaseTestCase):
     def test_writing_question_post_save_resets_character_cache(self, mock_reset):
         """Test that WritingQuestion post_save signal resets character cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         question = WritingQuestion(event=event, name="test_question", description="Test")
         question.save()
 
@@ -245,6 +251,7 @@ class TestCacheSignals(BaseTestCase):
     def test_run_pre_delete_resets_character_cache(self, mock_reset):
         """Test that Run pre_delete signal resets character cache"""
         run = self.get_run()
+        mock_reset.reset_mock()  # Reset mock after setup
         run.delete()
 
         mock_reset.assert_called_once_with(run)
@@ -349,6 +356,7 @@ class TestCacheSignals(BaseTestCase):
     def test_event_role_post_save_resets_role_cache(self, mock_reset):
         """Test that EventRole post_save signal resets role cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         role = EventRole(name="Test Role", event=event, number=10)
         role.save()
 
@@ -635,6 +643,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that Run post_delete signal resets links cache"""
         run = self.get_run()
         event = run.event
+        mock_reset.reset_mock()  # Reset mock after setup
         run.delete()
 
         mock_reset.assert_called_once_with(event)

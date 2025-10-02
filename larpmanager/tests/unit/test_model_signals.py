@@ -519,6 +519,7 @@ class TestModelSignals(BaseTestCase):
         from larpmanager.models.form import WritingQuestion
 
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         question = WritingQuestion(event=event, name="test_question", description="Test")
         question.save()
 

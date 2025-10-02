@@ -133,6 +133,7 @@ class TestTextFieldSignals(BaseTestCase):
     def test_run_post_save_resets_run_cache_detailed(self, mock_reset):
         """Test that Run post_save signal resets run cache with detailed tracking"""
         run = self.get_run()
+        mock_reset.reset_mock()  # Reset mock after setup
         run.save()
 
         mock_reset.assert_called_once_with(run)
@@ -202,6 +203,7 @@ class TestTextFieldSignals(BaseTestCase):
     def test_event_post_save_resets_features_cache(self, mock_reset):
         """Test that Event post_save signal resets features cache"""
         event = self.get_event()
+        mock_reset.reset_mock()  # Reset mock after setup
         event.save()
 
         mock_reset.assert_called_once_with(event.id)
