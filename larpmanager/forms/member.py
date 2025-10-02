@@ -364,78 +364,31 @@ class ResidenceField(forms.MultiValueField):
 
 
 class BaseProfileForm(MyForm):
-    def _get_cached_assoc(self, request):
-        """Get cached association object to avoid redundant database queries."""
-        assoc_id = request.assoc["id"]
-        if hasattr(request, "_cached_assoc") and request._cached_assoc.id == assoc_id:
-            return request._cached_assoc
-
-        assoc = Association.objects.get(pk=assoc_id)
-        request._cached_assoc = assoc
-        return assoc
-
-    def _get_cached_features(self, request, assoc_id=None):
-        """Get cached association features to avoid redundant function calls."""
-        if hasattr(request, "_cached_features"):
-            return request._cached_features
-
-        if assoc_id is None:
-            assoc_id = request.assoc["id"]
-
-        features = get_assoc_features(assoc_id)
-        request._cached_features = features
-        return features
-
-    def _get_cached_membership(self, instance, assoc_id):
-        """Get cached membership object to avoid redundant queries."""
-        if hasattr(instance, "_cached_membership"):
-            return instance._cached_membership
-
-        membership = get_user_membership(instance, assoc_id)
-        instance._cached_membership = membership
-        return membership
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Cache frequently accessed request data
-        request = self.params["request"]
-        self.allowed = request.assoc["members_fields"]
-
-        # Use cached association data
-        assoc = self._get_cached_assoc(request)
-
-        # Pre-split and cache field sets
+        self.allowed = self.params["request"].assoc["members_fields"]
+        assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
         self.mandatory = set(assoc.mandatory_fields.split(","))
         self.optional = set(assoc.optional_fields.split(","))
 
-        # Field filtering
-        always_allowed = {"name", "surname", "language"}
-        fields_to_delete = [f for f in self.fields if f not in self.allowed and f not in always_allowed]
+        dl = []
+        for f in self.fields:
+            if f not in self.allowed and f not in ["name", "surname", "language"]:
+                dl.append(f)
 
-        # Batch delete fields
-        for f in fields_to_delete:
+        for f in dl:
             del self.fields[f]
 
-        # Handle residence address field if needed
         if "residence_address" in self.allowed:
             self.fields["residence_address"] = ResidenceField(label=_("Residence address"))
             self.fields["residence_address"].required = "residence_address" in self.mandatory
-
             if self.instance.pk and self.instance.residence_address:
-                residence_data = self.instance.residence_address
-                self.initial["residence_address"] = residence_data
+                self.initial["residence_address"] = self.instance.residence_address
+                aux = self.instance.residence_address.split("|")
+                self.initial_nation = aux[0]
+                self.initial_province = aux[1]
 
-                # Safe split with error handling
-                try:
-                    aux = residence_data.split("|")
-                    self.initial_nation = aux[0] if len(aux) > 0 else ""
-                    self.initial_province = aux[1] if len(aux) > 1 else ""
-                except (IndexError, AttributeError):
-                    self.initial_nation = ""
-                    self.initial_province = ""
-
-            # Only assign if needed (avoid unnecessary memory allocation)
             self.country_subdivisions_map = country_subdivisions_map
 
 
@@ -487,56 +440,34 @@ class ProfileForm(BaseProfileForm):
         """
         super().__init__(*args, **kwargs)
 
-        # Cache request data
-        request = self.params["request"]
-        assoc_id = request.assoc["id"]
+        for f in self.fields:
+            if f in self.mandatory:
+                self.fields[f].required = True
+                self.fields[f].label = _(self.fields[f].label) + " (*)"
 
-        # Batch process mandatory field updates
-        mandatory_asterisk = " (*)"
-        fields_to_update = {}
+        for s in ["name", "surname"]:
+            if s in self.fields:
+                self.fields[s].label = _(self.fields[s].label) + " (*)"
 
-        # Process mandatory fields
-        for field_name in self.fields:
-            if field_name in self.mandatory:
-                field = self.fields[field_name]
-                field.required = True
-                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
-
-        # Process always-required fields
-        for field_name in ["name", "surname"]:
-            if field_name in self.fields:
-                field = self.fields[field_name]
-                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
-
-        # Apply all label updates at once
-        for field_name, new_label in fields_to_update.items():
-            self.fields[field_name].label = new_label
-
-        # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            # Use cached association
-            assoc = self._get_cached_assoc(request)
+            assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
             vote_cands = assoc.get_config("vote_candidates", "").split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
-        # Set default values
-        initial_defaults = {}
         if "phone_contact" not in self.initial:
-            initial_defaults["phone_contact"] = "+XX"
+            self.initial["phone_contact"] = "+XX"
+
         if "birth_date" not in self.initial:
-            initial_defaults["birth_date"] = "00/00/0000"
+            self.initial["birth_date"] = "00/00/0000"
+        # ~ else:
+        # ~ self.initial['birth_date'] = self.instance.birth_date.isoformat()
 
-        # Apply initial values in batch
-        self.initial.update(initial_defaults)
-
-        # Membership checking
         share = False
         if self.instance.pk:
-            membership = self._get_cached_membership(self.instance, assoc_id)
-            share = membership.compiled
+            get_user_membership(self.instance, self.params["request"].assoc["id"])
+            share = self.instance.membership.compiled
 
-        # Add consent field only if needed
         if not share:
             self.fields["share"] = forms.BooleanField(
                 required=True,
@@ -548,30 +479,19 @@ class ProfileForm(BaseProfileForm):
             )
 
     def clean_birth_date(self):
-        """
-        Optimized birth date validation with cached association data.
-        """
         data = self.cleaned_data["birth_date"]
         logger.debug(f"Validating birth date: {data}")
 
-        # Use cached association
-        request = self.params["request"]
-        assoc = self._get_cached_assoc(request)
-
-        # Use cached features
-        features = self._get_cached_features(request, assoc.id)
-
-        if "membership" in features:
+        assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
+        if "membership" in get_assoc_features(assoc.id):
             min_age = assoc.get_config("membership_age", "")
             if min_age:
-                try:
-                    min_age = int(min_age)
-                    logger.debug(f"Checking minimum age {min_age} against birth date {data}")
-                    age_diff = relativedelta(datetime.now(), data).years
-                    if age_diff < min_age:
-                        raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
-                except (ValueError, TypeError) as e:
-                    logger.warning(f"Invalid membership_age config: {min_age}, error: {e}")
+                min_age = int(min_age)
+                # ~ d = date.fromisoformat(data)
+                logger.debug(f"Checking minimum age {min_age} against birth date {data}")
+                dif = relativedelta(datetime.now(), data).years
+                if dif < min_age:
+                    raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
 
         return data
 
