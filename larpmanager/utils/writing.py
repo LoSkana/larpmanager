@@ -34,7 +34,7 @@ from larpmanager.cache.character import get_event_cache_all, get_writing_element
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.casting import Quest, Trait
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
@@ -251,6 +251,12 @@ def writing_list(request, ctx, typ, nm):
     if issubclass(typ, Prologue):
         writing_list_prologue(ctx)
 
+    if issubclass(typ, Quest):
+        writing_list_quest(ctx)
+
+    if issubclass(typ, QuestType):
+        writing_list_questtype(ctx)
+
     if issubclass(typ, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
@@ -454,6 +460,20 @@ def writing_list_prologue(ctx):
 
     for el in ctx["list"]:
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+
+
+def writing_list_quest(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("quests", {})
+
+    for el in ctx["list"]:
+        el.trait_rels = rels.get(el.id, {}).get("trait_rels", [])
+
+
+def writing_list_questtype(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("questtypes", {})
+
+    for el in ctx["list"]:
+        el.quest_rels = rels.get(el.id, {}).get("quest_rels", [])
 
 
 def writing_list_char(ctx):

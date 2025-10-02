@@ -34,8 +34,8 @@
                     </td>
                     <td>{{ el.teaser_red | safe }}</td>
                     <td class="dot_links">
-                        {% for p in el.quests.all %}
-                            <a href="{% url 'orga_quests_edit' run.get_slug p.id %}">{{ p }}</a>
+                        {% for q in el.quest_rels.list %}
+                            <a href="{% url 'orga_quests_edit' run.get_slug q.0 %}">{{ q.1 }}</a>
                         {% endfor %}
                     </td>
                 </tr>

@@ -38,11 +38,11 @@
             <td>{{ el.typ }}</td>
             {% include "elements/writing/questions_body.html" %}
             <td class="hide traits dot_links">
-                {% for ch in el.traits.all %}
-                    <a href="{% url 'orga_traits_edit' run.get_slug ch.id %}">{{ ch }}</a>
+                {% for t in el.trait_rels.list %}
+                    <a href="{% url 'orga_traits_edit' run.get_slug t.0 %}">{{ t.1 }}</a>
                 {% endfor %}
             </td>
-            <td class="hide stats">{{ el.traits.all | length }}</td>
+            <td class="hide stats">{{ el.trait_rels.count }}</td>
         </tr>
     {% endfor %}
 {% endblock tbody %}
