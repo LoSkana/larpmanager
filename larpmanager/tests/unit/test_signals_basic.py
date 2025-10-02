@@ -24,7 +24,7 @@ from decimal import Decimal
 
 from django.core.cache import cache
 
-from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, AccountingItemPayment, PaymentChoices
+from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, AccountingItemPayment, OtherChoices, PaymentChoices
 from larpmanager.models.writing import Character
 from larpmanager.models.member import Member
 from larpmanager.tests.unit.base import BaseTestCase
@@ -39,15 +39,16 @@ class TestBasicSignals(BaseTestCase):
 
     def test_member_save_signal(self):
         """Test that Member save operations work correctly"""
-        user = self.create_user(username="testmember")
-        member = Member(user=user, name="Test", surname="Member")
+        # Create a fresh member using BaseTestCase helper that avoids conflicts
+        member = self.get_member()
 
-        # Should not raise exception
+        # Update and save to trigger signal
+        member.name = "Updated"
         member.save()
 
         # Verify saved correctly
         self.assertIsNotNone(member.id)
-        self.assertEqual(member.name, "Test")
+        self.assertEqual(member.name, "Updated")
 
     def test_character_save_signal(self):
         """Test that Character save operations work correctly"""
@@ -121,7 +122,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("10.00"),
             assoc=self.get_association(),
-            discount=discount,
+            disc=discount,  # Changed from 'discount' to 'disc'
             run=self.get_run(),
         )
 
@@ -141,7 +142,8 @@ class TestBasicSignals(BaseTestCase):
             value=Decimal("25.00"),
             assoc=self.get_association(),
             run=self.get_run(),
-            oth=AccountingItemOther.CREDIT,
+            oth=OtherChoices.CREDIT,  # Changed from AccountingItemOther.CREDIT to OtherChoices.CREDIT
+            descr="Test credit",  # Added required descr field
         )
 
         # Should not raise exception

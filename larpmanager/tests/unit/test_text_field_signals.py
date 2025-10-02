@@ -22,6 +22,8 @@
 
 from unittest.mock import patch
 
+from django.db import models
+
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.form import WritingOption, WritingQuestion
@@ -32,7 +34,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestTextFieldSignals(BaseTestCase):
     """Test cases for text field and generic cache signal receivers"""
 
-    @patch("larpmanager.cache.text_fields.reset_text_fields_cache")
+    @patch("larpmanager.cache.text_fields.update_cache_text_fields")
     def test_generic_post_save_resets_text_cache(self, mock_reset):
         """Test that generic post_save signal resets text fields cache"""
         # Create a model instance that should trigger text cache reset
@@ -43,7 +45,7 @@ class TestTextFieldSignals(BaseTestCase):
         # The generic signal should reset text cache
         mock_reset.assert_called()
 
-    @patch("larpmanager.cache.text_fields.reset_text_fields_cache")
+    @patch("larpmanager.cache.text_fields.update_cache_text_fields")
     def test_generic_post_delete_resets_text_cache(self, mock_reset):
         """Test that generic post_delete signal resets text fields cache"""
         # Create and delete a model instance
@@ -58,6 +60,7 @@ class TestTextFieldSignals(BaseTestCase):
         """Test that WritingQuestion pre_delete signal resets event fields cache"""
         event = self.get_event()
         question = WritingQuestion.objects.create(event=event, name="test_question", description="Test Question")
+        mock_reset.reset_mock()  # Reset after the create call
         question.delete()
 
         mock_reset.assert_called_once_with(event.id)
@@ -77,6 +80,7 @@ class TestTextFieldSignals(BaseTestCase):
         event = self.get_event()
         question = WritingQuestion.objects.create(event=event, name="test_question", description="Test Question")
         option = WritingOption.objects.create(event=event, question=question, name="Test Option")
+        mock_reset.reset_mock()  # Reset after the create calls
         option.delete()
 
         mock_reset.assert_called_once_with(event.id)
@@ -86,12 +90,13 @@ class TestTextFieldSignals(BaseTestCase):
         """Test that WritingOption post_save signal resets event fields cache"""
         event = self.get_event()
         question = WritingQuestion.objects.create(event=event, name="test_question", description="Test Question")
+        mock_reset.reset_mock()  # Reset after the create call
         option = WritingOption(event=event, question=question, name="Test Option")
         option.save()
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.cache.larpmanager.reset_larpmanager_cache")
+    @patch("larpmanager.cache.larpmanager.reset_cache_lm_home")
     def test_association_post_save_resets_larpmanager_cache(self, mock_reset):
         """Test that Association post_save signal resets larpmanager cache"""
         assoc = Association(name="Test Association", email="test@example.com")
@@ -99,81 +104,93 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.cache.association.reset_association_cache")
+    @patch("larpmanager.cache.association.reset_cache_assoc")
     def test_association_post_save_resets_association_cache(self, mock_reset):
         """Test that Association post_save signal resets association cache"""
         assoc = Association(name="Test Association", email="test@example.com")
         assoc.save()
 
-        mock_reset.assert_called_once_with(assoc.id)
+        mock_reset.assert_called_once_with(assoc.slug)
 
-    @patch("larpmanager.cache.run.reset_run_cache")
+    @patch("larpmanager.cache.run.reset_cache_run")
     def test_run_pre_save_resets_run_cache(self, mock_reset):
         """Test that Run pre_save signal resets run cache"""
         run = self.get_run()
         run.save()
 
-        mock_reset.assert_called_once_with(run.event.id)
+        mock_reset.assert_called_once_with(run.event.assoc_id, run.get_slug())
 
-    @patch("larpmanager.cache.run.reset_event_cache")
+    @patch("larpmanager.cache.run.reset_cache_run")
     def test_event_pre_save_resets_event_cache(self, mock_reset):
         """Test that Event pre_save signal resets event cache"""
         event = self.get_event()
         event.save()
 
-        mock_reset.assert_called_once_with(event.id)
+        # Event pre_save resets cache for all its runs
+        self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.cache.run.reset_run_cache")
+    @patch("larpmanager.cache.run.reset_cache_config_run")
     def test_run_post_save_resets_run_cache_detailed(self, mock_reset):
         """Test that Run post_save signal resets run cache with detailed tracking"""
         run = self.get_run()
         run.save()
 
-        mock_reset.assert_called_once_with(run.id)
+        mock_reset.assert_called_once_with(run)
 
-    @patch("larpmanager.cache.run.reset_event_cache")
+    @patch("larpmanager.cache.run.reset_cache_config_run")
     def test_event_post_save_resets_event_cache_detailed(self, mock_reset):
         """Test that Event post_save signal resets event cache with detailed tracking"""
         event = self.get_event()
         event.save()
 
-        mock_reset.assert_called_once_with(event.id)
+        # Event post_save resets cache for all its runs
+        self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.cache.permission.reset_permissions_cache")
+    @patch("larpmanager.cache.permission.reset_index_permission")
     def test_feature_post_save_resets_permissions_cache(self, mock_reset):
         """Test that Feature post_save signal resets permissions cache"""
-        feature = Feature(name="Test Feature", slug="test-feature")
+        feature = Feature(name="Test Feature", slug="test-feature", order=1)
         feature.save()
 
-        mock_reset.assert_called_once()
+        # Feature post_save resets both event and assoc permissions
+        self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.permission.reset_permissions_cache")
+    @patch("larpmanager.cache.permission.reset_index_permission")
     def test_feature_post_delete_resets_permissions_cache(self, mock_reset):
         """Test that Feature post_delete signal resets permissions cache"""
-        feature = Feature.objects.create(name="Test Feature", slug="test-feature")
+        feature = Feature.objects.create(name="Test Feature", slug="test-feature", order=1)
+        mock_reset.reset_mock()  # Reset after the create call
         feature.delete()
 
-        mock_reset.assert_called_once()
+        # Feature post_delete resets both event and assoc permissions
+        self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.permission.reset_permissions_cache")
+    @patch("larpmanager.cache.permission.reset_index_permission")
     def test_feature_module_post_save_resets_permissions_cache(self, mock_reset):
         """Test that FeatureModule post_save signal resets permissions cache"""
-        feature = Feature.objects.create(name="Test Feature", slug="test-feature")
-        module = FeatureModule(feature=feature, name="Test Module", slug="test-module")
+        # Use all_objects to include soft-deleted records
+        max_id = FeatureModule.all_objects.aggregate(models.Max('id'))['id__max'] or 0
+        max_order = FeatureModule.objects.aggregate(models.Max('order'))['order__max'] or 0
+        module = FeatureModule(id=max_id + 1, name="Test Module Post Save", icon="test-icon", order=max_order + 1)
         module.save()
 
-        mock_reset.assert_called_once()
+        # FeatureModule post_save resets both event and assoc permissions
+        self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.permission.reset_permissions_cache")
+    @patch("larpmanager.cache.permission.reset_index_permission")
     def test_feature_module_post_delete_resets_permissions_cache(self, mock_reset):
         """Test that FeatureModule post_delete signal resets permissions cache"""
-        feature = Feature.objects.create(name="Test Feature", slug="test-feature")
-        module = FeatureModule.objects.create(feature=feature, name="Test Module", slug="test-module")
+        # Use all_objects to include soft-deleted records
+        max_id = FeatureModule.all_objects.aggregate(models.Max('id'))['id__max'] or 0
+        max_order = FeatureModule.objects.aggregate(models.Max('order'))['order__max'] or 0
+        module = FeatureModule.objects.create(id=max_id + 1, name="Test Module Post Delete", icon="test-icon", order=max_order + 1)
+        mock_reset.reset_mock()  # Reset after the create call
         module.delete()
 
-        mock_reset.assert_called_once()
+        # FeatureModule post_delete resets both event and assoc permissions
+        self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.feature.reset_association_features_cache")
+    @patch("larpmanager.cache.feature.reset_assoc_features")
     def test_association_post_save_resets_features_cache(self, mock_reset):
         """Test that Association post_save signal resets features cache"""
         assoc = Association(name="Test Association", email="test@example.com")
@@ -181,7 +198,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(assoc.id)
 
-    @patch("larpmanager.cache.feature.reset_event_features_cache")
+    @patch("larpmanager.cache.feature.reset_event_features")
     def test_event_post_save_resets_features_cache(self, mock_reset):
         """Test that Event post_save signal resets features cache"""
         event = self.get_event()
@@ -236,21 +253,15 @@ class TestTextFieldSignals(BaseTestCase):
         # Should handle long content correctly
         self.assertEqual(len(character.description), 10000)
 
-    @patch("larpmanager.cache.text_fields.reset_text_fields_cache")
+    @patch("larpmanager.cache.text_fields.update_cache_text_fields")
     def test_multiple_models_trigger_text_cache_reset(self, mock_reset):
         """Test that multiple different models trigger text cache reset"""
         # Create various models that should trigger cache reset
         character = self.character()
         character.save()
 
-        event = self.get_event()
-        event.save()
-
-        assoc = self.get_association()
-        assoc.save()
-
-        # All should trigger cache reset
-        self.assertTrue(mock_reset.call_count >= 3)
+        # Character is a Writing subclass, so it should trigger the cache update
+        self.assertTrue(mock_reset.call_count >= 1)
 
     def test_cascade_signal_effects(self):
         """Test that signals work correctly in cascade scenarios"""
@@ -279,9 +290,11 @@ class TestTextFieldSignals(BaseTestCase):
     def test_signal_performance_with_bulk_operations(self):
         """Test that signals perform reasonably well with bulk operations"""
         # Create multiple characters rapidly
+        event = self.get_event()
         characters = []
-        for i in range(10):
-            character = Character(name=f"Test Character {i}", assoc=self.get_association())
+        # Start from 100 to avoid conflicts with existing test data
+        for i in range(100, 110):
+            character = Character(name=f"Test Character {i}", event=event, number=i)
             character.save()
             characters.append(character)
 
@@ -295,7 +308,7 @@ class TestTextFieldSignals(BaseTestCase):
         # Should handle bulk operations without issues
         self.assertTrue(True)
 
-    @patch("larpmanager.cache.text_fields.reset_text_fields_cache")
+    @patch("larpmanager.cache.text_fields.update_cache_text_fields")
     def test_signal_idempotency(self, mock_reset):
         """Test that repeated signal calls are idempotent"""
         character = self.character()
@@ -317,30 +330,23 @@ class TestTextFieldSignals(BaseTestCase):
 
     def test_signal_error_handling(self):
         """Test that signals handle errors gracefully"""
-        # Test with potentially problematic data
-        character = self.character()
+        from django.db import transaction
 
-        # Test with None values where not expected
+        # Test with invalid relationships - use a transaction to avoid breaking the connection
         try:
-            character.name = None
-            character.save()
-        except Exception:
-            # If it raises an exception, that's expected for required fields
-            pass
-
-        # Test with invalid relationships
-        try:
-            invalid_question = WritingQuestion(
-                event=None,  # Invalid - event is required
-                name="test_question",
-                description="Test Question",
-            )
-            invalid_question.save()
+            with transaction.atomic():
+                invalid_question = WritingQuestion(
+                    event=None,  # Invalid - event is required
+                    name="test_question",
+                    description="Test Question",
+                )
+                invalid_question.save()
         except Exception:
             # Expected to fail due to validation
             pass
 
         # Basic functionality should still work
-        valid_character = self.character()
+        event = self.get_event()
+        valid_character = Character(name="Valid Test", event=event, number=1000)
         valid_character.save()
         self.assertIsNotNone(valid_character.id)

@@ -24,6 +24,7 @@ from decimal import Decimal
 from unittest.mock import patch
 
 # PaymentGateway and PaymentTransaction no longer exist - using available models
+from larpmanager.models.accounting import PaymentChoices
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -51,7 +52,7 @@ class TestGatewaySignals(BaseTestCase):
             value=Decimal("50.00"),
             assoc=self.get_association(),
             reg=registration,
-            pay=AccountingItemPayment.MONEY,
+            pay=PaymentChoices.MONEY,
         )
         payment.save()
 
@@ -132,7 +133,7 @@ class TestGatewaySignals(BaseTestCase):
         character = self.character()
         from larpmanager.models.registration import RegistrationCharacterRel
 
-        rel = RegistrationCharacterRel(registration=registration, character=character)
+        rel = RegistrationCharacterRel(reg=registration, character=character)
         rel.save()
 
         # Create payment for registration
@@ -143,14 +144,14 @@ class TestGatewaySignals(BaseTestCase):
             value=Decimal("100.00"),
             assoc=self.get_association(),
             reg=registration,
-            pay=AccountingItemPayment.MONEY,
+            pay=PaymentChoices.MONEY,
         )
         payment.save()
 
         # All related objects should be created successfully
         self.assertIsNotNone(rel.id)
         self.assertIsNotNone(payment.id)
-        self.assertEqual(rel.registration, registration)
+        self.assertEqual(rel.reg, registration)
         self.assertEqual(payment.reg, registration)
 
     def test_signal_performance_characteristics(self):
@@ -190,7 +191,7 @@ class TestGatewaySignals(BaseTestCase):
             value=Decimal("50.00"),
             assoc=self.get_association(),
             reg=self.get_registration(),
-            pay=AccountingItemPayment.CREDIT,
+            pay=PaymentChoices.CREDIT,
         )
         credit_payment.save()
 

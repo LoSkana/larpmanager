@@ -333,13 +333,20 @@ class BaseTestCase(TestCase):
 
         return question, option1, option2
 
-    def character(self, association=None, **kwargs):
+    def character(self, event=None, **kwargs):
         """Create a character for testing"""
         from larpmanager.models.writing import Character
 
-        if association is None:
-            association = self.get_association()
-        defaults = {"name": "Test Character", "assoc": association}
+        if event is None:
+            event = self.get_event()
+
+        # Get next available number for this event
+        if 'number' not in kwargs:
+            last_char = Character.objects.filter(event=event).order_by('-number').first()
+            next_number = (last_char.number + 1) if last_char else 1
+            kwargs['number'] = next_number
+
+        defaults = {"name": "Test Character", "event": event}
         defaults.update(kwargs)
         return Character.objects.create(**defaults)
 
