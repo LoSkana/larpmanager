@@ -7,23 +7,13 @@ SLUG_ASSOC = 'def'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'larpmanager',
+        'NAME': 'test_larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
         "HOST": os.getenv("DB_HOST", "postgres"),
         'PORT': '5432',
-        'TEST': {
-            'NAME': 'test_larpmanager',
-        },
    }
 }
-
-name = os.getenv("POSTGRES_DB","larp_test")
-worker = os.getenv("PYTEST_XDIST_WORKER")
-if worker:
-    name = f"{name}_{worker}"
-    DATABASES["default"]["NAME"] = name
-    DATABASES["default"]["TEST"] = {"NAME": name}
 
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
