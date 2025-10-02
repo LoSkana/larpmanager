@@ -104,11 +104,6 @@ urlpatterns = [
         name="lm_profile",
     ),
     path(
-        "lm/profile/<slug:func>",
-        views_lm.lm_profile_rm,
-        name="lm_profile_rm",
-    ),
-    path(
         "redirect/<path:p>",
         views_lm.redr,
         name="redr",

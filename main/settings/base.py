@@ -243,7 +243,7 @@ CLEAN_DB = [
 
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_relationship where deleted < CURRENT_DATE - INTERVAL '6 months';",
-    "delete from larpmanager_larpmanagerprofiler where created < CURRENT_DATE - INTERVAL '3 day';",
+    "delete from larpmanager_larpmanagerprofiler where created < CURRENT_DATE - INTERVAL '6 months';",
 ]
 
 
