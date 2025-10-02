@@ -79,6 +79,7 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
+        rm -rf .pytest_cache larpmanager/tests/**/__pycache__
         pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
 
     - name: Upload Artifacts
