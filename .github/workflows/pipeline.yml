@@ -79,7 +79,8 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
-        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations larpmanager/tests/playwright
+        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations -m e2e larpmanager/tests/playwright
+
 
     - name: Upload Artifacts
       if: always()

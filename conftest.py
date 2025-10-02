@@ -21,6 +21,7 @@
 import logging
 import os
 import subprocess
+from pathlib import Path
 
 import pytest
 from django.conf import settings
@@ -31,17 +32,14 @@ from django.db import connection
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
 logging.getLogger("faker.providers").setLevel(logging.ERROR)
 
+# Track database initialization state per worker
+_DB_INITIALIZED = {}
+
 
 @pytest.fixture(autouse=True, scope="session")
 def _env_for_tests():
     os.environ.setdefault("PYTHONHASHSEED", "0")
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
-
-
-@pytest.fixture(autouse=True)
-def _fast_password_hashers(settings):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 @pytest.fixture(autouse=True)
@@ -61,13 +59,6 @@ def _cache_isolation(settings):
 
 
 @pytest.fixture
-def reset_sequences(request):
-    marker = request.node.get_closest_marker("django_db_reset_sequences")
-    if marker:
-        pass
-
-
-@pytest.fixture
 def pw_page(pytestconfig, browser_type, live_server):
     headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
 
@@ -78,7 +69,7 @@ def pw_page(pytestconfig, browser_type, live_server):
     )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(60000)
+    page.set_default_timeout(10000)
 
     page.on("dialog", lambda dialog: dialog.accept())
 
@@ -117,38 +108,8 @@ def _truncate_app_tables():
         END$$;""")
 
 
-@pytest.fixture(autouse=True, scope="function")
-def _db_teardown_between_tests(django_db_blocker):
-    yield
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        with django_db_blocker.unblock():
-            _truncate_app_tables()
-
-
-@pytest.fixture(autouse=True)
-def load_fixtures(django_db_blocker):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        with django_db_blocker.unblock():
-            call_command("init_db", verbosity=0)
-
-
 def psql(params, env):
-    subprocess.run(params, check=True, env=env, text=True)
-
-
-def pytest_sessionstart(session):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        return
-
-    env = os.environ.copy()
-    env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
-    name = settings.DATABASES["default"]["NAME"]
-    host = settings.DATABASES["default"].get("HOST") or "localhost"
-    user = settings.DATABASES["default"]["USER"]
-
-    clean_db(host, env, name, user)
-    sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
-    psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", sql_path], env)
+    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)
 
 
 def clean_db(host, env, name, user):
@@ -171,10 +132,68 @@ def clean_db(host, env, name, user):
     )
 
 
-@pytest.fixture(scope="session")
-def django_db_setup():
-    # normal behaviour in CI
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+def _database_has_tables():
+    """Check if database has any application tables."""
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public'
+              AND c.relkind = 'r'
+              AND c.relname NOT LIKE 'django_%'
+        """)
+        count = cursor.fetchone()[0]
+        return count > 0
+
+
+def _load_test_db_sql():
+    """Load test database from SQL file."""
+    env = os.environ.copy()
+    env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
+    name = settings.DATABASES["default"]["NAME"]
+    host = settings.DATABASES["default"].get("HOST") or "localhost"
+    user = settings.DATABASES["default"]["USER"]
+
+    sql_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.sql"
+
+    if not sql_path.exists():
+        raise FileNotFoundError(f"Test database SQL file not found: {sql_path}")
+
+    # Clean the database first
+    clean_db(host, env, name, user)
+
+    # Load the SQL dump
+    psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", str(sql_path)], env)
+
+
+def _reload_fixtures():
+    _truncate_app_tables()
+    call_command("init_db")
+
+
+@pytest.fixture(autouse=True, scope="function")
+def _e2e_db_setup(request, django_db_blocker):
+    """Setup database for e2e tests with single database per worker."""
+    # Only run for e2e marked tests
+    if not request.node.get_closest_marker("e2e"):
         return
-    # don't touch the db in local
-    pass
+
+    # Get worker ID for parallel execution
+    worker_id = os.environ.get("PYTEST_XDIST_WORKER", "master")
+    db_name = settings.DATABASES["default"]["NAME"]
+    cache_key = f"{worker_id}_{db_name}"
+
+    # Check if this worker's database is already initialized
+    if cache_key not in _DB_INITIALIZED:
+        with django_db_blocker.unblock():
+            if _database_has_tables():
+                # Tables exist - truncate and init
+                _reload_fixtures()
+            else:
+                # No tables - load from SQL dump
+                _load_test_db_sql()
+
+            _DB_INITIALIZED[cache_key] = True
+
+    yield
