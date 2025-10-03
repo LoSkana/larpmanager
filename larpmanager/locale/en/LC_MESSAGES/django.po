@@ -1060,6 +1060,14 @@ msgid ""
 "not signed up user"
 msgstr ""
 
+msgid "Unimportant"
+msgstr ""
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+
 msgid "Independent factions"
 msgstr ""
 

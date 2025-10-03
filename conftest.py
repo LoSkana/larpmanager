@@ -29,6 +29,9 @@ from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
 
+from larpmanager.models.access import AssocRole
+from larpmanager.models.association import Association, AssociationSkin
+
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
 logging.getLogger("faker.providers").setLevel(logging.ERROR)
 
@@ -180,7 +183,7 @@ def _e2e_db_setup(request, django_db_blocker):
         if not _database_has_tables():
             # No tables - load from SQL dump
             _load_test_db_sql()
-        elif request.node.get_closest_marker("e2e"):
+        elif "playwright" in str(request.node.fspath):
             # Tables exist - truncate and init
             _reload_fixtures()
 
@@ -190,9 +193,6 @@ def _e2e_db_setup(request, django_db_blocker):
 @pytest.fixture(autouse=True)
 def _ensure_association_skin(db):
     """Ensure default AssociationSkin and AssocRole exist for tests."""
-    from larpmanager.models.association import Association, AssociationSkin
-    from larpmanager.models.access import AssocRole
-
     if not AssociationSkin.objects.filter(pk=1).exists():
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
 

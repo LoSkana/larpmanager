@@ -1743,6 +1743,9 @@ msgstr "Transversal"
 msgid "Undo period"
 msgstr "Deshacer el período"
 
+msgid "Unimportant"
+msgstr "Sin importancia"
+
 msgid "Unique code"
 msgstr "Código único"
 
@@ -8541,6 +8544,13 @@ msgid ""
 msgstr ""
 "Habilita el campo \"asignado\" para saber qué miembro del personal es "
 "responsable de cada elemento de la redacción"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Si está marcada, permite seguir las tramas o relaciones que no son realmente"
+" importantes para el personaje"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

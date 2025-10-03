@@ -28,6 +28,7 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 
 logger = logging.getLogger(__name__)
@@ -96,7 +97,7 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
         logger.debug(f"Updated {section_name} {section_id} relationships in cache")
 
     except Exception as e:
-        logger.error(f"Error updating {section_name} {section_id} relationships: {e}")
+        logger.error(f"Error updating {section_name} {section_id} relationships: {e}", exc_info=True)
         reset_event_rels_cache(event_id)
 
 
@@ -116,7 +117,7 @@ def remove_from_cache_section(event_id: int, section_name: str, section_id: int)
             cache.set(cache_key, res)
             logger.debug(f"Removed {section_name} {section_id} from cache")
     except Exception as e:
-        logger.error(f"Error removing {section_name} {section_id} from cache: {e}")
+        logger.error(f"Error removing {section_name} {section_id} from cache: {e}", exc_info=True)
         reset_event_rels_cache(event_id)
 
 
@@ -256,7 +257,7 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
         logger.debug(f"Cached relationships for event {event.id}")
 
     except Exception as e:
-        logger.error(f"Error initializing relationships for event {event.id}: {e}")
+        logger.error(f"Error initializing relationships for event {event.id}: {e}", exc_info=True)
         res = {}
 
     return res
@@ -288,7 +289,7 @@ def update_event_char_rels(char: Character) -> None:
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:
-        logger.error(f"Error updating character {char.id} relationships: {e}")
+        logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
         reset_event_rels_cache(char.event_id)
 
 
@@ -319,6 +320,12 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             rel_plots = char.get_plot_characters()
             plot_list = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
             relations["plot_rels"] = build_relationship_dict(plot_list)
+            unimportant_count = 0
+            if char.event.get_config("writing_unimportant", False):
+                unimportant_count = sum(
+                    1 for rel in rel_plots if strip_tags(rel.text).lstrip().startswith("$unimportant")
+                )
+            relations["plot_rels"]["unimportant"] = unimportant_count
 
         if "faction" in features:
             fac_event = char.event.get_class_parent("faction")
@@ -333,6 +340,12 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             relationships = Relationship.objects.filter(deleted=None, source=char)
             rel_list = [(rel.target.id, rel.target.name) for rel in relationships]
             relations["relationships_rels"] = build_relationship_dict(rel_list)
+            unimportant_count = 0
+            if char.event.get_config("writing_unimportant", False):
+                unimportant_count = sum(
+                    1 for rel in relationships if strip_tags(rel.text).lstrip().startswith("$unimportant")
+                )
+            relations["relationships_rels"]["unimportant"] = unimportant_count
 
         if "speedlarp" in features:
             speedlarps = char.speedlarps_list.all()
@@ -345,7 +358,7 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             relations["prologue_rels"] = build_relationship_dict(prologue_list)
 
     except Exception as e:
-        logger.error(f"Error getting relationships for character {char.id}: {e}")
+        logger.error(f"Error getting relationships for character {char.id}: {e}", exc_info=True)
         relations = {}
 
     return relations
@@ -371,7 +384,7 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
-        logger.error(f"Error getting relationships for faction {faction.id}: {e}")
+        logger.error(f"Error getting relationships for faction {faction.id}: {e}", exc_info=True)
         relations = {}
 
     return relations
@@ -397,7 +410,7 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
-        logger.error(f"Error getting relationships for plot {plot.id}: {e}")
+        logger.error(f"Error getting relationships for plot {plot.id}: {e}", exc_info=True)
         relations = {}
 
     return relations
@@ -423,7 +436,7 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
-        logger.error(f"Error getting relationships for speedlarp {speedlarp.id}: {e}")
+        logger.error(f"Error getting relationships for speedlarp {speedlarp.id}: {e}", exc_info=True)
         relations = {}
 
     return relations
@@ -449,7 +462,7 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
-        logger.error(f"Error getting relationships for prologue {prologue.id}: {e}")
+        logger.error(f"Error getting relationships for prologue {prologue.id}: {e}", exc_info=True)
         relations = {}
 
     return relations
