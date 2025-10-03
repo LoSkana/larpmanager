@@ -2510,9 +2510,6 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Credits residues"
-msgstr "Credits residuen"
-
 msgid "Current template"
 msgstr "Huidige sjabloon"
 
@@ -2791,6 +2788,9 @@ msgstr "Registratieformulier"
 
 msgid "Registration mail"
 msgstr "Registratie e-mail"
+
+msgid "Remaining credits"
+msgstr "Resterende credits"
 
 msgid "Request submitted"
 msgstr "Onderdanig verzoek"

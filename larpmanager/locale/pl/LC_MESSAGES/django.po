@@ -2510,9 +2510,6 @@ msgstr "Łączna kolekcja"
 msgid "Color background"
 msgstr "Kolor tła"
 
-msgid "Credits residues"
-msgstr "Pozostałości kredytów"
-
 msgid "Current template"
 msgstr "Aktualny szablon"
 
@@ -2791,6 +2788,9 @@ msgstr "Formularz rejestracyjny"
 
 msgid "Registration mail"
 msgstr "Poczta rejestracyjna"
+
+msgid "Remaining credits"
+msgstr "Pozostałe kredyty"
 
 msgid "Request submitted"
 msgstr "Złożony wniosek"
