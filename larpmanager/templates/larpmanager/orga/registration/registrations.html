@@ -590,29 +590,59 @@ window.addEventListener('DOMContentLoaded', function() {
             datatype: "json",
         });
 
-        start_spinner();
+        // Show spinner only after 500ms delay
+        let spinnerTimeout = setTimeout(function() {
+            start_spinner();
+        }, 500);
 
         request.done(function(data) {
+            // Clear the spinner timeout since request completed
+            clearTimeout(spinnerTimeout);
+
+            // Batch updates by table to minimize DOM operations
+            const tableUpdates = {};
+            let totalUpdates = 0;
+
+            // Collect all updates first
             for (let key in data) {
                 for (let nm in data[key]) {
                     let vl = data[key][nm];
                     if (parseInt(vl) != 0) {
-
-                        {% if interface_old %}
-                        $('#' + key + ' .' + nm).html(vl);
-                        {% else %}
-
                         Object.keys(window.datatables).forEach(function(dt_key) {
-                            var table = window.datatables[dt_key];
-                            var cell = table.cell('#' + key, '.' + nm);
-                            if (cell && cell.node()) {
-                                cell.data(vl).draw(false);
+                            const table = window.datatables[dt_key];
+                            const row = table.row('#' + key);
+
+                            if (row.length > 0) {
+                                if (!tableUpdates[dt_key]) {
+                                    tableUpdates[dt_key] = [];
+                                }
+                                tableUpdates[dt_key].push({
+                                    rowSelector: '#' + key,
+                                    columnClass: '.' + nm,
+                                    value: vl
+                                });
+                                totalUpdates++;
                             }
                         });
-                        {% endif %}
                     }
                 }
             }
+
+            // Apply all updates per table and draw once
+            Object.keys(tableUpdates).forEach(function(dt_key) {
+                const table = window.datatables[dt_key];
+                const updates = tableUpdates[dt_key];
+
+                updates.forEach(function(update) {
+                    const cell = table.cell(update.rowSelector, update.columnClass);
+                    if (cell && cell.node()) {
+                        cell.data(update.value);
+                    }
+                });
+
+                // Single draw call per table instead of multiple
+                table.draw(false);
+            });
 
             done['acc'] = 1;
 
@@ -620,9 +650,15 @@ window.addEventListener('DOMContentLoaded', function() {
 
             el.next().trigger('click');
 
+            clearTimeout(spinnerTimeout);
             stop_spinner();
 
             setTimeout(reload_table, 1000);
+        }).fail(function() {
+            // Clear the spinner timeout and handle errors gracefully
+            clearTimeout(spinnerTimeout);
+            stop_spinner();
+            console.error('Failed to load accounting data');
         });
 
     }
@@ -636,7 +672,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $(document).on('click', '.post_popup_member', function (e) {
 
-                start_spinner();
+                // Show spinner only after 500ms delay
+                let spinnerTimeout = setTimeout(function() {
+                    start_spinner();
+                }, 500);
 
                 request = $.ajax({
                     url: "{% url 'orga_registration_member' run.get_slug %}",
@@ -646,6 +685,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 });
 
                 request.done(function(res) {
+                    // Clear the spinner timeout since request completed
+                    clearTimeout(spinnerTimeout);
+
                     if (res.k == 0) return;
                     stop_spinner();
 

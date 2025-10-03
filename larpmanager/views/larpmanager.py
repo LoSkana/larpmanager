@@ -27,7 +27,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, Min, Sum
+from django.db.models import Count, F, Min, Sum
 from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -652,6 +652,7 @@ def guides(request):
     """
     ctx = get_lm_contact(request)
     ctx["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    ctx["index"] = True
     return render(request, "larpmanager/larpmanager/guides.html", ctx)
 
 
@@ -669,6 +670,8 @@ def guide(request, slug):
         Http404: If guide with given slug is not found or not published
     """
     ctx = get_lm_contact(request)
+    ctx["index"] = True
+
     try:
         ctx["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
     except ObjectDoesNotExist as err:
@@ -892,9 +895,10 @@ def lm_send(request):
 
 @login_required
 def lm_profile(request):
-    """Display performance profiling data.
+    """Display performance profiling data aggregated by domain and view function.
 
-    Shows view function performance metrics from the last 72 hours.
+    Shows view function performance metrics aggregated across dates.
+    Calculates average duration and total calls for each domain/view combination.
     Requires admin permissions.
 
     Args:
@@ -904,28 +908,22 @@ def lm_profile(request):
         HttpResponse: Rendered profiling data page
     """
     ctx = check_lm_admin(request)
-    st = datetime.now() - timedelta(hours=72)
-    ctx["res"] = LarpManagerProfiler.objects.filter(date__gte=st).order_by("-mean_duration")[:50]
+    st = datetime.now() - timedelta(hours=168)
+
+    # Aggregate data by domain and view_func_name across different dates
+    # Calculate weighted average duration using num_calls as weights
+    ctx["res"] = (
+        LarpManagerProfiler.objects.filter(date__gte=st)
+        .values("domain", "view_func_name")
+        .annotate(
+            total_duration=Sum(F("mean_duration") * F("num_calls")),
+            total_calls=Sum("num_calls"),
+            avg_duration=F("total_duration") / F("total_calls"),
+        )
+        .order_by("-avg_duration")[:50]
+    )
+
     return render(request, "larpmanager/larpmanager/profile.html", ctx)
-
-
-@login_required
-def lm_profile_rm(request, func):
-    """Remove profiling data for a specific function.
-
-    Deletes all profiling records for the specified view function.
-    Requires admin permissions.
-
-    Args:
-        request: Django HTTP request object (must be authenticated admin)
-        func: View function name to remove profiling data for
-
-    Returns:
-        HttpResponseRedirect: Redirect to profiling page
-    """
-    check_lm_admin(request)
-    LarpManagerProfiler.objects.filter(view_func_name=func).delete()
-    return redirect("lm_profile")
 
 
 @ratelimit(key="ip", rate="5/m", block=True)

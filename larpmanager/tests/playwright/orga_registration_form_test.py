@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, login_user, logout, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -65,8 +64,7 @@ def add_text(page):
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").press("ArrowLeft")
     page.locator("#id_max_length").fill("10")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_profile").set_input_files(str(image_path))
+    load_image(page, "#id_profile")
     submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("p")

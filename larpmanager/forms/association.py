@@ -306,13 +306,6 @@ class ExeConfigForm(ConfigForm):
         for the association's interface customization.
         """
         # CALENDAR
-        self.set_section("interface", _("Interface"))
-
-        label = _("Old interface")
-        help_text = _("If checked: uses old interface")
-        self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
-
-        # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
         label = _("Past events")
@@ -393,6 +386,12 @@ class ExeConfigForm(ConfigForm):
 
             label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
+
+        if "pre_register" in self.params["features"]:
+            self.set_section("pre_reg", _("Pre-registration"))
+            label = _("Enable preferences")
+            help_text = _("If checked, participants give a preference value when adding pre-registrations")
+            self.add_configs("pre_reg_preferences", ConfigType.BOOL, label, help_text)
 
         if "centauri" in self.params["features"]:
             self.set_section("centauri", _("Easter egg"))
@@ -697,30 +696,8 @@ class ExeQuickSetupForm(QuickSetupForm):
             **kwargs: Variable keyword arguments
         """
         super().__init__(*args, **kwargs)
+        self.setup = {}
 
-        self.setup = {
-            "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
-            "payment_fees_user": (
-                False,
-                _("Transaction fees"),
-                _(
-                    "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
-                ),
-            ),
-            "membership": (True, _("Membership"), _("Do you want users to join events only after an approval process")),
-            "deadlines": (
-                True,
-                _("Deadlines"),
-                _("Do you want a dashboard to track and manage deadlines missed by registered users"),
-            ),
-            "remind": (
-                True,
-                _("Reminders"),
-                _("Do you want to enable an automatic email reminder system for registered users who miss a deadline"),
-            ),
-            "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
-            "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
-        }
         if self.instance.skin_id == 1:
             self.setup.update(
                 {
@@ -731,6 +708,38 @@ class ExeQuickSetupForm(QuickSetupForm):
                     ),
                 }
             )
+
+        self.setup.update(
+            {
+                "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
+                "payment_fees_user": (
+                    False,
+                    _("Transaction fees"),
+                    _(
+                        "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
+                    ),
+                ),
+                "membership": (
+                    True,
+                    _("Membership"),
+                    _("Do you want users to join events only after an approval process"),
+                ),
+                "deadlines": (
+                    True,
+                    _("Deadlines"),
+                    _("Do you want a dashboard to track and manage deadlines missed by registered users"),
+                ),
+                "remind": (
+                    True,
+                    _("Reminders"),
+                    _(
+                        "Do you want to enable an automatic email reminder system for registered users who miss a deadline"
+                    ),
+                ),
+                "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
+                "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
+            }
+        )
 
         self.init_fields(get_assoc_features(self.instance.pk))
 

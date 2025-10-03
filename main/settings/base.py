@@ -243,7 +243,7 @@ CLEAN_DB = [
 
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_relationship where deleted < CURRENT_DATE - INTERVAL '6 months';",
-    "delete from larpmanager_larpmanagerprofiler where created < CURRENT_DATE - INTERVAL '3 day';",
+    "delete from larpmanager_larpmanagerprofiler where created < CURRENT_DATE - INTERVAL '6 months';",
 ]
 
 
@@ -333,6 +333,15 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'level': 'INFO',
+            'propagate': False,
+        },
+        'deepl': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.security.DisallowedHost': {
+            'handlers': [],
             'propagate': False,
         },
     },

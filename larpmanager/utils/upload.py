@@ -207,11 +207,11 @@ def _reg_load(request, ctx, row, questions):
     Creates or updates registrations with field validation, membership checks,
     and question processing for event registration imports.
     """
-    if "player" not in row:
-        return "ERR - There is no player column"
+    if "email" not in row:
+        return "ERR - There is no email column"
 
     try:
-        user = User.objects.get(email=row["player"])
+        user = User.objects.get(email__iexact=row["email"].strip())
     except ObjectDoesNotExist:
         return "ERR - Email not found"
 
@@ -256,7 +256,7 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
         questions: Dictionary of registration questions
         logs: List to append error messages to
     """
-    if field == "player":
+    if field == "email":
         return
 
     if not value or pd.isna(value):
@@ -264,8 +264,8 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
 
     if field == "ticket":
         _assign_elem(ctx, reg, field, value, RegistrationTicket, logs)
-    elif field == "character":
-        _reg_assign_character(ctx, reg, value, logs)
+    elif field == "characters":
+        _reg_assign_characters(ctx, reg, value, logs)
     elif field == "pwyw":
         reg.pay_what = Decimal(value)
     else:
@@ -285,24 +285,34 @@ def _assign_elem(ctx, obj, field, value, typ, logs):
     obj.__setattr__(field, el)
 
 
-def _reg_assign_character(ctx, reg, value, logs):
-    try:
-        char = Character.objects.get(event=ctx["event"], name__iexact=value)
-    except ObjectDoesNotExist:
-        logs.append("ERR - Character not found")
-        return
+def _reg_assign_characters(ctx, reg, value, logs):
+    # Clear existing character assignments for this registration
+    RegistrationCharacterRel.objects.filter(reg=reg).delete()
 
-    # check if we have a registration with the same character
-    que = RegistrationCharacterRel.objects.filter(
-        reg__run=ctx["run"],
-        reg__cancellation_date__isnull=True,
-        character=char,
-    )
-    if que.exclude(reg_id=reg.id).count() > 0:
-        logs.append("ERR - character already assigned")
-        return
+    # Handle multiple characters separated by commas
+    character_names = [name.strip() for name in value.split(",")]
 
-    RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
+    for char_name in character_names:
+        if not char_name:
+            continue
+
+        try:
+            char = Character.objects.get(event=ctx["event"], name__iexact=char_name)
+        except ObjectDoesNotExist:
+            logs.append(f"ERR - Character not found: {char_name}")
+            continue
+
+        # check if we have a registration with the same character
+        que = RegistrationCharacterRel.objects.filter(
+            reg__run=ctx["run"],
+            reg__cancellation_date__isnull=True,
+            character=char,
+        )
+        if que.exclude(reg_id=reg.id).count() > 0:
+            logs.append(f"ERR - character already assigned: {char_name}")
+            continue
+
+        RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
 
 
 def writing_load(request, ctx, form):

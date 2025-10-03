@@ -110,11 +110,10 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload {% if interface_old %}interface_old{% endif %}"
-          id="{{ assoc.name | slugify }}">
+    <body class="is-preload" id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if not interface_old and not frame %}
+            {% if not frame and assoc.id != 0 %}
                 {% if user.is_authenticated %}
                     {% if topbar %}
                         {% include "elements/structure/topbar-admin.html" %}
@@ -128,7 +127,7 @@
             {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not interface_old %}topbar{% endif %} ">
+                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and assoc.id != 0 %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>
@@ -136,7 +135,6 @@
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
-    window.interface_old = {{ interface_old | yesno:"true,false" }};
     window.interface_collapse_sidebar = {{ interface_collapse_sidebar | yesno:"true,false" }};
     window.enviro = "{{ request.enviro }}";
         </script>
@@ -255,12 +253,10 @@
                 sidebar();
             });
 
-            {% if not interface_old %}
-                {% if manage and is_sidebar_open %}
-                    $('#sidebar-close').hide();
-                {% else %}
-                    $('#sidebar-open').hide();
-                {% endif %}
+            {% if manage and is_sidebar_open %}
+                $('#sidebar-close').hide();
+            {% else %}
+                $('#sidebar-open').hide();
             {% endif %}
 
             // add origin for manage links

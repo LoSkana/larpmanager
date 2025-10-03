@@ -155,7 +155,7 @@ def update_index_permission(typ):
     mapping = {"event": EventPermission, "assoc": AssocPermission}
     que = mapping[typ].objects.select_related("feature", "module")
     que = que.order_by("module__order", "number")
-    return que.values(
+    res = que.values(
         "name",
         "descr",
         "slug",
@@ -165,6 +165,8 @@ def update_index_permission(typ):
         "module__name",
         "module__icon",
     )
+    cache.set(index_permission_key(typ), res)
+    return res
 
 
 def get_cache_index_permission(typ):

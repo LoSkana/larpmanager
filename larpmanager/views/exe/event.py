@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
@@ -33,6 +35,7 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
+from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Event,
     Run,
@@ -77,7 +80,7 @@ def exe_events_edit(request, num):
 
     # create new event
     ctx["exe"] = True
-    if backend_edit(request, ctx, ExeEventForm, num):
+    if backend_edit(request, ctx, ExeEventForm, num, quiet=True):
         if "saved" in ctx and num == 0:
             # Add member to organizers
             (er, created) = EventRole.objects.get_or_create(event=ctx["saved"], number=1)
@@ -87,6 +90,12 @@ def exe_events_edit(request, num):
             er.save()
             # reload cache event links
             reset_event_links(request.user.id, ctx["a_id"])
+            msg = (
+                _("Your event has been created")
+                + "! "
+                + _("Now please complete the quick setup by selecting the features most useful for this event")
+            )
+            messages.success(request, msg)
             return redirect("orga_quick", s=ctx["saved"].slug)
         return redirect("exe_events")
     ctx["add_another"] = False
@@ -143,18 +152,25 @@ def exe_pre_registrations(request):
 
     ctx["seen"] = []
 
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
         if not r.get_config("pre_register_active", False):
             continue
 
         pr = get_pre_registration(r)
-        r.count = {}
-        # print (pr)
-        for idx in range(1, 6):
-            r.count[idx] = 0
-            if idx in pr:
-                r.count[idx] = pr[idx]
+        if ctx["preferences"]:
+            r.count = {}
+            # print (pr)
+            for idx in range(1, 6):
+                r.count[idx] = 0
+                if idx in pr:
+                    r.count[idx] = pr[idx]
+        else:
+            r.total = len(pr["list"])
         ctx["list"].append(r)
+
     return render(request, "larpmanager/exe/pre_registrations.html", ctx)
 
 

@@ -18,11 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
-from pathlib import Path
 
 import pytest
 
-from larpmanager.tests.utils import check_download, fill_tinymce, go_to, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import check_download, fill_tinymce, go_to, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -34,18 +33,16 @@ def test_mail_generation(pw_page):
 
     chat(live_server, page)
 
-    image_path = Path(__file__).parent / "image.jpg"
+    badge(live_server, page)
 
-    badge(live_server, page, image_path)
-
-    submit_membership(live_server, page, image_path)
+    submit_membership(live_server, page)
 
     resubmit_membership(live_server, page)
 
-    expense(image_path, live_server, page)
+    expense(live_server, page)
 
 
-def expense(image_path, live_server, page):
+def expense(live_server, page):
     # approve it
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
@@ -54,11 +51,11 @@ def expense(image_path, live_server, page):
 
     # expenses
     go_to(page, live_server, "/manage/features/106/on")
-    go_to(page, live_server, "/test/manage/expenses/my")
+    go_to(page, live_server, "/test/manage/upload_expenses/")
     page.get_by_role("link", name="New").click()
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("10")
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     page.get_by_label("Type").select_option("g")
     page.get_by_role("textbox", name="Descr").click()
     page.get_by_role("textbox", name="Descr").fill("dsadas")
@@ -77,7 +74,10 @@ def resubmit_membership(live_server, page):
 
     # signup
     go_to(page, live_server, "/test/manage/tickets/")
-    page.locator("a:has(i.fas.fa-edit)").click()
+    page.wait_for_selector("table.go_datatable")
+    # Wait for the edit button to appear and click it
+    page.wait_for_selector("tbody tr:first-child td:first-child a i.fas.fa-edit", timeout=10000)
+    page.locator("tbody tr:first-child td:first-child a i.fas.fa-edit").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100")
     submit_confirm(page)
@@ -105,14 +105,14 @@ def resubmit_membership(live_server, page):
     submit(page)
 
 
-def submit_membership(live_server, page, image_path):
+def submit_membership(live_server, page):
     # Test membership
     go_to(page, live_server, "/manage/features/45/on")
     go_to(page, live_server, "/manage/texts")
     page.wait_for_timeout(2000)
     page.get_by_role("link", name="New").click()
 
-    fill_tinymce(page, "id_text", "Ciao {{ member.name }}!")
+    fill_tinymce(page, "id_text", "Ciao {{ member.name }}!", show=False)
 
     page.locator("#main_form").click()
     page.locator("#id_typ").select_option("m")
@@ -123,8 +123,8 @@ def submit_membership(live_server, page, image_path):
 
     check_download(page, "download it here")
 
-    page.locator("#id_request").set_input_files(str(image_path))
-    page.locator("#id_document").set_input_files(str(image_path))
+    load_image(page, "#id_request")
+    load_image(page, "#id_document")
 
     submit(page)
     page.locator("#id_confirm_1").check()
@@ -136,7 +136,7 @@ def submit_membership(live_server, page, image_path):
     submit(page)
 
 
-def badge(live_server, page, image_path):
+def badge(live_server, page):
     # Test badge
     go_to(page, live_server, "/manage/features/65/on")
     go_to(page, live_server, "/manage/badges")
@@ -155,7 +155,7 @@ def badge(live_server, page, image_path):
     page.locator("#id_cod").fill("asasdsadd")
     page.locator("#id_img").click()
 
-    page.locator("#id_img").set_input_files(str(image_path))
+    load_image(page, "#id_img")
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
     submit_confirm(page)

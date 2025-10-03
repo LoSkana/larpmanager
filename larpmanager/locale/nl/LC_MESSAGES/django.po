@@ -299,9 +299,6 @@ msgstr "Gesloten"
 msgid "Cover"
 msgstr "Omslag"
 
-msgid "Descr"
-msgstr "Beschrijving"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -313,6 +310,9 @@ msgstr "Evenement"
 
 msgid "Field"
 msgstr "Veld"
+
+msgid "Fifth"
+msgstr "Vijfde"
 
 msgid "First"
 msgstr "Eerste"
@@ -408,6 +408,9 @@ msgstr "Belastingen"
 msgid "Texts"
 msgstr "Teksten"
 
+msgid "Third"
+msgstr "Derde"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -501,6 +504,9 @@ msgstr "Vulstof"
 msgid "Footer"
 msgstr "Voettekst"
 
+msgid "Fourth"
+msgstr "Vierde"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +593,9 @@ msgstr "Veiligheid"
 
 msgid "Search"
 msgstr "Zoek op"
+
+msgid "Second"
+msgstr "Tweede"
 
 msgid "Secret"
 msgstr "Geheim"
@@ -1158,9 +1167,6 @@ msgstr "betalingen"
 msgid "positive"
 msgstr "positief"
 
-msgid "residues"
-msgstr "residuen"
-
 msgid "--- Empty"
 msgstr "--- Leeg"
 
@@ -1728,6 +1734,9 @@ msgstr "Ticketlijst"
 msgid "Total costs"
 msgstr "Totale kosten"
 
+msgid "Transaction"
+msgstr "Transactie"
+
 msgid "Transversal"
 msgstr "Dwars"
 
@@ -2055,9 +2064,6 @@ msgstr "Niet voltooid"
 
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
-
-msgid "Old interface"
-msgstr "Oude interface"
 
 msgid "Passages made"
 msgstr "Ondernomen stappen"
@@ -2504,8 +2510,8 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Confirm payments"
-msgstr "Betalingen bevestigen"
+msgid "Credits residues"
+msgstr "Credits residuen"
 
 msgid "Current template"
 msgstr "Huidige sjabloon"
@@ -2860,6 +2866,9 @@ msgstr "Toekenning uitschakelen"
 
 msgid "Electronic invoice"
 msgstr "Elektronische factuur"
+
+msgid "Enable preferences"
+msgstr "Voorkeuren inschakelen"
 
 msgid "Go to the form for"
 msgstr "Ga naar het formulier voor"
@@ -3916,6 +3925,9 @@ msgstr "Inhouding als transactiekosten"
 msgid "Would you like to change it"
 msgstr "Wil je het veranderen"
 
+msgid "Your event has been created"
+msgstr "Je evenement is aangemaakt"
+
 msgid "please fill in your profile"
 msgstr "vul je profiel in"
 
@@ -4036,6 +4048,12 @@ msgstr "Vervoer - benzine, snelweg"
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
 
+msgid "You don’t have any events yet"
+msgstr "Je hebt nog geen evenementen"
+
+msgid "You're not allowed to sign up"
+msgstr "Je mag je niet aanmelden"
+
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
@@ -4051,9 +4069,6 @@ msgstr "Uitstel van jaarlijkse contributie"
 
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
-
-msgid "If checked: uses old interface"
-msgstr "Indien aangevinkt: gebruikt oude interface"
 
 msgid "Manage issues during the event"
 msgstr "Problemen tijdens het evenement beheren"
@@ -5169,6 +5184,9 @@ msgstr "Nu kun je de openingsdatum van de registratie instellen"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 
+msgid "Please create your first event to get started"
+msgstr "Maak je eerste evenement aan om te beginnen"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
@@ -5353,6 +5371,9 @@ msgstr "Op deze pagina kun je een personage toevoegen of bewerken"
 msgid "This page allows you to edit a member's profile"
 msgstr "Op deze pagina kun je het profiel van een lid bewerken"
 
+msgid "To access this feature, you must first register"
+msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
 
@@ -5426,9 +5447,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Deze pagina geeft een overzicht van de soorten quests in het evenement"
 
-msgid "To access this feature, you must first register!"
-msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
 
@@ -5479,6 +5497,9 @@ msgstr "De som is %(amount).2f, met reden '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Er zijn <b>%(number)s</b> tekens om goed te keuren"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Op deze pagina kunt u een px-levering toevoegen of bewerken"
@@ -5550,9 +5571,6 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Er zijn schrijfvelden zonder opties: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "Op deze pagina kun je een betalingsitem toevoegen of bewerken"
@@ -5698,9 +5716,6 @@ msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
 
 msgid "please upload your membership application to proceed"
 msgstr "upload uw lidmaatschapsaanvraag om verder te gaan"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Optioneel) De naam van het personage om toe te wijzen aan de speler"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -6193,9 +6208,6 @@ msgstr "Merk op dat als de kosten 0 zijn, ze automatisch worden toegewezen"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Deelnemers kunnen nu donaties indienen en jij kunt ze beoordelen"
-
-msgid "Quickly configure your organization's most important settings"
-msgstr "Snel de belangrijkste instellingen van je organisatie configureren"
 
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
@@ -7228,6 +7240,12 @@ msgid ""
 msgstr "Je moet minstens één proloogtype maken voordat je prologen kunt maken"
 
 msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Optioneel) De karakternamen om aan de speler toe te wijzen, gescheiden door"
+" komma's"
+
+msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
 "Geeft deelnemers weer die te laat zijn met betalen of andere deadlines voor "
@@ -7358,6 +7376,12 @@ msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
 msgstr ""
 "In de factie wordt een personage genoemd, maar het lijkt niet te bestaan"
+
+msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Voltooi als laatste stap de instelling van het evenement door de begin- en "
+"einddatum toe te voegen"
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -7510,6 +7534,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, kunnen deelnemers de profielfoto van hun "
 "personage aanpassen"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Indien aangevinkt, geven deelnemers een voorkeurswaarde op bij het toevoegen"
+" van preregistraties"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8178,6 +8209,13 @@ msgid ""
 msgstr ""
 "Geef de waarde van de korting aan, deze wordt afgetrokken van het totaal "
 "berekende bedrag"
+
+msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Voltooi nu de snelle installatie door de functies te selecteren die het "
+"meest nuttig zijn voor dit evenement"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -9644,6 +9682,14 @@ msgstr ""
 "personeel kan de status van deze verzoeken beheren"
 
 msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Voordat je het evenementendashboard opent, moet je de snelle installatie "
+"voltooien door de functies te selecteren die het meest nuttig zijn voor je "
+"evenement"
+
+msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers"
 msgstr ""
@@ -9925,6 +9971,14 @@ msgid ""
 msgstr ""
 "Optioneel - Als je één (of meer) facties selecteert, wordt de vraag alleen "
 "getoond aan deelnemers met personages in alle gekozen facties"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Voordat je het organisatiedashboard opent, moet je de snelle installatie "
+"voltooien door de functies te selecteren die het handigst zijn voor je "
+"organisatie"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

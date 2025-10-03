@@ -19,12 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -85,14 +84,14 @@ def donation(page, live_server):
     page.get_by_role("cell", name="test wire").click()
     submit(page)
 
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("Donation of Admin Test")
+    # Check for donation invoice in the table
+    expect(page.get_by_role("row", name="Admin Test Wire donation")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")
@@ -108,9 +107,8 @@ def membership_fees(page, live_server):
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
 
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_request").set_input_files(str(image_path))
-    page.locator("#id_document").set_input_files(str(image_path))
+    load_image(page, "#id_request")
+    load_image(page, "#id_document")
     submit(page)
 
     page.locator("#id_confirm_1").check()
@@ -142,13 +140,14 @@ def membership_fees(page, live_server):
     submit(page)
 
     expect(page.locator("#one")).to_contain_text("15")
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("Membership fee of Admin Test")
+    # Check for membership fee invoice in the table
+    expect(page.get_by_role("row", name="Admin Test Wire membership")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")
@@ -171,8 +170,7 @@ def collections(page, live_server):
     submit(page)
 
     expect(page.locator("#one")).to_contain_text("20")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
+    load_image(page, "#id_invoice")
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)

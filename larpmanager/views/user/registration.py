@@ -53,7 +53,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import AssocTextType
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.event import (
     Event,
     EventTextType,
@@ -71,6 +71,7 @@ from larpmanager.utils.common import get_assoc
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,
+    RewokedMembershipError,
     check_event_feature,
 )
 from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
@@ -105,6 +106,9 @@ def pre_register(request, s=""):
     ctx["choices"] = []
     ctx["already"] = []
     ctx["member"] = request.user.member
+
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
 
     ch = {}
     que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])
@@ -455,7 +459,9 @@ def register(request, s, sc="", dis="", tk=0):
 
     _add_bring_friend_discounts(ctx)
 
-    get_user_membership(request.user.member, request.assoc["id"])
+    mb = get_user_membership(request.user.member, request.assoc["id"])
+    if mb.status in [MembershipStatus.REWOKED]:
+        raise RewokedMembershipError()
     ctx["member"] = request.user.member
 
     if request.method == "POST":

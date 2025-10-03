@@ -697,7 +697,7 @@ def auto_assign_campaign_character(registration):
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__run=registration.run).count() > 0:
+    if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
         return
 
     # get last run of campaign
@@ -785,12 +785,7 @@ def post_delete_reset_character_config(sender, instance, **kwargs):
 
 
 def handle_association_skin_features_pre_save(instance):
-    """Handle association skin feature setup before saving.
-
-    Args:
-        instance: Association instance being saved
-    """
-    if not instance.skin:
+    if not instance.skin_id:
         return
 
     # execute if new association, or if changed skin
@@ -799,18 +794,23 @@ def handle_association_skin_features_pre_save(instance):
             prev = Association.objects.get(pk=instance.pk)
         except ObjectDoesNotExist:
             return
-        if instance.skin == prev.skin:
+        if instance.skin_id == prev.skin_id:
             return
+
+    try:
+        skin = instance.skin
+    except ObjectDoesNotExist:
+        return
 
     instance._update_skin_features = True
     if not instance.nationality:
-        instance.nationality = instance.skin.default_nation
+        instance.nationality = skin.default_nation
 
     if not instance.optional_fields:
-        instance.optional_fields = instance.skin.default_optional_fields
+        instance.optional_fields = skin.default_optional_fields
 
     if not instance.mandatory_fields:
-        instance.mandatory_fields = instance.skin.default_mandatory_fields
+        instance.mandatory_fields = skin.default_mandatory_fields
 
 
 @receiver(pre_save, sender=Association)
