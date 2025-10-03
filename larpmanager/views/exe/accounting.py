@@ -413,7 +413,7 @@ def exe_refunds(request):
                 ("details", _("Informations")),
                 ("member", _("Member")),
                 ("value", _("Total required")),
-                ("credits", _("Credits residues")),
+                ("credits", _("Remaining credits")),
                 ("status", _("Status")),
                 ("action", _("Action")),
             ],

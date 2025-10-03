@@ -8573,7 +8573,7 @@ msgstr ""
 msgid "Total required"
 msgstr ""
 
-msgid "Credits residues"
+msgid "Remaining credits"
 msgstr ""
 
 msgid "Verified payments"
