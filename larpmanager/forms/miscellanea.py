@@ -347,7 +347,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
         self.fields["working"].widget.set_assoc(self.params["a_id"])
 
 
-class OrganizerCopyForm(forms.Form):
+class OrgaCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         """Initialize organizer copy form with source event choices.
 
@@ -368,11 +368,11 @@ class OrganizerCopyForm(forms.Form):
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [
-            ("all", "All"),
             ("event", "Event"),
             ("config", "Configuration"),
             ("appearance", "Appearance"),
             ("text", "Texts"),
+            ("navigation", "Navigation"),
             ("role", "Roles"),
             ("features", "Features"),
             ("ticket", "Registration Tickets"),
@@ -391,10 +391,11 @@ class OrganizerCopyForm(forms.Form):
             ("workshop", "Workshops"),
         ]
 
-        self.fields["target"] = forms.ChoiceField(
+        self.fields["target"] = forms.MultipleChoiceField(
             required=True,
             choices=cho,
             help_text="The type of elements you want to copy",
+            widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
         )
 
 

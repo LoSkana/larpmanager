@@ -113,7 +113,7 @@
     <body class="is-preload" id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if not frame %}
+            {% if not frame and assoc.id != 0 %}
                 {% if user.is_authenticated %}
                     {% if topbar %}
                         {% include "elements/structure/topbar-admin.html" %}
@@ -127,7 +127,7 @@
             {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} topbar">
+                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and assoc.id != 0 %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>

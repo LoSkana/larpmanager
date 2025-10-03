@@ -23,7 +23,7 @@ import io
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Exists, Model, OuterRef, Prefetch
+from django.db.models import Exists, Model, OuterRef
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -31,6 +31,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, Trait
@@ -47,9 +48,11 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
+    Faction,
     Plot,
     PlotCharacterRel,
-    Relationship,
+    Prologue,
+    SpeedLarp,
     TextVersion,
     Writing,
     replace_chars_all,
@@ -239,6 +242,15 @@ def writing_list(request, ctx, typ, nm):
     if issubclass(typ, Plot):
         writing_list_plot(ctx)
 
+    if issubclass(typ, Faction):
+        writing_list_faction(ctx)
+
+    if issubclass(typ, SpeedLarp):
+        writing_list_speedlarp(ctx)
+
+    if issubclass(typ, Prologue):
+        writing_list_prologue(ctx)
+
     if issubclass(typ, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
@@ -417,14 +429,31 @@ def writing_list_plot(ctx):
     Side effects:
         Adds chars dictionary to context and attaches character lists to plot objects
     """
-    ctx["chars"] = {}
-    for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
-        if el.plot.number not in ctx["chars"]:
-            ctx["chars"][el.plot.number] = []
-        ctx["chars"][el.plot.number].append((f"#{el.character.number} {el.character.name}", el.character.id))
+    rels = get_event_rels_cache(ctx["event"]).get("plots", {})
+
     for el in ctx["list"]:
-        if el.number in ctx["chars"]:
-            el.chars = ctx["chars"][el.number]
+        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+
+
+def writing_list_faction(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("factions", {})
+
+    for el in ctx["list"]:
+        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+
+
+def writing_list_speedlarp(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("speedlarps", {})
+
+    for el in ctx["list"]:
+        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+
+
+def writing_list_prologue(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("prologues", {})
+
+    for el in ctx["list"]:
+        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
 def writing_list_char(ctx):
@@ -436,11 +465,6 @@ def writing_list_char(ctx):
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
 
-    if "relationships" in ctx["features"]:
-        ctx["list"] = ctx["list"].prefetch_related(
-            Prefetch("source", queryset=Relationship.objects.filter(deleted=None))
-        )
-
     if "campaign" in ctx["features"] and ctx["event"].parent:
         # add check if the character is signed up to the event
         ctx["list"] = ctx["list"].annotate(
@@ -451,22 +475,27 @@ def writing_list_char(ctx):
             )
         )
 
-    if "plot" in ctx["features"]:
-        ctx["plots"] = {}
-        que = PlotCharacterRel.objects.filter(character__event=ctx["event"].get_class_parent(Plot))
-        for el in que.select_related("plot", "character").order_by("order"):
-            if el.character.number not in ctx["plots"]:
-                ctx["plots"][el.character.number] = []
-            ctx["plots"][el.character.number].append((el.plot.name, el.plot.id))
+    rels = get_event_rels_cache(ctx["event"]).get("characters", {})
 
+    if "relationships" in ctx["features"]:
         for el in ctx["list"]:
-            if el.number in ctx["plots"]:
-                el.plts = ctx["plots"][el.number]
+            el.relationships_rels = rels.get(el.id, {}).get("relationships_rels", [])
+
+    if "plot" in ctx["features"]:
+        for el in ctx["list"]:
+            el.plot_rels = rels.get(el.id, {}).get("plot_rels", [])
 
     if "faction" in ctx["features"]:
-        fac_event = ctx["event"].get_class_parent("faction")
         for el in ctx["list"]:
-            el.factions = el.factions_list.filter(event=fac_event)
+            el.faction_rels = rels.get(el.id, {}).get("faction_rels", [])
+
+    if "speedlarp" in ctx["features"]:
+        for el in ctx["list"]:
+            el.speedlarp_rels = rels.get(el.id, {}).get("speedlarp_rels", [])
+
+    if "prologue" in ctx["features"]:
+        for el in ctx["list"]:
+            el.prologue_rels = rels.get(el.id, {}).get("prologue_rels", [])
 
     # add character configs
     char_add_addit(ctx)

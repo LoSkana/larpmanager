@@ -299,9 +299,6 @@ msgstr "Stengt"
 msgid "Cover"
 msgstr "Omslag"
 
-msgid "Descr"
-msgstr "Beskrivelse"
-
 msgid "Email"
 msgstr "E-post"
 
@@ -1170,9 +1167,6 @@ msgstr "betalinger"
 msgid "positive"
 msgstr "positiv"
 
-msgid "residues"
-msgstr "rester"
-
 msgid "--- Empty"
 msgstr "--- Tom"
 
@@ -1739,6 +1733,9 @@ msgstr "Billettliste"
 
 msgid "Total costs"
 msgstr "Totale kostnader"
+
+msgid "Transaction"
+msgstr "Transaksjon"
 
 msgid "Transversal"
 msgstr "Tverrgående"
@@ -2513,8 +2510,8 @@ msgstr "Total innsamling"
 msgid "Color background"
 msgstr "Tekstbakgrunn"
 
-msgid "Confirm payments"
-msgstr "Bekreft betalinger"
+msgid "Credits residues"
+msgstr "Kreditter rester"
 
 msgid "Current template"
 msgstr "Gjeldende mal"
@@ -4054,6 +4051,9 @@ msgstr "Ikke-konverterte forhåndsregistreringer"
 msgid "You don’t have any events yet"
 msgstr "Du har ingen arrangementer ennå"
 
+msgid "You're not allowed to sign up"
+msgstr "Du har ikke lov til å registrere deg"
+
 msgid "Your account is now activated"
 msgstr "Kontoen din er nå aktiv"
 
@@ -5366,6 +5366,9 @@ msgstr "På denne siden kan du legge til eller redigere et tegn"
 msgid "This page allows you to edit a member's profile"
 msgstr "På denne siden kan du redigere et medlems profil"
 
+msgid "To access this feature, you must first register"
+msgstr "For å få tilgang til denne funksjonen må du først registrere deg"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 
@@ -5438,9 +5441,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Denne siden oppsummerer hvilke typer oppdrag som inngår i arrangementet"
 
-msgid "To access this feature, you must first register!"
-msgstr "For å få tilgang til denne funksjonen må du først registrere deg!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Du har allerede betalt årets medlemskontingent"
 
@@ -5491,6 +5491,9 @@ msgstr "Summen er %(amount).2f, med årsak '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det er <b>%(number)s</b> tegn som skal godkjennes"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "På denne siden kan du legge til eller redigere en px-levering"
@@ -5561,9 +5564,6 @@ msgstr "Påmeldingen til arrangementet ble avlyst"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finnes skrivefelt uten alternativer: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "På denne siden kan du legge til eller redigere en betalingspost"
@@ -5712,9 +5712,6 @@ msgstr "Du skal ha vår evige takk for at du tror på oss"
 
 msgid "please upload your membership application to proceed"
 msgstr "vennligst last opp medlemssøknaden din for å gå videre"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Valgfritt) Karakternavnet som skal tildeles spilleren"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7118,6 +7115,11 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Du må opprette minst én prologtype før du kan opprette prologer"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Valgfritt) Karakternavnene som skal tildeles spilleren, atskilt med komma"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

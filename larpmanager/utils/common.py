@@ -742,3 +742,11 @@ def get_recaptcha_secrets(request):
 
 def welcome_user(request, user):
     messages.success(request, _("Welcome") + ", " + user.get_username() + "!")
+
+
+def format_email_body(email):
+    body_with_spaces = email.body.replace("<br />", " ").replace("<br>", " ")
+    stripped = strip_tags(body_with_spaces)
+    cleaned = stripped.split("============")[0]
+    cutoff = 200
+    return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned

@@ -90,7 +90,8 @@ def donation(page, live_server):
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("Donation of Admin Test")
+    # Check for donation invoice in the table
+    expect(page.get_by_role("row", name="Admin Test Wire donation")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")
@@ -145,7 +146,8 @@ def membership_fees(page, live_server):
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("Membership fee of Admin Test")
+    # Check for membership fee invoice in the table
+    expect(page.get_by_role("row", name="Admin Test Wire membership")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")

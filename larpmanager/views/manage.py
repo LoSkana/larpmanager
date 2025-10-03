@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.http import HttpResponsePermanentRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -909,10 +910,36 @@ def _check_intro_driver(request, ctx):
     ctx["intro_driver"] = True
 
 
-@login_required
 def orga_redirect(request, s, n, p=None):
-    suffix = f"-{n}" if n > 1 else ""
-    path = f"/{s}{suffix}/"
+    """
+    Optimized redirect from /slug/number/path to /slug-number/path format.
+
+    Redirects URLs like /event-slug/2/some/path to /event-slug-2/some/path.
+    Uses permanent redirect (301) for better SEO and caching.
+
+    Args:
+        request: Django HTTP request object (not used in redirect logic)
+        s (str): Event slug
+        n (int): Run number
+        p (str, optional): Additional path components
+
+    Returns:
+        HttpResponsePermanentRedirect: 301 redirect to normalized URL
+    """
+
+    # Build path components efficiently
+    path_parts = [s]
+
+    # Only add suffix for run numbers > 1
+    if n > 1:
+        path_parts.append(f"-{n}")
+
+    # Join slug and number, add trailing slash
+    base_path = "".join(path_parts) + "/"
+
+    # Add additional path if provided (p already includes leading slash if needed)
     if p:
-        path += f"{p}"
-    return redirect(path)
+        base_path += p
+
+    # Use permanent redirect (301) for better caching and SEO
+    return HttpResponsePermanentRedirect("/" + base_path)

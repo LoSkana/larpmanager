@@ -26,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
@@ -1069,7 +1070,7 @@ class PreRegistrationForm(forms.Form):
         cho_pref = [(r, r) for r in prefs]
 
         # Check if preference editing is disabled via config
-        if self.ctx.get("event") and self.ctx["event"].assoc.get_config("pre_reg_preferences", False):
+        if self.ctx.get("event") and get_assoc_config(self.ctx["event"].assoc_id, "pre_reg_preferences", False):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,
                 choices=cho_pref,

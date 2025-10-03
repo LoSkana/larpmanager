@@ -361,6 +361,7 @@ class OrgaCharacterForm(CharacterForm):
         if "px" not in self.params["features"]:
             return
 
+        # px ability
         self.fields["px_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
             queryset=self.params["run"].event.get_elements(AbilityPx),
@@ -368,9 +369,10 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_ability_list"] = [str(s) for s in self.instance.px_ability_list.values_list("pk", flat=True)]
+        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("pk", flat=True))
         self.show_link.append("id_px_ability_list")
 
+        # delivery list
         self.fields["px_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Delivery"),
             queryset=self.params["run"].event.get_elements(DeliveryPx),
@@ -378,17 +380,17 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_delivery_list"] = [str(s) for s in self.instance.px_delivery_list.values_list("pk", flat=True)]
+        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
         self.show_link.append("id_px_delivery_list")
 
     def _save_px(self, instance):
         if "px" not in self.params["features"]:
             return
 
-        if "abilities" in self.cleaned_data:
-            instance.px_ability_list.set(self.cleaned_data["abilities"])
-        if "deliveries" in self.cleaned_data:
-            instance.px_delivery_list.set(self.cleaned_data["deliveries"])
+        if "px_ability_list" in self.cleaned_data:
+            instance.px_ability_list.set(self.cleaned_data["px_ability_list"])
+        if "px_delivery_list" in self.cleaned_data:
+            instance.px_delivery_list.set(self.cleaned_data["px_delivery_list"])
 
     def _init_factions(self):
         """Initialize faction selection fields for character forms.

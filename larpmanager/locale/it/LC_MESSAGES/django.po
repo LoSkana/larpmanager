@@ -299,9 +299,6 @@ msgstr "Chiuso"
 msgid "Cover"
 msgstr "Cover"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "Email"
 
@@ -1170,9 +1167,6 @@ msgstr "pagamenti"
 msgid "positive"
 msgstr "positivi"
 
-msgid "residues"
-msgstr "residui"
-
 msgid "--- Empty"
 msgstr "--- Vuoto"
 
@@ -1739,6 +1733,9 @@ msgstr "Elenco dei biglietti"
 
 msgid "Total costs"
 msgstr "Costi totali"
+
+msgid "Transaction"
+msgstr "Transazione"
 
 msgid "Transversal"
 msgstr "Trasversale"
@@ -2513,8 +2510,8 @@ msgstr "Raccolta totale"
 msgid "Color background"
 msgstr "Sfondo testo"
 
-msgid "Confirm payments"
-msgstr "Conferma pagamenti"
+msgid "Credits residues"
+msgstr "Crediti residui"
 
 msgid "Current template"
 msgstr "Template attuale"
@@ -4054,6 +4051,9 @@ msgstr "Preiscrizioni non convertite"
 msgid "You don’t have any events yet"
 msgstr "Non ci sono ancora eventi"
 
+msgid "You're not allowed to sign up"
+msgstr "Non è consentito iscriversi"
+
 msgid "Your account is now activated"
 msgstr "Il tuo account ora è attivo"
 
@@ -5365,6 +5365,9 @@ msgstr "Questa pagina consente di aggiungere o modificare un personaggio"
 msgid "This page allows you to edit a member's profile"
 msgstr "Questa pagina consente di modificare il profilo di un membro"
 
+msgid "To access this feature, you must first register"
+msgstr "Per accedere a questa funzionalità devi prima iscriverti"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attenzione! Il form contiene degli errori ai campi - "
 
@@ -5436,9 +5439,6 @@ msgstr "Questa pagina riepiloga i template per handout dell'evento"
 msgid "This page shows the types of quests in the event"
 msgstr "Questa pagina riepiloga i tipi di quest dell'evento"
 
-msgid "To access this feature, you must first register!"
-msgstr "Per accedere a questa funzionalità devi prima iscriverti!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Hai già versato la quota sociale di quest'anno"
 
@@ -5490,6 +5490,9 @@ msgstr "La somma è di %(amount).2f, con motivazione '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Ci sono <b>%(number)s</b> personaggi da approvare"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Questa funzione è disponibile per i biglietti non in attesa"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Questa pagina consente di aggiungere o modificare una consegna px"
@@ -5562,9 +5565,6 @@ msgstr "L'iscrizione all'evento è stata disdetta"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Ci sono campi di scrittura senza opzioni: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Questa funzione è disponibile per i biglietti non in attesa!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr ""
@@ -5715,9 +5715,6 @@ msgstr "Avrai il nostro eterno ringraziamento per aver creduto  in noi"
 
 msgid "please upload your membership application to proceed"
 msgstr "per favore carica la domanda di adesione per procedere"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Facoltativo) Il nome del personaggio da assegnare al giocatore"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7276,6 +7273,12 @@ msgid ""
 msgstr ""
 "È necessario creare almeno un tipo di prologo prima di poter creare dei "
 "prologhi"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Facoltativo) I nomi dei personaggi da assegnare al giocatore, separati da "
+"virgole"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

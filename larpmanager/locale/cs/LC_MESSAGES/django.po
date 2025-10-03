@@ -299,9 +299,6 @@ msgstr "Uzavřeno"
 msgid "Cover"
 msgstr "Obálka"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -1170,9 +1167,6 @@ msgstr "platby"
 msgid "positive"
 msgstr "pozitivní"
 
-msgid "residues"
-msgstr "rezidua"
-
 msgid "--- Empty"
 msgstr "--- Prázdný"
 
@@ -1739,6 +1733,9 @@ msgstr "Seznam vstupenek"
 
 msgid "Total costs"
 msgstr "Celkové náklady"
+
+msgid "Transaction"
+msgstr "Transakce"
 
 msgid "Transversal"
 msgstr "Příčná"
@@ -2513,8 +2510,8 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Confirm payments"
-msgstr "Potvrzení plateb"
+msgid "Credits residues"
+msgstr "Zbytky úvěrů"
 
 msgid "Current template"
 msgstr "Aktuální šablona"
@@ -4054,6 +4051,9 @@ msgstr "Nepřepočtené předběžné registrace"
 msgid "You don’t have any events yet"
 msgstr "Zatím nemáte žádné události"
 
+msgid "You're not allowed to sign up"
+msgstr "Nesmíte se zaregistrovat"
+
 msgid "Your account is now activated"
 msgstr "Váš účet je nyní aktivní"
 
@@ -5363,6 +5363,9 @@ msgstr "Na této stránce můžete přidat nebo upravit postavu"
 msgid "This page allows you to edit a member's profile"
 msgstr "Na této stránce můžete upravit profil člena"
 
+msgid "To access this feature, you must first register"
+msgstr "Pro přístup k této funkci se musíte nejprve zaregistrovat"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
 
@@ -5437,9 +5440,6 @@ msgstr ""
 msgid "This page shows the types of quests in the event"
 msgstr "Tato stránka shrnuje typy úkolů v této akci"
 
-msgid "To access this feature, you must first register!"
-msgstr "Pro přístup k této funkci se musíte nejprve zaregistrovat!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
 
@@ -5490,6 +5490,9 @@ msgstr "Součet je %(amount).2f s důvodem \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Ke schválení je třeba <b>%(number)s</b> znaků"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Tato funkce je k dispozici pro nečekané tipy"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Tato stránka umožňuje přidat nebo upravit dodávku px"
@@ -5560,9 +5563,6 @@ msgstr "Registrace na akci byla zrušena"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Jsou zde pole pro zápis bez možností: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Tato funkce je k dispozici pro nečekané tipy!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "Na této stránce můžete přidat nebo upravit platební položku"
@@ -5708,9 +5708,6 @@ msgstr "Za to, že jste nám věřili, vám patří náš věčný dík"
 
 msgid "please upload your membership application to proceed"
 msgstr "pro pokračování nahrajte svou členskou přihlášku"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Nepovinné) Jméno postavy, které se přiřadí hráči"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7054,6 +7051,11 @@ msgstr "Souhlas se sdílením údajů můžete odvolat kliknutím na příslušn
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Před vytvořením prologů musíte vytvořit alespoň jeden typ prologu"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Nepovinné) Jména postav, která se mají hráči přiřadit, oddělená čárkami"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

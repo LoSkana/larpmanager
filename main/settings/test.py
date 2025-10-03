@@ -1,19 +1,25 @@
 import os
 
-from main.settings import BASE_DIR
+from .base import *
 
 SLUG_ASSOC = 'def'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_larpmanager',
+        'NAME': 'larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
-        'HOST': 'localhost',
+        "HOST": os.getenv("DB_HOST", "localhost"),
         'PORT': '5432',
    }
 }
+
+name = os.getenv("POSTGRES_DB","larp_test")
+worker = os.getenv("PYTEST_XDIST_WORKER")
+if worker:
+    name = f"{name}_{worker}"
+    DATABASES["default"]["NAME"] = name
 
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
@@ -36,7 +42,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'DEBUG',
+        'level': 'WARN',
     },
 }
 

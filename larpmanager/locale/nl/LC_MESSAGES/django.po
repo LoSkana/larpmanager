@@ -299,9 +299,6 @@ msgstr "Gesloten"
 msgid "Cover"
 msgstr "Omslag"
 
-msgid "Descr"
-msgstr "Beschrijving"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -1170,9 +1167,6 @@ msgstr "betalingen"
 msgid "positive"
 msgstr "positief"
 
-msgid "residues"
-msgstr "residuen"
-
 msgid "--- Empty"
 msgstr "--- Leeg"
 
@@ -1739,6 +1733,9 @@ msgstr "Ticketlijst"
 
 msgid "Total costs"
 msgstr "Totale kosten"
+
+msgid "Transaction"
+msgstr "Transactie"
 
 msgid "Transversal"
 msgstr "Dwars"
@@ -2513,8 +2510,8 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Confirm payments"
-msgstr "Betalingen bevestigen"
+msgid "Credits residues"
+msgstr "Credits residuen"
 
 msgid "Current template"
 msgstr "Huidige sjabloon"
@@ -4054,6 +4051,9 @@ msgstr "Niet omgezette voorregistraties"
 msgid "You don’t have any events yet"
 msgstr "Je hebt nog geen evenementen"
 
+msgid "You're not allowed to sign up"
+msgstr "Je mag je niet aanmelden"
+
 msgid "Your account is now activated"
 msgstr "Je account is nu actief"
 
@@ -5371,6 +5371,9 @@ msgstr "Op deze pagina kun je een personage toevoegen of bewerken"
 msgid "This page allows you to edit a member's profile"
 msgstr "Op deze pagina kun je het profiel van een lid bewerken"
 
+msgid "To access this feature, you must first register"
+msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
 
@@ -5444,9 +5447,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Deze pagina geeft een overzicht van de soorten quests in het evenement"
 
-msgid "To access this feature, you must first register!"
-msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
 
@@ -5497,6 +5497,9 @@ msgstr "De som is %(amount).2f, met reden '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Er zijn <b>%(number)s</b> tekens om goed te keuren"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Op deze pagina kunt u een px-levering toevoegen of bewerken"
@@ -5568,9 +5571,6 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Er zijn schrijfvelden zonder opties: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "Op deze pagina kun je een betalingsitem toevoegen of bewerken"
@@ -5716,9 +5716,6 @@ msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
 
 msgid "please upload your membership application to proceed"
 msgstr "upload uw lidmaatschapsaanvraag om verder te gaan"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Optioneel) De naam van het personage om toe te wijzen aan de speler"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7241,6 +7238,12 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Je moet minstens één proloogtype maken voordat je prologen kunt maken"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Optioneel) De karakternamen om aan de speler toe te wijzen, gescheiden door"
+" komma's"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

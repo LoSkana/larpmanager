@@ -23,7 +23,6 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -866,8 +865,4 @@ class BaseAccForm(forms.Form):
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
-        if "association" in self.ctx:
-            self.assoc = self.ctx["association"]
-        else:
-            self.assoc = get_object_or_404(Association, pk=self.ctx["a_id"])
-        self.ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)
+        self.ctx["user_fees"] = get_assoc_config(self.ctx["a_id"], "payment_fees_user", False)

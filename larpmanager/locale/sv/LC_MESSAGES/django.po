@@ -299,9 +299,6 @@ msgstr "Stängt"
 msgid "Cover"
 msgstr "Skydd"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "E-post"
 
@@ -1170,9 +1167,6 @@ msgstr "betalningar"
 msgid "positive"
 msgstr "positiv"
 
-msgid "residues"
-msgstr "restprodukter"
-
 msgid "--- Empty"
 msgstr "--- Tom"
 
@@ -1739,6 +1733,9 @@ msgstr "Biljettlista"
 
 msgid "Total costs"
 msgstr "Totala kostnader"
+
+msgid "Transaction"
+msgstr "Transaktion"
 
 msgid "Transversal"
 msgstr "Transversal"
@@ -2513,8 +2510,8 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
-msgid "Confirm payments"
-msgstr "Bekräfta betalningar"
+msgid "Credits residues"
+msgstr "Restprodukter från krediter"
 
 msgid "Current template"
 msgstr "Nuvarande mall"
@@ -4054,6 +4051,9 @@ msgstr "Förhandsregistreringar som inte konverterats"
 msgid "You don’t have any events yet"
 msgstr "Du har inga evenemang ännu"
 
+msgid "You're not allowed to sign up"
+msgstr "Du får inte registrera dig"
+
 msgid "Your account is now activated"
 msgstr "Ditt konto är nu aktivt"
 
@@ -5365,6 +5365,9 @@ msgstr "På den här sidan kan du lägga till eller redigera en karaktär"
 msgid "This page allows you to edit a member's profile"
 msgstr "På den här sidan kan du redigera en medlems profil"
 
+msgid "To access this feature, you must first register"
+msgstr "För att få tillgång till denna funktion måste du först registrera dig"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Var uppmärksam! Formuläret innehåller fel i fälten"
 
@@ -5437,10 +5440,6 @@ msgstr "På den här sidan sammanfattas mallarna för evenemangets handout"
 msgid "This page shows the types of quests in the event"
 msgstr "Denna sida sammanfattar de olika typerna av uppdrag i evenemanget"
 
-msgid "To access this feature, you must first register!"
-msgstr ""
-"För att få tillgång till denna funktion måste du först registrera dig!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Du har redan betalat årets medlemsavgift"
 
@@ -5492,6 +5491,9 @@ msgstr "Summan är %(amount).2f, med anledning \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det finns <b>%(number)s</b> karaktärer att godkänna"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Denna funktion är tillgänglig för icke-väntande biljetter"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "På den här sidan kan du lägga till eller redigera en px-leverans"
@@ -5562,9 +5564,6 @@ msgstr "Anmälan till evenemanget avbröts"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finns skrivfält utan alternativ: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Denna funktion är tillgänglig för icke-väntande biljetter!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "På den här sidan kan du lägga till eller redigera en betalningspost"
@@ -5710,9 +5709,6 @@ msgstr "Du kommer att få vårt eviga tack för att du trodde på oss"
 
 msgid "please upload your membership application to proceed"
 msgstr "vänligen ladda upp din medlemsansökan för att fortsätta"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Valfritt) Det karaktärsnamn som ska tilldelas spelaren"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -7137,6 +7133,12 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Du måste skapa minst en prologtyp innan du kan skapa prologer"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Valfritt) De karaktärsnamn som ska tilldelas spelaren, åtskilda med "
+"kommatecken"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"

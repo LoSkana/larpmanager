@@ -9,47 +9,4 @@
 {% block content %}
     {% include "elements/header/edit.html" %}
     {% include "elements/paginate.html" %}
-    <table id="payments" class="tablesorter">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{% trans "Player" %}</th>
-                <th>{% trans "Type" %}</th>
-                <th>{% trans "Invoice" %}</th>
-                <th>{% trans "Details" %}</th>
-                <th>{% trans "Net" %}</th>
-                <th>{% trans "Fee" %}</th>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Info" %}</th>
-                {% if 'vat' in assoc.features %}
-                    <th>{% trans "VAT" %}</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
-                <tr id="{{ el.id }}">
-                    <td>
-                        <a href="{% url 'orga_payments_edit' run.get_slug el.id %}"
-                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td>{{ el.reg.member }}</td>
-                    <td>{{ el.get_pay_display }}</td>
-                    <td>
-                        {% if el.inv %}{{ el.inv.method.name }}{% endif %}
-                    </td>
-                    <td>
-                        {% if el.inv %}{{ el.inv.get_details | safe }}{% endif %}
-                    </td>
-                    <td>{{ el.net | format_decimal }}</td>
-                    <td>{{ el.trans | floatformat:"-2" }}</td>
-                    <td>{{ el.created | date:"d/m/Y h:m" }}</td>
-                    <td>
-                        {% if el.info %}{{ el.info }}{% endif %}
-                    </td>
-                    {% if 'vat' in assoc.features %}<td>{{ el.vat | floatformat:"-2" }}</td>{% endif %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock content %}

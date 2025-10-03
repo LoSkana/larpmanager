@@ -2584,13 +2584,16 @@ msgstr ""
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
 
-msgid "To access this feature, you must first register!"
+msgid "To access this feature, you must first register"
 msgstr ""
 
-msgid "This feature is available for non-waiting tickets!"
+msgid "This feature is available for non-waiting tickets"
 msgstr ""
 
 msgid "not visible at this time"
+msgstr ""
+
+msgid "You're not allowed to sign up"
 msgstr ""
 
 msgid "Statement"
@@ -4952,18 +4955,9 @@ msgstr ""
 msgid "This page shows all donations recorded in the system"
 msgstr ""
 
-msgid "Descr"
-msgstr ""
-
 msgid ""
 "This page shows all expenses incurred by collaborators, recorded in the "
 "system"
-msgstr ""
-
-msgid "Run"
-msgstr ""
-
-msgid "Approve"
 msgstr ""
 
 msgid "Movements"
@@ -4987,13 +4981,7 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
-msgid "Confirm payments"
-msgstr ""
-
 msgid "This page shows all invoices registered in the system"
-msgstr ""
-
-msgid "Net"
 msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
@@ -5006,12 +4994,6 @@ msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""
 
 msgid "you can review, edit, and mark them as assigned"
-msgstr ""
-
-msgid "Total required"
-msgstr ""
-
-msgid "residues"
 msgstr ""
 
 msgid "This page summarises the system entries of"
@@ -5147,21 +5129,6 @@ msgid "Archive mail"
 msgstr ""
 
 msgid "This page shows all emails, both queued and sent"
-msgstr ""
-
-msgid "Recipient"
-msgstr ""
-
-msgid "Subject"
-msgstr ""
-
-msgid "Body"
-msgstr ""
-
-msgid "Sent"
-msgstr ""
-
-msgid "Read"
 msgstr ""
 
 msgid ""
@@ -5764,6 +5731,9 @@ msgstr ""
 msgid "Returned"
 msgstr ""
 
+msgid "Run"
+msgstr ""
+
 msgid "Indicate the amount of your donation"
 msgstr ""
 
@@ -6338,6 +6308,9 @@ msgstr ""
 msgid "This page allows you to manually approve payments received"
 msgstr ""
 
+msgid "Net"
+msgstr ""
+
 msgid ""
 "This page shows all expenses incurred directly by the organization "
 "concerning this event"
@@ -6574,6 +6547,9 @@ msgstr ""
 msgid ""
 "This page allows you to read any writing element, using the table search "
 "controls"
+msgstr ""
+
+msgid "Read"
 msgstr ""
 
 msgid ""
@@ -8348,7 +8324,8 @@ msgstr ""
 msgid "if it doesn't exist, it will be created"
 msgstr ""
 
-msgid "(Optional) The character name to assign to the player"
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
 msgstr ""
 
 msgid "(Optional) The amount of a voluntary donation"
@@ -8581,10 +8558,22 @@ msgstr ""
 msgid "Registration completed successfully!"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 msgid "Request approved"
 msgstr ""
 
+msgid "Transaction"
+msgstr ""
+
 msgid "Element approved"
+msgstr ""
+
+msgid "Total required"
+msgstr ""
+
+msgid "Credits residues"
 msgstr ""
 
 msgid "Verified payments"
@@ -8633,6 +8622,18 @@ msgid "Membership fee of"
 msgstr ""
 
 msgid "Mail added to queue!"
+msgstr ""
+
+msgid "Recipient"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"

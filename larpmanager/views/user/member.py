@@ -129,50 +129,64 @@ def profile(request):
         return HttpResponseRedirect("/")
 
     ctx = def_user_ctx(request)
+    member = request.user.member
+    assoc_features = request.assoc["features"]
+    members_fields = request.assoc["members_fields"]
 
+    # Handle POST request (form submission)
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.member, request=request)
+        form = ProfileForm(request.POST, request.FILES, instance=member, request=request)
         if form.is_valid():
             prof = form.save()
-            ctx["membership"].compiled = True
-            if ctx["membership"].status == MembershipStatus.EMPTY:
-                ctx["membership"].status = MembershipStatus.JOINED
-            ctx["membership"].save()
+
+            # Update membership status
+            membership = ctx["membership"]
+            membership.compiled = True
+            if membership.status == MembershipStatus.EMPTY:
+                membership.status = MembershipStatus.JOINED
+            membership.save()
+
             activate(prof.language)
 
-            mes = _("Personal data updated") + "!"
+            message = _("Personal data updated") + "!"
 
-            if "membership" in request.assoc["features"]:
-                if ctx["membership"].status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
-                    mes += " " + _("Last step, please upload your membership application") + "."
-                    messages.success(request, mes)
-                    return redirect("membership")
+            # Check if membership workflow is needed
+            if "membership" in assoc_features and membership.status in [
+                MembershipStatus.EMPTY,
+                MembershipStatus.JOINED,
+            ]:
+                message += " " + _("Last step, please upload your membership application") + "."
+                messages.success(request, message)
+                return redirect("membership")
 
-            messages.success(request, mes)
+            messages.success(request, message)
             return redirect("home")
-    else:
-        form = ProfileForm(instance=request.user.member, request=request)
 
-    ctx["form"] = form
-    ctx["member"] = request.user.member
+    # Handle GET request (display form)
+    else:
+        form = ProfileForm(instance=member, request=request)
+
+    ctx.update(
+        {
+            "form": form,
+            "member": member,
+            "disable_join": True,
+        }
+    )
+
     ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.PROFILE)
 
-    if "profile" in request.assoc["members_fields"]:
+    # Add avatar form only if profile upload is enabled
+    if "profile" in members_fields:
         ctx["avatar_form"] = AvatarForm()
 
-    if request.user.member.profile_thumb:
-        ctx["profile"] = request.user.member.profile_thumb.url
+    # Add profile URL only if profile image exists
+    if member.profile_thumb:
+        ctx["profile"] = member.profile_thumb.url
 
-    # print(p)
-
-    # ~ if p and "membership" in p:
-    # ~ # messages.sucesss (Request, _ ('To register, we have to ask you some data. It will take very little, we jurist it!'))
-    # ~ ctx["membership"] = True
-
-    if "vote" in request.assoc["features"]:
+    # Add vote configuration only if voting is enabled
+    if "vote" in assoc_features:
         ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False)
-
-    ctx["disable_join"] = True
 
     return render(request, "larpmanager/member/profile.html", ctx)
 

@@ -308,12 +308,13 @@ class ExeExpenseForm(MyForm):
     class Meta:
         model = AccountingItemExpense
         exclude = ("inv", "hide")
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["run"].widget.set_assoc(self.params["a_id"])
 
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
@@ -433,7 +434,7 @@ class ExeRefundRequestForm(MyForm):
 
     class Meta:
         model = RefundRequest
-        exclude = ("status",)
+        exclude = ("status", "hide")
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):

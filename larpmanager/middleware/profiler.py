@@ -28,6 +28,8 @@ logger = logging.getLogger(__name__)
 
 
 class ProfilerMiddleware:
+    threshold = 0.8
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -45,7 +47,7 @@ class ProfilerMiddleware:
 
         if hasattr(request, "_profiler_func_name"):
             duration = (now() - request._profiler_start_ts).total_seconds()
-            if duration >= 1:
+            if duration >= self.threshold:
                 try:
                     # noinspection PyProtectedMember
                     profiler_response_signal.send(

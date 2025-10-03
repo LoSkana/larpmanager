@@ -40,10 +40,12 @@ from larpmanager.accounting.registration import (
     get_reg_payments,
 )
 from larpmanager.cache.character import get_event_cache_all, reset_run
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import reset_event_features
 from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
+from larpmanager.cache.rels import reset_event_rels_cache
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import get_cache_reg_field
@@ -57,7 +59,6 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.casting import AssignmentTrait, QuestType
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
@@ -475,9 +476,7 @@ def orga_registrations(request, s):
 @login_required
 def orga_registrations_accounting(request, s):
     ctx = check_event_permission(request, s, "orga_registrations")
-
     res = _orga_registrations_acc(ctx)
-
     return JsonResponse(res)
 
 
@@ -876,8 +875,7 @@ def orga_pre_registrations(request, s):
     ctx = check_event_permission(request, s, "orga_pre_registrations")
     ctx["dc"] = get_pre_registration(ctx["event"])
 
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+    ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 
@@ -891,6 +889,7 @@ def orga_reload_cache(request, s):
     reset_run_event_links(ctx["event"])
     reset_cache_reg_counts(ctx["run"])
     reset_event_fields_cache(ctx["event"].id)
+    reset_event_rels_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))
     return redirect("manage", s=ctx["run"].get_slug())
 
