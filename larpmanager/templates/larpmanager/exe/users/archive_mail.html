@@ -13,43 +13,4 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/paginate.html" %}
-    <table id="emails" class="tablesorter">
-        <thead>
-            <tr>
-                <th></th>
-                {% if exe %}
-                    <th>{% trans "Run" %}</th>
-                {% endif %}
-                <th>{% trans "Recipient" %}</th>
-                <th>{% trans "Subject" %}</th>
-                <th>{% trans "Body" %}</th>
-                <th>{% trans "Sent" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
-                <tr id="{{ el.id }}">
-                    <td>
-                        {% if exe %}
-                            <a href="{% url 'exe_read_mail' el.id %}" qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
-                        {% else %}
-                            <a href="{% url 'orga_read_mail' run.get_slug el.id %}"
-                               qtip="{% trans "Read" %}"><i class="fas fa-book-open"></i> </a>
-                        {% endif %}
-                    </td>
-                    {% if exe %}
-                        <td>
-                            {% if el.run %}{{ el.run }}{% endif %}
-                        </td>
-                    {% endif %}
-                    <td>{{ el.recipient }}</td>
-                    <td>{{ el.subj }}</td>
-                    <td>{{ el.body | striptags | truncatechars:100 }}</td>
-                    <td>
-                        {% if el.sent %}{{ el.sent | date:"d/m/Y H:i" }}{% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock content %}

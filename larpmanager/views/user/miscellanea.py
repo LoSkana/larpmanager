@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import datetime, timedelta
 
 from django.contrib import messages
@@ -33,9 +34,7 @@ from larpmanager.forms.miscellanea import (
     ShuttleServiceEditForm,
     ShuttleServiceForm,
 )
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.miscellanea import (
     Album,
     AlbumUpload,
@@ -47,20 +46,17 @@ from larpmanager.models.miscellanea import (
     WorkshopMemberRel,
     WorkshopModule,
 )
-from larpmanager.models.writing import (
-    Handout,
-)
+from larpmanager.models.writing import Handout
 from larpmanager.utils.base import def_user_ctx, is_shuttle
-from larpmanager.utils.common import (
-    get_album,
-    get_workshop,
-)
+from larpmanager.utils.common import get_album, get_workshop
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def url_short(request, s):
@@ -88,6 +84,16 @@ def help_red(request, n):
 
 @login_required
 def help(request, s=None):
+    """
+    Display help page with question submission form and user's previous questions.
+
+    Args:
+        request: HTTP request object
+        s: Optional event slug for event-specific help
+
+    Returns:
+        HttpResponse: Rendered help template with form and question list
+    """
     if s:
         ctx = get_event_run(request, s, status=True)
     else:
@@ -181,7 +187,7 @@ def workshops(request, s):
     for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
         dt = workshop.show()
         limit = datetime.now() - timedelta(days=365)
-        # print(limit)
+        logger.debug(f"Workshop completion limit date: {limit}")
         dt["done"] = (
             WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
             >= 1
@@ -211,6 +217,17 @@ def valid_workshop_answer(request, ctx):
 
 @login_required
 def workshop_answer(request, s, m):
+    """
+    Handle workshop answer submission and validation.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        m: Workshop module number
+
+    Returns:
+        HttpResponse: Rendered template or redirect response
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     get_workshop(ctx, m)
     completed = [el.pk for el in request.user.member.workshops.select_related().all()]
@@ -247,6 +264,14 @@ def workshop_answer(request, s, m):
 
 @login_required
 def shuttle(request):
+    """Display shuttle service requests for the current association.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered shuttle template with active and recent requests
+    """
     check_assoc_feature(request, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
@@ -269,6 +294,14 @@ def shuttle(request):
 
 @login_required
 def shuttle_new(request):
+    """Handle creation of new shuttle service requests.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Redirect to shuttle list on success or form template on GET/invalid POST
+    """
     check_assoc_feature(request, "shuttle")
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})

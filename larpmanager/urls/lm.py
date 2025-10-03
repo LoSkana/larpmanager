@@ -18,9 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.urls import (
-    path,
-)
+from django.urls import path
 
 from larpmanager.views import larpmanager as views_lm
 
@@ -41,7 +39,7 @@ urlpatterns = [
         name="guides",
     ),
     path(
-        "guide/<slug:slug>/",
+        "guides/<slug:slug>/",
         views_lm.guide,
         name="guide",
     ),
@@ -104,11 +102,6 @@ urlpatterns = [
         "lm/profile/",
         views_lm.lm_profile,
         name="lm_profile",
-    ),
-    path(
-        "lm/profile/<slug:func>",
-        views_lm.lm_profile_rm,
-        name="lm_profile_rm",
     ),
     path(
         "redirect/<path:p>",

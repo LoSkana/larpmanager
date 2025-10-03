@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import re
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import go_to, login_orga
 
 pytestmark = pytest.mark.e2e
 
@@ -41,12 +40,13 @@ def test_orga_reg_form(pw_page):
 
     check_filler(page, live_server)
 
+
 def prepare_form(page, live_server):
     go_to(page, live_server, "test/manage")
-    # check initial reg form 
+    # check initial reg form
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
     expect(page.locator("#one")).to_contain_text("Ticket Your registration ticket Ticket")
-    
+
     # Add features
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Additional tickets").check()
@@ -54,25 +54,27 @@ def prepare_form(page, live_server):
     page.get_by_role("checkbox", name="Surcharge").check()
     page.get_by_role("checkbox", name="Pay what you want").check()
     page.get_by_role("button", name="Confirm").click()
-    
-    # check there are questions for all features 
+
+    # check there are questions for all features
     page.get_by_role("link", name="Form").click()
-    page.locator("[id=\"\\31 \"]").get_by_role("cell", name="").click()
+    page.locator('[id="\\31 "]').get_by_role("cell", name="").click()
     page.get_by_text("Your registration ticket").click()
     page.get_by_text("Your registration ticket").fill("Your registration ticket2")
     page.get_by_role("button", name="Confirm").click()
 
     expect(page.locator("#one")).to_contain_text(
-        "Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your own Additional Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Rate Number of installments to split the fee: payments… Rate Optional Surcharge Registration surcharge Surcharge Optional")
-    page.locator("[id=\"\\34 \"]").get_by_role("link", name="").click()
-    page.locator("[id=\"\\32 \"]").get_by_role("link", name="").click()
+        "Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your own Additional Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Rate Number of installments to split the fee: payments… Rate Optional Surcharge Registration surcharge Surcharge Optional"
+    )
+    page.locator('[id="\\34 "]').get_by_role("link", name="").click()
+    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     expect(page.locator("#one")).to_contain_text(
-        "Additional Reserve additional tickets beyond your own Additional Optional Ticket Your registration ticket2 Ticket Rate Number of installments to split the fee: payments… Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Surcharge Registration surcharge Surcharge Optional")
-    page.locator("[id=\"\\32 \"]").get_by_role("link", name="").click()
+        "Additional Reserve additional tickets beyond your own Additional Optional Ticket Your registration ticket2 Ticket Rate Number of installments to split the fee: payments… Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Surcharge Registration surcharge Surcharge Optional"
+    )
+    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     page.get_by_text("Reserve additional tickets").click()
     page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
     page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("[id=\"\\32 \"]")).to_contain_text("Reserve additional tickets beyond your own2")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("Reserve additional tickets beyond your own2")
 
     # change ticket price
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
@@ -83,7 +85,7 @@ def prepare_form(page, live_server):
     page.locator("#id_description").fill("sadsadsadsa")
     page.get_by_role("button", name="Confirm").click()
 
-    
+
 def prepare_surcharge(page, live_server):
     go_to(page, live_server, "test/manage")
     # Add surcharges
@@ -105,7 +107,7 @@ def prepare_surcharge(page, live_server):
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("dasdsadsa")
     page.locator("#id_wire_fee").click()
-    page.locator("#id_wire_fee").fill("0a")
+    page.locator("#id_wire_fee").fill("0")
     page.locator("#id_wire_payee").click()
     page.locator("#id_wire_payee").fill("dsadsadsadas")
     page.locator("#id_wire_iban").click()
@@ -114,8 +116,9 @@ def prepare_surcharge(page, live_server):
     page.locator("#id_wire_fee").fill("0")
     page.get_by_role("button", name="Confirm").click()
 
+
 def signup(page, live_server):
-    # try signup 
+    # try signup
     go_to(page, live_server, "test/")
     page.get_by_role("link", name="Register").click()
     page.get_by_label("Additional").select_option("3")
@@ -130,7 +133,9 @@ def signup(page, live_server):
     page.get_by_role("link", name="Event").click()
     page.get_by_role("link", name="Registration", exact=True).click()
     expect(page.locator("#register_form")).to_contain_text(
-        "(*) : These fields are mandatory Additional 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge")
+        "(*) : These fields are mandatory Additional 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge"
+    )
+
 
 def check_filler(page, live_server):
     # set up filler
@@ -148,7 +153,8 @@ def check_filler(page, live_server):
     page.get_by_role("link", name="Registration", exact=True).click()
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        "- combobox \"Ticket (*)\":\n  - option \"Standard - 5€\" [selected]")
+        '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]'
+    )
 
     # enable config
     go_to(page, live_server, "test/manage")
@@ -162,4 +168,5 @@ def check_filler(page, live_server):
     page.get_by_role("link", name="Registration", exact=True).click()
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        "- combobox \"Ticket (*)\":\n  - option \"Standard - 5€\" [selected]\n  - option \"Filler\"")
+        '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]\n  - option "Filler"'
+    )

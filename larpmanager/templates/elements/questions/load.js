@@ -38,12 +38,17 @@ function load_question(el) {
         datatype: "json",
     });
 
-    if (!spinner) {
-        start_spinner();
-        spinner = true;
-    }
+    // Show spinner only after 500ms delay
+    let spinnerTimeout = setTimeout(function() {
+        if (!spinner) {
+            start_spinner();
+            spinner = true;
+        }
+    }, 500);
 
     request.done(function(result) {
+        // Clear the spinner timeout since request completed
+        clearTimeout(spinnerTimeout);
 
         num = result['num'];
         data = result['res'];
@@ -51,6 +56,10 @@ function load_question(el) {
 
         el.next().trigger('click');
 
+        // Batch updates by table to minimize DOM operations
+        const tableUpdates = {};
+
+        // Collect all updates first
         for (let r in data) {
             let vl = data[r];
             if (vl.constructor === Array) vl = vl.join(", ");
@@ -58,19 +67,38 @@ function load_question(el) {
             if (popup.has(parseInt(r)))
                 vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num);
 
-            {% if interface_old %}
-            $('#' + r + ' .q_' + num).html(vl);
-            {% else %}
             Object.keys(window.datatables).forEach(function(key) {
-                var table = window.datatables[key];
-                var cell = table.cell('#' + r, '.q_' + num);
-                if (cell && cell.node()) {
-                    cell.data(vl).draw(false);
+                const table = window.datatables[key];
+                const row = table.row('#' + r);
+
+                if (row.length > 0) {
+                    if (!tableUpdates[key]) {
+                        tableUpdates[key] = [];
+                    }
+                    tableUpdates[key].push({
+                        rowSelector: '#' + r,
+                        columnClass: '.q_' + num,
+                        value: vl
+                    });
                 }
             });
-            {% endif %}
-
         }
+
+        // Apply all updates per table and draw once
+        Object.keys(tableUpdates).forEach(function(key) {
+            const table = window.datatables[key];
+            const updates = tableUpdates[key];
+
+            updates.forEach(function(update) {
+                const cell = table.cell(update.rowSelector, update.columnClass);
+                if (cell && cell.node()) {
+                    cell.data(update.value);
+                }
+            });
+
+            // Single draw call per table instead of multiple
+            table.draw(false);
+        });
 
          done[num.toString()] = 1;
 
@@ -98,9 +126,14 @@ function load_question_email(el) {
         datatype: "json",
     });
 
-    start_spinner();
+    // Show spinner only after 500ms delay
+    let spinnerTimeout = setTimeout(function() {
+        start_spinner();
+    }, 500);
 
     request.done(function(data) {
+        // Clear the spinner timeout since request completed
+        clearTimeout(spinnerTimeout);
 
         let t = '.email_que_{0} table tbody'.format(key)
         let tbl = $(t);
@@ -167,10 +200,6 @@ window.addEventListener('DOMContentLoaded', function() {
             var tog = $(this).attr("tog");
             $(this).toggleClass('select');
 
-            {% if interface_old %}
-            $('.' + tog).toggle();
-            {% else %}
-
             var index_list = window.hideColumnsIndexMap[tog];
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
@@ -180,16 +209,9 @@ window.addEventListener('DOMContentLoaded', function() {
                     column.visible(!column.visible());
                 };
             });
-            {% endif %}
 
             return false;
         });
-
-        {% if interface_old %}
-        $.each(window.hideColumnsIndexMap, function(key, _) {
-            $('.' + key).hide();
-        });
-        {% endif %}
 
     });
 

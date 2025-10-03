@@ -23,15 +23,13 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.forms.accounting import (
-    ExePaymentSettingsForm,
-)
+from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
     ExeAppearanceForm,
     ExeAssociationForm,
@@ -42,20 +40,13 @@ from larpmanager.forms.association import (
     ExePreferencesForm,
     ExeQuickSetupForm,
 )
-from larpmanager.forms.member import (
-    ExeProfileForm,
-)
+from larpmanager.forms.member import ExeProfileForm
 from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText
 from larpmanager.models.base import Feature
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.utils.base import check_assoc_permission, get_index_assoc_permissions
-from larpmanager.utils.common import (
-    clear_messages,
-    get_feature,
-)
+from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
@@ -143,9 +134,11 @@ def exe_features(request):
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def exe_features_go(request, slug, on=True):
+def exe_features_go(request, ctx, slug, on=True):
     ctx = check_assoc_permission(request, "exe_features")
     get_feature(ctx, slug)
+    if not ctx["feature"].overall:
+        raise Http404("not overall feature!")
     f_id = ctx["feature"].id
     assoc = Association.objects.get(pk=request.assoc["id"])
     if on:

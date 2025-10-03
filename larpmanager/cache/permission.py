@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
@@ -25,6 +27,8 @@ from django.dispatch import receiver
 
 from larpmanager.models.access import AssocPermission, EventPermission
 from larpmanager.models.base import Feature, FeatureModule
+
+logger = logging.getLogger(__name__)
 
 
 def assoc_permission_feature_key(slug):
@@ -103,7 +107,7 @@ def update_event_permission_feature(slug):
     try:
         perm = EventPermission.objects.select_related("feature").get(slug=slug)
     except ObjectDoesNotExist:
-        print(f"permission slug does not exists: {slug}")
+        logger.warning(f"Permission slug does not exist: {slug}")
         return "", "", ""
     feature = perm.feature
     if feature.placeholder:
@@ -143,7 +147,7 @@ def update_index_permission(typ):
     mapping = {"event": EventPermission, "assoc": AssocPermission}
     que = mapping[typ].objects.select_related("feature", "module")
     que = que.order_by("module__order", "number")
-    return que.values(
+    res = que.values(
         "name",
         "descr",
         "slug",
@@ -153,6 +157,8 @@ def update_index_permission(typ):
         "module__name",
         "module__icon",
     )
+    cache.set(index_permission_key(typ), res)
+    return res
 
 
 def get_cache_index_permission(typ):

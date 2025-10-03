@@ -74,7 +74,7 @@ def go_upload(request, ctx, form):
         form: Uploaded file form data
 
     Returns:
-        str: Result message from processing function
+        list: Result messages from processing function
     """
     # FIX
     # if request.POST.get("upload") == "cover":
@@ -146,6 +146,16 @@ def _get_file(ctx, file, column_id=None):
         column_id: Optional column identifier for file naming
 
     Returns:
+        tuple: (DataFrame, error_list) or (None, error_list) if failed
+    """
+    """Get file path and save uploaded file to media directory.
+
+    Args:
+        ctx: Context dictionary with event information
+        file: Uploaded file object
+        column_id: Optional column identifier for file naming
+
+    Returns:
         str: Saved file path relative to media root
     """
     _get_column_names(ctx)
@@ -192,11 +202,16 @@ def registrations_load(request, ctx, form):
 
 
 def _reg_load(request, ctx, row, questions):
-    if "player" not in row:
-        return "ERR - There is no player column"
+    """Load registration data from CSV row for bulk import.
+
+    Creates or updates registrations with field validation, membership checks,
+    and question processing for event registration imports.
+    """
+    if "email" not in row:
+        return "ERR - There is no email column"
 
     try:
-        user = User.objects.get(email=row["player"])
+        user = User.objects.get(email__iexact=row["email"].strip())
     except ObjectDoesNotExist:
         return "ERR - Email not found"
 
@@ -231,7 +246,17 @@ def _reg_load(request, ctx, row, questions):
 
 
 def _reg_field_load(ctx, reg, field, value, questions, logs):
-    if field == "player":
+    """Load individual registration field from CSV data.
+
+    Args:
+        ctx: Context dictionary with event data
+        reg: Registration instance to update
+        field: Field name from CSV
+        value: Field value from CSV
+        questions: Dictionary of registration questions
+        logs: List to append error messages to
+    """
+    if field == "email":
         return
 
     if not value or pd.isna(value):
@@ -239,8 +264,8 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
 
     if field == "ticket":
         _assign_elem(ctx, reg, field, value, RegistrationTicket, logs)
-    elif field == "character":
-        _reg_assign_character(ctx, reg, value, logs)
+    elif field == "characters":
+        _reg_assign_characters(ctx, reg, value, logs)
     elif field == "pwyw":
         reg.pay_what = Decimal(value)
     else:
@@ -260,27 +285,47 @@ def _assign_elem(ctx, obj, field, value, typ, logs):
     obj.__setattr__(field, el)
 
 
-def _reg_assign_character(ctx, reg, value, logs):
-    try:
-        char = Character.objects.get(event=ctx["event"], name__iexact=value)
-    except ObjectDoesNotExist:
-        logs.append("ERR - Character not found")
-        return
+def _reg_assign_characters(ctx, reg, value, logs):
+    # Clear existing character assignments for this registration
+    RegistrationCharacterRel.objects.filter(reg=reg).delete()
 
-    # check if we have a registration with the same character
-    que = RegistrationCharacterRel.objects.filter(
-        reg__run=ctx["run"],
-        reg__cancellation_date__isnull=True,
-        character=char,
-    )
-    if que.exclude(reg_id=reg.id).count() > 0:
-        logs.append("ERR - character already assigned")
-        return
+    # Handle multiple characters separated by commas
+    character_names = [name.strip() for name in value.split(",")]
 
-    RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
+    for char_name in character_names:
+        if not char_name:
+            continue
+
+        try:
+            char = Character.objects.get(event=ctx["event"], name__iexact=char_name)
+        except ObjectDoesNotExist:
+            logs.append(f"ERR - Character not found: {char_name}")
+            continue
+
+        # check if we have a registration with the same character
+        que = RegistrationCharacterRel.objects.filter(
+            reg__run=ctx["run"],
+            reg__cancellation_date__isnull=True,
+            character=char,
+        )
+        if que.exclude(reg_id=reg.id).count() > 0:
+            logs.append(f"ERR - character already assigned: {char_name}")
+            continue
+
+        RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
 
 
 def writing_load(request, ctx, form):
+    """Load writing data from uploaded files and process relationships.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event and writing type data
+        form: Form object containing uploaded files
+
+    Returns:
+        List of log messages from the loading process
+    """
     logs = []
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:
@@ -364,6 +409,11 @@ def _get_questions(que):
 
 
 def _assign_choice_answer(element, field, value, questions, logs, is_registration=False):
+    """Assign choice answers to form elements during bulk import.
+
+    Processes choice field assignments with validation, option matching,
+    and proper relationship creation for registration or character forms.
+    """
     field = field.lower()
     if field not in questions:
         logs.append(f"ERR - question not found {field}")
@@ -401,6 +451,11 @@ def _assign_choice_answer(element, field, value, questions, logs, is_registratio
 
 
 def element_load(request, ctx, row, questions):
+    """Load generic element data from CSV row for bulk import.
+
+    Processes element creation or updates with field validation,
+    question processing, and proper logging for various element types.
+    """
     field_name = ctx["field_name"].lower()
     if field_name not in row:
         return "ERR - There is no name in fields"
@@ -436,6 +491,17 @@ def element_load(request, ctx, row, questions):
 
 
 def _writing_load_field(ctx, element, field, value, questions, logs):
+    """
+    Load writing field data during upload processing.
+
+    Args:
+        ctx: Context dictionary with event and field information
+        element: Writing element to update
+        field: Field name to process
+        value: Field value from upload
+        questions: Dictionary of available questions
+        logs: List to append error messages to
+    """
     if pd.isna(value):
         return
 
@@ -507,6 +573,17 @@ def _assign_faction(ctx, element, value, logs):
 
 
 def form_load(request, ctx, form, is_registration=True):
+    """Load form questions and options from uploaded files.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event data
+        form: Upload form with file data
+        is_registration: Whether loading registration or writing questions
+
+    Returns:
+        list: Log messages from the upload processing operations
+    """
     logs = []
 
     # upload questions
@@ -540,6 +617,20 @@ def invert_dict(d):
 
 
 def _questions_load(ctx, row, is_registration):
+    """Load and validate question data from upload files.
+
+    Processes question configurations for registration or character forms,
+    creating or updating RegistrationQuestion or WritingQuestion instances
+    based on the row data and validation mappings.
+
+    Args:
+        ctx (dict): Context dictionary containing event and processing information
+        row (dict): Data row from upload file containing question configuration
+        is_registration (bool): True for registration questions, False for writing questions
+
+    Returns:
+        str: Status message indicating success or error details
+    """
     name = row.get("name")
     if not name:
         return "ERR - name not found"
@@ -605,6 +696,11 @@ def _get_mappings(is_registration):
 
 
 def _options_load(ctx, row, questions, is_registration):
+    """Load question options from CSV row for bulk import.
+
+    Creates or updates question options with proper validation,
+    ordering, and association with the correct question type.
+    """
     for field in ["name", "question"]:
         if field not in row:
             return f"ERR - column {field} missing"
@@ -672,6 +768,16 @@ def get_csv_upload_tmp(csv_upload, run):
 
 
 def cover_load(ctx, z_obj):
+    """Handle cover image upload and processing from ZIP archive.
+
+    Args:
+        ctx: Context dictionary containing run and event information
+        z_obj: ZIP file object containing character cover images
+
+    Side effects:
+        Extracts ZIP contents, processes images, updates character cover fields,
+        and moves files to proper media directory structure
+    """
     # extract images
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
     fpath = os.path.join(fpath, ctx["run"].event.slug)
@@ -708,6 +814,11 @@ def tickets_load(request, ctx, form):
 
 
 def _ticket_load(request, ctx, row):
+    """Load ticket data from CSV row for bulk import.
+
+    Creates or updates ticket objects with tier validation, price handling,
+    and proper relationship setup for event registration.
+    """
     if "name" not in row:
         return "ERR - There is no name column"
 
@@ -753,6 +864,11 @@ def abilities_load(request, ctx, form):
 
 
 def _ability_load(request, ctx, row):
+    """Load ability data from CSV row for bulk import.
+
+    Creates or updates ability objects with field validation, type assignment,
+    prerequisite parsing, and requirement processing.
+    """
     if "name" not in row:
         return "ERR - There is no name column"
 

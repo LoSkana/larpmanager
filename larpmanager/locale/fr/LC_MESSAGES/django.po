@@ -299,9 +299,6 @@ msgstr "Fermé"
 msgid "Cover"
 msgstr "Couverture"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "Courriel"
 
@@ -313,6 +310,9 @@ msgstr "Événement"
 
 msgid "Field"
 msgstr "Champ d'application"
+
+msgid "Fifth"
+msgstr "Cinquième"
 
 msgid "First"
 msgstr "Première"
@@ -408,6 +408,9 @@ msgstr "Impôts"
 msgid "Texts"
 msgstr "Textes"
 
+msgid "Third"
+msgstr "Troisièmement"
+
 msgid "Title"
 msgstr "Titre"
 
@@ -501,6 +504,9 @@ msgstr "Remplisseur"
 msgid "Footer"
 msgstr "Pied de page"
 
+msgid "Fourth"
+msgstr "Quatrième"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -587,6 +593,9 @@ msgstr "Sécurité"
 
 msgid "Search"
 msgstr "Recherche"
+
+msgid "Second"
+msgstr "Deuxième"
 
 msgid "Secret"
 msgstr "Secret"
@@ -1158,9 +1167,6 @@ msgstr "paiements"
 msgid "positive"
 msgstr "positif"
 
-msgid "residues"
-msgstr "résidus"
-
 msgid "--- Empty"
 msgstr "--- Vide"
 
@@ -1728,6 +1734,9 @@ msgstr "Liste des billets"
 msgid "Total costs"
 msgstr "Coûts totaux"
 
+msgid "Transaction"
+msgstr "Transaction"
+
 msgid "Transversal"
 msgstr "Transversale"
 
@@ -1805,6 +1814,9 @@ msgstr "Élément de formulaire"
 
 msgid "Form section"
 msgstr "Section du formulaire"
+
+msgid "Full payment"
+msgstr "Paiement intégral"
 
 msgid "Host Address"
 msgstr "Adresse de l'hôte"
@@ -2052,9 +2064,6 @@ msgstr "Pas terminé"
 
 msgid "Number events"
 msgstr "Nombre d'événements"
-
-msgid "Old interface"
-msgstr "Ancienne interface"
 
 msgid "Passages made"
 msgstr "Mesures prises"
@@ -2501,9 +2510,6 @@ msgstr "Collection totale "
 msgid "Color background"
 msgstr "Arrière-plan du texte"
 
-msgid "Confirm payments"
-msgstr "Confirmer les paiements"
-
 msgid "Current template"
 msgstr "Modèle actuel"
 
@@ -2587,6 +2593,9 @@ msgstr "Maecenas / Réduit"
 
 msgid "Payment currency"
 msgstr "Devise de paiement"
+
+msgid "Payment priority"
+msgstr "Priorité de paiement"
 
 msgid "Payment to check"
 msgstr "Paiement à vérifier"
@@ -2780,6 +2789,9 @@ msgstr "Formulaire d'inscription"
 msgid "Registration mail"
 msgstr "Courrier d'inscription"
 
+msgid "Remaining credits"
+msgstr "Crédits restants"
+
 msgid "Request submitted"
 msgstr "Demande de soumission"
 
@@ -2854,6 +2866,9 @@ msgstr "Désactiver l'affectation"
 
 msgid "Electronic invoice"
 msgstr "Facture électronique"
+
+msgid "Enable preferences"
+msgstr "Activer les préférences"
 
 msgid "Go to the form for"
 msgstr "Accéder au formulaire pour"
@@ -3311,6 +3326,9 @@ msgstr "Les inscriptions sont ouvertes !"
 msgid "Registration not open"
 msgstr "L'inscription n'est pas ouverte"
 
+msgid "Registration priority"
+msgstr "Priorité d'inscription"
+
 msgid "Registration sections"
 msgstr "Sections des membres"
 
@@ -3430,6 +3448,9 @@ msgstr "Applications"
 
 msgid "Registration surcharge"
 msgstr "Supplément d'entrée"
+
+msgid "Registrations not open"
+msgstr "L'inscription n'est pas encore ouverte "
 
 msgid "Reimbursement approved"
 msgstr "Remboursement approuvé"
@@ -3798,9 +3819,6 @@ msgstr "L'option n'est plus disponible"
 msgid "Pre-register to the event!"
 msgstr "Inscrivez vous sur la liste de pré-inscription !"
 
-msgid "Registration not yet open!"
-msgstr "L'inscription n'est pas encore ouverte."
-
 msgid "Short name - international"
 msgstr "Nom court - en anglais"
 
@@ -3906,6 +3924,9 @@ msgstr "La rétention comme coût de transaction"
 
 msgid "Would you like to change it"
 msgstr "Souhaitez-vous le modifier"
+
+msgid "Your event has been created"
+msgstr "Votre événement a été créé"
 
 msgid "please fill in your profile"
 msgstr "veuillez remplir votre profil"
@@ -4027,6 +4048,12 @@ msgstr "Transport - essence, autoroute"
 msgid "Unconverted pre-registrations"
 msgstr "Préinscriptions non converties"
 
+msgid "You don’t have any events yet"
+msgstr "Vous n'avez pas encore d'événements"
+
+msgid "You're not allowed to sign up"
+msgstr "Vous n'êtes pas autorisé à vous inscrire"
+
 msgid "Your account is now activated"
 msgstr "Votre compte est maintenant actif"
 
@@ -4042,9 +4069,6 @@ msgstr "Retard dans le paiement de la cotisation annuelle"
 
 msgid "Font to be used in page titles"
 msgstr "police à utiliser dans les titres"
-
-msgid "If checked: uses old interface"
-msgstr "Si la case est cochée : utilise l'ancienne interface"
 
 msgid "Manage issues during the event"
 msgstr "Gérer les problèmes pendant l'événement"
@@ -5166,6 +5190,9 @@ msgstr "Vous pouvez maintenant fixer la date d'ouverture de l'inscription"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lieu de naissance ne figurant pas dans la liste ISTAT"
 
+msgid "Please create your first event to get started"
+msgstr "Veuillez créer votre premier événement pour commencer"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Entrée mise à jour en %(event)s par %(user)s"
@@ -5350,6 +5377,9 @@ msgstr "Cette page vous permet d'ajouter ou de modifier un personnage"
 msgid "This page allows you to edit a member's profile"
 msgstr "Cette page vous permet de modifier le profil d'un membre"
 
+msgid "To access this feature, you must first register"
+msgstr "Pour accéder à cette fonction, vous devez d'abord vous inscrire "
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attention ! Le formulaire contient des erreurs dans les champs"
 
@@ -5425,9 +5455,6 @@ msgstr ""
 msgid "This page shows the types of quests in the event"
 msgstr "Cette page résume les types de quêtes de l'événement"
 
-msgid "To access this feature, you must first register!"
-msgstr "Pour accéder à cette fonction, vous devez d'abord vous inscrire !"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Vous avez déjà payé la cotisation de cette année"
 
@@ -5480,6 +5507,10 @@ msgstr "La somme est de %(amount).2f, avec le motif '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Il y a <b>%(number)s</b> caractères à approuver"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr ""
+"Cette fonction est disponible pour les billets qui ne sont pas en attente "
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Cette page vous permet d'ajouter ou de modifier une livraison px"
@@ -5552,10 +5583,6 @@ msgstr "L'inscription à l'événement a été annulée"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Il existe des champs d'écriture sans options : %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr ""
-"Cette fonction est disponible pour les billets qui ne sont pas en attente !"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr ""
@@ -5708,9 +5735,6 @@ msgstr "Vous aurez nos remerciements éternels pour avoir cru en nous"
 
 msgid "please upload your membership application to proceed"
 msgstr "veuillez télécharger votre demande d'adhésion pour continuer"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Facultatif) Le nom du personnage à attribuer au joueur"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -6240,11 +6264,6 @@ msgstr ""
 "Les participants peuvent désormais soumettre des dons et vous pouvez les "
 "examiner"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr ""
-"Configurez rapidement les paramètres les plus importants de votre "
-"organisation"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 "Voir des exemples pratiques de la façon dont LarpManager peut aider votre "
@@ -6431,6 +6450,9 @@ msgid "You can also upload a second file with the registration options"
 msgstr ""
 "Vous pouvez également télécharger un deuxième fichier avec les options "
 "d'enregistrement"
+
+msgid "You must create at least one quest before you can create traits"
+msgstr "Vous devez créer au moins une quête avant de pouvoir créer des traits"
 
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Vous recevrez une confirmation du résultat de son évaluation"
@@ -6805,6 +6827,10 @@ msgstr ""
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Vous avez correctement annulé l'inscription à l'événement %(event)s"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+"Vous devez créer au moins un type de quête avant de pouvoir créer des quêtes"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr ""
@@ -7224,6 +7250,12 @@ msgstr ""
 "fournies"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+"Vous devez créer au moins un type de capacité avant de pouvoir créer des "
+"capacités"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "si vous laissez ce champ vide, il peut s'agir de l'événement de départ d'une"
@@ -7312,6 +7344,18 @@ msgid ""
 msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien correspondant"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr ""
+"Vous devez créer au moins un type de prologue avant de pouvoir créer des "
+"prologues"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Facultatif) Les noms des personnages à attribuer au joueur, séparés par des"
+" virgules"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7442,6 +7486,12 @@ msgstr ""
 "exister"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Dernière étape, veuillez compléter la configuration de l'événement en "
+"ajoutant les dates de début et de fin"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "Partie des droits d'inscription provenant uniquement des options "
@@ -7470,6 +7520,12 @@ msgid ""
 msgstr ""
 "Vous ne pouvez pas y travailler en même temps : le travail de l'un d'entre "
 "vous serait perdu"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+"Vous devez créer au moins un modèle de document avant de pouvoir créer des "
+"documents"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -7589,6 +7645,13 @@ msgid ""
 msgstr ""
 "Si cette option est cochée, elle permet aux participants de personnaliser "
 "l'image de profil de leur personnage"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Si cette case est cochée, les participants donnent une valeur de préférence "
+"lorsqu'ils ajoutent des pré-inscriptions"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -8263,6 +8326,13 @@ msgstr ""
 "Indiquez la valeur de la remise, elle sera déduite du montant total calculé"
 
 msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Veuillez maintenant compléter la configuration rapide en sélectionnant les "
+"fonctions les plus utiles pour cet événement"
+
+msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
 msgstr ""
@@ -8509,6 +8579,13 @@ msgstr ""
 "a été approuvée"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Mesure de la préférence à accorder aux personnes qui se sont inscrites plus "
+"tôt (0=désactivé par défaut, 1=normal, 10=fort)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -8663,6 +8740,13 @@ msgid ""
 msgstr ""
 "Traite cet événement comme un événement numérique/en ligne qui ne nécessite "
 "pas d'inscription en personne"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Vous devez créer au moins une question d'enregistrement avant de pouvoir "
+"créer des options d'enregistrement"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
@@ -9697,6 +9781,13 @@ msgstr ""
 "ces valeurs ne peuvent pas être définies en même temps : %(list)s"
 
 msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Mesure de l'importance de favoriser les participants qui ont effectué le "
+"paiement intégral plus tôt (0 = désactivé par défaut, 1 = normal, 10 = fort)"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
@@ -9710,6 +9801,14 @@ msgid ""
 msgstr ""
 "Permet aux participants de soumettre des demandes de navette (par exemple, "
 "logistique de ramassage), et le personnel peut gérer l'état de ces demandes"
+
+msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Avant d'accéder au tableau de bord de l'événement, veuillez procéder à la "
+"configuration rapide en sélectionnant les fonctions les plus utiles pour "
+"votre événement"
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
@@ -9999,6 +10098,14 @@ msgstr ""
 "Facultatif - Si vous sélectionnez une (ou plusieurs) faction(s), la question"
 " ne sera posée qu'aux participants dont les personnages appartiennent à "
 "toutes les factions choisies"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Avant d'accéder au tableau de bord de l'organisation, veuillez procéder à la"
+" configuration rapide en sélectionnant les fonctionnalités les plus utiles "
+"pour votre organisation"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

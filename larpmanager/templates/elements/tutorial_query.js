@@ -6,6 +6,8 @@ let timeout = null;
 
 let tutorials_url = "{% url 'tutorials' %}";
 
+let guides_url = "{% url 'guides' %}";
+
 function slugify(text) {
     return text
         .toString()
@@ -49,6 +51,17 @@ function search_tutorial() {
             link_text = '<h2>Links</h2><table >' + link_text + '</table>';
         }
 
+        // guides text
+        guide_text = '';
+        data.guides.forEach(item => {
+            guide_text += '<tr><td><h3>' + item.title + '</h3></td><td>' +
+            '<td><p><a href="' + guides_url + item.slug + '" target="_blank"><i>' + item.snippet + ' [...]</i></a></p></td></tr>';
+        });
+
+        if (guide_text.trim() !== "") {
+            guide_text = '<h2>Guides</h2><table >' + guide_text + '</table>';
+        }
+
         // tutorials text
         tutorial_text = '';
         data.tutorials.forEach(item => {
@@ -61,7 +74,7 @@ function search_tutorial() {
         }
 
         // prepare results
-        result = link_text + tutorial_text
+        result = link_text + guide_text + tutorial_text
 
         if (result.trim() === "")
             result = "{% trans "No results found; please try with more simpler terms (remember to write in English)" %}";

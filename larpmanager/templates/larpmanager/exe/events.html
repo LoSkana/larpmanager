@@ -13,9 +13,7 @@
             <a class="new button" href="{% url 'exe_runs_edit' 0 %}">{% trans "New session" %}</a>
         {% endif %}
     </div>
-    <table id="events"
-           class="{% if not interface_old %}go_datatable{% endif %} writing gall"
-           no_header_cols="[6,7]">
+    <table id="events" class="go_datatable writing gall" no_header_cols="[6,7]">
         <thead>
             <tr>
                 <th></th>

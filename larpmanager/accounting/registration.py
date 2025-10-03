@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import math
 from datetime import datetime
 from decimal import Decimal
@@ -55,6 +56,8 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.common import get_time_diff, get_time_diff_today
 from larpmanager.utils.tasks import background_auto
+
+logger = logging.getLogger(__name__)
 
 
 def get_reg_iscr(instance):
@@ -273,7 +276,7 @@ def installment_check(reg, alert, assoc_id):
 
         reg.quota = max(tot - reg.tot_payed, 0)
 
-        # print(reg.quota)
+        logger.debug(f"Registration {reg.id} installment quota calculated: {reg.quota}")
 
         if reg.quota <= 0:
             continue
@@ -483,6 +486,14 @@ def get_date_surcharge(reg, event):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_accounting(sender, instance, **kwargs):
+    """
+    Handle post-save accounting updates for registrations.
+
+    Args:
+        sender: Model class that sent the signal
+        instance: Registration instance that was saved
+        **kwargs: Additional signal arguments
+    """
     if not instance.member:
         return
 
@@ -505,7 +516,7 @@ def post_save_registration_accounting(sender, instance, **kwargs):
 
     # update accounting without triggering a new save
     updates = {}
-    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline"]:
+    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
         updates[field] = getattr(instance, field)
     Registration.objects.filter(pk=instance.pk).update(**updates)
 
@@ -523,13 +534,12 @@ def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
 
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_registration_ticket(sender, instance, created, **kwargs):
-    # print(f"@@@@ post_save_registration_ticket {instance} {datetime.now()}")
+    logger.debug(f"RegistrationTicket saved: {instance} at {datetime.now()}")
     check_reg_events(instance.event)
 
 
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender, instance, created, **kwargs):
-    # print(f"@@@@ post_RegistrationOption {instance} {datetime.now()}")
     check_reg_events(instance.question.event)
 
 
@@ -616,6 +626,8 @@ def update_registration_accounting(reg):
 
     remaining = reg.tot_iscr - reg.tot_payed
     if -max_rounding < remaining <= max_rounding:
+        if not reg.payment_date:
+            reg.payment_date = datetime.now()
         return
 
     if reg.cancellation_date:

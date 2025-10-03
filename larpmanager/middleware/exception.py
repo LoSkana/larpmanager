@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -36,6 +37,7 @@ from larpmanager.utils.exceptions import (
     PermissionError,
     RedirectError,
     ReturnNowError,
+    RewokedMembershipError,
     SignupError,
     UnknowRunError,
     WaitingError,
@@ -52,6 +54,11 @@ class ExceptionHandlingMiddleware:
         return self.get_response(request)
 
     def process_exception(self, request, exception):
+        """Django middleware exception handler.
+
+        Routes different exception types to appropriate error pages and handles
+        permission, not found, and other application-specific errors.
+        """
         handlers = [
             (PermissionError, lambda ex: render(request, "exception/permission.html")),
             (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
@@ -74,13 +81,13 @@ class ExceptionHandlingMiddleware:
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
-                    request, _("To access this feature, you must first register!"), "register", [ex.slug]
+                    request, _("To access this feature, you must first register") + "!", "register", [ex.slug]
                 ),
             ),
             (
                 WaitingError,
                 lambda ex: self._redirect_with_message(
-                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug]
+                    request, _("This feature is available for non-waiting tickets") + "!", "register", [ex.slug]
                 ),
             ),
             (
@@ -96,6 +103,10 @@ class ExceptionHandlingMiddleware:
             (RedirectError, lambda ex: redirect(ex.view)),
             (MainPageError, lambda ex: redirect("/")),
             (ReturnNowError, lambda ex: ex.value),
+            (
+                RewokedMembershipError,
+                lambda ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),
+            ),
         ]
 
         for exc_type, handler in handlers:
@@ -115,13 +126,21 @@ class ExceptionHandlingMiddleware:
         if request.assoc["skin_managed"]:
             raise Http404("not allowed")
 
-        feature = Feature.objects.get(slug=ex.feature)
+        try:
+            feature = Feature.objects.get(slug=ex.feature)
+        except ObjectDoesNotExist as err:
+            raise Http404("Feature not found") from err
+
         ctx = {"exe": ex, "feature": feature}
 
         if feature.overall:
             ctx["permission"] = has_assoc_permission(request, {}, "exe_features")
         else:
-            run = Run.objects.get(pk=ex.run)
+            try:
+                run = Run.objects.get(pk=ex.run)
+            except ObjectDoesNotExist as err:
+                raise Http404("Run not found") from err
+
             ctx["run"] = run
             ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
 

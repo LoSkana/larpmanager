@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import re
 
 from django.db import models
@@ -28,6 +29,8 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Writing
+
+logger = logging.getLogger(__name__)
 
 
 class QuestType(Writing):
@@ -175,14 +178,14 @@ def update_traits_text(instance):
             trait = Trait.objects.get(event=instance.event, number=pid)
             traits.append(trait)
         except Exception as e:
-            print(e)
+            logger.warning(f"Error getting trait {pid}: {e}")
 
     trait_search = re.findall(r"@([\d]+)", instance.text, re.IGNORECASE)
     for pid in set(trait_search):
         try:
             trait = Trait.objects.get(event=instance.event, number=pid)
         except Exception as e:
-            print(e)
+            logger.warning(f"Error getting trait {pid} in assignment: {e}")
 
     return traits
 

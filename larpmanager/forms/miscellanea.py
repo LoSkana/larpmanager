@@ -52,7 +52,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 PAY_CHOICES = (
     ("t", _("Over")),
@@ -252,6 +252,11 @@ class OrganizerCastingOptionsForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        """Initialize casting form with payment, membership, ticket, and faction options.
+
+        Sets up form fields based on enabled features and initializes choices
+        for payments, memberships, tickets, and factions.
+        """
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
@@ -343,8 +348,14 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
         self.fields["working"].widget.set_assoc(self.params["a_id"])
 
 
-class OrganizerCopyForm(forms.Form):
+class OrgaCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        """Initialize organizer copy form with source event choices.
+
+        Args:
+            *args: Variable length argument list passed to parent form
+            **kwargs: Arbitrary keyword arguments passed to parent form
+        """
         self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
 
@@ -358,11 +369,11 @@ class OrganizerCopyForm(forms.Form):
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [
-            ("all", "All"),
             ("event", "Event"),
             ("config", "Configuration"),
             ("appearance", "Appearance"),
             ("text", "Texts"),
+            ("navigation", "Navigation"),
             ("role", "Roles"),
             ("features", "Features"),
             ("ticket", "Registration Tickets"),
@@ -381,10 +392,11 @@ class OrganizerCopyForm(forms.Form):
             ("workshop", "Workshops"),
         ]
 
-        self.fields["target"] = forms.ChoiceField(
+        self.fields["target"] = forms.MultipleChoiceField(
             required=True,
             choices=cho,
             help_text="The type of elements you want to copy",
+            widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
         )
 
 

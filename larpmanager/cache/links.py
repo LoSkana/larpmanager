@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 from datetime import datetime, timedelta
 
 from django.contrib.auth.models import User
@@ -30,6 +31,8 @@ from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
+
+logger = logging.getLogger(__name__)
 
 
 def cache_event_links(request):
@@ -50,7 +53,7 @@ def cache_event_links(request):
 
     ctx = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
     if ctx:
-        # print(ctx)
+        # logger.debug(f"Retrieved cached event links for user {request.user.id}, assoc {request.assoc['id']}")
         return ctx
 
     ctx = {}

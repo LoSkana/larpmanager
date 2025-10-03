@@ -58,12 +58,12 @@
                     {% endif %}
                     <td>{{ el.text_red | safe }}</td>
                     <td>{{ el.text_ln }}</td>
-                    <td class="dot_links">
-                        {% for ch in el.characters.all %}
-                            <a href="{% url 'orga_characters_edit' run.get_slug ch.id %}">{{ ch }}</a>
+                    <td class="characters dot_links">
+                        {% for ch in el.character_rels.list %}
+                            <a href="{% url 'orga_characters_edit' run.get_slug ch.0 %}">{{ ch.1 }}</a>
                         {% endfor %}
                     </td>
-                    <td>{{ el.characters.all | length }}</td>
+                    <td class="stats">{{ el.character_rels.count }}</td>
                 </tr>
             {% endfor %}
         </tbody>

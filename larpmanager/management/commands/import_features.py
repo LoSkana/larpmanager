@@ -33,6 +33,11 @@ class Command(BaseCommand):
     help = "Reload features from yaml"
 
     def handle(self, *args, **options):
+        """Import feature system fixtures from YAML files.
+
+        Loads modules, features, permissions, and other system configuration
+        from YAML fixtures with proper handling of foreign keys and many-to-many relations.
+        """
         for fixture in [
             "module",
             "feature",

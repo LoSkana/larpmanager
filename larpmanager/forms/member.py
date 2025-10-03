@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
 import re
 from collections import OrderedDict
@@ -30,7 +31,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
@@ -55,11 +56,16 @@ from larpmanager.models.member import (
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
+from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.validators import FileTypeValidator
+
+logger = logging.getLogger(__name__)
 
 
 class MyAuthForm(AuthenticationForm):
+    """Custom authentication form with styled fields."""
+
     class Meta:
         model = User
         fields = ["username", "password"]
@@ -77,8 +83,16 @@ class MyAuthForm(AuthenticationForm):
 
 
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
+    """Custom registration form with unique email validation and GDPR compliance."""
+
     # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
+        """Initialize RegistrationFormUniqueEmail with custom field configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments, including 'request'
+        """
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
@@ -137,13 +151,21 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
     def clean_username(self):
         data = self.cleaned_data["username"].strip()
-        # print(data)
+        logger.debug(f"Validating username/email: {data}")
         # check if already used in user or email
         if User.objects.filter(email__iexact=data).count() > 0:
             raise ValidationError("Email already used! It seems you already have an account!")
         return data
 
     def save(self, commit=True):
+        """Save user and associated member profile.
+
+        Args:
+            commit: Whether to save to database
+
+        Returns:
+            User: Created user instance
+        """
         user = super(RegistrationFormUniqueEmail, self).save()
 
         user.member.newsletter = self.cleaned_data["newsletter"]
@@ -156,13 +178,29 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
 
 class MyPasswordResetConfirmForm(SetPasswordForm):
+    """Custom password reset confirmation form with field limits."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with password field constraints.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["new_password1"].widget.attrs["maxlength"] = 70
 
 
 class MyPasswordResetForm(PasswordResetForm):
+    """Custom password reset form with association-specific handling."""
+
     def __init__(self, *args, **kwargs):
+        """Initialize form with email field constraints.
+
+        Args:
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+        """
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
@@ -191,13 +229,17 @@ class MyPasswordResetForm(PasswordResetForm):
         assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
         assoc = None
         if assoc_slug:
-            assoc = Association.objects.get(slug=assoc_slug)
-            user = context["user"]
-            mb = get_user_membership(user.member, assoc.id)
-            mb.password_reset = f"{context['uid']}#{context['token']}"
-            mb.save()
+            try:
+                assoc = Association.objects.get(slug=assoc_slug)
+                user = context["user"]
+                mb = get_user_membership(user.member, assoc.id)
+                mb.password_reset = f"{context['uid']}#{context['token']}"
+                mb.save()
+            except ObjectDoesNotExist:
+                # Invalid association slug - continue with None assoc
+                pass
 
-        # print(context)
+        logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
 
         my_send_mail(subject, body, to_email, assoc)
 
@@ -210,10 +252,14 @@ class MyPasswordResetForm(PasswordResetForm):
 
 
 class AvatarForm(forms.Form):
+    """Form for uploading user avatar images."""
+
     image = forms.ImageField(label="Select an image")
 
 
 class LanguageForm(forms.Form):
+    """Form for selecting user interface language."""
+
     language = forms.ChoiceField(
         choices=conf_settings.LANGUAGES,
         label=_("Select Language"),
@@ -318,31 +364,78 @@ class ResidenceField(forms.MultiValueField):
 
 
 class BaseProfileForm(MyForm):
+    def _get_cached_assoc(self, request):
+        """Get cached association object to avoid redundant database queries."""
+        assoc_id = request.assoc["id"]
+        if hasattr(request, "_cached_assoc") and request._cached_assoc.id == assoc_id:
+            return request._cached_assoc
+
+        assoc = Association.objects.get(pk=assoc_id)
+        request._cached_assoc = assoc
+        return assoc
+
+    def _get_cached_features(self, request, assoc_id=None):
+        """Get cached association features to avoid redundant function calls."""
+        if hasattr(request, "_cached_features"):
+            return request._cached_features
+
+        if assoc_id is None:
+            assoc_id = request.assoc["id"]
+
+        features = get_assoc_features(assoc_id)
+        request._cached_features = features
+        return features
+
+    def _get_cached_membership(self, instance, assoc_id):
+        """Get cached membership object to avoid redundant queries."""
+        if hasattr(instance, "_cached_membership"):
+            return instance._cached_membership
+
+        membership = get_user_membership(instance, assoc_id)
+        instance._cached_membership = membership
+        return membership
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.allowed = self.params["request"].assoc["members_fields"]
-        assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
+        # Cache frequently accessed request data
+        request = self.params["request"]
+        self.allowed = request.assoc["members_fields"]
+
+        # Use cached association data
+        assoc = self._get_cached_assoc(request)
+
+        # Pre-split and cache field sets
         self.mandatory = set(assoc.mandatory_fields.split(","))
         self.optional = set(assoc.optional_fields.split(","))
 
-        dl = []
-        for f in self.fields:
-            if f not in self.allowed and f not in ["name", "surname", "language"]:
-                dl.append(f)
+        # Field filtering
+        always_allowed = {"name", "surname", "language"}
+        fields_to_delete = [f for f in self.fields if f not in self.allowed and f not in always_allowed]
 
-        for f in dl:
+        # Batch delete fields
+        for f in fields_to_delete:
             del self.fields[f]
 
+        # Handle residence address field if needed
         if "residence_address" in self.allowed:
             self.fields["residence_address"] = ResidenceField(label=_("Residence address"))
             self.fields["residence_address"].required = "residence_address" in self.mandatory
-            if self.instance.pk and self.instance.residence_address:
-                self.initial["residence_address"] = self.instance.residence_address
-                aux = self.instance.residence_address.split("|")
-                self.initial_nation = aux[0]
-                self.initial_province = aux[1]
 
+            if self.instance.pk and self.instance.residence_address:
+                residence_data = self.instance.residence_address
+                self.initial["residence_address"] = residence_data
+
+                # Safe split with error handling
+                try:
+                    aux = residence_data.split("|")
+                    self.initial_nation = aux[0] if len(aux) > 0 else ""
+                    self.initial_province = aux[1] if len(aux) > 1 else ""
+                except (IndexError, AttributeError):
+                    self.initial_nation = ""
+                    self.initial_province = ""
+
+            # Only assign if needed (avoid unnecessary memory allocation)
             self.country_subdivisions_map = country_subdivisions_map
 
 
@@ -383,36 +476,67 @@ class ProfileForm(BaseProfileForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize member form with dynamic field validation and configuration.
+
+        Sets mandatory fields, handles voting candidates, and adds required
+        data sharing consent field based on membership status.
+
+        Args:
+            *args: Variable positional arguments
+            **kwargs: Variable keyword arguments including request context
+        """
         super().__init__(*args, **kwargs)
 
-        for f in self.fields:
-            if f in self.mandatory:
-                self.fields[f].required = True
-                self.fields[f].label = _(self.fields[f].label) + " (*)"
+        # Cache request data
+        request = self.params["request"]
+        assoc_id = request.assoc["id"]
 
-        for s in ["name", "surname"]:
-            if s in self.fields:
-                self.fields[s].label = _(self.fields[s].label) + " (*)"
+        # Batch process mandatory field updates
+        mandatory_asterisk = " (*)"
+        fields_to_update = {}
 
+        # Process mandatory fields
+        for field_name in self.fields:
+            if field_name in self.mandatory:
+                field = self.fields[field_name]
+                field.required = True
+                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
+
+        # Process always-required fields
+        for field_name in ["name", "surname"]:
+            if field_name in self.fields:
+                field = self.fields[field_name]
+                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
+
+        # Apply all label updates at once
+        for field_name, new_label in fields_to_update.items():
+            self.fields[field_name].label = new_label
+
+        # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
+            # Use cached association
+            assoc = self._get_cached_assoc(request)
             vote_cands = assoc.get_config("vote_candidates", "").split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
+        # Set default values
+        initial_defaults = {}
         if "phone_contact" not in self.initial:
-            self.initial["phone_contact"] = "+XX"
-
+            initial_defaults["phone_contact"] = "+XX"
         if "birth_date" not in self.initial:
-            self.initial["birth_date"] = "00/00/0000"
-        # ~ else:
-        # ~ self.initial['birth_date'] = self.instance.birth_date.isoformat()
+            initial_defaults["birth_date"] = "00/00/0000"
 
+        # Apply initial values in batch
+        self.initial.update(initial_defaults)
+
+        # Membership checking
         share = False
         if self.instance.pk:
-            get_user_membership(self.instance, self.params["request"].assoc["id"])
-            share = self.instance.membership.compiled
+            membership = self._get_cached_membership(self.instance, assoc_id)
+            share = membership.compiled
 
+        # Add consent field only if needed
         if not share:
             self.fields["share"] = forms.BooleanField(
                 required=True,
@@ -424,19 +548,30 @@ class ProfileForm(BaseProfileForm):
             )
 
     def clean_birth_date(self):
+        """
+        Optimized birth date validation with cached association data.
+        """
         data = self.cleaned_data["birth_date"]
-        # print(data)
+        logger.debug(f"Validating birth date: {data}")
 
-        assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
-        if "membership" in get_assoc_features(assoc.id):
+        # Use cached association
+        request = self.params["request"]
+        assoc = self._get_cached_assoc(request)
+
+        # Use cached features
+        features = self._get_cached_features(request, assoc.id)
+
+        if "membership" in features:
             min_age = assoc.get_config("membership_age", "")
             if min_age:
-                min_age = int(min_age)
-                # ~ d = date.fromisoformat(data)
-                # print(d)
-                dif = relativedelta(datetime.now(), data).years
-                if dif < min_age:
-                    raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
+                try:
+                    min_age = int(min_age)
+                    logger.debug(f"Checking minimum age {min_age} against birth date {data}")
+                    age_diff = relativedelta(datetime.now(), data).years
+                    if age_diff < min_age:
+                        raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Invalid membership_age config: {min_age}, error: {e}")
 
         return data
 
@@ -726,6 +861,12 @@ class ExeProfileForm(MyForm):
 
     @staticmethod
     def get_members_fields():
+        """
+        Get available member fields for form configuration.
+
+        Returns:
+            list: List of tuples containing field information (name, verbose_name, help_text)
+        """
         skip = [
             "id",
             "deleted",
@@ -754,6 +895,14 @@ class ExeProfileForm(MyForm):
         return choices
 
     def save(self, commit=True):
+        """Save form data and update member field configurations.
+
+        Args:
+            commit: Whether to save the instance to database
+
+        Returns:
+            The saved form instance
+        """
         instance = super().save(commit=commit)
 
         mandatory = []

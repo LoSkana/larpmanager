@@ -157,6 +157,18 @@ class MyForm(forms.ModelForm):
         return self._validate_unique_event("display")
 
     def _validate_unique_event(self, field_name):
+        """
+        Validate field uniqueness within event scope.
+
+        Args:
+            field_name: Name of the field to validate for uniqueness
+
+        Returns:
+            value: Validated field value
+
+        Raises:
+            ValidationError: If value is not unique within the event
+        """
         value = self.cleaned_data.get(field_name)
         event = self.params.get("event")
         typ = self.params.get("elementTyp")
@@ -319,6 +331,18 @@ class BaseRegistrationForm(MyFormRun):
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
     def get_choice_options(self, all_options, question, chosen=None, reg_count=None):
+        """
+        Build form choice options for a question with availability and ticket validation.
+
+        Args:
+            all_options: Dictionary of all available options by question ID
+            question: Question instance to get options for
+            chosen: Previously chosen options (optional)
+            reg_count: Registration count data for availability checking (optional)
+
+        Returns:
+            tuple: (choices list, help_text string)
+        """
         choices = []
         help_text = question.description
         run = self.params["run"]
@@ -348,6 +372,19 @@ class BaseRegistrationForm(MyFormRun):
         return choices, help_text
 
     def check_option(self, chosen, name, option, reg_count, run):
+        """
+        Check option availability and update display name with availability info.
+
+        Args:
+            chosen: Previously chosen options list
+            name: Display name for the option
+            option: Option instance to check
+            reg_count: Registration count data
+            run: Run instance
+
+        Returns:
+            tuple: (updated_name, is_valid) with availability information
+        """
         found = False
         valid = True
         if chosen:
@@ -400,10 +437,28 @@ class BaseRegistrationForm(MyFormRun):
         return form_data
 
     def get_option_key_count(self, option):
+        """
+        Generate counting key for option availability tracking.
+
+        Args:
+            option: Option instance to generate key for
+
+        Returns:
+            str: Key string for tracking option usage
+        """
         key = f"option_{option.id}"
         return key
 
     def init_orga_fields(self, reg_section=None):
+        """
+        Initialize form fields for organizer view with registration questions.
+
+        Args:
+            reg_section: Optional registration section name override
+
+        Returns:
+            list: List of initialized field keys
+        """
         event = self.params["run"].event
         self._init_reg_question(self.instance, event)
 
@@ -432,6 +487,16 @@ class BaseRegistrationForm(MyFormRun):
         return True
 
     def _init_field(self, question, reg_counts=None, orga=True):
+        """Initialize form field for a writing question.
+
+        Args:
+            question: WritingQuestion instance to create field for
+            reg_counts: Registration count data (optional)
+            orga: Whether this is an organizer form (default: True)
+
+        Returns:
+            Form field instance or None for computed questions
+        """
         # ignore computed
         if question.typ == WritingQuestionType.COMPUTED:
             return None
@@ -502,6 +567,15 @@ class BaseRegistrationForm(MyFormRun):
         return key
 
     def init_special(self, question, required):
+        """Initialize special form field configurations.
+
+        Args:
+            question: Question object with type and configuration data
+            required: Whether the field should be required
+
+        Returns:
+            str or None: The field key if successfully initialized, None otherwise
+        """
         key = question.typ
         mapping = {
             "faction": "factions_list",
@@ -578,6 +652,18 @@ class BaseRegistrationForm(MyFormRun):
             self.initial[key] = self.singles[question.id].option_id
 
     def init_multiple(self, key, orga, question, reg_counts, required):
+        """Set up multiple choice form field handling.
+
+        Args:
+            key: Form field key
+            orga: Whether this is an organizational form
+            question: Question object with choices configuration
+            reg_counts: Registration counts for quota tracking
+            required: Whether field is required
+
+        Side effects:
+            Creates multiple choice field with checkboxes and sets initial values
+        """
         if orga:
             (choices, help_text) = self.get_choice_options(self.choices, question)
         else:
@@ -629,11 +715,19 @@ class BaseRegistrationForm(MyFormRun):
     def save_reg_text(self, instance, oid, q):
         if q.id in self.answers:
             if not oid:
-                self.answers[q.id].delete()
+                # For disabled questions in organizer forms, don't delete existing answers
+                # unless the organizer explicitly submitted an empty value for an editable field
+                orga = getattr(self, "orga", False)
+                is_disabled = hasattr(q, "status") and q.status == "d"
+                if orga and is_disabled:
+                    # Keep existing value for disabled fields in organizer forms
+                    pass
+                else:
+                    self.answers[q.id].delete()
             elif oid != self.answers[q.id].text:
                 self.answers[q.id].text = oid
                 self.answers[q.id].save()
-        else:
+        elif oid:  # Only create new answers if there's actually content
             self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
 
     def save_reg_single(self, instance, oid, q):

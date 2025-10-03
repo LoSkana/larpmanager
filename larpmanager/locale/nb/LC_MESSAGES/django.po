@@ -299,9 +299,6 @@ msgstr "Stengt"
 msgid "Cover"
 msgstr "Omslag"
 
-msgid "Descr"
-msgstr "Beskrivelse"
-
 msgid "Email"
 msgstr "E-post"
 
@@ -313,6 +310,9 @@ msgstr "Arrangement"
 
 msgid "Field"
 msgstr "Felt"
+
+msgid "Fifth"
+msgstr "Femte"
 
 msgid "First"
 msgstr "Første"
@@ -408,6 +408,9 @@ msgstr "Skatter og avgifter"
 msgid "Texts"
 msgstr "Tekster"
 
+msgid "Third"
+msgstr "Tredje"
+
 msgid "Title"
 msgstr "Tittel"
 
@@ -501,6 +504,9 @@ msgstr "Fyllstoff"
 msgid "Footer"
 msgstr "Bunntekst"
 
+msgid "Fourth"
+msgstr "Fjerde"
+
 msgid "Gender"
 msgstr "Sjanger"
 
@@ -587,6 +593,9 @@ msgstr "Sikkerhet"
 
 msgid "Search"
 msgstr "Søk"
+
+msgid "Second"
+msgstr "Andre"
 
 msgid "Secret"
 msgstr "Hemmelig"
@@ -1158,9 +1167,6 @@ msgstr "betalinger"
 msgid "positive"
 msgstr "positiv"
 
-msgid "residues"
-msgstr "rester"
-
 msgid "--- Empty"
 msgstr "--- Tom"
 
@@ -1728,6 +1734,9 @@ msgstr "Billettliste"
 msgid "Total costs"
 msgstr "Totale kostnader"
 
+msgid "Transaction"
+msgstr "Transaksjon"
+
 msgid "Transversal"
 msgstr "Tverrgående"
 
@@ -1805,6 +1814,9 @@ msgstr "Skjemaelement"
 
 msgid "Form section"
 msgstr "Skjemadelen"
+
+msgid "Full payment"
+msgstr "Full betaling"
 
 msgid "Host Address"
 msgstr "Vertsadresse"
@@ -2052,9 +2064,6 @@ msgstr "Ikke fullført"
 
 msgid "Number events"
 msgstr "Antall hendelser"
-
-msgid "Old interface"
-msgstr "Gammelt grensesnitt"
 
 msgid "Passages made"
 msgstr "Tiltak som er iverksatt"
@@ -2501,9 +2510,6 @@ msgstr "Total innsamling"
 msgid "Color background"
 msgstr "Tekstbakgrunn"
 
-msgid "Confirm payments"
-msgstr "Bekreft betalinger"
-
 msgid "Current template"
 msgstr "Gjeldende mal"
 
@@ -2587,6 +2593,9 @@ msgstr "Maecenas / Redusert"
 
 msgid "Payment currency"
 msgstr "Betalingsvaluta"
+
+msgid "Payment priority"
+msgstr "Betalingsprioritet"
 
 msgid "Payment to check"
 msgstr "Betaling som skal kontrolleres"
@@ -2780,6 +2789,9 @@ msgstr "Registreringsskjema"
 msgid "Registration mail"
 msgstr "Registreringspost"
 
+msgid "Remaining credits"
+msgstr "Gjenværende studiepoeng"
+
 msgid "Request submitted"
 msgstr "Underdanig forespørsel"
 
@@ -2854,6 +2866,9 @@ msgstr "Deaktiver tildeling"
 
 msgid "Electronic invoice"
 msgstr "Elektronisk faktura"
+
+msgid "Enable preferences"
+msgstr "Aktiver innstillinger"
 
 msgid "Go to the form for"
 msgstr "Gå til skjemaet for"
@@ -3311,6 +3326,9 @@ msgstr "Registreringen er åpen!"
 msgid "Registration not open"
 msgstr "Registreringen er ikke åpen"
 
+msgid "Registration priority"
+msgstr "Prioritet ved registrering"
+
 msgid "Registration sections"
 msgstr "Seksjonene for medlemskap"
 
@@ -3430,6 +3448,9 @@ msgstr "Bruksområder"
 
 msgid "Registration surcharge"
 msgstr "Inngangsavgift"
+
+msgid "Registrations not open"
+msgstr "Registreringen er ennå ikke åpnet"
 
 msgid "Reimbursement approved"
 msgstr "Godkjent refusjon"
@@ -3798,9 +3819,6 @@ msgstr "Alternativet er ikke lenger tilgjengelig"
 msgid "Pre-register to the event!"
 msgstr "Sett deg selv på forhåndsregistreringslisten!"
 
-msgid "Registration not yet open!"
-msgstr "Registreringen er ennå ikke åpen."
-
 msgid "Short name - international"
 msgstr "Kort navn - på engelsk"
 
@@ -3906,6 +3924,9 @@ msgstr "Tilbakeholdelse som transaksjonskostnad"
 
 msgid "Would you like to change it"
 msgstr "Ønsker du å endre det"
+
+msgid "Your event has been created"
+msgstr "Arrangementet ditt har blitt opprettet"
 
 msgid "please fill in your profile"
 msgstr "vennligst fyll ut profilen din"
@@ -4027,6 +4048,12 @@ msgstr "Transport - bensin, motorvei"
 msgid "Unconverted pre-registrations"
 msgstr "Ikke-konverterte forhåndsregistreringer"
 
+msgid "You don’t have any events yet"
+msgstr "Du har ingen arrangementer ennå"
+
+msgid "You're not allowed to sign up"
+msgstr "Du har ikke lov til å registrere deg"
+
 msgid "Your account is now activated"
 msgstr "Kontoen din er nå aktiv"
 
@@ -4042,9 +4069,6 @@ msgstr "Forsinkelse i årlig medlemsavgift"
 
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
-
-msgid "If checked: uses old interface"
-msgstr "Hvis avkrysset: bruker gammelt grensesnitt"
 
 msgid "Manage issues during the event"
 msgstr "Håndtere problemer under arrangementet"
@@ -5160,6 +5184,9 @@ msgstr "Nå kan du angi åpningsdato for registrering"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Fødested ikke inkludert i ISTAT-listen"
 
+msgid "Please create your first event to get started"
+msgstr "Opprett ditt første arrangement for å komme i gang"
+
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Oppdatert oppføring av %(event)s etter %(user)s"
@@ -5339,6 +5366,9 @@ msgstr "På denne siden kan du legge til eller redigere et tegn"
 msgid "This page allows you to edit a member's profile"
 msgstr "På denne siden kan du redigere et medlems profil"
 
+msgid "To access this feature, you must first register"
+msgstr "For å få tilgang til denne funksjonen må du først registrere deg"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 
@@ -5411,9 +5441,6 @@ msgid "This page shows the types of quests in the event"
 msgstr ""
 "Denne siden oppsummerer hvilke typer oppdrag som inngår i arrangementet"
 
-msgid "To access this feature, you must first register!"
-msgstr "For å få tilgang til denne funksjonen må du først registrere deg!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Du har allerede betalt årets medlemskontingent"
 
@@ -5464,6 +5491,9 @@ msgstr "Summen er %(amount).2f, med årsak '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det er <b>%(number)s</b> tegn som skal godkjennes"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "På denne siden kan du legge til eller redigere en px-levering"
@@ -5534,9 +5564,6 @@ msgstr "Påmeldingen til arrangementet ble avlyst"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finnes skrivefelt uten alternativer: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "På denne siden kan du legge til eller redigere en betalingspost"
@@ -5685,9 +5712,6 @@ msgstr "Du skal ha vår evige takk for at du tror på oss"
 
 msgid "please upload your membership application to proceed"
 msgstr "vennligst last opp medlemssøknaden din for å gå videre"
-
-msgid "(Optional) The character name to assign to the player"
-msgstr "(Valgfritt) Karakternavnet som skal tildeles spilleren"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -6160,9 +6184,6 @@ msgstr "Merk at hvis kostnaden er 0, vil den automatisk bli tildelt"
 msgid "Now participants can submit donation, and you can review them"
 msgstr "Nå kan deltakerne sende inn donasjoner, og du kan gå gjennom dem"
 
-msgid "Quickly configure your organization's most important settings"
-msgstr "Konfigurer raskt organisasjonens viktigste innstillinger"
-
 msgid "See practical examples of how LarpManager can help your event"
 msgstr ""
 "Se praktiske eksempler på hvordan LarpManager kan hjelpe arrangementet ditt"
@@ -6320,6 +6341,9 @@ msgstr "Advarsel: Det finnes allerede et godkjent medlem med samme navn"
 
 msgid "You can also upload a second file with the registration options"
 msgstr "Du kan også laste opp en annen fil med registreringsalternativene"
+
+msgid "You must create at least one quest before you can create traits"
+msgstr "Du må opprette minst ett oppdrag før du kan opprette egenskaper"
 
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Du vil motta en bekreftelse på resultatet av evalueringen"
@@ -6638,6 +6662,9 @@ msgstr "Vi sender deg en bekreftelse på e-post når endringen er gjennomført"
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Du har avbestilt påmeldingen til %(event)s-arrangementet på korrekt måte"
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr "Du må opprette minst én oppdragstype før du kan opprette oppdrag"
 
 msgid "Your user does not have the required permissions to access this page"
 msgstr ""
@@ -7005,6 +7032,10 @@ msgstr ""
 "Vi har forhåndsutfylt søknaden basert på opplysningene du har gitt oss"
 
 msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr "Du må opprette minst én evnetype før du kan opprette evner"
+
+msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 "hvis du lar denne stå tom, kan dette være starthendelsen for en ny kampanje"
@@ -7080,6 +7111,15 @@ msgid ""
 "You can withdraw your consent to data sharing by clicking the related link"
 msgstr ""
 "Du kan trekke tilbake ditt samtykke til datadeling ved å klikke på lenken"
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
+msgstr "Du må opprette minst én prologtype før du kan opprette prologer"
+
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
+msgstr ""
+"(Valgfritt) Karakternavnene som skal tildeles spilleren, atskilt med komma"
 
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
@@ -7201,6 +7241,12 @@ msgstr ""
 "I fraksjonen er det nevnt en karakter, men den ser ikke ut til å eksistere"
 
 msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+"Siste trinn er å fullføre oppsettet av arrangementet ved å legge til start- "
+"og sluttdatoer"
+
+msgid ""
 "Part of the registration fee derived only from the additional options chosen"
 msgstr ""
 "En del av registreringsavgiften stammer kun fra de valgte "
@@ -7228,6 +7274,10 @@ msgid ""
 msgstr ""
 "Dere kan ikke jobbe med det samtidig, for da går arbeidet til en av dere "
 "tapt"
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr "Du må opprette minst én utdelingsmal før du kan lage utdelinger"
 
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
@@ -7338,6 +7388,13 @@ msgid ""
 "picture"
 msgstr ""
 "Hvis avkrysset, kan deltakerne tilpasse profilbildet til karakterene sine"
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
+msgstr ""
+"Hvis avkrysset, oppgir deltakerne en preferanseverdi når de legger til "
+"forhåndsregistreringer"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -7986,6 +8043,13 @@ msgstr ""
 "Angi verdien av rabatten, den vil bli trukket fra det beregnede totalbeløpet"
 
 msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+"Fullfør nå hurtigoppsettet ved å velge de funksjonene som er mest nyttige "
+"for dette arrangementet"
+
+msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
 msgstr ""
@@ -8231,6 +8295,13 @@ msgstr ""
 " godkjent"
 
 msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+"Et mål på hvor mye man skal favorisere tidligere registranter (0=standard "
+"deaktivert, 1=normal, 10=sterk)"
+
+msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
 "their ticket price"
 msgstr ""
@@ -8384,6 +8455,13 @@ msgid ""
 msgstr ""
 "Behandler dette arrangementet som en digital/nettbasert hendelse som ikke "
 "krever personlig påmelding"
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+"Du må opprette minst ett registreringsspørsmål før du kan opprette "
+"registreringsalternativer"
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
@@ -9407,6 +9485,13 @@ msgstr ""
 "kan ikke angis samtidig: %(list)s"
 
 msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+"Et mål på hvor mye man skal favorisere deltakere som fullførte full betaling"
+" tidligere (0=standard deaktivert, 1=normal, 10=sterk)"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
@@ -9420,6 +9505,13 @@ msgstr ""
 "Gjør det mulig for deltakerne å sende inn forespørsler om skytteltransport "
 "(f.eks. hentelogistikk), og personalet kan administrere statusen til disse "
 "forespørslene"
+
+msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
+msgstr ""
+"Før du åpner dashbordet for arrangementet, må du fullføre hurtigoppsettet "
+"ved å velge de funksjonene som er mest nyttige for arrangementet ditt"
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
@@ -9696,6 +9788,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Hvis du velger én (eller flere) fraksjoner, vil spørsmålet bare "
 "vises til deltakere med karakterer i alle de valgte fraksjonene"
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup"
+" by selecting the features most useful for your organization"
+msgstr ""
+"Før du åpner organisasjonens dashbord, må du fullføre hurtigoppsettet ved å "
+"velge de funksjonene som er mest nyttige for organisasjonen din"
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

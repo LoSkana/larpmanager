@@ -646,12 +646,12 @@ urlpatterns = [
         name="orga_reading",
     ),
     path(
-        "<slug:s>/manage/expenses/my/",
+        "<slug:s>/manage/upload_expenses/",
         views_oa.orga_expenses_my,
         name="orga_expenses_my",
     ),
     path(
-        "<slug:s>/manage/expenses/my/edit/0",
+        "<slug:s>/manage/upload_expenses/edit/0",
         views_oa.orga_expenses_my_new,
         name="orga_expenses_my_new",
     ),

@@ -63,14 +63,14 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
+from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.tutorial_query import delete_index, index_tutorial
+from larpmanager.utils.tutorial_query import delete_index_guide, delete_index_tutorial, index_guide, index_tutorial
 
 
 @receiver(pre_save)
@@ -504,6 +504,12 @@ def _init_writing_element(instance, def_tps, applicables):
 
 
 def _init_character_form_questions(custom_tps, def_tps, features, instance):
+    """Initialize character form questions during model setup.
+
+    Sets up default and custom question types for character creation forms,
+    managing question creation and deletion based on enabled features and
+    existing question configurations.
+    """
     que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 
@@ -645,7 +651,7 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__run=instance.run).count() > 0:
+    if RegistrationCharacterRel.objects.filter(reg__member=instance.member, reg__run=instance.run).count() > 0:
         return
 
     # get last run of campaign
@@ -738,7 +744,7 @@ def post_delete_reset_character_config(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Association)
 def pre_save_association_set_skin_features(sender, instance, **kwargs):
-    if not instance.skin:
+    if not instance.skin_id:
         return
 
     # execute if new association, or if changed skin
@@ -747,18 +753,23 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
             prev = Association.objects.get(pk=instance.pk)
         except ObjectDoesNotExist:
             return
-        if instance.skin == prev.skin:
+        if instance.skin_id == prev.skin_id:
             return
+
+    try:
+        skin = instance.skin
+    except ObjectDoesNotExist:
+        return
 
     instance._update_skin_features = True
     if not instance.nationality:
-        instance.nationality = instance.skin.default_nation
+        instance.nationality = skin.default_nation
 
     if not instance.optional_fields:
-        instance.optional_fields = instance.skin.default_optional_fields
+        instance.optional_fields = skin.default_optional_fields
 
     if not instance.mandatory_fields:
-        instance.mandatory_fields = instance.skin.default_mandatory_fields
+        instance.mandatory_fields = skin.default_mandatory_fields
 
 
 @receiver(post_save, sender=Association)
@@ -779,7 +790,17 @@ def post_save_index_tutorial(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=LarpManagerTutorial)
 def delete_tutorial_from_index(sender, instance, **kwargs):
-    delete_index(instance.id)
+    delete_index_tutorial(instance.id)
+
+
+@receiver(post_save, sender=LarpManagerGuide)
+def post_save_index_guide(sender, instance, **kwargs):
+    index_guide(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerGuide)
+def delete_guide_from_index(sender, instance, **kwargs):
+    delete_index_guide(instance.id)
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -809,6 +830,13 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
 def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
+    """Automatically rotate vertical photos in warehouse items before saving.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The WarehouseItem instance being saved
+        **kwargs: Additional keyword arguments
+    """
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
         field = instance._meta.get_field("photo")

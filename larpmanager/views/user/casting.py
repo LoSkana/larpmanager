@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import json
+import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -36,6 +37,8 @@ from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters, get_event_run
 from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
+
+logger = logging.getLogger(__name__)
 
 
 def casting_characters(ctx, reg):
@@ -60,6 +63,12 @@ def casting_characters(ctx, reg):
 
 
 def casting_quest_traits(ctx, typ):
+    """Populate context with available quest traits for casting.
+
+    Args:
+        ctx: Template context dictionary to update
+        typ: Quest type identifier
+    """
     choices = {}
     factions = []
     num = 0
@@ -81,6 +90,15 @@ def casting_quest_traits(ctx, typ):
 
 
 def casting_details(ctx, typ):
+    """Prepare casting context with configuration details and labels.
+
+    Args:
+        ctx: Template context dictionary to update
+        typ: Quest type identifier (>0 for quests, 0 for characters)
+
+    Returns:
+        Updated context dictionary
+    """
     get_event_cache_all(ctx)
 
     if typ > 0:
@@ -104,6 +122,16 @@ def casting_details(ctx, typ):
 
 @login_required
 def casting(request, s, typ=0):
+    """Handle user casting preferences for LARP events.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        typ: Casting type identifier (default: 0)
+
+    Returns:
+        HttpResponse: Rendered casting form or redirect response
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
     check_event_feature(request, ctx, "casting")
 
@@ -122,7 +150,9 @@ def casting(request, s, typ=0):
         return redirect("gallery", s=ctx["run"].get_slug())
 
     casting_details(ctx, typ)
-    # print(ctx)
+    logger.debug(
+        f"Casting context for typ {typ}: {ctx.get('gl_name', 'Unknown')}, features: {list(ctx.get('features', {}).keys())}"
+    )
 
     red = "larpmanager/event/casting/casting.html"
 
@@ -213,6 +243,17 @@ def _casting_update(ctx, prefs, request, typ):
 
 
 def get_casting_preferences(number, ctx, typ=0, casts=None):
+    """Calculate and return casting preference statistics.
+
+    Args:
+        number: Character/element number to calculate preferences for
+        ctx: Context dictionary with run and casting configuration
+        typ: Casting type (default 0)
+        casts: Optional pre-filtered casting queryset
+
+    Returns:
+        tuple: (total_preferences, average_preference, distribution_dict)
+    """
     tot_pref = 0
     sum_pref = 0
     distr = {}
@@ -237,6 +278,14 @@ def get_casting_preferences(number, ctx, typ=0, casts=None):
 
 
 def casting_preferences_characters(ctx):
+    """Process character casting preferences with filtering.
+
+    Args:
+        ctx: Context dictionary containing run and casting data
+
+    Side effects:
+        Updates ctx with filtered character list and casting preferences
+    """
     filters = {"png": True}
     if not "staff" not in ctx:
         filters["free"] = True
@@ -255,7 +304,7 @@ def casting_preferences_characters(ctx):
             cc = []
             if ch.id in casts:
                 cc = casts[ch.id]
-            # print(cc)
+            logger.debug(f"Character {ch.id} casting preferences: {len(cc)} entries")
             el = {
                 "group_dis": fac.data["name"],
                 "name_dis": ch.data["name"],
@@ -308,6 +357,11 @@ def casting_preferences(request, s, typ=0):
 
 
 def casting_history_characters(ctx):
+    """Build casting history list showing character preferences by registration.
+
+    Creates a comprehensive view of all registrations with their character
+    casting preferences, handling mirror characters and preference ordering.
+    """
     ctx["list"] = []
     ctx["cache"] = {}
     for ch in ctx["event"].get_elements(Character).filter(hide=False).select_related("mirror"):
@@ -347,6 +401,12 @@ def casting_history_characters(ctx):
 
 
 def casting_history_traits(ctx):
+    """
+    Process casting history and character traits for display.
+
+    Args:
+        ctx: Context dictionary to populate with casting data
+    """
     ctx["list"] = []
     ctx["cache"] = {}
 
@@ -377,7 +437,9 @@ def casting_history_traits(ctx):
             reg.prefs[c.pref + 1] = ctx["cache"][c.element]
         ctx["list"].append(reg)
 
-    # print(ctx)
+    logger.debug(
+        f"Casting history context for typ {ctx.get('typ', 0)}: {len(ctx.get('list', []))} registrations processed"
+    )
 
 
 @login_required

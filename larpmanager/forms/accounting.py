@@ -52,7 +52,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
 from larpmanager.models.utils import get_payment_details, save_payment_details
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.validators import FileTypeValidator
 
 
 class OrgaPersonalExpenseForm(MyFormRun):
@@ -307,12 +307,13 @@ class ExeExpenseForm(MyForm):
     class Meta:
         model = AccountingItemExpense
         exclude = ("inv", "hide")
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["run"].widget.set_assoc(self.params["a_id"])
 
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
@@ -432,7 +433,7 @@ class ExeRefundRequestForm(MyForm):
 
     class Meta:
         model = RefundRequest
-        exclude = ("status",)
+        exclude = ("status", "hide")
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
@@ -456,6 +457,12 @@ class ExePaymentSettingsForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize PaymentMethodForm with dynamic payment method configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         self.prevent_canc = True
@@ -510,6 +517,14 @@ class ExePaymentSettingsForm(MyForm):
             self.initial[el] = data_string
 
     def save(self, commit=True):
+        """Save payment form with details masking and change tracking.
+
+        Args:
+            commit: Whether to commit changes to database
+
+        Returns:
+            Payment instance with updated details and change history
+        """
         instance = super().save(commit=commit)
 
         res = get_payment_details(self.instance)

@@ -8,3 +8,4 @@
     default_optional_fields: ''
     default_features:
     - exe_events
+    - payment

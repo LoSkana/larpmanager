@@ -44,6 +44,11 @@ from larpmanager.models.writing import Character, CharacterConfig
 
 
 def _build_px_context(char):
+    """Build context for character experience point calculations.
+
+    Gathers character abilities, choices, and modifiers with optimized queries
+    to create the foundation for PX cost and availability calculations.
+    """
     # get all abilities already learned by the character
     current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
 
@@ -107,6 +112,12 @@ def set_free_abilities(char, frees):
 
 
 def update_px(char):
+    """
+    Update character experience points and apply ability calculations.
+
+    Args:
+        char: Character instance to update
+    """
     start = char.event.get_config("px_start", 0)
 
     _handle_free_abilities(char)
@@ -128,6 +139,12 @@ def update_px(char):
 
 
 def _handle_free_abilities(char):
+    """
+    Handle free abilities that characters should automatically receive.
+
+    Args:
+        char: Character instance to process
+    """
     free_abilities = get_free_abilities(char)
 
     # look for available ability with cost 0, and not already in the free list: get them!
@@ -166,6 +183,15 @@ def check_available_ability_px(ability, current_char_abilities, current_char_cho
 
 
 def get_available_ability_px(char, px_avail=None):
+    """Get list of abilities available for purchase with character's PX.
+
+    Args:
+        char: Character instance
+        px_avail: Available PX points (calculated if None)
+
+    Returns:
+        List of AbilityPx instances that can be purchased
+    """
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
     if px_avail is None:
@@ -276,6 +302,12 @@ m2m_changed.connect(modifier_abilities_changed, sender=ModifierPx.abilities.thro
 
 
 def apply_rules_computed(char):
+    """
+    Apply computed field rules to calculate character statistics.
+
+    Args:
+        char: Character instance to apply rules to
+    """
     # save computed field
     event = char.event
     computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
@@ -307,6 +339,12 @@ def apply_rules_computed(char):
 
 
 def add_char_addit(char):
+    """
+    Add additional configuration data to character object.
+
+    Args:
+        char: Character instance to add additional data to
+    """
     char.addit = {}
     configs = CharacterConfig.objects.filter(character__id=char.id)
     if not configs.count():
@@ -317,8 +355,14 @@ def add_char_addit(char):
         char.addit[config.name] = config.value
 
 
-# remove ability and every other ability with that as pre-requisite
 def remove_char_ability(char, ability_id):
+    """
+    Remove character ability and all dependent abilities.
+
+    Args:
+        char: Character instance
+        ability_id: ID of ability to remove
+    """
     to_remove_ids = {ability_id}
 
     while True:

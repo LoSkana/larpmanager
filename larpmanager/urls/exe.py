@@ -325,12 +325,12 @@ urlpatterns = [
         name="exe_membership_request",
     ),
     path(
-        "manage/membership/check/",
+        "manage/check_membership/",
         views_em.exe_membership_check,
         name="exe_membership_check",
     ),
     path(
-        "manage/membership/registry/",
+        "manage/registry/",
         views_em.exe_membership_registry,
         name="exe_membership_registry",
     ),

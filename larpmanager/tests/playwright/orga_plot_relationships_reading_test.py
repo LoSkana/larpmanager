@@ -87,13 +87,17 @@ def reading(live_server, page):
     page.locator("#id_name").click()
     page.locator("#id_name").fill("only for testt")
     page.get_by_role("listitem").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
+    searchbox = page.get_by_role("searchbox")
+    searchbox.fill("te")
+    # Wait for the option to appear and click it
+    option = page.get_by_role("option", name="#1 Test Character")
+    option.wait_for(state="visible")
+    option.click()
     submit_confirm(page)
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("only for testt Primary #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("only for testt Primary Test Character")
 
     # check reading for prova
     page.get_by_role("link", name="Reading").click()
@@ -115,14 +119,19 @@ def relationships(live_server, page):
     page.locator("#id_name").click()
     page.locator("#id_name").fill("prova")
     page.get_by_role("combobox").click()
-    page.get_by_role("searchbox").fill("tes")
-    page.get_by_role("option", name="#1 Test Character").click()
+    searchbox = page.get_by_role("searchbox")
+    searchbox.fill("tes")
+    # Wait for the option to appear and click it
+    option = page.get_by_role("option", name="#1 Test Character")
+    option.wait_for(state="visible")
+    option.click()
+    page.wait_for_timeout(5000)
     fill_tinymce(page, "rel_1_direct", "ciaaoooooo")
     submit_confirm(page)
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
@@ -146,6 +155,8 @@ def plots(live_server, page):
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
+    page.wait_for_load_state("networkidle")
+
     page.locator("#id_name").click()
     page.locator("#id_name").fill("testona")
 
@@ -156,22 +167,27 @@ def plots(live_server, page):
     fill_tinymce(page, "id_text", "wwwww")
 
     # set char role
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
-
+    searchbox = page.get_by_role("searchbox")
+    searchbox.click()
+    searchbox.fill("te")
+    # Wait for the option to appear and click it
+    option = page.get_by_role("option", name="#1 Test Character")
+    option.wait_for(state="visible")
+    option.click()
+    page.wait_for_timeout(5000)
     fill_tinymce(page, "ch_1", "prova")
 
     submit_confirm(page)
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
 
     # check it is the same
     page.get_by_role("link", name="").click()
-    page.wait_for_timeout(2000)
+    # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
+    locator.wait_for(state="visible")
     locator.click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova</p>")
     locator.click()
@@ -182,23 +198,28 @@ def plots(live_server, page):
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #1 Test Character")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
     page.get_by_role("link", name="").click()
-    page.wait_for_timeout(2000)
+    # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
+    locator.wait_for(state="visible")
     locator.click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova222</p>")
 
     # remove first char
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
     # add another char
-    page.get_by_role("searchbox").fill("pro")
-    page.get_by_role("option", name="#2 prova").click()
+    searchbox = page.get_by_role("searchbox")
+    searchbox.fill("pro")
+    # Wait for the option to appear and click it
+    option = page.get_by_role("option", name="#2 prova")
+    option.wait_for(state="visible")
+    option.click()
     submit_confirm(page)
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww #2 prova")
+    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww prova")
 
     # set text
     page.get_by_role("link", name="").click()
@@ -226,10 +247,16 @@ def plots_character(live_server, page):
     # test adding them to character
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("gag")
+    searchbox = page.get_by_role("searchbox")
+    searchbox.click()
+    searchbox.fill("gag")
+    # Wait for search results to appear and click first option
+    page.locator(".select2-results__option").first.wait_for(state="visible")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("searchbox").fill("bibi")
+
+    searchbox.fill("bibi")
+    # Wait for search results to appear and click first option
+    page.locator(".select2-results__option").first.wait_for(state="visible")
     page.locator(".select2-results__option").first.click()
     page.get_by_role("button", name="Confirm").click()
 

@@ -44,6 +44,7 @@ from larpmanager.cache.feature import reset_event_features
 from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
+from larpmanager.cache.rels import reset_event_rels_cache
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import get_cache_reg_field
@@ -57,10 +58,9 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.casting import AssignmentTrait, QuestType
-from larpmanager.models.event import (
-    PreRegistration,
-)
+from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -87,6 +87,16 @@ from larpmanager.views.orga.member import member_field_correct
 
 
 def check_time(times, step, start=None):
+    """Record timing information for performance monitoring.
+
+    Args:
+        times: Dictionary to store timing data
+        step: Current step name
+        start: Start time reference
+
+    Returns:
+        float: Current time
+    """
     if step not in times:
         times[step] = []
     now = time.time()
@@ -95,6 +105,12 @@ def check_time(times, step, start=None):
 
 
 def _orga_registrations_traits(r, ctx):
+    """Process and organize character traits for registration display.
+
+    Args:
+        r: Registration instance to process
+        ctx: Context dictionary with traits and quest data
+    """
     if "questbuilder" not in ctx["features"]:
         return
 
@@ -118,6 +134,12 @@ def _orga_registrations_traits(r, ctx):
 
 
 def _orga_registrations_tickets(reg, ctx):
+    """Process registration ticket information and categorize by type.
+
+    Args:
+        reg: Registration instance to process
+        ctx: Context dictionary containing ticket and feature data
+    """
     default_typ = ("1", _("Participant"))
 
     ticket_types = {
@@ -159,6 +181,12 @@ def _orga_registrations_tickets(reg, ctx):
 
 
 def orga_registrations_membership(r, ctx):
+    """Process membership status for registration display.
+
+    Args:
+        r: Registration instance
+        ctx: Context dictionary with membership data
+    """
     member = r.member
     if member.id in ctx["memberships"]:
         member.membership = ctx["memberships"][member.id]
@@ -170,6 +198,14 @@ def orga_registrations_membership(r, ctx):
 
 
 def regs_list_add(ctx, list, name, member):
+    """Add member to categorized registration lists.
+
+    Args:
+        ctx: Context dictionary containing lists
+        list: List key to add to
+        name: Category name
+        member: Member instance to add
+    """
     key = slugify(name)
     if list not in ctx:
         ctx[list] = {}
@@ -181,6 +217,12 @@ def regs_list_add(ctx, list, name, member):
 
 
 def _orga_registrations_standard(reg, ctx):
+    """Process standard registration data including characters and membership.
+
+    Args:
+        reg: Registration instance to process
+        ctx: Context dictionary with event data
+    """
     # skip if it is gift
     if reg.redeem_code:
         return
@@ -200,6 +242,12 @@ def _orga_registrations_standard(reg, ctx):
 
 
 def _orga_registration_character(ctx, reg):
+    """Process character data for registration including factions and customizations.
+
+    Args:
+        ctx: Context dictionary with character data
+        reg: Registration instance to update
+    """
     if reg.member_id not in ctx["reg_chars"]:
         return
 
@@ -223,6 +271,13 @@ def _orga_registration_character(ctx, reg):
 
 
 def orga_registrations_custom(r, ctx, char):
+    """Process custom character information for registration.
+
+    Args:
+        r: Registration instance
+        ctx: Context dictionary with custom field info
+        char: Character data dictionary
+    """
     if not hasattr(r, "custom"):
         r.custom = {}
 
@@ -239,6 +294,15 @@ def orga_registrations_custom(r, ctx, char):
 
 
 def registrations_popup(request, ctx):
+    """Handle AJAX popup requests for registration details.
+
+    Args:
+        request: HTTP request with popup parameters
+        ctx: Context dictionary with registration data
+
+    Returns:
+        dict: Response data for popup
+    """
     idx = int(request.POST.get("idx", ""))
     tp = request.POST.get("tp", "")
 
@@ -253,6 +317,12 @@ def registrations_popup(request, ctx):
 
 
 def _orga_registrations_custom_character(ctx):
+    """
+    Prepare custom character information for registration display.
+
+    Args:
+        ctx: Context dictionary to populate with custom character info
+    """
     if "custom_character" not in ctx["features"]:
         return
     ctx["custom_info"] = []
@@ -263,6 +333,13 @@ def _orga_registrations_custom_character(ctx):
 
 
 def _orga_registrations_prepare(ctx, request):
+    """
+    Prepare registration data including characters, tickets, and questions.
+
+    Args:
+        ctx: Context dictionary to populate with registration data
+        request: HTTP request object
+    """
     ctx["reg_chars"] = {}
     for _chnum, char in ctx["chars"].items():
         if "player_id" not in char:
@@ -325,6 +402,15 @@ def _orga_registrations_text_fields(ctx):
 
 @login_required
 def orga_registrations(request, s):
+    """Display and manage event registrations for organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered registrations page or download/popup response
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
 
     if request.method == "POST":
@@ -385,14 +471,21 @@ def orga_registrations(request, s):
 @login_required
 def orga_registrations_accounting(request, s):
     ctx = check_event_permission(request, s, "orga_registrations")
-
     res = _orga_registrations_acc(ctx)
-
     return JsonResponse(res)
 
 
 @login_required
 def orga_registration_form_list(request, s):
+    """Handle registration form list management for event organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        JsonResponse: Registration form data for organizer interface
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
 
     eid = request.POST.get("num")
@@ -438,6 +531,11 @@ def orga_registration_form_list(request, s):
 
 @login_required
 def orga_registration_form_email(request, s):
+    """Generate email lists for registration question choices in JSON format.
+
+    Returns email addresses and names of registrants grouped by their
+    answers to single or multiple choice registration questions.
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
 
     eid = request.POST.get("num")
@@ -478,6 +576,16 @@ def orga_registration_form_email(request, s):
 
 @login_required
 def orga_registrations_edit(request, s, num):
+    """Edit or create a registration for an event.
+
+    Args:
+        request: HTTP request object
+        s: Event/run identifier
+        num: Registration ID (0 for new registration)
+
+    Returns:
+        Rendered registration edit form or redirect on success
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
     ctx["orga_characters"] = has_event_permission(request, ctx, ctx["event"].slug, "orga_characters")
@@ -616,6 +724,15 @@ def orga_registration_discount_del(request, s, num, dis):
 
 @login_required
 def orga_cancellations(request, s):
+    """Display cancelled registrations for event organizers.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        HttpResponse: Rendered cancellations page with cancelled registration list
+    """
     ctx = check_event_permission(request, s, "orga_cancellations")
     ctx["list"] = (
         Registration.objects.filter(run=ctx["run"])
@@ -661,6 +778,11 @@ def orga_cancellations(request, s):
 
 @login_required
 def orga_cancellation_refund(request, s, num):
+    """Handle cancellation refunds for tokens and credits.
+
+    Processes refund requests for cancelled registrations, creating accounting
+    entries for token and credit refunds and marking registration as refunded.
+    """
     ctx = check_event_permission(request, s, "orga_cancellations")
     get_registration(ctx, num)
     if request.method == "POST":
@@ -719,6 +841,10 @@ def get_pre_registration(event):
 def orga_pre_registrations(request, s):
     ctx = check_event_permission(request, s, "orga_pre_registrations")
     ctx["dc"] = get_pre_registration(ctx["event"])
+
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 
 
@@ -731,6 +857,7 @@ def orga_reload_cache(request, s):
     reset_run_event_links(ctx["event"])
     reset_cache_reg_counts(ctx["run"])
     reset_event_fields_cache(ctx["event"].id)
+    reset_event_rels_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))
     return redirect("manage", s=ctx["run"].get_slug())
 
@@ -752,6 +879,15 @@ def lottery_info(request, ctx):
 
 @login_required
 def orga_lottery(request, s):
+    """Manage registration lottery system.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Lottery template with chosen registrations or form
+    """
     ctx = check_event_permission(request, s, "orga_lottery")
 
     if request.method == "POST" and request.POST.get("submit"):
@@ -781,6 +917,11 @@ def calculate_age(born, today):
 
 @require_POST
 def orga_registration_member(request, s):
+    """Handle member registration actions from organizer interface.
+
+    Processes member assignment to events and manages registration status
+    changes including validation and permission checks.
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     member_id = request.POST.get("mid")
 

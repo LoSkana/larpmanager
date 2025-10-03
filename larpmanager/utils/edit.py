@@ -46,6 +46,12 @@ def save_log(member, cls, el, dl=False):
 
 
 def save_version(el, tp, mb, dl=False):
+    """Manage versioning of text content.
+
+    Creates and saves new versions of editable text elements with author tracking,
+    handling different content types including character relationships, plot
+    character associations, and question-based text fields.
+    """
     n = TextVersion.objects.filter(tp=tp, eid=el.id).aggregate(Max("version"))["version__max"]
     if n is None:
         n = 1
@@ -149,6 +155,18 @@ def check_assoc(el, ctx, afield=None):
 
 
 def user_edit(request, ctx, form_type, nm, eid):
+    """Generic user data editing with validation.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with model data
+        form_type: Form class to use for editing
+        nm: Name key for the model instance in context
+        eid: Entity ID for editing
+
+    Returns:
+        bool: True if form was successfully saved, False if form needs display
+    """
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
 
@@ -186,7 +204,13 @@ def backend_get(ctx, typ, eid, afield=None):
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, quiet=False):
+    """Handle backend editing operations for various content types.
+
+    Provides unified interface for editing different model types including
+    form processing, validation, logging, and deletion handling for both
+    event-based and association-based content management.
+    """
     typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request
@@ -213,7 +237,8 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
 
         if ctx["form"].is_valid():
             p = ctx["form"].save()
-            messages.success(request, _("Operation completed") + "!")
+            if not quiet:
+                messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -282,6 +307,20 @@ def set_suggestion(ctx, perm):
 
 
 def writing_edit(request, ctx, form_type, nm, tp, redr=None):
+    """
+    Handle editing of writing elements with form processing.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with element data
+        form_type: Form class to use for editing
+        nm: Name of the element in context
+        tp: Type of writing element
+        redr: Optional redirect URL after save
+
+    Returns:
+        HttpResponse: Redirect response if form is valid, None otherwise
+    """
     ctx["elementTyp"] = form_type.Meta.model
     if nm in ctx:
         ctx["eid"] = ctx[nm].id
@@ -330,6 +369,21 @@ def _setup_char_finder(ctx, typ):
 
 
 def _writing_save(ctx, form, form_type, nm, redr, request, tp):
+    """
+    Save writing form data with AJAX and normal save handling.
+
+    Args:
+        ctx: Context dictionary with element data
+        form: Validated form instance
+        form_type: Form class type
+        nm: Name of the element in context
+        redr: Optional redirect URL
+        request: HTTP request object
+        tp: Type of writing element
+
+    Returns:
+        HttpResponse: AJAX response or redirect after save
+    """
     # Auto save ajax
     if "ajax" in request.POST:
         if nm in ctx:
@@ -390,6 +444,18 @@ def writing_edit_save_ajax(form, request, ctx):
 
 
 def writing_edit_working_ticket(request, tp, eid, token):
+    """
+    Manage working tickets to prevent concurrent editing conflicts.
+
+    Args:
+        request: HTTP request object
+        tp: Type of element being edited (e.g., 'plot', 'character')
+        eid: Element ID being edited
+        token: User's editing token
+
+    Returns:
+        str: Warning message if conflicts exist, empty string otherwise
+    """
     # working ticket also for related characters
     if tp == "plot":
         obj = Plot.objects.get(pk=eid)

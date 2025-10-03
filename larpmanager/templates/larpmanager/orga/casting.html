@@ -116,6 +116,9 @@ window['tipo'] = "{{ typ }}";
 window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug typ %}";
 window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug typ %}";
 
+window['reg_priority'] = {{ reg_priority }};
+window['pay_priority'] = {{ pay_priority }};
+
 window['trads'] = {
     'g': '{% trans "Player" %}',
     'a': '{% trans "Seniority" %}',

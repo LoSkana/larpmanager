@@ -65,14 +65,21 @@ from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import def_user_ctx
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event, get_event_run
-from larpmanager.utils.exceptions import (
-    HiddenError,
-)
+from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
 def calendar(request, lang):
+    """Display the event calendar with open and future runs for an association.
+
+    Args:
+        request: HTTP request object containing user and association data
+        lang: Language code for filtering events
+
+    Returns:
+        Rendered calendar template with events and registration status
+    """
     aid = request.assoc["id"]
     my_regs = None
     my_runs_list = []
@@ -137,6 +144,15 @@ def home_json(request, lang="it"):
 
 
 def carousel(request):
+    """
+    Display event carousel with recent and upcoming events.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered carousel template with event list
+    """
     ctx = def_user_ctx(request)
     ctx.update({"list": []})
     cache = {}
@@ -256,6 +272,15 @@ def check_gallery_visibility(request, ctx):
 
 
 def gallery(request, s):
+    """Event gallery display with permissions.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Gallery template with character and registration data
+    """
     ctx = get_event_run(request, s, status=True)
     if "character" not in ctx["features"]:
         return redirect("event", s=ctx["run"].get_slug())
@@ -285,6 +310,16 @@ def gallery(request, s):
 
 
 def event(request, s):
+    """
+    Display main event page with runs, registration status, and event details.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered event template
+    """
     ctx = get_event_run(request, s, status=True)
     ctx["coming"] = []
     ctx["past"] = []
@@ -312,6 +347,8 @@ def event(request, s):
             ctx["past"].append(r)
 
     ctx["data"] = ctx["event"].show()
+
+    ctx["no_robots"] = datetime.today().date() > ctx["run"].end
 
     return render(request, "larpmanager/event/event.html", ctx)
 
@@ -434,6 +471,16 @@ def quest(request, s, g):
 
 
 def limitations(request, s):
+    """
+    Display event limitations including ticket availability and discounts.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered limitations template
+    """
     ctx = get_event_run(request, s, status=True)
 
     counts = get_reg_counts(ctx["run"])

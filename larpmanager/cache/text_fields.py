@@ -27,12 +27,12 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
-    WritingQuestionType,
     RegistrationAnswer,
     RegistrationQuestion,
     WritingAnswer,
-    WritingQuestion, BaseQuestionType, RegistrationQuestionType,
+    WritingQuestion,
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing

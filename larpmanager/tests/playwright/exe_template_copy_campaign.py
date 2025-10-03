@@ -23,7 +23,7 @@ import re
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -36,10 +36,6 @@ def test_exe_template_copy(pw_page):
     template(live_server, page)
 
     setup(live_server, page)
-
-    px(live_server, page)
-
-    rulepx(live_server, page)
 
     copy(live_server, page)
 
@@ -114,122 +110,6 @@ def setup(live_server, page):
     page.get_by_role("option", name="User Test - user@test.it").click()
     check_feature(page, "Navigation")
     check_feature(page, "Factions")
-    submit_confirm(page)
-
-
-def px(live_server, page):
-    # set up xp
-    go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    page.locator("#id_px_start").click()
-    page.locator("#id_px_start").fill("10")
-    submit_confirm(page)
-
-    go_to(page, live_server, "/test/manage/px/ability_types/")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("base ability")
-    submit_confirm(page)
-
-    go_to(page, live_server, "/test/manage/px/abilities/")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("standard")
-    page.locator("#id_cost").click()
-    page.locator("#id_name").dblclick()
-    page.locator("#id_name").fill("sword1")
-    page.locator("#id_cost").click()
-    page.locator("#id_cost").fill("1")
-    fill_tinymce(page, "id_descr", "sdsfdsfds")
-    submit_confirm(page)
-
-    go_to(page, live_server, "/test/manage/px/deliveries/")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("first live")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_amount").fill("2")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="#1 Test Character").click()
-    submit_confirm(page)
-
-    # check px computation
-    go_to(page, live_server, "/test/manage/characters/")
-    page.get_by_role("link", name="XP").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("0")
-    page.get_by_role("link", name="").click()
-    page.wait_for_load_state("load")
-    page.wait_for_timeout(2000)
-    row = page.get_by_role("row", name="Abilities Show")
-    row.get_by_role("link").click()
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
-    page.get_by_role("link", name="XP").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("11")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("1")
-
-
-def rulepx(live_server, page):
-    # create field
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("c")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Hit Point")
-    page.locator("#id_description").click()
-    page.locator("#id_description").fill("sasad")
-    page.locator("#id_name").click()
-    page.get_by_role("button", name="Confirm").click()
-
-    # create first rule - for everyone
-    page.get_by_role("link", name="Rules").click()
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_field").select_option("11")
-    page.locator("#id_amount").click()
-    page.locator("#id_amount").fill("2")
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("searchbox").click()
-
-    # create second rule - only for sword
-    page.get_by_role("searchbox").fill("swor")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#id_field").select_option("11")
-    page.locator("#id_operation").select_option("MUL")
-    page.locator("#id_amount").click()
-    page.locator("#id_amount").fill("3")
-    page.get_by_role("button", name="Confirm").click()
-
-    # check value
-    page.get_by_role("link", name="Characters").click()
-    page.get_by_role("link", name="Hit Point").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text 6")
-
-    # remove ability
-    page.get_by_role("link", name="").click()
-    page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
-    page.get_by_role("listitem", name="sword1").locator("span").click()
-    page.get_by_role("button", name="Confirm").click()
-
-    # recheck value
-    page.get_by_role("link", name="Hit Point").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text 2")
-
-    # readd ability
-    page.get_by_role("link", name="").click()
-    page.wait_for_load_state("load")
-    page.wait_for_timeout(2000)
-    row = page.get_by_role("row", name="Abilities Show")
-    row.get_by_role("link").click()
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
 

@@ -22,6 +22,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import get_run_accounting
@@ -41,11 +42,11 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemOutflow,
     AccountingItemPayment,
-    AccountingItemTransaction,
     Discount,
     PaymentInvoice,
     PaymentStatus,
 )
+from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.edit import backend_get, orga_edit
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.paginate import orga_paginate
@@ -95,9 +96,33 @@ def orga_expenses_my_new(request, s):
 
 @login_required
 def orga_invoices(request, s):
+    """
+    Optimized view for displaying payment invoices awaiting confirmation.
+
+    Shows submitted payment invoices for the current run with optimized
+    database queries to minimize N+1 query problems.
+
+    Args:
+        request: Django HTTP request object
+        s (str): Event slug
+
+    Returns:
+        HttpResponse: Rendered invoices template with paginated results
+    """
     ctx = check_event_permission(request, s, "orga_invoices")
-    que = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
-    ctx["list"] = que.select_related("member", "method")
+
+    que = (
+        PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
+        .select_related(
+            "member",  # For {{ el.member }} in template
+            "method",  # For {{ el.method }} in template
+            "reg",  # For confirmation URL generation
+            "reg__run",  # For run.get_slug() in confirmation URL
+        )
+        .order_by("-created")
+    )
+
+    ctx["list"] = que
     return render(request, "larpmanager/orga/accounting/invoices.html", ctx)
 
 
@@ -130,8 +155,22 @@ def orga_accounting(request, s):
 @login_required
 def orga_tokens(request, s):
     ctx = check_event_permission(request, s, "orga_tokens")
-    orga_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
-    return render(request, "larpmanager/orga/accounting/tokens.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "subtype": "tokens",
+            "fields": [
+                ("member", _("Member")),
+                ("run", _("Event")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("created", _("Date")),
+            ],
+        }
+    )
+    return orga_paginate(
+        request, ctx, AccountingItemOther, "larpmanager/orga/accounting/tokens.html", "orga_tokens_edit"
+    )
 
 
 @login_required
@@ -142,8 +181,22 @@ def orga_tokens_edit(request, s, num):
 @login_required
 def orga_credits(request, s):
     ctx = check_event_permission(request, s, "orga_credits")
-    orga_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
-    return render(request, "larpmanager/orga/accounting/credits.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "subtype": "credits",
+            "fields": [
+                ("member", _("Member")),
+                ("run", _("Event")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("created", _("Date")),
+            ],
+        }
+    )
+    return orga_paginate(
+        request, ctx, AccountingItemOther, "larpmanager/orga/accounting/credits.html", "orga_credits_edit"
+    )
 
 
 @login_required
@@ -154,31 +207,37 @@ def orga_credits_edit(request, s, num):
 @login_required
 def orga_payments(request, s):
     ctx = check_event_permission(request, s, "orga_payments")
-    sr = ("reg__member", "reg__run", "inv", "inv__method")
-    orga_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
-    assign_payment_fee(ctx)
-    return render(request, "larpmanager/orga/accounting/payments.html", ctx)
+    fields = [
+        ("member", _("Member")),
+        ("method", _("Method")),
+        ("type", _("Type")),
+        ("status", _("Status")),
+        ("net", _("Net")),
+        ("trans", _("Fee")),
+        ("created", _("Date")),
+    ]
+    if "vat" in ctx.get("features", []):
+        fields.append(("vat", _("VAT")))
 
-
-def assign_payment_fee(ctx):
-    inv_ids = set()
-    for el in ctx["list"]:
-        if el.inv_id:
-            inv_ids.add(el.inv_id)
-    cache = {}
-    for el in AccountingItemTransaction.objects.filter(inv_id__in=inv_ids):
-        cache[el.inv_id] = el.value
-    for el in ctx["list"]:
-        el.net = el.value
-
-        if el.inv_id not in cache:
-            continue
-
-        if cache[el.inv_id] == 0:
-            continue
-
-        el.trans = cache[el.inv_id]
-        el.net -= el.trans
+    ctx.update(
+        {
+            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
+            "afield": "reg",
+            "fields": fields,
+            "callbacks": {
+                "member": lambda row: str(row.reg.member) if row.reg and row.reg.member else "",
+                "method": lambda el: str(el.inv.method) if el.inv else "",
+                "type": lambda el: el.get_pay_display(),
+                "status": lambda el: el.inv.get_status_display() if el.inv else "",
+                "net": lambda el: format_decimal(el.net),
+                "trans": lambda el: format_decimal(el.trans) if el.trans else "",
+                "vat": lambda el: format_decimal(el.vat) if el.vat else "",
+            },
+        }
+    )
+    return orga_paginate(
+        request, ctx, AccountingItemPayment, "larpmanager/orga/accounting/payments.html", "orga_payments_edit"
+    )
 
 
 @login_required
@@ -189,8 +248,26 @@ def orga_payments_edit(request, s, num):
 @login_required
 def orga_outflows(request, s):
     ctx = check_event_permission(request, s, "orga_outflows")
-    orga_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
-    return render(request, "larpmanager/orga/accounting/outflows.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "fields": [
+                ("run", _("Event")),
+                ("type", _("Type")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("payment_date", _("Date")),
+                ("statement", _("Statement")),
+            ],
+            "callbacks": {
+                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "type": lambda el: el.get_exp_display(),
+            },
+        }
+    )
+    return orga_paginate(
+        request, ctx, AccountingItemOutflow, "larpmanager/orga/accounting/outflows.html", "orga_outflows_edit"
+    )
 
 
 @login_required
@@ -201,8 +278,24 @@ def orga_outflows_edit(request, s, num):
 @login_required
 def orga_inflows(request, s):
     ctx = check_event_permission(request, s, "orga_inflows")
-    orga_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
-    return render(request, "larpmanager/orga/accounting/inflows.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "fields": [
+                ("run", _("Event")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("payment_date", _("Date")),
+                ("statement", _("Statement")),
+            ],
+            "callbacks": {
+                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+            },
+        }
+    )
+    return orga_paginate(
+        request, ctx, AccountingItemInflow, "larpmanager/orga/accounting/inflows.html", "orga_inflows_edit"
+    )
 
 
 @login_required
@@ -214,8 +307,32 @@ def orga_inflows_edit(request, s, num):
 def orga_expenses(request, s):
     ctx = check_event_permission(request, s, "orga_expenses")
     ctx["disable_approval"] = ctx["event"].assoc.get_config("expense_disable_orga", False)
-    orga_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
-    return render(request, "larpmanager/orga/accounting/expenses.html", ctx)
+    approve = _("Approve")
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "fields": [
+                ("member", _("Member")),
+                ("type", _("Type")),
+                ("run", _("Event")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("created", _("Date")),
+                ("statement", _("Statement")),
+                ("action", _("Action")),
+            ],
+            "callbacks": {
+                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[ctx['run'].get_slug(), el.id])}'>{approve}</a>"
+                if not el.is_approved and not ctx["disable_approval"]
+                else "",
+                "type": lambda el: el.get_exp_display(),
+            },
+        }
+    )
+    return orga_paginate(
+        request, ctx, AccountingItemExpense, "larpmanager/orga/accounting/expenses.html", "orga_expenses_edit"
+    )
 
 
 @login_required

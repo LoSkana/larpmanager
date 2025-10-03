@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from datetime import datetime
 from io import StringIO
 
 from django.http import HttpResponse
@@ -71,6 +71,7 @@ def _organization_sitemap(request):
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
         .filter(event__assoc_id=request.assoc["id"])
+        .filter(end__gte=datetime.now())
         .select_related("event", "event__assoc")
         .order_by("-end")
     )
@@ -80,7 +81,7 @@ def _organization_sitemap(request):
         cache_ev[el.event_id] = 1
         assoc = el.event.assoc
         domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-        urls.append(f"https://{assoc.slug}.{domain}/{el.event.slug}/{el.number}/event/")
+        urls.append(f"https://{assoc.slug}.{domain}/{el.get_slug()}/event/")
     return urls
 
 
@@ -90,7 +91,7 @@ def larpmanager_sitemap():
     for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
     # Blog posts
-    for el in LarpManagerGuide.objects.filter(published=True):
+    for el in LarpManagerGuide.objects.all():
         urls.append(f"https://larpmanager.com/guide/{el.slug}/")
     return urls
 

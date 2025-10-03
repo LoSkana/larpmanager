@@ -1,0 +1,82 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import logging
+
+from django.core.management.base import BaseCommand
+
+from larpmanager.accounting.gateway import satispay_verify
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
+from larpmanager.utils.tasks import notify_admins
+
+logger = logging.getLogger(__name__)
+
+
+class Command(BaseCommand):
+    """Django management command for periodic payment checks.
+
+    This command should be run regularly (every 5 minutes) to check the status
+    of pending payments across different payment gateways and update them if completed.
+    Currently handles Satispay payments, with room for future payment gateway checks.
+    """
+
+    help = "Check status of pending payments across all payment gateways"
+
+    def handle(self, *args, **options):
+        """Main command entry point with exception handling.
+
+        Args:
+            *args: Command arguments
+            **options: Command options
+        """
+        try:
+            self.check_satispay_payments()
+            # Future payment gateway checks can be added here
+        except Exception as e:
+            notify_admins("Check Payments", "Error checking payments", e)
+            logger.error(f"Error in check_payments command: {e}")
+
+    def check_satispay_payments(self):
+        """Check all pending Satispay payments and verify their status.
+
+        Queries all payment invoices with Satispay method and CREATED status,
+        then verifies each one with the Satispay API to update their status.
+        """
+        pending_payments = PaymentInvoice.objects.filter(
+            method__slug="satispay",
+            status=PaymentStatus.CREATED,
+        )
+
+        if not pending_payments.exists():
+            self.stdout.write("No pending Satispay payments found.")
+            return
+
+        checked_count = 0
+        for invoice in pending_payments:
+            try:
+                # Use a mock request object since satispay_verify expects one
+                # but only uses it for logging context
+                mock_request = type("MockRequest", (), {"assoc": {"id": invoice.assoc_id}})()
+                satispay_verify(mock_request, invoice.cod)
+                checked_count += 1
+            except Exception as e:
+                logger.warning(f"Failed to verify Satispay payment {invoice.cod}: {e}")
+
+        self.stdout.write(self.style.SUCCESS(f"Successfully checked {checked_count} pending Satispay payments."))

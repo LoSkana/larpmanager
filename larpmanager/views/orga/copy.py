@@ -18,8 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -29,11 +27,11 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.event import OrgaAppearanceForm, OrgaEventForm
-from larpmanager.forms.miscellanea import OrganizerCopyForm
+from larpmanager.forms.miscellanea import OrgaCopyForm
 from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import Discount
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event, EventConfig, EventText
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText
 from larpmanager.models.form import RegistrationOption, RegistrationQuestion, WritingOption, WritingQuestion
 from larpmanager.models.miscellanea import WorkshopModule, WorkshopOption, WorkshopQuestion
 from larpmanager.models.registration import (
@@ -103,6 +101,12 @@ def correct_rels(e_id, p_id, cls_p, cls, field, rel_field="number"):
 
 
 def correct_relationship(e_id, p_id):
+    """Correct character relationships after event copying.
+
+    Args:
+        e_id: Target event ID with copied characters
+        p_id: Source parent event ID with original characters
+    """
     cache_f = {}
     cache_t = {}
     for obj in Character.objects.filter(event_id=p_id):
@@ -128,12 +132,20 @@ def correct_relationship(e_id, p_id):
 
         v = rel.source_id
         # print(rel.source_id)
+        if v not in cache_f:
+            continue
         v = cache_f[v]
+        if v not in cache_t:
+            continue
         v = cache_t[v]
         rel.source_id = v
 
         v = rel.target_id
+        if v not in cache_f:
+            continue
         v = cache_f[v]
+        if v not in cache_t:
+            continue
         v = cache_t[v]
         rel.target_id = v
 
@@ -145,6 +157,13 @@ def correct_relationship(e_id, p_id):
 
 
 def correct_workshop(e_id, p_id):
+    """
+    Correct workshop data mappings during event copying process.
+
+    Args:
+        e_id: Target event ID to copy to
+        p_id: Source event ID to copy from
+    """
     cache_f = {}
     cache_t = {}
     for obj in WorkshopModule.objects.filter(event_id=p_id):
@@ -223,7 +242,7 @@ def copy_character_config(e_id, p_id):
                     raise
 
 
-def copy(request, ctx, parent, event, element):
+def copy(request, ctx, parent, event, targets):
     if not parent:
         return messages.error(request, _("Parent empty"))
 
@@ -233,68 +252,100 @@ def copy(request, ctx, parent, event, element):
     if p_id == e_id:
         return messages.error(request, _("Can't copy from same event"))
 
-    all = element == "all"
+    copy_event(ctx, e_id, targets, event, p_id, parent)
 
-    copy_event(all, ctx, e_id, element, event, p_id, parent)
+    copy_registration(e_id, targets, p_id)
 
-    copy_registration(all, e_id, element, p_id)
-
-    copy_writing(all, e_id, element, p_id)
+    copy_writing(e_id, targets, p_id)
 
     event.save()
 
     messages.success(request, _("Copy done"))
 
 
-def copy_event(all, ctx, e_id, element, event, p_id, parent):
-    if all or element == "event":
-        for s in get_all_fields_from_form(OrgaEventForm, ctx):
-            if s == "slug":
-                continue
+def copy_event(ctx, e_id, targets, event, p_id, parent):
+    """
+    Copy event data and related objects from parent to new event.
+
+    Args:
+        ctx: Context dictionary with form information
+        e_id: Target event ID
+        targets: List of elements to copy
+        event: Target event instance
+        p_id: Source parent event ID
+        parent: Source parent event instance
+    """
+    # Define copy actions for each target type
+    copy_actions = {
+        "event": lambda: _copy_event_fields(ctx, event, parent),
+        "config": lambda: copy_class(e_id, p_id, EventConfig),
+        "appearance": lambda: _copy_appearance_fields(ctx, event, parent),
+        "text": lambda: copy_class(e_id, p_id, EventText),
+        "role": lambda: copy_class(e_id, p_id, EventRole),
+        "features": lambda: _copy_features(event, parent),
+        "navigation": lambda: copy_class(e_id, p_id, EventButton),
+    }
+
+    # Execute copy actions for each target in the list
+    for target in targets:
+        if target in copy_actions:
+            copy_actions[target]()
+
+
+def _copy_event_fields(ctx, event, parent):
+    """Copy basic event fields from parent to child event."""
+    for s in get_all_fields_from_form(OrgaEventForm, ctx):
+        if s == "slug":
+            continue
+        v = getattr(parent, s)
+        setattr(event, s, v)
+    event.name = "copy - " + event.name
+
+
+def _copy_appearance_fields(ctx, event, parent):
+    """Copy appearance fields from parent to child event."""
+    for s in get_all_fields_from_form(OrgaAppearanceForm, ctx):
+        if s == "event_css":
+            copy_css(ctx, event, parent)
+        else:
             v = getattr(parent, s)
             setattr(event, s, v)
 
-        event.name = "copy - " + event.name
-    if all or element == "config":
-        copy_class(e_id, p_id, EventConfig)
-    if all or element == "appearance":
-        for s in get_all_fields_from_form(OrgaAppearanceForm, ctx):
-            if s == "event_css":
-                copy_css(ctx, event, parent)
-            else:
-                v = getattr(parent, s)
-                setattr(event, s, v)
-    if all or element == "text":
-        copy_class(e_id, p_id, EventText)
-    if all or element == "role":
-        copy_class(e_id, p_id, EventRole)
-    if all or element == "features":
-        # copy features
-        for fn in parent.features.all():
-            event.features.add(fn)
-        event.save()
+
+def _copy_features(event, parent):
+    """Copy features from parent to child event."""
+    for fn in parent.features.all():
+        event.features.add(fn)
+    event.save()
 
 
-def copy_registration(all, e_id, element, p_id):
-    if all or element == "ticket":
+def copy_registration(e_id, targets, p_id):
+    if "ticket" in targets:
         copy_class(e_id, p_id, RegistrationTicket)
-    if all or element == "question":
+    if "question" in targets:
         copy_class(e_id, p_id, RegistrationQuestion)
         copy_class(e_id, p_id, RegistrationOption)
         correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "name")
-    if all or element == "discount":
+    if "discount" in targets:
         copy_class(e_id, p_id, Discount)
-    if all or element == "quota":
+    if "quota" in targets:
         copy_class(e_id, p_id, RegistrationQuota)
-    if all or element == "installment":
+    if "installment" in targets:
         copy_class(e_id, p_id, RegistrationInstallment)
         correct_rels_many(e_id, RegistrationTicket, RegistrationInstallment, "tickets", "name")
-    if all or element == "surcharge":
+    if "surcharge" in targets:
         copy_class(e_id, p_id, RegistrationSurcharge)
 
 
-def copy_writing(all, e_id, element, p_id):
-    if all or element == "character":
+def copy_writing(e_id, targets, p_id):
+    """Copy writing elements from parent to child event.
+
+    Args:
+        e_id: Target event ID
+        targets: List of element types to copy (character, faction, etc.)
+        p_id: Parent event ID to copy from
+    """
+    if "character" in targets:
         copy_class(e_id, p_id, Character)
         # correct relationship
         correct_relationship(e_id, p_id)
@@ -303,26 +354,26 @@ def copy_writing(all, e_id, element, p_id):
         copy_class(e_id, p_id, WritingOption)
         copy_character_config(e_id, p_id)
         correct_rels(e_id, p_id, WritingQuestion, WritingOption, "question", "name")
-    if all or element == "faction":
+    if "faction" in targets:
         copy_class(e_id, p_id, Faction)
-    if all or element == "quest":
+    if "quest" in targets:
         copy_class(e_id, p_id, QuestType)
         copy_class(e_id, p_id, Quest)
         copy_class(e_id, p_id, Trait)
         correct_rels(e_id, p_id, QuestType, Quest, "typ")
         correct_rels(e_id, p_id, Quest, Trait, "quest")
-    if all or element == "prologue":
+    if "prologue" in targets:
         copy_class(e_id, p_id, Prologue)
-    if all or element == "speedlarp":
+    if "speedlarp" in targets:
         copy_class(e_id, p_id, SpeedLarp)
-    if all or element == "plot":
+    if "plot" in targets:
         copy_class(e_id, p_id, Plot)
         # correct plotcharacterrels
         correct_plot_character(e_id, p_id)
-    if all or element == "handout":
+    if "handout" in targets:
         copy_class(e_id, p_id, Handout)
         copy_class(e_id, p_id, HandoutTemplate)
-    if all or element == "workshop":
+    if "workshop" in targets:
         copy_class(e_id, p_id, WorkshopModule)
         # correct workshop
         correct_workshop(e_id, p_id)
@@ -331,7 +382,7 @@ def copy_writing(all, e_id, element, p_id):
 def copy_css(ctx, event, parent):
     app_form = OrgaAppearanceForm(ctx=ctx)
     path = app_form.get_css_path(parent)
-    if not os.path.exists(path):
+    if not default_storage.exists(path):
         return
     value = default_storage.open(path).read().decode("utf-8")
     event.css_code = generate_id(32)
@@ -344,16 +395,16 @@ def orga_copy(request, s):
     ctx = check_event_permission(request, s, "orga_copy")
 
     if request.method == "POST":
-        form = OrganizerCopyForm(request.POST, request.FILES, ctx=ctx)
+        form = OrgaCopyForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
             pt = form.cleaned_data["parent"]
-            el = form.cleaned_data["target"]
+            targets = form.cleaned_data["target"]
             parent = Event.objects.get(pk=pt, assoc_id=ctx["a_id"])
             event = ctx["event"]
-            copy(request, ctx, parent, event, el)
+            copy(request, ctx, parent, event, targets)
 
     else:
-        form = OrganizerCopyForm(ctx=ctx)
+        form = OrgaCopyForm(ctx=ctx)
 
     ctx["form"] = form
 

@@ -18,12 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django.utils.timezone import now
 
 from larpmanager.utils.profiler.signals import profiler_response_signal
 
+logger = logging.getLogger(__name__)
+
 
 class ProfilerMiddleware:
+    threshold = 0.8
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -33,7 +39,7 @@ class ProfilerMiddleware:
 
         if hasattr(request, "_profiler_func_name"):
             duration = (now() - request._profiler_start_ts).total_seconds()
-            if duration >= 1:
+            if duration >= self.threshold:
                 try:
                     # noinspection PyProtectedMember
                     profiler_response_signal.send(
@@ -45,8 +51,8 @@ class ProfilerMiddleware:
                         duration=duration,
                     )
                 except Exception as err:
-                    # pass  # fail silently
-                    print(f"ProfilerMiddleware fail: {err}")
+                    # fail silently in production, but log for debugging
+                    logger.warning(f"ProfilerMiddleware fail: {err}")
 
         return response
 

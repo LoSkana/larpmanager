@@ -58,6 +58,11 @@ class Command(BaseCommand):
             self.stdout.write(entry.msgid)
 
     def go_polib(self):
+        """Process translation files using polib and DeepL API for automatic translation.
+
+        Iterates through all locale directories and translates untranslated
+        msgid entries using the DeepL translation service.
+        """
         loc_path = "larpmanager/locale"
         locales = [f for f in listdir(loc_path) if isdir(join(loc_path, f))]
 

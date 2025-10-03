@@ -4,6 +4,13 @@ from django.db import migrations, models
 
 
 def clean_fields(apps, schema_editor):
+    """
+    Database migration to clean up registration fields and convert features to configs.
+
+    Args:
+        apps: Django apps registry for accessing models
+        schema_editor: Database schema editor for migration operations
+    """
     # create question and answer to save data in "cocreation"
     Registration = apps.get_model("larpmanager", "Registration")
     RegistrationQuestion = apps.get_model("larpmanager", "RegistrationQuestion")

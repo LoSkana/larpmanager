@@ -261,15 +261,6 @@ msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 
-msgid "Interface"
-msgstr ""
-
-msgid "Old interface"
-msgstr ""
-
-msgid "If checked: uses old interface"
-msgstr ""
-
 msgid "Calendar"
 msgstr ""
 
@@ -365,6 +356,17 @@ msgid "Username of account"
 msgstr ""
 
 msgid "Password of account"
+msgstr ""
+
+msgid "Pre-registration"
+msgstr ""
+
+msgid "Enable preferences"
+msgstr ""
+
+msgid ""
+"If checked, participants give a preference value when adding pre-"
+"registrations"
 msgstr ""
 
 msgid "Easter egg"
@@ -655,6 +657,11 @@ msgid ""
 "for your new organization"
 msgstr ""
 
+msgid ""
+"Do you want to manage campaigns, a series of events that share the same "
+"characters"
+msgstr ""
+
 msgid "Do you want to accept payments processed through the system"
 msgstr ""
 
@@ -697,15 +704,13 @@ msgstr ""
 msgid "Do you want to allow users to make voluntary donations"
 msgstr ""
 
-msgid ""
-"Do you want to manage campaigns, a series of events that share the same "
-"characters"
-msgstr ""
-
 msgid "Personal preferences"
 msgstr ""
 
 msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+
+msgid "Interface"
 msgstr ""
 
 msgid "Collapse sidebar"
@@ -962,9 +967,6 @@ msgid ""
 "If checked, allows a option to be visible only if other options are selected"
 msgstr ""
 
-msgid "Pre-registration"
-msgstr ""
-
 msgid "If checked, makes pre-registration for this event available"
 msgstr ""
 
@@ -1216,6 +1218,22 @@ msgstr ""
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 
+msgid "Registration priority"
+msgstr ""
+
+msgid ""
+"A measure of how much to favor earlier registrants (0=default disabled, "
+"1=normal, 10=strong)"
+msgstr ""
+
+msgid "Payment priority"
+msgstr ""
+
+msgid ""
+"A measure of how much to favor participants who completed full payment "
+"earlier (0=default disabled, 1=normal, 10=strong)"
+msgstr ""
+
 msgid "Alert"
 msgstr ""
 
@@ -1462,6 +1480,24 @@ msgid ""
 "for your new event"
 msgstr ""
 
+msgid "Characters"
+msgstr ""
+
+msgid "Do you want to manage characters assigned to registered participants"
+msgstr ""
+
+msgid "Casting algorithm"
+msgstr ""
+
+msgid "Do you want to assign characters using a casting algorithm"
+msgstr ""
+
+msgid "Do you want to allow participants to create their own characters"
+msgstr ""
+
+msgid "Do you want to manage character progression through abilities"
+msgstr ""
+
 msgid "Registration opening date"
 msgstr ""
 
@@ -1499,24 +1535,6 @@ msgstr ""
 msgid ""
 "Do you want to allow users to add a voluntary donation to their registration "
 "fee"
-msgstr ""
-
-msgid "Characters"
-msgstr ""
-
-msgid "Do you want to manage characters assigned to registered participants"
-msgstr ""
-
-msgid "Casting algorithm"
-msgstr ""
-
-msgid "Do you want to assign characters using a casting algorithm"
-msgstr ""
-
-msgid "Do you want to allow participants to create their own characters"
-msgstr ""
-
-msgid "Do you want to manage character progression through abilities"
 msgstr ""
 
 msgid ""
@@ -2566,13 +2584,16 @@ msgstr ""
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
 
-msgid "To access this feature, you must first register!"
+msgid "To access this feature, you must first register"
 msgstr ""
 
-msgid "This feature is available for non-waiting tickets!"
+msgid "This feature is available for non-waiting tickets"
 msgstr ""
 
 msgid "not visible at this time"
+msgstr ""
+
+msgid "You're not allowed to sign up"
 msgstr ""
 
 msgid "Statement"
@@ -4934,18 +4955,9 @@ msgstr ""
 msgid "This page shows all donations recorded in the system"
 msgstr ""
 
-msgid "Descr"
-msgstr ""
-
 msgid ""
 "This page shows all expenses incurred by collaborators, recorded in the "
 "system"
-msgstr ""
-
-msgid "Run"
-msgstr ""
-
-msgid "Approve"
 msgstr ""
 
 msgid "Movements"
@@ -4969,13 +4981,7 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
-msgid "Confirm payments"
-msgstr ""
-
 msgid "This page shows all invoices registered in the system"
-msgstr ""
-
-msgid "Net"
 msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
@@ -4988,12 +4994,6 @@ msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""
 
 msgid "you can review, edit, and mark them as assigned"
-msgstr ""
-
-msgid "Total required"
-msgstr ""
-
-msgid "residues"
 msgstr ""
 
 msgid "This page summarises the system entries of"
@@ -5083,6 +5083,21 @@ msgstr ""
 msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 
+msgid "First"
+msgstr ""
+
+msgid "Second"
+msgstr ""
+
+msgid "Third"
+msgstr ""
+
+msgid "Fourth"
+msgstr ""
+
+msgid "Fifth"
+msgstr ""
+
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
@@ -5114,21 +5129,6 @@ msgid "Archive mail"
 msgstr ""
 
 msgid "This page shows all emails, both queued and sent"
-msgstr ""
-
-msgid "Recipient"
-msgstr ""
-
-msgid "Subject"
-msgstr ""
-
-msgid "Body"
-msgstr ""
-
-msgid "Sent"
-msgstr ""
-
-msgid "Read"
 msgstr ""
 
 msgid ""
@@ -5401,9 +5401,6 @@ msgid "Register to"
 msgstr ""
 
 msgid "May the best win"
-msgstr ""
-
-msgid "First"
 msgstr ""
 
 msgid "Prev"
@@ -5732,6 +5729,9 @@ msgid "Consumed"
 msgstr ""
 
 msgid "Returned"
+msgstr ""
+
+msgid "Run"
 msgstr ""
 
 msgid "Indicate the amount of your donation"
@@ -6308,6 +6308,9 @@ msgstr ""
 msgid "This page allows you to manually approve payments received"
 msgstr ""
 
+msgid "Net"
+msgstr ""
+
 msgid ""
 "This page shows all expenses incurred directly by the organization "
 "concerning this event"
@@ -6546,6 +6549,9 @@ msgid ""
 "controls"
 msgstr ""
 
+msgid "Read"
+msgstr ""
+
 msgid ""
 "This page shows active discounts on the participant, allows you to activate "
 "or deactivate them"
@@ -6682,6 +6688,9 @@ msgid "Additions"
 msgstr ""
 
 msgid "Last change"
+msgstr ""
+
+msgid "Full payment"
 msgstr ""
 
 msgid "PWYW"
@@ -8300,24 +8309,6 @@ msgstr ""
 msgid "Set ability type"
 msgstr ""
 
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
-"assignments/media-types/media-types.xhtml"
-msgstr ""
-
 msgid "Welcome"
 msgstr ""
 
@@ -8333,7 +8324,8 @@ msgstr ""
 msgid "if it doesn't exist, it will be created"
 msgstr ""
 
-msgid "(Optional) The character name to assign to the player"
+msgid ""
+"(Optional) The character names to assign to the player, separated by commas"
 msgstr ""
 
 msgid "(Optional) The amount of a voluntary donation"
@@ -8511,10 +8503,7 @@ msgstr ""
 msgid "Pre-register to the event!"
 msgstr ""
 
-msgid "Registration not yet open!"
-msgstr ""
-
-msgid "Registrations not open!"
+msgid "Registrations not open"
 msgstr ""
 
 #, python-format
@@ -8548,13 +8537,43 @@ msgid ""
 "href='%(url)s'>Unsubscribe</a>"
 msgstr ""
 
+#, python-format
+msgid ""
+"File type '%(detected_type)s' is not allowed.Allowed types are: "
+"'%(allowed_types)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
+"assignments/media-types/media-types.xhtml"
+msgstr ""
+
 msgid "Registration completed successfully!"
+msgstr ""
+
+msgid "Approve"
 msgstr ""
 
 msgid "Request approved"
 msgstr ""
 
+msgid "Transaction"
+msgstr ""
+
 msgid "Element approved"
+msgstr ""
+
+msgid "Total required"
+msgstr ""
+
+msgid "Remaining credits"
 msgstr ""
 
 msgid "Verified payments"
@@ -8582,6 +8601,14 @@ msgstr ""
 msgid "Feature %(name)s deactivated"
 msgstr ""
 
+msgid "Your event has been created"
+msgstr ""
+
+msgid ""
+"Now please complete the quick setup by selecting the features most useful "
+"for this event"
+msgstr ""
+
 msgid "Member approved!"
 msgstr ""
 
@@ -8595,6 +8622,18 @@ msgid "Membership fee of"
 msgstr ""
 
 msgid "Mail added to queue!"
+msgstr ""
+
+msgid "Recipient"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"
@@ -8636,10 +8675,18 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
-msgid "No events are present, create one"
+msgid "You don’t have any events yet"
 msgstr ""
 
-msgid "Quickly configure your organization's most important settings"
+msgid "Please create your first event to get started"
+msgstr ""
+
+msgid ""
+"Before accessing the organization dashboard, please complete the quick setup "
+"by selecting the features most useful for your organization"
+msgstr ""
+
+msgid "No events are present, create one"
 msgstr ""
 
 msgid "Set up the payment methods available to participants"
@@ -8708,6 +8755,15 @@ msgid "Set up the organization tax configuration"
 msgstr ""
 
 msgid "Set up the taxes configuration"
+msgstr ""
+
+msgid ""
+"Last step, please complete the event setup by adding the start and end dates"
+msgstr ""
+
+msgid ""
+"Before accessing the event dashboard, please complete the quick setup by "
+"selecting the features most useful for your event"
 msgstr ""
 
 msgid "Create the first character of the event"
@@ -8860,6 +8916,15 @@ msgstr ""
 msgid "Unknow error on upload"
 msgstr ""
 
+msgid ""
+"You must create at least one ability type before you can create abilities"
+msgstr ""
+
+msgid ""
+"You must create at least one registration question before you can create "
+"registration options"
+msgstr ""
+
 msgid "Photos and videos successfully uploaded"
 msgstr ""
 
@@ -8879,6 +8944,20 @@ msgid "Player customisation updated"
 msgstr ""
 
 msgid "Cache reset!"
+msgstr ""
+
+msgid "You must create at least one quest type before you can create quests"
+msgstr ""
+
+msgid "You must create at least one quest before you can create traits"
+msgstr ""
+
+msgid ""
+"You must create at least one handout template before you can create handouts"
+msgstr ""
+
+msgid ""
+"You must create at least one prologue type before you can create prologues"
 msgstr ""
 
 msgid ""
@@ -9128,6 +9207,9 @@ msgstr ""
 
 #, python-format
 msgid "You have correctly cancelled the registration to the %(event)s event"
+msgstr ""
+
+msgid "Registrations not open!"
 msgstr ""
 
 msgid "Gift card cancelled!"

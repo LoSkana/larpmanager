@@ -36,10 +36,15 @@ from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
-from larpmanager.utils.exceptions import SignupError, WaitingError
+from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 
 def registration_available(r, features=None, reg_counts=None):
+    """Check if registration is available based on capacity and rules.
+
+    Validates registration availability considering maximum participants,
+    ticket quotas, and advanced registration constraints.
+    """
     # check advanced registration rules only if there is a max number of tickets
     if r.event.max_pg == 0:
         r.status["primary"] = True
@@ -116,6 +121,16 @@ def get_match_reg(r, my_regs):
 
 
 def registration_status_signed(run, features, register_url):
+    """Generate registration status information for signed up users.
+
+    Args:
+        run: Run instance for the registered user
+        features: Available features configuration
+        register_url: URL for registration management
+
+    Returns:
+        dict: Registration status data including messages and membership info
+    """
     registration_status_characters(run, features)
     member = run.reg.member
     mb = get_user_membership(member, run.event.assoc_id)
@@ -129,6 +144,9 @@ def registration_status_signed(run, features, register_url):
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
     if "membership" in features:
+        if mb.status in [MembershipStatus.REWOKED]:
+            raise RewokedMembershipError()
+
         if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
             mes = _("please upload your membership application to proceed") + "."
@@ -162,6 +180,11 @@ def registration_status_signed(run, features, register_url):
 
 
 def _status_payment(register_text, run):
+    """Check payment status and update registration status text accordingly.
+
+    Handles pending payments, wire transfers, and payment alerts with
+    appropriate messaging and links to payment processing pages.
+    """
     pending = PaymentInvoice.objects.filter(
         idx=run.reg.id,
         member_id=run.reg.member_id,
@@ -200,6 +223,21 @@ def _status_payment(register_text, run):
 
 
 def registration_status(run, user, my_regs=None, features_map=None, reg_count=None):
+    """Determine registration status and availability for users.
+
+    Checks registration constraints, deadlines, and feature requirements
+    to determine if a user can register for an event.
+
+    Args:
+        run: Event run object to check registration status for
+        user: User object attempting registration
+        my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
+        features_map (dict, optional): Cached features mapping. Defaults to None.
+        reg_count (int, optional): Pre-calculated registration count. Defaults to None.
+
+    Returns:
+        bool: True if registration status was successfully determined
+    """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
     registration_find(run, user, my_regs)
@@ -209,6 +247,11 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
     registration_available(run, features, reg_count)
     register_url = reverse("register", args=[run.get_slug()])
 
+    if user.is_authenticated:
+        mb = get_user_membership(user.member, run.event.assoc_id)
+        if mb.status in [MembershipStatus.REWOKED]:
+            return
+
     if run.reg:
         registration_status_signed(run, features, register_url)
         return
@@ -217,24 +260,21 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         return
 
     # check pre-register
-    if not run.registration_open and run.event.get_config("pre_register_active", False):
-        run.status["open"] = False
+    if run.event.get_config("pre_register_active", False):
         mes = _("Pre-register to the event!")
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
-        run.status["details"] = _("Registration not yet open!")
-        return
 
     dt = datetime.today()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:
             run.status["open"] = False
-            run.status["text"] = _("Registrations not open!")
+            run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             return
         elif run.registration_open > dt:
             run.status["open"] = False
-            run.status["text"] = _("Registrations not open!")
+            run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             run.status["details"] = _("Opening at: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime)
             }
@@ -292,6 +332,11 @@ def check_character_maximum(event, member):
 
 
 def registration_status_characters(run, features):
+    """Update registration status with character assignment information.
+
+    Displays assigned characters with approval status and provides links
+    for character creation or selection based on event configuration.
+    """
     que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
     approval = run.event.get_config("user_character_approval", False)
     rcrs = que.order_by("character__number").select_related("character")
@@ -322,7 +367,7 @@ def registration_status_characters(run, features):
                 run.status["details"] += " - "
             mes = _("Access character creation!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
-        elif len(aux) == 0 and max_chars:
+        elif not aux and max_chars:
             url = reverse("character_list", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "
@@ -331,6 +376,14 @@ def registration_status_characters(run, features):
 
 
 def get_registration_options(instance):
+    """Get formatted list of registration options and answers for display.
+
+    Args:
+        instance: Registration instance
+
+    Returns:
+        List of tuples containing (question_name, answer_text) pairs
+    """
     res = []
     rqs = []
     cache = []
@@ -411,6 +464,13 @@ def get_reduced_available_count(run):
 
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender, instance, **kwargs):
+    """Handle registration updates when switching between events.
+
+    Args:
+        sender: The model class sending the signal
+        instance: The Registration instance being saved
+        **kwargs: Additional keyword arguments from the signal
+    """
     if not instance.pk:
         return
 
