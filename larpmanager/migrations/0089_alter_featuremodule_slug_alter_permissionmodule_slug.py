@@ -24,7 +24,7 @@ def move_enc_files(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0084_featuremodule_slug_permissionmodule_slug_and_more"),
+        ("larpmanager", "0088_featuremodule_slug_permissionmodule_slug_and_more"),
     ]
 
     operations = [

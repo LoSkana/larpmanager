@@ -1305,3 +1305,15 @@
     after_link: orga_registration_tickets
     hidden: false
     module: registration
+- model: larpmanager.feature
+  fields:
+    name: Publisher
+    descr: Makes upcoming events visible to external sites through a public API
+    slug: publisher
+    overall: true
+    placeholder: false
+    order: 80
+    after_text: ''
+    after_link: ''
+    hidden: false
+    module: events
