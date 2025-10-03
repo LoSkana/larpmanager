@@ -2513,9 +2513,6 @@ msgstr "Raccolta totale"
 msgid "Color background"
 msgstr "Sfondo testo"
 
-msgid "Credits residues"
-msgstr "Crediti residui"
-
 msgid "Current template"
 msgstr "Template attuale"
 
@@ -2794,6 +2791,9 @@ msgstr "Form iscrizione"
 
 msgid "Registration mail"
 msgstr "Mail iscrizione"
+
+msgid "Remaining credits"
+msgstr "Crediti rimanenti"
 
 msgid "Request submitted"
 msgstr "Richiesta sottomessa"

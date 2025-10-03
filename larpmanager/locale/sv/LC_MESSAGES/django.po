@@ -2513,9 +2513,6 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
-msgid "Credits residues"
-msgstr "Restprodukter från krediter"
-
 msgid "Current template"
 msgstr "Nuvarande mall"
 
@@ -2794,6 +2791,9 @@ msgstr "Registreringsformulär"
 
 msgid "Registration mail"
 msgstr "Registreringsbrev"
+
+msgid "Remaining credits"
+msgstr "Återstående krediter"
 
 msgid "Request submitted"
 msgstr "Undergiven begäran"

@@ -2513,9 +2513,6 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Credits residues"
-msgstr "Zbytky úvěrů"
-
 msgid "Current template"
 msgstr "Aktuální šablona"
 
@@ -2794,6 +2791,9 @@ msgstr "Registrační formulář"
 
 msgid "Registration mail"
 msgstr "Registrační pošta"
+
+msgid "Remaining credits"
+msgstr "Zbývající kredity"
 
 msgid "Request submitted"
 msgstr "Submisivní žádost"

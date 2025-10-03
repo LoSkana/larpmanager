@@ -2513,9 +2513,6 @@ msgstr "Total innsamling"
 msgid "Color background"
 msgstr "Tekstbakgrunn"
 
-msgid "Credits residues"
-msgstr "Kreditter rester"
-
 msgid "Current template"
 msgstr "Gjeldende mal"
 
@@ -2794,6 +2791,9 @@ msgstr "Registreringsskjema"
 
 msgid "Registration mail"
 msgstr "Registreringspost"
+
+msgid "Remaining credits"
+msgstr "Gjenværende studiepoeng"
 
 msgid "Request submitted"
 msgstr "Underdanig forespørsel"
