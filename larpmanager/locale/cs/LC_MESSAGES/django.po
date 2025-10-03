@@ -1224,6 +1224,9 @@ msgstr "První pomoc"
 msgid "Frequency"
 msgstr "Frekvence"
 
+msgid "Important"
+msgstr "Důležité"
+
 msgid "Interface"
 msgstr "Rozhraní"
 

@@ -325,7 +325,7 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
                 unimportant_count = sum(
                     1 for rel in rel_plots if strip_tags(rel.text).lstrip().startswith("$unimportant")
                 )
-            relations["plot_rels"]["unimportant"] = unimportant_count
+            relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_count
 
         if "faction" in features:
             fac_event = char.event.get_class_parent("faction")
@@ -345,7 +345,7 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
                 unimportant_count = sum(
                     1 for rel in relationships if strip_tags(rel.text).lstrip().startswith("$unimportant")
                 )
-            relations["relationships_rels"]["unimportant"] = unimportant_count
+            relations["relationships_rels"]["important"] = relations["relationships_rels"]["count"] - unimportant_count
 
         if "speedlarp" in features:
             speedlarps = char.speedlarps_list.all()
