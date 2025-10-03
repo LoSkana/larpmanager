@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pytest -n "$WORKERS" --reuse-db --no-migrations larpmanager/tests/unit
+pytest -n "$WORKERS" larpmanager/tests/unit
