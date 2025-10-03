@@ -170,32 +170,69 @@ def get_regs(assoc):
     return reg_que
 
 
+def handle_accounting_item_payment_post_save(instance, created):
+    """Handle accounting item payment post-save token/credit updates.
+
+    Args:
+        instance: AccountingItemPayment instance that was saved
+        created: Boolean indicating if instance was created
+    """
+    if not created and instance.reg:
+        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
+
+
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment(sender, instance, created, **kwargs):
-    if not created and instance.reg:
+    handle_accounting_item_payment_post_save(instance, created)
+
+
+def handle_accounting_item_payment_post_delete(instance):
+    """Handle accounting item payment post-delete token/credit updates.
+
+    Args:
+        instance: AccountingItemPayment instance that was deleted
+    """
+    if instance.reg:
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
 def post_delete_accounting_item_payment(sender, instance, **kwargs):
-    if instance.reg:
-        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
+    handle_accounting_item_payment_post_delete(instance)
+
+
+def handle_accounting_item_other_save(accounting_item):
+    """Handle accounting item other save for token/credit updates.
+
+    Args:
+        accounting_item: AccountingItemOther instance that was saved
+    """
+    if not accounting_item.member:
+        return
+
+    update_token_credit(accounting_item, accounting_item.oth == OtherChoices.TOKEN)
 
 
 @receiver(post_save, sender=AccountingItemOther)
 def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
-    if not instance.member:
+    handle_accounting_item_other_save(instance)
+
+
+def handle_accounting_item_expense_save(expense_item):
+    """Handle accounting item expense save for credit updates.
+
+    Args:
+        expense_item: AccountingItemExpense instance that was saved
+    """
+    if not expense_item.member or not expense_item.is_approved:
         return
 
-    update_token_credit(instance, instance.oth == OtherChoices.TOKEN)
+    update_token_credit(expense_item, False)
 
 
 @receiver(post_save, sender=AccountingItemExpense)
 def post_save_accounting_item_expense_accounting(sender, instance, **kwargs):
-    if not instance.member or not instance.is_approved:
-        return
-
-    update_token_credit(instance, False)
+    handle_accounting_item_expense_save(instance)
 
 
 def update_token_credit(instance, token=True):

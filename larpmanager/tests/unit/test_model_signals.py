@@ -462,7 +462,7 @@ class TestModelSignals(BaseTestCase):
         self.assertIsNotNone(assoc.key)
         self.assertGreater(len(assoc.key), 0)
 
-    @patch("larpmanager.models.signals.get_assoc_features")
+    @patch("larpmanager.cache.feature.get_assoc_features")
     def test_association_post_save_updates_features(self, mock_get_features):
         """Test that Association post_save signal updates features"""
         mock_get_features.return_value = {}
@@ -537,7 +537,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.models.signals.my_send_mail")
+    @patch("larpmanager.mail.base.mail_larpmanager_ticket")
     def test_larp_manager_ticket_post_save_sends_notification(self, mock_mail):
         """Test that LarpManagerTicket post_save signal sends notification"""
         member = self.get_member()
@@ -551,7 +551,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(ticket.id)
 
-    @patch("larpmanager.models.signals._check_new")
+    @patch("larpmanager.utils.miscellanea._check_new")
     def test_warehouse_item_pre_save_rotates_vertical_photo(self, mock_check_new):
         """Test that WarehouseItem pre_save signal rotates vertical photos"""
         from larpmanager.models.miscellanea import WarehouseContainer
