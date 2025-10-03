@@ -261,7 +261,9 @@ class TestCacheSignals(BaseTestCase):
         """Test that AssignmentTrait post_save signal resets character cache"""
         run = self.get_run()
         event = run.event
-        trait = Trait.objects.create(name="Test Trait", event=event)
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
+        quest = Quest.objects.create(name="Test Quest", event=event, typ=quest_type)
+        trait = Trait.objects.create(name="Test Trait", event=event, quest=quest)
         mock_reset.reset_mock()  # Reset after trait creation
         assignment = AssignmentTrait(run=run, member=self.get_member(), trait=trait, typ=0)
         assignment.save()
@@ -273,7 +275,9 @@ class TestCacheSignals(BaseTestCase):
         """Test that AssignmentTrait post_delete signal resets character cache"""
         run = self.get_run()
         event = run.event
-        trait = Trait.objects.create(name="Test Trait", event=event)
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
+        quest = Quest.objects.create(name="Test Quest", event=event, typ=quest_type)
+        trait = Trait.objects.create(name="Test Trait", event=event, quest=quest)
         assignment = AssignmentTrait.objects.create(run=run, member=self.get_member(), trait=trait, typ=0)
         mock_reset.reset_mock()  # Reset after creates
         assignment.delete()
