@@ -280,57 +280,6 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(run)
 
-    def test_assoc_permission_post_save_resets_permission_cache(self):
-        """Test that AssocPermission post_save signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # The actual cache behavior is tested in integration tests
-        permission = AssocPermission.objects.first()
-        if not permission:
-            self.skipTest("No AssocPermission available")
-
-        # Just verify signal doesn't raise an error by updating
-        permission.descr = "Updated description"
-        permission.save()
-        self.assertTrue(True)
-
-    def test_assoc_permission_post_delete_resets_permission_cache(self):
-        """Test that AssocPermission post_delete signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # We test that saving triggers the signal, delete is similar
-        permission = AssocPermission.objects.first()
-        if not permission:
-            self.skipTest("No AssocPermission available")
-
-        # Just verify signal doesn't raise an error
-        permission.descr = "Updated for delete test"
-        permission.save()
-        self.assertTrue(True)
-
-    def test_event_permission_post_save_resets_permission_cache(self):
-        """Test that EventPermission post_save signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # The actual cache behavior is tested in integration tests
-        permission = EventPermission.objects.first()
-        if not permission:
-            self.skipTest("No EventPermission available")
-
-        # Just verify signal doesn't raise an error by updating
-        permission.descr = "Updated description"
-        permission.save()
-        self.assertTrue(True)
-
-    def test_event_permission_post_delete_resets_permission_cache(self):
-        """Test that EventPermission post_delete signal resets permission cache"""
-        # This test verifies the signal receiver is connected
-        # We test that saving triggers the signal, delete is similar
-        permission = EventPermission.objects.first()
-        if not permission:
-            self.skipTest("No EventPermission available")
-
-        # Just verify signal doesn't raise an error
-        permission.descr = "Updated for delete test"
-        permission.save()
-        self.assertTrue(True)
 
     @patch("larpmanager.cache.role.delete_cache_assoc_role")
     def test_assoc_role_post_save_resets_role_cache(self, mock_reset):
