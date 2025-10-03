@@ -1224,6 +1224,9 @@ msgstr "Första hjälpen"
 msgid "Frequency"
 msgstr "Frekvens"
 
+msgid "Important"
+msgstr "Viktigt"
+
 msgid "Interface"
 msgstr "Gränssnitt"
 
@@ -1742,6 +1745,9 @@ msgstr "Transversal"
 
 msgid "Undo period"
 msgstr "Ångra period"
+
+msgid "Unimportant"
+msgstr "Oviktigt"
 
 msgid "Unique code"
 msgstr "Unik kod"
@@ -2510,9 +2516,6 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
-msgid "Credits residues"
-msgstr "Restprodukter från krediter"
-
 msgid "Current template"
 msgstr "Nuvarande mall"
 
@@ -2791,6 +2794,9 @@ msgstr "Registreringsformulär"
 
 msgid "Registration mail"
 msgstr "Registreringsbrev"
+
+msgid "Remaining credits"
+msgstr "Återstående krediter"
 
 msgid "Request submitted"
 msgstr "Undergiven begäran"
@@ -4050,6 +4056,9 @@ msgstr "Förhandsregistreringar som inte konverterats"
 
 msgid "You don’t have any events yet"
 msgstr "Du har inga evenemang ännu"
+
+msgid "You're not allowed to sign up"
+msgstr "Du får inte registrera dig"
 
 msgid "Your account is now activated"
 msgstr "Ditt konto är nu aktivt"
@@ -5362,6 +5371,9 @@ msgstr "På den här sidan kan du lägga till eller redigera en karaktär"
 msgid "This page allows you to edit a member's profile"
 msgstr "På den här sidan kan du redigera en medlems profil"
 
+msgid "To access this feature, you must first register"
+msgstr "För att få tillgång till denna funktion måste du först registrera dig"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Var uppmärksam! Formuläret innehåller fel i fälten"
 
@@ -5434,10 +5446,6 @@ msgstr "På den här sidan sammanfattas mallarna för evenemangets handout"
 msgid "This page shows the types of quests in the event"
 msgstr "Denna sida sammanfattar de olika typerna av uppdrag i evenemanget"
 
-msgid "To access this feature, you must first register!"
-msgstr ""
-"För att få tillgång till denna funktion måste du först registrera dig!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Du har redan betalat årets medlemsavgift"
 
@@ -5489,6 +5497,9 @@ msgstr "Summan är %(amount).2f, med anledning \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det finns <b>%(number)s</b> karaktärer att godkänna"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Denna funktion är tillgänglig för icke-väntande biljetter"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "På den här sidan kan du lägga till eller redigera en px-leverans"
@@ -5559,9 +5570,6 @@ msgstr "Anmälan till evenemanget avbröts"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finns skrivfält utan alternativ: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Denna funktion är tillgänglig för icke-väntande biljetter!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "På den här sidan kan du lägga till eller redigera en betalningspost"
@@ -8446,6 +8454,13 @@ msgid ""
 msgstr ""
 "Aktiverar fältet \"assigned\" för att spåra vilken anställd som är ansvarig "
 "för varje skrivelement"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Om markerad, gör det möjligt att spåra de intriger eller relationer som inte"
+" är riktigt viktiga för karaktären"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

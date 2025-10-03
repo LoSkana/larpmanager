@@ -1224,6 +1224,9 @@ msgstr "Primo soccorso"
 msgid "Frequency"
 msgstr "Frequenza"
 
+msgid "Important"
+msgstr "Importante"
+
 msgid "Interface"
 msgstr "Interfaccia"
 
@@ -1742,6 +1745,9 @@ msgstr "Trasversale"
 
 msgid "Undo period"
 msgstr "Periodo di annullamento"
+
+msgid "Unimportant"
+msgstr "Non importante"
 
 msgid "Unique code"
 msgstr "Codice univoco"
@@ -2510,9 +2516,6 @@ msgstr "Raccolta totale"
 msgid "Color background"
 msgstr "Sfondo testo"
 
-msgid "Credits residues"
-msgstr "Crediti residui"
-
 msgid "Current template"
 msgstr "Template attuale"
 
@@ -2791,6 +2794,9 @@ msgstr "Form iscrizione"
 
 msgid "Registration mail"
 msgstr "Mail iscrizione"
+
+msgid "Remaining credits"
+msgstr "Crediti rimanenti"
 
 msgid "Request submitted"
 msgstr "Richiesta sottomessa"
@@ -4050,6 +4056,9 @@ msgstr "Preiscrizioni non convertite"
 
 msgid "You don’t have any events yet"
 msgstr "Non ci sono ancora eventi"
+
+msgid "You're not allowed to sign up"
+msgstr "Non è consentito iscriversi"
 
 msgid "Your account is now activated"
 msgstr "Il tuo account ora è attivo"
@@ -5362,6 +5371,9 @@ msgstr "Questa pagina consente di aggiungere o modificare un personaggio"
 msgid "This page allows you to edit a member's profile"
 msgstr "Questa pagina consente di modificare il profilo di un membro"
 
+msgid "To access this feature, you must first register"
+msgstr "Per accedere a questa funzionalità devi prima iscriverti"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attenzione! Il form contiene degli errori ai campi - "
 
@@ -5433,9 +5445,6 @@ msgstr "Questa pagina riepiloga i template per handout dell'evento"
 msgid "This page shows the types of quests in the event"
 msgstr "Questa pagina riepiloga i tipi di quest dell'evento"
 
-msgid "To access this feature, you must first register!"
-msgstr "Per accedere a questa funzionalità devi prima iscriverti!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Hai già versato la quota sociale di quest'anno"
 
@@ -5487,6 +5496,9 @@ msgstr "La somma è di %(amount).2f, con motivazione '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Ci sono <b>%(number)s</b> personaggi da approvare"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Questa funzione è disponibile per i biglietti non in attesa"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Questa pagina consente di aggiungere o modificare una consegna px"
@@ -5559,9 +5571,6 @@ msgstr "L'iscrizione all'evento è stata disdetta"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Ci sono campi di scrittura senza opzioni: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Questa funzione è disponibile per i biglietti non in attesa!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr ""
@@ -8614,6 +8623,13 @@ msgid ""
 msgstr ""
 "Abilita il campo \"assegnato\", per tenere traccia di quale membro dello "
 "staff è responsabile di ciascun elemento di scrittura"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Se selezionata, permette di tenere traccia delle trame o delle relazioni non"
+" realmente importanti per il personaggio"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

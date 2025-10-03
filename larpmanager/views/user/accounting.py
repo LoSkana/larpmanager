@@ -32,7 +32,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from larpmanager.accounting.gateway import (
     redsys_webhook,
-    satispay_check,
     satispay_webhook,
     stripe_webhook,
     sumup_webhook,
@@ -545,8 +544,6 @@ def acc_payed(request, p=0):
     else:
         inv = None
 
-    ctx = def_user_ctx(request)
-    satispay_check(request, ctx)
     mes = _("You have completed the payment!")
     return acc_profile_check(request, mes, inv)
 

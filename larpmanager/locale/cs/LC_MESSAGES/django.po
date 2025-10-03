@@ -1224,6 +1224,9 @@ msgstr "První pomoc"
 msgid "Frequency"
 msgstr "Frekvence"
 
+msgid "Important"
+msgstr "Důležité"
+
 msgid "Interface"
 msgstr "Rozhraní"
 
@@ -1742,6 +1745,9 @@ msgstr "Příčná"
 
 msgid "Undo period"
 msgstr "Zrušení období"
+
+msgid "Unimportant"
+msgstr "Nedůležité"
 
 msgid "Unique code"
 msgstr "Jedinečný kód"
@@ -2510,9 +2516,6 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Credits residues"
-msgstr "Zbytky úvěrů"
-
 msgid "Current template"
 msgstr "Aktuální šablona"
 
@@ -2791,6 +2794,9 @@ msgstr "Registrační formulář"
 
 msgid "Registration mail"
 msgstr "Registrační pošta"
+
+msgid "Remaining credits"
+msgstr "Zbývající kredity"
 
 msgid "Request submitted"
 msgstr "Submisivní žádost"
@@ -4050,6 +4056,9 @@ msgstr "Nepřepočtené předběžné registrace"
 
 msgid "You don’t have any events yet"
 msgstr "Zatím nemáte žádné události"
+
+msgid "You're not allowed to sign up"
+msgstr "Nesmíte se zaregistrovat"
 
 msgid "Your account is now activated"
 msgstr "Váš účet je nyní aktivní"
@@ -5360,6 +5369,9 @@ msgstr "Na této stránce můžete přidat nebo upravit postavu"
 msgid "This page allows you to edit a member's profile"
 msgstr "Na této stránce můžete upravit profil člena"
 
+msgid "To access this feature, you must first register"
+msgstr "Pro přístup k této funkci se musíte nejprve zaregistrovat"
+
 msgid "Warning. The form contains errors to the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
 
@@ -5434,9 +5446,6 @@ msgstr ""
 msgid "This page shows the types of quests in the event"
 msgstr "Tato stránka shrnuje typy úkolů v této akci"
 
-msgid "To access this feature, you must first register!"
-msgstr "Pro přístup k této funkci se musíte nejprve zaregistrovat!"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
 
@@ -5487,6 +5496,9 @@ msgstr "Součet je %(amount).2f s důvodem \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Ke schválení je třeba <b>%(number)s</b> znaků"
+
+msgid "This feature is available for non-waiting tickets"
+msgstr "Tato funkce je k dispozici pro nečekané tipy"
 
 msgid "This page allows you to add or edit a px delivery"
 msgstr "Tato stránka umožňuje přidat nebo upravit dodávku px"
@@ -5557,9 +5569,6 @@ msgstr "Registrace na akci byla zrušena"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Jsou zde pole pro zápis bez možností: %(list)s"
-
-msgid "This feature is available for non-waiting tickets!"
-msgstr "Tato funkce je k dispozici pro nečekané tipy!"
 
 msgid "This page allows you to add or edit a payment item"
 msgstr "Na této stránce můžete přidat nebo upravit platební položku"
@@ -8299,6 +8308,13 @@ msgid ""
 msgstr ""
 "Umožňuje pole \"přiřazeno\", aby bylo možné sledovat, který pracovník je "
 "odpovědný za jednotlivé prvky zápisu"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje sledovat zápletky nebo vztahy, které nejsou "
+"pro postavu skutečně důležité"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

@@ -461,6 +461,12 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_external_access", ConfigType.BOOL, label, help_text)
 
+            label = _("Unimportant")
+            help_text = _(
+                "If checked, allows to track the plots or relationships not really important for the character"
+            )
+            self.add_configs("writing_unimportant", ConfigType.BOOL, label, help_text)
+
     def set_config_character(self):
         """Configure character-related settings including campaign and faction options.
 

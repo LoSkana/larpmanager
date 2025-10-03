@@ -40,10 +40,21 @@ function submitForm(auto) {
             type: "POST",
             url: post_url,
             data: formData,
-            dataType: "json",
             timeout: timeout
-        }).done(function(msg) {
+        }).done(function(data, textStatus, xhr) {
             setTimeout(confirmSubmit, 100);
+
+            // Try to parse JSON if it looks like JSON
+            var msg = null;
+            try {
+                if (typeof data === 'string' && (data.trim().startsWith('{') || data.trim().startsWith('['))) {
+                    msg = JSON.parse(data);
+                } else if (typeof data === 'object') {
+                    msg = data;
+                }
+            } catch (e) {
+                console.log('Response is not valid JSON, treating as successful save');
+            }
 
             if (!auto) {
                 $.toast({
@@ -72,6 +83,7 @@ function submitForm(auto) {
                 resolve(true);
             }
         }).fail(function(xhr) {
+            // console.log('Auto-save failed:', xhr.status, xhr.statusText, xhr.responseText);
             $.toast({
                 text: 'Network or server error',
                 showHideTransition: 'slide',

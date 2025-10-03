@@ -672,7 +672,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $(document).on('click', '.post_popup_member', function (e) {
 
-                start_spinner();
+                // Show spinner only after 500ms delay
+                let spinnerTimeout = setTimeout(function() {
+                    start_spinner();
+                }, 500);
 
                 request = $.ajax({
                     url: "{% url 'orga_registration_member' run.get_slug %}",
@@ -682,6 +685,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 });
 
                 request.done(function(res) {
+                    // Clear the spinner timeout since request completed
+                    clearTimeout(spinnerTimeout);
+
                     if (res.k == 0) return;
                     stop_spinner();
 

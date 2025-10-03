@@ -1060,6 +1060,14 @@ msgid ""
 "not signed up user"
 msgstr ""
 
+msgid "Unimportant"
+msgstr ""
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+
 msgid "Independent factions"
 msgstr ""
 
@@ -2584,13 +2592,16 @@ msgstr ""
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
 
-msgid "To access this feature, you must first register!"
+msgid "To access this feature, you must first register"
 msgstr ""
 
-msgid "This feature is available for non-waiting tickets!"
+msgid "This feature is available for non-waiting tickets"
 msgstr ""
 
 msgid "not visible at this time"
+msgstr ""
+
+msgid "You're not allowed to sign up"
 msgstr ""
 
 msgid "Statement"
@@ -7010,6 +7021,9 @@ msgstr ""
 msgid "Attended"
 msgstr ""
 
+msgid "Important"
+msgstr ""
+
 msgid "Versions"
 msgstr ""
 
@@ -8570,7 +8584,7 @@ msgstr ""
 msgid "Total required"
 msgstr ""
 
-msgid "Credits residues"
+msgid "Remaining credits"
 msgstr ""
 
 msgid "Verified payments"
