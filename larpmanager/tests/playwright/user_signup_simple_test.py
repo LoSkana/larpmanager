@@ -42,7 +42,7 @@ def test_user_signup_simple(pw_page):
 
 def signup(live_server, page):
     # deactivate registration open
-    go_to(page, live_server, "/test/manage/features/114/off")
+    go_to(page, live_server, "/test/manage/features/registration_open/off")
 
     # sign up
     go_to(page, live_server, "/")
@@ -81,7 +81,7 @@ def signup(live_server, page):
 
 def help_questions(live_server, page):
     # test help
-    go_to(page, live_server, "/manage/features/28/on")
+    go_to(page, live_server, "/manage/features/help/on")
     page.get_by_role("link", name="Need help?").click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("please help me")
@@ -120,9 +120,9 @@ def pre_register(live_server, page):
     page.locator("#id_mail_payment").check()
 
     # Activate pre-register
-    go_to(page, live_server, "/manage/features/32/on")
+    go_to(page, live_server, "/manage/features/pre_register/on")
     # Activate registration open
-    go_to(page, live_server, "/test/manage/features/114/on")
+    go_to(page, live_server, "/test/manage/features/registration_open/on")
 
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()

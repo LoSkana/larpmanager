@@ -662,6 +662,14 @@ msgid ""
 "characters"
 msgstr ""
 
+msgid "Publisher"
+msgstr ""
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a "
+"public API"
+msgstr ""
+
 msgid "Do you want to accept payments processed through the system"
 msgstr ""
 
@@ -2897,6 +2905,9 @@ msgstr ""
 msgid ""
 "Logo image (you can upload a file of any size, it will be resized "
 "automatically)"
+msgstr ""
+
+msgid "Descriptive name for this API key"
 msgstr ""
 
 msgid "A short tagline, slogan"
@@ -7874,6 +7885,9 @@ msgstr ""
 msgid "Now you can create the \"new player\" ticket"
 msgstr ""
 
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -7931,6 +7945,12 @@ msgid "Customize textual elements of the organization interface"
 msgstr ""
 
 msgid "Manage url shortner"
+msgstr ""
+
+msgid "Containers"
+msgstr ""
+
+msgid "Manage warehouse containers"
 msgstr ""
 
 msgid "Pre-Registrations"
@@ -8014,19 +8034,13 @@ msgstr ""
 msgid "quick"
 msgstr ""
 
-msgid "Containers"
-msgstr ""
-
-msgid "Manage warehouse containers"
-msgstr ""
-
-msgid "Manage warehouse tags"
-msgstr ""
-
 msgid "Manage warehouse items"
 msgstr ""
 
 msgid "Manage warehouse movements"
+msgstr ""
+
+msgid "Manage warehouse tags"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
@@ -8194,9 +8208,6 @@ msgstr ""
 msgid "Manage XP distributions for character skill purchases."
 msgstr ""
 
-msgid "Manage XP rules"
-msgstr ""
-
 msgid "Display full history of participant preferences on characters"
 msgstr ""
 
@@ -8261,6 +8272,9 @@ msgid "Manifest"
 msgstr ""
 
 msgid "Manage loading and deployment status of warehouse items"
+msgstr ""
+
+msgid "Manage XP rules"
 msgstr ""
 
 msgid "Manage XP modifiers"
