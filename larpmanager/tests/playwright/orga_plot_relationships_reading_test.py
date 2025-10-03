@@ -260,6 +260,8 @@ def plots_character(live_server, page):
     page.locator(".select2-results__option").first.click()
     page.get_by_role("button", name="Confirm").click()
 
+    page.wait_for_timeout(2000)
+
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("gaga bibi")

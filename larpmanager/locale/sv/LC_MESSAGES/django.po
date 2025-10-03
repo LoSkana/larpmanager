@@ -1224,6 +1224,9 @@ msgstr "Första hjälpen"
 msgid "Frequency"
 msgstr "Frekvens"
 
+msgid "Important"
+msgstr "Viktigt"
+
 msgid "Interface"
 msgstr "Gränssnitt"
 
@@ -1742,6 +1745,9 @@ msgstr "Transversal"
 
 msgid "Undo period"
 msgstr "Ångra period"
+
+msgid "Unimportant"
+msgstr "Oviktigt"
 
 msgid "Unique code"
 msgstr "Unik kod"
@@ -2510,9 +2516,6 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
-msgid "Credits residues"
-msgstr "Restprodukter från krediter"
-
 msgid "Current template"
 msgstr "Nuvarande mall"
 
@@ -2791,6 +2794,9 @@ msgstr "Registreringsformulär"
 
 msgid "Registration mail"
 msgstr "Registreringsbrev"
+
+msgid "Remaining credits"
+msgstr "Återstående krediter"
 
 msgid "Request submitted"
 msgstr "Undergiven begäran"
@@ -8448,6 +8454,13 @@ msgid ""
 msgstr ""
 "Aktiverar fältet \"assigned\" för att spåra vilken anställd som är ansvarig "
 "för varje skrivelement"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Om markerad, gör det möjligt att spåra de intriger eller relationer som inte"
+" är riktigt viktiga för karaktären"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

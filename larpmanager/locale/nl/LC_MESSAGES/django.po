@@ -1224,6 +1224,9 @@ msgstr "Eerste hulp"
 msgid "Frequency"
 msgstr "Frequentie"
 
+msgid "Important"
+msgstr "Belangrijk"
+
 msgid "Interface"
 msgstr "Interface"
 
@@ -1742,6 +1745,9 @@ msgstr "Dwars"
 
 msgid "Undo period"
 msgstr "Periode ongedaan maken"
+
+msgid "Unimportant"
+msgstr "Onbelangrijk"
 
 msgid "Unique code"
 msgstr "Unieke code"
@@ -2510,9 +2516,6 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Credits residues"
-msgstr "Credits residuen"
-
 msgid "Current template"
 msgstr "Huidige sjabloon"
 
@@ -2791,6 +2794,9 @@ msgstr "Registratieformulier"
 
 msgid "Registration mail"
 msgstr "Registratie e-mail"
+
+msgid "Remaining credits"
+msgstr "Resterende credits"
 
 msgid "Request submitted"
 msgstr "Onderdanig verzoek"
@@ -8584,6 +8590,13 @@ msgid ""
 msgstr ""
 "Maakt veld 'toegewezen' mogelijk om bij te houden welk personeelslid "
 "verantwoordelijk is voor elk schrijfelement"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Als deze optie is aangevinkt, kunnen de plots of relaties die niet echt "
+"belangrijk zijn voor het personage worden gevolgd"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

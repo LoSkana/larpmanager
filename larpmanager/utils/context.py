@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings
 from django.conf import settings as conf_settings
 
 
@@ -40,5 +41,8 @@ def cache_association(request):
         ctx["staging"] = 1
     if not hasattr(request, "user") or not hasattr(request.user, "member"):
         ctx["languages"] = conf_settings.LANGUAGES
+
+    ctx["google_tag"] = getattr(settings, "GOOGLE_TAG", None)
+    ctx["hotjar_siteid"] = getattr(settings, "HOTJAR_SITEID", None)
 
     return ctx

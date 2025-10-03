@@ -1224,6 +1224,9 @@ msgstr "Primo soccorso"
 msgid "Frequency"
 msgstr "Frequenza"
 
+msgid "Important"
+msgstr "Importante"
+
 msgid "Interface"
 msgstr "Interfaccia"
 
@@ -1742,6 +1745,9 @@ msgstr "Trasversale"
 
 msgid "Undo period"
 msgstr "Periodo di annullamento"
+
+msgid "Unimportant"
+msgstr "Non importante"
 
 msgid "Unique code"
 msgstr "Codice univoco"
@@ -2510,9 +2516,6 @@ msgstr "Raccolta totale"
 msgid "Color background"
 msgstr "Sfondo testo"
 
-msgid "Credits residues"
-msgstr "Crediti residui"
-
 msgid "Current template"
 msgstr "Template attuale"
 
@@ -2791,6 +2794,9 @@ msgstr "Form iscrizione"
 
 msgid "Registration mail"
 msgstr "Mail iscrizione"
+
+msgid "Remaining credits"
+msgstr "Crediti rimanenti"
 
 msgid "Request submitted"
 msgstr "Richiesta sottomessa"
@@ -8617,6 +8623,13 @@ msgid ""
 msgstr ""
 "Abilita il campo \"assegnato\", per tenere traccia di quale membro dello "
 "staff è responsabile di ciascun elemento di scrittura"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Se selezionata, permette di tenere traccia delle trame o delle relazioni non"
+" realmente importanti per il personaggio"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "
