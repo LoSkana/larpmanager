@@ -41,6 +41,7 @@ from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
@@ -396,6 +397,12 @@ class BaseProfileForm(MyForm):
         return membership
 
     def __init__(self, *args, **kwargs):
+        """Initialize base profile form with field filtering based on association settings.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
 
         # Cache frequently accessed request data
@@ -514,9 +521,7 @@ class ProfileForm(BaseProfileForm):
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            # Use cached association
-            assoc = self._get_cached_assoc(request)
-            vote_cands = assoc.get_config("vote_candidates", "").split(",")
+            vote_cands = get_assoc_config(self.params["request"].assoc["id"], "vote_candidates", "").split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
@@ -556,13 +561,13 @@ class ProfileForm(BaseProfileForm):
 
         # Use cached association
         request = self.params["request"]
-        assoc = self._get_cached_assoc(request)
+        assoc_id = self.params["request"].assoc["id"]
 
         # Use cached features
-        features = self._get_cached_features(request, assoc.id)
+        features = self._get_cached_features(request, assoc_id)
 
         if "membership" in features:
-            min_age = assoc.get_config("membership_age", "")
+            min_age = get_assoc_config(assoc_id, "membership_age", "")
             if min_age:
                 try:
                     min_age = int(min_age)
@@ -831,6 +836,12 @@ class ExeProfileForm(MyForm):
         fields = ()
 
     def __init__(self, *args, **kwargs):
+        """Initialize member field configuration form.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 

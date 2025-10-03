@@ -58,6 +58,10 @@ class WritingForm(MyForm):
         self.show_link = ["id_teaser", "id_text"]
 
     def _init_special_fields(self):
+        """Initialize special form fields based on available question types.
+
+        Configures cover, assigned, and progress fields based on writing question types.
+        """
         types = set()
         for que in self.questions:
             types.add(que.typ)
@@ -279,6 +283,12 @@ class FactionForm(WritingForm, BaseWritingForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize faction form with field configuration and help text.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+        """
         super().__init__(*args, **kwargs)
         self.init_orga_fields()
 

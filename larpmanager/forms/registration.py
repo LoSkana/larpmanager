@@ -26,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
@@ -699,6 +700,14 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 self.fields[qt_id] = forms.ChoiceField(required=True, choices=choices, label=qt["name"])
 
     def clean_member(self):
+        """Validate member field to prevent duplicate registrations.
+
+        Returns:
+            Member: Validated member instance
+
+        Raises:
+            ValidationError: If member already has an active registration for the event
+        """
         data = self.cleaned_data["member"]
 
         if "request" in self.params:
@@ -734,6 +743,14 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
 
     def clean_characters_new(self):
+        """Validate that new character assignments don't conflict with existing registrations.
+
+        Returns:
+            QuerySet: Cleaned character data if validation passes
+
+        Raises:
+            ValidationError: If character is already assigned to another player for this event
+        """
         data = self.cleaned_data["characters_new"]
 
         for ch in data.values_list("pk", flat=True):
@@ -925,6 +942,10 @@ class OrgaRegistrationQuestionForm(MyForm):
         )
 
     def _init_type(self):
+        """Initialize registration question type field choices.
+
+        Filters question types based on existing usage and prevents duplicates.
+        """
         # Add type of registration question to the available types
         que = self.params["event"].get_elements(RegistrationQuestion)
         already = list(que.values_list("typ", flat=True).distinct())
@@ -1049,7 +1070,7 @@ class PreRegistrationForm(forms.Form):
         cho_pref = [(r, r) for r in prefs]
 
         # Check if preference editing is disabled via config
-        if self.ctx.get("event") and self.ctx["event"].assoc.get_config("pre_reg_preferences", False):
+        if self.ctx.get("event") and get_assoc_config(self.ctx["event"].assoc_id, "pre_reg_preferences", False):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,
                 choices=cho_pref,

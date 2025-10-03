@@ -90,6 +90,19 @@ def update_payment_details(request, ctx):
 
 
 def check_assoc_permission(request, slug):
+    """Check and validate association permissions for a request.
+
+    Args:
+        request: HTTP request object
+        slug: Permission slug to check
+
+    Returns:
+        dict: Context dictionary with permission and feature data
+
+    Raises:
+        PermissionError: If user lacks required permissions
+        FeatureError: If required feature is not enabled
+    """
     ctx = def_user_ctx(request)
     if not has_assoc_permission(request, ctx, slug):
         raise PermissionError()
@@ -122,6 +135,18 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
 
 
 def get_index_permissions(ctx, features, has_default, permissions, typ):
+    """Build index permissions structure based on user access and features.
+
+    Args:
+        ctx: Context dictionary with association information
+        features: Available features list
+        has_default: Whether user has default permissions
+        permissions: User's specific permissions
+        typ: Permission type to filter
+
+    Returns:
+        Dictionary of grouped permissions by module
+    """
     res = {}
     for ar in get_cache_index_permission(typ):
         if ar["hidden"]:

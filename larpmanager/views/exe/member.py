@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
@@ -220,6 +221,14 @@ def exe_membership_request(request, num):
 
 @login_required
 def exe_membership_check(request):
+    """Check and report membership status inconsistencies.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered membership check report
+    """
     ctx = check_assoc_permission(request, "exe_membership_check")
 
     member_ids = set(
@@ -325,6 +334,15 @@ def member_add_accountingitemother(ctx, request):
 
 @login_required
 def exe_membership_status(request, num):
+    """Edit membership status and details for a specific member.
+
+    Args:
+        request: Django HTTP request object
+        num: Member number identifier
+
+    Returns:
+        Rendered membership editing form or redirect after successful update
+    """
     ctx = check_assoc_permission(request, "exe_membership")
     ctx.update(get_member(num))
     ctx["membership"] = get_object_or_404(Membership, member_id=ctx["member"].id, assoc_id=request.assoc["id"])
@@ -348,6 +366,14 @@ def exe_membership_status(request, num):
 
 @login_required
 def exe_membership_registry(request):
+    """Generate membership registry with card numbers for association executives.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered registry.html template with formatted member list
+    """
     ctx = check_assoc_permission(request, "exe_membership_registry")
     split_two_names = 2
 
@@ -389,8 +415,8 @@ def exe_membership_fee(request):
         form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
             member = form.cleaned_data["member"]
-            assoc = Association.objects.get(pk=ctx["a_id"])
-            fee = assoc.get_config("membership_fee", "0")
+            assoc_id = ctx["a_id"]
+            fee = get_assoc_config(assoc_id, "membership_fee", "0")
             payment = PaymentInvoice.objects.create(
                 member=member,
                 typ=PaymentType.MEMBERSHIP,
@@ -398,7 +424,7 @@ def exe_membership_fee(request):
                 method_id=form.cleaned_data["method"],
                 mc_gross=fee,
                 causal=_("Membership fee of") + f" {member}",
-                assoc=assoc,
+                assoc_id=assoc_id,
                 cod=unique_invoice_cod(),
             )
             payment.status = PaymentStatus.CONFIRMED
@@ -414,6 +440,14 @@ def exe_membership_fee(request):
 
 @login_required
 def exe_membership_document(request):
+    """Handle membership document upload and approval process.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        Rendered form for document upload or redirect to membership list
+    """
     ctx = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
@@ -524,10 +558,10 @@ def exe_vote(request):
     """
     ctx = check_assoc_permission(request, "exe_vote")
     ctx["year"] = datetime.today().year
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc_id = ctx["a_id"]
 
     idxs = []
-    for el in assoc.get_config("vote_candidates", "").split(","):
+    for el in get_assoc_config(assoc_id, "vote_candidates", "").split(","):
         if el.strip():
             idxs.append(el.strip())
 
@@ -678,6 +712,14 @@ def exe_questions_close(request, r):
 
 @login_required
 def exe_newsletter(request):
+    """Display newsletter subscription management for association members.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered newsletter management page with subscriber lists by language
+    """
     ctx = check_assoc_permission(request, "exe_newsletter")
 
     ctx["lst"] = {}
@@ -699,6 +741,15 @@ def exe_newsletter(request):
 
 @login_required
 def exe_newsletter_csv(request, lang):
+    """Export newsletter subscriber data as CSV for specific language.
+
+    Args:
+        request: HTTP request object
+        lang: Language code to filter subscribers
+
+    Returns:
+        CSV file response with member email, number, name, surname
+    """
     ctx = check_assoc_permission(request, "exe_newsletter")
     response = HttpResponse(
         content_type="text/csv", headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'}

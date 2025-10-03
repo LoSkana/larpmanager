@@ -531,6 +531,17 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
 
 
 def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
+    """Process and load writing question values into element fields.
+
+    Args:
+        ctx: Context dictionary
+        element: Target writing element to update
+        field: Field identifier
+        field_type: WritingQuestionType enum value
+        logs: List to collect processing logs
+        questions: Dictionary of questions
+        value: Value to assign to the field
+    """
     if field_type == WritingQuestionType.MIRROR:
         _get_mirror_instance(ctx, element, value, logs)
     elif field_type == WritingQuestionType.HIDE:
@@ -738,6 +749,17 @@ def _options_load(ctx, row, questions, is_registration):
 
 
 def _get_option(ctx, is_registration, name, question_id):
+    """Get or create a question option for registration or writing forms.
+
+    Args:
+        ctx: Context dictionary containing event data
+        is_registration: Boolean indicating if this is for registration (True) or writing (False)
+        name: Name of the option
+        question_id: ID of the parent question
+
+    Returns:
+        tuple: (created, instance) where created is bool and instance is the option object
+    """
     if is_registration:
         instance, created = RegistrationOption.objects.get_or_create(
             event=ctx["event"],

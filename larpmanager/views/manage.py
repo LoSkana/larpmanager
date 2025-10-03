@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
@@ -137,8 +138,7 @@ def _exe_manage(request):
         return redirect("exe_events_edit", num=0)
 
     # if quick setup was not completed, redirect
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if not assoc.get_config("exe_quick_suggestion", False):
+    if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False):
         msg = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization"
@@ -193,9 +193,8 @@ def _exe_suggestions(ctx):
         "exe_config": _("Set up specific values for the interface configuration or features"),
     }
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
     for perm, text in suggestions.items():
-        if assoc.get_config(f"{perm}_suggestion"):
+        if get_assoc_config(ctx["a_id"], f"{perm}_suggestion"):
             continue
         _add_suggestion(ctx, text, perm)
 
@@ -366,8 +365,7 @@ def _orga_manage(request, s):
     ctx["manage"] = 1
 
     get_index_event_permissions(ctx, request, s)
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    if assoc.get_config("interface_admin_links", False):
+    if get_assoc_config(request.assoc["id"], "interface_admin_links", False):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
     ctx["registration_status"] = _get_registration_status(ctx["run"])
@@ -389,7 +387,7 @@ def _orga_manage(request, s):
     if "actions_list" in ctx:
         del ctx["actions_list"]
 
-    _orga_actions_priorities(request, ctx, assoc)
+    _orga_actions_priorities(request, ctx)
 
     _orga_suggestions(ctx)
 
@@ -407,7 +405,7 @@ def _orga_manage(request, s):
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 
-def _orga_actions_priorities(request, ctx, assoc):
+def _orga_actions_priorities(request, ctx):
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
@@ -416,7 +414,6 @@ def _orga_actions_priorities(request, ctx, assoc):
     Args:
         request: Django HTTP request object
         ctx (dict): Context dictionary containing event and other data
-        assoc: Association object
 
     Returns:
         None: Function modifies ctx in-place, adding priority action recommendations
@@ -462,7 +459,7 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_characters",
         )
 
-    if not assoc.get_config("expense_disable_orga", False):
+    if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False):
         expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
         if expenses_approve:
             _add_action(
@@ -510,7 +507,7 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_character_form",
         )
 
-    _orga_user_actions(ctx, features, request, assoc)
+    _orga_user_actions(ctx, features, request)
 
     _orga_reg_acc_actions(ctx, features)
 
@@ -521,7 +518,7 @@ def _orga_actions_priorities(request, ctx, assoc):
     _orga_casting_actions(ctx, features)
 
 
-def _orga_user_actions(ctx, features, request, assoc):
+def _orga_user_actions(ctx, features, request):
     if "help" in features:
         _closed_q, open_q = _get_help_questions(ctx, request)
         if open_q:
@@ -727,6 +724,11 @@ def _orga_reg_actions(ctx, features):
 
 
 def _orga_suggestions(ctx):
+    """Add priority suggestions for event organization.
+
+    Args:
+        ctx: Context dictionary to add suggestions to
+    """
     priorities = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),

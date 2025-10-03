@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
@@ -35,7 +36,6 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
-from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Event,
     Run,
@@ -146,14 +146,21 @@ def exe_templates_roles(request, eid, num):
 
 @login_required
 def exe_pre_registrations(request):
+    """Display pre-registration statistics for all association events.
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        Rendered page showing pre-registration counts by preference level
+    """
     ctx = check_assoc_permission(request, "exe_pre_registrations")
     ctx["list"] = []
     ctx["pr"] = []
 
     ctx["seen"] = []
 
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+    ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
         if not r.get_config("pre_register_active", False):

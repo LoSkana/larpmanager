@@ -22,6 +22,7 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDonation,
@@ -35,7 +36,6 @@ from larpmanager.models.accounting import (
     PaymentType,
     RefundStatus,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import get_user_membership
@@ -253,10 +253,9 @@ def _info_membership(ctx, member, request):
         ctx["year_membership_pending"] = True
 
     ctx["year"] = year
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    m_day = assoc.get_config("membership_day", "01-01")
+    m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01")
     if m_day:
-        m_grazing = int(assoc.get_config("membership_grazing", "0"))
+        m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0"))
         m_day += f"-{year}"
         dt = datetime.strptime(m_day, "%d-%m-%Y")
         dt += relativedelta(months=m_grazing)

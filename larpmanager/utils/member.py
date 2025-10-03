@@ -41,6 +41,15 @@ def count_differences(s1, s2):
 
 
 def almost_equal(s1, s2):
+    """Check if two strings are almost equal (differ by exactly one character insertion).
+
+    Args:
+        s1: First string to compare
+        s2: Second string to compare
+
+    Returns:
+        bool: True if strings differ by exactly one character insertion, False otherwise
+    """
     # Ensure that one string has exactly one more character than the other
     if abs(len(s1) - len(s2)) != 1:
         return False
@@ -66,6 +75,14 @@ def leaderboard_key(a_id):
 
 
 def update_leaderboard(a_id):
+    """Generate leaderboard data for members with badges.
+
+    Args:
+        a_id: Association ID to generate leaderboard for
+
+    Returns:
+        list: List of member dictionaries with badge counts and info
+    """
     res = []
     for mb in Membership.objects.filter(assoc_id=a_id):
         el = {

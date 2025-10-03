@@ -103,6 +103,15 @@ def orga_utils_edit(request, s, num):
 
 @login_required
 def orga_workshops(request, s):
+    """Display workshop completion status for registered members.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+
+    Returns:
+        HttpResponse: Rendered workshops status template
+    """
     ctx = check_event_permission(request, s, "orga_workshops")
     # get number of modules
     workshops = ctx["event"].workshops.all()
@@ -281,6 +290,15 @@ def orga_warehouse_assignment_item_edit(request, s, num):
 
 @require_POST
 def orga_warehouse_assignment_manifest(request, s):
+    """Update warehouse item assignment status via AJAX.
+
+    Args:
+        request: Django HTTP request object with POST data
+        s: Event slug identifier
+
+    Returns:
+        JsonResponse with success status or error message
+    """
     ctx = check_event_permission(request, s, "orga_warehouse_manifest")
     idx = request.POST.get("idx")
     type = request.POST.get("type").lower()
@@ -304,6 +322,16 @@ def orga_warehouse_assignment_manifest(request, s):
 
 @require_POST
 def orga_warehouse_assignment_area(request, s, num):
+    """Handle warehouse item assignment to a specific area.
+
+    Args:
+        request: HTTP request object containing POST data with item assignment details
+        s: Event slug identifier
+        num: Area number identifier
+
+    Returns:
+        JsonResponse: Success confirmation with {"ok": True}
+    """
     ctx = check_event_permission(request, s, "orga_warehouse_manifest")
     get_element(ctx, num, "area", WarehouseArea)
 

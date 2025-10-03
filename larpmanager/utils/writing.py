@@ -588,6 +588,10 @@ def writing_versions(request, ctx, nm, tp):
 
 @receiver(pre_save, sender=Character)
 def pre_save_character(sender, instance, *args, **kwargs):
+    handle_replace_char_names(instance)
+
+
+def handle_replace_char_names(instance):
     """Django signal handler to replace character names before saving.
 
     Args:

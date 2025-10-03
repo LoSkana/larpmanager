@@ -692,6 +692,15 @@ def clear_messages(request):
 
 
 def _get_help_questions(ctx, request):
+    """Retrieve and categorize help questions for the current association/run.
+
+    Args:
+        ctx: Context dictionary containing association/run information
+        request: HTTP request object
+
+    Returns:
+        tuple: (closed_questions, open_questions) lists
+    """
     base_qs = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
     if "run" in ctx:
         base_qs = base_qs.filter(run=ctx["run"])

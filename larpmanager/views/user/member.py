@@ -39,6 +39,7 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from larpmanager.accounting.member import info_accounting
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.member import (
     AvatarForm,
     LanguageForm,
@@ -185,7 +186,7 @@ def profile(request):
 
     # Add vote configuration only if voting is enabled
     if "vote" in assoc_features:
-        ctx["vote_open"] = ctx["membership"].assoc.get_config("vote_open", False)
+        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False)
 
     return render(request, "larpmanager/member/profile.html", ctx)
 
@@ -199,6 +200,14 @@ def load_profile(request, img, ext):
 
 @login_required
 def profile_upload(request):
+    """Handle profile image upload for authenticated users.
+
+    Args:
+        request: HTTP request object containing POST data and uploaded image file
+
+    Returns:
+        JsonResponse: Success/failure status and image URL on success
+    """
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
@@ -221,6 +230,15 @@ def profile_upload(request):
 
 @login_required
 def profile_rotate(request, n):
+    """Rotate user's profile image 90 degrees clockwise or counterclockwise.
+
+    Args:
+        request: Django HTTP request object
+        n: Rotation direction (1 for clockwise, other for counterclockwise)
+
+    Returns:
+        JsonResponse with success/failure status and new image URL
+    """
     path = str(request.user.member.profile)
     if not path:
         return JsonResponse({"res": "ko"})
@@ -371,8 +389,8 @@ def public(request, n):
         for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
             ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("player_larp_history", False):
+    assoc_id = ctx["a_id"]
+    if get_assoc_config(assoc_id, "player_larp_history", False):
         ctx["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
@@ -498,6 +516,15 @@ def badge(request, n, p=1):
 
 @login_required
 def leaderboard(request, p=1):
+    """Display paginated leaderboard of members with badge scores.
+
+    Args:
+        request: Django HTTP request object
+        p: Page number for pagination (default: 1)
+
+    Returns:
+        Rendered leaderboard page with member rankings
+    """
     check_assoc_feature(request, "badge")
     member_list = get_leaderboard(request.assoc["id"])
     num_el = 25
@@ -555,12 +582,12 @@ def vote(request):
         ctx["done"] = True
         return render(request, "larpmanager/member/vote.html", ctx)
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc_id = ctx["a_id"]
 
-    ctx["vote_open"] = assoc.get_config("vote_open", False)
-    ctx["vote_cands"] = assoc.get_config("vote_candidates", "").split(",")
-    ctx["vote_min"] = assoc.get_config("vote_min", "1")
-    ctx["vote_max"] = assoc.get_config("vote_max", "1")
+    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False)
+    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "").split(",")
+    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1")
+    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1")
 
     if request.method == "POST":
         cnt = 0

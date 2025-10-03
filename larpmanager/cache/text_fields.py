@@ -72,6 +72,16 @@ def init_cache_text_field(typ, event):
 
 
 def _init_element_cache_text_field(el, res, typ):
+    """Initialize cache for text fields of a single element.
+
+    Args:
+        el: Element instance to cache text fields for
+        res: Result dictionary to populate with cached text data
+        typ: Element type class for determining applicable questions
+
+    Side effects:
+        Populates res[el.id] with cached text field data including teaser, text, and editor questions
+    """
     if el.id not in res:
         res[el.id] = {}
 

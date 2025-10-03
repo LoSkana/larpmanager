@@ -27,6 +27,7 @@ from django.db import connection
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
@@ -505,7 +506,7 @@ class Command(BaseCommand):
         if not run.start or run.start < ref.date():
             return
 
-        deadline_days = int(run.event.assoc.get_config("deadline_days", 0))
+        deadline_days = int(get_assoc_config(run.event.assoc_id, "deadline_days", 0))
         if not deadline_days:
             return
         if get_time_diff_today(run.start) % deadline_days != 1:

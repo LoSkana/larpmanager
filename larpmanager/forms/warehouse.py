@@ -155,6 +155,14 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
         _delete_optionals_warehouse(self)
 
     def clean(self):
+        """Validate form to prevent duplicate warehouse item assignments.
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: If assignment for the same item and area already exists
+        """
         cleaned = super().clean()
         area = cleaned.get("area")
         item = cleaned.get("item")

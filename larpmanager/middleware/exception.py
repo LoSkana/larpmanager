@@ -122,6 +122,18 @@ class ExceptionHandlingMiddleware:
 
     @staticmethod
     def _handle_feature_error(request, ex):
+        """Handle feature access errors by rendering appropriate error page.
+
+        Args:
+            request: HTTP request object
+            ex: FeatureError exception containing feature and run information
+
+        Returns:
+            Rendered feature error template or raises Http404
+
+        Raises:
+            Http404: If association skin is managed or feature/run not found
+        """
         # error is association skin is managed
         if request.assoc["skin_managed"]:
             raise Http404("not allowed")

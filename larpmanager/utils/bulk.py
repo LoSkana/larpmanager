@@ -132,6 +132,15 @@ def exec_move_item_box(request, ctx, target, ids):
 
 
 def handle_bulk_items(request, ctx):
+    """Handle bulk operations on warehouse items.
+
+    Args:
+        request: HTTP request object containing operation data
+        ctx: Context dictionary to update with bulk operation choices
+
+    Raises:
+        ReturnNowError: If POST request processed successfully
+    """
     if request.POST:
         mapping = {
             Operations.ADD_ITEM_TAG: exec_add_item_tag,

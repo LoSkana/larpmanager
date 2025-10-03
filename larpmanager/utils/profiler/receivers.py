@@ -30,6 +30,17 @@ from larpmanager.utils.profiler.signals import profiler_response_signal
 
 @receiver(profiler_response_signal)
 def handle_profiler_response(sender, domain, path, method, view_func_name, duration, **kwargs):
+    """Handle profiler signal to record view function performance metrics.
+
+    Args:
+        sender: Signal sender
+        domain: Request domain
+        path: Request path
+        method: HTTP method
+        view_func_name: Name of the view function
+        duration: Response duration in seconds
+        **kwargs: Additional keyword arguments
+    """
     if duration < 1:
         return
 

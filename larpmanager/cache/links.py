@@ -140,14 +140,11 @@ def reset_run_event_links(event):
         reset_event_links(user.member.id, event.assoc_id)
 
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_event_links(sender, instance, **kwargs):
-    """Reset event links when registration changes.
+def handle_registration_event_links_post_save(instance):
+    """Handle registration post-save event link reset.
 
     Args:
-        sender: Registration model class
         instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Clears event link cache for the registered member
@@ -158,63 +155,28 @@ def post_save_registration_event_links(sender, instance, **kwargs):
     reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
 
 
+@receiver(post_save, sender=Registration)
+def post_save_registration_event_links(sender, instance, **kwargs):
+    handle_registration_event_links_post_save(instance)
+
+
 @receiver(post_save, sender=Event)
 def post_save_event_links(sender, instance, **kwargs):
-    """Reset event links when event changes.
-
-    Args:
-        sender: Event model class
-        instance: Event instance that was saved
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all related users
-    """
     reset_run_event_links(instance)
 
 
 @receiver(post_delete, sender=Event)
 def post_delete_event_links(sender, instance, **kwargs):
-    """Reset event links when event is deleted.
-
-    Args:
-        sender: Event model class
-        instance: Event instance that was deleted
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all related users
-    """
     reset_run_event_links(instance)
 
 
 @receiver(post_save, sender=Run)
 def post_save_run_links(sender, instance, **kwargs):
-    """Reset event links when run changes.
-
-    Args:
-        sender: Run model class
-        instance: Run instance that was saved
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all users with access to the event
-    """
     reset_run_event_links(instance.event)
 
 
 @receiver(post_delete, sender=Run)
 def post_delete_run_links(sender, instance, **kwargs):
-    """Reset event links when run is deleted.
-
-    Args:
-        sender: Run model class
-        instance: Run instance that was deleted
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all users with access to the event
-    """
     reset_run_event_links(instance.event)
 
 
