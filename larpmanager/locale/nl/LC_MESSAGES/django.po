@@ -1224,6 +1224,9 @@ msgstr "Eerste hulp"
 msgid "Frequency"
 msgstr "Frequentie"
 
+msgid "Important"
+msgstr "Belangrijk"
+
 msgid "Interface"
 msgstr "Interface"
 

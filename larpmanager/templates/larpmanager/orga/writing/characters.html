@@ -59,7 +59,7 @@
         </th>
         {% if writing_unimportant %}
             <th class="stats">
-                <i class="fa fa-hashtag"></i> {% trans "Unimportant" %}
+                <i class="fa fa-hashtag"></i> {% trans "Important" %}
             </th>
         {% endif %}
     {% endif %}
@@ -76,7 +76,7 @@
         </th>
         {% if writing_unimportant %}
             <th class="stats">
-                <i class="fa fa-hashtag"></i> {% trans "Unimportant" %}
+                <i class="fa fa-hashtag"></i> {% trans "Important" %}
             </th>
         {% endif %}
     {% endif %}
@@ -127,7 +127,7 @@
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.plot_rels.count }}</td>
-                {% if writing_unimportant %}<td class="stats">{{ el.plot_rels.unimportant }}</td>{% endif %}
+                {% if writing_unimportant %}<td class="stats">{{ el.plot_rels.important }}</td>{% endif %}
             {% endif %}
             {% if features.prologue %}
                 <td class="prologues dot_links">
@@ -144,7 +144,7 @@
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.relationships_rels.count }}</td>
-                {% if writing_unimportant %}<td class="stats">{{ el.relationships_rels.unimportant }}</td>{% endif %}
+                {% if writing_unimportant %}<td class="stats">{{ el.relationships_rels.important }}</td>{% endif %}
             {% endif %}
             {% if features.speedlarp %}
                 <td class="speedlarp dot_links">
