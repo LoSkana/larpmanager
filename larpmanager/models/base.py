@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import secrets
 from datetime import datetime
 from itertools import chain
 
@@ -206,3 +206,23 @@ class PaymentMethod(BaseModel):
         """
         # noinspection PyUnresolvedReferences
         return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}
+
+
+class PublisherApiKey(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Descriptive name for this API key"))
+
+    key = models.CharField(max_length=64, unique=True, db_index=True, editable=False)
+
+    active = models.BooleanField(default=True)
+
+    last_used = models.DateTimeField(blank=True, null=True)
+
+    usage_count = models.PositiveIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = secrets.token_urlsafe(48)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} ({'Active' if self.active else 'Inactive'})"

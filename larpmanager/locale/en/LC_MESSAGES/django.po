@@ -662,6 +662,14 @@ msgid ""
 "characters"
 msgstr ""
 
+msgid "Publisher"
+msgstr ""
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a "
+"public API"
+msgstr ""
+
 msgid "Do you want to accept payments processed through the system"
 msgstr ""
 
@@ -2889,6 +2897,9 @@ msgstr ""
 msgid ""
 "Logo image (you can upload a file of any size, it will be resized "
 "automatically)"
+msgstr ""
+
+msgid "Descriptive name for this API key"
 msgstr ""
 
 msgid "A short tagline, slogan"
@@ -7864,6 +7875,9 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create the \"new player\" ticket"
+msgstr ""
+
+msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 
 msgid "Manage the organization main settings"

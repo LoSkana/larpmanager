@@ -1266,6 +1266,9 @@ msgstr "Perfilado"
 msgid "Prologues"
 msgstr "Prólogos"
 
+msgid "Publisher"
+msgstr "Editorial"
+
 msgid "Questions"
 msgstr "Preguntas"
 
@@ -4289,6 +4292,9 @@ msgstr "Nombre completo de la Organización"
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmar entrada a %(event)s"
 
+msgid "Descriptive name for this API key"
+msgstr "Nombre descriptivo de esta clave API"
+
 msgid "Discover what this event is about"
 msgstr "¡Descubre de qué trata este evento"
 
@@ -6660,6 +6666,11 @@ msgstr ""
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Indica si el descuento es visible y utilizable por los participantes"
 
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+"Hace visibles los próximos eventos a sitios externos a través de una API "
+"pública"
+
 msgid "Manage members votes for the assignment of roles in the organization"
 msgstr ""
 "Gestionar los votos de los miembros para la asignación de funciones en la "
@@ -8131,6 +8142,13 @@ msgid ""
 msgstr ""
 "Atención: la operación es definitiva, ¡por favor, vuelva a comprobar las "
 "asignaciones antes de subirlas"
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a"
+" public API"
+msgstr ""
+"¿Desea que sus próximos eventos sean visibles para sitios externos a través "
+"de una API pública"
 
 #, python-format
 msgid ""

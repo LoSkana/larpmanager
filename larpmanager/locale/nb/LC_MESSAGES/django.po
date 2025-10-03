@@ -1266,6 +1266,9 @@ msgstr "Profilering"
 msgid "Prologues"
 msgstr "Prologer"
 
+msgid "Publisher"
+msgstr "Utgiver"
+
 msgid "Questions"
 msgstr "Spørsmål"
 
@@ -4289,6 +4292,9 @@ msgstr "Fullstendig navn på organisasjonen"
 msgid "Confirm registration to %(event)s"
 msgstr "Bekreft oppføring til %(event)s"
 
+msgid "Descriptive name for this API key"
+msgstr "Beskrivende navn for denne API-nøkkelen"
+
 msgid "Discover what this event is about"
 msgstr "Finn ut hva dette arrangementet handler om"
 
@@ -6614,6 +6620,11 @@ msgstr "Ønsker du å administrere tegn som er tildelt registrerte deltakere"
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Angir om rabatten er synlig og kan brukes av deltakerne"
 
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+"Gjør kommende arrangementer synlige for eksterne nettsteder gjennom et "
+"offentlig API"
+
 msgid "Manage members votes for the assignment of roles in the organization"
 msgstr ""
 "Administrere medlemmenes stemmer for tildeling av roller i organisasjonen"
@@ -8007,6 +8018,13 @@ msgid ""
 msgstr ""
 "OBS: operasjonen er endelig, vennligst dobbeltsjekk oppgavene før du laster "
 "dem opp"
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a"
+" public API"
+msgstr ""
+"Ønsker du å gjøre kommende arrangementer synlige for eksterne nettsteder "
+"gjennom et offentlig API"
 
 #, python-format
 msgid ""
