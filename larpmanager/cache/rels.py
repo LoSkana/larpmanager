@@ -28,6 +28,7 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 
 logger = logging.getLogger(__name__)
@@ -319,6 +320,12 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             rel_plots = char.get_plot_characters()
             plot_list = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
             relations["plot_rels"] = build_relationship_dict(plot_list)
+            unimportant_count = 0
+            if char.event.get_config("writing_unimportant", True):
+                unimportant_count = sum(
+                    1 for rel in rel_plots if strip_tags(rel.text).lstrip().startswith("$unimportant")
+                )
+            relations["plot_rels"]["unimportant"] = unimportant_count
 
         if "faction" in features:
             fac_event = char.event.get_class_parent("faction")
@@ -333,6 +340,12 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             relationships = Relationship.objects.filter(deleted=None, source=char)
             rel_list = [(rel.target.id, rel.target.name) for rel in relationships]
             relations["relationships_rels"] = build_relationship_dict(rel_list)
+            unimportant_count = 0
+            if char.event.get_config("writing_unimportant", True):
+                unimportant_count = sum(
+                    1 for rel in relationships if strip_tags(rel.text).lstrip().startswith("$unimportant")
+                )
+            relations["relationships_rels"]["unimportant"] = unimportant_count
 
         if "speedlarp" in features:
             speedlarps = char.speedlarps_list.all()

@@ -1743,6 +1743,9 @@ msgstr "Poprzeczny"
 msgid "Undo period"
 msgstr "Okres cofania"
 
+msgid "Unimportant"
+msgstr "Nieistotne"
+
 msgid "Unique code"
 msgstr "Unikalny kod"
 
@@ -8469,6 +8472,13 @@ msgid ""
 msgstr ""
 "Włącza pole \"przypisany\", aby śledzić, który pracownik jest odpowiedzialny"
 " za każdy element pisma"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Jeśli zaznaczone, pozwala śledzić wątki lub relacje, które nie są naprawdę "
+"ważne dla postaci"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "
