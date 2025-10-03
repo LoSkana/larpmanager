@@ -1305,3 +1305,15 @@
     order: 75
     after_text: Now you can create the "new player" ticket
     after_link: orga_registration_tickets
+- model: larpmanager.feature
+  pk: 218
+  fields:
+    name: Publisher
+    descr: Makes upcoming events visible to external sites through a public API
+    slug: publisher
+    overall: true
+    module: 12
+    placeholder: false
+    order: 80
+    after_text: ''
+    after_link: ''
