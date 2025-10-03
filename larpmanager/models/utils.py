@@ -266,6 +266,8 @@ def strip_tags(html):
     Returns:
         str: Plain text with HTML tags removed
     """
+    if html is None or html == "":
+        return ""
     s = MLStripper()
     s.feed(html)
     return s.get_data()
