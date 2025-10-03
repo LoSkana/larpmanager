@@ -314,10 +314,18 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
     def test_get_regs_paying_incomplete_basic(self):
         """Test getting registrations with incomplete payments"""
+        from larpmanager.models.registration import Registration
+
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00"))
+        registration = self.create_registration(member=member, run=run)
+
+        # Update fields directly in DB to avoid signal triggers
+        Registration.objects.filter(pk=registration.pk).update(
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("50.00")
+        )
 
         regs = get_regs_paying_incomplete(assoc)
 
@@ -325,10 +333,18 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
     def test_get_regs_paying_incomplete_excludes_paid(self):
         """Test get_regs_paying_incomplete excludes fully paid"""
+        from larpmanager.models.registration import Registration
+
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00"))
+        registration = self.create_registration(member=member, run=run)
+
+        # Update fields directly in DB
+        Registration.objects.filter(pk=registration.pk).update(
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("100.00")
+        )
 
         regs = get_regs_paying_incomplete(assoc)
 
@@ -336,10 +352,18 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
     def test_get_regs_paying_incomplete_ignores_small_diff(self):
         """Test get_regs_paying_incomplete ignores small differences"""
+        from larpmanager.models.registration import Registration
+
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("99.98"))
+        registration = self.create_registration(member=member, run=run)
+
+        # Update fields directly in DB
+        Registration.objects.filter(pk=registration.pk).update(
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("99.98")
+        )
 
         regs = get_regs_paying_incomplete(assoc)
 
@@ -348,10 +372,18 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
     def test_get_regs_paying_incomplete_includes_overpay(self):
         """Test get_regs_paying_incomplete includes overpayments"""
+        from larpmanager.models.registration import Registration
+
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("110.00"))
+        registration = self.create_registration(member=member, run=run)
+
+        # Update fields directly in DB
+        Registration.objects.filter(pk=registration.pk).update(
+            tot_iscr=Decimal("100.00"),
+            tot_payed=Decimal("110.00")
+        )
 
         regs = get_regs_paying_incomplete(assoc)
 

@@ -354,27 +354,27 @@ def print_volunteer_registry(ctx):
 @receiver(pre_delete, sender=Handout)
 def pre_delete_pdf_handout(sender, instance, **kwargs):
     for run in instance.event.runs.all():
-        os.remove(instance.get_filepath(run))
+        safe_remove(instance.get_filepath(run))
 
 
 @receiver(post_save, sender=Handout)
 def post_save_pdf_handout(sender, instance, **kwargs):
     for run in instance.event.runs.all():
-        os.remove(instance.get_filepath(run))
+        safe_remove(instance.get_filepath(run))
 
 
 @receiver(pre_delete, sender=HandoutTemplate)
 def pre_delete_pdf_handout_template(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
-            os.remove(el.get_filepath(run))
+            safe_remove(el.get_filepath(run))
 
 
 @receiver(post_save, sender=HandoutTemplate)
 def post_save_pdf_handout_template(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
-            os.remove(el.get_filepath(run))
+            safe_remove(el.get_filepath(run))
 
 
 def safe_remove(path):
@@ -437,7 +437,7 @@ def post_save_pdf_relationship(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=Faction)
 def pre_delete_pdf_faction(sender, instance, **kwargs):
-    for char in instance.event.characters.all():
+    for char in instance.event.character_set.all():
         remove_char_pdf(char)
 
 

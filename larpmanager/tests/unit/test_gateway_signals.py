@@ -297,6 +297,8 @@ class TestGatewaySignals(BaseTestCase):
         self.assertFalse(Character.objects.filter(id=character_id).exists())
 
         # 4. post_delete signals should handle cleanup after deletion
-        # (We can't test post_delete directly since object is gone, but signals should work)
-
-        self.assertTrue(True)  # All signal patterns working correctly
+        # Verify other objects still exist after character deletion
+        member.refresh_from_db()
+        payment.refresh_from_db()
+        self.assertIsNotNone(member.id)
+        self.assertIsNotNone(payment.id)
