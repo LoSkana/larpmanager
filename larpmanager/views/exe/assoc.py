@@ -134,7 +134,7 @@ def exe_features(request):
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def exe_features_go(request, ctx, slug, on=True):
+def exe_features_go(request, slug, on=True):
     ctx = check_assoc_permission(request, "exe_features")
     get_feature(ctx, slug)
     if not ctx["feature"].overall:
