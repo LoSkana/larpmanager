@@ -231,21 +231,22 @@ def update_invoice_gross_fee(request, invoice, amount, assoc, pay_method):
     return amount
 
 
-def get_payment_form(request, form, typ, ctx, key=None):
-    """Create or update payment invoice and return payment gateway form.
+def get_payment_form(request: HttpRequest, form, typ: str, ctx: dict, key: str | None = None) -> None:
+    """Create/update payment invoice and prepare gateway form.
 
     Args:
-        request: Django HTTP request object
-        form: Form containing payment data
+        request: HTTP request
+        form: Form with payment data
         typ: Payment type
-        ctx: Context dictionary to update
-        key: Optional existing invoice key
+        ctx: Context dict to update
+        key: Existing invoice key
 
-    Returns:
-        dict: Payment form data for gateway integration
+    Side effects:
+        Updates ctx with invoice, forms, and payment details
     """
     assoc = form.assoc
 
+    # Extract payment details from form
     amount = form.cleaned_data["amount"]
     ctx["am"] = amount
     method = form.cleaned_data["method"]
@@ -253,14 +254,15 @@ def get_payment_form(request, form, typ, ctx, key=None):
 
     pay_method = PaymentMethod.objects.get(slug=method)
 
+    # Try to retrieve existing invoice or create new one
     invoice = None
     if key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=key, status=PaymentStatus.CREATED)
         except Exception:
-            # print(e)
             pass
 
+    # Create new invoice if not found
     if not invoice:
         invoice = PaymentInvoice()
         invoice.key = key
@@ -270,37 +272,32 @@ def get_payment_form(request, form, typ, ctx, key=None):
         invoice.member = request.user.member
         invoice.assoc = assoc
     else:
+        # Update existing invoice
         invoice.method = pay_method
         invoice.typ = typ
 
+    # Update payment details and invoice data
     update_payment_details(request, ctx)
-
     set_data_invoice(request, ctx, invoice, form, assoc)
-
     amount = update_invoice_gross_fee(request, invoice, amount, assoc, pay_method)
 
     ctx["invoice"] = invoice
 
+    # Prepare gateway-specific forms
     if method in {"wire", "paypal_nf"}:
         ctx["wire_form"] = WireInvoiceSubmitForm()
         ctx["wire_form"].set_initial("cod", invoice.cod)
-
     elif method == "any":
         ctx["any_form"] = AnyInvoiceSubmitForm()
         ctx["any_form"].set_initial("cod", invoice.cod)
-
     elif method == "paypal":
         get_paypal_form(request, ctx, invoice, amount)
-
     elif method == "stripe":
         get_stripe_form(request, ctx, invoice, amount)
-
     elif method == "sumup":
         get_sumup_form(request, ctx, invoice, amount)
-
     elif method == "redsys":
         get_redsys_form(request, ctx, invoice, amount)
-
     elif method == "satispay":
         get_satispay_form(request, ctx, invoice, amount)
 

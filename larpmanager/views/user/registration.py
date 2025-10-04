@@ -82,53 +82,68 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def pre_register(request, s=""):
-    """Handle pre-registration for events.
+def pre_register(request: "HttpRequest", s: str = "") -> "HttpResponse":
+    """Handle pre-registration for events before full registration opens.
 
-    Allows users to register interest in events before full registration opens.
-    Can target specific events or show all available events.
+    Allows users to express interest in events and set preference order,
+    optionally with additional information. Manages list of existing
+    pre-registrations and creates new ones.
 
     Args:
-        request: Django HTTP request object (must be authenticated)
-        s: Optional event slug to pre-register for specific event
+        request: HTTP request object with authenticated user
+        s: Optional event slug to pre-register for specific event, empty shows all
 
     Returns:
-        HttpResponse: Pre-registration form or redirect after processing
+        HttpResponse: Pre-registration form page or redirect after successful save
+
+    Side effects:
+        - Creates PreRegistration records linking member to events
+        - Saves preference order and additional info
     """
+    # Handle specific event pre-registration vs all events listing
     if s:
+        # Get context for specific event and verify pre-register feature is active
         ctx = get_event(request, s)
         ctx["sel"] = ctx["event"].id
         check_event_feature(request, ctx, "pre_register")
     else:
+        # Show all available events for pre-registration
         ctx = def_user_ctx(request)
         ctx.update({"features": get_assoc_features(request.assoc["id"])})
 
-    # get events
-    ctx["choices"] = []
-    ctx["already"] = []
+    # Initialize event lists for template
+    ctx["choices"] = []      # Events available for new pre-registration
+    ctx["already"] = []      # Events user has already pre-registered for
     ctx["member"] = request.user.member
 
+    # Check if preference ordering is enabled
     ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
+    # Build set of already pre-registered event IDs
     ch = {}
     que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])
     for el in que.order_by("pref"):
         ch[el.event.id] = True
         ctx["already"].append(el)
 
+    # Find events available for pre-registration
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
+        # Skip if pre-registration not active for this event
         if not r.get_config("pre_register_active", False):
             continue
 
+        # Skip if user already pre-registered
         if r.id in ch:
             continue
 
         ctx["choices"].append(r)
 
+    # Handle form submission for new pre-registration
     if request.method == "POST":
         form = PreRegistrationForm(request.POST, ctx=ctx)
         if form.is_valid():
             nr = form.cleaned_data["new_event"]
+            # Only save if an event was actually selected
             if nr != "":
                 with transaction.atomic():
                     PreRegistration(

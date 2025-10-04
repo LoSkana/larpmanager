@@ -406,68 +406,101 @@ def _orga_registrations_text_fields(ctx):
 
 
 @login_required
-def orga_registrations(request, s):
-    """Display and manage event registrations for organizers.
+def orga_registrations(request: "HttpRequest", s: str) -> "HttpResponse":
+    """Display and manage comprehensive event registration list for organizers.
+
+    Provides detailed registration management interface with filtering, grouping,
+    character assignments, ticket types, membership status, accounting info, and
+    custom form responses. Supports CSV download and AJAX popup details.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object with user authentication
+        s: Event/run slug identifier
 
     Returns:
-        HttpResponse: Rendered registrations page or download/popup response
+        HttpResponse: Rendered registrations table template
+        JsonResponse: AJAX popup content or download file on POST
+
+    Side effects:
+        - Caches character and registration data
+        - Processes membership statuses for batch operations
+        - Calculates accounting totals and payment status
     """
+    # Verify user has permission to view registrations
     ctx = check_event_permission(request, s, "orga_registrations")
 
+    # Handle AJAX and download POST requests
     if request.method == "POST":
+        # Return popup detail view for specific registration/question
         if request.POST.get("popup") == "1":
             return registrations_popup(request, ctx)
 
+        # Generate and return CSV download of all registrations
         if request.POST.get("download") == "1":
             return download(ctx, Registration, "registration")
 
+    # Load all cached character, faction, and event data
     get_event_cache_all(ctx)
 
+    # Prepare registration context with characters, tickets, and questions
     _orga_registrations_prepare(ctx, request)
 
+    # Load discount information for all registered members
     _orga_registrations_discount(ctx)
 
+    # Configure custom character fields if feature enabled
     _orga_registrations_custom_character(ctx)
 
+    # Check if age-based question filtering is enabled
     ctx["registration_reg_que_age"] = ctx["event"].get_config("registration_reg_que_age", False)
 
+    # Initialize registration grouping dictionary
     ctx["reg_all"] = {}
 
+    # Query active (non-cancelled) registrations ordered by last update
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).order_by("-updated")
     ctx["reg_list"] = que.select_related("member")
 
+    # Batch-load membership statuses for all registered members
     ctx["memberships"] = {}
     if "membership" in ctx["features"]:
         members_id = []
         for r in ctx["reg_list"]:
             members_id.append(r.member_id)
+        # Create lookup dictionary for efficient membership access
         for el in Membership.objects.filter(assoc_id=ctx["a_id"], member_id__in=members_id):
             ctx["memberships"][el.member_id] = el
 
+    # Process each registration to add computed fields
     for r in ctx["reg_list"]:
+        # Add standard fields: characters, membership status, age
         _orga_registrations_standard(r, ctx)
 
+        # Add discount information if available
         if "discount" in ctx["features"]:
             if r.member_id in ctx["reg_discounts"]:
                 r.discounts = ctx["reg_discounts"][r.member_id]
 
+        # Add questbuilder trait information
         _orga_registrations_traits(r, ctx)
 
+        # Categorize by ticket type and add to appropriate group
         _orga_registrations_tickets(r, ctx)
 
+    # Sort registration groups for consistent display
     ctx["reg_all"] = sorted(ctx["reg_all"].items())
 
+    # Process editor-type question responses for popup display
     _orga_registrations_text_fields(ctx)
 
+    # Enable bulk upload functionality
     ctx["upload"] = "registrations"
     ctx["download"] = 1
+    # Enable export view if configured
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "registration"
 
+    # Load user's saved column visibility preferences
     ctx["default_fields"] = request.user.member.get_config(f"open_registration_{ctx['event'].id}", "[]")
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)

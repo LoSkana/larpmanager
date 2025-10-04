@@ -105,7 +105,7 @@ def _get_registration_status(run):
         return _("Registration closed")
 
 
-def _exe_manage(request):
+def _exe_manage(request: HttpRequest) -> HttpResponse:
     """Executive management dashboard view.
 
     Displays association-level management interface with events,
@@ -330,29 +330,25 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
 
-def _orga_manage(request, s):
+def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
     """Event organizer management dashboard view.
 
-    Displays event-specific management interface with characters,
-    registrations, and event-level tools.
-
     Args:
-        request: Django HTTP request object
-        s (str): Event slug
+        request: HTTP request
+        s: Event slug
 
     Returns:
-        HttpResponse: Rendered organizer management dashboard
+        Rendered dashboard
     """
-
     ctx = get_event_run(request, s)
 
-    # if run is not set, redirect
+    # Ensure run dates are set
     if not ctx["run"].start or not ctx["run"].end:
         msg = _("Last step, please complete the event setup by adding the start and end dates")
         messages.success(request, msg)
         return redirect("orga_run", s=s)
 
-    # if quick setup is not done, redirect
+    # Ensure quick setup is complete
     if not ctx["event"].get_config("orga_quick_suggestion", False):
         msg = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
@@ -361,38 +357,41 @@ def _orga_manage(request, s):
         messages.success(request, msg)
         return redirect("orga_quick", s=s)
 
+    # Set page context
     ctx["orga_page"] = 1
     ctx["manage"] = 1
 
+    # Load permissions and navigation
     get_index_event_permissions(ctx, request, s)
     if get_assoc_config(request.assoc["id"], "interface_admin_links", False):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
+    # Load registration status
     ctx["registration_status"] = _get_registration_status(ctx["run"])
 
+    # Load registration counts if permitted
     if has_event_permission(request, ctx, s, "orga_registrations"):
         ctx["counts"] = get_reg_counts(ctx["run"])
         ctx["reg_counts"] = {}
-        # TODO simplify
         for tier in ["player", "staff", "wait", "fill", "seller", "npc", "collaborator"]:
             key = f"count_{tier}"
             if key in ctx["counts"]:
                 ctx["reg_counts"][_(tier.capitalize())] = ctx["counts"][key]
 
+    # Load accounting if permitted
     if has_event_permission(request, ctx, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
+    # Build action lists
     _exe_actions(request, ctx)
-    # keep only priorities
     if "actions_list" in ctx:
         del ctx["actions_list"]
 
     _orga_actions_priorities(request, ctx)
-
     _orga_suggestions(ctx)
-
     _compile(request, ctx)
 
+    # Mobile shortcuts handling
     if ctx["event"].get_config("show_shortcuts_mobile", False):
         origin_id = request.GET.get("origin", "")
         should_open = False
@@ -405,30 +404,35 @@ def _orga_manage(request, s):
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 
-def _orga_actions_priorities(request, ctx):
+def _orga_actions_priorities(request: HttpRequest, ctx: dict) -> None:
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
     event setup workflow, checking for missing required configurations.
+    Populates ctx with priority actions and regular actions for the organizer dashboard.
 
     Args:
         request: Django HTTP request object
-        ctx (dict): Context dictionary containing event and other data
+        ctx: Context dictionary containing 'event' and 'run' keys. Will be updated
+             with priority and action lists
 
-    Returns:
-        None: Function modifies ctx in-place, adding priority action recommendations
+    Side effects:
+        Modifies ctx by calling _add_priority() and _add_action() which populate
+        action lists for the organizer dashboard
     """
-    # if there are no characters, suggest to do it
+    # Load feature flags to determine which checks to perform
     features = get_event_features(ctx["event"].id)
 
+    # Check if character feature is properly configured
     if "character" in features:
+        # Prompt to create first character if none exist
         if not Character.objects.filter(event=ctx["event"]).count():
             _add_priority(
                 ctx,
                 _("Create the first character of the event"),
                 "orga_characters",
             )
-
+    # Check for feature dependencies on character feature
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
         _add_priority(
             ctx,
@@ -436,6 +440,7 @@ def _orga_actions_priorities(request, ctx):
             "orga_features",
         )
 
+    # Check if user_character feature needs configuration
     if "user_character" in features and ctx["event"].get_config("user_character_max", "") == "":
         _add_priority(
             ctx,
@@ -444,6 +449,7 @@ def _orga_actions_priorities(request, ctx):
             "config/user_character",
         )
 
+    # Check for features that depend on token_credit
     if "token_credit" not in features and set(features) & {"expense", "refund", "collection"}:
         _add_priority(
             ctx,
@@ -451,6 +457,7 @@ def _orga_actions_priorities(request, ctx):
             "orga_features",
         )
 
+    # Check for pending character approvals
     char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
     if char_proposed:
         _add_action(
@@ -459,6 +466,7 @@ def _orga_actions_priorities(request, ctx):
             "orga_characters",
         )
 
+    # Check for pending expense approvals (if not disabled for organizers)
     if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False):
         expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
         if expenses_approve:
@@ -468,6 +476,7 @@ def _orga_actions_priorities(request, ctx):
                 "orga_expenses",
             )
 
+    # Check for pending payment approvals
     payments_approve = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED).count()
     if payments_approve:
         _add_action(
@@ -476,7 +485,7 @@ def _orga_actions_priorities(request, ctx):
             "orga_invoices",
         )
 
-    # form
+    # Check for incomplete registration form questions (missing options)
     empty_reg_questions = (
         ctx["event"]
         .get_elements(RegistrationQuestion)
@@ -492,6 +501,7 @@ def _orga_actions_priorities(request, ctx):
             "orga_registration_form",
         )
 
+    # Check for incomplete writing form questions (missing options)
     empty_char_questions = (
         ctx["event"]
         .get_elements(WritingQuestion)
@@ -507,6 +517,7 @@ def _orga_actions_priorities(request, ctx):
             "orga_character_form",
         )
 
+    # Delegate to sub-functions for additional action checks
     _orga_user_actions(ctx, features, request)
 
     _orga_reg_acc_actions(ctx, features)

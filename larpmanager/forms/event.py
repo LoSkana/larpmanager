@@ -120,37 +120,57 @@ class OrgaEventForm(MyForm):
 
         widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: object, **kwargs: object) -> None:
         """Initialize event form with field configuration based on context.
 
+        Configures form fields dynamically based on activated features and
+        whether the event is being created or edited. Removes unnecessary
+        fields from the form when corresponding features are disabled.
+
         Args:
-            *args: Positional arguments passed to parent
-            **kwargs: Keyword arguments passed to parent
+            *args: Positional arguments passed to parent form class
+            **kwargs: Keyword arguments passed to parent form class, including
+                     'params' with feature configuration and context data
+
+        Side effects:
+            - Modifies form fields by deleting disabled feature fields
+            - Sets prevent_canc flag to prevent cancellation
+            - Configures campaign parent field widget
         """
         super().__init__(*args, **kwargs)
 
+        # Prevent cancellation for non-executive users
         if "exe" not in self.params:
             self.prevent_canc = True
 
+        # Configure slug field based on whether this is a new or existing event
         if self.instance.pk:
+            # Slug cannot be changed after event creation
             self.delete_field("slug")
         else:
+            # Slug is required for new events
             self.fields["slug"].required = True
 
+        # Build list of fields to delete based on disabled features
         dl = []
 
+        # Check each display-related feature and mark fields for removal if disabled
         for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]:
             if s not in self.params["features"]:
                 dl.append(s)
 
+        # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
 
+        # Add waiting list configuration field if feature is disabled
         if "waiting" not in self.params["features"]:
             dl.append("max_waiting")
 
+        # Add filler list configuration field if feature is disabled
         if "filler" not in self.params["features"]:
             dl.append("max_filler")
 
+        # Remove all marked fields from the form
         for m in dl:
             self.delete_field(m)
 

@@ -675,20 +675,28 @@ def _orga_registrations_acc_reg(reg, ctx, cache_aip):
     return dt
 
 
-def _get_column_names(ctx):
+def _get_column_names(ctx: dict) -> None:
     """Define column mappings and field types for different export contexts.
 
     Sets up comprehensive dictionaries mapping form fields to export columns
-    based on context type (registration, tickets, abilities, etc.).
+    based on context type (registration, tickets, abilities, etc.). This function
+    generates the appropriate column headers and field definitions for CSV templates
+    used in bulk upload/download operations.
 
     Args:
-        ctx (dict): Context dictionary containing export configuration including:
-            - typ (str): Export type ('registration', 'registration_ticket', etc.)
-            - features (set): Available features for the export context
+        ctx: Context dictionary containing export configuration including:
+            - typ: Export type ('registration', 'registration_ticket', 'px_abilitie',
+                   'registration_form', 'character_form', or writing element types)
+            - features: Set of available features for the export context
+            - event: Event instance for question lookups (for registration types)
 
-    Returns:
-        None: Function modifies ctx in-place, adding 'columns' and 'fields' keys
+    Side effects:
+        Modifies ctx in-place, adding:
+        - columns: List of dicts with column names and descriptions
+        - fields: Dict mapping field names to types (for registration type)
+        - name: Name of the export type (for px_abilitie type)
     """
+    # Handle registration data export with participant, ticket, and question columns
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {
@@ -701,11 +709,15 @@ def _get_column_names(ctx):
                 "donation": _("(Optional) The amount of a voluntary donation"),
             }
         ]
+        # Build field type mapping from registration questions for validation
         que = get_ordered_registration_questions(ctx).values("name", "typ")
         ctx["fields"] = {el["name"]: el["typ"] for el in que}
+
+        # Remove donation column if pay-what-you-want feature is disabled
         if "pay_what_you_want" not in ctx["features"]:
             del ctx["columns"][0]["donation"]
 
+    # Handle ticket tier definition export
     elif ctx["typ"] == "registration_ticket":
         ctx["columns"] = [
             {
@@ -717,6 +729,7 @@ def _get_column_names(ctx):
             }
         ]
 
+    # Handle ability/experience system export
     elif ctx["typ"] == "px_abilitie":
         ctx["columns"] = [
             {
@@ -730,7 +743,10 @@ def _get_column_names(ctx):
         ]
         ctx["name"] = "Ability"
 
+    # Handle registration form (questions + options) export
     elif ctx["typ"] == "registration_form":
+        # First dict: Question definitions with name, type, status
+        # Second dict: Option definitions linked to questions
         ctx["columns"] = [
             {
                 "name": _("The question name"),
@@ -756,7 +772,10 @@ def _get_column_names(ctx):
                 ),
             },
         ]
+
+    # Handle character/writing form (questions + options) export
     elif ctx["typ"] == "character_form":
+        # Similar to registration form but with additional fields for writing elements
         ctx["columns"] = [
             {
                 "name": _("The question name"),
@@ -784,9 +803,11 @@ def _get_column_names(ctx):
             },
         ]
 
+        # Add requirements column if the feature is enabled
         if "wri_que_requirements" in ctx["features"]:
             ctx["columns"][1]["requirements"] = _("Optional - Other options as requirements, comma-separated")
 
+    # Handle writing element types (character, plot, faction, quest, trait)
     else:
         _get_writing_names(ctx)
 

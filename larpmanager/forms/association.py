@@ -101,12 +101,20 @@ class ExeAssocTextForm(MyForm):
         model = AssocText
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: object, **kwargs: object) -> None:
         """Initialize AssocTextForm with feature-based field configuration.
 
+        Configures text type choices based on activated features, removing
+        options for disabled features like membership, reminders, and legal notices.
+        Adds detailed help text for each text type explaining its usage context.
+
         Args:
-            *args: Variable length argument list passed to parent
-            **kwargs: Arbitrary keyword arguments passed to parent
+            *args: Positional arguments passed to parent form class
+            **kwargs: Keyword arguments including 'params' dict with features list
+
+        Side effects:
+            - Modifies typ field choices based on enabled features
+            - Adds comprehensive help text to typ field
         """
         super().__init__(*args, **kwargs)
         ch = AssocTextType.choices
@@ -434,53 +442,60 @@ class ExeConfigForm(ConfigForm):
             help_text = _("If checked: Add a field to track items quantity")
             self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
 
-    def set_config_members(self):
+    def set_config_members(self) -> None:
         """Configure member-related form fields and sections in association settings.
 
-        Sets up various user management options like event history visibility
-        and member interaction features for the association configuration.
+        Sets up various user management options like event history visibility,
+        membership fees, deadlines, voting, and reminder features for the association
+        configuration form based on enabled features.
 
-        Args:
-            self: AssociationConfigForm instance
-
-        Returns:
-            None: Function modifies form fields in-place
+        Side effects:
+            Modifies form fields in-place by adding configuration sections and fields
+            for users, deadlines, membership, voting, and reminders
         """
-        # USERS
+        # Configure user profile and history display settings
         self.set_section("users", _("Users"))
 
         label = _("Event history")
         help_text = _("If checked: in the public page of an user shows a list of all events attended")
         self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
 
+        # Configure deadline management if feature is enabled
         if "deadlines" in self.params["features"]:
             self.set_section("deadlines", _("Deadline"))
 
+            # Tolerance period before automatic cancellation
             label = _("Tolerance")
             help_text = _(
                 "Number of days past the deadline beyond which registrations are marked to be cancelled (default 30 days)"
             )
             self.add_configs("deadline_tolerance", ConfigType.INT, label, help_text)
 
+            # Reminder email frequency
             label = _("Frequency")
             help_text = _("Sets how often reminder emails are sent, in days (if not set, no emails are sent)")
             self.add_configs("deadline_days", ConfigType.INT, label, help_text)
 
+        # Configure membership fee and requirements if feature is enabled
         if "membership" in self.params["features"]:
             self.set_section("membership", _("Members"))
 
+            # Minimum age requirement for membership
             label = _("Age")
             help_text = _("Minimum age of members (leave empty for no limit)")
             self.add_configs("membership_age", ConfigType.INT, label, help_text)
 
+            # Annual membership fee amount
             label = _("Annual fee")
             help_text = _("Annual fee required of members, starting from the beginning of the membership year")
             self.add_configs("membership_fee", ConfigType.INT, label, help_text)
 
+            # Membership year start date configuration
             label = _("Start day")
             help_text = _("Day of the year from which the membership year begins, in DD-MM format")
             self.add_configs("membership_day", ConfigType.CHAR, label, help_text)
 
+            # Grace period for membership fee payment
             label = _("Months free quota")
             help_text = _(
                 "Number of months, starting from the beginning of the membership year, for which "
@@ -488,17 +503,21 @@ class ExeConfigForm(ConfigForm):
             )
             self.add_configs("membership_grazing", ConfigType.INT, label, help_text)
 
+        # Configure voting system if feature is enabled
         if "vote" in self.params["features"]:
             self.set_section("vote", _("Voting"))
 
+            # Toggle voting availability
             label = _("Active")
             help_text = _("If checked: members can vote")
             self.add_configs("vote_open", ConfigType.BOOL, label, help_text)
 
+            # List of candidates for election
             label = _("Candidates")
             help_text = _("Candidates at the polls")
             self.add_configs("vote_candidates", ConfigType.MEMBERS, label, help_text, self.instance.id)
 
+            # Voting constraints: minimum and maximum votes per member
             label = _("Minimum votes")
             help_text = _("Minimum number of votes")
             self.add_configs("vote_min", ConfigType.INT, label, help_text)
@@ -507,13 +526,16 @@ class ExeConfigForm(ConfigForm):
             help_text = _("Maximum number of votes")
             self.add_configs("vote_max", ConfigType.INT, label, help_text)
 
+        # Configure reminder email system if feature is enabled
         if "remind" in self.params["features"]:
             self.set_section("remind", _("Reminder"))
 
+            # Frequency of automated reminder emails
             label = _("Frequency")
             help_text = _("Sets how often reminder emails are sent, in days (default: 5)")
             self.add_configs("remind_days", ConfigType.INT, label, help_text)
 
+            # Holiday scheduling for reminder emails
             label = _("Holidays")
             help_text = _("If checked: the system will send reminds the days on which holidays fall")
             self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)

@@ -253,14 +253,28 @@ def acc_pay(request, s, method=None):
 
 
 @login_required
-def acc_reg(request, reg_id, method=None):
-    """Handle registration payment processing.
+def acc_reg(request: "HttpRequest", reg_id: int, method: str | None = None) -> "HttpResponse":
+    """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
-    for event registrations across different payment methods.
+    across different payment methods. Validates registration status,
+    membership requirements, and outstanding payment amounts.
+
+    Args:
+        request: HTTP request object with authenticated user
+        reg_id: Registration ID to process payment for
+        method: Optional payment method slug to pre-select
+
+    Returns:
+        HttpResponse: Rendered payment form or redirect on validation failure/success
+
+    Raises:
+        Http404: If registration not found or invalid parameters
     """
+    # Ensure payment feature is enabled for this association
     check_assoc_feature(request, "payment")
 
+    # Retrieve registration with related run and event data
     try:
         reg = Registration.objects.select_related("run", "run__event").get(
             id=reg_id,
@@ -271,15 +285,19 @@ def acc_reg(request, reg_id, method=None):
     except Exception as err:
         raise Http404(f"registration not found {err}") from err
 
+    # Get event context and mark as accounting page
     ctx = get_event_run(request, reg.run.get_slug())
     ctx["show_accounting"] = True
 
+    # Load membership status for permission checks
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
 
+    # Check if registration is already fully paid
     if reg.tot_iscr == reg.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
         return redirect("gallery", s=reg.run.get_slug())
 
+    # Check for pending payment verification
     pending = (
         PaymentInvoice.objects.filter(
             idx=reg.id,
@@ -293,29 +311,37 @@ def acc_reg(request, reg_id, method=None):
         messages.success(request, _("You have already sent a payment pending verification"))
         return redirect("gallery", s=reg.run.get_slug())
 
+    # Verify membership approval if membership feature is enabled
     if "membership" in ctx["features"] and not reg.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
         return redirect("gallery", s=reg.run.get_slug())
 
+    # Add registration to context
     ctx["reg"] = reg
 
+    # Calculate payment quota - use installment quota if set, otherwise full balance
     if reg.quota:
         ctx["quota"] = reg.quota
     else:
         ctx["quota"] = reg.tot_iscr - reg.tot_payed
 
+    # Generate unique key for payment tracking
     key = f"{reg.id}_{reg.num_payments}"
 
+    # Load association configuration for payment display
     ctx["association"] = Association.objects.get(pk=ctx["a_id"])
     ctx["hide_amount"] = ctx["association"].get_config("payment_hide_amount", False)
 
+    # Pre-select payment method if specified
     if method:
         ctx["def_method"] = method
 
+    # Handle payment form submission
     if request.method == "POST":
         form = PaymentForm(request.POST, reg=reg, ctx=ctx)
         if form.is_valid():
+            # Process payment through selected gateway
             get_payment_form(request, form, PaymentType.REGISTRATION, ctx, key)
     else:
         form = PaymentForm(reg=reg, ctx=ctx)

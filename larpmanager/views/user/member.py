@@ -622,56 +622,82 @@ def vote(request):
 
 
 @login_required
-def delegated(request):
-    """Manage delegated member functionality.
+def delegated(request: "HttpRequest") -> "HttpResponse":
+    """Manage delegated member accounts for parent-child member relationships.
 
-    Allows users to temporarily login as other members with proper
-    permissions and logging for administrative purposes.
+    Allows parent members to create and switch between delegated child accounts,
+    useful for managing family memberships or multiple personas. Supports
+    bidirectional switching between parent and delegated accounts with
+    proper authentication handling.
+
+    Args:
+        request: HTTP request object with authenticated user
+
+    Returns:
+        HttpResponse: Rendered delegated accounts page or redirect after login switch
+
+    Side effects:
+        - May create new delegated user accounts
+        - Logs user in as different member (parent or child)
+        - Disconnects last login update signal temporarily
     """
+    # Ensure delegated members feature is enabled
     check_assoc_feature(request, "delegated_members")
     ctx = def_user_ctx(request)
 
+    # Disable last login update to avoid tracking when switching accounts
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
     backend = get_user_backend()
 
-    # If the user is delegated, show info on login to the main account
+    # Handle delegated user trying to return to parent account
     if request.user.member.parent:
         if request.method == "POST":
+            # Log back in as parent account
             login(request, request.user.member.parent.user, backend=backend)
             messages.success(
                 request, _("You are now logged in with your main account") + ":" + str(request.user.member)
             )
             return redirect("home")
+        # Show option to return to parent account
         return render(request, "larpmanager/member/delegated.html", ctx)
 
-    # If the user is the main, recover the list of delegated accounts
+    # Handle parent account managing delegated accounts
+    # Retrieve all delegated child accounts for this parent
     ctx["list"] = Member.objects.filter(parent=request.user.member)
     del_dict = {el.id: el for el in ctx["list"]}
 
+    # Process POST requests for account switching or creation
     if request.method == "POST":
         account_login = request.POST.get("account")
+        # Handle switching to an existing delegated account
         if account_login:
             account_login = int(account_login)
             if account_login not in del_dict:
                 raise Http404(f"delegated account not found: {account_login}")
             delegated = del_dict[account_login]
+            # Log in as the selected delegated account
             login(request, delegated.user, backend=backend)
             messages.success(request, _("You are now logged in with the delegate account") + ":" + str(delegated))
             return redirect("home")
 
+        # Handle creating a new delegated account
         form = ProfileForm(request.POST, request=request)
         if form.is_valid():
             data = form.cleaned_data
+            # Generate unique username and email for delegated account
             username = f"{data['name']}_{data['surname']}".lower()
             email = f"{username}@larpmanager.com"
             password = generate_id(32)
             user = User.objects.create_user(username=username, email=email, password=password)
 
+            # Copy profile data to delegated member
             for field in data:
                 setattr(user.member, field, data[field])
+            # Link delegated member to parent
             user.member.parent = request.user.member
             user.member.save()
 
+            # Mark membership as compiled for new delegated account
             mb = get_user_membership(user.member, request.assoc["id"])
             mb.compiled = True
             mb.save()
@@ -679,10 +705,12 @@ def delegated(request):
             messages.success(request, _("New delegate user added!"))
             return redirect("delegated")
     else:
+        # Display form for creating new delegated account
         form = ProfileForm(request=request)
 
     ctx["form"] = form
 
+    # Add accounting information for each delegated account
     for el in ctx["list"]:
         del_ctx = {"member": el, "a_id": ctx["a_id"]}
         info_accounting(request, del_ctx)

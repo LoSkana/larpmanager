@@ -30,7 +30,7 @@ from larpmanager.utils.common import clean, detect_delimiter
 from larpmanager.utils.tasks import notify_admins
 
 
-def invoice_verify(request, ctx, csv_upload):
+def invoice_verify(request: HttpRequest, ctx: dict, csv_upload: InMemoryUploadedFile) -> None:
     """Verify and match payments from CSV upload against pending invoices.
 
     Processes a CSV file containing payment data and matches entries against

@@ -91,11 +91,29 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Initialize character form with custom fields and configuration.
+
+        Sets up the character creation/editing form including faction selection,
+        dynamic custom fields based on event configuration, and optional
+        character completion workflow for approval processes.
+
+        Args:
+            *args: Positional arguments passed to parent form class
+            **kwargs: Keyword arguments passed to parent form class, must include
+                     'params' dict with event, run, and features configuration
+
+        Side effects:
+            - Creates self.details dict for additional field information
+            - Initializes faction selection and custom fields via _init_character
+            - Modifies form fields based on event configuration
+        """
         super().__init__(*args, **kwargs)
 
+        # Initialize storage for field details and metadata
         self.details = {}
 
+        # Set up character-specific fields including factions and custom questions
         self._init_character()
 
     def check_editable(self, question):
