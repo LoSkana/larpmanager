@@ -317,7 +317,7 @@ def payment_received(invoice):
     features = get_assoc_features(invoice.assoc_id)
     fee = get_payment_fee(invoice.assoc_id, invoice.method.slug)
 
-    if fee > 0 and AccountingItemTransaction.objects.filter(inv=invoice).count() == 0:
+    if fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
         _process_fee(features, fee, invoice)
 
     if invoice.typ == PaymentType.REGISTRATION:
@@ -336,7 +336,7 @@ def payment_received(invoice):
 
 
 def _process_collection(features, invoice):
-    if AccountingItemCollection.objects.filter(inv=invoice).count() == 0:
+    if not AccountingItemCollection.objects.filter(inv=invoice).exists():
         acc = AccountingItemCollection()
         acc.member_id = invoice.member_id
         acc.inv = invoice
@@ -350,7 +350,7 @@ def _process_collection(features, invoice):
 
 
 def _process_donate(features, invoice):
-    if AccountingItemDonation.objects.filter(inv=invoice).count() == 0:
+    if not AccountingItemDonation.objects.filter(inv=invoice).exists():
         acc = AccountingItemDonation()
         acc.member_id = invoice.member_id
         acc.inv = invoice
@@ -365,7 +365,7 @@ def _process_donate(features, invoice):
 
 
 def _process_membership(invoice):
-    if AccountingItemMembership.objects.filter(inv=invoice).count() == 0:
+    if not AccountingItemMembership.objects.filter(inv=invoice).exists():
         acc = AccountingItemMembership()
         acc.year = datetime.now().year
         acc.member_id = invoice.member_id
@@ -381,7 +381,7 @@ def _process_payment(invoice):
     Args:
         invoice: Invoice object to process payment for
     """
-    if AccountingItemPayment.objects.filter(inv=invoice).count() == 0:
+    if not AccountingItemPayment.objects.filter(inv=invoice).exists():
         reg = Registration.objects.get(pk=invoice.idx)
 
         acc = AccountingItemPayment()

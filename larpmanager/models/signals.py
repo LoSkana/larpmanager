@@ -443,7 +443,7 @@ def setup_event_after_save(event):
     if event.template:
         return
 
-    if event.runs.count() == 0:
+    if not event.runs.exists():
         Run.objects.create(event=event, number=1)
 
     features = get_event_features(event.id)
@@ -480,7 +480,7 @@ def save_event_tickets(features, instance):
     for ticket in tickets:
         if ticket[0] and ticket[0] not in features:
             continue
-        if RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).count() == 0:
+        if not RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).exists():
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
@@ -912,12 +912,12 @@ def handle_ability_save(instance):
 
 
 @receiver(post_save, sender=DeliveryPx)
-def post_delete_delivery_px(sender, instance, *args, **kwargs):
+def post_save_delivery_px(sender, instance, *args, **kwargs):
     handle_delivery_save(instance)
 
 
 @receiver(post_delete, sender=DeliveryPx)
-def post_save_delivery_px(sender, instance, *args, **kwargs):
+def post_delete_delivery_px(sender, instance, *args, **kwargs):
     handle_delivery_save(instance)
 
 
