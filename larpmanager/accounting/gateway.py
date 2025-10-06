@@ -25,6 +25,7 @@ import json
 import logging
 import math
 import re
+from decimal import Decimal
 from pprint import pformat
 
 import requests
@@ -35,7 +36,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.dispatch import receiver
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received

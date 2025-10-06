@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+from django.http import HttpRequest
 
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run

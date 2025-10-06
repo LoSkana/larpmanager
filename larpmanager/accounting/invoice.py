@@ -23,7 +23,9 @@ import math
 from io import StringIO
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import transaction
+from django.http import HttpRequest
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter

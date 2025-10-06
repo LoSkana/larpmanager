@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
