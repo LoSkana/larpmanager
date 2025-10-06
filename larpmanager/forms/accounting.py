@@ -24,6 +24,7 @@ from decimal import Decimal, InvalidOperation
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
 from larpmanager.forms.member import MembershipForm
@@ -52,7 +53,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
-from larpmanager.models.utils import get_payment_details, save_payment_details
+from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.validators import FileTypeValidator
 
 

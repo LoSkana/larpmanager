@@ -23,10 +23,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.association import Association
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import get_payment_details
 
 
 def reset_cache_assoc(s):
