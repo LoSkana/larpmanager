@@ -22,16 +22,21 @@
 
 from datetime import date
 from decimal import Decimal
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from django.contrib.auth.models import User
 from django.db import models
 
-from larpmanager.models.access import AssocPermission, EventPermission, Feature
-from larpmanager.models.accounting import AccountingItemCollection, AccountingItemPayment, Collection, OtherChoices, PaymentChoices
+from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.accounting import (
+    AccountingItemCollection,
+    AccountingItemPayment,
+    Collection,
+    PaymentChoices,
+)
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import Event, EventButton, EventConfig, Run, RunConfig
+from larpmanager.models.event import Event, EventButton, EventConfig, RunConfig
 from larpmanager.models.form import RegistrationQuestion
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import MemberConfig, Membership, MembershipStatus
@@ -462,7 +467,7 @@ class TestModelSignals(BaseTestCase):
         self.assertIsNotNone(assoc.key)
         self.assertGreater(len(assoc.key), 0)
 
-    @patch("larpmanager.models.signals.get_assoc_features")
+    @patch("larpmanager.cache.feature.get_assoc_features")
     def test_association_post_save_updates_features(self, mock_get_features):
         """Test that Association post_save signal updates features"""
         mock_get_features.return_value = {}
@@ -537,7 +542,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.models.signals.my_send_mail")
+    @patch("larpmanager.mail.base.mail_larpmanager_ticket")
     def test_larp_manager_ticket_post_save_sends_notification(self, mock_mail):
         """Test that LarpManagerTicket post_save signal sends notification"""
         member = self.get_member()
@@ -551,7 +556,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(ticket.id)
 
-    @patch("larpmanager.models.signals._check_new")
+    @patch("larpmanager.utils.miscellanea._check_new")
     def test_warehouse_item_pre_save_rotates_vertical_photo(self, mock_check_new):
         """Test that WarehouseItem pre_save signal rotates vertical photos"""
         from larpmanager.models.miscellanea import WarehouseContainer

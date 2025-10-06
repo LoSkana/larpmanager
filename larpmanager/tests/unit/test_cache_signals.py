@@ -27,15 +27,18 @@ from django.core.cache import cache
 from safedelete import HARD_DELETE
 
 from larpmanager.models.access import AssocPermission, AssocRole, EventPermission, EventRole
-from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, AccountingItemPayment, OtherChoices, PaymentChoices
+from larpmanager.models.accounting import (
+    AccountingItemDiscount,
+    AccountingItemOther,
+    AccountingItemPayment,
+    OtherChoices,
+    PaymentChoices,
+)
 from larpmanager.models.association import AssociationSkin
-from larpmanager.models.casting import AssignmentTrait, Trait
+from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.form import WritingOption, WritingQuestion
-from larpmanager.models.member import Member
-from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Faction, Plot
-from larpmanager.models.casting import QuestType
-from larpmanager.models.casting import Quest
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -261,7 +264,9 @@ class TestCacheSignals(BaseTestCase):
         """Test that AssignmentTrait post_save signal resets character cache"""
         run = self.get_run()
         event = run.event
-        trait = Trait.objects.create(name="Test Trait", event=event)
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
+        quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=event)
+        trait = Trait.objects.create(name="Test Trait", event=event, quest=quest)
         mock_reset.reset_mock()  # Reset after trait creation
         assignment = AssignmentTrait(run=run, member=self.get_member(), trait=trait, typ=0)
         assignment.save()
@@ -273,7 +278,9 @@ class TestCacheSignals(BaseTestCase):
         """Test that AssignmentTrait post_delete signal resets character cache"""
         run = self.get_run()
         event = run.event
-        trait = Trait.objects.create(name="Test Trait", event=event)
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
+        quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=event)
+        trait = Trait.objects.create(name="Test Trait", event=event, quest=quest)
         assignment = AssignmentTrait.objects.create(run=run, member=self.get_member(), trait=trait, typ=0)
         mock_reset.reset_mock()  # Reset after creates
         assignment.delete()
