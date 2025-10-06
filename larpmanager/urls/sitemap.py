@@ -73,8 +73,8 @@ def _organization_sitemap(request):
         List of URLs for the organization's public pages
     """
     assoc = Association.objects.get(pk=request.assoc["id"])
-    cache = get_cache_assoc(request.assoc["id"])
-    if cache["demo"]:
+    cache = get_cache_assoc(assoc.slug)
+    if cache.get("demo", False):
         return []
     domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
     urls = [f"https://{assoc.slug}.{domain}/"]
