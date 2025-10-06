@@ -845,7 +845,7 @@ def get_trait_character(run, number):
         tr = Trait.objects.get(event=run.event, number=number)
         mb = AssignmentTrait.objects.get(run=run, trait=tr).member
         rcrs = RegistrationCharacterRel.objects.filter(reg__run=run, reg__member=mb).select_related("character")
-        if rcrs.count() == 0:
+        if not rcrs.exists():
             return None
         return rcrs.first().character
     except ObjectDoesNotExist:
