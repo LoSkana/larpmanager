@@ -213,6 +213,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if s != "factions_list":
             return super()._save_multi(s, instance)
 
+        # Only process factions if the factions_list field is present in the form
+        if "factions_list" not in self.cleaned_data:
+            return
+
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
         old = set(instance.factions_list.order_by("number").values_list("id", flat=True))
 
@@ -351,6 +355,10 @@ class OrgaCharacterForm(CharacterForm):
         if "plot" not in self.params["features"]:
             return
 
+        # Only process plots if the plots field is present in the form
+        if "plots" not in self.cleaned_data:
+            return
+
         # Add / remove plots
         selected = set(self.cleaned_data.get("plots", []))
         current = set(Plot.objects.filter(plotcharacterrel__character=instance))
@@ -448,6 +456,9 @@ class OrgaCharacterForm(CharacterForm):
         chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
+        # Only process relationships if relationship fields are present in the form
+        if not rel_data:
+            return
         for key, value in rel_data.items():
             match = re.match(r"rel_(\d+)", key)
             if not match:

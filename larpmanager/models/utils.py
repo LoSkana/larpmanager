@@ -219,27 +219,6 @@ def get_payment_details_path(assoc):
     return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, os.path.basename(assoc.slug) + ".enc")
 
 
-def get_payment_details(assoc):
-    """
-    Decrypt and retrieve payment details for association.
-
-    Args:
-        assoc: Association instance with encryption key
-
-    Returns:
-        dict: Decrypted payment details dictionary
-    """
-    cipher = Fernet(assoc.key)
-    encrypted_file_path = get_payment_details_path(assoc)
-    if not os.path.exists(encrypted_file_path):
-        return {}
-    with open(encrypted_file_path, "rb") as f:
-        encrypted_data = f.read()
-    data_bytes = cipher.decrypt(encrypted_data)
-    decrypted_data = json.loads(data_bytes.decode("utf-8"))
-    return decrypted_data
-
-
 def save_payment_details(assoc, payment_details):
     """
     Encrypt and save payment details for association.

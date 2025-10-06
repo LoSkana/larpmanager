@@ -29,6 +29,7 @@ from django.dispatch import receiver
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import get_payment_details
 from larpmanager.accounting.gateway import (
     get_paypal_form,
     get_redsys_form,
@@ -65,7 +66,7 @@ from larpmanager.models.form import (
     RegistrationQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import generate_id, get_payment_details
+from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge

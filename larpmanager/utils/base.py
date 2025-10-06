@@ -22,13 +22,13 @@ from django.conf import settings as conf_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_assoc_permission_feature, get_cache_index_permission
 from larpmanager.cache.role import get_assoc_roles, has_assoc_permission
 from larpmanager.models.association import Association
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.utils import get_payment_details
 from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
