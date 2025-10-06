@@ -512,7 +512,7 @@ def handle_faction_pre_delete(instance):
     Args:
         instance: Faction instance being deleted
     """
-    for char in instance.event.characters.all():
+    for char in instance.event.character_set.all():
         remove_char_pdf(char)
 
 
