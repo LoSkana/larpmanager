@@ -184,40 +184,51 @@ def clean_sender(name):
     return name
 
 
-def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_to=None):
+def my_send_simple_mail(
+    subj: str,
+    body: str,
+    m_email: str,
+    assoc_id: int | None = None,
+    run_id: int | None = None,
+    reply_to: str | None = None,
+) -> None:
     """Send email with association/event-specific configuration.
 
     Handles custom SMTP settings, sender addresses, BCC lists, and email formatting
-    based on association and event configuration.
+    based on association and event configuration. Prioritizes event-level settings
+    over association-level settings when both are available.
 
     Args:
-        subj (str): Email subject
-        body (str): Email body (HTML)
-        m_email (str): Recipient email address
-        assoc_id (int, optional): Association ID for custom settings
-        run_id (int, optional): Run ID for event-specific settings
-        reply_to (str, optional): Reply-to email address
+        subj: Email subject line
+        body: Email body content (HTML format)
+        m_email: Recipient email address
+        assoc_id: Association ID for custom SMTP settings and sender configuration
+        run_id: Run ID for event-specific SMTP settings (overrides association settings)
+        reply_to: Custom Reply-To email address header
 
     Side effects:
-        Sends email using configured SMTP settings
+        Sends email using configured SMTP settings or default connection
 
     Raises:
-        Exception: Re-raises email sending exceptions after logging
+        Exception: Re-raises email sending exceptions after logging error details
     """
     hdr = {}
     bcc = []
 
+    # Initialize with default LarpManager sender configuration
     connection = None
     sender_email = "info@larpmanager.com"
     sender = f"LarpManager <{sender_email}>"
     event_settings = False
 
     try:
-        # Event confs: to apply only if email params are set up
+        # Apply event-level configuration if run_id is provided and SMTP is configured
         if run_id:
             run = Run.objects.get(pk=run_id)
             event = run.event
             email_host_user = event.get_config("mail_server_host_user", "")
+
+            # Only apply event settings if SMTP host user is configured
             if email_host_user:
                 sender_email = email_host_user
                 sender = f"{clean_sender(event.name)} <{sender_email}>"
@@ -230,13 +241,15 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
                 )
                 event_settings = True
 
-        # Assoc confs: to apply
+        # Apply association-level configuration if assoc_id is provided
         if assoc_id:
             assoc = Association.objects.get(pk=assoc_id)
+
+            # Add association main email to BCC if configured
             if assoc.get_config("mail_cc", False) and assoc.main_mail:
                 bcc.append(assoc.main_mail)
 
-            # See if we have to apply custom mail settings
+            # Apply custom SMTP settings if configured (only if event settings not already applied)
             email_host_user = assoc.get_config("mail_server_host_user", "")
             if email_host_user:
                 if not event_settings:
@@ -249,22 +262,25 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
                         password=assoc.get_config("mail_server_host_password", ""),
                         use_tls=assoc.get_config("mail_server_use_tls", False),
                     )
-            # See if we apply standard mail settings (if no event custom settings)
+            # Use standard LarpManager subdomain sender if no custom SMTP configured
             elif not event_settings:
                 sender_email = f"{assoc.slug}@larpmanager.com"
                 sender = f"{clean_sender(assoc.name)} <{sender_email}>"
 
+        # Fall back to default SMTP connection if no custom connection configured
         if not connection:
             connection = get_connection()
 
+        # Set custom Reply-To header if provided
         if reply_to:
             hdr["Reply-To"] = reply_to
 
+        # Add RFC-compliant unsubscribe header
         hdr["List-Unsubscribe"] = f"<mailto:{sender_email}>"
 
         body_html = body
 
-        # pprint(connection)
+        # Build multipart email with both plain text and HTML versions
         email = EmailMultiAlternatives(
             subj,
             remove_html_tags(body),
@@ -275,14 +291,18 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
             connection=connection,
         )
         email.attach_alternative(body_html, "text/html")
+
+        # Send the email
         email.send()
 
+        # Log email details in debug mode for troubleshooting
         if conf_settings.DEBUG:
             logger.info(f"Sending email to: {m_email}")
             logger.info(f"Subject: {subj}")
             logger.debug(f"Body: {body}")
 
     except Exception as e:
+        # Log the error and re-raise for caller handling
         mail_error(subj, body, e)
         raise e
 

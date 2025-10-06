@@ -29,6 +29,7 @@ from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
@@ -66,7 +67,7 @@ def send_membership_confirm(request, membership):
         "Once your admission is approved, you will be able to pay for the tickets for the "
         "events you have registered for."
     )
-    amount = int(membership.assoc.get_config("membership_fee", "0"))
+    amount = int(get_assoc_config(membership.assoc_id, "membership_fee", "0"))
     if amount:
         body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "
@@ -76,15 +77,11 @@ def send_membership_confirm(request, membership):
     my_send_mail(subj, body, profile, membership)
 
 
-@receiver(pre_save, sender=AccountingItemMembership)
-def save_accounting_item_membership(sender, instance, *args, **kwargs):
+def handle_membership_payment_notification(instance):
     """Send notification when membership fee payment is received.
 
     Args:
-        sender: AccountingItemMembership model class
         instance: AccountingItemMembership instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends payment confirmation email to member
@@ -98,6 +95,33 @@ def save_accounting_item_membership(sender, instance, *args, **kwargs):
     subj = hdr(instance) + _("Membership fee payment %(year)s") % {"year": instance.year}
     body = _("The payment of your membership fee for this year has been received") + "!"
     my_send_mail(subj, body, instance.member, instance)
+
+
+@receiver(pre_save, sender=AccountingItemMembership)
+def save_accounting_item_membership(sender, instance, *args, **kwargs):
+    handle_membership_payment_notification(instance)
+
+
+def handle_badge_assignment_notifications(instance, pk_set):
+    """Handle badge assignment notifications for a set of members.
+
+    Args:
+        instance: Badge instance that was assigned
+        pk_set: Set of member IDs who received the badge
+
+    Side effects:
+        Sends badge achievement notification emails to members
+    """
+    for pk in pk_set:
+        m = Member.objects.get(pk=pk)
+        activate(m.language)
+        badge = instance.show(m.language)
+        subj = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
+        body = _("You have been awarded an achievement") + "!" + "<br /><br />"
+        body += _("Description") + f": {badge['descr']}<br /><br />"
+        url = get_url(f"public/{m.id}/", instance)
+        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": url} + "."
+        my_send_mail(subj, body, m, instance)
 
 
 def badges_changed(sender, **kwargs):
@@ -117,16 +141,7 @@ def badges_changed(sender, **kwargs):
     # model = kwargs.pop("model", None)
     pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
 
-    for pk in pk_set:
-        m = Member.objects.get(pk=pk)
-        activate(m.language)
-        badge = instance.show(m.language)
-        subj = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
-        body = _("You have been awarded an achievement") + "!" + "<br /><br />"
-        body += _("Description") + f": {badge['descr']}<br /><br />"
-        url = get_url(f"public/{m.id}/", instance)
-        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": url} + "."
-        my_send_mail(subj, body, m, instance)
+    handle_badge_assignment_notifications(instance, pk_set)
 
 
 m2m_changed.connect(badges_changed, sender=Badge.members.through)
@@ -153,8 +168,8 @@ def notify_membership_approved(member, resp):
         body += " " + _("More details") + f": {resp}"
 
     # Check if you have payments to make
-    assoc = member.membership.assoc
-    regs = member.registrations.filter(run__event__assoc=assoc, run__start__gte=datetime.now().date())
+    assoc_id = member.membership.assoc_id
+    regs = member.registrations.filter(run__event__assoc_id=assoc_id, run__start__gte=datetime.now().date())
     membership_fee = False
     reg_list = []
     for registration in regs:
@@ -178,7 +193,7 @@ def notify_membership_approved(member, resp):
             + ", ".join(reg_list)
         )
 
-    if membership_fee and assoc.get_config("membership_fee", 0):
+    if membership_fee and get_assoc_config(assoc_id, "membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
@@ -209,14 +224,11 @@ def notify_membership_reject(member, resp):
     my_send_mail(subj, body, member, member.membership)
 
 
-@receiver(pre_save, sender=HelpQuestion)
-def notify_help_question(sender, instance, **kwargs):
+def handle_help_question_notification(instance):
     """Send notifications for help questions and answers.
 
     Args:
-        sender: HelpQuestion model class
         instance: HelpQuestion instance being saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends notifications to organizers for questions or to users for answers
@@ -265,6 +277,11 @@ def notify_help_question(sender, instance, **kwargs):
         my_send_mail(subj, body, mb, instance)
 
 
+@receiver(pre_save, sender=HelpQuestion)
+def notify_help_question(sender, instance, **kwargs):
+    handle_help_question_notification(instance)
+
+
 def get_help_email(instance):
     """Generate subject and body for help question notification.
 
@@ -280,14 +297,11 @@ def get_help_email(instance):
     return subj, body
 
 
-@receiver(pre_save, sender=ChatMessage)
-def notify_chat_message(sender, instance, **kwargs):
+def handle_chat_message_notification(instance):
     """Send notification for new chat messages.
 
     Args:
-        sender: ChatMessage model class
         instance: ChatMessage instance being saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Sends notification email to message receiver
@@ -299,6 +313,11 @@ def notify_chat_message(sender, instance, **kwargs):
     url = get_url(f"chat/{instance.sender.id}/", instance)
     body = f"<br /><br />{instance.message} (<a href='{url}'>" + _("reply here") + "</a>)"
     my_send_mail(subj, body, instance.receiver, instance)
+
+
+@receiver(pre_save, sender=ChatMessage)
+def notify_chat_message(sender, instance, **kwargs):
+    handle_chat_message_notification(instance)
 
 
 # ACTIVATION ACCOUNT

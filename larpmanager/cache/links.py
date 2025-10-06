@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+from django.http import HttpRequest
 
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
@@ -35,7 +36,7 @@ from larpmanager.utils.auth import is_lm_admin
 logger = logging.getLogger(__name__)
 
 
-def cache_event_links(request):
+def cache_event_links(request: HttpRequest) -> dict:
     """Get cached event navigation links for authenticated user.
 
     Builds and caches navigation context including registrations, roles,
@@ -45,24 +46,26 @@ def cache_event_links(request):
         request: Django HTTP request with authenticated user and association
 
     Returns:
-        dict: Navigation context with reg_menu, roles, and accessible runs
+        Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
     """
     ctx = {}
+    # Skip if not authenticated or no association
     if not request.user.is_authenticated or request.assoc["id"] == 0:
         return ctx
 
+    # Return cached data if available
     ctx = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
     if ctx:
-        # logger.debug(f"Retrieved cached event links for user {request.user.id}, assoc {request.assoc['id']}")
         return ctx
 
+    # Build navigation context from scratch
     ctx = {}
     ref = datetime.now() - timedelta(days=10)
     ref = ref.date()
 
     member = request.user.member
 
-    # get future events
+    # Get user's active registrations for upcoming events
     que = Registration.objects.filter(member=member, run__end__gte=ref)
     que = que.filter(cancellation_date__isnull=True, run__event__assoc_id=request.assoc["id"])
     que = que.select_related("run", "run__event")
@@ -70,29 +73,31 @@ def cache_event_links(request):
 
     assoc_id = request.assoc["id"]
 
-    # collect number and ids of assoc_roles
+    # Collect association-level roles
     ctx["assoc_role"] = {}
     for ar in member.assoc_roles.filter(assoc_id=assoc_id):
         ctx["assoc_role"][ar.number] = ar.id
-    # if lm admin, put assoc role admin
+    # Grant admin role to LarpManager admins
     if is_lm_admin(request):
         ctx["assoc_role"][1] = 1
 
-    # for each event, collect number and ids of event_roles
+    # Collect event-level roles
     ctx["event_role"] = {}
     for er in member.event_roles.filter(event__assoc_id=assoc_id).select_related("event"):
         if er.event.slug not in ctx["event_role"]:
             ctx["event_role"][er.event.slug] = {}
         ctx["event_role"][er.event.slug][er.number] = er.id
 
-    # get all runs access
+    # Build accessible runs list based on user's roles
     ctx["all_runs"] = {}
     ctx["open_runs"] = {}
     all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
     admin = 1 in ctx["assoc_role"]
     for r in all_runs:
+        # Skip deleted events
         if r.event.deleted:
             continue
+        # Determine user's roles for this run
         roles = None
         if admin:
             roles = [1]
@@ -101,6 +106,7 @@ def cache_event_links(request):
         if not roles:
             continue
         ctx["all_runs"][r.id] = roles
+        # Add to open runs if not completed or cancelled
         if r.development not in (DevelopStatus.DONE, DevelopStatus.CANC):
             ctx["open_runs"][r.id] = {
                 "slug": r.get_slug(),
@@ -110,8 +116,10 @@ def cache_event_links(request):
                 "k": (r.start if r.start else datetime.max.date()),
             }
 
+    # Determine if topbar should be shown
     ctx["topbar"] = ctx["event_role"] or ctx["assoc_role"]
 
+    # Cache for 60 seconds
     cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, 60)
     return ctx
 
@@ -140,14 +148,11 @@ def reset_run_event_links(event):
         reset_event_links(user.member.id, event.assoc_id)
 
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_event_links(sender, instance, **kwargs):
-    """Reset event links when registration changes.
+def handle_registration_event_links_post_save(instance):
+    """Handle registration post-save event link reset.
 
     Args:
-        sender: Registration model class
         instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
 
     Side effects:
         Clears event link cache for the registered member
@@ -158,63 +163,28 @@ def post_save_registration_event_links(sender, instance, **kwargs):
     reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
 
 
+@receiver(post_save, sender=Registration)
+def post_save_registration_event_links(sender, instance, **kwargs):
+    handle_registration_event_links_post_save(instance)
+
+
 @receiver(post_save, sender=Event)
 def post_save_event_links(sender, instance, **kwargs):
-    """Reset event links when event changes.
-
-    Args:
-        sender: Event model class
-        instance: Event instance that was saved
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all related users
-    """
     reset_run_event_links(instance)
 
 
 @receiver(post_delete, sender=Event)
 def post_delete_event_links(sender, instance, **kwargs):
-    """Reset event links when event is deleted.
-
-    Args:
-        sender: Event model class
-        instance: Event instance that was deleted
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all related users
-    """
     reset_run_event_links(instance)
 
 
 @receiver(post_save, sender=Run)
 def post_save_run_links(sender, instance, **kwargs):
-    """Reset event links when run changes.
-
-    Args:
-        sender: Run model class
-        instance: Run instance that was saved
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all users with access to the event
-    """
     reset_run_event_links(instance.event)
 
 
 @receiver(post_delete, sender=Run)
 def post_delete_run_links(sender, instance, **kwargs):
-    """Reset event links when run is deleted.
-
-    Args:
-        sender: Run model class
-        instance: Run instance that was deleted
-        **kwargs: Additional keyword arguments
-
-    Side effects:
-        Clears event link cache for all users with access to the event
-    """
     reset_run_event_links(instance.event)
 
 

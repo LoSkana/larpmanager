@@ -22,6 +22,7 @@ from datetime import datetime, timedelta
 
 from django.db.models import Count
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
@@ -61,21 +62,19 @@ def get_membership_fee_year(assoc_id, year=None):
     )
 
 
-def check_run_deadlines(runs):
-    """Check deadline compliance for registrations across multiple runs.
-
-    Analyzes registrations to identify users missing deadlines for
-    membership, payments, profile completion, and casting preferences.
+def check_run_deadlines(runs: list) -> list:
+    """Check deadline compliance for registrations.
 
     Args:
-        runs (list): List of Run instances to check
+        runs: Run instances to check
 
     Returns:
-        list: List of dictionaries with deadline violation data per run
+        List of dicts with deadline violations per run
     """
     if not runs:
         return []
 
+    # Collect all run and member IDs
     run_ids = [run.id for run in runs]
     regs_id = []
     members_id = []
@@ -85,6 +84,7 @@ def check_run_deadlines(runs):
         all_regs[run.id] = []
         members_map[run.id] = []
 
+    # Query active registrations
     reg_que = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True)
     reg_que = reg_que.exclude(ticket__tier=TicketTier.WAITING)
     for reg in reg_que:
@@ -92,12 +92,15 @@ def check_run_deadlines(runs):
         members_id.append(reg.member_id)
         all_regs[reg.run_id].append(reg)
 
-    tolerance = int(runs[0].event.assoc.get_config("deadlines_tolerance", "30"))
+    # Get tolerance setting
+    tolerance = int(get_assoc_config(runs[0].event.assoc_id, "deadlines_tolerance", "30"))
 
+    # Check membership feature
     assoc_id = runs[0].event.assoc_id
     now = datetime.now()
     uses_membership = "membership" in get_assoc_features(assoc_id)
 
+    # Load memberships and fees
     memberships = {el.member_id: el for el in Membership.objects.filter(assoc_id=assoc_id, member_id__in=members_id)}
     fees = {}
     if uses_membership:
@@ -105,27 +108,33 @@ def check_run_deadlines(runs):
 
     all_res = []
 
+    # Check each run
     for run in runs:
         if not run.start:
             continue
 
+        # Initialize collectors for different deadline types
         collect = {
             k: [] for k in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del", "profile", "profile_del"]
         }
         features = get_event_features(run.event.id)
         player_ids = []
 
+        # Check each registration
         for reg in all_regs[run.id]:
             if reg.ticket and reg.ticket.tier not in [TicketTier.STAFF, TicketTier.NPC]:
                 player_ids.append(reg.member_id)
 
+            # Check membership or profile deadlines
             if uses_membership:
                 deadlines_membership(collect, features, fees, memberships, now, reg, run, tolerance)
             else:
                 deadlines_profile(collect, features, memberships, now, reg, run, tolerance)
 
+            # Check payment deadlines
             deadlines_payment(collect, features, reg, tolerance)
 
+        # Check casting deadlines
         deadlines_casting(collect, features, player_ids, run)
         result = {k: get_users_data(v) for k, v in collect.items()}
         result["run"] = run

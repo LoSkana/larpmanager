@@ -23,6 +23,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.utils.tasks import background_auto
 
@@ -43,6 +44,15 @@ def process_payment(invoice_id):
 
 
 def prepare_xml(inv, einvoice):
+    """Generate XML structure for Italian electronic invoice.
+
+    Args:
+        inv: Invoice instance containing billing data
+        einvoice: Electronic invoice configuration object
+
+    Returns:
+        str: XML string formatted according to Italian e-invoice standards
+    """
     member = inv.member
     name_number = 2
 
@@ -61,69 +71,90 @@ def prepare_xml(inv, einvoice):
     return xml_str
 
 
-def _einvoice_header(einvoice, inv, member, name_number, root):
+def _einvoice_header(
+    einvoice: "ElectronicInvoice",
+    inv: "PaymentInvoice",
+    member: "Member",
+    name_number: int,
+    root: ET.Element
+) -> None:
     """Create the header section of an electronic invoice XML structure.
 
     Builds transmission data and supplier/customer information according
     to Italian e-invoice standards for electronic billing compliance.
 
     Args:
-        einvoice: Electronic invoice configuration object
-        inv: Invoice instance containing billing data
-        member: Member object with customer information
-        name_number (str): Unique identifier for the invoice
+        einvoice: Electronic invoice configuration object with progressive number
+        inv: Invoice instance containing billing data and association ID
+        member: Member object with customer information and residence
+        name_number: Expected number of name components (typically 2)
         root: XML root element to append header data to
 
-    Returns:
-        None: Function modifies root XML element in-place
+    Side effects:
+        Modifies root XML element in-place by adding FatturaElettronicaHeader
+        with transmission data, supplier (association), and customer (member) details
     """
-    # Invoicelettronicaheader
+    # Create main invoice header element
     header = ET.SubElement(root, "FatturaElettronicaHeader")
 
-    # Data
+    # Build transmission data section with sender and destination identifiers
     dati_trasmissione = ET.SubElement(header, "DatiTrasmissione")
     id_trasmittente = ET.SubElement(dati_trasmissione, "IdTrasmittente")
+    # Set Italy as default country code for electronic invoicing
     ET.SubElement(id_trasmittente, "IdPaese").text = "IT"
-    ET.SubElement(id_trasmittente, "IdCodice").text = inv.assoc.get_config("einvoice_idcodice")
+    ET.SubElement(id_trasmittente, "IdCodice").text = get_assoc_config(inv.assoc_id, "einvoice_idcodice")
+    # Progressive invoice number padded to 10 digits
     ET.SubElement(dati_trasmissione, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
+    # Standard format for private entities
     ET.SubElement(dati_trasmissione, "FormatoTrasmissione").text = "FPR12"
-    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = inv.assoc.get_config("einvoice_codicedestinatario")
+    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = get_assoc_config(
+        inv.assoc_id, "einvoice_codicedestinatario"
+    )
 
-    # Transferor (data of the association)
+    # Build supplier section - association information as service provider
     cedente_prestatore = ET.SubElement(header, "CedentePrestatore")
     dati_anagrafici = ET.SubElement(cedente_prestatore, "DatiAnagrafici")
+    # Add VAT identification details
     id_fiscale_iva = ET.SubElement(dati_anagrafici, "IdFiscaleIVA")
     ET.SubElement(id_fiscale_iva, "IdPaese").text = "IT"
-    ET.SubElement(id_fiscale_iva, "IdCodice").text = inv.assoc.get_config("einvoice_partitaiva")
+    ET.SubElement(id_fiscale_iva, "IdCodice").text = get_assoc_config(inv.assoc_id, "einvoice_partitaiva")
+    # Add association name and tax regime
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
-    ET.SubElement(anagrafica, "Denominazione").text = inv.assoc.get_config("einvoice_denominazione")
-    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = inv.assoc.get_config("einvoice_regimefiscale")
+    ET.SubElement(anagrafica, "Denominazione").text = get_assoc_config(inv.assoc_id, "einvoice_denominazione")
+    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = get_assoc_config(inv.assoc_id, "einvoice_regimefiscale")
+    # Add association registered address
     sede = ET.SubElement(cedente_prestatore, "Sede")
-    ET.SubElement(sede, "Indirizzo").text = inv.assoc.get_config("einvoice_indirizzo")
-    ET.SubElement(sede, "NumeroCivico").text = inv.assoc.get_config("einvoice_numerocivico")
-    ET.SubElement(sede, "Cap").text = inv.assoc.get_config("einvoice_cap")
-    ET.SubElement(sede, "Comune").text = inv.assoc.get_config("einvoice_comune")
-    ET.SubElement(sede, "Provincia").text = inv.assoc.get_config("einvoice_provincia")
-    ET.SubElement(sede, "Nazione").text = inv.assoc.get_config("einvoice_nazione")
+    ET.SubElement(sede, "Indirizzo").text = get_assoc_config(inv.assoc_id, "einvoice_indirizzo")
+    ET.SubElement(sede, "NumeroCivico").text = get_assoc_config(inv.assoc_id, "einvoice_numerocivico")
+    ET.SubElement(sede, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap")
+    ET.SubElement(sede, "Comune").text = get_assoc_config(inv.assoc_id, "einvoice_comune")
+    ET.SubElement(sede, "Provincia").text = get_assoc_config(inv.assoc_id, "einvoice_provincia")
+    ET.SubElement(sede, "Nazione").text = get_assoc_config(inv.assoc_id, "einvoice_nazione")
 
-    # Referred
+    # Build customer section - member receiving the invoice
     cessionario_committente = ET.SubElement(header, "CessionarioCommittente")
     dati_anagrafici = ET.SubElement(cessionario_committente, "DatiAnagrafici")
     ET.SubElement(dati_anagrafici, "CodiceFiscale").text = member.fiscal_code
+    # Parse member name from legal name if available
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
     if member.legal_name:
         splitted = member.legal_name.rsplit(" ", 1)
+        # Split into first and last name if exactly 2 parts
         if len(splitted) == name_number:
             member.name, member.surname = splitted
         else:
             member.name = splitted[0]
     ET.SubElement(anagrafica, "Nome").text = member.name
     ET.SubElement(anagrafica, "Cognome").text = member.surname
+    # Parse residence address from pipe-separated format: Country|Province|City|ZIP|Street|Number
     aux = member.residence_address.split("|")
+    # Handle Italian vs foreign addresses differently
     if aux[0] == "IT":
         aux[1] = aux[1].replace("IT-", "")
     else:
+        # Foreign addresses use special province code
         aux[1] = "ESTERO"
+    # Add customer address details
     sede = ET.SubElement(cessionario_committente, "Sede")
     ET.SubElement(sede, "Indirizzo").text = aux[4]
     ET.SubElement(sede, "NumeroCivico").text = aux[5]
@@ -159,9 +190,9 @@ def _einvoice_body(einvoice, inv, root):
     ET.SubElement(dettaglio_linee, "Quantita").text = "1"
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
     ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
-    aliquotaiva = inv.assoc.get_config("einvoice_aliquotaiva", "")
+    aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "")
     ET.SubElement(dettaglio_linee, "AliquotaIVA").text = aliquotaiva
-    natura = inv.assoc.get_config("einvoice_natura", "")
+    natura = get_assoc_config(inv.assoc_id, "einvoice_natura", "")
     if natura:
         ET.SubElement(dettaglio_linee, "Natura").text = natura
 

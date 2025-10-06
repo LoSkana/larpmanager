@@ -31,7 +31,13 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import (
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationOption,
+    RegistrationQuestion,
+    WritingChoice,
+)
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
@@ -222,7 +228,7 @@ def _status_payment(register_text, run):
     return False
 
 
-def registration_status(run, user, my_regs=None, features_map=None, reg_count=None):
+def registration_status(run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None) -> bool:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements
@@ -462,40 +468,37 @@ def get_reduced_available_count(run):
     return math.floor(pat * ratio / 10.0) - red
 
 
-@receiver(pre_save, sender=Registration)
-def pre_save_registration_switch_event(sender, instance, **kwargs):
+def handle_registration_event_switch(registration):
     """Handle registration updates when switching between events.
 
     Args:
-        sender: The model class sending the signal
-        instance: The Registration instance being saved
-        **kwargs: Additional keyword arguments from the signal
+        registration: The Registration instance being saved
     """
-    if not instance.pk:
+    if not registration.pk:
         return
 
     try:
-        prev = Registration.objects.get(pk=instance.pk)
+        prev = Registration.objects.get(pk=registration.pk)
     except ObjectDoesNotExist:
         return
 
-    if prev.run.event_id == instance.run.event_id:
+    if prev.run.event_id == registration.run.event_id:
         return
 
     # look for similar ticket to update
-    ticket_name = instance.ticket.name
+    ticket_name = registration.ticket.name
     try:
-        instance.ticket = instance.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
+        registration.ticket = registration.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
     except ObjectDoesNotExist:
-        instance.ticket = None
+        registration.ticket = None
 
     # look for similar registration choice
-    for choice in RegistrationChoice.objects.filter(reg=instance):
+    for choice in RegistrationChoice.objects.filter(reg=registration):
         question_name = choice.question.name
         option_name = choice.option.name
         try:
-            choice.question = instance.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
-            choice.option = instance.run.event.get_elements(RegistrationOption).get(
+            choice.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
+            choice.option = registration.run.event.get_elements(RegistrationOption).get(
                 question=choice.question, name__iexact=option_name
             )
             choice.save()
@@ -504,10 +507,45 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
             choice.option = None
 
     # look for similar registration answer
-    for answer in RegistrationAnswer.objects.filter(reg=instance):
+    for answer in RegistrationAnswer.objects.filter(reg=registration):
         question_name = answer.question.name
         try:
-            answer.question = instance.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
+            answer.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
             answer.save()
         except ObjectDoesNotExist:
             answer.question = None
+
+
+@receiver(pre_save, sender=Registration)
+def pre_save_registration_switch_event(sender, instance, **kwargs):
+    handle_registration_event_switch(instance)
+
+
+def check_character_ticket_options(reg, char):
+    ticket_id = reg.ticket.id
+
+    to_delete = []
+
+    # get options
+    for choice in WritingChoice.objects.filter(element_id=char.id):
+        tickets_map = choice.option.tickets.values_list("pk", flat=True)
+        if tickets_map and ticket_id not in tickets_map:
+            to_delete.append(choice.id)
+
+    WritingChoice.objects.filter(pk__in=to_delete).delete()
+
+
+def save_registration_character_form(instance):
+    if not instance.member:
+        return
+
+    if not instance.ticket:
+        return
+
+    event = instance.run.event
+
+    for char in instance.characters.all():
+        check_character_ticket_options(instance, char)
+
+    for char in event.get_elements(Character).filter(player=instance.member):
+        check_character_ticket_options(instance, char)

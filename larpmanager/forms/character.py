@@ -91,11 +91,29 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Initialize character form with custom fields and configuration.
+
+        Sets up the character creation/editing form including faction selection,
+        dynamic custom fields based on event configuration, and optional
+        character completion workflow for approval processes.
+
+        Args:
+            *args: Positional arguments passed to parent form class
+            **kwargs: Keyword arguments passed to parent form class, must include
+                     'params' dict with event, run, and features configuration
+
+        Side effects:
+            - Creates self.details dict for additional field information
+            - Initializes faction selection and custom fields via _init_character
+            - Modifies form fields based on event configuration
+        """
         super().__init__(*args, **kwargs)
 
+        # Initialize storage for field details and metadata
         self.details = {}
 
+        # Set up character-specific fields including factions and custom questions
         self._init_character()
 
     def check_editable(self, question):
@@ -165,6 +183,11 @@ class CharacterForm(WritingForm, BaseWritingForm):
         self._init_custom_fields()
 
     def _init_factions(self):
+        """Initialize faction selection field for character form.
+
+        Sets up a multiple choice field for selectable factions if the faction
+        feature is enabled for the event.
+        """
         if "faction" not in self.params["features"]:
             return
 
@@ -238,6 +261,11 @@ class OrgaCharacterForm(CharacterForm):
         self._init_plots()
 
     def _init_character(self):
+        """Initialize character form fields based on features and event configuration.
+
+        Sets up factions, custom fields, player assignment, approval status,
+        mirror character choices, and special character fields.
+        """
         self._init_factions()
 
         self._init_custom_fields()
@@ -315,6 +343,11 @@ class OrgaCharacterForm(CharacterForm):
                 self.ordering_down[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
 
     def _save_plot(self, instance):
+        """Save plot associations for a character.
+
+        Args:
+            instance: Character instance to save plots for
+        """
         if "plot" not in self.params["features"]:
             return
 
@@ -342,6 +375,7 @@ class OrgaCharacterForm(CharacterForm):
             pr.save()
 
     def _init_px(self):
+        """Initialize PX (ability/delivery) form fields if PX feature is enabled."""
         if "px" not in self.params["features"]:
             return
 
@@ -377,6 +411,11 @@ class OrgaCharacterForm(CharacterForm):
             instance.px_delivery_list.set(self.cleaned_data["px_delivery_list"])
 
     def _init_factions(self):
+        """Initialize faction selection fields for character forms.
+
+        Sets up faction choice fields with proper widget configuration
+        when faction feature is enabled.
+        """
         if "faction" not in self.params["features"]:
             return
 
@@ -540,6 +579,10 @@ class OrgaWritingQuestionForm(MyForm):
         self.check_applicable = self.params["writing_typ"]
 
     def _init_type(self):
+        """Initialize character type field choices based on available writing question types.
+
+        Filters question types based on event features and existing usage.
+        """
         # Add type of character question to the available types
         que = self.params["event"].get_elements(WritingQuestion)
         que = que.filter(applicable=self.params["writing_typ"])
@@ -608,6 +651,15 @@ class OrgaWritingOptionForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Initialize form with feature-based field customization.
+
+        Args:
+            *args: Variable positional arguments passed to parent class
+            **kwargs: Variable keyword arguments passed to parent class
+
+        Side effects:
+            Modifies form fields based on available features and event configuration
+        """
         super().__init__(*args, **kwargs)
 
         if "question_id" in self.params:

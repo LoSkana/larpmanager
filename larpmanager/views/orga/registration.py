@@ -40,6 +40,7 @@ from larpmanager.accounting.registration import (
     get_reg_payments,
 )
 from larpmanager.cache.character import get_event_cache_all, reset_run
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import reset_event_features
 from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.cache.links import reset_run_event_links
@@ -58,7 +59,6 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.casting import AssignmentTrait, QuestType
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
@@ -382,6 +382,11 @@ def _orga_registrations_discount(ctx):
 
 
 def _orga_registrations_text_fields(ctx):
+    """Process editor-type registration questions and add them to context.
+
+    Args:
+        ctx: Context dictionary containing event and registration data
+    """
     # add editor type questions
     text_fields = []
     que = RegistrationQuestion.objects.filter(event=ctx["event"])
@@ -401,68 +406,101 @@ def _orga_registrations_text_fields(ctx):
 
 
 @login_required
-def orga_registrations(request, s):
-    """Display and manage event registrations for organizers.
+def orga_registrations(request: "HttpRequest", s: str) -> "HttpResponse":
+    """Display and manage comprehensive event registration list for organizers.
+
+    Provides detailed registration management interface with filtering, grouping,
+    character assignments, ticket types, membership status, accounting info, and
+    custom form responses. Supports CSV download and AJAX popup details.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object with user authentication
+        s: Event/run slug identifier
 
     Returns:
-        HttpResponse: Rendered registrations page or download/popup response
+        HttpResponse: Rendered registrations table template
+        JsonResponse: AJAX popup content or download file on POST
+
+    Side effects:
+        - Caches character and registration data
+        - Processes membership statuses for batch operations
+        - Calculates accounting totals and payment status
     """
+    # Verify user has permission to view registrations
     ctx = check_event_permission(request, s, "orga_registrations")
 
+    # Handle AJAX and download POST requests
     if request.method == "POST":
+        # Return popup detail view for specific registration/question
         if request.POST.get("popup") == "1":
             return registrations_popup(request, ctx)
 
+        # Generate and return CSV download of all registrations
         if request.POST.get("download") == "1":
             return download(ctx, Registration, "registration")
 
+    # Load all cached character, faction, and event data
     get_event_cache_all(ctx)
 
+    # Prepare registration context with characters, tickets, and questions
     _orga_registrations_prepare(ctx, request)
 
+    # Load discount information for all registered members
     _orga_registrations_discount(ctx)
 
+    # Configure custom character fields if feature enabled
     _orga_registrations_custom_character(ctx)
 
+    # Check if age-based question filtering is enabled
     ctx["registration_reg_que_age"] = ctx["event"].get_config("registration_reg_que_age", False)
 
+    # Initialize registration grouping dictionary
     ctx["reg_all"] = {}
 
+    # Query active (non-cancelled) registrations ordered by last update
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).order_by("-updated")
     ctx["reg_list"] = que.select_related("member")
 
+    # Batch-load membership statuses for all registered members
     ctx["memberships"] = {}
     if "membership" in ctx["features"]:
         members_id = []
         for r in ctx["reg_list"]:
             members_id.append(r.member_id)
+        # Create lookup dictionary for efficient membership access
         for el in Membership.objects.filter(assoc_id=ctx["a_id"], member_id__in=members_id):
             ctx["memberships"][el.member_id] = el
 
+    # Process each registration to add computed fields
     for r in ctx["reg_list"]:
+        # Add standard fields: characters, membership status, age
         _orga_registrations_standard(r, ctx)
 
+        # Add discount information if available
         if "discount" in ctx["features"]:
             if r.member_id in ctx["reg_discounts"]:
                 r.discounts = ctx["reg_discounts"][r.member_id]
 
+        # Add questbuilder trait information
         _orga_registrations_traits(r, ctx)
 
+        # Categorize by ticket type and add to appropriate group
         _orga_registrations_tickets(r, ctx)
 
+    # Sort registration groups for consistent display
     ctx["reg_all"] = sorted(ctx["reg_all"].items())
 
+    # Process editor-type question responses for popup display
     _orga_registrations_text_fields(ctx)
 
+    # Enable bulk upload functionality
     ctx["upload"] = "registrations"
     ctx["download"] = 1
+    # Enable export view if configured
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "registration"
 
+    # Load user's saved column visibility preferences
     ctx["default_fields"] = request.user.member.get_config(f"open_registration_{ctx['event'].id}", "[]")
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
@@ -627,6 +665,13 @@ def orga_registrations_edit(request, s, num):
 
 
 def _save_questbuilder(ctx, form, reg):
+    """Save quest type assignments from questbuilder form.
+
+    Args:
+        ctx: Context dictionary containing event and run data
+        form: Form containing quest type selections
+        reg: Registration object for the member
+    """
     for qt in QuestType.objects.filter(event=ctx["event"]):
         qt_id = f"qt_{qt.number}"
         tid = int(form.cleaned_data[qt_id])
@@ -647,6 +692,16 @@ def _save_questbuilder(ctx, form, reg):
 
 @login_required
 def orga_registrations_customization(request, s, num):
+    """Handle organization customization of player registration character relationships.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+        num: Character number identifier
+
+    Returns:
+        HttpResponse: Rendered edit form or redirect to registrations page
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
     get_char(ctx, num)
@@ -691,6 +746,17 @@ def orga_registration_discounts(request, s, num):
 
 @login_required
 def orga_registration_discount_add(request, s, num, dis):
+    """Add a discount to a member's registration.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Registration ID
+        dis: Discount ID
+
+    Returns:
+        HttpResponseRedirect: Redirect to registration discounts page
+    """
     ctx = check_event_permission(request, s, "orga_registrations")
     get_registration(ctx, num)
     get_discount(ctx, dis)
@@ -842,8 +908,7 @@ def orga_pre_registrations(request, s):
     ctx = check_event_permission(request, s, "orga_pre_registrations")
     ctx["dc"] = get_pre_registration(ctx["event"])
 
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+    ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 

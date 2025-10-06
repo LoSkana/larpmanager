@@ -35,6 +35,7 @@ from django.views.decorators.http import require_POST
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.registration import (
     PreRegistrationForm,
@@ -53,7 +54,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import AssocTextType
 from larpmanager.models.event import (
     Event,
     EventTextType,
@@ -81,54 +82,68 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def pre_register(request, s=""):
-    """Handle pre-registration for events.
+def pre_register(request: "HttpRequest", s: str = "") -> "HttpResponse":
+    """Handle pre-registration for events before full registration opens.
 
-    Allows users to register interest in events before full registration opens.
-    Can target specific events or show all available events.
+    Allows users to express interest in events and set preference order,
+    optionally with additional information. Manages list of existing
+    pre-registrations and creates new ones.
 
     Args:
-        request: Django HTTP request object (must be authenticated)
-        s: Optional event slug to pre-register for specific event
+        request: HTTP request object with authenticated user
+        s: Optional event slug to pre-register for specific event, empty shows all
 
     Returns:
-        HttpResponse: Pre-registration form or redirect after processing
+        HttpResponse: Pre-registration form page or redirect after successful save
+
+    Side effects:
+        - Creates PreRegistration records linking member to events
+        - Saves preference order and additional info
     """
+    # Handle specific event pre-registration vs all events listing
     if s:
+        # Get context for specific event and verify pre-register feature is active
         ctx = get_event(request, s)
         ctx["sel"] = ctx["event"].id
         check_event_feature(request, ctx, "pre_register")
     else:
+        # Show all available events for pre-registration
         ctx = def_user_ctx(request)
         ctx.update({"features": get_assoc_features(request.assoc["id"])})
 
-    # get events
-    ctx["choices"] = []
-    ctx["already"] = []
+    # Initialize event lists for template
+    ctx["choices"] = []      # Events available for new pre-registration
+    ctx["already"] = []      # Events user has already pre-registered for
     ctx["member"] = request.user.member
 
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    ctx["preferences"] = assoc.get_config("pre_reg_preferences", False)
+    # Check if preference ordering is enabled
+    ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
+    # Build set of already pre-registered event IDs
     ch = {}
     que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])
     for el in que.order_by("pref"):
         ch[el.event.id] = True
         ctx["already"].append(el)
 
+    # Find events available for pre-registration
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
+        # Skip if pre-registration not active for this event
         if not r.get_config("pre_register_active", False):
             continue
 
+        # Skip if user already pre-registered
         if r.id in ch:
             continue
 
         ctx["choices"].append(r)
 
+    # Handle form submission for new pre-registration
     if request.method == "POST":
         form = PreRegistrationForm(request.POST, ctx=ctx)
         if form.is_valid():
             nr = form.cleaned_data["new_event"]
+            # Only save if an event was actually selected
             if nr != "":
                 with transaction.atomic():
                     PreRegistration(
@@ -412,6 +427,14 @@ def register_info(request, ctx, form, reg, dis):
 
 
 def init_form_submitted(ctx, form, request, reg=None):
+    """Initialize form submission data in context.
+
+    Args:
+        ctx: Context dictionary to update
+        form: Form object containing questions
+        request: HTTP request object with POST data
+        reg: Registration object (optional)
+    """
     ctx["submitted"] = request.POST.dict()
     if hasattr(form, "questions"):
         for question in form.questions:
@@ -493,6 +516,20 @@ def _apply_ticket(ctx, tk):
 
 
 def _check_redirect_registration(request, ctx, event, secret_code):
+    """Check if registration should be redirected based on event status and settings.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary with event and run data
+        event: Event instance
+        secret_code: Optional secret code for registration access
+
+    Returns:
+        HttpResponse for redirect/error or None if registration can proceed
+
+    Raises:
+        Http404: If wrong registration secret code is provided
+    """
     if "closed" in ctx["run"].status:
         return render(request, "larpmanager/event/closed.html", ctx)
 
@@ -523,6 +560,15 @@ def _add_bring_friend_discounts(ctx):
 
 
 def _register_prepare(ctx, reg):
+    """Prepare registration context with payment information and locks.
+
+    Args:
+        ctx: Context dictionary to update
+        reg: Existing registration instance or None for new registration
+
+    Returns:
+        bool: True if this is a new registration, False if updating existing
+    """
     new_reg = True
     ctx["tot_payed"] = 0
     if reg:
@@ -666,6 +712,17 @@ def discount(request, s):
 
 
 def _check_discount(disc, member, run, event):
+    """Validate if a discount can be applied to a member's registration.
+
+    Args:
+        disc: Discount object to validate
+        member: Member attempting to use discount
+        run: Event run instance
+        event: Event instance
+
+    Returns:
+        str or None: Error message if invalid, None if valid
+    """
     if _is_discount_invalid_for_registration(disc, member, run):
         return _("Discounts only applicable with new registrations")
 
@@ -734,6 +791,15 @@ def discount_list(request, s):
 
 @login_required
 def unregister(request, s):
+    """Handle user self-unregistration from an event.
+
+    Args:
+        request: HTTP request object from authenticated user
+        s: Event slug string
+
+    Returns:
+        HttpResponse: Confirmation form or redirect to accounting page after cancellation
+    """
     ctx = get_event_run(request, s, signup=True, status=True)
 
     # check if user is actually registered
@@ -756,6 +822,15 @@ def unregister(request, s):
 
 @login_required
 def gift(request, s):
+    """Display gift registrations and their payment status for the current user.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+
+    Returns:
+        Rendered gift.html template with registration list and payment info
+    """
     ctx = get_event_run(request, s, signup=False, slug="gift", status=True)
     check_registration_open(ctx, request)
 

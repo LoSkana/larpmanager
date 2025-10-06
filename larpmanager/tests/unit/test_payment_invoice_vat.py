@@ -46,7 +46,7 @@ class TestPaymentFunctions(BaseTestCase):
         """Test get_payment_fee when no fee is configured"""
         assoc = self.get_association()
 
-        result = get_payment_fee(assoc, "paypal")
+        result = get_payment_fee(assoc.id, "paypal")
 
         self.assertEqual(result, 0.0)
 
@@ -56,7 +56,7 @@ class TestPaymentFunctions(BaseTestCase):
         mock_get_details.return_value = {"paypal_fee": "2.5"}
 
         assoc = self.get_association()
-        result = get_payment_fee(assoc, "paypal")
+        result = get_payment_fee(assoc.id, "paypal")
 
         self.assertEqual(result, 2.5)
 
@@ -66,7 +66,7 @@ class TestPaymentFunctions(BaseTestCase):
         mock_get_details.return_value = {"stripe_fee": "3,75"}
 
         assoc = self.get_association()
-        result = get_payment_fee(assoc, "stripe")
+        result = get_payment_fee(assoc.id, "stripe")
 
         self.assertEqual(result, 3.75)
 
@@ -273,4 +273,3 @@ class TestVATFunctions(BaseTestCase):
         result = get_previous_sum(payment2, AccountingItemPayment)
 
         self.assertEqual(result, Decimal("50.00"))
-

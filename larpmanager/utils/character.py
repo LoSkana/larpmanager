@@ -297,6 +297,12 @@ def get_chars_relations(text, chs_numbers):
 
 
 def check_missing_mandatory(ctx):
+    """Check for missing mandatory character writing fields.
+
+    Args:
+        ctx: Context dictionary containing character and event data.
+              Updates ctx with 'missing_fields' list.
+    """
     ctx["missing_fields"] = []
     aux = []
 

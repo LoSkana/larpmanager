@@ -25,6 +25,7 @@ import json
 import logging
 import math
 import re
+from decimal import Decimal
 from pprint import pformat
 
 import requests
@@ -35,7 +36,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.dispatch import receiver
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
@@ -198,18 +199,15 @@ def get_paypal_form(request, ctx, invoice, amount):
     ctx["paypal_form"] = PayPalPaymentsForm(initial=paypal_dict)
 
 
-@receiver(valid_ipn_received)
-def paypal_webhook(sender, **kwargs):
+def handle_valid_paypal_ipn(ipn_obj):
     """Handle valid PayPal IPN notifications.
 
     Args:
-        sender: IPN object from PayPal
-        **kwargs: Additional keyword arguments
+        ipn_obj: IPN object from PayPal
 
     Returns:
         Result from invoice_received_money or None
     """
-    ipn_obj = sender
     if ipn_obj.payment_status == ST_PP_COMPLETED:
         # WARNING !
         # Check that the receiver email is the same we previously
@@ -228,6 +226,34 @@ def paypal_webhook(sender, **kwargs):
         return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
 
 
+@receiver(valid_ipn_received)
+def paypal_webhook(sender, **kwargs):
+    """Handle valid PayPal IPN notifications.
+
+    Args:
+        sender: IPN object from PayPal
+        **kwargs: Additional keyword arguments
+
+    Returns:
+        Result from invoice_received_money or None
+    """
+    return handle_valid_paypal_ipn(sender)
+
+
+def handle_invalid_paypal_ipn(ipn_obj):
+    """Handle invalid PayPal IPN notifications.
+
+    Args:
+        ipn_obj: Invalid IPN object from PayPal
+    """
+    if ipn_obj:
+        logger.info(f"PayPal IPN object: {ipn_obj}")
+    # TODO send mail
+    body = pformat(ipn_obj)
+    logger.info(f"PayPal IPN body: {body}")
+    notify_admins("paypal ko", body)
+
+
 @receiver(invalid_ipn_received)
 def paypal_ko_webhook(sender, **kwargs):
     """Handle invalid PayPal IPN notifications.
@@ -236,13 +262,7 @@ def paypal_ko_webhook(sender, **kwargs):
         sender: Invalid IPN object from PayPal
         **kwargs: Additional keyword arguments
     """
-    ipn_obj = sender
-    if ipn_obj:
-        logger.info(f"PayPal IPN object: {ipn_obj}")
-    # TODO send mail
-    body = pformat(ipn_obj)
-    logger.info(f"PayPal IPN body: {body}")
-    notify_admins("paypal ko", body)
+    handle_invalid_paypal_ipn(sender)
 
 
 def get_stripe_form(request, ctx, invoice, amount):
@@ -411,7 +431,7 @@ def redsys_invoice_cod():
     raise ValueError("Too many attempts to generate the code")
 
 
-def get_redsys_form(request, ctx, invoice, amount):
+def get_redsys_form(request: HttpRequest, ctx: dict, invoice, amount: Decimal) -> None:
     """Create Redsys payment form with encrypted parameters.
 
     Args:
@@ -687,68 +707,74 @@ class RedSysClient:
             "Ds_Signature": signature,
         }
 
-    def redsys_check_response(self, signature, b64_merchant_parameters, ctx):
+    def redsys_check_response(self, signature: str, b64_merchant_parameters: str, ctx: dict) -> str | None:
+        """Verify Redsys payment response signature and extract order number.
+
+        Validates the cryptographic signature of payment response from Redsys gateway
+        to ensure authenticity and prevent tampering. Checks payment status and
+        sends notifications to executives on failure.
+
+        Args:
+            signature: Received HMAC-SHA256 signature from Redsys
+            b64_merchant_parameters: Base64-encoded JSON merchant parameters
+            ctx: Context dictionary containing association ID (a_id)
+
+        Returns:
+            str: Order number if signature valid and payment successful
+            None: If signature invalid or payment failed
+
+        Side effects:
+            - Sends error emails to association executives on payment failure
+            - Logs error messages for signature verification failures
         """
-        Method to check received Ds_Signature with the one we extract from
-        Ds_MerchantParameters data.
-        We remove non alphanumeric characters before doing the comparison
-        :param signature: Received signature
-        :param b64_merchant_parameters: Received parameters
-        :return: True if signature is confirmed, False if not
-        """
+        # Decode Base64-encoded merchant parameters from Redsys
         merchant_parameters = json.loads(base64.b64decode(b64_merchant_parameters).decode())
 
+        # Get association for executive notifications
         assoc = Association.objects.get(pk=ctx["a_id"])
-        # logger.debug(f"Merchant parameters: {merchant_parameters}")
 
+        # Validate response code presence
         if "Ds_Response" not in merchant_parameters:
             subj = "Ds_Response not found"
             body = str(merchant_parameters)
+            # Notify executives about missing response code
             for member in get_assoc_executives(assoc):
                 my_send_mail(subj, body, member, assoc)
             return None
 
+        # Check payment response code (0-99 indicates success)
         resp = int(merchant_parameters["Ds_Response"])
 
+        # Response codes 0-99 indicate successful payment, anything else is failure
         redsys_failed = 99
         if resp < 0 or resp > redsys_failed:
             subj = "Failed redsys payment"
             body = str(merchant_parameters)
+            # Notify executives about failed payment
             for member in get_assoc_executives(assoc):
                 my_send_mail(subj, body, member, assoc)
             return None
 
-            # logger.debug(f"Merchant parameters decoded: {merchant_parameters}")
-
-        # logger.debug(f"Base64 decoded: {base64.b64decode(b64_merchant_parameters)}")
-
-        # logger.debug(f"Base64 decoded text: {base64.b64decode(b64_merchant_parameters).decode()}")
-
+        # Extract order number from merchant parameters
         order = merchant_parameters["Ds_Order"]
 
+        # Encrypt order number using 3DES for signature verification
         encrypted_order = self.encrypt_order(order)
 
-        # logger.debug(f"Encrypted order: {encrypted_order}")
-
+        # Re-encode merchant parameters for signature comparison
         b64_params = base64.b64encode(json.dumps(merchant_parameters).encode())
 
-        # logger.debug(f"Base64 params: {b64_params}")
-
+        # Compute expected signature using HMAC-SHA256
         computed_signature = self.sign_hmac256(encrypted_order, b64_params)
 
-        # logger.debug(f"Computed signature: {computed_signature}")
-
-        # signature = re.sub(ALPHANUMERIC_CHARACTERS, b'', signature)
-
-        # logger.debug(f"Signature: {signature}")
-
-        # computed_signature = re.sub(ALPHANUMERIC_CHARACTERS, b'', computed_signature)
-
+        # Verify signature matches to ensure payment authenticity
         if signature != computed_signature:
             mes = f"Different signature redsys: {signature} vs {computed_signature}"
             mes += pformat(merchant_parameters)
             logger.error(f"Redsys signature verification failed: {mes}")
+            # Send critical security alert to system admins
             for _name, email in conf_settings.ADMINS:
                 my_send_mail("redsys signature", mes, email)
 
+        # Return order number for successful payment processing
         return order

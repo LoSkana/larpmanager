@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
@@ -35,6 +36,7 @@ from larpmanager.accounting.gateway import (
     get_stripe_form,
     get_sumup_form,
 )
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
 from larpmanager.models.accounting import (
@@ -69,16 +71,17 @@ from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
 
 
-def get_payment_fee(assoc, slug):
+def get_payment_fee(assoc_id, slug):
     """Get payment processing fee for a specific payment method.
 
     Args:
-        assoc: Association instance
+        assoc_id: Association instance ID
         slug (str): Payment method slug
 
     Returns:
         float: Payment fee amount, 0.0 if not configured
     """
+    assoc = Association.objects.get(pk=assoc_id)
     payment_details = get_payment_details(assoc)
     k = slug + "_fee"
     if k not in payment_details or not payment_details[k]:
@@ -106,7 +109,7 @@ def unique_invoice_cod(length=16):
     raise ValueError("Too many attempts to generate the code")
 
 
-def set_data_invoice(request, ctx, invoice, form, assoc):
+def set_data_invoice(request, ctx, invoice, form, assoc_id):
     """Set invoice data from form submission.
 
     Args:
@@ -114,7 +117,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
         ctx: Context dictionary
         invoice: PaymentInvoice instance to update
         form: Form containing invoice data
-        assoc: Association instance
+        assoc_id: Association instance ID
     """
     member_real = request.user.member.display_real()
     if invoice.typ == PaymentType.REGISTRATION:
@@ -143,7 +146,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
             "recipient": ctx["coll"].display_member(),
         }
 
-    if assoc.get_config("payment_special_code", False):
+    if get_assoc_config(assoc_id, "payment_special_code", False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
@@ -205,22 +208,22 @@ def round_up_to_two_decimals(number):
     return math.ceil(number * 100) / 100
 
 
-def update_invoice_gross_fee(request, invoice, amount, assoc, pay_method):
+def update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method):
     """Update invoice with gross amount including payment processing fees.
 
     Args:
         request: Django HTTP request object
         invoice: PaymentInvoice instance to update
         amount (Decimal): Base amount before fees
-        assoc: Association instance
+        assoc_id: Association instance ID
         pay_method (str): Payment method slug
     """
     # add fee for paymentmethod
     amount = float(amount)
-    fee = get_payment_fee(assoc, pay_method.slug)
+    fee = get_payment_fee(assoc_id, pay_method.slug)
 
     if fee is not None:
-        if assoc.get_config("payment_fees_user", False):
+        if get_assoc_config(assoc_id, "payment_fees_user", False):
             amount = (amount * 100) / (100 - fee)
             amount = round_up_to_two_decimals(amount)
 
@@ -231,21 +234,22 @@ def update_invoice_gross_fee(request, invoice, amount, assoc, pay_method):
     return amount
 
 
-def get_payment_form(request, form, typ, ctx, key=None):
-    """Create or update payment invoice and return payment gateway form.
+def get_payment_form(request: HttpRequest, form, typ: str, ctx: dict, key: str | None = None) -> None:
+    """Create/update payment invoice and prepare gateway form.
 
     Args:
-        request: Django HTTP request object
-        form: Form containing payment data
+        request: HTTP request
+        form: Form with payment data
         typ: Payment type
-        ctx: Context dictionary to update
-        key: Optional existing invoice key
+        ctx: Context dict to update
+        key: Existing invoice key
 
-    Returns:
-        dict: Payment form data for gateway integration
+    Side effects:
+        Updates ctx with invoice, forms, and payment details
     """
-    assoc = form.assoc
+    assoc_id = request.assoc["id"]
 
+    # Extract payment details from form
     amount = form.cleaned_data["amount"]
     ctx["am"] = amount
     method = form.cleaned_data["method"]
@@ -253,14 +257,15 @@ def get_payment_form(request, form, typ, ctx, key=None):
 
     pay_method = PaymentMethod.objects.get(slug=method)
 
+    # Try to retrieve existing invoice or create new one
     invoice = None
     if key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=key, status=PaymentStatus.CREATED)
         except Exception:
-            # print(e)
             pass
 
+    # Create new invoice if not found
     if not invoice:
         invoice = PaymentInvoice()
         invoice.key = key
@@ -268,39 +273,34 @@ def get_payment_form(request, form, typ, ctx, key=None):
         invoice.method = pay_method
         invoice.typ = typ
         invoice.member = request.user.member
-        invoice.assoc = assoc
+        invoice.assoc_id = assoc_id
     else:
+        # Update existing invoice
         invoice.method = pay_method
         invoice.typ = typ
 
+    # Update payment details and invoice data
     update_payment_details(request, ctx)
-
-    set_data_invoice(request, ctx, invoice, form, assoc)
-
-    amount = update_invoice_gross_fee(request, invoice, amount, assoc, pay_method)
+    set_data_invoice(request, ctx, invoice, form, assoc_id)
+    amount = update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method)
 
     ctx["invoice"] = invoice
 
+    # Prepare gateway-specific forms
     if method in {"wire", "paypal_nf"}:
         ctx["wire_form"] = WireInvoiceSubmitForm()
         ctx["wire_form"].set_initial("cod", invoice.cod)
-
     elif method == "any":
         ctx["any_form"] = AnyInvoiceSubmitForm()
         ctx["any_form"].set_initial("cod", invoice.cod)
-
     elif method == "paypal":
         get_paypal_form(request, ctx, invoice, amount)
-
     elif method == "stripe":
         get_stripe_form(request, ctx, invoice, amount)
-
     elif method == "sumup":
         get_sumup_form(request, ctx, invoice, amount)
-
     elif method == "redsys":
         get_redsys_form(request, ctx, invoice, amount)
-
     elif method == "satispay":
         get_satispay_form(request, ctx, invoice, amount)
 
@@ -314,9 +314,8 @@ def payment_received(invoice):
     Side effects:
         Creates accounting records, processes collections/donations
     """
-    assoc = Association.objects.get(pk=invoice.assoc_id)
     features = get_assoc_features(invoice.assoc_id)
-    fee = get_payment_fee(assoc, invoice.method.slug)
+    fee = get_payment_fee(invoice.assoc_id, invoice.method.slug)
 
     if fee > 0 and AccountingItemTransaction.objects.filter(inv=invoice).count() == 0:
         _process_fee(features, fee, invoice)
@@ -339,10 +338,10 @@ def payment_received(invoice):
 def _process_collection(features, invoice):
     if AccountingItemCollection.objects.filter(inv=invoice).count() == 0:
         acc = AccountingItemCollection()
-        acc.member = invoice.member
+        acc.member_id = invoice.member_id
         acc.inv = invoice
         acc.value = invoice.mc_gross
-        acc.assoc = invoice.assoc
+        acc.assoc_id = invoice.assoc_id
         acc.collection_id = invoice.idx
         acc.save()
 
@@ -353,10 +352,10 @@ def _process_collection(features, invoice):
 def _process_donate(features, invoice):
     if AccountingItemDonation.objects.filter(inv=invoice).count() == 0:
         acc = AccountingItemDonation()
-        acc.member = invoice.member
+        acc.member_id = invoice.member_id
         acc.inv = invoice
         acc.value = invoice.mc_gross
-        acc.assoc = invoice.assoc
+        acc.assoc_id = invoice.assoc_id
         acc.inv = invoice
         acc.descr = invoice.causal
         acc.save()
@@ -369,24 +368,29 @@ def _process_membership(invoice):
     if AccountingItemMembership.objects.filter(inv=invoice).count() == 0:
         acc = AccountingItemMembership()
         acc.year = datetime.now().year
-        acc.member = invoice.member
+        acc.member_id = invoice.member_id
         acc.inv = invoice
         acc.value = invoice.mc_gross
-        acc.assoc = invoice.assoc
+        acc.assoc_id = invoice.assoc_id
         acc.save()
 
 
 def _process_payment(invoice):
+    """Process a payment from an invoice and create accounting entries.
+
+    Args:
+        invoice: Invoice object to process payment for
+    """
     if AccountingItemPayment.objects.filter(inv=invoice).count() == 0:
         reg = Registration.objects.get(pk=invoice.idx)
 
         acc = AccountingItemPayment()
         acc.pay = PaymentChoices.MONEY
-        acc.member = invoice.member
+        acc.member_id = invoice.member_id
         acc.reg = reg
         acc.inv = invoice
         acc.value = invoice.mc_gross
-        acc.assoc = invoice.assoc
+        acc.assoc_id = invoice.assoc_id
         acc.save()
 
         Registration.objects.filter(pk=reg.pk).update(num_payments=F("num_payments") + 1)
@@ -399,12 +403,12 @@ def _process_payment(invoice):
 
 def _process_fee(features, fee, invoice):
     trans = AccountingItemTransaction()
-    trans.member = invoice.member
+    trans.member_id = invoice.member_id
     trans.inv = invoice
     # trans.value = invoice.mc_fee
     trans.value = (float(invoice.mc_gross) * fee) / 100
-    trans.assoc = invoice.assoc
-    if invoice.assoc.get_config("payment_fees_user", False):
+    trans.assoc_id = invoice.assoc_id
+    if get_assoc_config(invoice.assoc_id, "payment_fees_user", False):
         trans.user_burden = True
     trans.save()
     if invoice.typ == PaymentType.REGISTRATION:
@@ -413,91 +417,104 @@ def _process_fee(features, fee, invoice):
         trans.save()
 
 
-@receiver(pre_save, sender=PaymentInvoice)
-def update_payment_invoice(sender, instance, **kwargs):
-    if not instance.pk:
+def process_payment_invoice_status_change(invoice):
+    """Process payment invoice status changes and trigger payment received.
+
+    Args:
+        invoice: PaymentInvoice instance being saved
+    """
+    if not invoice.pk:
         return
 
     try:
-        prev = PaymentInvoice.objects.get(pk=instance.pk)
+        prev = PaymentInvoice.objects.get(pk=invoice.pk)
     except Exception:
         return
 
     if prev.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    if instance.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+    if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    payment_received(instance)
+    payment_received(invoice)
 
 
-@receiver(pre_save, sender=RefundRequest)
-def update_refund_request(sender, instance, **kwargs):
+@receiver(pre_save, sender=PaymentInvoice)
+def update_payment_invoice(sender, instance, **kwargs):
+    process_payment_invoice_status_change(instance)
+
+
+def process_refund_request_status_change(refund_request):
     """Process refund request status changes.
 
     Args:
-        sender: Model class sending the signal
-        instance: RefundRequest instance being updated
-        **kwargs: Additional signal arguments
+        refund_request: RefundRequest instance being updated
 
     Side effects:
         Creates accounting item when refund status changes to PAYED
     """
-    if not instance.pk:
+    if not refund_request.pk:
         return
 
     try:
-        prev = RefundRequest.objects.get(pk=instance.pk)
+        prev = RefundRequest.objects.get(pk=refund_request.pk)
     except Exception:
         return
 
     if prev.status == RefundStatus.PAYED:
         return
 
-    if instance.status != RefundStatus.PAYED:
+    if refund_request.status != RefundStatus.PAYED:
         return
 
     acc = AccountingItemOther()
-    acc.member = instance.member
-    acc.value = instance.value
+    acc.member_id = refund_request.member_id
+    acc.value = refund_request.value
     acc.oth = OtherChoices.REFUND
-    acc.descr = f"Delivered refund of {instance.value:.2f}"
-    acc.assoc = instance.assoc
+    acc.descr = f"Delivered refund of {refund_request.value:.2f}"
+    acc.assoc_id = refund_request.assoc_id
     acc.save()
 
 
-@receiver(pre_save, sender=Collection)
-def update_collection(sender, instance, **kwargs):
+@receiver(pre_save, sender=RefundRequest)
+def update_refund_request(sender, instance, **kwargs):
+    process_refund_request_status_change(instance)
+
+
+def process_collection_status_change(collection):
     """Update payment collection status and metadata.
 
     Args:
-        sender: Model class sending the signal
-        instance: Collection instance being updated
-        **kwargs: Additional signal arguments
+        collection: Collection instance being updated
 
     Side effects:
         Creates accounting item credit when collection status changes to PAYED
     """
-    if not instance.pk:
+    if not collection.pk:
         return
 
     try:
-        prev = Collection.objects.get(pk=instance.pk)
+        prev = Collection.objects.get(pk=collection.pk)
     except Exception:
         return
 
     if prev.status == CollectionStatus.PAYED:
         return
 
-    if instance.status != CollectionStatus.PAYED:
+    if collection.status != CollectionStatus.PAYED:
         return
 
     acc = AccountingItemOther()
-    acc.assoc = instance.assoc
-    acc.member = instance.member
-    acc.run = instance.run
-    acc.value = instance.total
+    acc.assoc_id = collection.assoc_id
+    acc.member_id = collection.member_id
+    acc.run_id = collection.run_id
+    acc.value = collection.total
     acc.oth = OtherChoices.CREDIT
-    acc.descr = f"Collection of {instance.organizer}"
+    acc.descr = f"Collection of {collection.organizer}"
     acc.save()
+
+
+@receiver(pre_save, sender=Collection)
+def update_collection(sender, instance, **kwargs):
+    process_collection_status_change(instance)

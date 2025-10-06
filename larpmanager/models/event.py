@@ -236,6 +236,14 @@ class Event(BaseModel):
         return queryset
 
     def get_class_parent(self, nm):
+        """Get the parent event for inheriting elements of a specific model class.
+
+        Args:
+            nm: Model class or class name string to check inheritance for
+
+        Returns:
+            Event: Parent event if inheritance is enabled, otherwise self
+        """
         if inspect.isclass(nm) and issubclass(nm, BaseModel):
             nm = nm.__name__.lower()
 

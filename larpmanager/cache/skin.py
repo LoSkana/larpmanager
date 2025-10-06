@@ -47,6 +47,14 @@ def get_cache_skin(s):
 
 
 def init_cache_skin(domain):
+    """Initialize skin cache data for a given domain.
+
+    Args:
+        domain: Domain name to lookup skin configuration for
+
+    Returns:
+        dict: Skin configuration dictionary or None if not found
+    """
     try:
         skin = AssociationSkin.objects.get(domain=domain)
     except ObjectDoesNotExist:
