@@ -918,9 +918,11 @@ def lm_profile(request):
         .annotate(
             total_duration=Sum(F("mean_duration") * F("num_calls")),
             total_calls=Sum("num_calls"),
+        )
+        .annotate(
             avg_duration=F("total_duration") / F("total_calls"),
         )
-        .order_by("-avg_duration")[:50]
+        .order_by("-total_duration")[:50]
     )
 
     return render(request, "larpmanager/larpmanager/profile.html", ctx)
