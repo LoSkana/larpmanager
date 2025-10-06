@@ -272,7 +272,7 @@ def get_payment_form(request: HttpRequest, form, typ: str, ctx: dict, key: str |
         invoice.cod = unique_invoice_cod()
         invoice.method = pay_method
         invoice.typ = typ
-        invoice.member_id = request.user.member_id
+        invoice.member = request.user.member
         invoice.assoc_id = assoc_id
     else:
         # Update existing invoice
