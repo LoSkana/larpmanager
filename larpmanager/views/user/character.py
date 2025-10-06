@@ -87,6 +87,15 @@ def character(request, s, num):
 
 
 def _character_sheet(request, ctx):
+    """Display character sheet with visibility and approval checks.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event, run, and character data
+
+    Returns:
+        HttpResponse: Rendered character sheet or redirect
+    """
     ctx["screen"] = True
 
     if "check" not in ctx and not ctx["show_character"]:
@@ -116,6 +125,19 @@ def _character_sheet(request, ctx):
 
 
 def character_external(request, s, code):
+    """Display character sheet via external access token.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        code: External access token for character
+
+    Returns:
+        Character sheet view or 404 if access not enabled or invalid code
+
+    Raises:
+        Http404: If external access is disabled or token is invalid
+    """
     ctx = get_event_run(request, s)
 
     if not ctx["event"].get_config("writing_external_access", False):
@@ -594,6 +616,17 @@ def _save_character_abilities(ctx, request):
 
 
 def get_undo_abilities(request, ctx, char, new_ability_id=None):
+    """Get list of recently acquired abilities that can be undone.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing event data
+        char: Character object
+        new_ability_id: ID of newly acquired ability to track (optional)
+
+    Returns:
+        list: List of ability IDs that can be undone
+    """
     px_undo = int(ctx["event"].get_config("px_undo", 0))
     config_name = f"added_px_{char.id}"
     val = char.get_config(config_name, "{}")

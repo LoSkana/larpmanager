@@ -232,6 +232,39 @@ def go_character(context, search, number, tx, run, go_tooltip, simple=False):
     return tx.replace(search, lk)
 
 
+def _remove_unimportant_prefix(text):
+    """Remove first occurrence of $unimportant from text and clean up empty HTML tags at start.
+
+    Args:
+        text (str): Text that may contain $unimportant prefix
+
+    Returns:
+        str: Text with first occurrence of $unimportant removed and empty HTML tags cleaned up
+    """
+    if not text:
+        return text
+
+    original_text = text
+    text = text.replace("$unimportant", "", 1)
+
+    # If $unimportant was replaced, remove empty HTML tags at the start
+    if text != original_text:
+        # Remove empty HTML tags and whitespace from the beginning
+        while True:
+            stripped = text.lstrip()
+            # Match empty HTML tags like <p></p>, <div></div>, <span></span>, etc.
+            # Also match \r, \n, &nbsp; and other whitespace characters inside tags
+            match = re.match(r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>", stripped)
+            if match:
+                # Remove the empty tag and continue
+                text = stripped[match.end() :]
+            else:
+                text = stripped
+                break
+
+    return text
+
+
 @register.simple_tag(takes_context=True)
 def show_char(context, el, run, tooltip):
     """Template tag to process text and convert character references to links.
@@ -263,6 +296,9 @@ def show_char(context, el, run, tooltip):
         tx = go_character(context, f"#{number}", number, tx, run, tooltip)
         tx = go_character(context, f"@{number}", number, tx, run, tooltip)
         tx = go_character(context, f"^{number}", number, tx, run, tooltip, simple=True)
+
+    # replace unimportant tag - remove $unimportant prefix and clean up empty tags
+    tx = _remove_unimportant_prefix(tx)
 
     return mark_safe(tx)
 

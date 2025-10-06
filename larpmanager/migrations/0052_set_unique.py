@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import larpmanager
+from larpmanager.models.utils import my_uuid_short
 
 
 class Migration(migrations.Migration):
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name="access_token",
             field=models.CharField(
                 db_index=True,
-                default=larpmanager.models.utils.my_uuid_short,
+                default=my_uuid_short,
                 help_text="\n            Allows external access to this character through a secret URL \n            (change the code if it has been shared with the wrong people)\n        ",
                 max_length=12,
                 unique=True,

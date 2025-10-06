@@ -228,7 +228,7 @@ def _status_payment(register_text, run):
     return False
 
 
-def registration_status(run, user, my_regs=None, features_map=None, reg_count=None):
+def registration_status(run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None) -> bool:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements

@@ -22,16 +22,21 @@
 
 from datetime import date
 from decimal import Decimal
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from django.contrib.auth.models import User
 from django.db import models
 
-from larpmanager.models.access import AssocPermission, EventPermission, Feature
-from larpmanager.models.accounting import AccountingItemCollection, AccountingItemPayment, Collection, OtherChoices, PaymentChoices
+from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.accounting import (
+    AccountingItemCollection,
+    AccountingItemPayment,
+    Collection,
+    PaymentChoices,
+)
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import Event, EventButton, EventConfig, Run, RunConfig
+from larpmanager.models.event import Event, EventButton, EventConfig, RunConfig
 from larpmanager.models.form import RegistrationQuestion
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import MemberConfig, Membership, MembershipStatus

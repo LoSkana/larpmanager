@@ -25,6 +25,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import TinyMCE
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
@@ -34,7 +35,6 @@ from larpmanager.forms.utils import (
     TimePickerInput,
     get_run_choices,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
     Album,
@@ -225,9 +225,8 @@ def _delete_optionals_warehouse(form):
     Side effects:
         Deletes form fields for warehouse options not enabled in config
     """
-    assoc = Association.objects.get(pk=form.params["a_id"])
     for field in WarehouseItem.get_optional_fields():
-        if not assoc.get_config(f"warehouse_{field}", False):
+        if not get_assoc_config(form.params["a_id"], f"warehouse_{field}", False):
             form.delete_field(field)
 
 

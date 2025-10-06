@@ -309,6 +309,16 @@ def check_writing_form_type(ctx, typ):
 
 @login_required
 def orga_writing_form(request, s, typ):
+    """Display and manage writing form questions for character creation.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        typ: Writing form type (character, etc.)
+
+    Returns:
+        HttpResponse: Rendered form page or download response
+    """
     ctx = check_event_permission(request, s, "orga_character_form")
     check_writing_form_type(ctx, typ)
 
@@ -457,6 +467,19 @@ def orga_check(request, s):
 
 
 def check_relations(cache, checks, chs_numbers, ctx, number_map):
+    """Check character relationships for missing and extinct references.
+
+    Args:
+        cache: Dictionary to store relationship data for each character
+        checks: Dictionary to accumulate validation errors
+        chs_numbers: Set of valid character numbers in the event
+        ctx: Context dictionary containing character data
+        number_map: Mapping from character IDs to numbers
+
+    Side effects:
+        Updates checks with relat_missing and relat_extinct validation errors
+        Populates cache with character relationship data
+    """
     checks["relat_missing"] = []
     checks["relat_extinct"] = []
     for c in ctx["chars"]:

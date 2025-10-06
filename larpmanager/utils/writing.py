@@ -419,6 +419,8 @@ def _prepare_writing_list(ctx, request):
 
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
 
+    ctx["writing_unimportant"] = ctx["event"].get_config("writing_unimportant", False)
+
 
 def writing_list_plot(ctx):
     """Build character associations for plot list display.

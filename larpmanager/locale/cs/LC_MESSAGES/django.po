@@ -1224,6 +1224,9 @@ msgstr "První pomoc"
 msgid "Frequency"
 msgstr "Frekvence"
 
+msgid "Important"
+msgstr "Důležité"
+
 msgid "Interface"
 msgstr "Rozhraní"
 
@@ -1742,6 +1745,9 @@ msgstr "Příčná"
 
 msgid "Undo period"
 msgstr "Zrušení období"
+
+msgid "Unimportant"
+msgstr "Nedůležité"
 
 msgid "Unique code"
 msgstr "Jedinečný kód"
@@ -2510,9 +2516,6 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Credits residues"
-msgstr "Zbytky úvěrů"
-
 msgid "Current template"
 msgstr "Aktuální šablona"
 
@@ -2791,6 +2794,9 @@ msgstr "Registrační formulář"
 
 msgid "Registration mail"
 msgstr "Registrační pošta"
+
+msgid "Remaining credits"
+msgstr "Zbývající kredity"
 
 msgid "Request submitted"
 msgstr "Submisivní žádost"
@@ -8302,6 +8308,13 @@ msgid ""
 msgstr ""
 "Umožňuje pole \"přiřazeno\", aby bylo možné sledovat, který pracovník je "
 "odpovědný za jednotlivé prvky zápisu"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje sledovat zápletky nebo vztahy, které nejsou "
+"pro postavu skutečně důležité"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

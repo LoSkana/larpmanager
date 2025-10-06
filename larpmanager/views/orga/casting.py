@@ -223,56 +223,82 @@ def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
     return False
 
 
-def get_casting_data(request, ctx, typ, form):
-    """Retrieve and process casting-related data for character assignment.
+def get_casting_data(request: "HttpRequest", ctx: dict, typ: int, form: "OrganizerCastingOptionsForm") -> None:
+    """Retrieve and process casting data for automated character assignment algorithm.
 
-    Handles casting form data and prepares context for casting operations
-    including character assignments and trait management.
+    Collects player preferences, character choices, ticket types, membership status,
+    payment status, and avoidance lists. Processes data into JSON-serialized format
+    for client-side casting algorithm execution with priority weighting.
+
+    Args:
+        request: HTTP request object for association context
+        ctx: Context dictionary to populate with casting data
+        typ: Casting type (0 for characters, other for quest traits)
+        form: Form with filtering options (tickets, membership, payment status)
+
+    Side effects:
+        - Adds JSON-serialized casting data to ctx (choices, players, preferences, etc.)
+        - Loads membership and payment status caches
+        - Calculates registration and payment priorities
+        - Filters players based on form options
     """
+    # Extract filtering options from form (tickets, membership status, payment status)
     options = form.get_data()
-    # print(options)
 
+    # Load casting configuration (max choices, additional padding)
     casting_details(ctx, typ)
 
-    players = {}
-    didnt_choose = []
-    preferences = {}
-    nopes = {}
-    chosen = {}
+    # Initialize data structures for casting algorithm
+    players = {}          # Player info with priorities
+    didnt_choose = []     # Players who didn't submit preferences
+    preferences = {}      # Player->Character preference mappings
+    nopes = {}           # Characters players want to avoid
+    chosen = {}          # Characters that have been selected by at least one player
 
-    # get casting choices
+    # Get available choices based on casting type
     if typ == 0:
+        # Character casting - includes faction filtering and mirror handling
         (choices, taken, mirrors, allowed) = get_casting_choices_characters(ctx, options)
     else:
+        # Quest trait casting
         get_element(ctx, typ, "quest_type", QuestType, by_number=True)
         allowed = None
         (choices, taken, mirrors) = get_casting_choices_quests(ctx)
 
+    # Load cached membership and casting preference data
     cache_aim, cache_membs, castings = _casting_prepare(ctx, request, typ)
 
-    # loop over registered players
+    # Process each registration to build player preferences
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    # Exclude non-participant ticket types from casting
     que = que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
     que = que.order_by("created").select_related("ticket", "member")
     for reg in que:
+        # Skip players that don't match filter criteria (ticket, membership, payment)
         if check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
             continue
 
+        # Add player info with ticket priority and registration/payment dates
         _get_player_info(players, reg)
 
+        # Extract player's character preferences from casting submissions
         pref = _get_player_preferences(allowed, castings, chosen, nopes, reg)
 
+        # Track players who didn't submit preferences
         if len(pref) == 0:
             didnt_choose.append(reg.member.id)
         else:
             preferences[reg.member.id] = pref
 
+    # Add random unchosen characters to resolve ties fairly
     not_chosen, not_chosen_add = _fill_not_chosen(choices, chosen, ctx, preferences, taken)
 
+    # Load character avoidance texts (reasons players can't play certain characters)
     avoids = {}
     for el in CastingAvoid.objects.filter(run=ctx["run"], typ=typ):
         avoids[el.member_id] = el.text
 
+    # Serialize all data to JSON for client-side casting algorithm
     ctx["num_choices"] = min(ctx["casting_max"] + not_chosen_add, len(choices))
     ctx["choices"] = json.dumps(choices)
     ctx["mirrors"] = json.dumps(mirrors)
@@ -285,6 +311,7 @@ def get_casting_data(request, ctx, typ, form):
     ctx["nopes"] = json.dumps(nopes)
     ctx["avoids"] = json.dumps(avoids)
 
+    # Load priority configuration for algorithm weighting
     ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 0))
     ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 0))
 

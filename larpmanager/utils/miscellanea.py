@@ -32,7 +32,7 @@ from django.shortcuts import render
 from PIL import Image, ImageOps
 from PIL import Image as PILImage
 
-from larpmanager.models.association import Association
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
 
@@ -199,12 +199,11 @@ def check_centauri(request):
     if not _go_centauri(request):
         return
 
-    assoc = Association.objects.get(pk=request.assoc["id"])
     ctx = {}
     for s in ["centauri_descr", "centauri_content"]:
-        ctx[s] = assoc.get_config(s, None)
+        ctx[s] = get_assoc_config(request.assoc["id"], s, None)
 
-    badge = assoc.get_config("centauri_badge", None)
+    badge = get_assoc_config(request.assoc["id"], "centauri_badge", None)
     if badge:
         bdg = Badge.objects.get(cod=badge)
         bdg.members.add(request.user.member)
@@ -251,11 +250,10 @@ def get_warehouse_optionals(ctx, def_cols):
     Side effects:
         Updates ctx with optionals configuration and header column settings
     """
-    assoc = Association.objects.get(pk=ctx["a_id"])
     optionals = {}
     active = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = assoc.get_config(f"warehouse_{field}", False)
+        optionals[field] = get_assoc_config(ctx["a_id"], f"warehouse_{field}", False)
         if optionals[field]:
             active = 1
     ctx["optionals"] = optionals
@@ -263,6 +261,12 @@ def get_warehouse_optionals(ctx, def_cols):
 
 
 def rotate_vertical_photo(instance, sender):
+    """Automatically rotate vertical photos to landscape orientation.
+
+    Args:
+        instance: Model instance with a 'photo' ImageField
+        sender: Model class that sent the signal
+    """
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
         field = instance._meta.get_field("photo")

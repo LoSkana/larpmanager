@@ -358,7 +358,7 @@ def handle_handout_pre_delete(instance):
         instance: Handout instance being deleted
     """
     for run in instance.event.runs.all():
-        os.remove(instance.get_filepath(run))
+        safe_remove(instance.get_filepath(run))
 
 
 @receiver(pre_delete, sender=Handout)
@@ -373,7 +373,7 @@ def handle_handout_post_save(instance):
         instance: Handout instance that was saved
     """
     for run in instance.event.runs.all():
-        os.remove(instance.get_filepath(run))
+        safe_remove(instance.get_filepath(run))
 
 
 @receiver(post_save, sender=Handout)
@@ -388,8 +388,7 @@ def handle_handout_template_pre_delete(instance):
         instance: HandoutTemplate instance being deleted
     """
     for run in instance.event.runs.all():
-        for el in instance.handouts.all():
-            os.remove(el.get_filepath(run))
+        safe_remove(instance.get_filepath(run))
 
 
 @receiver(pre_delete, sender=HandoutTemplate)
@@ -405,7 +404,7 @@ def handle_handout_template_post_save(instance):
     """
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
-            os.remove(el.get_filepath(run))
+            safe_remove(el.get_filepath(run))
 
 
 @receiver(post_save, sender=HandoutTemplate)
@@ -513,7 +512,7 @@ def handle_faction_pre_delete(instance):
     Args:
         instance: Faction instance being deleted
     """
-    for char in instance.event.characters.all():
+    for char in instance.event.character_set.all():
         remove_char_pdf(char)
 
 

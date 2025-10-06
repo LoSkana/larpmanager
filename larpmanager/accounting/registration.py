@@ -75,8 +75,8 @@ def get_reg_iscr(instance):
     if instance.ticket:
         tot_iscr += instance.ticket.price
 
-    if instance.additionals:
-        tot_iscr += instance.ticket.price * instance.additionals
+        if instance.additionals:
+            tot_iscr += instance.ticket.price * instance.additionals
 
     if instance.pay_what:
         tot_iscr += instance.pay_what

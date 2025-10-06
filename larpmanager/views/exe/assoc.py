@@ -114,6 +114,14 @@ def f_k_exe(f_id, r_id):
 
 @login_required
 def exe_features(request):
+    """Handle executive feature activation for associations.
+
+    Args:
+        request: HTTP request object from authenticated executive user
+
+    Returns:
+        HttpResponse: Feature management form or redirect based on activation results
+    """
     ctx = check_assoc_permission(request, "exe_features")
     ctx["add_another"] = False
     if backend_edit(request, ctx, ExeFeatureForm, None, afield=None, assoc=True):
@@ -210,6 +218,14 @@ def exe_larpmanager(request):
 
 
 def _add_in_iframe_param(url):
+    """Add 'in_iframe=1' parameter to a URL for iframe rendering.
+
+    Args:
+        url: Original URL string to modify
+
+    Returns:
+        str: Modified URL with in_iframe parameter added
+    """
     parsed = urlparse(url)
 
     query_params = parse_qs(parsed.query)

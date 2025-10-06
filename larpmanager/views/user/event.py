@@ -182,6 +182,14 @@ def carousel(request):
 
 @login_required
 def share(request):
+    """Handle member data sharing consent for organization.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered template or redirect to home
+    """
     ctx = def_user_ctx(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
@@ -209,6 +217,15 @@ def legal_notice(request):
 
 @login_required
 def event_register(request, s):
+    """Display event registration options for future runs.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Redirect to single run registration or list of available runs
+    """
     ctx = get_event(request, s)
     # check future runs
     runs = (
@@ -231,6 +248,14 @@ def event_register(request, s):
 
 
 def calendar_past(request):
+    """Display calendar of past events for the association.
+
+    Args:
+        request: HTTP request object with user authentication and association data
+
+    Returns:
+        HttpResponse: Rendered past events calendar template
+    """
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
     my_regs = None
@@ -251,6 +276,15 @@ def calendar_past(request):
 
 
 def check_gallery_visibility(request, ctx):
+    """Check if gallery is visible to the current user based on event configuration.
+
+    Args:
+        request: HTTP request object with user authentication information
+        ctx: Context dictionary containing event and run data
+
+    Returns:
+        bool: True if gallery should be visible, False otherwise
+    """
     if is_lm_admin(request):
         return True
 
@@ -358,6 +392,15 @@ def event_redirect(request, s):
 
 
 def search(request, s):
+    """Display event search page with character gallery and search functionality.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+
+    Returns:
+        Rendered search.html template with searchable character data
+    """
     ctx = get_event_run(request, s, status=True)
 
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
@@ -416,6 +459,16 @@ def factions(request, s):
 
 
 def faction(request, s, g):
+    """Display detailed information for a specific faction.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+        g: Faction identifier string
+
+    Returns:
+        HttpResponse: Rendered faction detail page
+    """
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "faction", _("Factions"))
 
@@ -452,6 +505,16 @@ def quests(request, s, g=None):
 
 
 def quest(request, s, g):
+    """Display individual quest details and associated traits.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        g: Quest number
+
+    Returns:
+        HttpResponse: Rendered quest template
+    """
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
@@ -510,6 +573,16 @@ def limitations(request, s):
 
 
 def export(request, s, t):
+    """Export event elements as JSON for external consumption.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        t: Type of elements to export ('char', 'faction', 'quest', 'trait')
+
+    Returns:
+        JsonResponse: Exported elements data
+    """
     ctx = get_event(request, s)
     if t == "char":
         lst = ctx["event"].get_elements(Character).order_by("number")

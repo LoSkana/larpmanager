@@ -23,7 +23,7 @@ from datetime import date, datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -413,7 +413,7 @@ def exe_refunds(request):
                 ("details", _("Informations")),
                 ("member", _("Member")),
                 ("value", _("Total required")),
-                ("credits", _("Credits residues")),
+                ("credits", _("Remaining credits")),
                 ("status", _("Status")),
                 ("action", _("Action")),
             ],
@@ -505,28 +505,47 @@ def check_year(request, ctx):
 
 
 @login_required
-def exe_balance(request):
+def exe_balance(request: HttpRequest) -> HttpResponse:
     """Executive view for displaying association balance sheet for a specific year.
 
     Calculates totals for memberships, donations, tickets, and expenses from
     various accounting models to generate comprehensive financial reporting.
+    Proportionally distributes reimbursements across expense categories.
 
     Args:
         request: Django HTTP request object with user authentication and year parameter
 
     Returns:
-        HttpResponse: Rendered balance sheet template with financial data
+        HttpResponse: Rendered balance sheet template with financial data including:
+            - memberships: Total membership fees
+            - donations: Total donations
+            - tickets: Net ticket revenue (payments - transaction fees)
+            - inflows: Total inflows
+            - expenditure: Dict of expenses by category
+            - in: Total incoming funds
+            - out: Total outgoing funds
+            - bal: Balance (in - out)
+
+    Raises:
+        PermissionDenied: If user lacks exe_balance permission
     """
+    # Verify user has executive balance permission
     ctx = check_assoc_permission(request, "exe_balance")
     year = check_year(request, ctx)
 
+    # Define date range for the selected year
     start = date(year, 1, 1)
     end = date(year + 1, 1, 1)
-    # get total membership for that year
+
+    # Calculate total membership fees for the year
     ctx["memberships"] = get_sum(AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=year))
+
+    # Calculate total donations received in the year
     ctx["donations"] = get_sum(
         AccountingItemDonation.objects.filter(assoc_id=ctx["a_id"], created__gte=start, created__lt=end)
     )
+
+    # Calculate net ticket revenue (cash payments minus transaction fees)
     ctx["tickets"] = get_sum(
         AccountingItemPayment.objects.filter(
             assoc_id=ctx["a_id"],
@@ -535,15 +554,20 @@ def exe_balance(request):
             created__lt=end,
         )
     ) - get_sum(AccountingItemTransaction.objects.filter(assoc_id=ctx["a_id"], created__gte=start, created__lt=end))
+
+    # Calculate total inflows for the year
     ctx["inflows"] = get_sum(
         AccountingItemInflow.objects.filter(assoc_id=ctx["a_id"], payment_date__gte=start, payment_date__lt=end)
     )
 
+    # Sum all incoming funds
     ctx["in"] = ctx["memberships"] + ctx["donations"] + ctx["tickets"] + ctx["inflows"]
 
+    # Initialize expenditure tracking
     ctx["expenditure"] = {}
     ctx["out"] = 0
 
+    # Calculate total refunds/reimbursements for proportional distribution
     ctx["rimb"] = get_sum(
         AccountingItemOther.objects.filter(
             assoc_id=ctx["a_id"],
@@ -553,10 +577,11 @@ def exe_balance(request):
         )
     )
 
-    # add personal expenses
+    # Initialize expenditure categories with zero values
     for value, label in BalanceChoices.choices:
         ctx["expenditure"][value] = {"name": label, "value": 0}
 
+    # Aggregate approved personal expenses by balance category
     for el in (
         AccountingItemExpense.objects.filter(
             assoc_id=ctx["a_id"], created__gte=start, created__lt=end, is_approved=True
@@ -569,18 +594,19 @@ def exe_balance(request):
         ctx["expenditure"][bl]["value"] = value
         ctx["out"] += value
 
+    # Proportionally distribute reimbursements across expense categories
     tot = ctx["out"]
     ctx["out"] = 0
     if tot:
-        # round for actual reimbursed
+        # Recalculate each category's value based on proportion of total reimbursed
         for bl, _descr in BalanceChoices.choices:
             v = ctx["expenditure"][bl]["value"]
-            # resample value on given out credits
+            # Resample value based on actual reimbursements issued
             v = (v / tot) * ctx["rimb"]
             ctx["out"] += v
             ctx["expenditure"][bl]["value"] = v
 
-    # add normaly association outflows
+    # Add association-level outflows to expenditure categories
     for el in (
         AccountingItemOutflow.objects.filter(assoc_id=ctx["a_id"], payment_date__gte=start, payment_date__lt=end)
         .values("balance")
@@ -591,6 +617,7 @@ def exe_balance(request):
         ctx["expenditure"][bl]["value"] += value
         ctx["out"] += value
 
+    # Calculate final balance
     ctx["bal"] = ctx["in"] - ctx["out"]
 
     return render(request, "larpmanager/exe/accounting/balance.html", ctx)

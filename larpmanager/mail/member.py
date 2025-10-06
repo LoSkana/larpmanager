@@ -29,6 +29,7 @@ from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
@@ -66,7 +67,7 @@ def send_membership_confirm(request, membership):
         "Once your admission is approved, you will be able to pay for the tickets for the "
         "events you have registered for."
     )
-    amount = int(membership.assoc.get_config("membership_fee", "0"))
+    amount = int(get_assoc_config(membership.assoc_id, "membership_fee", "0"))
     if amount:
         body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "
@@ -167,8 +168,8 @@ def notify_membership_approved(member, resp):
         body += " " + _("More details") + f": {resp}"
 
     # Check if you have payments to make
-    assoc = member.membership.assoc
-    regs = member.registrations.filter(run__event__assoc=assoc, run__start__gte=datetime.now().date())
+    assoc_id = member.membership.assoc_id
+    regs = member.registrations.filter(run__event__assoc_id=assoc_id, run__start__gte=datetime.now().date())
     membership_fee = False
     reg_list = []
     for registration in regs:
@@ -192,7 +193,7 @@ def notify_membership_approved(member, resp):
             + ", ".join(reg_list)
         )
 
-    if membership_fee and assoc.get_config("membership_fee", 0):
+    if membership_fee and get_assoc_config(assoc_id, "membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
