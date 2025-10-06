@@ -118,7 +118,7 @@ def satispay_check(request, ctx):
         method__slug="satispay",
         status=PaymentStatus.CREATED,
     )
-    if que.count() == 0:
+    if not que.exists():
         return
 
     for invoice in que:

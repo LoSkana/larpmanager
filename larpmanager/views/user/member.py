@@ -32,7 +32,7 @@ from django.contrib.auth.models import User, update_last_login
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
-from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
@@ -381,7 +381,7 @@ def public(request, n):
     ctx = def_user_ctx(request)
     ctx.update(get_member(n))
 
-    if Membership.objects.filter(member=ctx["member"], assoc_id=request.assoc["id"]).count() == 0:
+    if not Membership.objects.filter(member=ctx["member"], assoc_id=request.assoc["id"]).exists():
         raise Http404("no membership")
 
     if "badge" in request.assoc["features"]:
@@ -573,7 +573,7 @@ def vote(request):
     # check if they have payed
     if "membership" in request.assoc["features"]:
         que = AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"])
-        if que.filter(member_id=ctx["member"].id).count() == 0:
+        if not que.filter(member_id=ctx["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
             return redirect("acc_membership")
 
@@ -622,7 +622,7 @@ def vote(request):
 
 
 @login_required
-def delegated(request: "HttpRequest") -> "HttpResponse":
+def delegated(request: HttpRequest) -> HttpResponse:
     """Manage delegated member accounts for parent-child member relationships.
 
     Allows parent members to create and switch between delegated child accounts,
