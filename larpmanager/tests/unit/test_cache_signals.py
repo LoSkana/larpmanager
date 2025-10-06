@@ -280,6 +280,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(run)
 
+
     def test_assoc_permission_post_save_resets_permission_cache(self):
         """Test that AssocPermission post_save signal resets permission cache"""
         # This test verifies the signal receiver is connected
@@ -288,23 +289,29 @@ class TestCacheSignals(BaseTestCase):
         if not permission:
             self.skipTest("No AssocPermission available")
 
-        # Just verify signal doesn't raise an error by updating
+        # Verify signal doesn't raise an error by updating
         permission.descr = "Updated description"
         permission.save()
-        self.assertTrue(True)
+
+        # Verify the object was updated successfully
+        permission.refresh_from_db()
+        self.assertEqual(permission.descr, "Updated description")
 
     def test_assoc_permission_post_delete_resets_permission_cache(self):
         """Test that AssocPermission post_delete signal resets permission cache"""
         # This test verifies the signal receiver is connected
-        # We test that saving triggers the signal, delete is similar
         permission = AssocPermission.objects.first()
         if not permission:
             self.skipTest("No AssocPermission available")
 
-        # Just verify signal doesn't raise an error
-        permission.descr = "Updated for delete test"
-        permission.save()
-        self.assertTrue(True)
+        # Store ID before deletion
+        permission_id = permission.id
+
+        # Delete the permission
+        permission.delete()
+
+        # Verify the object was deleted successfully
+        self.assertFalse(AssocPermission.objects.filter(id=permission_id).exists())
 
     def test_event_permission_post_save_resets_permission_cache(self):
         """Test that EventPermission post_save signal resets permission cache"""
@@ -314,23 +321,30 @@ class TestCacheSignals(BaseTestCase):
         if not permission:
             self.skipTest("No EventPermission available")
 
-        # Just verify signal doesn't raise an error by updating
+        # Verify signal doesn't raise an error by updating
         permission.descr = "Updated description"
         permission.save()
-        self.assertTrue(True)
+
+        # Verify the object was updated successfully
+        permission.refresh_from_db()
+        self.assertEqual(permission.descr, "Updated description")
 
     def test_event_permission_post_delete_resets_permission_cache(self):
         """Test that EventPermission post_delete signal resets permission cache"""
         # This test verifies the signal receiver is connected
-        # We test that saving triggers the signal, delete is similar
         permission = EventPermission.objects.first()
         if not permission:
             self.skipTest("No EventPermission available")
 
-        # Just verify signal doesn't raise an error
-        permission.descr = "Updated for delete test"
-        permission.save()
-        self.assertTrue(True)
+        # Store ID before deletion
+        permission_id = permission.id
+
+        # Delete the permission
+        permission.delete()
+
+        # Verify the object was deleted successfully
+        self.assertFalse(EventPermission.objects.filter(id=permission_id).exists())
+
 
     @patch("larpmanager.cache.role.delete_cache_assoc_role")
     def test_assoc_role_post_save_resets_role_cache(self, mock_reset):
@@ -559,11 +573,11 @@ class TestCacheSignals(BaseTestCase):
         event = self.get_event()
         faction = Faction.objects.create(name="Test Faction", event=event)
         mock_reset.reset_mock()  # Reset after create
+        faction_id = faction.id
         faction.delete()
 
-        # Signal updates related character rels
-        # Since no characters in faction, may not be called
-        self.assertTrue(True)  # Just verify no error
+        # Verify faction was deleted
+        self.assertFalse(Faction.objects.filter(id=faction_id).exists())
 
     @patch("larpmanager.cache.rels.update_event_plot_rels")
     def test_plot_post_save_resets_rels_cache(self, mock_reset):
@@ -580,11 +594,11 @@ class TestCacheSignals(BaseTestCase):
         event = self.get_event()
         plot = Plot.objects.create(name="Test Plot", event=event)
         mock_reset.reset_mock()  # Reset after create
+        plot_id = plot.id
         plot.delete()
 
-        # Signal updates related character rels
-        # Since no characters in plot, may not be called
-        self.assertTrue(True)  # Just verify no error
+        # Verify plot was deleted
+        self.assertFalse(Plot.objects.filter(id=plot_id).exists())
 
     @patch("larpmanager.cache.skin.reset_cache_skin")
     def test_association_skin_post_save_resets_skin_cache(self, mock_reset):

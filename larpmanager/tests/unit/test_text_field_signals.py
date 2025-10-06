@@ -283,14 +283,19 @@ class TestTextFieldSignals(BaseTestCase):
         self.assertIsNotNone(option.id)
 
         # Delete in reverse order
+        option_id = option.id
+        question_id = question.id
         option.delete()
         question.delete()
 
-        # Should handle deletion cascade correctly
-        self.assertTrue(True)
+        # Verify deletions were successful
+        self.assertFalse(WritingOption.objects.filter(id=option_id).exists())
+        self.assertFalse(WritingQuestion.objects.filter(id=question_id).exists())
 
     def test_signal_performance_with_bulk_operations(self):
         """Test that signals perform reasonably well with bulk operations"""
+        from larpmanager.models.writing import Character
+
         # Create multiple characters rapidly
         event = self.get_event()
         characters = []
@@ -303,12 +308,18 @@ class TestTextFieldSignals(BaseTestCase):
         # All should be created successfully
         self.assertEqual(len(characters), 10)
 
+        # Verify all characters have IDs
+        for character in characters:
+            self.assertIsNotNone(character.id)
+
         # Bulk delete
+        character_ids = [c.id for c in characters]
         for character in characters:
             character.delete()
 
-        # Should handle bulk operations without issues
-        self.assertTrue(True)
+        # Verify all were deleted
+        for char_id in character_ids:
+            self.assertFalse(Character.objects.filter(id=char_id, deleted__isnull=True).exists())
 
     @patch("larpmanager.cache.text_fields.update_cache_text_fields")
     def test_signal_idempotency(self, mock_reset):
