@@ -382,7 +382,11 @@ def event(request, s):
 
     ctx["data"] = ctx["event"].show()
 
-    ctx["no_robots"] = datetime.today().date() > ctx["run"].end or not ctx["run"].development == DevelopStatus.SHOW
+    ctx["no_robots"] = (
+        not ctx["run"].development == DevelopStatus.SHOW
+        or not ctx["run"].end
+        or datetime.today().date() > ctx["run"].end
+    )
 
     return render(request, "larpmanager/event/event.html", ctx)
 
