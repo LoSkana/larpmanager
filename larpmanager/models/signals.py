@@ -901,12 +901,22 @@ def post_save_ability_px(sender, instance, *args, **kwargs):
     handle_ability_save(instance)
 
 
+@receiver(post_delete, sender=AbilityPx)
+def post_delete_ability_px(sender, instance, *args, **kwargs):
+    handle_ability_save(instance)
+
+
 def handle_ability_save(instance):
     for char in instance.characters.all():
         update_px(char)
 
 
 @receiver(post_save, sender=DeliveryPx)
+def post_delete_delivery_px(sender, instance, *args, **kwargs):
+    handle_delivery_save(instance)
+
+
+@receiver(post_delete, sender=DeliveryPx)
 def post_save_delivery_px(sender, instance, *args, **kwargs):
     handle_delivery_save(instance)
 
@@ -921,6 +931,11 @@ def post_save_rule_px(sender, instance, *args, **kwargs):
     handle_rule_save(instance)
 
 
+@receiver(post_delete, sender=RulePx)
+def post_delete_rule_px(sender, instance, *args, **kwargs):
+    handle_rule_save(instance)
+
+
 def handle_rule_save(instance):
     event = instance.event.get_class_parent(RulePx)
     for char in event.get_elements(Character).all():
@@ -929,6 +944,11 @@ def handle_rule_save(instance):
 
 @receiver(post_save, sender=ModifierPx)
 def post_save_modifier_px(sender, instance, *args, **kwargs):
+    handle_modifier_save(instance)
+
+
+@receiver(post_delete, sender=ModifierPx)
+def post_delete_modifier_px(sender, instance, *args, **kwargs):
     handle_modifier_save(instance)
 
 
