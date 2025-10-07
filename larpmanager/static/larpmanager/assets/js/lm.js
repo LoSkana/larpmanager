@@ -532,7 +532,7 @@ function data_tables() {
                 { searcheable: false, targets: [0] },
                 { columnControl: [], targets: [0] }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
             /*
             initComplete: function () {
                 this.api()

@@ -303,6 +303,7 @@ def exe_payments(request):
         ("net", _("Net")),
         ("trans", _("Fee")),
         ("created", _("Date")),
+        ("info", _("Info")),
     ]
     if "vat" in ctx["features"]:
         fields.append(("vat", _("VAT")))
@@ -320,6 +321,7 @@ def exe_payments(request):
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
                 "vat": lambda el: format_decimal(el.vat) if el.vat else "",
+                "info": lambda el: el.info,
             },
         }
     )
