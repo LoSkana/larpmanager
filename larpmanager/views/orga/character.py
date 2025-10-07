@@ -65,12 +65,55 @@ from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
     exchange_order,
     get_char,
-    get_element,
 )
 from larpmanager.utils.download import orga_character_form_download
 from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
+
+
+def get_character_optimized(ctx, num):
+    """Get character with optimized queries for editing.
+
+    Args:
+        ctx: Template context dictionary
+        num: Character ID
+
+    Raises:
+        Http404: If character does not exist
+    """
+    try:
+        ev = ctx["event"].get_class_parent(Character)
+        features = ctx.get("features", [])
+
+        select_related_fields = ["event"]
+
+        # Add other select_related fields based on features
+        if "user_character" in features:
+            select_related_fields.append("player")
+        if "progress" in features:
+            select_related_fields.append("progress")
+        if "assigned" in features:
+            select_related_fields.append("assigned")
+        if "mirror" in features:
+            select_related_fields.append("mirror")
+
+        query = Character.objects.select_related(*select_related_fields)
+
+        # Only prefetch factions and plots if their features are enabled
+        prefetch_fields = []
+        if "faction" in features:
+            prefetch_fields.append("factions_list")
+        if "plot" in features:
+            prefetch_fields.append("plots")
+
+        if prefetch_fields:
+            query = query.prefetch_related(*prefetch_fields)
+
+        ctx["character"] = query.get(event=ev, pk=num)
+        ctx["class_name"] = "character"
+    except ObjectDoesNotExist as err:
+        raise Http404("character does not exist") from err
 
 
 @login_required
@@ -89,9 +132,13 @@ def orga_characters(request, s):
 @login_required
 def orga_characters_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_characters")
-    get_event_cache_all(ctx)
+
+    # Only load full event cache if we need relationships or other features that require it
+    if "relationships" in ctx["features"] or "character_finder" in ctx.get("features", []):
+        get_event_cache_all(ctx)
+
     if num != 0:
-        get_element(ctx, num, "character", Character)
+        get_character_optimized(ctx, num)
 
     _characters_relationships(ctx)
 
@@ -120,12 +167,17 @@ def _characters_relationships(ctx):
 
     if "character" in ctx:
         rels = {}
-        for rel in Relationship.objects.filter(source=ctx["character"]):
+
+        direct_rels = Relationship.objects.filter(source=ctx["character"]).select_related("target")
+
+        for rel in direct_rels:
             if rel.target.id not in rels:
                 rels[rel.target.id] = {"char": rel.target}
             rels[rel.target.id]["direct"] = rel.text
 
-        for rel in Relationship.objects.filter(target=ctx["character"]):
+        inverse_rels = Relationship.objects.filter(target=ctx["character"]).select_related("source")
+
+        for rel in inverse_rels:
             if rel.source.id not in rels:
                 rels[rel.source.id] = {"char": rel.source}
             rels[rel.source.id]["inverse"] = rel.text
@@ -154,11 +206,15 @@ def update_relationship(request, ctx, nm, fl):
 def orga_characters_relationships(request, s, num):
     ctx = check_event_permission(request, s, "orga_characters")
     get_char(ctx, num)
-    ctx["direct"] = Relationship.objects.filter(source=ctx["character"]).order_by(
-        Length("text").asc(), "target__number"
+    ctx["direct"] = (
+        Relationship.objects.filter(source=ctx["character"])
+        .select_related("target")
+        .order_by(Length("text").asc(), "target__number")
     )
-    ctx["inverse"] = Relationship.objects.filter(target=ctx["character"]).order_by(
-        Length("text").asc(), "source__number"
+    ctx["inverse"] = (
+        Relationship.objects.filter(target=ctx["character"])
+        .select_related("source")
+        .order_by(Length("text").asc(), "source__number")
     )
     return render(request, "larpmanager/orga/characters/relationships.html", ctx)
 
@@ -183,11 +239,14 @@ def orga_characters_summary(request, s, num):
     ctx = check_event_permission(request, s, "orga_characters")
     get_char(ctx, num)
     ctx["factions"] = []
-    for p in ctx["character"].factions_list.all():
+
+    for p in ctx["character"].factions_list.all().prefetch_related("characters"):
         ctx["factions"].append(p.show_complete())
     ctx["plots"] = []
-    for p in ctx["character"].plots.all():
+
+    for p in ctx["character"].plots.all().prefetch_related("characters"):
         ctx["plots"].append(p.show_complete())
+
     return render(request, "larpmanager/orga/characters_summary.html", ctx)
 
 
@@ -328,8 +387,13 @@ def orga_writing_form(request, s, typ):
     ctx["upload"] = "character_form"
     ctx["download"] = 1
 
-    ctx["list"] = ctx["event"].get_elements(WritingQuestion).order_by("order").prefetch_related("options")
-    ctx["list"] = ctx["list"].filter(applicable=ctx["writing_typ"])
+    ctx["list"] = (
+        ctx["event"]
+        .get_elements(WritingQuestion)
+        .filter(applicable=ctx["writing_typ"])
+        .order_by("order")
+        .prefetch_related("options")
+    )
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
@@ -448,7 +512,7 @@ def orga_check(request, s):
 
     if "plot" in ctx["features"]:
         event = ctx["event"].get_class_parent(Character)
-        que = PlotCharacterRel.objects.filter(character__event=event)
+        que = PlotCharacterRel.objects.filter(character__event=event).select_related("character")
         que = que.exclude(text__isnull=True).exclude(text__exact="")
         for el in que.values_list("character__number", "text"):
             ctx["chars"][el[0]]["text"] += el[1]
@@ -521,7 +585,9 @@ def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
         checks[nm + "_interloper"] = []
         cache[nm] = {}
         # check s: all characters currently listed has
-        for f in ctx["event"].get_elements(el).annotate(characters_map=ArrayAgg("characters")):
+        for f in (
+            ctx["event"].get_elements(el).annotate(characters_map=ArrayAgg("characters")).prefetch_related("characters")
+        ):
             (from_text, extinct) = get_chars_relations(f.text, chs_numbers)
             for e in extinct:
                 checks[nm + "_extinct"].append((f, e))
