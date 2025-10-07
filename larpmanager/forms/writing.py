@@ -212,7 +212,18 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_orga_fields()
         self.reorder_field("characters")
 
-        self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
+        # Cache plot characters data to avoid multiple queries
+        if self.instance.pk:
+            plot_characters_data = list(
+                self.instance.get_plot_characters().values_list(
+                    "character__id", "character__number", "character__name", "text"
+                )
+            )
+            self.init_characters = [ch[0] for ch in plot_characters_data]
+        else:
+            plot_characters_data = []
+            self.init_characters = []
+
         self.initial["characters"] = self.init_characters
 
         self.role_help_text = _("This text will be added to the sheet of")
@@ -223,9 +234,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.add_char_finder = []
         self.field_link = {}
         if self.instance.pk:
-            for ch in self.instance.get_plot_characters().values_list(
-                "character__id", "character__number", "character__name", "text"
-            ):
+            for ch in plot_characters_data:
                 char = f"#{ch[1]} {ch[2]}"
                 field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
