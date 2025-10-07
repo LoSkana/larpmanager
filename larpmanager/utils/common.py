@@ -294,7 +294,11 @@ def get_feature_module(ctx, num):
 
 def get_plot(ctx, n):
     try:
-        ctx["plot"] = Plot.objects.get(event=ctx["event"], pk=n)
+        ctx["plot"] = (
+            Plot.objects.select_related("event", "progress", "assigned")
+            .prefetch_related("characters", "plotcharacterrel_set__character")
+            .get(event=ctx["event"], pk=n)
+        )
         ctx["name"] = ctx["plot"].name
     except ObjectDoesNotExist as err:
         raise Http404("Plot does not exist") from err
