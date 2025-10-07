@@ -84,9 +84,13 @@ def is_shuttle(request):
 
 
 def update_payment_details(request, ctx):
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    payment_details = get_payment_details(assoc)
+    payment_details = fetch_payment_details(request.assoc["id"])
     ctx.update(payment_details)
+
+
+def fetch_payment_details(assoc_id):
+    assoc = Association.objects.only("slug", "key").get(pk=assoc_id)
+    return get_payment_details(assoc)
 
 
 def check_assoc_permission(request, slug):

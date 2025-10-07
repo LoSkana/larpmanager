@@ -50,7 +50,7 @@ class TestPaymentFunctions(BaseTestCase):
 
         self.assertEqual(result, 0.0)
 
-    @patch("larpmanager.accounting.payment.get_payment_details")
+    @patch("larpmanager.accounting.payment.fetch_payment_details")
     def test_get_payment_fee_with_fee(self, mock_get_details):
         """Test get_payment_fee with configured fee"""
         mock_get_details.return_value = {"paypal_fee": "2.5"}
@@ -60,7 +60,7 @@ class TestPaymentFunctions(BaseTestCase):
 
         self.assertEqual(result, 2.5)
 
-    @patch("larpmanager.accounting.payment.get_payment_details")
+    @patch("larpmanager.accounting.payment.fetch_payment_details")
     def test_get_payment_fee_with_comma_separator(self, mock_get_details):
         """Test get_payment_fee handles comma as decimal separator"""
         mock_get_details.return_value = {"stripe_fee": "3,75"}

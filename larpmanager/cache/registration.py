@@ -47,7 +47,7 @@ def get_reg_counts(r, reset=False):
         res = cache.get(key)
     if not res:
         res = update_reg_counts(r)
-        cache.set(key, res)
+        cache.set(key, res, timeout=60 * 5)
     return res
 
 

@@ -76,5 +76,5 @@ def get_payment_details(assoc):
         decrypted_data = json.loads(data_bytes.decode("utf-8"))
         return decrypted_data
     except InvalidToken as err:
-        notify_admins(f"invalid token for {assoc}", f"{err}")
+        notify_admins(f"invalid token for {assoc.slug}", f"{err}")
         return {}
