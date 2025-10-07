@@ -27,6 +27,7 @@ from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
@@ -217,40 +218,29 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
     try:
         features = get_event_features(event.id)
 
-        if "character" in features:
-            res["characters"] = {}
-            characters = event.get_elements(Character)
-            for char in characters:
-                res["characters"][char.id] = get_event_char_rels(char, features)
-            logger.debug(f"Initialized {len(characters)} character relationships for event {event.id}")
+        # Configuration for each relationship type
+        rel_configs = [
+            ("character", "characters", Character, get_event_char_rels, True),
+            ("faction", "factions", Faction, get_event_faction_rels, False),
+            ("plot", "plots", Plot, get_event_plot_rels, False),
+            ("speedlarp", "speedlarps", SpeedLarp, get_event_speedlarp_rels, False),
+            ("prologue", "prologues", Prologue, get_event_prologue_rels, False),
+            ("quest", "quests", Quest, get_event_quest_rels, False),
+            ("questtype", "questtypes", QuestType, get_event_questtype_rels, False),
+        ]
 
-        if "faction" in features:
-            res["factions"] = {}
-            factions = event.get_elements(Faction)
-            for faction in factions:
-                res["factions"][faction.id] = get_event_faction_rels(faction)
-            logger.debug(f"Initialized {len(factions)} faction relationships for event {event.id}")
+        for feature_name, cache_key_plural, model_class, get_rels_func, pass_features in rel_configs:
+            if feature_name not in features:
+                continue
 
-        if "plot" in features:
-            res["plots"] = {}
-            plots = event.get_elements(Plot)
-            for plot in plots:
-                res["plots"][plot.id] = get_event_plot_rels(plot)
-            logger.debug(f"Initialized {len(plots)} plot relationships for event {event.id}")
-
-        if "speedlarp" in features:
-            res["speedlarps"] = {}
-            speedlarps = event.get_elements(SpeedLarp)
-            for speedlarp in speedlarps:
-                res["speedlarps"][speedlarp.id] = get_event_speedlarp_rels(speedlarp)
-            logger.debug(f"Initialized {len(speedlarps)} speedlarp relationships for event {event.id}")
-
-        if "prologue" in features:
-            res["prologues"] = {}
-            prologues = event.get_elements(Prologue)
-            for prologue in prologues:
-                res["prologues"][prologue.id] = get_event_prologue_rels(prologue)
-            logger.debug(f"Initialized {len(prologues)} prologue relationships for event {event.id}")
+            res[cache_key_plural] = {}
+            elements = event.get_elements(model_class)
+            for element in elements:
+                if pass_features:
+                    res[cache_key_plural][element.id] = get_rels_func(element, features)
+                else:
+                    res[cache_key_plural][element.id] = get_rels_func(element)
+            logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
 
         cache_key = get_event_rels_key(event.id)
         cache.set(cache_key, res)
@@ -468,6 +458,58 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
     return relations
 
 
+def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
+    """Get quest relationships for a specific quest.
+
+    Args:
+        quest: The Quest instance to get relationships for
+
+    Returns:
+        Dict[str, Any]: Dictionary containing relationship data:
+            {
+                'trait_rels': {'list': [(trait_id, trait_name), ...], 'count': int}
+            }
+    """
+    relations = {}
+
+    try:
+        traits = Trait.objects.filter(quest=quest, deleted=None)
+        trait_list = [(trait.id, trait.name) for trait in traits]
+        relations["trait_rels"] = build_relationship_dict(trait_list)
+
+    except Exception as e:
+        logger.error(f"Error getting relationships for quest {quest.id}: {e}")
+        relations = {}
+
+    return relations
+
+
+def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
+    """Get questtype relationships for a specific questtype.
+
+    Args:
+        questtype: The QuestType instance to get relationships for
+
+    Returns:
+        Dict[str, Any]: Dictionary containing relationship data:
+            {
+                'quest_rels': {'list': [(quest_id, quest_name), ...], 'count': int}
+            }
+    """
+    relations = {}
+
+    try:
+        quests = questtype.quests.all()
+        quest_list = [(quest.id, quest.name) for quest in quests]
+        relations["quest_rels"] = build_relationship_dict(quest_list)
+
+    except Exception as e:
+        logger.error(f"Error getting relationships for questtype {questtype.id}: {e}")
+        relations = {}
+
+    return relations
+
+
 def update_event_faction_rels(faction: Faction) -> None:
     """Update faction relationships in cache.
 
@@ -518,6 +560,32 @@ def update_event_prologue_rels(prologue: Prologue) -> None:
     """
     prologue_data = get_event_prologue_rels(prologue)
     update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_data)
+
+
+def update_event_quest_rels(quest: Quest) -> None:
+    """Update quest relationships in cache.
+
+    Updates the cached relationship data for a specific quest.
+    If the cache doesn't exist, it will be initialized for the entire event.
+
+    Args:
+        quest: The Quest instance to update relationships for
+    """
+    quest_data = get_event_quest_rels(quest)
+    update_cache_section(quest.event_id, "quests", quest.id, quest_data)
+
+
+def update_event_questtype_rels(questtype: QuestType) -> None:
+    """Update questtype relationships in cache.
+
+    Updates the cached relationship data for a specific questtype.
+    If the cache doesn't exist, it will be initialized for the entire event.
+
+    Args:
+        questtype: The QuestType instance to update relationships for
+    """
+    questtype_data = get_event_questtype_rels(questtype)
+    update_cache_section(questtype.event_id, "questtypes", questtype.id, questtype_data)
 
 
 @receiver(post_save, sender=Character)
@@ -797,6 +865,114 @@ def post_delete_relationship_reset_rels(sender, instance, **kwargs):
     """
     # Update cache for source character
     update_event_char_rels(instance.source)
+
+
+@receiver(post_save, sender=Quest)
+def post_save_quest_reset_rels(sender, instance, **kwargs):
+    """Handle quest save to update related caches.
+
+    Updates both quest cache and related questtype cache.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Quest instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update quest cache
+    update_event_quest_rels(instance)
+
+    # Update questtype cache if quest has a type
+    if instance.typ:
+        update_event_questtype_rels(instance.typ)
+
+
+@receiver(post_delete, sender=Quest)
+def post_delete_quest_reset_rels(sender, instance, **kwargs):
+    """Handle quest deletion to update related caches.
+
+    Removes quest from cache and updates related questtype cache.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Quest instance that was deleted
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update questtype cache if quest had a type
+    if instance.typ:
+        update_event_questtype_rels(instance.typ)
+
+    # Remove quest from cache
+    remove_from_cache_section(instance.event_id, "quests", instance.id)
+
+
+@receiver(post_save, sender=QuestType)
+def post_save_questtype_reset_rels(sender, instance, **kwargs):
+    """Handle questtype save to update related caches.
+
+    Updates both questtype cache and related quest caches.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The QuestType instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update questtype cache
+    update_event_questtype_rels(instance)
+
+    # Update cache for all quests of this type
+    for quest in instance.quests.all():
+        update_event_quest_rels(quest)
+
+
+@receiver(post_delete, sender=QuestType)
+def post_delete_questtype_reset_rels(sender, instance, **kwargs):
+    """Handle questtype deletion to update related caches.
+
+    Removes questtype from cache and updates related quest caches.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The QuestType instance that was deleted
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update cache for all quests that were of this type
+    for quest in instance.quests.all():
+        update_event_quest_rels(quest)
+
+    # Remove questtype from cache
+    remove_from_cache_section(instance.event_id, "questtypes", instance.id)
+
+
+@receiver(post_save, sender=Trait)
+def post_save_trait_reset_rels(sender, instance, **kwargs):
+    """Handle trait save to update quest cache.
+
+    Updates the quest cache when a trait changes.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Trait instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update quest cache if trait has a quest
+    if instance.quest:
+        update_event_quest_rels(instance.quest)
+
+
+@receiver(post_delete, sender=Trait)
+def post_delete_trait_reset_rels(sender, instance, **kwargs):
+    """Handle trait deletion to update quest cache.
+
+    Updates the quest cache when a trait is deleted.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Trait instance that was deleted
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update quest cache if trait had a quest
+    if instance.quest:
+        update_event_quest_rels(instance.quest)
 
 
 # Connect M2M signals manually for better control
