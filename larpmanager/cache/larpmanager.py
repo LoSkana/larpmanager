@@ -46,7 +46,7 @@ def get_cache_lm_home():
     res = cache.get(key)
     if not res:
         res = update_cache_lm_home()
-        cache.set(key, res, timeout=60 * 15)
+        cache.set(key, res, timeout=60 * 5)
     return res
 
 
