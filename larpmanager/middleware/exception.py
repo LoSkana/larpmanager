@@ -104,7 +104,7 @@ class ExceptionHandlingMiddleware:
             (ReturnNowError, lambda ex: ex.value),
             (
                 MainPageError,
-                lambda ex: redirect(f"{ex.base_domain}{ex.path or request.path}"),
+                lambda ex: redirect(f"https://{ex.base_domain}/{ex.path or request.path}"),
             ),
             (
                 RewokedMembershipError,
