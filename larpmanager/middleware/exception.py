@@ -101,8 +101,11 @@ class ExceptionHandlingMiddleware:
                 ),
             ),
             (RedirectError, lambda ex: redirect(ex.view)),
-            (MainPageError, lambda ex: redirect("/")),
             (ReturnNowError, lambda ex: ex.value),
+            (
+                MainPageError,
+                lambda ex: redirect(f"{ex.base_domain}{ex.path or request.path}"),
+            ),
             (
                 RewokedMembershipError,
                 lambda ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),

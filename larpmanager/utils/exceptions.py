@@ -151,9 +151,10 @@ class MainPageError(Exception):
         path (str, optional): Original request path
     """
 
-    def __init__(self, path=None):
+    def __init__(self, request=None):
         super().__init__()
-        self.path = path
+        self.path = request.path
+        self.base_domain = request.assoc["main_domain"]
 
 
 # For when you want to just return a json value
