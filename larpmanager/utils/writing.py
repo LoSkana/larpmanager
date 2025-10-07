@@ -334,6 +334,11 @@ def writing_list_query(ctx, ev, typ):
     writing = issubclass(typ, Writing)
     text_fields = ["teaser", "text"]
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
+
+    # Add select_related optimization for common foreign keys
+    if writing and hasattr(typ, "progress"):
+        ctx["list"] = ctx["list"].select_related("progress", "assigned")
+
     if writing:
         for f in text_fields:
             ctx["list"] = ctx["list"].defer(f)
