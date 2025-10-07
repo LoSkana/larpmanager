@@ -443,7 +443,6 @@ function data_tables() {
         var full_layout = rowCount >= 10;
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
             scrollX: true,
             stateSave: true,
             paging: full_layout,
@@ -510,7 +509,7 @@ function data_tables() {
         const url = $table.attr('url');
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
+            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
             ajax: {
                 url: url,
                 type: 'POST'
