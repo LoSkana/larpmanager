@@ -313,7 +313,13 @@ class Character(Writing):
                 name="unique_character_without_optional",
             ),
         ]
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event", "status"]),
+            models.Index(fields=["player", "event"]),
+            models.Index(fields=["event", "hide"]),
+            models.Index(fields=["mirror"]),
+        ]
 
 
 class CharacterConfig(BaseModel):
@@ -660,4 +666,9 @@ class Relationship(BaseModel):
                 condition=Q(deleted=None),
                 name="unique_relationship_without_optional",
             ),
+        ]
+        indexes = [
+            models.Index(fields=["source"]),
+            models.Index(fields=["target"]),
+            models.Index(fields=["source", "target"]),
         ]
