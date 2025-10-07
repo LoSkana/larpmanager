@@ -12,6 +12,7 @@
                 <th>View</th>
                 <th>Avg Duration</th>
                 <th>Total Calls</th>
+                <th>Total Duration</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                     <td>{{ el.view_func_name }}</td>
                     <td>{{ el.avg_duration | floatformat:2 }}</td>
                     <td>{{ el.total_calls }}</td>
+                    <td>{{ el.total_duration }}</td>
                 </tr>
             {% endfor %}
         </tbody>
