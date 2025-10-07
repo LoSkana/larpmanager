@@ -29,7 +29,6 @@ from django.dispatch import receiver
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import get_payment_details
 from larpmanager.accounting.gateway import (
     get_paypal_form,
     get_redsys_form,
@@ -57,7 +56,6 @@ from larpmanager.models.accounting import (
     RefundRequest,
     RefundStatus,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -67,7 +65,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import update_payment_details
+from larpmanager.utils.base import fetch_payment_details, update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
 
@@ -82,8 +80,7 @@ def get_payment_fee(assoc_id, slug):
     Returns:
         float: Payment fee amount, 0.0 if not configured
     """
-    assoc = Association.objects.get(pk=assoc_id)
-    payment_details = get_payment_details(assoc)
+    payment_details = fetch_payment_details(assoc_id)
     k = slug + "_fee"
     if k not in payment_details or not payment_details[k]:
         return 0.0
