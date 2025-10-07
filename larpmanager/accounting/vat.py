@@ -64,8 +64,7 @@ def compute_vat(instance):
     quota_ticket = float(min(paid, remaining_ticket))
     quota_options = float(paid) - float(quota_ticket)
     # Compute VAT based on the split and respective rates
-    vat = max(0.0, quota_ticket * vat_ticket + quota_options * vat_options)
-    updates = {"vat": vat}
+    updates = {"vat_ticket": quota_ticket * vat_ticket, "vat_options": quota_options * vat_options}
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 

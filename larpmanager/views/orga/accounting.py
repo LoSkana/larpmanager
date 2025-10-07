@@ -226,8 +226,9 @@ def orga_payments(request, s):
         ("trans", _("Fee")),
         ("created", _("Date")),
     ]
-    if "vat" in ctx.get("features", []):
-        fields.append(("vat", _("VAT")))
+    if "vat" in ctx["features"]:
+        fields.append(("vat_ticket", _("VAT (Ticket)")))
+        fields.append(("vat_options", _("VAT (Options)")))
 
     ctx.update(
         {
@@ -241,7 +242,6 @@ def orga_payments(request, s):
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "vat": lambda el: format_decimal(el.vat) if el.vat else "",
             },
         }
     )

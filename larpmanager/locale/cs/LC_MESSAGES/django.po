@@ -1953,6 +1953,9 @@ msgstr "Typ textu"
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
 
+msgid "VAT (Ticket)"
+msgstr "DPH (jízdenka)"
+
 msgid "Verification"
 msgstr "Ověřování"
 
@@ -2145,6 +2148,9 @@ msgstr "Celkové příjmy"
 
 msgid "URL shortener"
 msgstr "Zkracovač URL"
+
+msgid "VAT (Options)"
+msgstr "DPH (volitelně)"
 
 msgid "Visualisation"
 msgstr "Vizualizace"
