@@ -509,7 +509,7 @@ function data_tables() {
         const url = $table.attr('url');
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
+            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,
                 type: 'POST'

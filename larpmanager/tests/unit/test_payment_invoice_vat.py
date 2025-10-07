@@ -196,7 +196,7 @@ class TestVATFunctions(BaseTestCase):
 
         payment.refresh_from_db()
         # With no VAT config, should be 0
-        self.assertEqual(payment.vat, 0.0)
+        self.assertEqual(payment.vat_ticket, 0.0)
 
     def test_compute_vat_with_vat_config(self):
         """Test compute_vat with VAT configured"""
@@ -228,7 +228,7 @@ class TestVATFunctions(BaseTestCase):
         payment.refresh_from_db()
         # With 22% VAT configured and ticket price, should have VAT value
         # If it's 0, the function logic might require specific conditions
-        self.assertGreaterEqual(payment.vat, 0.0)
+        self.assertEqual(payment.vat_ticket, 22.0)
 
     def test_get_previous_sum_no_previous(self):
         """Test get_previous_sum with no previous payments"""
