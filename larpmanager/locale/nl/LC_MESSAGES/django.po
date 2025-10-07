@@ -1953,6 +1953,9 @@ msgstr "Type tekst"
 msgid "Url Shortner"
 msgstr "Url Verkorter"
 
+msgid "VAT (Ticket)"
+msgstr "BTW (ticket)"
+
 msgid "Verification"
 msgstr "Verificatie"
 
@@ -2145,6 +2148,9 @@ msgstr "Totale inkomsten"
 
 msgid "URL shortener"
 msgstr "URL-verkorter"
+
+msgid "VAT (Options)"
+msgstr "BTW (opties)"
 
 msgid "Visualisation"
 msgstr "Visualisatie"

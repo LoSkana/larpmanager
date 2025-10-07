@@ -8575,6 +8575,12 @@ msgstr ""
 msgid "Request approved"
 msgstr ""
 
+msgid "VAT (Ticket)"
+msgstr ""
+
+msgid "VAT (Options)"
+msgstr ""
+
 msgid "Transaction"
 msgstr ""
 

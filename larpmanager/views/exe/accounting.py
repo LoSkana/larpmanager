@@ -306,7 +306,8 @@ def exe_payments(request):
         ("info", _("Info")),
     ]
     if "vat" in ctx["features"]:
-        fields.append(("vat", _("VAT")))
+        fields.append(("vat_ticket", _("VAT (Ticket)")))
+        fields.append(("vat_options", _("VAT (Options)")))
 
     ctx.update(
         {
@@ -320,8 +321,6 @@ def exe_payments(request):
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "vat": lambda el: format_decimal(el.vat) if el.vat else "",
-                "info": lambda el: el.info,
             },
         }
     )

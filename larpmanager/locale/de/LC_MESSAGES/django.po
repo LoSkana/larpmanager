@@ -1953,6 +1953,9 @@ msgstr "Art des Textes"
 msgid "Url Shortner"
 msgstr "Url-Verkürzer"
 
+msgid "VAT (Ticket)"
+msgstr "Mehrwertsteuer (Ticket)"
+
 msgid "Verification"
 msgstr "Überprüfung"
 
@@ -2145,6 +2148,9 @@ msgstr "Einnahmen insgesamt"
 
 msgid "URL shortener"
 msgstr "URL-Verkürzer"
+
+msgid "VAT (Options)"
+msgstr "Mehrwertsteuer (Optionen)"
 
 msgid "Visualisation"
 msgstr "Visualisierung"

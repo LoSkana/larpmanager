@@ -1953,6 +1953,9 @@ msgstr "Rodzaj tekstu"
 msgid "Url Shortner"
 msgstr "Skracacz adresów URL"
 
+msgid "VAT (Ticket)"
+msgstr "VAT (bilet)"
+
 msgid "Verification"
 msgstr "Weryfikacja"
 
@@ -2145,6 +2148,9 @@ msgstr "Całkowity przychód"
 
 msgid "URL shortener"
 msgstr "Skracacz adresów URL"
+
+msgid "VAT (Options)"
+msgstr "VAT (Opcje)"
 
 msgid "Visualisation"
 msgstr "Wizualizacja"
