@@ -26,6 +26,7 @@ from django.utils import translation
 from django.utils.xmlutils import SimplerXMLGenerator
 from django.views.decorators.cache import cache_page
 
+from larpmanager.cache.association import get_cache_assoc
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import LarpManagerGuide
@@ -63,7 +64,18 @@ def _render_sitemap(urls):
 
 
 def _organization_sitemap(request):
+    """Generate sitemap URLs for an organization's events and runs.
+
+    Args:
+        request: HTTP request with organization context
+
+    Returns:
+        List of URLs for the organization's public pages
+    """
     assoc = Association.objects.get(pk=request.assoc["id"])
+    cache = get_cache_assoc(assoc.slug)
+    if cache.get("demo", False):
+        return []
     domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
     urls = [f"https://{assoc.slug}.{domain}/"]
     # Event runs

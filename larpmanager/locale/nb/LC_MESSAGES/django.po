@@ -1224,6 +1224,9 @@ msgstr "Førstehjelp"
 msgid "Frequency"
 msgstr "Frekvens"
 
+msgid "Important"
+msgstr "Viktig"
+
 msgid "Interface"
 msgstr "Grensesnitt"
 
@@ -1745,6 +1748,9 @@ msgstr "Tverrgående"
 
 msgid "Undo period"
 msgstr "Angre periode"
+
+msgid "Unimportant"
+msgstr "Uviktig"
 
 msgid "Unique code"
 msgstr "Unik kode"
@@ -8431,6 +8437,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å spore hvilken medarbeider som er ansvarlig for hvert "
 "skriveelement i feltet \"tildelt"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Hvis avkrysset, kan du spore plott eller relasjoner som ikke er veldig "
+"viktige for karakteren"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

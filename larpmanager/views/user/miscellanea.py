@@ -145,6 +145,16 @@ def handout_ext(request, s, cod):
 
 
 def album_aux(request, ctx, parent):
+    """Prepare album context with sub-albums and paginated uploads.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary to update
+        parent: Parent album instance or None for root level
+
+    Returns:
+        Rendered album page with sub-albums and uploads
+    """
     ctx["subs"] = Album.objects.filter(run=ctx["run"], parent=parent, is_visible=True).order_by("-created")
     if parent is not None:
         lst = AlbumUpload.objects.filter(album=ctx["album"]).order_by("-created")
@@ -197,6 +207,15 @@ def workshops(request, s):
 
 
 def valid_workshop_answer(request, ctx):
+    """Validate workshop quiz answers and determine pass/fail status.
+
+    Args:
+        request: HTTP request object containing quiz answers
+        ctx: Context dictionary containing workshop questions
+
+    Returns:
+        bool: True if all answers are correct, False otherwise
+    """
     res = True
     for el in ctx["list"]:
         el["correct"] = []
@@ -323,6 +342,15 @@ def shuttle_new(request):
 
 @login_required
 def shuttle_edit(request, n):
+    """Edit existing shuttle service request.
+
+    Args:
+        request: HTTP request object
+        n: Shuttle service ID to edit
+
+    Returns:
+        HttpResponse: Rendered edit form or redirect after successful update
+    """
     check_assoc_feature(request, "shuttle")
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})

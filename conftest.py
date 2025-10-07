@@ -183,7 +183,7 @@ def _e2e_db_setup(request, django_db_blocker):
         if not _database_has_tables():
             # No tables - load from SQL dump
             _load_test_db_sql()
-        elif request.node.get_closest_marker("e2e"):
+        elif "playwright" in str(request.node.fspath):
             # Tables exist - truncate and init
             _reload_fixtures()
 

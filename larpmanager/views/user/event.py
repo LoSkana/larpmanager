@@ -81,8 +81,14 @@ def calendar(request, lang):
         Rendered calendar template with events and registration status
     """
     aid = request.assoc["id"]
-    my_regs = None
-    my_runs_list = []
+
+    # Get nexts runs
+    runs = (
+        get_coming_runs(aid).select_related("event").prefetch_related("registrations__ticket", "registrations__member")
+    )
+
+    # Check user registrations if authenticated
+    my_regs_dict = {}
     if request.user.is_authenticated:
         ref = datetime.now() - timedelta(days=3)
         my_regs = Registration.objects.filter(
@@ -91,15 +97,25 @@ def calendar(request, lang):
             redeem_code__isnull=True,
             member=request.user.member,
             run__end__gte=ref.date(),
-        )
-        my_regs = my_regs.select_related("ticket")
-        my_runs_list = [reg.run_id for reg in my_regs]
+        ).select_related("ticket", "run")
+
+        my_regs_dict = {reg.run_id: reg for reg in my_regs}
+        my_runs_list = list(my_regs_dict.keys())
+
+        # Filter runs based on user registrations
+        runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
+    else:
+        runs = runs.exclude(development=DevelopStatus.START)
+        my_regs = None
 
     ctx = def_user_ctx(request)
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
     if lang:
         ctx["lang"] = lang
-    for run in get_coming_runs(aid, my_runs_list=my_runs_list):
+
+    # Process runs in batch with pre-fetched data
+    for run in runs:
+        run.my_reg = my_regs_dict.get(run.id) if my_regs_dict else None
         registration_status(run, request.user, my_regs=my_regs)
         if run.status["open"]:
             ctx["open"].append(run)
@@ -111,20 +127,28 @@ def calendar(request, lang):
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_coming_runs(assoc_id, my_runs_list=None, future=True):
+def get_coming_runs(assoc_id, future=True):
+    """Get upcoming runs for an association with optimized queries.
+
+    Args:
+        assoc_id: Association ID to filter by
+        future: If True, get future runs; if False, get past runs
+
+    Returns:
+        QuerySet of Run objects with optimized select_related
+    """
     runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
-    if my_runs_list:
-        runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
-    else:
-        runs = runs.exclude(development=DevelopStatus.START)
+
+    if assoc_id:
+        runs = runs.filter(event__assoc_id=assoc_id)
+
     if future:
         ref = datetime.now() - timedelta(days=3)
         runs = runs.filter(end__gte=ref.date()).order_by("end")
     else:
         ref = datetime.now() + timedelta(days=3)
         runs = runs.filter(end__lte=ref.date()).order_by("-end")
-    if assoc_id:
-        runs = runs.filter(event__assoc_id=assoc_id)
+
     return runs
 
 
@@ -182,6 +206,14 @@ def carousel(request):
 
 @login_required
 def share(request):
+    """Handle member data sharing consent for organization.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        HttpResponse: Rendered template or redirect to home
+    """
     ctx = def_user_ctx(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
@@ -209,6 +241,15 @@ def legal_notice(request):
 
 @login_required
 def event_register(request, s):
+    """Display event registration options for future runs.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Redirect to single run registration or list of available runs
+    """
     ctx = get_event(request, s)
     # check future runs
     runs = (
@@ -231,6 +272,14 @@ def event_register(request, s):
 
 
 def calendar_past(request):
+    """Display calendar of past events for the association.
+
+    Args:
+        request: HTTP request object with user authentication and association data
+
+    Returns:
+        HttpResponse: Rendered past events calendar template
+    """
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
     my_regs = None
@@ -251,6 +300,15 @@ def calendar_past(request):
 
 
 def check_gallery_visibility(request, ctx):
+    """Check if gallery is visible to the current user based on event configuration.
+
+    Args:
+        request: HTTP request object with user authentication information
+        ctx: Context dictionary containing event and run data
+
+    Returns:
+        bool: True if gallery should be visible, False otherwise
+    """
     if is_lm_admin(request):
         return True
 
@@ -348,7 +406,11 @@ def event(request, s):
 
     ctx["data"] = ctx["event"].show()
 
-    ctx["no_robots"] = datetime.today().date() > ctx["run"].end
+    ctx["no_robots"] = (
+        not ctx["run"].development == DevelopStatus.SHOW
+        or not ctx["run"].end
+        or datetime.today().date() > ctx["run"].end
+    )
 
     return render(request, "larpmanager/event/event.html", ctx)
 
@@ -358,6 +420,15 @@ def event_redirect(request, s):
 
 
 def search(request, s):
+    """Display event search page with character gallery and search functionality.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+
+    Returns:
+        Rendered search.html template with searchable character data
+    """
     ctx = get_event_run(request, s, status=True)
 
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
@@ -416,6 +487,16 @@ def factions(request, s):
 
 
 def faction(request, s, g):
+    """Display detailed information for a specific faction.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+        g: Faction identifier string
+
+    Returns:
+        HttpResponse: Rendered faction detail page
+    """
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "faction", _("Factions"))
 
@@ -452,6 +533,16 @@ def quests(request, s, g=None):
 
 
 def quest(request, s, g):
+    """Display individual quest details and associated traits.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        g: Quest number
+
+    Returns:
+        HttpResponse: Rendered quest template
+    """
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
@@ -510,6 +601,16 @@ def limitations(request, s):
 
 
 def export(request, s, t):
+    """Export event elements as JSON for external consumption.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        t: Type of elements to export ('char', 'faction', 'quest', 'trait')
+
+    Returns:
+        JsonResponse: Exported elements data
+    """
     ctx = get_event(request, s)
     if t == "char":
         lst = ctx["event"].get_elements(Character).order_by("number")

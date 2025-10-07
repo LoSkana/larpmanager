@@ -87,6 +87,15 @@ def character(request, s, num):
 
 
 def _character_sheet(request, ctx):
+    """Display character sheet with visibility and approval checks.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary with event, run, and character data
+
+    Returns:
+        HttpResponse: Rendered character sheet or redirect
+    """
     ctx["screen"] = True
 
     if "check" not in ctx and not ctx["show_character"]:
@@ -116,6 +125,19 @@ def _character_sheet(request, ctx):
 
 
 def character_external(request, s, code):
+    """Display character sheet via external access token.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        code: External access token for character
+
+    Returns:
+        Character sheet view or 404 if access not enabled or invalid code
+
+    Raises:
+        Http404: If external access is disabled or token is invalid
+    """
     ctx = get_event_run(request, s)
 
     if not ctx["event"].get_config("writing_external_access", False):
@@ -167,7 +189,7 @@ def character_your(request, s, p=None):
 
     rcrs = ctx["run"].reg.rcrs.all()
 
-    if rcrs.count() == 0:
+    if not rcrs.exists():
         messages.error(request, _("You don't have a character assigned for this event") + "!")
         return redirect("home")
 
@@ -268,7 +290,9 @@ def character_customize(request, s, num):
     get_char_check(request, ctx, num, True)
 
     try:
-        rgr = RegistrationCharacterRel.objects.get(reg=ctx["run"].reg, character__number=num)
+        rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
+            reg=ctx["run"].reg, character__number=num
+        )
         if rgr.custom_profile:
             ctx["custom_profile"] = rgr.profile_thumb.url
 
@@ -305,7 +329,9 @@ def character_profile_upload(request, s, num):
     get_char_check(request, ctx, num, True)
 
     try:
-        rgr = RegistrationCharacterRel.objects.get(reg=ctx["run"].reg, character__number=num)
+        rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
+            reg=ctx["run"].reg, character__number=num
+        )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
 
@@ -340,7 +366,9 @@ def character_profile_rotate(request, s, num, r):
     get_char_check(request, ctx, num, True)
 
     try:
-        rgr = RegistrationCharacterRel.objects.get(reg=ctx["run"].reg, character__number=num)
+        rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
+            reg=ctx["run"].reg, character__number=num
+        )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
 
@@ -466,7 +494,7 @@ def character_assign(request, s, num):
     """
     ctx = get_event_run(request, s, signup=True, status=True)
     get_char_check(request, ctx, num, True)
-    if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count():
+    if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
     else:
         RegistrationCharacterRel.objects.create(reg_id=ctx["run"].reg.id, character=ctx["character"])
@@ -594,6 +622,17 @@ def _save_character_abilities(ctx, request):
 
 
 def get_undo_abilities(request, ctx, char, new_ability_id=None):
+    """Get list of recently acquired abilities that can be undone.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing event data
+        char: Character object
+        new_ability_id: ID of newly acquired ability to track (optional)
+
+    Returns:
+        list: List of ability IDs that can be undone
+    """
     px_undo = int(ctx["event"].get_config("px_undo", 0))
     config_name = f"added_px_{char.id}"
     val = char.get_config(config_name, "{}")
@@ -630,13 +669,15 @@ def character_relationships(request, s, num):
     get_event_cache_all(ctx)
 
     ctx["rel"] = []
-    que = PlayerRelationship.objects.filter(reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"])
+    que = PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
+        reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
+    )
     for tg_num, text in que.values_list("target__number", "text"):
         if "chars" in ctx and tg_num in ctx["chars"]:
             show = ctx["chars"][tg_num]
         else:
             try:
-                ch = Character.objects.get(event=ctx["event"], number=tg_num)
+                ch = Character.objects.select_related("event", "player").get(event=ctx["event"], number=tg_num)
                 show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue

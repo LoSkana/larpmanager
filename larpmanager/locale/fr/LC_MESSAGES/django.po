@@ -1224,6 +1224,9 @@ msgstr "Premiers secours"
 msgid "Frequency"
 msgstr "Fréquence"
 
+msgid "Important"
+msgstr "Important"
+
 msgid "Interface"
 msgstr "Interface"
 
@@ -1745,6 +1748,9 @@ msgstr "Transversale"
 
 msgid "Undo period"
 msgstr "Période d'annulation"
+
+msgid "Unimportant"
+msgstr "Sans importance"
 
 msgid "Unique code"
 msgstr "Code unique"
@@ -8716,6 +8722,13 @@ msgid ""
 msgstr ""
 "Le champ \"assigné\" permet de savoir quel membre du personnel est "
 "responsable de chaque élément d'écriture"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Si coché, permet de suivre les intrigues ou les relations qui ne sont pas "
+"vraiment importantes pour le personnage"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

@@ -17,76 +17,52 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from calmjs.parse.asttypes import Object
 from django.apps import apps
 from django.core.cache import cache
 
 
 def reset_configs(element):
-    """Clear cached configuration for an element.
-
-    Args:
-        element: Model instance to clear configuration cache for
-
-    Side effects:
-        Removes configuration from cache
-    """
-    cache.delete(cache_configs_key(element))
-
-
-def cache_configs_key(element):
-    """Generate cache key for element configuration.
-
-    Args:
-        element: Model instance to generate cache key for
-
-    Returns:
-        str: Cache key for element configurations
-    """
     # noinspection PyProtectedMember
-    return f"configs_{element._meta.model_name}_{element.id}"
+    cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
+
+
+def reset_element_configs(element_id, model_name):
+    cache.delete(cache_configs_key(element_id, model_name))
+
+
+def cache_configs_key(element_id, model_name):
+    return f"configs_{model_name}_{element_id}"
 
 
 def get_configs(element):
-    """Get cached configuration for an element, updating if needed.
+    # noinspection PyProtectedMember
+    return get_element_configs(element.id, element._meta.model_name.lower())
 
-    Args:
-        element: Model instance to get configurations for
 
-    Returns:
-        dict: Configuration name-value pairs
-    """
-    key = cache_configs_key(element)
+def get_element_configs(element_id, model_name):
+    key = cache_configs_key(element_id, model_name)
     res = cache.get(key)
     if not res:
-        res = update_configs(element)
+        res = update_configs(element_id, model_name)
         cache.set(key, res)
     return res
 
 
-def update_configs(element):
-    """Update configuration cache from database.
-
-    Args:
-        element: Model instance to update configurations for
-
-    Returns:
-        dict: Configuration name-value pairs from database
-    """
+def update_configs(element_id, model_name):
     model_map = {
-        "event": ("EventConfig", "event"),
-        "association": ("AssociationConfig", "assoc"),
-        "run": ("RunConfig", "run"),
-        "member": ("MemberConfig", "member"),
-        "character": ("CharacterConfig", "character"),
+        "event": ("EventConfig", "event_id"),
+        "association": ("AssociationConfig", "assoc_id"),
+        "run": ("RunConfig", "run_id"),
+        "member": ("MemberConfig", "member_id"),
+        "character": ("CharacterConfig", "character_id"),
     }
     # noinspection PyProtectedMember
-    model = element._meta.model_name.lower()
-    if model not in model_map:
+    if model_name not in model_map:
         return {}
-    config_model, fk_field = model_map[model]
+    config_model, fk_field = model_map[model_name]
     cls = apps.get_model("larpmanager", config_model)
-    que = cls.objects.filter(**{fk_field: element})
+    que = cls.objects.filter(**{fk_field: element_id})
     return {c.name: c.value for c in que}
 
 
@@ -170,6 +146,20 @@ def get_element_config(element, name, def_value):
     if not hasattr(element, "aux_configs"):
         element.aux_configs = get_configs(element)
 
+    return evaluate_config(element, name, def_value)
+
+
+def get_assoc_config(assoc_id, name, def_value=None, holder=None):
+    if not holder:
+        holder = Object()
+
+    if not hasattr(holder, "aux_configs"):
+        holder.aux_configs = get_element_configs(assoc_id, "association")
+
+    return evaluate_config(holder, name, def_value)
+
+
+def evaluate_config(element, name, def_value):
     if name not in element.aux_configs:
         return def_value
 

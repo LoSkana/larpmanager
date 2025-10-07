@@ -294,7 +294,11 @@ def get_feature_module(ctx, num):
 
 def get_plot(ctx, n):
     try:
-        ctx["plot"] = Plot.objects.get(event=ctx["event"], pk=n)
+        ctx["plot"] = (
+            Plot.objects.select_related("event", "progress", "assigned")
+            .prefetch_related("characters", "plotcharacterrel_set__character")
+            .get(event=ctx["event"], pk=n)
+        )
         ctx["name"] = ctx["plot"].name
     except ObjectDoesNotExist as err:
         raise Http404("Plot does not exist") from err
@@ -692,6 +696,15 @@ def clear_messages(request):
 
 
 def _get_help_questions(ctx, request):
+    """Retrieve and categorize help questions for the current association/run.
+
+    Args:
+        ctx: Context dictionary containing association/run information
+        request: HTTP request object
+
+    Returns:
+        tuple: (closed_questions, open_questions) lists
+    """
     base_qs = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
     if "run" in ctx:
         base_qs = base_qs.filter(run=ctx["run"])

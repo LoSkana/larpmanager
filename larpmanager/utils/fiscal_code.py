@@ -10,6 +10,14 @@ from larpmanager.utils.member import almost_equal, count_differences
 
 
 def calculate_fiscal_code(member):
+    """Calculate and validate Italian fiscal code for a member.
+
+    Args:
+        member: Member object with personal data for fiscal code calculation
+
+    Returns:
+        dict: Dictionary containing fiscal code validation results
+    """
     # ignore non-italian citizens
     if member.nationality and member.nationality.lower() != "it":
         return {}
@@ -71,6 +79,14 @@ def _clean_birth_place(birth_place):
 
 
 def _slugify(text):
+    """Normalize text for fiscal code generation by removing accents and special characters.
+
+    Args:
+        text: Input text to be normalized
+
+    Returns:
+        str: Normalized text with accents removed, lowercased, and special characters replaced
+    """
     # Remove accents
     for char in ["à", "è", "é", "ì", "ò", "ù"]:
         text = text.replace(char, "")
@@ -90,6 +106,14 @@ def _slugify(text):
 
 
 def _extract_municipality_code(birth_place):
+    """Extract municipality code from birth place name using ISTAT data.
+
+    Args:
+        birth_place: Name of the birth place (city/nation)
+
+    Returns:
+        str: ISTAT code for the municipality, or empty string if not found
+    """
     slug = _slugify(birth_place)
     # look for nations
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
@@ -118,18 +142,22 @@ def _extract_municipality_code(birth_place):
     return ""
 
 
-def _calculate_check_digit(cf_without_check_digit):
+def _calculate_check_digit(cf_without_check_digit: str) -> str:
     """Calculate the check digit for Italian fiscal codes (Codice Fiscale).
 
-    Implements the official algorithm using lookup tables for even and odd
-    position character values to compute the final check digit.
+    Implements the official Italian algorithm using lookup tables for even and odd
+    position character values to compute the final check digit according to the
+    Ministry of Finance specifications.
 
     Args:
-        cf_without_check_digit (str): 15-character fiscal code without check digit
+        cf_without_check_digit: 15-character fiscal code without check digit
+                                (format: AAABBB00A00A000)
 
     Returns:
-        str: Single character check digit (A-Z)
+        Single character check digit (A-Z) to complete the 16-character fiscal code
     """
+    # Lookup table for characters in even positions (0-indexed: 1, 3, 5, etc.)
+    # Maps each alphanumeric character to its numeric value for checksum calculation
     even_values = {
         "0": 0,
         "1": 1,
@@ -169,6 +197,8 @@ def _calculate_check_digit(cf_without_check_digit):
         "Z": 25,
     }
 
+    # Lookup table for characters in odd positions (0-indexed: 0, 2, 4, etc.)
+    # Uses different values than even positions as per fiscal code specification
     odd_values = {
         "0": 1,
         "1": 0,
@@ -208,13 +238,17 @@ def _calculate_check_digit(cf_without_check_digit):
         "Z": 23,
     }
 
+    # Calculate weighted sum of all characters
     total = 0
     for i, char in enumerate(cf_without_check_digit):
+        # Even positions (1, 3, 5, ...) use even_values table
         if i % 2 == 1 and char in even_values:
             total += even_values[char]
+        # Odd positions (0, 2, 4, ...) use odd_values table
         elif char in odd_values:
             total += odd_values[char]
 
+    # Convert the modulo 26 result to a letter (A=0, B=1, ..., Z=25)
     check_digit = chr((total % 26) + ord("A"))
     return check_digit
 

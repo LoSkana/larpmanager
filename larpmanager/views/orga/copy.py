@@ -58,6 +58,18 @@ from larpmanager.utils.event import check_event_permission
 
 
 def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
+    """Correct many-to-many relationships after copying event elements.
+
+    Args:
+        e_id: Target event ID
+        cls_p: Parent model class to match against
+        cls: Model class to update many-to-many relationships for
+        field: Many-to-many field name to correct
+        rel_field: Field to use for matching elements (default: "number")
+
+    Side effects:
+        Updates many-to-many relationships for all objects of cls in the event
+    """
     cache_t = {}
 
     for obj in cls_p.objects.filter(event_id=e_id):
@@ -78,6 +90,16 @@ def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
 
 
 def correct_rels(e_id, p_id, cls_p, cls, field, rel_field="number"):
+    """Correct model relationships after copying event elements.
+
+    Args:
+        e_id: Target event ID
+        p_id: Source parent event ID
+        cls_p: Parent model class to match
+        cls: Model class to update relationships for
+        field: Relationship field name to correct
+        rel_field: Field to use for matching (default: "number")
+    """
     cache_f = {}
     cache_t = {}
     field = field + "_id"
@@ -198,6 +220,12 @@ def correct_workshop(e_id, p_id):
 
 
 def correct_plot_character(e_id, p_id):
+    """Correct plot-character relationships after event copying.
+
+    Args:
+        e_id: Target event ID with copied elements
+        p_id: Source parent event ID with original elements
+    """
     cache_c = {}
     for obj in Character.objects.values_list("id", "number").filter(event_id=p_id):
         n_obj = Character.objects.values_list("id").get(event_id=e_id, number=obj[1])[0]
@@ -221,6 +249,12 @@ def correct_plot_character(e_id, p_id):
 
 
 def copy_character_config(e_id, p_id):
+    """Copy character configuration settings from parent to target event.
+
+    Args:
+        e_id: Target event ID to copy configurations to
+        p_id: Parent event ID to copy configurations from
+    """
     CharacterConfig.objects.filter(character__event_id=e_id).delete()
     cache = {}
     for obj in Character.objects.filter(event_id=e_id):
@@ -392,6 +426,15 @@ def copy_css(ctx, event, parent):
 
 @login_required
 def orga_copy(request, s):
+    """Handle event copying functionality for organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        HttpResponse: Rendered copy form template or redirect after successful copy
+    """
     ctx = check_event_permission(request, s, "orga_copy")
 
     if request.method == "POST":

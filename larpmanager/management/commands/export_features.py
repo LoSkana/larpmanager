@@ -31,19 +31,24 @@ class Command(BaseCommand):
     help = "Export features to yaml"
 
     # noinspection PyProtectedMember
-    def handle(self, *args, **options):
+    def handle(self, *args: tuple, **options: dict) -> None:
         """Django management command handler for exporting features and related data.
 
-        Defines export models and their fields for serialization to JSON format,
-        creating comprehensive data dumps for system migration or backup.
+        Defines export models and their fields for serialization to YAML format,
+        creating comprehensive data dumps for system migration or backup. Exports
+        features, permissions, skins, modules, and payment methods to fixture files.
 
         Args:
-            *args: Positional arguments passed by Django management command framework
-            **options: Keyword arguments parsed from command line options
+            *args: Positional arguments passed by Django management command framework (unused)
+            **options: Keyword arguments parsed from command line options (unused)
 
-        Returns:
-            None: Outputs JSON data to stdout
+        Side effects:
+            Creates YAML fixture files in larpmanager/fixtures/ directory for each
+            model type: skin.yaml, module.yaml, feature.yaml, permission_module.yaml,
+            assoc_permission.yaml, event_permission.yaml, payment_methods.yaml
         """
+        # Define models to export and their respective fields
+        # Each entry maps a fixture filename to (Model class, field tuple)
         export_models = {
             "skin": (
                 AssociationSkin,
@@ -86,10 +91,12 @@ class Command(BaseCommand):
             "payment_methods": (PaymentMethod, ("name", "slug", "instructions", "fields", "profile")),
         }
 
+        # Process each model type and export to YAML
         for model, value in export_models.items():
             typ, fields = value
             data = []
 
+            # Categorize fields by type for appropriate serialization
             m2m_fields = [f.name for f in typ._meta.many_to_many if f.name in fields]
             fk_fields = [f.name for f in typ._meta.fields if isinstance(f, ForeignKey) and f.name in fields]
             img_fields = [f.name for f in typ._meta.fields if isinstance(f, ImageField) and f.name in fields]
@@ -97,12 +104,15 @@ class Command(BaseCommand):
                 f for f in fields if f not in m2m_fields and f not in fk_fields and f not in img_fields and f != "id"
             ]
 
+            # Iterate through all objects and build export data
             for obj in typ.objects.all().order_by("pk"):
                 entry_fields = {}
 
+                # Export regular fields directly
                 for field in regular_fields:
                     entry_fields[field] = getattr(obj, field)
 
+                # Export foreign keys as ID references
                 for field in fk_fields:
                     rel_obj = getattr(obj, field)
                     if rel_obj is None:
@@ -118,13 +128,16 @@ class Command(BaseCommand):
                                 slug_val = getattr(obj, f"{field}_id")
                         entry_fields[field] = slug_val
 
+                # Export image fields as file paths
                 for field in img_fields:
                     image = getattr(obj, field)
                     entry_fields[field] = image.name if image else None
 
+                # Export many-to-many fields as lists of IDs
                 for field in m2m_fields:
                     entry_fields[field] = list(getattr(obj, field).values_list("pk", flat=True))
 
+                # Build Django fixture format entry
                 entry = {
                     "model": typ._meta.app_label + "." + typ._meta.model_name,
                     "fields": entry_fields,
@@ -132,5 +145,6 @@ class Command(BaseCommand):
 
                 data.append(entry)
 
+            # Write YAML fixture file with human-readable formatting
             with open(f"larpmanager/fixtures/{model}.yaml", "w") as f:
                 yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)

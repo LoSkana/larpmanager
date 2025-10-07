@@ -32,13 +32,14 @@ from django.contrib.auth.models import User, update_last_login
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
-from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from larpmanager.accounting.member import info_accounting
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.member import (
     AvatarForm,
     LanguageForm,
@@ -185,7 +186,7 @@ def profile(request):
 
     # Add vote configuration only if voting is enabled
     if "vote" in assoc_features:
-        ctx["vote_open"] = ctx["membership"].assoc.get_config("vote_open", False)
+        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False)
 
     return render(request, "larpmanager/member/profile.html", ctx)
 
@@ -199,6 +200,14 @@ def load_profile(request, img, ext):
 
 @login_required
 def profile_upload(request):
+    """Handle profile image upload for authenticated users.
+
+    Args:
+        request: HTTP request object containing POST data and uploaded image file
+
+    Returns:
+        JsonResponse: Success/failure status and image URL on success
+    """
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
@@ -221,6 +230,15 @@ def profile_upload(request):
 
 @login_required
 def profile_rotate(request, n):
+    """Rotate user's profile image 90 degrees clockwise or counterclockwise.
+
+    Args:
+        request: Django HTTP request object
+        n: Rotation direction (1 for clockwise, other for counterclockwise)
+
+    Returns:
+        JsonResponse with success/failure status and new image URL
+    """
     path = str(request.user.member.profile)
     if not path:
         return JsonResponse({"res": "ko"})
@@ -363,7 +381,7 @@ def public(request, n):
     ctx = def_user_ctx(request)
     ctx.update(get_member(n))
 
-    if Membership.objects.filter(member=ctx["member"], assoc_id=request.assoc["id"]).count() == 0:
+    if not Membership.objects.filter(member=ctx["member"], assoc_id=request.assoc["id"]).exists():
         raise Http404("no membership")
 
     if "badge" in request.assoc["features"]:
@@ -371,8 +389,8 @@ def public(request, n):
         for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
             ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("player_larp_history", False):
+    assoc_id = ctx["a_id"]
+    if get_assoc_config(assoc_id, "player_larp_history", False):
         ctx["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
@@ -498,6 +516,15 @@ def badge(request, n, p=1):
 
 @login_required
 def leaderboard(request, p=1):
+    """Display paginated leaderboard of members with badge scores.
+
+    Args:
+        request: Django HTTP request object
+        p: Page number for pagination (default: 1)
+
+    Returns:
+        Rendered leaderboard page with member rankings
+    """
     check_assoc_feature(request, "badge")
     member_list = get_leaderboard(request.assoc["id"])
     num_el = 25
@@ -546,7 +573,7 @@ def vote(request):
     # check if they have payed
     if "membership" in request.assoc["features"]:
         que = AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"])
-        if que.filter(member_id=ctx["member"].id).count() == 0:
+        if not que.filter(member_id=ctx["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
             return redirect("acc_membership")
 
@@ -555,12 +582,12 @@ def vote(request):
         ctx["done"] = True
         return render(request, "larpmanager/member/vote.html", ctx)
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc_id = ctx["a_id"]
 
-    ctx["vote_open"] = assoc.get_config("vote_open", False)
-    ctx["vote_cands"] = assoc.get_config("vote_candidates", "").split(",")
-    ctx["vote_min"] = assoc.get_config("vote_min", "1")
-    ctx["vote_max"] = assoc.get_config("vote_max", "1")
+    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False)
+    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "").split(",")
+    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1")
+    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1")
 
     if request.method == "POST":
         cnt = 0
@@ -595,56 +622,82 @@ def vote(request):
 
 
 @login_required
-def delegated(request):
-    """Manage delegated member functionality.
+def delegated(request: HttpRequest) -> HttpResponse:
+    """Manage delegated member accounts for parent-child member relationships.
 
-    Allows users to temporarily login as other members with proper
-    permissions and logging for administrative purposes.
+    Allows parent members to create and switch between delegated child accounts,
+    useful for managing family memberships or multiple personas. Supports
+    bidirectional switching between parent and delegated accounts with
+    proper authentication handling.
+
+    Args:
+        request: HTTP request object with authenticated user
+
+    Returns:
+        HttpResponse: Rendered delegated accounts page or redirect after login switch
+
+    Side effects:
+        - May create new delegated user accounts
+        - Logs user in as different member (parent or child)
+        - Disconnects last login update signal temporarily
     """
+    # Ensure delegated members feature is enabled
     check_assoc_feature(request, "delegated_members")
     ctx = def_user_ctx(request)
 
+    # Disable last login update to avoid tracking when switching accounts
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
     backend = get_user_backend()
 
-    # If the user is delegated, show info on login to the main account
+    # Handle delegated user trying to return to parent account
     if request.user.member.parent:
         if request.method == "POST":
+            # Log back in as parent account
             login(request, request.user.member.parent.user, backend=backend)
             messages.success(
                 request, _("You are now logged in with your main account") + ":" + str(request.user.member)
             )
             return redirect("home")
+        # Show option to return to parent account
         return render(request, "larpmanager/member/delegated.html", ctx)
 
-    # If the user is the main, recover the list of delegated accounts
+    # Handle parent account managing delegated accounts
+    # Retrieve all delegated child accounts for this parent
     ctx["list"] = Member.objects.filter(parent=request.user.member)
     del_dict = {el.id: el for el in ctx["list"]}
 
+    # Process POST requests for account switching or creation
     if request.method == "POST":
         account_login = request.POST.get("account")
+        # Handle switching to an existing delegated account
         if account_login:
             account_login = int(account_login)
             if account_login not in del_dict:
                 raise Http404(f"delegated account not found: {account_login}")
             delegated = del_dict[account_login]
+            # Log in as the selected delegated account
             login(request, delegated.user, backend=backend)
             messages.success(request, _("You are now logged in with the delegate account") + ":" + str(delegated))
             return redirect("home")
 
+        # Handle creating a new delegated account
         form = ProfileForm(request.POST, request=request)
         if form.is_valid():
             data = form.cleaned_data
+            # Generate unique username and email for delegated account
             username = f"{data['name']}_{data['surname']}".lower()
             email = f"{username}@larpmanager.com"
             password = generate_id(32)
             user = User.objects.create_user(username=username, email=email, password=password)
 
+            # Copy profile data to delegated member
             for field in data:
                 setattr(user.member, field, data[field])
+            # Link delegated member to parent
             user.member.parent = request.user.member
             user.member.save()
 
+            # Mark membership as compiled for new delegated account
             mb = get_user_membership(user.member, request.assoc["id"])
             mb.compiled = True
             mb.save()
@@ -652,10 +705,12 @@ def delegated(request):
             messages.success(request, _("New delegate user added!"))
             return redirect("delegated")
     else:
+        # Display form for creating new delegated account
         form = ProfileForm(request=request)
 
     ctx["form"] = form
 
+    # Add accounting information for each delegated account
     for el in ctx["list"]:
         del_ctx = {"member": el, "a_id": ctx["a_id"]}
         info_accounting(request, del_ctx)

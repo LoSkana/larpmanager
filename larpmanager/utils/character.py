@@ -61,7 +61,7 @@ def get_character_relationships(ctx, restrict=True):
             show = ctx["chars"][tg_num]
         else:
             try:
-                ch = Character.objects.get(event=ctx["event"], number=tg_num)
+                ch = Character.objects.select_related("event", "player").get(event=ctx["event"], number=tg_num)
                 show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue
@@ -81,7 +81,9 @@ def get_character_relationships(ctx, restrict=True):
     pr = {}
     # update with data inputted by players
     if "player_id" in ctx["char"]:
-        for el in PlayerRelationship.objects.filter(reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]):
+        for el in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
+            reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
+        ):
             pr[el.target_id] = el
             cache[el.target_id] = el.text
 
@@ -297,6 +299,12 @@ def get_chars_relations(text, chs_numbers):
 
 
 def check_missing_mandatory(ctx):
+    """Check for missing mandatory character writing fields.
+
+    Args:
+        ctx: Context dictionary containing character and event data.
+              Updates ctx with 'missing_fields' list.
+    """
     ctx["missing_fields"] = []
     aux = []
 

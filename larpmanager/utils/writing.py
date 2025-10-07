@@ -34,7 +34,7 @@ from larpmanager.cache.character import get_event_cache_all, get_writing_element
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.casting import Quest, Trait
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
@@ -251,6 +251,12 @@ def writing_list(request, ctx, typ, nm):
     if issubclass(typ, Prologue):
         writing_list_prologue(ctx)
 
+    if issubclass(typ, Quest):
+        writing_list_quest(ctx)
+
+    if issubclass(typ, QuestType):
+        writing_list_questtype(ctx)
+
     if issubclass(typ, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
@@ -328,6 +334,11 @@ def writing_list_query(ctx, ev, typ):
     writing = issubclass(typ, Writing)
     text_fields = ["teaser", "text"]
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
+
+    # Add select_related optimization for common foreign keys
+    if writing and hasattr(typ, "progress"):
+        ctx["list"] = ctx["list"].select_related("progress", "assigned")
+
     if writing:
         for f in text_fields:
             ctx["list"] = ctx["list"].defer(f)
@@ -419,6 +430,8 @@ def _prepare_writing_list(ctx, request):
 
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
 
+    ctx["writing_unimportant"] = ctx["event"].get_config("writing_unimportant", False)
+
 
 def writing_list_plot(ctx):
     """Build character associations for plot list display.
@@ -454,6 +467,20 @@ def writing_list_prologue(ctx):
 
     for el in ctx["list"]:
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+
+
+def writing_list_quest(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("quests", {})
+
+    for el in ctx["list"]:
+        el.trait_rels = rels.get(el.id, {}).get("trait_rels", [])
+
+
+def writing_list_questtype(ctx):
+    rels = get_event_rels_cache(ctx["event"]).get("questtypes", {})
+
+    for el in ctx["list"]:
+        el.quest_rels = rels.get(el.id, {}).get("quest_rels", [])
 
 
 def writing_list_char(ctx):
@@ -586,6 +613,10 @@ def writing_versions(request, ctx, nm, tp):
 
 @receiver(pre_save, sender=Character)
 def pre_save_character(sender, instance, *args, **kwargs):
+    handle_replace_char_names(instance)
+
+
+def handle_replace_char_names(instance):
     """Django signal handler to replace character names before saving.
 
     Args:

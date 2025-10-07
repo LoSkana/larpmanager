@@ -472,6 +472,15 @@ def orga_multichoice_available(request, s):
 
 @login_required
 def orga_factions_available(request, s):
+    """Return available factions for character assignment via AJAX.
+
+    Args:
+        request: HTTP POST request with orga and eid parameters
+        s: Event slug string
+
+    Returns:
+        JSON response with available factions list
+    """
     if not request.method == "POST":
         return Http404()
 
@@ -519,6 +528,15 @@ def orga_version(request, s, nm, num):
 
 @login_required
 def orga_reading(request, s):
+    """Display all writing elements for organizer reading/review.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+
+    Returns:
+        Rendered reading.html template with all writing elements
+    """
     ctx = check_event_permission(request, s, "orga_reading")
 
     text_fields = ["teaser", "text"]

@@ -17,31 +17,27 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import os
+import logging
 from datetime import date
-from io import BytesIO
 
-import PIL.Image as PILImage
 from cryptography.fernet import Fernet
-from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.base import ContentFile
-from django.db import models, transaction
+from django.db import transaction
 from django.db.models import Max, Q
-from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
+from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
-from PIL import ImageOps
 from slugify import slugify
 
 from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
 from larpmanager.cache.config import reset_configs
-from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
+from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.cache.fields import reset_event_fields_cache
+from larpmanager.mail.base import mail_larpmanager_ticket
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -52,6 +48,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -59,7 +56,6 @@ from larpmanager.models.form import (
     QuestionVisibility,
     RegistrationQuestion,
     RegistrationQuestionType,
-    WritingChoice,
     WritingQuestion,
     WritingQuestionType,
 )
@@ -69,22 +65,24 @@ from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.experience import (
+    modifier_abilities_changed,
+    px_characters_changed,
+    rule_abilities_changed,
+    update_px,
+)
+from larpmanager.utils.miscellanea import rotate_vertical_photo
+from larpmanager.utils.registration import save_registration_character_form
 from larpmanager.utils.tutorial_query import delete_index_guide, delete_index_tutorial, index_guide, index_tutorial
 
+log = logging.getLogger(__name__)
 
-@receiver(pre_save)
-def pre_save_callback(sender, instance, *args, **kwargs):
-    """Generic pre-save handler for automatic field population.
 
-    Automatically sets number/order fields and updates search fields
-    for models that have them.
+def auto_populate_number_order_fields(instance):
+    """Auto-populate number and order fields for model instances.
 
     Args:
-        sender: Model class sending the signal
-        instance: Model instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
+        instance: Model instance to populate fields for
     """
     for field in ["number", "order"]:
         if hasattr(instance, field) and not getattr(instance, field):
@@ -102,146 +100,136 @@ def pre_save_callback(sender, instance, *args, **kwargs):
                 else:
                     setattr(instance, field, n + 1)
 
+
+def update_search_field(instance):
+    """Update search field for model instances that have one.
+
+    Args:
+        instance: Model instance to update search field for
+    """
     if hasattr(instance, "search"):
         instance.search = None
         instance.search = str(instance)
 
 
-@receiver(pre_save, sender=Association)
-def pre_save_association_generate_fernet(sender, instance, **kwargs):
+@receiver(pre_save)
+def pre_save_callback(sender, instance, *args, **kwargs):
+    """Generic pre-save handler for automatic field population.
+
+    Automatically sets number/order fields and updates search fields
+    for models that have them.
+
+    Args:
+        sender: Model class sending the signal
+        instance: Model instance being saved
+        *args: Additional positional arguments
+        **kwargs: Additional keyword arguments
+    """
+    auto_populate_number_order_fields(instance)
+    update_search_field(instance)
+
+
+def handle_association_fernet_key_generation(instance):
     """Generate Fernet encryption key for new associations.
 
     Args:
-        sender: Association model class
         instance: Association instance being saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.key:
         instance.key = Fernet.generate_key()
 
 
-@receiver(pre_save, sender=AssocPermission)
-def pre_save_assoc_permission(sender, instance, **kwargs):
-    """Handle association permission changes and cache updates.
+@receiver(pre_save, sender=Association)
+def pre_save_association_generate_fernet(sender, instance, **kwargs):
+    handle_association_fernet_key_generation(instance)
+
+
+def assign_assoc_permission_number(assoc_permission):
+    """Assign number to association permission if not set.
 
     Args:
-        sender: AssocPermission model class
-        instance: AssocPermission instance being saved
-        **kwargs: Additional keyword arguments
+        assoc_permission: AssocPermission instance to assign number to
     """
-    if not instance.number:
-        n = AssocPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
+    if not assoc_permission.number:
+        n = AssocPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(Max("number"))[
             "number__max"
         ]
         if not n:
             n = 1
-        instance.number = n + 10
+        assoc_permission.number = n + 10
+
+
+@receiver(pre_save, sender=AssocPermission)
+def pre_save_assoc_permission(sender, instance, **kwargs):
+    assign_assoc_permission_number(instance)
+
+
+def assign_event_permission_number(event_permission):
+    """Assign number to event permission if not set.
+
+    Args:
+        event_permission: EventPermission instance to assign number to
+    """
+    if not event_permission.number:
+        n = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(Max("number"))[
+            "number__max"
+        ]
+        if not n:
+            n = 1
+        event_permission.number = n + 10
 
 
 @receiver(pre_save, sender=EventPermission)
 def pre_save_event_permission(sender, instance, **kwargs):
-    """Handle event permission changes and numbering.
-
-    Args:
-        sender: EventPermission model class
-        instance: EventPermission instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.number:
-        n = EventPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
-            "number__max"
-        ]
-        if not n:
-            n = 1
-        instance.number = n + 10
+    assign_event_permission_number(instance)
 
 
 @receiver(pre_save, sender=Plot)
 def pre_save_plot(sender, instance, *args, **kwargs):
-    """Replace character references in plot text before saving.
-
-    Args:
-        sender: Plot model class
-        instance: Plot instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender, instance, *args, **kwargs):
-    """Replace character references in faction text before saving.
-
-    Args:
-        sender: Faction model class
-        instance: Faction instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Prologue)
 def pre_save_prologue(sender, instance, *args, **kwargs):
-    """Replace character references in prologue text before saving.
-
-    Args:
-        sender: Prologue model class
-        instance: Prologue instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
     replace_chars_all(instance)
 
 
-@receiver(post_save, sender=Run)
-def save_run_plan(sender, instance, **kwargs):
+def handle_run_post_save(instance):
     """Set run plan from association default if not already set.
 
     Args:
-        sender: Run model class
         instance: Run instance that was saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.plan and instance.event:
         updates = {"plan": instance.event.assoc.plan}
         Run.objects.filter(pk=instance.pk).update(**updates)
 
 
+@receiver(post_save, sender=Run)
+def save_run_plan(sender, instance, **kwargs):
+    handle_run_post_save(instance)
+
+
 @receiver(post_save, sender=Trait)
 def update_trait(sender, instance, **kwargs):
-    """Update trait relationships after trait is saved.
-
-    Args:
-        sender: Trait model class
-        instance: Trait instance that was saved
-        **kwargs: Additional keyword arguments
-    """
     update_traits_all(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment_updatereg(sender, instance, created, **kwargs):
-    """Update registration totals when payment items are saved.
-
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
-    """
     instance.reg.save()
 
 
-@receiver(pre_save, sender=AccountingItemPayment)
-def update_accounting_item_payment_member(sender, instance, **kwargs):
+def handle_accounting_item_payment_pre_save(instance):
     """Update payment member and handle registration changes.
 
     Args:
-        sender: AccountingItemPayment model class
         instance: AccountingItemPayment instance being saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.member:
         instance.member = instance.reg.member
@@ -258,14 +246,16 @@ def update_accounting_item_payment_member(sender, instance, **kwargs):
             trans.save()
 
 
-@receiver(pre_save, sender=Collection)
-def pre_save_collection(sender, instance, **kwargs):
+@receiver(pre_save, sender=AccountingItemPayment)
+def update_accounting_item_payment_member(sender, instance, **kwargs):
+    handle_accounting_item_payment_pre_save(instance)
+
+
+def handle_collection_pre_save(instance):
     """Generate unique codes and calculate collection totals.
 
     Args:
-        sender: Collection model class
         instance: Collection instance being saved
-        **kwargs: Additional keyword arguments
     """
     if not instance.pk:
         instance.unique_contribute_code()
@@ -276,18 +266,24 @@ def pre_save_collection(sender, instance, **kwargs):
         instance.total += el.value
 
 
-@receiver(post_save, sender=AccountingItemCollection)
-def post_save_accounting_item_collection(sender, instance, created, **kwargs):
+@receiver(pre_save, sender=Collection)
+def pre_save_collection(sender, instance, **kwargs):
+    handle_collection_pre_save(instance)
+
+
+def handle_accounting_item_collection_post_save(instance):
     """Update collection total when items are added.
 
     Args:
-        sender: AccountingItemCollection model class
         instance: AccountingItemCollection instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
     """
     if instance.collection:
         instance.collection.save()
+
+
+@receiver(post_save, sender=AccountingItemCollection)
+def post_save_accounting_item_collection(sender, instance, created, **kwargs):
+    handle_accounting_item_collection_post_save(instance)
 
 
 @receiver(pre_save, sender=SpeedLarp)
@@ -295,77 +291,107 @@ def pre_save_speed_larp(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
-@receiver(pre_save, sender=LarpManagerTutorial)
-def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
+def handle_tutorial_slug_generation(instance):
+    """Generate slug for tutorial if not already set.
+
+    Args:
+        instance: LarpManagerTutorial instance being saved
+    """
     if not instance.slug:
         instance.slug = slugify(instance.name)
 
 
-@receiver(pre_save, sender=LarpManagerFaq)
-def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
-    if instance.number:
+@receiver(pre_save, sender=LarpManagerTutorial)
+def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
+    handle_tutorial_slug_generation(instance)
+
+
+def assign_faq_number(faq):
+    """Assign number to FAQ if not already set.
+
+    Args:
+        faq: LarpManagerFaq instance to assign number to
+    """
+    if faq.number:
         return
-    n = LarpManagerFaq.objects.filter(typ=instance.typ).aggregate(Max("number"))["number__max"]
+    n = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
     if not n:
         n = 1
     else:
         n = ((n / 10) + 1) * 10
-    instance.number = n
+    faq.number = n
+
+
+@receiver(pre_save, sender=LarpManagerFaq)
+def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
+    assign_faq_number(instance)
+
+
+def handle_user_profile_creation(user, created):
+    """Create member profile and sync email when user is saved.
+
+    Args:
+        user: User instance that was saved
+        created: Whether this is a new user
+    """
+    if created:
+        Member.objects.create(user=user)
+    user.member.email = user.email
+    user.member.save()
 
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    """Create member profile and sync email when user is saved.
+    handle_user_profile_creation(instance, created)
+
+
+def handle_membership_status_changes(membership):
+    """Handle membership status changes and card numbering.
 
     Args:
-        sender: User model class
-        instance: User instance that was saved
-        created (bool): Whether this is a new user
-        **kwargs: Additional keyword arguments
+        membership: Membership instance being saved
     """
-    if created:
-        Member.objects.create(user=instance)
-    instance.member.email = instance.email
-    instance.member.save()
+    if membership.status == MembershipStatus.ACCEPTED:
+        if not membership.card_number:
+            n = Membership.objects.filter(assoc=membership.assoc).aggregate(Max("card_number"))["card_number__max"]
+            if not n:
+                n = 0
+            membership.card_number = n + 1
+        if not membership.date:
+            membership.date = date.today()
+
+    if membership.status == MembershipStatus.EMPTY:
+        if membership.card_number:
+            membership.card_number = None
+        if membership.date:
+            membership.date = None
 
 
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender, instance, **kwargs):
-    """Handle membership status changes and card numbering.
-
-    Args:
-        sender: Membership model class
-        instance: Membership instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if instance.status == MembershipStatus.ACCEPTED:
-        if not instance.card_number:
-            n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
-            if not n:
-                n = 0
-            instance.card_number = n + 1
-        if not instance.date:
-            instance.date = date.today()
-
-    if instance.status == MembershipStatus.EMPTY:
-        if instance.card_number:
-            instance.card_number = None
-        if instance.date:
-            instance.date = None
+    handle_membership_status_changes(instance)
 
 
 @receiver(post_save, sender=EventButton)
 def save_event_button(sender, instance, created, **kwargs):
-    cache.delete(event_button_key(instance.event_id))
+    reset_event_button(instance)
 
 
 @receiver(pre_delete, sender=EventButton)
 def delete_event_button(sender, instance, **kwargs):
+    reset_event_button(instance)
+
+
+def reset_event_button(instance):
     cache.delete(event_button_key(instance.event_id))
 
 
-@receiver(pre_save, sender=Event)
-def pre_save_event_prepare_campaign(sender, instance, **kwargs):
+def handle_event_pre_save_prepare_campaign(instance):
+    """Prepare campaign event data before saving.
+
+    Args:
+        instance: Event instance being saved
+    """
     if instance.pk:
         try:
             old_instance = Event.objects.get(pk=instance.pk)
@@ -376,43 +402,66 @@ def pre_save_event_prepare_campaign(sender, instance, **kwargs):
         instance._old_parent_id = None
 
 
-@receiver(post_save, sender=Event)
-def post_save_event_campaign(sender, instance, **kwargs):
-    if instance.parent_id:
+@receiver(pre_save, sender=Event)
+def pre_save_event_prepare_campaign(sender, instance, **kwargs):
+    handle_event_pre_save_prepare_campaign(instance)
+
+
+def setup_campaign_event(event):
+    """Setup campaign event by copying from parent.
+
+    Args:
+        event: Event instance that was saved
+    """
+    if event.parent_id:
         # noinspection PyProtectedMember
-        if instance._old_parent_id != instance.parent_id:
+        if event._old_parent_id != event.parent_id:
             # copy config, texts, roles, features
-            copy_class(instance.pk, instance.parent_id, EventConfig)
-            copy_class(instance.pk, instance.parent_id, EventText)
-            copy_class(instance.pk, instance.parent_id, EventRole)
-            for fn in instance.parent.features.all():
-                instance.features.add(fn)
+            copy_class(event.pk, event.parent_id, EventConfig)
+            copy_class(event.pk, event.parent_id, EventText)
+            copy_class(event.pk, event.parent_id, EventRole)
+            for fn in event.parent.features.all():
+                event.features.add(fn)
 
             # Temporarily disconnect signal
             post_save.disconnect(post_save_event_campaign, sender=Event)
-            instance.save()
+            event.save()
             post_save.connect(post_save_event_campaign, sender=Event)
 
 
 @receiver(post_save, sender=Event)
-def save_event_update(sender, instance, **kwargs):
-    if instance.template:
+def post_save_event_campaign(sender, instance, **kwargs):
+    setup_campaign_event(instance)
+
+
+def setup_event_after_save(event):
+    """Setup event with runs, tickets, and forms after save.
+
+    Args:
+        event: Event instance that was saved
+    """
+    if event.template:
         return
 
-    if instance.runs.count() == 0:
-        Run.objects.create(event=instance, number=1)
+    if not event.runs.exists():
+        Run.objects.create(event=event, number=1)
 
-    features = get_event_features(instance.id)
+    features = get_event_features(event.id)
 
-    save_event_tickets(features, instance)
+    save_event_tickets(features, event)
 
-    save_event_registration_form(features, instance)
+    save_event_registration_form(features, event)
 
-    save_event_character_form(features, instance)
+    save_event_character_form(features, event)
 
-    reset_event_features(instance.id)
+    reset_event_features(event.id)
 
-    reset_event_fields_cache(instance.id)
+    reset_event_fields_cache(event.id)
+
+
+@receiver(post_save, sender=Event)
+def save_event_update(sender, instance, **kwargs):
+    setup_event_after_save(instance)
 
 
 def save_event_tickets(features, instance):
@@ -431,7 +480,7 @@ def save_event_tickets(features, instance):
     for ticket in tickets:
         if ticket[0] and ticket[0] not in features:
             continue
-        if RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).count() == 0:
+        if not RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).exists():
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
@@ -483,6 +532,13 @@ def save_event_character_form(features, instance):
 
 
 def _init_writing_element(instance, def_tps, applicables):
+    """Initialize writing questions for specific applicables in an event instance.
+
+    Args:
+        instance: Event instance to initialize writing elements for
+        def_tps: Dictionary of default question types and their configurations
+        applicables: List of QuestionApplicable types to create questions for
+    """
     for applicable in applicables:
         # if there are already questions for this applicable, skip
         if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():
@@ -629,35 +685,34 @@ def _activate_orga_lang(instance):
     activate(max_lang)
 
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_campaign(sender, instance, **kwargs):
+def auto_assign_campaign_character(registration):
     """Auto-assign last character for campaign registrations.
 
     Args:
-        sender: Registration model class
-        instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
+        registration: Registration instance to assign character to
     """
-    if not instance.member:
+    if not registration.member:
         return
 
-    if instance.cancellation_date:
+    if registration.cancellation_date:
         return
 
     # auto assign last character if campaign
-    if "campaign" not in get_event_features(instance.run.event_id):
+    if "campaign" not in get_event_features(registration.run.event_id):
         return
-    if not instance.run.event.parent:
+    if not registration.run.event.parent:
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__member=instance.member, reg__run=instance.run).count() > 0:
+    if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
         return
 
     # get last run of campaign
     last = (
-        Run.objects.filter(Q(event__parent=instance.run.event.parent) | Q(event_id=instance.run.event.parent_id))
-        .exclude(event_id=instance.run.event_id)
+        Run.objects.filter(
+            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
+        )
+        .exclude(event_id=registration.run.event_id)
         .order_by("-end")
         .first()
     )
@@ -665,8 +720,8 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         return
 
     try:
-        old_rcr = RegistrationCharacterRel.objects.get(reg__member=instance.member, reg__run=last)
-        rcr = RegistrationCharacterRel.objects.create(reg=instance, character=old_rcr.character)
+        old_rcr = RegistrationCharacterRel.objects.get(reg__member=registration.member, reg__run=last)
+        rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):
                 value = getattr(old_rcr, "custom_" + s)
@@ -676,19 +731,13 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         pass
 
 
+@receiver(post_save, sender=Registration)
+def post_save_registration_campaign(sender, instance, **kwargs):
+    auto_assign_campaign_character(instance)
+
+
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
-    """Calculate VAT for payment items when VAT feature is enabled.
-
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
-    """
-    if "vat" not in get_assoc_features(instance.assoc_id):
-        return
-
     compute_vat(instance)
 
 
@@ -742,8 +791,7 @@ def post_delete_reset_character_config(sender, instance, **kwargs):
     reset_configs(instance.character)
 
 
-@receiver(pre_save, sender=Association)
-def pre_save_association_set_skin_features(sender, instance, **kwargs):
+def handle_association_skin_features_pre_save(instance):
     if not instance.skin_id:
         return
 
@@ -772,8 +820,17 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
         instance.mandatory_fields = skin.default_mandatory_fields
 
 
-@receiver(post_save, sender=Association)
-def post_save_association_set_skin_features(sender, instance, created, **kwargs):
+@receiver(pre_save, sender=Association)
+def pre_save_association_set_skin_features(sender, instance, **kwargs):
+    handle_association_skin_features_pre_save(instance)
+
+
+def handle_association_skin_features_post_save(instance):
+    """Handle association skin feature setup after saving.
+
+    Args:
+        instance: Association instance that was saved
+    """
     if not hasattr(instance, "_update_skin_features"):
         return
 
@@ -781,6 +838,11 @@ def post_save_association_set_skin_features(sender, instance, created, **kwargs)
         instance.features.set(instance.skin.default_features.all())
 
     transaction.on_commit(update_features)
+
+
+@receiver(post_save, sender=Association)
+def post_save_association_set_skin_features(sender, instance, created, **kwargs):
+    handle_association_skin_features_post_save(instance)
 
 
 @receiver(post_save, sender=LarpManagerTutorial)
@@ -813,143 +875,98 @@ def delete_event_field(sender, instance, **kwargs):
     reset_event_fields_cache(instance.event_id)
 
 
-@receiver(post_save, sender=LarpManagerTicket)
-def save_larpmanager_ticket(sender, instance, created, **kwargs):
-    for _name, email in conf_settings.ADMINS:
-        subj = f"LarpManager ticket - {instance.assoc.name}"
-        if instance.reason:
-            subj += f" [{instance.reason}]"
-        body = f"Email: {instance.email} <br /><br />"
-        if instance.member:
-            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
-        body += instance.content
-        if instance.screenshot:
-            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
-        my_send_mail(subj, body, email)
+# Miscellanea
 
 
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
-def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
-    """Automatically rotate vertical photos in warehouse items before saving.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The WarehouseItem instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    try:
-        # noinspection PyProtectedMember, PyUnresolvedReferences
-        field = instance._meta.get_field("photo")
-        if not isinstance(field, models.ImageField):
-            return
-    except Exception:
-        return
-
-    f = getattr(instance, "photo", None)
-    if not f:
-        return
-
-    if _check_new(f, instance, sender):
-        return
-
-    fileobj = getattr(f, "file", None) or f
-    try:
-        fileobj.seek(0)
-        img = PILImage.open(fileobj)
-    except Exception:
-        return
-
-    img = ImageOps.exif_transpose(img)
-    w, h = img.size
-    if h <= w:
-        return
-
-    img = img.rotate(90, expand=True)
-
-    fmt = _get_extension(f, img)
-
-    if fmt == "JPEG" and img.mode in ("RGBA", "LA", "P"):
-        img = img.convert("RGB")
-
-    out = BytesIO()
-    save_kwargs = {"optimize": True}
-    if fmt == "JPEG":
-        save_kwargs["quality"] = 88
-    img.save(out, format=fmt, **save_kwargs)
-    out.seek(0)
-
-    basename = os.path.basename(f.name) or f.name
-    instance.photo = ContentFile(out.read(), name=basename)
-
-
-def _get_extension(f, img):
-    ext = os.path.splitext(f.name)[1].lower()
-    fmt = (img.format or "").upper()
-    if not fmt:
-        if ext in (".jpg", ".jpeg"):
-            fmt = "JPEG"
-        elif ext == ".png":
-            fmt = "PNG"
-        elif ext == ".webp":
-            fmt = "WEBP"
-        else:
-            fmt = "JPEG"
-    return fmt
-
-
-def _check_new(f, instance, sender):
-    if instance.pk:
-        try:
-            old = sender.objects.filter(pk=instance.pk).only("photo").first()
-            if old:
-                old_name = old.photo.name if old.photo else ""
-                if f.name == old_name and not getattr(f, "file", None):
-                    return True
-        except Exception:
-            pass
-
-    return False
-
-
-def check_character_ticket_options(reg, char):
-    """Remove character options not available for registration ticket.
-
-    Args:
-        reg: Registration instance
-        char: Character instance to check options for
-    """
-    ticket_id = reg.ticket.id
-
-    to_delete = []
-
-    # get options
-    for choice in WritingChoice.objects.filter(element_id=char.id):
-        tickets_map = choice.option.tickets.values_list("pk", flat=True)
-        if tickets_map and ticket_id not in tickets_map:
-            to_delete.append(choice.id)
-
-    WritingChoice.objects.filter(pk__in=to_delete).delete()
+def pre_save_warehouse_item(sender, instance: WarehouseItem, **kwargs):
+    rotate_vertical_photo(instance, sender)
 
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_character_form(sender, instance, **kwargs):
-    """Clean up character form options based on ticket restrictions.
+    save_registration_character_form(instance)
 
-    Args:
-        sender: Registration model class
-        instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.member:
-        return
 
-    if not instance.ticket:
-        return
+# Experience
 
-    event = instance.run.event
 
+@receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
+def post_character_update_px(sender, instance, *args, **kwargs):
+    update_px(instance)
+
+
+@receiver(post_save, sender=AbilityPx)
+def post_save_ability_px(sender, instance, *args, **kwargs):
+    handle_ability_save(instance)
+
+
+@receiver(post_delete, sender=AbilityPx)
+def post_delete_ability_px(sender, instance, *args, **kwargs):
+    handle_ability_save(instance)
+
+
+def handle_ability_save(instance):
     for char in instance.characters.all():
-        check_character_ticket_options(instance, char)
+        update_px(char)
 
-    for char in event.get_elements(Character).filter(player=instance.member):
-        check_character_ticket_options(instance, char)
+
+@receiver(post_save, sender=DeliveryPx)
+def post_save_delivery_px(sender, instance, *args, **kwargs):
+    handle_delivery_save(instance)
+
+
+@receiver(post_delete, sender=DeliveryPx)
+def post_delete_delivery_px(sender, instance, *args, **kwargs):
+    handle_delivery_save(instance)
+
+
+def handle_delivery_save(instance):
+    for char in instance.characters.all():
+        char.save()
+
+
+@receiver(post_save, sender=RulePx)
+def post_save_rule_px(sender, instance, *args, **kwargs):
+    handle_rule_save(instance)
+
+
+@receiver(post_delete, sender=RulePx)
+def post_delete_rule_px(sender, instance, *args, **kwargs):
+    handle_rule_save(instance)
+
+
+def handle_rule_save(instance):
+    event = instance.event.get_class_parent(RulePx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+@receiver(post_save, sender=ModifierPx)
+def post_save_modifier_px(sender, instance, *args, **kwargs):
+    handle_modifier_save(instance)
+
+
+@receiver(post_delete, sender=ModifierPx)
+def post_delete_modifier_px(sender, instance, *args, **kwargs):
+    handle_modifier_save(instance)
+
+
+def handle_modifier_save(instance):
+    event = instance.event.get_class_parent(ModifierPx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+m2m_changed.connect(px_characters_changed, sender=DeliveryPx.characters.through)
+m2m_changed.connect(px_characters_changed, sender=AbilityPx.characters.through)
+
+m2m_changed.connect(modifier_abilities_changed, sender=ModifierPx.abilities.through)
+m2m_changed.connect(rule_abilities_changed, sender=RulePx.abilities.through)
+
+# LarpManager
+
+
+@receiver(post_save, sender=LarpManagerTicket)
+def save_larpmanager_ticket(sender, instance, created, **kwargs):
+    mail_larpmanager_ticket(instance)

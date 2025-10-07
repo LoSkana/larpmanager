@@ -1224,6 +1224,9 @@ msgstr "Erste Hilfe"
 msgid "Frequency"
 msgstr "Frequenz"
 
+msgid "Important"
+msgstr "Wichtig"
+
 msgid "Interface"
 msgstr "Schnittstelle"
 
@@ -1745,6 +1748,9 @@ msgstr "Transversal"
 
 msgid "Undo period"
 msgstr "Zeitraum rückgängig machen"
+
+msgid "Unimportant"
+msgstr "Unwichtiges"
 
 msgid "Unique code"
 msgstr "Eindeutiger Code"
@@ -8796,6 +8802,13 @@ msgid ""
 msgstr ""
 "Ermöglicht das Feld \"zugewiesen\", um zu verfolgen, welcher Mitarbeiter für"
 " jedes Schriftelement zuständig ist"
+
+msgid ""
+"If checked, allows to track the plots or relationships not really important "
+"for the character"
+msgstr ""
+"Wenn diese Option aktiviert ist, können Sie die für den Charakter nicht "
+"wirklich wichtigen Handlungen oder Beziehungen verfolgen"
 
 msgid ""
 "If checked, generates secret urls to share the full character sheet with a "

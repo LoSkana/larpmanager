@@ -157,11 +157,20 @@ def update_event_features(ev_id):
         return {}
 
 
-@receiver(post_save, sender=Association)
-def update_association_reset_features(sender, instance, **kwargs):
+def handle_association_features_post_save(instance):
+    """Handle association post-save feature cache reset.
+
+    Args:
+        instance: Association instance that was saved
+    """
     reset_assoc_features(instance.id)
     for ev_id in instance.events.values_list("pk", flat=True):
         reset_event_features(ev_id)
+
+
+@receiver(post_save, sender=Association)
+def update_association_reset_features(sender, instance, **kwargs):
+    handle_association_features_post_save(instance)
 
 
 @receiver(post_save, sender=Event)

@@ -22,13 +22,13 @@ from django.conf import settings as conf_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_assoc_permission_feature, get_cache_index_permission
 from larpmanager.cache.role import get_assoc_roles, has_assoc_permission
 from larpmanager.models.association import Association
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.utils import get_payment_details
 from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
@@ -84,12 +84,29 @@ def is_shuttle(request):
 
 
 def update_payment_details(request, ctx):
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    payment_details = get_payment_details(assoc)
+    payment_details = fetch_payment_details(request.assoc["id"])
     ctx.update(payment_details)
 
 
+def fetch_payment_details(assoc_id):
+    assoc = Association.objects.only("slug", "key").get(pk=assoc_id)
+    return get_payment_details(assoc)
+
+
 def check_assoc_permission(request, slug):
+    """Check and validate association permissions for a request.
+
+    Args:
+        request: HTTP request object
+        slug: Permission slug to check
+
+    Returns:
+        dict: Context dictionary with permission and feature data
+
+    Raises:
+        PermissionError: If user lacks required permissions
+        FeatureError: If required feature is not enabled
+    """
     ctx = def_user_ctx(request)
     if not has_assoc_permission(request, ctx, slug):
         raise PermissionError()
@@ -122,6 +139,18 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
 
 
 def get_index_permissions(ctx, features, has_default, permissions, typ):
+    """Build index permissions structure based on user access and features.
+
+    Args:
+        ctx: Context dictionary with association information
+        features: Available features list
+        has_default: Whether user has default permissions
+        permissions: User's specific permissions
+        typ: Permission type to filter
+
+    Returns:
+        Dictionary of grouped permissions by module
+    """
     res = {}
     for ar in get_cache_index_permission(typ):
         if ar["hidden"]:

@@ -17,8 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import json
+import os
+
+from cryptography.fernet import Fernet, InvalidToken
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.utils import get_payment_details_path
+from larpmanager.utils.tasks import notify_admins
 
 
 def is_reg_provisional(instance, features=None):
@@ -47,3 +53,28 @@ def is_reg_provisional(instance, features=None):
             return True
 
     return False
+
+
+def get_payment_details(assoc):
+    """
+    Decrypt and retrieve payment details for association.
+
+    Args:
+        assoc: Association instance with encryption key
+
+    Returns:
+        dict: Decrypted payment details dictionary
+    """
+    cipher = Fernet(assoc.key)
+    encrypted_file_path = get_payment_details_path(assoc)
+    if not os.path.exists(encrypted_file_path):
+        return {}
+    with open(encrypted_file_path, "rb") as f:
+        encrypted_data = f.read()
+    try:
+        data_bytes = cipher.decrypt(encrypted_data)
+        decrypted_data = json.loads(data_bytes.decode("utf-8"))
+        return decrypted_data
+    except InvalidToken as err:
+        notify_admins(f"invalid token for {assoc.slug}", f"{err}")
+        return {}

@@ -37,7 +37,7 @@ def update_event_text(event_id, typ, lang):
         res = EventText.objects.get(event_id=event_id, typ=typ, language=lang).text
     except Exception:
         pass
-    cache.set(event_text_key(event_id, typ, lang), res)
+    cache.set(event_text_key(event_id, typ, lang), res, timeout=60 * 60)
     return res
 
 
@@ -58,7 +58,7 @@ def update_event_text_def(event_id, typ):
         res = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
     except Exception:
         pass
-    cache.set(event_text_key_def(event_id, typ), res)
+    cache.set(event_text_key_def(event_id, typ), res, timeout=60 * 60)
     return res
 
 
@@ -86,6 +86,10 @@ def get_event_text(event_id, typ, lang=None):
 
 @receiver(post_save, sender=AssocText)
 def save_assoc_text(sender, instance, created, **kwargs):
+    handle_assoc_text_save(instance)
+
+
+def handle_assoc_text_save(instance):
     update_assoc_text(instance.assoc_id, instance.typ, instance.language)
     if instance.default:
         update_assoc_text_def(instance.assoc_id, instance.typ)
@@ -93,6 +97,10 @@ def save_assoc_text(sender, instance, created, **kwargs):
 
 @receiver(pre_delete, sender=AssocText)
 def delete_assoc_text(sender, instance, **kwargs):
+    handle_assoc_text_del(instance)
+
+
+def handle_assoc_text_del(instance):
     cache.delete(assoc_text_key(instance.assoc_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(assoc_text_key_def(instance.assoc_id, instance.typ))
@@ -103,6 +111,10 @@ def delete_assoc_text(sender, instance, **kwargs):
 
 @receiver(post_save, sender=EventText)
 def save_event_text(sender, instance, created, **kwargs):
+    handle_event_text_save(instance)
+
+
+def handle_event_text_save(instance):
     update_event_text(instance.event_id, instance.typ, instance.language)
     if instance.default:
         update_event_text_def(instance.event_id, instance.typ)
@@ -110,6 +122,10 @@ def save_event_text(sender, instance, created, **kwargs):
 
 @receiver(pre_delete, sender=EventText)
 def delete_event_text(sender, instance, **kwargs):
+    handle_event_text_del(instance)
+
+
+def handle_event_text_del(instance):
     cache.delete(event_text_key(instance.event_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(event_text_key_def(instance.event_id, instance.typ))
@@ -128,7 +144,7 @@ def update_assoc_text(assoc_id, typ, lang):
         res = AssocText.objects.get(assoc_id=assoc_id, typ=typ, language=lang).text
     except Exception:
         pass
-    cache.set(assoc_text_key(assoc_id, typ, lang), res)
+    cache.set(assoc_text_key(assoc_id, typ, lang), res, timeout=60 * 60)
     return res
 
 
@@ -152,7 +168,7 @@ def update_assoc_text_def(assoc_id, typ):
         res = AssocText.objects.filter(assoc_id=assoc_id, typ=typ, default=True).first().text
     except Exception:
         pass
-    cache.set(assoc_text_key_def(assoc_id, typ), res)
+    cache.set(assoc_text_key_def(assoc_id, typ), res, timeout=60 * 60)
     return res
 
 

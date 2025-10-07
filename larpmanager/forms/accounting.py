@@ -24,6 +24,8 @@ from decimal import Decimal, InvalidOperation
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import get_payment_details
+from larpmanager.cache.config import get_assoc_config
 from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
@@ -51,7 +53,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
-from larpmanager.models.utils import get_payment_details, save_payment_details
+from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.validators import FileTypeValidator
 
 
@@ -99,7 +101,7 @@ class OrgaExpenseForm(MyFormRun):
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
-        if self.params["event"].assoc.get_config("expense_disable_orga", False):
+        if get_assoc_config(self.params["event"].assoc_id, "expense_disable_orga", False):
             self.delete_field("is_approved")
 
 
@@ -581,6 +583,11 @@ class ExePaymentSettingsForm(MyForm):
             return data_string
 
     def clean(self):
+        """Validate and normalize fee field values.
+
+        Returns:
+            dict: Cleaned form data with normalized fee values
+        """
         cleaned = super().clean()
         for name in self.fee_fields:
             val = cleaned.get(name)

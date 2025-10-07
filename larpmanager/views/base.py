@@ -145,6 +145,14 @@ def upload_media(request):
 
 @require_POST
 def set_member_config(request):
+    """Update member configuration settings via AJAX.
+
+    Args:
+        request: HTTP request containing 'name' and 'value' parameters
+
+    Returns:
+        JsonResponse: Success or error response
+    """
     if not request.user.is_authenticated:
         return JsonResponse({"res": "ko", "msg": "not authenticated"})
     config_name = request.POST.get("name", "").lower()
