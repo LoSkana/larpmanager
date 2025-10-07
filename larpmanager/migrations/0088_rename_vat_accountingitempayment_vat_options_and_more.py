@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0086_paymentinvoice_larpmanager_reg_id_173630_idx_and_more"),
+        ("larpmanager", "0087_optimize_character_indexes"),
     ]
 
     operations = [
