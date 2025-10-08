@@ -1023,7 +1023,10 @@ def _create_demo(request):
     )
 
     # create test user
-    user = User.objects.create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}", password="pippo")
+    (user, cr) = User.objects.get_or_create(email=f"test{new_pk}@demo.it")
+    user.username = f"test{new_pk}"
+    user.password = "pippo"
+    user.save()
     member = user.member
     member.name = "Demo"
     member.surname = "Admin"
