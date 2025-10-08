@@ -1106,4 +1106,29 @@ urlpatterns = [
         views_oms.orga_inventory_assignment_item_edit,
         name="orga_inventory_assignment_item_edit",
     ),
+    path(
+        "api/<slug:s>/<int:n>/manage/characters/",
+        views_oc.orga_api_characters,
+        name="orga_api_characters",
+    ),
+    path(
+        "api/<slug:s>/<int:n>/manage/px/abilities/",
+        views_ox.orga_api_px_abilities,
+        name="orga_api_px_abilities",
+    ),
+    path(
+        "api/<slug:s>/<int:n>/manage/px/ability_types/",
+        views_ox.orga_api_px_ability_types,
+        name="orga_api_px_ability_types",
+    ),
+    path(
+        "api/<slug:s>/<int:n>/manage/px/ability_templates/",
+        views_ox.orga_api_px_ability_templates,
+        name="orga_api_px_ability_templates",
+    ),
+    path(
+        "api/<slug:s>/<int:n>/manage/ci/pool_types/",
+        views_ci.orga_api_ci_pool_types,
+        name="orga_api_ci_pool_types",
+    ),
 ]

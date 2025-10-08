@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
 from larpmanager.forms.experience import OrgaAbilityPxForm, OrgaAbilityTypePxForm, OrgaDeliveryPxForm, OrgaRulePxForm, \
@@ -95,3 +96,44 @@ def orga_px_rules_order(request, s, n, num, order):
     ctx = check_event_permission(request, s, n, "orga_px_rules")
     exchange_order(ctx, RulePx, num, order)
     return redirect("orga_px_rules", s=ctx["event"].slug, n=ctx["run"].number)
+
+
+@login_required
+def orga_api_px_abilities(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_px_abilities")
+    ctx["px_user"] = ctx["event"].get_config("px_user", False)
+    ctx["list"] = ctx["event"].get_elements(AbilityPx).order_by("number")
+
+    parsed_abilities = []
+    for ability in ctx["list"]:
+        if ability.template == None:
+            ability_template = {}
+        else:
+            ability_template = {"id": ability.template.pk, "name": ability.template.name}
+        parsed_abilities.append({"id": ability.pk, "name": ability.name, "type": {"id": ability.typ.pk, "name": ability.typ.name}, "template": ability_template})
+
+    return JsonResponse(parsed_abilities, safe=False)
+
+
+@login_required
+def orga_api_px_ability_types(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_px_abilities")
+    ctx["list"] = ctx["event"].get_elements(AbilityTypePx).order_by("number")
+
+    parsed_types = []
+    for type in ctx["list"]:
+        parsed_types.append({"id": type.pk, "name": type.name})
+
+    return JsonResponse(parsed_types, safe=False)
+
+
+@login_required
+def orga_api_px_ability_templates(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_px_abilities")
+    ctx["list"] = ctx["event"].get_elements(AbilityTemplatePx).order_by("number")
+
+    parsed_templates = []
+    for template in ctx["list"]:
+        parsed_templates.append({"id": template.pk, "name": template.name})
+
+    return JsonResponse(parsed_templates, safe=False)

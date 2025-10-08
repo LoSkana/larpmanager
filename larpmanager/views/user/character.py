@@ -30,7 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import Http404, HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -40,6 +40,9 @@ from larpmanager.cache.character import get_character_element_fields, get_event_
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.character import (
     CharacterForm,
+)
+from larpmanager.models.characterinventory import (
+    CharacterInventory,
 )
 from larpmanager.forms.member import (
     AvatarForm,
@@ -70,6 +73,8 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_player_relationship,
+    get_char,
+    get_character_inventory
 )
 from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
@@ -563,3 +568,48 @@ def show_char(request, s, n):
     ch = ctx["chars"][search]
     tooltip = get_tooltip(ctx, ch)
     return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})
+
+
+@login_required
+def api_character_list(request, s, n):
+    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+
+    ctx["list"] = get_player_characters(request.user.member, ctx["event"])
+
+    charList = []
+
+    for char in ctx["list"]:
+        charList.append({"id": char.pk, "name": char.name})
+
+    return JsonResponse(charList, safe=False)
+
+@login_required
+def api_character(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+    get_character_inventory(ctx, num)
+    get_event_cache_all(ctx)
+
+    id = ctx["character"].pk
+    name = ctx["character"].name
+    abilities = ctx["character"].px_ability_list.all()
+    ci = get_object_or_404(CharacterInventory, pk=num, event=ctx["event"])
+    pools = ci.get_pool_balances()
+
+    parsed_abilities = {}
+    for ability in abilities:
+        if ability.typ.pk not in parsed_abilities.keys():
+            parsed_abilities[ability.typ.pk] = {"id": ability.typ.pk, "name": ability.typ.name, "abilities": []}
+
+        if ability.template == None:
+            ability_template = {}
+        else:
+            ability_template = {"id": ability.template.pk, "name": ability.template.name}
+
+        parsed_abilities[ability.typ.pk]["abilities"].append({"id": ability.pk, "name": ability.name, "template": ability_template})
+
+    parsed_pools = []
+    for pool in pools:
+        parsed_pools.append({"type": pool["type"].name, "balance": pool["balance"].amount })
+
+    return JsonResponse({"id": id, "name": name, "ability_types": parsed_abilities, "inventory": parsed_pools})
