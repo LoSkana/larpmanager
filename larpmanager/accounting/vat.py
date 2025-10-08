@@ -46,8 +46,8 @@ def compute_vat(instance):
     previous_paid = previous_pays - previous_trans
 
     # Get VAT configuration (e.g. 22 becomes 0.22)
-    vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0)) / 100.0
-    vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0)) / 100.0
+    _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0)) / 100.0
+    _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0)) / 100.0
 
     # Determine the full ticket amount (either from pay_what or ticket price)
     ticket_total = 0
@@ -70,7 +70,7 @@ def compute_vat(instance):
     quota_options = float(paid) - float(quota_ticket)
 
     # Compute VAT based on the split and respective rates
-    updates = {"vat_ticket": quota_ticket * vat_ticket, "vat_options": quota_options * vat_options}
+    updates = {"vat_ticket": quota_ticket, "vat_options": quota_options}
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 
