@@ -22,7 +22,7 @@ from django.db.models import Sum
 
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
-from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction
+from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, PaymentChoices
 
 
 def compute_vat(instance):
@@ -38,6 +38,9 @@ def compute_vat(instance):
         Updates the instance's VAT field in the database
     """
     if "vat" not in get_assoc_features(instance.assoc_id):
+        return
+
+    if instance.pay != PaymentChoices.MONEY:
         return
 
     # Get total previous payments and transactions for the same member and run
