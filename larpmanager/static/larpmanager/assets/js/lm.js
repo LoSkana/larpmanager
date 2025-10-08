@@ -28,9 +28,9 @@ $.ajaxSetup({
 
 window.jump_to = function(target) {
 
-    var headerHeight = $('header').outerHeight();
-
-    if (!target.length) return;
+    var headerHeight = $('header').length
+      ? $('header').outerHeight()
+      : $('#nav').outerHeight();
 
     $('#page-wrapper').animate({
         scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 4
