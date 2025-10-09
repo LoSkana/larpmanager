@@ -518,7 +518,7 @@ class TestModelSignals(BaseTestCase):
         # Guide should be deleted (soft delete)
         self.assertIsNone(LarpManagerGuide.objects.filter(id=guide_id, deleted__isnull=True).first())
 
-    @patch("larpmanager.utils.event.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.reset_event_fields_cache")
     def test_writing_question_post_save_resets_cache(self, mock_reset):
         """Test that WritingQuestion post_save signal resets event fields cache"""
         from larpmanager.models.form import WritingQuestion
@@ -530,7 +530,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.utils.event.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.reset_event_fields_cache")
     def test_writing_question_pre_delete_resets_cache(self, mock_reset):
         """Test that WritingQuestion pre_delete signal resets event fields cache"""
         from larpmanager.models.form import WritingQuestion
