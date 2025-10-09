@@ -185,7 +185,7 @@ def test_ghost_plots_secret_factions(pw_page):
     expect(page.locator("#one")).to_contain_text("Characters Test Character3 Presentation: Test Teaser2 Factions: eefqq")
 
     # if i try to go to secret faction, blocked
-    page.goto(page, live_server, "/test/faction/2/")
+    page.goto(f"{live_server}/test/faction/2/")
     banner = page.locator("#banner")
     if banner.count() > 0:
         expect(banner).to_contain_text("404")
