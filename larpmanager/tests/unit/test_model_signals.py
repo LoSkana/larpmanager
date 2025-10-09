@@ -326,8 +326,8 @@ class TestModelSignals(BaseTestCase):
         # The event should be created successfully
         self.assertIsNotNone(event.id)
 
-    @patch("larpmanager.models.signals.reset_event_features")
-    @patch("larpmanager.models.signals.reset_event_fields_cache")
+    @patch("larpmanager.utils.event.reset_event_features")
+    @patch("larpmanager.utils.event.reset_event_fields_cache")
     def test_event_post_save_resets_caches(self, mock_reset_fields, mock_reset_features):
         """Test that Event post_save signal resets various caches"""
         assoc = self.get_association()
@@ -542,7 +542,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.mail.base.mail_larpmanager_ticket")
+    @patch("larpmanager.models.signals.mail_larpmanager_ticket")
     def test_larp_manager_ticket_post_save_sends_notification(self, mock_mail):
         """Test that LarpManagerTicket post_save signal sends notification"""
         member = self.get_member()
