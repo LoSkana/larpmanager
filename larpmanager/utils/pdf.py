@@ -421,7 +421,7 @@ def handle_character_pre_delete(instance):
     remove_char_pdf(instance)
 
 
-def handle_character_post_save(instance):
+def handle_character_clean_pdf(instance):
     """Handle character post-save PDF cleanup.
 
     Args:
@@ -461,7 +461,7 @@ def handle_faction_pre_delete(instance):
         remove_char_pdf(char)
 
 
-def handle_faction_post_save(instance):
+def handle_faction_clean_pdf(instance):
     """Handle faction post-save PDF cleanup.
 
     Args:

@@ -168,7 +168,7 @@ def get_regs(assoc):
     return reg_que
 
 
-def handle_accounting_item_payment_post_save(instance, created):
+def handle_update_token_credit(instance, created):
     """Handle accounting item payment post-save token/credit updates.
 
     Args:

@@ -499,7 +499,7 @@ def update_event_cache_all_runs(event, instance):
         update_event_cache_all(r, instance)
 
 
-def handle_registration_character_rel_save(instance):
+def handle_registration_character_reset(instance):
     if instance.reg:
         instance.reg.save()
     reset_run(instance.reg.run)

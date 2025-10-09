@@ -375,7 +375,7 @@ def get_index_event_permissions(ctx, request, slug, check=True):
     ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")
 
 
-def handle_run_post_save(instance):
+def handle_run_plan_update(instance):
     """Set run plan from association default if not already set.
 
     Args:

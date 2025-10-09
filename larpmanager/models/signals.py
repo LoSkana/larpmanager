@@ -44,7 +44,7 @@ from larpmanager.accounting.token_credit import (
     handle_accounting_item_expense_save,
     handle_accounting_item_other_save,
     handle_accounting_item_payment_post_delete,
-    handle_accounting_item_payment_post_save,
+    handle_update_token_credit,
 )
 from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.accounting import reset_registration_accounting_cache, update_member_accounting_cache
@@ -55,7 +55,7 @@ from larpmanager.cache.character import (
     handle_faction_pre_save,
     handle_quest_presave,
     handle_quest_type_presave,
-    handle_registration_character_rel_save,
+    handle_registration_character_reset,
     handle_trait_presave,
     handle_update_event_characters,
     reset_event_cache_all_runs,
@@ -117,9 +117,9 @@ from larpmanager.mail.member import (
 )
 from larpmanager.mail.registration import (
     handle_pre_registration_pre_save,
+    handle_registration_cancellation_email,
     handle_registration_character_rel_post_save,
     handle_registration_pre_delete,
-    handle_registration_pre_save,
 )
 from larpmanager.models.access import AssocPermission, AssocRole, EventPermission, EventRole
 from larpmanager.models.accounting import (
@@ -178,7 +178,7 @@ from larpmanager.utils.auth import assign_event_permission_number
 from larpmanager.utils.event import (
     auto_assign_campaign_character,
     handle_event_pre_save_prepare_campaign,
-    handle_run_post_save,
+    handle_run_plan_update,
     reset_event_button,
     setup_campaign_event,
     setup_event_after_save,
@@ -198,9 +198,9 @@ from larpmanager.utils.member import handle_membership_status_changes, handle_us
 from larpmanager.utils.miscellanea import rotate_vertical_photo
 from larpmanager.utils.pdf import (
     handle_assignment_trait_post_save,
-    handle_character_post_save,
+    handle_character_clean_pdf,
     handle_character_pre_delete,
-    handle_faction_post_save,
+    handle_faction_clean_pdf,
     handle_faction_pre_delete,
     handle_handout_post_save,
     handle_handout_pre_delete,
@@ -241,11 +241,6 @@ def pre_save_callback(sender, instance, *args, **kwargs):
     update_search_field(instance)
 
 
-@receiver(pre_save, sender=Association)
-def pre_save_association_generate_fernet(sender, instance, **kwargs):
-    handle_association_fernet_key_generation(instance)
-
-
 @receiver(pre_save, sender=AssocPermission)
 def pre_save_assoc_permission(sender, instance, **kwargs):
     assign_assoc_permission_number(instance)
@@ -264,6 +259,7 @@ def pre_save_plot(sender, instance, *args, **kwargs):
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
+    handle_faction_pre_save(instance)
 
 
 @receiver(pre_save, sender=Prologue)
@@ -271,29 +267,10 @@ def pre_save_prologue(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
-@receiver(post_save, sender=Run)
-def post_save_run_plan(sender, instance, **kwargs):
-    handle_run_post_save(instance)
-
-
-@receiver(post_save, sender=Trait)
-def post_save_trait(sender, instance, **kwargs):
-    update_traits_all(instance)
-
-
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment_updatereg(sender, instance, created, **kwargs):
-    instance.reg.save()
-
-
-@receiver(pre_save, sender=AccountingItemPayment)
-def pre_save_accounting_item_payment_member(sender, instance, **kwargs):
-    handle_accounting_item_payment_pre_save(instance)
-
-
 @receiver(pre_save, sender=Collection)
 def pre_save_collection(sender, instance, **kwargs):
     handle_collection_pre_save(instance)
+    process_collection_status_change(instance)
 
 
 @receiver(post_save, sender=AccountingItemCollection)
@@ -336,30 +313,23 @@ def pre_delete_event_button(sender, instance, **kwargs):
     reset_event_button(instance)
 
 
-@receiver(pre_save, sender=Event)
-def pre_save_event_prepare_campaign(sender, instance, **kwargs):
-    handle_event_pre_save_prepare_campaign(instance)
-
-
 @receiver(post_save, sender=Event)
-def post_save_event_campaign(sender, instance, **kwargs):
+def post_save_event_update(sender, instance, **kwargs):
+    reset_event_cache_all_runs(instance)
+
+    reset_event_features(instance.id)
+
     if not getattr(instance, "_skip_campaign_setup", False):
         setup_campaign_event(instance)
 
+    reset_run_event_links(instance)
 
-@receiver(post_save, sender=Event)
-def post_save_event_update(sender, instance, **kwargs):
+    for r in instance.runs.all():
+        reset_cache_reg_counts(r)
+
+    handle_event_post_save_cache_reset(instance)
+
     setup_event_after_save(instance)
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_campaign(sender, instance, **kwargs):
-    auto_assign_campaign_character(instance)
-
-
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
-    compute_vat(instance)
 
 
 @receiver(post_save, sender=EventConfig)
@@ -415,11 +385,7 @@ def post_delete_reset_character_config(sender, instance, **kwargs):
 @receiver(pre_save, sender=Association)
 def pre_save_association_set_skin_features(sender, instance, **kwargs):
     handle_association_skin_features_pre_save(instance)
-
-
-@receiver(post_save, sender=Association)
-def post_save_association_set_skin_features(sender, instance, created, **kwargs):
-    handle_association_skin_features_post_save(instance)
+    handle_association_fernet_key_generation(instance)
 
 
 @receiver(post_save, sender=LarpManagerTutorial)
@@ -445,11 +411,6 @@ def delete_guide_from_index(sender, instance, **kwargs):
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
 def pre_save_warehouse_item(sender, instance: WarehouseItem, **kwargs):
     rotate_vertical_photo(instance, sender)
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_character_form(sender, instance, **kwargs):
-    save_registration_character_form(instance)
 
 
 @receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
@@ -509,117 +470,73 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
     mail_larpmanager_ticket(instance)
 
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_accounting(sender, instance, **kwargs):
-    handle_registration_accounting_updates(instance)
-
-
-@receiver(post_save, sender=AccountingItemDiscount)
-def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
-    process_accounting_discount_post_save(instance)
-
-
-@receiver(post_save, sender=RegistrationTicket)
-def post_save_registration_ticket(sender, instance, created, **kwargs):
-    process_registration_ticket_post_save(instance)
-
-
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender, instance, created, **kwargs):
     process_registration_option_post_save(instance)
 
 
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment(sender, instance, created, **kwargs):
-    handle_accounting_item_payment_post_save(instance, created)
-
-
-@receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_accounting_item_payment(sender, instance, **kwargs):
-    handle_accounting_item_payment_post_delete(instance)
-
-
-@receiver(post_save, sender=AccountingItemOther)
-def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
-    handle_accounting_item_other_save(instance)
-
-
-@receiver(post_save, sender=AccountingItemExpense)
-def post_save_accounting_item_expense_accounting(sender, instance, **kwargs):
-    handle_accounting_item_expense_save(instance)
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_accounting_cache(sender, instance, created, **kwargs):
-    """Reset accounting cache when a registration is saved."""
-    reset_registration_accounting_cache(instance.run)
-
-
 @receiver(post_delete, sender=Registration)
 def post_delete_registration_accounting_cache(sender, instance, **kwargs):
-    """Reset accounting cache when a registration is deleted."""
     reset_registration_accounting_cache(instance.run)
 
 
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_ticket_accounting_cache(sender, instance, created, **kwargs):
-    """Reset accounting cache when a ticket is saved."""
+    process_registration_ticket_post_save(instance)
+
     for run in instance.event.runs.all():
         reset_registration_accounting_cache(run)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender, instance, **kwargs):
-    """Reset accounting cache when a ticket is deleted."""
     for run in instance.event.runs.all():
         reset_registration_accounting_cache(run)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_payment_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when a payment is saved."""
     if instance.reg and instance.reg.run:
+        instance.reg.save()
         update_member_accounting_cache(instance.reg.run, instance.member_id)
+
+    handle_update_token_credit(instance, created)
+
+    compute_vat(instance)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
 def post_delete_payment_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when a payment is deleted."""
+    handle_accounting_item_payment_post_delete(instance)
+
     if instance.reg and instance.reg.run:
         update_member_accounting_cache(instance.reg.run, instance.member_id)
 
 
 @receiver(post_save, sender=AccountingItemDiscount)
 def post_save_discount_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when a discount is saved."""
+    process_accounting_discount_post_save(instance)
     if instance.run and instance.member_id:
         update_member_accounting_cache(instance.run, instance.member_id)
 
 
 @receiver(post_delete, sender=AccountingItemDiscount)
 def post_delete_discount_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when a discount is deleted."""
     if instance.run and instance.member_id:
         update_member_accounting_cache(instance.run, instance.member_id)
 
 
 @receiver(post_save, sender=AccountingItemOther)
 def post_save_other_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when an other accounting item is saved."""
+    handle_accounting_item_other_save(instance)
     if instance.run and instance.member_id:
         update_member_accounting_cache(instance.run, instance.member_id)
 
 
 @receiver(post_delete, sender=AccountingItemOther)
 def post_delete_other_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when an other accounting item is deleted."""
     if instance.run and instance.member_id:
         update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_save, sender=Association)
-def update_association_reset_cache(sender, instance, **kwargs):
-    reset_cache_assoc(instance.slug)
 
 
 @receiver(post_save, sender=Member)
@@ -627,24 +544,15 @@ def post_save_member_reset(sender, instance, **kwargs):
     handle_update_event_characters(instance)
 
 
-@receiver(pre_save, sender=Character)
-def pre_save_character_reset(sender, instance, **kwargs):
-    handle_character_pre_save(instance)
-
-
 @receiver(post_save, sender=RegistrationCharacterRel)
 def post_save_registration_character_rel_savereg(sender, instance, created, **kwargs):
-    handle_registration_character_rel_save(instance)
+    handle_registration_character_reset(instance)
+    handle_registration_character_rel_post_save(instance, created)
 
 
 @receiver(post_delete, sender=RegistrationCharacterRel)
 def post_delete_registration_character_rel_savereg(sender, instance, **kwargs):
-    handle_registration_character_rel_save(instance)
-
-
-@receiver(post_save, sender=AssignmentTrait)
-def post_save_assignment_trait_reset(sender, instance, **kwargs):
-    reset_run(instance.run)
+    handle_registration_character_reset(instance)
 
 
 @receiver(post_delete, sender=AssignmentTrait)
@@ -652,69 +560,33 @@ def post_delete_assignment_trait_reset(sender, instance, **kwargs):
     reset_run(instance.run)
 
 
-@receiver(post_save, sender=Event)
-def post_save_event_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance)
-
-
-@receiver(post_save, sender=Run)
-def post_save_run_reset(sender, instance, **kwargs):
-    reset_run(instance)
-
-
-@receiver(post_save, sender=WritingQuestion)
-def post_save_character_question_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(post_save, sender=WritingOption)
-def post_save_character_option_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.question.event)
-
-
-@receiver(post_save, sender=Association)
-def post_save_association_reset_features(sender, instance, **kwargs):
-    handle_association_features_post_save(instance)
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_reset_features(sender, instance, **kwargs):
-    reset_event_features(instance.id)
-
-
 @receiver(pre_delete, sender=WritingQuestion)
 def pre_delete_writing_question_reset(sender, instance, **kwargs):
     reset_event_fields_cache(instance.event_id)
+    reset_event_cache_all_runs(instance.event)
 
 
 @receiver(post_save, sender=WritingQuestion)
 def post_save_writing_question_reset(sender, instance, **kwargs):
     reset_event_fields_cache(instance.event_id)
-
-
-@receiver(pre_delete, sender=WritingOption)
-def pre_delete_writing_option_reset(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.question.event_id)
+    reset_event_cache_all_runs(instance.event)
 
 
 @receiver(post_save, sender=WritingOption)
 def post_save_writing_option_reset(sender, instance, **kwargs):
     reset_event_fields_cache(instance.question.event_id)
+    reset_event_cache_all_runs(instance.question.event)
 
 
 @receiver(post_save, sender=Association)
 def post_save_association_reset_lm_home(sender, instance, **kwargs):
     reset_cache_lm_home()
 
+    handle_association_skin_features_post_save(instance)
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_event_links(sender, instance, **kwargs):
-    handle_registration_event_links_post_save(instance)
+    reset_cache_assoc(instance.slug)
 
-
-@receiver(post_save, sender=Event)
-def post_save_event_links(sender, instance, **kwargs):
-    reset_run_event_links(instance)
+    handle_association_features_post_save(instance)
 
 
 @receiver(post_delete, sender=Event)
@@ -724,6 +596,14 @@ def post_delete_event_links(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Run)
 def post_save_run_links(sender, instance, **kwargs):
+    reset_cache_reg_counts(instance)
+
+    handle_run_post_save_cache_reset(instance)
+
+    handle_run_plan_update(instance)
+
+    reset_run(instance)
+
     reset_run_event_links(instance.event)
 
 
@@ -732,44 +612,28 @@ def post_delete_run_links(sender, instance, **kwargs):
     reset_run_event_links(instance.event)
 
 
-@receiver(post_save, sender=AssocPermission)
-def post_save_assoc_permission_reset(sender, instance, **kwargs):
-    reset_assoc_permission(instance)
-
-
-@receiver(post_delete, sender=AssocPermission)
-def post_delete_assoc_permission_reset(sender, instance, **kwargs):
-    reset_assoc_permission(instance)
-
-
 @receiver(post_save, sender=EventPermission)
 def post_save_event_permission_reset(sender, instance, **kwargs):
     reset_event_permission(instance)
+    reset_index_permission("event")
 
 
 @receiver(post_delete, sender=EventPermission)
 def post_delete_event_permission_reset(sender, instance, **kwargs):
     reset_event_permission(instance)
+    reset_index_permission("event")
 
 
 @receiver(post_save, sender=AssocPermission)
 def post_save_assoc_permission_index_permission(sender, instance, **kwargs):
     reset_index_permission("assoc")
+    reset_assoc_permission(instance)
 
 
 @receiver(post_delete, sender=AssocPermission)
 def post_delete_assoc_permission_index_permission(sender, instance, **kwargs):
     reset_index_permission("assoc")
-
-
-@receiver(post_save, sender=EventPermission)
-def post_save_event_permission_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-
-
-@receiver(post_delete, sender=EventPermission)
-def post_delete_event_permission_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
+    reset_assoc_permission(instance)
 
 
 @receiver(post_save, sender=Feature)
@@ -798,54 +662,21 @@ def post_delete_feature_module_index_permission(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_cache(sender, instance, created, **kwargs):
+    auto_assign_campaign_character(instance)
+
+    save_registration_character_form(instance)
+
+    handle_registration_accounting_updates(instance)
+
+    reset_registration_accounting_cache(instance.run)
+
+    handle_registration_event_links_post_save(instance)
+
     reset_cache_reg_counts(instance.run)
-
-
-@receiver(post_save, sender=Character)
-def post_save_character_cache(sender, instance, created, **kwargs):
-    handle_update_registration_character_rel(instance)
-
-
-@receiver(post_save, sender=Run)
-def post_save_run_cache(sender, instance, created, **kwargs):
-    reset_cache_reg_counts(instance)
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_cache(sender, instance, created, **kwargs):
-    for r in instance.runs.all():
-        reset_cache_reg_counts(r)
-
-
-@receiver(post_save, sender=Character)
-def post_save_character_reset_rels(sender, instance, **kwargs):
-    """Handle character save to update cache.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Character instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    update_event_char_rels(instance)
-    for rel in Relationship.objects.filter(target=instance):
-        update_event_char_rels(rel.source)
-
-    # Update all related caches
-    update_character_related_caches(instance)
 
 
 @receiver(post_delete, sender=Character)
 def post_delete_character_reset_rels(sender, instance, **kwargs):
-    """Handle character deletion to reset cache.
-
-    Resets the entire event cache when a character is deleted to ensure
-    all references to the deleted character are removed.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Character instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update all related caches
     update_character_related_caches(instance)
 
@@ -856,15 +687,6 @@ def post_delete_character_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Faction)
 def post_save_faction_reset_rels(sender, instance, **kwargs):
-    """Handle faction save to update related caches.
-
-    Updates both faction cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Faction instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update faction cache
     update_event_faction_rels(instance)
 
@@ -872,18 +694,11 @@ def post_save_faction_reset_rels(sender, instance, **kwargs):
     for char in instance.characters.all():
         update_event_char_rels(char)
 
+    handle_faction_clean_pdf(instance)
+
 
 @receiver(post_delete, sender=Faction)
 def post_delete_faction_reset_rels(sender, instance, **kwargs):
-    """Handle faction deletion to update related caches.
-
-    Removes faction from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Faction instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
         update_event_char_rels(char)
@@ -894,15 +709,6 @@ def post_delete_faction_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Plot)
 def post_save_plot_reset_rels(sender, instance, **kwargs):
-    """Handle plot save to update related caches.
-
-    Updates both plot cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Plot instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update plot cache
     update_event_plot_rels(instance)
 
@@ -913,15 +719,6 @@ def post_save_plot_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Plot)
 def post_delete_plot_reset_rels(sender, instance, **kwargs):
-    """Handle plot deletion to update related caches.
-
-    Removes plot from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Plot instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for all characters that were in this plot
     for char_rel in instance.get_plot_characters():
         update_event_char_rels(char_rel.character)
@@ -932,15 +729,6 @@ def post_delete_plot_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=SpeedLarp)
 def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
-    """Handle speedlarp save to update related caches.
-
-    Updates both speedlarp cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The SpeedLarp instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update speedlarp cache
     update_event_speedlarp_rels(instance)
 
@@ -951,15 +739,6 @@ def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=SpeedLarp)
 def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
-    """Handle speedlarp deletion to update related caches.
-
-    Removes speedlarp from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The SpeedLarp instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for all characters that were in this speedlarp
     for char in instance.characters.all():
         update_event_char_rels(char)
@@ -970,15 +749,6 @@ def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Prologue)
 def post_save_prologue_reset_rels(sender, instance, **kwargs):
-    """Handle prologue save to update related caches.
-
-    Updates both prologue cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Prologue instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update prologue cache
     update_event_prologue_rels(instance)
 
@@ -989,15 +759,6 @@ def post_save_prologue_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Prologue)
 def post_delete_prologue_reset_rels(sender, instance, **kwargs):
-    """Handle prologue deletion to update related caches.
-
-    Removes prologue from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Prologue instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for all characters that were in this prologue
     for char in instance.characters.all():
         update_event_char_rels(char)
@@ -1008,45 +769,20 @@ def post_delete_prologue_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Relationship)
 def post_save_relationship_reset_rels(sender, instance, **kwargs):
-    """Handle relationship save to update character caches.
-
-    Updates cache for both source and target characters when relationship changes.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Relationship instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for source character
     update_event_char_rels(instance.source)
+
+    remove_char_pdf(instance.source)
 
 
 @receiver(post_delete, sender=Relationship)
 def post_delete_relationship_reset_rels(sender, instance, **kwargs):
-    """Handle relationship deletion to update character caches.
-
-    Updates cache for both source and target characters when relationship is deleted.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Relationship instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for source character
     update_event_char_rels(instance.source)
 
 
 @receiver(post_save, sender=Quest)
 def post_save_quest_reset_rels(sender, instance, **kwargs):
-    """Handle quest save to update related caches.
-
-    Updates both quest cache and related questtype cache.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Quest instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update quest cache
     update_event_quest_rels(instance)
 
@@ -1057,15 +793,6 @@ def post_save_quest_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Quest)
 def post_delete_quest_reset_rels(sender, instance, **kwargs):
-    """Handle quest deletion to update related caches.
-
-    Removes quest from cache and updates related questtype cache.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Quest instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update questtype cache if quest had a type
     if instance.typ:
         update_event_questtype_rels(instance.typ)
@@ -1076,15 +803,6 @@ def post_delete_quest_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=QuestType)
 def post_save_questtype_reset_rels(sender, instance, **kwargs):
-    """Handle questtype save to update related caches.
-
-    Updates both questtype cache and related quest caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The QuestType instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update questtype cache
     update_event_questtype_rels(instance)
 
@@ -1095,15 +813,6 @@ def post_save_questtype_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=QuestType)
 def post_delete_questtype_reset_rels(sender, instance, **kwargs):
-    """Handle questtype deletion to update related caches.
-
-    Removes questtype from cache and updates related quest caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The QuestType instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update cache for all quests that were of this type
     for quest in instance.quests.all():
         update_event_quest_rels(quest)
@@ -1114,31 +823,15 @@ def post_delete_questtype_reset_rels(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Trait)
 def post_save_trait_reset_rels(sender, instance, **kwargs):
-    """Handle trait save to update quest cache.
-
-    Updates the quest cache when a trait changes.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Trait instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update quest cache if trait has a quest
     if instance.quest:
         update_event_quest_rels(instance.quest)
 
+    update_traits_all(instance)
+
 
 @receiver(post_delete, sender=Trait)
 def post_delete_trait_reset_rels(sender, instance, **kwargs):
-    """Handle trait deletion to update quest cache.
-
-    Updates the quest cache when a trait is deleted.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Trait instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
     # Update quest cache if trait had a quest
     if instance.quest:
         update_event_quest_rels(instance.quest)
@@ -1172,16 +865,7 @@ def pre_save_run(sender, instance, **kwargs):
 @receiver(pre_save, sender=Event)
 def pre_save_event(sender, instance, **kwargs):
     handle_event_pre_save(instance)
-
-
-@receiver(post_save, sender=Run)
-def post_save_run_reset_cache_config_run(sender, instance, **kwargs):
-    handle_run_post_save_cache_reset(instance)
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_reset_cache_config_run(sender, instance, **kwargs):
-    handle_event_post_save_cache_reset(instance)
+    handle_event_pre_save_prepare_campaign(instance)
 
 
 @receiver(post_save, sender=AssociationSkin)
@@ -1202,6 +886,7 @@ def post_delete_text_fields_callback(sender, instance, **kwargs):
 @receiver(post_save, sender=AccountingItemExpense)
 def post_save_accounting_item_expense(sender, instance, created, **kwargs):
     handle_expense_item_post_save(instance, created)
+    handle_accounting_item_expense_save(instance)
 
 
 @receiver(pre_save, sender=AccountingItemExpense)
@@ -1212,6 +897,7 @@ def pre_save_accounting_item_expense(sender, instance, **kwargs):
 @receiver(pre_save, sender=AccountingItemPayment)
 def pre_save_accounting_item_payment(sender, instance, **kwargs):
     handle_payment_item_pre_save(instance)
+    handle_accounting_item_payment_pre_save(instance)
 
 
 @receiver(pre_save, sender=AccountingItemOther)
@@ -1234,24 +920,13 @@ def pre_save_collection_gift(sender, instance, **kwargs):
     handle_collection_gift_pre_save(instance)
 
 
-@receiver(post_save, sender=AssignmentTrait)
-def post_save_notify_trait_assigned(sender, instance, created, **kwargs):
-    handle_trait_assignment_notification(instance, created)
-
-
 @receiver(pre_save, sender=Character)
 def pre_save_character_update_status(sender, instance, **kwargs):
     handle_character_status_update_notification(instance)
 
+    handle_replace_char_names(instance)
 
-@receiver(post_save, sender=RegistrationCharacterRel)
-def post_save_registration_character_rel(sender, instance, created, **kwargs):
-    handle_registration_character_rel_post_save(instance, created)
-
-
-@receiver(pre_save, sender=Registration)
-def pre_save_registration(sender, instance, **kwargs):
-    handle_registration_pre_save(instance)
+    handle_character_pre_save(instance)
 
 
 @receiver(pre_delete, sender=Registration)
@@ -1284,14 +959,18 @@ def post_save_handout_template(sender, instance, **kwargs):
     handle_handout_template_post_save(instance)
 
 
-@receiver(pre_delete, sender=Character)
-def pre_delete_character(sender, instance, **kwargs):
-    handle_character_pre_delete(instance)
-
-
 @receiver(post_save, sender=Character)
 def post_save_character(sender, instance, **kwargs):
-    handle_character_post_save(instance)
+    handle_character_clean_pdf(instance)
+
+    handle_update_registration_character_rel(instance)
+
+    update_event_char_rels(instance)
+    for rel in Relationship.objects.filter(target=instance):
+        update_event_char_rels(rel.source)
+
+    # Update all related caches
+    update_character_related_caches(instance)
 
 
 @receiver(pre_delete, sender=PlayerRelationship)
@@ -1309,19 +988,10 @@ def pre_delete_relationship(sender, instance, **kwargs):
     remove_char_pdf(instance.source)
 
 
-@receiver(post_save, sender=Relationship)
-def post_save_relationship(sender, instance, **kwargs):
-    remove_char_pdf(instance.source)
-
-
 @receiver(pre_delete, sender=Faction)
 def pre_delete_faction(sender, instance, **kwargs):
     handle_faction_pre_delete(instance)
-
-
-@receiver(post_save, sender=Faction)
-def post_save_faction(sender, instance, **kwargs):
-    handle_faction_post_save(instance)
+    reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_delete, sender=AssignmentTrait)
@@ -1331,6 +1001,10 @@ def pre_delete_assignment_trait(sender, instance, **kwargs):
 
 @receiver(post_save, sender=AssignmentTrait)
 def post_save_assignment_trait(sender, instance, created, **kwargs):
+    reset_run(instance.run)
+
+    handle_trait_assignment_notification(instance, created)
+
     handle_assignment_trait_post_save(instance, created)
 
 
@@ -1357,16 +1031,7 @@ def pre_delete_event_text(sender, instance, **kwargs):
 @receiver(pre_delete, sender=Character)
 def pre_delete_character_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_save, sender=Faction)
-def pre_save_faction_reset(sender, instance, **kwargs):
-    handle_faction_pre_save(instance)
-
-
-@receiver(pre_delete, sender=Faction)
-def pre_delete_faction_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
+    handle_character_pre_delete(instance)
 
 
 @receiver(pre_save, sender=QuestType)
@@ -1399,14 +1064,10 @@ def pre_delete_trait_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
-@receiver(pre_delete, sender=WritingQuestion)
-def pre_delete_character_question_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
 @receiver(pre_delete, sender=WritingOption)
 def pre_delete_character_option_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.question.event)
+    reset_event_fields_cache(instance.question.event_id)
 
 
 @receiver(pre_delete, sender=Run)
@@ -1422,16 +1083,6 @@ def pre_save_payment_invoice(sender, instance, **kwargs):
 @receiver(pre_save, sender=RefundRequest)
 def pre_save_refund_request(sender, instance, **kwargs):
     process_refund_request_status_change(instance)
-
-
-@receiver(pre_save, sender=Collection)
-def pre_save_collection_status(sender, instance, **kwargs):
-    process_collection_status_change(instance)
-
-
-@receiver(pre_save, sender=Registration)
-def pre_save_registration_surcharge(sender, instance, *args, **kwargs):
-    process_registration_pre_save(instance)
 
 
 @receiver(pre_save, sender=AccountingItemMembership)
@@ -1453,10 +1104,9 @@ def pre_save_notify_chat_message(sender, instance, **kwargs):
 def pre_save_registration_switch_event(sender, instance, **kwargs):
     handle_registration_event_switch(instance)
 
+    handle_registration_cancellation_email(instance)
 
-@receiver(pre_save, sender=Character)
-def pre_save_character_char_names(sender, instance, *args, **kwargs):
-    handle_replace_char_names(instance)
+    process_registration_pre_save(instance)
 
 
 m2m_changed.connect(character_factions_changed, sender=Faction.characters.through)

@@ -259,7 +259,7 @@ def update_registration_cancellation(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-def handle_registration_pre_save(instance):
+def handle_registration_cancellation_email(instance):
     """Handle pre-save events for registration instances.
 
     Args:
