@@ -23,22 +23,18 @@ import shutil
 from typing import Optional
 
 from django.core.cache import cache
-from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
-from django.dispatch import receiver
+from django.db.models.signals import m2m_changed
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Event
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
     WritingChoice,
-    WritingOption,
-    WritingQuestion,
 )
-from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 
@@ -417,21 +413,11 @@ def has_different_cache_values(instance, prev, lst):
     return False
 
 
-@receiver(post_save, sender=Member)
-def post_save_member_reset(sender, instance, **kwargs):
-    handle_update_event_characters(instance)
-
-
 def handle_update_event_characters(instance):
     que = RegistrationCharacterRel.objects.filter(reg__member_id=instance.id, reg__cancellation_date__isnull=True)
     que = que.select_related("character", "reg", "reg__run")
     for rcr in que:
         update_event_cache_all(rcr.reg.run, rcr)
-
-
-@receiver(pre_save, sender=Character)
-def pre_save_character_reset(sender, instance, **kwargs):
-    handle_character_pre_save(instance)
 
 
 def handle_character_pre_save(char):
@@ -463,16 +449,6 @@ def character_factions_changed(sender, **kwargs):
 m2m_changed.connect(character_factions_changed, sender=Faction.characters.through)
 
 
-@receiver(pre_delete, sender=Character)
-def del_character_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_save, sender=Faction)
-def update_faction_reset(sender, instance, **kwargs):
-    handle_faction_pre_save(instance)
-
-
 def handle_faction_pre_save(instance):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
@@ -489,16 +465,6 @@ def handle_faction_pre_save(instance):
         update_event_cache_all_runs(instance.event, instance)
 
 
-@receiver(pre_delete, sender=Faction)
-def del_faction_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_save, sender=QuestType)
-def update_questtype_reset(sender, instance, **kwargs):
-    handle_quest_type_presave(instance)
-
-
 def handle_quest_type_presave(instance):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
@@ -508,16 +474,6 @@ def handle_quest_type_presave(instance):
     prev = QuestType.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
         reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_delete, sender=QuestType)
-def del_quest_type_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_save, sender=Quest)
-def update_quest_reset(sender, instance, **kwargs):
-    handle_quest_presave(instance)
 
 
 def handle_quest_presave(instance):
@@ -531,16 +487,6 @@ def handle_quest_presave(instance):
         reset_event_cache_all_runs(instance.event)
 
 
-@receiver(pre_delete, sender=Quest)
-def del_quest_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_save, sender=Trait)
-def update_trait_reset(sender, instance, **kwargs):
-    handle_trait_presave(instance)
-
-
 def handle_trait_presave(instance):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
@@ -552,65 +498,15 @@ def handle_trait_presave(instance):
         reset_event_cache_all_runs(instance.event)
 
 
-@receiver(pre_delete, sender=Trait)
-def del_trait_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(post_save, sender=Event)
-def update_event_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance)
-
-
-@receiver(post_save, sender=Run)
-def save_run_reset(sender, instance, **kwargs):
-    reset_run(instance)
-
-
-@receiver(pre_delete, sender=WritingQuestion)
-def del_character_question_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(post_save, sender=WritingQuestion)
-def save_character_question_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.event)
-
-
-@receiver(pre_delete, sender=WritingOption)
-def del_character_option_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.question.event)
-
-
-@receiver(post_save, sender=WritingOption)
-def save_character_option_reset(sender, instance, **kwargs):
-    reset_event_cache_all_runs(instance.question.event)
-
-
 def update_event_cache_all_runs(event, instance):
     for r in event.runs.all():
         update_event_cache_all(r, instance)
-
-
-@receiver(post_save, sender=RegistrationCharacterRel)
-def post_save_registration_character_rel_savereg(sender, instance, created, **kwargs):
-    handle_registration_character_rel_save(instance)
 
 
 def handle_registration_character_rel_save(instance):
     if instance.reg:
         instance.reg.save()
     reset_run(instance.reg.run)
-
-
-@receiver(post_delete, sender=RegistrationCharacterRel)
-def post_delete_registration_character_rel_savereg(sender, instance, **kwargs):
-    handle_registration_character_rel_save(instance)
-
-
-@receiver(pre_delete, sender=Run)
-def del_run_reset(sender, instance, **kwargs):
-    reset_run(instance)
 
 
 def reset_event_cache_all_runs(event):
@@ -628,13 +524,3 @@ def reset_event_cache_all_runs(event):
         # reset also runs of parent event
         for r in event.parent.runs.all():
             reset_run(r)
-
-
-@receiver(post_save, sender=AssignmentTrait)
-def post_save_assignment_trait_reset(sender, instance, **kwargs):
-    reset_run(instance.run)
-
-
-@receiver(post_delete, sender=AssignmentTrait)
-def post_delete_assignment_trait_reset(sender, instance, **kwargs):
-    reset_run(instance.run)

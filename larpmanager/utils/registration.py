@@ -22,8 +22,6 @@ import math
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -228,7 +226,9 @@ def _status_payment(register_text, run):
     return False
 
 
-def registration_status(run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None) -> bool:
+def registration_status(
+    run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None
+) -> bool:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements
@@ -514,11 +514,6 @@ def handle_registration_event_switch(registration):
             answer.save()
         except ObjectDoesNotExist:
             answer.question = None
-
-
-@receiver(pre_save, sender=Registration)
-def pre_save_registration_switch_event(sender, instance, **kwargs):
-    handle_registration_event_switch(instance)
 
 
 def check_character_ticket_options(reg, char):

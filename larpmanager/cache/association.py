@@ -20,8 +20,6 @@
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_assoc_features
@@ -152,8 +150,3 @@ def _init_payments(assoc, el):
         for s in ["fee", "descr"]:
             mel[s] = payment_details.get(f"{m.slug}_{s}")
         el["methods"][m.slug] = mel
-
-
-@receiver(post_save, sender=Association)
-def update_association_reset_cache(sender, instance, **kwargs):
-    reset_cache_assoc(instance.slug)

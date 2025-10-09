@@ -22,8 +22,7 @@ from typing import Optional
 
 import holidays
 from django.conf import settings as conf_settings
-from django.db.models.signals import m2m_changed, post_save, pre_save
-from django.dispatch import receiver
+from django.db.models.signals import m2m_changed
 from django.template.loader import render_to_string
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -31,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssocRole, EventRole, get_assoc_executives, get_event_organizers
 from larpmanager.models.association import get_url, hdr
-from larpmanager.models.casting import AssignmentTrait, Casting
+from larpmanager.models.casting import Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
@@ -267,11 +266,6 @@ def handle_trait_assignment_notification(instance, created):
     my_send_mail(subj, body, instance.member, instance.run)
 
 
-@receiver(post_save, sender=AssignmentTrait)
-def notify_trait_assigned(sender, instance, created, **kwargs):
-    handle_trait_assignment_notification(instance, created)
-
-
 def mail_confirm_casting(member, run, gl_name, lst, avoid):
     """Send casting preference confirmation email to member.
 
@@ -329,11 +323,6 @@ def handle_character_status_update_notification(instance):
             subj = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
 
             my_send_mail(subj, body, instance.player, instance.event)
-
-
-@receiver(pre_save, sender=Character)
-def character_update_status(sender, instance, **kwargs):
-    handle_character_status_update_notification(instance)
 
 
 def notify_organization_exe(func, assoc, instance):

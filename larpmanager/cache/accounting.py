@@ -20,13 +20,9 @@
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
-    AccountingItemDiscount,
-    AccountingItemOther,
     AccountingItemPayment,
     PaymentChoices,
 )
@@ -233,71 +229,3 @@ def _calculate_registration_accounting(reg, reg_tickets, cache_aip, features):
         dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
 
     return dt
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_accounting_cache(sender, instance, created, **kwargs):
-    """Reset accounting cache when a registration is saved."""
-    reset_registration_accounting_cache(instance.run)
-
-
-@receiver(post_delete, sender=Registration)
-def post_delete_registration_accounting_cache(sender, instance, **kwargs):
-    """Reset accounting cache when a registration is deleted."""
-    reset_registration_accounting_cache(instance.run)
-
-
-@receiver(post_save, sender=RegistrationTicket)
-def post_save_ticket_accounting_cache(sender, instance, created, **kwargs):
-    """Reset accounting cache when a ticket is saved."""
-    for run in instance.event.runs.all():
-        reset_registration_accounting_cache(run)
-
-
-@receiver(post_delete, sender=RegistrationTicket)
-def post_delete_ticket_accounting_cache(sender, instance, **kwargs):
-    """Reset accounting cache when a ticket is deleted."""
-    for run in instance.event.runs.all():
-        reset_registration_accounting_cache(run)
-
-
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_payment_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when a payment is saved."""
-    if instance.reg and instance.reg.run:
-        update_member_accounting_cache(instance.reg.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_payment_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when a payment is deleted."""
-    if instance.reg and instance.reg.run:
-        update_member_accounting_cache(instance.reg.run, instance.member_id)
-
-
-@receiver(post_save, sender=AccountingItemDiscount)
-def post_save_discount_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when a discount is saved."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemDiscount)
-def post_delete_discount_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when a discount is deleted."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_save, sender=AccountingItemOther)
-def post_save_other_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when an other accounting item is saved."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemOther)
-def post_delete_other_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when an other accounting item is deleted."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)

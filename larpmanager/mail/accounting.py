@@ -18,8 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -28,12 +26,7 @@ from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
-    AccountingItemCollection,
-    AccountingItemDonation,
     AccountingItemExpense,
-    AccountingItemOther,
-    AccountingItemPayment,
-    Collection,
     OtherChoices,
     PaymentChoices,
     PaymentType,
@@ -58,11 +51,6 @@ def handle_expense_item_post_save(instance, created):
             activate(orga.language)
             subj, body = get_expense_mail(instance)
             my_send_mail(subj, body, orga, instance.run)
-
-
-@receiver(post_save, sender=AccountingItemExpense)
-def update_accounting_item_expense_post(sender, instance, created, **kwargs):
-    handle_expense_item_post_save(instance, created)
 
 
 def get_expense_mail(instance):
@@ -141,11 +129,6 @@ def handle_expense_item_approval_notification(expense_item):
     my_send_mail(subj, body, expense_item.member, expense_item.run)
 
 
-@receiver(pre_save, sender=AccountingItemExpense)
-def update_accounting_item_expense_pre(sender, instance, **kwargs):
-    handle_expense_item_approval_notification(instance)
-
-
 def get_token_credit_name(assoc_id):
     """Get token and credit names from association configuration.
 
@@ -189,11 +172,6 @@ def handle_payment_item_pre_save(payment_item):
             notify_pay_credit(credit_name, payment_item, member, run)
         elif payment_item.pay == PaymentChoices.TOKEN:
             notify_pay_token(payment_item, member, run, token_name)
-
-
-@receiver(pre_save, sender=AccountingItemPayment)
-def update_accounting_item_payment(sender, instance, **kwargs):
-    handle_payment_item_pre_save(instance)
 
 
 def notify_pay_token(instance, member, run, token_name):
@@ -354,11 +332,6 @@ def handle_accounting_item_other_pre_save(instance):
             notify_refund(credit_name, instance)
 
 
-@receiver(pre_save, sender=AccountingItemOther)
-def update_accounting_item_other(sender, instance, **kwargs):
-    handle_accounting_item_other_pre_save(instance)
-
-
 def notify_refund(credit_name, instance):
     """Send refund notifications to user and organizers.
 
@@ -504,11 +477,6 @@ def handle_donation_item_pre_save(instance):
     my_send_mail(subj, body, instance.member, instance)
 
 
-@receiver(pre_save, sender=AccountingItemDonation)
-def save_accounting_item_donation(sender, instance, *args, **kwargs):
-    handle_donation_item_pre_save(instance)
-
-
 def handle_collection_post_save(instance, created):
     """Handle post-save events for collection instances.
 
@@ -534,11 +502,6 @@ def handle_collection_post_save(instance, created):
         % context
     )
     my_send_mail(subj, body, instance.organizer, instance)
-
-
-@receiver(post_save, sender=Collection)
-def send_collection_activation_email(sender, instance, created, **kwargs):
-    handle_collection_post_save(instance, created)
 
 
 def handle_collection_gift_pre_save(instance):
@@ -568,11 +531,6 @@ def handle_collection_gift_pre_save(instance):
             _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience") + "!"
         )
         my_send_mail(subj, body, instance.collection.organizer, instance.collection)
-
-
-@receiver(pre_save, sender=AccountingItemCollection)
-def save_collection_gift(sender, instance, **kwargs):
-    handle_collection_gift_pre_save(instance)
 
 
 def notify_invoice_check(inv):

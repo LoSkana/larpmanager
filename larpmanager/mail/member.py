@@ -24,8 +24,7 @@ from typing import Optional
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.db.models.signals import m2m_changed, pre_save
-from django.dispatch import receiver
+from django.db.models.signals import m2m_changed
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -33,10 +32,8 @@ from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member
-from larpmanager.models.miscellanea import ChatMessage, HelpQuestion
 from larpmanager.utils.tasks import my_send_mail
 
 
@@ -95,11 +92,6 @@ def handle_membership_payment_notification(instance):
     subj = hdr(instance) + _("Membership fee payment %(year)s") % {"year": instance.year}
     body = _("The payment of your membership fee for this year has been received") + "!"
     my_send_mail(subj, body, instance.member, instance)
-
-
-@receiver(pre_save, sender=AccountingItemMembership)
-def save_accounting_item_membership(sender, instance, *args, **kwargs):
-    handle_membership_payment_notification(instance)
 
 
 def handle_badge_assignment_notifications(instance, pk_set):
@@ -277,11 +269,6 @@ def handle_help_question_notification(instance):
         my_send_mail(subj, body, mb, instance)
 
 
-@receiver(pre_save, sender=HelpQuestion)
-def notify_help_question(sender, instance, **kwargs):
-    handle_help_question_notification(instance)
-
-
 def get_help_email(instance):
     """Generate subject and body for help question notification.
 
@@ -313,11 +300,6 @@ def handle_chat_message_notification(instance):
     url = get_url(f"chat/{instance.sender.id}/", instance)
     body = f"<br /><br />{instance.message} (<a href='{url}'>" + _("reply here") + "</a>)"
     my_send_mail(subj, body, instance.receiver, instance)
-
-
-@receiver(pre_save, sender=ChatMessage)
-def notify_chat_message(sender, instance, **kwargs):
-    handle_chat_message_notification(instance)
 
 
 # ACTIVATION ACCOUNT

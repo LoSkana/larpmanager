@@ -20,8 +20,6 @@
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.models.association import AssociationSkin
 
@@ -73,8 +71,3 @@ def init_cache_skin(domain):
         "base_domain": domain,
         "skin_id": skin.id,
     }
-
-
-@receiver(post_save, sender=AssociationSkin)
-def update_association_skin_reset_cache(sender, instance, **kwargs):
-    reset_cache_skin(instance.domain)

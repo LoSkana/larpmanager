@@ -25,8 +25,6 @@ from decimal import Decimal
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
@@ -43,14 +41,13 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.form import RegistrationChoice, RegistrationOption
+from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
     RegistrationInstallment,
     RegistrationSurcharge,
-    RegistrationTicket,
     TicketTier,
 )
 from larpmanager.models.utils import get_sum
@@ -458,11 +455,6 @@ def process_registration_pre_save(registration):
     registration.member.join(registration.run.event.assoc)
 
 
-@receiver(pre_save, sender=Registration)
-def pre_save_registration(sender, instance, *args, **kwargs):
-    process_registration_pre_save(instance)
-
-
 def get_date_surcharge(reg, event):
     """Calculate date-based surcharge for a registration.
 
@@ -530,11 +522,6 @@ def handle_registration_accounting_updates(registration):
         update_registration_status_bkg(registration.id)
 
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_accounting(sender, instance, **kwargs):
-    handle_registration_accounting_updates(instance)
-
-
 def process_accounting_discount_post_save(discount_item):
     """Process accounting discount item after save.
 
@@ -544,11 +531,6 @@ def process_accounting_discount_post_save(discount_item):
     if discount_item.run and not discount_item.expires:
         for reg in Registration.objects.filter(member=discount_item.member, run=discount_item.run):
             reg.save()
-
-
-@receiver(post_save, sender=AccountingItemDiscount)
-def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
-    process_accounting_discount_post_save(instance)
 
 
 def process_registration_ticket_post_save(ticket):
@@ -561,11 +543,6 @@ def process_registration_ticket_post_save(ticket):
     check_reg_events(ticket.event)
 
 
-@receiver(post_save, sender=RegistrationTicket)
-def post_save_registration_ticket(sender, instance, created, **kwargs):
-    process_registration_ticket_post_save(instance)
-
-
 def process_registration_option_post_save(option):
     """Process registration option after save.
 
@@ -574,11 +551,6 @@ def process_registration_option_post_save(option):
     """
     logger.debug(f"RegistrationOption saved: {option} at {datetime.now()}")
     check_reg_events(option.question.event)
-
-
-@receiver(post_save, sender=RegistrationOption)
-def post_save_registration_option(sender, instance, created, **kwargs):
-    process_registration_option_post_save(instance)
 
 
 def check_reg_events(event):

@@ -23,8 +23,6 @@ import re
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -187,16 +185,6 @@ def update_cache_reg_fields_answer(instance):
     field = str(instance.question_id)
     res[instance.reg_id][field] = get_single_cache_text_field(instance.reg_id, field, instance.text)
     cache.set(key, res)
-
-
-@receiver(post_save)
-def post_save_callback(sender, instance, *args, **kwargs):
-    update_acc_callback(instance)
-
-
-@receiver(post_delete)
-def post_delete_callback(sender, instance, **kwargs):
-    update_acc_callback(instance)
 
 
 def update_acc_callback(instance):

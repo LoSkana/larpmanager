@@ -30,8 +30,6 @@ import pdfkit
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
@@ -43,14 +41,11 @@ from larpmanager.cache.association import get_cache_assoc
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
-from larpmanager.models.miscellanea import PlayerRelationship, Util
+from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
-    Faction,
     Handout,
-    HandoutTemplate,
-    Relationship,
 )
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import get_handout
@@ -361,11 +356,6 @@ def handle_handout_pre_delete(instance):
         safe_remove(instance.get_filepath(run))
 
 
-@receiver(pre_delete, sender=Handout)
-def pre_delete_pdf_handout(sender, instance, **kwargs):
-    handle_handout_pre_delete(instance)
-
-
 def handle_handout_post_save(instance):
     """Handle handout post-save PDF cleanup.
 
@@ -374,11 +364,6 @@ def handle_handout_post_save(instance):
     """
     for run in instance.event.runs.all():
         safe_remove(instance.get_filepath(run))
-
-
-@receiver(post_save, sender=Handout)
-def post_save_pdf_handout(sender, instance, **kwargs):
-    handle_handout_post_save(instance)
 
 
 def handle_handout_template_pre_delete(instance):
@@ -391,11 +376,6 @@ def handle_handout_template_pre_delete(instance):
         safe_remove(instance.get_filepath(run))
 
 
-@receiver(pre_delete, sender=HandoutTemplate)
-def pre_delete_pdf_handout_template(sender, instance, **kwargs):
-    handle_handout_template_pre_delete(instance)
-
-
 def handle_handout_template_post_save(instance):
     """Handle handout template post-save PDF cleanup.
 
@@ -405,11 +385,6 @@ def handle_handout_template_post_save(instance):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             safe_remove(el.get_filepath(run))
-
-
-@receiver(post_save, sender=HandoutTemplate)
-def post_save_pdf_handout_template(sender, instance, **kwargs):
-    handle_handout_template_post_save(instance)
 
 
 def safe_remove(path):
@@ -446,11 +421,6 @@ def handle_character_pre_delete(instance):
     remove_char_pdf(instance)
 
 
-@receiver(pre_delete, sender=Character)
-def pre_delete_pdf_character(sender, instance, **kwargs):
-    handle_character_pre_delete(instance)
-
-
 def handle_character_post_save(instance):
     """Handle character post-save PDF cleanup.
 
@@ -459,11 +429,6 @@ def handle_character_post_save(instance):
     """
     remove_run_pdf(instance.event)
     remove_char_pdf(instance)
-
-
-@receiver(post_save, sender=Character)
-def post_save_pdf_character(sender, instance, **kwargs):
-    handle_character_post_save(instance)
 
 
 def handle_player_relationship_pre_delete(instance):
@@ -476,11 +441,6 @@ def handle_player_relationship_pre_delete(instance):
         remove_char_pdf(el.character, instance.reg.run)
 
 
-@receiver(pre_delete, sender=PlayerRelationship)
-def pre_delete_pdf_player_relationship(sender, instance, **kwargs):
-    handle_player_relationship_pre_delete(instance)
-
-
 def handle_player_relationship_post_save(instance):
     """Handle player relationship post-save PDF cleanup.
 
@@ -491,21 +451,6 @@ def handle_player_relationship_post_save(instance):
         remove_char_pdf(el.character, instance.reg.run)
 
 
-@receiver(post_save, sender=PlayerRelationship)
-def post_save_pdf_player_relationship(sender, instance, **kwargs):
-    handle_player_relationship_post_save(instance)
-
-
-@receiver(pre_delete, sender=Relationship)
-def pre_delete_pdf_relationship(sender, instance, **kwargs):
-    remove_char_pdf(instance.source)
-
-
-@receiver(post_save, sender=Relationship)
-def post_save_pdf_relationship(sender, instance, **kwargs):
-    remove_char_pdf(instance.source)
-
-
 def handle_faction_pre_delete(instance):
     """Handle faction pre-delete PDF cleanup.
 
@@ -514,11 +459,6 @@ def handle_faction_pre_delete(instance):
     """
     for char in instance.event.character_set.all():
         remove_char_pdf(char)
-
-
-@receiver(pre_delete, sender=Faction)
-def pre_delete_pdf_faction(sender, instance, **kwargs):
-    handle_faction_pre_delete(instance)
 
 
 def handle_faction_post_save(instance):
@@ -532,11 +472,6 @@ def handle_faction_post_save(instance):
         remove_char_pdf(char, runs=runs)
 
 
-@receiver(post_save, sender=Faction)
-def post_save_pdf_faction(sender, instance, **kwargs):
-    handle_faction_post_save(instance)
-
-
 def remove_pdf_assignment_trait(instance):
     for casting in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
         casting.active = False
@@ -545,11 +480,6 @@ def remove_pdf_assignment_trait(instance):
     char = get_trait_character(instance.run, instance.trait.number)
     if char:
         remove_char_pdf(char, instance.run)
-
-
-@receiver(pre_delete, sender=AssignmentTrait)
-def pre_delete_pdf_assignment_trait(sender, instance, **kwargs):
-    remove_pdf_assignment_trait(instance)
 
 
 def handle_assignment_trait_post_save(instance, created):
@@ -563,11 +493,6 @@ def handle_assignment_trait_post_save(instance, created):
         return
 
     remove_pdf_assignment_trait(instance)
-
-
-@receiver(post_save, sender=AssignmentTrait)
-def post_save_assignment_trait(sender, instance, created, **kwargs):
-    handle_assignment_trait_post_save(instance, created)
 
 
 # ## TASKS

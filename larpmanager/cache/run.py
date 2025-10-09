@@ -21,12 +21,10 @@ import ast
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
 
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
 
 
@@ -72,11 +70,6 @@ def handle_run_pre_save(instance):
         reset_cache_run(instance.event.assoc_id, instance.get_slug())
 
 
-@receiver(pre_save, sender=Run)
-def pre_save_run(sender, instance, **kwargs):
-    handle_run_pre_save(instance)
-
-
 def handle_event_pre_save(instance):
     """Handle event pre-save cache invalidation.
 
@@ -86,11 +79,6 @@ def handle_event_pre_save(instance):
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_run(instance.assoc_id, run.get_slug())
-
-
-@receiver(pre_save, sender=Event)
-def pre_save_event(sender, instance, **kwargs):
-    handle_event_pre_save(instance)
 
 
 def reset_cache_config_run(run):
@@ -162,11 +150,6 @@ def handle_run_post_save_cache_reset(instance):
         reset_cache_config_run(instance)
 
 
-@receiver(post_save, sender=Run)
-def post_run_reset_cache_config_run(sender, instance, **kwargs):
-    handle_run_post_save_cache_reset(instance)
-
-
 def handle_event_post_save_cache_reset(instance):
     """Handle event post-save cache reset.
 
@@ -176,8 +159,3 @@ def handle_event_post_save_cache_reset(instance):
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_config_run(run)
-
-
-@receiver(post_save, sender=Event)
-def post_event_reset_cache_config_run(sender, instance, **kwargs):
-    handle_event_post_save_cache_reset(instance)

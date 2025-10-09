@@ -24,8 +24,6 @@ import json
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Exists, Model, OuterRef
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
@@ -609,11 +607,6 @@ def writing_versions(request, ctx, nm, tp):
     ctx["element"] = ctx[nm]
     ctx["typ"] = nm
     return render(request, "larpmanager/orga/writing/versions.html", ctx)
-
-
-@receiver(pre_save, sender=Character)
-def pre_save_character(sender, instance, *args, **kwargs):
-    handle_replace_char_names(instance)
 
 
 def handle_replace_char_names(instance):
