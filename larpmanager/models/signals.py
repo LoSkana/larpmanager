@@ -442,16 +442,6 @@ def delete_guide_from_index(sender, instance, **kwargs):
     delete_index_guide(instance.id)
 
 
-@receiver(post_save, sender=WritingQuestion)
-def save_event_field(sender, instance, created, **kwargs):
-    reset_event_fields_cache(instance.event_id)
-
-
-@receiver(pre_delete, sender=WritingQuestion)
-def delete_event_field(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.event_id)
-
-
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
 def pre_save_warehouse_item(sender, instance: WarehouseItem, **kwargs):
     rotate_vertical_photo(instance, sender)
