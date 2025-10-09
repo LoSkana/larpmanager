@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block maintitle %}
-    LarpManager - All-in-one LARP software, free & open source!
+    LarpManager - Everything you need to manage your LARP!
 {% endblock maintitle %}
 {% block meta %}
     <meta name="description"
-          content="Everything you need to manage your LARP - registrations, campaigns, one-shots, payments, and more. All in one platform. Free and open source!">
+          content="Everything you need to manage your LARP - registrations, campaigns, one-shots, payments, and more. All in one platform!">
     <meta property="og:title" content="LarpManager">
 {% endblock meta %}
 {% block alpha %}
@@ -13,7 +13,7 @@
     <section id="banner">
         <!-- <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo"  width="150" height="150" /></span> -->
         <h2 class="home">LarpManager</h2>
-        <h1 class="home">Everything you need to manage your LARP, free & open source!</h1>
+        <h1 class="home">Everything you need to manage your LARP!</h1>
     </section>
     <!-- Main -->
     <section id="main" class="container">
@@ -49,9 +49,9 @@
                     {% endfor %}
                 </section>
                 <hr />
-                <h3>LarpManager is ready when you are: fully hosted, zero setup. Effortless to start, endlessly configurable.</h3>
+                <h3>Start instantly. Zero setup. Free to use with no limits. Built to adapt to any event or workflow.</h3>
                 <hr />
-                <h3>Trusted by organizers around the world, completely free and open source!</h3>
+                <h3>Trusted by organizers around the world!</h3>
                 <br />
                 <section id="promoter-carousel" class="owl-carousel owl-theme">
                     {% for el in promoters %}
@@ -139,7 +139,7 @@
 								<span class="image featured"><img src="images/pic03.jpg" alt="" /></span>
 -->
                     <h6>Usage</h6>
-                    <p>LarpManager is free and open source, learn how you can use it or self-host it!</p>
+                    <p>LarpManager is free to use: we want help everyone run their LARP!</p>
                     <ul class="actions special">
                         <li>
                             <a href="{% url 'usage' %}" title="Affordable usage" class="button alt">Learn More</a>
