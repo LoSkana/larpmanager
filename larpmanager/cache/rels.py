@@ -23,7 +23,6 @@ from typing import Any
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import m2m_changed
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -645,10 +644,3 @@ def handle_prologue_characters_changed(sender, instance, action, pk_set, **kwarg
         **kwargs: Additional keyword arguments from the signal
     """
     update_m2m_related_characters(instance, pk_set, action, update_event_prologue_rels)
-
-
-# Connect M2M signals manually for better control
-m2m_changed.connect(handle_faction_characters_changed, sender=Faction.characters.through)
-m2m_changed.connect(handle_plot_characters_changed, sender=Plot.characters.through)
-m2m_changed.connect(handle_speedlarp_characters_changed, sender=SpeedLarp.characters.through)
-m2m_changed.connect(handle_prologue_characters_changed, sender=Prologue.characters.through)

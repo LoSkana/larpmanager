@@ -24,7 +24,6 @@ from typing import Optional
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.db.models.signals import m2m_changed
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -134,9 +133,6 @@ def badges_changed(sender, **kwargs):
     pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
 
     handle_badge_assignment_notifications(instance, pk_set)
-
-
-m2m_changed.connect(badges_changed, sender=Badge.members.through)
 
 
 def notify_membership_approved(member, resp):

@@ -21,7 +21,10 @@
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.http import Http404
+
+from larpmanager.models.access import EventPermission
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -149,3 +152,18 @@ def get_allowed_managed():
         "exe_preferences",
     ]
     return allowed
+
+
+def assign_event_permission_number(event_permission):
+    """Assign number to event permission if not set.
+
+    Args:
+        event_permission: EventPermission instance to assign number to
+    """
+    if not event_permission.number:
+        n = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(Max("number"))[
+            "number__max"
+        ]
+        if not n:
+            n = 1
+        event_permission.number = n + 10

@@ -22,7 +22,6 @@ from typing import Optional
 
 import holidays
 from django.conf import settings as conf_settings
-from django.db.models.signals import m2m_changed
 from django.template.loader import render_to_string
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -123,9 +122,6 @@ def assoc_roles_changed(sender, **kwargs):
                 my_send_mail(subj, body, m, instance.assoc)
 
 
-m2m_changed.connect(assoc_roles_changed, sender=AssocRole.members.through)
-
-
 def event_roles_changed(sender, **kwargs):
     """Handle event role changes and send notifications.
 
@@ -175,9 +171,6 @@ def event_roles_changed(sender, **kwargs):
                 }
                 body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.event)
-
-
-m2m_changed.connect(event_roles_changed, sender=EventRole.members.through)
 
 
 def bring_friend_instructions(reg, ctx):

@@ -23,7 +23,6 @@ import shutil
 from typing import Optional
 
 from django.core.cache import cache
-from django.db.models.signals import m2m_changed
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
@@ -444,9 +443,6 @@ def character_factions_changed(sender, **kwargs):
 
     instance: Optional[Faction] = kwargs.pop("instance", None)
     reset_event_cache_all_runs(instance.event)
-
-
-m2m_changed.connect(character_factions_changed, sender=Faction.characters.through)
 
 
 def handle_faction_pre_save(instance):

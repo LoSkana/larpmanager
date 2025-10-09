@@ -338,3 +338,25 @@ def remove_char_ability(char, ability_id):
         char.px_ability_list.remove(*to_remove_ids)
 
     return to_remove_ids
+
+
+def handle_ability_save(instance):
+    for char in instance.characters.all():
+        update_px(char)
+
+
+def handle_delivery_save(instance):
+    for char in instance.characters.all():
+        char.save()
+
+
+def handle_rule_save(instance):
+    event = instance.event.get_class_parent(RulePx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+def handle_modifier_save(instance):
+    event = instance.event.get_class_parent(ModifierPx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
