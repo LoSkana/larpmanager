@@ -427,9 +427,15 @@ function data_tables() {
         }
         let table_no_header_cols = $table.attr('no_header_cols');
         if (table_no_header_cols) {
-            disable_sort_columns = disable_sort_columns.concat(
-                JSON.parse(table_no_header_cols)
-            );
+            if (table_no_header_cols === "all") {
+                var thList = $table.find('thead th');
+                var totalColumns = thList.length;
+                disable_sort_columns = Array.from({length: totalColumns}, (_, i) => i);
+            } else {
+                disable_sort_columns = disable_sort_columns.concat(
+                    JSON.parse(table_no_header_cols)
+                );
+            }
         }
 
         let hide_columns = [];

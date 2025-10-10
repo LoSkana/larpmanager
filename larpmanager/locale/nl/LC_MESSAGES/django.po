@@ -299,6 +299,9 @@ msgstr "Gesloten"
 msgid "Cover"
 msgstr "Omslag"
 
+msgid "Dates"
+msgstr "Data"
+
 msgid "Email"
 msgstr "E-mail"
 
@@ -473,6 +476,9 @@ msgstr "Bewerk"
 
 msgid "Checks"
 msgstr "Controles"
+
+msgid "Counts"
+msgstr "Telt"
 
 msgid "Delete"
 msgstr "Verwijder"

@@ -44,18 +44,20 @@
                 <b>{% trans "Campaign" %}:</b> {{ event.parent }}
             </p>
         {% endif %}
-        {% if counts %}
+        {% if counts.count_reg %}
             <hr />
             <h2>
                 <a href="{% url 'orga_registrations' run.get_slug %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
             </h2>
-            <table class="go_datatable">
-                <tbody>
+            <table class="go_datatable" no_header_cols="all">
+                <thead>
                     <tr>
                         {% for key, count in reg_counts.items %}
                             {% if count %}<th>{{ key }}</th>{% endif %}
                         {% endfor %}
                     </tr>
+                </thead>
+                <tbody>
                     <tr>
                         {% for key, count in reg_counts.items %}
                             {% if count %}<td>{{ count }}</td>{% endif %}
@@ -68,8 +70,8 @@
             <h2>
                 <a href="{% url 'orga_accounting' run.get_slug %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
             </h2>
-            <table class="go_datatable">
-                <tbody>
+            <table class="go_datatable" no_header_cols="all">
+                <thead>
                     <tr>
                         <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
                             <a href="#" class="sidebar-link">{% trans "Total revenue" %}</a>
@@ -90,6 +92,8 @@
                             </th>
                         {% endif %}
                     </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td>{{ run.revenue }}</td>
                         <td>{{ run.costs }}</td>
