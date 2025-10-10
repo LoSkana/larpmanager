@@ -256,10 +256,13 @@ class RegistrationForm(BaseRegistrationForm):
             dff = get_time_diff_today(run.end)
             for el in RegistrationQuota.objects.filter(event=event).order_by("quotas"):
                 if dff > el.days_available or (self.instance and el.quotas == self.instance.quotas):
-                    label = qt_label[int(el.quotas) - 1]
-                    if el.surcharge > 0:
-                        label += f" ({el.surcharge}€)"
-                    quota_chs.append((el.quotas, label))
+                    # Ensure quotas value is within valid range (1-5)
+                    quota_index = int(el.quotas) - 1
+                    if 0 <= quota_index < len(qt_label):
+                        label = qt_label[quota_index]
+                        if el.surcharge > 0:
+                            label += f" ({el.surcharge}€)"
+                        quota_chs.append((el.quotas, label))
 
         if not quota_chs:
             quota_chs.append((1, _("Default")))
