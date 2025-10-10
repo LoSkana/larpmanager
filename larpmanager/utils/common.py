@@ -90,7 +90,7 @@ def check_already(nm, params):
         bool: True if task already exists in queue
     """
     q = Task.objects.filter(task_name=nm, task_params=params)
-    return q.count() > 0
+    return q.exists()
 
 
 def get_channel(a, b):

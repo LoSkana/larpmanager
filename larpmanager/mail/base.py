@@ -240,7 +240,7 @@ def handle_trait_assignment_notification(instance, created):
     if not instance.member or not created:
         return
 
-    que = Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ)
+    que = Casting.objects.filter(member_id=instance.member_id, run_id=instance.run_id, typ=instance.typ)
     for c in que:
         c.active = False
         c.save()

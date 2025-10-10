@@ -24,7 +24,7 @@ import random
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -104,7 +104,7 @@ def assign_casting(request, ctx, typ):
 
                 RegistrationCharacterRel.objects.create(character_id=eid, reg=reg)
             else:
-                AssignmentTrait.objects.create(trait_id=eid, run=reg.run, member=mb, typ=typ)
+                AssignmentTrait.objects.create(trait_id=eid, run_id=reg.run_id, member=mb, typ=typ)
         except Exception as e:
             print(e)
             err += str(e)
@@ -172,7 +172,7 @@ def check_player_skip_characters(reg, ctx):
 
 
 def check_player_skip_quests(reg, typ):
-    return AssignmentTrait.objects.filter(run=reg.run, member=reg.member, typ=typ).count() > 0
+    return AssignmentTrait.objects.filter(run_id=reg.run_id, member_id=reg.member_id, typ=typ).count() > 0
 
 
 def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
@@ -223,7 +223,7 @@ def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
     return False
 
 
-def get_casting_data(request: "HttpRequest", ctx: dict, typ: int, form: "OrganizerCastingOptionsForm") -> None:
+def get_casting_data(request: HttpRequest, ctx: dict, typ: int, form: "OrganizerCastingOptionsForm") -> None:
     """Retrieve and process casting data for automated character assignment algorithm.
 
     Collects player preferences, character choices, ticket types, membership status,
@@ -249,11 +249,11 @@ def get_casting_data(request: "HttpRequest", ctx: dict, typ: int, form: "Organiz
     casting_details(ctx, typ)
 
     # Initialize data structures for casting algorithm
-    players = {}          # Player info with priorities
-    didnt_choose = []     # Players who didn't submit preferences
-    preferences = {}      # Player->Character preference mappings
-    nopes = {}           # Characters players want to avoid
-    chosen = {}          # Characters that have been selected by at least one player
+    players = {}  # Player info with priorities
+    didnt_choose = []  # Players who didn't submit preferences
+    preferences = {}  # Player->Character preference mappings
+    nopes = {}  # Characters players want to avoid
+    chosen = {}  # Characters that have been selected by at least one player
 
     # Get available choices based on casting type
     if typ == 0:

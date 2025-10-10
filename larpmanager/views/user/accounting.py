@@ -25,7 +25,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -253,7 +253,7 @@ def acc_pay(request, s, method=None):
 
 
 @login_required
-def acc_reg(request: "HttpRequest", reg_id: int, method: str | None = None) -> "HttpResponse":
+def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording

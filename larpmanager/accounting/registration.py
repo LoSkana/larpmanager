@@ -86,7 +86,7 @@ def get_reg_iscr(instance):
 
     # no discount for gifted
     if not instance.redeem_code:
-        que = AccountingItemDiscount.objects.filter(member=instance.member, run=instance.run)
+        que = AccountingItemDiscount.objects.filter(member_id=instance.member_id, run_id=instance.run_id)
         for el in que.select_related("disc"):
             tot_iscr -= el.disc.value
 
@@ -158,7 +158,9 @@ def get_accounting_refund(reg):
     reg.refunds = {}
 
     if not hasattr(reg, "acc_refunds"):
-        reg.acc_refunds = AccountingItemOther.objects.filter(run_id=reg.run_id, member=reg.member, cancellation=True)
+        reg.acc_refunds = AccountingItemOther.objects.filter(
+            run_id=reg.run_id, member_id=reg.member_id, cancellation=True
+        )
 
     if not reg.acc_refunds:
         return
@@ -251,7 +253,7 @@ def installment_check(reg, alert, assoc_id):
 
     tot = 0
 
-    que = RegistrationInstallment.objects.filter(event=reg.run.event)
+    que = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
     que = que.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
 
     first_deadline = True
@@ -370,14 +372,18 @@ def cancel_run(instance):
     for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance):
         cancel_reg(r)
     for r in Registration.objects.filter(refunded=False, run=instance):
-        AccountingItemPayment.objects.filter(member=r.member, pay=PaymentChoices.TOKEN, reg__run=instance).delete()
-        AccountingItemPayment.objects.filter(member=r.member, pay=PaymentChoices.CREDIT, reg__run=instance).delete()
+        AccountingItemPayment.objects.filter(
+            member_id=r.member_id, pay=PaymentChoices.TOKEN, reg__run=instance
+        ).delete()
+        AccountingItemPayment.objects.filter(
+            member_id=r.member_id, pay=PaymentChoices.CREDIT, reg__run=instance
+        ).delete()
         money = get_sum(
-            AccountingItemPayment.objects.filter(member=r.member, pay=PaymentChoices.MONEY, reg__run=instance)
+            AccountingItemPayment.objects.filter(member_id=r.member_id, pay=PaymentChoices.MONEY, reg__run=instance)
         )
         if money > 0:
             AccountingItemOther.objects.create(
-                member=r.member,
+                member_id=r.member_id,
                 oth=OtherChoices.CREDIT,
                 descr=f"Refund per {instance}",
                 run=instance,
@@ -404,10 +410,10 @@ def cancel_reg(reg):
     RegistrationCharacterRel.objects.filter(reg=reg).delete()
 
     # delete trait assignments
-    AssignmentTrait.objects.filter(run=reg.run, member=reg.member).delete()
+    AssignmentTrait.objects.filter(run_id=reg.run_id, member_id=reg.member_id).delete()
 
     # delete discounts
-    AccountingItemDiscount.objects.filter(run=reg.run, member=reg.member).delete()
+    AccountingItemDiscount.objects.filter(run_id=reg.run_id, member_id=reg.member_id).delete()
 
     # delete bonus credits / tokens
     AccountingItemOther.objects.filter(ref_addit=reg.id).delete()
@@ -505,7 +511,7 @@ def handle_registration_accounting_updates(registration):
     # find cancelled registrations to transfer payments
     if not registration.cancellation_date:
         cancelled = Registration.objects.filter(
-            run=registration.run, member=registration.member, cancellation_date__isnull=False
+            run_id=registration.run_id, member_id=registration.member_id, cancellation_date__isnull=False
         )
         cancelled = list(cancelled.values_list("pk", flat=True))
         if cancelled:
@@ -542,7 +548,7 @@ def process_accounting_discount_post_save(discount_item):
         discount_item: AccountingItemDiscount instance that was saved
     """
     if discount_item.run and not discount_item.expires:
-        for reg in Registration.objects.filter(member=discount_item.member, run=discount_item.run):
+        for reg in Registration.objects.filter(member_id=discount_item.member_id, run_id=discount_item.run_id):
             reg.save()
 
 

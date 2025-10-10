@@ -183,7 +183,7 @@ def update_traits_text(instance):
     traits = []
     for pid in set(trait_search):
         try:
-            trait = Trait.objects.get(event=instance.event, number=pid)
+            trait = Trait.objects.get(event_id=instance.event_id, number=pid)
             traits.append(trait)
         except Exception as e:
             logger.warning(f"Error getting trait {pid}: {e}")
@@ -191,7 +191,7 @@ def update_traits_text(instance):
     trait_search = re.findall(r"@([\d]+)", instance.text, re.IGNORECASE)
     for pid in set(trait_search):
         try:
-            trait = Trait.objects.get(event=instance.event, number=pid)
+            trait = Trait.objects.get(event_id=instance.event_id, number=pid)
         except Exception as e:
             logger.warning(f"Error getting trait {pid} in assignment: {e}")
 

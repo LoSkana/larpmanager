@@ -154,7 +154,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         data = self.cleaned_data["username"].strip()
         logger.debug(f"Validating username/email: {data}")
         # check if already used in user or email
-        if User.objects.filter(email__iexact=data).count() > 0:
+        if User.objects.filter(email__iexact=data).exists():
             raise ValidationError("Email already used! It seems you already have an account!")
         return data
 
