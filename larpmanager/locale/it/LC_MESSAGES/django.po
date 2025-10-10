@@ -299,6 +299,9 @@ msgstr "Chiuso"
 msgid "Cover"
 msgstr "Cover"
 
+msgid "Dates"
+msgstr "Date"
+
 msgid "Email"
 msgstr "Email"
 
@@ -473,6 +476,9 @@ msgstr "Modifica"
 
 msgid "Checks"
 msgstr "Controlli"
+
+msgid "Counts"
+msgstr "Conti"
 
 msgid "Delete"
 msgstr "Elimina"

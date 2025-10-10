@@ -299,6 +299,9 @@ msgstr "Zamknij"
 msgid "Cover"
 msgstr "Okładka"
 
+msgid "Dates"
+msgstr "Daty"
+
 msgid "Email"
 msgstr "E-mail"
 
@@ -473,6 +476,9 @@ msgstr "Zmiana"
 
 msgid "Checks"
 msgstr "Czeki"
+
+msgid "Counts"
+msgstr "Liczby"
 
 msgid "Delete"
 msgstr "Usuń"
