@@ -26,7 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Substr
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -406,7 +406,7 @@ def _orga_registrations_text_fields(ctx):
 
 
 @login_required
-def orga_registrations(request: "HttpRequest", s: str) -> "HttpResponse":
+def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
     """Display and manage comprehensive event registration list for organizers.
 
     Provides detailed registration management interface with filtering, grouping,

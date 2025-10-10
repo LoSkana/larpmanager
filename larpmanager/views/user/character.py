@@ -497,7 +497,7 @@ def character_assign(request, s, num):
     if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
     else:
-        RegistrationCharacterRel.objects.create(reg_id=ctx["run"].reg.id, character=ctx["character"])
+        RegistrationCharacterRel.objects.create(reg_id=ctx["run"].reg.id, character_id=ctx["character"].id)
         messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", s=s)

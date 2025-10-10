@@ -353,7 +353,9 @@ def handle_membership_status_changes(membership):
     """
     if membership.status == MembershipStatus.ACCEPTED:
         if not membership.card_number:
-            n = Membership.objects.filter(assoc=membership.assoc).aggregate(Max("card_number"))["card_number__max"]
+            n = Membership.objects.filter(assoc_id=membership.assoc_id).aggregate(Max("card_number"))[
+                "card_number__max"
+            ]
             if not n:
                 n = 0
             membership.card_number = n + 1
@@ -715,7 +717,7 @@ def auto_assign_campaign_character(registration):
     # get last run of campaign
     last = (
         Run.objects.filter(
-            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
+            Q(event__parent_id=registration.run.event.parent_id) | Q(event_id=registration.run.event.parent_id)
         )
         .exclude(event_id=registration.run.event_id)
         .order_by("-end")
@@ -726,7 +728,7 @@ def auto_assign_campaign_character(registration):
 
     try:
         old_rcr = RegistrationCharacterRel.objects.get(reg__member_id=registration.member_id, reg__run_id=last.id)
-        rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
+        rcr = RegistrationCharacterRel.objects.create(reg=registration, character_id=old_rcr.character_id)
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):
                 value = getattr(old_rcr, "custom_" + s)
