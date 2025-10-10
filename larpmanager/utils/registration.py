@@ -468,7 +468,7 @@ def get_reduced_available_count(run):
     return math.floor(pat * ratio / 10.0) - red
 
 
-def handle_registration_event_switch(registration):
+def process_registration_event_change(registration):
     """Handle registration updates when switching between events.
 
     Args:
@@ -530,7 +530,7 @@ def check_character_ticket_options(reg, char):
     WritingChoice.objects.filter(pk__in=to_delete).delete()
 
 
-def save_registration_character_form(instance):
+def process_character_ticket_options(instance):
     if not instance.member:
         return
 

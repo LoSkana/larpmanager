@@ -45,7 +45,7 @@ def get_event_rels_key(event_id: int) -> str:
     return f"event__rels__{event_id}"
 
 
-def reset_event_rels_cache(event_id: int) -> None:
+def clear_event_relationships_cache(event_id: int) -> None:
     """Reset event relationships cache for given event ID.
 
     Args:
@@ -97,10 +97,10 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
 
     except Exception as e:
         logger.error(f"Error updating {section_name} {section_id} relationships: {e}", exc_info=True)
-        reset_event_rels_cache(event_id)
+        clear_event_relationships_cache(event_id)
 
 
-def remove_from_cache_section(event_id: int, section_name: str, section_id: int) -> None:
+def remove_item_from_cache_section(event_id: int, section_name: str, section_id: int) -> None:
     """Remove an item from a specific section in the event cache.
 
     Args:
@@ -117,10 +117,10 @@ def remove_from_cache_section(event_id: int, section_name: str, section_id: int)
             logger.debug(f"Removed {section_name} {section_id} from cache")
     except Exception as e:
         logger.error(f"Error removing {section_name} {section_id} from cache: {e}", exc_info=True)
-        reset_event_rels_cache(event_id)
+        clear_event_relationships_cache(event_id)
 
 
-def update_character_related_caches(char: Character) -> None:
+def refresh_character_related_caches(char: Character) -> None:
     """Update all caches that are related to a character.
 
     Args:
@@ -128,19 +128,19 @@ def update_character_related_caches(char: Character) -> None:
     """
     # Update plots that this character is part of
     for plot_rel in char.get_plot_characters():
-        update_event_plot_rels(plot_rel.plot)
+        refresh_event_plot_relationships(plot_rel.plot)
 
     # Update factions that this character is part of
     for faction in char.factions_list.all():
-        update_event_faction_rels(faction)
+        refresh_event_faction_relationships(faction)
 
     # Update speedlarps that this character is part of
     for speedlarp in char.speedlarps_list.all():
-        update_event_speedlarp_rels(speedlarp)
+        refresh_event_speedlarp_relationships(speedlarp)
 
     # Update prologues that this character is part of
     for prologue in char.prologues_list.all():
-        update_event_prologue_rels(prologue)
+        refresh_event_prologue_relationships(prologue)
 
 
 def update_m2m_related_characters(instance, pk_set, action: str, update_func) -> None:
@@ -161,17 +161,17 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
             for char_id in pk_set:
                 try:
                     char = Character.objects.get(id=char_id)
-                    update_event_char_rels(char)
+                    refresh_event_character_relationships(char)
                 except ObjectDoesNotExist:
                     logger.warning(f"Character {char_id} not found during relationship update")
         elif action == "post_clear":
             # For post_clear, we need to update all characters that were related
             if hasattr(instance, "characters"):
                 for char in instance.characters.all():
-                    update_event_char_rels(char)
+                    refresh_event_character_relationships(char)
             elif hasattr(instance, "get_plot_characters"):
                 for char_rel in instance.get_plot_characters():
-                    update_event_char_rels(char_rel.character)
+                    refresh_event_character_relationships(char_rel.character)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
@@ -251,7 +251,7 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
     return res
 
 
-def update_event_char_rels(char: Character) -> None:
+def refresh_event_character_relationships(char: Character) -> None:
     """Update character relationships in cache.
 
     Updates the cached relationship data for a specific character.
@@ -278,7 +278,7 @@ def update_event_char_rels(char: Character) -> None:
 
     except Exception as e:
         logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
-        reset_event_rels_cache(char.event_id)
+        clear_event_relationships_cache(char.event_id)
 
 
 def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any]:
@@ -508,7 +508,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
     return relations
 
 
-def update_event_faction_rels(faction: Faction) -> None:
+def refresh_event_faction_relationships(faction: Faction) -> None:
     """Update faction relationships in cache.
 
     Updates the cached relationship data for a specific faction.
@@ -521,7 +521,7 @@ def update_event_faction_rels(faction: Faction) -> None:
     update_cache_section(faction.event_id, "factions", faction.id, faction_data)
 
 
-def update_event_plot_rels(plot: Plot) -> None:
+def refresh_event_plot_relationships(plot: Plot) -> None:
     """Update plot relationships in cache.
 
     Updates the cached relationship data for a specific plot.
@@ -534,7 +534,7 @@ def update_event_plot_rels(plot: Plot) -> None:
     update_cache_section(plot.event_id, "plots", plot.id, plot_data)
 
 
-def update_event_speedlarp_rels(speedlarp: SpeedLarp) -> None:
+def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
     """Update speedlarp relationships in cache.
 
     Updates the cached relationship data for a specific speedlarp.
@@ -547,7 +547,7 @@ def update_event_speedlarp_rels(speedlarp: SpeedLarp) -> None:
     update_cache_section(speedlarp.event_id, "speedlarps", speedlarp.id, speedlarp_data)
 
 
-def update_event_prologue_rels(prologue: Prologue) -> None:
+def refresh_event_prologue_relationships(prologue: Prologue) -> None:
     """Update prologue relationships in cache.
 
     Updates the cached relationship data for a specific prologue.
@@ -560,7 +560,7 @@ def update_event_prologue_rels(prologue: Prologue) -> None:
     update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_data)
 
 
-def update_event_quest_rels(quest: Quest) -> None:
+def refresh_event_quest_relationships(quest: Quest) -> None:
     """Update quest relationships in cache.
 
     Updates the cached relationship data for a specific quest.
@@ -573,7 +573,7 @@ def update_event_quest_rels(quest: Quest) -> None:
     update_cache_section(quest.event_id, "quests", quest.id, quest_data)
 
 
-def update_event_questtype_rels(questtype: QuestType) -> None:
+def refresh_event_questtype_relationships(questtype: QuestType) -> None:
     """Update questtype relationships in cache.
 
     Updates the cached relationship data for a specific questtype.
@@ -586,7 +586,7 @@ def update_event_questtype_rels(questtype: QuestType) -> None:
     update_cache_section(questtype.event_id, "questtypes", questtype.id, questtype_data)
 
 
-def handle_faction_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_faction_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle faction-character relationship changes.
 
     Updates both faction cache and character caches when relationships change.
@@ -598,10 +598,10 @@ def handle_faction_characters_changed(sender, instance, action, pk_set, **kwargs
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_faction_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships)
 
 
-def handle_plot_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_plot_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle plot-character relationship changes.
 
     Updates both plot cache and character caches when relationships change.
@@ -613,10 +613,10 @@ def handle_plot_characters_changed(sender, instance, action, pk_set, **kwargs):
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_plot_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships)
 
 
-def handle_speedlarp_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_speedlarp_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle speedlarp-character relationship changes.
 
     Updates both speedlarp cache and character caches when relationships change.
@@ -628,10 +628,10 @@ def handle_speedlarp_characters_changed(sender, instance, action, pk_set, **kwar
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_speedlarp_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships)
 
 
-def handle_prologue_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_prologue_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle prologue-character relationship changes.
 
     Updates both prologue cache and character caches when relationships change.
@@ -643,4 +643,4 @@ def handle_prologue_characters_changed(sender, instance, action, pk_set, **kwarg
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_prologue_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships)

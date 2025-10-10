@@ -23,7 +23,7 @@ from slugify import slugify
 from larpmanager.models.larpmanager import LarpManagerFaq
 
 
-def handle_tutorial_slug_generation(instance):
+def generate_tutorial_url_slug(instance):
     """Generate slug for tutorial if not already set.
 
     Args:
@@ -33,7 +33,7 @@ def handle_tutorial_slug_generation(instance):
         instance.slug = slugify(instance.name)
 
 
-def assign_faq_number(faq):
+def auto_assign_faq_sequential_number(faq):
     """Assign number to FAQ if not already set.
 
     Args:

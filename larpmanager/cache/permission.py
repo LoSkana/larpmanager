@@ -120,7 +120,7 @@ def get_event_permission_feature(slug):
     return res
 
 
-def reset_event_permission(instance):
+def clear_event_permission_cache(instance):
     cache.delete(event_permission_feature_key(instance.slug))
 
 
@@ -153,5 +153,5 @@ def get_cache_index_permission(typ):
     return res
 
 
-def reset_index_permission(typ):
+def clear_index_permission_cache(typ):
     cache.delete(index_permission_key(typ))

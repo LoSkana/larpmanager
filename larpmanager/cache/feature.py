@@ -100,7 +100,7 @@ def update_assoc_features(assoc_id):
     return res
 
 
-def reset_event_features(ev_id):
+def clear_event_features_cache(ev_id):
     cache.delete(cache_event_features_key(ev_id))
 
 
@@ -155,7 +155,7 @@ def update_event_features(ev_id):
         return {}
 
 
-def handle_association_features_post_save(instance):
+def on_association_post_save_reset_features_cache(instance):
     """Handle association post-save feature cache reset.
 
     Args:
@@ -163,4 +163,4 @@ def handle_association_features_post_save(instance):
     """
     reset_assoc_features(instance.id)
     for ev_id in instance.events.values_list("pk", flat=True):
-        reset_event_features(ev_id)
+        clear_event_features_cache(ev_id)

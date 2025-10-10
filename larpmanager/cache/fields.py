@@ -34,7 +34,7 @@ def event_fields_key(event_id):
     return f"event_fields_{event_id}"
 
 
-def reset_event_fields_cache(event_id):
+def clear_event_fields_cache(event_id):
     cache.delete(event_fields_key(event_id))
 
 

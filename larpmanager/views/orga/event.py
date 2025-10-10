@@ -28,7 +28,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import reset_run
+from larpmanager.cache.character import clear_run_cache_and_media
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
     OrgaAppearanceForm,
@@ -260,7 +260,7 @@ def orga_features_go(request, ctx, num, on=True):
         raise Http404("overall feature!")
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
-    reset_run(ctx["run"])
+    clear_run_cache_and_media(ctx["run"])
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)

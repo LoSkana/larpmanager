@@ -73,7 +73,7 @@ def send_membership_confirm(request, membership):
     my_send_mail(subj, body, profile, membership)
 
 
-def handle_membership_payment_notification(instance):
+def send_membership_payment_notification_email(instance):
     """Send notification when membership fee payment is received.
 
     Args:
@@ -115,7 +115,7 @@ def handle_badge_assignment_notifications(instance, pk_set):
         my_send_mail(subj, body, m, instance)
 
 
-def badges_changed(sender, **kwargs):
+def on_member_badges_m2m_changed(sender, **kwargs):
     """Handle badge assignment notifications.
 
     Args:
@@ -212,7 +212,7 @@ def notify_membership_reject(member, resp):
     my_send_mail(subj, body, member, member.membership)
 
 
-def handle_help_question_notification(instance):
+def send_help_question_notification_email(instance):
     """Send notifications for help questions and answers.
 
     Args:
@@ -280,7 +280,7 @@ def get_help_email(instance):
     return subj, body
 
 
-def handle_chat_message_notification(instance):
+def send_chat_message_notification_email(instance):
     """Send notification for new chat messages.
 
     Args:

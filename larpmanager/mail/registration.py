@@ -192,7 +192,7 @@ def registration_payments(instance, currency):
     )
 
 
-def handle_registration_character_rel_post_save(instance, created):
+def send_character_assignment_email(instance, created):
     """
     Send character assignment email when registration-character relation is created.
 
@@ -259,7 +259,7 @@ def update_registration_cancellation(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-def handle_registration_cancellation_email(instance):
+def send_registration_cancellation_email(instance):
     """Handle pre-save events for registration instances.
 
     Args:
@@ -280,7 +280,7 @@ def handle_registration_cancellation_email(instance):
         update_registration_cancellation(instance)
 
 
-def handle_registration_pre_delete(instance):
+def send_registration_deletion_email(instance):
     """Handle registration deletion notifications.
 
     Args:
@@ -309,7 +309,7 @@ def handle_registration_pre_delete(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-def handle_pre_registration_pre_save(instance):
+def send_pre_registration_confirmation_email(instance):
     """Handle pre-registration pre-save notifications.
 
     Args:

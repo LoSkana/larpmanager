@@ -133,7 +133,7 @@ def get_mail(request, ctx, nm):
     return email
 
 
-def handle_user_profile_creation(user, created):
+def create_member_profile_for_user(user, created):
     """Create member profile and sync email when user is saved.
 
     Args:
@@ -146,7 +146,7 @@ def handle_user_profile_creation(user, created):
     user.member.save()
 
 
-def handle_membership_status_changes(membership):
+def process_membership_status_updates(membership):
     """Handle membership status changes and card numbering.
 
     Args:

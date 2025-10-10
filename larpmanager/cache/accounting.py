@@ -57,7 +57,7 @@ def get_registration_accounting_cache_key(run):
     return f"reg_accounting_{run.id}"
 
 
-def reset_registration_accounting_cache(run):
+def clear_registration_accounting_cache(run):
     """Reset registration accounting cache for a run.
 
     Args:
@@ -103,7 +103,7 @@ def _get_accounting_context(run, member_filter=None):
     return features, reg_tickets, cache_aip
 
 
-def update_member_accounting_cache(run, member_id):
+def refresh_member_accounting_cache(run, member_id):
     """Update accounting cache for a specific member's registrations in a run.
 
     Args:

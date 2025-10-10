@@ -53,7 +53,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersion,
     Writing,
-    replace_chars_all,
+    replace_character_names_in_writing,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
@@ -609,7 +609,7 @@ def writing_versions(request, ctx, nm, tp):
     return render(request, "larpmanager/orga/writing/versions.html", ctx)
 
 
-def handle_replace_char_names(instance):
+def replace_character_names_before_save(instance):
     """Django signal handler to replace character names before saving.
 
     Args:
@@ -621,4 +621,4 @@ def handle_replace_char_names(instance):
     if not instance.pk:
         return
 
-    replace_chars_all(instance)
+    replace_character_names_in_writing(instance)

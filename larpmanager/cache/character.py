@@ -341,7 +341,7 @@ def get_event_cache_all(ctx):
     ctx.update(res)
 
 
-def reset_run(run):
+def clear_run_cache_and_media(run):
     reset_event_cache_all(run)
     media_path = run.get_media_filepath()
     delete_all_in_path(media_path)
@@ -412,16 +412,16 @@ def has_different_cache_values(instance, prev, lst):
     return False
 
 
-def handle_update_event_characters(instance):
+def update_member_event_character_cache(instance):
     que = RegistrationCharacterRel.objects.filter(reg__member_id=instance.id, reg__cancellation_date__isnull=True)
     que = que.select_related("character", "reg", "reg__run")
     for rcr in que:
         update_event_cache_all(rcr.reg.run, rcr)
 
 
-def handle_character_pre_save(char):
+def on_character_pre_save_update_cache(char):
     if not char.pk:
-        reset_event_cache_all_runs(char.event)
+        clear_event_cache_all_runs(char.event)
         return
 
     try:
@@ -429,69 +429,69 @@ def handle_character_pre_save(char):
 
         lst = ["player_id", "mirror_id"]
         if has_different_cache_values(char, prev, lst):
-            reset_event_cache_all_runs(char.event)
+            clear_event_cache_all_runs(char.event)
         else:
             update_event_cache_all_runs(char.event, char)
     except Exception:
-        reset_event_cache_all_runs(char.event)
+        clear_event_cache_all_runs(char.event)
 
 
-def character_factions_changed(sender, **kwargs):
+def on_character_factions_m2m_changed(sender, **kwargs):
     action = kwargs.pop("action", None)
     if action not in ["post_add", "post_remove", "post_clear"]:
         return
 
     instance: Optional[Faction] = kwargs.pop("instance", None)
-    reset_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event)
 
 
-def handle_faction_pre_save(instance):
+def on_faction_pre_save_update_cache(instance):
     if not instance.pk:
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
         return
 
     prev = Faction.objects.get(pk=instance.pk)
 
     lst = ["typ"]
     if has_different_cache_values(instance, prev, lst):
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
 
     lst = ["name", "teaser"]
     if has_different_cache_values(instance, prev, lst):
         update_event_cache_all_runs(instance.event, instance)
 
 
-def handle_quest_type_presave(instance):
+def on_quest_type_pre_save_update_cache(instance):
     if not instance.pk:
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
         return
 
     lst = ["name"]
     prev = QuestType.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
 
 
-def handle_quest_presave(instance):
+def on_quest_pre_save_update_cache(instance):
     if not instance.pk:
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
         return
 
     lst = ["name", "teaser", "typ_id"]
     prev = Quest.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
 
 
-def handle_trait_presave(instance):
+def on_trait_pre_save_update_cache(instance):
     if not instance.pk:
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
         return
 
     lst = ["name", "teaser", "quest_id"]
     prev = Trait.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        reset_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event)
 
 
 def update_event_cache_all_runs(event, instance):
@@ -499,24 +499,24 @@ def update_event_cache_all_runs(event, instance):
         update_event_cache_all(r, instance)
 
 
-def handle_registration_character_reset(instance):
+def reset_character_registration_cache(instance):
     if instance.reg:
         instance.reg.save()
-    reset_run(instance.reg.run)
+    clear_run_cache_and_media(instance.reg.run)
 
 
-def reset_event_cache_all_runs(event):
+def clear_event_cache_all_runs(event):
     for r in event.runs.all():
-        reset_run(r)
+        clear_run_cache_and_media(r)
     # reset also runs of child events
     for child in Event.objects.filter(parent=event).prefetch_related("runs"):
         for r in child.runs.all():
-            reset_run(r)
+            clear_run_cache_and_media(r)
     if event.parent:
         # reset also runs of sibling events
         for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
             for r in child.runs.all():
-                reset_run(r)
+                clear_run_cache_and_media(r)
         # reset also runs of parent event
         for r in event.parent.runs.all():
-            reset_run(r)
+            clear_run_cache_and_media(r)

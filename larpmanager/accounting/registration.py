@@ -533,7 +533,7 @@ def process_accounting_discount_post_save(discount_item):
             reg.save()
 
 
-def process_registration_ticket_post_save(ticket):
+def log_registration_ticket_saved(ticket):
     """Process registration ticket after save.
 
     Args:

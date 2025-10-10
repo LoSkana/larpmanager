@@ -346,7 +346,7 @@ def print_volunteer_registry(ctx):
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def handle_handout_pre_delete(instance):
+def cleanup_handout_pdfs_before_delete(instance):
     """Handle handout pre-delete PDF cleanup.
 
     Args:
@@ -356,7 +356,7 @@ def handle_handout_pre_delete(instance):
         safe_remove(instance.get_filepath(run))
 
 
-def handle_handout_post_save(instance):
+def cleanup_handout_pdfs_after_save(instance):
     """Handle handout post-save PDF cleanup.
 
     Args:
@@ -366,7 +366,7 @@ def handle_handout_post_save(instance):
         safe_remove(instance.get_filepath(run))
 
 
-def handle_handout_template_pre_delete(instance):
+def cleanup_handout_template_pdfs_before_delete(instance):
     """Handle handout template pre-delete PDF cleanup.
 
     Args:
@@ -376,7 +376,7 @@ def handle_handout_template_pre_delete(instance):
         safe_remove(instance.get_filepath(run))
 
 
-def handle_handout_template_post_save(instance):
+def cleanup_handout_template_pdfs_after_save(instance):
     """Handle handout template post-save PDF cleanup.
 
     Args:
@@ -400,7 +400,7 @@ def remove_run_pdf(event):
         safe_remove(run.get_gallery_filepath())
 
 
-def remove_char_pdf(instance, single=None, runs=None):
+def delete_character_pdf_files(instance, single=None, runs=None):
     if not runs:
         runs = instance.event.runs.all()
     for run in runs:
@@ -411,57 +411,57 @@ def remove_char_pdf(instance, single=None, runs=None):
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def handle_character_pre_delete(instance):
+def cleanup_character_pdfs_before_delete(instance):
     """Handle character pre-delete PDF cleanup.
 
     Args:
         instance: Character instance being deleted
     """
     remove_run_pdf(instance.event)
-    remove_char_pdf(instance)
+    delete_character_pdf_files(instance)
 
 
-def handle_character_clean_pdf(instance):
+def cleanup_character_pdfs_on_save(instance):
     """Handle character post-save PDF cleanup.
 
     Args:
         instance: Character instance that was saved
     """
     remove_run_pdf(instance.event)
-    remove_char_pdf(instance)
+    delete_character_pdf_files(instance)
 
 
-def handle_player_relationship_pre_delete(instance):
+def cleanup_relationship_pdfs_before_delete(instance):
     """Handle player relationship pre-delete PDF cleanup.
 
     Args:
         instance: PlayerRelationship instance being deleted
     """
     for el in instance.reg.rcrs.all():
-        remove_char_pdf(el.character, instance.reg.run)
+        delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def handle_player_relationship_post_save(instance):
+def cleanup_relationship_pdfs_after_save(instance):
     """Handle player relationship post-save PDF cleanup.
 
     Args:
         instance: PlayerRelationship instance that was saved
     """
     for el in instance.reg.rcrs.all():
-        remove_char_pdf(el.character, instance.reg.run)
+        delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def handle_faction_pre_delete(instance):
+def cleanup_faction_pdfs_before_delete(instance):
     """Handle faction pre-delete PDF cleanup.
 
     Args:
         instance: Faction instance being deleted
     """
     for char in instance.event.character_set.all():
-        remove_char_pdf(char)
+        delete_character_pdf_files(char)
 
 
-def handle_faction_clean_pdf(instance):
+def cleanup_faction_pdfs_on_save(instance):
     """Handle faction post-save PDF cleanup.
 
     Args:
@@ -469,20 +469,20 @@ def handle_faction_clean_pdf(instance):
     """
     runs = instance.event.runs.all()
     for char in instance.characters.all():
-        remove_char_pdf(char, runs=runs)
+        delete_character_pdf_files(char, runs=runs)
 
 
-def remove_pdf_assignment_trait(instance):
+def deactivate_castings_and_remove_pdfs(instance):
     for casting in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
         casting.active = False
         casting.save()
 
     char = get_trait_character(instance.run, instance.trait.number)
     if char:
-        remove_char_pdf(char, instance.run)
+        delete_character_pdf_files(char, instance.run)
 
 
-def handle_assignment_trait_post_save(instance, created):
+def cleanup_pdfs_on_trait_assignment(instance, created):
     """Handle assignment trait post-save PDF cleanup.
 
     Args:
@@ -492,7 +492,7 @@ def handle_assignment_trait_post_save(instance, created):
     if not instance.member or not created:
         return
 
-    remove_pdf_assignment_trait(instance)
+    deactivate_castings_and_remove_pdfs(instance)
 
 
 # ## TASKS

@@ -60,7 +60,7 @@ def init_cache_run(a, s):
         return None
 
 
-def handle_run_pre_save(instance):
+def on_run_pre_save_invalidate_cache(instance):
     """Handle run pre-save cache invalidation.
 
     Args:
@@ -70,7 +70,7 @@ def handle_run_pre_save(instance):
         reset_cache_run(instance.event.assoc_id, instance.get_slug())
 
 
-def handle_event_pre_save(instance):
+def on_event_pre_save_invalidate_cache(instance):
     """Handle event pre-save cache invalidation.
 
     Args:
@@ -140,7 +140,7 @@ def init_cache_config_run(run):
     return ctx
 
 
-def handle_run_post_save_cache_reset(instance):
+def on_run_post_save_reset_config_cache(instance):
     """Handle run post-save cache reset.
 
     Args:
@@ -150,7 +150,7 @@ def handle_run_post_save_cache_reset(instance):
         reset_cache_config_run(instance)
 
 
-def handle_event_post_save_cache_reset(instance):
+def on_event_post_save_reset_config_cache(instance):
     """Handle event post-save cache reset.
 
     Args:

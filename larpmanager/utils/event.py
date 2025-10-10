@@ -28,8 +28,8 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.button import event_button_key
-from larpmanager.cache.feature import get_event_features, reset_event_features
-from larpmanager.cache.fields import get_event_fields_cache, reset_event_fields_cache
+from larpmanager.cache.feature import clear_event_features_cache, get_event_features
+from larpmanager.cache.fields import clear_event_fields_cache, get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
@@ -375,7 +375,7 @@ def get_index_event_permissions(ctx, request, slug, check=True):
     ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")
 
 
-def handle_run_plan_update(instance):
+def update_run_plan_on_event_change(instance):
     """Set run plan from association default if not already set.
 
     Args:
@@ -386,11 +386,11 @@ def handle_run_plan_update(instance):
         Run.objects.filter(pk=instance.pk).update(**updates)
 
 
-def reset_event_button(instance):
+def clear_event_button_cache(instance):
     cache.delete(event_button_key(instance.event_id))
 
 
-def handle_event_pre_save_prepare_campaign(instance):
+def prepare_campaign_event_data(instance):
     """Prepare campaign event data before saving.
 
     Args:
@@ -406,7 +406,7 @@ def handle_event_pre_save_prepare_campaign(instance):
         instance._old_parent_id = None
 
 
-def setup_campaign_event(event):
+def copy_parent_event_to_campaign(event):
     """Setup campaign event by copying from parent.
 
     Args:
@@ -428,7 +428,7 @@ def setup_campaign_event(event):
             del event._skip_campaign_setup
 
 
-def setup_event_after_save(event):
+def create_default_event_setup(event):
     """Setup event with runs, tickets, and forms after save.
 
     Args:
@@ -448,9 +448,9 @@ def setup_event_after_save(event):
 
     save_event_character_form(features, event)
 
-    reset_event_features(event.id)
+    clear_event_features_cache(event.id)
 
-    reset_event_fields_cache(event.id)
+    clear_event_fields_cache(event.id)
 
 
 def save_event_tickets(features, instance):
@@ -674,7 +674,7 @@ def _activate_orga_lang(instance):
     activate(max_lang)
 
 
-def auto_assign_campaign_character(registration):
+def assign_previous_campaign_character(registration):
     """Auto-assign last character for campaign registrations.
 
     Args:

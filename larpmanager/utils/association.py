@@ -26,7 +26,7 @@ from larpmanager.models.access import AssocPermission
 from larpmanager.models.association import Association
 
 
-def handle_association_fernet_key_generation(instance):
+def generate_association_encryption_key(instance):
     """Generate Fernet encryption key for new associations.
 
     Args:
@@ -36,7 +36,7 @@ def handle_association_fernet_key_generation(instance):
         instance.key = Fernet.generate_key()
 
 
-def assign_assoc_permission_number(assoc_permission):
+def auto_assign_association_permission_number(assoc_permission):
     """Assign number to association permission if not set.
 
     Args:
@@ -51,7 +51,7 @@ def assign_assoc_permission_number(assoc_permission):
         assoc_permission.number = n + 10
 
 
-def handle_association_skin_features_pre_save(instance):
+def prepare_association_skin_features(instance):
     if not instance.skin_id:
         return
 
@@ -80,7 +80,7 @@ def handle_association_skin_features_pre_save(instance):
         instance.mandatory_fields = skin.default_mandatory_fields
 
 
-def handle_association_skin_features_post_save(instance):
+def apply_skin_features_to_association(instance):
     """Handle association skin feature setup after saving.
 
     Args:

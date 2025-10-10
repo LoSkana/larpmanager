@@ -154,7 +154,7 @@ def get_allowed_managed():
     return allowed
 
 
-def assign_event_permission_number(event_permission):
+def auto_assign_event_permission_number(event_permission):
     """Assign number to event permission if not set.
 
     Args:

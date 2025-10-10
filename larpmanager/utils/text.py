@@ -82,13 +82,13 @@ def get_event_text(event_id, typ, lang=None):
 # # ASSOC TEXT
 
 
-def handle_assoc_text_save(instance):
+def update_association_text_cache_on_save(instance):
     update_assoc_text(instance.assoc_id, instance.typ, instance.language)
     if instance.default:
         update_assoc_text_def(instance.assoc_id, instance.typ)
 
 
-def handle_assoc_text_del(instance):
+def clear_association_text_cache_on_delete(instance):
     cache.delete(assoc_text_key(instance.assoc_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(assoc_text_key_def(instance.assoc_id, instance.typ))
@@ -97,13 +97,13 @@ def handle_assoc_text_del(instance):
 # ## EVENT TEXT
 
 
-def handle_event_text_save(instance):
+def update_event_text_cache_on_save(instance):
     update_event_text(instance.event_id, instance.typ, instance.language)
     if instance.default:
         update_event_text_def(instance.event_id, instance.typ)
 
 
-def handle_event_text_del(instance):
+def clear_event_text_cache_on_delete(instance):
     cache.delete(event_text_key(instance.event_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(event_text_key_def(instance.event_id, instance.typ))

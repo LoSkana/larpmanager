@@ -29,7 +29,7 @@ from larpmanager.accounting.payment import (
     round_up_to_two_decimals,
     unique_invoice_cod,
 )
-from larpmanager.accounting.vat import compute_vat, get_previous_sum
+from larpmanager.accounting.vat import calculate_payment_vat, get_previous_sum
 from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
@@ -192,7 +192,7 @@ class TestVATFunctions(BaseTestCase):
         )
 
         # compute_vat doesn't return a value, it updates DB
-        compute_vat(payment)
+        calculate_payment_vat(payment)
 
         payment.refresh_from_db()
         # With no VAT config, should be 0
@@ -223,7 +223,7 @@ class TestVATFunctions(BaseTestCase):
         )
 
         # compute_vat doesn't return value, updates DB
-        compute_vat(payment)
+        calculate_payment_vat(payment)
 
         payment.refresh_from_db()
         # With 22% VAT configured and ticket price, should have VAT value

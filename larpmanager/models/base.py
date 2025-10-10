@@ -209,7 +209,7 @@ class PaymentMethod(BaseModel):
         return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}
 
 
-def auto_populate_number_order_fields(instance):
+def auto_assign_sequential_numbers(instance):
     """Auto-populate number and order fields for model instances.
 
     Args:
@@ -232,7 +232,7 @@ def auto_populate_number_order_fields(instance):
                     setattr(instance, field, n + 1)
 
 
-def update_search_field(instance):
+def update_model_search_field(instance):
     """Update search field for model instances that have one.
 
     Args:

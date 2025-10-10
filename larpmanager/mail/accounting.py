@@ -36,7 +36,7 @@ from larpmanager.models.member import Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-def handle_expense_item_post_save(instance, created):
+def send_expense_notification_email(instance, created):
     """Handle post-save events for expense accounting items.
 
     Args:
@@ -84,7 +84,7 @@ def get_expense_mail(instance):
     return subj, body
 
 
-def handle_expense_item_approval_notification(expense_item):
+def send_expense_approval_email(expense_item):
     """Handle expense item approval notifications.
 
     Args:
@@ -147,7 +147,7 @@ def get_token_credit_name(assoc_id):
     return token_name, credit_name
 
 
-def handle_payment_item_pre_save(payment_item):
+def send_payment_confirmation_email(payment_item):
     """Handle pre-save events for payment accounting items.
 
     Args:
@@ -312,7 +312,7 @@ def get_pay_money_email(curr_sym, instance, run):
     return subj, body
 
 
-def handle_accounting_item_other_pre_save(instance):
+def send_token_credit_notification_email(instance):
     """Handle pre-save events for other accounting items.
 
     Args:
@@ -457,7 +457,7 @@ def get_token_email(instance, token_name):
     return subj, body
 
 
-def handle_donation_item_pre_save(instance):
+def send_donation_confirmation_email(instance):
     """Handle pre-save events for donation accounting items.
 
     Args:
@@ -477,7 +477,7 @@ def handle_donation_item_pre_save(instance):
     my_send_mail(subj, body, instance.member, instance)
 
 
-def handle_collection_post_save(instance, created):
+def send_collection_activation_email(instance, created):
     """Handle post-save events for collection instances.
 
     Args:
@@ -504,7 +504,7 @@ def handle_collection_post_save(instance, created):
     my_send_mail(subj, body, instance.organizer, instance)
 
 
-def handle_collection_gift_pre_save(instance):
+def send_gift_collection_notification_email(instance):
     """
     Send notification emails when gift collection participation is saved.
 

@@ -31,7 +31,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.common import round_to_two_significant_digits
 
 
-def reset_cache_lm_home():
+def clear_larpmanager_home_cache():
     cache.delete(cache_cache_lm_home_key())
 
 

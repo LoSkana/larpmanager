@@ -73,7 +73,7 @@ def join_email(assoc):
         my_send_mail(subj, body, member, schedule=3600 * 24 * 2)
 
 
-def assoc_roles_changed(sender, **kwargs):
+def on_association_roles_m2m_changed(sender, **kwargs):
     """Handle association role changes and send notifications.
 
     Args:
@@ -122,7 +122,7 @@ def assoc_roles_changed(sender, **kwargs):
                 my_send_mail(subj, body, m, instance.assoc)
 
 
-def event_roles_changed(sender, **kwargs):
+def on_event_roles_m2m_changed(sender, **kwargs):
     """Handle event role changes and send notifications.
 
     Args:
@@ -219,7 +219,7 @@ def bring_friend_instructions(reg, ctx):
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-def handle_trait_assignment_notification(instance, created):
+def send_trait_assignment_email(instance, created):
     """Notify member when a trait is assigned to them.
 
     Args:
@@ -286,7 +286,7 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
     my_send_mail(subj, body, member, run)
 
 
-def handle_character_status_update_notification(instance):
+def send_character_status_update_email(instance):
     """Notify player when character approval status changes.
 
     Args:
@@ -365,7 +365,7 @@ def get_exec_language(assoc):
     return max_lang
 
 
-def mail_larpmanager_ticket(instance):
+def send_support_ticket_email(instance):
     for _name, email in conf_settings.ADMINS:
         subj = f"LarpManager ticket - {instance.assoc.name}"
         if instance.reason:

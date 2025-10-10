@@ -122,7 +122,7 @@ def cache_event_links(request: HttpRequest) -> dict:
     return ctx
 
 
-def reset_run_event_links(event):
+def clear_run_event_links_cache(event):
     """Reset event link cache for all users with roles in the event.
 
     Args:
@@ -146,7 +146,7 @@ def reset_run_event_links(event):
         reset_event_links(user.member.id, event.assoc_id)
 
 
-def handle_registration_event_links_post_save(instance):
+def on_registration_post_save_reset_event_links(instance):
     """Handle registration post-save event link reset.
 
     Args:

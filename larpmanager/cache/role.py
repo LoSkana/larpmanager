@@ -55,7 +55,7 @@ def get_cache_assoc_role(ar_id):
     return res
 
 
-def delete_cache_assoc_role(ar_id):
+def remove_association_role_cache(ar_id):
     key = cache_assoc_role_key(ar_id)
     cache.delete(key)
 
@@ -117,7 +117,7 @@ def get_cache_event_role(ev_id):
     return res
 
 
-def delete_cache_event_role(ar_id):
+def remove_event_role_cache(ar_id):
     key = cache_event_role_key(ar_id)
     cache.delete(key)
 

@@ -168,7 +168,7 @@ def get_regs(assoc):
     return reg_que
 
 
-def handle_update_token_credit(instance, created):
+def update_token_credit_on_payment_save(instance, created):
     """Handle accounting item payment post-save token/credit updates.
 
     Args:
@@ -179,7 +179,7 @@ def handle_update_token_credit(instance, created):
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
-def handle_accounting_item_payment_post_delete(instance):
+def update_token_credit_on_payment_delete(instance):
     """Handle accounting item payment post-delete token/credit updates.
 
     Args:
@@ -189,7 +189,7 @@ def handle_accounting_item_payment_post_delete(instance):
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
-def handle_accounting_item_other_save(accounting_item):
+def update_token_credit_on_other_save(accounting_item):
     """Handle accounting item other save for token/credit updates.
 
     Args:
@@ -201,7 +201,7 @@ def handle_accounting_item_other_save(accounting_item):
     update_token_credit(accounting_item, accounting_item.oth == OtherChoices.TOKEN)
 
 
-def handle_accounting_item_expense_save(expense_item):
+def update_credit_on_expense_save(expense_item):
     """Handle accounting item expense save for credit updates.
 
     Args:

@@ -187,7 +187,7 @@ def update_cache_reg_fields_answer(instance):
     cache.set(key, res)
 
 
-def update_acc_callback(instance):
+def update_text_fields_cache(instance):
     if issubclass(instance.__class__, Writing):
         update_cache_text_fields(instance)
 

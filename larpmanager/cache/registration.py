@@ -28,7 +28,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.common import _search_char_reg
 
 
-def reset_cache_reg_counts(r):
+def clear_registration_counts_cache(r):
     cache.delete(cache_reg_counts_key(r))
 
 
@@ -109,7 +109,7 @@ def update_reg_counts(r):
 
 def handle_update_registration_character_rel(instance):
     for run in instance.event.runs.all():
-        reset_cache_reg_counts(run)
+        clear_registration_counts_cache(run)
     if instance.event.get_config("user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()
