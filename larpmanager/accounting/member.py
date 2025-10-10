@@ -20,6 +20,7 @@
 
 from datetime import datetime
 
+from calmjs.parse.asttypes import Object
 from dateutil.relativedelta import relativedelta
 
 from larpmanager.cache.config import get_assoc_config
@@ -253,9 +254,12 @@ def _info_membership(ctx, member, request):
         ctx["year_membership_pending"] = True
 
     ctx["year"] = year
-    m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01")
+
+    config_holder = Object()
+
+    m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01", config_holder)
     if m_day:
-        m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0"))
+        m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0", config_holder))
         m_day += f"-{year}"
         dt = datetime.strptime(m_day, "%d-%m-%Y")
         dt += relativedelta(months=m_grazing)
