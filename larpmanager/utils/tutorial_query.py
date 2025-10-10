@@ -41,7 +41,7 @@ def get_or_create_index_tutorial(index_dir):
 
 
 @background_auto(queue="whoosh")
-def index_tutorial(tutorial_id):
+def add_tutorial_to_search_index(tutorial_id):
     """
     Index tutorial content for search functionality.
 
@@ -78,7 +78,7 @@ def index_tutorial(tutorial_id):
 
 
 @background_auto(queue="whoosh")
-def delete_index_tutorial(tutorial_id):
+def remove_tutorial_from_search_index(tutorial_id):
     ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     writer = ix.writer()
     writer.delete_by_term("tutorial_id", str(tutorial_id))
@@ -96,7 +96,7 @@ def get_or_create_index_guide(index_dir):
 
 
 @background_auto(queue="whoosh")
-def index_guide(guide_id):
+def add_guide_to_search_index(guide_id):
     """Index a guide document for search functionality.
 
     Args:
@@ -126,7 +126,7 @@ def index_guide(guide_id):
 
 
 @background_auto(queue="whoosh")
-def delete_index_guide(guide_id):
+def remove_guide_from_search_index(guide_id):
     ix = get_or_create_index_guide(GUIDE_INDEX)
     writer = ix.writer()
     writer.delete_by_term("guide_id", str(guide_id))

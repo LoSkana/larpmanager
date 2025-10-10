@@ -20,8 +20,6 @@
 
 import time
 
-from django.db.models.signals import post_save, pre_delete, pre_save
-from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -30,9 +28,9 @@ from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
-from larpmanager.models.event import DevelopStatus, EventTextType, PreRegistration
+from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.models.registration import Registration
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
 from larpmanager.utils.text import get_assoc_text, get_event_text
@@ -194,7 +192,7 @@ def registration_payments(instance, currency):
     )
 
 
-def handle_registration_character_rel_post_save(instance, created):
+def send_character_assignment_email(instance, created):
     """
     Send character assignment email when registration-character relation is created.
 
@@ -236,11 +234,6 @@ def handle_registration_character_rel_post_save(instance, created):
     my_send_mail(subj, body, instance.reg.member, instance.reg.run)
 
 
-@receiver(post_save, sender=RegistrationCharacterRel)
-def update_registration_character_rel_post(sender, instance, created, **kwargs):
-    handle_registration_character_rel_post_save(instance, created)
-
-
 def update_registration_cancellation(instance):
     """Send cancellation notification emails to user and organizers.
 
@@ -266,7 +259,7 @@ def update_registration_cancellation(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-def handle_registration_pre_save(instance):
+def send_registration_cancellation_email(instance):
     """Handle pre-save events for registration instances.
 
     Args:
@@ -287,12 +280,7 @@ def handle_registration_pre_save(instance):
         update_registration_cancellation(instance)
 
 
-@receiver(pre_save, sender=Registration)
-def update_registration(sender, instance, **kwargs):
-    handle_registration_pre_save(instance)
-
-
-def handle_registration_pre_delete(instance):
+def send_registration_deletion_email(instance):
     """Handle registration deletion notifications.
 
     Args:
@@ -321,12 +309,7 @@ def handle_registration_pre_delete(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-@receiver(pre_delete, sender=Registration)
-def delete_registration(sender, instance, *args, **kwargs):
-    handle_registration_pre_delete(instance)
-
-
-def handle_pre_registration_pre_save(instance):
+def send_pre_registration_confirmation_email(instance):
     """Handle pre-registration pre-save notifications.
 
     Args:
@@ -337,8 +320,3 @@ def handle_pre_registration_pre_save(instance):
         subj = hdr(instance.event) + _("Pre-registration at %(event)s") % context
         body = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>") % context + "!"
         my_send_mail(subj, body, instance.member, instance.event)
-
-
-@receiver(pre_save, sender=PreRegistration)
-def update_pre_registration(sender, instance, **kwargs):
-    handle_pre_registration_pre_save(instance)

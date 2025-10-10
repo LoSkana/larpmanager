@@ -27,6 +27,9 @@ from unittest.mock import patch
 from larpmanager.models.accounting import PaymentChoices
 from larpmanager.tests.unit.base import BaseTestCase
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
+
 
 class TestGatewaySignals(BaseTestCase):
     """Test cases for gateway and other remaining signal receivers"""

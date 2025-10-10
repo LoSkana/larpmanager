@@ -19,8 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.links import cache_event_links
@@ -57,19 +55,9 @@ def get_cache_assoc_role(ar_id):
     return res
 
 
-def delete_cache_assoc_role(ar_id):
+def remove_association_role_cache(ar_id):
     key = cache_assoc_role_key(ar_id)
     cache.delete(key)
-
-
-@receiver(post_save, sender=AssocRole)
-def post_save_assoc_role_reset(sender, instance, **kwargs):
-    delete_cache_assoc_role(instance.pk)
-
-
-@receiver(pre_delete, sender=AssocRole)
-def del_assoc_role_reset(sender, instance, **kwargs):
-    delete_cache_assoc_role(instance.pk)
 
 
 def get_assoc_roles(request):
@@ -129,19 +117,9 @@ def get_cache_event_role(ev_id):
     return res
 
 
-def delete_cache_event_role(ar_id):
+def remove_event_role_cache(ar_id):
     key = cache_event_role_key(ar_id)
     cache.delete(key)
-
-
-@receiver(post_save, sender=EventRole)
-def post_save_event_role_reset(sender, instance, **kwargs):
-    delete_cache_event_role(instance.pk)
-
-
-@receiver(pre_delete, sender=EventRole)
-def del_event_role_reset(sender, instance, **kwargs):
-    delete_cache_event_role(instance.pk)
 
 
 def get_event_roles(request, slug):

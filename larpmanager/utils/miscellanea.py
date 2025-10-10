@@ -260,7 +260,7 @@ def get_warehouse_optionals(ctx, def_cols):
     ctx["no_header_cols"] = json.dumps([el + active for el in def_cols])
 
 
-def rotate_vertical_photo(instance, sender):
+def auto_rotate_vertical_photos(instance, sender):
     """Automatically rotate vertical photos to landscape orientation.
 
     Args:

@@ -38,6 +38,9 @@ from larpmanager.models.registration import Registration, RegistrationCharacterR
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
+
 
 class TestMailSignals(BaseTestCase):
     """Test cases for mail-related signal receivers"""
