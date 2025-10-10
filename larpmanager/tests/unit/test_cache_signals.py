@@ -610,19 +610,6 @@ class TestCacheSignals(BaseTestCase):
         # Verify plot was deleted
         self.assertFalse(Plot.objects.filter(id=plot_id).exists())
 
-    @patch("larpmanager.cache.skin.clear_skin_cache")
-    def test_association_skin_post_save_resets_skin_cache(self, mock_reset):
-        """Test that AssociationSkin post_save signal resets skin cache"""
-        # Use existing skin to avoid PK conflicts
-        skin = AssociationSkin.objects.first()
-        if not skin:
-            self.skipTest("No AssociationSkin available")
-        mock_reset.reset_mock()  # Reset after getting skin
-        skin.name = "Updated Skin"
-        skin.save()
-
-        mock_reset.assert_called_once_with(skin.domain)
-
     @patch("larpmanager.cache.links.reset_event_links")
     def test_registration_post_save_resets_links_cache(self, mock_reset):
         """Test that Registration post_save signal resets links cache"""

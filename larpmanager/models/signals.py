@@ -460,10 +460,6 @@ def post_save_association_skin_reset_cache(sender, instance, **kwargs):
     clear_skin_cache(instance.domain)
 
 
-# Badge signals (m2m_changed)
-m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
-
-
 # Character signals
 @receiver(pre_save, sender=Character)
 def pre_save_character_update_status(sender, instance, **kwargs):
@@ -1190,3 +1186,5 @@ m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characte
 
 m2m_changed.connect(on_association_roles_m2m_changed, sender=AssocRole.members.through)
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
+
+m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
