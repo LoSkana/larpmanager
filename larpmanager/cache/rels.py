@@ -237,7 +237,7 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
             elements = event.get_elements(model_class)
             for element in elements:
                 if pass_features:
-                    res[cache_key_plural][element.id] = get_rels_func(element, features)
+                    res[cache_key_plural][element.id] = get_rels_func(element, features, event)
                 else:
                     res[cache_key_plural][element.id] = get_rels_func(element)
             logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
@@ -274,7 +274,8 @@ def update_event_char_rels(char: Character) -> None:
         if "characters" not in res:
             res["characters"] = {}
 
-        res["characters"][char.id] = get_event_char_rels(char)
+        features = get_event_features(char.event_id)
+        res["characters"][char.id] = get_event_char_rels(char, features, char.event)
         cache.set(cache_key, res)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
@@ -283,7 +284,7 @@ def update_event_char_rels(char: Character) -> None:
         reset_event_rels_cache(char.event_id)
 
 
-def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict = None, event: Event = None) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
@@ -291,7 +292,8 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
 
     Args:
         char: The Character instance to get relationships for
-        features: Optional set of enabled features. If None, will be fetched from cache
+        features: Set of enabled features
+        event: Optional Event instance for caching context. If None, uses char.event
 
     Returns:
         Dict[str, Any]: Dictionary containing relationship data:
@@ -300,8 +302,6 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
                 'faction_rels': {'list': [(faction_id, faction_name), ...], 'count': int}
             }
     """
-    if features is None:
-        features = get_event_features(char.event_id)
 
     relations = {}
 
@@ -318,12 +318,17 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_count
 
         if "faction" in features:
-            fac_event = char.event.get_class_parent("faction")
+            if char.event.get_config("campaign_faction_indep", False):
+                fac_event = event
+            else:
+                fac_event = char.event.get_class_parent("faction")
+
             if fac_event:
                 factions = char.factions_list.filter(event=fac_event)
                 faction_list = [(faction.id, faction.name) for faction in factions]
             else:
                 faction_list = []
+
             relations["faction_rels"] = build_relationship_dict(faction_list)
 
         if "relationships" in features:
