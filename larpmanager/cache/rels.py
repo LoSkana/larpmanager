@@ -55,6 +55,12 @@ def reset_event_rels_cache(event_id: int) -> None:
     """
     cache_key = get_event_rels_key(event_id)
     cache.delete(cache_key)
+
+    # invalidate also for children events
+    for children_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
+        cache_key = get_event_rels_key(children_id)
+        cache.delete(cache_key)
+
     logger.debug(f"Reset cache for event {event_id}")
 
 
