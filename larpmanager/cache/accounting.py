@@ -86,7 +86,7 @@ def _get_accounting_context(run, member_filter=None):
 
     # Get all tickets for this event
     reg_tickets = {}
-    for t in RegistrationTicket.objects.filter(event=run.event).order_by("-price"):
+    for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
         reg_tickets[t.id] = t
 
     # Build cache for token/credit payments

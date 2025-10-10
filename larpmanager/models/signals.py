@@ -88,11 +88,11 @@ def auto_populate_number_order_fields(instance):
         if hasattr(instance, field) and not getattr(instance, field):
             que = None
             if hasattr(instance, "event") and instance.event:
-                que = instance.__class__.objects.filter(event=instance.event)
+                que = instance.__class__.objects.filter(event_id=instance.event_id)
             if hasattr(instance, "assoc") and instance.assoc:
-                que = instance.__class__.objects.filter(assoc=instance.assoc)
+                que = instance.__class__.objects.filter(assoc_id=instance.assoc_id)
             if hasattr(instance, "character") and instance.character:
-                que = instance.__class__.objects.filter(character=instance.character)
+                que = instance.__class__.objects.filter(character_id=instance.character_id)
             if que is not None:
                 n = que.aggregate(Max(field))[f"{field}__max"]
                 if not n:
@@ -704,7 +704,12 @@ def auto_assign_campaign_character(registration):
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
+    if (
+        RegistrationCharacterRel.objects.filter(
+            reg__member_id=registration.member_id, reg__run_id=registration.run_id
+        ).count()
+        > 0
+    ):
         return
 
     # get last run of campaign
@@ -720,7 +725,7 @@ def auto_assign_campaign_character(registration):
         return
 
     try:
-        old_rcr = RegistrationCharacterRel.objects.get(reg__member=registration.member, reg__run=last)
+        old_rcr = RegistrationCharacterRel.objects.get(reg__member_id=registration.member_id, reg__run_id=last.id)
         rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):

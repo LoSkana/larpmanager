@@ -59,17 +59,17 @@ def add_count(s, param, v=1):
     s[param] += v
 
 
-def update_reg_counts(r):
+def update_reg_counts(run):
     """Update registration counts cache for the given run.
 
     Args:
-        r: Run instance to update registration counts for
+        run: Run instance to update registration counts for
 
     Returns:
         dict: Updated registration counts data by ticket tier
     """
     s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
-    que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
+    que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
     for reg in que.select_related("ticket"):
         num_tickets = 1 + reg.additionals
         if not reg.ticket:
@@ -97,11 +97,11 @@ def update_reg_counts(r):
 
         add_count(s, f"tk_{reg.ticket_id}", num_tickets)
 
-    que = RegistrationChoice.objects.filter(reg__run=r, reg__cancellation_date__isnull=True)
+    que = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
     for el in que.values("option_id").annotate(total=Count("option_id")):
         s[f"option_{el['option_id']}"] = el["total"]
 
-    character_ids = Character.objects.filter(event=r.event).values_list("id", flat=True)
+    character_ids = Character.objects.filter(event_id=run.event_id).values_list("id", flat=True)
 
     que = WritingChoice.objects.filter(element_id__in=character_ids)
     for el in que.values("option_id").annotate(total=Count("option_id")):
