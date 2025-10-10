@@ -107,7 +107,7 @@ def update_reg_counts(r):
     return s
 
 
-def handle_update_registration_character_rel(instance):
+def on_character_update_registration_cache(instance):
     for run in instance.event.runs.all():
         clear_registration_counts_cache(run)
     if instance.event.get_config("user_character_approval", False):

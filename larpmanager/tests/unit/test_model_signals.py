@@ -45,6 +45,9 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import CharacterConfig, Faction, Plot, Prologue, SpeedLarp
 from larpmanager.tests.unit.base import BaseTestCase
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
+
 
 class TestModelSignals(BaseTestCase):
     """Test cases for model signal receivers"""
@@ -63,7 +66,7 @@ class TestModelSignals(BaseTestCase):
         plot2.save()
         self.assertEqual(plot2.number, 2)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_pre_save_callback_sets_order_for_association_scoped_models(self, mock_replace):
         """Test that pre_save_callback automatically sets order field for event-scoped models"""
         event = self.get_event()
@@ -89,55 +92,55 @@ class TestModelSignals(BaseTestCase):
         self.assertIsNotNone(assoc.key)
         self.assertGreater(len(assoc.key), 0)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_assoc_permission_can_be_queried(self, mock_replace):
         """Test that AssocPermission can be queried"""
         # Just verify that we can query AssocPermission model
         count = AssocPermission.objects.count()
         self.assertGreaterEqual(count, 0)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_event_permission_can_be_queried(self, mock_replace):
         """Test that EventPermission can be queried"""
         # Just verify that we can query EventPermission model
         count = EventPermission.objects.count()
         self.assertGreaterEqual(count, 0)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_plot_pre_save_creates_slug(self, mock_replace):
-        """Test that Plot pre_save signal calls replace_chars_all"""
+        """Test that Plot pre_save signal calls replace_character_names_in_writing"""
         event = self.get_event()
 
         plot = Plot(name="Test Plot Name", event=event)
         plot.save()
 
-        # Should call replace_chars_all
+        # Should call replace_character_names_in_writing
         mock_replace.assert_called_once_with(plot)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_faction_pre_save_creates_slug(self, mock_replace):
-        """Test that Faction pre_save signal calls replace_chars_all"""
+        """Test that Faction pre_save signal calls replace_character_names_in_writing"""
         event = self.get_event()
 
         faction = Faction(name="Test Faction", event=event)
         faction.save()
 
-        # Should call replace_chars_all
+        # Should call replace_character_names_in_writing
         mock_replace.assert_called_once_with(faction)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_prologue_pre_save_replaces_characters(self, mock_replace):
-        """Test that Prologue pre_save signal calls replace_chars_all"""
+        """Test that Prologue pre_save signal calls replace_character_names_in_writing"""
         event = self.get_event()
 
         prologue = Prologue(name="Test Prologue", event=event)
         prologue.save()
 
-        # Should call replace_chars_all
+        # Should call replace_character_names_in_writing
         mock_replace.assert_called_once_with(prologue)
 
-    @patch("larpmanager.models.signals.reset_event_features")
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.clear_event_features_cache")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_run_post_save_updates_run(self, mock_replace, mock_reset):
         """Test that Run can be updated"""
         event = self.get_event()
@@ -152,10 +155,10 @@ class TestModelSignals(BaseTestCase):
         # Run should be updated
         self.assertIsNotNone(run.id)
 
-    @patch("larpmanager.models.signals.update_traits_all")
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.refresh_all_instance_traits")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_trait_post_save_updates_traits_all(self, mock_replace, mock_update):
-        """Test that Trait post_save signal calls update_traits_all"""
+        """Test that Trait post_save signal calls refresh_all_instance_traits"""
         event = self.get_event()
         trait = Trait(name="Test Trait", event=event)
         trait.save()
@@ -227,19 +230,19 @@ class TestModelSignals(BaseTestCase):
         # We just verify the item was created successfully
         self.assertIsNotNone(item.id)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_speed_larp_pre_save_replaces_characters(self, mock_replace):
-        """Test that SpeedLarp pre_save signal calls replace_chars_all"""
+        """Test that SpeedLarp pre_save signal calls replace_character_names_in_writing"""
         event = self.get_event()
 
         speed_larp = SpeedLarp(name="Test Speed Larp", event=event, typ=1, station=1)
         speed_larp.save()
 
-        # Should call replace_chars_all
+        # Should call replace_character_names_in_writing
         mock_replace.assert_called_once_with(speed_larp)
 
-    @patch("larpmanager.models.signals.index_tutorial")
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.add_tutorial_to_search_index")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_larp_manager_tutorial_pre_save_creates_slug(self, mock_replace, mock_index):
         """Test that LarpManagerTutorial pre_save signal creates slug"""
         tutorial = LarpManagerTutorial(name="Test Tutorial", order=1, descr="Test description")
@@ -269,7 +272,7 @@ class TestModelSignals(BaseTestCase):
         # Verify user was created
         self.assertIsNotNone(user.id)
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_membership_pre_save_sets_card_number(self, mock_replace):
         """Test that Membership pre_save signal sets card number when status is ACCEPTED"""
         # Get existing membership from fixtures
@@ -315,7 +318,7 @@ class TestModelSignals(BaseTestCase):
         # Should clear the cache
         mock_cache_delete.assert_called()
 
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_event_pre_save_creates_slug(self, mock_replace):
         """Test that Event pre_save signal prepares campaign data"""
         assoc = self.get_association()
@@ -326,8 +329,8 @@ class TestModelSignals(BaseTestCase):
         # The event should be created successfully
         self.assertIsNotNone(event.id)
 
-    @patch("larpmanager.utils.event.reset_event_features")
-    @patch("larpmanager.utils.event.reset_event_fields_cache")
+    @patch("larpmanager.utils.event.clear_event_features_cache")
+    @patch("larpmanager.utils.event.clear_event_fields_cache")
     def test_event_post_save_resets_caches(self, mock_reset_fields, mock_reset_features):
         """Test that Event post_save signal resets various caches"""
         assoc = self.get_association()
@@ -353,7 +356,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(registration.id)
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_event_config_post_save_resets_configs(self, mock_reset):
         """Test that EventConfig post_save signal resets configs cache"""
         event = self.get_event()
@@ -363,7 +366,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_event_config_post_delete_resets_configs(self, mock_reset):
         """Test that EventConfig post_delete signal resets configs cache"""
         event = self.get_event()
@@ -374,7 +377,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_association_config_post_save_resets_configs(self, mock_reset):
         """Test that AssociationConfig post_save signal resets configs cache"""
         assoc = self.get_association()
@@ -384,7 +387,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_association_config_post_delete_resets_configs(self, mock_reset):
         """Test that AssociationConfig post_delete signal resets configs cache"""
         assoc = self.get_association()
@@ -395,7 +398,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_run_config_post_save_resets_configs(self, mock_reset):
         """Test that RunConfig post_save signal resets configs cache"""
         run = self.get_run()
@@ -405,7 +408,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_run_config_post_delete_resets_configs(self, mock_reset):
         """Test that RunConfig post_delete signal resets configs cache"""
         run = self.get_run()
@@ -416,7 +419,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_member_config_post_save_resets_configs(self, mock_reset):
         """Test that MemberConfig post_save signal resets configs cache"""
         member = self.get_member()
@@ -426,7 +429,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_member_config_post_delete_resets_configs(self, mock_reset):
         """Test that MemberConfig post_delete signal resets configs cache"""
         member = self.get_member()
@@ -437,7 +440,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_character_config_post_save_resets_configs(self, mock_reset):
         """Test that CharacterConfig post_save signal resets configs cache"""
         character = self.character()
@@ -447,7 +450,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_configs")
+    @patch("larpmanager.models.signals.clear_config_cache")
     def test_character_config_post_delete_resets_configs(self, mock_reset):
         """Test that CharacterConfig post_delete signal resets configs cache"""
         character = self.character()
@@ -479,7 +482,7 @@ class TestModelSignals(BaseTestCase):
         # Just verify the association was created successfully
         self.assertIsNotNone(assoc.id)
 
-    @patch("larpmanager.models.signals.index_tutorial")
+    @patch("larpmanager.models.signals.add_tutorial_to_search_index")
     def test_larp_manager_tutorial_post_save_indexes_tutorial(self, mock_index):
         """Test that LarpManagerTutorial post_save signal indexes tutorial"""
         tutorial = LarpManagerTutorial(name="Test Tutorial", order=1, descr="Test description")
@@ -487,8 +490,8 @@ class TestModelSignals(BaseTestCase):
 
         mock_index.assert_called_once_with(tutorial.id)
 
-    @patch("larpmanager.models.signals.delete_index_tutorial")
-    @patch("larpmanager.models.signals.index_tutorial")
+    @patch("larpmanager.models.signals.remove_tutorial_from_search_index")
+    @patch("larpmanager.models.signals.add_tutorial_to_search_index")
     def test_larp_manager_tutorial_can_be_deleted(self, mock_index, mock_delete_index):
         """Test that LarpManagerTutorial can be deleted"""
         tutorial = LarpManagerTutorial.objects.create(name="Test Tutorial", order=1, descr="Test description")
@@ -498,8 +501,8 @@ class TestModelSignals(BaseTestCase):
         # Tutorial should be deleted (soft delete)
         self.assertIsNone(LarpManagerTutorial.objects.filter(id=tutorial_id, deleted__isnull=True).first())
 
-    @patch("larpmanager.models.signals.index_guide")
-    @patch("larpmanager.models.signals.replace_chars_all")
+    @patch("larpmanager.models.signals.add_guide_to_search_index")
+    @patch("larpmanager.models.signals.replace_character_names_in_writing")
     def test_larp_manager_guide_post_save_indexes_guide(self, mock_replace, mock_index):
         """Test that LarpManagerGuide post_save signal indexes guide"""
         guide = LarpManagerGuide(title="Test Guide", slug="test-guide", text="Test content")
@@ -507,8 +510,8 @@ class TestModelSignals(BaseTestCase):
 
         mock_index.assert_called_once_with(guide.id)
 
-    @patch("larpmanager.models.signals.delete_index_guide")
-    @patch("larpmanager.models.signals.index_guide")
+    @patch("larpmanager.models.signals.remove_guide_from_search_index")
+    @patch("larpmanager.models.signals.add_guide_to_search_index")
     def test_larp_manager_guide_can_be_deleted(self, mock_index, mock_delete_index):
         """Test that LarpManagerGuide can be deleted"""
         guide = LarpManagerGuide.objects.create(title="Test Guide", slug="test-guide", text="Test content")
@@ -518,7 +521,7 @@ class TestModelSignals(BaseTestCase):
         # Guide should be deleted (soft delete)
         self.assertIsNone(LarpManagerGuide.objects.filter(id=guide_id, deleted__isnull=True).first())
 
-    @patch("larpmanager.models.signals.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_question_post_save_resets_cache(self, mock_reset):
         """Test that WritingQuestion post_save signal resets event fields cache"""
         from larpmanager.models.form import WritingQuestion
@@ -530,7 +533,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.models.signals.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_question_pre_delete_resets_cache(self, mock_reset):
         """Test that WritingQuestion pre_delete signal resets event fields cache"""
         from larpmanager.models.form import WritingQuestion
@@ -542,7 +545,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.models.signals.mail_larpmanager_ticket")
+    @patch("larpmanager.models.signals.send_support_ticket_email")
     def test_larp_manager_ticket_post_save_sends_notification(self, mock_mail):
         """Test that LarpManagerTicket post_save signal sends notification"""
         member = self.get_member()

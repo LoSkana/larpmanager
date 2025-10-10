@@ -66,11 +66,11 @@ from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
 from larpmanager.cache.links import clear_run_event_links_cache, on_registration_post_save_reset_event_links
 from larpmanager.cache.permission import (
+    clear_association_permission_cache,
     clear_event_permission_cache,
     clear_index_permission_cache,
-    reset_assoc_permission,
 )
-from larpmanager.cache.registration import clear_registration_counts_cache, handle_update_registration_character_rel
+from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
     on_faction_characters_m2m_changed,
@@ -394,13 +394,13 @@ def pre_save_assoc_permission(sender, instance, **kwargs):
 @receiver(post_save, sender=AssocPermission)
 def post_save_assoc_permission_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("assoc")
-    reset_assoc_permission(instance)
+    clear_association_permission_cache(instance)
 
 
 @receiver(post_delete, sender=AssocPermission)
 def post_delete_assoc_permission_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("assoc")
-    reset_assoc_permission(instance)
+    clear_association_permission_cache(instance)
 
 
 # AssocRole signals
@@ -483,7 +483,7 @@ def post_character_update_px(sender, instance, *args, **kwargs):
 def post_save_character(sender, instance, **kwargs):
     cleanup_character_pdfs_on_save(instance)
 
-    handle_update_registration_character_rel(instance)
+    on_character_update_registration_cache(instance)
 
     refresh_event_character_relationships(instance)
     for rel in Relationship.objects.filter(target=instance):

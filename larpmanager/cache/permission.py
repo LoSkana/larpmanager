@@ -78,7 +78,7 @@ def get_assoc_permission_feature(slug):
     return res
 
 
-def reset_assoc_permission(instance):
+def clear_association_permission_cache(instance):
     cache.delete(assoc_permission_feature_key(instance.slug))
 
 
