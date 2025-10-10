@@ -137,7 +137,25 @@ def get_coming_runs(assoc_id, future=True):
     Returns:
         QuerySet of Run objects with optimized select_related
     """
-    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
+    runs = (
+        Run.objects.exclude(development=DevelopStatus.CANC)
+        .exclude(event__visible=False)
+        .select_related("event", "event__assoc")
+        .only(
+            "id",
+            "number",
+            "start",
+            "end",
+            "development",
+            "registration_open",
+            "registration_close",
+            "event__id",
+            "event__name",
+            "event__slug",
+            "event__visible",
+            "event__assoc_id",
+        )
+    )
 
     if assoc_id:
         runs = runs.filter(event__assoc_id=assoc_id)
@@ -282,19 +300,29 @@ def calendar_past(request):
     """
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
-    my_regs = None
+
+    runs = get_coming_runs(aid, future=False).select_related("event__assoc").prefetch_related("tickets")
+
+    my_regs_dict = {}
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
             cancellation_date__isnull=True,
             redeem_code__isnull=True,
             member=request.user.member,
-        )
-        my_regs = my_regs.select_related("ticket")
+        ).select_related("ticket", "run")
+        my_regs_dict = {reg.run_id: reg for reg in my_regs}
+
+    runs_list = list(runs)
     ctx["list"] = []
-    for run in get_coming_runs(aid, future=False):
-        registration_status(run, request.user, my_regs=my_regs)
+
+    for run in runs_list:
+        user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
+        my_regs_for_run = [user_reg] if user_reg else []
+
+        registration_status(run, request.user, my_regs=my_regs_for_run)
         ctx["list"].append(run)
+
     ctx["page"] = "calendar_past"
     return render(request, "larpmanager/general/past.html", ctx)
 
