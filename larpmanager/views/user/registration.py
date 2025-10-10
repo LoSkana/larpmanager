@@ -25,8 +25,8 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
-from django.http import Http404, JsonResponse
+from django.db import models, transaction
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.timezone import now as timezone_now
 from django.utils.translation import gettext_lazy as _
@@ -82,7 +82,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def pre_register(request: "HttpRequest", s: str = "") -> "HttpResponse":
+def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
     """Handle pre-registration for events before full registration opens.
 
     Allows users to express interest in events and set preference order,
@@ -112,8 +112,8 @@ def pre_register(request: "HttpRequest", s: str = "") -> "HttpResponse":
         ctx.update({"features": get_assoc_features(request.assoc["id"])})
 
     # Initialize event lists for template
-    ctx["choices"] = []      # Events available for new pre-registration
-    ctx["already"] = []      # Events user has already pre-registered for
+    ctx["choices"] = []  # Events available for new pre-registration
+    ctx["already"] = []  # Events user has already pre-registered for
     ctx["member"] = request.user.member
 
     # Check if preference ordering is enabled
@@ -776,15 +776,27 @@ def _validate_exclusive_logic(disc, member, run, event):
 @login_required
 def discount_list(request, s):
     ctx = get_event_run(request, s)
-    # delete expired accounting item
-    now = datetime.now()
-    # AccountingItemDiscount.objects.filter(expires__lte=now).delete()
+    now = timezone_now()
+
+    # Bulk delete expired discount items for this user and run
+    AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"], expires__lte=now).delete()
+
+    # Get remaining valid discount items with optimized query
+    discount_items = (
+        AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"])
+        .select_related("disc")
+        .filter(models.Q(expires__isnull=True) | models.Q(expires__gt=now))
+    )
+
+    # Build response list efficiently
     lst = []
-    for aid in AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"]).select_related("disc"):
-        if aid.expires and aid.expires < now:
-            aid.delete()
+    for aid in discount_items:
+        j = {"name": aid.disc.name, "value": aid.value}
+        if aid.expires:
+            j["expires"] = aid.expires.strftime("%H:%M")
         else:
-            lst.append(aid.show())
+            j["expires"] = ""
+        lst.append(j)
 
     return JsonResponse({"lst": lst})
 
