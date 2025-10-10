@@ -148,7 +148,6 @@ def get_coming_runs(assoc_id, future=True):
             "end",
             "development",
             "registration_open",
-            "registration_close",
             "event__id",
             "event__name",
             "event__slug",
