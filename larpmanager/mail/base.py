@@ -22,6 +22,7 @@ from typing import Optional
 
 import holidays
 from django.conf import settings as conf_settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -82,21 +83,32 @@ def on_association_roles_m2m_changed(sender, **kwargs):
 
     Side effects:
         Sends role change notification emails to affected members
+        Invalidates permission cache for affected members
     """
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
-        if action != "post_add":
-            return
         instance: Optional[AssocRole] = kwargs.pop("instance", None)
         if not instance:
             return
         pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
 
-        exes = get_assoc_executives(instance.assoc)
-        if len(pk_set) == 1 and len(exes):
-            if next(iter(pk_set)) == exes[0].pk:
-                return
+        # Handle role removal or clear - invalidate cache immediately
+        if action in ("post_remove", "post_clear"):
+            if pk_set:
+                for mid in pk_set:
+                    mb = Member.objects.get(pk=mid)
+                    reset_event_links(mb.user.id, instance.assoc.id)
+            return
+
+        # Handle role addition
+        if action != "post_add":
+            return
+
+        try:
+            exes = get_assoc_executives(instance.assoc)
+        except ObjectDoesNotExist:
+            exes = []
 
         for mid in pk_set:
             mb = Member.objects.get(pk=mid)
@@ -131,19 +143,30 @@ def on_event_roles_m2m_changed(sender, **kwargs):
 
     Side effects:
         Sends role change notification emails to affected members and organizers
+        Invalidates permission cache for affected members
     """
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
-        if action != "post_add":
-            return
         instance: Optional[EventRole] = kwargs.pop("instance", None)
         pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
 
-        orgas = get_event_organizers(instance.event)
-        if len(pk_set) == 1 and len(orgas):
-            if next(iter(pk_set)) == orgas[0].pk:
-                return
+        # Handle role removal or clear - invalidate cache immediately
+        if action in ("post_remove", "post_clear"):
+            if pk_set:
+                for mid in pk_set:
+                    mb = Member.objects.get(pk=mid)
+                    reset_event_links(mb.user.id, instance.event.assoc_id)
+            return
+
+        # Handle role addition
+        if action != "post_add":
+            return
+
+        try:
+            orgas = get_event_organizers(instance.event)
+        except ObjectDoesNotExist:
+            orgas = []
 
         for mid in pk_set:
             mb = Member.objects.get(pk=mid)

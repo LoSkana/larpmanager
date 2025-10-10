@@ -64,7 +64,11 @@ from larpmanager.cache.config import clear_config_cache
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
-from larpmanager.cache.links import clear_run_event_links_cache, on_registration_post_save_reset_event_links
+from larpmanager.cache.links import (
+    clear_run_event_links_cache,
+    on_registration_post_save_reset_event_links,
+    reset_event_links,
+)
 from larpmanager.cache.permission import (
     clear_association_permission_cache,
     clear_event_permission_cache,
@@ -407,11 +411,15 @@ def post_delete_assoc_permission_index_permission(sender, instance, **kwargs):
 @receiver(pre_delete, sender=AssocRole)
 def pre_delete_assoc_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
+    for member in instance.members.all():
+        reset_event_links(member.user.id, instance.assoc_id)
 
 
 @receiver(post_save, sender=AssocRole)
 def post_save_assoc_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
+    for member in instance.members.all():
+        reset_event_links(member.user.id, instance.assoc_id)
 
 
 # AssocText signals
@@ -620,11 +628,15 @@ def post_delete_event_permission_reset(sender, instance, **kwargs):
 @receiver(pre_delete, sender=EventRole)
 def pre_delete_event_role_reset(sender, instance, **kwargs):
     remove_event_role_cache(instance.pk)
+    for member in instance.members.all():
+        reset_event_links(member.user.id, instance.event.assoc_id)
 
 
 @receiver(post_save, sender=EventRole)
 def post_save_event_role_reset(sender, instance, **kwargs):
     remove_event_role_cache(instance.pk)
+    for member in instance.members.all():
+        reset_event_links(member.user.id, instance.event.assoc_id)
 
 
 # EventText signals

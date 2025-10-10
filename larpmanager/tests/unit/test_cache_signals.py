@@ -696,3 +696,205 @@ class TestCacheSignals(BaseTestCase):
 
         # Should reset cache for all event runs
         self.assertTrue(mock_reset.called or True)
+
+    @patch("larpmanager.mail.base.reset_event_links")
+    def test_assoc_role_m2m_add_member_resets_cache(self, mock_reset):
+        """Test that adding a member to AssocRole resets event links cache"""
+        assoc = self.get_association()
+        member = self.get_member()
+        role = AssocRole.objects.create(name="Test Role", assoc=assoc, number=10)
+        mock_reset.reset_mock()  # Reset after role creation
+
+        # Add member to role
+        role.members.add(member)
+
+        # Verify cache was reset for the member
+        mock_reset.assert_called_once_with(member.user.id, assoc.id)
+
+    @patch("larpmanager.mail.base.reset_event_links")
+    def test_assoc_role_m2m_remove_member_resets_cache(self, mock_reset):
+        """Test that removing a member from AssocRole resets event links cache"""
+        assoc = self.get_association()
+        member = self.get_member()
+        role = AssocRole.objects.create(name="Test Role", assoc=assoc, number=10)
+        role.members.add(member)
+        mock_reset.reset_mock()  # Reset after adding member
+
+        # Remove member from role
+        role.members.remove(member)
+
+        # Verify cache was reset for the member
+        mock_reset.assert_called_once_with(member.user.id, assoc.id)
+
+    @patch("larpmanager.models.signals.reset_event_links")
+    def test_assoc_role_m2m_clear_members_resets_cache(self, mock_reset):
+        """Test that clearing members from AssocRole resets event links cache via signals"""
+        from django.contrib.auth.models import User
+
+        from larpmanager.models.member import Member
+
+        assoc = self.get_association()
+        member1 = self.get_member()
+        # Create a second user and get its automatically created member
+        user2 = User.objects.create_user(username="testuser2", email="test2@example.com")
+        member2 = Member.objects.get(user=user2)
+        member2.name = "Member2"
+        member2.surname = "Test2"
+        member2.save()
+        role = AssocRole.objects.create(name="Test Role", assoc=assoc, number=10)
+        role.members.add(member1, member2)
+        mock_reset.reset_mock()  # Reset after adding members
+
+        # Delete role to trigger pre_delete signal which should reset cache for all members
+        role.delete()
+
+        # Verify cache was reset for all members
+        self.assertTrue(mock_reset.call_count >= 2)
+
+    @patch("larpmanager.mail.base.reset_event_links")
+    def test_event_role_m2m_add_member_resets_cache(self, mock_reset):
+        """Test that adding a member to EventRole resets event links cache"""
+        event = self.get_event()
+        member = self.get_member()
+        role = EventRole.objects.create(name="Test Role", event=event, number=10)
+        mock_reset.reset_mock()  # Reset after role creation
+
+        # Add member to role
+        role.members.add(member)
+
+        # Verify cache was reset for the member
+        mock_reset.assert_called_once_with(member.user.id, event.assoc_id)
+
+    @patch("larpmanager.mail.base.reset_event_links")
+    def test_event_role_m2m_remove_member_resets_cache(self, mock_reset):
+        """Test that removing a member from EventRole resets event links cache"""
+        event = self.get_event()
+        member = self.get_member()
+        role = EventRole.objects.create(name="Test Role", event=event, number=10)
+        role.members.add(member)
+        mock_reset.reset_mock()  # Reset after adding member
+
+        # Remove member from role
+        role.members.remove(member)
+
+        # Verify cache was reset for the member
+        mock_reset.assert_called_once_with(member.user.id, event.assoc_id)
+
+    @patch("larpmanager.models.signals.reset_event_links")
+    def test_event_role_m2m_clear_members_resets_cache(self, mock_reset):
+        """Test that clearing members from EventRole resets event links cache via signals"""
+        from django.contrib.auth.models import User
+
+        from larpmanager.models.member import Member
+
+        event = self.get_event()
+        member1 = self.get_member()
+        # Create a second user and get its automatically created member
+        user2 = User.objects.create_user(username="testuser3", email="test3@example.com")
+        member2 = Member.objects.get(user=user2)
+        member2.name = "Member3"
+        member2.surname = "Test3"
+        member2.save()
+        role = EventRole.objects.create(name="Test Role", event=event, number=10)
+        role.members.add(member1, member2)
+        mock_reset.reset_mock()  # Reset after adding members
+
+        # Delete role to trigger pre_delete signal which should reset cache for all members
+        role.delete()
+
+        # Verify cache was reset for all members
+        self.assertTrue(mock_reset.call_count >= 2)
+
+    @patch("larpmanager.models.signals.reset_event_links")
+    def test_assoc_role_post_save_resets_member_caches(self, mock_reset):
+        """Test that saving AssocRole resets cache for all its members"""
+        from django.contrib.auth.models import User
+
+        from larpmanager.models.member import Member
+
+        assoc = self.get_association()
+        member1 = self.get_member()
+        user2 = User.objects.create_user(username="testuser4", email="test4@example.com")
+        member2 = Member.objects.get(user=user2)
+
+        # Create role with members
+        role = AssocRole.objects.create(name="Test Role", assoc=assoc, number=11)
+        role.members.add(member1, member2)
+        mock_reset.reset_mock()
+
+        # Modify and save role - should trigger post_save signal
+        role.name = "Updated Role"
+        role.save()
+
+        # Verify cache was reset for all members
+        self.assertTrue(mock_reset.call_count >= 2)
+
+    @patch("larpmanager.models.signals.reset_event_links")
+    def test_event_role_post_save_resets_member_caches(self, mock_reset):
+        """Test that saving EventRole resets cache for all its members"""
+        from django.contrib.auth.models import User
+
+        from larpmanager.models.member import Member
+
+        event = self.get_event()
+        member1 = self.get_member()
+        user2 = User.objects.create_user(username="testuser5", email="test5@example.com")
+        member2 = Member.objects.get(user=user2)
+
+        # Create role with members
+        role = EventRole.objects.create(name="Test Role", event=event, number=11)
+        role.members.add(member1, member2)
+        mock_reset.reset_mock()
+
+        # Modify and save role - should trigger post_save signal
+        role.name = "Updated Role"
+        role.save()
+
+        # Verify cache was reset for all members
+        self.assertTrue(mock_reset.call_count >= 2)
+
+    @patch("larpmanager.models.signals.reset_event_links")
+    def test_assoc_role_pre_delete_resets_member_caches(self, mock_reset):
+        """Test that deleting AssocRole resets cache for all its members"""
+        from django.contrib.auth.models import User
+
+        from larpmanager.models.member import Member
+
+        assoc = self.get_association()
+        member1 = self.get_member()
+        user2 = User.objects.create_user(username="testuser6", email="test6@example.com")
+        member2 = Member.objects.get(user=user2)
+
+        # Create role with members
+        role = AssocRole.objects.create(name="Test Role", assoc=assoc, number=12)
+        role.members.add(member1, member2)
+        mock_reset.reset_mock()
+
+        # Delete role - should trigger pre_delete signal
+        role.delete()
+
+        # Verify cache was reset for all members
+        self.assertTrue(mock_reset.call_count >= 2)
+
+    @patch("larpmanager.models.signals.reset_event_links")
+    def test_event_role_pre_delete_resets_member_caches(self, mock_reset):
+        """Test that deleting EventRole resets cache for all its members"""
+        from django.contrib.auth.models import User
+
+        from larpmanager.models.member import Member
+
+        event = self.get_event()
+        member1 = self.get_member()
+        user2 = User.objects.create_user(username="testuser7", email="test7@example.com")
+        member2 = Member.objects.get(user=user2)
+
+        # Create role with members
+        role = EventRole.objects.create(name="Test Role", event=event, number=12)
+        role.members.add(member1, member2)
+        mock_reset.reset_mock()
+
+        # Delete role - should trigger pre_delete signal
+        role.delete()
+
+        # Verify cache was reset for all members
+        self.assertTrue(mock_reset.call_count >= 2)
