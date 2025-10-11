@@ -18,8 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from calmjs.parse.asttypes import Object
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -28,12 +26,7 @@ from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
-    AccountingItemCollection,
-    AccountingItemDonation,
     AccountingItemExpense,
-    AccountingItemOther,
-    AccountingItemPayment,
-    Collection,
     OtherChoices,
     PaymentChoices,
     PaymentType,
@@ -43,7 +36,7 @@ from larpmanager.models.member import Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-def handle_expense_item_post_save(instance, created):
+def send_expense_notification_email(instance, created):
     """Handle post-save events for expense accounting items.
 
     Args:
@@ -58,11 +51,6 @@ def handle_expense_item_post_save(instance, created):
             activate(orga.language)
             subj, body = get_expense_mail(instance)
             my_send_mail(subj, body, orga, instance.run)
-
-
-@receiver(post_save, sender=AccountingItemExpense)
-def update_accounting_item_expense_post(sender, instance, created, **kwargs):
-    handle_expense_item_post_save(instance, created)
 
 
 def get_expense_mail(instance):
@@ -96,7 +84,7 @@ def get_expense_mail(instance):
     return subj, body
 
 
-def handle_expense_item_approval_notification(expense_item):
+def send_expense_approval_email(expense_item):
     """Handle expense item approval notifications.
 
     Args:
@@ -141,11 +129,6 @@ def handle_expense_item_approval_notification(expense_item):
     my_send_mail(subj, body, expense_item.member, expense_item.run)
 
 
-@receiver(pre_save, sender=AccountingItemExpense)
-def update_accounting_item_expense_pre(sender, instance, **kwargs):
-    handle_expense_item_approval_notification(instance)
-
-
 def get_token_credit_name(assoc_id):
     """Get token and credit names from association configuration.
 
@@ -166,7 +149,7 @@ def get_token_credit_name(assoc_id):
     return token_name, credit_name
 
 
-def handle_payment_item_pre_save(payment_item):
+def send_payment_confirmation_email(payment_item):
     """Handle pre-save events for payment accounting items.
 
     Args:
@@ -191,11 +174,6 @@ def handle_payment_item_pre_save(payment_item):
             notify_pay_credit(credit_name, payment_item, member, run)
         elif payment_item.pay == PaymentChoices.TOKEN:
             notify_pay_token(payment_item, member, run, token_name)
-
-
-@receiver(pre_save, sender=AccountingItemPayment)
-def update_accounting_item_payment(sender, instance, **kwargs):
-    handle_payment_item_pre_save(instance)
 
 
 def notify_pay_token(instance, member, run, token_name):
@@ -336,7 +314,7 @@ def get_pay_money_email(curr_sym, instance, run):
     return subj, body
 
 
-def handle_accounting_item_other_pre_save(instance):
+def send_token_credit_notification_email(instance):
     """Handle pre-save events for other accounting items.
 
     Args:
@@ -354,11 +332,6 @@ def handle_accounting_item_other_pre_save(instance):
             notify_credit(credit_name, instance)
         elif instance.oth == OtherChoices.REFUND:
             notify_refund(credit_name, instance)
-
-
-@receiver(pre_save, sender=AccountingItemOther)
-def update_accounting_item_other(sender, instance, **kwargs):
-    handle_accounting_item_other_pre_save(instance)
 
 
 def notify_refund(credit_name, instance):
@@ -486,7 +459,7 @@ def get_token_email(instance, token_name):
     return subj, body
 
 
-def handle_donation_item_pre_save(instance):
+def send_donation_confirmation_email(instance):
     """Handle pre-save events for donation accounting items.
 
     Args:
@@ -506,12 +479,7 @@ def handle_donation_item_pre_save(instance):
     my_send_mail(subj, body, instance.member, instance)
 
 
-@receiver(pre_save, sender=AccountingItemDonation)
-def save_accounting_item_donation(sender, instance, *args, **kwargs):
-    handle_donation_item_pre_save(instance)
-
-
-def handle_collection_post_save(instance, created):
+def send_collection_activation_email(instance, created):
     """Handle post-save events for collection instances.
 
     Args:
@@ -538,12 +506,7 @@ def handle_collection_post_save(instance, created):
     my_send_mail(subj, body, instance.organizer, instance)
 
 
-@receiver(post_save, sender=Collection)
-def send_collection_activation_email(sender, instance, created, **kwargs):
-    handle_collection_post_save(instance, created)
-
-
-def handle_collection_gift_pre_save(instance):
+def send_gift_collection_notification_email(instance):
     """
     Send notification emails when gift collection participation is saved.
 
@@ -570,11 +533,6 @@ def handle_collection_gift_pre_save(instance):
             _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience") + "!"
         )
         my_send_mail(subj, body, instance.collection.organizer, instance.collection)
-
-
-@receiver(pre_save, sender=AccountingItemCollection)
-def save_collection_gift(sender, instance, **kwargs):
-    handle_collection_gift_pre_save(instance)
 
 
 def notify_invoice_check(inv):

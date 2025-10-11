@@ -19,21 +19,36 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.conf import settings as conf_settings
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import Http404
 from django.urls import reverse
+from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.fields import get_event_fields_cache
+from larpmanager.cache.button import event_button_key
+from larpmanager.cache.feature import clear_event_features_cache, get_event_features
+from larpmanager.cache.fields import clear_event_fields_cache, get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
-from larpmanager.models.event import Run
-from larpmanager.models.registration import RegistrationCharacterRel
+from larpmanager.models.access import EventRole, get_event_organizers
+from larpmanager.models.event import Event, EventConfig, EventText, Run
+from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
+    QuestionStatus,
+    QuestionVisibility,
+    RegistrationQuestion,
+    RegistrationQuestionType,
+    WritingQuestion,
+    WritingQuestionType,
+)
+from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.base import def_user_ctx, get_index_permissions
+from larpmanager.utils.common import copy_class
 from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
 
@@ -358,3 +373,348 @@ def get_index_event_permissions(ctx, request, slug, check=True):
         ctx["role_names"] = names
     features = get_event_features(ctx["event"].id)
     ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")
+
+
+def update_run_plan_on_event_change(instance):
+    """Set run plan from association default if not already set.
+
+    Args:
+        instance: Run instance that was saved
+    """
+    if not instance.plan and instance.event:
+        updates = {"plan": instance.event.assoc.plan}
+        Run.objects.filter(pk=instance.pk).update(**updates)
+
+
+def clear_event_button_cache(instance):
+    cache.delete(event_button_key(instance.event_id))
+
+
+def prepare_campaign_event_data(instance):
+    """Prepare campaign event data before saving.
+
+    Args:
+        instance: Event instance being saved
+    """
+    if instance.pk:
+        try:
+            old_instance = Event.objects.get(pk=instance.pk)
+            instance._old_parent_id = old_instance.parent_id
+        except ObjectDoesNotExist:
+            instance._old_parent_id = None
+    else:
+        instance._old_parent_id = None
+
+
+def copy_parent_event_to_campaign(event):
+    """Setup campaign event by copying from parent.
+
+    Args:
+        event: Event instance that was saved
+    """
+    if event.parent_id:
+        # noinspection PyProtectedMember
+        if event._old_parent_id != event.parent_id:
+            # copy config, texts, roles, features
+            copy_class(event.pk, event.parent_id, EventConfig)
+            copy_class(event.pk, event.parent_id, EventText)
+            copy_class(event.pk, event.parent_id, EventRole)
+            for fn in event.parent.features.all():
+                event.features.add(fn)
+
+            # Use flag to prevent recursion instead of disconnecting signal
+            event._skip_campaign_setup = True
+            event.save()
+            del event._skip_campaign_setup
+
+
+def create_default_event_setup(event):
+    """Setup event with runs, tickets, and forms after save.
+
+    Args:
+        event: Event instance that was saved
+    """
+    if event.template:
+        return
+
+    if not event.runs.exists():
+        Run.objects.create(event=event, number=1)
+
+    features = get_event_features(event.id)
+
+    save_event_tickets(features, event)
+
+    save_event_registration_form(features, event)
+
+    save_event_character_form(features, event)
+
+    clear_event_features_cache(event.id)
+
+    clear_event_fields_cache(event.id)
+
+
+def save_event_tickets(features, instance):
+    """Create default registration tickets for event.
+
+    Args:
+        features (dict): Enabled features for the event
+        instance: Event instance to create tickets for
+    """
+    # create tickets if not exists
+    tickets = [
+        ("", TicketTier.STANDARD, "Standard"),
+        ("waiting", TicketTier.WAITING, "Waiting"),
+        ("filler", TicketTier.FILLER, "Filler"),
+    ]
+    for ticket in tickets:
+        if ticket[0] and ticket[0] not in features:
+            continue
+        if not RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).exists():
+            RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
+
+
+def save_event_character_form(features, instance):
+    """Create character form questions based on enabled features.
+
+    Args:
+        features (dict): Enabled features for the event
+        instance: Event instance to create form for
+    """
+    # create fields if not exists / delete if feature not active
+    if "character" not in features:
+        return
+
+    # if has parent, use those
+    if instance.parent:
+        return
+
+    _activate_orga_lang(instance)
+
+    def_tps = {
+        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
+        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
+        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
+    }
+
+    custom_tps = BaseQuestionType.get_basic_types()
+
+    _init_character_form_questions(custom_tps, def_tps, features, instance)
+
+    if "questbuilder" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.QUEST, QuestionApplicable.TRAIT])
+
+    if "prologue" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.PROLOGUE])
+
+    if "faction" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION])
+
+    if "plot" in features:
+        plot_tps = dict(def_tps)
+        plot_tps[WritingQuestionType.TEASER] = (
+            "Concept",
+            QuestionStatus.MANDATORY,
+            QuestionVisibility.PUBLIC,
+            3000,
+        )
+        _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
+
+
+def _init_writing_element(instance, def_tps, applicables):
+    """Initialize writing questions for specific applicables in an event instance.
+
+    Args:
+        instance: Event instance to initialize writing elements for
+        def_tps: Dictionary of default question types and their configurations
+        applicables: List of QuestionApplicable types to create questions for
+    """
+    for applicable in applicables:
+        # if there are already questions for this applicable, skip
+        if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():
+            continue
+
+        objs = [
+            WritingQuestion(
+                event=instance,
+                typ=typ,
+                name=_(cfg[0]),
+                status=cfg[1],
+                visibility=cfg[2],
+                max_length=cfg[3],
+                applicable=applicable,
+            )
+            for typ, cfg in def_tps.items()
+        ]
+        WritingQuestion.objects.bulk_create(objs)
+
+
+def _init_character_form_questions(custom_tps, def_tps, features, instance):
+    """Initialize character form questions during model setup.
+
+    Sets up default and custom question types for character creation forms,
+    managing question creation and deletion based on enabled features and
+    existing question configurations.
+    """
+    que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
+    types = set(que.values_list("typ", flat=True).distinct())
+
+    # evaluate each question type field
+    choices = dict(WritingQuestionType.choices)
+    all_types = choices.keys()
+    all_types -= custom_tps
+
+    # add default types if none are present
+    if not types:
+        for el, add in def_tps.items():
+            WritingQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=_(add[0]),
+                status=add[1],
+                visibility=add[2],
+                max_length=add[3],
+                applicable=QuestionApplicable.CHARACTER,
+            )
+
+    # add types from feature if the feature is active but the field is missing
+    not_to_remove = set(def_tps.keys())
+    if "px" in features:
+        not_to_remove.add(WritingQuestionType.COMPUTED)
+    all_types -= not_to_remove
+    for el in sorted(list(all_types)):
+        if el in features and el not in types:
+            WritingQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=_(el.capitalize()),
+                status=QuestionStatus.HIDDEN,
+                visibility=QuestionVisibility.HIDDEN,
+                max_length=1000,
+                applicable=QuestionApplicable.CHARACTER,
+            )
+        if el not in features and el in types:
+            WritingQuestion.objects.filter(event=instance, typ=el).delete()
+
+
+def save_event_registration_form(features, instance):
+    """Create registration form questions based on enabled features.
+
+    Args:
+        features (dict): Enabled features for the event
+        instance: Event instance to create form for
+    """
+    _activate_orga_lang(instance)
+
+    def_tps = {RegistrationQuestionType.TICKET}
+
+    help_texts = {
+        RegistrationQuestionType.TICKET: _("Your registration ticket"),
+    }
+
+    basic_tps = BaseQuestionType.get_basic_types()
+
+    que = instance.get_elements(RegistrationQuestion)
+    types = set(que.values_list("typ", flat=True).distinct())
+
+    # evaluate each question type field
+    choices = dict(RegistrationQuestionType.choices)
+    all_types = choices.keys()
+    all_types -= basic_tps
+
+    # add default types if none are present
+    for el in def_tps:
+        if el not in types:
+            RegistrationQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=choices[el],
+                description=help_texts.get(el, ""),
+                status=QuestionStatus.MANDATORY,
+            )
+
+    # add types from feature if the feature is active but the field is missing
+    not_to_remove = set(def_tps)
+    all_types -= not_to_remove
+
+    help_texts = {
+        "additional_tickets": _("Reserve additional tickets beyond your own"),
+        "pay_what_you_want": _("Freely indicate the amount of your donation"),
+        "reg_surcharges": _("Registration surcharge"),
+        "reg_quotas": _(
+            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date"
+        ),
+    }
+
+    for el in sorted(list(all_types)):
+        if el in features and el not in types:
+            RegistrationQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=_(choices[el].capitalize()),
+                description=help_texts.get(el, ""),
+                status=QuestionStatus.OPTIONAL,
+            )
+        if el not in features and el in types:
+            RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
+
+
+def _activate_orga_lang(instance):
+    # get most common language between organizers
+    langs = {}
+    for orga in get_event_organizers(instance):
+        lang = orga.language
+        if lang not in langs:
+            langs[lang] = 1
+        else:
+            langs[lang] += 1
+    if langs:
+        max_lang = max(langs, key=langs.get)
+    else:
+        max_lang = "en"
+    activate(max_lang)
+
+
+def assign_previous_campaign_character(registration):
+    """Auto-assign last character for campaign registrations.
+
+    Args:
+        registration: Registration instance to assign character to
+    """
+    if not registration.member:
+        return
+
+    if registration.cancellation_date:
+        return
+
+    # auto assign last character if campaign
+    if "campaign" not in get_event_features(registration.run.event_id):
+        return
+    if not registration.run.event.parent:
+        return
+
+    # if already has a character, do not proceed
+    if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
+        return
+
+    # get last run of campaign
+    last = (
+        Run.objects.filter(
+            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
+        )
+        .exclude(event_id=registration.run.event_id)
+        .order_by("-end")
+        .first()
+    )
+    if not last:
+        return
+
+    try:
+        old_rcr = RegistrationCharacterRel.objects.get(reg__member=registration.member, reg__run=last)
+        rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
+        for s in ["name", "pronoun", "song", "public", "private"]:
+            if hasattr(old_rcr, "custom_" + s):
+                value = getattr(old_rcr, "custom_" + s)
+                setattr(rcr, "custom_" + s, value)
+        rcr.save()
+    except ObjectDoesNotExist:
+        pass

@@ -23,6 +23,7 @@ import os
 from cryptography.fernet import Fernet, InvalidToken
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction
 from larpmanager.models.utils import get_payment_details_path
 from larpmanager.utils.tasks import notify_admins
 
@@ -78,3 +79,49 @@ def get_payment_details(assoc):
     except InvalidToken as err:
         notify_admins(f"invalid token for {assoc.slug}", f"{err}")
         return {}
+
+
+def handle_accounting_item_payment_pre_save(instance):
+    """Update payment member and handle registration changes.
+
+    Args:
+        instance: AccountingItemPayment instance being saved
+    """
+    if not instance.member:
+        instance.member = instance.reg.member
+
+    if not instance.pk:
+        return
+
+    prev = AccountingItemPayment.objects.get(pk=instance.pk)
+    instance._update_reg = prev.value != instance.value
+
+    if prev.reg != instance.reg:
+        for trans in AccountingItemTransaction.objects.filter(inv_id=instance.inv_id):
+            trans.reg = instance.reg
+            trans.save()
+
+
+def handle_collection_pre_save(instance):
+    """Generate unique codes and calculate collection totals.
+
+    Args:
+        instance: Collection instance being saved
+    """
+    if not instance.pk:
+        instance.unique_contribute_code()
+        instance.unique_redeem_code()
+        return
+    instance.total = 0
+    for el in instance.collection_gifts.all():
+        instance.total += el.value
+
+
+def handle_accounting_item_collection_post_save(instance):
+    """Update collection total when items are added.
+
+    Args:
+        instance: AccountingItemCollection instance that was saved
+    """
+    if instance.collection:
+        instance.collection.save()

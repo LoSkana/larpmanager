@@ -26,7 +26,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.timezone import now as timezone_now
 from django.utils.translation import gettext_lazy as _
@@ -82,7 +82,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def pre_register(request: "HttpRequest", s: str = "") -> "HttpResponse":
+def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
     """Handle pre-registration for events before full registration opens.
 
     Allows users to express interest in events and set preference order,
@@ -112,8 +112,8 @@ def pre_register(request: "HttpRequest", s: str = "") -> "HttpResponse":
         ctx.update({"features": get_assoc_features(request.assoc["id"])})
 
     # Initialize event lists for template
-    ctx["choices"] = []      # Events available for new pre-registration
-    ctx["already"] = []      # Events user has already pre-registered for
+    ctx["choices"] = []  # Events available for new pre-registration
+    ctx["already"] = []  # Events user has already pre-registered for
     ctx["member"] = request.user.member
 
     # Check if preference ordering is enabled

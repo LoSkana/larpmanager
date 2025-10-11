@@ -198,7 +198,7 @@ def update_traits_text(instance):
     return traits
 
 
-def update_traits_all(instance):
+def refresh_all_instance_traits(instance):
     if instance.id is None:
         return
 

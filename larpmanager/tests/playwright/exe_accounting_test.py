@@ -179,15 +179,15 @@ def add_orga(page, live_server):
 
 def config(page, live_server):
     # activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
     # activate taxes
-    go_to(page, live_server, "/manage/features/173/on")
+    go_to(page, live_server, "/manage/features/vat/on")
     # activate inflows
-    go_to(page, live_server, "/manage/features/144/on")
+    go_to(page, live_server, "/manage/features/inflow/on")
     # activate organization tax
-    go_to(page, live_server, "/manage/features/121/on")
+    go_to(page, live_server, "/manage/features/organization_tax/on")
     # activate outflows
-    go_to(page, live_server, "/manage/features/108/on")
+    go_to(page, live_server, "/manage/features/outflow/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name="Payments ").click()

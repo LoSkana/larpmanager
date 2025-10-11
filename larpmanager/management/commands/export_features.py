@@ -63,11 +63,10 @@ class Command(BaseCommand):
                     "default_optional_fields",
                 ),
             ),
-            "module": (FeatureModule, ("id", "name", "order", "icon")),
+            "module": (FeatureModule, ("name", "slug", "order", "icon")),
             "feature": (
                 Feature,
                 (
-                    "id",
                     "name",
                     "descr",
                     "slug",
@@ -80,16 +79,16 @@ class Command(BaseCommand):
                     "hidden",
                 ),
             ),
-            "permission_module": (PermissionModule, ("id", "name", "order", "icon")),
+            "permission_module": (PermissionModule, ("name", "slug", "order", "icon")),
             "assoc_permission": (
                 AssocPermission,
-                ("id", "name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
+                ("name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
             ),
             "event_permission": (
                 EventPermission,
-                ("id", "name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
+                ("name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
             ),
-            "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),
+            "payment_methods": (PaymentMethod, ("name", "slug", "instructions", "fields", "profile")),
         }
 
         # Process each model type and export to YAML
@@ -115,7 +114,19 @@ class Command(BaseCommand):
 
                 # Export foreign keys as ID references
                 for field in fk_fields:
-                    entry_fields[field] = getattr(obj, field + "_id")
+                    rel_obj = getattr(obj, field)
+                    if rel_obj is None:
+                        entry_fields[field] = None
+                    else:
+                        slug_val = getattr(rel_obj, "slug", None)
+                        if slug_val is None and hasattr(rel_obj, "get_slug") and callable(rel_obj.get_slug):
+                            slug_val = rel_obj.get_slug()
+                        if slug_val is None:
+                            try:
+                                slug_val = str(rel_obj)
+                            except Exception:
+                                slug_val = getattr(obj, f"{field}_id")
+                        entry_fields[field] = slug_val
 
                 # Export image fields as file paths
                 for field in img_fields:
@@ -129,7 +140,6 @@ class Command(BaseCommand):
                 # Build Django fixture format entry
                 entry = {
                     "model": typ._meta.app_label + "." + typ._meta.model_name,
-                    "pk": obj.pk,
                     "fields": entry_fields,
                 }
 
