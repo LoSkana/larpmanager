@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models import Count
 
@@ -44,7 +45,7 @@ def get_reg_counts(r, reset=False):
         res = cache.get(key)
     if not res:
         res = update_reg_counts(r)
-        cache.set(key, res, timeout=60 * 5)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

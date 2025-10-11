@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from datetime import date
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
@@ -98,7 +99,7 @@ def update_leaderboard(a_id):
         if el["count"] > 0:
             res.append(el)
     res = sorted(res, key=lambda x: (x["count"], x["created"]), reverse=True)
-    cache.set(leaderboard_key(a_id), res)
+    cache.set(leaderboard_key(a_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

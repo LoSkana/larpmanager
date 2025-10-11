@@ -251,7 +251,7 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
     return res
 
 
-def refresh_event_character_relationships(char: Character) -> None:
+def refresh_event_character_relationships(char: Character, event: Event) -> None:
     """Update character relationships in cache.
 
     Updates the cached relationship data for a specific character.
@@ -259,14 +259,15 @@ def refresh_event_character_relationships(char: Character) -> None:
 
     Args:
         char: The Character instance to update relationships for
+        event: The event for which we are building the cache
     """
     try:
-        cache_key = get_event_rels_key(char.event_id)
+        cache_key = get_event_rels_key(event.id)
         res = cache.get(cache_key)
 
         if res is None:
-            logger.debug(f"Cache miss during character update for event {char.event_id}, reinitializing")
-            init_event_rels_all(char.event)
+            logger.debug(f"Cache miss during character update for event {event}, reinitializing")
+            init_event_rels_all(event)
             return
 
         if "characters" not in res:
@@ -278,7 +279,7 @@ def refresh_event_character_relationships(char: Character) -> None:
 
     except Exception as e:
         logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
-        clear_event_relationships_cache(char.event_id)
+        clear_event_relationships_cache(event.id)
 
 
 def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any]:

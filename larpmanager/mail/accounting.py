@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from calmjs.parse.asttypes import Object
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -138,8 +138,10 @@ def get_token_credit_name(assoc_id):
     Returns:
         Tuple of (token_name, credit_name) strings with defaults if not configured
     """
-    token_name = get_assoc_config(assoc_id, "token_credit_token_name", None)
-    credit_name = get_assoc_config(assoc_id, "token_credit_credit_name", None)
+    config_holder = Object()
+
+    token_name = get_assoc_config(assoc_id, "token_credit_token_name", None, config_holder)
+    credit_name = get_assoc_config(assoc_id, "token_credit_credit_name", None, config_holder)
     if not token_name:
         token_name = _("Tokens")
     if not credit_name:

@@ -299,6 +299,9 @@ msgstr "Uzavřeno"
 msgid "Cover"
 msgstr "Obálka"
 
+msgid "Dates"
+msgstr "Data"
+
 msgid "Email"
 msgstr "E-mail"
 
@@ -473,6 +476,9 @@ msgstr "Upravit"
 
 msgid "Checks"
 msgstr "Kontroly"
+
+msgid "Counts"
+msgstr "Počítá"
 
 msgid "Delete"
 msgstr "Odstranit"

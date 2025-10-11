@@ -1,9 +1,8 @@
 #  LarpManager
 
-**LarpManager** is a free and open-source platform to manage **LARP (Live Action Role-Playing)** events.
-It has Everything you need to manage your LARP, free & open source!
+**LarpManager** is an all-in-one free LARP management platform.
 
-> Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)!
+> Not interested in self-hosting? Start using it right away with the fully hosted and free to use instance on [https://larpmanager.com](https://larpmanager.com)!
 
 ![License: AGPL or Commercial](https://img.shields.io/badge/license-AGPL%20%2F%20Commercial-blue.svg)
 
@@ -11,12 +10,15 @@ It has Everything you need to manage your LARP, free & open source!
 
 ## Licensing
 
-LarpManager is available under a **dual license**:
+LarpManager is distributed under a **dual license** model:
 
-- **AGPLv3** (Open Source): Use freely under AGPL terms. Modifications must be published if hosted.
-- **Commercial License**: Use in closed-source/proprietary projects. Contact [commercial@larpmanager.com](mailto:commercial@larpmanager.com) for info.
+- **Open Source (AGPLv3)** — Free to use under the terms of the AGPLv3 license.
+  If you host your own instance, you must publish any modifications and include a visible link to [larpmanager.com](https://larpmanager.com) on every page of the interface.
 
-See the LICENSE file for details.
+- **Commercial License** — Allows private modifications and removes the attribution requirement.
+  For details or licensing inquiries, contact [commercial@larpmanager.com](mailto:commercial@larpmanager.com).
+
+Refer to the `LICENSE` file for full terms.
 
 ---
 

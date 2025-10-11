@@ -189,6 +189,10 @@ h1.home {
   h1.home {
     font-size: 1.25em;
   }
+
+  #main h5 {
+    font-size: 1.5em;
+  }
 }
 
 #header nav > ul > li a:hover {

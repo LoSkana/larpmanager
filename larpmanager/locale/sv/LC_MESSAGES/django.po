@@ -299,6 +299,9 @@ msgstr "Stängt"
 msgid "Cover"
 msgstr "Skydd"
 
+msgid "Dates"
+msgstr "Datum"
+
 msgid "Email"
 msgstr "E-post"
 
@@ -473,6 +476,9 @@ msgstr "Redigera"
 
 msgid "Checks"
 msgstr "Kontroller"
+
+msgid "Counts"
+msgstr "Räkningar"
 
 msgid "Delete"
 msgstr "Radera"

@@ -103,7 +103,7 @@ def get_cache_text_field(typ, event):
     res = cache.get(key)
     if not res:
         res = init_cache_text_field(typ, event)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -113,7 +113,7 @@ def update_cache_text_fields(el):
     key = cache_text_field_key(typ, event)
     res = get_cache_text_field(typ, event)
     _init_element_cache_text_field(el, res, typ)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_cache_text_fields_answer(instance):
@@ -129,7 +129,7 @@ def update_cache_text_fields_answer(instance):
     if instance.element_id not in res:
         res[instance.element_id] = {}
     res[instance.element_id][field] = get_single_cache_text_field(instance.element_id, field, instance.text)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 # Registration
@@ -162,7 +162,7 @@ def get_cache_reg_field(run):
     res = cache.get(key)
     if not res:
         res = init_cache_reg_field(run)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -171,7 +171,7 @@ def update_cache_reg_fields(el):
     key = cache_text_field_key(Registration, run)
     res = get_cache_reg_field(run)
     _init_element_cache_reg_field(el, res)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_cache_reg_fields_answer(instance):
@@ -184,7 +184,7 @@ def update_cache_reg_fields_answer(instance):
     res = get_cache_reg_field(run)
     field = str(instance.question_id)
     res[instance.reg_id][field] = get_single_cache_text_field(instance.reg_id, field, instance.text)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_text_fields_cache(instance):

@@ -5544,6 +5544,12 @@ msgid ""
 "English"
 msgstr ""
 
+msgid "Dates"
+msgstr ""
+
+msgid "Counts"
+msgstr ""
+
 msgid "Feature activated"
 msgstr ""
 

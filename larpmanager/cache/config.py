@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from calmjs.parse.asttypes import Object
 from django.apps import apps
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 
 
@@ -45,7 +46,7 @@ def get_element_configs(element_id, model_name):
     res = cache.get(key)
     if not res:
         res = update_configs(element_id, model_name)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

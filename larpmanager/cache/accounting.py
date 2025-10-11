@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -140,7 +141,7 @@ def refresh_member_accounting_cache(run, member_id):
             cached_data[reg.id] = {key: f"{value:g}" for key, value in dt.items()}
 
     # Update the cache
-    cache.set(key, cached_data)
+    cache.set(key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def get_registration_accounting_cache(run):
@@ -157,7 +158,7 @@ def get_registration_accounting_cache(run):
 
     if not res:
         res = update_registration_accounting_cache(run)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return res
 

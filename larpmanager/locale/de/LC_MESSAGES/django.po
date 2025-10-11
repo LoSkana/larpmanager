@@ -299,6 +299,9 @@ msgstr "Geschlossen"
 msgid "Cover"
 msgstr "Abdeckung"
 
+msgid "Dates"
+msgstr "Daten"
+
 msgid "Email"
 msgstr "E-Mail"
 
@@ -473,6 +476,9 @@ msgstr "bearbeiten"
 
 msgid "Checks"
 msgstr "Schecks"
+
+msgid "Counts"
+msgstr "Zählt"
 
 msgid "Delete"
 msgstr "Löschen"
