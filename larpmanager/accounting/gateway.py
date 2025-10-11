@@ -35,11 +35,9 @@ from Crypto.Cipher import DES3
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.dispatch import receiver
 from django.http import Http404, HttpRequest
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
-from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 from paypal.standard.models import ST_PP_COMPLETED
 from satispaython.utils import load_key
 
@@ -226,20 +224,6 @@ def handle_valid_paypal_ipn(ipn_obj):
         return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
 
 
-@receiver(valid_ipn_received)
-def paypal_webhook(sender, **kwargs):
-    """Handle valid PayPal IPN notifications.
-
-    Args:
-        sender: IPN object from PayPal
-        **kwargs: Additional keyword arguments
-
-    Returns:
-        Result from invoice_received_money or None
-    """
-    return handle_valid_paypal_ipn(sender)
-
-
 def handle_invalid_paypal_ipn(ipn_obj):
     """Handle invalid PayPal IPN notifications.
 
@@ -252,17 +236,6 @@ def handle_invalid_paypal_ipn(ipn_obj):
     body = pformat(ipn_obj)
     logger.info(f"PayPal IPN body: {body}")
     notify_admins("paypal ko", body)
-
-
-@receiver(invalid_ipn_received)
-def paypal_ko_webhook(sender, **kwargs):
-    """Handle invalid PayPal IPN notifications.
-
-    Args:
-        sender: Invalid IPN object from PayPal
-        **kwargs: Additional keyword arguments
-    """
-    handle_invalid_paypal_ipn(sender)
 
 
 def get_stripe_form(request, ctx, invoice, amount):

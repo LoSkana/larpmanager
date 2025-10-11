@@ -20,8 +20,6 @@
 
 from django.core.cache import cache
 from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
@@ -33,7 +31,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.common import round_to_two_significant_digits
 
 
-def reset_cache_lm_home():
+def clear_larpmanager_home_cache():
     cache.delete(cache_cache_lm_home_key())
 
 
@@ -87,8 +85,3 @@ def _get_promoters():
     for element in que:
         res.append(element.promoter_dict())
     return res
-
-
-@receiver(post_save, sender=Association)
-def update_association_reset_lm_home(sender, instance, **kwargs):
-    reset_cache_lm_home()

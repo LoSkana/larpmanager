@@ -17,12 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from datetime import date
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.http import Http404
 
-from larpmanager.models.member import Badge, Membership
+from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email
 
 
@@ -129,3 +131,38 @@ def get_mail(request, ctx, nm):
         raise Http404("not your run")
 
     return email
+
+
+def create_member_profile_for_user(user, created):
+    """Create member profile and sync email when user is saved.
+
+    Args:
+        user: User instance that was saved
+        created: Whether this is a new user
+    """
+    if created:
+        Member.objects.create(user=user)
+    user.member.email = user.email
+    user.member.save()
+
+
+def process_membership_status_updates(membership):
+    """Handle membership status changes and card numbering.
+
+    Args:
+        membership: Membership instance being saved
+    """
+    if membership.status == MembershipStatus.ACCEPTED:
+        if not membership.card_number:
+            n = Membership.objects.filter(assoc=membership.assoc).aggregate(Max("card_number"))["card_number__max"]
+            if not n:
+                n = 0
+            membership.card_number = n + 1
+        if not membership.date:
+            membership.date = date.today()
+
+    if membership.status == MembershipStatus.EMPTY:
+        if membership.card_number:
+            membership.card_number = None
+        if membership.date:
+            membership.date = None

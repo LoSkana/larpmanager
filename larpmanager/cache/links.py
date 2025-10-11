@@ -24,12 +24,10 @@ from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 from django.http import HttpRequest
 
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
 
@@ -124,7 +122,7 @@ def cache_event_links(request: HttpRequest) -> dict:
     return ctx
 
 
-def reset_run_event_links(event):
+def clear_run_event_links_cache(event):
     """Reset event link cache for all users with roles in the event.
 
     Args:
@@ -148,7 +146,7 @@ def reset_run_event_links(event):
         reset_event_links(user.member.id, event.assoc_id)
 
 
-def handle_registration_event_links_post_save(instance):
+def on_registration_post_save_reset_event_links(instance):
     """Handle registration post-save event link reset.
 
     Args:
@@ -161,31 +159,6 @@ def handle_registration_event_links_post_save(instance):
         return
 
     reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_event_links(sender, instance, **kwargs):
-    handle_registration_event_links_post_save(instance)
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_links(sender, instance, **kwargs):
-    reset_run_event_links(instance)
-
-
-@receiver(post_delete, sender=Event)
-def post_delete_event_links(sender, instance, **kwargs):
-    reset_run_event_links(instance)
-
-
-@receiver(post_save, sender=Run)
-def post_save_run_links(sender, instance, **kwargs):
-    reset_run_event_links(instance.event)
-
-
-@receiver(post_delete, sender=Run)
-def post_delete_run_links(sender, instance, **kwargs):
-    reset_run_event_links(instance.event)
 
 
 def reset_event_links(uid, aid):

@@ -19,7 +19,7 @@ def update_slugs(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0087_publisherapikey"),
+        ("larpmanager", "0089_publisherapikey"),
     ]
 
     operations = [

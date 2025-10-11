@@ -1956,6 +1956,9 @@ msgstr "Type de texte"
 msgid "Url Shortner"
 msgstr "Raccourcisseur d'url"
 
+msgid "VAT (Ticket)"
+msgstr "TVA (ticket)"
+
 msgid "Verification"
 msgstr "Vérification"
 
@@ -2148,6 +2151,9 @@ msgstr "Recettes totales"
 
 msgid "URL shortener"
 msgstr "Raccourcisseur d'URL"
+
+msgid "VAT (Options)"
+msgstr "TVA (options)"
 
 msgid "Visualisation"
 msgstr "Visualisation"

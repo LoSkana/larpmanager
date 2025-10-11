@@ -193,6 +193,9 @@ def _prepare_data_json(ctx, elements, view, edit, exe=True):
         "value": lambda obj: int(obj.value) if obj.value == obj.value.to_integral() else str(obj.value),
         "details": lambda obj: str(obj.details),
         "credits": lambda obj: int(obj.credits) if obj.credits == obj.credits.to_integral() else str(obj.credits),
+        "info": lambda obj: str(obj.info) if obj.info else "",
+        "vat_ticket": lambda obj: round(float(obj.vat_ticket), 2),
+        "vat_options": lambda obj: round(float(obj.vat_options), 2),
     }
 
     if "callbacks" in ctx:

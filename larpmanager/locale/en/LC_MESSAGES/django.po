@@ -3717,20 +3717,6 @@ msgid ""
 "specifically for this event!"
 msgstr ""
 
-msgid "Your registration ticket"
-msgstr ""
-
-msgid "Reserve additional tickets beyond your own"
-msgstr ""
-
-msgid "Registration surcharge"
-msgstr ""
-
-msgid ""
-"Number of installments to split the fee: payments and deadlines will be "
-"equally divided from the registration date"
-msgstr ""
-
 msgid "Progress status"
 msgstr ""
 
@@ -8456,6 +8442,20 @@ msgstr ""
 msgid "Show available characters"
 msgstr ""
 
+msgid "Your registration ticket"
+msgstr ""
+
+msgid "Reserve additional tickets beyond your own"
+msgstr ""
+
+msgid "Registration surcharge"
+msgstr ""
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
+msgstr ""
+
 msgid "Place of birth not included in the ISTAT list"
 msgstr ""
 
@@ -8587,6 +8587,12 @@ msgid "Approve"
 msgstr ""
 
 msgid "Request approved"
+msgstr ""
+
+msgid "VAT (Ticket)"
+msgstr ""
+
+msgid "VAT (Options)"
 msgstr ""
 
 msgid "Transaction"

@@ -23,6 +23,7 @@ from itertools import chain
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Max
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -228,3 +229,37 @@ class PublisherApiKey(BaseModel):
 
     def __str__(self):
         return f"{self.name} ({'Active' if self.active else 'Inactive'})"
+
+
+def auto_assign_sequential_numbers(instance):
+    """Auto-populate number and order fields for model instances.
+
+    Args:
+        instance: Model instance to populate fields for
+    """
+    for field in ["number", "order"]:
+        if hasattr(instance, field) and not getattr(instance, field):
+            que = None
+            if hasattr(instance, "event") and instance.event:
+                que = instance.__class__.objects.filter(event=instance.event)
+            if hasattr(instance, "assoc") and instance.assoc:
+                que = instance.__class__.objects.filter(assoc=instance.assoc)
+            if hasattr(instance, "character") and instance.character:
+                que = instance.__class__.objects.filter(character=instance.character)
+            if que is not None:
+                n = que.aggregate(Max(field))[f"{field}__max"]
+                if not n:
+                    setattr(instance, field, 1)
+                else:
+                    setattr(instance, field, n + 1)
+
+
+def update_model_search_field(instance):
+    """Update search field for model instances that have one.
+
+    Args:
+        instance: Model instance to update search field for
+    """
+    if hasattr(instance, "search"):
+        instance.search = None
+        instance.search = str(instance)

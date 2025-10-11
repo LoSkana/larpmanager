@@ -19,8 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
 from django.utils.translation import get_language
 
 from larpmanager.models.association import AssocText
@@ -84,23 +82,13 @@ def get_event_text(event_id, typ, lang=None):
 # # ASSOC TEXT
 
 
-@receiver(post_save, sender=AssocText)
-def save_assoc_text(sender, instance, created, **kwargs):
-    handle_assoc_text_save(instance)
-
-
-def handle_assoc_text_save(instance):
+def update_association_text_cache_on_save(instance):
     update_assoc_text(instance.assoc_id, instance.typ, instance.language)
     if instance.default:
         update_assoc_text_def(instance.assoc_id, instance.typ)
 
 
-@receiver(pre_delete, sender=AssocText)
-def delete_assoc_text(sender, instance, **kwargs):
-    handle_assoc_text_del(instance)
-
-
-def handle_assoc_text_del(instance):
+def clear_association_text_cache_on_delete(instance):
     cache.delete(assoc_text_key(instance.assoc_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(assoc_text_key_def(instance.assoc_id, instance.typ))
@@ -109,23 +97,13 @@ def handle_assoc_text_del(instance):
 # ## EVENT TEXT
 
 
-@receiver(post_save, sender=EventText)
-def save_event_text(sender, instance, created, **kwargs):
-    handle_event_text_save(instance)
-
-
-def handle_event_text_save(instance):
+def update_event_text_cache_on_save(instance):
     update_event_text(instance.event_id, instance.typ, instance.language)
     if instance.default:
         update_event_text_def(instance.event_id, instance.typ)
 
 
-@receiver(pre_delete, sender=EventText)
-def delete_event_text(sender, instance, **kwargs):
-    handle_event_text_del(instance)
-
-
-def handle_event_text_del(instance):
+def clear_event_text_cache_on_delete(instance):
     cache.delete(event_text_key(instance.event_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(event_text_key_def(instance.event_id, instance.typ))

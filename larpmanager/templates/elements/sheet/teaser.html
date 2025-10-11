@@ -5,7 +5,7 @@
 {% endif %}
 {% for fnum in char.factions %}
     {% with factions|get:fnum as fact %}
-        {% if not fact.typ == 'fact' %}
+        {% if not fact.typ == 'g' %}
             {% if show_faction and fact.number %}
                 <h2 class="c">
                     <a href="{% url 'faction' run.get_slug fact.number %}">{{ fact.name }}</a>

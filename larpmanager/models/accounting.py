@@ -314,7 +314,9 @@ class AccountingItemPayment(AccountingItem):
 
     info = models.CharField(max_length=150, null=True, blank=True)
 
-    vat = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    vat_ticket = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         indexes = [models.Index(fields=["pay", "reg"])]

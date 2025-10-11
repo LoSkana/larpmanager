@@ -8,7 +8,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0086_paymentinvoice_larpmanager_reg_id_173630_idx_and_more"),
+        ("larpmanager", "0088_rename_vat_accountingitempayment_vat_options_and_more"),
     ]
 
     operations = [

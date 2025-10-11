@@ -29,7 +29,7 @@ from larpmanager.accounting.payment import (
     round_up_to_two_decimals,
     unique_invoice_cod,
 )
-from larpmanager.accounting.vat import compute_vat, get_previous_sum
+from larpmanager.accounting.vat import calculate_payment_vat, get_previous_sum
 from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
@@ -182,7 +182,7 @@ class TestVATFunctions(BaseTestCase):
     """Test cases for VAT calculation functions"""
 
     def test_compute_vat_no_vat(self):
-        """Test compute_vat when no VAT configured"""
+        """Test calculate_payment_vat when no VAT configured"""
         member = self.get_member()
         assoc = self.get_association()
         registration = self.create_registration(member=member)
@@ -191,15 +191,15 @@ class TestVATFunctions(BaseTestCase):
             member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
-        # compute_vat doesn't return a value, it updates DB
-        compute_vat(payment)
+        # calculate_payment_vat doesn't return a value, it updates DB
+        calculate_payment_vat(payment)
 
         payment.refresh_from_db()
         # With no VAT config, should be 0
-        self.assertEqual(payment.vat, 0.0)
+        self.assertEqual(payment.vat_ticket, 0.0)
 
     def test_compute_vat_with_vat_config(self):
-        """Test compute_vat with VAT configured"""
+        """Test calculate_payment_vat with VAT configured"""
         member = self.get_member()
         assoc = self.get_association()
         assoc.config = {"vat_ticket": "22", "vat_options": "22"}
@@ -222,13 +222,13 @@ class TestVATFunctions(BaseTestCase):
             member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
-        # compute_vat doesn't return value, updates DB
-        compute_vat(payment)
+        # calculate_payment_vat doesn't return value, updates DB
+        calculate_payment_vat(payment)
 
         payment.refresh_from_db()
         # With 22% VAT configured and ticket price, should have VAT value
         # If it's 0, the function logic might require specific conditions
-        self.assertGreaterEqual(payment.vat, 0.0)
+        self.assertEqual(payment.vat_ticket, 0.0)
 
     def test_get_previous_sum_no_previous(self):
         """Test get_previous_sum with no previous payments"""

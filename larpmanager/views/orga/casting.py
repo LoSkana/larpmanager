@@ -24,7 +24,7 @@ import random
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -223,7 +223,7 @@ def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
     return False
 
 
-def get_casting_data(request: "HttpRequest", ctx: dict, typ: int, form: "OrganizerCastingOptionsForm") -> None:
+def get_casting_data(request: HttpRequest, ctx: dict, typ: int, form: "OrganizerCastingOptionsForm") -> None:
     """Retrieve and process casting data for automated character assignment algorithm.
 
     Collects player preferences, character choices, ticket types, membership status,
@@ -249,11 +249,11 @@ def get_casting_data(request: "HttpRequest", ctx: dict, typ: int, form: "Organiz
     casting_details(ctx, typ)
 
     # Initialize data structures for casting algorithm
-    players = {}          # Player info with priorities
-    didnt_choose = []     # Players who didn't submit preferences
-    preferences = {}      # Player->Character preference mappings
-    nopes = {}           # Characters players want to avoid
-    chosen = {}          # Characters that have been selected by at least one player
+    players = {}  # Player info with priorities
+    didnt_choose = []  # Players who didn't submit preferences
+    preferences = {}  # Player->Character preference mappings
+    nopes = {}  # Characters players want to avoid
+    chosen = {}  # Characters that have been selected by at least one player
 
     # Get available choices based on casting type
     if typ == 0:

@@ -1956,6 +1956,9 @@ msgstr "Tipologia del testo"
 msgid "Url Shortner"
 msgstr "Url Shortner"
 
+msgid "VAT (Ticket)"
+msgstr "IVA (biglietto)"
+
 msgid "Verification"
 msgstr "Verifica"
 
@@ -2148,6 +2151,9 @@ msgstr "Ricavi totali"
 
 msgid "URL shortener"
 msgstr "Accorcia URL"
+
+msgid "VAT (Options)"
+msgstr "IVA (Opzioni)"
 
 msgid "Visualisation"
 msgstr "Visualizzazione"

@@ -30,6 +30,9 @@ from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
+
 
 class TestTextFieldSignals(BaseTestCase):
     """Test cases for text field and generic cache signal receivers"""
@@ -55,7 +58,7 @@ class TestTextFieldSignals(BaseTestCase):
         # The generic signal should reset text cache
         mock_reset.assert_called()
 
-    @patch("larpmanager.cache.fields.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_question_pre_delete_resets_fields_cache(self, mock_reset):
         """Test that WritingQuestion pre_delete signal resets event fields cache"""
         event = self.get_event()
@@ -65,7 +68,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.cache.fields.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_question_post_save_resets_fields_cache(self, mock_reset):
         """Test that WritingQuestion post_save signal resets event fields cache"""
         event = self.get_event()
@@ -74,7 +77,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.cache.fields.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_option_pre_delete_resets_fields_cache(self, mock_reset):
         """Test that WritingOption pre_delete signal resets event fields cache"""
         event = self.get_event()
@@ -85,7 +88,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.cache.fields.reset_event_fields_cache")
+    @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_option_post_save_resets_fields_cache(self, mock_reset):
         """Test that WritingOption post_save signal resets event fields cache"""
         event = self.get_event()
@@ -96,7 +99,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.cache.larpmanager.reset_cache_lm_home")
+    @patch("larpmanager.models.signals.clear_larpmanager_home_cache")
     def test_association_post_save_resets_larpmanager_cache(self, mock_reset):
         """Test that Association post_save signal resets larpmanager cache"""
         assoc = Association(name="Test Association", email="test@example.com")
@@ -104,7 +107,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.cache.association.reset_cache_assoc")
+    @patch("larpmanager.models.signals.clear_association_cache")
     def test_association_post_save_resets_association_cache(self, mock_reset):
         """Test that Association post_save signal resets association cache"""
         assoc = Association(name="Test Association", email="test@example.com")
@@ -147,7 +150,7 @@ class TestTextFieldSignals(BaseTestCase):
         # Event post_save resets cache for all its runs
         self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.cache.permission.reset_index_permission")
+    @patch("larpmanager.models.signals.clear_index_permission_cache")
     def test_feature_post_save_resets_permissions_cache(self, mock_reset):
         """Test that Feature post_save signal resets permissions cache"""
         feature = Feature(name="Test Feature", slug="test-feature", order=1)
@@ -156,7 +159,7 @@ class TestTextFieldSignals(BaseTestCase):
         # Feature post_save resets both event and assoc permissions
         self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.permission.reset_index_permission")
+    @patch("larpmanager.models.signals.clear_index_permission_cache")
     def test_feature_post_delete_resets_permissions_cache(self, mock_reset):
         """Test that Feature post_delete signal resets permissions cache"""
         feature = Feature.objects.create(name="Test Feature", slug="test-feature", order=1)
@@ -166,7 +169,7 @@ class TestTextFieldSignals(BaseTestCase):
         # Feature post_delete resets both event and assoc permissions
         self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.permission.reset_index_permission")
+    @patch("larpmanager.models.signals.clear_index_permission_cache")
     def test_feature_module_post_save_resets_permissions_cache(self, mock_reset):
         """Test that FeatureModule post_save signal resets permissions cache"""
         # Use all_objects to include soft-deleted records
@@ -178,7 +181,7 @@ class TestTextFieldSignals(BaseTestCase):
         # FeatureModule post_save resets both event and assoc permissions
         self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.permission.reset_index_permission")
+    @patch("larpmanager.models.signals.clear_index_permission_cache")
     def test_feature_module_post_delete_resets_permissions_cache(self, mock_reset):
         """Test that FeatureModule post_delete signal resets permissions cache"""
         # Use all_objects to include soft-deleted records
@@ -199,7 +202,7 @@ class TestTextFieldSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(assoc.id)
 
-    @patch("larpmanager.cache.feature.reset_event_features")
+    @patch("larpmanager.models.signals.clear_event_features_cache")
     def test_event_post_save_resets_features_cache(self, mock_reset):
         """Test that Event post_save signal resets features cache"""
         event = self.get_event()

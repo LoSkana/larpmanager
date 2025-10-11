@@ -607,7 +607,7 @@ def tutorials(request, slug=None):
     Raises:
         Http404: If tutorial with specified slug doesn't exist
     """
-    ctx = get_lm_contact(request, False)
+    ctx = get_lm_contact(request)
     ctx["index"] = True
 
     try:
@@ -749,7 +749,7 @@ def get_lm_contact(request, check=True):
         MainPageError: If check=True and user is on association site
     """
     if check and request.assoc["id"] > 0:
-        raise MainPageError(request.path)
+        raise MainPageError(request)
     ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
@@ -1023,7 +1023,9 @@ def _create_demo(request):
     )
 
     # create test user
-    user = User.objects.create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}", password="pippo")
+    (user, cr) = User.objects.get_or_create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}")
+    user.password = "pippo"
+    user.save()
     member = user.member
     member.name = "Demo"
     member.surname = "Admin"

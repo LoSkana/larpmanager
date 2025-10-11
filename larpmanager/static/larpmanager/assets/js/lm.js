@@ -28,9 +28,9 @@ $.ajaxSetup({
 
 window.jump_to = function(target) {
 
-    var headerHeight = $('header').outerHeight();
-
-    if (!target.length) return;
+    var headerHeight = $('header').length
+      ? $('header').outerHeight()
+      : $('#nav').outerHeight();
 
     $('#page-wrapper').animate({
         scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 4
@@ -443,7 +443,6 @@ function data_tables() {
         var full_layout = rowCount >= 10;
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
             scrollX: true,
             stateSave: true,
             paging: full_layout,
@@ -510,7 +509,7 @@ function data_tables() {
         const url = $table.attr('url');
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
+            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,
                 type: 'POST'
@@ -532,7 +531,7 @@ function data_tables() {
                 { searcheable: false, targets: [0] },
                 { columnControl: [], targets: [0] }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
             /*
             initComplete: function () {
                 this.api()

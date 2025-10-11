@@ -3,7 +3,7 @@
 from django.db import migrations, models
 
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.signals import save_event_registration_form
+from larpmanager.utils.event import save_event_registration_form
 
 
 def update(apps, schema_editor):
