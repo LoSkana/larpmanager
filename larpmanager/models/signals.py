@@ -82,7 +82,7 @@ from larpmanager.cache.rels import (
     on_prologue_characters_m2m_changed,
     on_speedlarp_characters_m2m_changed,
     refresh_character_related_caches,
-    refresh_event_character_relationships,
+    refresh_character_relationships,
     refresh_event_faction_relationships,
     refresh_event_plot_relationships,
     refresh_event_prologue_relationships,
@@ -489,9 +489,9 @@ def post_save_character(sender, instance, **kwargs):
 
     on_character_update_registration_cache(instance)
 
-    refresh_event_character_relationships(instance)
+    refresh_character_relationships(instance)
     for rel in Relationship.objects.filter(target=instance):
-        refresh_event_character_relationships(rel.source)
+        refresh_character_relationships(rel.source)
 
     # Update all related caches
     refresh_character_related_caches(instance)
@@ -510,7 +510,7 @@ def post_delete_character_reset_rels(sender, instance, **kwargs):
 
     clear_event_relationships_cache(instance.event_id)
     for rel in Relationship.objects.filter(target=instance):
-        refresh_event_character_relationships(rel.source)
+        refresh_character_relationships(rel.source)
 
 
 # CharacterConfig signals
@@ -664,7 +664,7 @@ def post_save_faction_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this faction
     for char in instance.characters.all():
-        refresh_event_character_relationships(char)
+        refresh_character_relationships(char)
 
     cleanup_faction_pdfs_on_save(instance)
 
@@ -679,7 +679,7 @@ def pre_delete_faction(sender, instance, **kwargs):
 def post_delete_faction_reset_rels(sender, instance, **kwargs):
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
-        refresh_event_character_relationships(char)
+        refresh_character_relationships(char)
 
     # Remove faction from cache
     remove_item_from_cache_section(instance.event_id, "factions", instance.id)
@@ -842,14 +842,14 @@ def post_save_plot_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this plot
     for char_rel in instance.get_plot_characters():
-        refresh_event_character_relationships(char_rel.character)
+        refresh_character_relationships(char_rel.character)
 
 
 @receiver(post_delete, sender=Plot)
 def post_delete_plot_reset_rels(sender, instance, **kwargs):
     # Update cache for all characters that were in this plot
     for char_rel in instance.get_plot_characters():
-        refresh_event_character_relationships(char_rel.character)
+        refresh_character_relationships(char_rel.character)
 
     # Remove plot from cache
     remove_item_from_cache_section(instance.event_id, "plots", instance.id)
@@ -874,14 +874,14 @@ def post_save_prologue_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this prologue
     for char in instance.characters.all():
-        refresh_event_character_relationships(char)
+        refresh_character_relationships(char)
 
 
 @receiver(post_delete, sender=Prologue)
 def post_delete_prologue_reset_rels(sender, instance, **kwargs):
     # Update cache for all characters that were in this prologue
     for char in instance.characters.all():
-        refresh_event_character_relationships(char)
+        refresh_character_relationships(char)
 
     # Remove prologue from cache
     remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
@@ -1032,7 +1032,7 @@ def pre_delete_relationship(sender, instance, **kwargs):
 @receiver(post_save, sender=Relationship)
 def post_save_relationship_reset_rels(sender, instance, **kwargs):
     # Update cache for source character
-    refresh_event_character_relationships(instance.source)
+    refresh_character_relationships(instance.source)
 
     delete_character_pdf_files(instance.source)
 
@@ -1040,7 +1040,7 @@ def post_save_relationship_reset_rels(sender, instance, **kwargs):
 @receiver(post_delete, sender=Relationship)
 def post_delete_relationship_reset_rels(sender, instance, **kwargs):
     # Update cache for source character
-    refresh_event_character_relationships(instance.source)
+    refresh_character_relationships(instance.source)
 
 
 # RulePx signals
@@ -1107,14 +1107,14 @@ def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this speedlarp
     for char in instance.characters.all():
-        refresh_event_character_relationships(char)
+        refresh_character_relationships(char)
 
 
 @receiver(post_delete, sender=SpeedLarp)
 def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
     # Update cache for all characters that were in this speedlarp
     for char in instance.characters.all():
-        refresh_event_character_relationships(char)
+        refresh_character_relationships(char)
 
     # Remove speedlarp from cache
     remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)

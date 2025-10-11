@@ -161,17 +161,17 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
             for char_id in pk_set:
                 try:
                     char = Character.objects.get(id=char_id)
-                    refresh_event_character_relationships(char)
+                    refresh_character_relationships(char)
                 except ObjectDoesNotExist:
                     logger.warning(f"Character {char_id} not found during relationship update")
         elif action == "post_clear":
             # For post_clear, we need to update all characters that were related
             if hasattr(instance, "characters"):
                 for char in instance.characters.all():
-                    refresh_event_character_relationships(char)
+                    refresh_character_relationships(char)
             elif hasattr(instance, "get_plot_characters"):
                 for char_rel in instance.get_plot_characters():
-                    refresh_event_character_relationships(char_rel.character)
+                    refresh_character_relationships(char_rel.character)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
@@ -251,6 +251,13 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
     return res
 
 
+def refresh_character_relationships(char: Character) -> None:
+    refresh_event_character_relationships(char, char.event)
+    # update char also for children events (if parent of campaign)
+    for children in Event.objects.filter(parent_id=char.event_id):
+        refresh_event_character_relationships(char, children)
+
+
 def refresh_event_character_relationships(char: Character, event: Event) -> None:
     """Update character relationships in cache.
 
@@ -273,7 +280,8 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         if "characters" not in res:
             res["characters"] = {}
 
-        res["characters"][char.id] = get_event_char_rels(char)
+        features = get_event_features(event.id)
+        res["characters"][char.id] = get_event_char_rels(char, features, event)
         cache.set(cache_key, res)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
@@ -282,7 +290,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         clear_event_relationships_cache(event.id)
 
 
-def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict, event: Event = None) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
@@ -290,7 +298,8 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
 
     Args:
         char: The Character instance to get relationships for
-        features: Optional set of enabled features. If None, will be fetched from cache
+        features: Set of enabled features
+        event: Event for which we are rebuilding the cache
 
     Returns:
         Dict[str, Any]: Dictionary containing relationship data:
@@ -299,9 +308,6 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
                 'faction_rels': {'list': [(faction_id, faction_name), ...], 'count': int}
             }
     """
-    if features is None:
-        features = get_event_features(char.event_id)
-
     relations = {}
 
     try:
@@ -317,12 +323,17 @@ def get_event_char_rels(char: Character, features: dict = None) -> dict[str, Any
             relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_count
 
         if "faction" in features:
-            fac_event = char.event.get_class_parent("faction")
+            if char.event.get_config("campaign_faction_indep", False):
+                fac_event = event
+            else:
+                fac_event = char.event.get_class_parent("faction")
+
             if fac_event:
                 factions = char.factions_list.filter(event=fac_event)
                 faction_list = [(faction.id, faction.name) for faction in factions]
             else:
                 faction_list = []
+
             relations["faction_rels"] = build_relationship_dict(faction_list)
 
         if "relationships" in features:
