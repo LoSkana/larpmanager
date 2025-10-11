@@ -170,17 +170,17 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
             for char_id in pk_set:
                 try:
                     char = Character.objects.get(id=char_id)
-                    update_event_char_rels(char)
+                    update_character_rels(char)
                 except ObjectDoesNotExist:
                     logger.warning(f"Character {char_id} not found during relationship update")
         elif action == "post_clear":
             # For post_clear, we need to update all characters that were related
             if hasattr(instance, "characters"):
                 for char in instance.characters.all():
-                    update_event_char_rels(char)
+                    update_character_rels(char)
             elif hasattr(instance, "get_plot_characters"):
                 for char_rel in instance.get_plot_characters():
-                    update_event_char_rels(char_rel.character)
+                    update_character_rels(char_rel.character)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
@@ -260,7 +260,14 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
     return res
 
 
-def update_event_char_rels(char: Character) -> None:
+def update_character_rels(char: Character) -> None:
+    update_character_event_rels(char, char.event)
+    # update char also for children events (if parent of campaign)
+    for children in Event.objects.filter(parent_id=char.event_id):
+        update_character_event_rels(char, children)
+
+
+def update_character_event_rels(char: Character, event: Event) -> None:
     """Update character relationships in cache.
 
     Updates the cached relationship data for a specific character.
@@ -268,27 +275,29 @@ def update_event_char_rels(char: Character) -> None:
 
     Args:
         char: The Character instance to update relationships for
+        event: The Event for which we are updating the cache
     """
+
     try:
-        cache_key = get_event_rels_key(char.event_id)
+        cache_key = get_event_rels_key(event.id)
         res = cache.get(cache_key)
 
         if res is None:
-            logger.debug(f"Cache miss during character update for event {char.event_id}, reinitializing")
+            logger.debug(f"Cache miss during character update for event {event.id}, reinitializing")
             init_event_rels_all(char.event)
             return
 
         if "characters" not in res:
             res["characters"] = {}
 
-        features = get_event_features(char.event_id)
-        res["characters"][char.id] = get_event_char_rels(char, features, char.event)
-        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        features = get_event_features(event.id)
+        res["characters"][char.id] = get_event_char_rels(char, features, event)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DA)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:
         logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
-        reset_event_rels_cache(char.event_id)
+        reset_event_rels_cache(event.id)
 
 
 def get_event_char_rels(char: Character, features: dict = None, event: Event = None) -> dict[str, Any]:
@@ -609,9 +618,9 @@ def post_save_character_reset_rels(sender, instance, **kwargs):
         instance: The Character instance that was saved
         **kwargs: Additional keyword arguments from the signal
     """
-    update_event_char_rels(instance)
+    update_character_rels(instance)
     for rel in Relationship.objects.filter(target=instance):
-        update_event_char_rels(rel.source)
+        update_character_rels(rel.source)
 
     # Update all related caches
     update_character_related_caches(instance)
@@ -634,7 +643,7 @@ def post_delete_character_reset_rels(sender, instance, **kwargs):
 
     reset_event_rels_cache(instance.event_id)
     for rel in Relationship.objects.filter(target=instance):
-        update_event_char_rels(rel.source)
+        update_character_rels(rel.source)
 
 
 @receiver(post_save, sender=Faction)
@@ -653,7 +662,7 @@ def post_save_faction_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this faction
     for char in instance.characters.all():
-        update_event_char_rels(char)
+        update_character_rels(char)
 
 
 @receiver(post_delete, sender=Faction)
@@ -669,7 +678,7 @@ def post_delete_faction_reset_rels(sender, instance, **kwargs):
     """
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
-        update_event_char_rels(char)
+        update_character_rels(char)
 
     # Remove faction from cache
     remove_from_cache_section(instance.event_id, "factions", instance.id)
@@ -751,7 +760,7 @@ def post_save_plot_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this plot
     for char_rel in instance.get_plot_characters():
-        update_event_char_rels(char_rel.character)
+        update_character_rels(char_rel.character)
 
 
 @receiver(post_delete, sender=Plot)
@@ -767,7 +776,7 @@ def post_delete_plot_reset_rels(sender, instance, **kwargs):
     """
     # Update cache for all characters that were in this plot
     for char_rel in instance.get_plot_characters():
-        update_event_char_rels(char_rel.character)
+        update_character_rels(char_rel.character)
 
     # Remove plot from cache
     remove_from_cache_section(instance.event_id, "plots", instance.id)
@@ -789,7 +798,7 @@ def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this speedlarp
     for char in instance.characters.all():
-        update_event_char_rels(char)
+        update_character_rels(char)
 
 
 @receiver(post_delete, sender=SpeedLarp)
@@ -805,7 +814,7 @@ def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
     """
     # Update cache for all characters that were in this speedlarp
     for char in instance.characters.all():
-        update_event_char_rels(char)
+        update_character_rels(char)
 
     # Remove speedlarp from cache
     remove_from_cache_section(instance.event_id, "speedlarps", instance.id)
@@ -827,7 +836,7 @@ def post_save_prologue_reset_rels(sender, instance, **kwargs):
 
     # Update cache for all characters in this prologue
     for char in instance.characters.all():
-        update_event_char_rels(char)
+        update_character_rels(char)
 
 
 @receiver(post_delete, sender=Prologue)
@@ -843,7 +852,7 @@ def post_delete_prologue_reset_rels(sender, instance, **kwargs):
     """
     # Update cache for all characters that were in this prologue
     for char in instance.characters.all():
-        update_event_char_rels(char)
+        update_character_rels(char)
 
     # Remove prologue from cache
     remove_from_cache_section(instance.event_id, "prologues", instance.id)
@@ -861,7 +870,7 @@ def post_save_relationship_reset_rels(sender, instance, **kwargs):
         **kwargs: Additional keyword arguments from the signal
     """
     # Update cache for source character
-    update_event_char_rels(instance.source)
+    update_character_rels(instance.source)
 
 
 @receiver(post_delete, sender=Relationship)
@@ -876,7 +885,7 @@ def post_delete_relationship_reset_rels(sender, instance, **kwargs):
         **kwargs: Additional keyword arguments from the signal
     """
     # Update cache for source character
-    update_event_char_rels(instance.source)
+    update_character_rels(instance.source)
 
 
 @receiver(post_save, sender=Quest)

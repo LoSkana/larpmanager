@@ -241,7 +241,7 @@ class ExePaymentForm(MyForm):
 
     class Meta:
         model = AccountingItemPayment
-        exclude = ("inv", "hide", "member")
+        exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
         widgets = {"reg": AssocRegS2Widget}
 
     def __init__(self, *args, **kwargs):
