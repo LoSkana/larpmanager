@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
@@ -53,7 +54,7 @@ def get_cache_assoc_role(ar_id):
         except Exception as err:
             raise PermissionError() from err
         res = get_assoc_role(ar)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -125,7 +126,7 @@ def get_cache_event_role(ev_id):
         except Exception as err:
             raise PermissionError() from err
         res = get_event_role(ar)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
