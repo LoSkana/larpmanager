@@ -21,6 +21,7 @@
 import logging
 from typing import Any
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -54,6 +55,11 @@ def clear_event_relationships_cache(event_id: int) -> None:
     cache_key = get_event_rels_key(event_id)
     cache.delete(cache_key)
     logger.debug(f"Reset cache for event {event_id}")
+
+    # invalidate also for children events
+    for children_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
+        cache_key = get_event_rels_key(children_id)
+        cache.delete(cache_key)
 
 
 def build_relationship_dict(items: list) -> dict[str, Any]:
@@ -92,7 +98,7 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
             res[section_name] = {}
 
         res[section_name][section_id] = data
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated {section_name} {section_id} relationships in cache")
 
     except Exception as e:
@@ -113,7 +119,7 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
         res = cache.get(cache_key)
         if res and section_name in res and section_id in res[section_name]:
             del res[section_name][section_id]
-            cache.set(cache_key, res)
+            cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             logger.debug(f"Removed {section_name} {section_id} from cache")
     except Exception as e:
         logger.error(f"Error removing {section_name} {section_id} from cache: {e}", exc_info=True)
@@ -241,7 +247,7 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
             logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
 
         cache_key = get_event_rels_key(event.id)
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Cached relationships for event {event.id}")
 
     except Exception as e:
@@ -282,7 +288,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
 
         features = get_event_features(event.id)
         res["characters"][char.id] = get_event_char_rels(char, features, event)
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:
