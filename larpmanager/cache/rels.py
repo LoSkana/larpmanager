@@ -21,6 +21,7 @@
 import logging
 from typing import Any
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed, post_delete, post_save
@@ -100,7 +101,7 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
             res[section_name] = {}
 
         res[section_name][section_id] = data
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated {section_name} {section_id} relationships in cache")
 
     except Exception as e:
@@ -121,7 +122,7 @@ def remove_from_cache_section(event_id: int, section_name: str, section_id: int)
         res = cache.get(cache_key)
         if res and section_name in res and section_id in res[section_name]:
             del res[section_name][section_id]
-            cache.set(cache_key, res)
+            cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             logger.debug(f"Removed {section_name} {section_id} from cache")
     except Exception as e:
         logger.error(f"Error removing {section_name} {section_id} from cache: {e}", exc_info=True)
@@ -249,7 +250,7 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
             logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
 
         cache_key = get_event_rels_key(event.id)
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Cached relationships for event {event.id}")
 
     except Exception as e:
@@ -282,7 +283,7 @@ def update_event_char_rels(char: Character) -> None:
 
         features = get_event_features(char.event_id)
         res["characters"][char.id] = get_event_char_rels(char, features, char.event)
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:

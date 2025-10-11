@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import ast
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_save
@@ -44,7 +45,7 @@ def get_cache_run(a, s):
     res = cache.get(key)
     if not res:
         res = init_cache_run(a, s)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -107,7 +108,7 @@ def get_cache_config_run(run):
     res = cache.get(key)
     if not res:
         res = init_cache_config_run(run)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 
 from larpmanager.models.event import EventButton
@@ -50,7 +51,7 @@ def update_event_button(event_id):
     res = []
     for el in EventButton.objects.filter(event_id=event_id).order_by("number"):
         res.append((el.name, el.tooltip, el.link))
-    cache.set(event_button_key(event_id), res)
+    cache.set(event_button_key(event_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

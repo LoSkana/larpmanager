@@ -20,6 +20,7 @@
 
 import time
 
+from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
@@ -503,7 +504,8 @@ def writing_edit_working_ticket(request, tp, eid, token):
         msg += " " + _("List of other users") + ": " + ", ".join(others)
 
     ticket[token] = (str(request.user.member), now)
-    cache.set(key, ticket, ticket_time)
+    # Use minimum of ticket_time and 1 day for timeout
+    cache.set(key, ticket, min(ticket_time, conf_settings.CACHE_TIMEOUT_1_DAY))
 
     return msg
 

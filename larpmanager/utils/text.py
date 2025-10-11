@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
@@ -37,7 +38,7 @@ def update_event_text(event_id, typ, lang):
         res = EventText.objects.get(event_id=event_id, typ=typ, language=lang).text
     except Exception:
         pass
-    cache.set(event_text_key(event_id, typ, lang), res, timeout=60 * 60)
+    cache.set(event_text_key(event_id, typ, lang), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -58,7 +59,7 @@ def update_event_text_def(event_id, typ):
         res = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
     except Exception:
         pass
-    cache.set(event_text_key_def(event_id, typ), res, timeout=60 * 60)
+    cache.set(event_text_key_def(event_id, typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -144,7 +145,7 @@ def update_assoc_text(assoc_id, typ, lang):
         res = AssocText.objects.get(assoc_id=assoc_id, typ=typ, language=lang).text
     except Exception:
         pass
-    cache.set(assoc_text_key(assoc_id, typ, lang), res, timeout=60 * 60)
+    cache.set(assoc_text_key(assoc_id, typ, lang), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -168,7 +169,7 @@ def update_assoc_text_def(assoc_id, typ):
         res = AssocText.objects.filter(assoc_id=assoc_id, typ=typ, default=True).first().text
     except Exception:
         pass
-    cache.set(assoc_text_key_def(assoc_id, typ), res, timeout=60 * 60)
+    cache.set(assoc_text_key_def(assoc_id, typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

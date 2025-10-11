@@ -112,6 +112,7 @@ def after_login(request, subdomain, path=""):
         return redirect("/login/")
 
     token = secrets.token_urlsafe(32)
+    # Session token has short 60 second timeout for security
     cache.set(f"session_token:{token}", user.id, timeout=60)
 
     base_domain = get_base_domain(request)

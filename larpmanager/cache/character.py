@@ -22,6 +22,7 @@ import os
 import shutil
 from typing import Optional
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
@@ -341,7 +342,7 @@ def get_event_cache_all(ctx):
     res = cache.get(k)
     if not res:
         res = init_event_cache_all(ctx)
-        cache.set(k, res)
+        cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     ctx.update(res)
 
@@ -378,7 +379,7 @@ def update_event_cache_all(run, instance):
         get_event_cache_factions({"event": run.event}, res)
     if isinstance(instance, RegistrationCharacterRel):
         update_event_cache_all_character_reg(instance, res, run)
-    cache.set(k, res)
+    cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_event_cache_all_character_reg(instance, res, run):
