@@ -514,7 +514,7 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
-    page_info = _("This page allows you to add or edit a signup to this event")
+    page_info = _("Manage event signups")
 
     page_title = _("Registrations")
 
@@ -795,7 +795,7 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
-    page_info = _("This page allows you to add or change the types of ticket with which participants can register")
+    page_info = _("Manage ticket types for participant registration")
 
     page_title = _("Tickets")
 
@@ -865,7 +865,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
 
 class OrgaRegistrationSectionForm(MyForm):
-    page_info = _("This page allows you to add or edit sections in the signup form")
+    page_info = _("Manage signup form sections")
 
     page_title = _("Form section")
 
@@ -875,7 +875,7 @@ class OrgaRegistrationSectionForm(MyForm):
 
 
 class OrgaRegistrationQuestionForm(MyForm):
-    page_info = _("This page allows you to add or edit a question from the sign up form")
+    page_info = _("Manage signup form questions")
 
     page_title = _("Form element")
 
@@ -976,7 +976,7 @@ class OrgaRegistrationQuestionForm(MyForm):
 
 
 class OrgaRegistrationOptionForm(MyForm):
-    page_info = _("This page allows you to add or edit an option in a sign up form question")
+    page_info = _("Manage signup form question options")
 
     page_title = _("Form Options")
 
@@ -993,9 +993,7 @@ class OrgaRegistrationOptionForm(MyForm):
 
 
 class OrgaRegistrationQuotaForm(MyForm):
-    page_info = _(
-        "This page allows you to add or modify the dynamic instalments with which the participant can split the payment"
-    )
+    page_info = _("Manage dynamic payment installments for participants")
 
     page_title = _("Dynamic rates")
 
@@ -1005,7 +1003,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a participant must pay")
+    page_info = _("Manage fixed payment installments for participants")
 
     page_title = _("Fixed instalments")
 
@@ -1037,7 +1035,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
-    page_info = _("This page allows you to add or edit the registration surcharges")
+    page_info = _("Manage registration surcharges")
 
     page_title = _("Surcharge")
 

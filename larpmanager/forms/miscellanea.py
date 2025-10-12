@@ -107,7 +107,7 @@ class HelpQuestionForm(MyForm):
 
 
 class OrgaHelpQuestionForm(MyForm):
-    page_info = _("This page allows you to answer a participant's question")
+    page_info = _("Manage participant questions")
 
     page_title = _("Participant questions")
 
@@ -151,7 +151,7 @@ class WorkshopOptionForm(MyForm):
 
 
 class OrgaAlbumForm(MyForm):
-    page_info = _("This page allows you to add or edit an album")
+    page_info = _("Manage albums")
 
     page_title = _("Album")
 
@@ -168,7 +168,7 @@ class OrgaAlbumForm(MyForm):
 
 
 class OrgaProblemForm(MyForm):
-    page_info = _("This page allows you to keep track of reported problems")
+    page_info = _("Manage reported problems")
 
     page_title = _("Problems")
 
@@ -207,7 +207,7 @@ class CompetencesForm(forms.Form):
 
 
 class ExeUrlShortnerForm(MyForm):
-    page_info = _("This page allows you to add or edit a url shortner")
+    page_info = _("Manage URL shorteners")
 
     page_title = _("Shorten URL")
 
@@ -231,7 +231,7 @@ def _delete_optionals_warehouse(form):
 
 
 class ExeCompetenceForm(MyForm):
-    page_info = _("This page allows you to add or edit a competency")
+    page_info = _("Manage competencies")
 
     class Meta:
         model = Competence

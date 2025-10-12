@@ -44,7 +44,7 @@ from larpmanager.models.miscellanea import (
 
 
 class ExeWarehouseItemForm(MyForm):
-    page_info = _("This page allows you to add or edit a new item of warehouse")
+    page_info = _("Manage warehouse items")
 
     page_title = _("Warehouse items")
 
@@ -66,7 +66,7 @@ class ExeWarehouseItemForm(MyForm):
 
 
 class ExeWarehouseContainerForm(MyForm):
-    page_info = _("This page allows you to add or edit a new container of warehouse")
+    page_info = _("Manage warehouse containers")
 
     page_title = _("Warehouse containers")
 
@@ -77,7 +77,7 @@ class ExeWarehouseContainerForm(MyForm):
 
 
 class ExeWarehouseTagForm(MyForm):
-    page_info = _("This page allows you to add or edit a new tag for warehouse items")
+    page_info = _("Manage warehouse item tags")
 
     page_title = _("Warehouse tags")
 
@@ -103,7 +103,7 @@ class ExeWarehouseTagForm(MyForm):
 
 
 class ExeWarehouseMovementForm(MyForm):
-    page_info = _("This page allows you to add or edit a new movement of item warehouse, loans or repairs")
+    page_info = _("Manage warehouse item movements, loans, and repairs")
 
     page_title = _("Warehouse movements")
 
@@ -123,7 +123,7 @@ class ExeWarehouseMovementForm(MyForm):
 
 
 class OrgaWarehouseAreaForm(MyForm):
-    page_info = _("This page allows you to add or edit a new event area")
+    page_info = _("Manage event areas")
 
     page_title = _("Event area")
 
@@ -134,7 +134,7 @@ class OrgaWarehouseAreaForm(MyForm):
 
 
 class OrgaWarehouseItemAssignmentForm(MyForm):
-    page_info = _("This page allows you to add or edit a new assignment of warehouse item to event area")
+    page_info = _("Manage warehouse item assignments to event areas")
 
     page_title = _("Warehouse assignments")
 
