@@ -549,7 +549,7 @@ class TestCacheSignals(BaseTestCase):
         # AccountingItemOther signal passes run and member_id
         mock_reset.assert_called_once_with(run, member_id)
 
-    @patch("larpmanager.cache.rels.refresh_character_related_caches")
+    @patch("larpmanager.models.signals.refresh_character_related_caches")
     def test_character_post_save_resets_rels_cache(self, mock_reset):
         """Test that Character post_save signal resets rels cache"""
         character = self.character()
