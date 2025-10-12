@@ -549,7 +549,7 @@ class TestCacheSignals(BaseTestCase):
         # AccountingItemOther signal passes run and member_id
         mock_reset.assert_called_once_with(run, member_id)
 
-    @patch("larpmanager.cache.rels.update_character_rels")
+    @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_character_post_save_resets_rels_cache(self, mock_reset):
         """Test that Character post_save signal resets rels cache"""
         character = self.character()
@@ -577,7 +577,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(faction)
 
-    @patch("larpmanager.cache.rels.update_character_rels")
+    @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_faction_post_delete_resets_rels_cache(self, mock_reset):
         """Test that Faction post_delete signal resets rels cache"""
         event = self.get_event()
@@ -598,7 +598,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(plot)
 
-    @patch("larpmanager.cache.rels.update_character_rels")
+    @patch("larpmanager.cache.rels.refresh_character_related_caches")
     def test_plot_post_delete_resets_rels_cache(self, mock_reset):
         """Test that Plot post_delete signal resets rels cache"""
         event = self.get_event()
