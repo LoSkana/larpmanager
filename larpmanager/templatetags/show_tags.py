@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import os
 import re
 
 from allauth.utils import get_request_param
@@ -53,6 +54,21 @@ def modulo(num, val):
         int: Remainder of num divided by val
     """
     return num % val
+
+
+@register.filter
+def basename(value):
+    """Template filter to extract basename from file path.
+
+    Args:
+        value (str): File path
+
+    Returns:
+        str: Basename of the file path (filename without directory)
+    """
+    if not value:
+        return ""
+    return os.path.basename(value)
 
 
 @register.filter

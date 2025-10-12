@@ -371,57 +371,12 @@ def orga_onetimes_edit(request, s, num):
 
 
 @login_required
-def orga_onetimes_tokens(request, s, num):
-    """List all access tokens for a specific one-time content."""
+def orga_onetimes_tokens(request, s):
     ctx = check_event_permission(request, s, "orga_onetimes")
-    try:
-        content = OneTimeContent.objects.get(pk=num, event=ctx["event"])
-    except OneTimeContent.DoesNotExist:
-        messages.error(request, _("Content not found"))
-        return redirect("orga_onetimes", s=s)
-
-    ctx["content"] = content
-    ctx["list"] = content.access_tokens.all().order_by("-created")
-    ctx["stats"] = content.get_token_stats()
-
+    ctx["list"] = OneTimeAccessToken.objects.filter(content__event=ctx["event"]).order_by("-created")
     return render(request, "larpmanager/orga/onetimes_tokens.html", ctx)
 
 
 @login_required
-def orga_onetimes_tokens_edit(request, s, content_num, num):
-    """Edit or create an access token for a one-time content."""
-    ctx = check_event_permission(request, s, "orga_onetimes")
-    try:
-        content = OneTimeContent.objects.get(pk=content_num, event=ctx["event"])
-    except OneTimeContent.DoesNotExist:
-        messages.error(request, _("Content not found"))
-        return redirect("orga_onetimes", s=s)
-
-    ctx["content"] = content
-
-    if num == 0:
-        token_instance = None
-    else:
-        try:
-            token_instance = OneTimeAccessToken.objects.get(pk=num, content=content)
-        except OneTimeAccessToken.DoesNotExist:
-            messages.error(request, _("Token not found"))
-            return redirect("orga_onetimes_tokens", s=s, num=content_num)
-
-    if request.method == "POST":
-        form = OneTimeAccessTokenForm(request.POST, instance=token_instance, ctx=ctx)
-        if form.is_valid():
-            token = form.save()
-            messages.success(request, _("Operation completed") + "!")
-            return redirect("orga_onetimes_tokens", s=s, num=content_num)
-    else:
-        form = OneTimeAccessTokenForm(instance=token_instance, ctx=ctx)
-        if num == 0:
-            form.initial["content"] = content
-
-    ctx["form"] = form
-    ctx["num"] = num
-    if num != 0:
-        ctx["name"] = str(token_instance)
-
-    return render(request, "larpmanager/orga/edit.html", ctx)
+def orga_onetimes_tokens_edit(request, s, num):
+    return orga_edit(request, s, "orga_onetimes_tokens", OneTimeAccessTokenForm, num)

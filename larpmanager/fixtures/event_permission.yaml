@@ -730,11 +730,21 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
-    name: One-Time Content
+    name: Content
     descr: Upload and manage secure video/audio content with one-time access tokens
     slug: orga_onetimes
-    number: 71
+    number: 11
     config: null
     hidden: false
     feature: onetime_content
-    module: miscellany
+    module: onetime
+- model: larpmanager.eventpermission
+  fields:
+    name: Tokens
+    descr: Manage one-time access tokens for secure video/audio content
+    slug: orga_onetimes_tokens
+    number: 21
+    config: null
+    hidden: false
+    feature: onetime_content
+    module: onetime

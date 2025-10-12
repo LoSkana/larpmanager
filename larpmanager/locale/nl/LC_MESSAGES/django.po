@@ -486,6 +486,9 @@ msgstr "Bewerk"
 msgid "Checks"
 msgstr "Controles"
 
+msgid "Copied"
+msgstr "Gekopieerd"
+
 msgid "Counts"
 msgstr "Telt"
 
@@ -882,6 +885,12 @@ msgstr "Bijgewerkt"
 msgid "Use TLD"
 msgstr "TLD gebruiken"
 
+msgid "Used At"
+msgstr "Gebruikt Bij"
+
+msgid "Used By"
+msgstr "Gebruikt door"
+
 msgid "Used at"
 msgstr "Gebruikt bij"
 
@@ -962,6 +971,9 @@ msgstr "Verbruikt"
 
 msgid "Continue"
 msgstr "Vervolg"
+
+msgid "Copy URL"
+msgstr "URL kopiëren"
 
 msgid "Creation"
 msgstr "Schepping"
@@ -1064,6 +1076,9 @@ msgstr "Nieuw cadeau"
 
 msgid "Nickname"
 msgstr "Bijnaam"
+
+msgid "One-Time"
+msgstr "Eenmalig"
 
 msgid "Optional"
 msgstr "Optioneel"
@@ -1290,6 +1305,9 @@ msgstr "Hulp nodig"
 msgid "New event"
 msgstr "Nieuw evenement"
 
+msgid "Open Link"
+msgstr "Open Link"
+
 msgid "Operation"
 msgstr "Operatie"
 
@@ -1461,6 +1479,9 @@ msgstr "Ervaring"
 msgid "Historical"
 msgstr "Historisch"
 
+msgid "IP Address"
+msgstr "IP-adres"
+
 msgid "IP address"
 msgstr "IP-adres"
 
@@ -1628,6 +1649,9 @@ msgstr "hier drukken"
 
 msgid "reply here"
 msgstr "antwoord hier"
+
+msgid "Access Link"
+msgstr "Toegang Link"
 
 msgid "Access link"
 msgstr "Link openen"
@@ -2333,6 +2357,9 @@ msgstr "Vermenigvuldiging"
 msgid "Obtain ability"
 msgstr "Vaardigheden verwerven"
 
+msgid "One-time token"
+msgstr "Eenmalig token"
+
 msgid "Outflows total"
 msgstr "Totale kosten"
 
@@ -2546,9 +2573,6 @@ msgstr "Algoritme starten"
 msgid "Ticket selected"
 msgstr "Geselecteerd ticket"
 
-msgid "Token not found"
-msgstr "Token niet gevonden"
-
 msgid "Upload Expenses"
 msgstr "Uitgaven uploaden"
 
@@ -2661,6 +2685,9 @@ msgid "Number not found"
 msgstr "Aantal niet gevonden"
 
 msgid "One-Time Content"
+msgstr "Eenmalige inhoud"
+
+msgid "One-time content"
 msgstr "Eenmalige inhoud"
 
 msgid "Organisation fee"
@@ -2791,9 +2818,6 @@ msgstr "Reeds gebruikte code"
 
 msgid "Collection closed"
 msgstr "Gesloten collectie"
-
-msgid "Content not found"
-msgstr "Inhoud niet gevonden"
 
 msgid "Conversion ticket"
 msgstr "Conversie ticket"
@@ -5262,6 +5286,9 @@ msgstr "Facturen van betalingen beheren en goedkeuren"
 msgid "Manage participant questions and answer them"
 msgstr "Vragen van deelnemers beheren en beantwoorden"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Beheer tokens om toegang te krijgen tot de eenmalige inhoud"
+
 msgid "Now you can create the factions of the event"
 msgstr "Nu kun je de facties van het evenement maken"
 
@@ -6310,6 +6337,9 @@ msgstr "Als u in plaats daarvan een nieuwe scan van uw aanvraag wilt uploaden"
 
 msgid "In the membership book the number of your membership card is"
 msgstr "In het ledenboek is je lidmaatschapsnummer"
+
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
 
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
@@ -7384,6 +7414,12 @@ msgid ""
 msgstr ""
 "Geef de nationaliteit van de organisatie op om landspecifieke functies te "
 "activeren"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Inhoud beheren die slechts één keer toegankelijk moet zijn met een specifiek"
+" token"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8532,6 +8568,13 @@ msgid ""
 msgstr ""
 "Optioneel - Maximum aantal keren dat het kan worden aangevraagd voor alle "
 "aanmeldingen (0 = onbeperkt)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Deze pagina toont alle toegangstokens voor eenmalige inhoud. Elk token kan "
+"maar één keer worden gebruikt."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10519,7 +10562,7 @@ msgid ""
 msgstr ""
 "Maakt beveiligde streaming van video/audio-inhoud mogelijk via eenmalige "
 "toegangstokens. Elk token kan maar één keer worden gebruikt en houdt bij "
-"wie, wanneer en waar toegang heeft gehad tot de inhoud."
+"wie, wanneer en waar toegang heeft gehad tot de inhoud"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

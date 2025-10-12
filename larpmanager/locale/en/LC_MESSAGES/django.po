@@ -1797,6 +1797,19 @@ msgstr ""
 msgid "This page allows you to add or edit a competency"
 msgstr ""
 
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+
+msgid "One-time content"
+msgstr ""
+
+msgid "Manage tokens to access the one-time content"
+msgstr ""
+
+msgid "One-time token"
+msgstr ""
+
 #, python-format
 msgid ""
 "Enter the “bring a friend” code provided by a registered participant to "
@@ -6628,6 +6641,32 @@ msgid "used"
 msgstr ""
 
 msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+
+msgid "Access Link"
+msgstr ""
+
+msgid "Used At"
+msgstr ""
+
+msgid "Used By"
+msgstr ""
+
+msgid "IP Address"
+msgstr ""
+
+msgid "Open Link"
+msgstr ""
+
+msgid "Copied"
+msgstr ""
+
+msgid "Copy URL"
+msgstr ""
+
+msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event"
 msgstr ""
@@ -8418,7 +8457,13 @@ msgid ""
 "Upload and manage secure video/audio content with one-time access tokens"
 msgstr ""
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+
 msgid "Communications"
+msgstr ""
+
+msgid "One-Time"
 msgstr ""
 
 msgid "Fields"
@@ -9106,12 +9151,6 @@ msgid ""
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"
-msgstr ""
-
-msgid "Content not found"
-msgstr ""
-
-msgid "Token not found"
 msgstr ""
 
 msgid "Updated"

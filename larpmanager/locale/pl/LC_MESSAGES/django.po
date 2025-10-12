@@ -486,6 +486,9 @@ msgstr "Zmiana"
 msgid "Checks"
 msgstr "Czeki"
 
+msgid "Copied"
+msgstr "Skopiowany"
+
 msgid "Counts"
 msgstr "Liczby"
 
@@ -882,6 +885,12 @@ msgstr "Aktualizacja"
 msgid "Use TLD"
 msgstr "Użyj TLD"
 
+msgid "Used At"
+msgstr "Używany w"
+
+msgid "Used By"
+msgstr "Używany przez"
+
 msgid "Used at"
 msgstr "Używany w"
 
@@ -962,6 +971,9 @@ msgstr "Zużyty"
 
 msgid "Continue"
 msgstr "Kontynuuj"
+
+msgid "Copy URL"
+msgstr "Kopiuj adres URL"
 
 msgid "Creation"
 msgstr "Tworzenie"
@@ -1064,6 +1076,9 @@ msgstr "Nowy prezent"
 
 msgid "Nickname"
 msgstr "Pseudonim"
+
+msgid "One-Time"
+msgstr "Jednorazowo"
 
 msgid "Optional"
 msgstr "Opcjonalnie"
@@ -1290,6 +1305,9 @@ msgstr "Potrzebujesz pomocy"
 msgid "New event"
 msgstr "Nowe wydarzenie"
 
+msgid "Open Link"
+msgstr "Open Link"
+
 msgid "Operation"
 msgstr "Działanie"
 
@@ -1461,6 +1479,9 @@ msgstr "Doświadczenie"
 msgid "Historical"
 msgstr "Historyczny"
 
+msgid "IP Address"
+msgstr "Adres IP"
+
 msgid "IP address"
 msgstr "Adres IP"
 
@@ -1628,6 +1649,9 @@ msgstr "naciśnij tutaj"
 
 msgid "reply here"
 msgstr "odpowiedź tutaj"
+
+msgid "Access Link"
+msgstr "Łącze dostępu"
 
 msgid "Access link"
 msgstr "Łącze dostępu"
@@ -2333,6 +2357,9 @@ msgstr "Mnożenie"
 msgid "Obtain ability"
 msgstr "Uzyskanie zdolności"
 
+msgid "One-time token"
+msgstr "Jednorazowy token"
+
 msgid "Outflows total"
 msgstr "Wypływy ogółem"
 
@@ -2546,9 +2573,6 @@ msgstr "Algorytm startowy"
 msgid "Ticket selected"
 msgstr "Wybrany bilet"
 
-msgid "Token not found"
-msgstr "Nie znaleziono tokena"
-
 msgid "Upload Expenses"
 msgstr "Prześlij wydatki"
 
@@ -2662,6 +2686,9 @@ msgstr "Nie znaleziono numeru"
 
 msgid "One-Time Content"
 msgstr "Zawartość jednorazowa"
+
+msgid "One-time content"
+msgstr "Jednorazowa zawartość"
 
 msgid "Organisation fee"
 msgstr "Opłata organizacyjna"
@@ -2791,9 +2818,6 @@ msgstr "Kod już użyty"
 
 msgid "Collection closed"
 msgstr "Kolekcja zamknięta"
-
-msgid "Content not found"
-msgstr "Nie znaleziono zawartości"
 
 msgid "Conversion ticket"
 msgstr "Bilet konwersji"
@@ -5259,6 +5283,10 @@ msgstr "Zarządzanie fakturami i płatnościami oraz ich zatwierdzanie"
 msgid "Manage participant questions and answer them"
 msgstr "Zarządzanie pytaniami uczestników i odpowiadanie na nie"
 
+msgid "Manage tokens to access the one-time content"
+msgstr ""
+"Zarządzanie tokenami w celu uzyskania dostępu do jednorazowej zawartości"
+
 msgid "Now you can create the factions of the event"
 msgstr "Teraz możesz stworzyć frakcje wydarzenia"
 
@@ -6292,6 +6320,11 @@ msgstr "Jeśli zamiast tego chcesz przesłać nowy skan aplikacji"
 msgid "In the membership book the number of your membership card is"
 msgstr "W księdze członkowskiej numer karty członkowskiej to"
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+"Zarządzanie jednorazowymi tokenami dostępu dla bezpiecznej zawartości "
+"wideo/audio"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr "Skonfiguruj bilety, które użytkownicy mogą wybrać podczas rejestracji"
 
@@ -7297,6 +7330,12 @@ msgid ""
 msgstr ""
 "Wskaż narodowość organizacji, aby aktywować funkcje specyficzne dla danego "
 "kraju"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Zarządzanie treściami, które powinny być dostępne tylko raz przy użyciu "
+"określonego tokena"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8333,7 +8372,7 @@ msgid ""
 "for the event"
 msgstr ""
 "Na tej stronie wyświetlana jest zabezpieczona zawartość wideo/audio z "
-"jednorazowymi tokenami dostępu do wydarzenia."
+"jednorazowymi tokenami dostępu do wydarzenia"
 
 msgid ""
 "This page summarizes the abilities that participants can purchase with "
@@ -8418,6 +8457,13 @@ msgid ""
 msgstr ""
 "Opcjonalnie - maksymalna liczba żądań we wszystkich rejestracjach (0 = "
 "nieograniczona)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Na tej stronie wyświetlane są wszystkie tokeny dostępu do zawartości "
+"jednorazowej. Każdy token może być użyty tylko raz."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10388,7 +10434,7 @@ msgid ""
 msgstr ""
 "Umożliwia bezpieczne strumieniowanie treści wideo/audio za pomocą "
 "jednorazowych tokenów dostępu. Każdy token może być użyty tylko raz i "
-"śledzi, kto uzyskał dostęp do treści, kiedy i skąd."
+"śledzi, kto uzyskał dostęp do treści, kiedy i skąd"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

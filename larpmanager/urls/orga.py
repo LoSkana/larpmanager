@@ -431,22 +431,22 @@ urlpatterns = [
         name="orga_utils_edit",
     ),
     path(
-        "<slug:s>/manage/onetimes/",
+        "<slug:s>/manage/onetimes/content/",
         views_oms.orga_onetimes,
         name="orga_onetimes",
     ),
     path(
-        "<slug:s>/manage/onetimes/edit/<int:num>/",
+        "<slug:s>/manage/onetimes/content/edit/<int:num>/",
         views_oms.orga_onetimes_edit,
         name="orga_onetimes_edit",
     ),
     path(
-        "<slug:s>/manage/onetimes/<int:num>/tokens/",
+        "<slug:s>/manage/onetimes/tokens/",
         views_oms.orga_onetimes_tokens,
         name="orga_onetimes_tokens",
     ),
     path(
-        "<slug:s>/manage/onetimes/<int:content_num>/tokens/edit/<int:num>/",
+        "<slug:s>/manage/onetimes/tokens/edit/<int:num>/",
         views_oms.orga_onetimes_tokens_edit,
         name="orga_onetimes_tokens_edit",
     ),

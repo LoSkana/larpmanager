@@ -486,6 +486,9 @@ msgstr "Redigera"
 msgid "Checks"
 msgstr "Kontroller"
 
+msgid "Copied"
+msgstr "Kopierad"
+
 msgid "Counts"
 msgstr "Räkningar"
 
@@ -882,6 +885,12 @@ msgstr "Uppdaterad"
 msgid "Use TLD"
 msgstr "Använd TLD"
 
+msgid "Used At"
+msgstr "Används på"
+
+msgid "Used By"
+msgstr "Används av"
+
 msgid "Used at"
 msgstr "Används vid"
 
@@ -962,6 +971,9 @@ msgstr "Förbrukad"
 
 msgid "Continue"
 msgstr "Fortsättning"
+
+msgid "Copy URL"
+msgstr "Kopiera URL"
 
 msgid "Creation"
 msgstr "Skapande"
@@ -1064,6 +1076,9 @@ msgstr "Ny gåva"
 
 msgid "Nickname"
 msgstr "Smeknamn"
+
+msgid "One-Time"
+msgstr "En gång"
 
 msgid "Optional"
 msgstr "Valfritt"
@@ -1290,6 +1305,9 @@ msgstr "Behöver du hjälp"
 msgid "New event"
 msgstr "Nytt evenemang"
 
+msgid "Open Link"
+msgstr "Öppna länk"
+
 msgid "Operation"
 msgstr "Drift"
 
@@ -1461,6 +1479,9 @@ msgstr "Erfarenhet"
 msgid "Historical"
 msgstr "Historisk"
 
+msgid "IP Address"
+msgstr "IP-adress"
+
 msgid "IP address"
 msgstr "IP-adress"
 
@@ -1628,6 +1649,9 @@ msgstr "tryck här"
 
 msgid "reply here"
 msgstr "svara här"
+
+msgid "Access Link"
+msgstr "Länk till åtkomst"
 
 msgid "Access link"
 msgstr "Länk för åtkomst"
@@ -2333,6 +2357,9 @@ msgstr "Multiplikation"
 msgid "Obtain ability"
 msgstr "Förvärva färdigheter"
 
+msgid "One-time token"
+msgstr "Engångsbelopp"
+
 msgid "Outflows total"
 msgstr "Summa kostnader"
 
@@ -2546,9 +2573,6 @@ msgstr "Starta algoritmen"
 msgid "Ticket selected"
 msgstr "Biljett vald"
 
-msgid "Token not found"
-msgstr "Token hittades inte"
-
 msgid "Upload Expenses"
 msgstr "Ladda upp kostnader"
 
@@ -2662,6 +2686,9 @@ msgstr "Numret hittades inte"
 
 msgid "One-Time Content"
 msgstr "Innehåll av engångskaraktär"
+
+msgid "One-time content"
+msgstr "Innehåll för engångsbruk"
 
 msgid "Organisation fee"
 msgstr "Organisationsavgift"
@@ -2791,9 +2818,6 @@ msgstr "Redan använd kod"
 
 msgid "Collection closed"
 msgstr "Sluten samling"
-
-msgid "Content not found"
-msgstr "Innehållet hittades inte"
 
 msgid "Conversion ticket"
 msgstr "Konvertering biljett"
@@ -5261,6 +5285,9 @@ msgstr "Hantera fakturor och betalningar och godkänna dem"
 msgid "Manage participant questions and answer them"
 msgstr "Hantera deltagarnas frågor och besvara dem"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Hantera tokens för att få tillgång till engångsinnehållet"
+
 msgid "Now you can create the factions of the event"
 msgstr "Nu kan du skapa fraktionerna i evenemanget"
 
@@ -6291,6 +6318,9 @@ msgstr "Om du vill ladda upp en ny skanning av din ansökan istället"
 msgid "In the membership book the number of your membership card is"
 msgstr "I medlemsboken är ditt medlemsnummer"
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Konfigurera de biljetter som användarna kan välja under registreringen"
@@ -7276,6 +7306,11 @@ msgid ""
 msgstr ""
 "Ange organisationens nationalitet för att aktivera nationsspecifika "
 "funktioner"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Hantera innehåll som bara ska vara åtkomligt en gång med en specifik token"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8393,6 +8428,13 @@ msgid ""
 msgstr ""
 "Valfritt - Maximalt antal gånger det kan begäras för alla registreringar (0 "
 "= obegränsat)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"På den här sidan visas alla åtkomsttoken för engångsinnehåll. Varje token "
+"kan bara användas en gång."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "

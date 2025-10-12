@@ -486,6 +486,9 @@ msgstr "Editer"
 msgid "Checks"
 msgstr "Chèques"
 
+msgid "Copied"
+msgstr "Copié"
+
 msgid "Counts"
 msgstr "Comptes"
 
@@ -882,6 +885,12 @@ msgstr "Mise à jour"
 msgid "Use TLD"
 msgstr "Utiliser le TLD"
 
+msgid "Used At"
+msgstr "Utilisé à"
+
+msgid "Used By"
+msgstr "Utilisé par"
+
 msgid "Used at"
 msgstr "Utilisé à"
 
@@ -962,6 +971,9 @@ msgstr "Consommé"
 
 msgid "Continue"
 msgstr "Suite"
+
+msgid "Copy URL"
+msgstr "Copier l'URL"
 
 msgid "Creation"
 msgstr "Création"
@@ -1064,6 +1076,9 @@ msgstr "Nouveau cadeau"
 
 msgid "Nickname"
 msgstr "Surnom"
+
+msgid "One-Time"
+msgstr "Unique"
 
 msgid "Optional"
 msgstr "En option"
@@ -1290,6 +1305,9 @@ msgstr "Besoin d'aide"
 msgid "New event"
 msgstr "Nouvel événement"
 
+msgid "Open Link"
+msgstr "Ouvrir le lien"
+
 msgid "Operation"
 msgstr "Fonctionnement"
 
@@ -1461,6 +1479,9 @@ msgstr "Expérience"
 msgid "Historical"
 msgstr "Historique"
 
+msgid "IP Address"
+msgstr "Adresse IP"
+
 msgid "IP address"
 msgstr "Adresse IP"
 
@@ -1628,6 +1649,9 @@ msgstr "appuyez ici"
 
 msgid "reply here"
 msgstr "répondre ici"
+
+msgid "Access Link"
+msgstr "Lien d'accès"
 
 msgid "Access link"
 msgstr "Lien d'accès"
@@ -2333,6 +2357,9 @@ msgstr "Multiplication"
 msgid "Obtain ability"
 msgstr "Acquérir des compétences"
 
+msgid "One-time token"
+msgstr "Jeton unique"
+
 msgid "Outflows total"
 msgstr "Dépenses totales"
 
@@ -2546,9 +2573,6 @@ msgstr "Algorithme de démarrage"
 msgid "Ticket selected"
 msgstr "Billet sélectionné"
 
-msgid "Token not found"
-msgstr "Jeton non trouvé"
-
 msgid "Upload Expenses"
 msgstr "Télécharger les dépenses"
 
@@ -2661,6 +2685,9 @@ msgid "Number not found"
 msgstr "Numéro non trouvé"
 
 msgid "One-Time Content"
+msgstr "Contenu unique"
+
+msgid "One-time content"
 msgstr "Contenu unique"
 
 msgid "Organisation fee"
@@ -2791,9 +2818,6 @@ msgstr "Code déjà utilisé"
 
 msgid "Collection closed"
 msgstr "Collection fermée"
-
-msgid "Content not found"
-msgstr "Contenu non trouvé"
 
 msgid "Conversion ticket"
 msgstr "Ticket de conversion"
@@ -5267,6 +5291,9 @@ msgstr "Gérer les factures et les paiements et les approuver"
 msgid "Manage participant questions and answer them"
 msgstr "Gérer les questions des participants et y répondre"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Gérer les jetons pour accéder au contenu unique"
+
 msgid "Now you can create the factions of the event"
 msgstr "Vous pouvez maintenant créer les factions de l'événement"
 
@@ -5922,7 +5949,7 @@ msgstr "Vous pouvez maintenant créer les billets \"patron\" et \"réduit\""
 
 msgid "Now you can upload content and generate access tokens"
 msgstr ""
-"Vous pouvez maintenant télécharger du contenu et générer des jetons d'accès."
+"Vous pouvez maintenant télécharger du contenu et générer des jetons d'accès"
 
 msgid "Optional - ram html code (substitute the text before)"
 msgstr "Facultatif - code html brut (remplace le texte ci-dessus)"
@@ -6362,6 +6389,10 @@ msgstr ""
 
 msgid "In the membership book the number of your membership card is"
 msgstr "Dans le livre des membres, votre numéro de membre est"
+
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+"Gestion des jetons d'accès uniques pour les contenus vidéo/audio sécurisés"
 
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
@@ -7498,6 +7529,12 @@ msgstr ""
 "spécifiques à chaque pays"
 
 msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Gérer les contenus qui ne doivent être accessibles qu'une seule fois à "
+"l'aide d'un jeton spécifique"
+
+msgid ""
 "On this page you can filter characters and directly view their information"
 msgstr ""
 "Sur cette page, vous pouvez filtrer les personnages et consulter directement"
@@ -8564,7 +8601,7 @@ msgid ""
 "for the event"
 msgstr ""
 "Cette page présente le contenu vidéo/audio sécurisé avec des jetons d'accès "
-"uniques pour l'événement."
+"uniques pour l'événement"
 
 msgid ""
 "This page summarizes the abilities that participants can purchase with "
@@ -8649,6 +8686,13 @@ msgid ""
 msgstr ""
 "Facultatif - Nombre maximal de fois qu'il peut être demandé pour toutes les "
 "inscriptions (0 = illimité)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Cette page présente tous les jetons d'accès aux contenus à usage unique. "
+"Chaque jeton ne peut être utilisé qu'une seule fois."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10652,7 +10696,7 @@ msgid ""
 msgstr ""
 "Permet la diffusion sécurisée de contenus vidéo/audio par le biais de jetons"
 " d'accès à usage unique. Chaque jeton ne peut être utilisé qu'une seule fois"
-" et permet de savoir qui a accédé au contenu, quand et d'où."
+" et permet de savoir qui a accédé au contenu, quand et d'où"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

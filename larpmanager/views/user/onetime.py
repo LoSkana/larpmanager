@@ -19,7 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+import re
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, StreamingHttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext as _
@@ -65,7 +67,7 @@ def onetime_access(request, token):
     """
     try:
         access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
-    except OneTimeAccessToken.DoesNotExist:
+    except ObjectDoesNotExist:
         return render(
             request,
             "larpmanager/event/onetime/error.html",
@@ -125,8 +127,8 @@ def onetime_stream(request, token):
     """
     try:
         access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
-    except OneTimeAccessToken.DoesNotExist:
-        raise Http404(_("Invalid token"))
+    except ObjectDoesNotExist as err:
+        raise Http404(_("Invalid token")) from err
 
     # Verify token is used and content is active
     if not access_token.used:
@@ -140,8 +142,8 @@ def onetime_stream(request, token):
     # Open the file
     try:
         file = content.file.open("rb")
-    except Exception:
-        raise Http404(_("File not found"))
+    except Exception as err:
+        raise Http404(_("File not found")) from err
 
     # Get file size
     file_size = content.file.size
@@ -150,8 +152,6 @@ def onetime_stream(request, token):
     range_header = request.META.get("HTTP_RANGE", "").strip()
     range_match = None
     if range_header:
-        import re
-
         range_match = re.search(r"bytes=(\d+)-(\d*)", range_header)
 
     if range_match:

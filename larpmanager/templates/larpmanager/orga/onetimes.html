@@ -1,5 +1,6 @@
 {% extends "utils.html" %}
 {% load i18n %}
+{% load show_tags %}
 {% block title %}
     {% trans "One-Time Content" %} - {{ event.name }}
 {% endblock title %}
@@ -43,7 +44,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_onetimes_tokens' run.get_slug el.id %}">
+                        <a href="{% url 'orga_onetimes_tokens' run.get_slug %}">
                             {% with stats=el.get_token_stats %}
                                 {{ stats.used }} / {{ stats.total }} {% trans "used" %}
                             {% endwith %}

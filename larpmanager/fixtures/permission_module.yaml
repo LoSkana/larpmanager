@@ -88,3 +88,9 @@
     slug: warehouse
     order: 95
     icon: box-open
+- model: larpmanager.permissionmodule
+  fields:
+    name: One-Time
+    slug: onetime
+    order: 120
+    icon: key

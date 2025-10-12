@@ -486,6 +486,9 @@ msgstr "Upravit"
 msgid "Checks"
 msgstr "Kontroly"
 
+msgid "Copied"
+msgstr "Zkopírováno"
+
 msgid "Counts"
 msgstr "Počítá"
 
@@ -882,6 +885,12 @@ msgstr "Aktualizováno"
 msgid "Use TLD"
 msgstr "Použití TLD"
 
+msgid "Used At"
+msgstr "Použité na"
+
+msgid "Used By"
+msgstr "Používá se do"
+
 msgid "Used at"
 msgstr "Používá se v"
 
@@ -962,6 +971,9 @@ msgstr "Spotřebováno"
 
 msgid "Continue"
 msgstr "Pokračování"
+
+msgid "Copy URL"
+msgstr "Kopírovat adresu URL"
 
 msgid "Creation"
 msgstr "Vytvoření"
@@ -1064,6 +1076,9 @@ msgstr "Nový dárek"
 
 msgid "Nickname"
 msgstr "Přezdívka"
+
+msgid "One-Time"
+msgstr "Jednorázové"
 
 msgid "Optional"
 msgstr "Volitelně"
@@ -1290,6 +1305,9 @@ msgstr "Potřebujete pomoc"
 msgid "New event"
 msgstr "Nová událost"
 
+msgid "Open Link"
+msgstr "Otevřít odkaz"
+
 msgid "Operation"
 msgstr "Operace"
 
@@ -1461,6 +1479,9 @@ msgstr "Zkušenosti"
 msgid "Historical"
 msgstr "Historické stránky"
 
+msgid "IP Address"
+msgstr "IP adresa"
+
 msgid "IP address"
 msgstr "IP adresa"
 
@@ -1628,6 +1649,9 @@ msgstr "stiskněte zde"
 
 msgid "reply here"
 msgstr "odpovězte zde"
+
+msgid "Access Link"
+msgstr "Přístupový odkaz"
 
 msgid "Access link"
 msgstr "Přístupový odkaz"
@@ -2333,6 +2357,9 @@ msgstr "Násobení"
 msgid "Obtain ability"
 msgstr "Získání dovedností"
 
+msgid "One-time token"
+msgstr "Jednorázový žeton"
+
 msgid "Outflows total"
 msgstr "Celkové výdaje"
 
@@ -2546,9 +2573,6 @@ msgstr "Algoritmus spuštění"
 msgid "Ticket selected"
 msgstr "Vybraná vstupenka"
 
-msgid "Token not found"
-msgstr "Token nebyl nalezen"
-
 msgid "Upload Expenses"
 msgstr "Nahrávání výdajů"
 
@@ -2661,6 +2685,9 @@ msgid "Number not found"
 msgstr "Číslo nebylo nalezeno"
 
 msgid "One-Time Content"
+msgstr "Jednorázový obsah"
+
+msgid "One-time content"
 msgstr "Jednorázový obsah"
 
 msgid "Organisation fee"
@@ -2791,9 +2818,6 @@ msgstr "Již použitý kód"
 
 msgid "Collection closed"
 msgstr "Uzavřená sbírka"
-
-msgid "Content not found"
-msgstr "Obsah nebyl nalezen"
 
 msgid "Conversion ticket"
 msgstr "Konverzní lístek"
@@ -5259,6 +5283,9 @@ msgstr "Správa faktur a jejich schvalování"
 msgid "Manage participant questions and answer them"
 msgstr "Správa dotazů účastníků a jejich zodpovídání"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Správa tokenů pro přístup k jednorázovému obsahu"
+
 msgid "Now you can create the factions of the event"
 msgstr "Nyní můžete vytvořit frakce události"
 
@@ -5895,7 +5922,7 @@ msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Nyní můžete vytvořit tipy \"patron\" a \"snížený\""
 
 msgid "Now you can upload content and generate access tokens"
-msgstr "Nyní můžete nahrávat obsah a generovat přístupové tokeny."
+msgstr "Nyní můžete nahrávat obsah a generovat přístupové tokeny"
 
 msgid "Optional - ram html code (substitute the text before)"
 msgstr "Volitelně - nezpracovaný html kód (nahrazuje výše uvedený text)"
@@ -6279,6 +6306,10 @@ msgstr "Chcete-li místo toho nahrát nový sken své žádosti"
 msgid "In the membership book the number of your membership card is"
 msgstr "V členské knize je vaše členské číslo"
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+"Správa jednorázových přístupových tokenů pro zabezpečený video/audio obsah"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr "Nastavení tipů, které si uživatelé mohou vybrat při registraci"
 
@@ -6407,7 +6438,7 @@ msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Nepovinné - rozšířený popis (zobrazuje se malým šedým textem)"
 
 msgid "Optional note about this token (e.g., recipient name, purpose)"
-msgstr "Nepovinná poznámka o tomto tokenu (např. jméno příjemce, účel)."
+msgstr "Nepovinná poznámka o tomto tokenu (např. jméno příjemce, účel)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Nastavení specifických hodnot pro konfiguraci funkcí události"
@@ -6554,7 +6585,7 @@ msgstr "Pro vyžádání převodu z vaší banky použijte níže uvedené infor
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
 "Video nebo audio soubor, který má být streamován (doporučeno: MP4, WebM, "
-"MP3)."
+"MP3)"
 
 msgid "You have indicated several preferences towards the same element!"
 msgstr "Uvedli jste několik preferencí vůči stejnému prvku!"
@@ -7202,6 +7233,12 @@ msgid ""
 msgstr ""
 "Uveďte státní příslušnost organizace, abyste aktivovali funkce specifické "
 "pro danou zemi"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Správa obsahu, který by měl být přístupný pouze jednou pomocí určitého "
+"tokenu"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8177,7 +8214,7 @@ msgid ""
 "for the event"
 msgstr ""
 "Tato stránka zobrazuje zabezpečený video/audio obsah s jednorázovými "
-"přístupovými tokeny pro danou událost."
+"přístupovými tokeny pro danou událost"
 
 msgid ""
 "This page summarizes the abilities that participants can purchase with "
@@ -8261,6 +8298,13 @@ msgid ""
 msgstr ""
 "Nepovinné - Maximální počet případů, kdy lze o to požádat při všech "
 "registracích (0 = neomezeně)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Tato stránka zobrazuje všechny přístupové tokeny pro jednorázový obsah. "
+"Každý token lze použít pouze jednou."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10188,7 +10232,7 @@ msgid ""
 msgstr ""
 "Umožňuje zabezpečené streamování video/audio obsahu prostřednictvím "
 "jednorázových přístupových tokenů. Každý token lze použít pouze jednou a "
-"sleduje, kdo, kdy a odkud k obsahu přistupoval."
+"sleduje, kdo, kdy a odkud k obsahu přistupoval"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

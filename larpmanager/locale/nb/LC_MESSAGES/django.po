@@ -486,6 +486,9 @@ msgstr "Redigere"
 msgid "Checks"
 msgstr "Sjekker"
 
+msgid "Copied"
+msgstr "Kopiert"
+
 msgid "Counts"
 msgstr "Tellinger"
 
@@ -882,6 +885,12 @@ msgstr "Oppdatert"
 msgid "Use TLD"
 msgstr "Bruk TLD"
 
+msgid "Used At"
+msgstr "Brukt på"
+
+msgid "Used By"
+msgstr "Brukt av"
+
 msgid "Used at"
 msgstr "Brukes på"
 
@@ -962,6 +971,9 @@ msgstr "Forbrukt"
 
 msgid "Continue"
 msgstr "Fortsettelse"
+
+msgid "Copy URL"
+msgstr "Kopier URL"
 
 msgid "Creation"
 msgstr "Skapelse"
@@ -1064,6 +1076,9 @@ msgstr "Ny gave"
 
 msgid "Nickname"
 msgstr "Kallenavn"
+
+msgid "One-Time"
+msgstr "Engangsbruk"
 
 msgid "Optional"
 msgstr "Valgfritt"
@@ -1290,6 +1305,9 @@ msgstr "Trenger du hjelp"
 msgid "New event"
 msgstr "Nytt arrangement"
 
+msgid "Open Link"
+msgstr "Åpne lenke"
+
 msgid "Operation"
 msgstr "Drift"
 
@@ -1461,6 +1479,9 @@ msgstr "Erfaring"
 msgid "Historical"
 msgstr "Historisk"
 
+msgid "IP Address"
+msgstr "IP-adresse"
+
 msgid "IP address"
 msgstr "IP-adresse"
 
@@ -1628,6 +1649,9 @@ msgstr "trykk her"
 
 msgid "reply here"
 msgstr "svar her"
+
+msgid "Access Link"
+msgstr "Access Link"
 
 msgid "Access link"
 msgstr "Tilgangslenke"
@@ -2333,6 +2357,9 @@ msgstr "Multiplikasjon"
 msgid "Obtain ability"
 msgstr "Tilegne seg ferdigheter"
 
+msgid "One-time token"
+msgstr "Engangstoken"
+
 msgid "Outflows total"
 msgstr "Totale kostnader"
 
@@ -2546,9 +2573,6 @@ msgstr "Start-algoritme"
 msgid "Ticket selected"
 msgstr "Billett valgt"
 
-msgid "Token not found"
-msgstr "Token ikke funnet"
-
 msgid "Upload Expenses"
 msgstr "Last opp utgifter"
 
@@ -2661,6 +2685,9 @@ msgid "Number not found"
 msgstr "Nummer ikke funnet"
 
 msgid "One-Time Content"
+msgstr "Engangsinnhold"
+
+msgid "One-time content"
 msgstr "Engangsinnhold"
 
 msgid "Organisation fee"
@@ -2791,9 +2818,6 @@ msgstr "Kode som allerede er brukt"
 
 msgid "Collection closed"
 msgstr "Lukket samling"
-
-msgid "Content not found"
-msgstr "Innhold ikke funnet"
 
 msgid "Conversion ticket"
 msgstr "Konverteringsbillett"
@@ -5262,6 +5286,9 @@ msgstr "Administrere og godkjenne fakturaer og betalinger"
 msgid "Manage participant questions and answer them"
 msgstr "Håndtere spørsmål fra deltakerne og besvare dem"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Administrer tokens for å få tilgang til engangsinnholdet"
+
 msgid "Now you can create the factions of the event"
 msgstr "Nå kan du opprette fraksjonene i arrangementet"
 
@@ -6291,6 +6318,9 @@ msgstr "Hvis du ønsker å laste opp en ny skanning av søknaden din i stedet"
 msgid "In the membership book the number of your membership card is"
 msgstr "I medlemsboken er medlemsnummeret ditt"
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr "Konfigurer billettene som brukerne kan velge under registreringen"
 
@@ -7263,6 +7293,12 @@ msgid ""
 "Indicate the organization nationality to activate nation-specific features"
 msgstr ""
 "Angi organisasjonens nasjonalitet for å aktivere landsspesifikke funksjoner"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Administrer innhold som bare skal være tilgjengelig én gang med et bestemt "
+"token"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8359,6 +8395,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Maksimalt antall ganger det kan forespørres på tvers av alle "
 "påmeldinger (0 = ubegrenset)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Denne siden viser alle tilgangstokener for engangsinnhold. Hvert token kan "
+"bare brukes én gang."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10319,7 +10362,7 @@ msgid ""
 msgstr ""
 "Muliggjør sikker strømming av video-/lydinnhold via engangstokener. Hvert "
 "token kan bare brukes én gang, og sporer hvem som har fått tilgang til "
-"innholdet, når og fra hvor."
+"innholdet, når og fra hvor"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

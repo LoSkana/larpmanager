@@ -418,6 +418,10 @@ def unique_util_cod():
 
 
 class OneTimeContentForm(MyForm):
+    page_info = _("Manage content that should be accessed only one time with a specific token")
+
+    page_title = _("One-time content")
+
     class Meta:
         model = OneTimeContent
         fields = ("name", "description", "file", "active", "event")
@@ -428,6 +432,10 @@ class OneTimeContentForm(MyForm):
 
 
 class OneTimeAccessTokenForm(MyForm):
+    page_info = _("Manage tokens to access the one-time content")
+
+    page_title = _("One-time token")
+
     class Meta:
         model = OneTimeAccessToken
         fields = ("note", "content")

@@ -486,6 +486,9 @@ msgstr "Editar"
 msgid "Checks"
 msgstr "Comprobaciones"
 
+msgid "Copied"
+msgstr "Copiado"
+
 msgid "Counts"
 msgstr "Cuenta"
 
@@ -882,6 +885,12 @@ msgstr "¡Actualizado"
 msgid "Use TLD"
 msgstr "Utilizar un dominio específico"
 
+msgid "Used At"
+msgstr "Usado en"
+
+msgid "Used By"
+msgstr "Usado por"
+
 msgid "Used at"
 msgstr "Utilizado en"
 
@@ -962,6 +971,9 @@ msgstr "Consumido"
 
 msgid "Continue"
 msgstr "Continúa en"
+
+msgid "Copy URL"
+msgstr "Copiar URL"
 
 msgid "Creation"
 msgstr "Creación"
@@ -1064,6 +1076,9 @@ msgstr "Nuevo regalo"
 
 msgid "Nickname"
 msgstr "Apodo"
+
+msgid "One-Time"
+msgstr "Una sola vez"
 
 msgid "Optional"
 msgstr "Opcional"
@@ -1290,6 +1305,9 @@ msgstr "¿Necesitas ayuda"
 msgid "New event"
 msgstr "Nuevo evento"
 
+msgid "Open Link"
+msgstr "Abrir enlace"
+
 msgid "Operation"
 msgstr "Operación"
 
@@ -1461,6 +1479,9 @@ msgstr "Experiencia"
 msgid "Historical"
 msgstr "Histórico"
 
+msgid "IP Address"
+msgstr "Dirección IP"
+
 msgid "IP address"
 msgstr "Dirección IP"
 
@@ -1628,6 +1649,9 @@ msgstr "pulse aquí"
 
 msgid "reply here"
 msgstr "responder aquí"
+
+msgid "Access Link"
+msgstr "Enlace de acceso"
 
 msgid "Access link"
 msgstr "Enlace de acceso"
@@ -2333,6 +2357,9 @@ msgstr "Multiplicación"
 msgid "Obtain ability"
 msgstr "Adquirir habilidad"
 
+msgid "One-time token"
+msgstr "Ficha única"
+
 msgid "Outflows total"
 msgstr "Gastos totales"
 
@@ -2546,9 +2573,6 @@ msgstr "Iniciar algoritmo"
 msgid "Ticket selected"
 msgstr "Billete seleccionado"
 
-msgid "Token not found"
-msgstr "Ficha no encontrada"
-
 msgid "Upload Expenses"
 msgstr "Cargar gastos"
 
@@ -2661,6 +2685,9 @@ msgid "Number not found"
 msgstr "Número no encontrado"
 
 msgid "One-Time Content"
+msgstr "Contenido único"
+
+msgid "One-time content"
 msgstr "Contenido único"
 
 msgid "Organisation fee"
@@ -2791,9 +2818,6 @@ msgstr "Código ya utilizado"
 
 msgid "Collection closed"
 msgstr "¡Colecta cerrada"
-
-msgid "Content not found"
-msgstr "Contenido no encontrado"
 
 msgid "Conversion ticket"
 msgstr "Billete de conversión"
@@ -5259,6 +5283,9 @@ msgstr "Gestionar las facturas de los pagos y aprobarlas"
 msgid "Manage participant questions and answer them"
 msgstr "Gestionar las preguntas de los participantes y responderlas"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Gestionar tokens para acceder al contenido único"
+
 msgid "Now you can create the factions of the event"
 msgstr "Ahora puedes crear las facciones del evento"
 
@@ -6302,6 +6329,11 @@ msgstr "Si deseas subir un nuevo escaneado de tu solicitud en su lugar"
 
 msgid "In the membership book the number of your membership card is"
 msgstr "En el libro de la organización, tu número de miembro es"
+
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+"Gestión de tokens de acceso de un solo uso para contenidos de vídeo/audio "
+"seguros"
 
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
@@ -7357,6 +7389,12 @@ msgid ""
 msgstr ""
 "Indique la nacionalidad de la organización para activar las funciones "
 "específicas de cada país"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Gestionar contenidos a los que sólo se debe acceder una vez con un token "
+"específico"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8493,6 +8531,13 @@ msgid ""
 msgstr ""
 "Opcional - Número máximo de veces que se puede solicitar en todos los "
 "registros (0 = ilimitado)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Esta página muestra todos los tokens de acceso para contenidos de un solo "
+"uso. Cada token sólo puede utilizarse una vez."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10471,7 +10516,7 @@ msgid ""
 msgstr ""
 "Permite la transmisión segura de contenidos de vídeo y audio mediante tokens"
 " de acceso de un solo uso. Cada token sólo puede utilizarse una vez y "
-"rastrea quién accedió al contenido, cuándo y desde dónde."
+"rastrea quién accedió al contenido, cuándo y desde dónde"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

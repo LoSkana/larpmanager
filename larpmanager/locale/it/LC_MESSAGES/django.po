@@ -486,6 +486,9 @@ msgstr "Modifica"
 msgid "Checks"
 msgstr "Controlli"
 
+msgid "Copied"
+msgstr "Copiato"
+
 msgid "Counts"
 msgstr "Conti"
 
@@ -882,6 +885,12 @@ msgstr "Aggiornato"
 msgid "Use TLD"
 msgstr "Utilizza TLD"
 
+msgid "Used At"
+msgstr "Usato a"
+
+msgid "Used By"
+msgstr "Usato da"
+
 msgid "Used at"
 msgstr "Usato a"
 
@@ -962,6 +971,9 @@ msgstr "Consumati"
 
 msgid "Continue"
 msgstr "Continua"
+
+msgid "Copy URL"
+msgstr "Copia l'URL"
 
 msgid "Creation"
 msgstr "Creazione"
@@ -1064,6 +1076,9 @@ msgstr "Nuovo regalo"
 
 msgid "Nickname"
 msgstr "Nickname"
+
+msgid "One-Time"
+msgstr "Una tantum"
 
 msgid "Optional"
 msgstr "Opzionale"
@@ -1290,6 +1305,9 @@ msgstr "Ti serve aiuto"
 msgid "New event"
 msgstr "Nuovo evento"
 
+msgid "Open Link"
+msgstr "Apri il link"
+
 msgid "Operation"
 msgstr "Funzionamento"
 
@@ -1461,6 +1479,9 @@ msgstr "Esperienza"
 msgid "Historical"
 msgstr "Storico"
 
+msgid "IP Address"
+msgstr "Indirizzo IP"
+
 msgid "IP address"
 msgstr "Indirizzo IP"
 
@@ -1628,6 +1649,9 @@ msgstr "premi qui"
 
 msgid "reply here"
 msgstr "rispondi qui"
+
+msgid "Access Link"
+msgstr "Link di accesso"
 
 msgid "Access link"
 msgstr "Link di accesso"
@@ -2333,6 +2357,9 @@ msgstr "Moltiplicazione"
 msgid "Obtain ability"
 msgstr "Acquisisci abilità"
 
+msgid "One-time token"
+msgstr "Token una tantum"
+
 msgid "Outflows total"
 msgstr "Spese totali"
 
@@ -2546,9 +2573,6 @@ msgstr "Avvia algoritmo"
 msgid "Ticket selected"
 msgstr "Biglietto selezionato"
 
-msgid "Token not found"
-msgstr "Token non trovato"
-
 msgid "Upload Expenses"
 msgstr "Carica Spese"
 
@@ -2662,6 +2686,9 @@ msgstr "Numero non trovato"
 
 msgid "One-Time Content"
 msgstr "Contenuto una tantum"
+
+msgid "One-time content"
+msgstr "Contenuto unico"
 
 msgid "Organisation fee"
 msgstr "Tassa organizzativa"
@@ -2791,9 +2818,6 @@ msgstr "Codice già usato"
 
 msgid "Collection closed"
 msgstr "Colletta chiusa"
-
-msgid "Content not found"
-msgstr "Contenuto non trovato"
 
 msgid "Conversion ticket"
 msgstr "Biglietto conversione"
@@ -3534,7 +3558,7 @@ msgid "Manage the event plots"
 msgstr "Gestisci le trame dell'evento"
 
 msgid "Manage warehouse items"
-msgstr "Gestire gli articoli di magazzino"
+msgstr "Gestisci gli articoli di magazzino"
 
 msgid "Manages event revenues"
 msgstr "Gestisci i ricavi dell'evento"
@@ -3931,7 +3955,7 @@ msgid "Manage the event prologues"
 msgstr "Gestisci i prologhi degli eventi"
 
 msgid "Manage warehouse movements"
-msgstr "Gestire i movimenti di magazzino"
+msgstr "Gestisci i movimenti di magazzino"
 
 msgid "Now you can create inflows"
 msgstr "Ora è possibile creare flussi in entrata"
@@ -4010,7 +4034,7 @@ msgid "Manage the event characters"
 msgstr "Gestisci i personaggi dell'evento"
 
 msgid "Manage warehouse containers"
-msgstr "Gestire i contenitori del magazzino"
+msgstr "Gestisci i contenitori del magazzino"
 
 msgid "Members of the Organization"
 msgstr "Socio dell'Associazione"
@@ -5259,6 +5283,9 @@ msgstr "Gestisci le ricevute dei pagamenti e approvale"
 msgid "Manage participant questions and answer them"
 msgstr "Gestisci le domande dei partecipanti e rispondigli"
 
+msgid "Manage tokens to access the one-time content"
+msgstr "Gestisci i token per l'accesso ai contenuti una tantum"
+
 msgid "Now you can create the factions of the event"
 msgstr "Ora è possibile creare le fazioni dell'evento"
 
@@ -5901,7 +5928,7 @@ msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Ora è possibile creare i biglietti \"Mecenate\" e \"Ridotto\""
 
 msgid "Now you can upload content and generate access tokens"
-msgstr "Ora è possibile caricare i contenuti e generare i token di accesso."
+msgstr "Ora è possibile caricare i contenuti e generare i token di accesso"
 
 msgid "Optional - ram html code (substitute the text before)"
 msgstr "Opzionale - codice html raw (sostituisce il testo sopra)"
@@ -6038,7 +6065,7 @@ msgstr "Indicare il colore che verrà utilizzato per evidenziare i testi"
 
 msgid "Manage loading and deployment status of warehouse items"
 msgstr ""
-"Gestire lo stato di carico e di distribuzione degli articoli del magazzino"
+"Gestisci lo stato di carico e di distribuzione degli articoli del magazzino"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Gestisci i pagamenti effettuati dai partecipanti a tutti gli eventi"
@@ -6317,6 +6344,10 @@ msgstr ""
 
 msgid "In the membership book the number of your membership card is"
 msgstr "Nel libro soci il numero della tua tessera è"
+
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+"Gestisci token di accesso una tantum per contenuti video/audio protetti"
 
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
@@ -7418,6 +7449,12 @@ msgstr ""
 "specifiche della nazione"
 
 msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Gestisci i contenuti a cui si deve accedere una sola volta con un token "
+"specifico"
+
+msgid ""
 "On this page you can filter characters and directly view their information"
 msgstr ""
 "In questa pagina puoi filtrare i personaggi e visualizzare direttamente le "
@@ -8481,7 +8518,7 @@ msgid ""
 "for the event"
 msgstr ""
 "Questa pagina mostra i contenuti video/audio protetti con i token di accesso"
-" unico per l'evento."
+" unico per l'evento"
 
 msgid ""
 "This page summarizes the abilities that participants can purchase with "
@@ -8566,6 +8603,13 @@ msgid ""
 msgstr ""
 "Opzionale - Numero massimo di volte che può essere richiesto in tutte le "
 "iscrizioni (0 = illimitato)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Questa pagina mostra tutti i token di accesso per i contenuti unici. Ogni "
+"token può essere utilizzato una sola volta."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -10546,7 +10590,7 @@ msgid ""
 msgstr ""
 "Consente lo streaming sicuro di contenuti video/audio tramite token di "
 "accesso unico. Ogni token può essere utilizzato una sola volta e tiene "
-"traccia di chi ha avuto accesso ai contenuti, quando e da dove."
+"traccia di chi ha avuto accesso ai contenuti, quando e da dove"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

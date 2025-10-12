@@ -1,0 +1,69 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "One-Time Access Tokens" %} - {{ event.name }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows all access tokens for one-time content. Each token can only be used once." %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    <table id="onetimes_tokens" class="go_datatable writing">
+        <thead>
+            <tr>
+                <th>{% trans "Content" %}</th>
+                <th>{% trans "Token" %}</th>
+                <th>{% trans "Access Link" %}</th>
+                <th>{% trans "Note" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Used At" %}</th>
+                <th>{% trans "Used By" %}</th>
+                <th>{% trans "IP Address" %}</th>
+                <th>{% trans "Created" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.content.id %}">{{ el.content.name }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_onetimes_tokens_edit' run.get_slug el.id %}">
+                            <code>{{ el.token|truncatechars:16 }}</code>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'onetime_access' el.token %}"
+                           target="_blank"
+                           class="btn btn-sm btn-primary">
+                            <i class="fa fa-external-link"></i> {% trans "Open Link" %}
+                        </a>
+                        <button class="btn btn-sm btn-secondary"
+                                onclick="navigator.clipboard.writeText('{{ request.scheme }}://{{ request.get_host }}{% url 'onetime_access' el.token %}'); this.innerHTML='<i class=\'fa fa-check\'></i> {% trans "Copied" %}'; setTimeout(() => this.innerHTML='<i class=\'fa fa-copy\'></i> {% trans "Copy URL" %}', 2000);">
+                            <i class="fa fa-copy"></i> {% trans "Copy URL" %}
+                        </button>
+                    </td>
+                    <td>{{ el.note|truncatewords:10 }}</td>
+                    <td>
+                        {% if el.used %}
+                            <span class="badge badge-danger">{% trans "Used" %}</span>
+                        {% else %}
+                            <span class="badge badge-success">{% trans "Unused" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if el.used_at %}{{ el.used_at|date:"SHORT_DATETIME_FORMAT" }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.used_by %}{{ el.used_by.get_full_name }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.ip_address %}<code>{{ el.ip_address }}</code>{% endif %}
+                    </td>
+                    <td>{{ el.created|date:"SHORT_DATE_FORMAT" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
