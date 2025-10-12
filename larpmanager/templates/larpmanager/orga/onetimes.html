@@ -1,0 +1,57 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "One-Time Content" %} - {{ event.name }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the secure video/audio content with one-time access tokens for the event" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    <table id="onetimes" class="go_datatable writing">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "File" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Content Type" %}</th>
+                <th>{% trans "Active" %}</th>
+                <th>{% trans "Tokens" %}</th>
+                <th>{% trans "Created" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.id %}">{{ el.name }}</a>
+                    </td>
+                    <td>{{ el.description|truncatewords:10 }}</td>
+                    <td>
+                        {% if el.file %}<a href="{{ el.file.url }}" target="_blank">{{ el.file.name|basename }}</a>{% endif %}
+                    </td>
+                    <td>
+                        {% if el.file_size %}{{ el.file_size|filesizeformat }}{% endif %}
+                    </td>
+                    <td>{{ el.content_type }}</td>
+                    <td>
+                        {% if el.active %}
+                            <span class="badge badge-success">{% trans "Active" %}</span>
+                        {% else %}
+                            <span class="badge badge-secondary">{% trans "Inactive" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_onetimes_tokens' run.get_slug el.id %}">
+                            {% with stats=el.get_token_stats %}
+                                {{ stats.used }} / {{ stats.total }} {% trans "used" %}
+                            {% endwith %}
+                        </a>
+                    </td>
+                    <td>{{ el.created|date:"SHORT_DATE_FORMAT" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

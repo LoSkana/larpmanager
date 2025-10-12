@@ -31,6 +31,8 @@ from larpmanager.models.miscellanea import (
     Contact,
     Email,
     HelpQuestion,
+    OneTimeAccessToken,
+    OneTimeContent,
     PlayerRelationship,
     ShuttleService,
     Util,
@@ -205,3 +207,150 @@ class EmailAdmin(DefModelAdmin):
     @staticmethod
     def body_red(instance):
         return reduced(instance.body)
+
+
+class OneTimeAccessTokenInline(admin.TabularInline):
+    """Inline admin for access tokens."""
+
+    model = OneTimeAccessToken
+    extra = 0
+    readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent", "created")
+    fields = ("note", "token", "used", "used_at", "used_by", "ip_address")
+    can_delete = True
+
+    def has_add_permission(self, request, obj=None):
+        return True
+
+
+@admin.register(OneTimeContent)
+class OneTimeContentAdmin(DefModelAdmin):
+    """Admin interface for OneTimeContent."""
+
+    list_display = (
+        "name",
+        "event",
+        "file_display",
+        "content_type",
+        "file_size_display",
+        "token_count",
+        "active",
+        "created",
+    )
+    list_filter = ("event", "active", "created")
+    search_fields = ("name", "description", "event__name")
+    readonly_fields = ("content_type", "file_size", "created", "updated")
+    inlines = [OneTimeAccessTokenInline]
+    autocomplete_fields = ["event"]
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "event",
+                    "name",
+                    "description",
+                    "file",
+                    "active",
+                )
+            },
+        ),
+        (
+            "Metadata",
+            {
+                "fields": ("content_type", "file_size", "duration", "created", "updated"),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
+    def file_display(self, obj):
+        """Display file name."""
+        if obj.file:
+            return obj.file.name.split("/")[-1]
+        return "-"
+
+    file_display.short_description = "File"
+
+    def file_size_display(self, obj):
+        """Display human-readable file size."""
+        if not obj.file_size:
+            return "-"
+        size = obj.file_size
+        for unit in ["B", "KB", "MB", "GB"]:
+            if size < 1024.0:
+                return f"{size:.1f} {unit}"
+            size /= 1024.0
+        return f"{size:.1f} TB"
+
+    file_size_display.short_description = "File size"
+
+    def token_count(self, obj):
+        """Display token statistics."""
+        from django.utils.html import format_html
+
+        stats = obj.get_token_stats()
+        return format_html(
+            '<span style="color: green;">{}</span> / <span style="color: gray;">{}</span>',
+            stats["used"],
+            stats["total"],
+        )
+
+    token_count.short_description = "Tokens (used/total)"
+
+
+@admin.register(OneTimeAccessToken)
+class OneTimeAccessTokenAdmin(DefModelAdmin):
+    """Admin interface for OneTimeAccessToken."""
+
+    list_display = (
+        "token_short",
+        "content",
+        "note",
+        "used",
+        "used_at",
+        "used_by",
+        "ip_address",
+        "created",
+    )
+    list_filter = ("used", "used_at", "created", "content__event")
+    search_fields = ("token", "note", "content__name", "used_by__name", "ip_address")
+    readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent", "created", "updated")
+    autocomplete_fields = ["content", "used_by"]
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "content",
+                    "token",
+                    "note",
+                )
+            },
+        ),
+        (
+            "Usage information",
+            {
+                "fields": ("used", "used_at", "used_by", "ip_address", "user_agent"),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            "Metadata",
+            {
+                "fields": ("created", "updated"),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
+    def token_short(self, obj):
+        """Display shortened token."""
+        return f"{obj.token[:12]}..."
+
+    token_short.short_description = "Token"
+
+    def has_add_permission(self, request):
+        """Prevent adding tokens through admin - they should be generated via the content."""
+        return True

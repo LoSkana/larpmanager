@@ -40,6 +40,8 @@ from larpmanager.models.miscellanea import (
     Album,
     Competence,
     HelpQuestion,
+    OneTimeAccessToken,
+    OneTimeContent,
     Problem,
     ShuttleService,
     UrlShortner,
@@ -413,3 +415,23 @@ def unique_util_cod():
         if not Util.objects.filter(cod=cod).exists():
             return cod
     raise ValueError("Too many attempts to generate the code")
+
+
+class OneTimeContentForm(MyForm):
+    class Meta:
+        model = OneTimeContent
+        fields = ("name", "description", "file", "active", "event")
+
+        widgets = {
+            "description": Textarea(attrs={"rows": 3}),
+        }
+
+
+class OneTimeAccessTokenForm(MyForm):
+    class Meta:
+        model = OneTimeAccessToken
+        fields = ("note", "content")
+
+        widgets = {
+            "note": Textarea(attrs={"rows": 2}),
+        }

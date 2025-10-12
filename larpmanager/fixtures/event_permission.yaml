@@ -719,7 +719,6 @@
     feature: px
     module: experience
 - model: larpmanager.eventpermission
-  pk: 84
   fields:
     name: Modifiers
     descr: Manage XP modifiers
@@ -729,3 +728,13 @@
     hidden: false
     feature: px
     module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: One-Time Content
+    descr: Upload and manage secure video/audio content with one-time access tokens
+    slug: orga_onetimes
+    number: 71
+    config: null
+    hidden: false
+    feature: onetime_content
+    module: miscellany

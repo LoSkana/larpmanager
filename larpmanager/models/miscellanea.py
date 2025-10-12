@@ -20,6 +20,7 @@
 
 import os
 import random
+import secrets
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -687,3 +688,224 @@ class Email(BaseModel):
 
     def __str__(self):
         return f"{self.recipient} - {self.subj}"
+
+
+class OneTimeContent(BaseModel):
+    """
+    Model to store multimedia content for one-time access via tokens.
+    Organizers can upload video/audio files and generate access tokens.
+    """
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="onetime_contents",
+        verbose_name=_("Event"),
+        help_text=_("The event this content belongs to"),
+    )
+
+    name = models.CharField(
+        max_length=200,
+        verbose_name=_("Content name"),
+        help_text=_("Descriptive name for this content"),
+    )
+
+    description = models.TextField(
+        blank=True,
+        verbose_name=_("Description"),
+        help_text=_("Optional description of the content"),
+    )
+
+    file = models.FileField(
+        upload_to=UploadToPathAndRename("onetime_content/"),
+        verbose_name=_("Media file"),
+        help_text=_("Video or audio file to be streamed (recommended: MP4, WebM, MP3)"),
+    )
+
+    content_type = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name=_("Content type"),
+        help_text=_("MIME type of the file (e.g., video/mp4)"),
+    )
+
+    file_size = models.BigIntegerField(
+        default=0,
+        verbose_name=_("File size"),
+        help_text=_("Size of the file in bytes"),
+    )
+
+    duration = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_("Duration"),
+        help_text=_("Duration in seconds (optional)"),
+    )
+
+    active = models.BooleanField(
+        default=True,
+        verbose_name=_("Active"),
+        help_text=_("Whether this content is currently available for access"),
+    )
+
+    class Meta:
+        ordering = ["-created"]
+        verbose_name = _("One-Time Content")
+        verbose_name_plural = _("One-Time Contents")
+
+    def __str__(self):
+        return f"{self.name} ({self.event.name})"
+
+    def save(self, *args, **kwargs):
+        """Override save to capture file metadata."""
+        if self.file:
+            self.file_size = self.file.size
+            # Try to determine content type
+            if not self.content_type:
+                file_name = self.file.name.lower()
+                if file_name.endswith(".mp4"):
+                    self.content_type = "video/mp4"
+                elif file_name.endswith(".webm"):
+                    self.content_type = "video/webm"
+                elif file_name.endswith(".mp3"):
+                    self.content_type = "audio/mpeg"
+                elif file_name.endswith(".ogg"):
+                    self.content_type = "audio/ogg"
+                else:
+                    self.content_type = "application/octet-stream"
+        super().save(*args, **kwargs)
+
+    def generate_token(self, note=""):
+        """
+        Generate a new access token for this content.
+
+        Args:
+            note (str): Optional note describing the purpose of this token
+
+        Returns:
+            OneTimeAccessToken: The newly created token
+        """
+        token = OneTimeAccessToken.objects.create(content=self, note=note)
+        return token
+
+    def get_token_stats(self):
+        """
+        Get statistics about tokens for this content.
+
+        Returns:
+            dict: Dictionary with token statistics
+        """
+        tokens = self.access_tokens.all()
+        return {
+            "total": tokens.count(),
+            "used": tokens.filter(used=True).count(),
+            "unused": tokens.filter(used=False).count(),
+        }
+
+
+class OneTimeAccessToken(BaseModel):
+    """
+    Access token for one-time viewing of content.
+    Each token can only be used once.
+    """
+
+    content = models.ForeignKey(
+        OneTimeContent,
+        on_delete=models.CASCADE,
+        related_name="access_tokens",
+        verbose_name=_("Content"),
+    )
+
+    token = models.CharField(
+        max_length=64,
+        unique=True,
+        db_index=True,
+        editable=False,
+        verbose_name=_("Token"),
+    )
+
+    note = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name=_("Note"),
+        help_text=_("Optional note about this token (e.g., recipient name, purpose)"),
+    )
+
+    used = models.BooleanField(
+        default=False,
+        verbose_name=_("Used"),
+        help_text=_("Whether this token has been used"),
+    )
+
+    used_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_("Used at"),
+        help_text=_("When this token was used"),
+    )
+
+    used_by = models.ForeignKey(
+        Member,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="used_onetime_tokens",
+        verbose_name=_("Used by"),
+        help_text=_("Member who used this token (if authenticated)"),
+    )
+
+    ip_address = models.GenericIPAddressField(
+        blank=True,
+        null=True,
+        verbose_name=_("IP address"),
+        help_text=_("IP address from which the token was used"),
+    )
+
+    user_agent = models.TextField(
+        blank=True,
+        verbose_name=_("User agent"),
+        help_text=_("Browser user agent string from the access"),
+    )
+
+    class Meta:
+        ordering = ["-created"]
+        verbose_name = _("One-Time Access Token")
+        verbose_name_plural = _("One-Time Access Tokens")
+
+    def __str__(self):
+        status = _("Used") if self.used else _("Unused")
+        return f"{self.token[:8]}... - {status}"
+
+    def save(self, *args, **kwargs):
+        """Generate token on creation."""
+        if not self.token:
+            # Generate a cryptographically secure token
+            self.token = secrets.token_urlsafe(48)
+        super().save(*args, **kwargs)
+
+    def mark_as_used(self, request=None, member=None):
+        """
+        Mark this token as used and record access information.
+
+        Args:
+            request: Django HttpRequest object to extract metadata
+            member: Member object if user is authenticated
+        """
+        from django.utils import timezone
+
+        self.used = True
+        self.used_at = timezone.now()
+        self.used_by = member
+
+        if request:
+            # Extract IP address
+            x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+            if x_forwarded_for:
+                self.ip_address = x_forwarded_for.split(",")[0].strip()
+            else:
+                self.ip_address = request.META.get("REMOTE_ADDR")
+
+            # Extract user agent
+            self.user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
+
+        self.save()

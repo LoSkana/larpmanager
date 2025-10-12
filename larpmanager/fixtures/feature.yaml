@@ -1317,3 +1317,15 @@
     after_link: ''
     hidden: false
     module: events
+- model: larpmanager.feature
+  fields:
+    name: One-Time Content
+    descr: Enables secure streaming of video/audio content via one-time access tokens. Each token can only be used once and tracks who accessed the content, when, and from where
+    slug: onetime_content
+    overall: false
+    placeholder: false
+    order: 50
+    after_text: Now you can upload content and generate access tokens
+    after_link: orga_onetimes
+    hidden: false
+    module: miscellany

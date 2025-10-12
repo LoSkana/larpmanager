@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex, nofollow">
+        <title>{% trans "Token Already Used" %}</title>
+        {% load i18n %}
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+
+        .info-box {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .info-box span {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .info-box {
+                padding: 15px;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="icon">⛔</div>
+            <h1>{% trans "Token Already Used" %}</h1>
+            <p>{% trans "This access link has already been used and cannot be accessed again." %}</p>
+            <p>{% trans "Each token can only be used once for security reasons." %}</p>
+            <div class="info-box">
+                <strong>{% trans "Access Information:" %}</strong>
+                <div style="margin-top: 10px;">
+                    <span>{% trans "Used on:" %} {{ used_at|date:"Y-m-d H:i:s" }}</span>
+                </div>
+                {% if user_agent %}
+                    <div style="margin-top: 5px;">
+                        <span style="font-size: 0.85em; color: rgba(255, 255, 255, 0.6);">{{ user_agent|truncatechars:80 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            <p style="margin-top: 25px; font-size: 0.95em;">
+                {% trans "If you need access to this content again, please contact the organizers for a new access link." %}
+            </p>
+        </div>
+    </body>
+</html>

@@ -3600,6 +3600,99 @@ msgstr ""
 msgid "Who takes it upon themselves to solve it"
 msgstr ""
 
+msgid "The event this content belongs to"
+msgstr ""
+
+msgid "Content name"
+msgstr ""
+
+msgid "Descriptive name for this content"
+msgstr ""
+
+msgid "Optional description of the content"
+msgstr ""
+
+msgid "Media file"
+msgstr ""
+
+msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
+msgstr ""
+
+msgid "Content type"
+msgstr ""
+
+msgid "MIME type of the file (e.g., video/mp4)"
+msgstr ""
+
+msgid "File size"
+msgstr ""
+
+msgid "Size of the file in bytes"
+msgstr ""
+
+msgid "Duration"
+msgstr ""
+
+msgid "Duration in seconds (optional)"
+msgstr ""
+
+msgid "Whether this content is currently available for access"
+msgstr ""
+
+msgid "One-Time Content"
+msgstr ""
+
+msgid "One-Time Contents"
+msgstr ""
+
+msgid "Content"
+msgstr ""
+
+msgid "Token"
+msgstr ""
+
+msgid "Optional note about this token (e.g., recipient name, purpose)"
+msgstr ""
+
+msgid "Used"
+msgstr ""
+
+msgid "Whether this token has been used"
+msgstr ""
+
+msgid "Used at"
+msgstr ""
+
+msgid "When this token was used"
+msgstr ""
+
+msgid "Used by"
+msgstr ""
+
+msgid "Member who used this token (if authenticated)"
+msgstr ""
+
+msgid "IP address"
+msgstr ""
+
+msgid "IP address from which the token was used"
+msgstr ""
+
+msgid "User agent"
+msgstr ""
+
+msgid "Browser user agent string from the access"
+msgstr ""
+
+msgid "One-Time Access Token"
+msgstr ""
+
+msgid "One-Time Access Tokens"
+msgstr ""
+
+msgid "Unused"
+msgstr ""
+
 msgid "New player"
 msgstr ""
 
@@ -4325,9 +4418,6 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-msgid "Used"
-msgstr ""
-
 msgid "Remove"
 msgstr ""
 
@@ -4676,6 +4766,26 @@ msgid "are not yet open"
 msgstr ""
 
 msgid "Will open at"
+msgstr ""
+
+msgid "Token Already Used"
+msgstr ""
+
+msgid "This access link has already been used and cannot be accessed again."
+msgstr ""
+
+msgid "Each token can only be used once for security reasons."
+msgstr ""
+
+msgid "Access Information:"
+msgstr ""
+
+msgid "Used on:"
+msgstr ""
+
+msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link."
 msgstr ""
 
 msgid "Change registration"
@@ -6498,6 +6608,26 @@ msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
 msgid ""
+"This page shows the secure video/audio content with one-time access tokens "
+"for the event"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Content Type"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "used"
+msgstr ""
+
+msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event"
 msgstr ""
@@ -7883,6 +8013,15 @@ msgstr ""
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 
+msgid ""
+"Enables secure streaming of video/audio content via one-time access tokens. "
+"Each token can only be used once and tracks who accessed the content, when, "
+"and from where"
+msgstr ""
+
+msgid "Now you can upload content and generate access tokens"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -8273,6 +8412,10 @@ msgid "Manage XP rules"
 msgstr ""
 
 msgid "Manage XP modifiers"
+msgstr ""
+
+msgid ""
+"Upload and manage secure video/audio content with one-time access tokens"
 msgstr ""
 
 msgid "Communications"
@@ -8965,6 +9108,12 @@ msgstr ""
 msgid "Photos and videos successfully uploaded"
 msgstr ""
 
+msgid "Content not found"
+msgstr ""
+
+msgid "Token not found"
+msgstr ""
+
 msgid "Updated"
 msgstr ""
 
@@ -9182,6 +9331,30 @@ msgid "New shuttle request"
 msgstr ""
 
 msgid "Modify shuttle request"
+msgstr ""
+
+msgid "Invalid Token"
+msgstr ""
+
+msgid "This access link is invalid or has expired."
+msgstr ""
+
+msgid "Content Unavailable"
+msgstr ""
+
+msgid "This content is currently not available."
+msgstr ""
+
+msgid "Invalid token"
+msgstr ""
+
+msgid "Token not initialized"
+msgstr ""
+
+msgid "Content unavailable"
+msgstr ""
+
+msgid "File not found"
 msgstr ""
 
 msgid "Pre-registrations saved"

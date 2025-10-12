@@ -116,6 +116,9 @@ msgstr "Turnarounds"
 msgid "Edit"
 msgstr "Bewerk"
 
+msgid "File"
+msgstr "Bestand"
+
 msgid "Form"
 msgstr "Formulier"
 
@@ -275,6 +278,9 @@ msgstr "dagen"
 msgid "gift"
 msgstr "cadeau"
 
+msgid "used"
+msgstr "tweedehands"
+
 msgid "Album"
 msgstr "Albums"
 
@@ -416,6 +422,9 @@ msgstr "Derde"
 
 msgid "Title"
 msgstr "Titel"
+
+msgid "Token"
+msgstr "Penning"
 
 msgid "Total"
 msgstr "Totalen"
@@ -636,6 +645,9 @@ msgstr "Eigenschappen"
 msgid "Unread"
 msgstr "Ongelezen"
 
+msgid "Unused"
+msgstr "Ongebruikt"
+
 msgid "Update"
 msgstr "Update"
 
@@ -708,8 +720,14 @@ msgstr "Toepassen"
 msgid "Contact"
 msgstr "Neem contact op met"
 
+msgid "Content"
+msgstr "Inhoud"
+
 msgid "Correct"
 msgstr "Correct"
+
+msgid "Created"
+msgstr "Gemaakt"
 
 msgid "Credits"
 msgstr "Credits"
@@ -864,6 +882,12 @@ msgstr "Bijgewerkt"
 msgid "Use TLD"
 msgstr "TLD gebruiken"
 
+msgid "Used at"
+msgstr "Gebruikt bij"
+
+msgid "Used by"
+msgstr "Gebruikt door"
+
 msgid "Utility"
 msgstr "Utility"
 
@@ -969,6 +993,9 @@ msgstr "Donatie"
 msgid "Download"
 msgstr "Downloaden"
 
+msgid "Duration"
+msgstr "Duur"
+
 msgid "Editable"
 msgstr "Bewerkbaar"
 
@@ -1004,6 +1031,9 @@ msgstr "Handouts"
 
 msgid "Holidays"
 msgstr "Vakantie"
+
+msgid "Inactive"
+msgstr "Inactief"
 
 msgid "Included"
 msgstr "Inclusief"
@@ -1146,6 +1176,9 @@ msgstr "Schatkist"
 msgid "Uploaded"
 msgstr "Geüpload"
 
+msgid "Used on:"
+msgstr "Gebruikt op:"
+
 msgid "VAT rate"
 msgstr "BTW-tarief"
 
@@ -1223,6 +1256,9 @@ msgstr "Donaties"
 
 msgid "Enrolment"
 msgstr "Inschrijving"
+
+msgid "File size"
+msgstr "Bestandsgrootte"
 
 msgid "First aid"
 msgstr "Eerste hulp"
@@ -1425,11 +1461,17 @@ msgstr "Ervaring"
 msgid "Historical"
 msgstr "Historisch"
 
+msgid "IP address"
+msgstr "IP-adres"
+
 msgid "Kicked out"
 msgstr "Opgejaagd"
 
 msgid "Legal name"
 msgstr "Juridische naam"
+
+msgid "Media file"
+msgstr "Mediabestand"
 
 msgid "Membership"
 msgstr "Lidmaatschap"
@@ -1544,6 +1586,9 @@ msgstr "Token naam"
 
 msgid "Two quotas"
 msgstr "Twee quota"
+
+msgid "User agent"
+msgstr "Gebruiker agent"
 
 msgid "Visibility"
 msgstr "Zichtbaarheid"
@@ -1806,6 +1851,15 @@ msgstr "Foto wijzigen"
 msgid "Collaborator"
 msgstr "Deelnemer"
 
+msgid "Content Type"
+msgstr "Type inhoud"
+
+msgid "Content name"
+msgstr "Naam inhoud"
+
+msgid "Content type"
+msgstr "Type inhoud"
+
 msgid "Event hidden"
 msgstr "Gebeurtenis verborgen"
 
@@ -2056,6 +2110,12 @@ msgstr "Totale inkomsten"
 msgid "Internal link"
 msgstr "Interne link"
 
+msgid "Invalid Token"
+msgstr "Ongeldig token"
+
+msgid "Invalid token"
+msgstr "Ongeldig token"
+
 msgid "Manage events"
 msgstr "Evenementen beheren"
 
@@ -2230,6 +2290,9 @@ msgstr "Functies van het evenement"
 
 msgid "Executive Vote"
 msgstr "Stemming management"
+
+msgid "File not found"
+msgstr "Bestand niet gevonden"
 
 msgid "Form questions"
 msgstr "Formulier vragen"
@@ -2483,6 +2546,9 @@ msgstr "Algoritme starten"
 msgid "Ticket selected"
 msgstr "Geselecteerd ticket"
 
+msgid "Token not found"
+msgstr "Token niet gevonden"
+
 msgid "Upload Expenses"
 msgstr "Uitgaven uploaden"
 
@@ -2593,6 +2659,9 @@ msgstr "Geen communicatie"
 
 msgid "Number not found"
 msgstr "Aantal niet gevonden"
+
+msgid "One-Time Content"
+msgstr "Eenmalige inhoud"
 
 msgid "Organisation fee"
 msgstr "Organisatiekosten"
@@ -2723,6 +2792,9 @@ msgstr "Reeds gebruikte code"
 msgid "Collection closed"
 msgstr "Gesloten collectie"
 
+msgid "Content not found"
+msgstr "Inhoud niet gevonden"
+
 msgid "Conversion ticket"
 msgstr "Conversie ticket"
 
@@ -2776,6 +2848,9 @@ msgstr "Maanden vrij quotum"
 
 msgid "Move to container"
 msgstr "Verplaats naar container"
+
+msgid "One-Time Contents"
+msgstr "Eenmalige inhoud"
 
 msgid "Paid current year"
 msgstr "Betaald lopend jaar"
@@ -2951,6 +3026,9 @@ msgstr "Zoektochttypes instellen"
 msgid "Show cancellations"
 msgstr "Show annuleringen"
 
+msgid "Token Already Used"
+msgstr "Reeds gebruikt token"
+
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
 
@@ -2968,6 +3046,9 @@ msgstr "voor de deadline van"
 
 msgid "global preferences"
 msgstr "globale voorkeuren"
+
+msgid "Access Information:"
+msgstr "Toegangsinformatie:"
 
 msgid "Accounting tracking"
 msgstr "Boekhouding bijhouden"
@@ -2992,6 +3073,12 @@ msgstr "Karakter niet gevonden"
 
 msgid "Confirmation delete"
 msgstr "Bevestiging verwijderen"
+
+msgid "Content Unavailable"
+msgstr "Inhoud niet beschikbaar"
+
+msgid "Content unavailable"
+msgstr "Inhoud niet beschikbaar"
 
 msgid "Cost of the ability"
 msgstr "Kosten van het vermogen"
@@ -3316,6 +3403,9 @@ msgstr "Aantal extracties"
 msgid "Object does not exist"
 msgstr "Object bestaat niet"
 
+msgid "One-Time Access Token"
+msgstr "Eenmalig toegangssymbool"
+
 msgid "Participant questions"
 msgstr "Vragen van deelnemers"
 
@@ -3364,6 +3454,9 @@ msgstr "Instructies sjabloon"
 
 msgid "To access the history"
 msgstr "De geschiedenis openen"
+
+msgid "Token not initialized"
+msgstr "Token niet geïnitialiseerd"
 
 msgid "Upload membership fee"
 msgstr "Lidmaatschap uploaden"
@@ -3451,6 +3544,9 @@ msgstr "Shuttleverzoek wijzigen"
 
 msgid "Number of partecipants"
 msgstr "Aantal deelnemingen"
+
+msgid "One-Time Access Tokens"
+msgstr "Eenmalige toegangsmunten"
 
 msgid "Payment membership fee"
 msgstr "Betaling lidmaatschapsgeld"
@@ -3699,6 +3795,9 @@ msgstr "Geverifieerde betalingen uploaden"
 msgid "User is already a member"
 msgstr "Gebruiker is al lid"
 
+msgid "When this token was used"
+msgstr "Wanneer dit token werd gebruikt"
+
 msgid "Your registration ticket"
 msgstr "Je entreebewijs"
 
@@ -3775,6 +3874,9 @@ msgstr "Vaste termijnen instellen"
 
 msgid "Show available characters"
 msgstr "Beschikbare tekens tonen"
+
+msgid "Size of the file in bytes"
+msgstr "Grootte van het bestand in bytes"
 
 msgid "These are our past events"
 msgstr "Dit zijn onze evenementen uit het verleden"
@@ -4088,6 +4190,9 @@ msgstr "Volledige betaling voor %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Uitstel van jaarlijkse contributie"
 
+msgid "Duration in seconds (optional)"
+msgstr "Duur in seconden (optioneel)"
+
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
 
@@ -4283,6 +4388,9 @@ msgstr "De stemming voor de Raad van Bestuur is geopend"
 msgid "We'll try to help as best we can"
 msgstr "We proberen zo goed mogelijk te helpen"
 
+msgid "Whether this token has been used"
+msgstr "Of dit token is gebruikt"
+
 msgid "You need to define the end date!"
 msgstr "Je moet de einddatum definiëren!"
 
@@ -4313,6 +4421,9 @@ msgstr "Toegang tot %(event)s bevestigen"
 msgid "Descriptive name for this API key"
 msgstr "Beschrijvende naam voor deze API-sleutel"
 
+msgid "Descriptive name for this content"
+msgstr "Beschrijvende naam voor deze inhoud"
+
 msgid "Discover what this event is about"
 msgstr "Ontdek waar dit evenement over gaat"
 
@@ -4336,6 +4447,9 @@ msgstr "Er zijn geen gebeurtenissen aanwezig, maak er een aan"
 
 msgid "Now you can set the taxes options"
 msgstr "Nu kun je de belastingopties instellen"
+
+msgid "The event this content belongs to"
+msgstr "Het evenement waartoe deze inhoud behoort"
 
 msgid "This page shows the url shortners"
 msgstr "Deze pagina toont de url shortners"
@@ -4483,6 +4597,9 @@ msgstr "Nu kun je de ontvangstbevestiging maken"
 
 msgid "Now you can set the casting options"
 msgstr "Nu kun je de gietopties instellen"
+
+msgid "Optional description of the content"
+msgstr "Optionele beschrijving van de inhoud"
 
 msgid "Payments pending delegated accounts"
 msgstr "Betalingen in afwachting van gedelegeerde rekeningen"
@@ -4755,6 +4872,9 @@ msgstr "Als je hulp nodig hebt, ga dan naar"
 msgid "Indicate the required character options"
 msgstr "Geef de vereiste tekenopties aan"
 
+msgid "MIME type of the file (e.g., video/mp4)"
+msgstr "MIME-type van het bestand (bijv. video/mp4)"
+
 msgid "Manages and assigns tasks to characters"
 msgstr "Taken beheren en toewijzen aan personages"
 
@@ -4826,6 +4946,9 @@ msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
 msgid "Did you check the required data properly"
 msgstr "Heb je de vereiste gegevens goed gecontroleerd"
 
+msgid "IP address from which the token was used"
+msgstr "IP-adres van waaruit het token is gebruikt"
+
 msgid "If not found, the option will be skipped"
 msgstr "Als de optie niet wordt gevonden, wordt deze overgeslagen"
 
@@ -4852,6 +4975,9 @@ msgstr "De betaling wordt momenteel beoordeeld door het personeel"
 
 msgid "The collection was delivered to the user"
 msgstr "De collectie werd geleverd aan de gebruiker"
+
+msgid "This content is currently not available."
+msgstr "Deze inhoud is momenteel niet beschikbaar."
 
 msgid "This page shows the quests for the event"
 msgstr "Deze pagina toont de quests voor het evenement"
@@ -4886,6 +5012,9 @@ msgstr "als het teken bij dit element hoort"
 
 msgid "Added at the top of the user profile page"
 msgstr "Toegevoegd bovenaan de gebruikersprofielpagina"
+
+msgid "Browser user agent string from the access"
+msgstr "Browser user agent string van de toegang"
 
 msgid "Choice locked, click to make it available"
 msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
@@ -5072,6 +5201,9 @@ msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
 msgid "Set up a value for registration secret link"
 msgstr "Een waarde instellen voor registratie geheime link"
 
+msgid "This access link is invalid or has expired."
+msgstr "Deze toegangslink is ongeldig of verlopen."
+
 msgid "This page allows you to translate the event"
 msgstr "Op deze pagina kun je het evenement vertalen"
 
@@ -5195,6 +5327,9 @@ msgstr "Badges beheren en toewijzen aan deelnemers"
 
 msgid "Manage the registration questions and options"
 msgstr "De registratievragen en -opties beheren"
+
+msgid "Member who used this token (if authenticated)"
+msgstr "Lid dat dit token heeft gebruikt (indien geverifieerd)"
 
 msgid "Now you can copy elements from an other event"
 msgstr "Nu kun je elementen van een andere gebeurtenis kopiëren"
@@ -5766,6 +5901,9 @@ msgstr "Beheer dynamische termijnbetalingen voor registraties"
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Nu kun je de 'patron' en 'reduced' tickets maken"
 
+msgid "Now you can upload content and generate access tokens"
+msgstr "Nu kunt u inhoud uploaden en toegangsmunten genereren"
+
 msgid "Optional - ram html code (substitute the text before)"
 msgstr "Optioneel - ruwe html-code (vervangt bovenstaande tekst)"
 
@@ -5817,6 +5955,9 @@ msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Wil je gebruikers in staat stellen vrijwillig te doneren"
+
+msgid "Each token can only be used once for security reasons."
+msgstr "Om veiligheidsredenen kan elk token maar één keer worden gebruikt."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alles is in orde om dit evenement te betalen"
@@ -5871,6 +6012,9 @@ msgstr "Deze pagina vat de aangepaste teksten van het evenement samen"
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Deze pagina vat de ledenlijst samen als een register"
+
+msgid "Whether this content is currently available for access"
+msgstr "Of deze inhoud momenteel beschikbaar is voor toegang"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Je hebt het minimumaantal voorkeuren niet bereikt om aan te geven"
@@ -6312,6 +6456,9 @@ msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Optioneel - Uitgebreide beschrijving (weergegeven in kleine grijze tekst)"
 
+msgid "Optional note about this token (e.g., recipient name, purpose)"
+msgstr "Optionele opmerking over dit token (bijv. naam ontvanger, doel)"
+
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
 "Specifieke waarden instellen voor de configuratie van kenmerken van de "
@@ -6485,6 +6632,11 @@ msgid "Use the information below to request the transfer from your bank"
 msgstr ""
 "Gebruik de onderstaande informatie om de overschrijving aan te vragen bij je"
 " bank"
+
+msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
+msgstr ""
+"Video- of audiobestand dat moet worden gestreamd (aanbevolen: MP4, WebM, "
+"MP3)"
 
 msgid "You have indicated several preferences towards the same element!"
 msgstr "Je hebt meerdere voorkeuren voor hetzelfde element aangegeven!"
@@ -6731,6 +6883,9 @@ msgstr ""
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Het ticket wordt gelijk verdeeld in het aangegeven aantal aandelen"
+
+msgid "This access link has already been used and cannot be accessed again."
+msgstr "Deze toegangslink is al gebruikt en kan niet opnieuw worden geopend."
 
 msgid "This page allows you to add or edit a question from the sign up form"
 msgstr ""
@@ -7064,6 +7219,12 @@ msgid ""
 msgstr ""
 "Op deze pagina kunt u de factuur voor de betaling van een "
 "lidmaatschapsbijdrage uploaden"
+
+msgid ""
+"Upload and manage secure video/audio content with one-time access tokens"
+msgstr ""
+"Beveiligde video/audio-inhoud uploaden en beheren met eenmalige "
+"toegangstokens"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
@@ -8282,6 +8443,13 @@ msgstr ""
 "evenement kunnen registreren"
 
 msgid ""
+"This page shows the secure video/audio content with one-time access tokens "
+"for the event"
+msgstr ""
+"Deze pagina toont de beveiligde video/audio-inhoud met eenmalige "
+"toegangstokens voor het evenement"
+
+msgid ""
 "This page summarizes the abilities that participants can purchase with "
 "experience points"
 msgstr ""
@@ -8697,6 +8865,13 @@ msgid ""
 msgstr ""
 "Als het aan jou wordt toegewezen, krijg je automatisch het originele "
 "personage toegewezen dat het spiegelt"
+
+msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link."
+msgstr ""
+"Als je opnieuw toegang wilt tot deze inhoud, neem dan contact op met de "
+"organisatoren voor een nieuwe toegangslink."
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all "
@@ -10336,6 +10511,15 @@ msgstr ""
 "Daarnaast moet je up-to-date zijn met de betaling van je lidmaatschapsgeld "
 "om te kunnen deelnemen aan evenementen. Doe de betaling <a href='%(url)s'>op"
 " deze pagina</a>."
+
+msgid ""
+"Enables secure streaming of video/audio content via one-time access tokens. "
+"Each token can only be used once and tracks who accessed the content, when, "
+"and from where"
+msgstr ""
+"Maakt beveiligde streaming van video/audio-inhoud mogelijk via eenmalige "
+"toegangstokens. Elk token kan maar één keer worden gebruikt en houdt bij "
+"wie, wanneer en waar toegang heeft gehad tot de inhoud."
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        <meta http-equiv="Cache-Control"
+              content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <title>{{ content.name }}</title>
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #999;
+        }
+
+        .player-wrapper {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        video, audio {
+            width: 100%;
+            display: block;
+            outline: none;
+        }
+
+        .warning {
+            background-color: #2a2a2a;
+            border-left: 4px solid #ff6b6b;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 4px;
+        }
+
+        .warning h3 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .warning p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .info {
+            background-color: #2a2a2a;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .warning, .info {
+                padding: 15px;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>{{ content.name }}</h1>
+                {% if content.description %}<p>{{ content.description }}</p>{% endif %}
+            </div>
+            <div class="player-wrapper">
+                {% if content.content_type|slice:":5" == "video" %}
+                    <video controls preload="metadata" controlsList="nodownload">
+                        <source src="{% url 'onetime_stream' token=token %}"
+                                type="{{ content.content_type }}">
+                        Your browser does not support the video tag.
+                    </video>
+                {% elif content.content_type|slice:":5" == "audio" %}
+                    <audio controls preload="metadata" controlsList="nodownload">
+                        <source src="{% url 'onetime_stream' token=token %}"
+                                type="{{ content.content_type }}">
+                        Your browser does not support the audio tag.
+                    </audio>
+                {% else %}
+                    <p style="padding: 40px; text-align: center; color: #999;">Media type not supported for streaming.</p>
+                {% endif %}
+            </div>
+            <div class="warning">
+                <h3>⚠️ One-Time Access Notice</h3>
+                <p>
+                    This is a one-time access link. The access token has been consumed and cannot be used again.
+                    If you close this page, you will not be able to access this content again with the same link.
+                    Please watch/listen to the content now or contact the organizers for a new access link.
+                </p>
+            </div>
+            <div class="info">
+                <p>This content is protected and cannot be downloaded. Screen recording is discouraged.</p>
+            </div>
+        </div>
+        <script>
+        // Disable right-click context menu on media elements
+        document.querySelectorAll('video, audio').forEach(function(media) {
+            media.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Prevent download attribute bypass
+            media.addEventListener('loadedmetadata', function() {
+                media.removeAttribute('download');
+            });
+        });
+
+        // Warn before leaving page
+        let hasPlayed = false;
+        document.querySelectorAll('video, audio').forEach(function(media) {
+            media.addEventListener('play', function() {
+                hasPlayed = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (hasPlayed) {
+                const message = 'Are you sure you want to leave? This is a one-time access link.';
+                e.returnValue = message;
+                return message;
+            }
+        });
+
+        // Disable caching
+        if (window.performance && window.performance.navigation.type === 2) {
+            window.location.reload();
+        }
+        </script>
+    </body>
+</html>
