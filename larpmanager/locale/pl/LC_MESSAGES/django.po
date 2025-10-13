@@ -6153,6 +6153,10 @@ msgstr "Suma opłaty rejestracyjnej: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Przekroczono maksymalną liczbę opcji do wyboru"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Dostęp do panelu zarządzania <a href= %(url)s\">z tego miejsca</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Czy chcesz akceptować płatności przetwarzane przez system"
 
@@ -6205,10 +6209,6 @@ msgstr ""
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "UWAGA: Ta czynność zastępuje zmiany wprowadzone w tym zdarzeniu"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Dostęp do panelu zarządzania <a href= %(url)s'>z tego miejsca!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""

@@ -300,7 +300,7 @@ def calendar_past(request):
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
 
-    runs = get_coming_runs(aid, future=False).select_related("event__assoc").prefetch_related("tickets")
+    runs = get_coming_runs(aid, future=False).select_related("event__assoc")
 
     my_regs_dict = {}
     if request.user.is_authenticated:

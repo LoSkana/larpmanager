@@ -35,7 +35,7 @@ def paginate(request, ctx, typ, template, view, exe=True):
 
     draw = int(request.POST.get("draw", 0))
 
-    elements, records_filtered = _get_elements_query(cls, ctx, request, typ)
+    elements, records_filtered = _get_elements_query(cls, ctx, request, typ, exe)
 
     records_total = typ.objects.count()
 
@@ -52,10 +52,19 @@ def paginate(request, ctx, typ, template, view, exe=True):
     )
 
 
-def _get_elements_query(cls, ctx, request, typ):
+def _get_elements_query(cls, ctx, request, typ, exe=True):
     start, length, order, filters = _get_query_params(request)
 
     elements = cls.filter(assoc_id=ctx["a_id"])
+
+    # For event-specific views (exe=False), also filter by run if the model has a run field
+    if not exe and "run" in ctx:
+        # noinspection PyProtectedMember
+        field_names = [f.name for f in typ._meta.get_fields()]
+        if "run" in field_names:
+            elements = elements.filter(run=ctx["run"])
+        elif "event" in field_names:
+            elements = elements.filter(event=ctx["event"])
 
     # noinspection PyProtectedMember
     if "hide" in [f.name for f in typ._meta.get_fields()]:

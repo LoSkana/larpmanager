@@ -2155,7 +2155,7 @@ msgid "Role approval %(role)s"
 msgstr ""
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr ""
 
 #, python-format
@@ -7911,9 +7911,6 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
-msgid "Manage warehouse containers"
-msgstr ""
-
 msgid "Pre-Registrations"
 msgstr ""
 
@@ -7995,16 +7992,10 @@ msgstr ""
 msgid "quick"
 msgstr ""
 
-msgid "Manage warehouse items"
-msgstr ""
-
-msgid "Manage warehouse containers"
+msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage warehouse tags"
-msgstr ""
-
-msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"

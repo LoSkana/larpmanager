@@ -6141,6 +6141,10 @@ msgstr "Summa för din post: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har överskridit det maximala antalet valbara alternativ"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vill du acceptera betalningar som behandlas via systemet"
 
@@ -6195,10 +6199,6 @@ msgstr "%(amount)d %(tokens)s användes för att delta i detta evenemang"
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "VARNING: denna åtgärd skriver över ändringar som gjorts till detta evenemang"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""

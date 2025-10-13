@@ -6163,6 +6163,10 @@ msgstr "Total de tu entrada: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Ha superado el número máximo de opciones seleccionables"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Accede al panel de gestión <a href= %(url)s'>desde aquí</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "¿Desea aceptar pagos procesados a través del sistema"
 
@@ -6216,10 +6220,6 @@ msgstr "¡%(amount)d %(tokens)s se utilizaron para participar en este evento"
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "ADVERTENCIA: esta acción sobrescribe cambios realizados en este evento"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Accede al panel de gestión <a href= %(url)s'>desde aquí!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""

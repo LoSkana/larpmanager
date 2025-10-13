@@ -6147,6 +6147,10 @@ msgstr "Summen av oppføringen din: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har overskredet det maksimale antallet valgbare alternativer"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Ønsker du å akseptere betalinger som behandles gjennom systemet"
 
@@ -6202,10 +6206,6 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "ADVARSEL: Denne handlingen overskriver endringer som er gjort i denne "
 "hendelsen"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""

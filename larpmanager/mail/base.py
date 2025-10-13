@@ -118,7 +118,7 @@ def on_association_roles_m2m_changed(sender, **kwargs):
             activate(mb.language)
             subj = hdr(instance.assoc) + _("Role approval %(role)s") % {"role": instance.name}
             url = get_url("manage", instance.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
+            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.assoc)
 
             # notify organizers
@@ -179,7 +179,7 @@ def on_event_roles_m2m_changed(sender, **kwargs):
                 "event": instance.event,
             }
             url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
+            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
             # notify organizers
