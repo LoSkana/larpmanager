@@ -22,9 +22,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
-from larpmanager.models.member import Log
+from larpmanager.models.member import Log, Member
 from larpmanager.models.miscellanea import (
     WarehouseContainer,
     WarehouseItem,
@@ -97,6 +99,8 @@ class Operations:
     DEL_CHAR_DELIVERY = 12
     ADD_CHAR_PROLOGUE = 13
     DEL_CHAR_PROLOGUE = 14
+    SET_CHAR_PROGRESS = 15
+    SET_CHAR_ASSIGNED = 16
 
 
 def exec_bulk(request, ctx, mapping):
@@ -202,6 +206,16 @@ def exec_del_char_prologue(request, ctx, target, ids):
     prologue.characters.remove(*_get_chars(ctx, ids))
 
 
+def exec_set_char_progress(request, ctx, target, ids):
+    progress_step = ctx["event"].get_elements(ProgressStep).get(pk=target)
+    ctx["event"].get_elements(Character).filter(pk__in=ids).update(progress=progress_step)
+
+
+def exec_set_char_assigned(request, ctx, target, ids):
+    member = Member.objects.get(pk=target)
+    ctx["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
+
+
 def handle_bulk_characters(request, ctx):
     """Process bulk operations on character objects.
 
@@ -224,7 +238,9 @@ def handle_bulk_characters(request, ctx):
             Operations.ADD_CHAR_DELIVERY: exec_add_char_delivery,
             Operations.DEL_CHAR_DELIVERY: exec_del_char_delivery,
             Operations.ADD_CHAR_PROLOGUE: exec_add_char_prologue,
-            Operations.DEL_CHAR_PROLOGUE: exec_add_char_prologue,
+            Operations.DEL_CHAR_PROLOGUE: exec_del_char_prologue,
+            Operations.SET_CHAR_PROGRESS: exec_set_char_progress,
+            Operations.SET_CHAR_ASSIGNED: exec_set_char_assigned,
         }
         raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
@@ -264,6 +280,20 @@ def handle_bulk_characters(request, ctx):
                 {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
                 {"idx": Operations.DEL_CHAR_DELIVERY, "label": _("Remove from xp delivery"), "objs": delivery},
             ]
+        )
+
+    if "progress" in ctx["features"]:
+        progress_steps = ctx["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
+        ctx["bulk"].append(
+            {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps}
+        )
+
+    if "assigned" in ctx["features"]:
+        # Get event staff members using the same function used in writing utils
+        event_staff = get_event_staffers(ctx["event"])
+        staff_members = [{"id": m.id, "name": m.show_nick()} for m in event_staff]
+        ctx["bulk"].append(
+            {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members}
         )
 
 

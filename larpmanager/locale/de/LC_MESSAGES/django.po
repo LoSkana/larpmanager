@@ -2933,6 +2933,9 @@ msgstr "Unterwürfige Anfrage"
 msgid "Residence address"
 msgstr "Wohnanschrift"
 
+msgid "Set progress step"
+msgstr "Fortschrittsstufe einstellen"
+
 msgid "Technical Support"
 msgstr "Technische Unterstützung"
 
@@ -3955,6 +3958,9 @@ msgstr "Anmeldung bei %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Antrag zur Genehmigung gesendet"
+
+msgid "Set assigned staff member"
+msgstr "Zugewiesenen Mitarbeiter festlegen"
 
 msgid "Set up fixed installments"
 msgstr "Feste Raten einrichten"

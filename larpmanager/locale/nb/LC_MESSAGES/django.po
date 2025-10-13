@@ -2933,6 +2933,9 @@ msgstr "Underdanig forespørsel"
 msgid "Residence address"
 msgstr "Bostedsadresse"
 
+msgid "Set progress step"
+msgstr "Angi fremdriftstrinn"
+
 msgid "Technical Support"
 msgstr "Teknisk støtte"
 
@@ -3955,6 +3958,9 @@ msgstr "Registrering på %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Forespørsel sendt for godkjenning"
+
+msgid "Set assigned staff member"
+msgstr "Angi tildelt medarbeider"
 
 msgid "Set up fixed installments"
 msgstr "Sett opp faste avdrag"
