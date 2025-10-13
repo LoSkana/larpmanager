@@ -268,7 +268,7 @@ def _prepare_export(ctx: dict, model: str, query: QuerySet) -> None:
     # Special handling for character model: build character-to-member assignments
     if model == "character":
         ctx["assignments"] = {}
-        for rcr in RegistrationCharacterRel.objects.filter(run=ctx["run"]).select_related("reg", "reg__member"):
+        for rcr in RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).select_related("reg", "reg__member"):
             ctx["assignments"][rcr.character.id] = rcr.reg.member
 
     # Update context with all prepared export data
