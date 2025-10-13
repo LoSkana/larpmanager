@@ -104,7 +104,7 @@ def assign_casting(request, ctx, typ):
 
                 RegistrationCharacterRel.objects.create(character_id=eid, reg=reg)
             else:
-                AssignmentTrait.objects.create(trait_id=eid, run=reg.run, member=mb, typ=typ)
+                AssignmentTrait.objects.create(trait_id=eid, run_id=reg.run_id, member=mb, typ=typ)
         except Exception as e:
             print(e)
             err += str(e)
@@ -172,7 +172,7 @@ def check_player_skip_characters(reg, ctx):
 
 
 def check_player_skip_quests(reg, typ):
-    return AssignmentTrait.objects.filter(run=reg.run, member=reg.member, typ=typ).count() > 0
+    return AssignmentTrait.objects.filter(run_id=reg.run_id, member_id=reg.member_id, typ=typ).count() > 0
 
 
 def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):

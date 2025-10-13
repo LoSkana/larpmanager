@@ -147,7 +147,7 @@ def _init_element_cache_reg_field(el, res):
         res[el.id] = {}
 
     # noinspection PyProtectedMember
-    que = RegistrationQuestion.objects.filter(event=el.run.event)
+    que = RegistrationQuestion.objects.filter(event_id=el.run.event_id)
     for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         try:
             v = RegistrationAnswer.objects.get(question_id=que_id, reg_id=el.id).text

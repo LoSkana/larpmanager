@@ -920,7 +920,7 @@ def orga_reload_cache(request, s):
     reset_cache_run(ctx["event"].assoc_id, ctx["run"].get_slug())
     clear_event_features_cache(ctx["event"].id)
     clear_run_event_links_cache(ctx["event"])
-    clear_registration_counts_cache(ctx["run"])
+    clear_registration_counts_cache(ctx["run"].id)
     clear_event_fields_cache(ctx["event"].id)
     clear_event_relationships_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))

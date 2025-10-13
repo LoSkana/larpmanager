@@ -65,7 +65,7 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.TOKEN,
                 value=tk_use,
-                member=reg.member,
+                member_id=reg.member_id,
                 reg=reg,
                 assoc_id=assoc_id,
             )
@@ -79,7 +79,7 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.CREDIT,
                 value=cr_use,
-                member=reg.member,
+                member_id=reg.member_id,
                 reg=reg,
                 assoc_id=assoc_id,
             )
@@ -237,30 +237,34 @@ def update_token_credit(instance, token=True):
 
     # token case
     if token:
-        tk_given = AccountingItemOther.objects.filter(member=instance.member, oth=OtherChoices.TOKEN, assoc_id=assoc_id)
+        tk_given = AccountingItemOther.objects.filter(
+            member_id=instance.member_id, oth=OtherChoices.TOKEN, assoc_id=assoc_id
+        )
         tk_used = AccountingItemPayment.objects.filter(
-            member=instance.member, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
+            member_id=instance.member_id, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
         )
         membership.tokens = get_sum(tk_given) - get_sum(tk_used)
         membership.save()
 
     # credit or refund case
     else:
-        cr_expenses = AccountingItemExpense.objects.filter(member=instance.member, is_approved=True, assoc_id=assoc_id)
+        cr_expenses = AccountingItemExpense.objects.filter(
+            member_id=instance.member_id, is_approved=True, assoc_id=assoc_id
+        )
         cr_given = AccountingItemOther.objects.filter(
-            member=instance.member, oth=OtherChoices.CREDIT, assoc_id=assoc_id
+            member_id=instance.member_id, oth=OtherChoices.CREDIT, assoc_id=assoc_id
         )
         cr_used = AccountingItemPayment.objects.filter(
-            member=instance.member, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
+            member_id=instance.member_id, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
         )
         cr_refunded = AccountingItemOther.objects.filter(
-            member=instance.member, oth=OtherChoices.REFUND, assoc_id=assoc_id
+            member_id=instance.member_id, oth=OtherChoices.REFUND, assoc_id=assoc_id
         )
         membership.credit = get_sum(cr_expenses) + get_sum(cr_given) - (get_sum(cr_used) + get_sum(cr_refunded))
         membership.save()
 
     # trigger accounting update on registrations with missing remaining
-    for reg in get_regs_paying_incomplete(instance.assoc).filter(member=instance.member):
+    for reg in get_regs_paying_incomplete(instance.assoc).filter(member_id=instance.member_id):
         reg.save()
 
 
