@@ -24,7 +24,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -127,24 +127,34 @@ def casting_details(ctx, typ):
 
 
 @login_required
-def casting(request, s, typ=0):
+def casting(request: HttpRequest, slug: str, typ: int = 0) -> HttpResponse:
     """Handle user casting preferences for LARP events.
 
+    This view manages the casting preference selection process for registered users,
+    including validation of registration status and processing of preference submissions.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
-        typ: Casting type identifier (default: 0)
+        request: Django HTTP request object containing user session and POST data
+        slug: Event slug identifier used to retrieve the specific event run
+        typ: Casting type identifier for different casting categories (default: 0)
 
     Returns:
-        HttpResponse: Rendered casting form or redirect response
+        HttpResponse: Rendered casting form template or redirect response to appropriate page
+
+    Raises:
+        Http404: If event or run is not found via get_event_run
+        PermissionDenied: If user lacks required casting feature permissions
     """
-    ctx = get_event_run(request, s, signup=True, status=True)
+    # Get event context and validate user access permissions
+    ctx = get_event_run(request, slug, signup=True, status=True)
     check_event_feature(request, ctx, "casting")
 
+    # Verify user has completed event registration
     if ctx["run"].reg is None:
         messages.success(request, _("You must signed up in order to select your preferences") + "!")
         return redirect("gallery", s=ctx["run"].get_slug())
 
+    # Check if user is on waiting list (cannot set preferences)
     if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == TicketTier.WAITING:
         messages.success(
             request,
@@ -155,35 +165,46 @@ def casting(request, s, typ=0):
         )
         return redirect("gallery", s=ctx["run"].get_slug())
 
+    # Load casting details and options for the specified type
     casting_details(ctx, typ)
     logger.debug(
         f"Casting context for typ {typ}: {ctx.get('gl_name', 'Unknown')}, features: {list(ctx.get('features', {}).keys())}"
     )
 
+    # Set template path for rendering
     red = "larpmanager/event/casting/casting.html"
 
+    # Check if user has already completed casting assignments
     _check_already_done(ctx, request, typ)
 
+    # If assignments are already done, render read-only view
     if "assigned" in ctx:
         return render(request, red, ctx)
 
+    # Load any previously saved preferences for this casting type
     _get_previous(ctx, request, typ)
 
+    # Process POST request with new casting preferences
     if request.method == "POST":
         prefs = {}
+        # Extract preference choices from form data
         for i in range(0, ctx["casting_max"]):
             k = f"choice{i}"
             if k not in request.POST:
                 continue
             pref = int(request.POST[k])
+
+            # Validate no duplicate preferences selected
             if pref in prefs.values():
                 messages.warning(request, _("You have indicated several preferences towards the same element!"))
                 return redirect("casting", s=ctx["run"].get_slug(), typ=typ)
             prefs[i] = pref
 
+        # Save preferences and redirect to refresh page
         _casting_update(ctx, prefs, request, typ)
         return redirect(request.path_info)
 
+    # Render casting form for GET requests
     return render(request, red, ctx)
 
 

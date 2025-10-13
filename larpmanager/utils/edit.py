@@ -19,12 +19,14 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import time
+from typing import Any, Optional
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.http import Http404, JsonResponse
+from django.forms import ModelForm
+from django.http import Http404, HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -215,56 +217,86 @@ def backend_get(ctx, typ, eid, afield=None):
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, quiet=False):
+def backend_edit(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    form_type: type[ModelForm],
+    eid: Optional[int],
+    afield: Optional[str] = None,
+    assoc: bool = False,
+    quiet: bool = False,
+) -> bool:
     """Handle backend editing operations for various content types.
 
     Provides unified interface for editing different model types including
     form processing, validation, logging, and deletion handling for both
     event-based and association-based content management.
+
+    Args:
+        request: Django HTTP request object containing user and POST data
+        ctx: Context dictionary for template rendering and data sharing
+        form_type: Django ModelForm class for handling the specific model
+        eid: Element ID for editing existing objects, None for new objects
+        afield: Optional additional field parameter for specialized handling
+        assoc: Flag indicating association-based vs event-based operation
+        quiet: Flag to suppress success messages when True
+
+    Returns:
+        bool: True if form was successfully processed and saved, False otherwise
     """
+    # Extract model type and set up basic context variables
     typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request
 
+    # Handle association-based operations vs event-based operations
     if assoc:
         ctx["exe"] = True
         if eid is None:
             eid = request.assoc["id"]
             ctx["nonum"] = True
-
     elif eid is None:
         eid = ctx["event"].id
         ctx["nonum"] = True
 
+    # Load existing element or set as None for new objects
     if eid != 0:
         backend_get(ctx, typ, eid, afield)
     else:
         ctx["el"] = None
 
+    # Set up context for template rendering
     ctx["num"] = eid
     ctx["type"] = ctx["elementTyp"].__name__.lower()
+
+    # Process POST request - form submission and validation
     if request.method == "POST":
         ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
         if ctx["form"].is_valid():
+            # Save the form and show success message if not in quiet mode
             p = ctx["form"].save()
             if not quiet:
                 messages.success(request, _("Operation completed") + "!")
 
+            # Handle deletion if delete flag is set in POST data
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
             if dl:
                 p.delete()
 
+            # Store saved object in context and return success
             ctx["saved"] = p
-
             return True
     else:
+        # GET request - initialize form with existing instance
         ctx["form"] = form_type(instance=ctx["el"], ctx=ctx)
 
+    # Set display name for existing objects
     if eid != 0:
         ctx["name"] = str(ctx["el"])
 
+    # Handle "add another" functionality for continuous adding
     ctx["add_another"] = "add_another" not in ctx or ctx["add_another"]
     if ctx["add_another"]:
         ctx["continue_add"] = "continue" in request.POST

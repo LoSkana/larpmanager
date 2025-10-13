@@ -25,75 +25,83 @@ from io import StringIO
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import transaction
-from django.http import HttpRequest
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter
 from larpmanager.utils.tasks import notify_admins
 
 
-def invoice_verify(request: HttpRequest, ctx: dict, csv_upload: InMemoryUploadedFile) -> None:
+def invoice_verify(ctx: dict, csv_upload: InMemoryUploadedFile) -> int:
     """Verify and match payments from CSV upload against pending invoices.
 
     Processes a CSV file containing payment data and matches entries against
     pending payment invoices using causal codes, registration codes, or transaction IDs.
+    Marks matching invoices as verified when payment amounts are sufficient.
 
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary containing todo list of pending invoices
-        csv_upload: Uploaded CSV file containing payment data
+        ctx (dict): Context dictionary containing 'todo' key with list of pending invoices
+        csv_upload (InMemoryUploadedFile): Uploaded CSV file containing payment data with
+            format [amount, causal, ...] where amount uses dot for thousands
+            and comma for decimal separator
 
     Returns:
         int: Number of successfully verified payments
 
     Note:
         CSV format expected: [amount, causal, ...] where amount uses dot for thousands
-        and comma for decimal separator
+        and comma for decimal separator. Only processes unverified invoices where
+        payment amount meets or exceeds invoice amount.
     """
-    content = csv_upload.read().decode("utf-8")
-    delim = detect_delimiter(content)
+    # Decode CSV content and detect delimiter
+    content: str = csv_upload.read().decode("utf-8")
+    delim: str = detect_delimiter(content)
     csv_data = csv.reader(StringIO(content), delimiter=delim)
 
-    counter = 0
+    counter: int = 0
 
+    # Process each row in the CSV file
     for row in csv_data:
-        causal = row[1]
-        amount = row[0].replace(".", "").replace(",", ".")
+        causal: str = row[1]
+        amount_str: str = row[0].replace(".", "").replace(",", ".")
 
-        if not causal:
+        # Skip rows with missing causal or amount data
+        if not causal or not amount_str:
             continue
 
-        if not amount:
-            continue
-
-        # check in all todos
+        # Check payment against all pending invoices
         for el in ctx["todo"]:
+            # Skip already verified invoices
             if el.verified:
                 continue
 
-            found = clean(el.causal) in clean(causal)
-            code = el.causal.split()[0]
+            # Try to match causal code directly
+            found: bool = clean(el.causal) in clean(causal)
+            code: str = el.causal.split()[0]
 
-            random_causal_length = 16
-
+            # Check for random causal codes (16 characters)
+            random_causal_length: int = 16
             if not found and len(code) == random_causal_length:
                 found = code in clean(causal)
 
+            # Try matching registration code if available
             if not found and el.reg_cod:
                 found = clean(el.reg_cod) in clean(causal)
 
+            # Try matching transaction ID if available
             if not found and el.txn_id:
                 found = clean(el.txn_id) in clean(causal)
 
+            # Skip if no match found
             if not found:
                 continue
 
-            a_dist = math.ceil(float(amount)) - math.ceil(float(el.mc_gross))
-            if a_dist > 0:
+            # Verify payment amount is sufficient (rounded up)
+            amount_diff: float = math.ceil(float(amount_str)) - math.ceil(float(el.mc_gross))
+            if amount_diff > 0:
                 continue
 
+            # Mark invoice as verified and increment counter
             counter += 1
-
             with transaction.atomic():
                 el.verified = True
                 el.save()

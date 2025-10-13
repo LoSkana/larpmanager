@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.access import get_event_staffers
@@ -216,20 +217,26 @@ def exec_set_char_assigned(request, ctx, target, ids):
     ctx["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
-def handle_bulk_characters(request, ctx):
+def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
     """Process bulk operations on character objects.
 
     Handles mass character modifications, faction assignments, and other
     batch character management tasks for efficient character administration.
 
     Args:
-        request: Django HTTP request object containing POST data with operation details
-        ctx (dict): Context dictionary containing event and selection data
+        request: Django HTTP request object containing POST data with operation details.
+        ctx: Context dictionary containing event and selection data. Modified in-place
+            to include operation results and status messages.
 
     Returns:
-        None: Function modifies ctx in-place, adding operation results and status messages
+        None: Function modifies ctx in-place.
+
+    Raises:
+        ReturnNowError: When POST request is processed, containing execution results.
     """
+    # Handle POST request by executing the requested bulk operation
     if request.POST:
+        # Map operation codes to their corresponding execution functions
         mapping = {
             Operations.ADD_CHAR_FACT: exec_add_char_fact,
             Operations.DEL_CHAR_FACT: exec_del_char_fact,
@@ -242,10 +249,13 @@ def handle_bulk_characters(request, ctx):
             Operations.SET_CHAR_PROGRESS: exec_set_char_progress,
             Operations.SET_CHAR_ASSIGNED: exec_set_char_assigned,
         }
+        # Execute the bulk operation and raise exception to return result
         raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
+    # Initialize bulk operations list for GET requests
     ctx["bulk"] = []
 
+    # Add faction-related operations if faction feature is enabled
     if "faction" in ctx["features"]:
         factions = ctx["event"].get_elements(Faction).values("id", "name").order_by("name")
         ctx["bulk"].extend(
@@ -255,6 +265,7 @@ def handle_bulk_characters(request, ctx):
             ]
         )
 
+    # Add plot-related operations if plot feature is enabled
     if "plot" in ctx["features"]:
         plots = ctx["event"].get_elements(Plot).values("id", "name").order_by("name")
         ctx["bulk"].extend(
@@ -264,6 +275,7 @@ def handle_bulk_characters(request, ctx):
             ]
         )
 
+    # Add prologue-related operations if prologue feature is enabled
     if "prologue" in ctx["features"]:
         prologues = ctx["event"].get_elements(Prologue).values("id", "name").order_by("name")
         ctx["bulk"].extend(
@@ -273,6 +285,7 @@ def handle_bulk_characters(request, ctx):
             ]
         )
 
+    # Add XP delivery operations if px feature is enabled
     if "px" in ctx["features"]:
         delivery = ctx["event"].get_elements(DeliveryPx).values("id", "name")
         ctx["bulk"].extend(
@@ -282,12 +295,14 @@ def handle_bulk_characters(request, ctx):
             ]
         )
 
+    # Add progress step operation if progress feature is enabled
     if "progress" in ctx["features"]:
         progress_steps = ctx["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
         ctx["bulk"].append(
             {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps}
         )
 
+    # Add staff assignment operation if assigned feature is enabled
     if "assigned" in ctx["features"]:
         # Get event staff members using the same function used in writing utils
         event_staff = get_event_staffers(ctx["event"])

@@ -24,13 +24,14 @@ import shutil
 import zipfile
 from io import BytesIO
 from uuid import uuid4
+from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
 from django.db import models
 from django.shortcuts import render
-from PIL import Image, ImageOps
 from PIL import Image as PILImage
+from PIL import ImageOps
 
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.member import Badge
@@ -76,59 +77,79 @@ def upload_albums_dir(main, cache_subs, name):
     return cache_subs[name]
 
 
-def upload_albums_el(f, alb, name, main, o_path):
+def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
     """Upload individual file from zip archive to album.
 
-    Args:
-        f: Zip file object
-        alb: Album instance to upload to
-        name (str): File name from zip archive
-        main: Main album instance
-        o_path (str): Output path for extraction
+    Processes a single file from a zip archive, creates album upload and image records,
+    and moves the file to the appropriate media directory structure.
 
-    Side effects:
-        Creates AlbumUpload and AlbumImage records, moves files to media directory
+    Args:
+        f: Zip file object containing the archive being processed
+        alb: Album instance to upload the file to
+        name: File name from zip archive (including path if nested)
+        main: Main album instance containing run and event references
+        o_path: Output path where zip contents were extracted
+
+    Side Effects:
+        - Creates AlbumUpload and AlbumImage database records
+        - Moves file from extraction path to media directory
+        - Creates directory structure if it doesn't exist
+        - Generates unique filename using UUID to prevent conflicts
+
+    Returns:
+        None
     """
-    # check if exists already
+    # Check if file already exists in album to avoid duplicates
     u_name = os.path.basename(name)
     for u in alb.uploads.all():
         if u.name == u_name:
             return
 
-            # check if image
+    # Create album upload record for the file
     upl = AlbumUpload()
     upl.album = alb
     upl.name = u_name
     upl.typ = AlbumUpload.PHOTO
     upl.save()
 
+    # Create associated album image record
     img = AlbumImage()
     img.upload = upl
 
+    # Generate unique filename preserving original extension
     parts = u_name.split(".")
     ext = parts[-1] if len(parts) > 1 and parts[-1] else "tmp"
     filename = f"{uuid4().hex}.{ext}"
 
+    # Build destination path starting from media root
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "albums")
     fpath = os.path.join(fpath, main.run.event.slug)
     fpath = os.path.join(fpath, str(main.run.number))
+
+    # Traverse album hierarchy to build nested directory structure
     par = alb.parent
     dirs = []
     while par is not None:
         dirs.append(par.id)
         par = par.parent
     dirs.reverse()
+
+    # Create directory structure for nested albums
     for el in dirs:
         fpath = os.path.join(fpath, str(el))
         if not os.path.exists(fpath):
             os.makedirs(fpath)
+
+    # Complete the file path with unique filename
     fpath = os.path.join(fpath, filename)
     print(fpath)
 
+    # Move file from extraction path to final destination
     os.rename(os.path.join(o_path, name), fpath)
 
+    # Store file path and extract image dimensions
     img.original = fpath
-    with Image.open(fpath) as i:
+    with PILImage.open(fpath) as i:
         img.width, img.height = i.size
     img.save()
 

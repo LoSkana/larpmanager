@@ -292,66 +292,92 @@ def profile_privacy_rewoke(request, slug):
 
 
 @login_required
-def membership(request):
+def membership(request: HttpRequest) -> HttpResponse:
     """User interface for managing their own membership status.
 
     Handles membership applications, renewals, and membership-related
     form submissions for individual users.
+
+    Args:
+        request: The HTTP request object containing user and POST data.
+
+    Returns:
+        HttpResponse: Rendered membership template or redirect response.
+
+    Raises:
+        Http404: If membership status is invalid for the requested operation.
     """
+    # Initialize context with default user context
     ctx = def_user_ctx(request)
 
+    # Get user's membership record for current association
     el = get_user_membership(request.user.member, request.assoc["id"])
 
+    # Redirect to profile if membership compilation is incomplete
     if not el.compiled:
         return redirect("profile")
 
     if request.method == "POST":
+        # Validate membership status allows form submission
         if el.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             raise Http404("wrong membership")
 
-        # Second pass - if the user already uploaded the files
+        # Second pass - confirmation after file upload
         if el.status == MembershipStatus.UPLOADED:
             form = MembershipConfirmForm(request.POST, request.FILES)
             if form.is_valid():
+                # Mark membership as submitted and send confirmation
                 el.status = MembershipStatus.SUBMITTED
                 el.save()
                 send_membership_confirm(request, el)
+
+                # Show success message and redirect to home
                 mes = _("Your membership application was successfully submitted!")
                 messages.success(request, mes)
                 return redirect("home")
 
-        # First pass - if the user did not upload the files
+        # First pass - initial file upload
         else:
             form = MembershipRequestForm(request.POST, request.FILES, instance=el)
             if form.is_valid():
+                # Save form data and update status to uploaded
                 form.save()
                 el.status = MembershipStatus.UPLOADED
                 el.save()
+
+                # Prepare confirmation form and file paths for template
                 form = MembershipConfirmForm()
                 ctx["doc_path"] = el.get_document_filepath().lower()
                 ctx["req_path"] = el.get_request_filepath().lower()
 
     else:
-        # Bring back to empty if uploaded
+        # Reset status if returning from uploaded state
         if el.status == MembershipStatus.UPLOADED:
             el.status = MembershipStatus.JOINED
             el.save()
+
+        # Initialize form with current membership data
         form = MembershipRequestForm(instance=el)
 
+    # Add core membership data to context
     ctx.update({"member": request.user.member, "membership": el, "form": form})
 
+    # Add fiscal code calculation if feature is enabled
     if "fiscal_code_check" in ctx["features"]:
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
+    # Check if membership fee has been paid for current year
     ctx["fee_payed"] = AccountingItemMembership.objects.filter(
         assoc_id=request.assoc["id"],
         year=datetime.now().year,
         member_id=request.user.member.id,
     ).exists()
 
+    # Add statute text for accepted memberships
     if el.status == MembershipStatus.ACCEPTED:
         ctx["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
 
+    # Disable join functionality for this view
     ctx["disable_join"] = True
 
     return render(request, "larpmanager/member/membership.html", ctx)
@@ -559,32 +585,45 @@ def unsubscribe(request):
 
 
 @login_required
-def vote(request):
+def vote(request: HttpRequest) -> HttpResponse:
     """Handle voting functionality for association members.
 
     Manages voting processes, ballot submissions, and vote counting
     for association governance and decision-making.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered voting page or redirect response.
+
+    Raises:
+        PermissionDenied: If user doesn't have voting feature access.
+        ValidationError: If voting configuration is invalid.
     """
+    # Verify user has access to voting feature
     check_assoc_feature(request, "vote")
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
+    # Set current year for membership and voting validation
     ctx["year"] = datetime.now().year
 
-    # check if they have payed
+    # Check if membership payment is required and completed
     if "membership" in request.assoc["features"]:
         que = AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"])
         if not que.filter(member_id=ctx["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
             return redirect("acc_membership")
 
+    # Check if user has already voted this year
     que = Vote.objects.filter(member=ctx["member"], assoc_id=ctx["a_id"], year=ctx["year"])
     if que.count() > 0:
         ctx["done"] = True
         return render(request, "larpmanager/member/vote.html", ctx)
 
+    # Retrieve voting configuration from association settings
     assoc_id = ctx["a_id"]
-
     config_holder = Object()
 
     ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, config_holder)
@@ -592,13 +631,16 @@ def vote(request):
     ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", config_holder)
     ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", config_holder)
 
+    # Process vote submission if POST request
     if request.method == "POST":
         cnt = 0
+        # Iterate through candidate IDs and record votes
         for m_id in ctx["vote_cands"]:
             v = request.POST.get(f"vote_{m_id}")
             if not v:
                 continue
             cnt += 1
+            # Create vote record for each selected candidate
             Vote.objects.create(
                 member=ctx["member"],
                 assoc_id=ctx["a_id"],
@@ -608,14 +650,17 @@ def vote(request):
             )
         return redirect(request.path_info)
 
+    # Build list of candidate objects for display
     ctx["candidates"] = []
-
     for mb in ctx["vote_cands"]:
         try:
             idx = int(mb)
             ctx["candidates"].append(Member.objects.get(pk=idx))
         except Exception:
+            # Skip invalid candidate IDs
             pass
+
+    # Randomize candidate order to prevent position bias
     random.shuffle(ctx["candidates"])
 
     return render(request, "larpmanager/member/vote.html", ctx)

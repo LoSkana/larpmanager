@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any, Optional
 
 from django import forms
 from django.conf import settings as conf_settings
@@ -37,6 +38,7 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+    WritingQuestion,
     WritingQuestionType,
     get_writing_max_length,
 )
@@ -486,58 +488,72 @@ class BaseRegistrationForm(MyFormRun):
     def check_editable(self, question):
         return True
 
-    def _init_field(self, question, reg_counts=None, orga=True):
+    def _init_field(
+        self, question: WritingQuestion, reg_counts: Optional[dict[str, Any]] = None, orga: bool = True
+    ) -> Optional[str]:
         """Initialize form field for a writing question.
+
+        Creates and configures a form field based on the writing question type and settings.
+        Handles different question statuses, validation requirements, and organizer vs user contexts.
 
         Args:
             question: WritingQuestion instance to create field for
-            reg_counts: Registration count data (optional)
-            orga: Whether this is an organizer form (default: True)
+            reg_counts: Registration count data for field initialization, defaults to None
+            orga: Whether this is an organizer form, defaults to True
 
         Returns:
-            Form field instance or None for computed questions
+            Form field key string if field was created, None if question was skipped
+            (computed questions or non-editable questions for users)
         """
-        # ignore computed
+        # Skip computed questions entirely - they don't need form fields
         if question.typ == WritingQuestionType.COMPUTED:
             return None
 
+        # Generate unique field key based on question ID
         key = "q" + str(question.id)
 
+        # Set default field states for organizer context
         active = True
         required = False
 
+        # Apply user-specific field logic when not in organizer mode
         if not orga:
+            # Check if question is editable for current user context
             if not self.check_editable(question):
-                # skip questions not editable
-                return
+                return None
 
+            # Hide questions marked as hidden from users
             if question.status == QuestionStatus.HIDDEN:
-                # do not show hidden questions
-                return
+                return None
 
+            # Disable fields for disabled questions or creation-only questions
             if question.status == QuestionStatus.DISABLED:
-                # disable question, or if only creation and element is created
                 active = False
             else:
-                # make question mandatory
+                # Set field as required based on question status
                 required = question.status == QuestionStatus.MANDATORY
 
+        # Initialize field type and apply type-specific configuration
         key = self.init_type(key, orga, question, reg_counts, required)
         if not key:
             return key
 
+        # Apply user-specific field state (disabled/enabled)
         if not orga:
             self.fields[key].disabled = not active
 
+        # Configure max length validation for applicable question types
         if question.max_length:
             if question.typ in get_writing_max_length():
                 self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
+        # Mark mandatory fields with visual indicator and track for validation
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
 
+        # Set basic type flag for template rendering logic
         question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
 
         return key

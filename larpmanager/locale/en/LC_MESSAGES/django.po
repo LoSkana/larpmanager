@@ -8869,7 +8869,7 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
-msgid "You don’t have any events yet"
+msgid "You don't have any events yet"
 msgstr ""
 
 msgid "Please create your first event to get started"

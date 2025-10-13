@@ -4282,7 +4282,7 @@ msgstr "Transport - bensin, motorvei"
 msgid "Unconverted pre-registrations"
 msgstr "Ikke-konverterte forhåndsregistreringer"
 
-msgid "You don’t have any events yet"
+msgid "You don't have any events yet"
 msgstr "Du har ingen arrangementer ennå"
 
 msgid "You're not allowed to sign up"

@@ -1,6 +1,20 @@
 from decimal import Decimal
+from typing import Any
 
-from django.db.models import Case, DecimalField, ExpressionWrapper, F, IntegerField, OuterRef, Q, Subquery, Value, When
+from django.db.models import (
+    Case,
+    DecimalField,
+    ExpressionWrapper,
+    F,
+    IntegerField,
+    Model,
+    OuterRef,
+    Q,
+    QuerySet,
+    Subquery,
+    Value,
+    When,
+)
 from django.db.models.functions import Cast, Coalesce
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -226,13 +240,27 @@ def _prepare_data_json(ctx, elements, view, edit, exe=True):
     return data
 
 
-def _apply_custom_queries(ctx, elements, typ):
+def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Model]) -> QuerySet:
+    """Apply custom queries and optimizations based on model type.
+
+    Args:
+        ctx: Context dictionary containing request data and parameters
+        elements: Base queryset to apply modifications to
+        typ: Model class type to determine which optimizations to apply
+
+    Returns:
+        Modified queryset with applied select_related, prefetch_related,
+        annotations, and ordering based on the model type
+    """
+    # Apply select_related optimization for AccountingItem and subclasses
     if issubclass(typ, AccountingItem):
         elements = elements.select_related("member")
 
+    # Handle AccountingItemExpense with member relation and approval-based ordering
     if issubclass(typ, AccountingItemExpense):
         elements = elements.select_related("member").order_by("is_approved", "-created")
 
+    # Handle PaymentInvoice with submission status annotation and ordering
     elif issubclass(typ, PaymentInvoice):
         elements = elements.annotate(
             is_submitted=Case(
@@ -243,22 +271,28 @@ def _apply_custom_queries(ctx, elements, typ):
         )
         elements = elements.order_by("is_submitted", "-created")
 
+    # Handle RefundRequest with membership prefetch and credit annotation
     elif issubclass(typ, RefundRequest):
         elements = elements.prefetch_related("member__memberships")
         elements = elements.order_by("-status", "-updated")
 
+        # Subquery to get the latest membership credit for each member
         memberships = Membership.objects.filter(member_id=OuterRef("member_id"), assoc_id=ctx["a_id"]).order_by("id")[
             :1
         ]
         elements = elements.annotate(credits=Subquery(memberships.values("credit")))
 
+    # Handle AccountingItemPayment with transaction calculations
     elif issubclass(typ, AccountingItemPayment):
+        # Get field definition for proper decimal handling
         # noinspection PyUnresolvedReferences, PyProtectedMember
         val_field = AccountingItemPayment._meta.get_field("value")
         dec = DecimalField(max_digits=val_field.max_digits, decimal_places=val_field.decimal_places)
 
+        # Define zero value with proper decimal field type
         zero = Value(Decimal("0"), output_field=dec)
 
+        # Subquery to calculate total transaction value per invoice
         subq_base = (
             AccountingItemTransaction.objects.filter(inv_id=OuterRef("inv_id"))
             .values("inv_id")
@@ -268,19 +302,22 @@ def _apply_custom_queries(ctx, elements, typ):
 
         subq = Subquery(subq_base, output_field=dec)
 
+        # Annotate with transaction totals and net calculations
         elements = elements.annotate(
             trans=Coalesce(subq, zero),
             net=ExpressionWrapper(F("value") - Coalesce(subq, zero), output_field=dec),
         )
+    # Default ordering for other model types
     else:
         elements = elements.order_by("-created")
 
+    # Apply subtype-specific filters based on context
     subtype = ctx.get("subtype")
     if subtype == "credits":
         elements = elements.filter(oth=OtherChoices.CREDIT)
-
     elif subtype == "tokens":
         elements = elements.filter(oth=OtherChoices.TOKEN)
+
     return elements
 
 

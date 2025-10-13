@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -70,58 +70,88 @@ from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
-def calendar(request, lang):
+def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     """Display the event calendar with open and future runs for an association.
 
+    This function retrieves upcoming runs for an association, checks user registration status,
+    and categorizes runs into 'open' (available for registration) and 'future' (not yet open).
+    It also filters runs based on development status and user permissions.
+
     Args:
-        request: HTTP request object containing user and association data
-        lang: Language code for filtering events
+        request: HTTP request object containing user and association data. Must include
+                'assoc' key with association information and authenticated user data.
+        lang: Language code for filtering events by language preference.
 
     Returns:
-        Rendered calendar template with events and registration status
+        HttpResponse: Rendered calendar template containing:
+            - open: List of runs open for registration
+            - future: List of future runs not yet open
+            - langs: Available language options
+            - custom_text: Association-specific homepage text
+            - my_reg: User's registration status for each run (if authenticated)
+
+    Note:
+        Authenticated users see runs they're registered for even if in START development status.
+        Anonymous users cannot see START status runs at all.
     """
+    # Extract association ID from request context
     aid = request.assoc["id"]
 
-    # Get nexts runs
+    # Get upcoming runs with optimized queries using select_related and prefetch_related
     runs = (
         get_coming_runs(aid).select_related("event").prefetch_related("registrations__ticket", "registrations__member")
     )
 
-    # Check user registrations if authenticated
+    # Initialize user registration tracking
     my_regs_dict = {}
+
     if request.user.is_authenticated:
+        # Define cutoff date (3 days ago) for filtering relevant registrations
         ref = datetime.now() - timedelta(days=3)
+
+        # Fetch user's active registrations for upcoming runs
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
-            cancellation_date__isnull=True,
-            redeem_code__isnull=True,
+            cancellation_date__isnull=True,  # Exclude cancelled registrations
+            redeem_code__isnull=True,  # Exclude redeemed registrations
             member=request.user.member,
-            run__end__gte=ref.date(),
+            run__end__gte=ref.date(),  # Only future/recent runs
         ).select_related("ticket", "run")
 
+        # Create lookup dictionary for O(1) access to user registrations
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
         my_runs_list = list(my_regs_dict.keys())
 
-        # Filter runs based on user registrations
+        # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
     else:
+        # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
         my_regs = None
 
+    # Initialize context with default user context and empty collections
     ctx = def_user_ctx(request)
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
+
+    # Add language filter to context if specified
     if lang:
         ctx["lang"] = lang
 
-    # Process runs in batch with pre-fetched data
+    # Process each run to determine registration status and categorize
     for run in runs:
+        # Attach user's registration to run object for template access
         run.my_reg = my_regs_dict.get(run.id) if my_regs_dict else None
-        registration_status(run, request.user, my_regs=my_regs)
-        if run.status["open"]:
-            ctx["open"].append(run)
-        elif "already" not in run.status:
-            ctx["future"].append(run)
 
+        # Calculate registration status (open, closed, full, etc.)
+        registration_status(run, request.user, my_regs=my_regs)
+
+        # Categorize runs based on registration availability
+        if run.status["open"]:
+            ctx["open"].append(run)  # Available for registration
+        elif "already" not in run.status:
+            ctx["future"].append(run)  # Future runs (not yet open, not already registered)
+
+    # Add association-specific homepage text to context
     ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", ctx)

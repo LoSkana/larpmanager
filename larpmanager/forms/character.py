@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -91,7 +92,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
         """Initialize character form with custom fields and configuration.
 
         Sets up the character creation/editing form including faction selection,
@@ -99,21 +100,28 @@ class CharacterForm(WritingForm, BaseWritingForm):
         character completion workflow for approval processes.
 
         Args:
-            *args: Positional arguments passed to parent form class
-            **kwargs: Keyword arguments passed to parent form class, must include
-                     'params' dict with event, run, and features configuration
+            *args: Positional arguments passed to parent form class.
+            **kwargs: Keyword arguments passed to parent form class. Must include
+                     'params' dict with event, run, and features configuration.
 
-        Side effects:
-            - Creates self.details dict for additional field information
-            - Initializes faction selection and custom fields via _init_character
-            - Modifies form fields based on event configuration
+        Raises:
+            KeyError: If required 'params' key is missing from kwargs.
+
+        Note:
+            The 'params' dict should contain:
+            - event: Event instance for context
+            - run: Run instance for current event run
+            - features: Available features configuration
         """
+        # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
 
         # Initialize storage for field details and metadata
-        self.details = {}
+        # This dict will store additional information about dynamic fields
+        self.details: dict[str, Any] = {}
 
         # Set up character-specific fields including factions and custom questions
+        # This method handles dynamic field creation based on event configuration
         self._init_character()
 
     def check_editable(self, question):

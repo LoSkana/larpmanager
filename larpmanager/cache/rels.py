@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any
+from typing import Any, Optional
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -187,7 +187,7 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
         event: The Event instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing cached relationship data
+        dict[str, Any]: Dictionary containing cached relationship data
     """
     cache_key = get_event_rels_key(event.id)
     res = cache.get(cache_key)
@@ -197,7 +197,7 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
     return res
 
 
-def init_event_rels_all(event: Event) -> dict[str, Any]:
+def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
     """Initialize all relationships for an event and cache the result.
 
     Builds a complete relationship cache for all characters in the event,
@@ -207,22 +207,32 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
         event: The Event instance to initialize relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary with relationship data structure:
-            {
-                'character': {
-                    char_id: {
-                        'plot_rels': [(plot_id, plot_name), ...],
-                        'faction_rels': [(faction_id, faction_name), ...]
-                    }
+        Dictionary with relationship data structure organized by element type:
+        {
+            'characters': {
+                char_id: {
+                    'plot_rels': [(plot_id, plot_name), ...],
+                    'faction_rels': [(faction_id, faction_name), ...]
                 }
-            }
+            },
+            'factions': {
+                faction_id: relationship_data
+            },
+            ...
+        }
+
+    Raises:
+        Exception: Any error during relationship initialization is logged
+                  and an empty dict is returned
     """
-    res = {}
+    res: dict[str, dict[int, dict[str, Any]]] = {}
 
     try:
+        # Get enabled features for this event to determine which relationships to build
         features = get_event_features(event.id)
 
-        # Configuration for each relationship type
+        # Configuration mapping for each relationship type with their corresponding
+        # feature name, cache key, model class, relationship function, and feature flag
         rel_configs = [
             ("character", "characters", Character, get_event_char_rels, True),
             ("faction", "factions", Faction, get_event_faction_rels, False),
@@ -233,24 +243,33 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
             ("questtype", "questtypes", QuestType, get_event_questtype_rels, False),
         ]
 
+        # Process each relationship type if the corresponding feature is enabled
         for feature_name, cache_key_plural, model_class, get_rels_func, pass_features in rel_configs:
             if feature_name not in features:
                 continue
 
+            # Initialize the cache section for this relationship type
             res[cache_key_plural] = {}
+
+            # Get all elements of this type associated with the event
             elements = event.get_elements(model_class)
+
+            # Build relationships for each element, passing features if required
             for element in elements:
                 if pass_features:
                     res[cache_key_plural][element.id] = get_rels_func(element, features)
                 else:
                     res[cache_key_plural][element.id] = get_rels_func(element)
+
             logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
 
+        # Cache the complete relationship data structure
         cache_key = get_event_rels_key(event.id)
         cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Cached relationships for event {event.id}")
 
     except Exception as e:
+        # Log the error with full traceback and return empty result
         logger.error(f"Error initializing relationships for event {event.id}: {e}", exc_info=True)
         res = {}
 
@@ -296,31 +315,45 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         clear_event_relationships_cache(event.id)
 
 
-def get_event_char_rels(char: Character, features: dict, event: Event = None) -> dict[str, Any]:
+def get_event_char_rels(char: "Character", features: dict[str, Any], event: Optional["Event"] = None) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
-    Includes plot relationships and faction relationships if those features are enabled.
+    Includes plot relationships, faction relationships, character relationships,
+    speedlarp relationships, and prologue relationships if those features are enabled.
 
     Args:
-        char: The Character instance to get relationships for
-        features: Set of enabled features
-        event: Event for which we are rebuilding the cache
+        char: The Character instance to get relationships for.
+        features: Dictionary of enabled features for the event.
+        event: Optional Event instance for which we are rebuilding the cache.
+               Used for faction independence configuration.
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
-            {
-                'plot_rels': {'list': [(plot_id, plot_name), ...], 'count': int},
-                'faction_rels': {'list': [(faction_id, faction_name), ...], 'count': int}
-            }
+        Dictionary containing relationship data with keys:
+            - 'plot_rels': Plot relationships with list and counts
+            - 'faction_rels': Faction relationships with list and counts
+            - 'relationships_rels': Character relationships with list and counts
+            - 'speedlarp_rels': Speedlarp relationships with list and counts
+            - 'prologue_rels': Prologue relationships with list and counts
+
+        Each relationship type contains:
+            - 'list': List of tuples (id, name)
+            - 'count': Total count of relationships
+            - 'important': Count excluding unimportant items (where applicable)
+
+    Raises:
+        Exception: Logs error and returns empty dict if relationship building fails.
     """
-    relations = {}
+    relations: dict[str, Any] = {}
 
     try:
+        # Handle plot relationships if plot feature is enabled
         if "plot" in features:
             rel_plots = char.get_plot_characters()
             plot_list = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
             relations["plot_rels"] = build_relationship_dict(plot_list)
+
+            # Calculate important plot count (excluding $unimportant entries)
             unimportant_count = 0
             if char.event.get_config("writing_unimportant", False):
                 unimportant_count = sum(
@@ -328,12 +361,15 @@ def get_event_char_rels(char: Character, features: dict, event: Event = None) ->
                 )
             relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_count
 
+        # Handle faction relationships if faction feature is enabled
         if "faction" in features:
+            # Determine which event to use for faction lookup
             if char.event.get_config("campaign_faction_indep", False):
                 fac_event = event
             else:
                 fac_event = char.event.get_class_parent("faction")
 
+            # Build faction list based on determined event
             if fac_event:
                 factions = char.factions_list.filter(event=fac_event)
                 faction_list = [(faction.id, faction.name) for faction in factions]
@@ -342,10 +378,13 @@ def get_event_char_rels(char: Character, features: dict, event: Event = None) ->
 
             relations["faction_rels"] = build_relationship_dict(faction_list)
 
+        # Handle character-to-character relationships if relationships feature is enabled
         if "relationships" in features:
             relationships = Relationship.objects.filter(deleted=None, source=char)
             rel_list = [(rel.target.id, rel.target.name) for rel in relationships]
             relations["relationships_rels"] = build_relationship_dict(rel_list)
+
+            # Calculate important relationship count (excluding $unimportant entries)
             unimportant_count = 0
             if char.event.get_config("writing_unimportant", False):
                 unimportant_count = sum(
@@ -353,17 +392,20 @@ def get_event_char_rels(char: Character, features: dict, event: Event = None) ->
                 )
             relations["relationships_rels"]["important"] = relations["relationships_rels"]["count"] - unimportant_count
 
+        # Handle speedlarp relationships if speedlarp feature is enabled
         if "speedlarp" in features:
             speedlarps = char.speedlarps_list.all()
             speedlarp_list = [(speedlarp.id, speedlarp.name) for speedlarp in speedlarps]
             relations["speedlarp_rels"] = build_relationship_dict(speedlarp_list)
 
+        # Handle prologue relationships if prologue feature is enabled
         if "prologue" in features:
             prologues = char.prologues_list.all()
             prologue_list = [(prologue.id, prologue.name) for prologue in prologues]
             relations["prologue_rels"] = build_relationship_dict(prologue_list)
 
     except Exception as e:
+        # Log the error with full traceback and return empty dict as fallback
         logger.error(f"Error getting relationships for character {char.id}: {e}", exc_info=True)
         relations = {}
 
@@ -377,7 +419,7 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
         faction: The Faction instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data:
             {
                 'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
             }
@@ -403,7 +445,7 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
         plot: The Plot instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data:
             {
                 'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
             }
@@ -429,7 +471,7 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
         speedlarp: The SpeedLarp instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data:
             {
                 'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
             }
@@ -455,7 +497,7 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
         prologue: The Prologue instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data:
             {
                 'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
             }
@@ -481,7 +523,7 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
         quest: The Quest instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data:
             {
                 'trait_rels': {'list': [(trait_id, trait_name), ...], 'count': int}
             }
@@ -507,7 +549,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
         questtype: The QuestType instance to get relationships for
 
     Returns:
-        Dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data:
             {
                 'quest_rels': {'list': [(quest_id, quest_name), ...], 'count': int}
             }

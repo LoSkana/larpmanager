@@ -4282,7 +4282,7 @@ msgstr "Transport - essence, autoroute"
 msgid "Unconverted pre-registrations"
 msgstr "Préinscriptions non converties"
 
-msgid "You don’t have any events yet"
+msgid "You don't have any events yet"
 msgstr "Vous n'avez pas encore d'événements"
 
 msgid "You're not allowed to sign up"

@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """
-Script to automatically improve functions from function_analysis.csv using Claude Code CLI.
+Script to automatically improve functions using Claude Code CLI.
+Can accept a specific function as input or process from function_analysis.csv.
 Processes each function: adds type hints, improves docstrings, adds comments.
 """
 
+import argparse
 import ast
 import csv
+import re
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -24,19 +28,55 @@ def max_parts():
     return 2
 
 
-def improve_function_with_claude_code(function_name: str, file_path: Path, start_line: int, end_line: int) -> bool:
+def extract_function_from_file(file_path: Path, function_name: str) -> str | None:
+    """Extract the source code of a specific function from a file."""
+    try:
+        with open(file_path, encoding="utf-8") as f:
+            lines = f.readlines()
+
+        tree = ast.parse("".join(lines))
+
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if node.name == function_name:
+                    start_line = node.lineno - 1  # Convert to 0-based
+                    end_line = node.end_lineno
+                    return "".join(lines[start_line:end_line])
+
+        return None
+    except Exception as e:
+        print(f"  ⚠️  Error extracting function: {e}")
+        return None
+
+
+def improve_function_with_claude_code(
+    function_name: str, file_path: Path, function_source: str = None
+) -> tuple[bool, str | None]:
     """
     Call Claude Code CLI to improve the function.
-    Returns True if successful, False otherwise.
+    Returns (success, improved_function_source).
     """
+    if function_source is None:
+        function_source = extract_function_from_file(file_path, function_name)
+        if function_source is None:
+            return False, None
+
     # Create the prompt for Claude Code
-    prompt = f"""Migliora la funzione `{function_name}` nel file {file_path} (righe {start_line}-{end_line}):
+    prompt = f"""Migliora questa funzione Python:
+
+```python
+{function_source}
+```
 
 1. Aggiungi type hints alla definizione della funzione (parametri e return type)
 2. Migliora il docstring seguendo lo stile Google/NumPy
 3. Aggiungi commenti inline ogni 4-5 linee o per ogni blocco logico
 
-IMPORTANTE: Modifica SOLO la funzione specificata nel file. Non aggiungere spiegazioni o sommari.
+IMPORTANTE:
+- Restituisci SOLO il codice della funzione migliorata, senza spiegazioni aggiuntive
+- NON aggiungere MAI import statements
+- MANTIENI esattamente la stessa indentazione della funzione originale
+- Non modificare l'indentazione esistente del codice
 """
 
     try:
@@ -53,25 +93,31 @@ IMPORTANTE: Modifica SOLO la funzione specificata nel file. Non aggiungere spieg
 
         # Check if successful
         if result.returncode == 0:
-            # Check if the output contains any modifications
             output = result.stdout.strip()
-            if output and len(output) > len(prompt):
-                return True
+
+            # Extract code blocks from the output
+            code_match = re.search(r"```python\n(.*?)\n```", output, re.DOTALL)
+            if code_match:
+                improved_code = code_match.group(1)
+                return True, improved_code
+            elif output and "def " in output:
+                # Sometimes Claude returns code without markdown blocks
+                return True, output
             else:
-                print("  ⚠️  Claude Code returned but made no changes")
-                return False
+                print("  ⚠️  Claude Code returned but no valid code found")
+                return False, None
         else:
             print(f"  ❌ Claude Code returned error (code {result.returncode})")
             if result.stderr:
                 print(f"  ❌ Error details: {result.stderr}")
-            return False
+            return False, None
 
     except subprocess.TimeoutExpired:
         print("  ❌ Claude Code timed out after 5 minutes")
-        return False
+        return False, None
     except Exception as e:
         print(f"  ❌ Error calling Claude Code: {e}")
-        return False
+        return False, None
 
 
 def get_function_line_range(file_path: Path, function_name: str) -> tuple[int, int] | None:
@@ -97,8 +143,150 @@ def get_function_line_range(file_path: Path, function_name: str) -> tuple[int, i
         return None
 
 
-def main():
-    csv_path = Path.cwd() / "function_analysis.csv"
+def get_function_indentation(function_source: str) -> str:
+    """Extract the base indentation of a function from its source code."""
+    lines = function_source.split("\n")
+    for line in lines:
+        if line.strip().startswith("def ") or line.strip().startswith("async def "):
+            # Count leading whitespace
+            return line[: len(line) - len(line.lstrip())]
+    return ""
+
+
+def normalize_function_indentation(improved_code: str, original_indentation: str) -> str:
+    """Ensure the improved function maintains the original indentation."""
+    lines = improved_code.split("\n")
+    if not lines:
+        return improved_code
+
+    # Remove any leading/trailing empty lines
+    while lines and not lines[0].strip():
+        lines.pop(0)
+    while lines and not lines[-1].strip():
+        lines.pop()
+
+    if not lines:
+        return improved_code
+
+    # Find the current indentation of the function definition
+    def_line = None
+    for line in lines:
+        if line.strip().startswith("def ") or line.strip().startswith("async def "):
+            def_line = line
+            break
+
+    if not def_line:
+        return improved_code
+
+    current_indentation = def_line[: len(def_line) - len(def_line.lstrip())]
+
+    # If indentations are the same, return as is
+    if current_indentation == original_indentation:
+        return "\n".join(lines)
+
+    # Adjust indentation
+    adjusted_lines = []
+    for line in lines:
+        if line.strip():  # Non-empty line
+            if line.startswith(current_indentation):
+                # Replace current indentation with original indentation
+                adjusted_line = original_indentation + line[len(current_indentation) :]
+                adjusted_lines.append(adjusted_line)
+            else:
+                # Line doesn't start with expected indentation, keep as is
+                adjusted_lines.append(line)
+        else:
+            # Empty line
+            adjusted_lines.append(line)
+
+    return "\n".join(adjusted_lines)
+
+
+def replace_function_in_file(
+    file_path: Path, function_name: str, new_function_code: str, original_function: str
+) -> bool:
+    """Replace a function in a file with improved code, maintaining original indentation."""
+    try:
+        with open(file_path, encoding="utf-8") as f:
+            lines = f.readlines()
+
+        tree = ast.parse("".join(lines))
+
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if node.name == function_name:
+                    start_line = node.lineno - 1  # Convert to 0-based
+                    end_line = node.end_lineno
+
+                    # Get original indentation and normalize the improved code
+                    original_indentation = get_function_indentation(original_function)
+                    normalized_code = normalize_function_indentation(new_function_code, original_indentation)
+
+                    # Replace the function
+                    new_lines = lines[:start_line] + [normalized_code + "\n"] + lines[end_line:]
+
+                    # Write back to file
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.writelines(new_lines)
+                    return True
+
+        return False
+    except Exception as e:
+        print(f"  ⚠️  Error replacing function: {e}")
+        return False
+
+
+def improve_single_function(file_path: str, function_name: str) -> bool:
+    """Improve a single function specified by the user."""
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        print(f"❌ File not found: {file_path}")
+        return False
+
+    print(f"🔍 Extracting function '{function_name}' from {file_path}")
+
+    # Extract original function
+    original_function = extract_function_from_file(file_path, function_name)
+    if original_function is None:
+        print(f"❌ Function '{function_name}' not found in {file_path}")
+        return False
+
+    print("📄 Original function:")
+    print("-" * 60)
+    print(original_function)
+    print("-" * 60)
+
+    # Improve function
+    print("🤖 Calling Claude Code to improve function...")
+    success, improved_function = improve_function_with_claude_code(function_name, file_path, original_function)
+
+    if not success or not improved_function:
+        print("❌ Failed to improve function")
+        return False
+
+    print("✨ Improved function:")
+    print("-" * 60)
+    print(improved_function)
+    print("-" * 60)
+
+    # Ask user for confirmation
+    response = input("🔄 Replace the function in the file? (y/N): ").lower().strip()
+    if response == "y":
+        if replace_function_in_file(file_path, function_name, improved_function, original_function):
+            print(f"✅ Successfully replaced function '{function_name}' in {file_path}")
+            return True
+        else:
+            print("❌ Failed to replace function in file")
+            return False
+    else:
+        print("ℹ️  Function not replaced")
+        return False
+
+
+def process_csv_batch():
+    """Process functions from CSV file in batch mode."""
+    csv_path = Path.cwd() / "refactor/function_analysis.csv"
 
     while True:
         # Read all rows from CSV
@@ -137,11 +325,17 @@ def main():
 
                 # Call Claude Code to improve
                 print("  🤖 Calling Claude Code...")
-                if improve_function_with_claude_code(function_name, file_path, start_line, end_line):
-                    print(f"  ✅ Successfully processed {function_name}")
-                    success = True
+                original_function = extract_function_from_file(file_path, function_name)
+                success, improved_code = improve_function_with_claude_code(function_name, file_path)
+                if success and improved_code and original_function:
+                    if replace_function_in_file(file_path, function_name, improved_code, original_function):
+                        print(f"  ✅ Successfully processed {function_name}")
+                        success = True
+                    else:
+                        print(f"  ❌ Failed to replace {function_name}")
+                        success = False
                 else:
-                    print(f"  ❌ Failed to process {function_name}")
+                    print(f"  ❌ Failed to improve {function_name}")
 
         # Remove processed row from CSV if successful or skipped
         if success:
@@ -154,6 +348,25 @@ def main():
         else:
             print("  ⏳  Wait 5 minutes before trying again...")
             time.sleep(5 * 60)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Improve Python functions using Claude Code CLI")
+    parser.add_argument("--file", help="Path to Python file containing the function")
+    parser.add_argument("--function", help="Name of the function to improve")
+
+    args = parser.parse_args()
+
+    if args.file and args.function:
+        # Single function mode
+        if not improve_single_function(args.file, args.function):
+            sys.exit(1)
+    else:
+        # CSV batch mode
+        if args.file or args.function:
+            print("❌ Both --file and --function are required for single function mode")
+            sys.exit(1)
+        process_csv_batch()
 
 
 if __name__ == "__main__":

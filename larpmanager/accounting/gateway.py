@@ -27,6 +27,7 @@ import math
 import re
 from decimal import Decimal
 from pprint import pformat
+from typing import Any, Union
 
 import requests
 import satispaython
@@ -328,56 +329,78 @@ def stripe_webhook(request):
         # raise Exception('Unhandled event type {}'.format(event['type']))
 
 
-def get_sumup_form(request, ctx, invoice, amount):
+def get_sumup_form(
+    request: "HttpRequest", ctx: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
+) -> None:
     """Generate SumUp payment form for invoice processing.
 
+    Creates a SumUp checkout session by first authenticating with the SumUp API
+    to obtain an access token, then creating a checkout with the invoice details.
+    Updates the invoice code with the checkout ID for tracking purposes.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
+        request: Django HTTP request object containing request metadata
+        ctx: Context dictionary containing SumUp payment configuration:
+            - sumup_client_id: SumUp API client ID
+            - sumup_client_secret: SumUp API client secret
+            - sumup_merchant_id: SumUp merchant identifier
+            - payment_currency: Currency code for the payment
         invoice: Invoice instance to process payment for
-        amount: Payment amount to charge
+        amount: Payment amount to charge (will be converted to float)
 
-    Returns:
-        str: HTML form for SumUp payment processing
+    Raises:
+        KeyError: If required configuration keys are missing from ctx
+        requests.RequestException: If API requests fail
+        json.JSONDecodeError: If API response is not valid JSON
     """
-    # ## GET AUTH TOKEN
-
-    url = "https://api.sumup.com/token"
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    payload = {
+    # Authenticate with SumUp API to obtain access token
+    auth_url = "https://api.sumup.com/token"
+    auth_headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    auth_payload = {
         "client_id": ctx["sumup_client_id"],
         "client_secret": ctx["sumup_client_secret"],
         "grant_type": "client_credentials",
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
-    aux = json.loads(response.text)
-    # logger.debug(f"Response text: {response.text}")
-    token = aux["access_token"]
-    # logger.debug(f"Token: {token}")
+    # Make authentication request and extract token
+    auth_response = requests.request("POST", auth_url, headers=auth_headers, data=auth_payload)
+    auth_data = json.loads(auth_response.text)
+    # logger.debug(f"Response text: {auth_response.text}")
+    access_token = auth_data["access_token"]
+    # logger.debug(f"Token: {access_token}")
 
-    # ## GET CHECKOUT
-
-    url = "https://api.sumup.com/v0.1/checkouts"
-    payload = json.dumps(
+    # Prepare checkout creation request with invoice details
+    checkout_url = "https://api.sumup.com/v0.1/checkouts"
+    checkout_payload = json.dumps(
         {
             "checkout_reference": invoice.cod,
             "amount": float(amount),
             "currency": ctx["payment_currency"],
             "merchant_code": ctx["sumup_merchant_id"],
             "description": invoice.causal,
+            # Configure callback URLs for payment flow
             "return_url": request.build_absolute_uri(reverse("acc_webhook_sumup")),
             "redirect_url": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
             "payment_type": "boleto",
         }
     )
-    headers = {"Content-Type": "application/json", "Accept": "application/json", "Authorization": f"Bearer {token}"}
-    # logger.debug(f"Payload: {payload}")
-    response = requests.request("POST", url, headers=headers, data=payload)
-    # logger.debug(f"SumUp response: {response.text}")
-    aux = json.loads(response.text)
-    ctx["sumup_checkout_id"] = aux["id"]
-    invoice.cod = aux["id"]
+
+    # Set authorization headers with obtained token
+    checkout_headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": f"Bearer {access_token}",
+    }
+
+    # Create checkout session and extract checkout ID
+    # logger.debug(f"Payload: {checkout_payload}")
+    checkout_response = requests.request("POST", checkout_url, headers=checkout_headers, data=checkout_payload)
+    # logger.debug(f"SumUp response: {checkout_response.text}")
+    checkout_data = json.loads(checkout_response.text)
+
+    # Store checkout ID in context and update invoice for tracking
+    ctx["sumup_checkout_id"] = checkout_data["id"]
+    invoice.cod = checkout_data["id"]
     invoice.save()
 
 
@@ -404,71 +427,75 @@ def redsys_invoice_cod():
     raise ValueError("Too many attempts to generate the code")
 
 
-def get_redsys_form(request: HttpRequest, ctx: dict, invoice, amount: Decimal) -> None:
+def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create Redsys payment form with encrypted parameters.
 
+    Generates a secure payment form for Redsys payment gateway by creating
+    encrypted parameters and updating the invoice with a unique code.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
-        invoice: PaymentInvoice instance
-        amount (float): Payment amount
+        request: Django HTTP request object containing association data
+        ctx: Context dictionary with Redsys payment configuration including
+             merchant code, terminal, currency, secret key, and sandbox flag
+        invoice: PaymentInvoice instance to be updated with payment code
+        amount: Payment amount in decimal format
 
     Returns:
-        dict: Redsys form context with encrypted payment data
+        None: Updates ctx dictionary in-place with 'redsys_form' key containing
+              encrypted payment data ready for form submission
+
+    Side Effects:
+        - Updates invoice.cod with generated payment code
+        - Saves invoice to database
+        - Adds 'redsys_form' to ctx dictionary
     """
+    # Generate unique invoice code and save to database
     invoice.cod = redsys_invoice_cod()
     invoice.save()
 
-    # logger.debug(f"Invoice: {invoice}")
-    # logger.debug(f"Invoice code: {invoice.cod}")
-
-    # ~ client = RedirectClient(ctx['redsys_secret_key'])
-
-    # ~ parameters = {
-    # ~ "merchant_code": ctx['redsys_merchant_code'],
-    # ~ "terminal": ctx['redsys_merchant_terminal'],
-    # ~ "transaction_type": STANDARD_PAYMENT,
-    # ~ "currency": int(ctx['redsys_merchant_currency']),
-    # ~ "order": invoice.cod,
-    # ~ "amount": D(amount).quantize(D(".01"), ROUND_HALF_UP),
-    # ~ "merchant_data": "test merchant data",
-    # ~ "merchant_name": request.assoc['name'],
-    # ~ "titular": "Example Ltd.",
-    # ~ "product_description": "Products of Example Commerce",
-    # ~ "merchant_url": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
-    # None
-
-    # ~ ctx['redsys_form'] = client.prepare_request(parameters)
-
+    # Prepare basic payment parameters for Redsys gateway
     values = {
         "DS_MERCHANT_AMOUNT": float(amount),
         "DS_MERCHANT_CURRENCY": int(ctx["redsys_merchant_currency"]),
         "DS_MERCHANT_ORDER": invoice.cod,
         "DS_MERCHANT_PRODUCTDESCRIPTION": invoice.causal,
         "DS_MERCHANT_TITULAR": request.assoc["name"],
-        "DS_MERCHANT_MERCHANTCODE": ctx["redsys_merchant_code"],
-        "DS_MERCHANT_MERCHANTURL": request.build_absolute_uri(reverse("acc_webhook_redsys")),
-        "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
-        "DS_MERCHANT_URLKO": request.build_absolute_uri(reverse("acc_redsys_ko")),
-        "DS_MERCHANT_MERCHANTNAME": request.assoc["name"],
-        "DS_MERCHANT_TERMINAL": ctx["redsys_merchant_terminal"],
-        "DS_MERCHANT_TRANSACTIONTYPE": "0",
     }
 
-    # key = "redsys_merchant_paymethods"
+    # Add merchant identification and terminal configuration
+    values.update(
+        {
+            "DS_MERCHANT_MERCHANTCODE": ctx["redsys_merchant_code"],
+            "DS_MERCHANT_MERCHANTNAME": request.assoc["name"],
+            "DS_MERCHANT_TERMINAL": ctx["redsys_merchant_terminal"],
+            "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Standard payment
+        }
+    )
+
+    # Configure callback URLs for payment flow
+    values.update(
+        {
+            "DS_MERCHANT_MERCHANTURL": request.build_absolute_uri(reverse("acc_webhook_redsys")),
+            "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
+            "DS_MERCHANT_URLKO": request.build_absolute_uri(reverse("acc_redsys_ko")),
+        }
+    )
+
+    # Add optional payment methods if configured
     if "key" in ctx and ctx["key"]:
         values["DS_MERCHANT_PAYMETHODS"] = ctx["key"]
 
-    # logger.debug(f"Context: {ctx}")
-    redsys_sandbox = False
-    if int(ctx["redsys_sandbox"]) == 1:
-        redsys_sandbox = True
-    # logger.debug(f"Redsys sandbox: {redsys_sandbox}")
+    # Determine sandbox mode from configuration
+    redsys_sandbox = int(ctx["redsys_sandbox"]) == 1
+
+    # Initialize Redsys client with merchant credentials
     redsyspayment = RedSysClient(
         business_code=ctx["redsys_merchant_code"],
         secret_key=ctx["redsys_secret_key"],
         sandbox=redsys_sandbox,
     )
+
+    # Generate encrypted form data and add to context
     ctx["redsys_form"] = redsyspayment.redsys_generate_request(values)
     # logger.debug(f"Redsys form: {ctx['redsys_form']}")
 

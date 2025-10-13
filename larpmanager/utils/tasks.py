@@ -22,6 +22,7 @@ import logging
 import re
 import traceback
 from functools import wraps
+from typing import Any, Optional, Union
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -323,35 +324,54 @@ def add_unsubscribe_body(assoc):
     return txt
 
 
-def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
+def my_send_mail(
+    subj: str,
+    body: str,
+    recipient: Union[str, Member],
+    obj: Optional[Union[Run, Event, Association, Any]] = None,
+    reply_to: Optional[str] = None,
+    schedule: int = 0,
+) -> None:
     """Queue email for sending with context-aware formatting.
 
     Main email sending function that adds signatures, unsubscribe links,
     and queues email for background delivery.
 
     Args:
-        subj (str): Email subject
-        body (str): Email body content
-        recipient (str or Member): Email recipient
-        obj (optional): Context object (Run, Event, Association, etc.)
-        reply_to (str, optional): Reply-to email address
-        schedule (int): Seconds to delay before sending
+        subj: Email subject line
+        body: Email body content (HTML or plain text)
+        recipient: Email recipient address or Member instance
+        obj: Context object for extracting association/run information.
+             Supports Run, Event, Association, or objects with run_id/assoc_id/event_id
+        reply_to: Custom reply-to email address
+        schedule: Delay in seconds before sending email
 
-    Side effects:
-        Creates Email record and schedules background task for delivery
+    Returns:
+        None
+
+    Side Effects:
+        - Creates Email record in database
+        - Schedules background task for email delivery
+        - Modifies body with signature and unsubscribe link
     """
+    # Clean up duplicate spaces in subject line
     subj = subj.replace("  ", " ")
 
+    # Initialize context variables for database relationships
     run_id = None
     assoc_id = None
+
+    # Extract context information from the provided object
     if obj:
+        # Handle direct model instances
         if isinstance(obj, Run):
             run_id = obj.id  # type: ignore[attr-defined]
             assoc_id = obj.event.assoc_id  # type: ignore[attr-defined]
-        if isinstance(obj, Event):
+        elif isinstance(obj, Event):
             assoc_id = obj.assoc_id  # type: ignore[attr-defined]
         elif isinstance(obj, Association):
             assoc_id = obj.id  # type: ignore[attr-defined]
+        # Handle objects with foreign key relationships
         elif hasattr(obj, "run_id") and obj.run_id:
             run_id = obj.run_id
             assoc_id = obj.run.event.assoc_id
@@ -360,25 +380,29 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
         elif hasattr(obj, "event_id") and obj.event_id:
             assoc_id = obj.event.assoc_id
 
+        # Add organization signature if available
         if assoc_id:
             sign = get_assoc_text(assoc_id, AssocTextType.SIGNATURE)
             if sign:
                 body += sign
 
+    # Append unsubscribe footer based on context
     body += add_unsubscribe_body(obj)
 
+    # Convert Member instance to email string if needed
     if isinstance(recipient, Member):
         recipient = recipient.email
 
-    # print(assoc)
-
+    # Ensure string types for database storage
     subj_str = str(subj)
     body_str = str(body)
 
+    # Create email record for tracking and delivery
     email = Email.objects.create(
         assoc_id=assoc_id, run_id=run_id, recipient=recipient, subj=subj_str, body=body_str, reply_to=reply_to
     )
 
+    # Queue email for background processing
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 

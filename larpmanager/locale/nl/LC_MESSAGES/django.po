@@ -4282,7 +4282,7 @@ msgstr "Vervoer - benzine, snelweg"
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
 
-msgid "You don’t have any events yet"
+msgid "You don't have any events yet"
 msgstr "Je hebt nog geen evenementen"
 
 msgid "You're not allowed to sign up"
