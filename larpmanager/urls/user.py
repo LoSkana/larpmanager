@@ -34,6 +34,7 @@ from larpmanager.views.user import accounting as views_ua
 from larpmanager.views.user import event as views_ue
 from larpmanager.views.user import member as views_um
 from larpmanager.views.user import miscellanea as views_ums
+from larpmanager.views.user import onetime as views_onetime
 from larpmanager.views.user import registration as views_ur
 
 urlpatterns = [
@@ -431,4 +432,14 @@ urlpatterns = [
         name="set_member_config",
     ),
     path("upload_media/", views_base.upload_media, name="upload_media"),
+    path(
+        "watch/<str:token>/",
+        views_onetime.onetime_access,
+        name="onetime_access",
+    ),
+    path(
+        "stream/<str:token>/",
+        views_onetime.onetime_stream,
+        name="onetime_stream",
+    ),
 ]

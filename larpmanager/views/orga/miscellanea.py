@@ -29,6 +29,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.forms.miscellanea import (
+    OneTimeAccessTokenForm,
+    OneTimeContentForm,
     OrgaAlbumForm,
     OrgaProblemForm,
     UploadAlbumsForm,
@@ -43,6 +45,8 @@ from larpmanager.forms.warehouse import (
 )
 from larpmanager.models.miscellanea import (
     Album,
+    OneTimeAccessToken,
+    OneTimeContent,
     Problem,
     Util,
     WarehouseArea,
@@ -350,3 +354,29 @@ def orga_warehouse_assignment_area(request, s, num):
     assign.save()
 
     return JsonResponse({"ok": True})
+
+
+@login_required
+def orga_onetimes(request, s):
+    """List all one-time contents for an event."""
+    ctx = check_event_permission(request, s, "orga_onetimes")
+    ctx["list"] = OneTimeContent.objects.filter(event=ctx["event"]).order_by("-created")
+    return render(request, "larpmanager/orga/onetimes.html", ctx)
+
+
+@login_required
+def orga_onetimes_edit(request, s, num):
+    """Edit or create a one-time content."""
+    return orga_edit(request, s, "orga_onetimes", OneTimeContentForm, num)
+
+
+@login_required
+def orga_onetimes_tokens(request, s):
+    ctx = check_event_permission(request, s, "orga_onetimes")
+    ctx["list"] = OneTimeAccessToken.objects.filter(content__event=ctx["event"]).order_by("-created")
+    return render(request, "larpmanager/orga/onetimes_tokens.html", ctx)
+
+
+@login_required
+def orga_onetimes_tokens_edit(request, s, num):
+    return orga_edit(request, s, "orga_onetimes_tokens", OneTimeAccessTokenForm, num)

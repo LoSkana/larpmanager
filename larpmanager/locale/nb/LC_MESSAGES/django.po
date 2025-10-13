@@ -116,6 +116,9 @@ msgstr "Snuoperasjoner"
 msgid "Edit"
 msgstr "Rediger"
 
+msgid "File"
+msgstr "Fil"
+
 msgid "Form"
 msgstr "Skjema"
 
@@ -275,6 +278,9 @@ msgstr "dager"
 msgid "gift"
 msgstr "gave"
 
+msgid "used"
+msgstr "brukt"
+
 msgid "Album"
 msgstr "Album"
 
@@ -417,6 +423,9 @@ msgstr "Tredje"
 msgid "Title"
 msgstr "Tittel"
 
+msgid "Token"
+msgstr "Token"
+
 msgid "Total"
 msgstr "Totalsum"
 
@@ -476,6 +485,9 @@ msgstr "Redigere"
 
 msgid "Checks"
 msgstr "Sjekker"
+
+msgid "Copied"
+msgstr "Kopiert"
 
 msgid "Counts"
 msgstr "Tellinger"
@@ -636,6 +648,9 @@ msgstr "Egenskaper"
 msgid "Unread"
 msgstr "Ulest"
 
+msgid "Unused"
+msgstr "Ubrukt"
+
 msgid "Update"
 msgstr "Oppdatering"
 
@@ -708,8 +723,14 @@ msgstr "Søke"
 msgid "Contact"
 msgstr "Kontakt"
 
+msgid "Content"
+msgstr "Innhold"
+
 msgid "Correct"
 msgstr "Korrekt"
+
+msgid "Created"
+msgstr "Opprettet"
 
 msgid "Credits"
 msgstr "Studiepoeng"
@@ -864,6 +885,18 @@ msgstr "Oppdatert"
 msgid "Use TLD"
 msgstr "Bruk TLD"
 
+msgid "Used At"
+msgstr "Brukt på"
+
+msgid "Used By"
+msgstr "Brukt av"
+
+msgid "Used at"
+msgstr "Brukes på"
+
+msgid "Used by"
+msgstr "Brukt av"
+
 msgid "Utility"
 msgstr "Verktøy"
 
@@ -939,6 +972,9 @@ msgstr "Forbrukt"
 msgid "Continue"
 msgstr "Fortsettelse"
 
+msgid "Copy URL"
+msgstr "Kopier URL"
+
 msgid "Creation"
 msgstr "Skapelse"
 
@@ -968,6 +1004,9 @@ msgstr "Donasjon"
 
 msgid "Download"
 msgstr "Last ned"
+
+msgid "Duration"
+msgstr "Varighet"
 
 msgid "Editable"
 msgstr "Redigerbar"
@@ -1005,6 +1044,9 @@ msgstr "Utdeling"
 msgid "Holidays"
 msgstr "Ferier"
 
+msgid "Inactive"
+msgstr "Inaktiv"
+
 msgid "Included"
 msgstr "Inkludert"
 
@@ -1034,6 +1076,9 @@ msgstr "Ny gave"
 
 msgid "Nickname"
 msgstr "Kallenavn"
+
+msgid "One-Time"
+msgstr "Engangsbruk"
 
 msgid "Optional"
 msgstr "Valgfritt"
@@ -1146,6 +1191,9 @@ msgstr "Finansdepartementet"
 msgid "Uploaded"
 msgstr "Lastet opp"
 
+msgid "Used on:"
+msgstr "Brukes på:"
+
 msgid "VAT rate"
 msgstr "MVA-sats"
 
@@ -1224,6 +1272,9 @@ msgstr "Donasjoner"
 msgid "Enrolment"
 msgstr "Innmelding"
 
+msgid "File size"
+msgstr "Filstørrelse"
+
 msgid "First aid"
 msgstr "Førstehjelp"
 
@@ -1253,6 +1304,9 @@ msgstr "Trenger du hjelp"
 
 msgid "New event"
 msgstr "Nytt arrangement"
+
+msgid "Open Link"
+msgstr "Åpne lenke"
 
 msgid "Operation"
 msgstr "Drift"
@@ -1425,11 +1479,20 @@ msgstr "Erfaring"
 msgid "Historical"
 msgstr "Historisk"
 
+msgid "IP Address"
+msgstr "IP-adresse"
+
+msgid "IP address"
+msgstr "IP-adresse"
+
 msgid "Kicked out"
 msgstr "Jaktet"
 
 msgid "Legal name"
 msgstr "Juridisk navn"
+
+msgid "Media file"
+msgstr "Mediefil"
 
 msgid "Membership"
 msgstr "Medlemskap"
@@ -1545,6 +1608,9 @@ msgstr "Token-navn"
 msgid "Two quotas"
 msgstr "To kvoter"
 
+msgid "User agent"
+msgstr "Brukeragent"
+
 msgid "Visibility"
 msgstr "Synlighet"
 
@@ -1583,6 +1649,9 @@ msgstr "trykk her"
 
 msgid "reply here"
 msgstr "svar her"
+
+msgid "Access Link"
+msgstr "Access Link"
 
 msgid "Access link"
 msgstr "Tilgangslenke"
@@ -1808,6 +1877,15 @@ msgstr "Endre bilde"
 
 msgid "Collaborator"
 msgstr "Bidragsyter"
+
+msgid "Content Type"
+msgstr "Innholdstype"
+
+msgid "Content name"
+msgstr "Navn på innhold"
+
+msgid "Content type"
+msgstr "Innholdstype"
 
 msgid "Event hidden"
 msgstr "Hendelse skjult"
@@ -2059,6 +2137,12 @@ msgstr "Totale inntekter"
 msgid "Internal link"
 msgstr "Intern lenke"
 
+msgid "Invalid Token"
+msgstr "Ugyldig Token"
+
+msgid "Invalid token"
+msgstr "Ugyldig token"
+
 msgid "Manage albums"
 msgstr "Administrer album"
 
@@ -2237,6 +2321,9 @@ msgstr "Arrangementets funksjoner"
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
 
+msgid "File not found"
+msgstr "Filen ble ikke funnet"
+
 msgid "Form questions"
 msgstr "Skjema for spørsmål"
 
@@ -2275,6 +2362,9 @@ msgstr "Multiplikasjon"
 
 msgid "Obtain ability"
 msgstr "Tilegne seg ferdigheter"
+
+msgid "One-time token"
+msgstr "Engangstoken"
 
 msgid "Outflows total"
 msgstr "Totale kostnader"
@@ -2606,6 +2696,12 @@ msgstr "Ingen kommunikasjon"
 msgid "Number not found"
 msgstr "Nummer ikke funnet"
 
+msgid "One-Time Content"
+msgstr "Engangsinnhold"
+
+msgid "One-time content"
+msgstr "Engangsinnhold"
+
 msgid "Organisation fee"
 msgstr "Organisasjonsavgift"
 
@@ -2792,6 +2888,9 @@ msgstr "Måneder fri kvote"
 msgid "Move to container"
 msgstr "Flytt til container"
 
+msgid "One-Time Contents"
+msgstr "Engangsinnhold"
+
 msgid "Paid current year"
 msgstr "Betalt inneværende år"
 
@@ -2972,6 +3071,9 @@ msgstr "Sett opp oppdragstyper"
 msgid "Show cancellations"
 msgstr "Avlysninger av forestillinger"
 
+msgid "Token Already Used"
+msgstr "Token allerede brukt"
+
 msgid "Total payment sent"
 msgstr "Total innbetaling sendt"
 
@@ -2989,6 +3091,9 @@ msgstr "innen fristen"
 
 msgid "global preferences"
 msgstr "globale preferanser"
+
+msgid "Access Information:"
+msgstr "Informasjon om tilgang:"
 
 msgid "Accounting tracking"
 msgstr "Sporing av regnskap"
@@ -3013,6 +3118,12 @@ msgstr "Tegn ikke funnet"
 
 msgid "Confirmation delete"
 msgstr "Bekreftelse på sletting"
+
+msgid "Content Unavailable"
+msgstr "Innhold utilgjengelig"
+
+msgid "Content unavailable"
+msgstr "Innhold utilgjengelig"
 
 msgid "Cost of the ability"
 msgstr "Kostnad for evnen"
@@ -3352,6 +3463,9 @@ msgstr "Antall ekstraksjoner"
 msgid "Object does not exist"
 msgstr "Objektet eksisterer ikke"
 
+msgid "One-Time Access Token"
+msgstr "Token for engangstilgang"
+
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
 
@@ -3400,6 +3514,9 @@ msgstr "Instruksjoner for maler"
 
 msgid "To access the history"
 msgstr "Slik får du tilgang til historikken"
+
+msgid "Token not initialized"
+msgstr "Token ikke initialisert"
 
 msgid "Upload membership fee"
 msgstr "Last opp medlemsavgift"
@@ -3493,6 +3610,9 @@ msgstr "Forespørsel om endring av skyttelbuss"
 
 msgid "Number of partecipants"
 msgstr "Antall deltakelser"
+
+msgid "One-Time Access Tokens"
+msgstr "Engangsadgangstokener"
 
 msgid "Payment membership fee"
 msgstr "Betaling av medlemsavgift"
@@ -3753,6 +3873,9 @@ msgstr "Last opp bekreftede betalinger"
 msgid "User is already a member"
 msgstr "Brukeren er allerede medlem"
 
+msgid "When this token was used"
+msgstr "Når dette tokenet ble brukt"
+
 msgid "Your registration ticket"
 msgstr "Inngangsbilletten din"
 
@@ -3838,6 +3961,9 @@ msgstr "Sett opp faste avdrag"
 
 msgid "Show available characters"
 msgstr "Vis tilgjengelige tegn"
+
+msgid "Size of the file in bytes"
+msgstr "Filens størrelse i byte"
 
 msgid "These are our past events"
 msgstr "Dette er våre tidligere arrangementer"
@@ -4166,6 +4292,9 @@ msgstr "Fullfør betaling for %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Forsinkelse i årlig medlemsavgift"
 
+msgid "Duration in seconds (optional)"
+msgstr "Varighet i sekunder (valgfritt)"
+
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
 
@@ -4382,6 +4511,9 @@ msgstr "Stemmegivningen til hovedstyret er åpen"
 msgid "We'll try to help as best we can"
 msgstr "Vi skal prøve å hjelpe så godt vi kan"
 
+msgid "Whether this token has been used"
+msgstr "Om dette tokenet har blitt brukt"
+
 msgid "You need to define the end date!"
 msgstr "Du må definere sluttdatoen!"
 
@@ -4411,6 +4543,9 @@ msgstr "Bekreft oppføring til %(event)s"
 
 msgid "Descriptive name for this API key"
 msgstr "Beskrivende navn for denne API-nøkkelen"
+
+msgid "Descriptive name for this content"
+msgstr "Beskrivende navn for dette innholdet"
 
 msgid "Discover what this event is about"
 msgstr "Finn ut hva dette arrangementet handler om"
@@ -4444,6 +4579,9 @@ msgstr "Ingen hendelser er til stede, opprett en"
 
 msgid "Now you can set the taxes options"
 msgstr "Nå kan du angi skattealternativene"
+
+msgid "The event this content belongs to"
+msgstr "Arrangementet dette innholdet tilhører"
 
 msgid "This page shows the url shortners"
 msgstr "Denne siden viser url-forkortelsene"
@@ -4609,6 +4747,9 @@ msgstr "Nå kan du opprette kvitteringsteksten"
 
 msgid "Now you can set the casting options"
 msgstr "Nå kan du stille inn casting-alternativene"
+
+msgid "Optional description of the content"
+msgstr "Valgfri beskrivelse av innholdet"
 
 msgid "Payments pending delegated accounts"
 msgstr "Betalinger i påvente av delegerte konti"
@@ -4890,6 +5031,9 @@ msgstr "Hvis du trenger hjelp, husk å sjekke ut"
 msgid "Indicate the required character options"
 msgstr "Angi de ønskede tegnalternativene"
 
+msgid "MIME type of the file (e.g., video/mp4)"
+msgstr "MIME-typen til filen (f.eks. video/mp4)"
+
 msgid "Manages and assigns tasks to characters"
 msgstr "Administrerer og tildeler oppgaver til karakterer"
 
@@ -4961,6 +5105,9 @@ msgstr "Beskriv nøyaktig under hvilke forhold det skjer"
 msgid "Did you check the required data properly"
 msgstr "Har du sjekket de nødvendige dataene på riktig måte"
 
+msgid "IP address from which the token was used"
+msgstr "IP-adressen som tokenet ble brukt fra"
+
 msgid "If not found, the option will be skipped"
 msgstr "Hvis alternativet ikke blir funnet, hoppes det over"
 
@@ -4990,6 +5137,9 @@ msgstr "Betalingen er for tiden til vurdering hos de ansatte"
 
 msgid "The collection was delivered to the user"
 msgstr "Samlingen ble levert til brukeren"
+
+msgid "This content is currently not available."
+msgstr "Dette innholdet er for øyeblikket ikke tilgjengelig."
 
 msgid "This page shows the quests for the event"
 msgstr "Denne siden viser oppdragene for arrangementet"
@@ -5024,6 +5174,9 @@ msgstr "hvis tegnet tilhører dette elementet"
 
 msgid "Added at the top of the user profile page"
 msgstr "Lagt til øverst på brukerprofilsiden"
+
+msgid "Browser user agent string from the access"
+msgstr "Nettleserens brukeragentstreng fra tilgangen"
 
 msgid "Choice locked, click to make it available"
 msgstr "Valget er låst, klikk for å gjøre det tilgjengelig"
@@ -5219,6 +5372,9 @@ msgstr "Nå kan du angi innstillinger for spillerredigering"
 msgid "Set up a value for registration secret link"
 msgstr "Angi en verdi for hemmelig registreringskobling"
 
+msgid "This access link is invalid or has expired."
+msgstr "Denne tilgangskoblingen er ugyldig eller har utløpt."
+
 msgid "This page shows an email sent by the system"
 msgstr "Denne siden viser en e-post som er sendt av systemet"
 
@@ -5273,6 +5429,9 @@ msgstr "Administrere og godkjenne fakturaer og betalinger"
 
 msgid "Manage participant questions and answer them"
 msgstr "Håndtere spørsmål fra deltakerne og besvare dem"
+
+msgid "Manage tokens to access the one-time content"
+msgstr "Administrer tokens for å få tilgang til engangsinnholdet"
 
 msgid "Now you can create the factions of the event"
 msgstr "Nå kan du opprette fraksjonene i arrangementet"
@@ -5336,6 +5495,9 @@ msgstr "Administrer merker og tildel dem til deltakerne"
 
 msgid "Manage the registration questions and options"
 msgstr "Administrer registreringsspørsmål og -alternativer"
+
+msgid "Member who used this token (if authenticated)"
+msgstr "Medlem som brukte dette tokenet (hvis autentisert)"
 
 msgid "Now you can copy elements from an other event"
 msgstr "Nå kan du kopiere elementer fra en annen hendelse"
@@ -5888,6 +6050,9 @@ msgstr "Administrere alternativer i skjemaspørsmål for skriveelementer"
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Nå kan du opprette billettene \"låner\" og \"redusert"
 
+msgid "Now you can upload content and generate access tokens"
+msgstr "Nå kan du laste opp innhold og generere tilgangstokener"
+
 msgid "Optional - ram html code (substitute the text before)"
 msgstr "Valgfritt - rå html-kode (erstatter teksten ovenfor)"
 
@@ -5924,6 +6089,9 @@ msgstr "Du har gitt tillatelse til datadeling med denne organisasjonen!"
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Ønsker du å gi brukerne mulighet til å gi frivillige donasjoner"
+
+msgid "Each token can only be used once for security reasons."
+msgstr "Hver token kan bare brukes én gang av sikkerhetsmessige årsaker."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet"
@@ -5978,6 +6146,9 @@ msgstr "Denne siden oppsummerer de tilpassede tekstene for arrangementet"
 msgid "This page summarises the list of members as a registry"
 msgstr ""
 "På denne siden finner du en oversikt over medlemslisten som et register"
+
+msgid "Whether this content is currently available for access"
+msgstr "Om dette innholdet for øyeblikket er tilgjengelig for tilgang"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Du har ikke nådd minimumsantallet av preferanser som skal angis"
@@ -6226,6 +6397,9 @@ msgstr "Hvis du ønsker å laste opp en ny skanning av søknaden din i stedet"
 msgid "In the membership book the number of your membership card is"
 msgstr "I medlemsboken er medlemsnummeret ditt"
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr "Konfigurer billettene som brukerne kan velge under registreringen"
 
@@ -6346,6 +6520,9 @@ msgstr "Nå kan medarbeiderne laste opp utgifter, og du kan gå gjennom dem"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valgfritt - Utvidet beskrivelse (vises med liten grå tekst)"
+
+msgid "Optional note about this token (e.g., recipient name, purpose)"
+msgstr "Valgfri merknad om dette tokenet (f.eks. mottakerens navn, formål)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Angi spesifikke verdier for konfigurasjon av funksjoner i hendelsen"
@@ -6488,6 +6665,9 @@ msgstr "For å fullføre prosessen, bare <a href='%(url)s'>klikk her</a>"
 
 msgid "Use the information below to request the transfer from your bank"
 msgstr "Bruk informasjonen nedenfor for å be om overføring fra banken din"
+
+msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
+msgstr "Video- eller lydfil som skal strømmes (anbefalt: MP4, WebM, MP3)"
 
 msgid "You have indicated several preferences towards the same element!"
 msgstr "Du har angitt flere preferanser for det samme elementet!"
@@ -6709,6 +6889,10 @@ msgstr "Velg filene som skal lastes opp (må være i CSV-format, kodet i UTF-8)"
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Billetten vil bli delt likt i det angitte antall aksjer"
+
+msgid "This access link has already been used and cannot be accessed again."
+msgstr ""
+"Denne tilgangskoblingen har allerede blitt brukt og kan ikke brukes igjen."
 
 msgid "This page shows the quota options available for payment of the event"
 msgstr ""
@@ -6990,6 +7174,10 @@ msgid ""
 msgstr "Samlingen er klar til å bli levert, gi denne lenken til mottakeren"
 
 msgid ""
+"Upload and manage secure video/audio content with one-time access tokens"
+msgstr "Last opp og administrer sikkert video-/lydinnhold med engangskoder"
+
+msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
 msgstr ""
 "Vi verdsetter personvernet ditt og behandler opplysningene dine med den "
@@ -7126,6 +7314,12 @@ msgid ""
 "Indicate the organization nationality to activate nation-specific features"
 msgstr ""
 "Angi organisasjonens nasjonalitet for å aktivere landsspesifikke funksjoner"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Administrer innhold som bare skal være tilgjengelig én gang med et bestemt "
+"token"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8096,6 +8290,13 @@ msgstr ""
 "til arrangementet"
 
 msgid ""
+"This page shows the secure video/audio content with one-time access tokens "
+"for the event"
+msgstr ""
+"Denne siden viser det sikre video-/lydinnholdet med engangskoder for tilgang"
+" til arrangementet"
+
+msgid ""
 "This page summarizes the abilities that participants can purchase with "
 "experience points"
 msgstr ""
@@ -8176,6 +8377,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Maksimalt antall ganger det kan forespørres på tvers av alle "
 "påmeldinger (0 = ubegrenset)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Denne siden viser alle tilgangstokener for engangsinnhold. Hvert token kan "
+"bare brukes én gang."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -8494,6 +8702,13 @@ msgid ""
 msgstr ""
 "Hvis du får den tildelt, vil du automatisk bli tildelt den opprinnelige "
 "karakteren den speiler"
+
+msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link."
+msgstr ""
+"Hvis du trenger tilgang til dette innholdet igjen, kan du kontakte "
+"arrangørene for å få en ny tilgangslenke."
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all "
@@ -10072,6 +10287,15 @@ msgstr ""
 "I tillegg må du være à jour med betalingen av medlemskontingenten for å "
 "kunne delta på arrangementer. Gjør din betaling <a href='%(url)s'>på denne "
 "siden</a>."
+
+msgid ""
+"Enables secure streaming of video/audio content via one-time access tokens. "
+"Each token can only be used once and tracks who accessed the content, when, "
+"and from where"
+msgstr ""
+"Muliggjør sikker strømming av video-/lydinnhold via engangstokener. Hvert "
+"token kan bare brukes én gang, og sporer hvem som har fått tilgang til "
+"innholdet, når og fra hvor"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "

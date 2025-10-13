@@ -2240,3 +2240,216 @@ input[type="number"] {
   color: black;
   font-weight: 600;
 }
+
+/* One-time Content Styles */
+
+.onetime-body {
+  background-color: #000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  margin: 0;
+}
+
+.onetime-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.onetime-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.onetime-header h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.onetime-header p {
+  font-size: 1.1em;
+  color: #999;
+}
+
+.onetime-player-wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.onetime-player-wrapper video,
+.onetime-player-wrapper audio {
+  width: 100%;
+  display: block;
+  outline: none;
+}
+
+.onetime-warning {
+  background-color: #2a2a2a;
+  border-left: 4px solid #ff6b6b;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 4px;
+}
+
+.onetime-warning h3 {
+  color: #ff6b6b;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.onetime-warning p {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.onetime-info {
+  background-color: #2a2a2a;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 4px;
+  text-align: center;
+  color: #999;
+  font-size: 0.9em;
+}
+
+.onetime-unsupported {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .onetime-header h1 {
+    font-size: 1.5em;
+  }
+
+  .onetime-header p {
+    font-size: 1em;
+  }
+
+  .onetime-warning,
+  .onetime-info {
+    padding: 15px;
+  }
+}
+
+/* One-time Error Pages */
+
+.onetime-error-body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  margin: 0;
+}
+
+.onetime-error-container {
+  max-width: 600px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.onetime-error-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.onetime-error-container h1 {
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
+.onetime-error-container p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .onetime-error-container {
+    padding: 30px 20px;
+  }
+
+  .onetime-error-container h1 {
+    font-size: 1.5em;
+  }
+
+  .onetime-error-container p {
+    font-size: 1em;
+  }
+}
+
+/* One-time Already Used Page */
+
+.onetime-used-body {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  margin: 0;
+}
+
+.onetime-info-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 25px;
+  text-align: left;
+}
+
+.onetime-info-box strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.onetime-info-box span {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95em;
+}
+
+.onetime-info-detail {
+  margin-top: 10px;
+}
+
+.onetime-user-agent {
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.onetime-contact-text {
+  margin-top: 25px;
+  font-size: 0.95em;
+}
+
+@media (max-width: 768px) {
+  .onetime-info-box {
+    padding: 15px;
+  }
+}

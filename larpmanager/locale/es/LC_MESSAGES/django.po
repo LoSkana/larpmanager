@@ -116,6 +116,9 @@ msgstr "Hecho"
 msgid "Edit"
 msgstr "Editar"
 
+msgid "File"
+msgstr "Archivo"
+
 msgid "Form"
 msgstr "Formulario"
 
@@ -275,6 +278,9 @@ msgstr "días"
 msgid "gift"
 msgstr "regalo"
 
+msgid "used"
+msgstr "usado"
+
 msgid "Album"
 msgstr "Álbum"
 
@@ -417,6 +423,9 @@ msgstr "Tercera"
 msgid "Title"
 msgstr "Título"
 
+msgid "Token"
+msgstr "Ficha"
+
 msgid "Total"
 msgstr "Totales"
 
@@ -476,6 +485,9 @@ msgstr "Editar"
 
 msgid "Checks"
 msgstr "Comprobaciones"
+
+msgid "Copied"
+msgstr "Copiado"
 
 msgid "Counts"
 msgstr "Cuenta"
@@ -636,6 +648,9 @@ msgstr "Agentes"
 msgid "Unread"
 msgstr "Sin leer"
 
+msgid "Unused"
+msgstr "No utilizado"
+
 msgid "Update"
 msgstr "Actualizar"
 
@@ -708,8 +723,14 @@ msgstr "Confirmar"
 msgid "Contact"
 msgstr "Contacto"
 
+msgid "Content"
+msgstr "Contenido"
+
 msgid "Correct"
 msgstr "Correcto"
+
+msgid "Created"
+msgstr "Creado"
 
 msgid "Credits"
 msgstr "Créditos"
@@ -864,6 +885,18 @@ msgstr "¡Actualizado"
 msgid "Use TLD"
 msgstr "Utilizar un dominio específico"
 
+msgid "Used At"
+msgstr "Usado en"
+
+msgid "Used By"
+msgstr "Usado por"
+
+msgid "Used at"
+msgstr "Utilizado en"
+
+msgid "Used by"
+msgstr "Utilizado por"
+
 msgid "Utility"
 msgstr "Utilidad"
 
@@ -939,6 +972,9 @@ msgstr "Consumido"
 msgid "Continue"
 msgstr "Continúa en"
 
+msgid "Copy URL"
+msgstr "Copiar URL"
+
 msgid "Creation"
 msgstr "Creación"
 
@@ -968,6 +1004,9 @@ msgstr "Donación"
 
 msgid "Download"
 msgstr "Descargar"
+
+msgid "Duration"
+msgstr "Duración"
 
 msgid "Editable"
 msgstr "Editable"
@@ -1005,6 +1044,9 @@ msgstr "Documentos"
 msgid "Holidays"
 msgstr "Vacaciones"
 
+msgid "Inactive"
+msgstr "Inactivo"
+
 msgid "Included"
 msgstr "Incluido"
 
@@ -1034,6 +1076,9 @@ msgstr "Nuevo regalo"
 
 msgid "Nickname"
 msgstr "Apodo"
+
+msgid "One-Time"
+msgstr "Una sola vez"
 
 msgid "Optional"
 msgstr "Opcional"
@@ -1146,6 +1191,9 @@ msgstr "Tesorería"
 msgid "Uploaded"
 msgstr "Subido a"
 
+msgid "Used on:"
+msgstr "Utilizado en:"
+
 msgid "VAT rate"
 msgstr "Tipo del IVA"
 
@@ -1224,6 +1272,9 @@ msgstr "Donaciones"
 msgid "Enrolment"
 msgstr "Inscripción"
 
+msgid "File size"
+msgstr "Tamaño del archivo"
+
 msgid "First aid"
 msgstr "Primeros auxilios"
 
@@ -1253,6 +1304,9 @@ msgstr "¿Necesitas ayuda"
 
 msgid "New event"
 msgstr "Nuevo evento"
+
+msgid "Open Link"
+msgstr "Abrir enlace"
 
 msgid "Operation"
 msgstr "Operación"
@@ -1425,11 +1479,20 @@ msgstr "Experiencia"
 msgid "Historical"
 msgstr "Histórico"
 
+msgid "IP Address"
+msgstr "Dirección IP"
+
+msgid "IP address"
+msgstr "Dirección IP"
+
 msgid "Kicked out"
 msgstr "Expulsado"
 
 msgid "Legal name"
 msgstr "Nombre legal"
+
+msgid "Media file"
+msgstr "Archivo multimedia"
 
 msgid "Membership"
 msgstr "Afiliación"
@@ -1545,6 +1608,9 @@ msgstr "Nombre del token"
 msgid "Two quotas"
 msgstr "Dos plazos"
 
+msgid "User agent"
+msgstr "Agente de usuario"
+
 msgid "Visibility"
 msgstr "Visibilidad"
 
@@ -1583,6 +1649,9 @@ msgstr "pulse aquí"
 
 msgid "reply here"
 msgstr "responder aquí"
+
+msgid "Access Link"
+msgstr "Enlace de acceso"
 
 msgid "Access link"
 msgstr "Enlace de acceso"
@@ -1808,6 +1877,15 @@ msgstr "Cambiar foto"
 
 msgid "Collaborator"
 msgstr "Colaborador"
+
+msgid "Content Type"
+msgstr "Tipo de contenido"
+
+msgid "Content name"
+msgstr "Nombre del contenido"
+
+msgid "Content type"
+msgstr "Tipo de contenido"
 
 msgid "Event hidden"
 msgstr "Evento oculto"
@@ -2059,6 +2137,12 @@ msgstr "Ingresos totales"
 msgid "Internal link"
 msgstr "Enlace interno"
 
+msgid "Invalid Token"
+msgstr "Token no válido"
+
+msgid "Invalid token"
+msgstr "Token no válido"
+
 msgid "Manage albums"
 msgstr "Gestionar álbumes"
 
@@ -2237,6 +2321,9 @@ msgstr "Características del evento"
 msgid "Executive Vote"
 msgstr "Voto ejecutivo"
 
+msgid "File not found"
+msgstr "Archivo no encontrado"
+
 msgid "Form questions"
 msgstr "Preguntas de formulario"
 
@@ -2275,6 +2362,9 @@ msgstr "Multiplicación"
 
 msgid "Obtain ability"
 msgstr "Adquirir habilidad"
+
+msgid "One-time token"
+msgstr "Ficha única"
 
 msgid "Outflows total"
 msgstr "Gastos totales"
@@ -2606,6 +2696,12 @@ msgstr "No hay comunicaciones"
 msgid "Number not found"
 msgstr "Número no encontrado"
 
+msgid "One-Time Content"
+msgstr "Contenido único"
+
+msgid "One-time content"
+msgstr "Contenido único"
+
 msgid "Organisation fee"
 msgstr "Cuota de organización"
 
@@ -2792,6 +2888,9 @@ msgstr "Meses de cuota libre"
 msgid "Move to container"
 msgstr "Pasar a contenedor"
 
+msgid "One-Time Contents"
+msgstr "Contenido único"
+
 msgid "Paid current year"
 msgstr "Pagado el año actual"
 
@@ -2972,6 +3071,9 @@ msgstr "Establecer tipos de búsqueda"
 msgid "Show cancellations"
 msgstr "Mostrar cancelaciones"
 
+msgid "Token Already Used"
+msgstr "Ficha ya utilizada"
+
 msgid "Total payment sent"
 msgstr "Pago total enviado"
 
@@ -2989,6 +3091,9 @@ msgstr "en el plazo de"
 
 msgid "global preferences"
 msgstr "preferencias globales"
+
+msgid "Access Information:"
+msgstr "Información de acceso:"
 
 msgid "Accounting tracking"
 msgstr "Seguimiento contable"
@@ -3013,6 +3118,12 @@ msgstr "Carácter no encontrado"
 
 msgid "Confirmation delete"
 msgstr "Confirmación de eliminación"
+
+msgid "Content Unavailable"
+msgstr "Contenido no disponible"
+
+msgid "Content unavailable"
+msgstr "Contenido no disponible"
 
 msgid "Cost of the ability"
 msgstr "Coste de la capacidad"
@@ -3352,6 +3463,9 @@ msgstr "Número de extracciones"
 msgid "Object does not exist"
 msgstr "El objeto no existe"
 
+msgid "One-Time Access Token"
+msgstr "Token de acceso único"
+
 msgid "Participant questions"
 msgstr "Preguntas de los participantes"
 
@@ -3400,6 +3514,9 @@ msgstr "Instrucciones para la plantilla"
 
 msgid "To access the history"
 msgstr "Para acceder al historial"
+
+msgid "Token not initialized"
+msgstr "Ficha no inicializada"
 
 msgid "Upload membership fee"
 msgstr "Subir la cuota de afiliación"
@@ -3493,6 +3610,9 @@ msgstr "Cambiar solicitud de transporte"
 
 msgid "Number of partecipants"
 msgstr "Número de participantes"
+
+msgid "One-Time Access Tokens"
+msgstr "Fichas de acceso único"
 
 msgid "Payment membership fee"
 msgstr "Pago de la cuota de afiliación"
@@ -3753,6 +3873,9 @@ msgstr "Subir pagos verificados"
 msgid "User is already a member"
 msgstr "El usuario ya es miembro"
 
+msgid "When this token was used"
+msgstr "Cuando se utilizó esta ficha"
+
 msgid "Your registration ticket"
 msgstr "Su billete de entrada"
 
@@ -3838,6 +3961,9 @@ msgstr "Establecer plazos fijos"
 
 msgid "Show available characters"
 msgstr "Mostrar caracteres disponibles"
+
+msgid "Size of the file in bytes"
+msgstr "Tamaño del archivo en bytes"
 
 msgid "These are our past events"
 msgstr "Estos son nuestros eventos anteriores"
@@ -4166,6 +4292,9 @@ msgstr "Pago completo de %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Retraso en la cuota anual de afiliación"
 
+msgid "Duration in seconds (optional)"
+msgstr "Duración en segundos (opcional)"
+
 msgid "Font to be used in page titles"
 msgstr "Fuente que se utilizará en los títulos"
 
@@ -4382,6 +4511,9 @@ msgstr "La votación para el Comité Ejecutivo está abierta"
 msgid "We'll try to help as best we can"
 msgstr "Intentaremos ayudar lo mejor que podamos"
 
+msgid "Whether this token has been used"
+msgstr "Si se ha utilizado este token"
+
 msgid "You need to define the end date!"
 msgstr "Debe definir la fecha de finalización."
 
@@ -4411,6 +4543,9 @@ msgstr "Confirmar entrada a %(event)s"
 
 msgid "Descriptive name for this API key"
 msgstr "Nombre descriptivo de esta clave API"
+
+msgid "Descriptive name for this content"
+msgstr "Nombre descriptivo de este contenido"
 
 msgid "Discover what this event is about"
 msgstr "¡Descubre de qué trata este evento"
@@ -4444,6 +4579,9 @@ msgstr "No hay eventos presentes, crea uno"
 
 msgid "Now you can set the taxes options"
 msgstr "Ahora puedes configurar las opciones de impuestos"
+
+msgid "The event this content belongs to"
+msgstr "El evento al que pertenece este contenido"
 
 msgid "This page shows the url shortners"
 msgstr "Esta página muestra las url abreviadas"
@@ -4609,6 +4747,9 @@ msgstr "Ahora puede crear el texto del recibo"
 
 msgid "Now you can set the casting options"
 msgstr "Ahora puedes configurar las opciones de casting"
+
+msgid "Optional description of the content"
+msgstr "Descripción opcional del contenido"
 
 msgid "Payments pending delegated accounts"
 msgstr "Pagos pendientes de cuentas delegadas"
@@ -4888,6 +5029,9 @@ msgstr "Si necesita ayuda, no olvide consultar"
 msgid "Indicate the required character options"
 msgstr "Indique las opciones de caracteres requeridas"
 
+msgid "MIME type of the file (e.g., video/mp4)"
+msgstr "Tipo MIME del archivo (por ejemplo, video/mp4)"
+
 msgid "Manages and assigns tasks to characters"
 msgstr "Gestiona y asigna tareas a los personajes"
 
@@ -4959,6 +5103,9 @@ msgstr "Describe exactamente en qué condiciones se encuentra"
 msgid "Did you check the required data properly"
 msgstr "¿Has comprobado correctamente los datos requeridos"
 
+msgid "IP address from which the token was used"
+msgstr "Dirección IP desde la que se utilizó el token"
+
 msgid "If not found, the option will be skipped"
 msgstr "Si no se encuentra, se omitirá la opción"
 
@@ -4988,6 +5135,9 @@ msgstr "Pago actualmente en revisión por el personal"
 
 msgid "The collection was delivered to the user"
 msgstr "La colección se entregó al usuario"
+
+msgid "This content is currently not available."
+msgstr "Este contenido no está disponible actualmente."
 
 msgid "This page shows the quests for the event"
 msgstr "Esta página muestra las misiones del evento"
@@ -5022,6 +5172,9 @@ msgstr "si el carácter pertenece a este elemento"
 
 msgid "Added at the top of the user profile page"
 msgstr "Añadido en la parte superior de la página de perfil de usuario"
+
+msgid "Browser user agent string from the access"
+msgstr "Cadena del agente de usuario del navegador desde el acceso"
 
 msgid "Choice locked, click to make it available"
 msgstr "Elección bloqueada, haga clic para que esté disponible"
@@ -5217,6 +5370,9 @@ msgstr "Ahora puedes configurar los ajustes de edición del reproductor"
 msgid "Set up a value for registration secret link"
 msgstr "Establecer un valor para el enlace secreto de registro"
 
+msgid "This access link is invalid or has expired."
+msgstr "Este enlace de acceso no es válido o ha caducado."
+
 msgid "This page shows an email sent by the system"
 msgstr "Esta página muestra un correo electrónico enviado por el sistema"
 
@@ -5270,6 +5426,9 @@ msgstr "Gestionar las facturas de los pagos y aprobarlas"
 
 msgid "Manage participant questions and answer them"
 msgstr "Gestionar las preguntas de los participantes y responderlas"
+
+msgid "Manage tokens to access the one-time content"
+msgstr "Gestionar tokens para acceder al contenido único"
 
 msgid "Now you can create the factions of the event"
 msgstr "Ahora puedes crear las facciones del evento"
@@ -5333,6 +5492,9 @@ msgstr "Gestionar insignias y asignarlas a los participantes"
 
 msgid "Manage the registration questions and options"
 msgstr "Gestionar las preguntas y opciones de registro"
+
+msgid "Member who used this token (if authenticated)"
+msgstr "Miembro que ha utilizado este token (si está autenticado)"
 
 msgid "Now you can copy elements from an other event"
 msgstr "Ahora puedes copiar elementos de otro evento"
@@ -5892,6 +6054,9 @@ msgstr ""
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Ahora puedes crear las entradas \"patrón\" y \"reducida\""
 
+msgid "Now you can upload content and generate access tokens"
+msgstr "Ya puedes subir contenidos y generar tokens de acceso"
+
 msgid "Optional - ram html code (substitute the text before)"
 msgstr "Opcional - código html sin formato (sustituye al texto anterior)"
 
@@ -5931,6 +6096,9 @@ msgstr "Has autorizado el intercambio de datos con esta organización."
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "¿Desea permitir que los usuarios hagan donaciones voluntarias"
+
+msgid "Each token can only be used once for security reasons."
+msgstr "Por razones de seguridad, cada ficha sólo puede utilizarse una vez."
 
 msgid "Everything is in order about the payment of this event"
 msgstr "¡Todo está en orden respecto el pago de este evento"
@@ -5985,6 +6153,9 @@ msgstr "Esta página muestra los textos personalizados del evento"
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Esta página muestra la lista de miembros a modo de registro"
+
+msgid "Whether this content is currently available for access"
+msgstr "Si este contenido está actualmente disponible para su acceso"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "No has alcanzado el número mínimo de preferencias"
@@ -6244,6 +6415,11 @@ msgstr "Si deseas subir un nuevo escaneado de tu solicitud en su lugar"
 msgid "In the membership book the number of your membership card is"
 msgstr "En el libro de la organización, tu número de miembro es"
 
+msgid "Manage one-time access tokens for secure video/audio content"
+msgstr ""
+"Gestión de tokens de acceso de un solo uso para contenidos de vídeo/audio "
+"seguros"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Configurar las entradas que los usuarios pueden seleccionar durante el "
@@ -6374,6 +6550,11 @@ msgstr "Ahora los empleados pueden cargar gastos y usted puede revisarlos"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Opcional - Descripción ampliada (aparece en texto gris pequeño)"
+
+msgid "Optional note about this token (e.g., recipient name, purpose)"
+msgstr ""
+"Nota opcional sobre este token (por ejemplo, nombre del destinatario, "
+"propósito)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
@@ -6523,6 +6704,11 @@ msgstr ""
 msgid "Use the information below to request the transfer from your bank"
 msgstr ""
 "Utilice la siguiente información para solicitar la transferencia a su banco"
+
+msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
+msgstr ""
+"Archivo de vídeo o audio que se va a transmitir (recomendado: MP4, WebM, "
+"MP3)"
 
 msgid "You have indicated several preferences towards the same element!"
 msgstr "¡Ha indicado varias preferencias hacia el mismo elemento!"
@@ -6769,6 +6955,11 @@ msgstr ""
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr ""
 "La entrada se dividirá a partes iguales en el número de pagos indicado"
+
+msgid "This access link has already been used and cannot be accessed again."
+msgstr ""
+"Este enlace de acceso ya ha sido utilizado y no se puede volver a acceder a "
+"él."
 
 msgid "This page shows the quota options available for payment of the event"
 msgstr ""
@@ -7073,6 +7264,12 @@ msgstr ""
 "destinatario"
 
 msgid ""
+"Upload and manage secure video/audio content with one-time access tokens"
+msgstr ""
+"Cargue y gestione contenidos de vídeo/audio seguros con tokens de acceso de "
+"un solo uso"
+
+msgid ""
 "We value the privacy of your data and will treat it with the utmost care"
 msgstr ""
 "Valoramos la privacidad de sus datos y los trataremos con el máximo cuidado"
@@ -7222,6 +7419,12 @@ msgid ""
 msgstr ""
 "Indique la nacionalidad de la organización para activar las funciones "
 "específicas de cada país"
+
+msgid ""
+"Manage content that should be accessed only one time with a specific token"
+msgstr ""
+"Gestionar contenidos a los que sólo se debe acceder una vez con un token "
+"específico"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -8229,6 +8432,13 @@ msgstr ""
 "pueden inscribirse en el acto"
 
 msgid ""
+"This page shows the secure video/audio content with one-time access tokens "
+"for the event"
+msgstr ""
+"Esta página muestra el contenido de vídeo/audio seguro con tokens de acceso "
+"único para el evento"
+
+msgid ""
 "This page summarizes the abilities that participants can purchase with "
 "experience points"
 msgstr ""
@@ -8311,6 +8521,13 @@ msgid ""
 msgstr ""
 "Opcional - Número máximo de veces que se puede solicitar en todos los "
 "registros (0 = ilimitado)"
+
+msgid ""
+"This page shows all access tokens for one-time content. Each token can only "
+"be used once."
+msgstr ""
+"Esta página muestra todos los tokens de acceso para contenidos de un solo "
+"uso. Cada token sólo puede utilizarse una vez."
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
@@ -8630,6 +8847,13 @@ msgid ""
 msgstr ""
 "Si se te asigna, se te asignará automáticamente el personaje original que "
 "refleja"
+
+msgid ""
+"If you need access to this content again, please contact the organizers for "
+"a new access link."
+msgstr ""
+"Si necesita acceder de nuevo a este contenido, póngase en contacto con los "
+"organizadores para obtener un nuevo enlace de acceso."
 
 msgid ""
 "Optional – Maximum number of times it can be selected across all "
@@ -10225,6 +10449,15 @@ msgstr ""
 "Además, debes estar al corriente del pago de tu cuota de afiliación para "
 "poder participar en eventos. Realiza el pago <a href='%(url)s'>en esta "
 "página</a>."
+
+msgid ""
+"Enables secure streaming of video/audio content via one-time access tokens. "
+"Each token can only be used once and tracks who accessed the content, when, "
+"and from where"
+msgstr ""
+"Permite la transmisión segura de contenidos de vídeo y audio mediante tokens"
+" de acceso de un solo uso. Cada token sólo puede utilizarse una vez y "
+"rastrea quién accedió al contenido, cuándo y desde dónde"
 
 msgid ""
 "In order to confirm your registration, you must request to register as a "
