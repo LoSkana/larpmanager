@@ -86,7 +86,7 @@ python manage.py compress
 playwright install
 
 # tests
-WORKERS=12test
+WORKERS=12
 bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
 
 ./test_unit.sh
