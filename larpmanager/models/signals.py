@@ -571,7 +571,7 @@ def post_save_event_update(sender, instance, **kwargs):
 
     clear_run_event_links_cache(instance)
 
-    for run_id in instance.event.runs.values_list("id", flat=True):
+    for run_id in instance.runs.values_list("id", flat=True):
         clear_registration_counts_cache(run_id)
 
     on_event_post_save_reset_config_cache(instance)
