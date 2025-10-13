@@ -21,6 +21,7 @@
 from django.contrib import admin
 
 from larpmanager.admin.base import DefModelAdmin
+from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
     LarpManagerDiscover,
     LarpManagerFaq,
@@ -104,3 +105,8 @@ class LarpManagerTicketAdmin(DefModelAdmin):
     @staticmethod
     def content_red(instance):
         return instance.content[:100]
+
+
+@admin.register(PublisherApiKey)
+class PublisherApiKeyAdmin(DefModelAdmin):
+    list_display = ("name", "active", "last_used", "usage_count")

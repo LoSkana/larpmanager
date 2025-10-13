@@ -1764,6 +1764,9 @@ msgstr "Postup"
 msgid "Provisional"
 msgstr "Provizorní"
 
+msgid "Publication"
+msgstr "Publikace"
+
 msgid "Quick Setup"
 msgstr "Rychlé nastavení"
 

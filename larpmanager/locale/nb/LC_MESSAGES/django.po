@@ -1764,6 +1764,9 @@ msgstr "Progresjon"
 msgid "Provisional"
 msgstr "Foreløpig"
 
+msgid "Publication"
+msgstr "Utgivelse"
+
 msgid "Quick Setup"
 msgstr "Hurtigoppsett"
 

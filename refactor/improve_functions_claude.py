@@ -4,21 +4,24 @@ Script to automatically improve functions from function_analysis.csv using Claud
 Processes each function: adds type hints, improves docstrings, adds comments.
 """
 
+import ast
 import csv
 import subprocess
-import tempfile
-from pathlib import Path
 import time
+from pathlib import Path
 
 
 def convert_path(csv_path: str) -> Path:
     """Convert CSV path to current project path."""
-    # Extract relative path from CSV (remove /home/loskana/Documents/my/larpmanager/)
-    parts = csv_path.split('larpmanager/')
-    if len(parts) >= 2:
-        relative = 'larpmanager/' + parts[-1]
-        return Path('/home/user/larpmanager') / relative
+    parts = csv_path.split("larpmanager/")
+    if len(parts) >= max_parts():
+        relative = "larpmanager/" + parts[-1]
+        return Path.cwd() / relative
     return Path(csv_path)
+
+
+def max_parts():
+    return 2
 
 
 def improve_function_with_claude_code(function_name: str, file_path: Path, start_line: int, end_line: int) -> bool:
@@ -27,43 +30,44 @@ def improve_function_with_claude_code(function_name: str, file_path: Path, start
     Returns True if successful, False otherwise.
     """
     # Create the prompt for Claude Code
-    prompt = f"""Per la funzione `{function_name}` nel file {file_path} (righe {start_line}-{end_line}):
+    prompt = f"""Migliora la funzione `{function_name}` nel file {file_path} (righe {start_line}-{end_line}):
 
-1. Aggiungi type hints alla definizione (parametri e return type)
-2. Migliora il pydoc (docstring) seguendo lo stile Google/NumPy
-3. Aggiungi commenti ogni 4-5 linee, oppure ogni blocco logico
+1. Aggiungi type hints alla definizione della funzione (parametri e return type)
+2. Migliora il docstring seguendo lo stile Google/NumPy
+3. Aggiungi commenti inline ogni 4-5 linee o per ogni blocco logico
 
-NON aggiungere spiegazioni, fai solo le modifiche richieste.
+IMPORTANTE: Modifica SOLO la funzione specificata nel file. Non aggiungere spiegazioni o sommari.
 """
 
     try:
-        # Write prompt to a temporary file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as tmp:
-            tmp.write(prompt)
-            tmp_path = tmp.name
-
-        # Call Claude Code with the prompt via stdin
+        # Call Claude Code with --print flag for non-interactive mode
         result = subprocess.run(
-            ['claude'],
+            ["claude", "--print"],
+            check=False,
             input=prompt,
-            cwd='/home/user/larpmanager',
+            cwd=Path.cwd(),
             capture_output=True,
             text=True,
-            timeout=300  # 5 minutes timeout
+            timeout=300,  # 5 minutes timeout
         )
-
-        # Clean up temp file
-        Path(tmp_path).unlink(missing_ok=True)
 
         # Check if successful
         if result.returncode == 0:
-            return True
+            # Check if the output contains any modifications
+            output = result.stdout.strip()
+            if output and len(output) > len(prompt):
+                return True
+            else:
+                print("  ⚠️  Claude Code returned but made no changes")
+                return False
         else:
-            print(f"  ❌ Claude Code returned error: {result.stderr}")
+            print(f"  ❌ Claude Code returned error (code {result.returncode})")
+            if result.stderr:
+                print(f"  ❌ Error details: {result.stderr}")
             return False
 
     except subprocess.TimeoutExpired:
-        print(f"  ❌ Claude Code timed out after 5 minutes")
+        print("  ❌ Claude Code timed out after 5 minutes")
         return False
     except Exception as e:
         print(f"  ❌ Error calling Claude Code: {e}")
@@ -76,9 +80,7 @@ def get_function_line_range(file_path: Path, function_name: str) -> tuple[int, i
     Returns (start_line, end_line) or None if not found.
     """
     try:
-        import ast
-
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content)
@@ -96,11 +98,11 @@ def get_function_line_range(file_path: Path, function_name: str) -> tuple[int, i
 
 
 def main():
-    csv_path = Path('/home/user/larpmanager/function_analysis.csv')
+    csv_path = Path.cwd() / "function_analysis.csv"
 
     while True:
         # Read all rows from CSV
-        with open(csv_path, 'r', encoding='utf-8') as f:
+        with open(csv_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             if not rows:
@@ -110,8 +112,8 @@ def main():
 
         # Process first row
         row = rows[0]
-        function_name = row['name']
-        csv_file_path = row['path']
+        function_name = row["name"]
+        csv_file_path = row["path"]
 
         print(f"\nProcessing: {function_name} in {csv_file_path}")
 
@@ -122,34 +124,37 @@ def main():
 
         if not file_path.exists():
             print(f"  ⚠️  File not found: {file_path}")
+            success = True  # Skip this entry
         else:
             # Get function line range
             line_range = get_function_line_range(file_path, function_name)
             if not line_range:
                 print(f"  ⚠️  Function {function_name} not found in {file_path}")
+                success = True  # Skip this entry
             else:
                 start_line, end_line = line_range
                 print(f"  📝 Found function at lines {start_line}-{end_line}")
 
                 # Call Claude Code to improve
-                print(f"  🤖 Calling Claude Code...")
+                print("  🤖 Calling Claude Code...")
                 if improve_function_with_claude_code(function_name, file_path, start_line, end_line):
                     print(f"  ✅ Successfully processed {function_name}")
                     success = True
                 else:
                     print(f"  ❌ Failed to process {function_name}")
 
-        # Remove processed row from CSV if successful
+        # Remove processed row from CSV if successful or skipped
         if success:
             remaining_rows = rows[1:]
-            with open(csv_path, 'w', encoding='utf-8', newline='') as f:
+            with open(csv_path, "w", encoding="utf-8", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(remaining_rows)
             print(f"  🗑️  Removed from CSV ({len(remaining_rows)} remaining)")
         else:
-            print(f"  ⏳  Wait 5 minutes before trying again...")
+            print("  ⏳  Wait 5 minutes before trying again...")
             time.sleep(5 * 60)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

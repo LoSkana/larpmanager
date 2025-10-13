@@ -1307,7 +1307,7 @@
     module: registration
 - model: larpmanager.feature
   fields:
-    name: Publisher
+    name: Publication
     descr: Makes upcoming events visible to external sites through a public API
     slug: publisher
     overall: true
