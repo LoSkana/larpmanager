@@ -8015,6 +8015,9 @@ msgstr ""
 msgid "Now you can create the \"new player\" ticket"
 msgstr ""
 
+msgid "Publication"
+msgstr ""
+
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 

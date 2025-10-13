@@ -1764,6 +1764,9 @@ msgstr "Progressie"
 msgid "Provisional"
 msgstr "Voorlopig"
 
+msgid "Publication"
+msgstr "Publicatie"
+
 msgid "Quick Setup"
 msgstr "Snelle installatie"
 

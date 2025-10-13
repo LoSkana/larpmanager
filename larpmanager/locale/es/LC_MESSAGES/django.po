@@ -1764,6 +1764,9 @@ msgstr "Progresión"
 msgid "Provisional"
 msgstr "Provisional"
 
+msgid "Publication"
+msgstr "Publicación"
+
 msgid "Quick Setup"
 msgstr "Configuración rápida"
 
