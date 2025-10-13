@@ -8465,6 +8465,12 @@ msgstr ""
 msgid "Remove from xp delivery"
 msgstr ""
 
+msgid "Set progress step"
+msgstr ""
+
+msgid "Set assigned staff member"
+msgstr ""
+
 msgid "Set quest type"
 msgstr ""
 

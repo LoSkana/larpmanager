@@ -2933,6 +2933,9 @@ msgstr "Złożony wniosek"
 msgid "Residence address"
 msgstr "Adres zamieszkania"
 
+msgid "Set progress step"
+msgstr "Ustaw krok postępu"
+
 msgid "Technical Support"
 msgstr "Wsparcie techniczne"
 
@@ -3955,6 +3958,9 @@ msgstr "Rejestracja na %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Wniosek wysłany do zatwierdzenia"
+
+msgid "Set assigned staff member"
+msgstr "Ustaw przypisanego pracownika"
 
 msgid "Set up fixed installments"
 msgstr "Skonfiguruj stałe raty"
