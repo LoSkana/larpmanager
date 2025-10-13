@@ -764,14 +764,21 @@ def _get_excel_form(request, s, typ, submit=False):
     the context for character, faction, plot, trait, or quest editing.
     """
     ctx = check_event_permission(request, s, f"orga_{typ}s")
-    get_event_cache_all(ctx)
+    if not submit:
+        get_event_cache_all(ctx)
     check_writing_form_type(ctx, typ)
     question_id = int(request.POST.get("qid"))
     element_id = int(request.POST.get("eid"))
 
-    question = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).get(pk=question_id)
+    question = (
+        ctx["event"]
+        .get_elements(WritingQuestion)
+        .select_related("event")
+        .filter(applicable=ctx["writing_typ"])
+        .get(pk=question_id)
+    )
     ctx["applicable"] = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
-    element = ctx["event"].get_elements(ctx["applicable"]).get(pk=element_id)
+    element = ctx["event"].get_elements(ctx["applicable"]).select_related("event").get(pk=element_id)
 
     ctx["elementTyp"] = ctx["applicable"]
 
@@ -783,23 +790,20 @@ def _get_excel_form(request, s, typ, submit=False):
         "quest": QuestForm,
     }
 
-    # Init form
     form_class = form_mapping.get(typ, OrgaCharacterForm)
     if submit:
         form = form_class(request.POST, request.FILES, ctx=ctx, instance=element)
     else:
         form = form_class(ctx=ctx, instance=element)
 
-    # Remove question other than the one requested
     keep_key = f"q{question_id}"
     if question.typ not in BaseQuestionType.get_basic_types():
         keep_key = question.typ
-    remove_keys = []
-    for key in form.fields:
-        if key != keep_key:
-            remove_keys.append(key)
-    for key in remove_keys:
-        form.delete_field(key)
+
+    if keep_key in form.fields:
+        form.fields = {keep_key: form.fields[keep_key]}
+    else:
+        form.fields = {}
 
     ctx["form"] = form
     ctx["question"] = question

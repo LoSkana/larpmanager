@@ -2936,6 +2936,9 @@ msgstr "Demande de soumission"
 msgid "Residence address"
 msgstr "Adresse résidentielle"
 
+msgid "Set progress step"
+msgstr "Définir l'étape de progression"
+
 msgid "Technical Support"
 msgstr "Support technique"
 
@@ -3958,6 +3961,9 @@ msgstr "Inscription à %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Demande envoyée pour approbation"
+
+msgid "Set assigned staff member"
+msgstr "Définir le membre du personnel affecté"
 
 msgid "Set up fixed installments"
 msgstr "Mise en place de versements fixes"

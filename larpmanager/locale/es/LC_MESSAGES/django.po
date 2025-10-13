@@ -2936,6 +2936,9 @@ msgstr "Petición enviada"
 msgid "Residence address"
 msgstr "Dirección"
 
+msgid "Set progress step"
+msgstr "Establecer paso de progreso"
+
 msgid "Technical Support"
 msgstr "Asistencia técnica"
 
@@ -3958,6 +3961,9 @@ msgstr "Inscripción en %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Solicitud enviada para su aprobación"
+
+msgid "Set assigned staff member"
+msgstr "Establecer el miembro del personal asignado"
 
 msgid "Set up fixed installments"
 msgstr "Establecer plazos fijos"

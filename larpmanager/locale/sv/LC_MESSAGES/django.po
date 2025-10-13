@@ -2936,6 +2936,9 @@ msgstr "Undergiven begäran"
 msgid "Residence address"
 msgstr "Bostadsadress"
 
+msgid "Set progress step"
+msgstr "Ställ in förloppssteg"
+
 msgid "Technical Support"
 msgstr "Teknisk support"
 
@@ -3958,6 +3961,9 @@ msgstr "Registrering vid %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Begäran skickad för godkännande"
+
+msgid "Set assigned staff member"
+msgstr "Ställ in tilldelad personal"
 
 msgid "Set up fixed installments"
 msgstr "Upprätta fasta avbetalningar"

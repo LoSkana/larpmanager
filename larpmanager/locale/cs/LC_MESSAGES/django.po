@@ -2936,6 +2936,9 @@ msgstr "Submisivní žádost"
 msgid "Residence address"
 msgstr "Adresa bydliště"
 
+msgid "Set progress step"
+msgstr "Nastavení kroku postupu"
+
 msgid "Technical Support"
 msgstr "Technická podpora"
 
@@ -3958,6 +3961,9 @@ msgstr "Registrace v %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Žádost zaslaná ke schválení"
+
+msgid "Set assigned staff member"
+msgstr "Nastavit přiděleného zaměstnance"
 
 msgid "Set up fixed installments"
 msgstr "Nastavení pevných splátek"

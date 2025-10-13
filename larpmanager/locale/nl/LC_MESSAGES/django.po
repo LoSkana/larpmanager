@@ -2936,6 +2936,9 @@ msgstr "Onderdanig verzoek"
 msgid "Residence address"
 msgstr "Woonadres"
 
+msgid "Set progress step"
+msgstr "Voortgangsstap instellen"
+
 msgid "Technical Support"
 msgstr "Technische ondersteuning"
 
@@ -3958,6 +3961,9 @@ msgstr "Registratie bij %(event)s"
 
 msgid "Request sent for approval"
 msgstr "Aanvraag ter goedkeuring verzonden"
+
+msgid "Set assigned staff member"
+msgstr "Stel toegewezen personeelslid in"
 
 msgid "Set up fixed installments"
 msgstr "Vaste termijnen instellen"
