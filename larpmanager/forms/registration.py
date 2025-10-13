@@ -256,10 +256,13 @@ class RegistrationForm(BaseRegistrationForm):
             dff = get_time_diff_today(run.end)
             for el in RegistrationQuota.objects.filter(event=event).order_by("quotas"):
                 if dff > el.days_available or (self.instance and el.quotas == self.instance.quotas):
-                    label = qt_label[int(el.quotas) - 1]
-                    if el.surcharge > 0:
-                        label += f" ({el.surcharge}€)"
-                    quota_chs.append((el.quotas, label))
+                    # Ensure quotas value is within valid range (1-5)
+                    quota_index = int(el.quotas) - 1
+                    if 0 <= quota_index < len(qt_label):
+                        label = qt_label[quota_index]
+                        if el.surcharge > 0:
+                            label += f" ({el.surcharge}€)"
+                        quota_chs.append((el.quotas, label))
 
         if not quota_chs:
             quota_chs.append((1, _("Default")))
@@ -511,7 +514,7 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
-    page_info = _("This page allows you to add or edit a signup to this event")
+    page_info = _("Manage event signups")
 
     page_title = _("Registrations")
 
@@ -792,7 +795,7 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
-    page_info = _("This page allows you to add or change the types of ticket with which participants can register")
+    page_info = _("Manage ticket types for participant registration")
 
     page_title = _("Tickets")
 
@@ -862,7 +865,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
 
 class OrgaRegistrationSectionForm(MyForm):
-    page_info = _("This page allows you to add or edit sections in the signup form")
+    page_info = _("Manage signup form sections")
 
     page_title = _("Form section")
 
@@ -872,7 +875,7 @@ class OrgaRegistrationSectionForm(MyForm):
 
 
 class OrgaRegistrationQuestionForm(MyForm):
-    page_info = _("This page allows you to add or edit a question from the sign up form")
+    page_info = _("Manage signup form questions")
 
     page_title = _("Form element")
 
@@ -973,7 +976,7 @@ class OrgaRegistrationQuestionForm(MyForm):
 
 
 class OrgaRegistrationOptionForm(MyForm):
-    page_info = _("This page allows you to add or edit an option in a sign up form question")
+    page_info = _("Manage signup form question options")
 
     page_title = _("Form Options")
 
@@ -990,9 +993,7 @@ class OrgaRegistrationOptionForm(MyForm):
 
 
 class OrgaRegistrationQuotaForm(MyForm):
-    page_info = _(
-        "This page allows you to add or modify the dynamic instalments with which the participant can split the payment"
-    )
+    page_info = _("Manage dynamic payment installments for participants")
 
     page_title = _("Dynamic rates")
 
@@ -1002,7 +1003,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a participant must pay")
+    page_info = _("Manage fixed payment installments for participants")
 
     page_title = _("Fixed instalments")
 
@@ -1034,7 +1035,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
-    page_info = _("This page allows you to add or edit the registration surcharges")
+    page_info = _("Manage registration surcharges")
 
     page_title = _("Surcharge")
 

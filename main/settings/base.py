@@ -300,6 +300,10 @@ RECAPTCHA_PRIVATE_KEY = ''
 # max size of snippet
 FIELD_SNIPPET_LIMIT = 150
 
+# Cache timeout settings
+# Maximum cache duration: 1 day (86400 seconds)
+CACHE_TIMEOUT_1_DAY = 86400
+
 # Logging configuration
 LOGGING = {
     'version': 1,

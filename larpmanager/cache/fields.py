@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
@@ -86,7 +87,7 @@ def update_event_fields(event_id):
             res[first_key]["ids"] = {}
         res[first_key]["ids"][second_key] = el["id"]
 
-    cache.set(event_fields_key(event_id), res)
+    cache.set(event_fields_key(event_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

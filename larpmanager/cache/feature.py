@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save
@@ -61,7 +62,7 @@ def get_assoc_features(assoc_id):
     res = cache.get(key)
     if not res:
         res = update_assoc_features(assoc_id)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -123,7 +124,7 @@ def get_event_features(ev_id):
     res = cache.get(key)
     if not res:
         res = update_event_features(ev_id)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

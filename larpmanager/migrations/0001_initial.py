@@ -8,7 +8,7 @@ import django.db.models.deletion
 import model_clone.mixin
 import phonenumber_field.modelfields
 import tinymce.models
-from django.conf import settings
+from django.conf import settings as conf_settings
 from django.db import migrations, models
 
 import larpmanager.models.utils
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        migrations.swappable_dependency(conf_settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -2213,7 +2213,9 @@ class Migration(migrations.Migration):
                 (
                     "user",
                     models.OneToOneField(
-                        on_delete=django.db.models.deletion.CASCADE, related_name="member", to=settings.AUTH_USER_MODEL
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="member",
+                        to=conf_settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],

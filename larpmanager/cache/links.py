@@ -21,6 +21,7 @@
 import logging
 from datetime import datetime, timedelta
 
+from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -119,8 +120,8 @@ def cache_event_links(request: HttpRequest) -> dict:
     # Determine if topbar should be shown
     ctx["topbar"] = ctx["event_role"] or ctx["assoc_role"]
 
-    # Cache for 60 seconds
-    cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, 60)
+    # Cache for 1 day
+    cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return ctx
 
 

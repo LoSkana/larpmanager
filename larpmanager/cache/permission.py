@@ -20,6 +20,7 @@
 
 import logging
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
@@ -60,7 +61,7 @@ def update_assoc_permission_feature(slug):
         slug = feature.slug
     tutorial = feature.tutorial or ""
     config = perm.config or ""
-    cache.set(assoc_permission_feature_key(slug), (slug, tutorial, config))
+    cache.set(assoc_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return slug, tutorial, config
 
 
@@ -120,7 +121,7 @@ def update_event_permission_feature(slug):
         slug = feature.slug
     tutorial = feature.tutorial or ""
     config = perm.config or ""
-    cache.set(event_permission_feature_key(slug), (slug, tutorial, config))
+    cache.set(event_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return slug, tutorial, config
 
 
@@ -165,7 +166,7 @@ def update_index_permission(typ):
         "module__name",
         "module__icon",
     )
-    cache.set(index_permission_key(typ), res)
+    cache.set(index_permission_key(typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 

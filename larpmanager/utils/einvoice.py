@@ -23,8 +23,11 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
+from calmjs.parse.asttypes import Object
+
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
+from larpmanager.models.member import Member
 from larpmanager.utils.tasks import background_auto
 
 
@@ -72,11 +75,7 @@ def prepare_xml(inv, einvoice):
 
 
 def _einvoice_header(
-    einvoice: "ElectronicInvoice",
-    inv: "PaymentInvoice",
-    member: "Member",
-    name_number: int,
-    root: ET.Element
+    einvoice: "ElectronicInvoice", inv: PaymentInvoice, member: Member, name_number: int, root: ET.Element
 ) -> None:
     """Create the header section of an electronic invoice XML structure.
 
@@ -94,6 +93,9 @@ def _einvoice_header(
         Modifies root XML element in-place by adding FatturaElettronicaHeader
         with transmission data, supplier (association), and customer (member) details
     """
+    # Create config holder to optimize repeated calls
+    config_holder = Object()
+
     # Create main invoice header element
     header = ET.SubElement(root, "FatturaElettronicaHeader")
 
@@ -102,13 +104,15 @@ def _einvoice_header(
     id_trasmittente = ET.SubElement(dati_trasmissione, "IdTrasmittente")
     # Set Italy as default country code for electronic invoicing
     ET.SubElement(id_trasmittente, "IdPaese").text = "IT"
-    ET.SubElement(id_trasmittente, "IdCodice").text = get_assoc_config(inv.assoc_id, "einvoice_idcodice")
+    ET.SubElement(id_trasmittente, "IdCodice").text = get_assoc_config(
+        inv.assoc_id, "einvoice_idcodice", None, config_holder
+    )
     # Progressive invoice number padded to 10 digits
     ET.SubElement(dati_trasmissione, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     # Standard format for private entities
     ET.SubElement(dati_trasmissione, "FormatoTrasmissione").text = "FPR12"
     ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = get_assoc_config(
-        inv.assoc_id, "einvoice_codicedestinatario"
+        inv.assoc_id, "einvoice_codicedestinatario", None, config_holder
     )
 
     # Build supplier section - association information as service provider
@@ -117,19 +121,27 @@ def _einvoice_header(
     # Add VAT identification details
     id_fiscale_iva = ET.SubElement(dati_anagrafici, "IdFiscaleIVA")
     ET.SubElement(id_fiscale_iva, "IdPaese").text = "IT"
-    ET.SubElement(id_fiscale_iva, "IdCodice").text = get_assoc_config(inv.assoc_id, "einvoice_partitaiva")
+    ET.SubElement(id_fiscale_iva, "IdCodice").text = get_assoc_config(
+        inv.assoc_id, "einvoice_partitaiva", None, config_holder
+    )
     # Add association name and tax regime
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
-    ET.SubElement(anagrafica, "Denominazione").text = get_assoc_config(inv.assoc_id, "einvoice_denominazione")
-    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = get_assoc_config(inv.assoc_id, "einvoice_regimefiscale")
+    ET.SubElement(anagrafica, "Denominazione").text = get_assoc_config(
+        inv.assoc_id, "einvoice_denominazione", None, config_holder
+    )
+    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = get_assoc_config(
+        inv.assoc_id, "einvoice_regimefiscale", None, config_holder
+    )
     # Add association registered address
     sede = ET.SubElement(cedente_prestatore, "Sede")
-    ET.SubElement(sede, "Indirizzo").text = get_assoc_config(inv.assoc_id, "einvoice_indirizzo")
-    ET.SubElement(sede, "NumeroCivico").text = get_assoc_config(inv.assoc_id, "einvoice_numerocivico")
-    ET.SubElement(sede, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap")
-    ET.SubElement(sede, "Comune").text = get_assoc_config(inv.assoc_id, "einvoice_comune")
-    ET.SubElement(sede, "Provincia").text = get_assoc_config(inv.assoc_id, "einvoice_provincia")
-    ET.SubElement(sede, "Nazione").text = get_assoc_config(inv.assoc_id, "einvoice_nazione")
+    ET.SubElement(sede, "Indirizzo").text = get_assoc_config(inv.assoc_id, "einvoice_indirizzo", None, config_holder)
+    ET.SubElement(sede, "NumeroCivico").text = get_assoc_config(
+        inv.assoc_id, "einvoice_numerocivico", None, config_holder
+    )
+    ET.SubElement(sede, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap", None, config_holder)
+    ET.SubElement(sede, "Comune").text = get_assoc_config(inv.assoc_id, "einvoice_comune", None, config_holder)
+    ET.SubElement(sede, "Provincia").text = get_assoc_config(inv.assoc_id, "einvoice_provincia", None, config_holder)
+    ET.SubElement(sede, "Nazione").text = get_assoc_config(inv.assoc_id, "einvoice_nazione", None, config_holder)
 
     # Build customer section - member receiving the invoice
     cessionario_committente = ET.SubElement(header, "CessionarioCommittente")
@@ -190,9 +202,12 @@ def _einvoice_body(einvoice, inv, root):
     ET.SubElement(dettaglio_linee, "Quantita").text = "1"
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
     ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
-    aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "")
+
+    config_holder = Object()
+
+    aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "", config_holder)
     ET.SubElement(dettaglio_linee, "AliquotaIVA").text = aliquotaiva
-    natura = get_assoc_config(inv.assoc_id, "einvoice_natura", "")
+    natura = get_assoc_config(inv.assoc_id, "einvoice_natura", "", config_holder)
     if natura:
         ET.SubElement(dettaglio_linee, "Natura").text = natura
 
