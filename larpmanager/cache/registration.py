@@ -108,8 +108,8 @@ def update_reg_counts(run):
 
 
 def on_character_update_registration_cache(instance):
-    for run in instance.event.runs.all():
-        clear_registration_counts_cache(run)
+    for run_id in instance.event.runs.values_list("id", flat=True):
+        clear_registration_counts_cache(run_id)
     if instance.event.get_config("user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()
