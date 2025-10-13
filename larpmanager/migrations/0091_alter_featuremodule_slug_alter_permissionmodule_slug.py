@@ -14,6 +14,8 @@ def move_enc_files(apps, schema_editor):
         return
     Association = apps.get_model("larpmanager", "Association")
     for assoc in Association.objects.all():
+        if not assoc.key:
+            continue
         kid = _key_id(assoc.key)
         new_filename = f"{os.path.basename(assoc.slug)}.{kid}.enc"
         new_path = os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, new_filename)
