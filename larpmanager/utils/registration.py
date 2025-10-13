@@ -197,7 +197,7 @@ def _status_payment(register_text, run):
         status=PaymentStatus.SUBMITTED,
         typ=PaymentType.REGISTRATION,
     )
-    if pending.count() > 0:
+    if pending.exists():
         run.status["text"] = register_text + ", " + _("payment pending confirmation")
         return True
 
@@ -209,7 +209,7 @@ def _status_payment(register_text, run):
             typ=PaymentType.REGISTRATION,
             method__slug="wire",
         )
-        if wire_created.count() > 0:
+        if wire_created.exists():
             pay_url = reverse("acc_reg", args=[run.reg.id])
             mes = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{pay_url}'>{mes}</a>"
@@ -228,7 +228,9 @@ def _status_payment(register_text, run):
     return False
 
 
-def registration_status(run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None) -> bool:
+def registration_status(
+    run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None
+) -> bool:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements
@@ -450,7 +452,7 @@ def check_assign_character(request, ctx):
     if not reg:
         return
 
-    if reg.rcrs.count() > 0:
+    if reg.rcrs.exists():
         return
 
     chars = get_player_characters(request.user.member, ctx["event"])

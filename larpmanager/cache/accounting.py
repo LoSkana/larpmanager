@@ -50,25 +50,25 @@ def round_to_nearest_cent(number):
     return float(number)
 
 
-def get_registration_accounting_cache_key(run):
+def get_registration_accounting_cache_key(run_id):
     """Generate cache key for registration accounting data.
 
     Args:
-        run: Run instance
+        run_id: id of Run instance
 
     Returns:
         str: Cache key for registration accounting data
     """
-    return f"reg_accounting_{run.id}"
+    return f"reg_accounting_{run_id}"
 
 
-def reset_registration_accounting_cache(run):
+def reset_registration_accounting_cache(run_id):
     """Reset registration accounting cache for a run.
 
     Args:
-        run: Run instance to reset cache for
+        run_id: id of Run instance to reset cache for
     """
-    cache.delete(get_registration_accounting_cache_key(run))
+    cache.delete(get_registration_accounting_cache_key(run_id))
 
 
 def _get_accounting_context(run, member_filter=None):
@@ -81,13 +81,13 @@ def _get_accounting_context(run, member_filter=None):
     Returns:
         tuple: (features, reg_tickets, cache_aip)
     """
-    features = get_event_features(run.event.id)
+    features = get_event_features(run.event_id)
     if not isinstance(features, dict):
         features = {}
 
     # Get all tickets for this event
     reg_tickets = {}
-    for t in RegistrationTicket.objects.filter(event=run.event).order_by("-price"):
+    for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
         reg_tickets[t.id] = t
 
     # Build cache for token/credit payments
@@ -115,12 +115,12 @@ def update_member_accounting_cache(run, member_id):
         run: Run instance
         member_id: Member ID to update accounting data for
     """
-    key = get_registration_accounting_cache_key(run)
+    key = get_registration_accounting_cache_key(run.id)
     cached_data = cache.get(key)
 
     if not cached_data:
         # If cache doesn't exist, create it entirely
-        cached_data = update_registration_accounting_cache(run)
+        update_registration_accounting_cache(run)
         return
 
     # Get registrations for this member in this run
@@ -157,7 +157,7 @@ def get_registration_accounting_cache(run):
     Returns:
         dict: Cached registration accounting data
     """
-    key = get_registration_accounting_cache_key(run)
+    key = get_registration_accounting_cache_key(run.id)
     res = cache.get(key)
 
     if not res:
@@ -239,40 +239,40 @@ def _calculate_registration_accounting(reg, reg_tickets, cache_aip, features):
 @receiver(post_save, sender=Registration)
 def post_save_registration_accounting_cache(sender, instance, created, **kwargs):
     """Reset accounting cache when a registration is saved."""
-    reset_registration_accounting_cache(instance.run)
+    reset_registration_accounting_cache(instance.run_id)
 
 
 @receiver(post_delete, sender=Registration)
 def post_delete_registration_accounting_cache(sender, instance, **kwargs):
     """Reset accounting cache when a registration is deleted."""
-    reset_registration_accounting_cache(instance.run)
+    reset_registration_accounting_cache(instance.run_id)
 
 
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_ticket_accounting_cache(sender, instance, created, **kwargs):
     """Reset accounting cache when a ticket is saved."""
-    for run in instance.event.runs.all():
-        reset_registration_accounting_cache(run)
+    for run_id in instance.event.runs.values_list("id", flat=True):
+        reset_registration_accounting_cache(run_id)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender, instance, **kwargs):
     """Reset accounting cache when a ticket is deleted."""
-    for run in instance.event.runs.all():
-        reset_registration_accounting_cache(run)
+    for run_id in instance.event.runs.values_list("id", flat=True):
+        reset_registration_accounting_cache(run_id)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_payment_accounting_cache(sender, instance, created, **kwargs):
     """Update accounting cache when a payment is saved."""
-    if instance.reg and instance.reg.run:
+    if instance.reg_id and instance.reg.run_id:
         update_member_accounting_cache(instance.reg.run, instance.member_id)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
 def post_delete_payment_accounting_cache(sender, instance, **kwargs):
     """Update accounting cache when a payment is deleted."""
-    if instance.reg and instance.reg.run:
+    if instance.reg_id and instance.reg.run_id:
         update_member_accounting_cache(instance.reg.run, instance.member_id)
 
 

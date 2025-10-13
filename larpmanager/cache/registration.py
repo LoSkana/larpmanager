@@ -32,23 +32,23 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.common import _search_char_reg
 
 
-def reset_cache_reg_counts(r):
-    cache.delete(cache_reg_counts_key(r))
+def reset_cache_reg_counts(run_id):
+    cache.delete(cache_reg_counts_key(run_id))
 
 
-def cache_reg_counts_key(r):
-    return f"reg_counts{r.id}"
+def cache_reg_counts_key(run_id):
+    return f"reg_counts{run_id}"
 
 
-def get_reg_counts(r, reset=False):
-    key = cache_reg_counts_key(r)
+def get_reg_counts(run, reset=False):
+    key = cache_reg_counts_key(run.id)
     if reset:
         res = None
     else:
         res = cache.get(key)
     if not res:
-        res = update_reg_counts(r)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        res = update_reg_counts(run)
+        cache.set(key, res, timeout=60 * 5)
     return res
 
 
@@ -60,17 +60,17 @@ def add_count(s, param, v=1):
     s[param] += v
 
 
-def update_reg_counts(r):
+def update_reg_counts(run):
     """Update registration counts cache for the given run.
 
     Args:
-        r: Run instance to update registration counts for
+        run: Run instance to update registration counts for
 
     Returns:
         dict: Updated registration counts data by ticket tier
     """
     s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
-    que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
+    que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
     for reg in que.select_related("ticket"):
         num_tickets = 1 + reg.additionals
         if not reg.ticket:
@@ -98,11 +98,11 @@ def update_reg_counts(r):
 
         add_count(s, f"tk_{reg.ticket_id}", num_tickets)
 
-    que = RegistrationChoice.objects.filter(reg__run=r, reg__cancellation_date__isnull=True)
+    que = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
     for el in que.values("option_id").annotate(total=Count("option_id")):
         s[f"option_{el['option_id']}"] = el["total"]
 
-    character_ids = Character.objects.filter(event=r.event).values_list("id", flat=True)
+    character_ids = Character.objects.filter(event_id=run.event_id).values_list("id", flat=True)
 
     que = WritingChoice.objects.filter(element_id__in=character_ids)
     for el in que.values("option_id").annotate(total=Count("option_id")):
@@ -113,7 +113,7 @@ def update_reg_counts(r):
 
 @receiver(post_save, sender=Registration)
 def post_save_registration_cache(sender, instance, created, **kwargs):
-    reset_cache_reg_counts(instance.run)
+    reset_cache_reg_counts(instance.run_id)
 
 
 @receiver(post_save, sender=Character)
@@ -122,8 +122,8 @@ def post_save_registration_character_rel_cache(sender, instance, created, **kwar
 
 
 def handle_update_registration_character_rel(instance):
-    for run in instance.event.runs.all():
-        reset_cache_reg_counts(run)
+    for run_id in instance.event.runs.values_list("id", flat=True):
+        reset_cache_reg_counts(run_id)
     if instance.event.get_config("user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()
@@ -131,13 +131,13 @@ def handle_update_registration_character_rel(instance):
 
 @receiver(post_save, sender=Run)
 def post_save_run_cache(sender, instance, created, **kwargs):
-    reset_cache_reg_counts(instance)
+    reset_cache_reg_counts(instance.id)
 
 
 @receiver(post_save, sender=Event)
 def post_save_event_cache(sender, instance, created, **kwargs):
-    for r in instance.runs.all():
-        reset_cache_reg_counts(r)
+    for run_id in instance.runs.values_list("id", flat=True):
+        reset_cache_reg_counts(run_id)
 
 
 def search_player(char, js, ctx):

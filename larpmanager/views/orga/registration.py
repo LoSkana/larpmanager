@@ -26,7 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Substr
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -406,7 +406,7 @@ def _orga_registrations_text_fields(ctx):
 
 
 @login_required
-def orga_registrations(request: "HttpRequest", s: str) -> "HttpResponse":
+def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
     """Display and manage comprehensive event registration list for organizers.
 
     Provides detailed registration management interface with filtering, grouping,
@@ -920,7 +920,7 @@ def orga_reload_cache(request, s):
     reset_cache_run(ctx["event"].assoc_id, ctx["run"].get_slug())
     reset_event_features(ctx["event"].id)
     reset_run_event_links(ctx["event"])
-    reset_cache_reg_counts(ctx["run"])
+    reset_cache_reg_counts(ctx["run"].id)
     reset_event_fields_cache(ctx["event"].id)
     reset_event_rels_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))
