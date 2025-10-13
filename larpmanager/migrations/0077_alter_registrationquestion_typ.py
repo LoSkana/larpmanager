@@ -2,15 +2,12 @@
 
 from django.db import migrations, models
 
-from larpmanager.cache.feature import get_event_features
-from larpmanager.utils.event import save_event_registration_form
-
 
 def update(apps, schema_editor):
-    Event = apps.get_model("larpmanager", "Event")
-    for instance in Event.objects.all():
-        features = get_event_features(instance.id)
-        save_event_registration_form(features, instance)
+    # This migration intentionally does nothing during the migration.
+    # The save_event_registration_form function will be called automatically
+    # via post_save signals when the events are next saved.
+    pass
 
 
 class Migration(migrations.Migration):
