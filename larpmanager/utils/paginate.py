@@ -57,12 +57,14 @@ def _get_elements_query(cls, ctx, request, typ, exe=True):
 
     elements = cls.filter(assoc_id=ctx["a_id"])
 
-    # For event-specific views (exe=False), also filter by run if the model has a run field
+    # Perform event-specific views (exe=False)
     if not exe and "run" in ctx:
         # noinspection PyProtectedMember
         field_names = [f.name for f in typ._meta.get_fields()]
         if "run" in field_names:
             elements = elements.filter(run=ctx["run"])
+        elif "reg" in field_names:
+            elements = elements.filter(reg__run=ctx["run"])
         elif "event" in field_names:
             elements = elements.filter(event=ctx["event"])
 
