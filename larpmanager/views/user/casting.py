@@ -127,7 +127,7 @@ def casting_details(ctx, typ):
 
 
 @login_required
-def casting(request: HttpRequest, slug: str, typ: int = 0) -> HttpResponse:
+def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
     """Handle user casting preferences for LARP events.
 
     This view manages the casting preference selection process for registered users,
@@ -135,7 +135,7 @@ def casting(request: HttpRequest, slug: str, typ: int = 0) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and POST data
-        slug: Event slug identifier used to retrieve the specific event run
+        s: Event slug identifier used to retrieve the specific event run
         typ: Casting type identifier for different casting categories (default: 0)
 
     Returns:
@@ -146,7 +146,7 @@ def casting(request: HttpRequest, slug: str, typ: int = 0) -> HttpResponse:
         PermissionDenied: If user lacks required casting feature permissions
     """
     # Get event context and validate user access permissions
-    ctx = get_event_run(request, slug, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, status=True)
     check_event_feature(request, ctx, "casting")
 
     # Verify user has completed event registration
