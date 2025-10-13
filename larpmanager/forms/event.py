@@ -26,7 +26,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.role import has_event_permission
 from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import MyCssForm, MyForm
@@ -222,7 +222,7 @@ class OrgaFeatureForm(FeatureForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         self._save_features(instance)
-        reset_event_features(instance.id)
+        clear_event_features_cache(instance.id)
         return instance
 
 

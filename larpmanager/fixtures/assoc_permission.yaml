@@ -1,5 +1,4 @@
 - model: larpmanager.assocpermission
-  pk: 1
   fields:
     name: Organization
     descr: Manage the organization main settings
@@ -7,10 +6,9 @@
     number: 2
     config: interface
     hidden: false
-    feature: 198
-    module: 9
+    feature: exe_association
+    module: organization
 - model: larpmanager.assocpermission
-  pk: 2
   fields:
     name: Roles
     descr: Assign roles to collaborators and grant access to specific functions
@@ -18,10 +16,9 @@
     number: 3
     config: null
     hidden: false
-    feature: 197
-    module: 9
+    feature: exe_roles
+    module: organization
 - model: larpmanager.assocpermission
-  pk: 3
   fields:
     name: Configuration
     descr: Manage the configuration of the activated features
@@ -29,10 +26,9 @@
     number: 4
     config: null
     hidden: false
-    feature: 196
-    module: 9
+    feature: exe_config
+    module: organization
 - model: larpmanager.assocpermission
-  pk: 4
   fields:
     name: Features
     descr: Activate features for the organization
@@ -40,10 +36,9 @@
     number: 5
     config: null
     hidden: false
-    feature: 195
-    module: 9
+    feature: exe_features
+    module: organization
 - model: larpmanager.assocpermission
-  pk: 5
   fields:
     name: Accounting
     descr: Manage organization accounting
@@ -51,10 +46,9 @@
     number: 2
     config: null
     hidden: false
-    feature: 194
-    module: 2
+    feature: exe_accounting
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 6
   fields:
     name: Payments
     descr: Manage payments performed by participants on all events
@@ -62,10 +56,9 @@
     number: 3
     config: payment
     hidden: false
-    feature: 111
-    module: 2
+    feature: payment
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 7
   fields:
     name: Donations
     descr: Manage donations performed by participants
@@ -73,10 +66,9 @@
     number: 4
     config: null
     hidden: false
-    feature: 36
-    module: 2
+    feature: donate
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 8
   fields:
     name: Outflows
     descr: Manages events or organization expenses
@@ -84,10 +76,9 @@
     number: 5
     config: null
     hidden: false
-    feature: 108
-    module: 2
+    feature: outflow
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 9
   fields:
     name: Inflows
     descr: Manages events or organization revenues
@@ -95,10 +86,9 @@
     number: 6
     config: null
     hidden: false
-    feature: 144
-    module: 2
+    feature: inflow
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 10
   fields:
     name: Expenses
     descr: Manage staff expenses based on receipts uploaded for all events
@@ -106,10 +96,9 @@
     number: 7
     config: expense
     hidden: false
-    feature: 106
-    module: 2
+    feature: expense
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 11
   fields:
     name: Credits
     descr: Manages credits used by participants to cover the registration fee on all
@@ -118,10 +107,9 @@
     number: 8
     config: token_credit
     hidden: false
-    feature: 107
-    module: 2
+    feature: token_credit
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 12
   fields:
     name: Refunds
     descr: Manage refund requests
@@ -129,10 +117,9 @@
     number: 9
     config: null
     hidden: false
-    feature: 112
-    module: 2
+    feature: refund
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 13
   fields:
     name: Collections
     descr: Manage collections participated by users
@@ -140,10 +127,9 @@
     number: 10
     config: null
     hidden: false
-    feature: 31
-    module: 2
+    feature: collection
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 14
   fields:
     name: Verification
     descr: Verify manually approved payments
@@ -151,10 +137,9 @@
     number: 11
     config: null
     hidden: false
-    feature: 109
-    module: 2
+    feature: verification
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 15
   fields:
     name: Balance
     descr: Review the annual budget report
@@ -162,10 +147,9 @@
     number: 12
     config: null
     hidden: false
-    feature: 110
-    module: 10
+    feature: ita_balance
+    module: italy
 - model: larpmanager.assocpermission
-  pk: 16
   fields:
     name: Historical
     descr: Review historical financial records
@@ -173,10 +157,9 @@
     number: 13
     config: null
     hidden: false
-    feature: 86
-    module: 2
+    feature: record_acc
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 17
   fields:
     name: Appearance
     descr: 'Set visual aspect: colors, background, cover image'
@@ -184,10 +167,9 @@
     number: 11
     config: calendar
     hidden: false
-    feature: 193
-    module: 6
+    feature: exe_appearance
+    module: appearance
 - model: larpmanager.assocpermission
-  pk: 18
   fields:
     name: Texts
     descr: Customize textual elements of the organization interface
@@ -195,10 +177,9 @@
     number: 21
     config: null
     hidden: false
-    feature: 192
-    module: 6
+    feature: exe_texts
+    module: appearance
 - model: larpmanager.assocpermission
-  pk: 19
   fields:
     name: URL shortener
     descr: Manage url shortner
@@ -206,10 +187,19 @@
     number: 11
     config: null
     hidden: false
-    feature: 138
-    module: 3
+    feature: urlshortner
+    module: miscellany
 - model: larpmanager.assocpermission
-  pk: 21
+  fields:
+    name: Containers
+    descr: Manage warehouse containers
+    slug: exe_warehouse_containers
+    number: 21
+    config: warehouse
+    hidden: false
+    feature: warehouse
+    module: warehouse
+- model: larpmanager.assocpermission
   fields:
     name: Events
     descr: Manage events
@@ -217,10 +207,9 @@
     number: 11
     config: null
     hidden: false
-    feature: 191
-    module: 12
+    feature: exe_events
+    module: events
 - model: larpmanager.assocpermission
-  pk: 23
   fields:
     name: Pre-Registrations
     descr: Manage the pre-registration of all events
@@ -228,10 +217,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 32
-    module: 4
+    feature: pre_register
+    module: registration
 - model: larpmanager.assocpermission
-  pk: 24
   fields:
     name: Deadlines
     descr: Displays participants overdue for payment or other deadlines for all events
@@ -239,10 +227,9 @@
     number: 41
     config: deadlines
     hidden: false
-    feature: 94
-    module: 4
+    feature: deadlines
+    module: registration
 - model: larpmanager.assocpermission
-  pk: 25
   fields:
     name: Send e-mail
     descr: Send e-mail
@@ -250,10 +237,9 @@
     number: 11
     config: email
     hidden: false
-    feature: 189
-    module: 14
+    feature: exe_send_mail
+    module: communications
 - model: larpmanager.assocpermission
-  pk: 26
   fields:
     name: Membership
     descr: Review all members
@@ -261,10 +247,9 @@
     number: 15
     config: membership
     hidden: false
-    feature: 45
-    module: 8
+    feature: membership
+    module: users
 - model: larpmanager.assocpermission
-  pk: 27
   fields:
     name: Vote
     descr: Manage members votes for the assignment of roles in the organization
@@ -272,10 +257,9 @@
     number: 21
     config: vote
     hidden: false
-    feature: 63
-    module: 8
+    feature: vote
+    module: users
 - model: larpmanager.assocpermission
-  pk: 28
   fields:
     name: Badges
     descr: Manage badges and assign them to participants
@@ -283,10 +267,9 @@
     number: 31
     config: null
     hidden: false
-    feature: 65
-    module: 8
+    feature: badge
+    module: users
 - model: larpmanager.assocpermission
-  pk: 29
   fields:
     name: Questions
     descr: Manage participant questions and answer them
@@ -294,10 +277,9 @@
     number: 1
     config: null
     hidden: false
-    feature: 28
-    module: 14
+    feature: help
+    module: communications
 - model: larpmanager.assocpermission
-  pk: 30
   fields:
     name: Newsletter
     descr: Displays list of emails of users
@@ -305,10 +287,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 40
-    module: 14
+    feature: newsletter
+    module: communications
 - model: larpmanager.assocpermission
-  pk: 32
   fields:
     name: Volunteers
     descr: Manage volunteer registry
@@ -316,10 +297,9 @@
     number: 71
     config: null
     hidden: false
-    feature: 158
-    module: 10
+    feature: volunteer_registry
+    module: italy
 - model: larpmanager.assocpermission
-  pk: 33
   fields:
     name: Enrolment
     descr: Display all users data
@@ -327,10 +307,9 @@
     number: 81
     config: null
     hidden: false
-    feature: 45
-    module: 8
+    feature: membership
+    module: users
 - model: larpmanager.assocpermission
-  pk: 34
   fields:
     name: Methods
     descr: Configure payment methods available for participants
@@ -338,10 +317,9 @@
     number: 1
     config: payment
     hidden: false
-    feature: 111
-    module: 2
+    feature: payment
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 35
   fields:
     name: Invoices
     descr: Manage invoices of payments and approve them
@@ -349,10 +327,9 @@
     number: 33
     config: null
     hidden: false
-    feature: 111
-    module: 2
+    feature: payment
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 38
   fields:
     name: Check data
     descr: Check consistency of the members’ personal data
@@ -360,10 +337,9 @@
     number: 99
     config: null
     hidden: false
-    feature: 185
-    module: 10
+    feature: fiscal_code_check
+    module: italy
 - model: larpmanager.assocpermission
-  pk: 39
   fields:
     name: Tokens
     descr: Manages tokens used by participants to cover the registration fee for all
@@ -372,10 +348,9 @@
     number: 8
     config: token_credit
     hidden: false
-    feature: 107
-    module: 2
+    feature: token_credit
+    module: accounting
 - model: larpmanager.assocpermission
-  pk: 40
   fields:
     name: Registry
     descr: Display all users data as members registry
@@ -383,10 +358,9 @@
     number: 99
     config: null
     hidden: false
-    feature: 45
-    module: 8
+    feature: membership
+    module: users
 - model: larpmanager.assocpermission
-  pk: 42
   fields:
     name: Profile
     descr: Manage fields that track participants’ data
@@ -394,10 +368,9 @@
     number: 1
     config: users
     hidden: false
-    feature: 188
-    module: 8
+    feature: exe_profile
+    module: users
 - model: larpmanager.assocpermission
-  pk: 43
   fields:
     name: Template
     descr: Manage event templates used as starting points for new events
@@ -405,10 +378,9 @@
     number: 51
     config: null
     hidden: false
-    feature: 179
-    module: 12
+    feature: template
+    module: events
 - model: larpmanager.assocpermission
-  pk: 44
   fields:
     name: Archive
     descr: Display all sent e-mails
@@ -416,10 +388,9 @@
     number: 91
     config: email
     hidden: false
-    feature: 187
-    module: 14
+    feature: exe_archive_email
+    module: communications
 - model: larpmanager.assocpermission
-  pk: 45
   fields:
     name: Quick Setup
     descr: quick
@@ -427,32 +398,9 @@
     number: 9999
     config: null
     hidden: true
-    feature: 216
-    module: 7
+    feature: quick_setup
+    module: event
 - model: larpmanager.assocpermission
-  pk: 20
-  fields:
-    name: Containers
-    descr: Manage warehouse containers
-    slug: exe_warehouse_containers
-    number: 21
-    config: warehouse
-    hidden: false
-    feature: 66
-    module: 15
-- model: larpmanager.assocpermission
-  pk: 48
-  fields:
-    name: Tags
-    descr: Manage warehouse tags
-    slug: exe_warehouse_tags
-    number: 36
-    config: warehouse
-    hidden: false
-    feature: 66
-    module: 15
-- model: larpmanager.assocpermission
-  pk: 46
   fields:
     name: Items
     descr: Manage warehouse items
@@ -460,10 +408,9 @@
     number: 46
     config: warehouse
     hidden: false
-    feature: 66
-    module: 15
+    feature: warehouse
+    module: warehouse
 - model: larpmanager.assocpermission
-  pk: 47
   fields:
     name: Movements
     descr: Manage warehouse movements
@@ -471,5 +418,15 @@
     number: 66
     config: warehouse
     hidden: false
-    feature: 66
-    module: 15
+    feature: warehouse
+    module: warehouse
+- model: larpmanager.assocpermission
+  fields:
+    name: Tags
+    descr: Manage warehouse tags
+    slug: exe_warehouse_tags
+    number: 36
+    config: warehouse
+    hidden: false
+    feature: warehouse
+    module: warehouse

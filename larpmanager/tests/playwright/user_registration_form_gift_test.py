@@ -46,7 +46,7 @@ def test_user_registration_form_gift(pw_page):
 
 def prepare(page, live_server):
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
@@ -69,7 +69,7 @@ def prepare(page, live_server):
     submit_confirm(page)
 
     # Activate gift
-    go_to(page, live_server, "/test/manage/features/175/on")
+    go_to(page, live_server, "/test/1/manage/features/gift/on")
 
     go_to(page, live_server, "/test/manage/form/")
 

@@ -1275,6 +1275,9 @@ msgstr "Profilowanie"
 msgid "Prologues"
 msgstr "Prologi"
 
+msgid "Publisher"
+msgstr "Wydawca"
+
 msgid "Questions"
 msgstr "Pytania"
 
@@ -4406,6 +4409,9 @@ msgstr "Pełna nazwa organizacji"
 msgid "Confirm registration to %(event)s"
 msgstr "Potwierdź rejestrację na %(event)s"
 
+msgid "Descriptive name for this API key"
+msgstr "Nazwa opisowa dla tego klucza API"
+
 msgid "Discover what this event is about"
 msgstr "Dowiedz się, o co chodzi w tym wydarzeniu"
 
@@ -6147,6 +6153,10 @@ msgstr "Suma opłaty rejestracyjnej: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Przekroczono maksymalną liczbę opcji do wyboru"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Dostęp do panelu zarządzania <a href= %(url)s\">z tego miejsca</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Czy chcesz akceptować płatności przetwarzane przez system"
 
@@ -6199,10 +6209,6 @@ msgstr ""
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "UWAGA: Ta czynność zastępuje zmiany wprowadzone w tym zdarzeniu"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Dostęp do panelu zarządzania <a href= %(url)s'>z tego miejsca!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
@@ -6697,6 +6703,11 @@ msgid "Indicates whether the discount is visible and usable by participants"
 msgstr ""
 "Wskazuje, czy rabat jest widoczny i możliwy do wykorzystania przez "
 "uczestników"
+
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+"Sprawia, że nadchodzące wydarzenia są widoczne dla zewnętrznych witryn za "
+"pośrednictwem publicznego interfejsu API"
 
 msgid "Manage members votes for the assignment of roles in the organization"
 msgstr "Zarządzanie głosami członków w celu przypisania ról w organizacji"
@@ -8082,6 +8093,13 @@ msgid ""
 msgstr ""
 "Uwaga: operacja jest ostateczna, prosimy o dokładne sprawdzenie zadań przed "
 "ich przesłaniem"
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a"
+" public API"
+msgstr ""
+"Czy chcesz, aby Twoje nadchodzące wydarzenia były widoczne dla zewnętrznych "
+"witryn za pośrednictwem publicznego interfejsu API"
 
 #, python-format
 msgid ""

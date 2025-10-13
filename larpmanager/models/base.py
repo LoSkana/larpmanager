@@ -17,12 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import secrets
 from datetime import datetime
 from itertools import chain
 
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Max
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -122,6 +123,8 @@ class FeatureNationality(models.TextChoices):
 class FeatureModule(BaseModel):
     name = models.CharField(max_length=100)
 
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
+
     icon = models.CharField(max_length=100)
 
     order = models.IntegerField()
@@ -134,7 +137,7 @@ class Feature(BaseModel):
 
     descr = models.TextField(max_length=500, blank=True)
 
-    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
 
     order = models.IntegerField()
 
@@ -174,7 +177,7 @@ class Feature(BaseModel):
 class PaymentMethod(BaseModel):
     name = models.CharField(max_length=100)
 
-    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
 
     instructions = HTMLField(blank=True, null=True)
 
@@ -206,3 +209,57 @@ class PaymentMethod(BaseModel):
         """
         # noinspection PyUnresolvedReferences
         return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}
+
+
+class PublisherApiKey(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Descriptive name for this API key"))
+
+    key = models.CharField(max_length=64, unique=True, db_index=True, editable=False)
+
+    active = models.BooleanField(default=True)
+
+    last_used = models.DateTimeField(blank=True, null=True)
+
+    usage_count = models.PositiveIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = secrets.token_urlsafe(48)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} ({'Active' if self.active else 'Inactive'})"
+
+
+def auto_assign_sequential_numbers(instance):
+    """Auto-populate number and order fields for model instances.
+
+    Args:
+        instance: Model instance to populate fields for
+    """
+    for field in ["number", "order"]:
+        if hasattr(instance, field) and not getattr(instance, field):
+            que = None
+            if hasattr(instance, "event") and instance.event:
+                que = instance.__class__.objects.filter(event=instance.event)
+            if hasattr(instance, "assoc") and instance.assoc:
+                que = instance.__class__.objects.filter(assoc=instance.assoc)
+            if hasattr(instance, "character") and instance.character:
+                que = instance.__class__.objects.filter(character=instance.character)
+            if que is not None:
+                n = que.aggregate(Max(field))[f"{field}__max"]
+                if not n:
+                    setattr(instance, field, 1)
+                else:
+                    setattr(instance, field, n + 1)
+
+
+def update_model_search_field(instance):
+    """Update search field for model instances that have one.
+
+    Args:
+        instance: Model instance to update search field for
+    """
+    if hasattr(instance, "search"):
+        instance.search = None
+        instance.search = str(instance)

@@ -22,8 +22,6 @@ import math
 from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -470,7 +468,7 @@ def get_reduced_available_count(run):
     return math.floor(pat * ratio / 10.0) - red
 
 
-def handle_registration_event_switch(registration):
+def process_registration_event_change(registration):
     """Handle registration updates when switching between events.
 
     Args:
@@ -518,11 +516,6 @@ def handle_registration_event_switch(registration):
             answer.question = None
 
 
-@receiver(pre_save, sender=Registration)
-def pre_save_registration_switch_event(sender, instance, **kwargs):
-    handle_registration_event_switch(instance)
-
-
 def check_character_ticket_options(reg, char):
     ticket_id = reg.ticket.id
 
@@ -537,7 +530,7 @@ def check_character_ticket_options(reg, char):
     WritingChoice.objects.filter(pk__in=to_delete).delete()
 
 
-def save_registration_character_form(instance):
+def process_character_ticket_options(instance):
     if not instance.member:
         return
 

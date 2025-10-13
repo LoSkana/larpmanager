@@ -1275,6 +1275,9 @@ msgstr "Profilazione"
 msgid "Prologues"
 msgstr "Prologhi"
 
+msgid "Publisher"
+msgstr "Editore"
+
 msgid "Questions"
 msgstr "Domande"
 
@@ -4406,6 +4409,9 @@ msgstr "Nome completo dell'organizzazione"
 msgid "Confirm registration to %(event)s"
 msgstr "Conferma l'iscrizione a %(event)s"
 
+msgid "Descriptive name for this API key"
+msgstr "Nome descrittivo per questa chiave API"
+
 msgid "Discover what this event is about"
 msgstr "Scopri di cosa parla questo evento"
 
@@ -6149,6 +6155,10 @@ msgstr "Totale della tua iscrizione: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Hai superato il numero massimo di opzioni selezionabili"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Accedere al pannello di gestione <a href= %(url)s'>da qui</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vuoi accettare pagamenti elaborati attraverso il sistema"
 
@@ -6202,10 +6212,6 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "ATTENZIONE: questa azione sovrascrive le modifiche effettuate a questo "
 "evento"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Accedi al pannello di gestione <a href='%(url)s'>da qui!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
@@ -6740,6 +6746,10 @@ msgstr "Vuoi Gestisci i personaggi assegnati ai partecipanti registrati"
 
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Indica se lo sconto è visibile e utilizzabile dai partecipanti"
+
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+"Rende visibili i prossimi eventi a siti esterni attraverso un'API pubblica"
 
 msgid "Manage members votes for the assignment of roles in the organization"
 msgstr ""
@@ -8187,6 +8197,13 @@ msgid ""
 msgstr ""
 "Attenzione: l'operazione è definitiva, ricontrolla le assegnazioni prima di "
 "caricarle"
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a"
+" public API"
+msgstr ""
+"Volete rendere visibili i vostri prossimi eventi a siti esterni attraverso "
+"un'API pubblica"
 
 #, python-format
 msgid ""

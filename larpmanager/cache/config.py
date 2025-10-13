@@ -23,7 +23,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 
 
-def reset_configs(element):
+def clear_config_cache(element):
     # noinspection PyProtectedMember
     cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
 

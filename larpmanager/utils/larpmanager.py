@@ -17,14 +17,33 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from django.db.models import Max
+from slugify import slugify
 
-from django.apps import AppConfig
+from larpmanager.models.larpmanager import LarpManagerFaq
 
 
-class LarpManagerConfig(AppConfig):
-    name = "larpmanager"
+def generate_tutorial_url_slug(instance):
+    """Generate slug for tutorial if not already set.
 
-    # Import signals
-    def ready(self):
-        _ = __import__("larpmanager.models.signals")
-        _ = __import__("larpmanager.utils.profiler.receivers")
+    Args:
+        instance: LarpManagerTutorial instance being saved
+    """
+    if not instance.slug:
+        instance.slug = slugify(instance.name)
+
+
+def auto_assign_faq_sequential_number(faq):
+    """Assign number to FAQ if not already set.
+
+    Args:
+        faq: LarpManagerFaq instance to assign number to
+    """
+    if faq.number:
+        return
+    n = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
+    if not n:
+        n = 1
+    else:
+        n = ((n / 10) + 1) * 10
+    faq.number = n

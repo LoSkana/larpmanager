@@ -21,8 +21,6 @@
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event
@@ -103,7 +101,7 @@ def update_assoc_features(assoc_id):
     return res
 
 
-def reset_event_features(ev_id):
+def clear_event_features_cache(ev_id):
     cache.delete(cache_event_features_key(ev_id))
 
 
@@ -158,7 +156,7 @@ def update_event_features(ev_id):
         return {}
 
 
-def handle_association_features_post_save(instance):
+def on_association_post_save_reset_features_cache(instance):
     """Handle association post-save feature cache reset.
 
     Args:
@@ -166,14 +164,4 @@ def handle_association_features_post_save(instance):
     """
     reset_assoc_features(instance.id)
     for ev_id in instance.events.values_list("pk", flat=True):
-        reset_event_features(ev_id)
-
-
-@receiver(post_save, sender=Association)
-def update_association_reset_features(sender, instance, **kwargs):
-    handle_association_features_post_save(instance)
-
-
-@receiver(post_save, sender=Event)
-def save_event_reset_features(sender, instance, **kwargs):
-    reset_event_features(instance.id)
+        clear_event_features_cache(ev_id)

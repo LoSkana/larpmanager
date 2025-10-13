@@ -39,13 +39,13 @@ from larpmanager.accounting.registration import (
     get_accounting_refund,
     get_reg_payments,
 )
-from larpmanager.cache.character import get_event_cache_all, reset_run
+from larpmanager.cache.character import clear_run_cache_and_media, get_event_cache_all
 from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.feature import reset_event_features
-from larpmanager.cache.fields import reset_event_fields_cache
-from larpmanager.cache.links import reset_run_event_links
-from larpmanager.cache.registration import reset_cache_reg_counts
-from larpmanager.cache.rels import reset_event_rels_cache
+from larpmanager.cache.feature import clear_event_features_cache
+from larpmanager.cache.fields import clear_event_fields_cache
+from larpmanager.cache.links import clear_run_event_links_cache
+from larpmanager.cache.registration import clear_registration_counts_cache
+from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import get_cache_reg_field
@@ -916,13 +916,13 @@ def orga_pre_registrations(request, s):
 @login_required
 def orga_reload_cache(request, s):
     ctx = check_event_permission(request, s)
-    reset_run(ctx["run"])
+    clear_run_cache_and_media(ctx["run"])
     reset_cache_run(ctx["event"].assoc_id, ctx["run"].get_slug())
-    reset_event_features(ctx["event"].id)
-    reset_run_event_links(ctx["event"])
-    reset_cache_reg_counts(ctx["run"].id)
-    reset_event_fields_cache(ctx["event"].id)
-    reset_event_rels_cache(ctx["event"].id)
+    clear_event_features_cache(ctx["event"].id)
+    clear_run_event_links_cache(ctx["event"])
+    clear_registration_counts_cache(ctx["run"].id)
+    clear_event_fields_cache(ctx["event"].id)
+    clear_event_relationships_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))
     return redirect("manage", s=ctx["run"].get_slug())
 

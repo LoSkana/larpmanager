@@ -18,21 +18,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
 from larpmanager.utils.common import _search_char_reg
 
 
-def reset_cache_reg_counts(run_id):
+def clear_registration_counts_cache(run_id):
     cache.delete(cache_reg_counts_key(run_id))
 
 
@@ -111,33 +107,12 @@ def update_reg_counts(run):
     return s
 
 
-@receiver(post_save, sender=Registration)
-def post_save_registration_cache(sender, instance, created, **kwargs):
-    reset_cache_reg_counts(instance.run_id)
-
-
-@receiver(post_save, sender=Character)
-def post_save_registration_character_rel_cache(sender, instance, created, **kwargs):
-    handle_update_registration_character_rel(instance)
-
-
-def handle_update_registration_character_rel(instance):
+def on_character_update_registration_cache(instance):
     for run_id in instance.event.runs.values_list("id", flat=True):
-        reset_cache_reg_counts(run_id)
+        clear_registration_counts_cache(run_id)
     if instance.event.get_config("user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()
-
-
-@receiver(post_save, sender=Run)
-def post_save_run_cache(sender, instance, created, **kwargs):
-    reset_cache_reg_counts(instance.id)
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_cache(sender, instance, created, **kwargs):
-    for run_id in instance.runs.values_list("id", flat=True):
-        reset_cache_reg_counts(run_id)
 
 
 def search_player(char, js, ctx):

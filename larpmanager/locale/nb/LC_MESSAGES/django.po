@@ -1275,6 +1275,9 @@ msgstr "Profilering"
 msgid "Prologues"
 msgstr "Prologer"
 
+msgid "Publisher"
+msgstr "Utgiver"
+
 msgid "Questions"
 msgstr "Spørsmål"
 
@@ -4406,6 +4409,9 @@ msgstr "Fullstendig navn på organisasjonen"
 msgid "Confirm registration to %(event)s"
 msgstr "Bekreft oppføring til %(event)s"
 
+msgid "Descriptive name for this API key"
+msgstr "Beskrivende navn for denne API-nøkkelen"
+
 msgid "Discover what this event is about"
 msgstr "Finn ut hva dette arrangementet handler om"
 
@@ -6141,6 +6147,10 @@ msgstr "Summen av oppføringen din: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har overskredet det maksimale antallet valgbare alternativer"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Ønsker du å akseptere betalinger som behandles gjennom systemet"
 
@@ -6196,10 +6206,6 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "ADVARSEL: Denne handlingen overskriver endringer som er gjort i denne "
 "hendelsen"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
@@ -6676,6 +6682,11 @@ msgstr "Ønsker du å administrere tegn som er tildelt registrerte deltakere"
 
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Angir om rabatten er synlig og kan brukes av deltakerne"
+
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+"Gjør kommende arrangementer synlige for eksterne nettsteder gjennom et "
+"offentlig API"
 
 msgid "Manage members votes for the assignment of roles in the organization"
 msgstr ""
@@ -8014,6 +8025,13 @@ msgid ""
 msgstr ""
 "OBS: operasjonen er endelig, vennligst dobbeltsjekk oppgavene før du laster "
 "dem opp"
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a"
+" public API"
+msgstr ""
+"Ønsker du å gjøre kommende arrangementer synlige for eksterne nettsteder "
+"gjennom et offentlig API"
 
 #, python-format
 msgid ""

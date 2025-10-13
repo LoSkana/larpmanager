@@ -1275,6 +1275,9 @@ msgstr "Profilering"
 msgid "Prologues"
 msgstr "Prologen"
 
+msgid "Publisher"
+msgstr "Uitgever"
+
 msgid "Questions"
 msgstr "Vragen"
 
@@ -4406,6 +4409,9 @@ msgstr "Volledige naam van de organisatie"
 msgid "Confirm registration to %(event)s"
 msgstr "Toegang tot %(event)s bevestigen"
 
+msgid "Descriptive name for this API key"
+msgstr "Beschrijvende naam voor deze API-sleutel"
+
 msgid "Discover what this event is about"
 msgstr "Ontdek waar dit evenement over gaat"
 
@@ -6159,6 +6165,10 @@ msgstr "Totaal van je invoer: <b>%(amount).2f %(currency)s</b>"
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "U hebt het maximum aantal selecteerbare opties overschreden"
 
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
+msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hier</a>"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Wil je via het systeem verwerkte betalingen accepteren"
 
@@ -6212,10 +6222,6 @@ msgstr ""
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "WAARSCHUWING: deze actie overschrijft wijzigingen in deze gebeurtenis"
-
-#, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
-msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hieruit!</a>"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
@@ -6743,6 +6749,11 @@ msgstr ""
 
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Geeft aan of de korting zichtbaar en bruikbaar is voor deelnemers"
+
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+"Maakt aankomende evenementen zichtbaar voor externe sites via een openbare "
+"API"
 
 msgid "Manage members votes for the assignment of roles in the organization"
 msgstr ""
@@ -8172,6 +8183,13 @@ msgid ""
 msgstr ""
 "Let op: de bewerking is definitief, controleer de opdrachten voordat je ze "
 "uploadt"
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a"
+" public API"
+msgstr ""
+"Wil je je aankomende evenementen zichtbaar maken voor externe sites via een "
+"openbare API"
 
 #, python-format
 msgid ""

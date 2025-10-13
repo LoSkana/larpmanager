@@ -26,7 +26,7 @@ from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, PaymentChoices
 
 
-def compute_vat(instance):
+def calculate_payment_vat(instance):
     """Compute VAT for a payment based on ticket and options VAT rates.
 
     Calculates VAT for an accounting item payment by splitting the payment

@@ -659,6 +659,14 @@ msgid ""
 "characters"
 msgstr ""
 
+msgid "Publisher"
+msgstr ""
+
+msgid ""
+"Do you want to make your upcoming events visible to external sites through a "
+"public API"
+msgstr ""
+
 msgid "Do you want to accept payments processed through the system"
 msgstr ""
 
@@ -2147,7 +2155,7 @@ msgid "Role approval %(role)s"
 msgstr ""
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here!</a>"
+msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr ""
 
 #, python-format
@@ -2871,6 +2879,9 @@ msgstr ""
 msgid ""
 "Logo image (you can upload a file of any size, it will be resized "
 "automatically)"
+msgstr ""
+
+msgid "Descriptive name for this API key"
 msgstr ""
 
 msgid "A short tagline, slogan"
@@ -3678,20 +3689,6 @@ msgstr ""
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
 "specifically for this event!"
-msgstr ""
-
-msgid "Your registration ticket"
-msgstr ""
-
-msgid "Reserve additional tickets beyond your own"
-msgstr ""
-
-msgid "Registration surcharge"
-msgstr ""
-
-msgid ""
-"Number of installments to split the fee: payments and deadlines will be "
-"equally divided from the registration date"
 msgstr ""
 
 msgid "Progress status"
@@ -7849,6 +7846,9 @@ msgstr ""
 msgid "Now you can create the \"new player\" ticket"
 msgstr ""
 
+msgid "Makes upcoming events visible to external sites through a public API"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -7906,6 +7906,9 @@ msgid "Customize textual elements of the organization interface"
 msgstr ""
 
 msgid "Manage url shortner"
+msgstr ""
+
+msgid "Containers"
 msgstr ""
 
 msgid "Pre-Registrations"
@@ -7989,13 +7992,10 @@ msgstr ""
 msgid "quick"
 msgstr ""
 
-msgid "Containers"
+msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage warehouse tags"
-msgstr ""
-
-msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
@@ -8163,9 +8163,6 @@ msgstr ""
 msgid "Manage XP distributions for character skill purchases."
 msgstr ""
 
-msgid "Manage XP rules"
-msgstr ""
-
 msgid "Display full history of participant preferences on characters"
 msgstr ""
 
@@ -8230,6 +8227,9 @@ msgid "Manifest"
 msgstr ""
 
 msgid "Manage loading and deployment status of warehouse items"
+msgstr ""
+
+msgid "Manage XP rules"
 msgstr ""
 
 msgid "Manage XP modifiers"
@@ -8406,6 +8406,20 @@ msgid "List of other users"
 msgstr ""
 
 msgid "Show available characters"
+msgstr ""
+
+msgid "Your registration ticket"
+msgstr ""
+
+msgid "Reserve additional tickets beyond your own"
+msgstr ""
+
+msgid "Registration surcharge"
+msgstr ""
+
+msgid ""
+"Number of installments to split the fee: payments and deadlines will be "
+"equally divided from the registration date"
 msgstr ""
 
 msgid "Place of birth not included in the ISTAT list"

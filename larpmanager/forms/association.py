@@ -736,6 +736,11 @@ class ExeQuickSetupForm(QuickSetupForm):
 
         self.setup.update(
             {
+                "publisher": (
+                    True,
+                    _("Publisher"),
+                    _("Do you want to make your upcoming events visible to external sites through a public API"),
+                ),
                 "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
                 "payment_fees_user": (
                     False,

@@ -42,9 +42,9 @@ def test_user_signup_membership(pw_page):
 
 def signup(live_server, page):
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
     # Activate membership
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()
