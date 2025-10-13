@@ -471,7 +471,11 @@ class EventCharacterS2:
         self.event = event
 
     def get_queryset(self):
-        return self.event.get_elements(Character)
+        return (
+            self.event.get_elements(Character)
+            .only("id", "name", "number", "teaser", "title", "event_id")
+            .order_by("number")
+        )
 
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
@@ -515,7 +519,7 @@ class EventTraitS2:
         self.event = event
 
     def get_queryset(self):
-        return self.event.get_elements(Trait)
+        return self.event.get_elements(Trait).only("id", "name", "number", "teaser", "event_id").order_by("number")
 
 
 class EventTraitS2WidgetMulti(EventTraitS2, s2forms.ModelSelect2MultipleWidget):
