@@ -7,7 +7,6 @@ Processes each function: adds type hints, improves docstrings, adds comments.
 import ast
 import csv
 import subprocess
-import tempfile
 import time
 from pathlib import Path
 
@@ -31,24 +30,19 @@ def improve_function_with_claude_code(function_name: str, file_path: Path, start
     Returns True if successful, False otherwise.
     """
     # Create the prompt for Claude Code
-    prompt = f"""Per la funzione `{function_name}` nel file {file_path} (righe {start_line}-{end_line}):
+    prompt = f"""Migliora la funzione `{function_name}` nel file {file_path} (righe {start_line}-{end_line}):
 
-1. Aggiungi type hints alla definizione (parametri e return type)
-2. Migliora il pydoc (docstring) seguendo lo stile Google/NumPy
-3. Aggiungi commenti ogni 4-5 linee, oppure ogni blocco logico
+1. Aggiungi type hints alla definizione della funzione (parametri e return type)
+2. Migliora il docstring seguendo lo stile Google/NumPy
+3. Aggiungi commenti inline ogni 4-5 linee o per ogni blocco logico
 
-NON aggiungere spiegazioni, fai solo le modifiche richieste.
+IMPORTANTE: Modifica SOLO la funzione specificata nel file. Non aggiungere spiegazioni o sommari.
 """
 
     try:
-        # Write prompt to a temporary file
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as tmp:
-            tmp.write(prompt)
-            tmp_path = tmp.name
-
-        # Call Claude Code with the prompt via stdin
+        # Call Claude Code with --print flag for non-interactive mode
         result = subprocess.run(
-            ["claude"],
+            ["claude", "--print"],
             check=False,
             input=prompt,
             cwd=Path.cwd(),
@@ -57,14 +51,19 @@ NON aggiungere spiegazioni, fai solo le modifiche richieste.
             timeout=300,  # 5 minutes timeout
         )
 
-        # Clean up temp file
-        Path(tmp_path).unlink(missing_ok=True)
-
         # Check if successful
         if result.returncode == 0:
-            return True
+            # Check if the output contains any modifications
+            output = result.stdout.strip()
+            if output and len(output) > len(prompt):
+                return True
+            else:
+                print("  ⚠️  Claude Code returned but made no changes")
+                return False
         else:
-            print(f"  ❌ Claude Code returned error: {result.stderr}")
+            print(f"  ❌ Claude Code returned error (code {result.returncode})")
+            if result.stderr:
+                print(f"  ❌ Error details: {result.stderr}")
             return False
 
     except subprocess.TimeoutExpired:
