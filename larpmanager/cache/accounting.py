@@ -18,15 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
-    AccountingItemDiscount,
-    AccountingItemOther,
     AccountingItemPayment,
     PaymentChoices,
 )
@@ -49,25 +46,25 @@ def round_to_nearest_cent(number):
     return float(number)
 
 
-def get_registration_accounting_cache_key(run):
+def get_registration_accounting_cache_key(run_id):
     """Generate cache key for registration accounting data.
 
     Args:
-        run: Run instance
+        run_id: id of Run instance
 
     Returns:
         str: Cache key for registration accounting data
     """
-    return f"reg_accounting_{run.id}"
+    return f"reg_accounting_{run_id}"
 
 
-def reset_registration_accounting_cache(run):
+def clear_registration_accounting_cache(run_id):
     """Reset registration accounting cache for a run.
 
     Args:
-        run: Run instance to reset cache for
+        run_id: id of Run instance to reset cache for
     """
-    cache.delete(get_registration_accounting_cache_key(run))
+    cache.delete(get_registration_accounting_cache_key(run_id))
 
 
 def _get_accounting_context(run, member_filter=None):
@@ -80,13 +77,13 @@ def _get_accounting_context(run, member_filter=None):
     Returns:
         tuple: (features, reg_tickets, cache_aip)
     """
-    features = get_event_features(run.event.id)
+    features = get_event_features(run.event_id)
     if not isinstance(features, dict):
         features = {}
 
     # Get all tickets for this event
     reg_tickets = {}
-    for t in RegistrationTicket.objects.filter(event=run.event).order_by("-price"):
+    for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
         reg_tickets[t.id] = t
 
     # Build cache for token/credit payments
@@ -107,19 +104,19 @@ def _get_accounting_context(run, member_filter=None):
     return features, reg_tickets, cache_aip
 
 
-def update_member_accounting_cache(run, member_id):
+def refresh_member_accounting_cache(run, member_id):
     """Update accounting cache for a specific member's registrations in a run.
 
     Args:
         run: Run instance
         member_id: Member ID to update accounting data for
     """
-    key = get_registration_accounting_cache_key(run)
+    key = get_registration_accounting_cache_key(run.id)
     cached_data = cache.get(key)
 
     if not cached_data:
         # If cache doesn't exist, create it entirely
-        cached_data = update_registration_accounting_cache(run)
+        update_registration_accounting_cache(run)
         return
 
     # Get registrations for this member in this run
@@ -144,7 +141,7 @@ def update_member_accounting_cache(run, member_id):
             cached_data[reg.id] = {key: f"{value:g}" for key, value in dt.items()}
 
     # Update the cache
-    cache.set(key, cached_data)
+    cache.set(key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def get_registration_accounting_cache(run):
@@ -156,12 +153,12 @@ def get_registration_accounting_cache(run):
     Returns:
         dict: Cached registration accounting data
     """
-    key = get_registration_accounting_cache_key(run)
+    key = get_registration_accounting_cache_key(run.id)
     res = cache.get(key)
 
     if not res:
         res = update_registration_accounting_cache(run)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return res
 
@@ -233,71 +230,3 @@ def _calculate_registration_accounting(reg, reg_tickets, cache_aip, features):
         dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
 
     return dt
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_accounting_cache(sender, instance, created, **kwargs):
-    """Reset accounting cache when a registration is saved."""
-    reset_registration_accounting_cache(instance.run)
-
-
-@receiver(post_delete, sender=Registration)
-def post_delete_registration_accounting_cache(sender, instance, **kwargs):
-    """Reset accounting cache when a registration is deleted."""
-    reset_registration_accounting_cache(instance.run)
-
-
-@receiver(post_save, sender=RegistrationTicket)
-def post_save_ticket_accounting_cache(sender, instance, created, **kwargs):
-    """Reset accounting cache when a ticket is saved."""
-    for run in instance.event.runs.all():
-        reset_registration_accounting_cache(run)
-
-
-@receiver(post_delete, sender=RegistrationTicket)
-def post_delete_ticket_accounting_cache(sender, instance, **kwargs):
-    """Reset accounting cache when a ticket is deleted."""
-    for run in instance.event.runs.all():
-        reset_registration_accounting_cache(run)
-
-
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_payment_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when a payment is saved."""
-    if instance.reg and instance.reg.run:
-        update_member_accounting_cache(instance.reg.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_payment_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when a payment is deleted."""
-    if instance.reg and instance.reg.run:
-        update_member_accounting_cache(instance.reg.run, instance.member_id)
-
-
-@receiver(post_save, sender=AccountingItemDiscount)
-def post_save_discount_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when a discount is saved."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemDiscount)
-def post_delete_discount_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when a discount is deleted."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_save, sender=AccountingItemOther)
-def post_save_other_accounting_cache(sender, instance, created, **kwargs):
-    """Update accounting cache when an other accounting item is saved."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)
-
-
-@receiver(post_delete, sender=AccountingItemOther)
-def post_delete_other_accounting_cache(sender, instance, **kwargs):
-    """Update accounting cache when an other accounting item is deleted."""
-    if instance.run and instance.member_id:
-        update_member_accounting_cache(instance.run, instance.member_id)

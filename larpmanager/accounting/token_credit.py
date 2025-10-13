@@ -19,8 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from django.db import transaction
 from django.db.models import Case, F, IntegerField, Q, Value, When
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import (
@@ -67,7 +65,7 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.TOKEN,
                 value=tk_use,
-                member=reg.member,
+                member_id=reg.member_id,
                 reg=reg,
                 assoc_id=assoc_id,
             )
@@ -81,7 +79,7 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.CREDIT,
                 value=cr_use,
-                member=reg.member,
+                member_id=reg.member_id,
                 reg=reg,
                 assoc_id=assoc_id,
             )
@@ -170,7 +168,7 @@ def get_regs(assoc):
     return reg_que
 
 
-def handle_accounting_item_payment_post_save(instance, created):
+def update_token_credit_on_payment_save(instance, created):
     """Handle accounting item payment post-save token/credit updates.
 
     Args:
@@ -181,12 +179,7 @@ def handle_accounting_item_payment_post_save(instance, created):
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment(sender, instance, created, **kwargs):
-    handle_accounting_item_payment_post_save(instance, created)
-
-
-def handle_accounting_item_payment_post_delete(instance):
+def update_token_credit_on_payment_delete(instance):
     """Handle accounting item payment post-delete token/credit updates.
 
     Args:
@@ -196,12 +189,7 @@ def handle_accounting_item_payment_post_delete(instance):
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
-@receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_accounting_item_payment(sender, instance, **kwargs):
-    handle_accounting_item_payment_post_delete(instance)
-
-
-def handle_accounting_item_other_save(accounting_item):
+def update_token_credit_on_other_save(accounting_item):
     """Handle accounting item other save for token/credit updates.
 
     Args:
@@ -213,12 +201,7 @@ def handle_accounting_item_other_save(accounting_item):
     update_token_credit(accounting_item, accounting_item.oth == OtherChoices.TOKEN)
 
 
-@receiver(post_save, sender=AccountingItemOther)
-def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
-    handle_accounting_item_other_save(instance)
-
-
-def handle_accounting_item_expense_save(expense_item):
+def update_credit_on_expense_save(expense_item):
     """Handle accounting item expense save for credit updates.
 
     Args:
@@ -228,11 +211,6 @@ def handle_accounting_item_expense_save(expense_item):
         return
 
     update_token_credit(expense_item, False)
-
-
-@receiver(post_save, sender=AccountingItemExpense)
-def post_save_accounting_item_expense_accounting(sender, instance, **kwargs):
-    handle_accounting_item_expense_save(instance)
 
 
 def update_token_credit(instance, token=True):
@@ -259,30 +237,34 @@ def update_token_credit(instance, token=True):
 
     # token case
     if token:
-        tk_given = AccountingItemOther.objects.filter(member=instance.member, oth=OtherChoices.TOKEN, assoc_id=assoc_id)
+        tk_given = AccountingItemOther.objects.filter(
+            member_id=instance.member_id, oth=OtherChoices.TOKEN, assoc_id=assoc_id
+        )
         tk_used = AccountingItemPayment.objects.filter(
-            member=instance.member, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
+            member_id=instance.member_id, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
         )
         membership.tokens = get_sum(tk_given) - get_sum(tk_used)
         membership.save()
 
     # credit or refund case
     else:
-        cr_expenses = AccountingItemExpense.objects.filter(member=instance.member, is_approved=True, assoc_id=assoc_id)
+        cr_expenses = AccountingItemExpense.objects.filter(
+            member_id=instance.member_id, is_approved=True, assoc_id=assoc_id
+        )
         cr_given = AccountingItemOther.objects.filter(
-            member=instance.member, oth=OtherChoices.CREDIT, assoc_id=assoc_id
+            member_id=instance.member_id, oth=OtherChoices.CREDIT, assoc_id=assoc_id
         )
         cr_used = AccountingItemPayment.objects.filter(
-            member=instance.member, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
+            member_id=instance.member_id, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
         )
         cr_refunded = AccountingItemOther.objects.filter(
-            member=instance.member, oth=OtherChoices.REFUND, assoc_id=assoc_id
+            member_id=instance.member_id, oth=OtherChoices.REFUND, assoc_id=assoc_id
         )
         membership.credit = get_sum(cr_expenses) + get_sum(cr_given) - (get_sum(cr_used) + get_sum(cr_refunded))
         membership.save()
 
     # trigger accounting update on registrations with missing remaining
-    for reg in get_regs_paying_incomplete(instance.assoc).filter(member=instance.member):
+    for reg in get_regs_paying_incomplete(instance.assoc).filter(member_id=instance.member_id):
         reg.save()
 
 

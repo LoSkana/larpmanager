@@ -224,9 +224,7 @@
     gdpr_contract: ''
     review_done: false
     images_shared: false
-    key: bldCZ3JCa0lCOEZIQkc3SnRGX3owMFpqYTZyWko1ZzRZbXMxalRNNWE0Yz0=
     payment_methods: []
-    features: [191]
     skin: 1
 - model: larpmanager.assocrole
   pk: 1

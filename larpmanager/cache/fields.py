@@ -18,9 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
 
 from larpmanager.models.event import Event
 from larpmanager.models.form import (
@@ -36,7 +35,7 @@ def event_fields_key(event_id):
     return f"event_fields_{event_id}"
 
 
-def reset_event_fields_cache(event_id):
+def clear_event_fields_cache(event_id):
     cache.delete(event_fields_key(event_id))
 
 
@@ -86,7 +85,7 @@ def update_event_fields(event_id):
             res[first_key]["ids"] = {}
         res[first_key]["ids"][second_key] = el["id"]
 
-    cache.set(event_fields_key(event_id), res)
+    cache.set(event_fields_key(event_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -138,23 +137,3 @@ def visible_writing_fields(ctx, applicable, only_visible=True):
                 if el["question_id"] not in ctx["searchable"]:
                     ctx["searchable"][el["question_id"]] = []
                 ctx["searchable"][el["question_id"]].append(el["id"])
-
-
-@receiver(pre_delete, sender=WritingQuestion)
-def del_character_question_reset(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.event_id)
-
-
-@receiver(post_save, sender=WritingQuestion)
-def save_fieldsquestion_reset(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.event_id)
-
-
-@receiver(pre_delete, sender=WritingOption)
-def del_fieldsoption_reset(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.question.event_id)
-
-
-@receiver(post_save, sender=WritingOption)
-def save_fieldsoption_reset(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.question.event_id)

@@ -23,8 +23,6 @@ import re
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -105,7 +103,7 @@ def get_cache_text_field(typ, event):
     res = cache.get(key)
     if not res:
         res = init_cache_text_field(typ, event)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -115,7 +113,7 @@ def update_cache_text_fields(el):
     key = cache_text_field_key(typ, event)
     res = get_cache_text_field(typ, event)
     _init_element_cache_text_field(el, res, typ)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_cache_text_fields_answer(instance):
@@ -131,7 +129,7 @@ def update_cache_text_fields_answer(instance):
     if instance.element_id not in res:
         res[instance.element_id] = {}
     res[instance.element_id][field] = get_single_cache_text_field(instance.element_id, field, instance.text)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 # Registration
@@ -149,7 +147,7 @@ def _init_element_cache_reg_field(el, res):
         res[el.id] = {}
 
     # noinspection PyProtectedMember
-    que = RegistrationQuestion.objects.filter(event=el.run.event)
+    que = RegistrationQuestion.objects.filter(event_id=el.run.event_id)
     for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         try:
             v = RegistrationAnswer.objects.get(question_id=que_id, reg_id=el.id).text
@@ -164,7 +162,7 @@ def get_cache_reg_field(run):
     res = cache.get(key)
     if not res:
         res = init_cache_reg_field(run)
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -173,7 +171,7 @@ def update_cache_reg_fields(el):
     key = cache_text_field_key(Registration, run)
     res = get_cache_reg_field(run)
     _init_element_cache_reg_field(el, res)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_cache_reg_fields_answer(instance):
@@ -186,20 +184,10 @@ def update_cache_reg_fields_answer(instance):
     res = get_cache_reg_field(run)
     field = str(instance.question_id)
     res[instance.reg_id][field] = get_single_cache_text_field(instance.reg_id, field, instance.text)
-    cache.set(key, res)
+    cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-@receiver(post_save)
-def post_save_callback(sender, instance, *args, **kwargs):
-    update_acc_callback(instance)
-
-
-@receiver(post_delete)
-def post_delete_callback(sender, instance, **kwargs):
-    update_acc_callback(instance)
-
-
-def update_acc_callback(instance):
+def update_text_fields_cache(instance):
     if issubclass(instance.__class__, Writing):
         update_cache_text_fields(instance)
 

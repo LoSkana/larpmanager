@@ -64,7 +64,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
     based on enabled features.
     """
 
-    page_info = _("This page allows you to add or edit an expense item of a contributor")
+    page_info = _("Manage expense items for contributors")
 
     page_title = _("Expenses")
 
@@ -87,7 +87,7 @@ class OrgaExpenseForm(MyFormRun):
 
     page_title = _("Expenses collaborators")
 
-    page_info = _("This page allows you to add or edit the expense of a contributor")
+    page_info = _("Manage expenses for contributors")
 
     class Meta:
         model = AccountingItemExpense
@@ -119,14 +119,14 @@ class OrgaTokenForm(MyFormRun):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.page_info = _("This page allows you to add or edit an assignment of") + f" {self.params['token_name']}"
+        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
         self.page_title = self.params["token_name"]
         self.initial["oth"] = OtherChoices.TOKEN
         self.fields["member"].widget.set_run(self.params["run"])
 
 
 class OrgaCreditForm(MyFormRun):
-    page_info = _("This page allows you to add or edit a credits assignment")
+    page_info = _("Manage credit assignments")
 
     class Meta:
         model = AccountingItemOther
@@ -149,7 +149,7 @@ class OrgaPaymentForm(MyFormRun):
 
     page_title = _("Payments")
 
-    page_info = _("This page allows you to add or edit a payment item")
+    page_info = _("Manage payment items")
 
     class Meta:
         model = AccountingItemPayment
@@ -165,7 +165,7 @@ class OrgaPaymentForm(MyFormRun):
 class ExeOutflowForm(MyForm):
     page_title = _("Outflows")
 
-    page_info = _("This page allows you to add or edit an expense item incurred")
+    page_info = _("Manage expense items incurred")
 
     class Meta:
         model = AccountingItemOutflow
@@ -197,7 +197,7 @@ class OrgaOutflowForm(ExeOutflowForm):
 class ExeInflowForm(MyForm):
     page_title = _("Inflows")
 
-    page_info = _("This page allows you to add or edit an event revenue other than the participants' registration fee")
+    page_info = _("Manage event revenue other than participants' registration fees")
 
     class Meta:
         model = AccountingItemInflow
@@ -237,11 +237,11 @@ class ExeDonationForm(MyForm):
 class ExePaymentForm(MyForm):
     page_title = _("Payments")
 
-    page_info = _("This page allows you to add or edit a payment item")
+    page_info = _("Manage payment items")
 
     class Meta:
         model = AccountingItemPayment
-        exclude = ("inv", "hide", "member")
+        exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
         widgets = {"reg": AssocRegS2Widget}
 
     def __init__(self, *args, **kwargs):
@@ -254,7 +254,7 @@ class ExePaymentForm(MyForm):
 class ExeInvoiceForm(MyForm):
     page_title = _("Invoices")
 
-    page_info = _("This page allows you to add or edit an invoice")
+    page_info = _("Manage invoices")
 
     class Meta:
         model = PaymentInvoice
@@ -267,7 +267,7 @@ class ExeInvoiceForm(MyForm):
 
 
 class ExeCreditForm(MyForm):
-    page_info = _("This page allows you to add or edit a credits assignment")
+    page_info = _("Manage credit assignments")
 
     class Meta:
         model = AccountingItemOther
@@ -293,7 +293,7 @@ class ExeTokenForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.page_title = _("Assignment") + f" {self.params['token_name']}"
-        self.page_info = _("This page allows you to add or edit an assignment of") + f" {self.params['token_name']}"
+        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
@@ -304,7 +304,7 @@ class ExeTokenForm(MyForm):
 class ExeExpenseForm(MyForm):
     page_title = _("Expenses")
 
-    page_info = _("This page allows you to add or edit an expense item of a contributor")
+    page_info = _("Manage expense items for contributors")
 
     class Meta:
         model = AccountingItemExpense
@@ -368,7 +368,7 @@ class ExeCollectionForm(CollectionNewForm):
 
 
 class OrgaDiscountForm(MyForm):
-    page_info = _("This page allows you to add or edit a discount")
+    page_info = _("Manage discounts")
 
     page_title = _("Discount")
 
@@ -446,7 +446,7 @@ class ExeRefundRequestForm(MyForm):
 class ExePaymentSettingsForm(MyForm):
     page_title = _("Payment Methods")
 
-    page_info = _("This page allows you to set up your payment methods")
+    page_info = _("Manage payment methods")
 
     load_js = ["payment-details"]
 

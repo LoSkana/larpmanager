@@ -24,8 +24,6 @@ from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
@@ -438,11 +436,6 @@ def process_payment_invoice_status_change(invoice):
     payment_received(invoice)
 
 
-@receiver(pre_save, sender=PaymentInvoice)
-def update_payment_invoice(sender, instance, **kwargs):
-    process_payment_invoice_status_change(instance)
-
-
 def process_refund_request_status_change(refund_request):
     """Process refund request status changes.
 
@@ -473,11 +466,6 @@ def process_refund_request_status_change(refund_request):
     acc.descr = f"Delivered refund of {refund_request.value:.2f}"
     acc.assoc_id = refund_request.assoc_id
     acc.save()
-
-
-@receiver(pre_save, sender=RefundRequest)
-def update_refund_request(sender, instance, **kwargs):
-    process_refund_request_status_change(instance)
 
 
 def process_collection_status_change(collection):
@@ -511,8 +499,3 @@ def process_collection_status_change(collection):
     acc.oth = OtherChoices.CREDIT
     acc.descr = f"Collection of {collection.organizer}"
     acc.save()
-
-
-@receiver(pre_save, sender=Collection)
-def update_collection(sender, instance, **kwargs):
-    process_collection_status_change(instance)

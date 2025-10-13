@@ -53,7 +53,7 @@ class ExeAssociationForm(MyForm):
 
     page_title = _("Settings")
 
-    page_info = _("This page allows you to change the main settings of your Organization")
+    page_info = _("Manage main organization settings")
 
     class Meta:
         model = Association
@@ -94,7 +94,7 @@ class ExeAssocTextForm(MyForm):
 
     page_title = _("Texts")
 
-    page_info = _("This page allows you to edit organization-specific text")
+    page_info = _("Manage organization-specific texts")
 
     class Meta:
         abstract = True
@@ -216,7 +216,7 @@ class ExeAssocRoleForm(MyForm):
 
     page_title = _("Roles")
 
-    page_info = _("This page allows you to edit the roles of the association")
+    page_info = _("Manage association roles")
 
     load_templates = ["share"]
 
@@ -239,10 +239,7 @@ class ExeAssocRoleForm(MyForm):
 class ExeAppearanceForm(MyCssForm):
     page_title = _("Appearance")
 
-    page_info = _(
-        "This page allows you to change the appearance settings and presentation of the "
-        "management system for your Organization"
-    )
+    page_info = _("Manage appearance settings and presentation of the organization")
 
     class Meta:
         model = Association
@@ -276,7 +273,7 @@ class ExeFeatureForm(FeatureForm):
     page_title = _("Features")
 
     page_info = _(
-        "This page allows you to select the features activated for the organization, and all its events (click on a feature to show its description)"
+        "Manage features activated for the organization and all its events (click on a feature to show its description)"
     )
 
     load_js = ["feature-search"]
@@ -299,7 +296,7 @@ class ExeFeatureForm(FeatureForm):
 class ExeConfigForm(ConfigForm):
     page_title = _("Configuration")
 
-    page_info = _("This page allows you to edit the configuration of the activated features")
+    page_info = _("Manage configuration of activated features")
 
     section_replace = True
 
@@ -707,9 +704,7 @@ class FirstAssociationForm(MyForm):
 class ExeQuickSetupForm(QuickSetupForm):
     page_title = _("Quick Setup")
 
-    page_info = _(
-        "This page allows you to perform a quick setup of the most important settings for your new organization"
-    )
+    page_info = _("Manage quick setup of the most important settings for your new organization")
 
     class Meta:
         model = Association
@@ -741,6 +736,11 @@ class ExeQuickSetupForm(QuickSetupForm):
 
         self.setup.update(
             {
+                "publisher": (
+                    True,
+                    _("Publisher"),
+                    _("Do you want to make your upcoming events visible to external sites through a public API"),
+                ),
                 "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
                 "payment_fees_user": (
                     False,
@@ -777,7 +777,7 @@ class ExeQuickSetupForm(QuickSetupForm):
 class ExePreferencesForm(ConfigForm):
     page_title = _("Personal preferences")
 
-    page_info = _("This page allows you to set your personal preferences on the interface")
+    page_info = _("Manage your personal interface preferences")
 
     class Meta:
         model = Member

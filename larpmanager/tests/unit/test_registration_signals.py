@@ -42,6 +42,9 @@ from larpmanager.models.registration import (
 )
 from larpmanager.tests.unit.base import BaseTestCase
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
+
 
 class TestRegistrationCreation(BaseTestCase):
     """Test cases for registration creation"""

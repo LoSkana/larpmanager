@@ -38,6 +38,9 @@ from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import Faction, Relationship
 from larpmanager.tests.unit.base import BaseTestCase
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
+
 
 class TestUtilitySignals(BaseTestCase):
     """Test cases for utility and accounting-related signal receivers"""
@@ -54,7 +57,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(character.name, original_name)
         self.assertIsNotNone(character.id)
 
-    @patch("larpmanager.utils.experience.update_px")
+    @patch("larpmanager.utils.experience.calculate_character_experience_points")
     def test_ability_px_post_save_updates_experience(self, mock_update):
         """Test that AbilityPx m2m_changed signal updates character experience"""
         character = self.character()
@@ -63,7 +66,7 @@ class TestUtilitySignals(BaseTestCase):
         # Adding character to ability triggers m2m_changed signal
         ability_px.characters.add(character)
 
-        # The m2m_changed signal calls update_px for the added character
+        # The m2m_changed signal calls calculate_character_experience_points for the added character
         mock_update.assert_called_with(character)
 
     def test_delivery_px_post_save_updates_experience(self):
@@ -81,7 +84,7 @@ class TestUtilitySignals(BaseTestCase):
 
     def test_rule_px_post_save_updates_experience(self):
         """Test that RulePx post_save signal updates character experience"""
-        # Signal triggers update_px for all characters in event
+        # Signal triggers calculate_character_experience_points for all characters in event
         # RulePx requires complex setup with field_id, so we just verify signal is connected
         event = self.get_event()
 

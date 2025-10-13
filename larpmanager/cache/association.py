@@ -18,10 +18,9 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_assoc_features
@@ -29,7 +28,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.registration import Registration
 
 
-def reset_cache_assoc(s):
+def clear_association_cache(s):
     key = cache_assoc_key(s)
     cache.delete(key)
 
@@ -45,7 +44,7 @@ def get_cache_assoc(s):
         res = init_cache_assoc(s)
         if not res:
             return None
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -152,8 +151,3 @@ def _init_payments(assoc, el):
         for s in ["fee", "descr"]:
             mel[s] = payment_details.get(f"{m.slug}_{s}")
         el["methods"][m.slug] = mel
-
-
-@receiver(post_save, sender=Association)
-def update_association_reset_cache(sender, instance, **kwargs):
-    reset_cache_assoc(instance.slug)

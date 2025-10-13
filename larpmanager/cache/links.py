@@ -21,15 +21,14 @@
 import logging
 from datetime import datetime, timedelta
 
+from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 from django.http import HttpRequest
 
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
 
@@ -119,12 +118,12 @@ def cache_event_links(request: HttpRequest) -> dict:
     # Determine if topbar should be shown
     ctx["topbar"] = ctx["event_role"] or ctx["assoc_role"]
 
-    # Cache for 60 seconds
-    cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, 60)
+    # Cache for 1 day
+    cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return ctx
 
 
-def reset_run_event_links(event):
+def clear_run_event_links_cache(event):
     """Reset event link cache for all users with roles in the event.
 
     Args:
@@ -137,7 +136,7 @@ def reset_run_event_links(event):
         for mb in er.members.all():
             reset_event_links(mb.id, event.assoc_id)
     try:
-        ar = AssocRole.objects.prefetch_related("members").get(assoc=event.assoc, number=1)
+        ar = AssocRole.objects.prefetch_related("members").get(assoc_id=event.assoc_id, number=1)
         for mb in ar.members.all():
             reset_event_links(mb.id, event.assoc_id)
     except ObjectDoesNotExist:
@@ -148,7 +147,7 @@ def reset_run_event_links(event):
         reset_event_links(user.member.id, event.assoc_id)
 
 
-def handle_registration_event_links_post_save(instance):
+def on_registration_post_save_reset_event_links(instance):
     """Handle registration post-save event link reset.
 
     Args:
@@ -161,31 +160,6 @@ def handle_registration_event_links_post_save(instance):
         return
 
     reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_event_links(sender, instance, **kwargs):
-    handle_registration_event_links_post_save(instance)
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_links(sender, instance, **kwargs):
-    reset_run_event_links(instance)
-
-
-@receiver(post_delete, sender=Event)
-def post_delete_event_links(sender, instance, **kwargs):
-    reset_run_event_links(instance)
-
-
-@receiver(post_save, sender=Run)
-def post_save_run_links(sender, instance, **kwargs):
-    reset_run_event_links(instance.event)
-
-
-@receiver(post_delete, sender=Run)
-def post_delete_run_links(sender, instance, **kwargs):
-    reset_run_event_links(instance.event)
 
 
 def reset_event_links(uid, aid):

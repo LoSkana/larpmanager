@@ -21,10 +21,9 @@
 import logging
 from typing import Any
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import m2m_changed, post_delete, post_save
-from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -47,7 +46,7 @@ def get_event_rels_key(event_id: int) -> str:
     return f"event__rels__{event_id}"
 
 
-def reset_event_rels_cache(event_id: int) -> None:
+def clear_event_relationships_cache(event_id: int) -> None:
     """Reset event relationships cache for given event ID.
 
     Args:
@@ -56,6 +55,11 @@ def reset_event_rels_cache(event_id: int) -> None:
     cache_key = get_event_rels_key(event_id)
     cache.delete(cache_key)
     logger.debug(f"Reset cache for event {event_id}")
+
+    # invalidate also for children events
+    for children_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
+        cache_key = get_event_rels_key(children_id)
+        cache.delete(cache_key)
 
 
 def build_relationship_dict(items: list) -> dict[str, Any]:
@@ -94,15 +98,15 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
             res[section_name] = {}
 
         res[section_name][section_id] = data
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated {section_name} {section_id} relationships in cache")
 
     except Exception as e:
         logger.error(f"Error updating {section_name} {section_id} relationships: {e}", exc_info=True)
-        reset_event_rels_cache(event_id)
+        clear_event_relationships_cache(event_id)
 
 
-def remove_from_cache_section(event_id: int, section_name: str, section_id: int) -> None:
+def remove_item_from_cache_section(event_id: int, section_name: str, section_id: int) -> None:
     """Remove an item from a specific section in the event cache.
 
     Args:
@@ -115,14 +119,14 @@ def remove_from_cache_section(event_id: int, section_name: str, section_id: int)
         res = cache.get(cache_key)
         if res and section_name in res and section_id in res[section_name]:
             del res[section_name][section_id]
-            cache.set(cache_key, res)
+            cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             logger.debug(f"Removed {section_name} {section_id} from cache")
     except Exception as e:
         logger.error(f"Error removing {section_name} {section_id} from cache: {e}", exc_info=True)
-        reset_event_rels_cache(event_id)
+        clear_event_relationships_cache(event_id)
 
 
-def update_character_related_caches(char: Character) -> None:
+def refresh_character_related_caches(char: Character) -> None:
     """Update all caches that are related to a character.
 
     Args:
@@ -130,19 +134,19 @@ def update_character_related_caches(char: Character) -> None:
     """
     # Update plots that this character is part of
     for plot_rel in char.get_plot_characters():
-        update_event_plot_rels(plot_rel.plot)
+        refresh_event_plot_relationships(plot_rel.plot)
 
     # Update factions that this character is part of
     for faction in char.factions_list.all():
-        update_event_faction_rels(faction)
+        refresh_event_faction_relationships(faction)
 
     # Update speedlarps that this character is part of
     for speedlarp in char.speedlarps_list.all():
-        update_event_speedlarp_rels(speedlarp)
+        refresh_event_speedlarp_relationships(speedlarp)
 
     # Update prologues that this character is part of
     for prologue in char.prologues_list.all():
-        update_event_prologue_rels(prologue)
+        refresh_event_prologue_relationships(prologue)
 
 
 def update_m2m_related_characters(instance, pk_set, action: str, update_func) -> None:
@@ -163,17 +167,17 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
             for char_id in pk_set:
                 try:
                     char = Character.objects.get(id=char_id)
-                    update_event_char_rels(char)
+                    refresh_character_relationships(char)
                 except ObjectDoesNotExist:
                     logger.warning(f"Character {char_id} not found during relationship update")
         elif action == "post_clear":
             # For post_clear, we need to update all characters that were related
             if hasattr(instance, "characters"):
                 for char in instance.characters.all():
-                    update_event_char_rels(char)
+                    refresh_character_relationships(char)
             elif hasattr(instance, "get_plot_characters"):
                 for char_rel in instance.get_plot_characters():
-                    update_event_char_rels(char_rel.character)
+                    refresh_character_relationships(char_rel.character)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
@@ -237,13 +241,13 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
             elements = event.get_elements(model_class)
             for element in elements:
                 if pass_features:
-                    res[cache_key_plural][element.id] = get_rels_func(element, features, event)
+                    res[cache_key_plural][element.id] = get_rels_func(element, features)
                 else:
                     res[cache_key_plural][element.id] = get_rels_func(element)
             logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
 
         cache_key = get_event_rels_key(event.id)
-        cache.set(cache_key, res)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Cached relationships for event {event.id}")
 
     except Exception as e:
@@ -253,7 +257,14 @@ def init_event_rels_all(event: Event) -> dict[str, Any]:
     return res
 
 
-def update_event_char_rels(char: Character) -> None:
+def refresh_character_relationships(char: Character) -> None:
+    refresh_event_character_relationships(char, char.event)
+    # update char also for children events (if parent of campaign)
+    for children in Event.objects.filter(parent_id=char.event_id):
+        refresh_event_character_relationships(char, children)
+
+
+def refresh_event_character_relationships(char: Character, event: Event) -> None:
     """Update character relationships in cache.
 
     Updates the cached relationship data for a specific character.
@@ -261,30 +272,31 @@ def update_event_char_rels(char: Character) -> None:
 
     Args:
         char: The Character instance to update relationships for
+        event: The event for which we are building the cache
     """
     try:
-        cache_key = get_event_rels_key(char.event_id)
+        cache_key = get_event_rels_key(event.id)
         res = cache.get(cache_key)
 
         if res is None:
-            logger.debug(f"Cache miss during character update for event {char.event_id}, reinitializing")
-            init_event_rels_all(char.event)
+            logger.debug(f"Cache miss during character update for event {event}, reinitializing")
+            init_event_rels_all(event)
             return
 
         if "characters" not in res:
             res["characters"] = {}
 
-        features = get_event_features(char.event_id)
-        res["characters"][char.id] = get_event_char_rels(char, features, char.event)
-        cache.set(cache_key, res)
+        features = get_event_features(event.id)
+        res["characters"][char.id] = get_event_char_rels(char, features, event)
+        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:
         logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
-        reset_event_rels_cache(char.event_id)
+        clear_event_relationships_cache(event.id)
 
 
-def get_event_char_rels(char: Character, features: dict = None, event: Event = None) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict, event: Event = None) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
@@ -293,7 +305,7 @@ def get_event_char_rels(char: Character, features: dict = None, event: Event = N
     Args:
         char: The Character instance to get relationships for
         features: Set of enabled features
-        event: Optional Event instance for caching context. If None, uses char.event
+        event: Event for which we are rebuilding the cache
 
     Returns:
         Dict[str, Any]: Dictionary containing relationship data:
@@ -302,7 +314,6 @@ def get_event_char_rels(char: Character, features: dict = None, event: Event = N
                 'faction_rels': {'list': [(faction_id, faction_name), ...], 'count': int}
             }
     """
-
     relations = {}
 
     try:
@@ -515,7 +526,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
     return relations
 
 
-def update_event_faction_rels(faction: Faction) -> None:
+def refresh_event_faction_relationships(faction: Faction) -> None:
     """Update faction relationships in cache.
 
     Updates the cached relationship data for a specific faction.
@@ -528,7 +539,7 @@ def update_event_faction_rels(faction: Faction) -> None:
     update_cache_section(faction.event_id, "factions", faction.id, faction_data)
 
 
-def update_event_plot_rels(plot: Plot) -> None:
+def refresh_event_plot_relationships(plot: Plot) -> None:
     """Update plot relationships in cache.
 
     Updates the cached relationship data for a specific plot.
@@ -541,7 +552,7 @@ def update_event_plot_rels(plot: Plot) -> None:
     update_cache_section(plot.event_id, "plots", plot.id, plot_data)
 
 
-def update_event_speedlarp_rels(speedlarp: SpeedLarp) -> None:
+def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
     """Update speedlarp relationships in cache.
 
     Updates the cached relationship data for a specific speedlarp.
@@ -554,7 +565,7 @@ def update_event_speedlarp_rels(speedlarp: SpeedLarp) -> None:
     update_cache_section(speedlarp.event_id, "speedlarps", speedlarp.id, speedlarp_data)
 
 
-def update_event_prologue_rels(prologue: Prologue) -> None:
+def refresh_event_prologue_relationships(prologue: Prologue) -> None:
     """Update prologue relationships in cache.
 
     Updates the cached relationship data for a specific prologue.
@@ -567,7 +578,7 @@ def update_event_prologue_rels(prologue: Prologue) -> None:
     update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_data)
 
 
-def update_event_quest_rels(quest: Quest) -> None:
+def refresh_event_quest_relationships(quest: Quest) -> None:
     """Update quest relationships in cache.
 
     Updates the cached relationship data for a specific quest.
@@ -580,7 +591,7 @@ def update_event_quest_rels(quest: Quest) -> None:
     update_cache_section(quest.event_id, "quests", quest.id, quest_data)
 
 
-def update_event_questtype_rels(questtype: QuestType) -> None:
+def refresh_event_questtype_relationships(questtype: QuestType) -> None:
     """Update questtype relationships in cache.
 
     Updates the cached relationship data for a specific questtype.
@@ -593,82 +604,7 @@ def update_event_questtype_rels(questtype: QuestType) -> None:
     update_cache_section(questtype.event_id, "questtypes", questtype.id, questtype_data)
 
 
-@receiver(post_save, sender=Character)
-def post_save_character_reset_rels(sender, instance, **kwargs):
-    """Handle character save to update cache.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Character instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    update_event_char_rels(instance)
-    for rel in Relationship.objects.filter(target=instance):
-        update_event_char_rels(rel.source)
-
-    # Update all related caches
-    update_character_related_caches(instance)
-
-
-@receiver(post_delete, sender=Character)
-def post_delete_character_reset_rels(sender, instance, **kwargs):
-    """Handle character deletion to reset cache.
-
-    Resets the entire event cache when a character is deleted to ensure
-    all references to the deleted character are removed.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Character instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update all related caches
-    update_character_related_caches(instance)
-
-    reset_event_rels_cache(instance.event_id)
-    for rel in Relationship.objects.filter(target=instance):
-        update_event_char_rels(rel.source)
-
-
-@receiver(post_save, sender=Faction)
-def post_save_faction_reset_rels(sender, instance, **kwargs):
-    """Handle faction save to update related caches.
-
-    Updates both faction cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Faction instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update faction cache
-    update_event_faction_rels(instance)
-
-    # Update cache for all characters in this faction
-    for char in instance.characters.all():
-        update_event_char_rels(char)
-
-
-@receiver(post_delete, sender=Faction)
-def post_delete_faction_reset_rels(sender, instance, **kwargs):
-    """Handle faction deletion to update related caches.
-
-    Removes faction from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Faction instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for all characters that were in this faction
-    for char in instance.characters.all():
-        update_event_char_rels(char)
-
-    # Remove faction from cache
-    remove_from_cache_section(instance.event_id, "factions", instance.id)
-
-
-def handle_faction_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_faction_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle faction-character relationship changes.
 
     Updates both faction cache and character caches when relationships change.
@@ -680,10 +616,10 @@ def handle_faction_characters_changed(sender, instance, action, pk_set, **kwargs
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_faction_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships)
 
 
-def handle_plot_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_plot_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle plot-character relationship changes.
 
     Updates both plot cache and character caches when relationships change.
@@ -695,10 +631,10 @@ def handle_plot_characters_changed(sender, instance, action, pk_set, **kwargs):
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_plot_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships)
 
 
-def handle_speedlarp_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_speedlarp_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle speedlarp-character relationship changes.
 
     Updates both speedlarp cache and character caches when relationships change.
@@ -710,10 +646,10 @@ def handle_speedlarp_characters_changed(sender, instance, action, pk_set, **kwar
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_speedlarp_rels)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships)
 
 
-def handle_prologue_characters_changed(sender, instance, action, pk_set, **kwargs):
+def on_prologue_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
     """Handle prologue-character relationship changes.
 
     Updates both prologue cache and character caches when relationships change.
@@ -725,263 +661,4 @@ def handle_prologue_characters_changed(sender, instance, action, pk_set, **kwarg
         pk_set: Set of primary keys of the Character objects
         **kwargs: Additional keyword arguments from the signal
     """
-    update_m2m_related_characters(instance, pk_set, action, update_event_prologue_rels)
-
-
-@receiver(post_save, sender=Plot)
-def post_save_plot_reset_rels(sender, instance, **kwargs):
-    """Handle plot save to update related caches.
-
-    Updates both plot cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Plot instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update plot cache
-    update_event_plot_rels(instance)
-
-    # Update cache for all characters in this plot
-    for char_rel in instance.get_plot_characters():
-        update_event_char_rels(char_rel.character)
-
-
-@receiver(post_delete, sender=Plot)
-def post_delete_plot_reset_rels(sender, instance, **kwargs):
-    """Handle plot deletion to update related caches.
-
-    Removes plot from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Plot instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for all characters that were in this plot
-    for char_rel in instance.get_plot_characters():
-        update_event_char_rels(char_rel.character)
-
-    # Remove plot from cache
-    remove_from_cache_section(instance.event_id, "plots", instance.id)
-
-
-@receiver(post_save, sender=SpeedLarp)
-def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
-    """Handle speedlarp save to update related caches.
-
-    Updates both speedlarp cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The SpeedLarp instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update speedlarp cache
-    update_event_speedlarp_rels(instance)
-
-    # Update cache for all characters in this speedlarp
-    for char in instance.characters.all():
-        update_event_char_rels(char)
-
-
-@receiver(post_delete, sender=SpeedLarp)
-def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
-    """Handle speedlarp deletion to update related caches.
-
-    Removes speedlarp from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The SpeedLarp instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for all characters that were in this speedlarp
-    for char in instance.characters.all():
-        update_event_char_rels(char)
-
-    # Remove speedlarp from cache
-    remove_from_cache_section(instance.event_id, "speedlarps", instance.id)
-
-
-@receiver(post_save, sender=Prologue)
-def post_save_prologue_reset_rels(sender, instance, **kwargs):
-    """Handle prologue save to update related caches.
-
-    Updates both prologue cache and related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Prologue instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update prologue cache
-    update_event_prologue_rels(instance)
-
-    # Update cache for all characters in this prologue
-    for char in instance.characters.all():
-        update_event_char_rels(char)
-
-
-@receiver(post_delete, sender=Prologue)
-def post_delete_prologue_reset_rels(sender, instance, **kwargs):
-    """Handle prologue deletion to update related caches.
-
-    Removes prologue from cache and updates related character caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Prologue instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for all characters that were in this prologue
-    for char in instance.characters.all():
-        update_event_char_rels(char)
-
-    # Remove prologue from cache
-    remove_from_cache_section(instance.event_id, "prologues", instance.id)
-
-
-@receiver(post_save, sender=Relationship)
-def post_save_relationship_reset_rels(sender, instance, **kwargs):
-    """Handle relationship save to update character caches.
-
-    Updates cache for both source and target characters when relationship changes.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Relationship instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for source character
-    update_event_char_rels(instance.source)
-
-
-@receiver(post_delete, sender=Relationship)
-def post_delete_relationship_reset_rels(sender, instance, **kwargs):
-    """Handle relationship deletion to update character caches.
-
-    Updates cache for both source and target characters when relationship is deleted.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Relationship instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for source character
-    update_event_char_rels(instance.source)
-
-
-@receiver(post_save, sender=Quest)
-def post_save_quest_reset_rels(sender, instance, **kwargs):
-    """Handle quest save to update related caches.
-
-    Updates both quest cache and related questtype cache.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Quest instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update quest cache
-    update_event_quest_rels(instance)
-
-    # Update questtype cache if quest has a type
-    if instance.typ:
-        update_event_questtype_rels(instance.typ)
-
-
-@receiver(post_delete, sender=Quest)
-def post_delete_quest_reset_rels(sender, instance, **kwargs):
-    """Handle quest deletion to update related caches.
-
-    Removes quest from cache and updates related questtype cache.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Quest instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update questtype cache if quest had a type
-    if instance.typ:
-        update_event_questtype_rels(instance.typ)
-
-    # Remove quest from cache
-    remove_from_cache_section(instance.event_id, "quests", instance.id)
-
-
-@receiver(post_save, sender=QuestType)
-def post_save_questtype_reset_rels(sender, instance, **kwargs):
-    """Handle questtype save to update related caches.
-
-    Updates both questtype cache and related quest caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The QuestType instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update questtype cache
-    update_event_questtype_rels(instance)
-
-    # Update cache for all quests of this type
-    for quest in instance.quests.all():
-        update_event_quest_rels(quest)
-
-
-@receiver(post_delete, sender=QuestType)
-def post_delete_questtype_reset_rels(sender, instance, **kwargs):
-    """Handle questtype deletion to update related caches.
-
-    Removes questtype from cache and updates related quest caches.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The QuestType instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update cache for all quests that were of this type
-    for quest in instance.quests.all():
-        update_event_quest_rels(quest)
-
-    # Remove questtype from cache
-    remove_from_cache_section(instance.event_id, "questtypes", instance.id)
-
-
-@receiver(post_save, sender=Trait)
-def post_save_trait_reset_rels(sender, instance, **kwargs):
-    """Handle trait save to update quest cache.
-
-    Updates the quest cache when a trait changes.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Trait instance that was saved
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update quest cache if trait has a quest
-    if instance.quest:
-        update_event_quest_rels(instance.quest)
-
-
-@receiver(post_delete, sender=Trait)
-def post_delete_trait_reset_rels(sender, instance, **kwargs):
-    """Handle trait deletion to update quest cache.
-
-    Updates the quest cache when a trait is deleted.
-
-    Args:
-        sender: The model class that sent the signal
-        instance: The Trait instance that was deleted
-        **kwargs: Additional keyword arguments from the signal
-    """
-    # Update quest cache if trait had a quest
-    if instance.quest:
-        update_event_quest_rels(instance.quest)
-
-
-# Connect M2M signals manually for better control
-m2m_changed.connect(handle_faction_characters_changed, sender=Faction.characters.through)
-m2m_changed.connect(handle_plot_characters_changed, sender=Plot.characters.through)
-m2m_changed.connect(handle_speedlarp_characters_changed, sender=SpeedLarp.characters.through)
-m2m_changed.connect(handle_prologue_characters_changed, sender=Prologue.characters.through)
+    update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships)

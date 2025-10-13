@@ -26,7 +26,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.role import has_event_permission
 from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import MyCssForm, MyForm
@@ -94,7 +94,7 @@ class OrgaEventForm(MyForm):
 
     page_title = _("Event")
 
-    page_info = _("This page allows you to change general event settings")
+    page_info = _("Manage event settings")
 
     load_templates = ["event"]
 
@@ -206,7 +206,7 @@ class OrgaFeatureForm(FeatureForm):
     page_title = _("Event features")
 
     page_info = _(
-        "This page allows you to select the features activated for this event, and all its runs (click on a feature to show its description)"
+        "Manage features activated for this event and all its runs (click on a feature to show its description)"
     )
 
     load_js = ["feature-search"]
@@ -222,7 +222,7 @@ class OrgaFeatureForm(FeatureForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         self._save_features(instance)
-        reset_event_features(instance.id)
+        clear_event_features_cache(instance.id)
         return instance
 
 
@@ -231,7 +231,7 @@ class OrgaConfigForm(ConfigForm):
 
     page_title = _("Event Configuration")
 
-    page_info = _("This page allows you to edit the configuration of the activated features")
+    page_info = _("Manage configuration of activated features")
 
     section_replace = True
 
@@ -753,7 +753,7 @@ class OrgaAppearanceForm(MyCssForm):
 
     page_title = _("Event Appearance")
 
-    page_info = _("This page allows you to change the appearance and presentation of the event")
+    page_info = _("Manage appearance and presentation of the event")
 
     class Meta:
         model = Event
@@ -824,7 +824,7 @@ class OrgaEventTextForm(MyForm):
 
     page_title = _("Texts")
 
-    page_info = _("This page allows you to edit event-specific texts")
+    page_info = _("Manage event texts")
 
     class Meta:
         abstract = True
@@ -915,7 +915,7 @@ class OrgaEventRoleForm(MyForm):
 
     page_title = _("Roles")
 
-    page_info = _("This page allows you to change the access roles for the event")
+    page_info = _("Manage event access roles")
 
     load_templates = ["share"]
 
@@ -940,7 +940,7 @@ class OrgaEventButtonForm(MyForm):
 
     page_title = _("Navigation")
 
-    page_info = _("This page allows you to edit the event navigation buttons")
+    page_info = _("Manage event navigation buttons")
 
     class Meta:
         model = EventButton
@@ -988,9 +988,9 @@ class OrgaRunForm(ConfigForm):
             self.fields["event"].widget.set_assoc(self.params["a_id"])
             self.fields["event"].help_text = _("Select the event of this new session")
             self.choose_event = True
-            self.page_info = _("This page allows you to add a new session of an existing event")
+            self.page_info = _("Manage new session for an existing event")
         else:
-            self.page_info = _("This page allows you to change the date settings of this event")
+            self.page_info = _("Manage date settings for this event")
 
         # do not show cancelled or done options for development if date are not set
         if not self.instance.pk or not self.instance.start or not self.instance.end:
@@ -1167,9 +1167,7 @@ class ExeTemplateForm(FeatureForm):
 
     page_title = _("Event Template")
 
-    page_info = _(
-        "This page allows you to select the features of a template (click on a feature to show its description)"
-    )
+    page_info = _("Manage template features (click on a feature to show its description)")
 
     class Meta:
         model = Event
@@ -1215,7 +1213,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("This page allows you to perform a quick setup of the most important settings for your new event")
+    page_info = _("Manage quick setup of the most important settings for your new event")
 
     class Meta:
         model = Event

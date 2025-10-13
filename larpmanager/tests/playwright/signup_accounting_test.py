@@ -96,8 +96,8 @@ def discount(live_server, page):
     submit_confirm(page)
 
     # use discount
-    go_to(page, live_server, "/test/manage/features/12/on")
-    go_to(page, live_server, "/test/manage/discounts/")
+    go_to(page, live_server, "/test/1/manage/features/discount/on")
+    go_to(page, live_server, "/test/1/manage/discounts/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("discount")
@@ -162,7 +162,7 @@ def pay(live_server, page):
 
 def token_credits(live_server, page):
     # activate tokens credits
-    go_to(page, live_server, "/manage/features/107/on")
+    go_to(page, live_server, "/manage/features/token_credit/on")
     go_to(page, live_server, "/manage/tokens")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
@@ -235,7 +235,8 @@ def signup_pay(live_server, page):
 
 def setup_payment(live_server, page):
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
+
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()

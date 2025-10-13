@@ -18,15 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.models.association import AssociationSkin
 
 
-def reset_cache_skin(s):
+def clear_skin_cache(s):
     key = cache_skin_key(s)
     cache.delete(key)
 
@@ -42,7 +41,7 @@ def get_cache_skin(s):
         res = init_cache_skin(s)
         if not res:
             return None
-        cache.set(key, res)
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
 
@@ -73,8 +72,3 @@ def init_cache_skin(domain):
         "base_domain": domain,
         "skin_id": skin.id,
     }
-
-
-@receiver(post_save, sender=AssociationSkin)
-def update_association_skin_reset_cache(sender, instance, **kwargs):
-    reset_cache_skin(instance.domain)

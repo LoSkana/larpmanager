@@ -109,7 +109,7 @@ def set_free_abilities(char, frees):
     save_single_config(char, config_name, json.dumps(frees))
 
 
-def update_px(char):
+def calculate_character_experience_points(char):
     """
     Update character experience points and apply ability calculations.
 
@@ -226,12 +226,12 @@ def get_available_ability_px(char, px_avail=None):
     return abilities
 
 
-def px_characters_changed(sender, instance: Optional[DeliveryPx], action, pk_set, **kwargs):
+def on_experience_characters_m2m_changed(sender, instance: Optional[DeliveryPx], action, pk_set, **kwargs):
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
     if isinstance(instance, Character):
-        update_px(instance)
+        calculate_character_experience_points(instance)
     else:
         if pk_set:
             characters = Character.objects.filter(pk__in=pk_set)
@@ -239,25 +239,25 @@ def px_characters_changed(sender, instance: Optional[DeliveryPx], action, pk_set
             characters = instance.characters.all()
 
         for char in characters:
-            update_px(char)
+            calculate_character_experience_points(char)
 
 
-def rule_abilities_changed(sender, instance, action, pk_set, **kwargs):
+def on_rule_abilities_m2m_changed(sender, instance, action, pk_set, **kwargs):
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
     event = instance.event.get_class_parent(RulePx)
     for char in event.get_elements(Character).all():
-        update_px(char)
+        calculate_character_experience_points(char)
 
 
-def modifier_abilities_changed(sender, instance, action, pk_set, **kwargs):
+def on_modifier_abilities_m2m_changed(sender, instance, action, pk_set, **kwargs):
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
     event = instance.event.get_class_parent(ModifierPx)
     for char in event.get_elements(Character).all():
-        update_px(char)
+        calculate_character_experience_points(char)
 
 
 def apply_rules_computed(char):
@@ -307,7 +307,7 @@ def add_char_addit(char):
     char.addit = {}
     configs = CharacterConfig.objects.filter(character__id=char.id)
     if not configs.count():
-        update_px(char)
+        calculate_character_experience_points(char)
         configs = CharacterConfig.objects.filter(character__id=char.id)
 
     for config in configs:
@@ -338,3 +338,25 @@ def remove_char_ability(char, ability_id):
         char.px_ability_list.remove(*to_remove_ids)
 
     return to_remove_ids
+
+
+def update_characters_experience_on_ability_change(instance):
+    for char in instance.characters.all():
+        calculate_character_experience_points(char)
+
+
+def refresh_delivery_characters(instance):
+    for char in instance.characters.all():
+        char.save()
+
+
+def update_characters_experience_on_rule_change(instance):
+    event = instance.event.get_class_parent(RulePx)
+    for char in event.get_elements(Character).all():
+        calculate_character_experience_points(char)
+
+
+def update_characters_experience_on_modifier_change(instance):
+    event = instance.event.get_class_parent(ModifierPx)
+    for char in event.get_elements(Character).all():
+        calculate_character_experience_points(char)

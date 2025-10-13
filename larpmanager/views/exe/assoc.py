@@ -142,35 +142,20 @@ def exe_features(request):
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def exe_features_go(request, ctx, num, on=True):
-    """
-    Toggle association features on/off for executives.
-
-    Args:
-        request: HTTP request object
-        ctx: Context dictionary with association data
-        num: Feature number/ID
-        on: Whether to turn feature on (True) or off (False)
-
-    Returns:
-        Feature: The feature object that was toggled
-
-    Raises:
-        Http404: If feature is not an overall feature
-    """
+def exe_features_go(request, slug, on=True):
     ctx = check_assoc_permission(request, "exe_features")
-    get_feature(ctx, num)
+    get_feature(ctx, slug)
     if not ctx["feature"].overall:
         raise Http404("not overall feature!")
     f_id = ctx["feature"].id
     assoc = Association.objects.get(pk=request.assoc["id"])
     if on:
-        if ctx["feature"].slug not in request.assoc["features"]:
+        if slug not in request.assoc["features"]:
             assoc.features.add(f_id)
             msg = _("Feature %(name)s activated") + "!"
         else:
             msg = _("Feature %(name)s already activated") + "!"
-    elif ctx["feature"].slug not in request.assoc["features"]:
+    elif slug not in request.assoc["features"]:
         msg = _("Feature %(name)s already deactivated") + "!"
     else:
         assoc.features.remove(f_id)
@@ -194,16 +179,14 @@ def _exe_feature_after_link(feature):
 
 
 @login_required
-def exe_features_on(request, num):
-    ctx = check_assoc_permission(request, "exe_features")
-    feature = exe_features_go(request, ctx, num, on=True)
+def exe_features_on(request, slug):
+    feature = exe_features_go(request, slug, on=True)
     return redirect(_exe_feature_after_link(feature))
 
 
 @login_required
-def exe_features_off(request, num):
-    ctx = check_assoc_permission(request, "exe_features")
-    exe_features_go(request, ctx, num, on=False)
+def exe_features_off(request, slug):
+    exe_features_go(request, slug, on=False)
     return redirect("manage")
 
 

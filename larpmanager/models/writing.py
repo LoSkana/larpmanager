@@ -606,7 +606,7 @@ def replace_chars_el(el, chars):
         el.teaser = replace_char_names(el.teaser, chars)
 
 
-def replace_chars_all(instance):
+def replace_character_names_in_writing(instance):
     """
     Replace character names in writing content with character numbers.
 

@@ -28,7 +28,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import reset_run
+from larpmanager.cache.character import clear_run_cache_and_media
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
     OrgaAppearanceForm,
@@ -243,24 +243,13 @@ def orga_features(request, s):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def orga_features_go(request, ctx, num, on=True):
-    """Activate or deactivate a feature for an event.
-
-    Args:
-        request: HTTP request object
-        ctx: Context dictionary containing event and run data
-        num: Feature number/ID to toggle
-        on: Boolean indicating whether to activate (True) or deactivate (False) the feature
-
-    Returns:
-        The feature object that was toggled
-    """
-    get_feature(ctx, num)
+def orga_features_go(request, ctx, slug, on=True):
+    get_feature(ctx, slug)
     if ctx["feature"].overall:
         raise Http404("overall feature!")
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
-    reset_run(ctx["run"])
+    clear_run_cache_and_media(ctx["run"])
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
@@ -294,16 +283,16 @@ def _orga_feature_after_link(feature, s):
 
 
 @login_required
-def orga_features_on(request, s, num):
+def orga_features_on(request, s, slug):
     ctx = check_event_permission(request, s, "orga_features")
-    feature = orga_features_go(request, ctx, num, on=True)
+    feature = orga_features_go(request, ctx, slug, on=True)
     return redirect(_orga_feature_after_link(feature, s))
 
 
 @login_required
-def orga_features_off(request, s, num):
+def orga_features_off(request, s, slug):
     ctx = check_event_permission(request, s, "orga_features")
-    orga_features_go(request, ctx, num, on=False)
+    orga_features_go(request, ctx, slug, on=False)
     return redirect("manage", s=s)
 
 
