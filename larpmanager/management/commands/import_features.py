@@ -66,6 +66,8 @@ class Command(BaseCommand):
                 lookup = {}
                 if "slug" in fields:
                     lookup["slug"] = fields["slug"]
+                elif "domain" in fields:
+                    lookup["domain"] = fields["domain"]
                 else:
                     lookup["pk"] = obj.get("pk")
 
