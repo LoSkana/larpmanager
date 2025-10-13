@@ -118,7 +118,7 @@ def on_association_roles_m2m_changed(sender, **kwargs):
             activate(mb.language)
             subj = hdr(instance.assoc) + _("Role approval %(role)s") % {"role": instance.name}
             url = get_url("manage", instance.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
+            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.assoc)
 
             # notify organizers
@@ -179,7 +179,7 @@ def on_event_roles_m2m_changed(sender, **kwargs):
                 "event": instance.event,
             }
             url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
+            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
             # notify organizers
@@ -255,7 +255,7 @@ def send_trait_assignment_email(instance, created):
     if not instance.member or not created:
         return
 
-    que = Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ)
+    que = Casting.objects.filter(member_id=instance.member_id, run_id=instance.run_id, typ=instance.typ)
     for c in que:
         c.active = False
         c.save()

@@ -44,7 +44,7 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
     page_title = _("Delivery")
 
-    page_info = _("This page allows you to add or edit a px delivery")
+    page_info = _("Manage experience point deliveries")
 
     class Meta:
         model = DeliveryPx
@@ -61,7 +61,7 @@ class OrgaAbilityPxForm(PxBaseForm):
 
     page_title = _("Ability")
 
-    page_info = _("This page allows you to add or edit a px ability")
+    page_info = _("Manage experience point abilities")
 
     class Meta:
         model = AbilityPx
@@ -94,7 +94,7 @@ class OrgaAbilityPxForm(PxBaseForm):
 class OrgaAbilityTypePxForm(MyForm):
     page_title = _("Ability type")
 
-    page_info = _("This page allows you to add or edit a px ability type")
+    page_info = _("Manage experience point ability types")
 
     class Meta:
         model = AbilityTypePx
@@ -104,7 +104,7 @@ class OrgaAbilityTypePxForm(MyForm):
 class OrgaRulePxForm(MyForm):
     page_title = _("Rule")
 
-    page_info = _("This page allows you to add or edit a rule on computed fields")
+    page_info = _("Manage rules for computed fields")
 
     class Meta:
         model = RulePx
@@ -124,7 +124,7 @@ class OrgaModifierPxForm(MyForm):
     page_title = _("Rule")
 
     page_info = _(
-        "This page allows you to add or edit an ability modifier. It is triggered only if all prerequisites "
+        "Manage ability modifiers. Modifiers are triggered only if all prerequisites "
         + "and requirements are met. If multiple modifiers apply, only the first is used"
     )
 

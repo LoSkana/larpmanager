@@ -116,7 +116,7 @@ def orga_plots_rels_order(request, s, num, order):
         raise Http404("plot rel not found") from err
     if rel.character.event != ctx["event"]:
         raise Http404("plot rel wrong event")
-    elements = PlotCharacterRel.objects.filter(character=rel.character)
+    elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
     exchange_order(ctx, PlotCharacterRel, num, order, elements)
     return redirect("orga_characters_edit", s=ctx["run"].get_slug(), num=rel.character_id)
 

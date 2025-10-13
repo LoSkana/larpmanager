@@ -571,8 +571,8 @@ def post_save_event_update(sender, instance, **kwargs):
 
     clear_run_event_links_cache(instance)
 
-    for r in instance.runs.all():
-        clear_registration_counts_cache(r)
+    for run_id in instance.runs.values_list("id", flat=True):
+        clear_registration_counts_cache(run_id)
 
     on_event_post_save_reset_config_cache(instance)
 
@@ -973,11 +973,11 @@ def post_save_registration_cache(sender, instance, created, **kwargs):
 
     handle_registration_accounting_updates(instance)
 
-    clear_registration_accounting_cache(instance.run)
+    clear_registration_accounting_cache(instance.run_id)
 
     on_registration_post_save_reset_event_links(instance)
 
-    clear_registration_counts_cache(instance.run)
+    clear_registration_counts_cache(instance.run_id)
 
 
 @receiver(pre_delete, sender=Registration)
@@ -987,7 +987,7 @@ def pre_delete_registration(sender, instance, *args, **kwargs):
 
 @receiver(post_delete, sender=Registration)
 def post_delete_registration_accounting_cache(sender, instance, **kwargs):
-    clear_registration_accounting_cache(instance.run)
+    clear_registration_accounting_cache(instance.run_id)
 
 
 # RegistrationCharacterRel signals
@@ -1014,13 +1014,13 @@ def post_save_ticket_accounting_cache(sender, instance, created, **kwargs):
     log_registration_ticket_saved(instance)
 
     for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run)
+        clear_registration_accounting_cache(run.id)
 
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender, instance, **kwargs):
     for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run)
+        clear_registration_accounting_cache(run.id)
 
 
 # Relationship signals
@@ -1062,7 +1062,7 @@ def pre_save_run(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Run)
 def post_save_run_links(sender, instance, **kwargs):
-    clear_registration_counts_cache(instance)
+    clear_registration_counts_cache(instance.id)
 
     on_run_post_save_reset_config_cache(instance)
 

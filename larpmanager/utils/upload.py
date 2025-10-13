@@ -308,7 +308,7 @@ def _reg_assign_characters(ctx, reg, value, logs):
             reg__cancellation_date__isnull=True,
             character=char,
         )
-        if que.exclude(reg_id=reg.id).count() > 0:
+        if que.exclude(reg_id=reg.id).exists():
             logs.append(f"ERR - character already assigned: {char_name}")
             continue
 

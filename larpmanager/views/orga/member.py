@@ -308,7 +308,6 @@ def orga_archive_email(request, s):
     ctx.update(
         {
             "fields": [
-                ("run", _("Run")),
                 ("recipient", _("Recipient")),
                 ("subj", _("Subject")),
                 ("body", _("Body")),
@@ -324,7 +323,6 @@ def orga_archive_email(request, s):
     return orga_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 
-# TODO
 @login_required
 def orga_read_mail(request, s, nm):
     ctx = check_event_permission(request, s, "orga_archive_email")

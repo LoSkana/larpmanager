@@ -767,7 +767,7 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
 
 def get_trait_character(run, number):
     try:
-        tr = Trait.objects.get(event=run.event, number=number)
+        tr = Trait.objects.get(event_id=run.event_id, number=number)
         mb = AssignmentTrait.objects.get(run=run, trait=tr).member
         rcrs = RegistrationCharacterRel.objects.filter(reg__run=run, reg__member=mb).select_related("character")
         if not rcrs.exists():

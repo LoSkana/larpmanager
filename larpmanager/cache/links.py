@@ -136,7 +136,7 @@ def clear_run_event_links_cache(event):
         for mb in er.members.all():
             reset_event_links(mb.id, event.assoc_id)
     try:
-        ar = AssocRole.objects.prefetch_related("members").get(assoc=event.assoc, number=1)
+        ar = AssocRole.objects.prefetch_related("members").get(assoc_id=event.assoc_id, number=1)
         for mb in ar.members.all():
             reset_event_links(mb.id, event.assoc_id)
     except ObjectDoesNotExist:

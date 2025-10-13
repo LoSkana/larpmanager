@@ -385,7 +385,7 @@ def show_trait(context, tx, run, tooltip):
         str: Safe HTML with trait references converted to character links
     """
     if "max_trait" not in context:
-        context["max_trait"] = Trait.objects.filter(event=run.event).aggregate(Max("number"))["number__max"]
+        context["max_trait"] = Trait.objects.filter(event_id=run.event_id).aggregate(Max("number"))["number__max"]
 
     if not context["max_trait"]:
         context["max_trait"] = 0
