@@ -28,9 +28,10 @@ from django.views.decorators.http import require_GET
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
-from larpmanager.models.event import Event
+from larpmanager.models.event import Run
 from larpmanager.models.member import Log, Member
 from larpmanager.utils.tasks import notify_admins
+from larpmanager.views.manage import _get_registration_status_code
 
 
 def get_client_ip(request):
@@ -90,9 +91,9 @@ def validate_api_key(request):
 
 @require_GET
 def published_events(request):
-    """API endpoint to get upcoming events from associations with publisher feature enabled."""
+    """API endpoint to get upcoming runs from associations with publisher feature enabled."""
     # This endpoint should only work on the primary domain (assoc.id == 0)
-    if hasattr(request, "assoc") and request.assoc.get("id", 0) != 0:
+    if not settings.DEBUG and hasattr(request, "assoc") and request.assoc.get("id", 0) != 0:
         return JsonResponse({"error": "This endpoint is only available on the primary domain"}, status=403)
 
     # Validate API key
@@ -106,48 +107,56 @@ def published_events(request):
             features__slug="publisher", deleted__isnull=True
         ).select_related("skin")
 
-        # Get upcoming events from these associations
+        # Get upcoming runs from these associations
         now = timezone.now()
-        events = (
-            Event.objects.filter(assoc__in=publisher_associations, deleted__isnull=True, run__date_start__gte=now)
-            .select_related("assoc", "assoc__skin")
-            .prefetch_related("run_set")
-            .order_by("run__date_start")
+        runs = (
+            Run.objects.filter(event__assoc__in=publisher_associations, start__gte=now)
+            .select_related("event", "event__assoc", "event__assoc__skin")
+            .order_by("start")
         )
 
         # Build response data
         events_data = []
-        for event in events:
-            # Get the earliest upcoming run
-            upcoming_runs = event.run_set.filter(date_start__gte=now).order_by("date_start")
-            if not upcoming_runs.exists():
-                continue
+        for run in runs:
+            event = run.event
+            assoc = run.event.assoc
 
-            earliest_run = upcoming_runs.first()
+            run_status = _get_registration_status_code(run)
 
             event_data = {
-                "id": event.id,
-                "name": event.name,
-                "description": event.descr if hasattr(event, "descr") else "",
-                "date_start": earliest_run.date_start.isoformat() if earliest_run.date_start else None,
-                "date_end": earliest_run.date_end.isoformat() if earliest_run.date_end else None,
-                "location": earliest_run.location if hasattr(earliest_run, "location") else "",
-                "association": {
-                    "id": event.assoc.id,
-                    "name": event.assoc.name,
-                    "slug": event.assoc.slug,
-                    "url": f"https://{event.assoc.slug}.{event.assoc.skin.domain}/",
-                },
-                "event_url": f"https://{event.assoc.slug}.{event.assoc.skin.domain}/{event.slug}/",
+                "id": run.id,
+                "name": str(run),
+                "date_start": run.start.isoformat() if run.start else None,
+                "date_end": run.end.isoformat() if run.end else None,
+                "association": assoc.name,
+                "signup_url": f"https://{assoc.slug}.{assoc.skin.domain}/{run.get_slug()}/register/",
+                "status": run_status[0],
+                "additional": run_status[1],
             }
 
+            mapping = {
+                "where": "location",
+                "authors": "authors",
+                "description": "description",
+                "genre": "genre",
+                "website": "website",
+            }
+
+            for orig, dest in mapping.items():
+                if not hasattr(event, orig):
+                    continue
+                value = getattr(event, orig, "")
+                if not value:
+                    continue
+                event_data[dest] = value
+
             # Add optional profile image if available
-            if event.assoc.profile:
-                event_data["association"]["logo_url"] = request.build_absolute_uri(event.assoc.profile_thumb.url)
+            if event.cover:
+                event_data["cover"] = request.build_absolute_uri(event.cover_thumb.url)
 
             events_data.append(event_data)
 
-        response_data = {"events": events_data, "count": len(events_data), "generated_at": timezone.now().isoformat()}
+        response_data = {"runs": events_data, "count": len(events_data), "generated_at": timezone.now().isoformat()}
 
         # Log successful access
         log_api_access(api_key, request, 200, len(events_data))

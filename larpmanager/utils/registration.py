@@ -43,43 +43,44 @@ from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 
-def registration_available(r, features=None, reg_counts=None):
+def registration_available(run, features=None, reg_counts=None):
     """Check if registration is available based on capacity and rules.
 
     Validates registration availability considering maximum participants,
     ticket quotas, and advanced registration constraints.
     """
     # check advanced registration rules only if there is a max number of tickets
-    if r.event.max_pg == 0:
-        r.status["primary"] = True
+    if run.event.max_pg == 0:
+        run.status["primary"] = True
         return
 
     if not reg_counts:
-        reg_counts = get_reg_counts(r)
+        reg_counts = get_reg_counts(run)
 
-    remaining_pri = r.event.max_pg - reg_counts.get("count_player", 0)
+    remaining_pri = run.event.max_pg - reg_counts.get("count_player", 0)
 
     if not features:
-        features = get_event_features(r.event_id)
+        features = get_event_features(run.event_id)
 
     # check primary tickets available
     if remaining_pri > 0:
-        r.status["primary"] = True
+        run.status["primary"] = True
         perc_signed = 0.3
         max_signed = 10
-        if remaining_pri < max_signed or remaining_pri * 1.0 / r.event.max_pg < perc_signed:
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_pri} + "."
+        if remaining_pri < max_signed or remaining_pri * 1.0 / run.event.max_pg < perc_signed:
+            run.status["count"] = remaining_pri
+            run.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_pri} + "."
         return
 
     # check if we manage filler
-    if "filler" in features and _available_filler(r, reg_counts):
+    if "filler" in features and _available_filler(run, reg_counts):
         return
 
     # check if we manage waiting
-    if "waiting" in features and _available_waiting(r, reg_counts):
+    if "waiting" in features and _available_waiting(run, reg_counts):
         return
 
-    r.status["closed"] = True
+    run.status["closed"] = True
     return
 
 
@@ -87,14 +88,16 @@ def _available_waiting(r, reg_counts):
     # infinite waitings
     if r.event.max_waiting == 0:
         r.status["waiting"] = True
+        r.status["count"] = None  # Infinite
         return True
 
     # if we manage waiting and there are available, say so
     if r.event.max_waiting > 0:
         remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
         if remaining_waiting > 0:
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting} + "."
             r.status["waiting"] = True
+            r.status["count"] = remaining_waiting
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting} + "."
             return True
 
     return False
@@ -104,14 +107,16 @@ def _available_filler(r, reg_counts):
     # infinite fillers
     if r.event.max_filler == 0:
         r.status["filler"] = True
+        r.status["count"] = None  # Infinite
         return True
 
         # if we manage filler and there are available, say so
     if r.event.max_filler > 0:
         remaining_filler = r.event.max_filler - reg_counts["count_fill"]
         if remaining_filler > 0:
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
             r.status["filler"] = True
+            r.status["count"] = remaining_filler
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
             return True
 
     return False
@@ -250,7 +255,7 @@ def _status_payment(register_text, run):
 
 def registration_status(
     run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None
-) -> bool:
+) -> None:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements
@@ -262,9 +267,6 @@ def registration_status(
         my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
         features_map (dict, optional): Cached features mapping. Defaults to None.
         reg_count (int, optional): Pre-calculated registration count. Defaults to None.
-
-    Returns:
-        bool: True if registration status was successfully determined
     """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 

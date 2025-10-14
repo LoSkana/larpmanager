@@ -60,6 +60,51 @@ def manage(request, s=None):
         return _exe_manage(request)
 
 
+def _get_registration_status_code(run):
+    """Get registration status code for a run with additional value.
+
+    Args:
+        run: Run instance to check status for
+
+    Returns:
+        tuple: (status_code, additional_value) where:
+            - external: (code, register_link)
+            - future: (code, registration_open)
+            - primary/filler/waiting: (code, remaining_count)
+            - others: (code, None)
+    """
+    features = get_event_features(run.event_id)
+
+    # Check external registration link
+    if "register_link" in features and run.event.register_link:
+        return "external", run.event.register_link
+
+    # Check pre-registration
+    if not run.registration_open and run.event.get_config("pre_register_active", False):
+        return "preregister", None
+
+    # Check registration opening time
+    dt = datetime.today()
+    if "registration_open" in features:
+        if not run.registration_open:
+            return "not_set", None
+        if run.registration_open > dt:
+            return "future", run.registration_open
+
+    # Check registration availability
+    run.status = {}
+    registration_available(run, features)
+    status = run.status
+
+    # Determine status based on availability
+    status_priority = ["primary", "filler", "waiting"]
+    for status_type in status_priority:
+        if status_type in status:
+            return status_type, status.get("count")
+
+    return "closed", None
+
+
 def _get_registration_status(run):
     """Get human-readable registration status for a run.
 
@@ -69,40 +114,28 @@ def _get_registration_status(run):
     Returns:
         str: Localized status message describing registration state
     """
-    features = get_event_features(run.event_id)
-    if "register_link" in features and run.event.register_link:
-        return _("Registrations on external link")
+    status_code, additional_value = _get_registration_status_code(run)
 
-    # check pre-register
-    if not run.registration_open and run.event.get_config("pre_register_active", False):
-        return _("Pre-registration active")
-
-    dt = datetime.today()
-    # check registration open
-    if "registration_open" in features:
-        if not run.registration_open:
-            return _("Registrations opening not set")
-
-        elif run.registration_open > dt:
-            return _("Registrations opening at: %(date)s") % {"date": run.registration_open.strftime(format_datetime)}
-
-    run.status = {}
-    registration_available(run, features)
-
-    # signup open, not already signed in
-    status = run.status
-    reg_messages = {
+    # Map status codes to prettified messages
+    status_messages = {
+        "external": _("Registrations on external link"),
+        "preregister": _("Pre-registration active"),
+        "not_set": _("Registrations opening not set"),
         "primary": _("Registrations open"),
         "filler": _("Filler registrations"),
         "waiting": _("Waiting list registrations"),
+        "closed": _("Registration closed"),
     }
 
-    # pick the first matching message (or None)
-    mes = next((msg for key, msg in reg_messages.items() if key in status), None)
-    if mes:
-        return mes
-    else:
-        return _("Registration closed")
+    # Handle special case for "future" status with datetime formatting
+    if status_code == "future":
+        if additional_value:
+            formatted_date = additional_value.strftime(format_datetime)
+            return _("Registrations opening at: %(date)s") % {"date": formatted_date}
+        else:
+            return _("Registrations opening not set")
+
+    return status_messages.get(status_code, _("Registration closed"))
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:

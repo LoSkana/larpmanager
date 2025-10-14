@@ -26,7 +26,8 @@
                            preload="auto"
                            controlsList="nodownload"
                            playsinline
-                           crossorigin="anonymous">
+                           crossorigin="anonymous"
+                           class="onetime_video">
                         <source src="{% url 'onetime_stream' token=token %}"
                                 type="{{ content.content_type }}">
                         Your browser does not support the video tag.
