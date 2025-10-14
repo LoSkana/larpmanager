@@ -20,6 +20,7 @@
 
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
+from typing import Any
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -72,9 +73,22 @@ class OrgaPersonalExpenseForm(MyFormRun):
         model = AccountingItemExpense
         exclude = ("member", "is_approved", "inv", "hide")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Calls parent constructor and removes the 'balance' field if the
+        'ita_balance' feature is not enabled in the form parameters.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
+
+        # Check if Italian balance feature is disabled in form parameters
         if "ita_balance" not in self.params["features"]:
+            # Remove balance field when feature is not available
             self.delete_field("balance")
 
 

@@ -21,6 +21,7 @@
 import logging
 import traceback
 from datetime import datetime, timedelta
+from typing import Any, Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -59,6 +60,7 @@ from larpmanager.models.event import (
     Event,
     EventTextType,
     PreRegistration,
+    Run,
 )
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
@@ -196,56 +198,77 @@ def register_exclusive(request, s, sc="", dis=""):
     return register(request, s, sc, dis)
 
 
-def save_registration(request, ctx, form, run, event, reg, gifted=False):
+def save_registration(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    form: Any,  # Registration form instance
+    run: Run,
+    event: Event,
+    reg: Optional[Registration],
+    gifted: bool = False,
+) -> "Registration":
     """Save registration data and handle payment processing.
 
+    This function creates or updates a registration record within a database transaction,
+    handling standard registration data, questions, discounts, and special features.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with form and event data
-        form: Registration form instance
+        request: Django HTTP request object containing user information
+        ctx: Context dictionary with form data, event info, and feature flags
+        form: Registration form instance with cleaned data
         run: Run instance being registered for
-        event: Event instance
-        reg: Registration instance to save
-        gifted (bool): Whether this is a gifted registration
+        event: Event instance associated with the run
+        reg: Existing registration instance to update, or None to create new
+        gifted: Whether this is a gifted registration requiring redeem code
 
     Returns:
-        HttpResponse: Redirect to appropriate next step or error handling
+        Registration: The saved registration instance
+
+    Note:
+        This function handles special features like user_character assignment
+        and bring_friend functionality based on context feature flags.
     """
-    # pprint(form.cleaned_data)
-    # Create / modification registration
+    # pprint(form.cleaned_data)  # Debug output for form data
+
+    # Create or update registration within atomic transaction
     with transaction.atomic():
+        # Initialize new registration if none provided
         if not reg:
             reg = Registration()
             reg.run = run
             reg.member = request.user.member
+            # Generate redeem code for gifted registrations
             if gifted:
                 reg.redeem_code = my_uuid(16)
             reg.save()
 
+        # Determine if registration should be provisional
         provisional = is_reg_provisional(reg)
 
+        # Save standard registration fields and data
         save_registration_standard(ctx, event, form, gifted, provisional, reg)
 
-        # Registration question
+        # Process and save registration-specific questions
         form.save_reg_questions(reg, False)
 
-        # Confirm saved discounts, signs
+        # Confirm and finalize any pending discounts for this member/run
         que = AccountingItemDiscount.objects.filter(member=request.user.member, run=reg.run)
         for el in que:
+            # Remove expiration date to confirm discount usage
             if el.expires is not None:
                 el.expires = None
                 el.save()
 
-        # save reg
+        # Save the updated registration instance
         reg.save()
 
-        # special features
+        # Handle special feature processing based on context flags
         if "user_character" in ctx["features"]:
             check_assign_character(request, ctx)
         if "bring_friend" in ctx["features"]:
             save_registration_bring_friend(ctx, form, reg, request)
 
-    # send email to notify of registration update
+    # Send background notification email for registration update
     update_registration_status_bkg(reg.id)
 
     return reg

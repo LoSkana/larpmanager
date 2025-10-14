@@ -76,13 +76,22 @@ class ExeAssociationForm(MyForm):
             "demo",
         )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form instance with custom field modifications.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
+        # Set flag to prevent cancellation operations
         self.prevent_canc = True
 
-        for m in ["slug"]:
-            del self.fields[m]
+        # Remove specified fields from the form's field collection
+        for field_name in ["slug"]:
+            del self.fields[field_name]
 
 
 class ExeAssocTextForm(MyForm):
@@ -312,79 +321,103 @@ class ExeConfigForm(ConfigForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def set_configs(self):
+    def set_configs(self) -> None:
         """Set up interface configuration options for association settings.
 
-        Manages UI preferences, theme settings, and display options
-        for the association's interface customization.
+        Manages UI preferences, theme settings, and display options for the
+        association's interface customization. Configures calendar display options,
+        email notification preferences, and delegates to other configuration methods.
+
+        Returns:
+            None
         """
-        # CALENDAR
+        # CALENDAR SECTION - Configure calendar display options
         self.set_section("calendar", _("Calendar"))
 
+        # Past events visibility toggle
         label = _("Past events")
         help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, label, help_text)
 
+        # Website link display option
         label = _("Website")
         help_text = _("If checked: shows the website for each event")
         self.add_configs("calendar_website", ConfigType.BOOL, label, help_text)
 
+        # Event location display toggle
         label = _("Where")
         help_text = _("If checked: shows the position for each event")
         self.add_configs("calendar_where", ConfigType.BOOL, label, help_text)
 
+        # Authors list visibility option
         label = _("Authors")
         help_text = _("If checked: shows the list of authors for each event")
         self.add_configs("calendar_authors", ConfigType.BOOL, label, help_text)
 
+        # Event genre display setting
         label = pgettext("event", "Genre")
         help_text = pgettext("event", "If checked: shows the genre for each event")
         self.add_configs("calendar_genre", ConfigType.BOOL, label, help_text)
 
+        # Event tagline visibility toggle
         label = _("Tagline")
         help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
 
-        # MAIL
+        # EMAIL SECTION - Configure notification preferences
         self.set_section("email", _("Email notifications"))
 
+        # Carbon copy setting (only if main_mail exists)
         if self.instance.main_mail:
             label = _("Carbon copy")
             help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
 
+        # New signup notification toggle
         label = _("New signup")
         help_text = _("If checked: Send an email notification to the organisers for new signups")
         self.add_configs("mail_signup_new", ConfigType.BOOL, label, help_text)
 
+        # Signup update notification setting
         label = _("Signup update")
         help_text = _("If checked: Send an email notification to the organisers for updated signups")
         self.add_configs("mail_signup_update", ConfigType.BOOL, label, help_text)
 
+        # Signup cancellation notification option
         label = _("Signup cancellation")
         help_text = _("If checked: Send a notification email to the organisers for cancellation of registration")
         self.add_configs("mail_signup_del", ConfigType.BOOL, label, help_text)
 
+        # Payment notification toggle
         label = _("Payments received")
         help_text = _("If checked: Send an email to the organisers for each payment received")
         self.add_configs("mail_payment", ConfigType.BOOL, label, help_text)
 
+        # Delegate to specialized configuration methods
         self.set_config_members()
         self.set_config_accounting()
         self.set_config_einvoice()
         self.set_config_others()
 
-    def set_config_others(self):
+    def set_config_others(self) -> None:
         """Configure miscellaneous association settings.
 
-        Sets up custom mail server configuration, easter egg features,
-        and campaign-specific settings based on available features
-        for the association.
+        Sets up configuration sections for various optional features including:
+        - Custom mail server settings (SMTP configuration)
+        - Pre-registration preferences
+        - Easter egg features (centauri)
+        - Campaign-specific settings
+        - Warehouse management options
+
+        The method checks for available features in self.params["features"] and
+        creates appropriate configuration sections and fields for each enabled feature.
         """
+        # Configure custom mail server settings if feature is enabled
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             help_text = ""
 
+            # SMTP connection settings
             label = _("Use TLD")
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, label, help_text)
 
@@ -394,21 +427,25 @@ class ExeConfigForm(ConfigForm):
             label = _("Port")
             self.add_configs("mail_server_port", ConfigType.INT, label, help_text)
 
+            # Authentication credentials
             label = _("Username of account")
             self.add_configs("mail_server_host_user", ConfigType.CHAR, label, help_text)
 
             label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
 
+        # Configure pre-registration preferences
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             label = _("Enable preferences")
             help_text = _("If checked, participants give a preference value when adding pre-registrations")
             self.add_configs("pre_reg_preferences", ConfigType.BOOL, label, help_text)
 
+        # Configure easter egg feature (centauri)
         if "centauri" in self.params["features"]:
             self.set_section("centauri", _("Easter egg"))
 
+            # Probability and badge settings
             label = _("Probability")
             help_text = _("Probability of showing the special page (out of thousands)")
             self.add_configs("centauri_prob", ConfigType.INT, label, help_text)
@@ -417,6 +454,7 @@ class ExeConfigForm(ConfigForm):
             help_text = _("Name of badge to be awarded")
             self.add_configs("centauri_badge", ConfigType.CHAR, label, help_text)
 
+            # Content configuration
             label = _("Description")
             help_text = _("Description to be shown on the special page")
             self.add_configs("centauri_descr", ConfigType.CHAR, label, help_text)
@@ -425,6 +463,7 @@ class ExeConfigForm(ConfigForm):
             help_text = _("Contents of the special page")
             self.add_configs("centauri_content", ConfigType.HTML, label, help_text)
 
+        # Configure campaign-specific settings
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
 
@@ -432,6 +471,7 @@ class ExeConfigForm(ConfigForm):
             help_text = _("Allow to switch registration between events")
             self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
 
+        # Configure warehouse management options
         if "warehouse" in self.params["features"]:
             self.set_section("warehouse", _("Warehouse"))
 
@@ -537,64 +577,75 @@ class ExeConfigForm(ConfigForm):
             help_text = _("If checked: the system will send reminds the days on which holidays fall")
             self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)
 
-    def set_config_accounting(self):
+    def set_config_accounting(self) -> None:
         """Configure accounting-related form fields for association settings.
 
         Sets up payment options, transaction fee settings, and financial
-        feature configurations for the association.
+        feature configurations for the association based on enabled features.
 
-        Args:
-            self: AssociationConfigForm instance
-
-        Returns:
-            None: Function modifies form fields in-place
+        This method conditionally adds form sections and configuration fields
+        for various accounting features including payments, VAT, tokens/credits,
+        treasury management, organization fees, and expenses.
         """
+        # Configure payment gateway settings and fee options
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
+            # Payment fee configuration - who pays gateway fees
             label = _("Charge transaction fees to participant")
             help_text = _(
                 "If enabled, the system will automatically add payment gateway fees to the ticket price, so the participant covers them instead of the organization"
             )
             self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
+            # Payment amount modification controls
             label = _("Disable amount change")
             help_text = _(
                 "If checked: Hides the possibility for the participant to change the payment amount for his entries"
             )
             self.add_configs("payment_hide_amount", ConfigType.BOOL, label, help_text)
 
+            # Unique payment identification system
             label = _("Unique code")
             help_text = _("If checked: Adds a unique code to each payment, which helps in being able to recognize it")
             self.add_configs("payment_special_code", ConfigType.BOOL, label, help_text)
 
+        # Configure VAT calculation settings for different cost components
         if "vat" in self.params["features"]:
             self.set_section("vat", _("VAT"))
 
+            # VAT percentage for base ticket cost
             label = _("Ticket")
             help_text = _("Percentage of VAT to be calculated on the ticket cost alone")
             self.add_configs("vat_ticket", ConfigType.INT, label, help_text)
 
+            # VAT percentage for additional registration options
             label = _("Options")
             help_text = _("Percentage of VAT to be calculated on the sum of the costs of the registration options")
             self.add_configs("vat_options", ConfigType.INT, label, help_text)
 
+        # Configure token/credit system naming and display
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))
+
+            # Customizable token display name
             label = _("Token name")
             help_text = _("Name to be displayed for tokens")
             self.add_configs("token_credit_token_name", ConfigType.CHAR, label, help_text)
 
+            # Customizable credit display name
             label = _("Name credits")
             help_text = _("Name to be displayed for credits")
             self.add_configs("token_credit_credit_name", ConfigType.CHAR, label, help_text)
 
+        # Configure treasury management and appointee selection
         if "treasurer" in self.params["features"]:
             self.set_section("treasurer", _("Treasury"))
             label = _("Appointees")
             help_text = _("Treasury appointees")
             self.add_configs("treasurer_appointees", ConfigType.MEMBERS, label, help_text, self.instance.id)
 
+        # Configure organization infrastructure fee calculation
         if "organization_tax" in self.params["features"]:
             self.set_section("organization_tax", _("Organisation fee"))
             label = _("Percentage")
@@ -604,23 +655,29 @@ class ExeConfigForm(ConfigForm):
             )
             self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
 
+        # Configure expense approval workflow settings
         if "expense" in self.params["features"]:
             self.set_section("expense", _("Expenses"))
             label = _("Disable event approval")
             help_text = _("If checked, approval of expenses can be performed only from the organization panel")
             self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
 
-    def set_config_einvoice(self):
+    def set_config_einvoice(self) -> None:
         """Configure electronic invoice settings for associations.
 
-        Sets up Italian e-invoice system parameters and business
-        information for electronic billing compliance.
+        Sets up Italian e-invoice system parameters and business information
+        for electronic billing compliance. Only processes if 'e-invoice'
+        feature is enabled in params.
+
+        Returns:
+            None
         """
         if "e-invoice" not in self.params["features"]:
             return
 
         self.set_section("einvoice", _("Electronic invoice"))
 
+        # Basic company information fields
         label = _("Name")
         help_text = ""
         self.add_configs("einvoice_denominazione", ConfigType.CHAR, label, help_text)
@@ -633,6 +690,7 @@ class ExeConfigForm(ConfigForm):
         help_text = ""
         self.add_configs("einvoice_partitaiva", ConfigType.CHAR, label, help_text)
 
+        # Tax regime and VAT configuration
         label = _("Tax regime")
         help_text = "RF19: forfettario, RF01: ordinario, RF05: agevolato, RF07: commerciale"
         self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, label, help_text)
@@ -645,6 +703,7 @@ class ExeConfigForm(ConfigForm):
         help_text = _("Indicate only if rate 0")
         self.add_configs("einvoice_natura", ConfigType.CHAR, label, help_text)
 
+        # Company address information
         label = _("Address")
         help_text = ""
         self.add_configs("einvoice_indirizzo", ConfigType.CHAR, label, help_text)
@@ -657,6 +716,7 @@ class ExeConfigForm(ConfigForm):
         help_text = ""
         self.add_configs("einvoice_cap", ConfigType.CHAR, label, help_text)
 
+        # Geographic location fields
         label = _("Municipality")
         help_text = ""
         self.add_configs("einvoice_comune", ConfigType.CHAR, label, help_text)
@@ -669,6 +729,7 @@ class ExeConfigForm(ConfigForm):
         help_text = _("Code two capital letters")
         self.add_configs("einvoice_nazione", ConfigType.CHAR, label, help_text)
 
+        # Electronic invoice routing configuration
         label = _("Recipient Code")
         help_text = _("Intermediary channel code")
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, label, help_text)

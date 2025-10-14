@@ -102,25 +102,35 @@ def update_registration_status(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-def registration_options(instance):
+def registration_options(instance) -> str:
     """Generate email content for registration options.
 
     Creates formatted text showing selected tickets and registration choices,
     including payment information, totals, and selected registration options
     for email notifications.
+
+    Args:
+        instance: Registration instance containing ticket, member, and payment data
+
+    Returns:
+        str: HTML formatted string with registration details for email content
     """
     body = ""
 
+    # Add ticket information if selected
     if instance.ticket:
         body += "<br /><br />" + _("Ticket selected") + f": <b>{instance.ticket.name}</b>"
         if instance.ticket.description:
             body += f" - {instance.ticket.description}"
 
+    # Get user membership and event features for permission checks
     get_user_membership(instance.member, instance.run.event.assoc.id)
     features = get_event_features(instance.run.event_id)
 
+    # Get currency symbol for formatting monetary amounts
     currency = instance.run.event.assoc.get_currency_symbol()
 
+    # Display total registration fee if greater than zero
     if instance.tot_iscr > 0:
         body += (
             "<br /><br />"
@@ -132,6 +142,7 @@ def registration_options(instance):
             + "."
         )
 
+    # Display payments already received if any
     if instance.tot_payed > 0:
         body += (
             "<br /><br />"
@@ -143,9 +154,11 @@ def registration_options(instance):
             + "."
         )
 
+    # Add payment information if payment feature enabled and quota/alert conditions met
     if "payment" in features and instance.quota > 0 and instance.alert:
         body += registration_payments(instance, currency)
 
+    # Add selected registration options if any exist
     res = get_registration_options(instance)
     if res:
         body += "<br /><br />" + _("Selected options") + ":"

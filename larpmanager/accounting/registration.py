@@ -231,66 +231,81 @@ def quota_check(reg, start, alert, assoc_id):
         return
 
 
-def installment_check(reg, alert, assoc_id):
+def installment_check(reg: "Registration", alert: int, assoc_id: int) -> None:
     """Check installment payment schedule for a registration.
 
     Processes configured installments for the event and determines
-    next payment amount and deadline.
+    next payment amount and deadline based on the installment schedule.
+    Updates the registration's quota and deadline fields as side effects.
 
     Args:
         reg: Registration instance to check installments for
-        alert: Alert threshold in days
-        assoc_id: Association ID for payment deadline calculation
+        alert: Alert threshold in days for deadline filtering
+        assoc_id: Association ID used for payment deadline calculation
 
-    Side effects:
-        Sets reg.quota and reg.deadline based on installment schedule
+    Returns:
+        None
+
+    Side Effects:
+        - Sets reg.quota to the amount due for the next installment
+        - Sets reg.deadline to the deadline for the next payment
     """
+    # Early return if registration has no ticket
     if not reg.ticket:
         return
 
     tot = 0
 
+    # Get all installments for this event, ordered by sequence
     que = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
     que = que.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
 
     first_deadline = True
 
-    # for all installments
+    # Process each installment in order
     for i in que:
-        tickets_id = [i for i in i.tickets_map if i is not None]
+        # Filter installments that apply to this ticket type
+        tickets_id = [ticket_id for ticket_id in i.tickets_map if ticket_id is not None]
         if tickets_id and reg.ticket_id not in tickets_id:
             continue
 
+        # Calculate deadline for this installment
         deadline = _get_deadline_installment(assoc_id, i, reg)
 
+        # Skip installments that are still within alert threshold
         if deadline and deadline >= alert:
             continue
 
+        # Calculate cumulative amount due up to this installment
         if i.amount:
             tot += i.amount
         else:
             tot = reg.tot_iscr
 
+        # Ensure total doesn't exceed registration total
         tot = min(tot, reg.tot_iscr)
 
+        # Calculate outstanding amount for this installment
         reg.quota = max(tot - reg.tot_payed, 0)
 
         logger.debug(f"Registration {reg.id} installment quota calculated: {reg.quota}")
 
+        # Skip if nothing is due for this installment
         if reg.quota <= 0:
             continue
 
+        # Set deadline for the first applicable installment
         if first_deadline and deadline:
             first_deadline = False
             reg.deadline = deadline
 
-        # go to next installment if deadline was missed
+        # Skip to next installment if deadline has passed
         if not deadline or deadline < 0:
             continue
 
         return
 
-    # If not installment is found
+    # Fallback: if no installments found, use registration date and full amount
     if not tot:
         reg.deadline = get_time_diff_today(reg.created.date())
         reg.quota = reg.tot_iscr - reg.tot_payed
@@ -605,68 +620,88 @@ def check_reg_bkg_go(reg_id):
         return
 
 
-def update_registration_accounting(reg):
+def update_registration_accounting(reg: "Registration") -> None:
     """Update comprehensive accounting information for a registration.
 
     Calculates total signup fee, payments received, outstanding balance,
     payment quotas, and deadlines based on event configuration.
 
     Args:
-        reg: Registration instance to update accounting for
+        reg (Registration): Registration instance to update accounting for
 
-    Side effects:
-        Updates reg.tot_iscr, reg.tot_payed, reg.quota, reg.deadline, reg.alert
+    Returns:
+        None
+
+    Side Effects:
+        Updates the following registration attributes:
+        - reg.tot_iscr: Total inscription amount
+        - reg.tot_payed: Total amount paid
+        - reg.quota: Payment quota amount
+        - reg.deadline: Payment deadline
+        - reg.alert: Alert flag for upcoming deadlines
+        - reg.payment_date: Date when payment was completed (if applicable)
     """
+    # Skip processing for cancelled or completed runs
     for s in [DevelopStatus.CANC, DevelopStatus.DONE]:
         if reg.run.development == s:
             return
 
     max_rounding = 0.05
 
+    # Extract basic event information
     start = reg.run.start
     features = get_event_features(reg.run.event_id)
     assoc_id = reg.run.event.assoc_id
 
-    # get registration account item
+    # Calculate total inscription fee and payments
     reg.tot_iscr = get_reg_iscr(reg)
-    # get all transaction
     tot_trans = get_reg_transactions(reg)
-    # get  all payments
     reg.tot_payed = get_reg_payments(reg)
+
+    # Adjust for transactions and round to nearest cent
     reg.tot_payed -= tot_trans
     reg.tot_payed = Decimal(round_to_nearest_cent(reg.tot_payed))
 
+    # Initialize payment tracking fields
     reg.quota = 0
     reg.deadline = 0
     reg.alert = False
 
+    # Check if payment is complete (within rounding tolerance)
     remaining = reg.tot_iscr - reg.tot_payed
     if -max_rounding < remaining <= max_rounding:
         if not reg.payment_date:
             reg.payment_date = datetime.now()
         return
 
+    # Skip further processing if registration is cancelled
     if reg.cancellation_date:
         return
 
+    # Handle membership requirements for non-LAOG events
     if "membership" in features and "laog" not in features:
         if not hasattr(reg, "membership"):
             reg.membership = get_user_membership(reg.member, assoc_id)
         if reg.membership.status != MembershipStatus.ACCEPTED:
             return
 
+    # Process tokens and credits
     handle_tokes_credits(assoc_id, features, reg, remaining)
 
+    # Get payment alert threshold from event configuration
     alert = int(reg.run.event.get_config("payment_alert", 30))
 
+    # Calculate payment schedule based on feature flags
     if "reg_installments" in features:
         installment_check(reg, alert, assoc_id)
     else:
         quota_check(reg, start, alert, assoc_id)
 
+    # Skip alert setting if quota is negligible
     if reg.quota <= max_rounding:
         return
 
+    # Set alert flag based on deadline proximity
     reg.alert = reg.deadline < alert
 
 

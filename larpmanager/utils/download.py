@@ -24,7 +24,7 @@ import zipfile
 
 import pandas as pd
 from bs4 import BeautifulSoup
-from django.db.models import F
+from django.db.models import F, QuerySet
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -193,7 +193,7 @@ def export_relationships(ctx):
     return [("relationships", keys, vals)]
 
 
-def _prepare_export(ctx, model, query):
+def _prepare_export(ctx: dict, model: str, query: QuerySet) -> None:
     """Prepare data for export operations.
 
     Processes questions, choices, and answers for data export functionality,
@@ -201,56 +201,77 @@ def _prepare_export(ctx, model, query):
     registration and character model exports.
 
     Args:
-        ctx (dict): Context dictionary containing export configuration and data
-        model: Django model class to export data from
-        query: QuerySet containing the filtered data to export
+        ctx: Context dictionary containing export configuration and data.
+            Will be modified in-place to include prepared export data structures.
+        model: String identifier for the Django model to export data from.
+            Expected values: "registration", "character", or other model names.
+        query: QuerySet containing the filtered data to export.
 
     Returns:
-        None: Function modifies ctx in-place, adding prepared export data structures
+        None: Function modifies ctx in-place, adding the following keys:
+            - applicable: Question applicability filter
+            - answers: Dictionary mapping question_id -> element_id -> answer_text
+            - choices: Dictionary mapping question_id -> element_id -> [choice_names]
+            - questions: List of applicable questions for the model
+            - assignments: (character model only) character_id -> member mapping
     """
+    # Determine applicable question types for the model
     # noinspection PyProtectedMember
     applicable = QuestionApplicable.get_applicable(model)
-    choices = {}
-    answers = {}
-    questions = []
+
+    # Initialize data structures for export organization
+    choices: dict[int, dict[int, list[str]]] = {}
+    answers: dict[int, dict[int, str]] = {}
+    questions: list = []
+
+    # Process questions, choices, and answers if applicable or for registration model
     if applicable or model == "registration":
+        # Determine model-specific classes and field names
         is_reg = model == "registration"
         question_cls = RegistrationQuestion if is_reg else WritingQuestion
         choices_cls = RegistrationChoice if is_reg else WritingChoice
         answers_cls = RegistrationAnswer if is_reg else WritingAnswer
         ref_field = "reg_id" if is_reg else "element_id"
 
+        # Extract element IDs from query for filtering related objects
         el_ids = {el.id for el in query}
 
+        # Get applicable questions for the event and features
         questions = question_cls.get_instance_questions(ctx["event"], ctx["features"])
         if model != "registration":
             questions = questions.filter(applicable=applicable)
 
+        # Extract question IDs for efficient database filtering
         que_ids = {que.id for que in questions}
-
         filter_kwargs = {"question_id__in": que_ids, f"{ref_field}__in": el_ids}
 
+        # Process multiple choice answers and organize by question and element
         que_choice = choices_cls.objects.filter(**filter_kwargs)
         for choice in que_choice.select_related("option"):
             element_id = getattr(choice, ref_field)
+            # Initialize nested dictionaries as needed
             if choice.question_id not in choices:
                 choices[choice.question_id] = {}
             if element_id not in choices[choice.question_id]:
                 choices[choice.question_id][element_id] = []
             choices[choice.question_id][element_id].append(choice.option.name)
 
+        # Process text answers and organize by question and element
         que_answer = answers_cls.objects.filter(**filter_kwargs)
         for answer in que_answer:
             element_id = getattr(answer, ref_field)
+            # Initialize nested dictionary as needed
             if answer.question_id not in answers:
                 answers[answer.question_id] = {}
             answers[answer.question_id][element_id] = answer.text
 
+    # Special handling for character model: build character-to-member assignments
     if model == "character":
         ctx["assignments"] = {}
         for rcr in RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).select_related("reg", "reg__member"):
             ctx["assignments"][rcr.character.id] = rcr.reg.member
 
+    # Update context with all prepared export data
     ctx["applicable"] = applicable
     ctx["answers"] = answers
     ctx["choices"] = choices

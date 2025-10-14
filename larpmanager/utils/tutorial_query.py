@@ -1,12 +1,13 @@
 import os
 from difflib import SequenceMatcher
+from typing import Any
 
 import deepl
 from bs4 import BeautifulSoup
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.urls import reverse
 from whoosh.fields import ID, TEXT, Schema
 from whoosh.index import create_in, open_dir
@@ -144,34 +145,51 @@ def get_sorted_permissions(model, query):
     return sorted(permissions, key=lambda p: similarity(p["name"], query), reverse=True)
 
 
-def query_index(request):
+def query_index(request: HttpRequest) -> JsonResponse:
     """Handle search queries with translation support.
 
     Processes search requests and translates content using DeepL API,
     then searches through both permission-based navigation links, guides and
     tutorial content to provide relevant results.
+
+    Args:
+        request: Django HTTP request object containing POST data with:
+            - q: Search query string
+            - r: Optional run ID for event-specific search
+
+    Returns:
+        JsonResponse containing search results with guides, tutorials, and links.
+        Returns empty JsonResponse if run lookup fails.
+
+    Raises:
+        ValueError: If run_id cannot be converted to integer (handled internally)
+        TypeError: If run_id is None (handled internally)
+        ObjectDoesNotExist: If specified run doesn't exist (handled internally)
     """
-    orig_string = request.POST.get("q", "")
+    # Extract and validate input parameters
+    orig_string: str = request.POST.get("q", "")
     try:
-        run_id = int(request.POST.get("r", "0"))
+        run_id: int = int(request.POST.get("r", "0"))
     except (ValueError, TypeError):
         run_id = 0
 
-    # translate it
+    # Translate query string to English for consistent search
     translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
-    query_string = str(translator.translate_text(orig_string, target_lang="EN-US"))
+    query_string: str = str(translator.translate_text(orig_string, target_lang="EN-US"))
 
-    # notify admins
+    # Log search activity for admin monitoring
     notify_admins(f"query_index: {query_string}", f"{orig_string} - {request.user}")
 
-    # get links
+    # Build permission-based navigation links
+    links: list[dict[str, str]] = []
     if run_id:
+        # Event-specific permissions and links
         try:
             run = Run.objects.select_related("event").get(pk=run_id, event__assoc_id=request.assoc["id"])
         except ObjectDoesNotExist:
             return JsonResponse({})
 
-        sorted_permissions = get_sorted_permissions(EventPermission, query_string)
+        sorted_permissions: list[dict[str, Any]] = get_sorted_permissions(EventPermission, query_string)
         links = [
             {
                 "name": perm["name"],
@@ -181,25 +199,30 @@ def query_index(request):
             for perm in sorted_permissions
         ]
     else:
+        # Organization-wide permissions and links
         sorted_permissions = get_sorted_permissions(AssocPermission, query_string)
         links = [
             {"name": perm["name"], "descr": perm["descr"], "href": reverse(perm["slug"])} for perm in sorted_permissions
         ]
 
-    # get guides
+    # Search through guide content using Whoosh index
     ix = get_or_create_index_tutorial(GUIDE_INDEX)
     with ix.searcher() as searcher:
         query = QueryParser("content", ix.schema).parse(query_string)
         results = searcher.search(query, limit=5)
-        guides = [{"slug": r["slug"], "title": r["title"], "snippet": r["content"][:300]} for r in results]
+        guides: list[dict[str, str]] = [
+            {"slug": r["slug"], "title": r["title"], "snippet": r["content"][:300]} for r in results
+        ]
 
-    # get tutorials
+    # Search through tutorial content using Whoosh index
     ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     with ix.searcher() as searcher:
         query = QueryParser("content", ix.schema).parse(query_string)
         results = searcher.search(query, limit=10)
-        tutorials = [
+        tutorials: list[dict[str, str]] = [
             {"slug": r["slug"], "title": r["title"], "section": r["section_title"], "snippet": r["content"][:300]}
             for r in results
         ]
+
+    # Return consolidated search results
     return JsonResponse({"guides": guides, "tutorials": tutorials, "links": links}, safe=False)

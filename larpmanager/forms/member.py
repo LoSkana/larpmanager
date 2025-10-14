@@ -23,6 +23,7 @@ import os
 import re
 from collections import OrderedDict
 from datetime import datetime
+from typing import Any
 
 import pycountry
 from dateutil.relativedelta import relativedelta
@@ -71,15 +72,33 @@ class MyAuthForm(AuthenticationForm):
         model = User
         fields = ["username", "password"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with custom widget configurations.
+
+        Configures username and password fields with Bootstrap styling,
+        removes labels, and sets appropriate input attributes.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None
+        """
         super().__init__(*args, **kwargs)
+
+        # Configure username field with Bootstrap styling and email placeholder
         self.fields["username"].widget = forms.TextInput(
             attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
         )
+        # Remove label to create clean inline form appearance
         self.fields["username"].label = False
+
+        # Configure password field with Bootstrap styling and secure input
         self.fields["password"].widget = forms.PasswordInput(
             attrs={"class": "form-control", "placeholder": "password", "maxlength": 70},
         )
+        # Remove label for consistent styling with username field
         self.fields["password"].label = False
 
 
@@ -722,12 +741,13 @@ class ExeMembershipFeeForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        self.params = kwargs.pop("ctx", None)
+        self.params = kwargs.pop("ctx", {})
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
-        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+        assoc_id = self.params.get("a_id", None)
+        self.fields["member"].widget.set_assoc(assoc_id)
+        self.fields["member"].queryset = get_members_queryset(assoc_id)
 
-        assoc = Association.objects.get(pk=self.params["a_id"])
+        assoc = Association.objects.get(pk=assoc_id)
         choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
         self.fields["method"] = forms.ChoiceField(
             required=True,
@@ -777,14 +797,13 @@ class ExeMembershipDocumentForm(forms.Form):
     date = forms.DateField(widget=DatePickerInput(), label=_("Date of membership approval"))
 
     def __init__(self, *args, **kwargs):
-        self.params = kwargs.pop("ctx", None)
+        self.params = kwargs.pop("ctx", {})
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
-        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+        self.assoc_id = self.params.get("a_id", None)
+        self.fields["member"].widget.set_assoc(self.assoc_id)
+        self.fields["member"].queryset = get_members_queryset(self.assoc_id)
 
-        number = Membership.objects.filter(assoc_id=self.params["a_id"]).aggregate(Max("card_number"))[
-            "card_number__max"
-        ]
+        number = Membership.objects.filter(assoc_id=self.assoc_id).aggregate(Max("card_number"))["card_number__max"]
         if not number:
             number = 1
         else:
@@ -793,7 +812,7 @@ class ExeMembershipDocumentForm(forms.Form):
 
     def clean_member(self):
         member = self.cleaned_data["member"]
-        membership = Membership.objects.get(member=member, assoc_id=self.params["a_id"])
+        membership = Membership.objects.get(member=member, assoc_id=self.assoc_id)
         if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             self.add_error("member", _("User is already a member"))
 

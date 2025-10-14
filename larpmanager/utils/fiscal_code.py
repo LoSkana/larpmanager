@@ -2,10 +2,12 @@ import csv
 import os
 import re
 import unicodedata
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.models.member import Member
 from larpmanager.utils.member import almost_equal, count_differences
 
 
@@ -253,7 +255,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
     return check_digit
 
 
-def _go(member, male=True):
+def _go(member: Member, male: bool = True) -> dict[str, Any]:
     """Generate Italian fiscal code for a member and validate against existing code.
 
     Implements the complete fiscal code algorithm including name/surname processing,
@@ -261,16 +263,24 @@ def _go(member, male=True):
     the member's existing fiscal code and provides detailed error messages.
 
     Args:
-        member: Member instance with personal information for fiscal code generation
-        male (bool, optional): Gender flag for date encoding. Defaults to True.
+        member: Member instance with personal information for fiscal code generation.
+                Must have attributes: legal_name, name, surname, birth_date,
+                birth_place, fiscal_code.
+        male: Gender flag for date encoding. True for male, False for female.
+              Defaults to True.
 
     Returns:
-        tuple: (success_boolean, generated_code, error_message)
+        Dictionary containing validation results with keys:
+            - membership_cf (bool): Always True, indicates fiscal code context
+            - calculated_cf (str): Generated fiscal code
+            - supplied_cf (str): Member's existing fiscal code (uppercase)
+            - error_cf (str): Error message if validation fails
+            - correct_cf (bool): True if calculated matches supplied code
     """
     fiscal_code_length = 16
     name_number = 2
 
-    # Take care of legal name
+    # Process legal name by splitting into name and surname components
     if member.legal_name:
         splitted = member.legal_name.rsplit(" ", 1)
         if len(splitted) == name_number:
@@ -278,31 +288,42 @@ def _go(member, male=True):
         else:
             member.name = splitted[0]
 
-    ctx = {"membership_cf": True}
+    # Initialize validation context
+    ctx: dict[str, Any] = {"membership_cf": True}
 
-    # Constructing the fiscal code
+    # Extract fiscal code components using helper functions
     last_name_code = _extract_last_name(member.surname)
     first_name_code = _extract_first_name(member.name)
     birth_date_code = _extract_birth_date(member.birth_date, male)
+
+    # Process birth place and get municipality code
     cleaned_birth_place = _clean_birth_place(member.birth_place)
     municipality_code = _extract_municipality_code(cleaned_birth_place)
+
+    # Construct fiscal code without check digit and add check digit
     cf_without_check_digit = f"{last_name_code}{first_name_code}{birth_date_code}{municipality_code}"
     check_digit = _calculate_check_digit(cf_without_check_digit)
 
+    # Store calculated and supplied fiscal codes in context
     ctx["calculated_cf"] = cf_without_check_digit + check_digit
     if member.fiscal_code:
         ctx["supplied_cf"] = member.fiscal_code.upper()
     else:
         ctx["supplied_cf"] = ""
+
+    # Check for municipality code validity
     if not municipality_code:
         ctx["error_cf"] = _("Place of birth not included in the ISTAT list")
 
+    # Perform detailed validation checks with specific error messages
     if almost_equal(ctx["calculated_cf"], ctx["supplied_cf"]):
         ctx["error_cf"] = _("One character more or less than expected")
     elif len(ctx["supplied_cf"]) != fiscal_code_length:
         ctx["error_cf"] = _("Wrong number of characters")
     elif count_differences(ctx["calculated_cf"], ctx["supplied_cf"]) == 1:
         ctx["error_cf"] = _("Differing by only one character from the expected one")
+
+    # Check specific sections of the fiscal code for targeted error messages
     elif ctx["calculated_cf"][:6] != ctx["supplied_cf"][:6]:
         ctx["error_cf"] = _(
             "First and last name characters do not match (remember to enter the correct first "
@@ -313,6 +334,7 @@ def _go(member, male=True):
     elif ctx["calculated_cf"][6:10] != ctx["supplied_cf"][6:10]:
         ctx["error_cf"] = _("Date of birth characters do not match (check exact date)")
 
+    # Set final validation result
     ctx["correct_cf"] = ctx["calculated_cf"] == ctx["supplied_cf"]
 
     return ctx

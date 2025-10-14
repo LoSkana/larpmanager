@@ -47,10 +47,10 @@ repos:
     rev: v0.12.11
     hooks:
       - id: ruff
-        args: [ --fix ]
-        exclude: larpmanager/tests/
+        args: [--fix]
+        exclude: ^(larpmanager/tests/|refactor/)
       - id: ruff-format
-        exclude: larpmanager/tests/
+        exclude: ^(larpmanager/tests/|refactor/)
 
   - repo: local
     hooks:

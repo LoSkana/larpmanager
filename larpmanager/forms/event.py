@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+from typing import Any
 
 from django import forms
 from django.conf import settings as conf_settings
@@ -77,15 +78,42 @@ class EventCharactersPdfForm(ConfigForm):
         model = Event
         fields = ()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.prevent_canc = True
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance with cancellation prevention.
 
-    def set_configs(self):
+        Initializes the parent class with all provided arguments and sets up
+        the instance to prevent cancellation operations.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None
+        """
+        # Initialize parent class with all provided arguments
+        super().__init__(*args, **kwargs)
+
+        # Set flag to prevent cancellation operations on this instance
+        self.prevent_canc: bool = True
+
+    def set_configs(self) -> None:
+        """Configure PDF-related settings for the application.
+
+        Sets up the PDF configuration section and adds various configuration
+        options including CSS styling, header content, and footer content
+        for PDF generation and customization.
+        """
+        # Set up the main PDF configuration section
         self.set_section("pdf", "PDF")
+
+        # Add CSS configuration for PDF styling
         self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("Insert the css code to customize the pdf printing"))
+
+        # Add header content configuration
         self.add_configs("header_content", ConfigType.TEXTAREA, _("Header"), _("Insert the html code for the header"))
 
+        # Add footer content configuration
         self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer"), _("Insert the html code for the footer"))
 
 

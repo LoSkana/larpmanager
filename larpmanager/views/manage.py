@@ -112,24 +112,33 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     suggestions, actions, and accounting information.
 
     Args:
-        request: Django HTTP request object
+        request: Django HTTP request object containing user and association data
 
     Returns:
-        HttpResponse: Rendered executive management dashboard
+        HttpResponse: Rendered executive management dashboard template or redirect response
+
+    Redirects:
+        - To event creation if no events exist and exe_events feature is available
+        - To quick setup if not completed
     """
+    # Initialize context and permissions for the current user and association
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
     ctx["manage"] = 1
+
+    # Get available features for this association
     features = get_assoc_features(ctx["a_id"])
 
+    # Check if association has any events
     ctx["event_counts"] = Event.objects.filter(assoc_id=ctx["a_id"]).count()
-    # if no events, and exe_events is present, redirect to create one
+
+    # Redirect to event creation if no events exist and feature is available
     if not ctx["event_counts"] and "exe_events" in features:
         msg = (
             _("Welcome")
             + "! "
-            + _("You don’t have any events yet")
+            + _("You don't have any events yet")
             + ". "
             + _("Please create your first event to get started")
             + "!"
@@ -137,7 +146,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         messages.success(request, msg)
         return redirect("exe_events_edit", num=0)
 
-    # if quick setup was not completed, redirect
+    # Redirect to quick setup if not completed
     if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False):
         msg = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
@@ -146,16 +155,20 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         messages.success(request, msg)
         return redirect("exe_quick")
 
+    # Get ongoing runs (events in START or SHOW development status)
     que = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW])
     ctx["ongoing_runs"] = que.select_related("event").order_by("end")
+
+    # Add registration status and counts for each ongoing run
     for run in ctx["ongoing_runs"]:
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
 
+    # Add accounting information if user has permission
     if has_assoc_permission(request, ctx, "exe_accounting"):
         assoc_accounting(ctx)
 
-    # if no event active, suggest to create one
+    # Suggest creating an event if no runs are active
     if not ctx["ongoing_runs"]:
         _add_priority(
             ctx,
@@ -163,12 +176,12 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
             "exe_events",
         )
 
+    # Add dashboard actions and suggestions
     _exe_actions(request, ctx, features)
-
     _exe_suggestions(ctx)
 
+    # Compile final context and check for intro driver
     _compile(request, ctx)
-
     _check_intro_driver(request, ctx)
 
     return render(request, "larpmanager/manage/exe.html", ctx)
@@ -199,19 +212,31 @@ def _exe_suggestions(ctx):
         _add_suggestion(ctx, text, perm)
 
 
-def _exe_actions(request, ctx, features=None):
+def _exe_actions(request, ctx: dict, features: dict = None) -> None:
     """Determine available executive actions based on association features.
 
     Adds action items to the management dashboard based on user permissions
     and association configuration settings.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing association ID and other data
+        features: Dictionary of association features, defaults to None
+
+    Returns:
+        None: Modifies ctx in place by adding action items
     """
+    # Get association features if not provided
     if not features:
         features = get_assoc_features(ctx["a_id"])
     assoc = Association.objects.get(pk=ctx["a_id"])
 
+    # Check for runs that should be concluded
     runs_conclude = Run.objects.filter(
         event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW], end__lt=datetime.today()
     ).values_list("search", flat=True)
+
+    # Add action for past runs still open
     if runs_conclude:
         _add_action(
             ctx,
@@ -222,6 +247,7 @@ def _exe_actions(request, ctx, features=None):
             "exe_events",
         )
 
+    # Check for pending expense approvals
     expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
     if expenses_approve:
         _add_action(
@@ -230,6 +256,7 @@ def _exe_actions(request, ctx, features=None):
             "exe_expenses",
         )
 
+    # Check for pending payment approvals
     payments_approve = PaymentInvoice.objects.filter(assoc_id=ctx["a_id"], status=PaymentStatus.SUBMITTED).count()
     if payments_approve:
         _add_action(
@@ -238,6 +265,7 @@ def _exe_actions(request, ctx, features=None):
             "exe_invoices",
         )
 
+    # Check for pending refund approvals
     refund_approve = RefundRequest.objects.filter(assoc_id=ctx["a_id"], status=RefundStatus.REQUEST).count()
     if refund_approve:
         _add_action(
@@ -246,6 +274,7 @@ def _exe_actions(request, ctx, features=None):
             "exe_refunds",
         )
 
+    # Check for pending member approvals
     members_approve = Membership.objects.filter(assoc_id=ctx["a_id"], status=MembershipStatus.SUBMITTED).count()
     if members_approve:
         _add_action(
@@ -254,8 +283,10 @@ def _exe_actions(request, ctx, features=None):
             "exe_membership",
         )
 
+    # Process accounting-specific actions
     _exe_accounting_actions(assoc, ctx, features)
 
+    # Process user-specific actions
     _exe_users_actions(request, assoc, ctx, features)
 
 
@@ -627,12 +658,20 @@ def _orga_px_actions(ctx, features):
         )
 
 
-def _orga_reg_acc_actions(ctx, features):
+def _orga_reg_acc_actions(ctx: dict, features: list[str]) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,
     such as installments, quotas, and accounting systems for events.
+
+    Args:
+        ctx: Context dictionary containing event and other data
+        features: List of enabled feature names
+
+    Returns:
+        None: Modifies ctx in place by adding priority actions
     """
+    # Check for conflicting installment features
     if "reg_installments" in features and "reg_quotas" in features:
         _add_priority(
             ctx,
@@ -643,6 +682,7 @@ def _orga_reg_acc_actions(ctx, features):
             "orga_features",
         )
 
+    # Handle dynamic installments (quotas) setup
     if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
         _add_priority(
             ctx,
@@ -650,7 +690,9 @@ def _orga_reg_acc_actions(ctx, features):
             "orga_registration_quotas",
         )
 
+    # Handle fixed installments feature
     if "reg_installments" in features:
+        # Check if installments are configured
         if not ctx["event"].get_elements(RegistrationInstallment).count():
             _add_priority(
                 ctx,
@@ -658,6 +700,7 @@ def _orga_reg_acc_actions(ctx, features):
                 "orga_registration_installments",
             )
         else:
+            # Validate installment configuration - check for conflicting deadline settings
             both_set = (
                 ctx["event"]
                 .get_elements(RegistrationInstallment)
@@ -673,6 +716,7 @@ def _orga_reg_acc_actions(ctx, features):
                     "orga_registration_installments",
                 )
 
+            # Check for missing final installments (amount = 0)
             missing_final = ctx["event"].get_elements(RegistrationTicket).exclude(installments__amount=0)
             if missing_final:
                 _add_priority(
@@ -682,6 +726,7 @@ def _orga_reg_acc_actions(ctx, features):
                     "orga_registration_installments",
                 )
 
+    # Handle reduced tickets feature configuration
     if "reduced" in features:
         if not ctx["event"].get_config("reduced_ratio", 0):
             _add_priority(

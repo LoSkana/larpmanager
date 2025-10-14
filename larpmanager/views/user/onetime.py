@@ -20,9 +20,10 @@
 
 import os
 import re
+from typing import Optional
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, StreamingHttpResponse
+from django.http import Http404, HttpRequest, StreamingHttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
@@ -120,48 +121,65 @@ def onetime_access(request, token):
 
 @never_cache
 @require_http_methods(["GET"])
-def onetime_stream(request, token):
+def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
     """
-    Stream the media file for a one-time content.
-    This endpoint is called by the video player to actually stream the file.
+    Stream the media file for a one-time content with range request support.
+
+    This endpoint is called by video players to stream protected content files.
+    Supports HTTP range requests for video seeking and handles security headers
+    to prevent caching and unauthorized access.
+
+    Args:
+        request: The HTTP request object containing headers and metadata
+        token: The one-time access token string for content authentication
+
+    Returns:
+        StreamingHttpResponse: HTTP response with file content stream
+
+    Raises:
+        Http404: If token is invalid, not initialized, content inactive, or file not found
     """
+    # Validate and retrieve the access token with related content
     try:
         access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
     except ObjectDoesNotExist as err:
         raise Http404(_("Invalid token")) from err
 
-    # Verify token is used and content is active
+    # Verify token has been properly initialized
     if not access_token.used:
         raise Http404(_("Token not initialized"))
 
+    # Ensure the content is still active and available
     if not access_token.content.active:
         raise Http404(_("Content unavailable"))
 
     content = access_token.content
 
-    # Open the file
+    # Open the file in binary read mode for streaming
     try:
         file = content.file.open("rb")
     except Exception as err:
         raise Http404(_("File not found")) from err
 
-    # Get file size
+    # Get total file size for response headers
     file_size = content.file.size
 
-    # Handle range requests for seeking in video
+    # Parse HTTP Range header for partial content requests (video seeking)
     range_header = request.META.get("HTTP_RANGE", "").strip()
-    range_match = None
+    range_match: Optional[re.Match] = None
     if range_header:
         range_match = re.search(r"bytes=(\d+)-(\d*)", range_header)
 
+    # Handle partial content request (HTTP 206) for range requests
     if range_match:
-        # Partial content request
         first_byte = int(range_match.group(1))
         last_byte = int(range_match.group(2)) if range_match.group(2) else file_size - 1
 
+        # Seek to requested position and calculate content length
         file.seek(first_byte)
         length = last_byte - first_byte + 1
 
+        # Create partial content response with appropriate headers
         response = StreamingHttpResponse(
             file_iterator(file, chunk_size=8192 * 16),
             status=206,
@@ -170,21 +188,21 @@ def onetime_stream(request, token):
         response["Content-Length"] = str(length)
         response["Content-Range"] = f"bytes {first_byte}-{last_byte}/{file_size}"
     else:
-        # Full file request
+        # Handle full file request (HTTP 200)
         response = StreamingHttpResponse(
             file_iterator(file, chunk_size=8192 * 16),
             content_type=content.content_type or "application/octet-stream",
         )
         response["Content-Length"] = str(file_size)
 
-    # Security headers
+    # Apply security headers to prevent caching and unauthorized access
     response["Cache-Control"] = "no-cache, no-store, must-revalidate, private"
     response["Pragma"] = "no-cache"
     response["Expires"] = "0"
     response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
     response["Accept-Ranges"] = "bytes"
 
-    # Set filename for download (optional)
+    # Set content disposition header with original filename
     filename = os.path.basename(content.file.name)
     response["Content-Disposition"] = f'inline; filename="{filename}"'
 

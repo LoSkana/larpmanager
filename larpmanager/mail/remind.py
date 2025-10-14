@@ -114,23 +114,34 @@ def remember_pay(reg):
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-def get_remember_pay_body(context, provisional, reg):
+def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
     """Generate default payment reminder email body text.
 
+    Creates an HTML-formatted email body for payment reminders, handling both
+    provisional and confirmed registrations with appropriate messaging based
+    on payment deadlines.
+
     Args:
-        context (dict): Email context with event information
-        provisional (bool): Whether registration is provisional
-        reg: Registration instance with payment details
+        context: Email context dictionary containing event information
+        provisional: Whether the registration is provisional or confirmed
+        reg: Registration instance containing payment details and run information
 
     Returns:
-        str: HTML formatted email body for payment reminder
+        HTML formatted string containing the complete email body for payment reminder
+
+    Example:
+        >>> context = {'event': 'Summer LARP 2024'}
+        >>> body = get_remember_pay_body(context, False, registration_obj)
+        >>> print(body)  # Returns formatted HTML email body
     """
+    # Extract payment information and build payment URL
     symbol = reg.run.event.assoc.get_currency_symbol()
     amount = f"{reg.quota:.2f}{symbol}"
     deadline = reg.deadline
     url = get_url("accounting/pay", reg.run.event)
     payment_url = f"{url}/{reg.run.event.slug}/{reg.id}"
 
+    # Generate appropriate greeting based on registration type
     if provisional:
         intro = _("Hello! We are reaching out regarding your provisional registration for <b>%(event)s</b>")
     else:
@@ -138,6 +149,7 @@ def get_remember_pay_body(context, provisional, reg):
 
     body = intro % context + "."
 
+    # Add payment instruction based on deadline status
     if deadline <= 0:
         middle = _("To confirm it, please pay the following amount as soon as possible: %(amount)s")
     else:
@@ -145,8 +157,10 @@ def get_remember_pay_body(context, provisional, reg):
 
     body += "<br /><br />" + middle % {"amount": amount, "days": deadline} + "."
 
+    # Add disclaimer for existing agreements
     body += "<br /><br />(" + _("If you have a separate agreement with us, you may disregard this email") + ")"
 
+    # Include payment link and support contact information
     body += (
         "<br /><br />"
         + _("You can make the payment <a href='%(url)s'>on this page</a>") % {"url": payment_url}
@@ -155,6 +169,7 @@ def get_remember_pay_body(context, provisional, reg):
         + "!"
     )
 
+    # Add cancellation warning for non-responsive registrants
     body += (
         "<br /><br />"
         + _(

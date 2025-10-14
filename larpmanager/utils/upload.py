@@ -627,7 +627,7 @@ def invert_dict(d):
     return {v.lower().strip(): k for k, v in d.items()}
 
 
-def _questions_load(ctx, row, is_registration):
+def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
     """Load and validate question data from upload files.
 
     Processes question configurations for registration or character forms,
@@ -635,32 +635,37 @@ def _questions_load(ctx, row, is_registration):
     based on the row data and validation mappings.
 
     Args:
-        ctx (dict): Context dictionary containing event and processing information
-        row (dict): Data row from upload file containing question configuration
-        is_registration (bool): True for registration questions, False for writing questions
+        ctx: Context dictionary containing event and processing information
+        row: Data row from upload file containing question configuration
+        is_registration: True for registration questions, False for writing questions
 
     Returns:
-        str: Status message indicating success or error details
+        Status message indicating success or error details
     """
+    # Extract and validate the required name field
     name = row.get("name")
     if not name:
         return "ERR - name not found"
 
+    # Get field validation mappings for the question type
     mappings = _get_mappings(is_registration)
 
     if is_registration:
+        # Create or get registration question instance
         instance, created = RegistrationQuestion.objects.get_or_create(
             event=ctx["event"],
             name__iexact=name,
             defaults={"name": name},
         )
     else:
+        # Writing questions require additional 'applicable' field validation
         if "applicable" not in row:
             return "ERR - missing applicable column"
         applicable = row["applicable"]
         if applicable not in mappings["applicable"]:
             return "ERR - unknown applicable"
 
+        # Create or get writing question instance with applicable field
         instance, created = WritingQuestion.objects.get_or_create(
             event=ctx["event"],
             name__iexact=name,
@@ -668,21 +673,31 @@ def _questions_load(ctx, row, is_registration):
             defaults={"name": name},
         )
 
+    # Process and validate each field in the row data
     for field, value in row.items():
+        # Skip empty values and already processed fields
         if not value or pd.isna(value) or field in ["applicable", "name"]:
             continue
+
         new_value = value
+        # Apply mapping validation if field has defined mappings
         if field in mappings:
             new_value = new_value.lower().strip()
             if new_value not in mappings[field]:
                 return f"ERR - unknow value {value} for field {field}"
             new_value = mappings[field][new_value]
+
+        # Handle special case for max_length field conversion
         if field == "max_length":
             new_value = int(value)
+
+        # Set the validated value on the instance
         setattr(instance, field, new_value)
 
+    # Save the configured instance to database
     instance.save()
 
+    # Return appropriate success message based on operation
     if created:
         msg = f"OK - Created {name}"
     else:

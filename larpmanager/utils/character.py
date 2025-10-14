@@ -44,61 +44,87 @@ from larpmanager.utils.experience import add_char_addit
 logger = logging.getLogger(__name__)
 
 
-def get_character_relationships(ctx, restrict=True):
+def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
     """Get character relationships with faction and player input data.
 
-    Args:
-        ctx: Context dictionary with character and event data
-        restrict (bool): Whether to restrict relationship visibility
+    Retrieves and processes character relationships from both system-defined
+    relationships and player-inputted relationships. Updates the context with
+    formatted relationship data including faction information and text content.
 
-    Side effects:
-        Updates ctx['rel'] with relationship data
+    Args:
+        ctx: Context dictionary containing character, event, run, chars, and factions data.
+            Must include 'character', 'event', 'run', and may include 'chars', 'factions'.
+        restrict: Whether to filter out relationships with empty text content.
+            Defaults to True.
+
+    Returns:
+        None: Function modifies ctx in-place, adding 'rel' list and 'pr' dict.
+
+    Side Effects:
+        - Updates ctx['rel'] with sorted list of relationship data
+        - Updates ctx['pr'] with player relationship objects
     """
     cache = {}
     data = {}
+
+    # Process system-defined relationships from the database
     for tg_num, text in Relationship.objects.values_list("target__number", "text").filter(source=ctx["character"]):
+        # Check if character data is already cached in context
         if "chars" in ctx and tg_num in ctx["chars"]:
             show = ctx["chars"][tg_num]
         else:
+            # Fetch character data from database if not cached
             try:
                 ch = Character.objects.select_related("event", "player").get(event=ctx["event"], number=tg_num)
                 show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue
 
+        # Build faction list for display purposes
         show["factions_list"] = []
         for fac_num in show["factions"]:
             if not fac_num or fac_num not in ctx["factions"]:
                 continue
             fac = ctx["factions"][fac_num]
+            # Skip empty names or secret factions
             if not fac["name"] or fac["typ"] == FactionType.SECRET:
                 continue
             show["factions_list"].append(fac["name"])
+
+        # Join faction names and store character data
         show["factions_list"] = ", ".join(show["factions_list"])
         data[show["id"]] = show
         cache[show["id"]] = text
 
     pr = {}
-    # update with data inputted by players
+    # Update with player-inputted relationship data
     if "player_id" in ctx["char"]:
         for el in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
             reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
         ):
             pr[el.target_id] = el
+            # Player input overrides system relationships
             cache[el.target_id] = el.text
 
+    # Build final relationship list sorted by text length
     ctx["rel"] = []
     for idx in sorted(cache, key=lambda k: len(cache[k]), reverse=True):
+        # Skip if character data not found
         if idx not in data:
             logger.debug(f"Character index {idx} not found in data keys: {list(data.keys())[:5]}...")
             continue
+
         el = data[idx]
+        # Filter empty relationships if restrict is enabled
         if restrict and len(cache[idx]) == 0:
             continue
+
+        # Add relationship text and calculate font size based on content length
         el["text"] = cache[idx]
         el["font_size"] = int(100 - ((len(el["text"]) / 50) * 4))
         ctx["rel"].append(el)
 
+    # Store player relationships for additional processing
     ctx["pr"] = pr
 
 

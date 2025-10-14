@@ -19,11 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -201,58 +202,73 @@ def orga_warehouse_area_edit(request, s, num):
 
 
 @login_required
-def orga_warehouse_area_assignments(request, s, num):
+def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> HttpResponse:
     """Manage warehouse area item assignments for event organizers.
 
+    This function handles the display and management of warehouse item assignments
+    for a specific warehouse area within an event. It retrieves all available items,
+    calculates availability based on existing assignments, and presents them in a
+    sorted order with assigned items prioritized.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
-        num: Warehouse area ID number
+        request: Django HTTP request object containing user session and form data
+        s: Event slug identifier used to locate the specific event
+        num: Warehouse area ID number to identify the target warehouse area
 
     Returns:
-        HttpResponse: Rendered warehouse area assignments page
+        HttpResponse: Rendered warehouse area assignments page with context data
+            including sorted items, assignment information, and availability status
+
+    Raises:
+        PermissionDenied: If user lacks required warehouse area permissions
+        Http404: If warehouse area with specified ID does not exist
     """
+    # Check user permissions and get base context with event and area data
     ctx = check_event_permission(request, s, "orga_warehouse_area")
     get_element(ctx, num, "area", WarehouseArea)
 
+    # Configure optional warehouse display settings for quantity columns
     get_warehouse_optionals(ctx, [6, 7])
     if ctx["optionals"]["quantity"]:
         ctx["no_header_cols"] = [8, 9]
 
-    # GET ITEMS
-
-    item_all = {}
+    # Retrieve all warehouse items for the association with prefetched tags
+    item_all: dict[int, Any] = {}
     for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
+        # Set initial availability to item's total quantity
         item.available = item.quantity or 0
         item_all[item.id] = item
 
+    # Process existing warehouse item assignments to calculate availability
     for el in ctx["event"].get_elements(WarehouseItemAssignment).filter(event=ctx["event"]):
         item = item_all[el.item_id]
+
+        # Mark items assigned to current area and track assignment details
         if el.area_id == ctx["area"].pk:
             item.assigned = {"quantity": el.quantity, "notes": el.notes}
         else:
+            # Reduce available quantity for items assigned to other areas
             item.available -= el.quantity or 0
 
-    # SORT THEM
-
-    def _assigned_updated(it):
+    def _assigned_updated(it: Any) -> Any:
+        """Helper function to extract assignment update timestamp for sorting."""
         if getattr(it, "assigned", None):
             return it.assigned.get("updated") or getattr(it, "updated", None) or datetime.min
         return datetime.min
 
-    # items with assigned first; among them, most recently updated first; then by name, then id
+    # Sort items: assigned items first, then by recent updates, name, and ID
     ordered_items = sorted(
         item_all.values(),
         key=lambda it: (
-            bool(getattr(it, "assigned", None)),  # True first via reverse
-            _assigned_updated(it),  # recent first via reverse
-            getattr(it, "name", ""),  # alphabetical fallback
-            it.id,  # stable tiebreaker
+            bool(getattr(it, "assigned", None)),  # Assigned items first (True via reverse)
+            _assigned_updated(it),  # Most recently updated first (via reverse)
+            getattr(it, "name", ""),  # Alphabetical name fallback
+            it.id,  # Stable ID tiebreaker
         ),
         reverse=True,
     )
 
-    # rebuild dict preserving the sorted order
+    # Rebuild dictionary preserving sorted order for template rendering
     ctx["item_all"] = {it.id: it for it in ordered_items}
     return render(request, "larpmanager/orga/warehouse/assignments.html", ctx)
 

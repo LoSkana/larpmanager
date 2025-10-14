@@ -4282,7 +4282,7 @@ msgstr "Doprava - benzín, dálnice"
 msgid "Unconverted pre-registrations"
 msgstr "Nepřepočtené předběžné registrace"
 
-msgid "You don’t have any events yet"
+msgid "You don't have any events yet"
 msgstr "Zatím nemáte žádné události"
 
 msgid "You're not allowed to sign up"

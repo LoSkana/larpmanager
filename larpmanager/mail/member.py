@@ -135,44 +135,57 @@ def on_member_badges_m2m_changed(sender, **kwargs):
     handle_badge_assignment_notifications(instance, pk_set)
 
 
-def notify_membership_approved(member, resp):
+def notify_membership_approved(member: "Member", resp: str) -> None:
     """Send notification when membership application is approved.
 
     Args:
         member: Member instance whose membership was approved
-        resp (str): Optional response message from board
+        resp: Optional response message from board
 
-    Side effects:
+    Side Effects:
         Sends approval email with payment instructions and card number
     """
-    # send Mail
+    # Activate member's language for localized messages
     activate(member.language)
+
+    # Build notification subject and body
     subj = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
     body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
+
+    # Add card number to notification
     body += (
         "<br /><br />" + _("Your card number is: <b>%(number)03d</b>") % {"number": member.membership.card_number} + "."
     )
+
+    # Add additional response details if provided
     if resp:
         body += " " + _("More details") + f": {resp}"
 
-    # Check if you have payments to make
+    # Check for pending payments across member's registrations
     assoc_id = member.membership.assoc_id
     regs = member.registrations.filter(run__event__assoc_id=assoc_id, run__start__gte=datetime.now().date())
     membership_fee = False
     reg_list = []
+
+    # Process each registration for payment requirements
     for registration in regs:
         features = get_event_features(registration.run.event_id)
         run_start = registration.run.start and registration.run.start.year == datetime.today().year
+
+        # Check if membership fee is required for this event
         if run_start and "laog" not in features:
             membership_fee = True
 
+        # Skip registrations with no payment due
         if not registration.tot_iscr:
             continue
 
+        # Build payment link for unpaid registrations
         url = get_url("accounting/pay", member.membership)
         href = f"{url}/{registration.run.get_slug()}"
         reg_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
 
+    # Add registration payment instructions if needed
     if reg_list:
         body += (
             "<br /><br />"
@@ -181,6 +194,7 @@ def notify_membership_approved(member, resp):
             + ", ".join(reg_list)
         )
 
+    # Add membership fee payment instructions if required
     if membership_fee and get_assoc_config(assoc_id, "membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
@@ -189,6 +203,7 @@ def notify_membership_approved(member, resp):
             "page</a>."
         ) % {"url": url}
 
+    # Send the notification email
     my_send_mail(subj, body, member, member.membership)
 
 
