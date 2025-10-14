@@ -4775,6 +4775,53 @@ msgid ""
 "a new access link."
 msgstr ""
 
+msgid "Access Confirmation"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Video"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Media"
+msgstr ""
+
+msgid "One-Time Access Warning"
+msgstr ""
+
+msgid ""
+"This content can only be accessed once. Please read carefully before "
+"proceeding"
+msgstr ""
+
+msgid "Once you click 'Access Content', this link will be permanently consumed"
+msgstr ""
+
+msgid "You will not be able to use this link again after accessing the content"
+msgstr ""
+
+msgid "If you close the page after accessing, you will lose access forever"
+msgstr ""
+
+msgid "Make sure you have time to watch/listen to the content now"
+msgstr ""
+
+msgid "Contact the organizers if you need a new access link later"
+msgstr ""
+
+msgid "I Understand - Access Content"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "This content is protected and cannot be downloaded or recorded"
+msgstr ""
+
 msgid "Change registration"
 msgstr ""
 
@@ -5574,9 +5621,6 @@ msgid ""
 "Below you will find all the features available; you can write a search "
 "keyword to filter them. Then click on 'Video', and you will see the video "
 "directly"
-msgstr ""
-
-msgid "Video"
 msgstr ""
 
 msgid "Guides"

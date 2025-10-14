@@ -290,6 +290,9 @@ msgstr "Varsle"
 msgid "Alias"
 msgstr "Alias"
 
+msgid "Audio"
+msgstr "Lyd"
+
 msgid "Avoid"
 msgstr "Unngå"
 
@@ -350,6 +353,9 @@ msgstr "Gjenstander"
 
 msgid "Login"
 msgstr "Logg inn"
+
+msgid "Media"
+msgstr "Medier"
 
 msgid "Money"
 msgstr "Penger"
@@ -476,6 +482,9 @@ msgstr "Svar"
 
 msgid "Badges"
 msgstr "Merker"
+
+msgid "Cancel"
+msgstr "Avbryt"
 
 msgid "Causal"
 msgstr "Årsak"
@@ -923,6 +932,9 @@ msgstr "Px brukt"
 
 msgid "options"
 msgstr "alternativer"
+
+msgid "seconds"
+msgstr "sekunder"
 
 msgid "website"
 msgstr "nettside"
@@ -3101,6 +3113,9 @@ msgstr "innen fristen"
 msgid "global preferences"
 msgstr "globale preferanser"
 
+msgid "Access Confirmation"
+msgstr "Bekreftelse av tilgang"
+
 msgid "Access Information:"
 msgstr "Informasjon om tilgang:"
 
@@ -3752,6 +3767,9 @@ msgstr "Minimum antall stemmer"
 msgid "Move registration event"
 msgstr "Flytt registreringsarrangement"
 
+msgid "One-Time Access Warning"
+msgstr "Advarsel om engangsadgang"
+
 msgid "Please check them below"
 msgstr "Vennligst sjekk dem nedenfor"
 
@@ -4221,6 +4239,9 @@ msgstr "Opprett og administrer arrangementer her"
 
 msgid "Date of issue of the document"
 msgstr "Dato for utstedelse av dokumentet"
+
+msgid "I Understand - Access Content"
+msgstr "Jeg forstår - Få tilgang til innhold"
 
 msgid "Indicate the outflow category"
 msgstr "Angi hvilken kategori produksjonen regnes innenfor"
@@ -6283,6 +6304,9 @@ msgstr ""
 "Gjør det mulig å kopiere et hvilket som helst element direkte fra en annen "
 "hendelse"
 
+msgid "Contact the organizers if you need a new access link later"
+msgstr "Kontakt arrangørene hvis du trenger en ny tilgangslink senere"
+
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Ønsker du å tildele tegn ved hjelp av en casting-algoritme"
 
@@ -6306,6 +6330,9 @@ msgstr "Angir hvilke økter rabatten er tilgjengelig for"
 
 msgid "Let us know if you encounter any issues or need assistance"
 msgstr "Gi oss beskjed hvis du støter på problemer eller trenger hjelp"
+
+msgid "Make sure you have time to watch/listen to the content now"
+msgstr "Sørg for at du har tid til å se/lytte til innholdet nå"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Administrere og godkjenne utlegg som er lastet opp av ansatte"
@@ -6538,6 +6565,9 @@ msgstr "Valgfri merknad om dette tokenet (f.eks. mottakerens navn, formål)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Angi spesifikke verdier for konfigurasjon av funksjoner i hendelsen"
+
+msgid "This content is protected and cannot be downloaded or recorded"
+msgstr "Dette innholdet er beskyttet og kan ikke lastes ned eller tas opp"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Vi ber deg om å betale det beløpet vi ber om for neste avdrag"
@@ -6818,6 +6848,11 @@ msgstr "Jeg bekrefter at mitt ansikt og navn er tydelig synlig i dokumentet"
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 "Hvis avkrysset, viser deltakerne historikken for de angitte preferansene"
+
+msgid "If you close the page after accessing, you will lose access forever"
+msgstr ""
+"Hvis du lukker siden etter at du har åpnet den, mister du tilgangen for "
+"alltid"
 
 msgid "Indicate an organization contact address for sending communications"
 msgstr ""
@@ -7103,6 +7138,12 @@ msgstr ""
 "registreringsavgiften"
 
 msgid ""
+"Once you click 'Access Content', this link will be permanently consumed"
+msgstr ""
+"Når du klikker på \"Få tilgang til innhold\", vil denne lenken bli brukt "
+"permanent"
+
+msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr "Kun små bokstaver og tall er tillatt, ingen mellomrom eller symboler"
 
@@ -7127,6 +7168,12 @@ msgid ""
 msgstr ""
 "På denne siden finner du en oversikt over alle utgifter som er sendt inn av "
 "samarbeidspartnere"
+
+msgid ""
+"You will not be able to use this link again after accessing the content"
+msgstr ""
+"Du vil ikke kunne bruke denne lenken igjen etter at du har fått tilgang til "
+"innholdet"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
@@ -7748,6 +7795,12 @@ msgid ""
 msgstr ""
 "Vilkår og betingelser for registrering, vist på en side som er lenket til i "
 "registreringsskjemaet"
+
+msgid ""
+"This content can only be accessed once. Please read carefully before "
+"proceeding"
+msgstr ""
+"Dette innholdet kan bare åpnes én gang. Vennligst les nøye før du fortsetter"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

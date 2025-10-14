@@ -1,0 +1,156 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{{ content.name }}">
+        <meta name="keywords" content="">
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        <meta http-equiv="Cache-Control"
+              content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <title>{% trans "Access Confirmation" %} - {{ content.name }}</title>
+        <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}">
+        <style>
+            .onetime-confirmation {
+                max-width: 600px;
+                margin: 50px auto;
+                padding: 30px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                text-align: center;
+            }
+
+            .onetime-confirmation h1 {
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            .onetime-confirmation .content-info {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 5px;
+                margin: 20px 0;
+            }
+
+            .warning-box {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 5px;
+                padding: 20px;
+                margin: 20px 0;
+            }
+
+            .warning-box h3 {
+                color: #856404;
+                margin-top: 0;
+            }
+
+            .warning-box ul {
+                text-align: left;
+                margin: 10px 0;
+            }
+
+            .confirmation-buttons {
+                margin-top: 30px;
+            }
+
+            .btn-confirm {
+                background: #007bff;
+                color: white;
+                padding: 15px 30px;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                margin: 0 10px;
+                transition: background-color 0.3s;
+            }
+
+            .btn-confirm:hover {
+                background: #0056b3;
+            }
+
+            .btn-cancel {
+                background: #6c757d;
+                color: white;
+                padding: 15px 30px;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                margin: 0 10px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .btn-cancel:hover {
+                background: #545b62;
+                text-decoration: none;
+                color: white;
+            }
+
+            .inline-form {
+                display: inline;
+            }
+
+            .onetime-info-footer {
+                margin-top: 30px;
+                font-size: 0.9em;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body class="onetime-body">
+        <div class="onetime-confirmation">
+            <h1>{{ content.name }}</h1>
+            <div class="content-info">
+                {% if content.description %}
+                    <p>
+                        <strong>{% trans "Description" %}:</strong> {{ content.description }}
+                    </p>
+                {% endif %}
+                {% if content.duration %}
+                    <p>
+                        <strong>{% trans "Duration" %}:</strong> {{ content.duration|floatformat:0 }} {% trans "seconds" %}
+                    </p>
+                {% endif %}
+                <p>
+                    <strong>{% trans "Type" %}:</strong>
+                    {% if content.content_type|slice:":5" == "video" %}
+                        {% trans "Video" %}
+                    {% elif content.content_type|slice:":5" == "audio" %}
+                        {% trans "Audio" %}
+                    {% else %}
+                        {% trans "Media" %}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="warning-box">
+                <h3>⚠️ {% trans "One-Time Access Warning" %}</h3>
+                <p>{% trans "This content can only be accessed once. Please read carefully before proceeding" %}:</p>
+                <ul>
+                    <li>{% trans "Once you click 'Access Content', this link will be permanently consumed" %}</li>
+                    <li>{% trans "You will not be able to use this link again after accessing the content" %}</li>
+                    <li>{% trans "If you close the page after accessing, you will lose access forever" %}</li>
+                    <li>{% trans "Make sure you have time to watch/listen to the content now" %}</li>
+                    <li>{% trans "Contact the organizers if you need a new access link later" %}</li>
+                </ul>
+            </div>
+            <div class="confirmation-buttons">
+                <form method="post" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-confirm">{% trans "I Understand - Access Content" %}</button>
+                </form>
+                <a href="#" onclick="history.back(); return false;" class="btn-cancel">{% trans "Cancel" %}</a>
+            </div>
+            <div class="onetime-info onetime-info-footer">
+                <p>{% trans "This content is protected and cannot be downloaded or recorded" %}.</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -290,6 +290,9 @@ msgstr "Varning"
 msgid "Alias"
 msgstr "Alias"
 
+msgid "Audio"
+msgstr "Ljud"
+
 msgid "Avoid"
 msgstr "Undvik"
 
@@ -350,6 +353,9 @@ msgstr "Föremål"
 
 msgid "Login"
 msgstr "Inloggning"
+
+msgid "Media"
+msgstr "Media"
 
 msgid "Money"
 msgstr "Pengar"
@@ -476,6 +482,9 @@ msgstr "Svar"
 
 msgid "Badges"
 msgstr "Badges"
+
+msgid "Cancel"
+msgstr "Avbryt"
 
 msgid "Causal"
 msgstr "Causale"
@@ -923,6 +932,9 @@ msgstr "Px används"
 
 msgid "options"
 msgstr "alternativ"
+
+msgid "seconds"
+msgstr "sekunder"
 
 msgid "website"
 msgstr "webbplats"
@@ -3101,6 +3113,9 @@ msgstr "senast den sista"
 msgid "global preferences"
 msgstr "globala preferenser"
 
+msgid "Access Confirmation"
+msgstr "Bekräftelse av åtkomst"
+
 msgid "Access Information:"
 msgstr "Tillgång till information:"
 
@@ -3752,6 +3767,9 @@ msgstr "Lägsta antal röster"
 msgid "Move registration event"
 msgstr "Flytta registreringshändelse"
 
+msgid "One-Time Access Warning"
+msgstr "Engångstillgång Varning"
+
 msgid "Please check them below"
 msgstr "Vänligen kontrollera dem nedan"
 
@@ -4221,6 +4239,9 @@ msgstr "Skapa och hantera evenemang här"
 
 msgid "Date of issue of the document"
 msgstr "Datum för utfärdande av dokumentet"
+
+msgid "I Understand - Access Content"
+msgstr "Jag förstår - Få tillgång till innehåll"
 
 msgid "Indicate the outflow category"
 msgstr "Ange den kategori inom vilken produktionen räknas"
@@ -6277,6 +6298,9 @@ msgstr "när de har godkänts, tilldelas motsvarande belopp som"
 msgid "Allows you to copy any element directly from another event"
 msgstr "Gör det möjligt att kopiera ett element direkt från en annan händelse"
 
+msgid "Contact the organizers if you need a new access link later"
+msgstr "Kontakta arrangörerna om du behöver en ny accesslänk senare"
+
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Vill du tilldela tecken med hjälp av en casting-algoritm"
 
@@ -6299,6 +6323,9 @@ msgstr "Anger de sessioner för vilka rabatten är tillgänglig"
 
 msgid "Let us know if you encounter any issues or need assistance"
 msgstr "Låt oss veta om du stöter på några problem eller behöver hjälp"
+
+msgid "Make sure you have time to watch/listen to the content now"
+msgstr "Se till att du har tid att titta/lyssna på innehållet nu"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Hantera utlägg som laddats upp av medarbetare och godkänna dem"
@@ -6534,6 +6561,9 @@ msgstr "Valfri notering om denna token (t.ex. mottagarens namn, syfte)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Ange specifika värden för konfiguration av evenemangets funktioner"
+
+msgid "This content is protected and cannot be downloaded or recorded"
+msgstr "Detta innehåll är skyddat och kan inte laddas ner eller spelas in"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Vi ber dig att betala det belopp som begärs för nästa delbetalning"
@@ -6811,6 +6841,11 @@ msgstr ""
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 "Om markerad, visar deltagarna historiken för de preferenser som angetts"
+
+msgid "If you close the page after accessing, you will lose access forever"
+msgstr ""
+"Om du stänger sidan efter att du har öppnat den förlorar du åtkomsten för "
+"alltid"
 
 msgid "Indicate an organization contact address for sending communications"
 msgstr "Ange en kontaktadress för organisationen för att skicka meddelanden"
@@ -7098,6 +7133,12 @@ msgstr ""
 "Hantera betalningar från deltagare för att täcka registreringsavgiften"
 
 msgid ""
+"Once you click 'Access Content', this link will be permanently consumed"
+msgstr ""
+"När du klickar på \"Access Content\" kommer den här länken att vara "
+"permanent förbrukad"
+
+msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr ""
 "Endast gemener och siffror är tillåtna, inga mellanslag eller symboler"
@@ -7121,6 +7162,12 @@ msgid ""
 msgstr ""
 "På den här sidan finns en sammanfattning av alla utgifter som skickats in av"
 " medarbetare"
+
+msgid ""
+"You will not be able to use this link again after accessing the content"
+msgstr ""
+"Du kommer inte att kunna använda den här länken igen efter att du har fått "
+"tillgång till innehållet"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
@@ -7752,6 +7799,11 @@ msgid ""
 msgstr ""
 "Villkor för registrering, som visas på en sida som är länkad i "
 "registreringsformuläret"
+
+msgid ""
+"This content can only be accessed once. Please read carefully before "
+"proceeding"
+msgstr "Detta innehåll kan endast nås en gång. Läs noga innan du fortsätter"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
