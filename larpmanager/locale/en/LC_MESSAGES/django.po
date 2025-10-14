@@ -9359,6 +9359,9 @@ msgstr ""
 msgid "Token not initialized"
 msgstr ""
 
+msgid "Token expired"
+msgstr ""
+
 msgid "Content unavailable"
 msgstr ""
 

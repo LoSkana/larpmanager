@@ -2242,6 +2242,9 @@ msgstr "Ticketvuller"
 msgid "Ticket chosen"
 msgstr "Geselecteerd ticket"
 
+msgid "Token expired"
+msgstr "Token verlopen"
+
 msgid "Total members"
 msgstr "Totaal aantal leden"
 

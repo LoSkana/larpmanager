@@ -2242,6 +2242,9 @@ msgstr "Billettfyller"
 msgid "Ticket chosen"
 msgstr "Billett valgt"
 
+msgid "Token expired"
+msgstr "Token utløpt"
+
 msgid "Total members"
 msgstr "Totalt antall medlemmer"
 

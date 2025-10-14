@@ -109,4 +109,4 @@ class LarpManagerTicketAdmin(DefModelAdmin):
 
 @admin.register(PublisherApiKey)
 class PublisherApiKeyAdmin(DefModelAdmin):
-    list_display = ("name", "active", "last_used", "usage_count")
+    list_display = ("name", "key", "active", "last_used", "usage_count")
