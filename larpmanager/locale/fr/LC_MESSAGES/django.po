@@ -290,6 +290,9 @@ msgstr "Alerte"
 msgid "Alias"
 msgstr "Alias"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Avoid"
 msgstr "Éviter"
 
@@ -350,6 +353,9 @@ msgstr "Articles"
 
 msgid "Login"
 msgstr "Connexion"
+
+msgid "Media"
+msgstr "Les médias"
 
 msgid "Money"
 msgstr "L'argent"
@@ -476,6 +482,9 @@ msgstr "Réponse"
 
 msgid "Badges"
 msgstr "Badges"
+
+msgid "Cancel"
+msgstr "Annuler"
 
 msgid "Causal"
 msgstr "Causale"
@@ -923,6 +932,9 @@ msgstr "Px utilisé"
 
 msgid "options"
 msgstr "options"
+
+msgid "seconds"
+msgstr "secondes"
 
 msgid "website"
 msgstr "site web"
@@ -3101,6 +3113,9 @@ msgstr "avant la date limite de"
 msgid "global preferences"
 msgstr "les préférences mondiales"
 
+msgid "Access Confirmation"
+msgstr "Confirmation d'accès"
+
 msgid "Access Information:"
 msgstr "Informations sur l'accès :"
 
@@ -3752,6 +3767,9 @@ msgstr "Nombre minimum de votes"
 msgid "Move registration event"
 msgstr "Déménagement de l'événement d'enregistrement"
 
+msgid "One-Time Access Warning"
+msgstr "Avertissement relatif à l'accès unique"
+
 msgid "Please check them below"
 msgstr "Veuillez les consulter ci-dessous"
 
@@ -4221,6 +4239,9 @@ msgstr "Créer et gérer des événements ici"
 
 msgid "Date of issue of the document"
 msgstr "Date de délivrance du document"
+
+msgid "I Understand - Access Content"
+msgstr "Je comprends - Accéder au contenu"
 
 msgid "Indicate the outflow category"
 msgstr "Indiquer la catégorie dans laquelle la production est comptabilisée"
@@ -6333,6 +6354,11 @@ msgstr ""
 "Permet de copier n'importe quel élément directement à partir d'un autre "
 "événement"
 
+msgid "Contact the organizers if you need a new access link later"
+msgstr ""
+"Contactez les organisateurs si vous avez besoin d'un nouveau lien d'accès "
+"plus tard"
+
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr ""
 "Souhaitez-vous attribuer des caractères à l'aide d'un algorithme de casting"
@@ -6361,6 +6387,10 @@ msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 "Faites-nous savoir si vous rencontrez des problèmes ou si vous avez besoin "
 "d'aide"
+
+msgid "Make sure you have time to watch/listen to the content now"
+msgstr ""
+"Assurez-vous d'avoir le temps de regarder/écouter le contenu dès maintenant"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr ""
@@ -6628,6 +6658,9 @@ msgid "Set specific values for configuration of features of the event"
 msgstr ""
 "Définir des valeurs spécifiques pour la configuration des caractéristiques "
 "de l'événement"
+
+msgid "This content is protected and cannot be downloaded or recorded"
+msgstr "Ce contenu est protégé et ne peut être téléchargé ou enregistré"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr ""
@@ -6954,6 +6987,11 @@ msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 "Si cette option est cochée, elle montre aux participants l'historique des "
 "préférences saisies"
+
+msgid "If you close the page after accessing, you will lose access forever"
+msgstr ""
+"Si vous fermez la page après avoir accédé au site, vous perdrez l'accès pour"
+" toujours"
 
 msgid "Indicate an organization contact address for sending communications"
 msgstr ""
@@ -7291,6 +7329,12 @@ msgstr ""
 "d'inscription"
 
 msgid ""
+"Once you click 'Access Content', this link will be permanently consumed"
+msgstr ""
+"Une fois que vous aurez cliqué sur \"Accéder au contenu\", ce lien sera "
+"définitivement consommé"
+
+msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr ""
 "Seuls les minuscules et les chiffres sont autorisés, sans espaces ni "
@@ -7316,6 +7360,10 @@ msgid ""
 msgstr ""
 "Cette page fournit un résumé de toutes les dépenses soumises par les "
 "collaborateurs"
+
+msgid ""
+"You will not be able to use this link again after accessing the content"
+msgstr "Vous ne pourrez plus utiliser ce lien après avoir accédé au contenu"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
@@ -7995,6 +8043,13 @@ msgid ""
 msgstr ""
 "Conditions d'inscription, affichées sur une page liée au formulaire "
 "d'inscription"
+
+msgid ""
+"This content can only be accessed once. Please read carefully before "
+"proceeding"
+msgstr ""
+"Ce contenu n'est accessible qu'une seule fois. Veuillez lire attentivement "
+"avant de poursuivre"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

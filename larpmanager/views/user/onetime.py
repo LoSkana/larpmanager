@@ -72,7 +72,7 @@ def file_iterator(file_object, chunk_size=8192, start_pos=None, max_length=None)
 
 
 @never_cache
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def onetime_access(request, token):
     """
     Public view to access one-time content via token.
@@ -120,15 +120,28 @@ def onetime_access(request, token):
             },
         )
 
-    # Mark token as used and log access information
-    member = request.user.member if request.user.is_authenticated and hasattr(request.user, "member") else None
-    access_token.mark_as_used(request=request, member=member)
+    # Handle POST request (user confirmed access)
+    if request.method == "POST":
+        # Mark token as used and log access information
+        member = request.user.member if request.user.is_authenticated and hasattr(request.user, "member") else None
+        access_token.mark_as_used(request=request, member=member)
 
-    # Render video player page
+        # Render video player page
+        content = access_token.content
+        return render(
+            request,
+            "larpmanager/event/onetime/player.html",
+            {
+                "content": content,
+                "token": token,
+            },
+        )
+
+    # Handle GET request - show confirmation page
     content = access_token.content
     return render(
         request,
-        "larpmanager/event/onetime/player.html",
+        "larpmanager/event/onetime/confirm.html",
         {
             "content": content,
             "token": token,

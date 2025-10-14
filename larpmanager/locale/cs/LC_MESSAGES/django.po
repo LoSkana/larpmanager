@@ -290,6 +290,9 @@ msgstr "Upozornění"
 msgid "Alias"
 msgstr "Alias"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Avoid"
 msgstr "Vyhněte se"
 
@@ -350,6 +353,9 @@ msgstr "Položky"
 
 msgid "Login"
 msgstr "Přihlášení"
+
+msgid "Media"
+msgstr "Média"
 
 msgid "Money"
 msgstr "Peníze"
@@ -476,6 +482,9 @@ msgstr "Odpověď"
 
 msgid "Badges"
 msgstr "Odznaky"
+
+msgid "Cancel"
+msgstr "Zrušit"
 
 msgid "Causal"
 msgstr "Causale"
@@ -923,6 +932,9 @@ msgstr "Použité Px"
 
 msgid "options"
 msgstr "možnosti"
+
+msgid "seconds"
+msgstr "sekundy"
 
 msgid "website"
 msgstr "webové stránky"
@@ -3101,6 +3113,9 @@ msgstr "do termínu"
 msgid "global preferences"
 msgstr "globální preference"
 
+msgid "Access Confirmation"
+msgstr "Potvrzení přístupu"
+
 msgid "Access Information:"
 msgstr "Přístupové informace:"
 
@@ -3752,6 +3767,9 @@ msgstr "Minimální počet hlasů"
 msgid "Move registration event"
 msgstr "Přesun registrační události"
 
+msgid "One-Time Access Warning"
+msgstr "Upozornění na jednorázový přístup"
+
 msgid "Please check them below"
 msgstr "Podívejte se na ně níže"
 
@@ -4221,6 +4239,9 @@ msgstr "Zde můžete vytvářet a spravovat události"
 
 msgid "Date of issue of the document"
 msgstr "Datum vydání dokumentu"
+
+msgid "I Understand - Access Content"
+msgstr "Rozumím - Přístup k obsahu"
 
 msgid "Indicate the outflow category"
 msgstr "Uveďte kategorii, do které se výstup započítává"
@@ -6279,6 +6300,10 @@ msgstr "po schválení jsou příslušné částky přiděleny jako"
 msgid "Allows you to copy any element directly from another event"
 msgstr "Umožňuje zkopírovat libovolný prvek přímo z jiné události"
 
+msgid "Contact the organizers if you need a new access link later"
+msgstr ""
+"Pokud potřebujete nový přístupový odkaz později, kontaktujte organizátory"
+
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Chcete přiřadit znaky pomocí algoritmu obsazování"
 
@@ -6302,6 +6327,9 @@ msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 "Dejte nám vědět, pokud narazíte na nějaké problémy nebo budete potřebovat "
 "pomoc"
+
+msgid "Make sure you have time to watch/listen to the content now"
+msgstr "Ujistěte se, že máte čas sledovat/poslouchat obsah nyní"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Správa výdajů nahraných zaměstnanci a jejich schvalování"
@@ -6525,6 +6553,9 @@ msgstr "Nepovinná poznámka o tomto tokenu (např. jméno příjemce, účel)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Nastavení specifických hodnot pro konfiguraci funkcí události"
+
+msgid "This content is protected and cannot be downloaded or recorded"
+msgstr "Tento obsah je chráněn a nelze jej stahovat ani nahrávat"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku"
@@ -6781,6 +6812,9 @@ msgstr "Potvrzuji, že moje tvář a jméno jsou v dokumentu zřetelně viditeln
 msgid "If checked, shows participants the histories of preferences entered"
 msgstr ""
 "Pokud je zaškrtnuto, zobrazí se účastníkům historie zadaných preferencí"
+
+msgid "If you close the page after accessing, you will lose access forever"
+msgstr "Pokud stránku po přístupu zavřete, ztratíte k ní navždy přístup"
 
 msgid "Indicate an organization contact address for sending communications"
 msgstr "Uveďte kontaktní adresu organizace pro zasílání sdělení"
@@ -7060,6 +7094,12 @@ msgid ""
 msgstr "Správa plateb provedených účastníky na pokrytí registračního poplatku"
 
 msgid ""
+"Once you click 'Access Content', this link will be permanently consumed"
+msgstr ""
+"Po kliknutí na tlačítko \"Přístup k obsahu\" bude tento odkaz trvale "
+"spotřebován"
+
+msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr "Povoleny jsou pouze malé znaky a čísla, žádné mezery ani symboly"
 
@@ -7081,6 +7121,10 @@ msgid ""
 "This page provides a summary of all expenses submitted by collaborators"
 msgstr ""
 "Na této stránce najdete přehled všech výdajů předložených spolupracovníky"
+
+msgid ""
+"You will not be able to use this link again after accessing the content"
+msgstr "Po přístupu k obsahu již nebudete moci tento odkaz použít"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
@@ -7684,6 +7728,13 @@ msgid ""
 "form"
 msgstr ""
 "Podmínky registrace uvedené na stránce s odkazem v registračním formuláři"
+
+msgid ""
+"This content can only be accessed once. Please read carefully before "
+"proceeding"
+msgstr ""
+"K tomuto obsahu lze přistupovat pouze jednou. Před pokračováním si prosím "
+"pozorně přečtěte"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

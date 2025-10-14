@@ -290,6 +290,9 @@ msgstr "Waarschuwing"
 msgid "Alias"
 msgstr "Alias"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Avoid"
 msgstr "Vermijd"
 
@@ -350,6 +353,9 @@ msgstr "Items"
 
 msgid "Login"
 msgstr "Inloggen"
+
+msgid "Media"
+msgstr "Media"
 
 msgid "Money"
 msgstr "Geld"
@@ -476,6 +482,9 @@ msgstr "Antwoord"
 
 msgid "Badges"
 msgstr "Badges"
+
+msgid "Cancel"
+msgstr "Annuleren"
 
 msgid "Causal"
 msgstr "Oorzaak"
@@ -923,6 +932,9 @@ msgstr "Gebruikte Px"
 
 msgid "options"
 msgstr "opties"
+
+msgid "seconds"
+msgstr "seconden"
 
 msgid "website"
 msgstr "website"
@@ -3101,6 +3113,9 @@ msgstr "voor de deadline van"
 msgid "global preferences"
 msgstr "globale voorkeuren"
 
+msgid "Access Confirmation"
+msgstr "Toegangsbevestiging"
+
 msgid "Access Information:"
 msgstr "Toegangsinformatie:"
 
@@ -3752,6 +3767,9 @@ msgstr "Minimum aantal stemmen"
 msgid "Move registration event"
 msgstr "Verhuis registratie evenement"
 
+msgid "One-Time Access Warning"
+msgstr "Waarschuwing voor eenmalige toegang"
+
 msgid "Please check them below"
 msgstr "Bekijk ze hieronder"
 
@@ -4221,6 +4239,9 @@ msgstr "Hier evenementen maken en beheren"
 
 msgid "Date of issue of the document"
 msgstr "Datum van uitgifte van het document"
+
+msgid "I Understand - Access Content"
+msgstr "Ik begrijp het - Toegang tot inhoud"
 
 msgid "Indicate the outflow category"
 msgstr "Geef de categorie aan waarbinnen de output wordt geteld"
@@ -6297,6 +6318,11 @@ msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Hiermee kun je elk element rechtstreeks uit een andere gebeurtenis kopiëren"
 
+msgid "Contact the organizers if you need a new access link later"
+msgstr ""
+"Neem contact op met de organisatoren als je later een nieuwe toegangslink "
+"nodig hebt"
+
 msgid "Do you want to assign characters using a casting algorithm"
 msgstr "Wil je tekens toewijzen met een gietalgoritme"
 
@@ -6322,6 +6348,9 @@ msgstr "Geeft de sessies aan waarvoor de korting beschikbaar is"
 
 msgid "Let us know if you encounter any issues or need assistance"
 msgstr "Laat het ons weten als je problemen ondervindt of hulp nodig hebt"
+
+msgid "Make sure you have time to watch/listen to the content now"
+msgstr "Zorg dat je nu tijd hebt om de inhoud te bekijken/beluisteren"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Beheer uitgaven die door medewerkers zijn geüpload en keur ze goed"
@@ -6573,6 +6602,9 @@ msgid "Set specific values for configuration of features of the event"
 msgstr ""
 "Specifieke waarden instellen voor de configuratie van kenmerken van de "
 "gebeurtenis"
+
+msgid "This content is protected and cannot be downloaded or recorded"
+msgstr "Deze inhoud is beschermd en kan niet worden gedownload of opgenomen"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
@@ -6881,6 +6913,10 @@ msgstr ""
 "Als deze optie is ingeschakeld, worden de ingevoerde voorkeuren aan de "
 "deelnemers getoond"
 
+msgid "If you close the page after accessing, you will lose access forever"
+msgstr ""
+"Als je de pagina sluit na het openen, verlies je voor altijd de toegang"
+
 msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 "Geef een contactadres van de organisatie op voor het verzenden van "
@@ -7188,6 +7224,12 @@ msgid ""
 msgstr "Betalingen van deelnemers beheren om het inschrijfgeld te dekken"
 
 msgid ""
+"Once you click 'Access Content', this link will be permanently consumed"
+msgstr ""
+"Zodra u op 'Toegang tot inhoud' klikt, zal deze link permanent worden "
+"geconsumeerd"
+
+msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr ""
 "Alleen kleine letters en cijfers zijn toegestaan, geen spaties of symbolen"
@@ -7213,6 +7255,12 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van alle uitgaven die door medewerkers zijn "
 "ingediend"
+
+msgid ""
+"You will not be able to use this link again after accessing the content"
+msgstr ""
+"Je zult deze link niet meer kunnen gebruiken nadat je toegang hebt gekregen "
+"tot de inhoud"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
@@ -7891,6 +7939,13 @@ msgid ""
 msgstr ""
 "Inschrijvingsvoorwaarden, weergegeven op een pagina waarnaar wordt verwezen "
 "in het inschrijvingsformulier"
+
+msgid ""
+"This content can only be accessed once. Please read carefully before "
+"proceeding"
+msgstr ""
+"Deze inhoud is slechts eenmaal toegankelijk. Lees aandachtig voordat u "
+"verder gaat"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
