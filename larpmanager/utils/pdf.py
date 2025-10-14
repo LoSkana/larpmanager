@@ -24,6 +24,7 @@ import re
 import shutil
 import time
 from datetime import datetime, timedelta, timezone
+from typing import Any
 
 import lxml.etree
 import pdfkit
@@ -703,54 +704,82 @@ def replace_data(path, char):
         file.write(filedata)
 
 
-def update_content(ctx, working_dir, zip_dir, char, aux_template):
+def update_content(ctx: Any, working_dir: str, zip_dir: str, char: Any, aux_template: str) -> None:
     """Update PDF content for character sheets.
 
     Modifies LibreOffice document content with character data for PDF
     generation, handling template replacement and content formatting.
+
+    Args:
+        ctx: Context object for processing
+        working_dir: Working directory path for temporary files
+        zip_dir: Directory containing extracted ODT files
+        char: Character object containing data for replacement
+        aux_template: Auxiliary template identifier
+
+    Raises:
+        ValueError: If required XML elements are not found in document
     """
-    # ## NOW CONTENT
+    # Update content.xml with character data
     content = os.path.join(zip_dir, "content.xml")
     replace_data(content, char)
+
+    # Parse content document and get template elements
     doc = lxml.etree.parse(content)
     elements = get_odt_content(ctx, working_dir, aux_template)
 
+    # Find and clear automatic styles section
     styles_elements = doc.xpath('//*[local-name()="automatic-styles"]')
     if not styles_elements:
         raise ValueError("automatic-styles element not found in content.xml")
+
     styles = styles_elements[0]
+    # Remove existing child elements from styles
     for ch in styles.getchildren():
         styles.remove(ch)
+
+    # Add new automatic styles, removing master-page-name attributes
     for ch in elements["auto"]:
         master_page = None
         for k in ch.attrib.keys():
             if clean_tag(k) == "master-page-name":
                 master_page = k
+
+        # Remove master-page attribute if found
         if master_page is not None:
             del ch.attrib[master_page]
         styles.append(ch)
 
+    # Find and replace content placeholder with actual content
     cnt = doc.xpath('//*[text()="@content@"]')
     if cnt:
         cnt = cnt[0]
         prnt = cnt.getparent()
         prnt.remove(cnt)
+
+        # Append text elements, skipping sequence declarations
         for e in elements["txt"]:
             if clean_tag(e.tag) == "sequence-decls":
                 continue
             prnt.append(e)
 
+    # Write updated content back to file
     doc.write(content, pretty_print=True)
 
-    # ## NOW STYLE
+    # Update styles.xml with character data
     content = os.path.join(zip_dir, "styles.xml")
     replace_data(content, char)
+
+    # Parse styles document and find styles section
     doc = lxml.etree.parse(content)
     styles_elements = doc.xpath('//*[local-name()="styles"]')
     if not styles_elements:
         raise ValueError("styles element not found in styles.xml")
+
     styles = styles_elements[0]
-    # pprint(styles)
+
+    # Add style elements from template
+    # Note: Commented code shows previous filtering logic for specific styles
     for ch in elements["styles"]:
         # ~ Skip = false
         # ~ if ch.tag.endswith("default-style"):
@@ -762,6 +791,7 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
         # ~ continue
         styles.append(ch)
 
+    # Write updated styles back to file
     doc.write(content, pretty_print=True)
 
 

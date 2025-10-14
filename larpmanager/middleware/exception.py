@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Optional
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -53,16 +54,28 @@ class ExceptionHandlingMiddleware:
     def __call__(self, request):
         return self.get_response(request)
 
-    def process_exception(self, request, exception):
-        """Django middleware exception handler.
+    def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[HttpResponse]:
+        """Process Django middleware exceptions and route to appropriate handlers.
 
-        Routes different exception types to appropriate error pages and handles
-        permission, not found, and other application-specific errors.
+        Args:
+            request: The HTTP request object that triggered the exception
+            exception: The exception instance that was raised
+
+        Returns:
+            HttpResponse object for handled exceptions, None for unhandled exceptions
+
+        Note:
+            This method handles application-specific exceptions by routing them to
+            appropriate error pages or redirect responses. Unhandled exceptions
+            return None to allow Django's default exception handling.
         """
+        # Define exception type to handler mappings for clean separation of concerns
         handlers = [
+            # Permission-related errors - show appropriate error pages
             (PermissionError, lambda ex: render(request, "exception/permission.html")),
             (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
             (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
+            # Run-related errors - show available runs for the current association
             (
                 UnknowRunError,
                 lambda ex: render(
@@ -77,7 +90,9 @@ class ExceptionHandlingMiddleware:
                     },
                 ),
             ),
+            # Feature and access control errors - delegate to specialized handlers
             (FeatureError, lambda ex: self._handle_feature_error(request, ex)),
+            # Registration and signup flow errors - redirect with informative messages
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
@@ -90,6 +105,7 @@ class ExceptionHandlingMiddleware:
                     request, _("This feature is available for non-waiting tickets") + "!", "register", [ex.slug]
                 ),
             ),
+            # Content visibility and access errors
             (
                 HiddenError,
                 lambda ex: self._redirect_with_message(
@@ -100,8 +116,10 @@ class ExceptionHandlingMiddleware:
                     level="warning",
                 ),
             ),
+            # Flow control exceptions - handle redirects and early returns
             (RedirectError, lambda ex: redirect(ex.view)),
             (ReturnNowError, lambda ex: ex.value),
+            # Domain and membership management errors
             (
                 MainPageError,
                 lambda ex: redirect(f"https://{ex.base_domain}/{ex.path or request.path}"),
@@ -112,10 +130,12 @@ class ExceptionHandlingMiddleware:
             ),
         ]
 
+        # Iterate through handlers and process the first matching exception type
         for exc_type, handler in handlers:
             if isinstance(exception, exc_type):
                 return handler(exception)
 
+        # Return None for unhandled exceptions to use Django's default handling
         return None
 
     @staticmethod

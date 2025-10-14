@@ -26,56 +26,72 @@ from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, PaymentChoices
 
 
-def calculate_payment_vat(instance):
+def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     """Compute VAT for a payment based on ticket and options VAT rates.
 
     Calculates VAT for an accounting item payment by splitting the payment
     between ticket amount and options, applying different VAT rates to each.
 
-    Args:
-        instance: AccountingItemPayment instance to compute VAT for
+    The function performs the following steps:
+    1. Validates that VAT feature is enabled and payment is in money
+    2. Calculates previous payments to determine remaining amounts
+    3. Retrieves VAT configuration for tickets and options
+    4. Splits current payment between ticket and options portions
+    5. Updates the payment record with calculated VAT amounts
 
-    Side effects:
-        Updates the instance's VAT field in the database
+    Args:
+        instance: AccountingItemPayment instance to compute VAT for.
+                 Must have valid assoc_id, pay type, reg, and inv attributes.
+
+    Returns:
+        None: Function modifies the instance's VAT fields in the database as a side effect.
+
+    Side Effects:
+        Updates the instance's vat_ticket and vat_options fields in the database.
     """
+    # Early return if VAT feature is not enabled for this association
     if "vat" not in get_assoc_features(instance.assoc_id):
         return
 
+    # Early return if payment is not in money (no VAT calculation needed)
     if instance.pay != PaymentChoices.MONEY:
         return
 
-    # Get total previous payments and transactions for the same member and run
+    # Calculate total amount already paid by this member for this run
+    # This includes previous payments minus any refund transactions
     previous_pays = get_previous_sum(instance, AccountingItemPayment)
     previous_trans = get_previous_sum(instance, AccountingItemTransaction)
     previous_paid = previous_pays - previous_trans
 
-    # Get VAT configuration (e.g. 22 becomes 0.22)
+    # Retrieve VAT rates from association configuration
+    # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
     config_holder = Object()
-
     _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, config_holder)) / 100.0
     _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, config_holder)) / 100.0
 
-    # Determine the full ticket amount (either from pay_what or ticket price)
+    # Calculate total ticket cost including both base price and custom amounts
     ticket_total = 0
     if instance.reg.pay_what is not None:
         ticket_total += instance.reg.pay_what
     if instance.reg.ticket:
         ticket_total += instance.reg.ticket.price
 
-    # Check transaction for this payment
+    # Determine net payment amount after accounting for refund transactions
     paid = instance.value
     que = AccountingItemTransaction.objects.filter(inv=instance.inv)
     for trans in que:
         paid -= trans.value
 
-    # Compute how much of the ticket is still unpaid
+    # Calculate how much of the ticket portion remains unpaid
+    # This determines how to split the current payment
     remaining_ticket = max(0, ticket_total - previous_paid)
 
-    # Split the current payment value between ticket and options
+    # Split current payment between ticket portion and options portion
+    # Ticket portion is paid first, remainder goes to options
     quota_ticket = float(min(paid, remaining_ticket))
     quota_options = float(paid) - float(quota_ticket)
 
-    # Compute VAT based on the split and respective rates
+    # Update database with calculated VAT amounts for each portion
     updates = {"vat_ticket": quota_ticket, "vat_options": quota_options}
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 

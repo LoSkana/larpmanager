@@ -1,6 +1,6 @@
 #  LarpManager
 
-**LarpManager** is an all-in-one free LARP management platform.
+**LarpManager** is the free LARP management platform.
 
 > Not interested in self-hosting? Start using it right away with the fully hosted and free to use instance on [https://larpmanager.com](https://larpmanager.com)!
 

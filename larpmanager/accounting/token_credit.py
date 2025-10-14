@@ -213,7 +213,7 @@ def update_credit_on_expense_save(expense_item):
     update_token_credit(expense_item, False)
 
 
-def update_token_credit(instance, token=True):
+def update_token_credit(instance, token: bool = True) -> None:
     """Update member's token or credit balance based on accounting items.
 
     Recalculates and updates membership token or credit balance by summing
@@ -221,49 +221,67 @@ def update_token_credit(instance, token=True):
 
     Args:
         instance: Accounting item instance that triggered the update
-        token: If True, update tokens; if False, update credits
+        token: If True, update tokens; if False, update credits. Defaults to True.
 
-    Side effects:
-        Updates membership.tokens or membership.credit
-        Triggers accounting updates on affected registrations
+    Returns:
+        None
+
+    Side Effects:
+        - Updates membership.tokens or membership.credit
+        - Triggers accounting updates on affected registrations
     """
     assoc_id = instance.assoc_id
 
-    # skip if not active
+    # Skip processing if token_credit feature is not active for this association
     if "token_credit" not in get_assoc_features(assoc_id):
         return
 
+    # Get the user's membership for this association
     membership = get_user_membership(instance.member, assoc_id)
 
-    # token case
+    # Handle token balance calculation
     if token:
+        # Get all tokens given to the member
         tk_given = AccountingItemOther.objects.filter(
             member_id=instance.member_id, oth=OtherChoices.TOKEN, assoc_id=assoc_id
         )
+
+        # Get all tokens used by the member
         tk_used = AccountingItemPayment.objects.filter(
             member_id=instance.member_id, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
         )
+
+        # Calculate and save new token balance
         membership.tokens = get_sum(tk_given) - get_sum(tk_used)
         membership.save()
 
-    # credit or refund case
+    # Handle credit balance calculation
     else:
+        # Get all approved expenses for the member
         cr_expenses = AccountingItemExpense.objects.filter(
             member_id=instance.member_id, is_approved=True, assoc_id=assoc_id
         )
+
+        # Get all credits given to the member
         cr_given = AccountingItemOther.objects.filter(
             member_id=instance.member_id, oth=OtherChoices.CREDIT, assoc_id=assoc_id
         )
+
+        # Get all credits used by the member
         cr_used = AccountingItemPayment.objects.filter(
             member_id=instance.member_id, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
         )
+
+        # Get all refunds given to the member
         cr_refunded = AccountingItemOther.objects.filter(
             member_id=instance.member_id, oth=OtherChoices.REFUND, assoc_id=assoc_id
         )
+
+        # Calculate and save new credit balance (expenses + credits - used - refunds)
         membership.credit = get_sum(cr_expenses) + get_sum(cr_given) - (get_sum(cr_used) + get_sum(cr_refunded))
         membership.save()
 
-    # trigger accounting update on registrations with missing remaining
+    # Trigger accounting updates on registrations with incomplete payments
     for reg in get_regs_paying_incomplete(instance.assoc).filter(member_id=instance.member_id):
         reg.save()
 

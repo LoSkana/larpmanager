@@ -21,10 +21,11 @@
 import csv
 import io
 import json
+from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Exists, Model, OuterRef
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -218,22 +219,39 @@ def writing_post(request, ctx, typ, nm):
         raise ReturnNowError(writing_popup(request, ctx, typ))
 
 
-def writing_list(request, ctx, typ, nm):
+def writing_list(request: HttpRequest, ctx: dict[str, Any], typ: type[Model], nm: str) -> HttpResponse:
     """Handle writing list display with POST processing and bulk operations.
 
     Manages writing element lists with form submission processing,
     bulk operations, and proper context preparation for different writing types.
+
+    Args:
+        request: The HTTP request object containing user data and parameters
+        ctx: Context dictionary containing event data and other shared state
+        typ: Model class type for the writing element (Character, Plot, etc.)
+        nm: Name string used for template and URL routing
+
+    Returns:
+        HttpResponse: Rendered template response for the writing list page
+
+    Note:
+        This function modifies the ctx dictionary in-place and handles various
+        writing types through conditional logic and specialized helper functions.
     """
+    # Process any POST data for writing operations
     writing_post(request, ctx, typ, nm)
 
+    # Handle bulk operations on writing elements
     writing_bulk(ctx, request, typ)
 
+    # Extract event from context for query operations
     ev = ctx["event"]
-
     ctx["nm"] = nm
 
+    # Get text fields configuration and writing query results
     text_fields, writing = writing_list_query(ctx, ev, typ)
 
+    # Apply type-specific context modifications based on model type
     if issubclass(typ, Character):
         writing_list_char(ctx)
 
@@ -243,34 +261,45 @@ def writing_list(request, ctx, typ, nm):
     if issubclass(typ, Faction):
         writing_list_faction(ctx)
 
+    # Handle speed LARP specific context setup
     if issubclass(typ, SpeedLarp):
         writing_list_speedlarp(ctx)
 
     if issubclass(typ, Prologue):
         writing_list_prologue(ctx)
 
+    # Configure quest and quest type specific contexts
     if issubclass(typ, Quest):
         writing_list_quest(ctx)
 
     if issubclass(typ, QuestType):
         writing_list_questtype(ctx)
 
+    # Add prerequisites prefetching for ability experience types
     if issubclass(typ, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
+    # Setup writing-specific context if writing elements exist
     if writing:
         # noinspection PyProtectedMember, PyUnresolvedReferences
         ctx["label_typ"] = typ._meta.model_name
         ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
+
+        # Configure upload/download paths if writing type is applicable
         if ctx["writing_typ"]:
             ctx["upload"] = f"{nm}s"
             ctx["download"] = f"{nm}s"
+
+        # Setup progress assignment and text field handling
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
+
+        # Prepare final context elements for rendering
         _prepare_writing_list(ctx, request)
         _setup_char_finder(ctx, typ)
         _get_custom_form(ctx)
 
+    # Render the appropriate template based on the name parameter
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
 
 

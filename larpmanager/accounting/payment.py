@@ -21,6 +21,8 @@
 import math
 import re
 from datetime import datetime
+from decimal import Decimal
+from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
@@ -230,38 +232,50 @@ def update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method):
     return amount
 
 
-def get_payment_form(request: HttpRequest, form, typ: str, ctx: dict, key: str | None = None) -> None:
-    """Create/update payment invoice and prepare gateway form.
+def get_payment_form(request: HttpRequest, form: Any, typ: str, ctx: dict[str, Any], key: str | None = None) -> None:
+    """Create or update payment invoice and prepare gateway-specific form.
+
+    This function handles the complete payment form preparation workflow:
+    extracting payment details from the form, creating or updating payment
+    invoices, and preparing the appropriate gateway forms based on the
+    selected payment method.
 
     Args:
-        request: HTTP request
-        form: Form with payment data
-        typ: Payment type
-        ctx: Context dict to update
-        key: Existing invoice key
+        request: HTTP request object containing user and association data
+        form: Form instance with cleaned payment data (amount, method)
+        typ: Payment type identifier string
+        ctx: Context dictionary to be updated with payment data and forms
+        key: Optional existing invoice key for invoice retrieval
 
-    Side effects:
-        Updates ctx with invoice, forms, and payment details
+    Returns:
+        None: Function modifies ctx dict in place
+
+    Side Effects:
+        - Updates ctx with invoice, payment forms, and method details
+        - May create new PaymentInvoice object in database
+        - Modifies invoice gross fee calculations
     """
-    assoc_id = request.assoc["id"]
+    assoc_id: int = request.assoc["id"]
 
-    # Extract payment details from form
-    amount = form.cleaned_data["amount"]
+    # Extract and store payment details from form data
+    amount: Decimal = form.cleaned_data["amount"]
     ctx["am"] = amount
-    method = form.cleaned_data["method"]
+    method: str = form.cleaned_data["method"]
     ctx["method"] = method
 
-    pay_method = PaymentMethod.objects.get(slug=method)
+    # Retrieve payment method configuration
+    pay_method: PaymentMethod = PaymentMethod.objects.get(slug=method)
 
-    # Try to retrieve existing invoice or create new one
-    invoice = None
+    # Attempt to retrieve existing invoice by key if provided
+    invoice: PaymentInvoice | None = None
     if key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=key, status=PaymentStatus.CREATED)
         except Exception:
+            # Invoice not found or invalid, will create new one
             pass
 
-    # Create new invoice if not found
+    # Create new invoice if existing one not found or invalid
     if not invoice:
         invoice = PaymentInvoice()
         invoice.key = key
@@ -271,33 +285,41 @@ def get_payment_form(request: HttpRequest, form, typ: str, ctx: dict, key: str |
         invoice.member = request.user.member
         invoice.assoc_id = assoc_id
     else:
-        # Update existing invoice
+        # Update existing invoice with current payment method and type
         invoice.method = pay_method
         invoice.typ = typ
 
-    # Update payment details and invoice data
+    # Update payment context and invoice data with current details
     update_payment_details(request, ctx)
     set_data_invoice(request, ctx, invoice, form, assoc_id)
-    amount = update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method)
 
+    # Calculate final amount including fees and update invoice
+    amount = update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method)
     ctx["invoice"] = invoice
 
-    # Prepare gateway-specific forms
+    # Prepare gateway-specific forms based on selected payment method
     if method in {"wire", "paypal_nf"}:
+        # Wire transfer or non-financial PayPal forms
         ctx["wire_form"] = WireInvoiceSubmitForm()
         ctx["wire_form"].set_initial("cod", invoice.cod)
     elif method == "any":
+        # Generic payment method form
         ctx["any_form"] = AnyInvoiceSubmitForm()
         ctx["any_form"].set_initial("cod", invoice.cod)
     elif method == "paypal":
+        # PayPal gateway integration
         get_paypal_form(request, ctx, invoice, amount)
     elif method == "stripe":
+        # Stripe payment gateway
         get_stripe_form(request, ctx, invoice, amount)
     elif method == "sumup":
+        # SumUp payment gateway
         get_sumup_form(request, ctx, invoice, amount)
     elif method == "redsys":
+        # Redsys payment gateway (Spanish banks)
         get_redsys_form(request, ctx, invoice, amount)
     elif method == "satispay":
+        # Satispay mobile payment gateway
         get_satispay_form(request, ctx, invoice, amount)
 
 

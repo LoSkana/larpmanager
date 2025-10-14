@@ -25,7 +25,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Case, Count, IntegerField, Value, When
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -93,30 +93,43 @@ from larpmanager.views.orga.member import send_mail_batch
 
 
 @login_required
-def exe_membership(request):
+def exe_membership(request: HttpRequest) -> HttpResponse:
     """Executive view for managing association memberships.
 
     Displays membership statistics, fee collection status, and membership
-    administration tools for association executives.
+    administration tools for association executives. Shows pending memberships
+    with priority sorting and includes upcoming event registrations.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered template with membership data and statistics.
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership")
 
+    # Get set of member IDs who have paid membership fees for current year
     fees = set(
         AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=datetime.now().year).values_list(
             "member_id", flat=True
         )
     )
 
+    # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
         Run.objects.filter(event__assoc_id=ctx["a_id"], end__gt=datetime.today()).values_list("pk", "search")
     )
 
+    # Get registrations for upcoming runs and group by member
     next_regs_qs = Registration.objects.filter(run__id__in=next_runs.keys()).values_list("run_id", "member_id")
 
+    # Create member_id -> [run_ids] mapping for upcoming registrations
     next_regs = defaultdict(list)
     for run_id, member_id in next_regs_qs:
         next_regs[member_id].append(run_id)
 
+    # Query memberships excluding certain statuses, with priority sorting
     que = (
         Membership.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
@@ -130,21 +143,29 @@ def exe_membership(request):
         )
         .order_by("sort_priority", "-updated")
     )
+
+    # Define fields to extract from membership query
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
     ctx["list"] = []
     ctx["sum"] = {}
+
+    # Process each membership record
     for el in que.values(*values):
         status = el["status"]
+
+        # Mark accepted members with paid fees as "paid" status
         if status == MembershipStatus.ACCEPTED and el["member__id"] in fees:
             el["status"] = "p"
             el["status_display"] = _("Payed")
         else:
             el["status_display"] = MembershipStatus(el["status"]).label
 
+        # Count memberships by status for summary statistics
         if el["status"] not in ctx["sum"]:
             ctx["sum"][el["status"]] = 0
         ctx["sum"][el["status"]] += 1
 
+        # Add upcoming run names for members with registrations
         if el["member__id"] in next_regs:
             el["run_names"] = ", ".join(
                 [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs]
@@ -155,57 +176,81 @@ def exe_membership(request):
 
 
 @login_required
-def exe_membership_evaluation(request, num):
+def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
     """Executive interface for evaluating membership applications.
 
     Handles membership approval/rejection processes and status updates,
     including notifications, duplicate checking, and registration updates
     for approved members.
+
+    Args:
+        request: The HTTP request object
+        num: Primary key of the member to evaluate
+
+    Returns:
+        HttpResponse: Rendered template with membership evaluation form
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership")
 
+    # Get member and their membership status
     member = Member.objects.get(pk=num)
     get_user_membership(member, ctx["a_id"])
 
     if request.method == "POST":
+        # Process membership evaluation form submission
         form = MembershipResponseForm(request.POST)
         if form.is_valid():
             resp = form.cleaned_data["response"]
+
+            # Handle approval or rejection based on form data
             if form.cleaned_data["is_approved"]:
+                # Approve member and send notifications
                 member.membership.status = MembershipStatus.ACCEPTED
                 member.membership.save()
                 notify_membership_approved(member, resp)
                 update_member_registrations(member)
                 messages.success(request, _("Member approved!"))
             else:
+                # Reject member and send notifications
                 member.membership.status = MembershipStatus.EMPTY
                 member.membership.save()
                 notify_membership_reject(member, resp)
                 messages.success(request, _("Member refused!"))
+
             return redirect("exe_membership")
     else:
+        # Initialize empty form for GET requests
         form = MembershipResponseForm()
 
+    # Add member and form to context
     ctx["member"] = member
     ctx["form"] = form
 
+    # Add document path if document exists
     if member.membership.document:
         ctx["doc_path"] = member.membership.get_document_filepath().lower()
 
+    # Add request path if request exists
     if member.membership.request:
         ctx["req_path"] = member.membership.get_request_filepath().lower()
 
+    # Normalize member name and surname for duplicate checking
     normalized_name = normalize_string(member.name)
     normalized_surname = normalize_string(member.surname)
 
+    # Check for existing members with same normalized name/surname
     ctx["member_exists"] = False
     que = Membership.objects.select_related("member").filter(assoc_id=ctx["a_id"])
     que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).exclude(member_id=member.id)
+
+    # Compare normalized names to detect potential duplicates
     for other in que.values_list("member__surname", "member__name"):
         if normalize_string(other[1]) == normalized_name:
             if normalize_string(other[0]) == normalized_surname:
                 ctx["member_exists"] = True
 
+    # Add fiscal code validation if feature is enabled
     if "fiscal_code_check" in ctx["features"]:
         ctx.update(calculate_fiscal_code(member))
 

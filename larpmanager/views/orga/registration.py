@@ -981,36 +981,53 @@ def calculate_age(born, today):
 
 
 @require_POST
-def orga_registration_member(request, s):
+def orga_registration_member(request: HttpRequest, s: str) -> JsonResponse:
     """Handle member registration actions from organizer interface.
 
     Processes member assignment to events and manages registration status
     changes including validation and permission checks.
+
+    Args:
+        request: The HTTP request object containing POST data with member ID
+        s: The event slug identifier
+
+    Returns:
+        JsonResponse: Contains success status and member details HTML if successful,
+                     or error status if member/registration not found
+
+    Raises:
+        ObjectDoesNotExist: When member or registration cannot be found
     """
+    # Check organizer permissions for registration management
     ctx = check_event_permission(request, s, "orga_registrations")
     member_id = request.POST.get("mid")
 
-    # check it's a member
+    # Validate member existence
     try:
         member = Member.objects.get(pk=member_id)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    # check they have a registration it this event
+    # Verify member has registration for this event
     try:
         Registration.objects.filter(member=member, run=ctx["run"]).first()
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
+    # Build member information HTML starting with name and profile
     text = f"<h2>{member.display_real()}</h2>"
 
+    # Add profile image if available
     if member.profile:
         text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
 
+    # Always include email address
     text += f"<p><b>Email</b>: {member.email}</p>"
 
-    # check if the user can see sensitive data
+    # Define fields to exclude from display based on permissions
     exclude = ["profile", "newsletter", "language", "presentation"]
+
+    # Add sensitive data to exclusion list if user lacks permission
     if not has_event_permission(request, ctx, s, "orga_sensitive"):
         exclude.extend(
             [
@@ -1029,20 +1046,22 @@ def orga_registration_member(request, s):
             ]
         )
 
+    # Process and display configured member fields
     member_cls: type[Member] = Member
     member_fields = sorted(request.assoc["members_fields"])
     member_field_correct(member, member_fields)
+
+    # Iterate through each configured field and add to display
     for field_name in member_fields:
-        if not field_name:
+        if not field_name or field_name in exclude:
             continue
 
-        if field_name in exclude:
-            continue
-        # noinspection PyUnresolvedReferences, PyProtectedMember
+        # Get field metadata and value for display
         field_label = member_cls._meta.get_field(field_name).verbose_name
         value = getattr(member, field_name)
-        if not value:
-            continue
-        text += f"<p><b>{field_label}</b>: {value}</p>"
+
+        # Only display fields with actual values
+        if value:
+            text += f"<p><b>{field_label}</b>: {value}</p>"
 
     return JsonResponse({"k": 1, "v": text})

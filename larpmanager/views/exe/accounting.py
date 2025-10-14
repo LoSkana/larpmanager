@@ -662,7 +662,7 @@ def exe_verification(request):
     if request.method == "POST":
         form = UploadElementsForm(request.POST, request.FILES, only_one=True)
         if form.is_valid():
-            counter = invoice_verify(request, ctx, request.FILES["first"])
+            counter = invoice_verify(ctx, request.FILES["first"])
             messages.success(request, _("Verified payments") + "!" + " " + str(counter))
             return redirect("exe_verification")
 

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 import yaml
 from django.core.management.base import BaseCommand
@@ -31,24 +32,28 @@ class Command(BaseCommand):
     help = "Export features to yaml"
 
     # noinspection PyProtectedMember
-    def handle(self, *args: tuple, **options: dict) -> None:
-        """Django management command handler for exporting features and related data.
+    def handle(self, *args: tuple[Any, ...], **options: dict[str, Any]) -> None:
+        """Export features and related data to YAML fixture files.
 
-        Defines export models and their fields for serialization to YAML format,
-        creating comprehensive data dumps for system migration or backup. Exports
-        features, permissions, skins, modules, and payment methods to fixture files.
+        This Django management command exports system configuration data including
+        features, permissions, skins, modules, and payment methods to YAML fixture
+        files for migration or backup purposes.
 
         Args:
-            *args: Positional arguments passed by Django management command framework (unused)
-            **options: Keyword arguments parsed from command line options (unused)
+            *args: Positional arguments from Django management command framework (unused).
+            **options: Command line options from Django management command framework (unused).
 
-        Side effects:
-            Creates YAML fixture files in larpmanager/fixtures/ directory for each
-            model type: skin.yaml, module.yaml, feature.yaml, permission_module.yaml,
-            assoc_permission.yaml, event_permission.yaml, payment_methods.yaml
+        Side Effects:
+            Creates YAML fixture files in larpmanager/fixtures/ directory:
+            - skin.yaml: AssociationSkin configurations
+            - module.yaml: FeatureModule definitions
+            - feature.yaml: Feature configurations
+            - permission_module.yaml: PermissionModule definitions
+            - assoc_permission.yaml: AssocPermission configurations
+            - event_permission.yaml: EventPermission configurations
+            - payment_methods.yaml: PaymentMethod configurations
         """
-        # Define models to export and their respective fields
-        # Each entry maps a fixture filename to (Model class, field tuple)
+        # Define models to export with their respective fields for serialization
         export_models = {
             "skin": (
                 AssociationSkin,
@@ -91,33 +96,42 @@ class Command(BaseCommand):
             "payment_methods": (PaymentMethod, ("name", "slug", "instructions", "fields", "profile")),
         }
 
-        # Process each model type and export to YAML
-        for model, value in export_models.items():
-            typ, fields = value
+        # Process each model type and export to YAML fixture files
+        for model_name, model_config in export_models.items():
+            model_class, field_names = model_config
             data = []
 
-            # Categorize fields by type for appropriate serialization
-            m2m_fields = [f.name for f in typ._meta.many_to_many if f.name in fields]
-            fk_fields = [f.name for f in typ._meta.fields if isinstance(f, ForeignKey) and f.name in fields]
-            img_fields = [f.name for f in typ._meta.fields if isinstance(f, ImageField) and f.name in fields]
-            regular_fields = [
-                f for f in fields if f not in m2m_fields and f not in fk_fields and f not in img_fields and f != "id"
+            # Categorize fields by Django field type for proper serialization handling
+            m2m_fields = [f.name for f in model_class._meta.many_to_many if f.name in field_names]
+            fk_fields = [
+                f.name for f in model_class._meta.fields if isinstance(f, ForeignKey) and f.name in field_names
+            ]
+            img_fields = [
+                f.name for f in model_class._meta.fields if isinstance(f, ImageField) and f.name in field_names
             ]
 
-            # Iterate through all objects and build export data
-            for obj in typ.objects.all().order_by("pk"):
+            # Regular fields are all remaining fields except 'id' which is handled separately
+            regular_fields = [
+                f
+                for f in field_names
+                if f not in m2m_fields and f not in fk_fields and f not in img_fields and f != "id"
+            ]
+
+            # Iterate through all model instances and build fixture data
+            for obj in model_class.objects.all().order_by("pk"):
                 entry_fields = {}
 
-                # Export regular fields directly
+                # Export regular scalar fields with direct value assignment
                 for field in regular_fields:
                     entry_fields[field] = getattr(obj, field)
 
-                # Export foreign keys as ID references
+                # Handle foreign key relationships by extracting slug or string representation
                 for field in fk_fields:
                     rel_obj = getattr(obj, field)
                     if rel_obj is None:
                         entry_fields[field] = None
                     else:
+                        # Try to get slug from related object, fallback to string representation
                         slug_val = getattr(rel_obj, "slug", None)
                         if slug_val is None and hasattr(rel_obj, "get_slug") and callable(rel_obj.get_slug):
                             slug_val = rel_obj.get_slug()
@@ -125,26 +139,27 @@ class Command(BaseCommand):
                             try:
                                 slug_val = str(rel_obj)
                             except Exception:
+                                # Final fallback to foreign key ID
                                 slug_val = getattr(obj, f"{field}_id")
                         entry_fields[field] = slug_val
 
-                # Export image fields as file paths
+                # Handle image fields by storing file path or None
                 for field in img_fields:
                     image = getattr(obj, field)
                     entry_fields[field] = image.name if image else None
 
-                # Export many-to-many fields as lists of IDs
+                # Handle many-to-many relationships as lists of primary keys
                 for field in m2m_fields:
                     entry_fields[field] = list(getattr(obj, field).values_list("pk", flat=True))
 
-                # Build Django fixture format entry
+                # Build Django fixture format entry with model identifier
                 entry = {
-                    "model": typ._meta.app_label + "." + typ._meta.model_name,
+                    "model": f"{model_class._meta.app_label}.{model_class._meta.model_name}",
                     "fields": entry_fields,
                 }
-
                 data.append(entry)
 
-            # Write YAML fixture file with human-readable formatting
-            with open(f"larpmanager/fixtures/{model}.yaml", "w") as f:
+            # Write fixture data to YAML file with readable formatting
+            fixture_path = f"larpmanager/fixtures/{model_name}.yaml"
+            with open(fixture_path, "w") as f:
                 yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)

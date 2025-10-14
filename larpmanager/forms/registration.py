@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import json
+from typing import Any
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -67,28 +68,41 @@ class RegistrationForm(BaseRegistrationForm):
         fields = ("modified",)
         widgets = {"modified": forms.HiddenInput()}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with tickets, questions, and event-specific options.
 
         Sets up form fields for event registration including ticket selection,
         quota management, payment options, and registration questions.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+                     Expected to contain 'params' with 'run' key.
+
+        Returns:
+            None
         """
         super().__init__(*args, **kwargs)
+
+        # Initialize core form state
         self.questions = []
         self.tickets_map = {}
+        self.profiles = {}
+        self.section_descriptions = {}
+        self.ticket = None
+
+        # Extract run and event from parameters
         run = self.params["run"]
         event = run.event
         self.event = event
 
-        self.profiles = {}
-        self.section_descriptions = {}
-
-        self.ticket = None
-
+        # Get registration counts for quota calculations
         reg_counts = get_reg_counts(run)
 
+        # Initialize ticket selection field and get help text
         ticket_help = self.init_ticket(event, reg_counts, run)
 
+        # Determine if registration should be placed in waiting list
         self.waiting_check = (
             self.instance
             and self.instance.ticket
@@ -97,18 +111,21 @@ class RegistrationForm(BaseRegistrationForm):
             and "waiting" in run.status
         )
 
+        # Initialize various form sections
         self.init_quotas(event, run)
-
         self.init_additionals()
 
+        # Setup payment-related fields
         self.init_pay_what(run)
-
         self.init_surcharge(event)
 
+        # Add dynamic registration questions
         self.init_questions(event, reg_counts)
 
+        # Setup friend referral system
         self.init_bring_friend()
 
+        # Append additional help text to ticket field
         self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket):

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -25,7 +26,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.db.models.functions import Length, Substr
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -756,20 +757,37 @@ def orga_writing_excel_submit(request, s, typ):
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
 
 
-def _get_excel_form(request, s, typ, submit=False):
+def _get_excel_form(request: HttpRequest, s: str, typ: str, submit: bool = False) -> dict[str, Any]:
     """Prepare Excel form context for bulk editing operations.
 
     Sets up form data and validation for spreadsheet-based content editing,
     filtering forms to show only the requested question field and preparing
     the context for character, faction, plot, trait, or quest editing.
+
+    Args:
+        request: HTTP request object containing POST data with question and element IDs
+        s: Event slug for permission checking and context setup
+        typ: Type of element being edited (character, faction, plot, trait, quest)
+        submit: Whether this is a form submission (True) or initial load (False)
+
+    Returns:
+        Dict containing form context with filtered fields, question data, and element instance
+
+    Raises:
+        DoesNotExist: If question or element with given IDs don't exist
+        PermissionDenied: If user lacks required permissions for the operation
     """
+    # Check user permissions and setup base context
     ctx = check_event_permission(request, s, f"orga_{typ}s")
     if not submit:
         get_event_cache_all(ctx)
+
+    # Validate writing form type and extract request parameters
     check_writing_form_type(ctx, typ)
     question_id = int(request.POST.get("qid"))
     element_id = int(request.POST.get("eid"))
 
+    # Fetch the writing question with proper filtering
     question = (
         ctx["event"]
         .get_elements(WritingQuestion)
@@ -777,11 +795,13 @@ def _get_excel_form(request, s, typ, submit=False):
         .filter(applicable=ctx["writing_typ"])
         .get(pk=question_id)
     )
+
+    # Setup applicable type context and fetch target element
     ctx["applicable"] = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
     element = ctx["event"].get_elements(ctx["applicable"]).select_related("event").get(pk=element_id)
-
     ctx["elementTyp"] = ctx["applicable"]
 
+    # Map element types to their corresponding form classes
     form_mapping = {
         "character": OrgaCharacterForm,
         "faction": FactionForm,
@@ -790,21 +810,25 @@ def _get_excel_form(request, s, typ, submit=False):
         "quest": QuestForm,
     }
 
+    # Initialize form based on submission state
     form_class = form_mapping.get(typ, OrgaCharacterForm)
     if submit:
         form = form_class(request.POST, request.FILES, ctx=ctx, instance=element)
     else:
         form = form_class(ctx=ctx, instance=element)
 
+    # Determine field key based on question type
     keep_key = f"q{question_id}"
     if question.typ not in BaseQuestionType.get_basic_types():
         keep_key = question.typ
 
+    # Filter form to show only the relevant question field
     if keep_key in form.fields:
         form.fields = {keep_key: form.fields[keep_key]}
     else:
         form.fields = {}
 
+    # Finalize context with form and related objects
     ctx["form"] = form
     ctx["question"] = question
     ctx["element"] = element
