@@ -8856,10 +8856,6 @@ msgstr ""
 msgid "Registrations opening not set"
 msgstr ""
 
-#, python-format
-msgid "Registrations opening at: %(date)s"
-msgstr ""
-
 msgid "Registrations open"
 msgstr ""
 
@@ -8867,6 +8863,10 @@ msgid "Filler registrations"
 msgstr ""
 
 msgid "Waiting list registrations"
+msgstr ""
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
 msgstr ""
 
 msgid "You don't have any events yet"

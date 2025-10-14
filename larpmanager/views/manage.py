@@ -121,13 +121,19 @@ def _get_registration_status(run):
         "external": _("Registrations on external link"),
         "preregister": _("Pre-registration active"),
         "not_set": _("Registrations opening not set"),
-        "future": _("Registrations opening at: %(date)s")
-        % {"date": additional_value.strftime(format_datetime) if additional_value else ""},
         "primary": _("Registrations open"),
         "filler": _("Filler registrations"),
         "waiting": _("Waiting list registrations"),
         "closed": _("Registration closed"),
     }
+
+    # Handle special case for "future" status with datetime formatting
+    if status_code == "future":
+        if additional_value:
+            formatted_date = additional_value.strftime(format_datetime)
+            return _("Registrations opening at: %(date)s") % {"date": formatted_date}
+        else:
+            return _("Registrations opening not set")
 
     return status_messages.get(status_code, _("Registration closed"))
 
