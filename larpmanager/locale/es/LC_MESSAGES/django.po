@@ -2242,6 +2242,9 @@ msgstr "Entrada de relleno"
 msgid "Ticket chosen"
 msgstr "Entrada seleccionada"
 
+msgid "Token expired"
+msgstr "Ficha caducada"
+
 msgid "Total members"
 msgstr "Total de miembros"
 

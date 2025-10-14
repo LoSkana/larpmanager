@@ -2242,6 +2242,9 @@ msgstr "Výplň vstupenek"
 msgid "Ticket chosen"
 msgstr "Vybraná vstupenka"
 
+msgid "Token expired"
+msgstr "Platnost tokenu vypršela"
+
 msgid "Total members"
 msgstr "Celkový počet členů"
 

@@ -25,6 +25,7 @@ from typing import Optional
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, StreamingHttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
@@ -32,23 +33,39 @@ from django.views.decorators.http import require_http_methods
 from larpmanager.models.miscellanea import OneTimeAccessToken
 
 
-def file_iterator(file_object, chunk_size=8192):
+def file_iterator(file_object, chunk_size=8192, start_pos=None, max_length=None):
     """
     Generator to stream file in chunks.
 
     Args:
         file_object: File object to stream
         chunk_size: Size of each chunk in bytes
+        start_pos: Starting position (if None, uses current position)
+        max_length: Maximum bytes to read (if None, reads to EOF)
 
     Yields:
         bytes: Chunks of file data
     """
     try:
-        file_object.seek(0)
+        if start_pos is not None:
+            file_object.seek(start_pos)
+
+        bytes_read = 0
         while True:
-            chunk = file_object.read(chunk_size)
+            # Calculate chunk size for this iteration
+            if max_length is not None:
+                remaining = max_length - bytes_read
+                if remaining <= 0:
+                    break
+                current_chunk_size = min(chunk_size, remaining)
+            else:
+                current_chunk_size = chunk_size
+
+            chunk = file_object.read(current_chunk_size)
             if not chunk:
                 break
+
+            bytes_read += len(chunk)
             yield chunk
     finally:
         file_object.close()
@@ -139,27 +156,7 @@ def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
     Raises:
         Http404: If token is invalid, not initialized, content inactive, or file not found
     """
-    # Validate and retrieve the access token with related content
-    try:
-        access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
-    except ObjectDoesNotExist as err:
-        raise Http404(_("Invalid token")) from err
-
-    # Verify token has been properly initialized
-    if not access_token.used:
-        raise Http404(_("Token not initialized"))
-
-    # Ensure the content is still active and available
-    if not access_token.content.active:
-        raise Http404(_("Content unavailable"))
-
-    content = access_token.content
-
-    # Open the file in binary read mode for streaming
-    try:
-        file = content.file.open("rb")
-    except Exception as err:
-        raise Http404(_("File not found")) from err
+    content, file = _onetime_prepare(token)
 
     # Get total file size for response headers
     file_size = content.file.size
@@ -170,40 +167,93 @@ def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
     if range_header:
         range_match = re.search(r"bytes=(\d+)-(\d*)", range_header)
 
+    # Determine the correct content type for MP4 videos
+    content_type = content.content_type
+    if not content_type and content.file.name:
+        filename_lower = content.file.name.lower()
+        if filename_lower.endswith(".mp4"):
+            content_type = "video/mp4"
+        elif filename_lower.endswith(".webm"):
+            content_type = "video/webm"
+        elif filename_lower.endswith(".mp3"):
+            content_type = "audio/mpeg"
+        elif filename_lower.endswith(".ogg"):
+            content_type = "audio/ogg"
+        else:
+            content_type = "application/octet-stream"
+
     # Handle partial content request (HTTP 206) for range requests
     if range_match:
         first_byte = int(range_match.group(1))
         last_byte = int(range_match.group(2)) if range_match.group(2) else file_size - 1
 
-        # Seek to requested position and calculate content length
-        file.seek(first_byte)
+        # Validate range
+        if first_byte >= file_size or last_byte >= file_size or first_byte > last_byte:
+            file.close()
+            response = StreamingHttpResponse(status=416)  # Range Not Satisfiable
+            response["Content-Range"] = f"bytes */{file_size}"
+            return response
+
         length = last_byte - first_byte + 1
 
         # Create partial content response with appropriate headers
         response = StreamingHttpResponse(
-            file_iterator(file, chunk_size=8192 * 16),
+            file_iterator(file, chunk_size=8192 * 16, start_pos=first_byte, max_length=length),
             status=206,
-            content_type=content.content_type or "application/octet-stream",
+            content_type=content_type,
         )
         response["Content-Length"] = str(length)
         response["Content-Range"] = f"bytes {first_byte}-{last_byte}/{file_size}"
     else:
         # Handle full file request (HTTP 200)
         response = StreamingHttpResponse(
-            file_iterator(file, chunk_size=8192 * 16),
-            content_type=content.content_type or "application/octet-stream",
+            file_iterator(file, chunk_size=8192 * 16, start_pos=0),
+            content_type=content_type,
         )
         response["Content-Length"] = str(file_size)
 
-    # Apply security headers to prevent caching and unauthorized access
-    response["Cache-Control"] = "no-cache, no-store, must-revalidate, private"
-    response["Pragma"] = "no-cache"
-    response["Expires"] = "0"
+    # Apply headers optimized for video streaming
+    response["Cache-Control"] = "private"  # Allow browser caching for better streaming
     response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
     response["Accept-Ranges"] = "bytes"
+
+    # Add CORS headers for video streaming
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET"
+    response["Access-Control-Allow-Headers"] = "Range"
+
+    # Ensure proper content-encoding for video
+    response["X-Content-Type-Options"] = "nosniff"
 
     # Set content disposition header with original filename
     filename = os.path.basename(content.file.name)
     response["Content-Disposition"] = f'inline; filename="{filename}"'
 
     return response
+
+
+def _onetime_prepare(token):
+    max_time_use = 3600  # 3600 seconds = 1 hour
+    # Validate and retrieve the access token with related content
+    try:
+        access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
+    except ObjectDoesNotExist as err:
+        raise Http404(_("Invalid token")) from err
+    # Verify token has been properly initialized
+    if not access_token.used:
+        raise Http404(_("Token not initialized"))
+    # Verify token was used within the last hour
+    if access_token.used_at:
+        time_since_used = timezone.now() - access_token.used_at
+        if time_since_used.total_seconds() > max_time_use:
+            raise Http404(_("Token expired"))
+    # Ensure the content is still active and available
+    if not access_token.content.active:
+        raise Http404(_("Content unavailable"))
+    content = access_token.content
+    # Open the file in binary read mode for streaming
+    try:
+        file = content.file.open("rb")
+    except Exception as err:
+        raise Http404(_("File not found")) from err
+    return content, file

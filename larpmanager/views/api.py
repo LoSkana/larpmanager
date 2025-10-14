@@ -30,6 +30,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Event
 from larpmanager.models.member import Log, Member
+from larpmanager.utils.tasks import notify_admins
 
 
 def get_client_ip(request):
@@ -154,6 +155,8 @@ def published_events(request):
         return JsonResponse(response_data)
 
     except Exception as e:
+        notify_admins("error api publisher", "", e)
+
         # Log error access
         if "api_key" in locals():
             log_api_access(api_key, request, 500)

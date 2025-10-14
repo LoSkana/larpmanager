@@ -2242,6 +2242,9 @@ msgstr "Biglietto Filler"
 msgid "Ticket chosen"
 msgstr "Biglietto selezionato"
 
+msgid "Token expired"
+msgstr "Gettone scaduto"
+
 msgid "Total members"
 msgstr "Totale soci"
 
