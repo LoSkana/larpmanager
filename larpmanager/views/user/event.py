@@ -40,6 +40,7 @@ from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
     DevelopStatus,
+    Event,
     EventTextType,
     Run,
 )
@@ -441,7 +442,7 @@ def event(request, s):
         else:
             ctx["past"].append(r)
 
-    ctx["data"] = ctx["event"].show()
+    ctx["event"] = Event.objects.get(pk=ctx["event"].pk)
 
     ctx["no_robots"] = (
         not ctx["run"].development == DevelopStatus.SHOW
