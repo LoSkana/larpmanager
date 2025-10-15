@@ -59,6 +59,17 @@ function prepare_tinymce(key, limit) {
   }
 }
 
+function setUpMaxLength(key, limit, typ) {
+    $('#' + key).on('input', function() {
+        update_count(key, limit, typ);
+    });
+    update_count(key, limit, typ, true);
+
+    if (tinymce_count.includes(typ)) {
+        prepare_tinymce(key, limit);
+    }
+}
+
 function update_count(key, limit, typ, loop) {
     var el = $('#' + key);
     if (simple_count.includes(typ)) {
@@ -91,13 +102,7 @@ window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function(){
 
         {% for key, args in form.max_lengths.items %}
-            $('#' + '{{ key }}').on('input', function() {
-                update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}');
-            });
-            update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}', true);
-
-            if (tinymce_count.includes('{{ args.1 }}'))
-                prepare_tinymce('{{ key }}', {{ args.0 }});
+            setUpMaxLength('{{ key }}', {{ args.0 }}, '{{ args.1 }}');
         {% endfor %}
 
     });

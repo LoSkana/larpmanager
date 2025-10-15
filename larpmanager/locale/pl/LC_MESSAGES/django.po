@@ -3885,6 +3885,9 @@ msgstr "Rejestracja tymczasowa"
 msgid "Regeneration pdf started"
 msgstr "Regeneracja pdf rozpoczęta"
 
+msgid "Relationships max length"
+msgstr "Maksymalna długość relacji"
+
 msgid "Secret registration link"
 msgstr "Tajny link rejestracyjny"
 
@@ -7264,6 +7267,10 @@ msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""
 "Wybierz, które pola powinny otwierać się automatycznie po wyświetleniu listy"
+
+msgid ""
+"Set maximum length on character relationships (default 10000 characters)"
+msgstr "Ustaw maksymalną długość relacji znaków (domyślnie 10000 znaków)"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

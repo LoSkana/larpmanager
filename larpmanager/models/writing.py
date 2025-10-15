@@ -650,7 +650,7 @@ class Relationship(BaseModel):
 
     target = models.ForeignKey(Character, related_name="target", on_delete=models.CASCADE)
 
-    text = HTMLField(max_length=5000)
+    text = HTMLField()
 
     def __str__(self):
         return f"{self.source} {self.target}"

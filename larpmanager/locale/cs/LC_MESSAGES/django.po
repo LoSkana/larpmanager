@@ -3885,6 +3885,9 @@ msgstr "Prozatímní registrace"
 msgid "Regeneration pdf started"
 msgstr "pdf regenerace zahájena"
 
+msgid "Relationships max length"
+msgstr "Maximální délka vztahů"
+
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
 
@@ -7176,6 +7179,10 @@ msgstr ""
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr "Vyberte, která pole se mají automaticky otevřít při zobrazení seznamu"
+
+msgid ""
+"Set maximum length on character relationships (default 10000 characters)"
+msgstr "Nastavení maximální délky znakových vztahů (výchozí 10000 znaků)"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

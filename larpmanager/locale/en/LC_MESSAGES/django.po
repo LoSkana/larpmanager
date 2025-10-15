@@ -1023,6 +1023,13 @@ msgid ""
 "configuration you can select which ones to display at any given time"
 msgstr ""
 
+msgid "Relationships max length"
+msgstr ""
+
+msgid ""
+"Set maximum length on character relationships (default 10000 characters)"
+msgstr ""
+
 msgid "Disable character finder"
 msgstr ""
 
@@ -3982,6 +3989,9 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
+msgid "text length"
+msgstr ""
+
 msgid "How the relationship is described from this character's perspective"
 msgstr ""
 
@@ -4024,9 +4034,6 @@ msgid "Original"
 msgstr ""
 
 msgid "options"
-msgstr ""
-
-msgid "text length"
 msgstr ""
 
 msgid "Confirm"
