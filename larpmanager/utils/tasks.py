@@ -227,18 +227,18 @@ def my_send_simple_mail(
         if run_id:
             run = Run.objects.get(pk=run_id)
             event = run.event
-            email_host_user = event.get_config("mail_server_host_user", "")
+            email_host_user = event.get_config("mail_server_host_user", "", bypass_cache=True)
 
             # Only apply event settings if SMTP host user is configured
             if email_host_user:
                 sender_email = email_host_user
                 sender = f"{clean_sender(event.name)} <{sender_email}>"
                 connection = get_connection(
-                    host=event.get_config("mail_server_host", ""),
-                    port=event.get_config("mail_server_port", ""),
-                    username=event.get_config("mail_server_host_user", ""),
-                    password=event.get_config("mail_server_host_password", ""),
-                    use_tls=event.get_config("mail_server_use_tls", False),
+                    host=event.get_config("mail_server_host", "", bypass_cache=True),
+                    port=event.get_config("mail_server_port", "", bypass_cache=True),
+                    username=event.get_config("mail_server_host_user", "", bypass_cache=True),
+                    password=event.get_config("mail_server_host_password", "", bypass_cache=True),
+                    use_tls=event.get_config("mail_server_use_tls", False, bypass_cache=True),
                 )
                 event_settings = True
 
@@ -247,21 +247,21 @@ def my_send_simple_mail(
             assoc = Association.objects.get(pk=assoc_id)
 
             # Add association main email to BCC if configured
-            if assoc.get_config("mail_cc", False) and assoc.main_mail:
+            if assoc.get_config("mail_cc", False, bypass_cache=True) and assoc.main_mail:
                 bcc.append(assoc.main_mail)
 
             # Apply custom SMTP settings if configured (only if event settings not already applied)
-            email_host_user = assoc.get_config("mail_server_host_user", "")
+            email_host_user = assoc.get_config("mail_server_host_user", "", bypass_cache=True)
             if email_host_user:
                 if not event_settings:
                     sender_email = email_host_user
                     sender = f"{clean_sender(assoc.name)} <{sender_email}>"
                     connection = get_connection(
-                        host=assoc.get_config("mail_server_host", ""),
-                        port=assoc.get_config("mail_server_port", ""),
-                        username=assoc.get_config("mail_server_host_user", ""),
-                        password=assoc.get_config("mail_server_host_password", ""),
-                        use_tls=assoc.get_config("mail_server_use_tls", False),
+                        host=assoc.get_config("mail_server_host", "", bypass_cache=True),
+                        port=assoc.get_config("mail_server_port", "", bypass_cache=True),
+                        username=assoc.get_config("mail_server_host_user", "", bypass_cache=True),
+                        password=assoc.get_config("mail_server_host_password", "", bypass_cache=True),
+                        use_tls=assoc.get_config("mail_server_use_tls", False, bypass_cache=True),
                     )
             # Use standard LarpManager subdomain sender if no custom SMTP configured
             elif not event_settings:

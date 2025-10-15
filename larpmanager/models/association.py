@@ -257,8 +257,8 @@ class Association(BaseModel):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name, def_v=None, bypass_cache=False):
+        return get_element_config(self, name, def_v, bypass_cache)
 
     def promoter_dict(self):
         res = {"slug": self.slug, "name": self.name}

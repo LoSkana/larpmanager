@@ -28,8 +28,8 @@ def clear_config_cache(element):
     cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
 
 
-def reset_element_configs(element_id, model_name):
-    cache.delete(cache_configs_key(element_id, model_name))
+def reset_element_configs(element):
+    cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
 
 
 def cache_configs_key(element_id, model_name):
@@ -133,29 +133,38 @@ def _get_fkey_config(obj):
     return fk_field
 
 
-def get_element_config(element, name, def_value):
+def get_element_config(element, name, def_value, bypass_cache=False):
     """Get configuration value with type conversion and default fallback.
 
     Args:
         element: Model instance to get configuration from
         name (str): Configuration name
         def_value: Default value and type indicator
+        bypass_cache (bool): If True, bypass cache and fetch directly from database
 
     Returns:
         Configuration value converted to appropriate type, or default value
     """
     if not hasattr(element, "aux_configs"):
-        element.aux_configs = get_configs(element)
+        if bypass_cache:
+            # do not trust cache for background processes
+            element.aux_configs = update_configs(element.id, element._meta.model_name.lower())
+        else:
+            element.aux_configs = get_configs(element)
 
     return evaluate_config(element, name, def_value)
 
 
-def get_assoc_config(assoc_id, name, def_value=None, holder=None):
+def get_assoc_config(assoc_id, name, def_value=None, holder=None, bypass_cache=False):
     if not holder:
         holder = Object()
 
     if not hasattr(holder, "aux_configs"):
-        holder.aux_configs = get_element_configs(assoc_id, "association")
+        if bypass_cache:
+            # do not trust cache for background processes
+            holder.aux_configs = update_configs(assoc_id, "association")
+        else:
+            holder.aux_configs = get_element_configs(assoc_id, "association")
 
     return evaluate_config(holder, name, def_value)
 

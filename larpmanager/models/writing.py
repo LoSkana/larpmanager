@@ -205,8 +205,8 @@ class Character(Writing):
     def __str__(self):
         return f"#{self.number} {self.name}"
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name, def_v=None, bypass_cache=False):
+        return get_element_config(self, name, def_v, bypass_cache)
 
     def show(self, run=None):
         """Generate display dictionary with character information and media URLs.

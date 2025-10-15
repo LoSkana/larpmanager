@@ -162,7 +162,7 @@ def add_pdf_instructions(ctx):
         Updates ctx with processed PDF styling and content instructions
     """
     for instr in ["page_css", "header_content", "footer_content"]:
-        ctx[instr] = ctx["event"].get_config(instr, "")
+        ctx[instr] = ctx["event"].get_config(instr, "", bypass_cache=True)
 
     codes = {
         "<pdf:organization>": ctx["event"].assoc.name,
