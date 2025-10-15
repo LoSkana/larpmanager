@@ -1,57 +1,57 @@
 {% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {{ data.name }}
+    {{ event.name }}
 {% endblock title %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
 {% endblock robots %}
 {% block media %}
-    <meta name="description" content="{{ data.tagline }}" />
-    <meta property="og:title" content="{{ data.name }}" />
-    {% if data.tagline %}<meta property="og:description" content="{{ data.tagline }}" />{% endif %}
-    <meta property="og:image" content="{{ data.cover }}" />
+    <meta name="description" content="{{ event.tagline }}" />
+    <meta property="og:title" content="{{ event.name }}" />
+    {% if event.tagline %}<meta property="og:description" content="{{ event.tagline }}" />{% endif %}
+    <meta property="og:image" content="{{ event.cover }}" />
 {% endblock media %}
 {% block content %}
-    {% if data.cover %}
+    {% if event.cover %}
         <div id="aspect-ratio">
             <div id="event_cover"
                  class="nav"
-                 style="background-image: url({{ data.cover }})"></div>
+                 style="background-image: url({{ event.cover }})"></div>
         </div>
     {% endif %}
     <!--<h1 class="major">{{ name }}</h1> -->
-    {% if data.tagline %}
+    {% if event.tagline %}
         <p>
-            <b>{{ data.tagline }}</b>
+            <b>{{ event.tagline }}</b>
         </p>
         <hr />
     {% endif %}
-    {% if data.tagline %}
+    {% if event.tagline %}
         <p>
-            <i>{{ data.genre }}</i>
+            <i>{{ event.genre }}</i>
         </p>
         <hr />
     {% endif %}
-    {% if data.description %}
-        <p>{{ data.description | safe }}</p>
+    {% if event.description %}
+        <p>{{ event.description | safe }}</p>
         <hr />
     {% endif %}
-    {% if data.where %}
+    {% if event.where %}
         <p>
-            <b>{% trans "Where" %}:</b> {{ data.where }}
+            <b>{% trans "Where" %}:</b> {{ event.where }}
         </p>
         <hr />
     {% endif %}
-    {% if data.authors %}
+    {% if event.authors %}
         <p>
-            <b>{% trans "Authors" %}:</b> {{ data.authors }}
+            <b>{% trans "Authors" %}:</b> {{ event.authors }}
         </p>
         <hr />
     {% endif %}
-    {% if data.website %}
+    {% if event.website %}
         <p>
-            <a href="{{ data.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
+            <a href="{{ event.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
         </p>
         <hr />
     {% endif %}
