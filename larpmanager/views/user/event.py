@@ -99,7 +99,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
     runs = (
-        get_coming_runs(aid).select_related("event")
+        get_coming_runs(aid)
     )
 
     # Initialize user registration tracking
@@ -170,20 +170,7 @@ def get_coming_runs(assoc_id, future=True):
     runs = (
         Run.objects.exclude(development=DevelopStatus.CANC)
         .exclude(event__visible=False)
-        .select_related("event", "event__assoc")
-        .only(
-            "id",
-            "number",
-            "start",
-            "end",
-            "development",
-            "registration_open",
-            "event__id",
-            "event__name",
-            "event__slug",
-            "event__visible",
-            "event__assoc_id",
-        )
+        .select_related("event")
     )
 
     if assoc_id:
@@ -330,7 +317,7 @@ def calendar_past(request):
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
 
-    runs = get_coming_runs(aid, future=False).select_related("event", "event__assoc")
+    runs = get_coming_runs(aid, future=False)
 
     my_regs_dict = {}
     if request.user.is_authenticated:

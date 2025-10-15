@@ -1,4 +1,5 @@
 name,path,length
+registration_status_signed,larpmanager/utils/registration.py,56
 go_trait,larpmanager/templatetags/show_tags.py,50
 save_event_registration_form,larpmanager/utils/event.py,50
 auto_rotate_vertical_photos,larpmanager/utils/miscellanea.py,50

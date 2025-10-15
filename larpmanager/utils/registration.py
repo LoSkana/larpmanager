@@ -130,39 +130,23 @@ def get_match_reg(r, my_regs):
 
 
 def registration_status_signed(
-    run,  # type: Run
+    run,
+        reg, 
+        member,
     features: dict,
-    register_url: str,
+    register_url: str
 ) -> None:
-    """Generate registration status information for signed up users.
-
-    This function processes the registration status for users who have already
-    signed up for an event run, handling various states like provisional
-    registrations, membership requirements, payment status, and profile completion.
-
-    Args:
-        run: Run instance for the registered user containing registration details
-        features: Dictionary of available features configuration (e.g., 'membership', 'payment')
-        register_url: URL string for registration management page
-
-    Returns:
-        None: Modifies run.status['text'] in place with appropriate status message
-
-    Raises:
-        RewokedMembershipError: When user's membership has been revoked
-    """
     # Initialize character registration status
     registration_status_characters(run, features)
-    member = run.reg.member
     mb = get_user_membership(member, run.event.assoc_id)
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(run.reg)
+    provisional = is_reg_provisional(reg, run.event)
     if provisional:
         register_msg = _("Provisional registration")
-    if run.reg.ticket:
-        register_msg += f" ({run.reg.ticket.name})"
+    if reg.ticket:
+        register_msg += f" ({reg.ticket.name})"
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
     # Handle membership feature requirements
@@ -206,8 +190,9 @@ def registration_status_signed(
     run.status["text"] = register_text
 
     # Add patron appreciation message if applicable
-    if run.reg.ticket and run.reg.ticket.tier == TicketTier.PATRON:
+    if reg.ticket and reg.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support") + "!"
+
 
 
 def _status_payment(register_text, run):
@@ -282,9 +267,9 @@ def registration_status(
         if mb.status in [MembershipStatus.REWOKED]:
             return
 
-    if run.reg:
-        registration_status_signed(run, features, register_url)
-        return
+        if run.reg:
+            registration_status_signed(run, run.reg, user.member, features, register_url)
+            return
 
     if run.end and get_time_diff_today(run.end) < 0:
         return
