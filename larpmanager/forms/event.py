@@ -495,6 +495,11 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_field_visibility", ConfigType.BOOL, label, help_text)
 
+            if "relationships" in self.params["features"]:
+                label = _("Relationships max length")
+                help_text = _("Set maximum length on character relationships (default 10000 characters)")
+                self.add_configs("writing_relationship_length", ConfigType.INT, label, help_text)
+
             label = _("Disable character finder")
             help_text = (
                 _("Disable the system that finds the character number when a special reference symbol is written")

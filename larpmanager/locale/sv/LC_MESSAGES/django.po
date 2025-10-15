@@ -3885,6 +3885,9 @@ msgstr "Provisorisk registrering"
 msgid "Regeneration pdf started"
 msgstr "pdf förnyelse påbörjad"
 
+msgid "Relationships max length"
+msgstr "Relationer max längd"
+
 msgid "Secret registration link"
 msgstr "Hemlig registreringslänk"
 
@@ -7222,6 +7225,10 @@ msgstr ""
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr "Välj vilka fält som ska öppnas automatiskt när listan visas"
+
+msgid ""
+"Set maximum length on character relationships (default 10000 characters)"
+msgstr "Ställ in maximal längd på teckenrelationer (standard 10000 tecken)"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

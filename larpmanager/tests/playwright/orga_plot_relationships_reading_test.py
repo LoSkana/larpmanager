@@ -126,7 +126,7 @@ def relationships(live_server, page):
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
-    fill_tinymce(page, "rel_1_direct", "ciaaoooooo")
+    fill_tinymce(page, "rel_1", "ciaaoooooo")
     submit_confirm(page)
 
     # check in main list

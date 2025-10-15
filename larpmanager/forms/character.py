@@ -49,6 +49,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -264,6 +265,8 @@ class OrgaCharacterForm(CharacterForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.relationship_max_length = int(self.params["event"].get_config("writing_relationship_length", 10000))
 
         if not self.instance.pk:
             return
@@ -494,6 +497,14 @@ class OrgaCharacterForm(CharacterForm):
             if ch_id in self.params["relationships"] and rel_type in self.params["relationships"][ch_id]:
                 if value == self.params["relationships"][ch_id][rel_type]:
                     continue
+
+            # Check text length against configuration using centralized value
+            # Use strip_tags to get plain text length from HTML content
+            plain_text = strip_tags(value)
+            if len(plain_text) > self.relationship_max_length:
+                raise ValidationError(
+                    f"Relationship text for character #{ch_id} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
+                )
 
             rel = self._get_rel(ch_id, instance, rel_type)
             rel.text = value
