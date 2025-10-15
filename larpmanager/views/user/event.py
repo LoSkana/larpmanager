@@ -98,9 +98,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     aid = request.assoc["id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
-    runs = (
-        get_coming_runs(aid)
-    )
+    runs = get_coming_runs(aid)
 
     # Initialize user registration tracking
     my_regs_dict = {}
@@ -167,11 +165,7 @@ def get_coming_runs(assoc_id, future=True):
     Returns:
         QuerySet of Run objects with optimized select_related
     """
-    runs = (
-        Run.objects.exclude(development=DevelopStatus.CANC)
-        .exclude(event__visible=False)
-        .select_related("event")
-    )
+    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
 
     if assoc_id:
         runs = runs.filter(event__assoc_id=assoc_id)
@@ -404,7 +398,7 @@ def gallery(request, s):
             que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
             que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=TicketTier.WAITING)
             for reg in que_reg.select_related("member", "ticket").order_by("search"):
-                if not is_reg_provisional(reg, features):
+                if not is_reg_provisional(reg, event=ctx["event"], features=features):
                     ctx["reg_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", ctx)

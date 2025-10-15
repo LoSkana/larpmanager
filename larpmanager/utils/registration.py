@@ -129,20 +129,14 @@ def get_match_reg(r, my_regs):
     return None
 
 
-def registration_status_signed(
-    run,
-        reg, 
-        member,
-    features: dict,
-    register_url: str
-) -> None:
+def registration_status_signed(run, reg, member, features: dict, register_url: str) -> None:
     # Initialize character registration status
     registration_status_characters(run, features)
     mb = get_user_membership(member, run.event.assoc_id)
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(reg, run.event)
+    provisional = is_reg_provisional(reg, event=run.event)
     if provisional:
         register_msg = _("Provisional registration")
     if reg.ticket:
@@ -192,7 +186,6 @@ def registration_status_signed(
     # Add patron appreciation message if applicable
     if reg.ticket and reg.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support") + "!"
-
 
 
 def _status_payment(register_text, run):

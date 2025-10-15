@@ -161,7 +161,7 @@ def _orga_registrations_tickets(reg, ctx):
         regs_list_add(ctx, "list_tickets", ticket.name, reg.member)
         reg.ticket_show = ticket.name
 
-        if is_reg_provisional(reg, ctx["features"]):
+        if is_reg_provisional(reg, event=ctx["event"], features=ctx["features"]):
             typ = ("0", _("Provisional"))
         elif ticket.tier in ticket_types:
             typ = ticket_types[ticket.tier]
