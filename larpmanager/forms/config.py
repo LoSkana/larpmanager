@@ -7,7 +7,7 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
-from larpmanager.cache.config import save_all_element_configs
+from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import AssocMemberS2WidgetMulti, get_members_queryset
 
@@ -99,6 +99,8 @@ class ConfigForm(MyForm):
         for el in self.config_fields:
             self._get_custom_field(el, config_values)
         save_all_element_configs(instance, config_values)
+
+        reset_element_configs(instance)
 
         instance.save()
 

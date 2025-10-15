@@ -331,8 +331,8 @@ class Event(BaseModel):
         os.makedirs(fp, exist_ok=True)
         return fp
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name, def_v=None, bypass_cache=False):
+        return get_element_config(self, name, def_v, bypass_cache)
 
 
 class EventConfig(BaseModel):
@@ -573,8 +573,8 @@ class Run(BaseModel):
     def get_profiles_filepath(self):
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name, def_v=None, bypass_cache=False):
+        return get_element_config(self, name, def_v, bypass_cache)
 
 
 class RunConfig(BaseModel):

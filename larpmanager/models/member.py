@@ -355,8 +355,8 @@ class Member(BaseModel):
         aux = self.residence_address.split("|")
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name, def_v=None, bypass_cache=False):
+        return get_element_config(self, name, def_v, bypass_cache)
 
 
 class MemberConfig(BaseModel):
