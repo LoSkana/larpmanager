@@ -266,11 +266,10 @@ class OrgaCharacterForm(CharacterForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.relationship_max_length = int(self.params["event"].get_config("writing_relationship_length", 10000))
+
         if not self.instance.pk:
             return
-
-        # Extract relationship max length configuration in one place
-        self.relationship_max_length = int(self.params["event"].get_config("writing_relationship_length", 10000))
 
         self._init_px()
 
