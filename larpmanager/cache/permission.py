@@ -74,7 +74,7 @@ def get_assoc_permission_feature(slug):
     if not slug:
         return "def", None, None
     res = cache.get(assoc_permission_feature_key(slug))
-    if not res:
+    if res is None:
         res = update_assoc_permission_feature(slug)
     return res
 
@@ -116,7 +116,7 @@ def get_event_permission_feature(slug):
     if not slug:
         return "def", None, None
     res = cache.get(event_permission_feature_key(slug))
-    if not res:
+    if res is None:
         res = update_event_permission_feature(slug)
     return res
 
@@ -149,7 +149,7 @@ def update_index_permission(typ):
 
 def get_cache_index_permission(typ):
     res = cache.get(index_permission_key(typ))
-    if not res:
+    if res is None:
         res = update_index_permission(typ)
     return res
 

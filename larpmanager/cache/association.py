@@ -40,7 +40,7 @@ def cache_assoc_key(s):
 def get_cache_assoc(s):
     key = cache_assoc_key(s)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = init_cache_assoc(s)
         if not res:
             return None

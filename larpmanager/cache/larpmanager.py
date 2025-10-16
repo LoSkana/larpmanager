@@ -43,7 +43,7 @@ def cache_cache_lm_home_key():
 def get_cache_lm_home():
     key = cache_cache_lm_home_key()
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = update_cache_lm_home()
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res

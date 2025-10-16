@@ -419,7 +419,7 @@ def get_event_cache_traits(ctx: dict, res: dict) -> None:
 def get_event_cache_all(ctx):
     k = get_event_cache_all_key(ctx["run"])
     res = cache.get(k)
-    if not res:
+    if res is None:
         res = init_event_cache_all(ctx)
         cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
@@ -449,7 +449,7 @@ def update_character_fields(instance, data):
 def update_event_cache_all(run, instance):
     k = get_event_cache_all_key(run)
     res = cache.get(k)
-    if not res:
+    if res is None:
         return
     if isinstance(instance, Faction):
         update_event_cache_all_faction(instance, res)

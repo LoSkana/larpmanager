@@ -373,7 +373,7 @@ class HandoutForm(WritingForm):
 
     class Meta:
         model = Handout
-        fields = ["progress", "template", "name", "assigned", "text", "event"]
+        fields = ["template", "name", "text", "event"]
 
         widgets = {
             "text": WritingTinyMCE(),
@@ -385,12 +385,12 @@ class HandoutForm(WritingForm):
         self.fields["template"].choices = [(m.id, m.name) for m in que]
 
 
-class HandoutTemplateForm(MyForm):
+class HandoutTemplateForm(WritingForm):
     load_templates = ["handout-template"]
 
     class Meta:
         model = HandoutTemplate
-        exclude = ("number", "event")
+        exclude = ["number"]
 
         widgets = {"template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})}
 

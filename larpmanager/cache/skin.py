@@ -37,7 +37,7 @@ def cache_skin_key(s):
 def get_cache_skin(s):
     key = cache_skin_key(s)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = init_cache_skin(s)
         if not res:
             return None
