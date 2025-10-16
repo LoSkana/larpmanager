@@ -149,7 +149,7 @@ def get_token_details(nm, run):
     return dc
 
 
-def get_run_accounting(run: Run, ctx: dict) -> dict:
+def get_run_accounting(run: Run, ctx: dict, perform_update: bool = True) -> dict:
     """Generate comprehensive accounting report for a run.
 
     Calculates revenue, costs, and balance for a run based on enabled features.
@@ -159,6 +159,7 @@ def get_run_accounting(run: Run, ctx: dict) -> dict:
     Args:
         run: Run instance to generate accounting for
         ctx: Context dictionary with optional token/credit names (e.g., 'token_name', 'credit_name')
+        perform_update: Whether to update the run with new financial data
 
     Returns:
         dict: Complete accounting breakdown by category. Keys may include:
@@ -315,7 +316,8 @@ def get_run_accounting(run: Run, ctx: dict) -> dict:
         run.tax = run.revenue * tax / 100
 
     # Persist the calculated financial data
-    run.save()
+    if perform_update:
+        run.save()
 
     return dc
 
