@@ -22,11 +22,11 @@ from django.core.cache import cache
 from django.db.models import Count
 
 from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
 from larpmanager.utils.common import _search_char_reg
-from larpmanager.cache.feature import get_event_features
 
 
 def clear_registration_counts_cache(run_id):
@@ -43,7 +43,7 @@ def get_reg_counts(run, reset=False):
         res = None
     else:
         res = cache.get(key)
-    if not res:
+    if res is None:
         res = update_reg_counts(run)
         cache.set(key, res, timeout=60 * 5)
     return res
@@ -76,7 +76,7 @@ def update_reg_counts(run) -> dict[str, int]:
 
     # Get all non-cancelled registrations for this run
     que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-    
+
     # Get event features
     features = get_event_features(run.event_id)
 

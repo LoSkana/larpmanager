@@ -44,7 +44,7 @@ def get_configs(element):
 def get_element_configs(element_id, model_name):
     key = cache_configs_key(element_id, model_name)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = update_configs(element_id, model_name)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res

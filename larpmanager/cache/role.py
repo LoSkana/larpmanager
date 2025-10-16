@@ -46,7 +46,7 @@ def get_assoc_role(ar):
 def get_cache_assoc_role(ar_id):
     key = cache_assoc_role_key(ar_id)
     res = cache.get(key)
-    if not res:
+    if res is None:
         try:
             ar = AssocRole.objects.get(pk=ar_id)
         except Exception as err:
@@ -108,7 +108,7 @@ def get_event_role(ar):
 def get_cache_event_role(ev_id):
     key = cache_event_role_key(ev_id)
     res = cache.get(key)
-    if not res:
+    if res is None:
         try:
             ar = EventRole.objects.get(pk=ev_id)
         except Exception as err:

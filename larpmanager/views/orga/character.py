@@ -586,26 +586,24 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
     # Initialize context and validate user permissions for the event
     ctx = check_event_permission(request, s)
 
-    # Load all cached event data for efficient access
-    get_event_cache_all(ctx)
-
     # Initialize data structures for check results and caching
     checks = {}
     cache = {}
 
-    # Extract character numbers and build mapping structures
-    chs_numbers = list(ctx["chars"].keys())
+    # Build character data directly from database to include all characters (even hidden ones)
+    check_chars = {}
     id_number_map = {}
     number_map = {}
 
-    # Process character elements and build text content with teasers
-    for el in ctx["event"].get_elements(Character).values_list("number", "text"):
-        if el[0] not in ctx["chars"]:
-            continue
-        ch = ctx["chars"][el[0]]
-        ch["text"] = ch["teaser"] + el[1]
-        id_number_map[ch["id"]] = ch["number"]
-        number_map[ch["number"]] = ch["id"]
+    # Get all characters for the event
+    for ch_id, ch_number, ch_name, ch_text in (
+        ctx["event"].get_elements(Character).values_list("id", "number", "name", "text")
+    ):
+        check_chars[ch_number] = {"id": ch_id, "number": ch_number, "name": ch_name, "text": ch_text or ""}
+        id_number_map[ch_id] = ch_number
+        number_map[ch_number] = ch_id
+
+    chs_numbers = list(check_chars.keys())
 
     # Append plot-related text content if plot feature is enabled
     if "plot" in ctx["features"]:
@@ -615,7 +613,10 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
 
         # Concatenate plot text to existing character text
         for el in que.values_list("character__number", "text"):
-            ctx["chars"][el[0]]["text"] += el[1]
+            if el[0] in check_chars:
+                check_chars[el[0]]["text"] += el[1]
+
+    ctx["chars"] = check_chars
 
     # Validate character relationships and dependencies
     check_relations(cache, checks, chs_numbers, ctx, number_map)
@@ -628,7 +629,7 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
 
     # Store check results in context and render the check template
     ctx["checks"] = checks
-    # print(checks)
+
     return render(request, "larpmanager/orga/writing/check.html", ctx)
 
 
@@ -650,7 +651,7 @@ def check_relations(cache, checks, chs_numbers, ctx, number_map):
     checks["relat_extinct"] = []
     for c in ctx["chars"]:
         ch = ctx["chars"][c]
-        (from_text, extinct) = get_chars_relations(ch["text"], chs_numbers)
+        (from_text, extinct) = get_chars_relations(ch.get("text", ""), chs_numbers)
         name = f"#{ch['number']} {ch['name']}"
         for e in extinct:
             checks["relat_extinct"].append((name, e))

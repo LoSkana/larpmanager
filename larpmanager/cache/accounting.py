@@ -169,7 +169,7 @@ def get_registration_accounting_cache(run):
     key = get_registration_accounting_cache_key(run.id)
     res = cache.get(key)
 
-    if not res:
+    if res is None:
         res = update_registration_accounting_cache(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
