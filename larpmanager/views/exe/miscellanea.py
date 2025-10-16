@@ -68,7 +68,7 @@ def exe_warehouse_containers_edit(request, num):
 @login_required
 def exe_warehouse_tags(request):
     ctx = check_assoc_permission(request, "exe_warehouse_tags")
-    ctx["list"] = WarehouseTag.objects.filter(assoc_id=request.assoc["id"])
+    ctx["list"] = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("items")
     return render(request, "larpmanager/exe/warehouse/tags.html", ctx)
 
 

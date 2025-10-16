@@ -234,7 +234,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> H
 
     # Retrieve all warehouse items for the association with prefetched tags
     item_all: dict[int, Any] = {}
-    for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
+    for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags").select_related("container"):
         # Set initial availability to item's total quantity
         item.available = item.quantity or 0
         item_all[item.id] = item
@@ -293,7 +293,7 @@ def orga_warehouse_manifest(request, s):
     ctx["area_list"] = {}
     get_warehouse_optionals(ctx, [])
 
-    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
+    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
         if el.area_id not in ctx["area_list"]:
             ctx["area_list"][el.area_id] = el.area
         if not hasattr(ctx["area_list"][el.area_id], "items"):
