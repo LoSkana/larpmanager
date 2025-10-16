@@ -26,6 +26,7 @@ from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
 from larpmanager.utils.common import _search_char_reg
+from larpmanager.cache.feature import get_event_features
 
 
 def clear_registration_counts_cache(run_id):
@@ -75,6 +76,9 @@ def update_reg_counts(run) -> dict[str, int]:
 
     # Get all non-cancelled registrations for this run
     que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+    
+    # Get event features
+    features = get_event_features(run.event_id)
 
     # Process each registration to count by ticket tier
     for reg in que.select_related("ticket"):
@@ -103,7 +107,7 @@ def update_reg_counts(run) -> dict[str, int]:
                 add_count(s, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_reg_provisional(reg):
+            if is_reg_provisional(reg, event=run.event, features=features):
                 add_count(s, "count_provisional", num_tickets)
 
         # Add to total registration count
