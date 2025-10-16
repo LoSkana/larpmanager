@@ -21,7 +21,7 @@ from larpmanager.models.accounting import (
     RefundRequest,
     RefundStatus,
 )
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
@@ -276,7 +276,6 @@ def _exe_actions(request, ctx: dict, features: dict = None) -> None:
     # Get association features if not provided
     if not features:
         features = get_assoc_features(ctx["a_id"])
-    assoc = Association.objects.get(pk=ctx["a_id"])
 
     # Check for runs that should be concluded
     runs_conclude = Run.objects.filter(
@@ -331,13 +330,13 @@ def _exe_actions(request, ctx: dict, features: dict = None) -> None:
         )
 
     # Process accounting-specific actions
-    _exe_accounting_actions(assoc, ctx, features)
+    _exe_accounting_actions(request, ctx, features)
 
     # Process user-specific actions
-    _exe_users_actions(request, assoc, ctx, features)
+    _exe_users_actions(request, ctx, features)
 
 
-def _exe_users_actions(request, assoc, ctx, features):
+def _exe_users_actions(request, ctx, features):
     """
     Process user management actions and setup tasks for executives.
 
@@ -351,11 +350,11 @@ def _exe_users_actions(request, assoc, ctx, features):
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(assoc.get_config("membership_fee", "")) == 0:
+        if len(get_assoc_config(request.assoc["id"], "membership_fee", "")) == 0:
             _add_priority(ctx, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in features:
-        if not assoc.get_config("vote_candidates", ""):
+        if not get_assoc_config(request.assoc["id"], "vote_candidates", ""):
             _add_priority(
                 ctx,
                 _("Set up the voting configuration"),
@@ -372,17 +371,17 @@ def _exe_users_actions(request, assoc, ctx, features):
             )
 
 
-def _exe_accounting_actions(assoc, ctx, features):
+def _exe_accounting_actions(request, ctx, features):
     """
     Process accounting-related setup actions for executives.
 
     Args:
-        assoc: Association instance
+        request: request instance
         ctx: Context dictionary to populate with priority actions
         features: Set of enabled features for the association
     """
     if "payment" in features:
-        if not assoc.payment_methods.count():
+        if not request.assoc.get("methods", ""):
             _add_priority(
                 ctx,
                 _("Set up payment methods"),
@@ -390,7 +389,7 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
     if "organization_tax" in features:
-        if not assoc.get_config("organization_tax_perc", ""):
+        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", ""):
             _add_priority(
                 ctx,
                 _("Set up the organization tax configuration"),
@@ -399,7 +398,9 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
     if "vat" in features:
-        if not assoc.get_config("vat_ticket", "") or not assoc.get_config("vat_options", ""):
+        if not get_assoc_config(request.assoc["id"], "vat_ticket", "") or not get_assoc_config(
+            request.assoc["id"], "vat_options", ""
+        ):
             _add_priority(
                 ctx,
                 _("Set up the taxes configuration"),
