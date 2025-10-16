@@ -184,9 +184,12 @@ def get_event_staffers(event):
     Returns:
         list: List of Member instances with non-organizer event roles
     """
+
+    roles = EventRole.objects.filter(event=event).prefetch_related("members")
+
     lst = []
     already = {}
-    for role in EventRole.objects.filter(event=event):
+    for role in roles:
         for mb in role.members.all():
             if mb.id in already:
                 continue

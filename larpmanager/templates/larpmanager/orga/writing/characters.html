@@ -27,7 +27,7 @@
         <a href="#" class="table_toggle" tog='prologues'>{% trans "Prologues" %}</a>
     {% endif %}
     {% if features.relationships %}
-        <a href="#" class="table_toggle" tog='relationships'>{% trans "Relationships" %}</a>
+        <a href="#" class="table_toggle" tog='relationship_list'>{% trans "Relationships" %}</a>
     {% endif %}
     {% if features.speedlarp %}
         <a href="#" class="table_toggle" tog='speedlarp'>{% trans "Speedlarp" %}</a>
@@ -70,7 +70,7 @@
         </th>
     {% endif %}
     {% if features.relationships %}
-        <th class="relationships">{% trans "Relationships" %}</th>
+        <th class="relationship_list">{% trans "Relationships" %}</th>
         <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Relationships" %}
         </th>
@@ -138,7 +138,7 @@
                 <td class="stats">{{ el.prologue_rels.count }}</td>
             {% endif %}
             {% if features.relationships %}
-                <td class="relationships dot_links">
+                <td class="relationship_list dot_links">
                     {% for rel in el.relationships_rels.list %}
                         <a href="{% url 'orga_characters_edit' run.get_slug rel.0 %}">{{ rel.1 }}</a>
                     {% endfor %}
