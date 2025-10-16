@@ -189,14 +189,14 @@ def character_your(request, s, p=None):
     """
     ctx = get_event_run(request, s, signup=True, status=True)
 
-    rcrs = ctx["run"].reg.rcrs.all()
+    rcrs = list(ctx["run"].reg.rcrs.select_related("character").all())
 
-    if not rcrs.exists():
+    if not rcrs:
         messages.error(request, _("You don't have a character assigned for this event") + "!")
         return redirect("home")
 
-    if rcrs.count() == 1:
-        char = rcrs.first().character
+    if len(rcrs) == 1:
+        char = rcrs[0].character
         url = character_your_link(ctx, char, p)
         return HttpResponseRedirect(url)
 
