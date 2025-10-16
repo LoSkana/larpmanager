@@ -23,7 +23,7 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -428,44 +428,73 @@ def orga_progress_steps_order(request, s, num, order):
 
 
 @login_required
-def orga_multichoice_available(request, s):
+def orga_multichoice_available(request: HttpRequest, s: str) -> JsonResponse:
     """
     Handle AJAX requests for available multichoice options for organizers.
 
-    Args:
-        request: HTTP request object with POST data
-        s: Event slug
+    This function processes POST requests to retrieve character options that are
+    available for selection, excluding those already taken based on the specified
+    type (registrations, abilities, etc.).
 
-    Returns:
-        JsonResponse: Available character options for selection
+    Parameters
+    ----------
+    request : HttpRequest
+        HTTP request object containing POST data with 'type' and optional 'eid'
+    s : str
+        Event slug identifier
 
-    Raises:
-        Http404: If request method is not POST
+    Returns
+    -------
+    JsonResponse
+        JSON response containing available character options as list of tuples
+        with format: {"res": [(character_id, character_str), ...]}
+
+    Raises
+    ------
+    Http404
+        If request method is not POST
     """
+    # Validate request method
     if not request.method == "POST":
         return Http404()
 
+    # Extract class name from POST data
     class_name = request.POST.get("type", "")
     taken_characters = set()
+
+    # Handle registration-specific character filtering
     if class_name == "registrations":
         ctx = check_event_permission(request, s, "orga_registrations")
+        # Get characters already assigned to registrations in this run
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id).values_list(
             "character_id", flat=True
         )
     else:
+        # Handle other class types (abilities, etc.)
         eid = request.POST.get("eid", "")
         perms = {"abilitypx": "orga_px_abilities"}
+
+        # Determine permission based on class name
         if class_name in perms:
             perm = perms[class_name]
         else:
             perm = "orga_" + class_name + "s"
+
+        # Check permissions for the event
         ctx = check_event_permission(request, s, perm)
+
+        # Get characters already assigned to the specific entity
         if eid:
             model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
             taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)
 
+    # Get all characters for the event, ordered by number
     ctx["list"] = ctx["event"].get_elements(Character).order_by("number")
+
+    # Exclude already taken characters
     ctx["list"] = ctx["list"].exclude(pk__in=taken_characters)
+
+    # Format response as list of tuples (id, string representation)
     res = [(el.id, str(el)) for el in ctx["list"]]
     return JsonResponse({"res": res})
 

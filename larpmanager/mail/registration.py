@@ -48,24 +48,41 @@ def update_registration_status_bkg(reg_id):
     update_registration_status(instance)
 
 
-def update_registration_status(instance):
+def update_registration_status(instance) -> None:
     """Send email notifications for registration status changes.
 
     Handles automated emails for registration confirmations and updates,
     sending notifications to both the registering member and event organizers
     based on association configuration settings.
+
+    Args:
+        instance: Registration instance with member, run, and modification status.
+                 Expected to have attributes: modified, member, run.
+
+    Returns:
+        None
+
+    Note:
+        - Skips notifications for non-gifted registrations (modified == 0)
+        - Skips notifications for provisional registrations
+        - Sends different messages based on modification type (1=new, other=update)
+        - Organizer notifications depend on association configuration settings
     """
-    # skip registration not gifted
+    # Skip registration not gifted - no notifications needed
     if instance.modified == 0:
         return
 
+    # Skip provisional registrations - wait for confirmation
     if is_reg_provisional(instance):
         return
 
+    # Prepare common context for email templates
     context = {"event": instance.run, "user": instance.member}
 
-    # to user
+    # Send notification to the registering user
     activate(instance.member.language)
+
+    # Determine email subject and body based on modification type
     if instance.modified == 1:
         subj = hdr(instance.run.event) + _("Registration to %(event)s") % context
         body = _("Hello! Your registration at <b>%(event)s</b> has been confirmed") % context + "!"
@@ -73,8 +90,10 @@ def update_registration_status(instance):
         subj = hdr(instance.run.event) + _("Registration updated for %(event)s") % context
         body = _("Hi! Your registration to <b>%(event)s</b> has been updated") % context + "!"
 
+    # Append registration details to email body
     body += registration_options(instance)
 
+    # Add custom messages from event and association configurations
     for custom_mesg in [
         get_event_text(instance.run.event_id, EventTextType.SIGNUP),
         get_assoc_text(instance.run.event.assoc_id, AssocTextType.SIGNUP),
@@ -82,10 +101,13 @@ def update_registration_status(instance):
         if custom_mesg:
             body += "<br />" + custom_mesg
 
+    # Send email to the user
     my_send_mail(subj, body, instance.member, instance.run)
 
-    # to orga
+    # Send notifications to event organizers based on configuration
     assoc_id = instance.run.event.assoc_id
+
+    # Handle new registration notifications to organizers
     if instance.modified == 1 and get_assoc_config(assoc_id, "mail_signup_new", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
@@ -93,6 +115,8 @@ def update_registration_status(instance):
             body = _("The user has confirmed its registration for this event") + "!"
             body += registration_options(instance)
             my_send_mail(subj, body, orga, instance.run)
+
+    # Handle registration update notifications to organizers
     elif get_assoc_config(assoc_id, "mail_signup_update", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
@@ -205,45 +229,63 @@ def registration_payments(instance, currency):
     )
 
 
-def send_character_assignment_email(instance, created):
+def send_character_assignment_email(instance, created: bool) -> None:
     """
     Send character assignment email when registration-character relation is created.
 
+    This function sends an email notification to a member when they are assigned
+    a character for a LARP event. The email includes character details and a link
+    to access the character information.
+
     Args:
-        instance: RegistrationCharacterRel instance
-        created: Whether the instance was created
+        instance: RegistrationCharacterRel instance representing the assignment
+        created: Whether the instance was just created (True) or updated (False)
+
+    Returns:
+        None
     """
+    # Early return if this is an update, not a creation
     if not created:
         return
 
+    # Set the language context for email localization
     activate(instance.reg.member.language)
 
+    # Early return if no character is assigned
     if not instance.character:
         return
 
+    # Check if character assignment emails are disabled for this event
     if instance.reg.run.event.get_config("mail_character", False):
         return
 
+    # Prepare context data for email template
     context = {
         "event": instance.reg.run,
         "character": instance.character,
     }
 
+    # Construct email subject with event header and localized text
     subj = hdr(instance.reg.run.event) + _("Character assigned for %(event)s") % context
 
+    # Build the main email body with character assignment information
     body = _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>") % context + "."
 
+    # Generate URL for character access page
     char_url = get_url(
         f"{instance.reg.run.get_slug()}/character/your",
         instance.reg.run.event,
     )
 
+    # Add character access link to email body
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": char_url} + "!"
 
+    # Append custom assignment message if configured for the event
     custom_message_ass = get_event_text(instance.reg.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
 
+    # Send the email to the registered member
     my_send_mail(subj, body, instance.reg.member, instance.reg.run)
 
 

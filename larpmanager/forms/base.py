@@ -53,40 +53,60 @@ class MyForm(forms.ModelForm):
     that can be passed during form initialization.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with optional context parameters.
 
+        This method sets up the form with context data, removes unnecessary fields,
+        configures widgets, and initializes tracking dictionaries for form state.
+
         Args:
-            *args: Positional arguments passed to parent ModelForm
-            **kwargs: Keyword arguments, may include 'ctx' for context data
+            *args: Positional arguments passed to parent ModelForm.
+            **kwargs: Keyword arguments that may include:
+                - ctx: Context data dictionary
+                - run: Run instance for form context
+                - request: HTTP request object
+
+        Note:
+            Automatically removes 'deleted' and 'temp' fields if present.
+            Sets up character widget with event context when available.
+            Configures automatic fields as hidden or removes them based on instance state.
         """
+        # Initialize parent class and extract context parameters
         super().__init__()
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
         else:
             self.params = {}
 
+        # Extract run and request parameters if provided
         for k in ["run", "request"]:
             if k in kwargs:
                 self.params[k] = kwargs.pop(k)
 
+        # Call parent ModelForm initialization with remaining arguments
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
+        # Remove system fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
             if m in self.fields:
                 del self.fields[m]
 
+        # Configure characters field widget with event context
         if "characters" in self.fields:
             self.fields["characters"].widget.set_event(self.params["event"])
 
+        # Handle automatic fields based on instance state
         for s in self.get_automatic_field():
             if s in self.fields:
                 if self.instance.pk:
+                    # Remove automatic fields for existing instances
                     del self.fields[s]
                 else:
+                    # Hide automatic fields for new instances
                     self.fields[s].widget = forms.HiddenInput()
                     self.fields[s].required = False
 
+        # Initialize tracking dictionaries for form state management
         self.mandatory = []
         self.answers = {}
         self.singles = {}
@@ -332,41 +352,59 @@ class BaseRegistrationForm(MyFormRun):
     def get_options_query(self, event):
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
-    def get_choice_options(self, all_options, question, chosen=None, reg_count=None):
+    def get_choice_options(self, all_options: dict, question, chosen=None, reg_count=None) -> tuple[list[tuple], str]:
         """
         Build form choice options for a question with availability and ticket validation.
 
-        Args:
-            all_options: Dictionary of all available options by question ID
-            question: Question instance to get options for
-            chosen: Previously chosen options (optional)
-            reg_count: Registration count data for availability checking (optional)
+        Processes available options for a registration question, applying availability
+        constraints and ticket validation rules to generate valid form choices.
 
-        Returns:
-            tuple: (choices list, help_text string)
+        Parameters
+        ----------
+        all_options : dict
+            Dictionary mapping question IDs to their available option lists
+        question : Question
+            Question instance to retrieve and process options for
+        chosen : optional
+            Previously selected options for validation checks
+        reg_count : optional
+            Registration count data used for availability verification
+
+        Returns
+        -------
+        tuple[list[tuple], str]
+            A tuple containing:
+            - List of (option_id, display_name) tuples for form choices
+            - Combined help text string with question description and option details
         """
         choices = []
         help_text = question.description
         run = self.params["run"]
 
+        # Early return if no options available for this question
         if question.id not in all_options:
             return choices, help_text
 
         options = all_options[question.id]
 
+        # Process each available option for the question
         for option in options:
+            # Generate display text with pricing information
             name = option.get_form_text(run, cs=self.params["currency_symbol"])
+
+            # Check availability constraints if registration counts provided
             if reg_count and option.max_available > 0:
                 name, valid = self.check_option(chosen, name, option, reg_count, run)
                 if not valid:
                     continue
 
+            # Validate ticket compatibility if ticket mapping exists
             if reg_count and hasattr(option, "tickets_map"):
                 tickets_id = [i for i in option.tickets_map if i is not None]
                 if tickets_id and run.reg.ticket_id not in tickets_id:
                     continue
 
-            # no problem, go ahead
+            # Add valid option to choices and append description to help text
             choices.append((option.id, name))
             if option.description:
                 help_text += f'<p id="hp_{option.id}"><b>{option.name}</b> {option.description}</p>'

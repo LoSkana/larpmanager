@@ -100,17 +100,31 @@ def get_cache_config_run(run):
     return res
 
 
-def init_cache_config_run(run):
+def init_cache_config_run(run) -> dict:
     """
     Initialize and build cache configuration data for a run.
 
+    This function creates a cache configuration context containing UI elements,
+    limitations, and display settings for a specific run. It handles event features,
+    parent event inheritance, and writing system configurations.
+
     Args:
-        run: Run instance to initialize cache for
+        run: Run instance to initialize cache for. Must have an associated event.
 
     Returns:
-        dict: Cache configuration context with buttons, limitations, and display settings
+        dict: Cache configuration context containing:
+            - buttons: Event-specific button cache
+            - limitations: Whether to show limitations
+            - user_character_max: Maximum characters per user
+            - cover_orig: Original cover setting
+            - px_user: User experience points setting
+            - show_* keys: Display configuration for character, faction, quest, trait
+            - show_addit: Additional display configuration
     """
+    # Get event features to determine what functionality is available
     ev_features = get_event_features(run.event_id)
+
+    # Initialize base context with buttons and core display settings
     ctx = {
         "buttons": get_event_button_cache(run.event_id),
         "limitations": run.event.get_config("show_limitations", False),
@@ -119,19 +133,25 @@ def init_cache_config_run(run):
         "px_user": run.event.get_config("px_user", False),
     }
 
+    # Handle parent event inheritance for px_user setting
     if run.event.parent:
         ctx["px_user"] = run.event.parent.get_config("px_user", False)
 
+    # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
     for config_name in ["character", "faction", "quest", "trait"]:
+        # Skip if this writing feature is not enabled for the event
         if mapping[config_name] not in ev_features:
             continue
+
+        # Parse and convert list configuration to dictionary lookup
         res = {}
         val = run.get_config("show_" + config_name, "[]")
         for el in ast.literal_eval(val):
             res[el] = 1
         ctx["show_" + config_name] = res
 
+    # Process additional display configurations
     res = {}
     val = run.get_config("show_addit", "[]")
     for el in ast.literal_eval(val):

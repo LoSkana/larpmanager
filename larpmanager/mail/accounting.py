@@ -84,25 +84,38 @@ def get_expense_mail(instance):
     return subj, body
 
 
-def send_expense_approval_email(expense_item):
+def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     """Handle expense item approval notifications.
+
+    Sends an email notification to the member when their expense reimbursement
+    request is approved. The email includes approval details and information
+    about credit assignment for future events if applicable.
 
     Args:
         expense_item: AccountingItemExpense instance being saved
+
+    Returns:
+        None
     """
+    # Skip hidden or new expense items
     if expense_item.hide:
         return
     if not expense_item.pk:
         return
 
+    # Get previous approval status to detect state change
     previous_appr = AccountingItemExpense.objects.get(pk=expense_item.pk).is_approved
-    # Send email when the spending item is approved
+
+    # Only send email when item is newly approved and has an associated member
     if not (expense_item.member and expense_item.is_approved and not previous_appr):
         return
 
+    # Build email subject with optional run information
     subj = hdr(expense_item) + _("Reimbursement approved")
     if expense_item.run:
         subj += " " + _("for") + f" {expense_item.run}"
+
+    # Create base email body with approval details
     body = (
         _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
         % {
@@ -112,11 +125,15 @@ def send_expense_approval_email(expense_item):
         + "!"
     )
 
+    # Get token and credit names for the association
     token_name, credit_name = get_token_credit_name(expense_item.assoc_id)
 
+    # Add credit information if run has token_credit feature enabled
     if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
         body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
         body += " " + _("This is automatically deducted from the registration of a future event") + "."
+
+        # Add link to accounting page for formal request option
         body += (
             " "
             + _(
@@ -126,6 +143,8 @@ def send_expense_approval_email(expense_item):
             % {"url": get_url("accounting", expense_item)}
             + "</i>"
         )
+
+    # Send the notification email
     my_send_mail(subj, body, expense_item.member, expense_item.run)
 
 

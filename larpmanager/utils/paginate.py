@@ -66,13 +66,29 @@ def paginate(request, ctx, typ, template, view, exe=True):
     )
 
 
-def _get_elements_query(cls, ctx, request, typ, exe=True):
+def _get_elements_query(cls, ctx: dict, request, typ, exe: bool = True) -> tuple[any, int]:
+    """
+    Get filtered and paginated query elements based on context and request parameters.
+
+    Args:
+        cls: The model class to query
+        ctx: Context dictionary containing association ID, run, event, and other filters
+        request: HTTP request object containing query parameters
+        typ: Model type for field inspection
+        exe: Whether this is an executive (organization-wide) view or event-specific view
+
+    Returns:
+        tuple: (filtered_elements_queryset, total_filtered_count)
+    """
+    # Extract pagination and filtering parameters from request
     start, length, order, filters = _get_query_params(request)
 
+    # Start with base queryset filtered by association
     elements = cls.filter(assoc_id=ctx["a_id"])
 
-    # Perform event-specific views (exe=False)
+    # Apply event-specific filtering for non-executive views
     if not exe and "run" in ctx:
+        # Check which relation field exists on the model to filter by run/event
         # noinspection PyProtectedMember
         field_names = [f.name for f in typ._meta.get_fields()]
         if "run" in field_names:
@@ -82,26 +98,32 @@ def _get_elements_query(cls, ctx, request, typ, exe=True):
         elif "event" in field_names:
             elements = elements.filter(event=ctx["event"])
 
+    # Filter out hidden elements if the model supports it
     # noinspection PyProtectedMember
     if "hide" in [f.name for f in typ._meta.get_fields()]:
         elements = elements.filter(hide=False)
 
+    # Apply select_related optimization if specified in context
     selrel = ctx.get("selrel")
     if selrel:
         for e in selrel:
             elements = elements.select_related(e)
 
+    # Apply any custom query modifications defined in context
     elements = _apply_custom_queries(ctx, elements, typ)
 
+    # Apply user-defined filters from the request
     elements = _set_filtering(ctx, elements, filters)
 
-    # Count filtered records before pagination
+    # Count filtered records before applying pagination
     records_filtered = elements.count()
 
+    # Apply ordering if specified in context
     ordering = _get_ordering(ctx, order)
     if ordering:
         elements = elements.order_by(*ordering)
 
+    # Apply pagination using slice notation
     elements = elements[start : start + length]
 
     return elements, records_filtered

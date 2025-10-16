@@ -33,6 +33,7 @@ from larpmanager.models.association import get_url, hdr
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
+from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.text import get_event_text
@@ -196,19 +197,35 @@ def on_event_roles_m2m_changed(sender, **kwargs):
                 my_send_mail(subj, body, m, instance.event)
 
 
-def bring_friend_instructions(reg, ctx):
+def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
     """Send friend invitation instructions to registered user.
 
-    Args:
-        reg: Registration instance
-        ctx: Context dictionary with event and discount information
+    This function generates and sends an email to a registered user containing
+    their personal discount code and instructions on how to share it with friends
+    to receive mutual discounts on event registration.
 
-    Side effects:
-        Sends email with friend invitation instructions and discount code
+    Args:
+        reg: Registration instance containing member and event information
+        ctx: Context dictionary containing discount amounts and event details.
+             Expected keys: 'bring_friend_discount_to', 'bring_friend_discount_from'
+
+    Returns:
+        None
+
+    Side Effects:
+        - Activates the user's preferred language for email localization
+        - Sends an email with friend invitation instructions and discount code
     """
+    # Activate user's language for proper email localization
     activate(reg.member.language)
+
+    # Build email subject with event header and localized message
     subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
+
+    # Start email body with the user's personal discount code
     body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
+
+    # Add instructions for sharing the code and friend's discount amount
     body += (
         "<br /><br />"
         + _("Copy this code and share it with friends!")
@@ -222,6 +239,7 @@ def bring_friend_instructions(reg, ctx):
             "currency": reg.run.event.assoc.get_currency_symbol(),
         }
         + ". "
+        # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
         % {
             "amount_from": ctx["bring_friend_discount_from"],
@@ -230,6 +248,7 @@ def bring_friend_instructions(reg, ctx):
         + "."
     )
 
+    # Add link to check remaining discount availability
     body += (
         "<br /><br />"
         + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
@@ -237,8 +256,8 @@ def bring_friend_instructions(reg, ctx):
         + "."
     )
 
+    # Add closing message and send the email
     body += "<br /><br />" + _("See you soon") + "!"
-
     my_send_mail(subj, body, reg.member, reg.run)
 
 

@@ -110,40 +110,54 @@ def download(ctx, typ, nm):
     return zip_exports(ctx, exports, nm.capitalize())
 
 
-def export_data(ctx, typ, member_cover=False):
+def export_data(ctx: dict, typ: type, member_cover: bool = False) -> list[tuple[str, list, list]]:
     """Export model data to structured format with questions and answers.
 
     Processes data export for various model types with question handling,
-    answer processing, and cover image support.
+    answer processing, and cover image support for members when specified.
+
+    Args:
+        ctx: Context dictionary containing export configuration and features
+        typ: Model class to export data from
+        member_cover: Whether to include member cover images in export
+
+    Returns:
+        List of tuples containing (model_name, headers, data_rows) for export
     """
+    # Initialize query and prepare basic export data
     query = typ.objects.all()
     get_event_cache_all(ctx)
     model = typ.__name__.lower()
-    query = _download_prepare(ctx, model, query, typ)
 
+    # Apply filters and prepare query based on model type
+    query = _download_prepare(ctx, model, query, typ)
     _prepare_export(ctx, model, query)
 
+    # Process each record to extract data rows
     key = None
     vals = []
     for el in query:
+        # Handle applicable records or registration-specific processing
         if ctx["applicable"] or model == "registration":
             val, key = _get_applicable_row(ctx, el, model, member_cover)
         else:
             val, key = _get_standard_row(ctx, el)
         vals.append(val)
 
+    # Sort data by appropriate column (adjust for member cover offset)
     order_column = 0
     if member_cover:
         order_column = 1
     vals = sorted(vals, key=lambda x: x[order_column])
 
+    # Build base export structure
     exports = [(model, key, vals)]
 
-    # if plots, add rels
+    # Add plot relationships if exporting plot data
     if model == "plot":
         exports.extend(export_plot_rels(ctx))
 
-    # if character, add relationships
+    # Add character relationships if feature is enabled
     if model == "character":
         if "relationships" in ctx["features"]:
             exports.extend(export_relationships(ctx))
@@ -278,23 +292,39 @@ def _prepare_export(ctx: dict, model: str, query: QuerySet) -> None:
     ctx["questions"] = questions
 
 
-def _get_applicable_row(ctx, el, model, member_cover=False):
+def _get_applicable_row(ctx: dict, el: object, model: str, member_cover: bool = False) -> tuple[list, list]:
     """Build row data for export with question answers and element information.
 
-    Args:
-        ctx: Context dictionary with questions, answers, and choices data
-        el: Element instance (registration, character, etc.)
-        model: Model type string ('registration', 'character')
-        member_cover: Boolean to include member profile images
+    This function constructs export data by combining element metadata with
+    question-specific answers and choices based on the applicable context type.
 
-    Returns:
-        Tuple of (values list, headers list) for the row
+    Parameters
+    ----------
+    ctx : dict
+        Context dictionary containing:
+        - questions: List of question objects
+        - answers: Dict mapping question IDs to element answers
+        - choices: Dict mapping question IDs to element choice selections
+        - applicable: QuestionApplicable enum value
+    el : object
+        Element instance (registration, character, etc.) to extract data from
+    model : str
+        Model type identifier ('registration', 'character', etc.)
+    member_cover : bool, optional
+        Whether to include member profile images in export, by default False
+
+    Returns
+    -------
+    tuple[list, list]
+        Tuple containing (values_list, headers_list) for the export row
     """
     val = []
     key = []
 
+    # Build base headers and values for the element
     _row_header(ctx, el, key, member_cover, model, val)
 
+    # Add context-specific fields based on applicable type
     if ctx["applicable"] == QuestionApplicable.QUEST:
         key.append("typ")
         val.append(el.typ.name)
@@ -302,46 +332,64 @@ def _get_applicable_row(ctx, el, model, member_cover=False):
         key.append("quest")
         val.append(el.quest.name)
 
+    # Extract answers and choices from context
     answers = ctx["answers"]
     choices = ctx["choices"]
 
-    # add question values
+    # Process each question and extract corresponding values
     for que in ctx["questions"]:
         key.append(que.name)
+
+        # Get element-specific value mapping for special question types
         mapping = _get_values_mapping(el)
         value = ""
+
+        # Handle mapped question types (direct element attributes)
         if que.typ in mapping:
             value = mapping[que.typ]()
+        # Handle text-based question types (paragraph, text, email)
         elif que.typ in {"p", "t", "e"}:
             if que.id in answers and el.id in answers[que.id]:
                 value = answers[que.id][el.id]
+        # Handle choice-based question types (single, multiple)
         elif que.typ in {"s", "m"}:
             if que.id in choices and el.id in choices[que.id]:
                 value = ", ".join(choices[que.id][el.id])
+
+        # Clean value for export format (remove tabs, convert newlines)
         value = value.replace("\t", "").replace("\n", "<br />")
         val.append(value)
 
     return val, key
 
 
-def _row_header(ctx, el, key, member_cover, model, val):
+def _row_header(ctx: dict, el: object, key: list, member_cover: bool, model: str, val: list) -> None:
     """Build header row data with member information and basic element data.
 
+    Constructs header rows for export tables by extracting member data, profile images,
+    and model-specific information like ticket details for registrations.
+
     Args:
-        ctx: Context dictionary with assignments data
-        el: Element instance to process
-        key: List to append header names to
-        member_cover: Boolean to include member profile images
-        model: Model type string ('registration', 'character')
-        val: List to append values to
+        ctx: Context dictionary containing assignments data and other export context
+        el: Element instance to process (registration or character object)
+        key: List to append header column names to
+        member_cover: Whether to include member profile image column
+        model: Model type identifier ('registration' or 'character')
+        val: List to append corresponding values to
+
+    Returns:
+        None: Function modifies key and val lists in place
     """
+    # Extract member based on model type
     member = None
     if model == "registration":
         member = el.member
     elif model == "character":
+        # Check if character has assignment in context
         if el.id in ctx["assignments"]:
             member = ctx["assignments"][el.id]
 
+    # Add profile image column if requested
     if member_cover:
         key.append("")
         profile = ""
@@ -349,23 +397,29 @@ def _row_header(ctx, el, key, member_cover, model, val):
             profile = member.profile_thumb.url
         val.append(profile)
 
+    # Add participant and email columns for relevant models
     if model in ["registration", "character"]:
+        # Add participant display name
         key.append(_("Participant"))
         display = ""
         if member:
             display = member.display_real()
         val.append(display)
 
+        # Add participant email
         key.append(_("Email"))
         email = ""
         if member:
             email = member.email
         val.append(email)
 
+    # Add registration-specific columns
     if model == "registration":
+        # Add ticket information
         val.append(el.ticket.name if el.ticket is not None else "")
         key.append(_("Ticket"))
 
+        # Process additional registration headers
         _header_regs(ctx, el, key, val)
 
 
@@ -379,31 +433,43 @@ def _expand_val(val, el, field):
     val.append("")
 
 
-def _header_regs(ctx, el, key, val):
+def _header_regs(ctx: dict, el: object, key: list, val: list) -> None:
     """Generate header row data for registration download with feature-based columns.
 
+    This function dynamically builds column headers and values for registration data
+    export based on enabled features in the context. It appends data to the provided
+    key and val lists in-place.
+
     Args:
-        ctx: Context dictionary containing features and configuration
-        el: Registration element object
-        key: List to append column headers to
-        val: List to append column values to
+        ctx: Context dictionary containing features configuration and feature names
+        el: Registration element object with registration data and relationships
+        key: List to append column headers to (modified in-place)
+        val: List to append column values to (modified in-place)
+
+    Returns:
+        None: Function modifies key and val lists in-place
     """
+    # Handle character-related data if character feature is enabled
     if "character" in ctx["features"]:
         key.append(_("Characters"))
         val.append(", ".join([row.character.name for row in el.rcrs.all()]))
 
+    # Add pay-what-you-want pricing if enabled
     if "pay_what_you_want" in ctx["features"]:
         val.append(el.pay_what)
         key.append("PWYW")
 
+    # Include surcharge information if feature is active
     if "surcharge" in ctx["features"]:
         val.append(el.surcharge)
         key.append(_("Surcharge"))
 
+    # Add quota information for installment or quota-based registrations
     if "reg_quotas" in ctx["features"] or "reg_installments" in ctx["features"]:
         val.append(el.quota)
         key.append(_("Next quota"))
 
+    # Core payment and deadline information (always included)
     val.append(el.deadline)
     key.append(_("Deadline"))
 
@@ -416,6 +482,7 @@ def _header_regs(ctx, el, key, val):
     val.append(el.tot_iscr)
     key.append(_("Total"))
 
+    # VAT-related pricing breakdown if VAT feature is enabled
     if "vat" in ctx["features"]:
         val.append(el.ticket_price)
         key.append(_("Ticket"))
@@ -423,6 +490,7 @@ def _header_regs(ctx, el, key, val):
         val.append(el.options_price)
         key.append(_("Options"))
 
+    # Token and credit payment methods if token credit feature is enabled
     if "token_credit" in ctx["features"]:
         _expand_val(val, el, "pay_a")
         key.append(_("Money"))
@@ -443,13 +511,26 @@ def _get_standard_row(ctx, el):
     return val, key
 
 
-def _writing_field(ctx, k, key, v, val):
+def _writing_field(ctx: dict, k: str, key: list, v: any, val: list) -> None:
     """Process writing field for export with feature-based filtering.
 
     Filters and formats writing fields based on enabled features,
-    handling special cases like factions and custom fields.
+    handling special cases like factions and custom fields. Modifies
+    the key and val lists in-place by appending processed field data.
+
+    Args:
+        ctx: Context dictionary containing features and factions data
+        k: Field name/key to process
+        key: List to append field names to (modified in-place)
+        v: Field value to process
+        val: List to append processed values to (modified in-place)
+
+    Returns:
+        None: Function modifies key and val lists in-place
     """
     new_val = v
+
+    # Define fields that should be skipped from export
     skip_fields = [
         "id",
         "show",
@@ -464,23 +545,31 @@ def _writing_field(ctx, k, key, v, val):
         "cover",
         "thumb",
     ]
+
+    # Skip processing if field is in exclusion list
     if k in skip_fields:
         return
 
+    # Skip custom fields (prefixed with "custom_")
     if k.startswith("custom_"):
         return
 
+    # Check if title field is enabled in features
     if k in ["title"]:
         if k not in ctx["features"]:
             return
 
+    # Handle faction field processing
     if k == "factions":
+        # Skip if faction feature is not enabled
         if "faction" not in ctx["features"]:
             return
 
+        # Convert faction IDs to names and join with commas
         aux = [ctx["factions"][int(el)]["name"] for el in v]
         new_val = ", ".join(aux)
 
+    # Clean the processed value and append to output lists
     clean = _clean(new_val)
     val.append(clean)
     key.append(k)
@@ -652,45 +741,65 @@ def _orga_registrations_acc(ctx, regs=None):
     return cached_data
 
 
-def _orga_registrations_acc_reg(reg, ctx, cache_aip):
+def _orga_registrations_acc_reg(reg, ctx: dict, cache_aip: dict) -> dict:
     """
     Process registration accounting data for organizer downloads.
 
+    Calculates payment breakdowns, remaining balances, and ticket pricing
+    information for registration accounting reports.
+
     Args:
-        reg: Registration instance to process
-        ctx: Context dictionary with ticket and feature information
-        cache_aip: Cached accounting payment data
+        reg: Registration instance containing payment and ticket data
+        ctx: Context dictionary containing:
+            - features: Available feature flags
+            - reg_tickets: Ticket information by ID
+        cache_aip: Cached accounting payment data indexed by member_id
+            containing payment type breakdown ('b', 'c' payment types)
 
     Returns:
-        dict: Processed accounting data dictionary
+        dict: Processed accounting data containing:
+            - Payment amounts (tot_payed, tot_iscr, quota, etc.)
+            - Payment type breakdown (pay_a, pay_b, pay_c) if token_credit enabled
+            - Remaining balance calculation
+            - Ticket and options pricing breakdown
     """
     dt = {}
 
+    # Maximum rounding threshold for balance calculations
     max_rounding = 0.05
 
+    # Round all monetary values to nearest cent
     for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
         dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
 
+    # Process payment breakdown if token credit feature is enabled
     if "token_credit" in ctx["features"]:
         if reg.member_id in cache_aip:
+            # Extract payment types 'b' and 'c' from cache
             for pay in ["b", "c"]:
                 v = 0
                 if pay in cache_aip[reg.member_id]:
                     v = cache_aip[reg.member_id][pay]
                 dt["pay_" + pay] = float(v)
+            # Calculate remaining payment type 'a' as difference
             dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
         else:
+            # If no cached data, all payment is type 'a'
             dt["pay_a"] = dt["tot_payed"]
 
+    # Calculate remaining balance with rounding tolerance
     dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
     if abs(dt["remaining"]) < max_rounding:
         dt["remaining"] = 0
 
+    # Calculate ticket and options pricing breakdown
     if reg.ticket_id in ctx["reg_tickets"]:
         t = ctx["reg_tickets"][reg.ticket_id]
         dt["ticket_price"] = t.price
+        # Add pay-what-you-want amount to base ticket price
         if reg.pay_what:
             dt["ticket_price"] += reg.pay_what
+        # Calculate options price as difference between total and ticket
         dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
 
     return dt
@@ -833,26 +942,46 @@ def _get_column_names(ctx: dict) -> None:
         _get_writing_names(ctx)
 
 
-def _get_writing_names(ctx):
+def _get_writing_names(ctx: dict) -> None:
     """Get writing field names and types for download context.
 
+    Populates the provided context dictionary with writing field information
+    including applicable question types, field definitions, column configurations,
+    and allowed field names for data export functionality.
+
     Args:
-        ctx: Context dictionary to populate with writing field information
-            including event, typ, and fields data
+        ctx: Context dictionary containing event, typ, and features data.
+             Will be modified in-place with additional writing field information:
+             - writing_typ: Applicable question type
+             - fields: Dictionary mapping field names to their types
+             - field_name: Name field identifier (if present)
+             - columns: List of column configuration dictionaries
+             - allowed: List of allowed field names for export
+
+    Returns:
+        None: Function modifies ctx dictionary in-place
     """
+    # Determine the applicable writing question type based on context
     ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
     ctx["fields"] = {}
+
+    # Retrieve and process writing questions for the event
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
     for field in que.order_by("order").values("name", "typ"):
         ctx["fields"][field["name"]] = field["typ"]
+        # Store the name field for special handling
         if field["typ"] == "name":
             ctx["field_name"] = field["name"]
 
+    # Initialize base column configuration
     ctx["columns"] = [{}]
+
+    # Configure character-specific fields and columns
     if ctx["writing_typ"] == QuestionApplicable.CHARACTER:
         ctx["fields"]["player"] = "skip"
         ctx["fields"]["email"] = "skip"
 
+        # Add relationship columns if feature is enabled
         if "relationships" in ctx["features"]:
             ctx["columns"].append(
                 {
@@ -862,6 +991,7 @@ def _get_writing_names(ctx):
                 }
             )
 
+    # Configure plot-specific columns
     elif ctx["writing_typ"] == QuestionApplicable.PLOT:
         ctx["columns"].append(
             {
@@ -871,12 +1001,15 @@ def _get_writing_names(ctx):
             }
         )
 
+    # Configure quest-specific columns
     elif ctx["writing_typ"] == QuestionApplicable.QUEST:
         ctx["columns"][0]["typ"] = _("Name of quest type")
 
+    # Configure trait-specific columns
     elif ctx["writing_typ"] == QuestionApplicable.TRAIT:
         ctx["columns"][0]["quest"] = _("Name of quest")
 
+    # Build the list of allowed field names for export validation
     ctx["allowed"] = list(ctx["columns"][0].keys())
     ctx["allowed"].extend(ctx["fields"].keys())
 

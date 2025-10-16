@@ -301,19 +301,28 @@ def exe_membership_check(request):
 
 
 @login_required
-def exe_member(request, num):
+def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     """Display and edit member profile with accounting and membership data.
 
+    This view handles both GET requests for displaying member information and POST
+    requests for updating member profiles. It includes accounting data, registrations,
+    discounts, and membership documents.
+
     Args:
-        request: HTTP request object
-        num: Member ID to edit
+        request: The HTTP request object containing user session and form data
+        num: The unique identifier (ID) of the member to display/edit
 
     Returns:
-        Rendered member edit template with forms and member data
+        HttpResponse: Rendered template with member edit form and associated data
+
+    Raises:
+        Http404: If member with given ID doesn't exist or user lacks permissions
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership")
     ctx.update(get_member(num))
 
+    # Handle form submission for member profile updates
     if request.method == "POST":
         form = ExeMemberForm(request.POST, request.FILES, instance=ctx["member"], request=request)
         if form.is_valid():
@@ -321,30 +330,38 @@ def exe_member(request, num):
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
+        # Initialize empty form for GET requests
         form = ExeMemberForm(instance=ctx["member"], request=request)
     ctx["form"] = form
 
+    # Get member registrations for current association events
     ctx["regs"] = Registration.objects.filter(
         member=ctx["member"], run__event__assoc=request.assoc["id"]
     ).select_related("run")
 
+    # Add accounting payment items to context
     member_add_accountingitempayment(ctx, request)
 
+    # Add other accounting items to context
     member_add_accountingitemother(ctx, request)
 
+    # Get member discounts for current association
     ctx["discounts"] = AccountingItemDiscount.objects.filter(
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
     )
 
+    # Process membership data and document paths
     member = ctx["member"]
     get_user_membership(member, ctx["a_id"])
 
+    # Set document file paths if they exist
     if member.membership.document:
         ctx["doc_path"] = member.membership.get_document_filepath().lower()
 
     if member.membership.request:
         ctx["req_path"] = member.membership.get_request_filepath().lower()
 
+    # Add fiscal code validation if feature is enabled
     if "fiscal_code_check" in ctx["features"]:
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
@@ -516,35 +533,54 @@ def exe_membership_document(request):
 
 
 @login_required
-def exe_enrolment(request):
+def exe_enrolment(request) -> HttpResponse:
     """Display yearly enrollment list with membership card numbers.
 
+    Generates a list of enrolled members for the current year, including their
+    membership card numbers and enrollment dates. Members are ordered by their
+    card numbers and include calculated enrollment order based on days from
+    year start.
+
     Args:
-        request: HTTP request object
+        request (HttpRequest): The HTTP request object containing user and
+            association context.
 
     Returns:
-        Rendered template with enrolled members list for current year
+        HttpResponse: Rendered template with context containing:
+            - year: Current year
+            - list: List of members with membership details, enrollment dates,
+              and formatted names
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_enrolment")
     split_two_names = 2
 
+    # Set current year and calculate year start date
     ctx["year"] = datetime.today().year
     start = datetime(ctx["year"], 1, 1)
+
+    # Build cache of member enrollment dates from accounting items
     cache = {}
     for el in AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"]).values_list(
         "member_id", "created"
     ):
         cache[el[0]] = el[1]
 
+    # Query memberships with card numbers for enrolled members
     ctx["list"] = []
     que = Membership.objects.filter(member_id__in=cache.keys(), assoc_id=ctx["a_id"], card_number__isnull=False)
     que = que.select_related("member").order_by("card_number")
+
+    # Process each membership and prepare member data
     for mb in que:
         member = mb.member
         member.membership = mb
         member.last_enrolment = cache[member.id]
+
+        # Calculate enrollment order based on days from year start
         member.order = (member.last_enrolment - start).days
 
+        # Parse and format member legal name if available
         if member.legal_name:
             splitted = member.legal_name.rsplit(" ", 1)
             if len(splitted) == split_two_names:
@@ -552,6 +588,7 @@ def exe_enrolment(request):
             else:
                 member.name = splitted[0]
 
+        # Capitalize name components for display
         member.name = member.name.capitalize()
         member.surname = member.surname.capitalize()
 
@@ -704,41 +741,60 @@ def exe_questions(request):
 
 
 @login_required
-def exe_questions_answer(request, r):
+def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
     """
     Handle question answering for executives.
 
+    This view allows organization executives to answer help questions submitted by members.
+    It displays the member's question history and provides a form to submit answers.
+
     Args:
-        request: HTTP request object
-        r: Member ID for question answering
+        request: The HTTP request object containing user session and POST data
+        r: The primary key (ID) of the Member who submitted the question
 
     Returns:
-        HttpResponse: Question answer form or redirect after submission
+        HttpResponse: Rendered question answer form page or redirect to questions list
+            after successful form submission
+
+    Raises:
+        Member.DoesNotExist: If the member with the given ID doesn't exist
     """
+    # Check executive permissions for question management
     ctx = check_assoc_permission(request, "exe_questions")
 
-    # Get last question by that user
+    # Retrieve the member and their question history
     member = Member.objects.get(pk=r)
     ctx["member"] = member
     ctx["list"] = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created")
 
+    # Get the most recent question from this member
     last = ctx["list"].first()
 
+    # Handle form submission for new answers
     if request.method == "POST":
         form = OrgaHelpQuestionForm(request.POST, request.FILES)
         if form.is_valid():
+            # Create answer object without saving to database yet
             hp = form.save(commit=False)
+
+            # Associate answer with the same run as the original question if applicable
             if last.run:
                 hp.run = last.run
+
+            # Set answer metadata and save to database
             hp.member = member
             hp.is_user = False
             hp.assoc_id = ctx["a_id"]
             hp.save()
+
+            # Notify user of successful submission and redirect
             messages.success(request, _("Answer submitted!"))
             return redirect("exe_questions")
     else:
+        # Initialize empty form for GET requests
         form = OrgaHelpQuestionForm()
 
+    # Add form to context for template rendering
     ctx["form"] = form
 
     return render(request, "larpmanager/exe/users/questions_answer.html", ctx)

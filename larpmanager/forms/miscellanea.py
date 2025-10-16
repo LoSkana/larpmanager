@@ -75,8 +75,20 @@ class SendMailForm(forms.Form):
         required=False,
     )
 
-    def __init__(self, *args: object, **kwargs: object):
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Initialize the form with show_link configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
+
+        # Configure fields that should display as links in the form
         self.show_link = ["id_reply_to", "id_raw"]
 
 

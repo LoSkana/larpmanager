@@ -625,17 +625,29 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_verification(request):
+def exe_verification(request: HttpRequest) -> HttpResponse:
     """Handle payment verification process with invoice upload and processing.
 
+    This function manages the verification of payment invoices by allowing users to
+    view pending payments and upload verification documents. It excludes automated
+    payment methods and processes manual verification uploads.
+
     Args:
-        request: HTTP request object with file upload capability
+        request: HTTP request object containing user data and potentially uploaded files
+            for payment verification processing
 
     Returns:
-        Rendered verification template with pending payments and upload form
+        HttpResponse: Rendered verification template containing pending payments list
+            and file upload form for verification documents
+
+    Raises:
+        PermissionError: If user lacks required association permissions for verification
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_verification")
 
+    # Query pending payment invoices excluding automated payment methods
+    # Filter out created status and electronic payment methods that auto-verify
     ctx["todo"] = (
         PaymentInvoice.objects.filter(assoc_id=ctx["a_id"], verified=False)
         .exclude(status=PaymentStatus.CREATED)
@@ -643,30 +655,40 @@ def exe_verification(request):
         .select_related("method")
     )
 
+    # Extract registration payment IDs for further processing
     check = [el.id for el in ctx["todo"] if el.typ == PaymentType.REGISTRATION]
 
+    # Get accounting payment records for registration payments
     payments = AccountingItemPayment.objects.filter(inv_id__in=check)
 
+    # Create mapping from invoice ID to run-member identifier
+    # Build sets of unique run and member IDs for efficient querying
     aux = {acc.inv_id: f"{acc.reg.run_id}-{acc.member_id}" for acc in payments}
     run_ids = {acc.reg.run_id for acc in payments}
     member_ids = {acc.member_id for acc in payments}
 
+    # Cache registration special codes using run-member composite key
+    # This avoids N+1 queries when displaying registration codes
     cache = {
         f"{reg.run_id}-{reg.member_id}": reg.special_cod
         for reg in Registration.objects.filter(run_id__in=run_ids, member_id__in=member_ids)
     }
 
+    # Attach registration codes to payment invoice objects
     for el in ctx["todo"]:
         el.reg_cod = cache.get(aux.get(el.id))
 
+    # Handle file upload for payment verification
     if request.method == "POST":
         form = UploadElementsForm(request.POST, request.FILES, only_one=True)
         if form.is_valid():
+            # Process uploaded verification file and count verified payments
             counter = invoice_verify(ctx, request.FILES["first"])
             messages.success(request, _("Verified payments") + "!" + " " + str(counter))
             return redirect("exe_verification")
 
     else:
+        # Initialize empty form for GET requests
         form = UploadElementsForm(only_one=True)
 
     ctx["form"] = form

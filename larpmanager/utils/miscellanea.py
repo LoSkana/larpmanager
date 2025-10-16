@@ -281,13 +281,28 @@ def get_warehouse_optionals(ctx, def_cols):
     ctx["no_header_cols"] = json.dumps([el + active for el in def_cols])
 
 
-def auto_rotate_vertical_photos(instance, sender):
+def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     """Automatically rotate vertical photos to landscape orientation.
 
+    This function is designed to be used as a Django signal handler that processes
+    image fields on model instances. It rotates vertical images 90 degrees clockwise
+    to convert them to landscape orientation while preserving image quality and
+    handling various image formats appropriately.
+
     Args:
-        instance: Model instance with a 'photo' ImageField
-        sender: Model class that sent the signal
+        instance: Model instance containing a 'photo' ImageField that may need rotation
+        sender: Model class that sent the signal (typically used in Django signals)
+
+    Returns:
+        None: Function performs in-place modification of the instance's photo field
+
+    Note:
+        - Only processes images that are taller than they are wide
+        - Handles EXIF orientation data automatically
+        - Optimizes JPEG quality and converts RGBA/LA/P modes to RGB for JPEG format
+        - Silently returns on any errors to avoid breaking the calling process
     """
+    # Validate that the instance has a photo ImageField
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
         field = instance._meta.get_field("photo")
@@ -296,13 +311,16 @@ def auto_rotate_vertical_photos(instance, sender):
     except Exception:
         return
 
+    # Get the photo file object from the instance
     f = getattr(instance, "photo", None)
     if not f:
         return
 
+    # Check if this is a new file that needs processing
     if _check_new(f, instance, sender):
         return
 
+    # Open and load the image from the file object
     fileobj = getattr(f, "file", None) or f
     try:
         fileobj.seek(0)
@@ -310,18 +328,25 @@ def auto_rotate_vertical_photos(instance, sender):
     except Exception:
         return
 
+    # Apply EXIF orientation and get image dimensions
     img = ImageOps.exif_transpose(img)
     w, h = img.size
+
+    # Skip rotation if image is already landscape or square
     if h <= w:
         return
 
+    # Rotate the image 90 degrees clockwise to make it landscape
     img = img.rotate(90, expand=True)
 
+    # Determine the appropriate file format for saving
     fmt = _get_extension(f, img)
 
+    # Convert incompatible color modes for JPEG format
     if fmt == "JPEG" and img.mode in ("RGBA", "LA", "P"):
         img = img.convert("RGB")
 
+    # Save the rotated image to a BytesIO buffer with optimization
     out = BytesIO()
     save_kwargs = {"optimize": True}
     if fmt == "JPEG":
@@ -329,6 +354,7 @@ def auto_rotate_vertical_photos(instance, sender):
     img.save(out, format=fmt, **save_kwargs)
     out.seek(0)
 
+    # Replace the original photo with the rotated version
     basename = os.path.basename(f.name) or f.name
     instance.photo = ContentFile(out.read(), name=basename)
 

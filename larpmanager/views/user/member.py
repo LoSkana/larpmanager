@@ -76,32 +76,47 @@ from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text
 
 
-def language(request):
-    """
-    Handle language selection and preference setting for users.
+def language(request: HttpRequest) -> HttpResponse:
+    """Handle language selection and preference setting for users.
+
+    This view processes language selection forms and updates user language preferences.
+    For authenticated users, the language preference is saved to their member profile.
+    For anonymous users, the language is stored in cookies and session.
 
     Args:
-        request: HTTP request object
+        request: The HTTP request object containing user data and form submission.
 
     Returns:
-        HttpResponse: Rendered language form or redirect response
+        HttpResponse: Either a rendered language selection form (GET) or a redirect
+                     response after successful language change (POST).
+
+    Note:
+        Language changes are immediately activated and stored in the session.
+        Authenticated users have their preference saved to the database.
     """
+    # Determine current language based on user authentication status
     if request.user.is_authenticated:
         current_language = request.user.member.language
     else:
         current_language = get_language()
 
+    # Process form submission for language change
     if request.method == "POST":
         form = LanguageForm(request.POST, current_language=current_language)
         if form.is_valid():
             language = form.cleaned_data["language"]
+
+            # Activate the new language and store in session
             activate(language)
             request.session["django_language"] = language
             response = HttpResponseRedirect("/")
+
+            # Save language preference for authenticated users
             if request.user.is_authenticated:
                 request.user.member.language = language
                 request.user.member.save()
             else:
+                # Set language cookie for anonymous users
                 response.set_cookie(
                     conf_settings.LANGUAGE_COOKIE_NAME,
                     language,
@@ -114,7 +129,9 @@ def language(request):
                 )
             return response
     else:
+        # Display language selection form for GET requests
         form = LanguageForm(current_language=current_language)
+
     return render(request, "larpmanager/member/language.html", {"form": form})
 
 
@@ -398,26 +415,41 @@ def membership_request_test(request):
 
 
 @login_required
-def public(request, n):
+def public(request: HttpRequest, n: int) -> HttpResponse:
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
     including badges, registration history, and character information
     based on association configuration and feature availability.
+
+    Args:
+        request: HTTP request object containing user and association context
+        n: Member ID to display profile for
+
+    Returns:
+        HttpResponse: Rendered public member profile page
+
+    Raises:
+        Http404: If member has no membership in the current association
     """
+    # Initialize context with user data and fetch member information
     ctx = def_user_ctx(request)
     ctx.update(get_member(n))
 
+    # Verify member has membership in current association
     if not Membership.objects.filter(member=ctx["member"], assoc_id=request.assoc["id"]).exists():
         raise Http404("no membership")
 
+    # Add badges if badge feature is enabled for association
     if "badge" in request.assoc["features"]:
         ctx["badges"] = []
         for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
             ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
+    # Add LARP history if enabled in association configuration
     assoc_id = ctx["a_id"]
     if get_assoc_config(assoc_id, "player_larp_history", False):
+        # Fetch registrations with related run and event data
         ctx["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
@@ -428,17 +460,21 @@ def public(request, n):
             .select_related("run", "run__event")
             .prefetch_related("rcrs")
         )
+
+        # Process character information for each registration
         for el in ctx["regs"]:
             el.chars = {}
 
             for rcr in el.rcrs.select_related("character").all():
                 if not rcr.character:
                     continue
+                # Use custom name if available, otherwise use character name
                 name = rcr.character.name
                 if rcr.custom_name:
                     name = rcr.custom_name
                 el.chars[rcr.character.number] = name
 
+    # Validate and mark social contact as URL if valid
     validate = URLValidator()
     if ctx["member"].social_contact:
         try:

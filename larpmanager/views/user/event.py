@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -156,25 +156,31 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_coming_runs(assoc_id, future=True):
-    """Get upcoming runs for an association with optimized queries.
+def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
+    """Get upcoming or past runs for an association with optimized queries.
 
     Args:
-        assoc_id: Association ID to filter by
-        future: If True, get future runs; if False, get past runs
+        assoc_id: Association ID to filter by. If None, returns runs for all associations.
+        future: If True, get future runs; if False, get past runs. Defaults to True.
 
     Returns:
-        QuerySet of Run objects with optimized select_related
+        QuerySet of Run objects with optimized select_related, ordered by end date.
+        Future runs are ordered ascending, past runs descending.
     """
+    # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
     runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
 
+    # Filter by association if specified
     if assoc_id:
         runs = runs.filter(event__assoc_id=assoc_id)
 
+    # Apply date filtering and ordering based on future/past requirement
     if future:
+        # Get runs ending 3+ days from now, ordered by end date (earliest first)
         ref = datetime.now() - timedelta(days=3)
         runs = runs.filter(end__gte=ref.date()).order_by("end")
     else:
+        # Get runs that ended 3+ days ago, ordered by end date (latest first)
         ref = datetime.now() + timedelta(days=3)
         runs = runs.filter(end__lte=ref.date()).order_by("-end")
 
@@ -405,20 +411,29 @@ def gallery(request, s):
     return render(request, "larpmanager/event/gallery.html", ctx)
 
 
-def event(request, s):
+def event(request: HttpRequest, s: str) -> HttpResponse:
     """
     Display main event page with runs, registration status, and event details.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing user authentication and session data
+        s: Event slug used to identify the specific event
 
     Returns:
-        HttpResponse: Rendered event template
+        HttpResponse: Rendered event template with context containing event details,
+                     runs categorized as coming/past, and registration information
+
+    Note:
+        - Categorizes runs as 'coming' (ended within 3 days) or 'past'
+        - Includes user registration status if authenticated
+        - Sets no_robots flag based on development status and timing
     """
+    # Get base context with event and run information
     ctx = get_event_run(request, s, status=True)
     ctx["coming"] = []
     ctx["past"] = []
+
+    # Retrieve user's registrations for this event if authenticated
     my_regs = None
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
@@ -427,23 +442,32 @@ def event(request, s):
             cancellation_date__isnull=True,
             member=request.user.member,
         )
+
+    # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=ctx["event"])
     ref = datetime.now() - timedelta(days=3)
 
+    # Prepare features mapping for registration status checking
     features_map = {ctx["event"].slug: ctx["features"]}
+
+    # Process each run to determine registration status and categorize by timing
     for r in runs:
         if not r.end:
             continue
 
+        # Update run with registration status information
         registration_status(r, request.user, my_regs=my_regs, features_map=features_map)
 
+        # Categorize run as coming (recent) or past based on end date
         if r.end > ref.date():
             ctx["coming"].append(r)
         else:
             ctx["past"].append(r)
 
+    # Refresh event object to ensure latest data
     ctx["event"] = Event.objects.get(pk=ctx["event"].pk)
 
+    # Determine if search engines should index this page
     ctx["no_robots"] = (
         not ctx["run"].development == DevelopStatus.SHOW
         or not ctx["run"].end

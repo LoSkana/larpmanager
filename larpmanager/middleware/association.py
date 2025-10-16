@@ -19,9 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
@@ -53,43 +55,51 @@ class AssociationIdentifyMiddleware:
         return self.get_assoc_info(request) or self.get_response(request)
 
     @classmethod
-    def get_assoc_info(cls, request):
+    def get_assoc_info(cls, request) -> Optional[HttpResponse]:
         """Extract association information from request domain.
 
-        Determines environment, extracts subdomain, loads association data,
-        and handles domain redirects for multi-tenant setup.
+        Determines the environment based on host domain, extracts subdomain to identify
+        the target association, loads association data from cache, and handles domain
+        redirects for proper multi-tenant routing.
 
         Args:
-            request: Django HTTP request object
+            request: Django HTTP request object containing host and session data
 
         Returns:
-            HttpResponse or None: Redirect response if needed, None to continue
+            HttpResponse: Redirect response if domain mismatch requires redirect
+            None: Continue processing if association found and domain is correct
+
+        Raises:
+            No exceptions are raised directly by this method
         """
-        # get assoc slug from host
+        # Extract host components for domain analysis
         host = request.get_host().split(":")[0]
         domain = host.split(".")[0]
         base_domain = ".".join(host.split(".")[-2:])
 
+        # Determine environment based on host characteristics
         if os.getenv("env") == "prod":
             request.enviro = "prod"
         elif "xyz" in host:
             request.enviro = "staging"
         else:
-            # dev environment
+            # Handle dev/test environment detection
             if not os.getenv("PYTEST_CURRENT_TEST"):
                 request.enviro = "dev"
             else:
                 request.enviro = "test"
 
-            # base_domain = "ludomanager.it"
+            # Override base domain for development environments
             base_domain = "larpmanager.com"
 
+        # Resolve association slug from multiple sources
         conf_slug = getattr(conf_settings, "SLUG_ASSOC", None)
-
         assoc_slug = request.session.get("debug_slug") if "debug_slug" in request.session else conf_slug or domain
 
+        # Attempt to load association data from cache
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
+            # Check for domain mismatch requiring redirect
             if "main_domain" in assoc and assoc["main_domain"] != base_domain:
                 if request.enviro == "prod" and not conf_slug:
                     slug = assoc["slug"]
@@ -97,6 +107,7 @@ class AssociationIdentifyMiddleware:
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
 
+        # Fallback to main domain handling
         return cls.get_main_info(request, base_domain)
 
     @classmethod

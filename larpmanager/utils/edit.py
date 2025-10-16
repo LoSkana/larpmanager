@@ -19,14 +19,14 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import time
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.forms import ModelForm
-from django.http import Http404, HttpRequest, JsonResponse
+from django.forms import ModelForm, forms
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -48,18 +48,30 @@ def save_log(member, cls, el, dl=False):
     Log.objects.create(member=member, cls=cls.__name__, eid=el.id, dl=dl, dct=el.as_dict())
 
 
-def save_version(el, tp, mb, dl=False):
+def save_version(el, tp: str, mb, dl: bool = False) -> None:
     """Manage versioning of text content.
 
     Creates and saves new versions of editable text elements with author tracking,
     handling different content types including character relationships, plot
     character associations, and question-based text fields.
+
+    Args:
+        el: The element object to create a version for
+        tp: Type identifier for the content being versioned
+        mb: Member object representing the author of this version
+        dl: Whether this version should be marked for deletion, defaults to False
+
+    Returns:
+        None
     """
+    # Get the highest version number for this element and increment it
     n = TextVersion.objects.filter(tp=tp, eid=el.id).aggregate(Max("version"))["version__max"]
     if n is None:
         n = 1
     else:
         n += 1
+
+    # Create new TextVersion instance with basic metadata
     tv = TextVersion()
     tv.eid = el.id
     tv.tp = tp
@@ -67,9 +79,12 @@ def save_version(el, tp, mb, dl=False):
     tv.member = mb
     tv.dl = dl
 
+    # Handle question-based content types by aggregating answers
     if tp in QuestionApplicable.values:
         texts = []
         query = el.event.get_elements(WritingQuestion)
+
+        # Collect all applicable questions and their values
         for que in query.filter(applicable=tp).order_by("order"):
             value = _get_field_value(el, que)
             if not value:
@@ -79,8 +94,10 @@ def save_version(el, tp, mb, dl=False):
 
         tv.text = "\n".join(texts)
     else:
+        # For non-question types, use the element's text directly
         tv.text = el.text
 
+    # Add character relationships if this is a character type
     if tp == QuestionApplicable.CHARACTER:
         rels = Relationship.objects.filter(source=el)
         if rels:
@@ -88,6 +105,7 @@ def save_version(el, tp, mb, dl=False):
             for rel in rels:
                 tv.text += f"{rel.target}: {html_clean(rel.text)}\n"
 
+    # Add plot character associations if this is a plot type
     if tp == QuestionApplicable.PLOT:
         chars = PlotCharacterRel.objects.filter(plot=el)
         if chars:
@@ -95,6 +113,7 @@ def save_version(el, tp, mb, dl=False):
             for rel in chars:
                 tv.text += f"{rel.character}: {html_clean(rel.text)}\n"
 
+    # Save the completed version to database
     tv.save()
 
 
@@ -349,45 +368,67 @@ def set_suggestion(ctx, perm):
     config.save()
 
 
-def writing_edit(request, ctx, form_type, nm, tp, redr=None):
+def writing_edit(
+    request: HttpRequest, ctx: dict[str, Any], form_type: type[forms.Form], nm: str, tp: str, redr: Optional[str] = None
+) -> Optional[HttpResponse]:
     """
     Handle editing of writing elements with form processing.
 
+    Manages the creation and editing of writing elements (characters, backgrounds, etc.)
+    through a dynamic form system. Handles both GET requests for form display and
+    POST requests for form submission and validation.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with element data
-        form_type: Form class to use for editing
-        nm: Name of the element in context
-        tp: Type of writing element
-        redr: Optional redirect URL after save
+        request: The HTTP request object containing method and form data
+        ctx: Context dictionary containing element data and template variables
+        form_type: Django form class to instantiate for editing the element
+        nm: Name key of the element in the context dictionary
+        tp: Type identifier for the writing element being edited
+        redr: Optional redirect URL to use after successful form save
 
     Returns:
-        HttpResponse: Redirect response if form is valid, None otherwise
+        HttpResponse object for redirect after successful save, None otherwise
+        to continue with template rendering
+
+    Note:
+        Function modifies the ctx dictionary in-place to add form and display data.
     """
+    # Set up element type metadata for template rendering
     ctx["elementTyp"] = form_type.Meta.model
+
+    # Configure element identification and naming
     if nm in ctx:
         ctx["eid"] = ctx[nm].id
         ctx["name"] = str(ctx[nm])
     else:
         ctx[nm] = None
 
+    # Set type information for template display
     ctx["type"] = ctx["elementTyp"].__name__.lower()
     ctx["label_typ"] = ctx["type"]
 
+    # Handle form submission (POST request)
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
+
+        # Process valid form data and potentially redirect
         if form.is_valid():
             return _writing_save(ctx, form, form_type, nm, redr, request, tp)
     else:
+        # Initialize form for GET request
         form = form_type(instance=ctx[nm], ctx=ctx)
 
+    # Configure template context for form rendering
     ctx["nm"] = nm
     ctx["form"] = form
     ctx["add_another"] = True
     ctx["continue_add"] = "continue" in request.POST
+
+    # Set auto-save behavior based on event configuration
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
     ctx["download"] = 1
 
+    # Set up character finder functionality for the element type
     _setup_char_finder(ctx, ctx["elementTyp"])
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
@@ -411,51 +452,68 @@ def _setup_char_finder(ctx, typ):
     ctx["char_finder_media"] = widget.media
 
 
-def _writing_save(ctx, form, form_type, nm, redr, request, tp):
+def _writing_save(
+    ctx: dict, form: Any, form_type: type, nm: str, redr: Optional[Callable], request: HttpRequest, tp: Optional[str]
+) -> HttpResponse:
     """
     Save writing form data with AJAX and normal save handling.
 
+    Handles both AJAX auto-save requests and normal form submissions. For normal saves,
+    creates version history if type is provided, otherwise logs the operation. Supports
+    deletion via POST parameter and various redirect behaviors.
+
     Args:
-        ctx: Context dictionary with element data
-        form: Validated form instance
-        form_type: Form class type
-        nm: Name of the element in context
-        redr: Optional redirect URL
-        request: HTTP request object
-        tp: Type of writing element
+        ctx: Context dictionary containing element data and run information
+        form: Validated form instance ready for saving
+        form_type: Form class type used for logging operations
+        nm: Name of the element in context (used for redirects)
+        redr: Optional redirect callable that takes context as parameter
+        request: HTTP request object containing POST data and user info
+        tp: Type of writing element for version tracking (None disables versioning)
 
     Returns:
-        HttpResponse: AJAX response or redirect after save
+        HttpResponse: AJAX JSON response for auto-save or HTTP redirect after normal save
     """
-    # Auto save ajax
+    # Handle AJAX auto-save requests
     if "ajax" in request.POST:
+        # Check if element exists in context before processing
         if nm in ctx:
             return writing_edit_save_ajax(form, request, ctx)
         else:
             return JsonResponse({"res": "ko"})
 
-    # Normal save
+    # Process normal form submission
+    # Save form data but keep as temporary until processing complete
     p = form.save(commit=False)
     p.temp = False
     p.save()
+
+    # Check if deletion was requested via POST parameter
     dl = "delete" in request.POST and request.POST["delete"] == "1"
+
+    # Create version history or log operation based on type parameter
     if tp:
         save_version(p, tp, request.user.member, dl)
     else:
         save_log(request.user.member, form_type, p)
 
+    # Execute deletion if requested after logging/versioning
     if dl:
         p.delete()
 
+    # Display success message to user
     messages.success(request, _("Operation completed") + "!")
 
+    # Handle continue editing request
     if "continue" in request.POST:
         return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
+    # Handle custom redirect function if provided
     if redr:
         ctx["element"] = p
         return redr(ctx)
 
+    # Default redirect to list view
     return redirect("orga_" + nm + "s", s=ctx["run"].get_slug())
 
 
@@ -496,20 +554,29 @@ def writing_edit_save_ajax(form, request, ctx):
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, tp, eid, token):
+def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
     """
     Manage working tickets to prevent concurrent editing conflicts.
 
+    This function implements a locking mechanism to prevent multiple users from
+    editing the same content simultaneously, which could result in data loss.
+    For plot objects, it recursively checks all related characters.
+
     Args:
-        request: HTTP request object
+        request: HTTP request object containing user information
         tp: Type of element being edited (e.g., 'plot', 'character')
         eid: Element ID being edited
-        token: User's editing token
+        token: User's unique editing token for session identification
 
     Returns:
-        str: Warning message if conflicts exist, empty string otherwise
+        Warning message if editing conflicts exist, empty string if safe to edit
+
+    Note:
+        Uses Redis cache with a 15-second timeout window to track active editors.
+        Cache timeout is set to minimum of ticket_time and 1 day.
     """
-    # working ticket also for related characters
+    # Handle plot objects by recursively checking all related characters
+    # This prevents conflicts when editing plots that affect multiple characters
     if tp == "plot":
         obj = Plot.objects.get(pk=eid)
         for char_id in obj.characters.values_list("pk", flat=True):
@@ -517,26 +584,32 @@ def writing_edit_working_ticket(request, tp, eid, token):
             if msg:
                 return msg
 
+    # Get current timestamp and retrieve existing ticket from cache
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
     if not ticket:
         ticket = {}
+
+    # Check for other active editors within the timeout window
     others = []
-    ticket_time = 15
+    ticket_time = 15  # 15-second timeout for editing conflicts
     for idx, el in ticket.items():
         (name, tm) = el
+        # Only consider other users' tokens within the timeout period
         if idx != token and now - tm < ticket_time:
             others.append(name)
 
+    # Generate warning message if other users are currently editing
     msg = ""
     if len(others) > 0:
         msg = _("Warning! Other users are editing this item") + "."
         msg += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
         msg += " " + _("List of other users") + ": " + ", ".join(others)
 
+    # Update ticket with current user's information and timestamp
     ticket[token] = (str(request.user.member), now)
-    # Use minimum of ticket_time and 1 day for timeout
+    # Cache the updated ticket with appropriate timeout
     cache.set(key, ticket, min(ticket_time, conf_settings.CACHE_TIMEOUT_1_DAY))
 
     return msg

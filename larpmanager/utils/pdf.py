@@ -215,20 +215,26 @@ def xhtml_pdf(context, template_path, output_filename):
             raise Http404("We had some errors <pre>" + html + "</pre>")
 
 
-def pdf_template(ctx, tmp, out, small=False, html=False):
+def pdf_template(ctx: dict, tmp: str, out: str, small: bool = False, html: bool = False) -> None:
     """Generate PDF from template using pdfkit with configurable options.
 
     Args:
-        ctx (dict): Template context dictionary
-        tmp (str): Template path or HTML string
-        out (str): Output PDF file path
-        small (bool): Use minimal margins for compact layout
-        html (bool): If True, treat tmp as HTML string; if False, as template path
+        ctx: Template context dictionary containing variables for rendering.
+        tmp: Template path or HTML string depending on html parameter.
+        out: Output PDF file path where the generated PDF will be saved.
+        small: Use minimal margins for compact layout. Defaults to False.
+        html: If True, treat tmp as HTML string; if False, as template path.
+              Defaults to False.
 
-    Side effects:
-        Creates PDF file at specified output path
+    Raises:
+        Exception: PDF generation errors are logged but not re-raised.
+
+    Side Effects:
+        Creates PDF file at specified output path.
     """
+    # Configure PDF options based on layout preference
     if small:
+        # Minimal margins for compact layout
         options = {
             "page-size": "A4",
             "margin-top": "0.1in",
@@ -241,6 +247,7 @@ def pdf_template(ctx, tmp, out, small=False, html=False):
             "quiet": "",
         }
     else:
+        # Standard margins for normal layout
         options = {
             "page-size": "A4",
             "margin-top": "0.6in",
@@ -254,18 +261,24 @@ def pdf_template(ctx, tmp, out, small=False, html=False):
         }
 
     try:
+        # Render HTML content based on input type
         if html:
+            # Treat tmp as HTML string and render with context
             t = Template(tmp)
             c = Context(ctx)
             html = t.render(c)
         else:
+            # Treat tmp as template path and load template
             template = get_template(tmp)
             html = template.render(ctx)
             logger.debug(f"Generated HTML for PDF: {len(html)} characters")
+
+        # Generate PDF from rendered HTML string
         # html = html.replace(conf_settings.STATIC_URL, request.build_absolute_uri(conf_settings.STATIC_URL))
         # html = html.replace(conf_settings.MEDIA_URL, request.build_absolute_uri(conf_settings.MEDIA_URL))
         pdfkit.from_string(html, out, options)
     except Exception as e:
+        # Log PDF generation errors without re-raising
         logger.error(f"PDF generation error: {e}")
 
 
@@ -573,44 +586,55 @@ def odt_template(ctx, char, fp, template, aux_template):
     logger.error(f"ERROR IN odt_template: {excepts}")
 
 
-def exec_odt_template(ctx, char, fp, template, aux_template):
-    """
-    Process ODT template to generate PDF for character data.
+def exec_odt_template(ctx: dict, char: dict, fp: str, template: object, aux_template: object) -> None:
+    """Process ODT template to generate PDF for character data.
 
     Args:
-        ctx: Context dictionary with template data
-        char: Character data dictionary
-        fp: Output file path for generated PDF
-        template: ODT template file object
-        aux_template: Auxiliary template for content processing
+        ctx: Context dictionary containing template rendering data
+        char: Character data dictionary with character information
+        fp: Output file path where the generated PDF will be saved
+        template: ODT template file object with path attribute
+        aux_template: Auxiliary template object for content processing
+
+    Returns:
+        None: Function writes PDF file to specified path
     """
+    # Set up working directory based on character number
     working_dir = os.path.dirname(fp)
     working_dir = os.path.join(working_dir, str(char["number"]))
     logger.debug(f"Character PDF working directory: {working_dir}")
-    # deletes file if existing
+
+    # Clean up existing output file if present
     if os.path.exists(fp):
         os.remove(fp)
+
+    # Set up temporary working directory for processing
     working_dir += "-work"
-    # deletes directory if existing
     if os.path.exists(working_dir):
         logger.debug(f"Cleaning up existing character directory: {working_dir}")
         shutil.rmtree(working_dir)
     os.makedirs(working_dir)
+
+    # Create subdirectory for unzipped template content
     zip_dir = os.path.join(working_dir, "zipdd")
-    # creates directory
     os.makedirs(zip_dir)
-    # unzip event template there
+
+    # Extract ODT template to working directory
     os.chdir(zip_dir)
     os.system(f"unzip -q {template.path}")
+
+    # Process template content with character data
     update_content(ctx, working_dir, zip_dir, char, aux_template)
-    # zip back again
+
+    # Repackage modified content back into ODT format
     os.chdir(zip_dir)
     os.system("zip -q -r ../out.odt *")
-    # convert to pdf
+
+    # Convert ODT to PDF using unoconv
     os.chdir(working_dir)
-    # os.system("unoconv -f pdf out.odt")
     os.system("/usr/bin/unoconv -f pdf out.odt")
-    # move
+
+    # Move generated PDF to final destination
     os.rename("out.pdf", fp)
     # ## TODO shutil.rmtree(working_dir)
     # if os.path.exists(working_dir):
@@ -618,48 +642,72 @@ def exec_odt_template(ctx, char, fp, template, aux_template):
 
 
 # translate html markup to odt
-def get_odt_content(ctx, working_dir, aux_template):
+def get_odt_content(ctx: dict, working_dir: str, aux_template) -> dict:
     """
     Extract ODT content from HTML template for PDF generation.
 
+    Converts an HTML template to ODT format using LibreOffice, then extracts
+    and parses the XML content to retrieve text, automatic styles, and document
+    styles for further processing.
+
     Args:
-        ctx: Template context dictionary
-        working_dir: Working directory for file operations
-        aux_template: Django template object
+        ctx: Template context dictionary containing variables for rendering
+        working_dir: Working directory path for temporary file operations
+        aux_template: Django template object to be rendered and converted
 
     Returns:
-        dict: ODT content with txt, auto, and styles elements
+        Dictionary containing extracted ODT elements:
+            - txt: List of text elements from content.xml
+            - auto: List of automatic style elements from content.xml
+            - styles: List of style elements from styles.xml
+
+    Raises:
+        ValueError: If required XML elements are not found in the ODT files
     """
+    # Render the Django template with provided context
     html = aux_template.render(ctx)
-    # get odt teaser
+
+    # Write rendered HTML to temporary file for LibreOffice conversion
     o_html = os.path.join(working_dir, "auxiliary.html")
     f = open(o_html, "w")
     f.write(html)
     f.close()
-    # convert to odt
+
+    # Convert HTML to ODT format using LibreOffice headless mode
     os.chdir(working_dir)
     os.system("soffice --headless --convert-to odt auxiliary.html")
-    # extract zip
+
+    # Prepare extraction directory and clean up any existing content
     aux_dir = os.path.join(working_dir, "aux")
     if os.path.exists(aux_dir):
         shutil.rmtree(aux_dir)
     os.makedirs(aux_dir)
+
+    # Extract ODT file contents (ODT is essentially a ZIP archive)
     os.chdir(aux_dir)
     os.system("unzip -q ../aux.odt")
-    # get data from content
+
+    # Parse content.xml to extract text and automatic style elements
     doc = lxml.etree.parse("content.xml")
     txt_elements = doc.xpath('//*[local-name()="text"]')
     auto_elements = doc.xpath('//*[local-name()="automatic-styles"]')
+
+    # Validate that required elements exist in content.xml
     if not txt_elements or not auto_elements:
         raise ValueError("Required XML elements not found in content.xml")
     txt = txt_elements[0]
     auto = auto_elements[0]
-    # get data from styles
+
+    # Parse styles.xml to extract document style definitions
     doc = lxml.etree.parse("styles.xml")
     styles_elements = doc.xpath('//*[local-name()="styles"]')
+
+    # Validate that required elements exist in styles.xml
     if not styles_elements:
         raise ValueError("Required XML elements not found in styles.xml")
     styles = styles_elements[0]
+
+    # Return extracted content as dictionary with child elements
     return {
         "txt": txt.getchildren(),
         "auto": auto.getchildren(),

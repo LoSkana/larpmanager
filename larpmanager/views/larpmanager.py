@@ -20,6 +20,7 @@
 
 import random
 from datetime import date, datetime, timedelta
+from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -28,7 +29,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, F, Min, Sum
-from django.http import Http404, HttpResponseForbidden, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -523,35 +524,44 @@ def join(request):
     return render(request, "larpmanager/larpmanager/join.html", ctx)
 
 
-def _join_form(ctx, request):
+def _join_form(ctx: dict, request) -> Association | None:
     """Process association creation form for new users.
 
     Handles form validation, association creation, user role assignment,
     and admin notifications for new organizations.
 
     Args:
-        ctx: Context dictionary to update with form data
-        request: Django HTTP request object
+        ctx: Context dictionary to update with form data.
+        request: Django HTTP request object containing POST data and user info.
 
     Returns:
-        Association: Created association object if successful, None otherwise
+        Created Association object if form submission is successful and valid,
+        None if GET request or form validation fails.
+
+    Note:
+        Updates ctx dictionary with form instance for template rendering.
+        Sends email notifications to all configured admins upon successful creation.
     """
     if request.method == "POST":
+        # Initialize and validate the association creation form
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
-            # set skin
+            # Create association with inherited skin from request context
             assoc = form.save(commit=False)
             assoc.skin_id = request.assoc["skin_id"]
             assoc.save()
 
-            # Add member to admins
+            # Create admin role for the new association and assign creator
             (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
             ar.members.add(request.user.member)
             ar.save()
+
+            # Update membership status to joined for the creator
             el = get_user_membership(request.user.member, assoc.id)
             el.status = MembershipStatus.JOINED
             el.save()
 
+            # Send notification emails to all configured administrators
             for _name, email in conf_settings.ADMINS:
                 subj = _("New organization created")
                 body = _("Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s") % {
@@ -565,8 +575,10 @@ def _join_form(ctx, request):
             # return redirect('first', assoc=assoc.slug)
             return assoc
     else:
+        # Initialize empty form for GET requests
         form = FirstAssociationForm()
 
+    # Add form to context for template rendering
     ctx["form"] = form
     return None
 
@@ -591,26 +603,28 @@ def discover(request):
 
 
 @override("en")
-def tutorials(request, slug=None):
+def tutorials(request: HttpRequest, slug: Optional[str] = None) -> HttpResponse:
     """Display tutorial pages with navigation.
 
     Shows individual tutorials with previous/next navigation.
     Always rendered in English locale.
 
     Args:
-        request: Django HTTP request object
-        slug: Optional tutorial slug, defaults to first tutorial
+        request: Django HTTP request object.
+        slug: Optional tutorial slug, defaults to first tutorial if None.
 
     Returns:
-        HttpResponse: Rendered tutorial page
+        HttpResponse: Rendered tutorial page with navigation context.
 
     Raises:
-        Http404: If tutorial with specified slug doesn't exist
+        Http404: If tutorial with specified slug doesn't exist.
     """
+    # Initialize base context with contact information
     ctx = get_lm_contact(request)
     ctx["index"] = True
 
     try:
+        # Get tutorial by slug or fetch first tutorial by order
         if slug:
             tutorial = LarpManagerTutorial.objects.get(slug=slug)
         else:
@@ -620,20 +634,26 @@ def tutorials(request, slug=None):
         raise Http404("tutorial not found") from err
 
     if tutorial:
+        # Set current tutorial order for navigation
         order = tutorial.order
         ctx["seq"] = order
 
+        # Get all tutorials ordered by sequence for navigation
         que = LarpManagerTutorial.objects.order_by("order")
         ctx["list"] = que.values_list("name", "order", "slug")
 
+        # Initialize navigation links
         ctx["next"] = None
         ctx["prev"] = None
+
+        # Find previous and next tutorials based on order
         for el in ctx["list"]:
             if el[1] < order:
                 ctx["prev"] = el
             if el[1] > order and not ctx["next"]:
                 ctx["next"] = el
 
+    # Check if page should be displayed in iframe
     ctx["iframe"] = request.GET.get("in_iframe") == "1"
     ctx["opened"] = tutorial
 
@@ -777,41 +797,60 @@ def lm_list(request):
 
 
 @login_required
-def lm_payments(request):
+def lm_payments(request: HttpRequest) -> HttpResponse:
     """Display payment management page for admin users.
 
-    Shows unpaid runs and payment totals by year.
-    Requires admin permissions.
+    Shows unpaid runs with minimum registration requirements and calculates
+    payment totals by year for administrative oversight.
 
     Args:
-        request: Django HTTP request object (must be authenticated admin)
+        request: Django HTTP request object. Must be from authenticated admin user.
 
     Returns:
-        HttpResponse: Rendered payments management page
+        HttpResponse: Rendered payments management page with unpaid runs list,
+                     total unpaid amount, and yearly payment totals.
+
+    Raises:
+        PermissionDenied: If user lacks admin permissions (handled by check_lm_admin).
     """
+    # Verify admin permissions and get base context
     ctx = check_lm_admin(request)
     min_registrations = 5
+
+    # Get all unpaid runs ordered by start date
     que = Run.objects.filter(paid__isnull=True).order_by("start")
 
+    # Initialize lists and totals for unpaid runs
     ctx["list"] = []
     ctx["total"] = 0
+
+    # Process each unpaid run
     for el in que:
+        # Skip runs without a plan
         if not el.plan:
             continue
 
+        # Calculate payment details for this run
         get_run_lm_payment(el)
 
+        # Skip runs with insufficient registrations
         if el.active_registrations < min_registrations:
             continue
 
+        # Add qualifying run to list and update total
         ctx["list"].append(el)
         ctx["total"] += el.total
 
+    # Get the oldest run date to determine year range
     que = Run.objects.aggregate(oldest_date=Min("start"))
     ctx["totals"] = {}
+
+    # Calculate yearly payment totals from current year to oldest
     for year in list(range(datetime.today().year, que["oldest_date"].year - 1, -1)):
         start_of_year = date(year, 1, 1)
         end_of_year = date(year, 12, 31)
+
+        # Sum all paid amounts for runs in this year
         total_paid = Run.objects.filter(start__range=(start_of_year, end_of_year)).aggregate(total=Sum("paid"))["total"]
         ctx["totals"][year] = total_paid
 
@@ -1002,43 +1041,57 @@ def demo(request):
     return render(request, "larpmanager/larpmanager/demo.html", ctx)
 
 
-def _create_demo(request):
+def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     """Create a demo organization with test user.
 
-    Creates a new demo association with a test admin user
-    and logs the user in automatically.
+    Creates a new demo association with a test admin user and logs the user
+    in automatically. The demo organization is created with a unique slug
+    and configured with default settings for testing purposes.
 
     Args:
-        request: Django HTTP request object
+        request: Django HTTP request object containing user session data
+            and association context information.
 
     Returns:
-        HttpResponseRedirect: Redirect to demo organization management
+        HttpResponseRedirect: Redirect response to the demo organization's
+            management dashboard where the newly created admin user can
+            begin using the system.
+
+    Note:
+        The created demo organization inherits the skin configuration from
+        the current request's association context.
     """
+    # Generate unique primary key for new association
     new_pk = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
     new_pk += 1
 
-    # create assoc
+    # Create demo association with unique slug and inherited skin
     assoc = Association.objects.create(
         slug=f"test{new_pk}", name="Demo Organization", skin_id=request.assoc["skin_id"], demo=True
     )
 
-    # create test user
+    # Create test admin user with demo credentials
     (user, cr) = User.objects.get_or_create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}")
     user.password = "pippo"
     user.save()
+
+    # Configure member profile with demo information
     member = user.member
     member.name = "Demo"
     member.surname = "Admin"
     member.save()
 
-    # Add member to admins
+    # Create admin role and assign member with full permissions
     (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
     ar.members.add(member)
     ar.save()
+
+    # Set membership status to active/joined
     el = get_user_membership(member, assoc.id)
     el.status = MembershipStatus.JOINED
     el.save()
 
+    # Authenticate and log in the demo user
     login(request, user, backend=get_user_backend())
 
     return redirect("after_login", subdomain=assoc.slug, path="manage")

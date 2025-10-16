@@ -20,6 +20,7 @@
 
 import logging
 from datetime import date, datetime
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -351,24 +352,34 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
 
 @login_required
-def acc_membership(request, method=None):
+def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpResponse:
     """Process membership fee payment for the current year.
 
+    This function handles the membership fee payment workflow, including validation
+    of membership status, checking for existing payments, and processing payment forms.
+
     Args:
-        request: HTTP request object with user data
-        method: Optional payment method to use by default
+        request: HTTP request object containing user data and session information
+        method: Optional payment method to use as default in the payment form
 
     Returns:
-        Rendered membership payment form or redirect on success
+        HttpResponse: Rendered membership payment form template or redirect response
+
+    Raises:
+        PermissionDenied: If user lacks required association feature access
     """
+    # Check if user has access to membership feature
     check_assoc_feature(request, "membership")
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
+
+    # Validate user membership status - must be accepted to pay dues
     memb = get_user_membership(request.user.member, request.assoc["id"])
     if memb.status != MembershipStatus.ACCEPTED:
         messages.success(request, _("It is not possible for you to pay dues at this time") + ".")
         return redirect("accounting")
 
+    # Check if membership fee already paid for current year
     year = datetime.now().year
     try:
         AccountingItemMembership.objects.get(year=year, member=request.user.member, assoc_id=request.assoc["id"])
@@ -377,19 +388,24 @@ def acc_membership(request, method=None):
     except Exception:
         pass
 
+    # Set up context variables for template rendering
     ctx["year"] = year
-
     key = f"{request.user.member.id}_{year}"
 
+    # Set default payment method if provided
     if method:
         ctx["def_method"] = method
 
+    # Process form submission or render initial form
     if request.method == "POST":
         form = MembershipForm(request.POST, ctx=ctx)
         if form.is_valid():
+            # Generate payment form for valid membership submission
             get_payment_form(request, form, PaymentType.MEMBERSHIP, ctx, key)
     else:
         form = MembershipForm(ctx=ctx)
+
+    # Add form and membership fee to context for template
     ctx["form"] = form
     ctx["membership_fee"] = get_assoc(request).get_config("membership_fee")
 
@@ -610,16 +626,29 @@ def acc_payed(request, p=0):
 
 
 @login_required
-def acc_submit(request, s, p):
+def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
     """Handle payment submission and invoice upload for user accounts.
 
     Processes different payment types (wire transfer, PayPal, any) and handles
     file uploads with validation and status updates.
+
+    Args:
+        request: The HTTP request object containing POST data and files
+        s: Payment submission type ('wire', 'paypal_nf', or 'any')
+        p: Redirect path for error cases
+
+    Returns:
+        HttpResponse: Redirect response to accounting page or profile check
+
+    Raises:
+        Http404: If payment submission type is unknown
     """
+    # Only allow POST requests for security
     if not request.method == "POST":
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
+    # Select appropriate form based on payment type
     if s in {"wire", "paypal_nf"}:
         form = WireInvoiceSubmitForm(request.POST, request.FILES)
     elif s == "any":
@@ -627,36 +656,42 @@ def acc_submit(request, s, p):
     else:
         raise Http404("unknown value: " + s)
 
+    # Validate form data and uploaded files
     if not form.is_valid():
         # logger.debug(f"Form errors: {form.errors}")
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + p)
 
+    # Retrieve the payment invoice using form data
     try:
         inv = PaymentInvoice.objects.get(cod=form.cleaned_data["cod"], assoc_id=request.assoc["id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + p)
 
+    # Update invoice with submitted data atomically
     with transaction.atomic():
         if s in {"wire", "paypal_nf"}:
             inv.invoice = form.cleaned_data["invoice"]
         elif s == "any":
             inv.text = form.cleaned_data["text"]
 
+        # Mark as submitted and generate transaction ID
         inv.status = PaymentStatus.SUBMITTED
         inv.txn_id = datetime.now().timestamp()
         inv.save()
 
+    # Send notification for invoice review
     notify_invoice_check(inv)
 
+    # Display success message and redirect to profile check
     mes = _("Payment received! As soon as it is approved, your accounts will be updated") + "."
     return acc_profile_check(request, mes, inv)
 
 
 @login_required
-def acc_confirm(request, c):
+def acc_confirm(request: HttpRequest, c: str) -> HttpResponse:
     """
     Confirm accounting payment invoice with authorization checks.
 
@@ -665,21 +700,29 @@ def acc_confirm(request, c):
         c: Invoice confirmation code
 
     Returns:
-        HttpResponse: Redirect to home page
+        HttpResponse: Redirect to home page with success/error message
+
+    Raises:
+        ObjectDoesNotExist: When invoice with given code is not found
+        PermissionDenied: When user lacks authorization to confirm invoice
     """
+    # Retrieve invoice by confirmation code and association ID
     try:
         inv = PaymentInvoice.objects.get(cod=c, assoc_id=request.assoc["id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Invoice not found"))
         return redirect("home")
 
+    # Check if invoice is in submittable status
     if inv.status != PaymentStatus.SUBMITTED:
         messages.error(request, _("Invoice already confirmed"))
         return redirect("home")
 
-    # check authorization
+    # Authorization check: verify user permissions
     found = False
     assoc_id = request.assoc["id"]
+
+    # Check if user is appointed treasurer
     if "treasurer" in get_assoc_features(assoc_id):
         for mb in get_assoc_config(assoc_id, "treasurer_appointees", "").split(", "):
             if not mb:
@@ -687,15 +730,18 @@ def acc_confirm(request, c):
             if request.user.member.id == int(mb):
                 found = True
 
+    # For registration payments, check event permissions
     if not found:
         if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
             check_event_permission(request, reg.run.get_slug())
 
+    # Atomically update invoice status to confirmed
     with transaction.atomic():
         inv.status = PaymentStatus.CONFIRMED
         inv.save()
 
+    # Return success response
     messages.success(request, _("Payment confirmed"))
     return redirect("home")
 

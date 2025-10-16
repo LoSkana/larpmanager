@@ -39,6 +39,7 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
 )
 from larpmanager.models.casting import Trait
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
@@ -79,30 +80,31 @@ class RegistrationForm(BaseRegistrationForm):
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
                      Expected to contain 'params' with 'run' key.
 
-        Returns:
-            None
+        Raises:
+            KeyError: If 'params' or 'run' key is missing from kwargs.
         """
+        # Call parent constructor with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Initialize core form state
+        # Initialize core form state variables for tracking form data
         self.questions = []
         self.tickets_map = {}
         self.profiles = {}
         self.section_descriptions = {}
         self.ticket = None
 
-        # Extract run and event from parameters
+        # Extract run and event objects from parameters for form configuration
         run = self.params["run"]
         event = run.event
         self.event = event
 
-        # Get registration counts for quota calculations
+        # Get current registration counts for quota calculations and availability checks
         reg_counts = get_reg_counts(run)
 
-        # Initialize ticket selection field and get help text
+        # Initialize ticket selection field and retrieve help text for user guidance
         ticket_help = self.init_ticket(event, reg_counts, run)
 
-        # Determine if registration should be placed in waiting list
+        # Determine if registration should be placed in waiting list based on instance or run status
         self.waiting_check = (
             self.instance
             and self.instance.ticket
@@ -111,21 +113,21 @@ class RegistrationForm(BaseRegistrationForm):
             and "waiting" in run.status
         )
 
-        # Initialize various form sections
+        # Initialize quota management system and additional registration options
         self.init_quotas(event, run)
         self.init_additionals()
 
-        # Setup payment-related fields
+        # Setup payment-related form fields including pricing and surcharges
         self.init_pay_what(run)
         self.init_surcharge(event)
 
-        # Add dynamic registration questions
+        # Add dynamic registration questions based on event configuration and requirements
         self.init_questions(event, reg_counts)
 
-        # Setup friend referral system
+        # Setup friend referral system functionality for social registration features
         self.init_bring_friend()
 
-        # Append additional help text to ticket field
+        # Append additional help text to ticket selection field for complete user guidance
         self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket):
@@ -363,42 +365,54 @@ class RegistrationForm(BaseRegistrationForm):
 
         return False
 
-    def get_available_tickets(self, event, reg_counts, run):
+    def get_available_tickets(self, event: Event, reg_counts: dict, run: Run) -> list["RegistrationTicket"] | list:
         """Get list of available tickets for registration.
 
+        Returns tickets available for the current user based on their status,
+        event configuration, and registration limits.
+
         Args:
-            event: Event instance
-            reg_counts: Registration count data
-            run: Run instance
+            event: Event instance to get tickets for
+            reg_counts: Dictionary containing registration count data by ticket type
+            run: Run instance associated with the event
 
         Returns:
-            QuerySet: Available registration tickets
+            List of RegistrationTicket objects available for registration,
+            or empty list if no tickets are available
         """
+        # Check if user has staff or NPC tickets - these take priority
         for tier in [TicketTier.STAFF, TicketTier.NPC]:
             # If the user is registered as a staff, show those options
             if self.has_ticket(tier):
                 return RegistrationTicket.objects.filter(event=event, tier=tier).order_by("order")
 
-        # Check closed inscriptions
+        # Prevent new registrations if inscriptions are closed
         if not self.instance.pk and "closed" in run.status:
             return []
 
-        # See players options
+        # Build list of available player tickets
         tickets = []
         que_tickets = RegistrationTicket.objects.filter(event=event).order_by("order")
+
+        # Filter to giftable tickets only if this is a gift registration
         if self.gift:
             que_tickets = que_tickets.filter(giftable=True)
 
+        # Evaluate each ticket for availability based on various constraints
         for ticket in que_tickets:
+            # Skip tickets not visible to current user
             if not self.check_ticket_visibility(ticket):
                 continue
 
+            # Skip tickets based on type restrictions
             if self.skip_ticket_type(event, run, ticket):
                 continue
 
+            # Skip tickets that have reached maximum capacity
             if self.skip_ticket_max(reg_counts, ticket):
                 continue
 
+            # Skip reduced-price tickets based on run configuration
             if self.skip_ticket_reduced(run, ticket):
                 continue
 
@@ -445,24 +459,31 @@ class RegistrationForm(BaseRegistrationForm):
                     return True
         return False
 
-    def skip_ticket_type(self, event, run, ticket):
+    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket) -> bool:
         """Determine if a ticket type should be skipped for the current member.
 
+        This method checks various conditions to determine whether a specific ticket
+        type should be hidden from the registration form for the current member.
+
         Args:
-            event: Event instance
-            run: Run instance
-            ticket: RegistrationTicket instance to check
+            event: Event instance containing the registration
+            run: Run instance for the specific event occurrence
+            ticket: RegistrationTicket instance to evaluate for visibility
 
         Returns:
-            Boolean indicating if the ticket should be skipped
+            True if the ticket should be skipped (hidden), False if it should be shown
+
+        Note:
+            The logic considers ticket selection state, player history, run status,
+            and member's existing registrations to determine ticket visibility.
         """
         result = False
 
-        # skip it ticket already selected
+        # Skip if ticket already selected in current registration flow
         if "ticket" in self.params:
             result = True
 
-        # do not show new player tickets if already played
+        # Hide new player tickets if member has previous non-waiting/staff/npc registrations
         elif ticket.tier == TicketTier.NEW_PLAYER:
             past_regs = Registration.objects.filter(cancellation_date__isnull=True)
             past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
@@ -470,27 +491,27 @@ class RegistrationForm(BaseRegistrationForm):
             if past_regs.exists():
                 result = True
 
-        # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
+        # Show waiting tickets only if run allows waiting or member already has waiting ticket
         elif ticket.tier == TicketTier.WAITING:
             if "waiting" not in run.status and not self.has_ticket(TicketTier.WAITING):
                 result = True
 
-        # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
+        # Handle filler ticket visibility based on event config and member status
         elif ticket.tier == TicketTier.FILLER:
             filler_alway = event.get_config("filler_always", False)
             if filler_alway:
+                # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
                     "filler" not in run.status
                     and "primary" not in run.status
                     and not self.has_ticket(TicketTier.FILLER)
                 ):
                     result = True
-
-            # Show Filler Tickets only if you have been fillers, or if the player
+            # Without filler_always, show only if run supports filler or member has filler ticket
             elif "filler" not in run.status and not self.has_ticket(TicketTier.FILLER):
                 result = True
 
-        # Show Primary Tickets only if he was primary, or if the player is registered
+        # Show primary tickets only if run supports primary registration or member has primary ticket
         elif "primary" not in run.status and not self.has_ticket_primary():
             result = True
 
@@ -839,17 +860,30 @@ class OrgaRegistrationTicketForm(MyForm):
             self.delete_field("giftable")
 
     @staticmethod
-    def get_tier_available(event):
+    def get_tier_available(event) -> list[tuple[str, str]]:
         """
         Get available ticket tiers based on event features and configuration.
 
+        Filters ticket tiers by checking if required features are enabled for the event
+        and if necessary configuration options are set. Returns only tiers that meet
+        all requirements.
+
         Args:
-            event: Event instance to check tier availability for
+            event: Event instance to check tier availability for. Must have
+                  get_config method and id attribute.
 
         Returns:
-            list: List of available ticket tier tuples (value, label)
+            List of available ticket tier tuples in format (value, label).
+            Each tuple represents a selectable ticket tier option.
+
+        Example:
+            >>> tiers = get_tier_available(my_event)
+            >>> print(tiers)
+            [('standard', 'Standard'), ('reduced', 'Reduced Price')]
         """
         aux = []
+
+        # Map ticket tiers to their required feature flags
         ticket_features = {
             TicketTier.LOTTERY: "lottery",
             TicketTier.WAITING: "waiting",
@@ -858,26 +892,35 @@ class OrgaRegistrationTicketForm(MyForm):
             TicketTier.REDUCED: "reduced",
             TicketTier.NEW_PLAYER: "new_player",
         }
+
+        # Map ticket tiers to their required configuration keys
         ticket_configs = {
             TicketTier.STAFF: "staff",
             TicketTier.NPC: "npc",
             TicketTier.COLLABORATOR: "collaborator",
             TicketTier.SELLER: "seller",
         }
+
+        # Get enabled features for this event
         ev_features = get_event_features(event.id)
+
+        # Iterate through all possible ticket tier choices
         for tp in TicketTier.choices:
             (value, label) = tp
-            # skip ticket if feature not set
+
+            # Skip ticket tiers that require features not enabled for this event
             if value in ticket_features:
                 if ticket_features[value] not in ev_features:
                     continue
 
-            # skip ticket if config not set
+            # Skip ticket tiers that require configuration options not set
             if value in ticket_configs:
                 if not event.get_config(f"ticket_{ticket_configs[value]}", False):
                     continue
 
+            # Add tier to available options if all checks pass
             aux.append(tp)
+
         return aux
 
 

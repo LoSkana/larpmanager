@@ -23,6 +23,7 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -162,30 +163,44 @@ def orga_spam(request, s):
 
 
 @login_required
-def orga_persuade(request, s):
+def orga_persuade(request, s: str) -> HttpResponse:
     """Display members who can be persuaded to register for the event.
 
     Shows association members who haven't registered yet, excluding current
     registrants and staff, with pre-registration status and event history.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        HttpResponse: Rendered template with member persuasion data
     """
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_persuade")
 
+    # Get list of members already registered for current/future runs
     already = list(
         Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
             "member_id", flat=True
         )
     )
 
+    # Add event staff members to exclusion list
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
+    # Get active association members
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
+    # Filter out already registered/staff members
     que = Member.objects.filter(id__in=members)
     que = que.exclude(id__in=already)
 
+    # Get pre-registration status for all members
     pre_regs = set(PreRegistration.objects.filter(event=ctx["event"]).values_list("member_id", flat=True))
 
+    # Calculate registration counts for each member
     reg_counts = {}
     for el in (
         Registration.objects.filter(member_id__in=members, cancellation_date__isnull=True)
@@ -195,6 +210,7 @@ def orga_persuade(request, s):
     ):
         reg_counts[el["member_id"]] = el["member_id__count"]
 
+    # Build final member list with pre-registration and count data
     ctx["lst"] = []
     for m in que.values_list("id", "name", "surname", "nickname"):
         pre_reg = m[0] in pre_regs
@@ -219,49 +235,76 @@ def orga_questions(request, s):
 
 
 @login_required
-def orga_questions_answer(request, s, r):
+def orga_questions_answer(request: HttpRequest, s: str, r: int) -> HttpResponse:
     """Handle organizer responses to member help questions.
 
+    This view allows organizers to respond to help questions submitted by members
+    for a specific event. It displays the member's information, their characters,
+    and the conversation history of help questions.
+
     Args:
-        request: HTTP request object
-        s: Event/run identifier
+        request: HTTP request object containing POST data for form submission
+        s: Event/run identifier (slug or ID)
         r: Member ID who submitted the question
 
     Returns:
-        Rendered template for answering help questions
+        HttpResponse: Rendered template for answering help questions or redirect
+            to questions list after successful submission
+
+    Raises:
+        Member.DoesNotExist: If the specified member ID doesn't exist
+        PermissionDenied: If user lacks required event permissions
     """
+    # Check organizer permissions for this event and get context
     ctx = check_event_permission(request, s, "orga_questions")
 
+    # Get the member who submitted the question
     member = Member.objects.get(pk=r)
+
+    # Handle form submission for organizer's answer
     if request.method == "POST":
         form = OrgaHelpQuestionForm(request.POST, request.FILES)
         if form.is_valid():
+            # Create new help question entry as organizer response
             hp = form.save(commit=False)
             hp.member = member
-            hp.is_user = False
+            hp.is_user = False  # Mark as organizer response
             hp.assoc_id = ctx["a_id"]
             hp.run = ctx["run"]
             hp.save()
+
+            # Show success message and redirect back to questions list
             messages.success(request, _("Answer submitted!"))
             return redirect("orga_questions", s=s)
     else:
+        # Initialize empty form for GET requests
         form = OrgaHelpQuestionForm()
 
+    # Add form and member to template context
     ctx["form"] = form
     ctx["member"] = member
 
+    # Get cached event data (characters, factions, etc.)
     get_event_cache_all(ctx)
+
+    # Find characters and factions associated with this member
     ctx["reg_characters"] = []
     ctx["reg_factions"] = []
     for _num, char in ctx["chars"].items():
+        # Skip characters without assigned players
         if "player_id" not in char:
             continue
+
+        # Add character if it belongs to the current member
         if char["player_id"] == member.id:
             ctx["reg_characters"].append(char)
+            # Collect all factions for this member's characters
             for fnum in char["factions"]:
                 ctx["reg_factions"].append(ctx["factions"][fnum])
 
+    # Get all help questions for this member in this event, newest first
     ctx["list"] = HelpQuestion.objects.filter(member_id=r, assoc_id=ctx["a_id"], run_id=ctx["run"]).order_by("-created")
+
     return render(request, "larpmanager/orga/users/questions_answer.html", ctx)
 
 
@@ -331,20 +374,31 @@ def orga_read_mail(request, s, nm):
 
 
 @login_required
-def orga_sensitive(request, s):
+def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
     """Display sensitive member information for event organizers.
 
+    This view allows event organizers to access sensitive member information
+    for registered participants and staff members. It includes character
+    assignments and configurable member fields.
+
     Args:
-        request: HTTP request object with user and association data
-        s: Event/run identifier
+        request: HTTP request object containing user and association data
+        s: Event/run identifier string used to locate the specific event
 
     Returns:
-        Rendered template with member sensitive data and character assignments
+        HttpResponse: Rendered template with member sensitive data and character assignments
+
+    Note:
+        Requires 'orga_sensitive' permission for the specified event.
+        Displays only non-cancelled registrations and event staff members.
     """
+    # Check user permissions for accessing sensitive data
     ctx = check_event_permission(request, s, "orga_sensitive")
 
+    # Load all event-related cache data
     get_event_cache_all(ctx)
 
+    # Build mapping of member IDs to their character assignments
     member_chars = {}
     for _num, el in ctx["chars"].items():
         if "player_id" not in el:
@@ -353,30 +407,38 @@ def orga_sensitive(request, s):
             member_chars[el["player_id"]] = []
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
+    # Collect all relevant member IDs (registered participants + staff)
     member_list = list(
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).values_list("member_id", flat=True)
     )
     member_list.extend([mb.id for mb in get_event_staffers(ctx["run"].event)])
 
+    # Define member model and fields to display
     member_cls: type[Member] = Member
     member_fields = ["name", "surname"] + sorted(request.assoc["members_fields"])
 
+    # Query and process member data
     ctx["list"] = Member.objects.filter(id__in=member_list).order_by("created")
     for el in ctx["list"]:
+        # Attach character assignments to each member
         if el.id in member_chars:
             el.chars = member_chars[el.id]
 
+        # Apply field corrections/formatting
         member_field_correct(el, member_fields)
 
+    # Build field metadata for template display
     ctx["fields"] = {}
     for field_name in member_fields:
         if not field_name:
             continue
+        # Skip fields that shouldn't be displayed in sensitive view
         if field_name in ["diet", "safety", "profile", "newsletter", "language"]:
             continue
         # noinspection PyUnresolvedReferences, PyProtectedMember
         ctx["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
 
+    # Sort members by display name for consistent ordering
     ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
 
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)

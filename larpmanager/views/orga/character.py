@@ -26,7 +26,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.db.models.functions import Length, Substr
-from django.http import Http404, HttpRequest, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -252,42 +252,71 @@ def orga_characters_summary(request, s, num):
 
 
 @login_required
-def orga_writing_form_list(request, s, typ):
+def orga_writing_form_list(request: HttpRequest, s: str, typ: str) -> JsonResponse:
     """Generate form list data for writing questions in JSON format.
 
     Processes writing questions and their answers for display in organizer interface,
     handling different question types (single, multiple choice, text, paragraph).
+
+    Args:
+        request: HTTP request object containing POST data with question ID
+        s: Event slug identifier
+        typ: Question type identifier for filtering applicable questions
+
+    Returns:
+        JsonResponse: JSON response containing question results, popup indicators,
+                     and question ID for frontend processing
+
+    Raises:
+        PermissionDenied: If user lacks required event permissions
+        Http404: If question or event not found
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
     event = ctx["event"]
+
+    # Use parent event if current event is a child
     if event.parent:
         event = event.parent
+
+    # Get question ID from POST data
     eid = request.POST.get("num")
 
+    # Determine applicable question type and get related element IDs
     applicable = QuestionApplicable.get_applicable(typ)
     element_typ = QuestionApplicable.get_applicable_inverse(applicable)
     element_ids = element_typ.objects.filter(event=event).values_list("id", flat=True)
 
+    # Initialize response data structures
     res = {}
     popup = []
     max_length = 100
 
+    # Get the specific question being processed
     question = event.get_elements(WritingQuestion).get(pk=eid, applicable=applicable)
+
+    # Handle single/multiple choice questions
     if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+        # Build choice options dictionary
         cho = {}
         for opt in event.get_elements(WritingOption).filter(question=question):
             cho[opt.id] = opt.name
 
+        # Process choices and group by element ID
         for el in WritingChoice.objects.filter(question=question, element_id__in=element_ids).order_by("option__order"):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
+    # Handle text, paragraph, and computed questions
     elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, WritingQuestionType.COMPUTED]:
+        # Query answers with text truncation for preview
         que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
+
+        # Process each answer and mark long texts for popup display
         for el in que:
             answer = el["short_text"]
             if len(answer) == max_length:
@@ -298,51 +327,75 @@ def orga_writing_form_list(request, s, typ):
 
 
 @login_required
-def orga_writing_form_email(request, s, typ):
+def orga_writing_form_email(request: HttpRequest, s: str, typ: str) -> JsonResponse:
     """Generate email data for writing form options by character choices.
 
+    This function processes writing form questions and returns email data
+    organized by the choices characters made for specific question options.
+
     Args:
-        request: HTTP request object
-        s: Event/run identifier
-        typ: Writing form type
+        request: The HTTP request object containing POST data
+        s: Event or run identifier string
+        typ: Writing form type identifier
 
     Returns:
-        JsonResponse with email data organized by option choices
+        JsonResponse containing email data organized by option choices.
+        Each option maps to a dict with 'emails' (character names) and
+        'names' (player names) lists.
+
+    Raises:
+        Http404: If event permission check fails or writing form type is invalid
     """
+    # Check event permissions and validate writing form type
     ctx = check_event_permission(request, s, "orga_characters")
     check_writing_form_type(ctx, typ)
+
+    # Get the parent event if this is a child event
     event = ctx["event"]
     if event.parent:
         event = event.parent
+
+    # Retrieve the specific writing question from POST data
     eid = request.POST.get("num")
     q = event.get_elements(WritingQuestion).get(pk=eid)
 
+    # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return
 
+    # Build mapping of option IDs to option names
     cho = {}
     for opt in event.get_elements(WritingOption).filter(question=q):
         cho[opt.id] = opt.name
 
+    # Load event cache and create character ID to number mapping
     get_event_cache_all(ctx)
     mapping = {}
     for ch_num, ch in ctx["chars"].items():
         mapping[ch["id"]] = ch_num
 
+    # Initialize result dictionary for organizing choices by option
     res = {}
 
+    # Process all character choices for this question
     character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
     for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
+        # Skip if character not in current event mapping
         if el.element_id not in mapping:
             continue
+
+        # Get character data and initialize option entry if needed
         ch_num = mapping[el.element_id]
         char = ctx["chars"][ch_num]
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
+
+        # Add character name and player name if available
         res[el.option_id]["emails"].append(char["name"])
         if char["player_id"]:
             res[el.option_id]["names"].append(char["player"])
 
+    # Convert option IDs to option names in final result
     n_res = {}
     for opt_id, value in res.items():
         n_res[cho[opt_id]] = value
@@ -405,28 +458,50 @@ def orga_writing_form(request, s, typ):
 
 
 @login_required
-def orga_writing_form_edit(request, s, typ, num):
+def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> HttpResponse:
     """Edit writing form questions with validation and option handling.
 
+    Handles the editing of writing form questions for LARP events, including
+    validation of question types and automatic redirection to option editing
+    for single/multiple choice questions.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        typ: Writing form type identifier
-        num: Question number/ID
+        request: The HTTP request object containing form data and user info
+        s: Event slug identifier for the current event
+        typ: Writing form type identifier (e.g., 'character', 'background')
+        num: Question number/ID to edit, or 0 for new question
 
     Returns:
-        HttpResponse: Form edit template or redirect to options/form list
+        HttpResponse: Either a rendered form edit template or a redirect to
+            options editing or form list depending on form submission result
+
+    Raises:
+        PermissionDenied: If user lacks 'orga_character_form' permission
+        Http404: If writing form type is invalid for the event
     """
+    # Check user permissions for editing character forms
     perm = "orga_character_form"
     ctx = check_event_permission(request, s, perm)
+
+    # Validate the writing form type exists for this event
     check_writing_form_type(ctx, typ)
+
+    # Process form submission using backend edit utility
     if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
+        # Set permission suggestion for future operations
         set_suggestion(ctx, perm)
+
+        # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), typ=typ, num=0)
+
+        # Determine if we need to redirect to option editing
         edit_option = False
+
+        # Check if user explicitly requested new option creation
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
+        # For choice questions, ensure at least one option exists
         elif ctx["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
             if not WritingOption.objects.filter(question_id=ctx["saved"].id).exists():
                 edit_option = True
@@ -434,14 +509,18 @@ def orga_writing_form_edit(request, s, typ, num):
                     request,
                     _("You must define at least one option before saving a single-choice or multiple-choice question"),
                 )
+
+        # Redirect to option editing if needed, otherwise back to form list
         if edit_option:
             return redirect(orga_writing_options_new, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].id)
         return redirect("orga_writing_form", s=ctx["run"].get_slug(), typ=typ)
 
+    # Load existing options for the question being edited
     ctx["list"] = WritingOption.objects.filter(question=ctx["el"], question__applicable=ctx["writing_typ"]).order_by(
         "order"
     )
 
+    # Render the form edit template with context
     return render(request, "larpmanager/orga/characters/form_edit.html", ctx)
 
 
@@ -486,23 +565,40 @@ def orga_writing_options_order(request, s, typ, num, order):
 
 
 @login_required
-def orga_check(request, s):
+def orga_check(request: HttpRequest, s: str) -> HttpResponse:
     """Perform comprehensive character and writing consistency checks.
 
     Validates character relationships, writing completeness, speedlarp constraints,
     and plot assignments to identify potential issues in the event setup.
+
+    Args:
+        request: The HTTP request object containing user session and data
+        s: The event slug identifier for accessing the specific event
+
+    Returns:
+        HttpResponse: Rendered template with check results and context data
+
+    Note:
+        This function performs multiple validation checks including character
+        relationships, writing completeness, and speedlarp constraints to ensure
+        event setup integrity.
     """
+    # Initialize context and validate user permissions for the event
     ctx = check_event_permission(request, s)
 
+    # Load all cached event data for efficient access
     get_event_cache_all(ctx)
 
+    # Initialize data structures for check results and caching
     checks = {}
-
     cache = {}
 
+    # Extract character numbers and build mapping structures
     chs_numbers = list(ctx["chars"].keys())
     id_number_map = {}
     number_map = {}
+
+    # Process character elements and build text content with teasers
     for el in ctx["event"].get_elements(Character).values_list("number", "text"):
         if el[0] not in ctx["chars"]:
             continue
@@ -511,21 +607,26 @@ def orga_check(request, s):
         id_number_map[ch["id"]] = ch["number"]
         number_map[ch["number"]] = ch["id"]
 
+    # Append plot-related text content if plot feature is enabled
     if "plot" in ctx["features"]:
         event = ctx["event"].get_class_parent(Character)
         que = PlotCharacterRel.objects.filter(character__event=event).select_related("character")
         que = que.exclude(text__isnull=True).exclude(text__exact="")
+
+        # Concatenate plot text to existing character text
         for el in que.values_list("character__number", "text"):
             ctx["chars"][el[0]]["text"] += el[1]
 
+    # Validate character relationships and dependencies
     check_relations(cache, checks, chs_numbers, ctx, number_map)
 
-    # check extinct, missing, interloper
+    # Verify writing completeness and identify extinct/missing/interloper characters
     check_writings(cache, checks, chs_numbers, ctx, id_number_map)
 
-    # check speedlarp, no player has double
+    # Validate speedlarp constraints ensuring no player has duplicate assignments
     check_speedlarp(checks, ctx, id_number_map)
 
+    # Store check results in context and render the check template
     ctx["checks"] = checks
     # print(checks)
     return render(request, "larpmanager/orga/writing/check.html", ctx)
@@ -669,33 +770,54 @@ def orga_character_get_number(request, s):
 
 
 @require_POST
-def orga_writing_excel_edit(request, s, typ):
+def orga_writing_excel_edit(request: HttpRequest, s: str, typ: str) -> JsonResponse:
     """Handle Excel-based editing of writing elements.
 
     Manages bulk editing of character stories and writing content through
     spreadsheet interface, providing AJAX form rendering with TinyMCE
     support and character count validation.
+
+    Args:
+        request: HTTP request object containing user session and form data
+        s: String identifier for the specific writing element or character
+        typ: Type identifier specifying the kind of writing question/element
+
+    Returns:
+        JsonResponse: JSON response containing form HTML, editor configuration,
+                     and validation parameters. Returns {"k": 0} on error.
+
+    Raises:
+        ObjectDoesNotExist: When the requested writing element cannot be found
     """
+    # Attempt to retrieve the Excel form context for the specified element
     try:
         ctx = _get_excel_form(request, s, typ)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
+    # Determine if TinyMCE rich text editor should be enabled
+    # Based on question type requiring formatted text input
     tinymce = False
     if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
         tinymce = True
 
+    # Initialize character counter HTML for length validation
     counter = ""
     if ctx["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]:
         if ctx["question"].max_length:
+            # Set appropriate label for multiple choice vs text fields
             if ctx["question"].typ == "m":
                 name = _("options")
             else:
                 name = "text length"
+            # Generate counter display with current/max length format
             counter = f'<div class="helptext">{name}: <span class="count"></span> / {ctx["question"].max_length}</div>'
 
+    # Prepare localized labels and form field references
     confirm = _("Confirm")
     field = ctx["form"][ctx["field_key"]]
+
+    # Build complete form HTML with header, input field, and controls
     value = f"""
         <h2>{ctx["question"].name}: {ctx["element"]}</h2>
         <form id='form-excel'>
@@ -708,6 +830,8 @@ def orga_writing_excel_edit(request, s, typ):
         <input type='submit' value='{confirm}'>
         <a href="#" class="close"><i class="fa-solid fa-xmark"></i></a>
     """
+
+    # Construct JSON response with form data and editor configuration
     response = {
         "k": 1,
         "v": value,
@@ -837,12 +961,20 @@ def _get_excel_form(request: HttpRequest, s: str, typ: str, submit: bool = False
     return ctx
 
 
-def _get_question_update(ctx, el):
+def _get_question_update(ctx: dict, el) -> str:
     """Generate question update HTML for different question types.
 
     Creates appropriate HTML content for updating questions based on their type,
     handling cover questions and other writing question formats.
+
+    Args:
+        ctx: Context dictionary containing question, form, event, and element data
+        el: Element object with thumb attribute for cover questions
+
+    Returns:
+        HTML string for the question update content
     """
+    # Handle cover question type - return image thumbnail HTML
     if ctx["question"].typ in [WritingQuestionType.COVER]:
         return f"""
                 <a href="{el.thumb.url}">
@@ -852,17 +984,21 @@ def _get_question_update(ctx, el):
                 </a>
             """
 
+    # Determine question key and slug based on question type
     question_key = f"q{ctx['question'].id}"
     question_slug = str(ctx["question"].id)
     if ctx["question"].typ not in BaseQuestionType.get_basic_types():
         question_key = ctx["question"].typ
         question_slug = ctx["question"].typ
 
+    # Extract value from form cleaned data
     value = ctx["form"].cleaned_data[question_key]
 
+    # Strip HTML tags for editor and text-based question types
     if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
         value = strip_tags(str(value))
 
+    # Handle multiple choice and single choice questions
     if ctx["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
         option_ids = [int(val) for val in value]
@@ -872,6 +1008,8 @@ def _get_question_update(ctx, el):
         # check if it is over the character limit
         value = str(value)
         limit = conf_settings.FIELD_SNIPPET_LIMIT
+
+        # Truncate long values and add expand link
         if len(value) > limit:
             value = value[:limit]
             value += f"... <a href='#' class='post_popup' pop='{ctx['element'].id}' fie='{question_slug}'><i class='fas fa-eye'></i></a>"

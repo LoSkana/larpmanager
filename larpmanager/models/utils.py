@@ -156,22 +156,31 @@ class UploadToPathAndRename:
     def __init__(self, sub_path):
         self.sub_path = sub_path
 
-    def __call__(self, instance, filename):
+    def __call__(self, instance, filename: str) -> str:
         """
         Generate upload path for file with backup handling.
 
+        Creates a unique filename using UUID and organizes files into directories
+        based on instance attributes (event, run, album). When updating existing
+        instances, previous files are moved to a backup directory.
+
         Args:
-            instance: Model instance being saved
-            filename: Original filename
+            instance: Model instance being saved (Event, Run, Album, etc.)
+            filename: Original filename from upload
 
         Returns:
-            str: Generated file path for upload
+            Generated file path for upload relative to MEDIA_ROOT
+
+        Note:
+            Backup files are stored in 'bkp/' subdirectory with timestamp suffix.
         """
+        # Extract file extension and generate unique filename
         ext = filename.split(".")[-1].lower()
         filename = f"{uuid4().hex}.{ext}"
         if instance.pk:
             filename = f"{instance.pk}_{filename}"
 
+        # Build directory path based on instance attributes
         path = self.sub_path
         if hasattr(instance, "event") and instance.event:
             path = os.path.join(path, instance.event.slug)
@@ -180,22 +189,29 @@ class UploadToPathAndRename:
         if hasattr(instance, "album") and instance.album:
             path = os.path.join(path, instance.album.slug)
 
+        # Construct final file path
         new_fn = os.path.join(path, filename)
         # true_fn = os.path.join(conf_settings.MEDIA_ROOT, new_fn)
 
+        # Handle backup of existing files for updates
         if instance.pk:
             bkp_tomove = []
             path_bkp = os.path.join(conf_settings.MEDIA_ROOT, path)
+
+            # Find existing files that match this instance
             if os.path.exists(path_bkp):
                 for fn in os.listdir(str(path_bkp)):
                     if fn.startswith(f"{instance.pk}_"):
                         bkp_tomove.append(fn)
 
+            # Move existing files to backup directory
             for el in bkp_tomove:
-                # move to backup previous version
+                # Create backup directory if it doesn't exist
                 bkp = os.path.join(conf_settings.MEDIA_ROOT, "bkp", path)
                 if not os.path.exists(bkp):
                     os.makedirs(bkp)
+
+                # Generate timestamped backup filename and move file
                 bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
                 bkp_fn = os.path.join(str(bkp), bkp_fn)
                 current_fn = os.path.join(conf_settings.MEDIA_ROOT, path, el)

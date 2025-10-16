@@ -41,23 +41,35 @@ from larpmanager.models.form import (
 from larpmanager.models.writing import Character, CharacterConfig
 
 
-def _build_px_context(char):
+def _build_px_context(char) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
     """Build context for character experience point calculations.
 
     Gathers character abilities, choices, and modifiers with optimized queries
     to create the foundation for PX cost and availability calculations.
+
+    Args:
+        char: Character instance for which to build the PX context.
+
+    Returns:
+        A tuple containing:
+        - Set of ability IDs already learned by the character
+        - Set of option IDs selected for the character
+        - Dictionary mapping ability IDs to lists of modifier tuples (cost, prerequisites, requirements)
     """
-    # get all abilities already learned by the character
+    # Get all abilities already learned by the character
+    # This creates a set of primary keys for efficient lookup operations
     current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
 
-    # get the options selected for the character
+    # Get the options selected for the character from writing choices
+    # Filter by character ID and applicable question type for accuracy
     current_char_choices = set(
         WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER).values_list(
             "option_id", flat=True
         )
     )
 
-    # get all modifiers
+    # Get all modifiers with optimized prefetch for related objects
+    # Use only() to limit fields and prefetch_related to avoid N+1 queries
     all_modifiers = (
         char.event.get_elements(ModifierPx)
         .only("id", "order", "cost")
@@ -69,14 +81,20 @@ def _build_px_context(char):
         )
     )
 
-    # build mapping for cost, prereq, reqs
+    # Build mapping for cost, prerequisites, and requirements by ability
+    # This creates an efficient lookup structure for modifier calculations
     mods_by_ability = defaultdict(list)
     for m in all_modifiers:
-        # Nessuna query extra: usa i risultati del prefetch in memoria
+        # Extract IDs from prefetched objects to avoid additional queries
+        # Use list comprehension and set comprehension for performance
         ability_ids = [a.id for a in m.abilities.all()]
         prereq_ids = {a.id for a in m.prerequisites.all()}
         req_ids = {o.id for o in m.requirements.all()}
+
+        # Create payload tuple with modifier data for easy access
         payload = (m.cost, prereq_ids, req_ids)
+
+        # Map each ability to its applicable modifiers
         for aid in ability_ids:
             mods_by_ability[aid].append(payload)
 
@@ -183,22 +201,31 @@ def check_available_ability_px(ability, current_char_abilities, current_char_cho
     return prereq_ids.issubset(current_char_abilities) and requirements_ids.issubset(current_char_choices)
 
 
-def get_available_ability_px(char, px_avail=None):
+def get_available_ability_px(char, px_avail: int | None = None) -> list:
     """Get list of abilities available for purchase with character's PX.
 
+    Retrieves all visible abilities that the character can purchase based on their
+    available PX points, prerequisites, and requirements. Applies cost modifiers
+    and filters out unaffordable abilities.
+
     Args:
-        char: Character instance
-        px_avail: Available PX points (calculated if None)
+        char: Character instance to check abilities for
+        px_avail: Available PX points. If None, calculated from character's
+            additional data
 
     Returns:
-        List of AbilityPx instances that can be purchased
+        List of AbilityPx instances that the character can purchase with their
+        current PX and that meet all prerequisites and requirements
     """
+    # Build context with current character abilities, choices, and modifiers
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
+    # Calculate available PX if not provided
     if px_avail is None:
         add_char_addit(char)
         px_avail = int(char.addit.get("px_avail", 0))
 
+    # Get all visible abilities excluding those already owned by character
     all_abilities = (
         char.event.get_elements(AbilityPx)
         .filter(visible=True)
@@ -213,11 +240,14 @@ def get_available_ability_px(char, px_avail=None):
 
     abilities = []
     for ability in all_abilities:
+        # Check if character meets prerequisites and requirements
         if not check_available_ability_px(ability, current_char_abilities, current_char_choices):
             continue
 
+        # Apply cost modifiers based on character's current state
         _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
 
+        # Filter out abilities that cost more than available PX
         if ability.cost > px_avail:
             continue
 

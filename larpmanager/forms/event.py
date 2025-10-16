@@ -103,17 +103,26 @@ class EventCharactersPdfForm(ConfigForm):
         Sets up the PDF configuration section and adds various configuration
         options including CSS styling, header content, and footer content
         for PDF generation and customization.
+
+        This method creates a dedicated PDF configuration section and populates
+        it with three main configuration options:
+        - CSS styling for PDF appearance customization
+        - Header HTML content for PDF documents
+        - Footer HTML content for PDF documents
         """
         # Set up the main PDF configuration section
         self.set_section("pdf", "PDF")
 
         # Add CSS configuration for PDF styling
+        # This allows users to customize the visual appearance of generated PDFs
         self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("Insert the css code to customize the pdf printing"))
 
         # Add header content configuration
+        # Users can define custom HTML content to appear at the top of each PDF page
         self.add_configs("header_content", ConfigType.TEXTAREA, _("Header"), _("Insert the html code for the header"))
 
         # Add footer content configuration
+        # Users can define custom HTML content to appear at the bottom of each PDF page
         self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer"), _("Insert the html code for the footer"))
 
 
@@ -350,30 +359,39 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
-    def set_config_reg_form(self):
+    def set_config_reg_form(self) -> None:
         """Configure registration form settings and display options.
 
         Sets up configuration fields for registration form display,
         grouping options, and participant visibility settings.
+
+        This method creates a configuration section for registration-related
+        settings and adds various boolean configuration options that control
+        how registration forms are displayed and processed.
         """
+        # Create the registration configuration section
         self.set_section("reg_form", _("Registrations"))
 
+        # Configure table grouping behavior
         label = _("Disable grouping")
         help_text = _(
             "If checked, all registrations are displayed in a single table rather than being separated by type"
         )
         self.add_configs("registration_no_grouping", ConfigType.BOOL, label, help_text)
 
+        # Add unique code generation for registrations
         label = _("Unique code")
         help_text = _("If checked, adds to all registrations an unique code to reference them")
         self.add_configs("registration_unique_code", ConfigType.BOOL, label, help_text)
 
+        # Configure staff visibility permissions for registration questions
         label = _("Allowed")
         help_text = _(
             "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the participants"
         )
         self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, label, help_text)
 
+        # Control visibility of unavailable registration options
         label = _("Hide not available")
         help_text = _(
             "If checked, options no longer available in the registration form are hidden, "
@@ -381,6 +399,7 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("registration_hide_unavailable", ConfigType.BOOL, label, help_text)
 
+        # Enable faction-based question visibility
         label = _("Faction selection")
         help_text = _(
             "If checked, allows a registration form question to be visible only if the participant is "
@@ -388,12 +407,14 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("registration_reg_que_faction", ConfigType.BOOL, label, help_text)
 
+        # Enable ticket-based question visibility
         label = _("Ticket selection")
         help_text = _(
             "If checked, allows a registration form question to be visible based on the selected registration ticket."
         )
         self.add_configs("registration_reg_que_tickets", ConfigType.BOOL, label, help_text)
 
+        # Enable age-based question visibility
         label = _("Age selection")
         help_text = _("If checked, allows a registration form question to be visible based on the participant's age")
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, label, help_text)
@@ -670,15 +691,23 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("casting_pay_priority", ConfigType.INT, label, help_text)
 
-    def set_config_accounting(self):
+    def set_config_accounting(self) -> None:
         """Configure event-specific accounting settings.
 
         Sets up payment alerts, financial notifications, and event-level
-        payment configurations for event management.
+        payment configurations for event management. This method configures
+        three main feature areas: payment settings, token/credit controls,
+        and bring-a-friend discount system.
+
+        The method checks for specific features in self.params["features"]
+        and adds corresponding configuration sections with their respective
+        settings.
         """
+        # Configure payment-related settings if payment feature is enabled
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
+            # Payment alert configuration - days before deadline to notify users
             label = _("Alert")
             help_text = _(
                 "Given a payment deadline, indicates the number of days under which it notifies "
@@ -686,6 +715,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("payment_alert", ConfigType.INT, label, help_text)
 
+            # Custom payment reason configuration with dynamic field substitution
             label = _("Causal")
             help_text = _(
                 "If present, it indicates the reason for the payment that the participant must put on the payments they make."
@@ -698,59 +728,79 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)
 
+            # Option to disable provisional registrations - auto-confirm all registrations
             label = _("Disable provisional")
             help_text = _("If checked, all registrations are confirmed even if no payment has been received")
             self.add_configs("payment_no_provisional", ConfigType.BOOL, label, help_text)
 
+        # Configure token and credit system controls
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))
+
+            # Token disabling option for this specific event
             label = _("Disable Tokens")
             help_text = _("If checked, no tokens will be used in the entries of this event")
             self.add_configs("token_credit_disable_t", ConfigType.BOOL, label, help_text)
 
+            # Credit disabling option for this specific event
             label = _("Disable credits")
             help_text = _("If checked, no credits will be used in the entries for this event")
             self.add_configs("token_credit_disable_c", ConfigType.BOOL, label, help_text)
 
+        # Configure bring-a-friend referral discount system
         if "bring_friend" in self.params["features"]:
             self.set_section("bring_friend", _("Bring a friend"))
+
+            # Discount amount for the referring participant
             label = _("Forward discount")
             help_text = _(
                 "Value of the discount for the registered participant who gives the code to a friend who signs up"
             )
             self.add_configs("bring_friend_discount_to", ConfigType.INT, label, help_text)
 
+            # Discount amount for the referred friend
             label = _("Discount back")
             help_text = _(
                 "Value of the discount for the friend who signs up using the code of a registered participant"
             )
             self.add_configs("bring_friend_discount_from", ConfigType.INT, label, help_text)
 
-    def set_config_registration(self):
+    def set_config_registration(self) -> None:
         """Configure event registration settings.
 
         Sets up ticket tiers, registration options, and staff ticket availability
         including special ticket types like NPC, collaborator, and seller tiers
         based on available features.
+
+        This method configures various registration-related settings by adding
+        configuration options to different sections. It handles basic ticket types
+        and conditional features like reduced tickets, filler tickets, and lottery
+        systems.
         """
+        # Set up main tickets section
         self.set_section("tickets", _("Tickets"))
 
+        # Configure staff ticket tier
         label = "Staff"
         help_text = _("If checked, allow ticket tier: Staff")
         self.add_configs("ticket_staff", ConfigType.BOOL, label, help_text)
 
+        # Configure NPC ticket tier
         label = "NPC"
         help_text = _("If checked, allow ticket tier: NPC")
         self.add_configs("ticket_npc", ConfigType.BOOL, label, help_text)
 
+        # Configure collaborator ticket tier
         label = "Collaborator"
         help_text = _("If checked, allow ticket tier: Collaborator")
         self.add_configs("ticket_collaborator", ConfigType.BOOL, label, help_text)
 
+        # Configure seller ticket tier
         label = "Seller"
         help_text = _("If checked, allow ticket tier: Seller")
         self.add_configs("ticket_seller", ConfigType.BOOL, label, help_text)
 
+        # Configure reduced/patron tickets if feature is enabled
         if "reduced" in self.params["features"]:
             self.set_section("reduced", _("Patron / Reduced"))
             label = "Ratio"
@@ -761,6 +811,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("reduced_ratio", ConfigType.INT, label, help_text)
 
+        # Configure filler ticket options if feature is enabled
         if "filler" in self.params["features"]:
             self.set_section("filler", _("Ticket Filler"))
             label = _("Free registration")
@@ -770,12 +821,16 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("filler_always", ConfigType.BOOL, label, help_text)
 
+        # Configure lottery system if feature is enabled
         if "lottery" in self.params["features"]:
             self.set_section("lottery", _("Lottery"))
+
+            # Set number of lottery draws
             label = _("Number of extractions")
             help_text = _("Number of tickets to be drawn")
             self.add_configs("lottery_num_draws", ConfigType.INT, label, help_text)
 
+            # Set conversion ticket type for lottery winners
             label = _("Conversion ticket")
             help_text = _("Name of the ticket into which to convert")
             self.add_configs("lottery_ticket", ConfigType.CHAR, label, help_text)
@@ -1351,19 +1406,31 @@ class OrgaPreferencesForm(ExePreferencesForm):
         for s in shows:
             self.add_writing_configs(basics, event_id, help_text, s)
 
-    def _add_reg_configs(self, event_id, help_text):
+    def _add_reg_configs(self, event_id: int, help_text: str) -> None:
         """Add registration-related configuration fields to the form.
 
         Configures form fields for registration management including accounting,
         email settings, chronology, and various registration feature options.
+        Also adds dynamic fields based on user permissions and available registration
+        fields for the specific event.
+
+        Args:
+            event_id: The ID of the event to configure registration for
+            help_text: Help text to display for the configuration section
+
+        Returns:
+            None
         """
+        # Check if user has permission to manage registrations for this event
         if not has_event_permission(
             self.params["request"], self.params, self.params["event"].slug, "orga_registrations"
         ):
             return
 
-        # Add registration fields
+        # Initialize list for additional configuration fields
         extra = []
+
+        # Define standard registration feature fields with their identifiers and labels
         feature_fields = [
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
@@ -1377,9 +1444,15 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("reg_surcharges", "sur", _("Surcharge")),
             ("discount", "disc", _("Discounts")),
         ]
+
+        # Add feature-based fields to the extra configuration options
         self.add_feature_extra(extra, feature_fields)
+
+        # Retrieve dynamic registration fields for current user and event
         fields = _get_registration_fields(self.params, self.params["request"].user.member)
         max_length = 20
+
+        # Add dynamic fields with truncated names if they exist
         if fields:
             extra.extend(
                 [
@@ -1390,39 +1463,59 @@ class OrgaPreferencesForm(ExePreferencesForm):
                     for field_id, field in fields.items()
                 ]
             )
+
+        # Create the final configuration with all collected fields
         self.add_configs(
             f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
         )
 
-    def add_writing_configs(self, basics, event_id, help_text, s):
+    def add_writing_configs(self, basics: dict, event_id: int, help_text: str, s: tuple) -> None:
         """Add writing-related configuration fields to the event form.
 
+        This method adds configuration fields for writing elements (characters, factions,
+        plots, etc.) to the event configuration form based on available features and
+        permissions.
+
         Args:
-            basics: Basic configuration settings
-            event_id: Event identifier
-            help_text: Help text for the configuration
-            s: Writing section configuration tuple
+            basics: Basic configuration settings dictionary
+            event_id: Unique identifier for the event
+            help_text: Descriptive text to help users understand the configuration
+            s: Writing section configuration tuple containing (section_name, display_name)
+
+        Returns:
+            None: Method modifies the form in place
         """
+        # Get the writing feature mapping and check if feature is available
         mapping = _get_writing_mapping()
         if mapping.get(s[0]) not in self.params["features"]:
             return
 
+        # Verify writing fields exist for this section
         if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
             return
 
+        # Check user permissions for this writing section
         if not has_event_permission(self.params["request"], self.params, self.params["event"].slug, f"orga_{s[0]}s"):
             return
 
+        # Extract field configurations and prepare extra options
         fields = self.params["writing_fields"][s[0]]["questions"]
         extra = []
 
+        # Compile basic field configurations
         self._compile_configs(basics, extra, fields)
 
+        # Add character-specific configuration options
         if s[0] == "character":
+            # Add player field if character limit is set
             if self.params["event"].get_config("user_character_max", 0):
                 extra.append(("player", _("Player")))
+
+            # Add status field if character approval is enabled
             if self.params["event"].get_config("user_character_approval", False):
                 extra.append(("status", _("Status")))
+
+            # Define character feature fields with their config keys and labels
             feature_fields = [
                 ("px", "px", _("XP")),
                 ("plot", "plots", _("Plots")),
@@ -1430,19 +1523,27 @@ class OrgaPreferencesForm(ExePreferencesForm):
                 ("speedlarp", "speedlarp", _("Speedlarp")),
                 ("prologue", "prologues", _("Prologue")),
             ]
+
+            # Add faction field if faction feature is enabled
             if "faction" in self.params["features"]:
                 questions = self.params["event"].get_elements(WritingQuestion)
                 que = questions.get(applicable=QuestionApplicable.CHARACTER, typ=WritingQuestionType.FACTIONS)
                 feature_fields.insert(0, ("faction", f"q_{que.id}", _("Factions")))
 
             self.add_feature_extra(extra, feature_fields)
+
+        # Add characters field for faction and plot sections
         elif s[0] in ["faction", "plot"]:
             extra.append(("characters", _("Characters")))
+
+        # Add traits field for quest and trait sections
         elif s[0] in ["quest", "trait"]:
             extra.append(("traits", _("Traits")))
 
+        # Add stats field for all writing sections
         extra.append(("stats", "Stats"))
 
+        # Add the compiled configuration to the form
         self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
     def _compile_configs(self, basics, extra, fields):

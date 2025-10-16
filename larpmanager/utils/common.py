@@ -515,42 +515,60 @@ def round_to_two_significant_digits(number):
     return int(rounded)
 
 
-def exchange_order(ctx, cls, num, order, elements=None):
+def exchange_order(ctx: dict, cls: type, num: int, order: bool, elements=None) -> None:
     """
-    Exchange ordering positions between two elements.
+    Exchange ordering positions between two elements in a sequence.
+
+    This function moves an element up or down in the ordering sequence by swapping
+    its order value with an adjacent element. If no adjacent element exists,
+    it simply increments or decrements the order value.
 
     Args:
-        ctx: Context dictionary to store current element
-        cls: Model class of elements to reorder
-        num: Primary key of element to move
-        order: Direction to move (True for up, False for down)
-        elements: Optional queryset of elements (defaults to event elements)
+        ctx: Context dictionary to store the current element after operation.
+        cls: Model class of elements to reorder.
+        num: Primary key of the element to move.
+        order: Direction to move - True for up (increase order), False for down (decrease order).
+        elements: Optional queryset of elements. Defaults to event elements if None.
+
+    Returns:
+        None: Function modifies elements in-place and updates ctx['current'].
+
+    Note:
+        The function handles edge cases where elements have the same order value
+        by adjusting one of them to maintain proper ordering.
     """
+    # Get elements queryset, defaulting to event elements if not provided
     elements = elements or ctx["event"].get_elements(cls)
     current = elements.get(pk=num)
 
-    # order indicates if we have to increase, or reduce, the current_order
+    # Determine direction: order=True means move up (increase order), False means down
     qs = elements.filter(order__gt=current.order) if order else elements.filter(order__lt=current.order)
     qs = qs.order_by("order" if order else "-order")
 
+    # Apply additional filters based on current element's attributes
+    # This ensures we only swap within the same logical group
     for attr in ("question", "section", "applicable"):
         if hasattr(current, attr):
             qs = qs.filter(**{attr: getattr(current, attr)})
 
+    # Get the next element in the desired direction
     other = qs.first()
-    # if not element is found, simply increase / reduce the order
+
+    # If no adjacent element found, just increment/decrement order
     if not other:
         current.order += 1 if order else -1
         current.save()
         ctx["current"] = current
         return
 
-    # exchange ordering
+    # Exchange ordering values between current and adjacent element
     current.order, other.order = other.order, current.order
-    # if they are the same, something has gone wrong, try to fix it
+
+    # Handle edge case where both elements have same order (data inconsistency)
     if current.order == other.order:
         other.order += -1 if order else 1
 
+    # Save both elements and update context
     current.save()
     other.save()
     ctx["current"] = current

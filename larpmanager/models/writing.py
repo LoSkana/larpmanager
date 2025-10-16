@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+from typing import Any, Optional
 
 from django.db import models
 from django.db.models import Q
@@ -79,9 +80,27 @@ class Writing(BaseConceptModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show(self, run=None):
+    def show(self, run: Optional[Any] = None) -> dict[str, Any]:
+        """Generate a display dictionary with basic writing information and teaser.
+
+        Builds upon the reduced representation from show_red() by adding the teaser
+        field to provide a more complete view of the writing object for display
+        purposes.
+
+        Args:
+            run: Optional run instance for context-specific display modifications.
+                 Defaults to None if no specific run context is needed.
+
+        Returns:
+            Dict containing writing object data with id, number, name, and teaser
+            fields suitable for JSON serialization and frontend display.
+        """
+        # Get base dictionary with id, number, and name fields
         js = self.show_red()
+
+        # Add teaser field to the display dictionary
         self.upd_js_attr(js, "teaser")
+
         return js
 
     def show_complete(self):

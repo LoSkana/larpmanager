@@ -105,18 +105,29 @@ def _get_registration_status_code(run):
     return "closed", None
 
 
-def _get_registration_status(run):
+def _get_registration_status(run) -> str:
     """Get human-readable registration status for a run.
 
+    This function retrieves the registration status code and returns a localized,
+    user-friendly message describing the current registration state for the given run.
+
     Args:
-        run: Run instance to check status for
+        run: Run instance to check status for. Expected to have registration-related
+             attributes that can be processed by _get_registration_status_code().
 
     Returns:
-        str: Localized status message describing registration state
+        str: Localized status message describing registration state. Returns one of
+             several predefined messages or a formatted datetime string for future
+             registrations.
+
+    Note:
+        Depends on _get_registration_status_code() to provide the status code and
+        any additional values (like datetime for future registrations).
     """
+    # Get the current status code and any additional data from the run
     status_code, additional_value = _get_registration_status_code(run)
 
-    # Map status codes to prettified messages
+    # Define mapping of status codes to localized human-readable messages
     status_messages = {
         "external": _("Registrations on external link"),
         "preregister": _("Pre-registration active"),
@@ -127,14 +138,17 @@ def _get_registration_status(run):
         "closed": _("Registration closed"),
     }
 
-    # Handle special case for "future" status with datetime formatting
+    # Special handling for future registrations with datetime formatting
     if status_code == "future":
+        # Check if we have a valid datetime to format
         if additional_value:
             formatted_date = additional_value.strftime(format_datetime)
             return _("Registrations opening at: %(date)s") % {"date": formatted_date}
         else:
+            # Fallback when datetime is not available
             return _("Registrations opening not set")
 
+    # Return the appropriate status message or default to closed
     return status_messages.get(status_code, _("Registration closed"))
 
 
