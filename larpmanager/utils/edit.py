@@ -578,7 +578,6 @@ def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
     # Handle plot objects by recursively checking all related characters
     # This prevents conflicts when editing plots that affect multiple characters
     if tp == "plot":
-        # Optimize by getting character IDs directly instead of fetching the plot object first
         char_ids = Plot.objects.filter(pk=eid).values_list("characters__pk", flat=True)
         for char_id in char_ids:
             if char_id is None:  # Skip if plot has no characters
