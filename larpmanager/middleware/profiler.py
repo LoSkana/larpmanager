@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProfilerMiddleware:
-    threshold = 0.8
+    threshold = 0.5
 
     def __init__(self, get_response):
         self.get_response = get_response
