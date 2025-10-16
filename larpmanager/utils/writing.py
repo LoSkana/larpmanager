@@ -416,27 +416,6 @@ def writing_list_query(ctx: dict, ev, typ) -> tuple[list[str], bool]:
         for f in text_fields:
             ctx["list"] = ctx["list"].defer(f)
 
-    # Get model field names for checking available relationships
-    # noinspection PyProtectedMember
-    typ_fields = [f.name for f in typ._meta.get_fields()]
-
-    # Add prefetch_related for many-to-many relationships based on features and field availability
-    for el in [
-        ("faction", "factions_list"),
-        ("prologue", "prologues_list"),
-        ("speedlarp", "speedlarps_list"),
-        ("", "characters"),
-    ]:
-        # Skip if feature is required but not enabled
-        if el[0] and el[0] not in ctx["features"]:
-            continue
-
-        # Skip if the relationship field doesn't exist on this model
-        if el[1] not in typ_fields:
-            continue
-
-        ctx["list"] = ctx["list"].prefetch_related(el[1])
-
     # Apply ordering based on available fields: order > number > updated (newest first)
     if check_field(typ, "order"):
         ctx["list"] = ctx["list"].order_by("order")
