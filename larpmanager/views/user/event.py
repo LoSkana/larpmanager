@@ -36,6 +36,7 @@ from larpmanager.cache.character import (
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
+from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
@@ -104,6 +105,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     # Initialize user registration tracking
     my_regs_dict = {}
     character_rels_dict = {}
+    payment_invoices_dict = {}
 
     if request.user.is_authenticated:
         # Define cutoff date (3 days ago) for filtering relevant registrations
@@ -125,8 +127,9 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
 
-        # Precompute character rels objects
+        # Precompute character rels and payment invoices objects
         character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
+        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
@@ -146,7 +149,13 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         run.my_reg = my_regs_dict.get(run.id) if my_regs_dict else None
 
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, request.user, my_regs=my_regs, character_rels_dict=character_rels_dict)
+        registration_status(
+            run,
+            request.user,
+            my_regs=my_regs,
+            character_rels_dict=character_rels_dict,
+            payment_invoices_dict=payment_invoices_dict,
+        )
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -178,6 +187,25 @@ def get_character_rels_dict(my_regs_dict, member):
                 character_rels_dict[rel.reg_id] = []
             character_rels_dict[rel.reg_id].append(rel)
     return character_rels_dict
+
+
+def get_payment_invoices_dict(my_regs_dict, member):
+    # Precalculate PaymentInvoice data for all registrations to optimize queries
+    payment_invoices_dict = {}
+    if my_regs_dict:
+        reg_ids = list(my_regs_dict.keys())
+
+        # Get all payment invoices for user's registrations in one query
+        payment_invoices = PaymentInvoice.objects.filter(
+            idx__in=reg_ids, member=member, typ=PaymentType.REGISTRATION
+        ).select_related("method")
+
+        # Group payment invoices by registration ID (idx field)
+        for invoice in payment_invoices:
+            if invoice.idx not in payment_invoices_dict:
+                payment_invoices_dict[invoice.idx] = []
+            payment_invoices_dict[invoice.idx].append(invoice)
+    return payment_invoices_dict
 
 
 def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
@@ -346,6 +374,7 @@ def calendar_past(request):
 
     my_regs_dict = {}
     character_rels_dict = {}
+    payment_invoices_dict = {}
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
@@ -356,6 +385,7 @@ def calendar_past(request):
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
         character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
+        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
 
     runs_list = list(runs)
     ctx["list"] = []
@@ -363,7 +393,13 @@ def calendar_past(request):
     for run in runs_list:
         user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
         my_regs_for_run = [user_reg] if user_reg else []
-        registration_status(run, request.user, my_regs=my_regs_for_run, character_rels_dict=character_rels_dict)
+        registration_status(
+            run,
+            request.user,
+            my_regs=my_regs_for_run,
+            character_rels_dict=character_rels_dict,
+            payment_invoices_dict=payment_invoices_dict,
+        )
         ctx["list"].append(run)
 
     ctx["page"] = "calendar_past"

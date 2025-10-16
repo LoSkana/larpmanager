@@ -150,7 +150,13 @@ def get_match_reg(r, my_regs):
 
 
 def registration_status_signed(
-    run: Run, reg: Registration, member: Member, features: dict[str, Any], register_url: str, character_rels_dict=None
+    run: Run,
+    reg: Registration,
+    member: Member,
+    features: dict[str, Any],
+    register_url: str,
+    character_rels_dict=None,
+    payment_invoices_dict=None,
 ) -> None:
     """
     Updates the registration status for a signed user based on membership and payment features.
@@ -163,6 +169,8 @@ def registration_status_signed(
         register_url: URL for the registration page
         character_rels_dict: Optional dictionary mapping registration IDs to
             lists of RegistrationCharacterRel objects
+        payment_invoices_dict: Optional dictionary mapping registration IDs to
+            lists of PaymentInvoice objects
 
     Returns:
         None: Updates run.status["text"] in place
@@ -211,7 +219,7 @@ def registration_status_signed(
     # Handle payment feature processing and related status updates
     if "payment" in features:
         # Process payment status and return if payment handling is complete
-        if _status_payment(register_text, run):
+        if _status_payment(register_text, run, payment_invoices_dict):
             return
 
     # Check for incomplete user profile and prompt completion
@@ -235,7 +243,7 @@ def registration_status_signed(
         run.status["text"] += " " + _("Thanks for your support") + "!"
 
 
-def _status_payment(register_text: str, run) -> bool:
+def _status_payment(register_text: str, run, payment_invoices_dict=None) -> bool:
     """Check payment status and update registration status text accordingly.
 
     Handles pending payments, wire transfers, and payment alerts with
@@ -244,36 +252,58 @@ def _status_payment(register_text: str, run) -> bool:
     Args:
         register_text: Base registration status text to append to
         run: Registration run object containing registration and status info
+        payment_invoices_dict: Optional dictionary mapping registration IDs to
+            lists of PaymentInvoice objects. If provided, avoids querying the database.
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
     """
-    # Check for pending payment confirmations
-    pending = PaymentInvoice.objects.filter(
-        idx=run.reg.id,
-        member_id=run.reg.member_id,
-        status=PaymentStatus.SUBMITTED,
-        typ=PaymentType.REGISTRATION,
-    )
+    # Get payment invoices for this registration
+    if payment_invoices_dict:
+        invoices = payment_invoices_dict.get(run.reg.id, [])
+        # Filter for pending payments
+        pending_invoices = [
+            inv for inv in invoices if inv.status == PaymentStatus.SUBMITTED and inv.typ == PaymentType.REGISTRATION
+        ]
+        # Filter for wire transfer payments
+        wire_created_invoices = [
+            inv
+            for inv in invoices
+            if inv.status == PaymentStatus.CREATED
+            and inv.typ == PaymentType.REGISTRATION
+            and hasattr(inv, "method")
+            and inv.method
+            and inv.method.slug == "wire"
+        ]
+    else:
+        # Fallback to database queries if no precalculated data available
+        pending_invoices = list(
+            PaymentInvoice.objects.filter(
+                idx=run.reg.id,
+                member_id=run.reg.member_id,
+                status=PaymentStatus.SUBMITTED,
+                typ=PaymentType.REGISTRATION,
+            )
+        )
+        wire_created_invoices = list(
+            PaymentInvoice.objects.filter(
+                idx=run.reg.id,
+                member_id=run.reg.member_id,
+                status=PaymentStatus.CREATED,
+                typ=PaymentType.REGISTRATION,
+                method__slug="wire",
+            )
+        )
 
     # Handle pending payment status
-    if pending.exists():
+    if pending_invoices:
         run.status["text"] = register_text + ", " + _("payment pending confirmation")
         return True
 
     # Process payment alerts for unpaid registrations
     if run.reg.alert:
-        # Check for created wire transfer payments
-        wire_created = PaymentInvoice.objects.filter(
-            idx=run.reg.id,
-            member_id=run.reg.member_id,
-            status=PaymentStatus.CREATED,
-            typ=PaymentType.REGISTRATION,
-            method__slug="wire",
-        )
-
         # Handle wire transfer specific messaging
-        if wire_created.exists():
+        if wire_created_invoices:
             pay_url = reverse("acc_reg", args=[run.reg.id])
             mes = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{pay_url}'>{mes}</a>"
@@ -303,6 +333,7 @@ def registration_status(
     features_map: dict | None = None,
     reg_count: int | None = None,
     character_rels_dict=None,
+    payment_invoices_dict=None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -317,6 +348,8 @@ def registration_status(
         reg_count (int, optional): Pre-calculated registration count. Defaults to None.
         character_rels_dict: Optional dictionary mapping registration IDs to
             lists of RegistrationCharacterRel objects
+        payment_invoices_dict: Optional dictionary mapping registration IDs to
+            lists of PaymentInvoice objects
     """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
@@ -333,7 +366,9 @@ def registration_status(
             return
 
         if run.reg:
-            registration_status_signed(run, run.reg, user.member, features, register_url, character_rels_dict)
+            registration_status_signed(
+                run, run.reg, user.member, features, register_url, character_rels_dict, payment_invoices_dict
+            )
             return
 
     if run.end and get_time_diff_today(run.end) < 0:
