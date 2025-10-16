@@ -101,7 +101,7 @@ def _init_element_cache_text_field(el, res, typ):
 def get_cache_text_field(typ, event):
     key = cache_text_field_key(typ, event)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = init_cache_text_field(typ, event)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
@@ -160,7 +160,7 @@ def _init_element_cache_reg_field(el, res):
 def get_cache_reg_field(run):
     key = cache_text_field_key(Registration, run)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = init_cache_reg_field(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res

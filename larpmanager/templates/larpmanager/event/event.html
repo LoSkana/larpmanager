@@ -10,7 +10,7 @@
     <meta name="description" content="{{ event.tagline }}" />
     <meta property="og:title" content="{{ event.name }}" />
     {% if event.tagline %}<meta property="og:description" content="{{ event.tagline }}" />{% endif %}
-    <meta property="og:image" content="{{ event.cover }}" />
+    <meta property="og:image" content="{{ event.cover_thumb.url }}" />
 {% endblock media %}
 {% block content %}
     {% if event.cover %}

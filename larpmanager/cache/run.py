@@ -41,7 +41,7 @@ def cache_run_key(a, s):
 def get_cache_run(a, s):
     key = cache_run_key(a, s)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = init_cache_run(a, s)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
@@ -94,7 +94,7 @@ def cache_config_run_key(run):
 def get_cache_config_run(run):
     key = cache_config_run_key(run)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = init_cache_config_run(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res

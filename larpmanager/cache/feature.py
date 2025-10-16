@@ -58,7 +58,7 @@ def get_assoc_features(assoc_id):
     """
     key = cache_assoc_features(assoc_id)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = update_assoc_features(assoc_id)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
@@ -120,7 +120,7 @@ def get_event_features(ev_id):
     """
     key = cache_event_features_key(ev_id)
     res = cache.get(key)
-    if not res:
+    if res is None:
         res = update_event_features(ev_id)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
