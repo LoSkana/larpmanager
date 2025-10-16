@@ -8739,9 +8739,6 @@ msgid ""
 "If you have made a transfer, please upload the receipt for it to be processed"
 msgstr ""
 
-msgid "Pre-register to the event!"
-msgstr ""
-
 msgid "Registrations not open"
 msgstr ""
 
@@ -8756,6 +8753,12 @@ msgid "Sign up as a filler!"
 msgstr ""
 
 msgid "Join the waiting list!"
+msgstr ""
+
+msgid "Pre-registration confirmed"
+msgstr ""
+
+msgid "Pre-register to the event"
 msgstr ""
 
 msgid "Your character is"

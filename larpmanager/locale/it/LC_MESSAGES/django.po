@@ -3970,6 +3970,9 @@ msgstr "Opzionale - email reply to"
 msgid "Payment already confirmed"
 msgstr "Pagamento già confermato"
 
+msgid "Pre-register to the event"
+msgstr "Segnati nella lista di pre-iscrizione"
+
 msgid "Read the writing elements"
 msgstr "Leggere gli elementi di scrittura"
 
@@ -4062,8 +4065,8 @@ msgstr "Ora è possibile creare flussi in entrata"
 msgid "Option no longer available"
 msgstr "Opzione non più disponibile"
 
-msgid "Pre-register to the event!"
-msgstr "Segnati nella lista di pre-iscrizione!"
+msgid "Pre-registration confirmed"
+msgstr "Pre-registrazione confermata"
 
 msgid "Short name - international"
 msgstr "Nome breve - in inglese"

@@ -19,15 +19,16 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 
@@ -162,6 +163,13 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
         # Update the instance cache
         update_func(instance)
 
+        # Reset event char for any run of event and child events
+        event = instance.event
+        events_id = list(Event.objects.filter(parent=event).values_list("pk", flat=True))
+        events_id.append(event.id)
+        for run in Run.objects.filter(event_id__in=events_id):
+            reset_event_cache_all(run)
+
         # Update cache for all affected characters
         if pk_set:
             for char_id in pk_set:
@@ -257,7 +265,7 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             # Build relationships for each element, passing features if required
             for element in elements:
                 if pass_features:
-                    res[cache_key_plural][element.id] = get_rels_func(element, features)
+                    res[cache_key_plural][element.id] = get_rels_func(element, features, event)
                 else:
                     res[cache_key_plural][element.id] = get_rels_func(element)
 
@@ -315,7 +323,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         clear_event_relationships_cache(event.id)
 
 
-def get_event_char_rels(char: "Character", features: dict[str, Any], event: Optional["Event"] = None) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict[str, Any], event: Event) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
@@ -363,10 +371,12 @@ def get_event_char_rels(char: "Character", features: dict[str, Any], event: Opti
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
-            # Determine which event to use for faction lookup
-            if char.event.get_config("campaign_faction_indep", False):
-                fac_event = event
+            cache_event = event if event else char.event
+            if cache_event.get_config("campaign_faction_indep", False):
+                # Use the cache event for independent faction lookup
+                fac_event = cache_event
             else:
+                # Use the parent event for inherited faction lookup
                 fac_event = char.event.get_class_parent("faction")
 
             # Build faction list based on determined event

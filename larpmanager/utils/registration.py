@@ -31,7 +31,7 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.event import Run
+from larpmanager.models.event import PreRegistration, Run
 from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
@@ -334,6 +334,7 @@ def registration_status(
     reg_count: int | None = None,
     character_rels_dict=None,
     payment_invoices_dict=None,
+    pre_registrations_dict=None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -350,6 +351,8 @@ def registration_status(
             lists of RegistrationCharacterRel objects
         payment_invoices_dict: Optional dictionary mapping registration IDs to
             lists of PaymentInvoice objects
+        pre_registrations_dict: Optional dictionary mapping event IDs to
+            PreRegistration objects
     """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
@@ -376,9 +379,7 @@ def registration_status(
 
     # check pre-register
     if run.event.get_config("pre_register_active", False):
-        mes = _("Pre-register to the event!")
-        preregister_url = reverse("pre_register", args=[run.event.slug])
-        run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
+        _status_preregister(run, user, pre_registrations_dict)
 
     dt = datetime.today()
     # check registration open
@@ -412,6 +413,27 @@ def registration_status(
 
     # wrap in a link if we have a message, otherwise show closed
     status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed") + "."
+
+
+def _status_preregister(run, user, pre_registrations_dict=None):
+    # Check if user already has a pre-registration for this event
+    has_pre_registration = False
+    if user.is_authenticated:
+        if pre_registrations_dict is not None:
+            # Use cached data if available
+            has_pre_registration = run.event.id in pre_registrations_dict
+        else:
+            # Fallback to database query if no cache provided
+            has_pre_registration = PreRegistration.objects.filter(
+                event_id=run.event.id, member=user.member, deleted__isnull=True
+            ).exists()
+    if has_pre_registration:
+        mes = _("Pre-registration confirmed") + "!"
+        run.status["text"] = mes
+    else:
+        mes = _("Pre-register to the event") + "!"
+        preregister_url = reverse("pre_register", args=[run.event.slug])
+        run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
 
 
 def _get_features_map(features_map, run):
