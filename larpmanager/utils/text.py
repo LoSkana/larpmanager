@@ -31,7 +31,7 @@ def event_text_key(event_id, typ, lang):
 
 
 def update_event_text(event_id, typ, lang):
-    res = None
+    res = ""
     try:
         res = EventText.objects.get(event_id=event_id, typ=typ, language=lang).text
     except Exception:
@@ -42,7 +42,7 @@ def update_event_text(event_id, typ, lang):
 
 def get_event_text_cache(event_id, typ, lang):
     res = cache.get(event_text_key(event_id, typ, lang))
-    if not res:
+    if res is None:
         res = update_event_text(event_id, typ, lang)
     return res
 
@@ -52,7 +52,7 @@ def event_text_key_def(event_id, typ):
 
 
 def update_event_text_def(event_id, typ):
-    res = None
+    res = ""
     try:
         res = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
     except Exception:
@@ -63,7 +63,7 @@ def update_event_text_def(event_id, typ):
 
 def get_event_text_cache_def(event_id, typ):
     res = cache.get(event_text_key_def(event_id, typ))
-    if not res:
+    if res is None:
         res = update_event_text_def(event_id, typ)
     return res
 
@@ -118,7 +118,7 @@ def assoc_text_key(assoc_id, typ, lang):
 
 
 def update_assoc_text(assoc_id, typ, lang):
-    res = None
+    res = ""
     try:
         res = AssocText.objects.get(assoc_id=assoc_id, typ=typ, language=lang).text
     except Exception:
@@ -129,7 +129,7 @@ def update_assoc_text(assoc_id, typ, lang):
 
 def get_assoc_text_cache(assoc_id, typ, lang):
     res = cache.get(assoc_text_key(assoc_id, typ, lang))
-    if not res:
+    if res is None:
         res = update_assoc_text(assoc_id, typ, lang)
     return res
 
@@ -142,7 +142,7 @@ def assoc_text_key_def(assoc_id, typ):
 
 
 def update_assoc_text_def(assoc_id, typ):
-    res = None
+    res = ""
     try:
         res = AssocText.objects.filter(assoc_id=assoc_id, typ=typ, default=True).first().text
     except Exception:
@@ -153,7 +153,7 @@ def update_assoc_text_def(assoc_id, typ):
 
 def get_assoc_text_cache_def(assoc_id, typ):
     res = cache.get(assoc_text_key_def(assoc_id, typ))
-    if not res:
+    if res is None:
         res = update_assoc_text_def(assoc_id, typ)
     return res
 

@@ -25,7 +25,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -235,38 +235,58 @@ def valid_workshop_answer(request, ctx):
 
 
 @login_required
-def workshop_answer(request, s, m):
+def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
     """
     Handle workshop answer submission and validation.
 
+    This function processes workshop submissions for LARP events, validates answers,
+    tracks completion status, and manages progression through workshop modules.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        m: Workshop module number
+        request (HttpRequest): The HTTP request object containing user data and POST parameters
+        s (str): Event slug identifier for the current event/run
+        m (int): Workshop module number to process
 
     Returns:
-        HttpResponse: Rendered template or redirect response
+        HttpResponse: Either a rendered template (answer form or failure page) or
+                     a redirect response to next module or workshops overview
+
+    Raises:
+        Http404: If event, run, or workshop module is not found
+        PermissionDenied: If user doesn't have access to the workshop
     """
+    # Get event context and validate user access to workshop signup
     ctx = get_event_run(request, s, signup=True, status=True)
     get_workshop(ctx, m)
+
+    # Check if user has already completed this workshop module
     completed = [el.pk for el in request.user.member.workshops.select_related().all()]
     if ctx["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
         return redirect("workshops", s=ctx["run"].get_slug())
+
+    # Build list of questions for the current workshop module
     ctx["list"] = []
     for question in ctx["workshop"].questions.select_related().all().order_by("number"):
         ctx["list"].append(question.show())
-    # if only preseting result
+
+    # For GET requests, display the workshop question form
     if request.method != "POST":
         return render(request, "larpmanager/event/workshops/answer.html", ctx)
-        # if correct
+
+    # Process POST request - validate submitted answers
     if valid_workshop_answer(request, ctx):
+        # Create completion record for this workshop module
         WorkshopMemberRel.objects.create(member=request.user.member, workshop=ctx["workshop"])
+
+        # Find remaining uncompleted workshop modules
         remaining = (
             WorkshopModule.objects.filter(event=ctx["event"], number__gt=ctx["workshop"].number)
             .exclude(pk__in=completed)
             .order_by("number")
         )
+
+        # Redirect to next module or completion page based on remaining modules
         if len(remaining) > 0:
             messages.success(request, _("Completed module. Remaining: {number:d}").format(number=len(remaining)))
             return redirect(
@@ -274,10 +294,12 @@ def workshop_answer(request, s, m):
                 s=ctx["run"].get_slug(),
                 m=remaining.first().number,
             )
+
+        # All modules completed - redirect to workshops overview
         messages.success(request, _("Well done, you've completed all modules!"))
         return redirect("workshops", s=ctx["run"].get_slug())
 
-        # if wrong
+    # Invalid answers - show failure page
     return render(request, "larpmanager/event/workshops/failed.html", ctx)
 
 

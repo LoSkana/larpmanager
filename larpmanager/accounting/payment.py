@@ -63,6 +63,7 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationQuestion,
 )
+from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import fetch_payment_details, update_payment_details
@@ -148,49 +149,72 @@ def set_data_invoice(request, ctx, invoice, form, assoc_id):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
-def _custom_reason_reg(ctx, invoice, member_real):
+def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) -> None:
     """Generate custom invoice reason text for registrations.
 
+    This function processes a custom reason template from event configuration,
+    replacing placeholder variables with actual registration data including
+    player names and registration question answers.
+
     Args:
-        ctx: Context dictionary with registration data
-        invoice: PaymentInvoice instance to update
+        ctx: Context dictionary containing registration data with 'reg' key
+        invoice: PaymentInvoice instance to update with custom reason text
         member_real: Real member instance for the registration
+
+    Returns:
+        None: Function modifies the invoice object in place
     """
+    # Set invoice registration references
     invoice.idx = ctx["reg"].id
     invoice.reg = ctx["reg"]
+
+    # Get custom reason template from event configuration
     custom_reason = ctx["reg"].run.event.get_config("payment_custom_reason")
     if not custom_reason:
         return
 
-    # find all matches
+    # Extract all placeholder variables from template using regex
     pattern = r"\{([^}]+)\}"
     keys = re.findall(pattern, custom_reason)
 
+    # Initialize values dictionary for template replacement
     values = {}
+
+    # Handle special case for player_name placeholder
     name = "player_name"
     if name in keys:
         values[name] = member_real
         keys.remove(name)
+
+    # Process each remaining placeholder key
     for key in keys:
-        # Look for a registration question with that name
+        # Look for a registration question with matching name
         try:
             question = RegistrationQuestion.objects.get(event=ctx["reg"].run.event, name__iexact=key)
+
+            # Handle single/multiple choice questions
             if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 aux = []
                 que = RegistrationChoice.objects.filter(question=question, reg_id=ctx["reg"].id)
+
+                # Collect all selected option names
                 for choice in que.select_related("option"):
                     aux.append(choice.option.name)
                 value = ",".join(aux)
             else:
+                # Handle text-based questions
                 value = RegistrationAnswer.objects.get(question=question, reg_id=ctx["reg"].id).text
             values[key] = value
         except ObjectDoesNotExist:
+            # Skip missing questions/answers
             pass
 
+    # Define replacement function for regex substitution
     def replace(match):
         key = match.group(1)
         return values.get(key, match.group(0))
 
+    # Apply template substitution and set invoice causal field
     invoice.causal = re.sub(pattern, replace, custom_reason)
 
 

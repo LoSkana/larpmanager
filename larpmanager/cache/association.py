@@ -48,26 +48,37 @@ def get_cache_assoc(s):
     return res
 
 
-def init_cache_assoc(a_slug):
+def init_cache_assoc(a_slug: str) -> dict | None:
     """Initialize association cache with configuration data.
 
+    Retrieves association data and builds a comprehensive cache dictionary
+    containing configuration, features, payment info, and UI assets.
+
     Args:
-        a_slug: Association slug identifier
+        a_slug: Association slug identifier used to look up the association.
 
     Returns:
-        dict: Association cache data or None if not found
+        Dictionary containing association cache data with configuration,
+        features, payment settings, and UI assets. Returns None if the
+        association is not found.
+
+    Raises:
+        No exceptions are raised - ObjectDoesNotExist is caught internally.
     """
+    # Retrieve association object or return None if not found
     try:
         assoc = Association.objects.get(slug=a_slug)
     except ObjectDoesNotExist:
         return None
 
+    # Convert association to dictionary for cache storage
     assoc_dict = assoc.as_dict()
 
+    # Initialize payment configuration and member field settings
     _init_payments(assoc, assoc_dict)
-
     _init_member_fields(assoc, assoc_dict)
 
+    # Add profile images (favicon, logo, main image) if available
     if assoc.profile:
         try:
             assoc_dict["favicon"] = assoc.profile_fav.url
@@ -76,6 +87,7 @@ def init_cache_assoc(a_slug):
         except FileNotFoundError:
             pass
 
+    # Remove sensitive and unnecessary fields from cache
     for m in [
         "created",
         "updated",
@@ -89,10 +101,11 @@ def init_cache_assoc(a_slug):
         if m in assoc_dict:
             del assoc_dict[m]
 
+    # Initialize feature flags and skin configuration
     _init_features(assoc, assoc_dict)
-
     _init_skin(assoc, assoc_dict)
 
+    # Determine if association qualifies for demo mode (< 10 registrations)
     max_demo = 10
     assoc_dict["demo"] = Registration.objects.filter(run__event__assoc_id=assoc.id).count() < max_demo
 

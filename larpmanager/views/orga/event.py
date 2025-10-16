@@ -23,7 +23,7 @@ from collections import defaultdict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Prefetch
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -402,20 +402,33 @@ def orga_upload(request, s, typ):
 
 
 @login_required
-def orga_upload_template(request, s, typ):
+def orga_upload_template(request, s: str, typ: str) -> HttpResponse:
     """Generate and download template files for data upload.
 
     Args:
-        request: HTTP request object
-        s: Event/run identifier
-        typ: Template type (writing, registration, px_abilitie, form)
+        request: HTTP request object containing user session and metadata
+        s: Event or run identifier string used to locate the specific event
+        typ: Template type specifying which template to generate. Valid values:
+            - 'writing': Character writing elements template
+            - 'registration': Event registration template
+            - 'px_abilitie': Player experience abilities template
+            - 'form': Generic form template
 
     Returns:
-        ZIP file response containing template files
+        HttpResponse: ZIP file download response containing the generated template files
+
+    Raises:
+        PermissionDenied: If user lacks permission to access the specified event
+        ValidationError: If template type is invalid or event not found
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s)
     ctx["typ"] = typ
+
+    # Extract and set column names for template generation
     _get_column_names(ctx)
+
+    # Define value mappings for different question types and their expected formats
     value_mapping = {
         BaseQuestionType.SINGLE: "option name",
         BaseQuestionType.MULTIPLE: "option names (comma separated)",
@@ -438,15 +451,22 @@ def orga_upload_template(request, s, typ):
         RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
         RegistrationQuestionType.SURCHARGE: "surcharge applied",
     }
+
+    # Generate appropriate template based on type
     if ctx.get("writing_typ"):
+        # Generate writing elements template for character backgrounds
         exports = _writing_template(ctx, typ, value_mapping)
     elif typ == "registration":
+        # Generate registration template for event signup data
         exports = _reg_template(ctx, typ, value_mapping)
     elif typ == "px_abilitie":
+        # Generate abilities template for player experience tracking
         exports = _ability_template(ctx)
     else:
+        # Generate generic form template for other data types
         exports = _form_template(ctx)
 
+    # Package exports into ZIP file and return as download response
     return zip_exports(ctx, exports, "template")
 
 
@@ -478,16 +498,27 @@ def _ability_template(ctx):
     return exports
 
 
-def _form_template(ctx):
+def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate template files for form questions and options upload.
 
+    Creates sample data templates for both questions and options that can be used
+    for bulk upload functionality. The templates include predefined values that
+    serve as examples for users.
+
     Args:
-        ctx: Context dictionary with column definitions
+        ctx: Context dictionary containing column definitions with the structure:
+            - columns[0]: Dictionary with question field definitions
+            - columns[1]: Dictionary with option field definitions
 
     Returns:
-        List of tuples containing template data for questions and options
+        List of tuples where each tuple contains:
+            - str: Template type ("questions" or "options")
+            - list[str]: Column headers/keys
+            - list[list[str]]: Sample data rows
     """
     exports = []
+
+    # Define sample data for questions template
     defs = {
         "name": "Question Name",
         "typ": "multi-choice",
@@ -497,13 +528,21 @@ def _form_template(ctx):
         "visibility": "public",
         "max_length": "1",
     }
+
+    # Extract available question fields from context
     keys = list(ctx["columns"][0].keys())
     vals = []
+
+    # Build values list matching available fields
     for field, value in defs.items():
         if field not in keys:
             continue
         vals.append(value)
+
+    # Add questions template to exports
     exports.append(("questions", keys, [vals]))
+
+    # Define sample data for options template
     defs = {
         "question": "Question Name",
         "name": "Option Name",
@@ -511,13 +550,20 @@ def _form_template(ctx):
         "max_available": "2",
         "price": "10",
     }
+
+    # Extract available option fields from context
     keys = list(ctx["columns"][1].keys())
     vals = []
+
+    # Build values list matching available fields
     for field, value in defs.items():
         if field not in keys:
             continue
         vals.append(value)
+
+    # Add options template to exports
     exports.append(("options", keys, [vals]))
+
     return exports
 
 
@@ -536,20 +582,30 @@ def _reg_template(ctx, typ, value_mapping):
     return exports
 
 
-def _writing_template(ctx, typ, value_mapping):
+def _writing_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate template data for writing export with field mappings.
 
+    Creates export templates for different writing types including base templates
+    and conditional templates for relationships and roles based on features.
+
     Args:
-        ctx: Context dictionary containing fields, writing type, and features
-        typ: Type string for the template name
-        value_mapping: Dictionary mapping field types to example values
+        ctx: Context dictionary containing:
+            - fields: Dict mapping field names to field types
+            - writing_typ: QuestionApplicable enum value for writing type
+            - features: Set of enabled feature names
+            - columns: Dict containing column definitions (when applicable)
+        typ: Type string used as prefix for the template name
+        value_mapping: Dictionary mapping field types to their example values
 
     Returns:
-        List of tuples containing template data (name, keys, values)
+        List of tuples containing template data where each tuple is:
+        (template_name, column_keys, row_values_list)
     """
+    # Extract non-skipped fields and their corresponding example values
     keys = [k for k, v in ctx["fields"].items() if v != "skip"]
     vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items() if field_typ != "skip"]
 
+    # Add type-specific prefix fields based on writing type
     if ctx["writing_typ"] == QuestionApplicable.QUEST:
         keys.insert(0, "typ")
         vals.insert(0, "name of quest type")
@@ -557,8 +613,10 @@ def _writing_template(ctx, typ, value_mapping):
         keys.insert(0, "quest")
         vals.insert(0, "name of quest")
 
+    # Create base template export
     exports = [(f"{typ} - template", keys, [vals])]
 
+    # Add relationships template for character writing when feature is enabled
     if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
         exports.append(
             (
@@ -567,6 +625,8 @@ def _writing_template(ctx, typ, value_mapping):
                 [["Test Character", "Another Character", "Super pals"]],
             )
         )
+
+    # Add roles template for plot writing
     if ctx["writing_typ"] == QuestionApplicable.PLOT:
         exports.append(
             (

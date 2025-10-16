@@ -20,6 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -61,43 +62,68 @@ def exe_events(request):
 
 
 @login_required
-def exe_events_edit(request, num):
+def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
     """Handle editing of existing events or creation of new executive events.
 
+    This function manages both the creation of new events and the editing of existing events/runs.
+    For new events (num=0), it creates the event and automatically adds the requesting user as an organizer.
+    For existing events (num>0), it delegates to the full event edit functionality.
+
     Args:
-        request: HTTP request object
-        num: Event number (0 for new event, >0 for existing)
+        request: HTTP request object containing user session and form data
+        num: Event number identifier (0 for new event creation, >0 for existing event editing)
 
     Returns:
-        Redirect to appropriate page or rendered event form
+        HttpResponse: Either a redirect to the appropriate page after successful operation
+                     or a rendered event form template for user input
+
+    Raises:
+        PermissionDenied: If user lacks required association permissions
+        Http404: If specified event number doesn't exist
     """
+    # Check user has executive events permission for the association
     ctx = check_assoc_permission(request, "exe_events")
 
     if num:
-        # edit existing event / run
+        # Handle editing of existing event or run
+        # Retrieve the run object and set it in context
         backend_get(ctx, Run, num, "event")
+        # Delegate to full event edit with executive flag enabled
         return full_event_edit(ctx, request, ctx["el"].event, ctx["el"], exe=True)
 
-    # create new event
+    # Handle creation of new event
+    # Set executive context flag for form rendering
     ctx["exe"] = True
+
+    # Process form submission and handle creation logic
     if backend_edit(request, ctx, ExeEventForm, num, quiet=True):
+        # Check if event was successfully created (saved context and new event)
         if "saved" in ctx and num == 0:
-            # Add member to organizers
+            # Automatically add requesting user as event organizer
+            # Get or create organizer role (number=1 is standard organizer role)
             (er, created) = EventRole.objects.get_or_create(event=ctx["saved"], number=1)
             if not er.name:
                 er.name = "Organizer"
+            # Add current user's member profile to organizer role
             er.members.add(request.user.member)
             er.save()
-            # reload cache event links
+
+            # Refresh cached event links for user navigation
             reset_event_links(request.user.id, ctx["a_id"])
+
+            # Prepare success message encouraging quick setup completion
             msg = (
                 _("Your event has been created")
                 + "! "
                 + _("Now please complete the quick setup by selecting the features most useful for this event")
             )
             messages.success(request, msg)
+            # Redirect to quick setup page for new event
             return redirect("orga_quick", s=ctx["saved"].slug)
+        # Redirect back to events list after successful edit
         return redirect("exe_events")
+
+    # Configure form context and render edit template
     ctx["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", ctx)
 

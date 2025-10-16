@@ -54,30 +54,40 @@ from larpmanager.utils.tasks import my_send_mail, notify_admins
 logger = logging.getLogger(__name__)
 
 
-def get_satispay_form(request, ctx, invoice, amount):
+def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
     """Create Satispay payment form and initialize payment.
 
+    Creates a new Satispay payment request using the provided invoice and amount,
+    then updates the invoice with the payment ID and returns the context data
+    needed for the payment form.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
-        invoice: PaymentInvoice instance
-        amount (float): Payment amount
+        request: Django HTTP request object used to build absolute URIs
+        ctx: Context dictionary containing payment configuration including
+            satispay_key_id, payment_currency, and other payment settings
+        invoice: PaymentInvoice instance to be updated with payment ID
+        amount: Payment amount in the base currency unit
 
     Returns:
-        dict: Payment form context data
+        Updated context dictionary containing payment form data with
+        redirect URL, callback URL, and payment ID
 
     Raises:
-        Http404: If Satispay API call fails
+        Http404: If Satispay API call fails or returns non-200 status code
     """
+    # Build redirect and callback URLs for payment flow
     ctx["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
     ctx["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
 
+    # Load Satispay authentication credentials
     key_id = ctx["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
+    # Future implementation for payment expiration
     # expiration_date = datetime.now(timezone.utc) + timedelta(hours=1)
     # expiration_date = format_datetime(expiration_date)
 
+    # Future implementation for additional body parameters
     # body_params = {
     #     "expire_date": expiration_date,
     #     "external_code": invoice.causal,
@@ -85,19 +95,24 @@ def get_satispay_form(request, ctx, invoice, amount):
     #     "callback_url": ctx["callback"],
     # }
 
+    # Create payment request with Satispay API (amount in cents)
     response = satispaython.create_payment(
         key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], ctx["callback"]
     )
 
+    # Validate API response and handle errors
     correct_response_code = 200
     if response.status_code != correct_response_code:
         notify_admins("satispay ko", str(response.content))
         raise Http404("something went wrong :( ")
 
+    # Parse response and update invoice with payment ID
     aux = json.loads(response.content)
     with transaction.atomic():
         invoice.cod = aux["id"]
         invoice.save()
+
+    # Add payment ID to context for form rendering
     ctx["pay_id"] = aux["id"]
 
 

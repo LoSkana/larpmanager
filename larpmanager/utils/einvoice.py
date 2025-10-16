@@ -176,28 +176,35 @@ def _einvoice_header(
     ET.SubElement(sede, "Nazione").text = aux[0]
 
 
-def _einvoice_body(einvoice, inv, root):
+def _einvoice_body(einvoice, inv, root) -> None:
     """
     Build the body section of electronic invoice XML structure.
 
     Args:
-        einvoice: Electronic invoice instance
-        inv: Invoice data object
+        einvoice: Electronic invoice instance containing creation date and number
+        inv: Invoice data object with causal, mc_gross, and assoc_id attributes
         root: XML root element to append body to
+
+    Returns:
+        None: Modifies root element in place by adding FatturaElettronicaBody
     """
-    # Invoicelettronicabody
+    # Create main body element and general data section
     body = ET.SubElement(root, "FatturaElettronicaBody")
     dati_generali = ET.SubElement(body, "DatiGenerali")
     dati_generali_documento = ET.SubElement(dati_generali, "DatiGeneraliDocumento")
+
+    # Set document metadata: type, currency, date, and invoice number
     ET.SubElement(dati_generali_documento, "TipoDocumento").text = "TD01"
     ET.SubElement(dati_generali_documento, "Divisa").text = "EUR"
     ET.SubElement(dati_generali_documento, "Data").text = einvoice.created.strftime("%Y-%m-%d")
     ET.SubElement(dati_generali_documento, "Numero").text = "F" + str(einvoice.number).zfill(8)
 
-    # Datibeniservizi
+    # Create goods/services section and line item details
     beni_servizi = ET.SubElement(body, "DatiBeniServizi")
     dettaglio_linee = ET.SubElement(beni_servizi, "DettaglioLinee")
     ET.SubElement(dettaglio_linee, "NumeroLinea").text = "1"
+
+    # Set line item data: description, quantity, unit price, and total
     ET.SubElement(dettaglio_linee, "Descrizione").text = inv.causal
     ET.SubElement(dettaglio_linee, "Quantita").text = "1"
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
@@ -205,16 +212,19 @@ def _einvoice_body(einvoice, inv, root):
 
     config_holder = Object()
 
+    # Get VAT rate and nature configuration from association settings
     aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "", config_holder)
     ET.SubElement(dettaglio_linee, "AliquotaIVA").text = aliquotaiva
     natura = get_assoc_config(inv.assoc_id, "einvoice_natura", "", config_holder)
     if natura:
         ET.SubElement(dettaglio_linee, "Natura").text = natura
 
-    # Data
+    # Create summary data section with VAT calculations
     dati_riepilogo = ET.SubElement(beni_servizi, "DatiRiepilogo")
     ET.SubElement(dati_riepilogo, "AliquotaIVA").text = aliquotaiva
     ET.SubElement(dati_riepilogo, "ImponibileImporto").text = f"{inv.mc_gross:.2f}"
+
+    # Calculate and set VAT amount based on rate and gross amount
     ET.SubElement(dati_riepilogo, "Imposta").text = f"{int(aliquotaiva) * float(inv.mc_gross) / 100.0:.2f}"
     if natura:
         ET.SubElement(dati_riepilogo, "Natura").text = natura

@@ -87,42 +87,59 @@ def init_event_cache_all(ctx):
     return res
 
 
-def get_event_cache_characters(ctx, res):
+def get_event_cache_characters(ctx: dict, res: dict) -> dict:
     """Cache character data for an event including assignments and registrations.
 
+    This function populates the results dictionary with character data for caching purposes.
+    It handles character assignments, player data retrieval, and applies filtering based on
+    event configuration and mirror functionality.
+
     Args:
-        ctx: Context dictionary with event data
-        res: Results dictionary to populate with character data
+        ctx: Context dictionary containing event data, features, run information, and event config.
+        res: Results dictionary to populate with character data and metadata.
+
+    Returns:
+        The updated results dictionary with character data, assignments, and max character number.
     """
     res["chars"] = {}
+
+    # Check if mirror feature is enabled for character filtering
     mirror = "mirror" in ctx["features"]
 
-    # get assignments
+    # Build assignments mapping from character number to registration relation
     ctx["assignments"] = {}
     reg_que = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"])
     for el in reg_que.select_related("character", "reg", "reg__member"):
         ctx["assignments"][el.character.number] = el
 
+    # Get event configuration for hiding uncasted characters
     hide_uncasted_characters = ctx["event"].get_config("gallery_hide_uncasted_characters", False)
 
+    # Get list of assigned character IDs for mirror filtering
     assigned_chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
 
-    # get player data
+    # Process each character for the event cache
     que = ctx["event"].get_elements(Character).filter(hide=False).order_by("number")
     for ch in que.prefetch_related("factions_list"):
+        # Skip mirror characters that are already assigned
         if mirror and ch.mirror_id in assigned_chars:
             continue
 
+        # Build character data and search for player information
         data = ch.show(ctx["run"])
         data["fields"] = {}
         search_player(ch, data, ctx)
+
+        # Hide uncasted characters if configuration is enabled
         if hide_uncasted_characters and data["player_id"] == 0:
             data["hide"] = True
 
         res["chars"][int(data["number"])] = data
 
+    # Add field data to the cache
     get_event_cache_fields(ctx, res)
 
+    # Set the maximum character number for reference
     if res["chars"]:
         res["max_ch_number"] = max(res["chars"], key=int)
     else:
@@ -131,51 +148,75 @@ def get_event_cache_characters(ctx, res):
     return res
 
 
-def get_event_cache_fields(ctx, res, only_visible=True):
+def get_event_cache_fields(ctx: dict, res: dict, only_visible: bool = True) -> None:
     """
     Retrieve and cache writing fields for characters in an event.
 
+    This function populates character data with their associated writing field
+    responses, including both multiple choice selections and text answers.
+
     Args:
-        ctx: Context dictionary containing features and questions
-        res: Result dictionary with character data
-        only_visible: Whether to include only visible fields (default: True)
+        ctx: Context dictionary containing features and questions data
+        res: Result dictionary with character data under 'chars' key
+        only_visible: Whether to include only visible fields. Defaults to True.
+
+    Returns:
+        None: Modifies res dictionary in-place by adding field data to characters
+
+    Note:
+        Function returns early if 'character' feature is not enabled or if
+        no questions are available in the context.
     """
+    # Early return if character feature is not enabled
     if "character" not in ctx["features"]:
         return
 
-    # get visible question ids
+    # Retrieve visible question IDs and populate ctx with questions
     visible_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
     if "questions" not in ctx:
         return
 
+    # Extract question IDs from context for database filtering
     question_idxs = ctx["questions"].keys()
 
-    # ids to number
+    # Create mapping from character IDs to their position numbers in results
     mapping = {}
     for ch_num, ch in res["chars"].items():
         mapping[ch["id"]] = ch_num
 
-    # get choices for characters of the event
+    # Retrieve and process multiple choice answers for characters
+    # Each choice can have multiple options selected per question
     ans_que = WritingChoice.objects.filter(question_id__in=question_idxs)
     for el in ans_que.values_list("element_id", "question_id", "option_id"):
+        # Skip if character not in current event mapping
         if el[0] not in mapping:
             continue
+
+        # Map database values to result structure
         ch_num = mapping[el[0]]
         question = el[1]
         value = el[2]
+
+        # Initialize fields list for question if not exists, then append choice
         fields = res["chars"][ch_num]["fields"]
         if question not in fields:
             fields[question] = []
         fields[question].append(value)
 
-    # get answers for characters of the event
+    # Retrieve and process text answers for characters
+    # Each text answer is a single value per question
     ans_que = WritingAnswer.objects.filter(question_id__in=question_idxs)
     for el in ans_que.values_list("element_id", "question_id", "text"):
+        # Skip if character not in current event mapping
         if el[0] not in mapping:
             continue
+
+        # Map database values to result structure
         ch_num = mapping[el[0]]
         question = el[1]
         value = el[2]
+
+        # Set text answer directly (single value, not list)
         res["chars"][ch_num]["fields"][question] = value
 
 
@@ -222,7 +263,7 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
     return {"questions": ctx["questions"], "options": ctx["options"], "fields": fields}
 
 
-def get_event_cache_factions(ctx, res):
+def get_event_cache_factions(ctx: dict, res: dict) -> None:
     """Build cached faction data for events.
 
     Organizes faction information by type and prepares faction selection options,
@@ -230,15 +271,22 @@ def get_event_cache_factions(ctx, res):
     mappings for the event cache.
 
     Args:
-        ctx (dict): Context dictionary containing event information
-        res (dict): Result dictionary to be populated with faction data
+        ctx: Context dictionary containing event information with 'event' key
+        res: Result dictionary to be populated with faction data, modified in-place
 
     Returns:
-        None: Function modifies res in-place, adding faction mappings and metadata
+        None: Function modifies res in-place, adding 'factions' and 'factions_typ' keys
+
+    Note:
+        - Creates a fake faction (number 0) for characters without primary factions
+        - Only includes factions that have associated characters
+        - Organizes factions by type for easy lookup
     """
+    # Initialize faction data structures
     res["factions"] = {}
     res["factions_typ"] = {}
 
+    # If faction feature is not enabled, create single default faction with all characters
     if "faction" not in get_event_features(ctx["event"].id):
         res["factions"][0] = {
             "name": "",
@@ -250,11 +298,13 @@ def get_event_cache_factions(ctx, res):
         res["factions_typ"][FactionType.PRIM] = [0]
         return
 
-    # add characters without a primary to a fake one
+    # Find characters without a primary faction (faction 0)
     void_primary = []
     for number, ch in res["chars"].items():
         if "factions" in ch and 0 in ch["factions"]:
             void_primary.append(number)
+
+    # Create fake faction for characters without primary faction
     if void_primary:
         res["factions"][0] = {
             "name": "",
@@ -264,22 +314,30 @@ def get_event_cache_factions(ctx, res):
             "characters": void_primary,
         }
         res["factions_typ"][FactionType.PRIM] = [0]
-    # add real factions
+
+    # Process real factions from the event
     for f in ctx["event"].get_elements(Faction).order_by("number"):
+        # Get faction display data
         el = f.show_red()
         el["characters"] = []
+
+        # Find characters belonging to this faction
         for number, ch in res["chars"].items():
             if el["number"] in ch["factions"]:
                 el["characters"].append(number)
+
+        # Skip factions with no characters
         if not el["characters"]:
             continue
+
+        # Add faction to results and organize by type
         res["factions"][f.number] = el
         if f.typ not in res["factions_typ"]:
             res["factions_typ"][f.typ] = []
         res["factions_typ"][f.typ].append(f.number)
 
 
-def get_event_cache_traits(ctx, res):
+def get_event_cache_traits(ctx: dict, res: dict) -> None:
     """Build cached trait and quest data for events.
 
     Organizes character traits, quest types, and related game mechanics data,
@@ -287,45 +345,71 @@ def get_event_cache_traits(ctx, res):
     mappings for efficient event cache operations.
 
     Args:
-        ctx (dict): Context dictionary containing event information
-        res (dict): Result dictionary to be populated with trait and quest data
+        ctx: Context dictionary containing event information with 'event' and 'run' keys
+        res: Result dictionary to be populated with trait and quest data, must contain 'chars' key
 
     Returns:
         None: Function modifies res in-place, adding quest types, traits, and relationships
+
+    Side Effects:
+        Modifies res dictionary by adding:
+        - quest_types: Mapping of quest type numbers to their display data
+        - quests: Mapping of quest numbers to their display data
+        - traits: Mapping of trait numbers to enhanced trait data with relationships
+        - max_tr_number: Maximum trait number or 0 if no traits exist
     """
+    # Build quest types mapping ordered by number
     res["quest_types"] = {}
     for qt in QuestType.objects.filter(event=ctx["event"]).order_by("number"):
         res["quest_types"][qt.number] = qt.show()
+
+    # Build quests mapping with type relationships
     res["quests"] = {}
     for qt in Quest.objects.filter(event=ctx["event"]).order_by("number").select_related("typ"):
         res["quests"][qt.number] = qt.show()
+
+    # Build trait relationships mapping (traits that reference other traits)
     aux = {}
     for t in Trait.objects.filter(event=ctx["event"]).prefetch_related("traits"):
         aux[t.number] = []
+        # Add related trait numbers, excluding self-references
         for at in t.traits.all():
             if at.number == t.number:
                 continue
             aux[t.number].append(at.number)
+
+    # Build main traits mapping with character assignments
     res["traits"] = {}
     que = AssignmentTrait.objects.filter(run=ctx["run"]).order_by("typ")
+
+    # Process each assigned trait and link to character
     for at in que.select_related("trait", "trait__quest", "trait__quest__typ"):
         trait = at.trait.show()
         trait["quest"] = at.trait.quest.number
         trait["typ"] = at.trait.quest.typ.number
         trait["traits"] = aux[at.trait.number]
 
+        # Find the character this trait is assigned to
         found = None
         for _number, ch in res["chars"].items():
             if "player_id" in ch and ch["player_id"] == at.member_id:
                 found = ch
                 break
+
+        # Skip if character not found in cache
         if not found:
             continue
+
+        # Initialize character traits list if needed
         if "traits" not in found:
             found["traits"] = []
+
+        # Link trait to character and vice versa
         found["traits"].append(trait["number"])
         trait["char"] = found["number"]
         res["traits"][trait["number"]] = trait
+
+    # Set maximum trait number for cache optimization
     if res["traits"]:
         res["max_tr_number"] = max(res["traits"], key=int)
     else:

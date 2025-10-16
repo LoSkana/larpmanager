@@ -169,31 +169,43 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form, typ):
+def prepare_permissions_role(form, typ) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
     with checkboxes for available permissions based on enabled features.
 
     Args:
-        form: Form instance to add permission fields to
-        typ: Permission model type (AssocPermission or EventPermission)
+        form: Form instance to add permission fields to. Must have instance, params,
+              fields, and modules attributes.
+        typ: Permission model type (AssocPermission or EventPermission class).
+             Must have objects manager with filter, select_related methods.
 
-    Side effects:
-        Adds permission fields to form.fields and sets form.modules list
-        Sets form.prevent_canc for role number 1 (executives)
+    Returns:
+        None: Modifies form in-place by adding permission fields and setting attributes.
+
+    Side Effects:
+        - Adds permission fields to form.fields dict
+        - Sets form.modules list with field names
+        - Sets form.prevent_canc=True for role number 1 (executives)
     """
+    # Early return for executive role (number 1) - prevent cancellation
     if form.instance and form.instance.number == 1:
         form.prevent_canc = True
         return
+
+    # Initialize modules list for storing field names
     form.modules = []
 
+    # Extract enabled features from form parameters
     features = set(form.params.get("features", []))
 
+    # Get currently selected permission IDs for existing instances
     selected_ids = set()
     if getattr(form.instance, "pk", None):
         selected_ids = set(form.instance.permissions.values_list("pk", flat=True))
 
+    # Build base queryset for permissions - filter by enabled features and visibility
     base_qs = (
         typ.objects.filter(hidden=False)
         .select_related("feature", "module")
@@ -201,25 +213,32 @@ def prepare_permissions_role(form, typ):
         .order_by("module__order", "number", "pk")
     )
 
+    # Group permissions by module for organized display
     by_module = defaultdict(list)
     for p in base_qs:
         by_module[p.module_id].append(p)
 
+    # Ensure modules attribute exists on form
     form.modules = getattr(form, "modules", [])
 
+    # Create form fields for each module that has permissions
     for module in PermissionModule.objects.order_by("order"):
         perms = by_module.get(module.id, [])
         if not perms:
             continue
 
+        # Generate unique field name for this module
         field_name = f"perm_{module.pk}"
 
+        # Create module label with icon markup
         label = _(module.name)
         label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
 
+        # Determine which permissions should be initially selected
         module_ids = [p.pk for p in perms]
         initial_vals = [pid for pid in selected_ids if pid in module_ids]
 
+        # Create the multiple choice field with custom widget
         form.fields[field_name] = TranslatedModelMultipleChoiceField(
             required=False,
             queryset=typ.objects.filter(pk__in=module_ids).order_by("number", "pk"),
@@ -231,6 +250,7 @@ def prepare_permissions_role(form, typ):
             initial=initial_vals,
         )
 
+        # Track field name for template rendering
         form.modules.append(field_name)
 
 

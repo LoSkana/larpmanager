@@ -27,6 +27,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
 )
+from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration, RegistrationTicket
 
 
@@ -104,43 +105,55 @@ def _get_accounting_context(run, member_filter=None):
     return features, reg_tickets, cache_aip
 
 
-def refresh_member_accounting_cache(run, member_id):
+def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
     """Update accounting cache for a specific member's registrations in a run.
 
+    This function efficiently updates the accounting cache for a single member's
+    registrations within a specific run, either by creating the entire cache if
+    it doesn't exist or by selectively updating only the affected member's data.
+
     Args:
-        run: Run instance
-        member_id: Member ID to update accounting data for
+        run: Run instance for which to update the accounting cache
+        member_id: ID of the member whose accounting data should be updated
+
+    Returns:
+        None
     """
+    # Get the cache key and retrieve existing cached data
     key = get_registration_accounting_cache_key(run.id)
     cached_data = cache.get(key)
 
+    # If no cache exists, rebuild the entire cache and return early
     if not cached_data:
-        # If cache doesn't exist, create it entirely
         update_registration_accounting_cache(run)
         return
 
-    # Get registrations for this member in this run
+    # Fetch all active registrations for this member in the current run
     member_regs = Registration.objects.filter(run=run, member_id=member_id, cancellation_date__isnull=True)
 
+    # Handle case where member has no active registrations
     if not member_regs.exists():
-        # Remove any cached data for this member's registrations
+        # Clean up any stale cache entries for this member's old registrations
         for reg_id in list(cached_data.keys()):
             try:
                 reg = Registration.objects.get(id=reg_id, member_id=member_id)
+                # Remove cache entry if it belongs to this run and member
                 if reg.run_id == run.id:
                     cached_data.pop(reg_id, None)
             except ObjectDoesNotExist:
+                # Skip if registration no longer exists
                 pass
     else:
-        # Recalculate accounting data for this member's registrations
+        # Recalculate accounting data for member's active registrations
         features, reg_tickets, cache_aip = _get_accounting_context(run, member_id)
 
-        # Update cache for each registration of this member
+        # Update cache with fresh accounting data for each registration
         for reg in member_regs:
             dt = _calculate_registration_accounting(reg, reg_tickets, cache_aip, features)
+            # Store calculated values as formatted strings in cache
             cached_data[reg.id] = {key: f"{value:g}" for key, value in dt.items()}
 
-    # Update the cache
+    # Persist the updated cache data with 1-day timeout
     cache.set(key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
@@ -185,48 +198,59 @@ def update_registration_accounting_cache(run):
     return res
 
 
-def _calculate_registration_accounting(reg, reg_tickets, cache_aip, features):
+def _calculate_registration_accounting(reg, reg_tickets: dict, cache_aip: dict, features: dict) -> dict:
     """Calculate accounting data for a single registration.
 
+    Computes financial totals, payment breakdowns, and remaining balances
+    for a registration based on tickets, payments, and enabled features.
+
     Args:
-        reg: Registration instance
-        reg_tickets: Dictionary of ticket ID to RegistrationTicket mapping
-        cache_aip: Cached accounting payment data
+        reg: Registration instance containing financial data
+        reg_tickets: Dictionary mapping ticket ID to RegistrationTicket objects
+        cache_aip: Cached accounting payment data by member ID
         features: Dictionary of enabled features for the event
 
     Returns:
-        dict: Registration accounting data
+        dict: Registration accounting data containing:
+            - Basic financial fields (tot_payed, tot_iscr, quota, etc.)
+            - Payment breakdown by type (pay_a, pay_b, pay_c)
+            - Remaining balance and ticket pricing information
     """
     dt = {}
     max_rounding = 0.05
 
-    # Basic registration financial fields
+    # Extract and round basic registration financial fields
     for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
         dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
 
-    # Handle token/credit payments if feature is enabled
+    # Process token/credit payments if the feature is enabled
     if isinstance(features, dict) and "token_credit" in features:
         if reg.member_id in cache_aip:
+            # Extract credit (b) and token (c) payments from cache
             for pay in ["b", "c"]:  # b=CREDIT, c=TOKEN
                 v = 0
                 if pay in cache_aip[reg.member_id]:
                     v = cache_aip[reg.member_id][pay]
                 dt["pay_" + pay] = float(v)
+            # Calculate cash payment (a) as remainder
             dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
         else:
+            # No cached payments, all payment is cash
             dt["pay_a"] = dt["tot_payed"]
 
-    # Calculate remaining balance
+    # Calculate remaining balance and apply rounding threshold
     dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
     if abs(dt["remaining"]) < max_rounding:
         dt["remaining"] = 0
 
-    # Add ticket price information
+    # Add ticket pricing breakdown if ticket exists
     if reg.ticket_id in reg_tickets:
         t = reg_tickets[reg.ticket_id]
         dt["ticket_price"] = t.price
+        # Add custom payment amount to base ticket price
         if reg.pay_what:
             dt["ticket_price"] += reg.pay_what
+        # Calculate additional options cost
         dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
 
     return dt

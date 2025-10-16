@@ -583,6 +583,9 @@ class Vote(BaseModel):
 
 
 def get_user_membership(user, assoc):
+    if hasattr(user, 'membership'):
+        return user.membership
+    
     # noinspection PyUnresolvedReferences
     assoc_id = assoc.id if isinstance(assoc, Association) else assoc
 

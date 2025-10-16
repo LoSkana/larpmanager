@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -309,7 +310,19 @@ class WritingQuestion(BaseModel):
         return event.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(instance, features, params, orga):
+    def skip(instance: Any, features: dict[str, Any], params: dict[str, Any], orga: Any) -> bool:
+        """Determines whether to skip processing for the given instance.
+
+        Args:
+            instance: The object instance to check for skipping
+            features: Dictionary containing available features and their settings
+            params: Dictionary of parameters for processing configuration
+            orga: Organization object containing context information
+
+        Returns:
+            bool: Always returns False, indicating no skipping should occur
+        """
+        # Default behavior: never skip processing
         return False
 
     def get_editable(self):

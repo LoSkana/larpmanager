@@ -33,44 +33,70 @@ from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
 
-def def_user_ctx(request):
+def def_user_ctx(request) -> dict:
     """Build default user context with association data and permissions.
 
+    Constructs a comprehensive context dictionary containing user information,
+    association data, permissions, and configuration settings for template rendering.
+    Handles cases where users are not authenticated or lack proper membership.
+
     Args:
-        request: HTTP request object with user and association information
+        request: HTTP request object containing user and association information.
+                Must have 'assoc' attribute with association data including 'id'.
 
     Returns:
-        Dictionary containing user context, membership, permissions, and settings
+        dict: Context dictionary containing:
+            - Association data (id, name, settings, etc.)
+            - User membership information and permissions
+            - Feature flags and configuration
+            - TinyMCE editor settings
+            - Request metadata
+
+    Raises:
+        MembershipError: When user lacks proper association membership or
+                        when accessing home page without valid association.
     """
-    # check the home page has been reached, redirect to the correct organization page
+    # Check if home page reached without valid association, redirect appropriately
     if request.assoc["id"] == 0:
         if hasattr(request, "user") and hasattr(request.user, "member"):
             assocs = [el.assoc for el in request.user.member.memberships.all()]
             raise MembershipError(assocs)
         raise MembershipError()
 
+    # Initialize result dictionary with association ID
     res = {"a_id": request.assoc["id"]}
+
+    # Copy all association data to context
     for s in request.assoc:
         res[s] = request.assoc[s]
 
+    # Add user-specific data if authenticated member exists
     if hasattr(request, "user") and hasattr(request.user, "member"):
         res["member"] = request.user.member
         res["membership"] = get_user_membership(request.user.member, request.assoc["id"])
+
+        # Get association permissions for the user
         get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
+
+        # Add user interface preferences and staff status
         res["interface_collapse_sidebar"] = request.user.member.get_config("interface_collapse_sidebar", False)
         res["is_staff"] = request.user.is_staff
 
+    # Add cached event links to context
     res.update(cache_event_links(request))
 
+    # Set default names for token/credit system if feature enabled
     if "token_credit" in res["features"]:
         if not res["token_name"]:
             res["token_name"] = _("Tokens")
         if not res["credit_name"]:
             res["credit_name"] = _("Credits")
 
+    # Add TinyMCE editor configuration
     res["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     res["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
 
+    # Add current request function name for debugging/analytics
     if request and request.resolver_match:
         res["request_func_name"] = request.resolver_match.func.__name__
 

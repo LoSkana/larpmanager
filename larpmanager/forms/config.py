@@ -131,36 +131,55 @@ class ConfigForm(MyForm):
         res[k] = val
 
     @staticmethod
-    def _get_form_field(field_type: ConfigType, label, help_text, extra=None):
+    def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra=None) -> forms.Field | None:
         """Create appropriate Django form field based on configuration type.
 
-        Args:
-            field_type: Type of configuration field
-            label: Field label
-            help_text: Field help text
-            extra: Additional configuration for specific field types
+        Parameters
+        ----------
+        field_type : ConfigType
+            Type of configuration field that determines which Django form field to create
+        label : str
+            Human-readable label text displayed for the form field
+        help_text : str
+            Descriptive text shown to help users understand the field purpose
+        extra : Any, optional
+            Additional configuration data specific to certain field types (e.g., choices for MULTI_BOOL)
 
-        Returns:
-            forms.Field: Django form field instance or None if type unknown
+        Returns
+        -------
+        forms.Field or None
+            Django form field instance matching the specified type, or None if field_type is unknown
+
+        Notes
+        -----
+        Supported field types include CHAR, BOOL, HTML, INT, TEXTAREA, MEMBERS, and MULTI_BOOL.
+        The MEMBERS type requires extra parameter to contain association data for queryset filtering.
         """
+        # Map each configuration type to its corresponding Django form field factory
         field_map = {
+            # Basic text input field for short strings
             ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
+            # Checkbox field with custom styling for boolean values
             ConfigType.BOOL: lambda: forms.BooleanField(
                 label=label,
                 help_text=help_text,
                 required=False,
                 widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
             ),
+            # Rich text editor field for HTML content
             ConfigType.HTML: lambda: forms.CharField(
                 label=label, widget=TinyMCE(), help_text=help_text, required=False
             ),
+            # Numeric input field with integer validation
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
+            # Multi-line text area for longer text content
             ConfigType.TEXTAREA: lambda: forms.CharField(
                 label=label,
                 widget=Textarea(attrs={"rows": 5}),
                 help_text=help_text,
                 required=False,
             ),
+            # Multi-select field for choosing association members
             ConfigType.MEMBERS: lambda: forms.ModelMultipleChoiceField(
                 label=label,
                 queryset=get_members_queryset(extra),
@@ -168,6 +187,7 @@ class ConfigForm(MyForm):
                 required=False,
                 help_text=help_text,
             ),
+            # Multiple checkbox field for selecting multiple boolean options
             ConfigType.MULTI_BOOL: lambda: forms.MultipleChoiceField(
                 label=label,
                 choices=extra,
@@ -177,7 +197,9 @@ class ConfigForm(MyForm):
             ),
         }
 
+        # Get the factory function for the specified field type
         factory = field_map.get(ConfigType(field_type))
+        # Create and return the form field instance, or None if type is unsupported
         return factory() if factory else None
 
     def _add_custom_field(self, config, res):

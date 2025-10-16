@@ -20,7 +20,9 @@
 
 import math
 from datetime import datetime
+from typing import Any
 
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -29,6 +31,7 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.event import Run
 from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
@@ -36,35 +39,51 @@ from larpmanager.models.form import (
     RegistrationQuestion,
     WritingChoice,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 
-def registration_available(run, features=None, reg_counts=None):
+def registration_available(run, features: dict | None = None, reg_counts: dict | None = None) -> None:
     """Check if registration is available based on capacity and rules.
 
     Validates registration availability considering maximum participants,
-    ticket quotas, and advanced registration constraints.
+    ticket quotas, and advanced registration constraints. Updates the run's
+    status dictionary with availability information.
+
+    Args:
+        run: The run object containing event and status information
+        features: Optional dictionary of event features. If None, will be
+            fetched using get_event_features()
+        reg_counts: Optional dictionary of registration counts. If None,
+            will be fetched using get_reg_counts()
+
+    Returns:
+        None: Function modifies run.status in-place
     """
-    # check advanced registration rules only if there is a max number of tickets
+    # Skip advanced registration rules if no maximum participant limit is set
     if run.event.max_pg == 0:
         run.status["primary"] = True
         return
 
+    # Get registration counts if not provided
     if not reg_counts:
         reg_counts = get_reg_counts(run)
 
+    # Calculate remaining primary tickets
     remaining_pri = run.event.max_pg - reg_counts.get("count_player", 0)
 
+    # Get event features if not provided
     if not features:
         features = get_event_features(run.event_id)
 
-    # check primary tickets available
+    # Check if primary tickets are available
     if remaining_pri > 0:
         run.status["primary"] = True
+
+        # Show urgency warning when tickets are running low
         perc_signed = 0.3
         max_signed = 10
         if remaining_pri < max_signed or remaining_pri * 1.0 / run.event.max_pg < perc_signed:
@@ -72,14 +91,15 @@ def registration_available(run, features=None, reg_counts=None):
             run.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_pri} + "."
         return
 
-    # check if we manage filler
+    # Check if filler tickets are available (fallback option)
     if "filler" in features and _available_filler(run, reg_counts):
         return
 
-    # check if we manage waiting
+    # Check if waiting list is available (last resort option)
     if "waiting" in features and _available_waiting(run, reg_counts):
         return
 
+    # No registration options available - mark as closed
     run.status["closed"] = True
     return
 
@@ -130,48 +150,60 @@ def get_match_reg(r, my_regs):
 
 
 def registration_status_signed(
-    run,  # type: Run
-    features: dict,
+    run: Run,
+    reg: Registration,
+    member: Member,
+    features: dict[str, Any],
     register_url: str,
+    character_rels_dict=None,
+    payment_invoices_dict=None,
 ) -> None:
-    """Generate registration status information for signed up users.
-
-    This function processes the registration status for users who have already
-    signed up for an event run, handling various states like provisional
-    registrations, membership requirements, payment status, and profile completion.
+    """
+    Updates the registration status for a signed user based on membership and payment features.
 
     Args:
-        run: Run instance for the registered user containing registration details
-        features: Dictionary of available features configuration (e.g., 'membership', 'payment')
-        register_url: URL string for registration management page
+        run: The run object containing event and status information
+        reg: The registration object with ticket and user details
+        member: The member object for the registered user
+        features: Dictionary of enabled features for the event
+        register_url: URL for the registration page
+        character_rels_dict: Optional dictionary mapping registration IDs to
+            lists of RegistrationCharacterRel objects
+        payment_invoices_dict: Optional dictionary mapping registration IDs to
+            lists of PaymentInvoice objects
 
     Returns:
-        None: Modifies run.status['text'] in place with appropriate status message
+        None: Updates run.status["text"] in place
 
     Raises:
-        RewokedMembershipError: When user's membership has been revoked
+        RewokedMembershipError: When membership status is revoked
     """
-    # Initialize character registration status
-    registration_status_characters(run, features)
-    member = run.reg.member
+    # Initialize character registration status for the run
+    registration_status_characters(run, features, character_rels_dict)
+
+    # Get user membership for the event's association
     mb = get_user_membership(member, run.event.assoc_id)
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(run.reg)
+    provisional = is_reg_provisional(reg, event=run.event)
+
+    # Update message for provisional registrations
     if provisional:
         register_msg = _("Provisional registration")
-    if run.reg.ticket:
-        register_msg += f" ({run.reg.ticket.name})"
+
+    # Append ticket name if ticket exists
+    if reg.ticket:
+        register_msg += f" ({reg.ticket.name})"
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
-    # Handle membership feature requirements
+    # Handle membership feature requirements and status checks
     if "membership" in features:
-        # Check for revoked membership status
+        # Check for revoked membership status and raise error
         if mb.status in [MembershipStatus.REWOKED]:
             raise RewokedMembershipError()
 
-        # Handle incomplete membership applications
+        # Handle incomplete membership applications (empty, joined, uploaded)
         if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
             mes = _("please upload your membership application to proceed") + "."
@@ -179,17 +211,18 @@ def registration_status_signed(
             run.status["text"] = register_text + text_url
             return
 
-        # Handle pending membership approval
+        # Handle pending membership approval (submitted but not approved)
         if mb.status in [MembershipStatus.SUBMITTED]:
             run.status["text"] = register_text + ", " + _("awaiting member approval to proceed with payment")
             return
 
-    # Handle payment feature processing
+    # Handle payment feature processing and related status updates
     if "payment" in features:
-        if _status_payment(register_text, run):
+        # Process payment status and return if payment handling is complete
+        if _status_payment(register_text, run, payment_invoices_dict):
             return
 
-    # Check for incomplete user profile
+    # Check for incomplete user profile and prompt completion
     if not mb.compiled:
         profile_url = reverse("profile")
         mes = _("please fill in your profile") + "."
@@ -197,44 +230,80 @@ def registration_status_signed(
         run.status["text"] = register_text + text_url
         return
 
-    # Handle provisional registration status
+    # Handle provisional registration status (no further action needed)
     if provisional:
         run.status["text"] = register_text
         return
 
-    # Set final confirmed registration status
+    # Set final confirmed registration status for completed registrations
     run.status["text"] = register_text
 
-    # Add patron appreciation message if applicable
-    if run.reg.ticket and run.reg.ticket.tier == TicketTier.PATRON:
+    # Add patron appreciation message for patron tier tickets
+    if reg.ticket and reg.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support") + "!"
 
 
-def _status_payment(register_text, run):
+def _status_payment(register_text: str, run, payment_invoices_dict=None) -> bool:
     """Check payment status and update registration status text accordingly.
 
     Handles pending payments, wire transfers, and payment alerts with
     appropriate messaging and links to payment processing pages.
+
+    Args:
+        register_text: Base registration status text to append to
+        run: Registration run object containing registration and status info
+        payment_invoices_dict: Optional dictionary mapping registration IDs to
+            lists of PaymentInvoice objects. If provided, avoids querying the database.
+
+    Returns:
+        True if payment status was processed and status text updated, False otherwise
     """
-    pending = PaymentInvoice.objects.filter(
-        idx=run.reg.id,
-        member_id=run.reg.member_id,
-        status=PaymentStatus.SUBMITTED,
-        typ=PaymentType.REGISTRATION,
-    )
-    if pending.exists():
+    # Get payment invoices for this registration
+    if payment_invoices_dict:
+        invoices = payment_invoices_dict.get(run.reg.id, [])
+        # Filter for pending payments
+        pending_invoices = [
+            inv for inv in invoices if inv.status == PaymentStatus.SUBMITTED and inv.typ == PaymentType.REGISTRATION
+        ]
+        # Filter for wire transfer payments
+        wire_created_invoices = [
+            inv
+            for inv in invoices
+            if inv.status == PaymentStatus.CREATED
+            and inv.typ == PaymentType.REGISTRATION
+            and hasattr(inv, "method")
+            and inv.method
+            and inv.method.slug == "wire"
+        ]
+    else:
+        # Fallback to database queries if no precalculated data available
+        pending_invoices = list(
+            PaymentInvoice.objects.filter(
+                idx=run.reg.id,
+                member_id=run.reg.member_id,
+                status=PaymentStatus.SUBMITTED,
+                typ=PaymentType.REGISTRATION,
+            )
+        )
+        wire_created_invoices = list(
+            PaymentInvoice.objects.filter(
+                idx=run.reg.id,
+                member_id=run.reg.member_id,
+                status=PaymentStatus.CREATED,
+                typ=PaymentType.REGISTRATION,
+                method__slug="wire",
+            )
+        )
+
+    # Handle pending payment status
+    if pending_invoices:
         run.status["text"] = register_text + ", " + _("payment pending confirmation")
         return True
 
+    # Process payment alerts for unpaid registrations
     if run.reg.alert:
-        wire_created = PaymentInvoice.objects.filter(
-            idx=run.reg.id,
-            member_id=run.reg.member_id,
-            status=PaymentStatus.CREATED,
-            typ=PaymentType.REGISTRATION,
-            method__slug="wire",
-        )
-        if wire_created.exists():
+        # Handle wire transfer specific messaging
+        if wire_created_invoices:
             pay_url = reverse("acc_reg", args=[run.reg.id])
             mes = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{pay_url}'>{mes}</a>"
@@ -242,11 +311,15 @@ def _status_payment(register_text, run):
             run.status["text"] = f"{register_text}{text_url} ({note})"
             return True
 
+        # Handle general payment alert with deadline warning
         pay_url = reverse("acc_reg", args=[run.reg.id])
         mes = _("to confirm it proceed with payment") + "."
         text_url = f", <a href='{pay_url}'>{mes}</a>"
+
+        # Add cancellation warning if deadline passed
         if run.reg.deadline < 0:
             text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
+
         run.status["text"] = register_text + text_url
         return True
 
@@ -254,7 +327,13 @@ def _status_payment(register_text, run):
 
 
 def registration_status(
-    run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None
+    run: Run,
+    user: User,
+    my_regs=None,
+    features_map: dict | None = None,
+    reg_count: int | None = None,
+    character_rels_dict=None,
+    payment_invoices_dict=None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -267,6 +346,10 @@ def registration_status(
         my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
         features_map (dict, optional): Cached features mapping. Defaults to None.
         reg_count (int, optional): Pre-calculated registration count. Defaults to None.
+        character_rels_dict: Optional dictionary mapping registration IDs to
+            lists of RegistrationCharacterRel objects
+        payment_invoices_dict: Optional dictionary mapping registration IDs to
+            lists of PaymentInvoice objects
     """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
@@ -282,9 +365,11 @@ def registration_status(
         if mb.status in [MembershipStatus.REWOKED]:
             return
 
-    if run.reg:
-        registration_status_signed(run, features, register_url)
-        return
+        if run.reg:
+            registration_status_signed(
+                run, run.reg, user.member, features, register_url, character_rels_dict, payment_invoices_dict
+            )
+            return
 
     if run.end and get_time_diff_today(run.end) < 0:
         return
@@ -361,15 +446,26 @@ def check_character_maximum(event, member):
     return current_chars >= max_chars, max_chars
 
 
-def registration_status_characters(run, features):
+def registration_status_characters(run, features, character_rels_dict=None):
     """Update registration status with character assignment information.
 
     Displays assigned characters with approval status and provides links
     for character creation or selection based on event configuration.
+
+    Args:
+        run: The run object containing registration information
+        features: Dictionary of enabled event features
+        character_rels_dict: Optional dictionary mapping registration IDs to
+            lists of RegistrationCharacterRel objects. If provided, avoids
+            querying the database for character relationships.
     """
-    que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+    if character_rels_dict:
+        rcrs = character_rels_dict.get(run.reg.id, [])
+    else:
+        que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+        rcrs = que.order_by("character__number").select_related("character")
+
     approval = run.event.get_config("user_character_approval", False)
-    rcrs = que.order_by("character__number").select_related("character")
 
     aux = []
     for el in rcrs:
@@ -405,18 +501,30 @@ def registration_status_characters(run, features):
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
 
 
-def get_registration_options(instance):
+def get_registration_options(instance) -> list[tuple[str, str]]:
     """Get formatted list of registration options and answers for display.
 
+    This function retrieves all registration questions for a given event run,
+    filters out skipped questions based on features, and returns the answers
+    in a formatted list of question-answer pairs.
+
     Args:
-        instance: Registration instance
+        instance: Registration instance containing the run and event information.
 
     Returns:
-        List of tuples containing (question_name, answer_text) pairs
+        List of tuples where each tuple contains:
+            - question_name (str): The name of the registration question
+            - answer_text (str): The formatted answer text (comma-separated for choices)
+
+    Note:
+        Questions are filtered based on event features and individual skip conditions.
+        Choice questions are formatted as comma-separated option names.
     """
     res = []
     rqs = []
     cache = []
+
+    # Get event features and filter applicable questions
     features = get_event_features(instance.run.event_id)
     for q in RegistrationQuestion.get_instance_questions(instance.run.event, features):
         if q.skip(instance, features):
@@ -424,22 +532,27 @@ def get_registration_options(instance):
         rqs.append(q)
         cache.append(q.id)
 
+    # Fetch text answers for all relevant questions
     answers = {}
     for el in RegistrationAnswer.objects.filter(question_id__in=cache, reg=instance):
         answers[el.question_id] = el.text
 
+    # Fetch choice answers and group by question
     choices = {}
     for c in RegistrationChoice.objects.filter(question_id__in=cache, reg=instance).select_related("option"):
         if c.question_id not in choices:
             choices[c.question_id] = []
         choices[c.question_id].append(c.option)
 
+    # Build result list with question names and formatted answers
     if len(rqs) > 0:
         for q in rqs:
+            # Handle multiple choice questions
             if q.id in choices:
                 txt = ",".join([opt.name for opt in choices[q.id]])
                 res.append((q.name, txt))
 
+            # Handle text answer questions
             if q.id in answers:
                 res.append((q.name, answers[q.id]))
 
@@ -492,51 +605,76 @@ def get_reduced_available_count(run):
     return math.floor(pat * ratio / 10.0) - red
 
 
-def process_registration_event_change(registration):
+def process_registration_event_change(registration: Registration) -> None:
     """Handle registration updates when switching between events.
 
+    When a registration is moved from one event to another, this function attempts
+    to preserve the registration data by finding equivalent tickets, questions, and
+    options in the new event based on name matching.
+
     Args:
-        registration: The Registration instance being saved
+        registration: The Registration instance being saved with a potentially
+                     changed event assignment.
+
+    Returns:
+        None
+
+    Note:
+        This function performs case-insensitive name matching to find equivalent
+        elements in the target event. If no matching elements are found, the
+        corresponding fields are set to None.
     """
+    # Early return if this is a new registration (no existing data to migrate)
     if not registration.pk:
         return
 
     try:
+        # Fetch the previous state to compare event changes
         prev = Registration.objects.get(pk=registration.pk)
     except ObjectDoesNotExist:
         return
 
+    # Skip processing if the event hasn't actually changed
     if prev.run.event_id == registration.run.event_id:
         return
 
-    # look for similar ticket to update
+    # Attempt to find a matching ticket in the new event by name
+    # This preserves the ticket assignment when moving between events
     ticket_name = registration.ticket.name
     try:
         registration.ticket = registration.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
     except ObjectDoesNotExist:
         registration.ticket = None
 
-    # look for similar registration choice
+    # Process all registration choices (question/option pairs)
+    # Try to find matching questions and options in the new event
     for choice in RegistrationChoice.objects.filter(reg=registration):
         question_name = choice.question.name
         option_name = choice.option.name
+
         try:
+            # Find matching question and option in the new event
             choice.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
             choice.option = registration.run.event.get_elements(RegistrationOption).get(
                 question=choice.question, name__iexact=option_name
             )
             choice.save()
         except ObjectDoesNotExist:
+            # Clear the choice if no matching question/option found
             choice.question = None
             choice.option = None
 
-    # look for similar registration answer
+    # Process all registration answers (free-form question responses)
+    # Attempt to preserve answers by finding matching questions
     for answer in RegistrationAnswer.objects.filter(reg=registration):
         question_name = answer.question.name
+
         try:
+            # Find matching question in the new event to preserve the answer
             answer.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
             answer.save()
         except ObjectDoesNotExist:
+            # Clear the answer if no matching question found
             answer.question = None
 
 

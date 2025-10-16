@@ -29,6 +29,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.form import (
@@ -137,41 +138,47 @@ def _read_uploaded_csv(uploaded_file):
     return None
 
 
-def _get_file(ctx, file, column_id=None):
+def _get_file(ctx: dict, file, column_id: str = None) -> tuple[any, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:
-        ctx: Context dictionary with event information
-        file: Uploaded file object
-        column_id: Optional column identifier for file naming
+        ctx: Context dictionary containing event information and column definitions.
+        file: Uploaded file object to be processed.
+        column_id: Optional column identifier for file naming. Defaults to None.
 
     Returns:
-        tuple: (DataFrame, error_list) or (None, error_list) if failed
-    """
-    """Get file path and save uploaded file to media directory.
+        A tuple containing:
+            - DataFrame: Processed pandas DataFrame if successful, None if failed.
+            - list[str]: List of error messages, empty if no errors occurred.
 
-    Args:
-        ctx: Context dictionary with event information
-        file: Uploaded file object
-        column_id: Optional column identifier for file naming
-
-    Returns:
-        str: Saved file path relative to media root
+    Note:
+        Function validates that all columns in the uploaded CSV are recognized
+        based on the context configuration.
     """
+    # Get available column names from context
     _get_column_names(ctx)
     allowed = []
+
+    # Add columns from specific column_id if provided
     if column_id is not None:
         allowed.extend(list(ctx["columns"][column_id].keys()))
+
+    # Add fields from context if available
     if "fields" in ctx:
         allowed.extend(ctx["fields"].keys())
+
+    # Convert all allowed column names to lowercase for comparison
     allowed = [a.lower() for a in allowed]
 
+    # Read and parse the uploaded CSV file
     input_df = _read_uploaded_csv(file)
     if input_df is None:
         return None, ["ERR - Could not read input csv"]
 
+    # Normalize column names to lowercase for validation
     input_df.columns = [c.lower() for c in input_df.columns]
 
+    # Validate that all columns are recognized
     for col in input_df.columns:
         if col.lower() not in allowed:
             return None, [f"ERR - column not recognized: {col}"]
@@ -201,15 +208,29 @@ def registrations_load(request, ctx, form):
     return logs
 
 
-def _reg_load(request, ctx, row, questions):
+def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
     """Load registration data from CSV row for bulk import.
 
     Creates or updates registrations with field validation, membership checks,
     and question processing for event registration imports.
+
+    Args:
+        request: HTTP request object containing user information
+        ctx: Context dictionary containing event and run information
+        row: Dictionary representing a CSV row with registration data
+        questions: List of registration questions for the event
+
+    Returns:
+        str: Status message indicating success/failure and details
+
+    Raises:
+        ObjectDoesNotExist: When user email or membership is not found
     """
+    # Validate required email column exists
     if "email" not in row:
         return "ERR - There is no email column"
 
+    # Find user by email (case-insensitive)
     try:
         user = User.objects.get(email__iexact=row["email"].strip())
     except ObjectDoesNotExist:
@@ -217,24 +238,30 @@ def _reg_load(request, ctx, row, questions):
 
     member = user.member
 
+    # Check if user has valid membership for this association
     try:
         membership = Membership.objects.get(member=member, assoc_id=ctx["event"].assoc_id)
     except ObjectDoesNotExist:
         return "ERR - Sharing data not found"
 
+    # Verify user has approved data sharing
     if membership.status == MembershipStatus.EMPTY:
         return "ERR - User has not approved sharing of data"
 
+    # Get or create registration for this run and member
     (reg, cr) = Registration.objects.get_or_create(run=ctx["run"], member=member, cancellation_date__isnull=True)
 
     logs = []
 
+    # Process each field in the CSV row
     for field, value in row.items():
         _reg_field_load(ctx, reg, field, value, questions, logs)
 
+    # Save registration and log the action
     reg.save()
     save_log(request.user.member, Registration, reg)
 
+    # Generate appropriate status message
     if logs:
         msg = "KO - " + ",".join(logs)
     elif cr:
@@ -315,49 +342,66 @@ def _reg_assign_characters(ctx, reg, value, logs):
         RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
 
 
-def writing_load(request, ctx, form):
+def writing_load(request, ctx: dict, form) -> list[str]:
     """Load writing data from uploaded files and process relationships.
 
+    Processes uploaded files containing writing elements and their relationships.
+    Handles both character and plot types with their respective relationship data.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with event and writing type data
-        form: Form object containing uploaded files
+        request: HTTP request object containing user and session data
+        ctx: Context dictionary containing event, writing_typ, and typ keys
+        form: Django form object with cleaned_data containing uploaded files
 
     Returns:
-        List of log messages from the loading process
+        List of log messages documenting the loading process and any errors
+
+    Note:
+        For character type, processes main data file and optional relationships file.
+        For plot type, processes main data file and optional plot relationships file.
     """
     logs = []
+
+    # Process main writing data file
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:
         (input_df, logs) = _get_file(ctx, uploaded_file, 0)
 
+        # Get questions for the writing type with their options
         que = (
             ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).prefetch_related("options")
         )
         questions = _get_questions(que)
 
+        # Process each row of writing data
         if input_df is not None:
             for row in input_df.to_dict(orient="records"):
                 logs.append(element_load(request, ctx, row, questions))
 
-    # upload relationships
+    # Process character relationships if type is character
     if ctx["typ"] == "character":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
+            # Load relationships file and get character mapping
             (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
             chars = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Character).values("id", "name")}
+
+            # Process each relationship row
             if input_df is not None:
                 for row in input_df.to_dict(orient="records"):
                     new_logs.append(_relationships_load(row, chars))
             logs.extend(new_logs)
 
-    # upload rels
+    # Process plot relationships if type is plot
     if ctx["typ"] == "plot":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
+            # Load plot relationships file and get character/plot mappings
             (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
             chars = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Character).values("id", "name")}
             plots = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Plot).values("id", "name")}
+
+            # Process each plot relationship row
             if input_df is not None:
                 for row in input_df.to_dict(orient="records"):
                     new_logs.append(_plot_rels_load(row, chars, plots))
@@ -490,27 +534,47 @@ def element_load(request, ctx, row, questions):
         return f"OK - Updated {name}"
 
 
-def _writing_load_field(ctx, element, field, value, questions, logs):
+def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
     """
     Load writing field data during upload processing.
 
-    Args:
-        ctx: Context dictionary with event and field information
-        element: Writing element to update
-        field: Field name to process
-        value: Field value from upload
-        questions: Dictionary of available questions
-        logs: List to append error messages to
+    Processes individual field values from upload data and updates the writing element
+    accordingly. Handles special fields like 'typ' and 'quest' with object lookups,
+    and delegates other field types to question loading.
+
+    Parameters
+    ----------
+    ctx : dict
+        Context dictionary containing event and field information
+    element : WritingElement
+        Writing element instance to update with field data
+    field : str
+        Name of the field being processed
+    value : any
+        Value from upload data for this field
+    questions : dict
+        Dictionary mapping field names to question instances
+    logs : list
+        List to append error messages to during processing
+
+    Returns
+    -------
+    None
+        Function modifies element and logs in place
     """
+    # Skip processing if value is NaN/null
     if pd.isna(value):
         return
 
+    # Handle quest type field with case-insensitive lookup
     if field == "typ":
         try:
             element.typ = ctx["event"].get_elements(QuestType).get(name__iexact=value)
         except ObjectDoesNotExist:
             logs.append(f"ERR - quest type not found: {value}")
         return
+
+    # Handle quest field with case-insensitive lookup
     if field == "quest":
         try:
             element.quest = ctx["event"].get_elements(Quest).get(name__iexact=value)
@@ -518,15 +582,19 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
             logs.append(f"ERR - quest not found: {value}")
         return
 
+    # Get field type from context configuration
     field_type = ctx["fields"][field]
 
+    # Skip processing for name fields and explicitly skipped fields
     if field_type in [WritingQuestionType.NAME, "skip"]:
         return
 
+    # Convert multiline text to HTML break tags and strip whitespace
     value = "<br />".join(str(value).strip().split("\n"))
     if not value:
         return
 
+    # Delegate to question loading for all other field types
     _writing_question_load(ctx, element, field, field_type, logs, questions, value)
 
 
@@ -583,41 +651,60 @@ def _assign_faction(ctx, element, value, logs):
             logs.append(f"Faction not found: {fac_name}")
 
 
-def form_load(request, ctx, form, is_registration=True):
+def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[str]:
     """Load form questions and options from uploaded files.
 
+    Processes uploaded CSV/Excel files to create form questions and their
+    associated options. Handles both registration and writing question types.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with event data
-        form: Upload form with file data
-        is_registration: Whether loading registration or writing questions
+        request: HTTP request object containing the upload request
+        ctx: Context dictionary containing event data and configuration
+        form: Upload form instance with cleaned file data
+        is_registration: Flag indicating whether to load registration questions
+            (True) or writing questions (False). Defaults to True.
 
     Returns:
-        list: Log messages from the upload processing operations
+        List of log messages generated during the upload processing operations.
+        Each message describes the success or failure of individual operations.
+
+    Note:
+        Expects 'first' field to contain questions file and 'second' field
+        to contain options file. Files are processed sequentially.
     """
     logs = []
 
-    # upload questions
+    # Process questions file upload
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:
+        # Parse uploaded questions file into DataFrame
         (input_df, logs) = _get_file(ctx, uploaded_file, 0)
         if input_df is not None:
+            # Create question objects from each row in the DataFrame
             for row in input_df.to_dict(orient="records"):
                 logs.append(_questions_load(ctx, row, is_registration))
 
-    # upload options
+    # Process options file upload
     uploaded_file = form.cleaned_data.get("second", None)
     if uploaded_file:
+        # Parse uploaded options file into DataFrame
         (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
         if input_df is not None:
+            # Determine question model class based on registration type
             question_cls = WritingQuestion
             if is_registration:
                 question_cls = RegistrationQuestion
+
+            # Build lookup dictionary mapping question names to IDs
             questions = {
                 el["name"].lower(): el["id"] for el in ctx["event"].get_elements(question_cls).values("id", "name")
             }
+
+            # Create option objects for each row, linking to existing questions
             for row in input_df.to_dict(orient="records"):
                 new_logs.append(_options_load(ctx, row, questions, is_registration))
+
+        # Combine logs from options processing with existing logs
         logs.extend(new_logs)
 
     return logs
@@ -850,39 +937,64 @@ def tickets_load(request, ctx, form):
     return logs
 
 
-def _ticket_load(request, ctx, row):
+def _ticket_load(request, ctx: dict, row: dict) -> str:
     """Load ticket data from CSV row for bulk import.
 
-    Creates or updates ticket objects with tier validation, price handling,
-    and proper relationship setup for event registration.
+    Creates or updates RegistrationTicket objects with proper validation,
+    price handling, and relationship setup for event registration.
+
+    Args:
+        request: HTTP request object containing user context
+        ctx: Context dictionary containing event and other bulk import data
+        row: Dictionary representing a single CSV row with ticket data
+
+    Returns:
+        str: Status message indicating success ("OK - Created/Updated") or error ("ERR - ...")
+
+    Raises:
+        ValueError: When numeric conversion fails for max_available or price fields
     """
+    # Validate required name column exists
     if "name" not in row:
         return "ERR - There is no name column"
 
+    # Get or create ticket object for the event
     (ticket, cr) = RegistrationTicket.objects.get_or_create(event=ctx["event"], name=row["name"])
 
+    # Define field mappings for enumeration values
     mappings = {
         "tier": invert_dict(TicketTier.get_mapping()),
     }
 
+    # Process each field in the CSV row
     for field, value in row.items():
+        # Skip empty values, NaN values, and the name field (already processed)
         if not value or pd.isna(value) or field in ["name"]:
             continue
+
         new_value = value
+
+        # Handle mapped enumeration fields
         if field in mappings:
             new_value = new_value.lower().strip()
             if new_value not in mappings[field]:
                 return f"ERR - unknow value {value} for field {field}"
             new_value = mappings[field][new_value]
+
+        # Convert numeric fields to appropriate types
         if field == "max_available":
             new_value = int(value)
         if field == "price":
             new_value = float(value)
+
+        # Set the field value on the ticket object
         setattr(ticket, field, new_value)
 
+    # Save the ticket and log the operation
     ticket.save()
     save_log(request.user.member, RegistrationTicket, ticket)
 
+    # Return appropriate success message
     if cr:
         msg = f"OK - Created {ticket}"
     else:
@@ -900,42 +1012,73 @@ def abilities_load(request, ctx, form):
     return logs
 
 
-def _ability_load(request, ctx, row):
+def _ability_load(request, ctx: dict, row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
-    Creates or updates ability objects with field validation, type assignment,
-    prerequisite parsing, and requirement processing.
+    Creates or updates ability objects with comprehensive field validation,
+    type assignment, prerequisite parsing, and requirement processing.
+
+    Args:
+        request: HTTP request object containing user information
+        ctx: Context dictionary containing event and related data
+        row: Dictionary representing a CSV row with ability data
+
+    Returns:
+        str: Status message indicating success/failure of the operation
+
+    Raises:
+        ValueError: When required 'name' column is missing from row
+        AttributeError: When accessing invalid model fields
     """
+    # Validate required name column exists
     if "name" not in row:
         return "ERR - There is no name column"
 
+    # Get or create ability object using event's class parent
     (element, cr) = AbilityPx.objects.get_or_create(event=ctx["event"].get_class_parent(AbilityPx), name=row["name"])
 
     logs = []
 
+    # Process each field in the CSV row
     for field, value in row.items():
+        # Skip empty, NaN values, or the name field (already processed)
         if not value or pd.isna(value) or field in ["name"]:
             continue
         new_value = value
+
+        # Handle type field assignment
         if field == "typ":
             _assign_type(ctx, element, logs, value)
             continue
+
+        # Convert cost field to integer
         if field == "cost":
             new_value = int(value)
+
+        # Handle prerequisites field parsing
         if field == "prerequisites":
             _assign_prereq(ctx, element, logs, value)
             continue
+
+        # Handle requirements field processing
         if field == "requirements":
             _assign_requirements(ctx, element, logs, value)
             continue
+
+        # Convert visible field to boolean
         if field == "visible":
             new_value = value.lower().strip() == "true"
+
+        # Set the attribute on the element
         setattr(element, field, new_value)
 
+    # Save the element to database
     element.save()
 
+    # Log the operation for audit trail
     save_log(request.user.member, AbilityPx, element)
 
+    # Return appropriate success message
     if cr:
         msg = f"OK - Created {element}"
     else:

@@ -275,14 +275,21 @@ class Event(BaseModel):
     def get_name(self):
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, str]:
         """Generate display dictionary with event information and media URLs.
 
         Creates a comprehensive dictionary containing event details, cover images,
         carousel images, fonts, and backgrounds with their respective URLs.
+
+        Returns:
+            dict[str, str]: Dictionary containing event attributes and media URLs.
+                Keys include: slug, name, tagline, description, website, genre,
+                where, authors, cover, cover_thumb, carousel_img, carousel_thumb,
+                font, background, background_red (when available).
         """
         dc = {}
 
+        # Extract basic event attributes
         for s in [
             "slug",
             "name",
@@ -294,22 +301,27 @@ class Event(BaseModel):
             "authors",
         ]:
             dc[s] = get_attr(self, s)
+
+        # Add cover image URLs if available
         if self.cover:
             # noinspection PyUnresolvedReferences
             dc["cover"] = self.cover.url
             # noinspection PyUnresolvedReferences
             dc["cover_thumb"] = self.cover_thumb.url
 
+        # Add carousel image URLs if available
         if self.carousel_img:
             # noinspection PyUnresolvedReferences
             dc["carousel_img"] = self.carousel_img.url
             # noinspection PyUnresolvedReferences
             dc["carousel_thumb"] = self.carousel_thumb.url
 
+        # Add font URL if available
         if self.font:
             # noinspection PyUnresolvedReferences
             dc["font"] = self.font.url
 
+        # Add background image URLs if available
         if self.background:
             # noinspection PyUnresolvedReferences
             dc["background"] = self.background.url

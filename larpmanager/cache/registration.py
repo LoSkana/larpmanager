@@ -56,22 +56,35 @@ def add_count(s, param, v=1):
     s[param] += v
 
 
-def update_reg_counts(run):
+def update_reg_counts(run) -> dict[str, int]:
     """Update registration counts cache for the given run.
+
+    Calculates and returns registration statistics including counts by ticket tier,
+    provisional registrations, registration choices, and character writing choices.
 
     Args:
         run: Run instance to update registration counts for
 
     Returns:
-        dict: Updated registration counts data by ticket tier
+        Dictionary containing registration counts data by ticket tier and choices.
+        Keys include count_reg, count_wait, count_staff, count_fill, tk_{ticket_id},
+        option_{option_id}, and option_char_{option_id}.
     """
+    # Initialize base counters
     s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
+
+    # Get all non-cancelled registrations for this run
     que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+
+    # Process each registration to count by ticket tier
     for reg in que.select_related("ticket"):
         num_tickets = 1 + reg.additionals
+
+        # Handle registrations without ticket assignment
         if not reg.ticket:
             add_count(s, "count_unknown", num_tickets)
         else:
+            # Map ticket tiers to counter keys
             tier_map = {
                 TicketTier.STAFF: "staff",
                 TicketTier.WAITING: "wait",
@@ -81,23 +94,30 @@ def update_reg_counts(run):
                 TicketTier.NPC: "npc",
                 TicketTier.COLLABORATOR: "collaborator",
             }
+
+            # Count by specific tier or default to player
             key = tier_map.get(reg.ticket.tier)
             if key:
                 add_count(s, f"count_{key}", num_tickets)
             else:
                 add_count(s, "count_player", num_tickets)
 
+            # Track provisional registrations separately
             if is_reg_provisional(reg):
                 add_count(s, "count_provisional", num_tickets)
 
+        # Add to total registration count
         add_count(s, "count_reg", num_tickets)
 
+        # Track count by specific ticket ID
         add_count(s, f"tk_{reg.ticket_id}", num_tickets)
 
+    # Count registration choices (form options selected)
     que = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
     for el in que.values("option_id").annotate(total=Count("option_id")):
         s[f"option_{el['option_id']}"] = el["total"]
 
+    # Count character writing choices for this event
     character_ids = Character.objects.filter(event_id=run.event_id).values_list("id", flat=True)
 
     que = WritingChoice.objects.filter(element_id__in=character_ids)

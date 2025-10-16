@@ -206,45 +206,63 @@ def replace_chars(context, el, limit=200):
     return el[:limit]
 
 
-def go_character(context, search, number, tx, run, go_tooltip, simple=False):
+def go_character(context: dict, search: str, number: int, tx: str, run, go_tooltip: bool, simple: bool = False) -> str:
     """Replace character reference with formatted link or name.
 
+    Processes text containing character references (like '#1', '@1', '^1') and replaces
+    them with either formatted HTML links or simple bold names, depending on the simple
+    parameter. Optionally includes tooltips for character information.
+
     Args:
-        context: Template context with character data
-        search (str): Pattern to search for (e.g., '#1', '@1', '^1')
-        number (int): Character number to replace
-        tx (str): Text containing the search pattern
-        run: Run instance for URL generation
-        go_tooltip (bool): Whether to include tooltip
-        simple (bool): If True, return simple name; if False, return link
+        context: Template context dictionary containing character data under 'chars' key.
+        search: Pattern to search for in the text (e.g., '#1', '@1', '^1').
+        number: Character number/ID to look up in the context chars dictionary.
+        tx: Input text that may contain the search pattern to be replaced.
+        run: Run instance used for generating character URLs via get_slug() method.
+        go_tooltip: If True, includes hover tooltip with character information.
+        simple: If True, returns character name in bold; if False, returns clickable link.
 
     Returns:
-        str: Text with character reference replaced
+        The input text with character references replaced by formatted HTML, or
+        unchanged text if search pattern not found or character data unavailable.
+
+    Example:
+        >>> go_character(ctx, '#1', 1, 'See character #1', run_obj, True, False)
+        'See character <a class="link_show_char" href="/run/char/1">John Doe</a>'
     """
+    # Early return if search pattern not in text
     if search not in tx:
         return tx
 
+    # Check if character data exists in context
     if "chars" not in context:
         return tx
 
+    # Verify specific character number exists
     if number not in context["chars"]:
         return tx
 
+    # Get character data from context
     ch = context["chars"][number]
 
+    # Generate character URL using run slug and character number
     r = get_url(
         reverse("character", args=[run.get_slug(), ch["number"]]),
         context["assoc_slug"],
     ).replace('"', "")
 
+    # Create either simple bold name or full link based on simple flag
     if simple:
         lk = f"<b>{ch['name'].split()[0]}</b>"
     else:
         lk = f"<a class='link_show_char' href='{r}'>{ch['name']}</a>"
+
+        # Add tooltip wrapper if tooltips are enabled
         if go_tooltip:
             tooltip = get_tooltip(context, ch)
             lk = "<span class='has_show_char'>" + lk + f"</span><span class='hide show_char'>{tooltip}</span>"
 
+    # Replace search pattern with generated link/name
     return tx.replace(search, lk)
 
 
@@ -319,27 +337,34 @@ def show_char(context, el, run, tooltip):
     return mark_safe(tx)
 
 
-def go_trait(context, search, number, tx, run, go_tooltip, simple=False):
+def go_trait(context: dict, search: str, number: int, tx: str, run, go_tooltip: bool, simple: bool = False) -> str:
     """Replace trait reference with character link.
 
+    Searches for a pattern in text and replaces it with either a character name
+    or a clickable link to the character page, depending on the simple flag.
+
     Args:
-        context: Template context with trait and character data
-        search (str): Pattern to search for
-        number (int): Trait number to replace
-        tx (str): Text containing the search pattern
-        run: Run instance for character lookup
-        go_tooltip (bool): Whether to include tooltip
-        simple (bool): If True, return simple name; if False, return link
+        context: Template context dictionary containing trait and character data
+        search: Pattern string to search for in the text
+        number: Trait number identifier to look up the associated character
+        tx: Input text containing the search pattern to be replaced
+        run: Run instance used for character lookup operations
+        go_tooltip: Whether to include hover tooltip in the generated link
+        simple: If True, returns bold character name; if False, returns full HTML link
 
     Returns:
-        str: Text with trait reference replaced by character link
+        Modified text string with trait reference replaced by character link or name,
+        or original text if pattern not found or character data unavailable
     """
+    # Early return if search pattern not found in text
     if search not in tx:
         return tx
 
+    # Initialize traits cache if not present in context
     if "traits" not in context:
         context["traits"] = {}
 
+    # Get character number from cached traits or fetch from database
     if number in context["traits"]:
         ch_number = context["traits"][number]["char"]
     else:
@@ -348,26 +373,36 @@ def go_trait(context, search, number, tx, run, go_tooltip, simple=False):
             return tx
         ch_number = char.number
 
+    # Verify character exists in context data
     if ch_number not in context["chars"]:
         return tx
 
+    # Get character data from context
     ch = context["chars"][ch_number]
 
+    # Generate appropriate output based on simple flag
     if simple:
+        # Simple mode: return bold first name only
         lk = f"<b>{ch['name'].split()[0]}</b>"
     else:
+        # Full mode: generate clickable link with optional tooltip
         tooltip = ""
         if go_tooltip:
             tooltip = get_tooltip(context, ch)
+
+        # Build character page URL
         r = get_url(
             reverse("character", args=[run.get_slug(), ch["number"]]),
             context["slug"],
         )
+
+        # Create HTML link with hover functionality
         lk = (
             f"<span class='has_show_char'><a href='{r}'>{ch['name']}</a></span>"
             f"<span class='hide show_char'>{tooltip}</span>"
         )
 
+    # Replace search pattern with generated link/name
     return tx.replace(search, lk)
 
 

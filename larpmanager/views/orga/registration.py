@@ -133,15 +133,30 @@ def _orga_registrations_traits(r, ctx):
         r.traits[typ] = ",".join(r.traits[typ])
 
 
-def _orga_registrations_tickets(reg, ctx):
+def _orga_registrations_tickets(reg, ctx: dict) -> None:
     """Process registration ticket information and categorize by type.
 
+    Analyzes a registration's ticket information and categorizes it based on ticket tier.
+    Updates the context dictionary with registration counts and lists organized by type.
+    Handles cases where tickets are missing or invalid, and respects grouping preferences.
+
     Args:
-        reg: Registration instance to process
-        ctx: Context dictionary containing ticket and feature data
+        reg: Registration instance to process, must have ticket_id and member attributes
+        ctx: Context dictionary containing:
+            - reg_tickets: Dictionary mapping ticket IDs to ticket objects
+            - event: Event instance for provisional registration checks
+            - features: Feature flags for registration validation
+            - no_grouping: Boolean flag to disable ticket type grouping
+            - reg_all: Dictionary to store categorized registration data
+            - list_tickets: Dictionary for ticket name tracking
+
+    Returns:
+        None: Modifies ctx dictionary in-place
     """
+    # Define default ticket type for participants
     default_typ = ("1", _("Participant"))
 
+    # Map ticket tiers to their display types and sort order
     ticket_types = {
         TicketTier.FILLER: ("2", _("Filler")),
         TicketTier.WAITING: ("3", _("Waiting")),
@@ -152,31 +167,37 @@ def _orga_registrations_tickets(reg, ctx):
         TicketTier.SELLER: ("8", _("Seller")),
     }
 
+    # Start with default type, will be overridden if specific ticket found
     typ = default_typ
 
+    # Handle missing or invalid ticket references
     if not reg.ticket_id or reg.ticket_id not in ctx["reg_tickets"]:
         regs_list_add(ctx, "list_tickets", "e", reg.member)
     else:
+        # Process valid ticket and determine registration type
         ticket = ctx["reg_tickets"][reg.ticket_id]
         regs_list_add(ctx, "list_tickets", ticket.name, reg.member)
         reg.ticket_show = ticket.name
 
-        if is_reg_provisional(reg, ctx["features"]):
+        # Check for provisional status first, then map ticket tier to type
+        if is_reg_provisional(reg, event=ctx["event"], features=ctx["features"]):
             typ = ("0", _("Provisional"))
         elif ticket.tier in ticket_types:
             typ = ticket_types[ticket.tier]
 
+    # Ensure both default and current type categories exist in context
     for key in [default_typ, typ]:
         if key[0] not in ctx["reg_all"]:
             ctx["reg_all"][key[0]] = {"count": 0, "type": key[1], "list": []}
 
-    # update count
+    # Increment count for the determined registration type
     ctx["reg_all"][typ[0]]["count"] += 1
 
-    # if grouping has been disabled, simply add them to the default type
+    # Override grouping if disabled - all registrations go to default type
     if ctx["no_grouping"]:
         typ = default_typ
 
+    # Add registration to the appropriate category list
     ctx["reg_all"][typ[0]]["list"].append(reg)
 
 
@@ -568,21 +589,35 @@ def orga_registration_form_list(request, s):
 
 
 @login_required
-def orga_registration_form_email(request, s):
+def orga_registration_form_email(request: HttpRequest, s: str) -> JsonResponse:
     """Generate email lists for registration question choices in JSON format.
 
     Returns email addresses and names of registrants grouped by their
     answers to single or multiple choice registration questions.
+
+    Args:
+        request: HTTP request object containing POST data with question ID
+        s: Event slug identifier
+
+    Returns:
+        JsonResponse: Dictionary mapping choice names to lists of emails and names.
+                     Format: {choice_name: {"emails": [...], "names": [...]}}
+                     Returns empty response if question type is not single/multiple choice
+                     or if user lacks permission.
     """
+    # Check user permissions for accessing registration data
     ctx = check_event_permission(request, s, "orga_registrations")
 
+    # Extract question ID from POST request
     eid = request.POST.get("num")
 
+    # Query registration question with optional allowed users annotation
     q = RegistrationQuestion.objects
     if "reg_que_allowed" in ctx["features"]:
         q = q.annotate(allowed_map=ArrayAgg("allowed"))
     q = q.get(event=ctx["event"], pk=eid)
 
+    # Check if user has permission to access this specific question
     if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
         run_id = ctx["run"].id
         organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
@@ -591,20 +626,26 @@ def orga_registration_form_email(request, s):
 
     res = {}
 
+    # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         return
 
+    # Build mapping of option IDs to option names
     cho = {}
     for opt in RegistrationOption.objects.filter(question=q):
         cho[opt.id] = opt.name
 
+    # Query all choices for this question from active registrations
     que = RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"], reg__cancellation_date__isnull=True)
+
+    # Group emails and names by selected option
     for el in que.select_related("reg", "reg__member"):
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
         res[el.option_id]["emails"].append(el.reg.member.email)
         res[el.option_id]["names"].append(el.reg.member.display_member())
 
+    # Convert option IDs to option names in final result
     n_res = {}
     for opt_id, value in res.items():
         n_res[cho[opt_id]] = value
@@ -613,51 +654,79 @@ def orga_registration_form_email(request, s):
 
 
 @login_required
-def orga_registrations_edit(request, s, num):
+def orga_registrations_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
     """Edit or create a registration for an event.
 
+    This function handles both creating new registrations (when num=0) and editing
+    existing ones. It processes form submission, handles registration questions,
+    and manages quest builder features if available.
+
     Args:
-        request: HTTP request object
-        s: Event/run identifier
-        num: Registration ID (0 for new registration)
+        request: The HTTP request object containing user data and form submission
+        s: Event/run identifier used to locate the specific event
+        num: Registration ID - use 0 for creating new registration,
+             positive integer for editing existing registration
 
     Returns:
-        Rendered registration edit form or redirect on success
+        HttpResponse: Rendered registration edit form template or redirect response
+                     to registration list on successful form submission
+
+    Raises:
+        Http404: If the event or registration (when num > 0) is not found
+        PermissionDenied: If user lacks required event permissions
     """
+    # Check user permissions and initialize context with event data
     ctx = check_event_permission(request, s, "orga_registrations")
     get_event_cache_all(ctx)
+
+    # Set additional context flags for template rendering
     ctx["orga_characters"] = has_event_permission(request, ctx, ctx["event"].slug, "orga_characters")
     ctx["continue_add"] = "continue" in request.POST
+
+    # Load existing registration if editing (num != 0)
     if num != 0:
         get_registration(ctx, num)
+
+    # Handle form submission (POST request)
     if request.method == "POST":
+        # Initialize form with existing instance for editing or new instance for creation
         if num != 0:
             form = OrgaRegistrationForm(request.POST, instance=ctx["registration"], ctx=ctx, request=request)
         else:
             form = OrgaRegistrationForm(request.POST, ctx=ctx)
+
+        # Process valid form submission
         if form.is_valid():
             reg = form.save()
 
+            # Handle registration deletion if requested
             if "delete" in request.POST and request.POST["delete"] == "1":
                 cancel_reg(reg)
                 messages.success(request, _("Registration cancelled"))
                 return redirect("orga_registrations", s=ctx["run"].get_slug())
 
-            # Registration questions
+            # Save registration-specific questions and answers
             form.save_reg_questions(reg)
 
+            # Process quest builder data if feature is enabled
             if "questbuilder" in ctx["features"]:
                 _save_questbuilder(ctx, form, reg)
 
+            # Redirect based on user choice: continue adding or return to list
             if ctx["continue_add"]:
                 return redirect("orga_registrations_edit", s=ctx["run"].get_slug(), num=0)
 
             return redirect("orga_registrations", s=ctx["run"].get_slug())
+
+    # Handle GET request: initialize form for display
     elif num != 0:
+        # Load form with existing registration data for editing
         form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
     else:
+        # Create empty form for new registration
         form = OrgaRegistrationForm(ctx=ctx)
 
+    # Prepare final context for template rendering
     ctx["form"] = form
     ctx["add_another"] = 1
 
@@ -843,18 +912,38 @@ def orga_cancellations(request, s):
 
 
 @login_required
-def orga_cancellation_refund(request, s, num):
+def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
     """Handle cancellation refunds for tokens and credits.
 
     Processes refund requests for cancelled registrations, creating accounting
     entries for token and credit refunds and marking registration as refunded.
+
+    Args:
+        request: The HTTP request object containing user data and POST parameters
+        s: The event slug identifier for the run
+        num: The registration number to process refund for
+
+    Returns:
+        HttpResponse: Redirect to cancellations page on POST success,
+                     or rendered refund form template on GET
+
+    Note:
+        Creates AccountingItemOther entries for both token and credit refunds
+        when amounts are greater than zero, then marks registration as refunded.
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_cancellations")
+
+    # Retrieve and validate the registration
     get_registration(ctx, num)
+
+    # Process refund form submission
     if request.method == "POST":
+        # Extract refund amounts from form data
         ref_token = int(request.POST["inp_token"])
         ref_credit = int(request.POST["inp_credit"])
 
+        # Create token refund accounting entry if amount > 0
         if ref_token > 0:
             AccountingItemOther.objects.create(
                 oth=OtherChoices.TOKEN,
@@ -865,6 +954,8 @@ def orga_cancellation_refund(request, s, num):
                 value=ref_token,
                 cancellation=True,
             )
+
+        # Create credit refund accounting entry if amount > 0
         if ref_credit > 0:
             AccountingItemOther.objects.create(
                 oth=OtherChoices.CREDIT,
@@ -876,13 +967,17 @@ def orga_cancellation_refund(request, s, num):
                 cancellation=True,
             )
 
+        # Mark registration as refunded and save changes
         ctx["registration"].refunded = True
         ctx["registration"].save()
 
+        # Redirect back to cancellations overview
         return redirect("orga_cancellations", s=ctx["run"].get_slug())
 
+    # Get payment history for display in template
     get_reg_payments(ctx["registration"])
 
+    # Render the refund form template
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", ctx)
 
 

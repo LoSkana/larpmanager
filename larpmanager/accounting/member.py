@@ -19,9 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime
+from typing import Any
 
 from calmjs.parse.asttypes import Object
 from dateutil.relativedelta import relativedelta
+from django.http import HttpRequest
 
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import (
@@ -43,48 +45,69 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 
 
-def info_accounting(request, ctx):
+def info_accounting(request: HttpRequest, ctx: dict[str, Any]) -> None:
     """Gather comprehensive accounting information for a member.
 
     Collects registration history, payment status, membership fees, donations,
     collections, refunds, and token/credit balances for display in member dashboard.
 
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with member and association ID
+        request: Django HTTP request object containing user session and metadata
+        ctx: Context dictionary containing member object and association ID (a_id).
+             Modified in-place to include accounting data.
 
-    Side effects:
-        Populates ctx with accounting data including reg_list, payments_todo,
-        payments_pending, refunds, and various balance information
+    Returns:
+        None: Function modifies ctx dictionary in-place
+
+    Side Effects:
+        Populates ctx with the following keys:
+        - reg_list: List of registration records
+        - payments_todo: Outstanding payments requiring action
+        - payments_pending: Payments awaiting processing
+        - refunds: Active refund requests
+        - reg_years: Registration data grouped by year
+        - Various balance and membership information
     """
     member = ctx["member"]
+    # Initialize user membership data for the given association
     get_user_membership(member, ctx["a_id"])
     ctx["reg_list"] = []
 
+    # Gather membership fee information and status
     _info_membership(ctx, member, request)
 
+    # Collect donation history and outstanding donations
     _info_donations(ctx, member, request)
 
+    # Process collection records and payment collections
     _info_collections(ctx, member, request)
 
+    # Initialize registration years tracking dictionary
     ctx["reg_years"] = {}
 
+    # Set up pending payments tracking for the member
     pending = _init_pending(member)
 
+    # Initialize payment choices and options
     choices = _init_choices(member)
 
-    # get all registrations in the future, or not completed
+    # Initialize payment status lists for todo and pending items
     for s in ["payments_todo", "payments_pending"]:
         ctx[s] = []
 
+    # Query all registrations for this member in the current association
+    # Exclude cancelled events from the development status
     reg_que = Registration.objects.filter(member=member, run__event__assoc_id=ctx["a_id"])
     reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC])
+
+    # Process each registration to populate payment and status information
     for reg in reg_que.select_related("run", "run__event", "ticket"):
         _init_regs(choices, ctx, pending, reg)
 
-    # check open refund requests
+    # Retrieve open refund requests for this member and association
     ctx["refunds"] = ctx["member"].refund_requests.filter(status=RefundStatus.REQUEST, assoc_id=ctx["a_id"])
 
+    # Calculate and add token/credit balance information
     _info_token_credit(ctx, member)
 
 

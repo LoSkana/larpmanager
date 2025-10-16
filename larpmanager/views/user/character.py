@@ -22,6 +22,7 @@ import ast
 import json
 import os
 import time
+from typing import Any, Optional, Union
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -31,7 +32,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import transaction
-from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.forms import Form
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -208,45 +210,77 @@ def character_your(request, s, p=None):
     return render(request, "larpmanager/event/character/your.html", ctx)
 
 
-def character_form(request, ctx, s, instance, form_class):
+def character_form(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    s: str,
+    instance: Optional[Union[Character, RegistrationCharacterRel]],
+    form_class: type[Form],
+) -> HttpResponse:
     """Handle character creation and editing form processing.
 
     Manages character form submission, validation, saving, and assignment
     with transaction safety and proper message handling.
+
+    Args:
+        request: The HTTP request object containing form data
+        ctx: Template context dictionary with event and user data
+        s: Event slug identifier
+        instance: Existing character or registration relation to edit, None for new
+        form_class: Django form class to use for character processing
+
+    Returns:
+        HttpResponse: Rendered form page or redirect to character detail
+
+    Note:
+        Uses atomic transactions to ensure data consistency during save operations.
+        Handles both character creation and editing workflows.
     """
+    # Initialize form dependencies and set element type for template context
     get_options_dependencies(ctx)
     ctx["elementTyp"] = Character
 
     if request.method == "POST":
+        # Process form submission with uploaded files
         form = form_class(request.POST, request.FILES, instance=instance, ctx=ctx)
         if form.is_valid():
+            # Set appropriate success message based on operation type
             if instance:
                 mes = _("Informations saved") + "!"
             else:
                 mes = _("New character created") + "!"
 
+            # Save character data within atomic transaction
             with transaction.atomic():
                 element = form.save(commit=False)
+                # Update character with additional processing and context
                 mes = _update_character(ctx, element, form, mes, request)
                 element.save()
 
+                # Handle character assignment logic
                 check_assign_character(request, ctx)
 
+            # Display success message to user
             if mes:
                 messages.success(request, mes)
 
+            # Determine character number for redirect
             number = None
             if isinstance(element, Character):
                 number = element.number
             elif isinstance(element, RegistrationCharacterRel):
                 number = element.character.number
+            # Redirect to character detail page
             return redirect("character", s=s, num=number)
     else:
+        # Initialize empty form for GET requests
         form = form_class(instance=instance, ctx=ctx)
 
+    # Add form to template context and initialize form state
     ctx["form"] = form
     init_form_submitted(ctx, form, request)
 
+    # Configure form display options from event settings
     ctx["hide_unavailable"] = ctx["event"].get_config("character_form_hide_unavailable", False)
 
     return render(request, "larpmanager/event/character/edit.html", ctx)
@@ -305,29 +339,41 @@ def character_customize(request, s, num):
 
 
 @login_required
-def character_profile_upload(request, s, num):
+def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResponse:
     """
     Handle character profile image upload via AJAX.
 
+    Processes an uploaded character profile image for a specific character in an event,
+    validates the upload, and saves it to storage with a unique filename.
+
     Args:
-        request: HTTP request object with uploaded file
-        s: Event slug
-        num: Character number
+        request: HTTP request object containing the uploaded file in POST data
+        s: Event slug identifier for the target event
+        num: Character number within the event registration
 
     Returns:
-        JsonResponse: Success/failure status and image URL
+        JsonResponse containing:
+            - "res": "ok" on success, "ko" on failure
+            - "src": thumbnail URL of uploaded image (on success only)
+
+    Raises:
+        ObjectDoesNotExist: When character registration relationship is not found
     """
+    # Validate request method is POST
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
+    # Validate uploaded file using form
     form = AvatarForm(request.POST, request.FILES)
     if not form.is_valid():
         return JsonResponse({"res": "ko"})
 
+    # Get event context and validate user permissions
     ctx = get_event_run(request, s, signup=True)
     registration_find(ctx["run"], request.user)
     get_char_check(request, ctx, num, True)
 
+    # Retrieve character registration relationship
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=ctx["run"].reg, character__number=num
@@ -335,12 +381,15 @@ def character_profile_upload(request, s, num):
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
 
+    # Process uploaded image and generate unique filename
     img = form.cleaned_data["image"]
     ext = img.name.split(".")[-1]
 
+    # Create unique file path with registration ID and UUID
     n_path = f"registration/{rgr.pk}_{uuid4().hex}.{ext}"
     path = default_storage.save(n_path, ContentFile(img.read()))
 
+    # Save profile path to database atomically
     with transaction.atomic():
         rgr.custom_profile = path
         rgr.save()
@@ -349,22 +398,27 @@ def character_profile_upload(request, s, num):
 
 
 @login_required
-def character_profile_rotate(request, s, num, r):
+def character_profile_rotate(request: HttpRequest, s: str, num: int, r: int) -> JsonResponse:
     """
     Rotate character profile image by specified degrees.
 
     Args:
-        request: HTTP request object
-        s: Event slug
-        num: Character number
-        r: Rotation angle in degrees
+        request (HttpRequest): HTTP request object containing user session
+        s (str): Event slug identifier
+        num (int): Character number identifier
+        r (int): Rotation direction (1 for 90°, else -90°)
 
     Returns:
-        JsonResponse: Success status and new image URL
+        JsonResponse: Dictionary with 'res' status ('ok'/'ko') and 'src' URL if successful
+
+    Raises:
+        ObjectDoesNotExist: When character registration relationship not found
     """
+    # Get event context and validate character access permissions
     ctx = get_event_run(request, s, signup=True, status=True)
     get_char_check(request, ctx, num, True)
 
+    # Retrieve character registration relationship with related objects
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=ctx["run"].reg, character__number=num
@@ -372,10 +426,12 @@ def character_profile_rotate(request, s, num, r):
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
 
+    # Validate that character has a custom profile image
     path = str(rgr.custom_profile)
     if not path:
         return JsonResponse({"res": "ko"})
 
+    # Open and rotate the image based on direction parameter
     path = os.path.join(conf_settings.MEDIA_ROOT, path)
     im = Image.open(path)
     if r == 1:
@@ -383,10 +439,12 @@ def character_profile_rotate(request, s, num, r):
     else:
         out = im.rotate(-90)
 
+    # Generate unique filename and save rotated image
     ext = path.split(".")[-1]
     n_path = f"{os.path.dirname(path)}/{rgr.pk}_{uuid4().hex}.{ext}"
     out.save(n_path)
 
+    # Update database with new image path atomically
     with transaction.atomic():
         rgr.custom_profile = n_path
         rgr.save()

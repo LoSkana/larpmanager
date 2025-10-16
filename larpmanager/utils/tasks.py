@@ -207,12 +207,14 @@ def my_send_simple_mail(
         run_id: Run ID for event-specific SMTP settings (overrides association settings)
         reply_to: Custom Reply-To email address header
 
-    Side effects:
-        Sends email using configured SMTP settings or default connection
-
     Raises:
         Exception: Re-raises email sending exceptions after logging error details
+
+    Note:
+        Sends email using configured SMTP settings or default connection.
+        Logs email details in debug mode for troubleshooting.
     """
+    # Initialize email headers and BCC list
     hdr = {}
     bcc = []
 
@@ -227,12 +229,16 @@ def my_send_simple_mail(
         if run_id:
             run = Run.objects.get(pk=run_id)
             event = run.event
+
+            # Check if event has custom SMTP configuration
             email_host_user = event.get_config("mail_server_host_user", "", bypass_cache=True)
 
             # Only apply event settings if SMTP host user is configured
             if email_host_user:
                 sender_email = email_host_user
                 sender = f"{clean_sender(event.name)} <{sender_email}>"
+
+                # Create custom SMTP connection for event
                 connection = get_connection(
                     host=event.get_config("mail_server_host", "", bypass_cache=True),
                     port=event.get_config("mail_server_port", "", bypass_cache=True),
@@ -252,10 +258,14 @@ def my_send_simple_mail(
 
             # Apply custom SMTP settings if configured (only if event settings not already applied)
             email_host_user = assoc.get_config("mail_server_host_user", "", bypass_cache=True)
+
+            # Check if association has custom SMTP and event settings aren't active
             if email_host_user:
                 if not event_settings:
                     sender_email = email_host_user
                     sender = f"{clean_sender(assoc.name)} <{sender_email}>"
+
+                    # Create custom SMTP connection for association
                     connection = get_connection(
                         host=assoc.get_config("mail_server_host", "", bypass_cache=True),
                         port=assoc.get_config("mail_server_port", "", bypass_cache=True),
@@ -279,6 +289,7 @@ def my_send_simple_mail(
         # Add RFC-compliant unsubscribe header
         hdr["List-Unsubscribe"] = f"<mailto:{sender_email}>"
 
+        # Store HTML body for multipart email
         body_html = body
 
         # Build multipart email with both plain text and HTML versions
@@ -291,6 +302,8 @@ def my_send_simple_mail(
             headers=hdr,
             connection=connection,
         )
+
+        # Attach HTML alternative to the email
         email.attach_alternative(body_html, "text/html")
 
         # Send the email

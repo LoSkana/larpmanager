@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -36,10 +36,12 @@ from larpmanager.cache.character import (
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
+from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
     DevelopStatus,
+    Event,
     EventTextType,
     Run,
 )
@@ -98,12 +100,12 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     aid = request.assoc["id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
-    runs = (
-        get_coming_runs(aid).select_related("event").prefetch_related("registrations__ticket", "registrations__member")
-    )
+    runs = get_coming_runs(aid)
 
     # Initialize user registration tracking
     my_regs_dict = {}
+    character_rels_dict = {}
+    payment_invoices_dict = {}
 
     if request.user.is_authenticated:
         # Define cutoff date (3 days ago) for filtering relevant registrations
@@ -124,6 +126,10 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
 
         # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
+
+        # Precompute character rels and payment invoices objects
+        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
+        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
@@ -143,7 +149,13 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         run.my_reg = my_regs_dict.get(run.id) if my_regs_dict else None
 
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, request.user, my_regs=my_regs)
+        registration_status(
+            run,
+            request.user,
+            my_regs=my_regs,
+            character_rels_dict=character_rels_dict,
+            payment_invoices_dict=payment_invoices_dict,
+        )
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -157,42 +169,70 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_coming_runs(assoc_id, future=True):
-    """Get upcoming runs for an association with optimized queries.
+def get_character_rels_dict(my_regs_dict, member):
+    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
+    character_rels_dict = {}
+    if my_regs_dict:
+        # Get all RegistrationCharacterRel objects for user's registrations in one query
+        run_ids = list(my_regs_dict.keys())
+        character_rels = (
+            RegistrationCharacterRel.objects.filter(reg__run_id__in=run_ids, reg__member=member)
+            .select_related("character")
+            .order_by("character__number")
+        )
+
+        # Group character relations by registration ID
+        for rel in character_rels:
+            if rel.reg_id not in character_rels_dict:
+                character_rels_dict[rel.reg_id] = []
+            character_rels_dict[rel.reg_id].append(rel)
+    return character_rels_dict
+
+
+def get_payment_invoices_dict(my_regs_dict, member):
+    # Precalculate PaymentInvoice data for all registrations to optimize queries
+    payment_invoices_dict = {}
+    if my_regs_dict:
+        reg_ids = list(my_regs_dict.keys())
+
+        # Get all payment invoices for user's registrations in one query
+        payment_invoices = PaymentInvoice.objects.filter(
+            idx__in=reg_ids, member=member, typ=PaymentType.REGISTRATION
+        ).select_related("method")
+
+        # Group payment invoices by registration ID (idx field)
+        for invoice in payment_invoices:
+            if invoice.idx not in payment_invoices_dict:
+                payment_invoices_dict[invoice.idx] = []
+            payment_invoices_dict[invoice.idx].append(invoice)
+    return payment_invoices_dict
+
+
+def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
+    """Get upcoming or past runs for an association with optimized queries.
 
     Args:
-        assoc_id: Association ID to filter by
-        future: If True, get future runs; if False, get past runs
+        assoc_id: Association ID to filter by. If None, returns runs for all associations.
+        future: If True, get future runs; if False, get past runs. Defaults to True.
 
     Returns:
-        QuerySet of Run objects with optimized select_related
+        QuerySet of Run objects with optimized select_related, ordered by end date.
+        Future runs are ordered ascending, past runs descending.
     """
-    runs = (
-        Run.objects.exclude(development=DevelopStatus.CANC)
-        .exclude(event__visible=False)
-        .select_related("event", "event__assoc")
-        .only(
-            "id",
-            "number",
-            "start",
-            "end",
-            "development",
-            "registration_open",
-            "event__id",
-            "event__name",
-            "event__slug",
-            "event__visible",
-            "event__assoc_id",
-        )
-    )
+    # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
+    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
 
+    # Filter by association if specified
     if assoc_id:
         runs = runs.filter(event__assoc_id=assoc_id)
 
+    # Apply date filtering and ordering based on future/past requirement
     if future:
+        # Get runs ending 3+ days from now, ordered by end date (earliest first)
         ref = datetime.now() - timedelta(days=3)
         runs = runs.filter(end__gte=ref.date()).order_by("end")
     else:
+        # Get runs that ended 3+ days ago, ordered by end date (latest first)
         ref = datetime.now() + timedelta(days=3)
         runs = runs.filter(end__lte=ref.date()).order_by("-end")
 
@@ -330,9 +370,11 @@ def calendar_past(request):
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
 
-    runs = get_coming_runs(aid, future=False).select_related("event__assoc")
+    runs = get_coming_runs(aid, future=False)
 
     my_regs_dict = {}
+    character_rels_dict = {}
+    payment_invoices_dict = {}
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
@@ -342,14 +384,22 @@ def calendar_past(request):
         ).select_related("ticket", "run")
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
+        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
+        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
+
     runs_list = list(runs)
     ctx["list"] = []
 
     for run in runs_list:
         user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
         my_regs_for_run = [user_reg] if user_reg else []
-
-        registration_status(run, request.user, my_regs=my_regs_for_run)
+        registration_status(
+            run,
+            request.user,
+            my_regs=my_regs_for_run,
+            character_rels_dict=character_rels_dict,
+            payment_invoices_dict=payment_invoices_dict,
+        )
         ctx["list"].append(run)
 
     ctx["page"] = "calendar_past"
@@ -418,26 +468,35 @@ def gallery(request, s):
             que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
             que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=TicketTier.WAITING)
             for reg in que_reg.select_related("member", "ticket").order_by("search"):
-                if not is_reg_provisional(reg, features):
+                if not is_reg_provisional(reg, event=ctx["event"], features=features):
                     ctx["reg_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", ctx)
 
 
-def event(request, s):
+def event(request: HttpRequest, s: str) -> HttpResponse:
     """
     Display main event page with runs, registration status, and event details.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing user authentication and session data
+        s: Event slug used to identify the specific event
 
     Returns:
-        HttpResponse: Rendered event template
+        HttpResponse: Rendered event template with context containing event details,
+                     runs categorized as coming/past, and registration information
+
+    Note:
+        - Categorizes runs as 'coming' (ended within 3 days) or 'past'
+        - Includes user registration status if authenticated
+        - Sets no_robots flag based on development status and timing
     """
+    # Get base context with event and run information
     ctx = get_event_run(request, s, status=True)
     ctx["coming"] = []
     ctx["past"] = []
+
+    # Retrieve user's registrations for this event if authenticated
     my_regs = None
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
@@ -446,23 +505,32 @@ def event(request, s):
             cancellation_date__isnull=True,
             member=request.user.member,
         )
+
+    # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=ctx["event"])
     ref = datetime.now() - timedelta(days=3)
 
+    # Prepare features mapping for registration status checking
     features_map = {ctx["event"].slug: ctx["features"]}
+
+    # Process each run to determine registration status and categorize by timing
     for r in runs:
         if not r.end:
             continue
 
+        # Update run with registration status information
         registration_status(r, request.user, my_regs=my_regs, features_map=features_map)
 
+        # Categorize run as coming (recent) or past based on end date
         if r.end > ref.date():
             ctx["coming"].append(r)
         else:
             ctx["past"].append(r)
 
-    ctx["data"] = ctx["event"].show()
+    # Refresh event object to ensure latest data
+    ctx["event"] = Event.objects.get(pk=ctx["event"].pk)
 
+    # Determine if search engines should index this page
     ctx["no_robots"] = (
         not ctx["run"].development == DevelopStatus.SHOW
         or not ctx["run"].end

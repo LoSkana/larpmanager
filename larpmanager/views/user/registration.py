@@ -308,43 +308,60 @@ def save_registration_standard(ctx, event, form, gifted, provisional, reg):
         reg.pay_what = int(form.cleaned_data["pay_what"])
 
 
-def registration_redirect(request, reg, new_reg, run):
+def registration_redirect(request: HttpRequest, reg: Registration, new_reg: bool, run: Run) -> HttpResponse:
     """Handle post-registration redirect logic.
 
+    Determines the appropriate redirect destination after a user completes
+    or updates their event registration. Checks membership requirements,
+    payment status, and redirects accordingly.
+
     Args:
-        request: Django HTTP request object
-        reg: Registration instance
-        new_reg (bool): Whether this is a new registration
-        run: Run instance
+        request: Django HTTP request object containing user and association data
+        reg: Registration instance for the current user's registration
+        new_reg: Whether this is a new registration (True) or an update (False)
+        run: Run instance representing the event run being registered for
 
     Returns:
-        HttpResponse: Redirect to appropriate next step based on registration state
+        HttpResponse: Redirect response to the appropriate next step:
+            - Profile page if membership compilation needed
+            - Membership application if membership status requires it
+            - Payment page if payment is outstanding
+            - Event gallery if registration is complete
+
+    Note:
+        This function handles the post-registration workflow by checking
+        feature flags and user status to determine the next required action.
     """
-    # check if user needs to compile membership
+    # Check if membership feature is enabled and user needs to complete profile
     if "membership" in request.assoc["features"]:
+        # Redirect to profile if membership data not compiled
         if not request.user.member.membership.compiled:
             mes = _("To confirm your registration, please fill in your personal profile") + "."
             messages.success(request, mes)
             return redirect("profile")
 
+        # Check membership status for non-waiting registrations
         memb_status = request.user.member.membership.status
         if memb_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED] and reg.ticket.tier != TicketTier.WAITING:
             mes = _("To confirm your registration, apply to become a member of the Association") + "."
             messages.success(request, mes)
             return redirect("membership")
 
-    # check if the user needs to pay
+    # Check if payment feature is enabled and payment is required
     if "payment" in request.assoc["features"]:
+        # Redirect to payment page if registration has outstanding payment alert
         if reg.alert:
             mes = _("To confirm your registration, please pay the amount indicated") + "."
             messages.success(request, mes)
             return redirect("acc_reg", reg_id=reg.id)
 
-    # all ok
+    # All requirements satisfied - show success message and redirect to event gallery
     context = {"event": run}
     if new_reg:
+        # Success message for new registration
         mes = _("Registration confirmed at %(event)s!") % context
     else:
+        # Success message for registration update
         mes = _("Registration updated to %(event)s!") % context
 
     messages.success(request, mes)
@@ -477,48 +494,73 @@ def init_form_submitted(ctx, form, request, reg=None):
 
 
 @login_required
-def register(request, s, sc="", dis="", tk=0):
+def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int = 0) -> HttpResponse:
     """Handle event registration form display and submission.
 
     Manages the complete registration process including ticket selection,
     form validation, payment processing, and membership verification.
+
+    Args:
+        request: Django HTTP request object
+        s: Event slug identifier
+        sc: Optional scenario code for registration context
+        dis: Optional discount code to apply
+        tk: Ticket ID to pre-select (default: 0)
+
+    Returns:
+        HttpResponse: Rendered registration page or redirect response
+
+    Raises:
+        RewokedMembershipError: When user membership has been revoked
     """
+    # Get event and run context with status validation
     ctx = get_event_run(request, s, status=True)
     run = ctx["run"]
     event = ctx["event"]
 
+    # Set up registration context for the current run
     if hasattr(run, "reg"):
         ctx["run_reg"] = run.reg
     else:
         ctx["run_reg"] = None
 
+    # Apply ticket selection if provided
     _apply_ticket(ctx, tk)
 
+    # Check if payment features are enabled for this association
     ctx["payment_feature"] = "payment" in get_assoc_features(ctx["a_id"])
 
+    # Prepare new registration or load existing one
     new_reg = _register_prepare(ctx, ctx["run_reg"])
 
+    # Handle registration redirects for new registrations
     if new_reg:
         res = _check_redirect_registration(request, ctx, event, sc)
         if res:
             return res
 
+    # Add any available bring-a-friend discounts
     _add_bring_friend_discounts(ctx)
 
+    # Verify user membership status and permissions
     mb = get_user_membership(request.user.member, request.assoc["id"])
     if mb.status in [MembershipStatus.REWOKED]:
         raise RewokedMembershipError()
     ctx["member"] = request.user.member
 
+    # Process form submission or display registration form
     if request.method == "POST":
         form = RegistrationForm(request.POST, ctx=ctx, instance=ctx["run_reg"])
         form.sel_ticket_map(request.POST.get("ticket", ""))
+        # Validate form and save registration if valid
         if form.is_valid():
             reg = save_registration(request, ctx, form, run, event, ctx["run_reg"])
             return registration_redirect(request, reg, new_reg, run)
     else:
+        # Display empty form for GET requests
         form = RegistrationForm(ctx=ctx, instance=ctx["run_reg"])
 
+    # Prepare additional registration information and render page
     register_info(request, ctx, form, ctx["run_reg"], dis)
     return render(request, "larpmanager/event/register.html", ctx)
 
@@ -677,25 +719,34 @@ def register_conditions(request, s=None):
 
 @login_required
 @require_POST
-def discount(request, s):
+def discount(request: HttpRequest, s: str) -> JsonResponse:
     """Handle discount code application for user registration.
 
+    This function validates and applies discount codes for event registrations,
+    creating temporary discount reservations that expire after 15 minutes.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
+        request: Django HTTP request object containing POST data with discount code
+        s: Event slug identifier used to retrieve the event context
 
     Returns:
-        JsonResponse: Success or error response for discount application
+        JsonResponse: JSON response containing either success message with
+                     reservation details or error message with validation failure
+
+    Raises:
+        ObjectDoesNotExist: When discount code is not found for the event run
     """
 
     def error(msg):
         return JsonResponse({"res": "ko", "msg": msg})
 
+    # Get event context and validate discount feature availability
     ctx = get_event_run(request, s)
 
     if "discount" not in ctx["features"]:
         return error(_("Not available, kiddo"))
 
+    # Extract and validate discount code from request
     cod = request.POST.get("cod")
     try:
         disc = Discount.objects.get(runs__in=[ctx["run"]], cod=cod)
@@ -704,17 +755,21 @@ def discount(request, s):
         logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 
+    # Clean up expired discount reservations
     now = timezone_now()
     AccountingItemDiscount.objects.filter(expires__lte=now).delete()
 
+    # Extract context variables for discount validation
     member = request.user.member
     run = ctx["run"]
     event = ctx["event"]
 
+    # Validate discount eligibility and constraints
     check = _check_discount(disc, member, run, event)
     if check:
         return error(check)
 
+    # Create temporary discount reservation with 15-minute expiration
     AccountingItemDiscount.objects.create(
         value=disc.value,
         member=member,
@@ -724,6 +779,7 @@ def discount(request, s):
         assoc_id=ctx["a_id"],
     )
 
+    # Return success response with reservation confirmation
     return JsonResponse(
         {
             "res": "ok",
@@ -953,27 +1009,37 @@ def get_registration_gift(ctx, r, request):
 
 
 @login_required
-def gift_redeem(request, s, code):
+def gift_redeem(request: HttpRequest, s: str, code: str) -> HttpResponse:
     """
     Handle gift code redemption for event registrations.
 
+    Processes the redemption of a gift code for event registrations. If the user
+    is already registered for the event, they are redirected with a success message.
+    Otherwise, the function handles both GET (display form) and POST (process redemption)
+    requests for gift code redemption.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        code: Gift redemption code
+        request (HttpRequest): The HTTP request object containing user and method info
+        s (str): Event slug identifier for the specific event
+        code (str): Gift redemption code to be validated and processed
 
     Returns:
-        HttpResponse: Redemption form or redirect after successful redemption
+        HttpResponse: Either renders the redemption form template for GET requests
+                     or redirects to the gallery page after successful redemption
 
     Raises:
-        Http404: If registration with code is not found
+        Http404: When no valid registration is found matching the provided code
+                and association constraints
     """
+    # Get event context and validate user permissions for gift redemption
     ctx = get_event_run(request, s, False, "gift", status=True)
 
+    # Check if user is already registered for this event
     if ctx["run"].reg:
         messages.success(request, _("You cannot redeem a membership, you are already a member!"))
         return redirect("gallery", s=ctx["run"].get_slug())
 
+    # Attempt to find valid registration with the provided redemption code
     try:
         reg = Registration.objects.get(
             redeem_code=code,
@@ -983,14 +1049,19 @@ def gift_redeem(request, s, code):
     except Exception as err:
         raise Http404("registration not found") from err
 
+    # Process POST request - complete the gift redemption
     if request.method == "POST":
+        # Use atomic transaction to ensure data consistency during redemption
         with transaction.atomic():
             reg.member = request.user.member
             reg.redeem_code = None
             reg.save()
+
+        # Notify user of successful redemption and redirect to event gallery
         messages.success(request, _("Your gifted registration has been redeemed!"))
         return redirect("gallery", s=ctx["run"].get_slug())
 
+    # Add registration object to context for template rendering
     ctx["reg"] = reg
 
     return render(request, "larpmanager/event/gift_redeem.html", ctx)

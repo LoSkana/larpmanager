@@ -112,42 +112,68 @@ def assign_casting(request, ctx, typ):
         messages.error(request, err)
 
 
-def get_casting_choices_characters(ctx, options):
+def get_casting_choices_characters(
+    ctx: dict, options: dict
+) -> tuple[dict[int, str], list[int], dict[int, str], list[int]]:
     """Get character choices for casting with filtering and availability status.
 
+    Retrieves all available characters for casting based on faction filtering,
+    tracking which characters are already taken and handling mirror relationships.
+
     Args:
-        ctx: Context dictionary containing event, run, and features data
-        options: Dictionary containing faction filtering options
+        ctx: Context dictionary containing:
+            - event: Event instance for character filtering
+            - run: Run instance for registration filtering
+            - features: Dict of enabled features
+        options: Dictionary containing:
+            - factions: List of allowed faction IDs for filtering
 
     Returns:
-        Tuple of (choices dict, taken list, mirrors dict, allowed list)
+        Tuple containing:
+            - choices: Dict mapping character IDs to display names
+            - taken: List of character IDs that are already assigned
+            - mirrors: Dict mapping character IDs to their mirror character IDs
+            - allowed: List of character IDs allowed by faction filtering
     """
     choices = {}
     mirrors = {}
     taken = []
 
+    # Build list of allowed characters based on faction filtering
     allowed = []
     if "faction" in ctx["features"]:
+        # Get primary factions for the event
         que = ctx["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
         for el in que.order_by("number"):
+            # Skip factions not in the allowed options
             if str(el.id) not in options["factions"]:
                 continue
+            # Add all characters from this faction to allowed list
             allowed.extend(el.characters.values_list("id", flat=True))
 
+    # Get characters that are already registered for this run
     chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
 
-    # remove characters that are mirrors
+    # Process all characters for the event (excluding hidden ones)
     que = ctx["event"].get_elements(Character)
     for c in que.exclude(hide=True):
+        # Skip characters not allowed by faction filtering
         if allowed and c.id not in allowed:
             continue
 
+        # Mark character as taken if already registered
         if c.id in chars:
             taken.append(c.id)
+
+        # Handle mirror character relationships
         if c.mirror_id:
+            # Mark character as taken if its mirror is registered
             if c.mirror_id in chars:
                 taken.append(c.id)
+            # Store mirror relationship mapping
             mirrors[c.id] = str(c.mirror_id)
+
+        # Add character to choices with display name
         choices[c.id] = str(c)
 
     return choices, taken, mirrors, allowed
@@ -175,48 +201,61 @@ def check_player_skip_quests(reg, typ):
     return AssignmentTrait.objects.filter(run_id=reg.run_id, member_id=reg.member_id, typ=typ).count() > 0
 
 
-def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
+def check_casting_player(ctx: dict, reg, options: dict, typ: int, cache_membs: dict, cache_aim: dict) -> bool:
     """Check if player should be skipped in casting based on various criteria.
 
+    This function evaluates multiple filtering criteria to determine whether
+    a registered player should be excluded from casting assignments.
+
     Args:
-        ctx: Context dictionary with features data
-        reg: Registration instance
-        options: Dictionary with casting filter options
-        typ: Casting type (0 for characters, other for quests)
-        cache_membs: Cached membership statuses
-        cache_aim: Cached aim membership data
+        ctx: Context dictionary containing features data and configuration
+        reg: Registration instance representing the player's registration
+        options: Dictionary with casting filter options (tickets, memberships, pays)
+        typ: Casting type identifier (0 for characters, other values for quests)
+        cache_membs: Cached membership statuses keyed by member ID
+        cache_aim: Cached aim membership data for additional status checks
 
     Returns:
-        Boolean indicating if player should be skipped
+        True if player should be skipped in casting, False otherwise
+
+    Example:
+        >>> should_skip = check_casting_player(ctx, registration, filters, 0, memb_cache, aim_cache)
     """
-    # check if select the player given the ticket
+    # Filter by ticket type - skip if player's ticket not in allowed list
     if "tickets" in options and str(reg.ticket_id) not in options["tickets"]:
         return True
 
-    # check if select the player given the membership status
+    # Filter by membership status when membership feature is enabled
     if "membership" in ctx["features"]:
+        # Skip if member not found in membership cache
         if reg.member.id not in cache_membs:
             return True
 
+        # Determine actual membership status, accounting for AIM membership
         status = cache_membs[reg.member.id]
         if status == "a" and reg.member.id in cache_aim:
-            status = "p"
+            status = "p"  # Override status for AIM members
 
+        # Skip if membership status not in allowed list
         if "memberships" in options and status not in options["memberships"]:
             return True
 
-    # check if select the player given the payment status
+    # Filter by payment status - check current payment state
     registration_payments_status(reg)
     if "pays" in options and reg.payment_status:
+        # Skip if payment status not in allowed list
         if reg.payment_status not in options["pays"]:
             return True
 
-    # check if we have to skip the player (already assigned)
+    # Check for existing assignments based on casting type
     if typ == 0:
+        # Character casting - check if already assigned to character
         check = check_player_skip_characters(reg, ctx)
     else:
+        # Quest casting - check if already assigned to quest
         check = check_player_skip_quests(reg, typ)
 
+    # Skip if player already has assignments
     if check:
         return True
 

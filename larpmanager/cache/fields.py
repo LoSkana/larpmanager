@@ -39,43 +39,58 @@ def clear_event_fields_cache(event_id):
     cache.delete(event_fields_key(event_id))
 
 
-def update_event_fields(event_id):
+def update_event_fields(event_id: int) -> dict:
     """Update cached event fields including writing questions and registration data.
 
+    This function fetches an event and builds a hierarchical cache structure
+    containing writing questions, options, and default field mappings organized
+    by question applicability (e.g., 'player', 'character', etc.).
+
     Args:
-        event_id: Event ID to update fields cache for
+        event_id: The primary key of the Event to update fields cache for.
 
     Returns:
-        dict: Updated event fields cache data
+        A nested dictionary containing cached event field data with structure:
+        {
+            'applicability_label': {
+                'questions': {question_id: question_data, ...},
+                'options': {option_id: option_data, ...},
+                'names': {question_type: question_name, ...},
+                'ids': {question_type: question_id, ...}
+            }
+        }
     """
     res = {}
     event = Event.objects.get(pk=event_id)
 
-    # add questions
+    # Fetch visible writing questions and organize by applicability
     que = event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
     for el in que.values("id", "name", "typ", "printable", "visibility", "applicable"):
         first_key = QuestionApplicable(el["applicable"]).label
+        # Initialize nested dictionary structure for each applicability type
         if first_key not in res:
             res[first_key] = {}
         if "questions" not in res[first_key]:
             res[first_key]["questions"] = {}
         res[first_key]["questions"][el["id"]] = el
 
-    # add options
+    # Fetch writing options and group by parent question's applicability
     que = event.get_elements(WritingOption).order_by("order")
     for el in que.values("id", "name", "question_id", "question__applicable"):
         first_key = QuestionApplicable(el["question__applicable"]).label
+        # Ensure options section exists in the nested structure
         if first_key not in res:
             res[first_key] = {}
         if "options" not in res[first_key]:
             res[first_key]["options"] = {}
         res[first_key]["options"][el["id"]] = el
 
-    # add default names and ids
+    # Create name and ID mappings for default writing question types
     que = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
     for el in que.values("id", "typ", "name", "applicable"):
         first_key = QuestionApplicable(el["applicable"]).label
         second_key = el["typ"]
+        # Initialize names and ids dictionaries for quick type-based lookups
         if first_key not in res:
             res[first_key] = {}
         if "names" not in res[first_key]:
@@ -85,6 +100,7 @@ def update_event_fields(event_id):
             res[first_key]["ids"] = {}
         res[first_key]["ids"][second_key] = el["id"]
 
+    # Cache the complete result structure with 1-day timeout
     cache.set(event_fields_key(event_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 

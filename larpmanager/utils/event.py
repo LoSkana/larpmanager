@@ -97,44 +97,64 @@ def get_event(request, slug, number=None):
         raise Http404("Event does not exist") from err
 
 
-def get_event_run(request, s, signup=False, slug=None, status=False):
+def get_event_run(request, s: str, signup: bool = False, slug: str | None = None, status: bool = False) -> dict:
     """Get comprehensive event run context with permissions and features.
 
+    Retrieves event context and enhances it with user permissions, feature access,
+    and registration status based on the provided parameters.
+
     Args:
-        request: Django HTTP request object
-        s (str): Event slug
-        signup (bool): Whether to check signup eligibility
-        slug (str, optional): Feature slug to check access for
-        status (bool): Whether to include registration status
+        request: Django HTTP request object containing user and session data
+        s: Event slug identifier for the target event
+        signup: Whether to check and validate signup eligibility for the user
+        slug: Optional feature slug to verify user access permissions
+        status: Whether to include detailed registration status information
 
     Returns:
-        dict: Complete event context with permissions and configuration
+        Complete event context dictionary containing:
+            - Event and run objects
+            - User permissions and roles
+            - Feature access flags
+            - Registration status (if requested)
+            - Association configuration
+            - Staff permissions and sidebar state
+
+    Raises:
+        Http404: If event is not found or user lacks required permissions
+        PermissionDenied: If user cannot access requested features
     """
+    # Get base event context with run information
     ctx = get_event(request, s)
 
+    # Validate user signup eligibility if requested
     if signup:
         check_signup(request, ctx)
 
+    # Verify feature access permissions for specific functionality
     if slug:
         check_event_feature(request, ctx, slug)
 
+    # Add registration status details to context
     if status:
         registration_status(ctx["run"], request.user)
 
-    # check if the user has any role
+    # Configure user permissions and sidebar for authorized users
     if has_event_permission(request, ctx, s):
         get_index_event_permissions(ctx, request, s)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
+    # Set association slug from request or event object
     if hasattr(request, "assoc"):
         ctx["assoc_slug"] = request.assoc["slug"]
     else:
         ctx["assoc_slug"] = ctx["event"].assoc.slug
 
+    # Configure staff permissions for character management access
     if has_event_permission(request, ctx, s, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
 
+    # Finalize run context preparation and return complete context
     prepare_run(ctx)
 
     return ctx
@@ -596,32 +616,46 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             WritingQuestion.objects.filter(event=instance, typ=el).delete()
 
 
-def save_event_registration_form(features, instance):
+def save_event_registration_form(features: dict, instance) -> None:
     """Create registration form questions based on enabled features.
 
+    This function manages the creation and deletion of registration questions
+    for an event based on the features that are enabled. It ensures that
+    default question types are always present and adds/removes feature-specific
+    questions as needed.
+
     Args:
-        features (dict): Enabled features for the event
-        instance: Event instance to create form for
+        features: Dictionary of enabled features for the event, where keys
+            are feature names and values indicate if the feature is active.
+        instance: Event instance to create the registration form for.
+
+    Returns:
+        None
     """
+    # Activate the organization's language for proper translations
     _activate_orga_lang(instance)
 
+    # Define default question types that should always be present
     def_tps = {RegistrationQuestionType.TICKET}
 
+    # Help text descriptions for default question types
     help_texts = {
         RegistrationQuestionType.TICKET: _("Your registration ticket"),
     }
 
+    # Get basic question types that are always available
     basic_tps = BaseQuestionType.get_basic_types()
 
+    # Query existing questions and get their types
     que = instance.get_elements(RegistrationQuestion)
     types = set(que.values_list("typ", flat=True).distinct())
 
-    # evaluate each question type field
+    # Get all available question type choices and filter out basic types
     choices = dict(RegistrationQuestionType.choices)
     all_types = choices.keys()
     all_types -= basic_tps
 
-    # add default types if none are present
+    # Create default question types if they don't exist
     for el in def_tps:
         if el not in types:
             RegistrationQuestion.objects.create(
@@ -632,10 +666,11 @@ def save_event_registration_form(features, instance):
                 status=QuestionStatus.MANDATORY,
             )
 
-    # add types from feature if the feature is active but the field is missing
+    # Determine which types should not be removed (protected types)
     not_to_remove = set(def_tps)
     all_types -= not_to_remove
 
+    # Define help texts for feature-specific question types
     help_texts = {
         "additional_tickets": _("Reserve additional tickets beyond your own"),
         "pay_what_you_want": _("Freely indicate the amount of your donation"),
@@ -645,7 +680,9 @@ def save_event_registration_form(features, instance):
         ),
     }
 
+    # Process each feature-specific question type
     for el in sorted(list(all_types)):
+        # Add question if feature is enabled but question doesn't exist
         if el in features and el not in types:
             RegistrationQuestion.objects.create(
                 event=instance,
@@ -654,6 +691,7 @@ def save_event_registration_form(features, instance):
                 description=help_texts.get(el, ""),
                 status=QuestionStatus.OPTIONAL,
             )
+        # Remove question if feature is disabled but question exists
         if el not in features and el in types:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
 
