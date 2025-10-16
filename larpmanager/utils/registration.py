@@ -22,6 +22,7 @@ import math
 from datetime import datetime
 from typing import Any
 
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -296,7 +297,12 @@ def _status_payment(register_text: str, run) -> bool:
 
 
 def registration_status(
-    run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None, character_rels_dict=None
+    run: Run,
+    user: User,
+    my_regs=None,
+    features_map: dict | None = None,
+    reg_count: int | None = None,
+    character_rels_dict=None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -307,7 +313,7 @@ def registration_status(
         run: Event run object to check registration status for
         user: User object attempting registration
         my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
-        featry ures_map (dict, optional): Cached features mapping. Defaults to None.
+        features_map (dict, optional): Cached features mapping. Defaults to None.
         reg_count (int, optional): Pre-calculated registration count. Defaults to None.
         character_rels_dict: Optional dictionary mapping registration IDs to
             lists of RegistrationCharacterRel objects
