@@ -103,6 +103,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
 
     # Initialize user registration tracking
     my_regs_dict = {}
+    character_rels_dict = {}
 
     if request.user.is_authenticated:
         # Define cutoff date (3 days ago) for filtering relevant registrations
@@ -123,6 +124,9 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
 
         # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
+
+        # Precompute character rels objects
+        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
@@ -135,8 +139,6 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     # Add language filter to context if specified
     if lang:
         ctx["lang"] = lang
-
-    character_rels_dict = get_character_rels_dict(my_regs_dict)
 
     # Process each run to determine registration status and categorize
     for run in runs:
@@ -158,14 +160,14 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_character_rels_dict(my_regs_dict):
+def get_character_rels_dict(my_regs_dict, member):
     # Precalculate RegistrationCharacterRel data for all runs to optimize queries
     character_rels_dict = {}
     if my_regs_dict:
         # Get all RegistrationCharacterRel objects for user's registrations in one query
         run_ids = list(my_regs_dict.keys())
         character_rels = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=run_ids)
+            RegistrationCharacterRel.objects.filter(reg__run_id__in=run_ids, reg__member=member)
             .select_related("character")
             .order_by("character__number")
         )
@@ -343,6 +345,7 @@ def calendar_past(request):
     runs = get_coming_runs(aid, future=False)
 
     my_regs_dict = {}
+    character_rels_dict = {}
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
@@ -352,7 +355,7 @@ def calendar_past(request):
         ).select_related("ticket", "run")
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
-    character_rels_dict = get_character_rels_dict(my_regs_dict)
+        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
 
     runs_list = list(runs)
     ctx["list"] = []
