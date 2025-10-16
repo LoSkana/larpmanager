@@ -25,9 +25,10 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 
@@ -161,6 +162,13 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
     if action in ("post_add", "post_remove", "post_clear"):
         # Update the instance cache
         update_func(instance)
+
+        # Reset event char for any run of event and child events
+        event = instance.event
+        events_id = list(Event.objects.filter(parent=event).values_list("pk", flat=True))
+        events_id.append(event.id)
+        for run in Run.objects.filter(event_id__in=events_id):
+            reset_event_cache_all(run)
 
         # Update cache for all affected characters
         if pk_set:
