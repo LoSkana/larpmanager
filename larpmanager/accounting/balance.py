@@ -523,7 +523,7 @@ def assoc_accounting(ctx: dict) -> None:
     )
 
     # Build year range dictionary from association creation to current year
-    assoc = Association.objects.get(pk=ctx["a_id"])
+    assoc = Association.objects.only("created").get(pk=ctx["a_id"])
     s_year = int(assoc.created.year)
     e_year = int(datetime.now().date().year)
     ctx["sum_year"] = {}
