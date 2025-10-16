@@ -3970,6 +3970,9 @@ msgstr "Valfritt - e-posta svaret till"
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
 
+msgid "Pre-register to the event"
+msgstr "Skriv upp dig på föranmälningslistan"
+
 msgid "Read the writing elements"
 msgstr "Läs de skrivande elementen"
 
@@ -4062,8 +4065,8 @@ msgstr "Nu kan du skapa inflöden"
 msgid "Option no longer available"
 msgstr "Alternativet är inte längre tillgängligt"
 
-msgid "Pre-register to the event!"
-msgstr "Skriv upp dig på föranmälningslistan!"
+msgid "Pre-registration confirmed"
+msgstr "Förhandsanmälan bekräftad"
 
 msgid "Short name - international"
 msgstr "Kort namn - på engelska"

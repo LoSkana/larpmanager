@@ -3970,6 +3970,9 @@ msgstr "Nepovinné - odpověď e-mailem na adresu"
 msgid "Payment already confirmed"
 msgstr "Platba již potvrzena"
 
+msgid "Pre-register to the event"
+msgstr "Zapište se na seznam předběžných registrací"
+
 msgid "Read the writing elements"
 msgstr "Přečtěte si prvky psaní"
 
@@ -4062,8 +4065,8 @@ msgstr "Nyní můžete vytvářet přítoky"
 msgid "Option no longer available"
 msgstr "Možnost již není k dispozici"
 
-msgid "Pre-register to the event!"
-msgstr "Zapište se na seznam předběžných registrací!"
+msgid "Pre-registration confirmed"
+msgstr "Předběžná registrace potvrzena"
 
 msgid "Short name - international"
 msgstr "Krátký název - v angličtině"

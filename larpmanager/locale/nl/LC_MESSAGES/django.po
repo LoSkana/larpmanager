@@ -3970,6 +3970,9 @@ msgstr "Optioneel - antwoord per e-mail naar"
 msgid "Payment already confirmed"
 msgstr "Betaling al bevestigd"
 
+msgid "Pre-register to the event"
+msgstr "Schrijf je in op de voorinschrijvingslijst"
+
 msgid "Read the writing elements"
 msgstr "Lees de schrijfelementen"
 
@@ -4062,8 +4065,8 @@ msgstr "Nu kun je instromen maken"
 msgid "Option no longer available"
 msgstr "Optie niet langer beschikbaar"
 
-msgid "Pre-register to the event!"
-msgstr "Schrijf je in op de voorinschrijvingslijst!"
+msgid "Pre-registration confirmed"
+msgstr "Voorinschrijving bevestigd"
 
 msgid "Short name - international"
 msgstr "Korte naam - in het Engels"

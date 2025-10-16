@@ -74,6 +74,7 @@ from larpmanager.utils.member import get_leaderboard
 from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text
+from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
 
 def language(request: HttpRequest) -> HttpResponse:
@@ -819,8 +820,24 @@ def registrations(request):
         HttpResponse: Rendered registrations template
     """
     nt = []
+
+    # Get user's registrations for caching
+    my_regs = Registration.objects.filter(member=request.user.member, run__event_id=request.assoc["id"])
+    my_regs_dict = {reg.run_id: reg for reg in my_regs}
+
+    # Get cached data for optimization
+    character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
+    payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
+    pre_registrations_dict = get_pre_registrations_dict(request.assoc["id"], request.user.member)
+
     # get all registrations in the future
-    for reg in Registration.objects.filter(member=request.user.member, run__event_id=request.assoc["id"]):
-        registration_status(reg.run, request.user)
+    for reg in my_regs:
+        registration_status(
+            reg.run,
+            request.user,
+            pre_registrations_dict=pre_registrations_dict,
+            character_rels_dict=character_rels_dict,
+            payment_invoices_dict=payment_invoices_dict,
+        )
         nt.append(reg)
     return render(request, "larpmanager/member/registrations.html", {"reg_list": nt})

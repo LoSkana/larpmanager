@@ -43,6 +43,7 @@ from larpmanager.models.event import (
     DevelopStatus,
     Event,
     EventTextType,
+    PreRegistration,
     Run,
 )
 from larpmanager.models.form import (
@@ -106,6 +107,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     my_regs_dict = {}
     character_rels_dict = {}
     payment_invoices_dict = {}
+    pre_registrations_dict = {}
 
     if request.user.is_authenticated:
         # Define cutoff date (3 days ago) for filtering relevant registrations
@@ -127,9 +129,10 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         # Filter runs: authenticated users can see START development runs they're registered for
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
 
-        # Precompute character rels and payment invoices objects
+        # Precompute character rels, payment invoices, and pre-registrations objects
         character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
         payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
+        pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
@@ -155,6 +158,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
             my_regs=my_regs,
             character_rels_dict=character_rels_dict,
             payment_invoices_dict=payment_invoices_dict,
+            pre_registrations_dict=pre_registrations_dict,
         )
 
         # Categorize runs based on registration availability
@@ -206,6 +210,21 @@ def get_payment_invoices_dict(my_regs_dict, member):
                 payment_invoices_dict[invoice.idx] = []
             payment_invoices_dict[invoice.idx].append(invoice)
     return payment_invoices_dict
+
+
+def get_pre_registrations_dict(assoc_id, member):
+    # Precalculate PreRegistration data for all events to optimize queries
+    pre_registrations_dict = {}
+    if member:
+        # Get all pre-registrations for user's events in one query
+        pre_registrations = PreRegistration.objects.filter(
+            event__assoc_id=assoc_id, member=member, deleted__isnull=True
+        ).select_related("event")
+
+        # Group pre-registrations by event ID
+        for pre_reg in pre_registrations:
+            pre_registrations_dict[pre_reg.event_id] = pre_reg
+    return pre_registrations_dict
 
 
 def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
@@ -375,6 +394,7 @@ def calendar_past(request):
     my_regs_dict = {}
     character_rels_dict = {}
     payment_invoices_dict = {}
+    pre_registrations_dict = {}
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
@@ -386,6 +406,7 @@ def calendar_past(request):
 
         character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
         payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
+        pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
 
     runs_list = list(runs)
     ctx["list"] = []
@@ -399,6 +420,7 @@ def calendar_past(request):
             my_regs=my_regs_for_run,
             character_rels_dict=character_rels_dict,
             payment_invoices_dict=payment_invoices_dict,
+            pre_registrations_dict=pre_registrations_dict,
         )
         ctx["list"].append(run)
 
