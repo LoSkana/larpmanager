@@ -424,8 +424,8 @@ def registration_status_characters(run, features, character_rels_dict=None):
             lists of RegistrationCharacterRel objects. If provided, avoids
             querying the database for character relationships.
     """
-    if character_rels_dict and run.reg.id in character_rels_dict:
-        rcrs = character_rels_dict[run.reg.id]
+    if character_rels_dict:
+        rcrs = character_rels_dict.get(run.reg.id, [])
     else:
         que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
         rcrs = que.order_by("character__number").select_related("character")
