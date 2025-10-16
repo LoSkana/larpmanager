@@ -30,6 +30,7 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.event import Run
 from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
@@ -37,7 +38,7 @@ from larpmanager.models.form import (
     RegistrationQuestion,
     WritingChoice,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
@@ -147,7 +148,9 @@ def get_match_reg(r, my_regs):
     return None
 
 
-def registration_status_signed(run: Any, reg: Any, member: Any, features: dict[str, Any], register_url: str) -> None:
+def registration_status_signed(
+    run: Run, reg: Registration, member: Member, features: dict[str, Any], register_url: str, character_rels_dict=None
+) -> None:
     """
     Updates the registration status for a signed user based on membership and payment features.
 
@@ -157,6 +160,8 @@ def registration_status_signed(run: Any, reg: Any, member: Any, features: dict[s
         member: The member object for the registered user
         features: Dictionary of enabled features for the event
         register_url: URL for the registration page
+        character_rels_dict: Optional dictionary mapping registration IDs to
+            lists of RegistrationCharacterRel objects
 
     Returns:
         None: Updates run.status["text"] in place
@@ -165,7 +170,7 @@ def registration_status_signed(run: Any, reg: Any, member: Any, features: dict[s
         RewokedMembershipError: When membership status is revoked
     """
     # Initialize character registration status for the run
-    registration_status_characters(run, features)
+    registration_status_characters(run, features, character_rels_dict)
 
     # Get user membership for the event's association
     mb = get_user_membership(member, run.event.assoc_id)
@@ -291,7 +296,7 @@ def _status_payment(register_text: str, run) -> bool:
 
 
 def registration_status(
-    run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None
+    run, user, my_regs=None, features_map: dict | None = None, reg_count: int | None = None, character_rels_dict=None
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -302,8 +307,10 @@ def registration_status(
         run: Event run object to check registration status for
         user: User object attempting registration
         my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
-        features_map (dict, optional): Cached features mapping. Defaults to None.
+        featry ures_map (dict, optional): Cached features mapping. Defaults to None.
         reg_count (int, optional): Pre-calculated registration count. Defaults to None.
+        character_rels_dict: Optional dictionary mapping registration IDs to
+            lists of RegistrationCharacterRel objects
     """
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
@@ -320,7 +327,7 @@ def registration_status(
             return
 
         if run.reg:
-            registration_status_signed(run, run.reg, user.member, features, register_url)
+            registration_status_signed(run, run.reg, user.member, features, register_url, character_rels_dict)
             return
 
     if run.end and get_time_diff_today(run.end) < 0:
@@ -398,15 +405,26 @@ def check_character_maximum(event, member):
     return current_chars >= max_chars, max_chars
 
 
-def registration_status_characters(run, features):
+def registration_status_characters(run, features, character_rels_dict=None):
     """Update registration status with character assignment information.
 
     Displays assigned characters with approval status and provides links
     for character creation or selection based on event configuration.
+
+    Args:
+        run: The run object containing registration information
+        features: Dictionary of enabled event features
+        character_rels_dict: Optional dictionary mapping registration IDs to
+            lists of RegistrationCharacterRel objects. If provided, avoids
+            querying the database for character relationships.
     """
-    que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+    if character_rels_dict and run.reg.id in character_rels_dict:
+        rcrs = character_rels_dict[run.reg.id]
+    else:
+        que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+        rcrs = que.order_by("character__number").select_related("character")
+
     approval = run.event.get_config("user_character_approval", False)
-    rcrs = que.order_by("character__number").select_related("character")
 
     aux = []
     for el in rcrs:

@@ -136,13 +136,30 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     if lang:
         ctx["lang"] = lang
 
+    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
+    character_rels_dict = {}
+    if my_regs_dict:
+        # Get all RegistrationCharacterRel objects for user's registrations in one query
+        run_ids = list(my_regs_dict.keys())
+        character_rels = (
+            RegistrationCharacterRel.objects.filter(reg_id__in=run_ids)
+            .select_related("character")
+            .order_by("character__number")
+        )
+
+        # Group character relations by registration ID
+        for rel in character_rels:
+            if rel.reg_id not in character_rels_dict:
+                character_rels_dict[rel.reg_id] = []
+            character_rels_dict[rel.reg_id].append(rel)
+
     # Process each run to determine registration status and categorize
     for run in runs:
         # Attach user's registration to run object for template access
         run.my_reg = my_regs_dict.get(run.id) if my_regs_dict else None
 
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, request.user, my_regs=my_regs)
+        registration_status(run, request.user, my_regs=my_regs, character_rels_dict=character_rels_dict)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -330,13 +347,30 @@ def calendar_past(request):
         ).select_related("ticket", "run")
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
+    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
+    character_rels_dict = {}
+    if my_regs_dict:
+        # Get all RegistrationCharacterRel objects for user's registrations in one query
+        run_ids = list(my_regs_dict.keys())
+        character_rels = (
+            RegistrationCharacterRel.objects.filter(reg_id__in=run_ids)
+            .select_related("character")
+            .order_by("character__number")
+        )
+
+        # Group character relations by registration ID
+        for rel in character_rels:
+            if rel.reg_id not in character_rels_dict:
+                character_rels_dict[rel.reg_id] = []
+            character_rels_dict[rel.reg_id].append(rel)
+
     runs_list = list(runs)
     ctx["list"] = []
 
     for run in runs_list:
         user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
         my_regs_for_run = [user_reg] if user_reg else []
-        registration_status(run, request.user, my_regs=my_regs_for_run)
+        registration_status(run, request.user, my_regs=my_regs_for_run, character_rels_dict=character_rels_dict)
         ctx["list"].append(run)
 
     ctx["page"] = "calendar_past"
