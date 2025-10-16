@@ -259,7 +259,7 @@ def _status_payment(register_text: str, run, payment_invoices_dict=None) -> bool
         True if payment status was processed and status text updated, False otherwise
     """
     # Get payment invoices for this registration
-    if payment_invoices_dict:
+    if payment_invoices_dict is not None:
         invoices = payment_invoices_dict.get(run.reg.id, [])
         # Filter for pending payments
         pending_invoices = [
@@ -459,7 +459,7 @@ def registration_status_characters(run, features, character_rels_dict=None):
             lists of RegistrationCharacterRel objects. If provided, avoids
             querying the database for character relationships.
     """
-    if character_rels_dict:
+    if character_rels_dict is not None:
         rcrs = character_rels_dict.get(run.reg.id, [])
     else:
         que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)

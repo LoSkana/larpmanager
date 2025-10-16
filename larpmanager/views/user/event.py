@@ -174,9 +174,9 @@ def get_character_rels_dict(my_regs_dict, member):
     character_rels_dict = {}
     if my_regs_dict:
         # Get all RegistrationCharacterRel objects for user's registrations in one query
-        run_ids = list(my_regs_dict.keys())
+        reg_ids = [reg.id for reg in my_regs_dict.values()]
         character_rels = (
-            RegistrationCharacterRel.objects.filter(reg__run_id__in=run_ids, reg__member=member)
+            RegistrationCharacterRel.objects.filter(reg_id__in=reg_ids, reg__member=member)
             .select_related("character")
             .order_by("character__number")
         )
@@ -193,11 +193,11 @@ def get_payment_invoices_dict(my_regs_dict, member):
     # Precalculate PaymentInvoice data for all registrations to optimize queries
     payment_invoices_dict = {}
     if my_regs_dict:
-        reg_ids = list(my_regs_dict.keys())
+        reg_ids = [reg.id for reg in my_regs_dict.values()]
 
         # Get all payment invoices for user's registrations in one query
         payment_invoices = PaymentInvoice.objects.filter(
-            idx__in=reg_ids, member=member, typ=PaymentType.REGISTRATION
+            reg_id__in=reg_ids, member=member, typ=PaymentType.REGISTRATION
         ).select_related("method")
 
         # Group payment invoices by registration ID (idx field)
