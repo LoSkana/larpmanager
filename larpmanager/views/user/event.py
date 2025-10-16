@@ -136,22 +136,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     if lang:
         ctx["lang"] = lang
 
-    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
-    character_rels_dict = {}
-    if my_regs_dict:
-        # Get all RegistrationCharacterRel objects for user's registrations in one query
-        run_ids = list(my_regs_dict.keys())
-        character_rels = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=run_ids)
-            .select_related("character")
-            .order_by("character__number")
-        )
-
-        # Group character relations by registration ID
-        for rel in character_rels:
-            if rel.reg_id not in character_rels_dict:
-                character_rels_dict[rel.reg_id] = []
-            character_rels_dict[rel.reg_id].append(rel)
+    character_rels_dict = get_character_rels_dict(my_regs_dict)
 
     # Process each run to determine registration status and categorize
     for run in runs:
@@ -171,6 +156,26 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", ctx)
+
+
+def get_character_rels_dict(my_regs_dict):
+    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
+    character_rels_dict = {}
+    if my_regs_dict:
+        # Get all RegistrationCharacterRel objects for user's registrations in one query
+        run_ids = list(my_regs_dict.keys())
+        character_rels = (
+            RegistrationCharacterRel.objects.filter(reg_id__in=run_ids)
+            .select_related("character")
+            .order_by("character__number")
+        )
+
+        # Group character relations by registration ID
+        for rel in character_rels:
+            if rel.reg_id not in character_rels_dict:
+                character_rels_dict[rel.reg_id] = []
+            character_rels_dict[rel.reg_id].append(rel)
+    return character_rels_dict
 
 
 def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
@@ -347,22 +352,7 @@ def calendar_past(request):
         ).select_related("ticket", "run")
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
-    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
-    character_rels_dict = {}
-    if my_regs_dict:
-        # Get all RegistrationCharacterRel objects for user's registrations in one query
-        run_ids = list(my_regs_dict.keys())
-        character_rels = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=run_ids)
-            .select_related("character")
-            .order_by("character__number")
-        )
-
-        # Group character relations by registration ID
-        for rel in character_rels:
-            if rel.reg_id not in character_rels_dict:
-                character_rels_dict[rel.reg_id] = []
-            character_rels_dict[rel.reg_id].append(rel)
+    character_rels_dict = get_character_rels_dict(my_regs_dict)
 
     runs_list = list(runs)
     ctx["list"] = []
