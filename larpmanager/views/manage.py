@@ -458,7 +458,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
 
     # Load accounting if permitted
     if has_event_permission(request, ctx, s, "orga_accounting"):
-        ctx["dc"] = get_run_accounting(ctx["run"], ctx)
+        ctx["dc"] = get_run_accounting(ctx["run"], ctx, perform_update=False)
 
     # Build action lists
     _exe_actions(request, ctx)
