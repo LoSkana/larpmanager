@@ -747,7 +747,7 @@ def assign_previous_campaign_character(registration):
         return
 
     try:
-        old_rcr = RegistrationCharacterRel.objects.get(reg__member=registration.member, reg__run=last)
+        old_rcr = RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=last).first()
         rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):
