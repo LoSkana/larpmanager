@@ -293,7 +293,7 @@ def orga_warehouse_manifest(request, s):
     ctx["area_list"] = {}
     get_warehouse_optionals(ctx, [])
 
-    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
+    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
         if el.area_id not in ctx["area_list"]:
             ctx["area_list"][el.area_id] = el.area
         if not hasattr(ctx["area_list"][el.area_id], "items"):
