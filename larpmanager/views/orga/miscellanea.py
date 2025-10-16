@@ -234,7 +234,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> H
 
     # Retrieve all warehouse items for the association with prefetched tags
     item_all: dict[int, Any] = {}
-    for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
+    for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags").select_related("container"):
         # Set initial availability to item's total quantity
         item.available = item.quantity or 0
         item_all[item.id] = item
