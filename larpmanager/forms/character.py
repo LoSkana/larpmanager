@@ -227,7 +227,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             return
 
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
-        old = set(instance.factions_list.order_by("number").values_list("id", flat=True))
+
+        faction_event = self.params["run"].event.get_class_parent(Faction)
+        old = set(instance.factions_list.filter(event=faction_event).values_list("id", flat=True))
 
         for ch in old - new:
             instance.factions_list.remove(ch)
