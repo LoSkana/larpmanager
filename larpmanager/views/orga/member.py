@@ -360,6 +360,8 @@ def orga_archive_email(request, s):
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
+                "recipient": lambda el: str(el.recipient),
+                "subj": lambda el: str(el.subj),
             },
         }
     )

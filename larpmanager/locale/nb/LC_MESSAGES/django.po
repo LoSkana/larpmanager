@@ -2744,6 +2744,9 @@ msgstr "Betalingsvaluta"
 msgid "Payment priority"
 msgstr "Betalingsprioritet"
 
+msgid "Payment received"
+msgstr "Mottatt betaling"
+
 msgid "Payment to check"
 msgstr "Betaling som skal kontrolleres"
 
@@ -4797,6 +4800,9 @@ msgstr "Betalinger i påvente av delegerte konti"
 msgid "Reimbursement request for %(event)s"
 msgstr "Krav for %(event)s"
 
+msgid "Require receipt for manual payments"
+msgstr "Krev kvittering for manuelle betalinger"
+
 msgid "Review historical financial records"
 msgstr "Gjennomgå historiske regnskaper"
 
@@ -5011,6 +5017,9 @@ msgstr "Kreve transaksjonsgebyrer fra deltakeren"
 
 msgid "Fill in your character's relationships"
 msgstr "Fyll inn karakterens relasjoner"
+
+msgid "I confirm that I have made the payment"
+msgstr "Jeg bekrefter at jeg har foretatt betalingen"
 
 msgid "It will be shown to other participants"
 msgstr "Den vil bli vist til andre deltakere"
@@ -5433,6 +5442,9 @@ msgstr "Denne siden oppsummerer arrangementets speedlarps"
 msgid "This page shows the types of event prologue"
 msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer"
 
+msgid "Upload a PDF file or image (JPG, PNG, etc.)"
+msgstr "Last opp en PDF-fil eller et bilde (JPG, PNG osv.)"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din begavede registrering har blitt innløst!"
 
@@ -5795,6 +5807,9 @@ msgstr "På denne siden finner du en oppsummering av malene for utdeling"
 msgid "This page shows the types of quests in the event"
 msgstr ""
 "Denne siden oppsummerer hvilke typer oppdrag som inngår i arrangementet"
+
+msgid "You can upload a file in pdf format, or an image"
+msgstr "Du kan laste opp en fil i pdf-format eller et bilde"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Du har allerede betalt årets medlemskontingent"
@@ -6309,6 +6324,9 @@ msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Gjør det mulig å kopiere et hvilket som helst element direkte fra en annen "
 "hendelse"
+
+msgid "As soon as it is approved, your accounting will be updated"
+msgstr "Så snart den er godkjent, vil regnskapet ditt bli oppdatert"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Kontakt arrangørene hvis du trenger en ny tilgangslink senere"
@@ -7395,11 +7413,6 @@ msgid ""
 msgstr "På denne siden kan du filtrere tegnene og se informasjonen direkte"
 
 msgid ""
-"Payment received! As soon as it is approved, your accounts will be updated"
-msgstr ""
-"Betaling mottatt! Så snart den er godkjent, vil kontoene dine bli oppdatert"
-
-msgid ""
 "Text visible only by the assigned participant, when 'show text' is checked"
 msgstr ""
 "Tekst som bare er synlig for den tildelte deltakeren, når \"vis tekst\" er "
@@ -7459,6 +7472,12 @@ msgid ""
 "If checked, it allows participants to indicate the song of their characters"
 msgstr ""
 "Hvis det er krysset av, kan deltakerne angi sangen til karakterene sine"
+
+msgid ""
+"If checked: Participants must provide a receipt/invoice for manual payments"
+msgstr ""
+"Hvis avkrysset: Deltakerne må fremlegge kvittering/faktura for manuelle "
+"betalinger"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
@@ -8017,6 +8036,13 @@ msgid ""
 "Lets members cast votes for the election of the organisation's Executive "
 "Committee"
 msgstr "Lar medlemmene avgi stemme ved valg av organisasjonens hovedstyre"
+
+msgid ""
+"Once the transfer is confirmed, submit the form below to notify us of your "
+"payment"
+msgstr ""
+"Når overføringen er bekreftet, sender du inn skjemaet nedenfor for å varsle "
+"oss om betalingen din"
 
 msgid ""
 "Theoretical total of income due to participation fees selected by the "
@@ -9026,6 +9052,13 @@ msgstr ""
 "betalingsbeløpet for oppføringene sine"
 
 msgid ""
+"Once the transfer is confirmed, request the slip (the receipt of "
+"confirmation) and upload it below"
+msgstr ""
+"Når overføringen er bekreftet, ber du om kvitteringen "
+"(bekreftelseskvitteringen) og laster den opp nedenfor"
+
+msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -9361,6 +9394,13 @@ msgid ""
 msgstr ""
 "Fører daglig oversikt over organisasjonens og arrangementenes økonomiske "
 "status, og viser trendgrafer over tid"
+
+msgid ""
+"Once you have made the payment, return to this page and submit the form "
+"below to notify us of your payment"
+msgstr ""
+"Når du har foretatt betalingen, går du tilbake til denne siden og sender inn"
+" skjemaet nedenfor for å varsle oss om betalingen"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
@@ -10201,15 +10241,6 @@ msgid ""
 msgstr ""
 "I teksten til elementet til venstre er et tegn angitt med nummeret som er "
 "angitt til høyre, men sistnevnte eksisterer ikke"
-
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below. You can upload a file in pdf format, or "
-"an image"
-msgstr ""
-"Når overføringen er bekreftet, kan du be om kvitteringen "
-"(bekreftelseskvitteringen) og laste den opp nedenfor. Du kan laste opp en "
-"fil i pdf-format eller et bilde"
 
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "

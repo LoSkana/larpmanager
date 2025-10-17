@@ -321,10 +321,14 @@ def get_payment_form(request: HttpRequest, form: Any, typ: str, ctx: dict[str, A
     amount = update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method)
     ctx["invoice"] = invoice
 
+    # Check if receipt is required for manual payments (applies to all payment types)
+    require_receipt = get_assoc_config(assoc_id, "payment_require_receipt", False)
+    ctx["require_receipt"] = require_receipt
+
     # Prepare gateway-specific forms based on selected payment method
     if method in {"wire", "paypal_nf"}:
         # Wire transfer or non-financial PayPal forms
-        ctx["wire_form"] = WireInvoiceSubmitForm()
+        ctx["wire_form"] = WireInvoiceSubmitForm(require_receipt=require_receipt)
         ctx["wire_form"].set_initial("cod", invoice.cod)
     elif method == "any":
         # Generic payment method form

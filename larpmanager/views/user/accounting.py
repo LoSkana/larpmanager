@@ -673,7 +673,9 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
     # Update invoice with submitted data atomically
     with transaction.atomic():
         if s in {"wire", "paypal_nf"}:
-            inv.invoice = form.cleaned_data["invoice"]
+            # Only set invoice if one was provided
+            if form.cleaned_data.get("invoice"):
+                inv.invoice = form.cleaned_data["invoice"]
         elif s == "any":
             inv.text = form.cleaned_data["text"]
 
@@ -686,7 +688,7 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
     notify_invoice_check(inv)
 
     # Display success message and redirect to profile check
-    mes = _("Payment received! As soon as it is approved, your accounts will be updated") + "."
+    mes = _("Payment received") + "!" + _("As soon as it is approved, your accounting will be updated") + "."
     return acc_profile_check(request, mes, inv)
 
 

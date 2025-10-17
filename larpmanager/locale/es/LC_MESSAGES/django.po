@@ -2744,6 +2744,9 @@ msgstr "Moneda de pago"
 msgid "Payment priority"
 msgstr "Prioridad de pago"
 
+msgid "Payment received"
+msgstr "Pago recibido"
+
 msgid "Payment to check"
 msgstr "Pago que debe comprobarse"
 
@@ -4797,6 +4800,9 @@ msgstr "Pagos pendientes de cuentas delegadas"
 msgid "Reimbursement request for %(event)s"
 msgstr "Reclamación de %(event)s"
 
+msgid "Require receipt for manual payments"
+msgstr "Exigir recibo para los pagos manuales"
+
 msgid "Review historical financial records"
 msgstr "Revisar los registros financieros históricos"
 
@@ -5009,6 +5015,9 @@ msgstr "Cobrar comisiones de transacción al participante"
 
 msgid "Fill in your character's relationships"
 msgstr "Rellena las relaciones de tu personaje"
+
+msgid "I confirm that I have made the payment"
+msgstr "Confirmo que he efectuado el pago"
 
 msgid "It will be shown to other participants"
 msgstr "Se mostrará a los demás participantes"
@@ -5430,6 +5439,9 @@ msgstr "Esta página muestra las Escenas Previas del evento"
 msgid "This page shows the types of event prologue"
 msgstr "Esta página muestra los tipos de prólogo del evento"
 
+msgid "Upload a PDF file or image (JPG, PNG, etc.)"
+msgstr "Cargue un archivo PDF o una imagen (JPG, PNG, etc.)"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "¡Tu inscripción regalada ha sido canjeada!"
 
@@ -5794,6 +5806,9 @@ msgstr "Esta página muestra las plantillas de los documentos del evento"
 
 msgid "This page shows the types of quests in the event"
 msgstr "Esta página muestra los tipos de misiones del evento"
+
+msgid "You can upload a file in pdf format, or an image"
+msgstr "Puede cargar un archivo en formato pdf, o una imagen"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Ya has pagado la cuota de afiliación de este año"
@@ -6325,6 +6340,9 @@ msgstr "Una vez aprobados, los importes correspondientes se asignan como"
 
 msgid "Allows you to copy any element directly from another event"
 msgstr "Permite copiar cualquier elemento directamente de otro evento"
+
+msgid "As soon as it is approved, your accounting will be updated"
+msgstr "En cuanto se apruebe, se actualizará su contabilidad"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr ""
@@ -7503,10 +7521,6 @@ msgstr ""
 "En esta página puedes filtrar personajes y ver directamente su información"
 
 msgid ""
-"Payment received! As soon as it is approved, your accounts will be updated"
-msgstr "¡Pago recibido! En cuanto se apruebe, se actualizarán tus cuentas"
-
-msgid ""
 "Text visible only by the assigned participant, when 'show text' is checked"
 msgstr ""
 "Texto visible sólo por el participante asignado, cuando \"mostrar texto\" "
@@ -7574,6 +7588,12 @@ msgid ""
 msgstr ""
 "Si está marcada, permite a los participantes indicar la canción de sus "
 "personajes"
+
+msgid ""
+"If checked: Participants must provide a receipt/invoice for manual payments"
+msgstr ""
+"Si está marcada: Los participantes deben presentar un recibo/factura para "
+"los pagos manuales"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
@@ -8152,6 +8172,13 @@ msgid ""
 msgstr ""
 "Los miembros de Lets votan para la elección del Comité Ejecutivo de la "
 "organización"
+
+msgid ""
+"Once the transfer is confirmed, submit the form below to notify us of your "
+"payment"
+msgstr ""
+"Una vez confirmada la transferencia, envíe el siguiente formulario para "
+"notificarnos su pago"
 
 msgid ""
 "Theoretical total of income due to participation fees selected by the "
@@ -9175,6 +9202,13 @@ msgstr ""
 "importe de pago de sus entradas"
 
 msgid ""
+"Once the transfer is confirmed, request the slip (the receipt of "
+"confirmation) and upload it below"
+msgstr ""
+"Una vez confirmada la transferencia, solicite el resguardo (el recibo de "
+"confirmación) y cárguelo a continuación"
+
+msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -9510,6 +9544,13 @@ msgid ""
 msgstr ""
 "Lleva un registro diario de la situación financiera de la organización y los"
 " eventos, mostrando gráficos de tendencias a lo largo del tiempo"
+
+msgid ""
+"Once you have made the payment, return to this page and submit the form "
+"below to notify us of your payment"
+msgstr ""
+"Una vez efectuado el pago, vuelva a esta página y envíe el siguiente "
+"formulario para notificarnos su pago"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
@@ -10364,15 +10405,6 @@ msgid ""
 msgstr ""
 "En el texto del elemento de la izquierda, se hace referencia a un personaje "
 "con el número indicado a la derecha, pero este último no existe"
-
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below. You can upload a file in pdf format, or "
-"an image"
-msgstr ""
-"Una vez confirmada la transferencia, solicite el resguardo (el recibo de "
-"confirmación) y cárguelo a continuación. Puede subir un archivo en formato "
-"pdf, o una imagen"
 
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
