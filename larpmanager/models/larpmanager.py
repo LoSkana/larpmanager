@@ -215,8 +215,7 @@ class LarpManagerGuide(BaseModel):
 class LarpManagerProfiler(BaseModel):
     """Model for storing performance profiling data.
 
-    Tracks view function performance metrics including
-    call counts and duration for optimization analysis.
+    Tracks individual execution times with request path and query
     """
 
     num_calls = models.IntegerField(default=0)
@@ -225,12 +224,18 @@ class LarpManagerProfiler(BaseModel):
 
     domain = models.CharField(max_length=100)
 
+    path = models.CharField(max_length=500, blank=True)
+
+    query = models.TextField(blank=True)
+
+    method = models.CharField(max_length=10, blank=True)
+
     view_func_name = models.CharField(max_length=100, verbose_name="View function")
 
-    date = models.DateField()
+    duration = models.FloatField(null=True, blank=True)
 
     class Meta:
-        unique_together = ("domain", "view_func_name", "date")
+        indexes = [models.Index(fields=["domain", "view_func_name"])]
 
 
 class LarpManagerDiscover(BaseModel):

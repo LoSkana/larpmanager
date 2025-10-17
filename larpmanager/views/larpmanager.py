@@ -28,7 +28,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, F, Min, Sum
+from django.db.models import Avg, Count, Min, Sum
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -936,7 +936,7 @@ def lm_send(request):
 def lm_profile(request):
     """Display performance profiling data aggregated by domain and view function.
 
-    Shows view function performance metrics aggregated across dates.
+    Shows view function performance metrics computed from individual executions.
     Calculates average duration and total calls for each domain/view combination.
     Requires admin permissions.
 
@@ -949,17 +949,15 @@ def lm_profile(request):
     ctx = check_lm_admin(request)
     st = datetime.now() - timedelta(hours=168)
 
-    # Aggregate data by domain and view_func_name across different dates
-    # Calculate weighted average duration using num_calls as weights
+    # Aggregate data from individual executions by domain and view_func_name
+    # Calculate average duration and total calls directly from execution records
     ctx["res"] = (
-        LarpManagerProfiler.objects.filter(date__gte=st)
+        LarpManagerProfiler.objects.filter(created__gte=st)
         .values("domain", "view_func_name")
         .annotate(
-            total_duration=Sum(F("mean_duration") * F("num_calls")),
-            total_calls=Sum("num_calls"),
-        )
-        .annotate(
-            avg_duration=F("total_duration") / F("total_calls"),
+            total_calls=Count("id"),
+            avg_duration=Avg("duration"),
+            total_duration=Sum("duration"),
         )
         .order_by("-total_duration")[:50]
     )
