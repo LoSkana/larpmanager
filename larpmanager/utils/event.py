@@ -746,13 +746,11 @@ def assign_previous_campaign_character(registration):
     if not last:
         return
 
-    try:
-        old_rcr = RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=last).first()
+    old_rcr = RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=last).first()
+    if old_rcr:
         rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):
                 value = getattr(old_rcr, "custom_" + s)
                 setattr(rcr, "custom_" + s, value)
         rcr.save()
-    except ObjectDoesNotExist:
-        pass
