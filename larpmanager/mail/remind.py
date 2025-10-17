@@ -49,15 +49,26 @@ def remember_membership(reg):
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-def get_remember_membership_body(reg):
+def get_remember_membership_body(reg) -> str:
     """Generate default membership reminder email body text.
 
+    Creates an HTML-formatted email body for reminding users to complete their
+    membership application to confirm their provisional event registration.
+
     Args:
-        reg: Registration instance
+        reg: Registration instance containing event and user information
 
     Returns:
-        str: HTML formatted email body for membership reminder
+        HTML formatted email body text for membership reminder notification
+
+    Note:
+        The generated email includes:
+        - Instructions to apply for membership
+        - Link to membership application
+        - Offer for assistance
+        - Warning about registration cancellation
     """
+    # Generate main instruction message with event name and membership link
     body = (
         _(
             "Hello! To confirm your provisional registration for %(event)s, "
@@ -69,6 +80,7 @@ def get_remember_membership_body(reg):
         + ". "
     )
 
+    # Add helpful support message for users who need assistance
     body += (
         "<br /><br />("
         + _("If you need a hand, feel free to let us know")
@@ -77,6 +89,7 @@ def get_remember_membership_body(reg):
         + "!)"
     )
 
+    # Include warning about registration cancellation for inactive users
     body += (
         "<br /><br />"
         + _("If we don't hear from you, we'll assume you're no longer interested in the event")
@@ -239,34 +252,42 @@ def remember_membership_fee(reg):
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-def get_remember_membership_fee_body(context, reg):
+def get_remember_membership_fee_body(context: dict, reg) -> str:
     """Generate default membership fee reminder email body text.
 
+    Creates an HTML-formatted email body for reminding users about unpaid
+    annual membership fees required for event participation.
+
     Args:
-        context (dict): Email context with event information
-        reg: Registration instance with fee payment details
+        context: Email context containing event information and template variables
+        reg: Registration instance containing fee payment details and event data
 
     Returns:
-        str: HTML formatted email body for membership fee reminder
+        HTML formatted string containing the complete email body with membership
+        fee reminder message and payment link
     """
+    # Create main greeting and issue description
     body = (
         _("Hello! You have registered for %(event)s, but we have not yet received your annual membership payment")
         % context
         + "."
     )
 
+    # Add explanation about membership fee purpose
     body += (
         "<br /><br />"
         + _("It is required for participation in all our live events, as it also covers the insurance fee")
         + "."
     )
 
+    # Emphasize participation requirements
     body += (
         "<br /><br />"
         + _("Unfortunately, without full payment of the fee, participation in the event is not permitted")
         + "."
     )
 
+    # Provide payment link and support information
     body += (
         "<br /><br />"
         + _("You can complete the payment in just a few minutes <a href='%(url)s'>here</a>")

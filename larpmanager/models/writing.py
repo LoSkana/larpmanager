@@ -109,16 +109,29 @@ class Writing(BaseConceptModel):
         return js
 
     @classmethod
-    def get_example_csv(cls, features):
+    def get_example_csv(cls, features: set[str]) -> list[list[str]]:
         """
         Generate example CSV structure for writing element imports.
 
+        Creates a CSV template with headers and example data for importing writing elements.
+        The template includes mandatory fields (number, name, presentation, text) and
+        optional fields based on enabled features.
+
         Args:
-            features: Set of enabled features to include in CSV template
+            features: Set of enabled feature names to include in the CSV template.
+                     Each feature name corresponds to an optional column.
 
         Returns:
-            list: List of CSV rows with headers and example data
+            List of CSV rows where the first row contains headers and the second row
+            contains example/description data for each column.
+
+        Example:
+            >>> features = {'title', 'hide'}
+            >>> result = get_example_csv(features)
+            >>> result[0]  # Headers
+            ['number', 'name', 'presentation', 'text', 'title', 'hide']
         """
+        # Initialize base CSV structure with mandatory columns
         rows = [
             ["number", "name", "presentation", "text"],
             [
@@ -129,17 +142,23 @@ class Writing(BaseConceptModel):
             ],
         ]
 
-        for s in [
+        # Define optional feature columns with their descriptions
+        # Each tuple contains (feature_name, description_text)
+        optional_features = [
             # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
             ("cover", "url of the element cover"),
             ("hide", "single character, t (true), f (false)"),
-        ]:
-            (f, d) = s
-            if f in features:
-                rows[0].extend([f])
-                rows[1].extend([d])
+        ]
+
+        # Add enabled feature columns to the CSV structure
+        for feature_name, description in optional_features:
+            if feature_name in features:
+                # Append feature column to header row
+                rows[0].append(feature_name)
+                # Append description to example data row
+                rows[1].append(description)
 
         return rows
 
@@ -625,39 +644,55 @@ def replace_chars_el(el, chars):
         el.teaser = replace_char_names(el.teaser, chars)
 
 
-def replace_character_names_in_writing(instance):
-    """
-    Replace character names in writing content with character numbers.
+def replace_character_names_in_writing(instance) -> None:
+    """Replace character names in writing content with character numbers.
+
+    This function substitutes character names with their corresponding numbers
+    in writing content when the event has character substitution enabled.
+    It processes the main instance and related plot character relationships.
 
     Args:
-        instance: Writing model instance to process for character substitution
+        instance: Writing model instance to process for character substitution.
+                 Can be Character, Plot, or other writing-related model instances.
+
+    Returns:
+        None: Function performs in-place modifications and saves related objects.
+
+    Note:
+        Only processes instances that have a primary key, belong to an event,
+        and where the event has writing_substitute configuration enabled.
     """
+    # Early return if instance hasn't been saved to database yet
     if not instance.pk:
         return
 
+    # Early return if instance doesn't have an associated event
     if not hasattr(instance, "event"):
         return
 
+    # Early return if event doesn't have character substitution enabled
     if not instance.event.get_config("writing_substitute", False):
         return
 
-    # get all characters name for replacement
+    # Build character name to number mapping for replacement
     chars = {}
     for c in instance.event.get_elements(Character):
         chars[c.name] = c.number
 
+    # Sort names by length (longest first) to avoid partial replacements
     names = list(chars.keys())
     names.sort(key=len, reverse=True)
 
+    # Perform character name replacement on the main instance
     replace_chars_el(instance, chars)
 
-    # if type is character, adds also plot pieces
+    # Handle Character instance: process related plot character relationships
     if isinstance(instance, Character):
         for el in PlotCharacterRel.objects.filter(character=instance):
             replace_chars_el(el, chars)
             el.save()
 
-    # if type is plot, adds also plot pieces
+    # Handle Plot instance: process related plot character relationships
     if isinstance(instance, Plot):
         for el in PlotCharacterRel.objects.filter(plot=instance):
             replace_chars_el(el, chars)

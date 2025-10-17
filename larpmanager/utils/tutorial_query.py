@@ -42,32 +42,50 @@ def get_or_create_index_tutorial(index_dir):
 
 
 @background_auto(queue="whoosh")
-def add_tutorial_to_search_index(tutorial_id):
+def add_tutorial_to_search_index(tutorial_id: int) -> None:
     """
     Index tutorial content for search functionality.
 
+    Parses tutorial HTML content to extract sections and indexes them
+    for full-text search. Each H2/H3 section is indexed separately
+    with its associated content.
+
     Args:
-        tutorial_id: ID of the tutorial to index
+        tutorial_id: The primary key ID of the tutorial to index.
 
     Returns:
-        None: Function performs indexing operations but returns nothing
+        None: Function performs indexing operations but returns nothing.
+
+    Raises:
+        No exceptions are raised - ObjectDoesNotExist is handled internally.
     """
+    # Attempt to retrieve the tutorial instance
     try:
         instance = LarpManagerTutorial.objects.get(pk=tutorial_id)
     except ObjectDoesNotExist:
         return
 
+    # Initialize search index and writer
     ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     writer = ix.writer()
+
+    # Remove any existing index entries for this tutorial
     writer.delete_by_term("tutorial_id", str(tutorial_id))
 
+    # Parse HTML content to extract sections
     soup = BeautifulSoup(instance.descr, "html.parser")
+
+    # Process each section (H2/H3 headings)
     for section in soup.find_all(["h2", "h3"]):
         content = []
+
+        # Collect content following this section until next heading
         for sib in section.find_next_siblings():
             if sib.name in ["h2", "h3"]:
                 break
             content.append(sib.get_text())
+
+        # Add section to search index
         writer.add_document(
             tutorial_id=str(tutorial_id),
             slug=instance.slug,
@@ -75,6 +93,8 @@ def add_tutorial_to_search_index(tutorial_id):
             section_title=section.get_text(),
             content="\n".join(content),
         )
+
+    # Commit changes to the index
     writer.commit()
 
 

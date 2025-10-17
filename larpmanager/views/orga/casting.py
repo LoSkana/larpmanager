@@ -74,40 +74,71 @@ def orga_casting_history(request, s, typ=0):
     return render(request, "larpmanager/event/casting/history.html", ctx)
 
 
-def assign_casting(request, ctx, typ):
+def assign_casting(request: HttpRequest, ctx: dict, typ: int) -> None:
     """
     Handle character casting assignment for organizers.
 
+    Processes POST data to assign members to characters or traits in a LARP event.
+    Supports mirror character functionality where assignments can be redirected
+    to mirror characters if enabled.
+
     Args:
-        request: HTTP request object with assignment data
-        ctx: Context dictionary with casting information
+        request: HTTP request object containing assignment data in POST
+        ctx: Context dictionary containing casting information and feature flags
         typ: Type of casting assignment (0 for characters, other for traits)
+
+    Returns:
+        None: Function modifies database state and adds messages to request
+
+    Raises:
+        No exceptions are raised, but errors are collected and displayed as messages
     """
     # TODO Assign member to mirror_inv
+    # Check if mirror character feature is enabled
     mirror = "mirror" in ctx["features"]
+
+    # Extract assignment results from POST data
     res = request.POST.get("res")
     if not res:
         messages.error(request, _("Results not present"))
         return
+
+    # Initialize error collection string
     err = ""
+
+    # Process each assignment in the results string
     for sp in res.split():
         aux = sp.split("_")
         try:
+            # Extract member ID and get member object
             mb = Member.objects.get(pk=aux[0].replace("p", ""))
+
+            # Get active registration for this member and run
             reg = Registration.objects.get(member=mb, run=ctx["run"], cancellation_date__isnull=True)
+
+            # Extract entity ID (character or trait)
             eid = aux[1].replace("c", "")
+
+            # Handle character assignment (typ == 0)
             if typ == 0:
+                # Check for mirror character redirection
                 if mirror:
                     char = Character.objects.get(pk=eid)
                     if char.mirror:
                         eid = char.mirror_id
 
+                # Create character assignment relationship
                 RegistrationCharacterRel.objects.create(character_id=eid, reg=reg)
             else:
+                # Create trait assignment for non-character types
                 AssignmentTrait.objects.create(trait_id=eid, run_id=reg.run_id, member=mb, typ=typ)
+
         except Exception as e:
+            # Collect any errors that occur during processing
             print(e)
             err += str(e)
+
+    # Display collected errors to user if any occurred
     if err:
         messages.error(request, err)
 

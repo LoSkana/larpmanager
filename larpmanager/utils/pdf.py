@@ -114,76 +114,94 @@ def return_pdf(fp, fn):
         raise Http404("File not found") from err
 
 
-def link_callback(uri, rel):
+def link_callback(uri: str, rel: str) -> str:
     """Convert HTML URIs to absolute system paths for xhtml2pdf.
 
     Resolves static and media URLs to absolute file paths so the PDF
     generator can access resources like images and stylesheets.
 
     Args:
-        uri (str): URI from HTML content
-        rel (str): Relative URI reference
+        uri: URI from HTML content (e.g., '/static/css/style.css')
+        rel: Relative URI reference (currently unused)
 
     Returns:
-        str: Absolute file path or empty string if file not found
+        Absolute file path if file exists, empty string otherwise
+
+    Example:
+        >>> link_callback('/static/css/style.css', '')
+        '/path/to/static/css/style.css'
     """
-    """
-    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
-    resources. Raises an exception if the file doesn't exist.
-    """
+    # Get Django settings for URL and filesystem paths
     s_url = conf_settings.STATIC_URL
     s_root = conf_settings.STATIC_ROOT
     m_url = conf_settings.MEDIA_URL
     m_root = conf_settings.MEDIA_ROOT
 
+    # Check if URI is a media URL and build corresponding file path
     if uri.startswith(m_url):
         path = os.path.join(m_root, uri.replace(m_url, ""))
+    # Check if URI is a static URL and build corresponding file path
     elif uri.startswith(s_url):
         path = os.path.join(s_root, uri.replace(s_url, ""))
+    # Return empty string for unrecognized URI patterns
     else:
         return ""
 
+    # Verify the file actually exists on the filesystem
     if not os.path.isfile(path):
         return ""
 
     return path
 
 
-def add_pdf_instructions(ctx):
+def add_pdf_instructions(ctx: dict) -> None:
     """Add PDF generation instructions to template context.
 
     Processes template variables and utility codes for PDF headers,
-    footers, and CSS styling.
+    footers, and CSS styling. Updates the context dictionary in-place
+    with processed PDF styling and content instructions.
 
     Args:
-        ctx (dict): Template context dictionary to modify
+        ctx: Template context dictionary containing event and character data.
+             Must include 'event' and 'sheet_char' keys.
 
-    Side effects:
-        Updates ctx with processed PDF styling and content instructions
+    Returns:
+        None: Modifies the context dictionary in-place.
+
+    Side Effects:
+        - Updates ctx with 'page_css', 'header_content', 'footer_content' keys
+        - Replaces template variables with actual values
+        - Replaces utility codes with URLs
     """
+    # Extract PDF configuration from event settings
     for instr in ["page_css", "header_content", "footer_content"]:
         ctx[instr] = ctx["event"].get_config(instr, "", bypass_cache=True)
 
+    # Build replacement codes dictionary with event and character data
     codes = {
         "<pdf:organization>": ctx["event"].assoc.name,
         "<pdf:event>": ctx["event"].name,
     }
+
+    # Add character-specific replacement codes
     for m in ["number", "name", "title"]:
         codes[f"<pdf:{m}>"] = str(ctx["sheet_char"][m])
 
-    # replace char infos
+    # Replace character info placeholders in header and footer content
     for s in ["header_content", "footer_content"]:
         if s not in ctx:
             continue
+        # Apply all code replacements to current section
         for el, value in codes.items():
             if el not in ctx[s]:
                 continue
             ctx[s] = ctx[s].replace(el, value)
 
-    # replace utils by code
+    # Replace utility codes with actual URLs in all PDF sections
     for s in ["header_content", "footer_content", "page_css"]:
         if s not in ctx:
             continue
+        # Find all utility codes in format #code# and replace with URLs
         for x in re.findall(r"(#[\w-]+#)", ctx[s]):
             cod = x.replace("#", "")
             util = get_object_or_404(Util, cod=cod)

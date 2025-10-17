@@ -23,7 +23,7 @@ from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
@@ -111,36 +111,46 @@ class AssociationIdentifyMiddleware:
         return cls.get_main_info(request, base_domain)
 
     @classmethod
-    def get_main_info(cls, request, base_domain):
+    def get_main_info(cls, request: HttpRequest, base_domain: str) -> Optional[HttpResponse]:
         """Handle requests to main domain without specific association.
 
         Handles demo user logout, skin loading, and default redirects
         for the main application domain.
 
         Args:
-            request: Django HTTP request object
-            base_domain (str): Base domain name
+            request: Django HTTP request object containing user session and path info
+            base_domain: Base domain name used for skin lookup and routing decisions
 
         Returns:
-            HttpResponse or None: Redirect/render response or None to continue
+            HttpResponse for redirects/renders, or None to continue normal processing
+
+        Note:
+            Demo users (ending with 'demo.it') are automatically logged out when
+            visiting the main page, except for post-login flows.
         """
-        # if logged in with demo user visiting main page, logout
+        # Check for demo user logout requirement - skip if already in post-login flow
         user = request.user
         if not request.path.startswith("/after_login/"):
+            # Demo users should be logged out when visiting main domain
             if user.is_authenticated and user.email.lower().endswith("demo.it"):
                 logout(request)
                 return redirect(request.path)
 
+        # Attempt to load association skin for the base domain
         skin = get_cache_skin(base_domain)
         if skin:
+            # Skin found - load the associated organization
             return cls.load_assoc(request, skin)
 
+        # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
+        # Allow admin panel access without association
         if request.path.startswith("/admin"):
             return
 
+        # No valid association found - render error page
         return render(request, "exception/assoc.html", {})
 
     @staticmethod

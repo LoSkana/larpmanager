@@ -566,40 +566,62 @@ class ExePaymentSettingsForm(MyForm):
                 data_string = self.mask_string(data_string)
             self.initial[el] = data_string
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> PaymentInvoice:
         """Save payment form with details masking and change tracking.
 
+        This method saves the payment form instance, processes payment details
+        by masking sensitive information, tracks changes with timestamps,
+        and maintains a history of modifications.
+
         Args:
-            commit: Whether to commit changes to database
+            commit: Whether to commit changes to database. Defaults to True.
 
         Returns:
-            Payment instance with updated details and change history
+            Payment instance with updated details and change history.
+
+        Note:
+            Changes are tracked by storing old values with timestamped keys.
+            Description and fee fields are not masked for readability.
         """
+        # Save the form instance using parent class method
         instance = super().save(commit=commit)
 
+        # Get current payment details from the instance
         res = get_payment_details(self.instance)
+
+        # Iterate through payment detail fields by category
         for _slug, lst in self.get_payment_details_fields().items():
             for el in lst:
                 if el in self.cleaned_data:
+                    # Extract input value from cleaned form data
                     input_value = self.cleaned_data[el]
 
+                    # Get original value or default to empty string
                     if el in res:
                         orig_value = res[el]
                     else:
                         orig_value = ""
 
+                    # Apply masking based on field type
+                    # Description and fee fields remain unmasked for clarity
                     if el.endswith(("_descr", "_fee")):
                         data_string = orig_value
                     else:
                         data_string = self.mask_string(orig_value)
 
+                    # Track changes only when values actually differ
                     if input_value != data_string:
+                        # Ensure we don't track trivial empty-to-empty changes
                         if input_value not in [None, ""] or orig_value not in [None, ""]:
+                            # Update with new value
                             res[el] = input_value
+
+                            # Create timestamped backup of old value
                             now = datetime.now()
                             old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
                             res[old_key] = orig_value
 
+        # Persist updated payment details to storage
         save_payment_details(self.instance, res)
 
         return instance

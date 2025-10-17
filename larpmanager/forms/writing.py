@@ -53,8 +53,17 @@ from larpmanager.utils.validators import FileTypeValidator
 
 
 class WritingForm(MyForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form with default show_link configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
+
+        # Configure which fields should display links in the form
         self.show_link = ["id_teaser", "id_text"]
 
     def _init_special_fields(self):

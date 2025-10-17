@@ -1038,35 +1038,58 @@ def lottery_info(request, ctx):
 
 
 @login_required
-def orga_lottery(request, s):
-    """Manage registration lottery system.
+def orga_lottery(request: HttpRequest, s: str) -> HttpResponse:
+    """Manage registration lottery system for event organizers.
+
+    This function handles the lottery process for event registrations, allowing organizers
+    to randomly select participants from lottery tier registrations and upgrade them to
+    a specific ticket tier.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing POST data for lottery execution
+        s: Event slug identifier for the specific event
 
     Returns:
-        HttpResponse: Lottery template with chosen registrations or form
+        HttpResponse: Rendered lottery template with either the lottery form or
+                     results showing chosen registrations
+
+    Raises:
+        Http404: When lottery is already filled (no more spots available for upgrade)
     """
+    # Check user permissions for lottery management
     ctx = check_event_permission(request, s, "orga_lottery")
 
+    # Handle lottery execution when form is submitted
     if request.method == "POST" and request.POST.get("submit"):
+        # Get current lottery statistics and context
         lottery_info(request, ctx)
+
+        # Calculate how many registrations need to be upgraded
         to_upgrade = ctx["num_draws"] - ctx["num_def"]
         if to_upgrade <= 0:
             raise Http404("already filled!")
-        # do assignment
+
+        # Fetch all lottery tier registrations for this event run
         regs = Registration.objects.filter(run=ctx["run"], ticket__tier=TicketTier.LOTTERY)
         regs = list(regs)
+
+        # Randomly shuffle and select registrations for upgrade
         shuffle(regs)
         chosen = regs[0:to_upgrade]
+
+        # Get the target ticket for upgrading selected registrations
         ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, name=ctx["ticket"])
+
+        # Upgrade chosen registrations to the target ticket tier
         for el in chosen:
             el.ticket = ticket
             el.save()
-            # send mail?
+            # TODO: Consider sending notification email to selected participants
+
+        # Store chosen registrations in context for template display
         ctx["chosen"] = chosen
 
+    # Refresh lottery information for template rendering
     lottery_info(request, ctx)
     return render(request, "larpmanager/orga/registration/lottery.html", ctx)
 

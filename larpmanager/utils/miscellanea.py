@@ -23,12 +23,14 @@ import random
 import shutil
 import zipfile
 from io import BytesIO
+from typing import Optional
 from uuid import uuid4
 from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
 from django.db import models
+from django.http import HttpResponse
 from django.shortcuts import render
 from PIL import Image as PILImage
 from PIL import ImageOps
@@ -38,34 +40,46 @@ from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
 
 
-def upload_albums_dir(main, cache_subs, name):
+def upload_albums_dir(main, cache_subs: dict, name: str):
     """Create or find album directory structure for uploaded files.
 
+    Creates a hierarchical album structure based on directory paths from zip files.
+    Uses caching to avoid duplicate database queries for existing albums.
+
     Args:
-        main: Main album instance
-        cache_subs (dict): Cache of subdirectory albums
-        name (str): Directory path from zip file
+        main: Main album instance that serves as the root parent
+        cache_subs (dict): Cache mapping directory paths to Album instances
+        name (str): Full directory path from zip file entry
 
     Returns:
-        Album: Album instance for the directory
+        Album: Album instance representing the directory structure
 
-    Side effects:
-        Creates new Album instances for directories as needed
+    Side Effects:
+        - Creates new Album instances in database for missing directories
+        - Updates cache_subs dictionary with newly created albums
     """
+    # Extract directory path, removing filename component
     name = os.path.dirname(name)
+
+    # Check if this directory path is already cached
     if name not in cache_subs:
+        # Determine parent directory for hierarchy creation
         parent = os.path.dirname(name)
         if not parent or parent == "":
             parent = main
         else:
             parent = cache_subs[parent]
-        # search if sub album of parent with same name exists
+
+        # Search for existing sub-album with matching name
         album = None
         a_name = os.path.basename(name)
 
+        # Query existing sub-albums to avoid duplicates
         for a in parent.sub_albums.all():
             if a.name == a_name:
                 album = a
+
+        # Create new album if none exists
         if not album:
             album = Album()
             album.cod = uuid4().hex
@@ -73,7 +87,10 @@ def upload_albums_dir(main, cache_subs, name):
             album.parent = parent
             album.run = main.run
             album.save()
+
+        # Cache the album for future lookups
         cache_subs[name] = album
+
     return cache_subs[name]
 
 
@@ -200,36 +217,46 @@ def zipdir(path, ziph):
             )
 
 
-def check_centauri(request):
+def check_centauri(request) -> Optional[HttpResponse]:
     """Check and display Centauri easter egg feature.
 
-    Random chance to show special content and award badges to users.
+    Randomly triggers a special Centauri easter egg feature that displays custom content
+    and may award badges to authenticated users. The feature must be enabled for the
+    association and pass a random probability check.
 
     Args:
-        request: Django HTTP request with user and association context
+        request: Django HTTP request object containing user authentication and
+                association context with features configuration.
 
     Returns:
-        HttpResponse or None: Centauri page response if triggered, None otherwise
+        HttpResponse containing the rendered Centauri template if feature is triggered
+        and enabled, None otherwise.
 
-    Side effects:
-        May award badge to user if Centauri is triggered
+    Side Effects:
+        Awards a configurable badge to the authenticated user if Centauri is triggered
+        and a badge is configured for the association.
     """
+    # Early return if Centauri feature is not enabled for this association
     if "centauri" not in request.assoc["features"]:
         return
 
+    # Check random probability condition for triggering Centauri
     if not _go_centauri(request):
         return
 
+    # Build template context with association-specific Centauri content
     ctx = {}
     for s in ["centauri_descr", "centauri_content"]:
         ctx[s] = get_assoc_config(request.assoc["id"], s, None)
 
+    # Award badge to user if configured for this association
     badge = get_assoc_config(request.assoc["id"], "centauri_badge", None)
     if badge:
         bdg = Badge.objects.get(cod=badge)
         bdg.members.add(request.user.member)
         bdg.save()
 
+    # Render and return the Centauri easter egg page
     return render(request, "larpmanager/general/centauri.html", ctx)
 
 

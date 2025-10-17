@@ -178,43 +178,61 @@ def correct_relationship(e_id, p_id):
         rel.save()
 
 
-def correct_workshop(e_id, p_id):
+def correct_workshop(e_id: int, p_id: int) -> None:
     """
     Correct workshop data mappings during event copying process.
 
+    This function copies workshop modules, questions, and options from a source event
+    to a target event, maintaining proper relationships between the copied objects.
+
     Args:
-        e_id: Target event ID to copy to
-        p_id: Source event ID to copy from
+        e_id: Target event ID to copy workshop data to
+        p_id: Source event ID to copy workshop data from
+
+    Returns:
+        None
     """
+    # Build mapping cache from source event workshop modules (ID -> number)
     cache_f = {}
     cache_t = {}
     for obj in WorkshopModule.objects.filter(event_id=p_id):
         cache_f[obj.id] = obj.number
+
+    # Build mapping cache from target event workshop modules (number -> ID)
     for obj in WorkshopModule.objects.filter(event_id=e_id):
         cache_t[obj.number] = obj.id
 
+    # Copy workshop questions from source to target event
+    # Update module references using the mapping caches
     for el in WorkshopQuestion.objects.filter(module__event_id=p_id):
         v = el.module_id
-        v = cache_f[v]
-        v = cache_t[v]
+        v = cache_f[v]  # Get source module number
+        v = cache_t[v]  # Get target module ID
         el.module_id = v
 
+        # Create new question object in target event
         el.pk = None
         el.save()
 
+    # Rebuild caches for workshop questions mapping
     cache_f = {}
     cache_t = {}
     for obj in WorkshopQuestion.objects.filter(module__event_id=p_id):
         cache_f[obj.id] = obj.number
+
+    # Build mapping from target event questions (number -> ID)
     for obj in WorkshopQuestion.objects.filter(module__event_id=e_id):
         cache_t[obj.number] = obj.id
 
+    # Copy workshop options from source to target event
+    # Update question references using the mapping caches
     for el in WorkshopOption.objects.filter(question__module__event_id=p_id):
         v = el.question_id
-        v = cache_f[v]
-        v = cache_t[v]
+        v = cache_f[v]  # Get source question number
+        v = cache_t[v]  # Get target question ID
         el.question_id = v
 
+        # Create new option object in target event
         el.pk = None
         el.save()
 
@@ -371,14 +389,24 @@ def copy_registration(e_id, targets, p_id):
         copy_class(e_id, p_id, RegistrationSurcharge)
 
 
-def copy_writing(e_id, targets, p_id):
+def copy_writing(e_id: int, targets: list[str], p_id: int) -> None:
     """Copy writing elements from parent to child event.
 
+    This function copies various writing-related elements (characters, factions,
+    quests, etc.) from a parent event to a target event based on the specified
+    target types.
+
     Args:
-        e_id: Target event ID
-        targets: List of element types to copy (character, faction, etc.)
-        p_id: Parent event ID to copy from
+        e_id: Target event ID where elements will be copied to
+        targets: List of element types to copy. Valid values include:
+            'character', 'faction', 'quest', 'prologue', 'speedlarp',
+            'plot', 'handout', 'workshop'
+        p_id: Parent event ID to copy elements from
+
+    Returns:
+        None
     """
+    # Copy character-related elements and fix relationships
     if "character" in targets:
         copy_class(e_id, p_id, Character)
         # correct relationship
@@ -388,25 +416,39 @@ def copy_writing(e_id, targets, p_id):
         copy_class(e_id, p_id, WritingOption)
         copy_character_config(e_id, p_id)
         correct_rels(e_id, p_id, WritingQuestion, WritingOption, "question", "name")
+
+    # Copy faction elements
     if "faction" in targets:
         copy_class(e_id, p_id, Faction)
+
+    # Copy quest-related elements and fix relationships
     if "quest" in targets:
         copy_class(e_id, p_id, QuestType)
         copy_class(e_id, p_id, Quest)
         copy_class(e_id, p_id, Trait)
         correct_rels(e_id, p_id, QuestType, Quest, "typ")
         correct_rels(e_id, p_id, Quest, Trait, "quest")
+
+    # Copy prologue elements
     if "prologue" in targets:
         copy_class(e_id, p_id, Prologue)
+
+    # Copy speedlarp elements
     if "speedlarp" in targets:
         copy_class(e_id, p_id, SpeedLarp)
+
+    # Copy plot elements and fix character relationships
     if "plot" in targets:
         copy_class(e_id, p_id, Plot)
         # correct plotcharacterrels
         correct_plot_character(e_id, p_id)
+
+    # Copy handout and template elements
     if "handout" in targets:
         copy_class(e_id, p_id, Handout)
         copy_class(e_id, p_id, HandoutTemplate)
+
+    # Copy workshop elements and fix relationships
     if "workshop" in targets:
         copy_class(e_id, p_id, WorkshopModule)
         # correct workshop

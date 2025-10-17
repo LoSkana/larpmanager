@@ -279,77 +279,97 @@ def redr(request, p):
     return choose_run(request, p, list(ids))
 
 
-def activate_feature_assoc(request, cod, p=None):
+def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = None) -> HttpResponseRedirect:
     """Activate a feature for an association.
 
+    Activates a feature by adding it to the association's features and redirects
+    to either a specified path or the feature's default view.
+
     Args:
-        request: Django HTTP request object
+        request: Django HTTP request object containing user and association context
         cod: Feature slug/code to activate
-        p: Optional URL path to redirect to after activation
+        p: Optional URL path to redirect to after activation. If None, redirects
+           to the feature's default view based on associated permissions
 
     Returns:
-        HttpResponseRedirect: Redirect to specified path or feature view
+        HttpResponseRedirect to the specified path or feature's default view
 
     Raises:
-        Http404: If feature doesn't exist or isn't overall
-        PermissionError: If user lacks exe_features permission
+        Http404: If feature doesn't exist or isn't marked as overall
+        PermissionError: If user lacks exe_features permission for the association
     """
+    # Retrieve the feature by slug, ensuring it exists
     feature = get_object_or_404(Feature, slug=cod)
+
+    # Validate that this is an organization-wide feature
     if not feature.overall:
         raise Http404("feature not overall")
 
-    # check the user has the permission to add features
+    # Verify user has permission to manage association features
     if not has_assoc_permission(request, {}, "exe_features"):
         raise PermissionError()
 
-    # add feature
+    # Get the association from request context and activate the feature
     assoc = get_object_or_404(Association, pk=request.assoc["id"])
     assoc.features.add(feature)
     assoc.save()
 
+    # Display success message to user
     messages.success(request, _("Feature activated") + ":" + feature.name)
 
-    # redirect either to the requested next, or to the best match for the permission asked
+    # Redirect to specified path or feature's default view
     if p:
         return redirect("/" + p)
+
+    # Use the first associated permission's slug as the default view
     view_name = feature.assoc_permissions.first().slug
     return redirect(reverse(view_name))
 
 
-def activate_feature_event(request, s, cod, p=None):
+def activate_feature_event(request: HttpRequest, s: str, cod: str, p: str = None) -> HttpResponseRedirect:
     """Activate a feature for a specific event.
 
+    Enables a non-overall feature for the specified event and redirects the user
+    to either a custom path or the feature's default view.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
-        cod: Feature slug/code to activate
-        p: Optional URL path to redirect to after activation
+        request: Django HTTP request object containing user and session data
+        s: Event slug identifier used to locate the target event
+        cod: Feature slug/code identifying which feature to activate
+        p: Optional URL path to redirect to after successful activation.
+           If None, redirects to the feature's default event view.
 
     Returns:
-        HttpResponseRedirect: Redirect to specified path or feature view
+        HttpResponseRedirect: Redirect response to specified path or feature view
 
     Raises:
-        Http404: If feature doesn't exist or is overall (not event-specific)
-        PermissionError: If user lacks orga_features permission
+        Http404: If feature doesn't exist or is marked as overall (organization-wide)
+        PermissionError: If user lacks orga_features permission for the event
     """
+    # Retrieve the feature by slug, raise 404 if not found
     feature = get_object_or_404(Feature, slug=cod)
+
+    # Ensure this is an event-specific feature, not organization-wide
     if feature.overall:
         raise Http404("feature overall")
 
-    # check the user has the permission to add features
+    # Get event context and verify user has permission to manage features
     ctx = get_event_run(request, s)
     if not has_event_permission(request, {}, ctx["event"].slug, "orga_features"):
         raise PermissionError()
 
-    # add feature
+    # Add the feature to the event's feature set and persist changes
     ctx["event"].features.add(feature)
     ctx["event"].save()
 
+    # Display success message to user with feature name
     messages.success(request, _("Feature activated") + ":" + feature.name)
 
-    # redirect either to the requested next, or to the best match for the permission asked
+    # Redirect to custom path if provided, otherwise use feature's default view
     if p:
         return redirect("/" + p)
+
+    # Get the first event permission's slug as the default view name
     view_name = feature.event_permissions.first().slug
     return redirect(reverse(view_name, kwargs={"s": s}))
 
@@ -933,7 +953,7 @@ def lm_send(request):
 
 
 @login_required
-def lm_profile(request):
+def lm_profile(request: HttpRequest) -> HttpResponse:
     """Display performance profiling data aggregated by domain and view function.
 
     Shows view function performance metrics computed from individual executions.
@@ -944,9 +964,16 @@ def lm_profile(request):
         request: Django HTTP request object (must be authenticated admin)
 
     Returns:
-        HttpResponse: Rendered profiling data page
+        HttpResponse: Rendered profiling data page with performance metrics
+
+    Note:
+        Only shows data from the last 168 hours (7 days) and limits results to top 50
+        entries by total duration.
     """
+    # Check admin permissions and get base context
     ctx = check_lm_admin(request)
+
+    # Set time threshold to 7 days ago (168 hours)
     st = datetime.now() - timedelta(hours=168)
 
     # Aggregate data from individual executions by domain and view_func_name
@@ -955,13 +982,18 @@ def lm_profile(request):
         LarpManagerProfiler.objects.filter(created__gte=st)
         .values("domain", "view_func_name")
         .annotate(
+            # Count total number of executions for each domain/view combination
             total_calls=Count("id"),
+            # Calculate average execution duration across all calls
             avg_duration=Avg("duration"),
+            # Sum total time spent in this view across all executions
             total_duration=Sum("duration"),
         )
+        # Order by total duration descending to show most time-consuming views first
         .order_by("-total_duration")[:50]
     )
 
+    # Render the profiling template with aggregated performance data
     return render(request, "larpmanager/larpmanager/profile.html", ctx)
 
 

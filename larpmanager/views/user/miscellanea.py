@@ -20,6 +20,7 @@
 
 import logging
 from datetime import datetime, timedelta
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -83,38 +84,52 @@ def help_red(request, n):
 
 
 @login_required
-def help(request, s=None):
+def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
     """
     Display help page with question submission form and user's previous questions.
 
     Args:
-        request: HTTP request object
-        s: Optional event slug for event-specific help
+        request: HTTP request object containing user session and form data
+        s: Optional event slug for event-specific help context
 
     Returns:
         HttpResponse: Rendered help template with form and question list
+
+    Raises:
+        Http404: When event slug is provided but event/run not found
     """
+    # Initialize context based on whether this is event-specific or general help
     if s:
         ctx = get_event_run(request, s, status=True)
     else:
         ctx = def_user_ctx(request)
         ctx["a_id"] = request.assoc["id"]
 
+    # Handle form submission for new help questions
     if request.method == "POST":
         form = HelpQuestionForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
+            # Create help question instance without saving to database yet
             hp = form.save(commit=False)
             hp.member = request.user.member
+
+            # Associate question with organization if context is available
             if ctx["a_id"] != 0:
                 hp.assoc_id = ctx["a_id"]
+
+            # Save question and redirect to prevent form resubmission
             hp.save()
             messages.success(request, _("Question saved!"))
             return redirect(request.path_info)
     else:
+        # Display empty form for GET requests
         form = HelpQuestionForm(ctx=ctx)
 
+    # Prepare template context with form and user's question history
     ctx["form"] = form
     ctx["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
+
+    # Filter questions by association context
     if ctx["a_id"] != 0:
         ctx["list"] = ctx["list"].filter(assoc_id=ctx["a_id"])
     else:

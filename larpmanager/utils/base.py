@@ -164,33 +164,47 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
-def get_index_permissions(ctx, features, has_default, permissions, typ):
+def get_index_permissions(
+    ctx: dict, features: list[str], has_default: bool, permissions: list[str], typ: str
+) -> dict[tuple[str, str], list[dict]]:
     """Build index permissions structure based on user access and features.
 
+    Filters and groups permissions by module based on user's access rights,
+    available features, and permission type. Only includes visible permissions
+    that the user is allowed to access.
+
     Args:
-        ctx: Context dictionary with association information
-        features: Available features list
-        has_default: Whether user has default permissions
-        permissions: User's specific permissions
-        typ: Permission type to filter
+        ctx: Context dictionary containing association information
+        features: List of available feature slugs for the user
+        has_default: Whether user has default permissions (bypasses specific checks)
+        permissions: List of specific permission slugs the user has
+        typ: Permission type to filter (e.g., 'association', 'event')
 
     Returns:
-        Dictionary of grouped permissions by module
+        Dictionary mapping module info tuples (name, icon) to lists of
+        permission dictionaries for that module
     """
     res = {}
+
+    # Get cached permissions for the specified type
     for ar in get_cache_index_permission(typ):
+        # Skip hidden permissions
         if ar["hidden"]:
             continue
 
+        # Check if permission is allowed in current context
         if not is_allowed_managed(ar, ctx):
             continue
 
+        # Check user has specific permission (unless has default access)
         if not has_default and ar["slug"] not in permissions:
             continue
 
+        # Check feature is available (skip placeholder features)
         if not ar["feature__placeholder"] and ar["feature__slug"] not in features:
             continue
 
+        # Group permissions by module
         mod_name = (_(ar["module__name"]), ar["module__icon"])
         if mod_name not in res:
             res[mod_name] = []

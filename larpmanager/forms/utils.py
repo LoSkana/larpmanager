@@ -120,30 +120,48 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name, value, attrs=None, renderer=None):
+    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:
         """Render checkbox widget with tooltips and help links.
 
+        Generates HTML for a checkbox widget where each option includes:
+        - A checkbox input with proper ID and value
+        - A label associated with the checkbox
+        - A help icon that triggers tutorial functionality
+        - Tooltip text with additional information
+
         Args:
-            name: Field name
-            value: Selected values
-            attrs: HTML attributes
-            renderer: Form renderer
+            name: The form field name used for the checkbox group
+            value: List of currently selected option values, or None if no selection
+            attrs: Dictionary of HTML attributes to apply to the widget, may be None
+            renderer: Form renderer instance (unused in this implementation)
 
         Returns:
-            str: Rendered HTML for checkbox widget
+            Safe HTML string containing the complete checkbox widget markup
         """
         output = []
+        # Ensure value is a list for membership checking
         value = value or []
 
+        # Localized text for help icon tooltip
         know_more = _("click on the icon to open the tutorial")
 
+        # Generate HTML for each checkbox option
         for i, (option_value, option_label) in enumerate(self.choices):
+            # Create unique ID for each checkbox using index
             checkbox_id = f"{attrs.get('id', name)}_{i}"
+
+            # Determine if this option should be checked
             checked = "checked" if option_value in value else ""
+
+            # Build individual HTML components
             checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
             label_html = f'<label for="{checkbox_id}">{option_label}</label>'
             link_html = f'<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
+
+            # Get help text for this specific feature option
             help_text = self.feature_help.get(option_value, "")
+
+            # Combine all components into a single checkbox div
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
                     <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>

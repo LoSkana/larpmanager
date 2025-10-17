@@ -52,57 +52,86 @@ def orga_newsletter(request, s):
 
 
 @login_required
-def orga_safety(request, s):
+def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
     """Process safety-related member data forms.
 
+    Retrieves and displays safety information for all registered members
+    who have provided safety data longer than the minimum required length.
+    Associates each member with their character information.
+
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing user session and form data
+        s: Event slug identifier for the specific event
 
     Returns:
-        HttpResponse: Safety information template with member data and characters
+        HttpResponse: Rendered safety information template containing member
+                     data and their associated characters
+
+    Note:
+        Only includes members with safety information longer than min_length
+        and excludes cancelled registrations.
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_safety")
     get_event_cache_all(ctx)
     min_length = 3
 
+    # Build mapping of member IDs to their character list
     member_chars = {}
     for _num, el in ctx["chars"].items():
         if "player_id" not in el:
             continue
+        # Initialize member's character list if not exists
         if el["player_id"] not in member_chars:
             member_chars[el["player_id"]] = []
+        # Add formatted character info to member's list
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
+    # Query registered members with safety information
     ctx["list"] = []
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    # Exclude members without safety data and optimize with select_related
     que = que.exclude(member__safety__isnull=True).select_related("member")
+
+    # Filter members with sufficient safety information length
     for el in que:
         if len(el.member.safety) > min_length:
+            # Attach character list to member if available
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
 
+    # Sort members alphabetically by display name
     ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
 
     return render(request, "larpmanager/orga/users/safety.html", ctx)
 
 
 @login_required
-def orga_diet(request, s):
+def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
     """Handle dietary preference management forms.
 
+    This view collects and displays dietary preferences for all registered
+    members of an event, along with their associated characters.
+
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing user session and form data
+        s: Event slug identifier for the specific event
 
     Returns:
-        HttpResponse: Diet preferences template with member data and characters
+        HttpResponse: Rendered template displaying diet preferences with
+                     member data and their associated characters
+
+    Note:
+        Only shows members with dietary preferences longer than min_length
+        characters and excludes cancelled registrations.
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_diet")
     get_event_cache_all(ctx)
     min_length = 3
 
+    # Build mapping of member IDs to their character names and numbers
     member_chars = {}
     for _num, el in ctx["chars"].items():
         if "player_id" not in el:
@@ -111,53 +140,71 @@ def orga_diet(request, s):
             member_chars[el["player_id"]] = []
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
+    # Query all non-cancelled registrations with dietary preferences
     ctx["list"] = []
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
     que = que.exclude(member__diet__isnull=True).select_related("member")
+
+    # Filter members with substantial dietary info and attach character data
     for el in que:
         if len(el.member.diet) > min_length:
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
 
+    # Sort members alphabetically by display name
     ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
 
     return render(request, "larpmanager/orga/users/diet.html", ctx)
 
 
 @login_required
-def orga_spam(request, s):
-    """Manage spam/newsletter preference settings.
+def orga_spam(request: HttpRequest, s: str) -> HttpResponse:
+    """Manage spam/newsletter preference settings for event organizers.
+
+    This function retrieves members who have opted into newsletters, excludes those
+    already registered for current/future event runs or are event staff, and groups
+    the remaining members by language for targeted email campaigns.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: The HTTP request object containing user session and data
+        s: The event slug identifier used to look up the specific event
 
     Returns:
-        HttpResponse: Newsletter management template with grouped email lists
+        HttpResponse: Rendered template with newsletter management interface
+        containing email lists grouped by member language preferences
     """
+    # Check user permissions for spam management feature
     ctx = check_event_permission(request, s, "orga_spam")
 
+    # Get members already registered for current or future runs
     already = list(
         Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
             "member_id", flat=True
         )
     )
 
+    # Add event staff members to exclusion list
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
+    # Get all active association members (exclude empty memberships)
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
+    # Build language-grouped email lists for newsletter subscribers
     lst = {}
     que = Member.objects.filter(newsletter=NewsletterChoices.ALL)
     que = que.filter(id__in=members)
     que = que.exclude(id__in=already)
+
+    # Group email addresses by member language preference
     for m in que.values_list("language", "email"):
         language = m[0]
         if language not in lst:
             lst[language] = []
         lst[language].append(m[1])
+
+    # Add grouped email lists to template context
     ctx["lst"] = lst
     return render(request, "larpmanager/orga/users/spam.html", ctx)
 

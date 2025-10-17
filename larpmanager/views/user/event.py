@@ -273,22 +273,33 @@ def home_json(request, lang="it"):
     return JsonResponse({"res": res})
 
 
-def carousel(request):
-    """
-    Display event carousel with recent and upcoming events.
+def carousel(request: HttpRequest) -> HttpResponse:
+    """Display event carousel with recent and upcoming events.
+
+    Shows a carousel of events from the current association, filtering out
+    development and cancelled events. Events are ordered by end date and
+    marked as 'coming' if they end within 3 days of now.
 
     Args:
-        request: HTTP request object
+        request: HTTP request object containing association context
 
     Returns:
-        HttpResponse: Rendered carousel template with event list
+        HttpResponse: Rendered carousel template with event list and JSON data
+
+    Note:
+        Uses caching to avoid duplicate events from multiple runs.
+        Only includes events with valid end dates.
     """
+    # Initialize context with default user data and empty list
     ctx = def_user_ctx(request)
     ctx.update({"list": []})
+
+    # Cache to track processed events and set reference date (3 days ago)
     cache = {}
     ref = (datetime.now() - timedelta(days=3)).date()
-    # for run in get_coming_runs(request, ctx, aid):
-    # ref = datetime.now() - timedelta(days=3)
+
+    # Query runs from current association, excluding development/cancelled events
+    # Order by end date descending to show most recent first
     for run in (
         Run.objects.filter(event__assoc_id=request.assoc["id"])
         .exclude(development=DevelopStatus.START)
@@ -296,15 +307,21 @@ def carousel(request):
         .order_by("-end")
         .select_related("event")
     ):
+        # Skip if event already processed or has no end date
         if run.event_id in cache:
             continue
         if not run.end:
             continue
+
+        # Mark event as processed and get event display data
         cache[run.event_id] = 1
         el = run.event.show()
+
+        # Mark event as 'coming' if it ends after reference date
         el["coming"] = run.end > ref
         ctx["list"].append(el)
 
+    # Convert event list to JSON for frontend use
     ctx["json"] = json.dumps(ctx["list"])
 
     return render(request, "larpmanager/general/carousel.html", ctx)
@@ -377,43 +394,63 @@ def event_register(request, s):
     return render(request, "larpmanager/general/event_register.html", ctx)
 
 
-def calendar_past(request):
+def calendar_past(request: HttpRequest) -> HttpResponse:
     """Display calendar of past events for the association.
 
+    Renders a calendar view showing past events for the current association.
+    For authenticated users, includes registration status, character relationships,
+    payment information, and pre-registration data.
+
     Args:
-        request: HTTP request object with user authentication and association data
+        request: HTTP request object containing user authentication and association data.
+                Must include 'assoc' key with association ID in request context.
 
     Returns:
-        HttpResponse: Rendered past events calendar template
+        HttpResponse: Rendered template response with past events calendar data.
+                     Template: 'larpmanager/general/past.html'
     """
+    # Extract association ID and initialize user context
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
 
+    # Get all past runs for this association
     runs = get_coming_runs(aid, future=False)
 
+    # Initialize dictionaries for user-specific data
     my_regs_dict = {}
     character_rels_dict = {}
     payment_invoices_dict = {}
     pre_registrations_dict = {}
+
+    # Fetch user-specific registration data if authenticated
     if request.user.is_authenticated:
+        # Get all non-cancelled registrations for this user and association
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
             cancellation_date__isnull=True,
             redeem_code__isnull=True,
             member=request.user.member,
         ).select_related("ticket", "run")
+
+        # Create dictionary mapping run_id to registration for quick lookup
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
+        # Build related data dictionaries for character, payment, and pre-registration info
         character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
         payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
         pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
 
+    # Convert runs queryset to list and initialize context list
     runs_list = list(runs)
     ctx["list"] = []
 
+    # Process each run to add registration status information
     for run in runs_list:
+        # Get user's registration for this run if it exists
         user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
         my_regs_for_run = [user_reg] if user_reg else []
+
+        # Update run object with registration status data
         registration_status(
             run,
             request.user,
@@ -422,8 +459,11 @@ def calendar_past(request):
             payment_invoices_dict=payment_invoices_dict,
             pre_registrations_dict=pre_registrations_dict,
         )
+
+        # Add processed run to context list
         ctx["list"].append(run)
 
+    # Set page identifier and render template
     ctx["page"] = "calendar_past"
     return render(request, "larpmanager/general/past.html", ctx)
 
@@ -458,37 +498,57 @@ def check_gallery_visibility(request, ctx):
     return True
 
 
-def gallery(request, s):
-    """Event gallery display with permissions.
+def gallery(request: HttpRequest, s: str) -> HttpResponse:
+    """Event gallery display with permissions and character filtering.
+
+    Displays the event gallery page showing characters and registrations based on
+    event configuration and user permissions. Handles character approval status,
+    uncasted player visibility, and writing field visibility settings.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier used to retrieve the specific event
 
     Returns:
-        HttpResponse: Gallery template with character and registration data
+        HttpResponse: Rendered gallery template with character and registration
+        context data, or redirect to event page if character feature disabled
+
+    Raises:
+        Http404: If event or run not found (handled by get_event_run)
     """
+    # Get event context and check if character feature is enabled
     ctx = get_event_run(request, s, status=True)
     if "character" not in ctx["features"]:
         return redirect("event", s=ctx["run"].get_slug())
 
+    # Initialize registration list for unassigned members
     ctx["reg_list"] = []
 
+    # Get event features for permission checking
     features = get_event_features(ctx["event"].id)
 
+    # Check if user has permission to view gallery content
     if check_gallery_visibility(request, ctx):
+        # Load character cache if writing fields are visible or character display is forced
         if not ctx["event"].get_config("writing_field_visibility", False) or ctx.get("show_character"):
             get_event_cache_all(ctx)
 
+        # Check configuration for hiding uncasted players
         hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
         if not hide_uncasted_players:
+            # Get registrations that have assigned characters
             que = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id)
+
+            # Filter by character approval status if required
             if ctx["event"].get_config("user_character_approval", False):
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 
+            # Get registrations without assigned characters (excluding waiting list)
             que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
             que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=TicketTier.WAITING)
+
+            # Add non-provisional registered members to the display list
             for reg in que_reg.select_related("member", "ticket").order_by("search"):
                 if not is_reg_provisional(reg, event=ctx["event"], features=features):
                     ctx["reg_list"].append(reg.member)
@@ -566,35 +626,56 @@ def event_redirect(request, s):
     return redirect("event", s=s)
 
 
-def search(request, s):
+def search(request: HttpRequest, s: str) -> HttpResponse:
     """Display event search page with character gallery and search functionality.
 
+    This view handles the character search functionality for events, including
+    filtering visible character fields and preparing data for frontend search.
+
     Args:
-        request: HTTP request object
-        s: Event slug string
+        request: Django HTTP request object containing user session and data
+        s: Event slug string used to identify the specific event
 
     Returns:
-        Rendered search.html template with searchable character data
+        HttpResponse: Rendered search.html template with searchable character data
+        and JSON-serialized context for frontend functionality
+
+    Note:
+        Characters and their fields are filtered based on visibility permissions
+        and event configuration settings.
     """
+    # Get event context and validate user access
     ctx = get_event_run(request, s, status=True)
 
+    # Check if gallery is visible and character display is enabled
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
+        # Load all cached event data including characters
         get_event_cache_all(ctx)
+
+        # Get custom search text for this event
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
+
+        # Determine which writing fields should be visible
         visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
+
+        # Filter character fields based on visibility settings
         for _num, char in ctx["chars"].items():
             fields = char.get("fields")
             if not fields:
                 continue
+
+            # Remove fields that shouldn't be shown to current user
             to_delete = [
                 qid for qid in list(fields) if str(qid) not in ctx.get("show_character", []) and "show_all" not in ctx
             ]
             for qid in to_delete:
                 del fields[qid]
 
+    # Serialize context data to JSON for frontend consumption
     for slug in ["chars", "factions", "questions", "options", "searchable"]:
         if slug not in ctx:
             ctx[slug] = {}
+        # Create JSON versions of each data structure
         ctx[f"{slug}_json"] = json.dumps(ctx[slug])
 
     return render(request, "larpmanager/event/search.html", ctx)
@@ -708,38 +789,50 @@ def quest(request, s, g):
     return render(request, "larpmanager/event/quest.html", ctx)
 
 
-def limitations(request, s):
+def limitations(request: HttpRequest, s: str) -> HttpResponse:
     """
     Display event limitations including ticket availability and discounts.
 
+    This view shows the current availability status of tickets, discounts, and
+    registration options for a specific event run, helping users understand
+    what's available for registration.
+
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: The HTTP request object containing user session and request data.
+        s: The event slug used to identify the specific event.
 
     Returns:
-        HttpResponse: Rendered limitations template
+        HttpResponse: Rendered template showing limitations, ticket availability,
+        discounts, and registration options with their current usage counts.
     """
+    # Get event and run context with status validation
     ctx = get_event_run(request, s, status=True)
 
+    # Retrieve current registration counts for tickets and options
     counts = get_reg_counts(ctx["run"])
 
+    # Build discounts list with visibility filtering
     ctx["disc"] = []
     for discount in ctx["run"].discounts.exclude(visible=False):
         ctx["disc"].append(discount.show(ctx["run"]))
 
+    # Build tickets list with availability and usage data
     ctx["tickets"] = []
     for ticket in RegistrationTicket.objects.filter(event=ctx["event"], max_available__gt=0, visible=True):
         dt = ticket.show(ctx["run"])
         key = f"tk_{ticket.id}"
+        # Add usage count if available in registration counts
         if key in counts:
             dt["used"] = counts[key]
         ctx["tickets"].append(dt)
 
+    # Build registration options list with availability constraints
     ctx["opts"] = []
     que = RegistrationOption.objects.filter(question__event=ctx["event"], max_available__gt=0)
     for option in que:
         dt = option.show(ctx["run"])
         key = f"option_{option.id}"
+        # Add usage count if available in registration counts
         if key in counts:
             dt["used"] = counts[key]
         ctx["opts"].append(dt)

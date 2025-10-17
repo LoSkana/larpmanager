@@ -57,38 +57,51 @@ from larpmanager.utils.tasks import background_auto
 logger = logging.getLogger(__name__)
 
 
-def get_reg_iscr(instance):
+def get_reg_iscr(instance) -> int:
     """Calculate total registration signup fee including discounts.
 
+    Computes the total registration fee by summing base ticket price, additional
+    tickets, pay-what-you-want amounts, registration choices, and surcharges,
+    then applying any applicable discounts (except for gifted registrations).
+
     Args:
-        instance: Registration instance to calculate fee for
+        instance: Registration instance to calculate fee for. Must have attributes:
+            ticket, additionals, pay_what, member_id, run_id, redeem_code, surcharge
 
     Returns:
-        int: Total signup fee after applying discounts and surcharges
+        int: Total signup fee after applying discounts and surcharges, minimum 0
+
+    Note:
+        Discounts are not applied to registrations with redeem codes (gifted registrations).
     """
-    # update registration totatal signup fee
+    # Initialize total registration fee
     tot_iscr = 0
 
+    # Add base ticket price and additional tickets
     if instance.ticket:
         tot_iscr += instance.ticket.price
 
         if instance.additionals:
             tot_iscr += instance.ticket.price * instance.additionals
 
+    # Add pay-what-you-want amount
     if instance.pay_what:
         tot_iscr += instance.pay_what
 
+    # Add registration choice options (extras, meals, etc.)
     for c in RegistrationChoice.objects.filter(reg=instance).select_related("option"):
         tot_iscr += c.option.price
 
-    # no discount for gifted
+    # Apply discounts only for non-gifted registrations
     if not instance.redeem_code:
         que = AccountingItemDiscount.objects.filter(member_id=instance.member_id, run_id=instance.run_id)
         for el in que.select_related("disc"):
             tot_iscr -= el.disc.value
 
+    # Add any surcharges
     tot_iscr += instance.surcharge
 
+    # Ensure fee is never negative
     tot_iscr = max(0, tot_iscr)
 
     return tot_iscr
@@ -506,39 +519,56 @@ def get_date_surcharge(reg, event):
     return tot
 
 
-def handle_registration_accounting_updates(registration):
+def handle_registration_accounting_updates(registration: Registration) -> None:
     """Handle post-save accounting updates for registrations.
 
+    This function manages the transfer of payments from cancelled registrations,
+    updates accounting calculations, and triggers status notifications when
+    a registration moves from provisional to confirmed status.
+
     Args:
-        registration: Registration instance that was saved
+        registration: Registration instance that was saved. Must have valid
+            run_id and member_id for payment transfers to work properly.
+
+    Returns:
+        None
+
+    Note:
+        This function performs database updates and may trigger background
+        email notifications for status changes.
     """
+    # Early return if no member associated with registration
     if not registration.member:
         return
 
-    # find cancelled registrations to transfer payments
+    # Transfer payments from cancelled registrations to this active one
     if not registration.cancellation_date:
+        # Find all cancelled registrations for same run and member
         cancelled = Registration.objects.filter(
             run_id=registration.run_id, member_id=registration.member_id, cancellation_date__isnull=False
         )
         cancelled = list(cancelled.values_list("pk", flat=True))
+
+        # Transfer both payments and transactions from cancelled registrations
         if cancelled:
             for typ in [AccountingItemPayment, AccountingItemTransaction]:
                 for el in typ.objects.filter(reg__id__in=cancelled):
                     el.reg = registration
                     el.save()
 
+    # Store provisional status before accounting updates
     old_provisional = is_reg_provisional(registration)
 
-    # update accounting
+    # Recalculate all accounting fields for this registration
     update_registration_accounting(registration)
 
-    # update accounting without triggering a new save
+    # Bulk update accounting fields without triggering model save signals
     updates = {}
     for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
         updates[field] = getattr(registration, field)
     Registration.objects.filter(pk=registration.pk).update(**updates)
 
-    # send mail if not provisional anymore
+    # Send confirmation email if registration status changed from provisional to confirmed
     if old_provisional and not is_reg_provisional(registration):
         update_registration_status_bkg(registration.id)
 
@@ -620,7 +650,7 @@ def check_reg_bkg_go(reg_id):
         return
 
 
-def update_registration_accounting(reg: "Registration") -> None:
+def update_registration_accounting(reg: Registration) -> None:
     """Update comprehensive accounting information for a registration.
 
     Calculates total signup fee, payments received, outstanding balance,

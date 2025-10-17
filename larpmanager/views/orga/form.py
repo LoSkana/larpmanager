@@ -20,6 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -116,28 +117,50 @@ def orga_registration_form(request, s):
 
 
 @login_required
-def orga_registration_form_edit(request, s, num):
+def orga_registration_form_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
     """
     Handle registration form question editing for organizers.
 
-    Args:
-        request: HTTP request object
-        s: Event slug
-        num: Question number/ID to edit
+    This view allows organizers to edit registration questions, handle form submissions,
+    and redirect to appropriate pages based on the question type and user actions.
 
-    Returns:
-        HttpResponse: Form edit page or redirect after save
+    Args:
+        request : HttpRequest
+            The HTTP request object containing form data and user information
+        s : str
+            Event slug identifier for the specific event
+        num : int
+            Question number/ID to edit (0 for new questions)
+
+    Returns
+        HttpResponse
+            Either a rendered form edit page or a redirect response after successful save
+
+    Notes
+        - Handles both creation (num=0) and editing of existing questions
+        - Automatically redirects to option creation for single/multiple choice questions
+        - Validates that choice questions have at least one option defined
     """
+    # Check user permissions for registration form editing
     perm = "orga_registration_form"
     ctx = check_event_permission(request, s, perm)
+
+    # Process form submission using backend edit helper
     if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
+        # Set suggestion flag for the current permission
         set_suggestion(ctx, perm)
+
+        # Handle "continue editing" action - redirect to create new question
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
+        # Determine if we need to redirect to option editing
         edit_option = False
+
+        # Check if user explicitly requested to add options
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
+        # For choice questions, ensure at least one option exists
         elif ctx["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
             if not RegistrationOption.objects.filter(question_id=ctx["saved"].id).exists():
                 edit_option = True
@@ -145,10 +168,13 @@ def orga_registration_form_edit(request, s, num):
                     request,
                     _("You must define at least one option before saving a single-choice or multiple-choice question"),
                 )
+
+        # Redirect to option creation if needed, otherwise back to form list
         if edit_option:
             return redirect(orga_registration_options_new, s=ctx["run"].get_slug(), num=ctx["saved"].id)
         return redirect(perm, s=ctx["run"].get_slug())
 
+    # Prepare context for rendering the edit form
     ctx["list"] = RegistrationOption.objects.filter(question=ctx["el"]).order_by("order")
     return render(request, "larpmanager/orga/registration/form_edit.html", ctx)
 

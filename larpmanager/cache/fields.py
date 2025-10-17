@@ -112,43 +112,63 @@ def get_event_fields_cache(event_id):
     return res
 
 
-def visible_writing_fields(ctx, applicable, only_visible=True):
+def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visible: bool = True) -> None:
     """
     Filter and cache visible writing fields based on visibility settings.
 
+    This function processes writing fields from the context and filters them based on
+    visibility rules, storing the results in separate categories for questions, options,
+    and searchable fields.
+
     Args:
-        ctx: Context dictionary to store filtered results
-        applicable: QuestionApplicable enum value for field type
-        only_visible: Whether to include only visible fields (default: True)
+        ctx: Context dictionary to store filtered results. Must contain 'writing_fields'.
+        applicable: QuestionApplicable enum value specifying the field type to process.
+        only_visible: If True, includes only PUBLIC and SEARCHABLE fields. If False,
+                     includes all fields regardless of visibility. Defaults to True.
+
+    Returns:
+        None: Results are stored directly in the ctx dictionary under 'questions',
+              'options', and 'searchable' keys.
     """
+    # Get the label key for the applicable question type
     key = QuestionApplicable(applicable).label
 
+    # Initialize result containers in context
     ctx["questions"] = {}
     ctx["options"] = {}
     ctx["searchable"] = {}
 
+    # Early return if no writing fields or key not found
     if "writing_fields" not in ctx or key not in ctx["writing_fields"]:
         return
 
+    # Get the relevant writing fields data
     res = ctx["writing_fields"][key]
 
+    # Initialize tracking lists for question and searchable IDs
     question_ids = []
     searcheable_ids = []
 
+    # Process questions if they exist in the data
     if "questions" in res:
         for id, el in res["questions"].items():
+            # Filter based on visibility settings
             if not only_visible or el["visibility"] in [QuestionVisibility.PUBLIC, QuestionVisibility.SEARCHABLE]:
                 ctx["questions"][id] = el
                 question_ids.append(el["id"])
 
+            # Track searchable questions separately
             if el["visibility"] == QuestionVisibility.SEARCHABLE:
                 searcheable_ids.append(el["id"])
 
+    # Process options if they exist, linking them to visible questions
     if "options" in res:
         for id, el in res["options"].items():
+            # Include options for visible questions
             if el["question_id"] in question_ids:
                 ctx["options"][id] = el
 
+            # Build searchable options mapping by question ID
             if el["question_id"] in searcheable_ids:
                 if el["question_id"] not in ctx["searchable"]:
                     ctx["searchable"][el["question_id"]] = []

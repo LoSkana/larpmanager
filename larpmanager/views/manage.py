@@ -663,15 +663,24 @@ def _orga_casting_actions(ctx, features):
             )
 
 
-def _orga_px_actions(ctx, features):
+def _orga_px_actions(ctx: dict, features: dict) -> None:
     """Add priority actions for experience points system setup.
 
     Checks for missing PX configurations, ability types, and deliveries,
     adding appropriate priority suggestions for event organizers.
+
+    Args:
+        ctx: Context dictionary containing event and other relevant data
+        features: Dictionary of enabled features for the current context
+
+    Returns:
+        None: Function modifies ctx in place by adding priority suggestions
     """
+    # Early return if PX feature is not enabled
     if "px" not in features:
         return
 
+    # Check if experience points configuration is missing
     if not ctx["event"].get_config("px_start", 0):
         _add_priority(
             ctx,
@@ -680,6 +689,7 @@ def _orga_px_actions(ctx, features):
             "config/px",
         )
 
+    # Verify that ability types have been set up
     if not ctx["event"].get_elements(AbilityTypePx).count():
         _add_priority(
             ctx,
@@ -687,9 +697,11 @@ def _orga_px_actions(ctx, features):
             "orga_px_ability_types",
         )
 
+    # Find ability types that don't have any associated abilities
     unused_ability_types = (
         ctx["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
+    # Add priority if there are unused ability types
     if unused_ability_types.count():
         _add_priority(
             ctx,
@@ -698,6 +710,7 @@ def _orga_px_actions(ctx, features):
             "orga_px_abilities",
         )
 
+    # Check if delivery methods for experience points are configured
     if not ctx["event"].get_elements(DeliveryPx).count():
         _add_priority(
             ctx,
@@ -1014,7 +1027,7 @@ def _check_intro_driver(request, ctx):
     ctx["intro_driver"] = True
 
 
-def orga_redirect(request, s, n, p=None):
+def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
     """
     Optimized redirect from /slug/number/path to /slug-number/path format.
 
@@ -1023,27 +1036,26 @@ def orga_redirect(request, s, n, p=None):
 
     Args:
         request: Django HTTP request object (not used in redirect logic)
-        s (str): Event slug
-        n (int): Run number
-        p (str, optional): Additional path components
+        s: Event slug identifier
+        n: Run number for the event
+        p: Additional path components, defaults to None
 
     Returns:
-        HttpResponsePermanentRedirect: 301 redirect to normalized URL
+        HttpResponsePermanentRedirect: 301 redirect to normalized URL format
     """
-
-    # Build path components efficiently
+    # Initialize path components list with base slug
     path_parts = [s]
 
-    # Only add suffix for run numbers > 1
+    # Only add suffix for run numbers > 1 to keep URLs clean
     if n > 1:
         path_parts.append(f"-{n}")
 
-    # Join slug and number, add trailing slash
+    # Join slug and number components, add trailing slash
     base_path = "".join(path_parts) + "/"
 
-    # Add additional path if provided (p already includes leading slash if needed)
+    # Append additional path if provided (p already includes leading slash if needed)
     if p:
         base_path += p
 
-    # Use permanent redirect (301) for better caching and SEO
+    # Return permanent redirect (301) for better caching and SEO
     return HttpResponsePermanentRedirect("/" + base_path)

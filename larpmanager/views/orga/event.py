@@ -23,7 +23,7 @@ from collections import defaultdict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Prefetch
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -46,7 +46,7 @@ from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event, EventButton, EventText
+from larpmanager.models.event import Event, EventButton, EventText, Run
 from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
@@ -73,35 +73,50 @@ def orga_event(request, s):
     return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
 
 
-def full_event_edit(ctx, request, event, run, exe=False):
+def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe: bool = False) -> HttpResponse:
     """Comprehensive event editing with validation.
+
+    Handles both GET requests for displaying edit forms and POST requests for
+    processing form submissions. Validates and saves both event and run forms
+    when submitted.
 
     Args:
         ctx: Context dictionary for template rendering
-        request: HTTP request object
+        request: HTTP request object containing form data
         event: Event instance to edit
         run: Run instance associated with the event
-        exe: Whether this is an executive-level edit
+        exe: Whether this is an executive-level edit, defaults to False
 
     Returns:
-        HttpResponse: Edit form template or redirect after successful save
+        HttpResponse: Either the edit form template for GET requests or a
+        redirect response after successful form submission
     """
+    # Disable numbering in the template context
     ctx["nonum"] = 1
+
     if request.method == "POST":
+        # Create form instances with POST data and file uploads
         form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
         form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
+
+        # Validate both forms before saving
         if form_event.is_valid() and form_run.is_valid():
+            # Save both forms to database
             form_event.save()
             form_run.save()
+
+            # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
             if exe:
                 return redirect("manage")
             else:
                 return redirect("manage", s=run.get_slug())
     else:
+        # Create empty forms for GET requests
         form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
         form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
 
+    # Add forms and metadata to template context
     ctx["form1"] = form_event
     ctx["form2"] = form_run
     ctx["num"] = event.id
@@ -321,83 +336,122 @@ def orga_backup(request, s):
     return _prepare_backup(ctx)
 
 
-def _prepare_backup(ctx):
+def _prepare_backup(ctx: dict) -> HttpResponse:
     """
     Prepare comprehensive event data backup by exporting various components.
 
+    Creates a ZIP file containing exported event data including registrations,
+    characters, factions, plots, abilities, and quest builder components based
+    on enabled features.
+
     Args:
-        ctx: Context dictionary with event and feature information
+        ctx: Context dictionary containing:
+            - event: Event object to backup
+            - features: Dict of enabled feature flags
+            - Other context data required by export functions
 
     Returns:
-        HttpResponse: ZIP file containing exported event data
+        HttpResponse: ZIP file response containing all exported event data
+
+    Raises:
+        KeyError: If required context keys are missing
+        Exception: If export or ZIP creation fails
     """
     exports = []
 
+    # Export core event data
     exports.extend(export_event(ctx))
 
+    # Export registration-related data
     exports.extend(export_data(ctx, Registration))
     exports.extend(export_registration_form(ctx))
     exports.extend(export_tickets(ctx))
 
+    # Export character data if feature is enabled
     if "character" in ctx["features"]:
         exports.extend(export_data(ctx, Character))
         exports.extend(export_character_form(ctx))
 
+    # Export faction data if feature is enabled
     if "faction" in ctx["features"]:
         exports.extend(export_data(ctx, Faction))
 
+    # Export plot data if feature is enabled
     if "plot" in ctx["features"]:
         exports.extend(export_data(ctx, Plot))
 
+    # Export experience/abilities data if feature is enabled
     if "px" in ctx["features"]:
         exports.extend(export_abilities(ctx))
 
+    # Export quest builder data if feature is enabled
     if "questbuilder" in ctx["features"]:
         exports.extend(export_data(ctx, QuestType))
         exports.extend(export_data(ctx, Quest))
         exports.extend(export_data(ctx, Trait))
 
+    # Create and return ZIP file with all exports
     return zip_exports(ctx, exports, "backup")
 
 
 @login_required
-def orga_upload(request, s, typ):
+def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
     """
     Handle file uploads for organizers with element processing.
 
+    This function manages the upload process for various types of elements
+    (characters, items, etc.) in LARP events. It validates permissions,
+    processes uploaded files, and returns appropriate responses.
+
     Args:
-        request: HTTP request object with file data
-        s: Event slug
-        typ: Type of elements to upload
+        request: Django HTTP request object containing file data and POST parameters
+        s: Event slug identifier for the specific event
+        typ: Type of elements to upload (e.g., 'characters', 'items')
 
     Returns:
-        HttpResponse: Upload form or processing results page
+        HttpResponse: Either the upload form page or processing results page
+
+    Raises:
+        Exception: Any error during file processing is caught and displayed to user
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
     ctx["name"] = ctx["typ"]
+
+    # Get column names for the upload template
     _get_column_names(ctx)
 
+    # Handle POST request (file upload submission)
     if request.POST:
         form = UploadElementsForm(request.POST, request.FILES)
+
+        # Prepare redirect URL for after processing
         redr = reverse(f"orga_{typ}", args=[ctx["run"].get_slug()])
+
         if form.is_valid():
             try:
-                # print(request.FILES)
+                # Process the uploaded file and get processing logs
                 ctx["logs"] = go_upload(request, ctx, form)
                 ctx["redr"] = redr
+
+                # Show success message and render results page
                 messages.success(request, _("Elements uploaded") + "!")
                 return render(request, "larpmanager/orga/uploads.html", ctx)
 
             except Exception as exp:
+                # Log the full traceback and show error to user
                 print(traceback.format_exc())
                 messages.error(request, _("Unknow error on upload") + f": {exp}")
+
+            # Redirect back to the main page on error or completion
             return HttpResponseRedirect(redr)
     else:
+        # Handle GET request (show upload form)
         form = UploadElementsForm()
 
+    # Add form to context and render upload page
     ctx["form"] = form
-
     return render(request, "larpmanager/orga/upload.html", ctx)
 
 
