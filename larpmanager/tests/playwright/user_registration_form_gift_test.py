@@ -55,6 +55,10 @@ def prepare(page, live_server):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
+
+    page.get_by_role("link", name="Payments ").click()
+    page.locator("#id_payment_require_receipt").check()
+
     submit_confirm(page)
 
     go_to(page, live_server, "/manage/methods")

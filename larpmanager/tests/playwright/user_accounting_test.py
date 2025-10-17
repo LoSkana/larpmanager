@@ -56,6 +56,7 @@ def prepare(page, live_server):
 
     page.get_by_role("link", name=re.compile(r"^Payments\s.+")).click()
     page.locator("#id_payment_special_code").check()
+    page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)
 
