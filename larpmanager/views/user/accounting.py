@@ -648,9 +648,12 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
+    # Check if receipt is required for manual payments
+    require_receipt = get_assoc_config(request.assoc["id"], "payment_require_receipt", False)
+
     # Select appropriate form based on payment type
     if s in {"wire", "paypal_nf"}:
-        form = WireInvoiceSubmitForm(request.POST, request.FILES)
+        form = WireInvoiceSubmitForm(request.POST, request.FILES, require_receipt=require_receipt)
     elif s == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
     else:
