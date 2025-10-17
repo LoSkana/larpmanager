@@ -77,7 +77,7 @@ class LarpManagerShowcaseAdmin(DefModelAdmin):
 
 @admin.register(LarpManagerProfiler)
 class LarpManagerProfilerAdmin(DefModelAdmin):
-    list_display = ("date", "view_func_name", "domain", "mean_duration", "num_calls")
+    list_display = ("id", "view_func_name", "domain", "duration", "created")
 
 
 @admin.register(LarpManagerDiscover)

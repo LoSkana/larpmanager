@@ -18,10 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime
+from urllib.parse import urlparse
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError, transaction
 from django.dispatch import receiver
 
 from larpmanager.models.larpmanager import LarpManagerProfiler
@@ -30,7 +28,9 @@ from larpmanager.utils.profiler.signals import profiler_response_signal
 
 @receiver(profiler_response_signal)
 def handle_profiler_response(sender, domain, path, method, view_func_name, duration, **kwargs):
-    """Handle profiler signal to record view function performance metrics.
+    """Handle profiler signal to record individual execution data.
+
+    Saves individual execution data with path and query parameters.
 
     Args:
         sender: Signal sender
@@ -41,24 +41,16 @@ def handle_profiler_response(sender, domain, path, method, view_func_name, durat
         duration: Response duration in seconds
         **kwargs: Additional keyword arguments
     """
-    if duration < 1:
-        return
+    parsed_url = urlparse(path)
+    clean_path = parsed_url.path
+    query_string = parsed_url.query
 
-    with transaction.atomic():
-        key = {
-            "date": datetime.today().date(),
-            "domain": domain,
-            "view_func_name": view_func_name,
-        }
-
-        try:
-            profiler = LarpManagerProfiler.objects.select_for_update().get(**key)
-        except ObjectDoesNotExist:
-            try:
-                profiler = LarpManagerProfiler.objects.create(**key)
-            except IntegrityError:
-                profiler = LarpManagerProfiler.objects.select_for_update().get(**key)
-
-        profiler.num_calls += 1
-        profiler.mean_duration = ((profiler.mean_duration * (profiler.num_calls - 1)) + duration) / profiler.num_calls
-        profiler.save(update_fields=["mean_duration", "num_calls"])
+    # Save individual execution data
+    LarpManagerProfiler.objects.create(
+        domain=domain,
+        path=clean_path,
+        query=query_string,
+        method=method,
+        view_func_name=view_func_name,
+        duration=duration,
+    )
