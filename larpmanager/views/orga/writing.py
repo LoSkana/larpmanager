@@ -23,7 +23,7 @@ from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -500,35 +500,49 @@ def orga_multichoice_available(request: HttpRequest, s: str) -> JsonResponse:
 
 
 @login_required
-def orga_factions_available(request, s):
+def orga_factions_available(request: HttpRequest, s: str) -> JsonResponse:
     """Return available factions for character assignment via AJAX.
 
     Args:
-        request: HTTP POST request with orga and eid parameters
-        s: Event slug string
+        request: HTTP POST request containing orga and eid parameters
+        s: Event slug string identifying the event
 
     Returns:
-        JSON response with available factions list
+        JsonResponse: JSON response with available factions list or error status
+            - Success: {"res": [[faction_id, faction_name], ...]}
+            - Error: {"res": "ko"}
+
+    Raises:
+        Http404: If request method is not POST
     """
+    # Validate request method - only POST allowed
     if not request.method == "POST":
         return Http404()
 
+    # Get event context from slug
     ctx = get_event_run(request, s)
 
+    # Get all factions for this event, ordered by number
     ctx["list"] = ctx["event"].get_elements(Faction).order_by("number")
 
+    # Filter by selectable factions if not orga user
     orga = int(request.POST.get("orga", "0"))
     if not orga:
         ctx["list"] = ctx["list"].filter(selectable=True)
 
+    # Exclude factions already assigned to character if eid provided
     eid = int(request.POST.get("eid", "0"))
     if eid:
+        # Get character by ID and validate existence
         chars = ctx["event"].get_elements(Character).filter(pk=int(eid))
         if not chars:
             return JsonResponse({"res": "ko"})
+
+        # Get list of faction IDs already assigned to this character
         taken_factions = chars.first().factions_list.values_list("id", flat=True)
         ctx["list"] = ctx["list"].exclude(pk__in=taken_factions)
 
+    # Convert queryset to list of tuples (id, name) for JSON response
     res = [(el.id, str(el)) for el in ctx["list"]]
     return JsonResponse({"res": res})
 
@@ -556,36 +570,58 @@ def orga_version(request, s, nm, num):
 
 
 @login_required
-def orga_reading(request, s):
+def orga_reading(request: HttpRequest, s: str) -> HttpResponse:
     """Display all writing elements for organizer reading/review.
 
+    This function retrieves and displays all writing elements (characters, plots,
+    factions, etc.) for an event organizer to read and review. It checks permissions
+    and filters elements based on enabled features.
+
     Args:
-        request: HTTP request object
-        s: Event slug string
+        request (HttpRequest): The HTTP request object containing user and session data
+        s (str): Event slug string used to identify the specific event
 
     Returns:
-        Rendered reading.html template with all writing elements
+        HttpResponse: Rendered reading.html template with context containing all
+                     writing elements available for review
+
+    Raises:
+        PermissionDenied: If user lacks organizer reading permissions for the event
     """
+    # Check user permissions for organizer reading access
     ctx = check_event_permission(request, s, "orga_reading")
 
+    # Define text fields that need cache retrieval for performance
     text_fields = ["teaser", "text"]
 
+    # Initialize list to store all writing elements
     ctx["alls"] = []
 
+    # Get mapping of model names to their corresponding features
     mapping = _get_writing_mapping()
 
+    # Iterate through all writing element types to collect enabled ones
     for typ in [Character, Plot, Faction, Quest, Trait, Prologue, SpeedLarp]:
+        # Get model name from Django model metadata
         # noinspection PyUnresolvedReferences, PyProtectedMember
         model_name = typ._meta.model_name
+
+        # Skip this type if its feature is not enabled for the event
         if mapping.get(model_name) not in ctx["features"]:
             continue
 
+        # Retrieve all elements of this type for the current event
         ctx["list"] = ctx["event"].get_elements(typ)
+
+        # Cache text fields for performance optimization
         retrieve_cache_text_field(ctx, text_fields, typ)
+
+        # Process each element: set display type and generate view URL
         for el in ctx["list"]:
             el.type = _(model_name)
             el.url = reverse(f"orga_{model_name}s_view", args=[ctx["run"].get_slug(), el.id])
 
+        # Add all elements of this type to the combined list
         ctx["alls"].extend(ctx["list"])
 
     return render(request, "larpmanager/orga/reading.html", ctx)

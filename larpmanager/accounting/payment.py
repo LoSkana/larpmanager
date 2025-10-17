@@ -26,6 +26,7 @@ from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
+from django.forms import Form
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
@@ -108,36 +109,51 @@ def unique_invoice_cod(length=16):
     raise ValueError("Too many attempts to generate the code")
 
 
-def set_data_invoice(request, ctx, invoice, form, assoc_id):
+def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, form: Form, assoc_id: int) -> None:
     """Set invoice data from form submission.
 
+    Updates the invoice object with appropriate causal text based on payment type
+    and applies special formatting if configured for the association.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary
-        invoice: PaymentInvoice instance to update
-        form: Form containing invoice data
-        assoc_id: Association instance ID
+        request: Django HTTP request object containing user information
+        ctx: Context dictionary with registration, year, or collection data
+        invoice: PaymentInvoice instance to update with causal information
+        form: Form containing cleaned invoice data (used for donations)
+        assoc_id: Association instance ID for configuration lookup
+
+    Returns:
+        None: Function modifies the invoice object in place
     """
+    # Get the real display name of the current user
     member_real = request.user.member.display_real()
+
+    # Handle registration payment type
     if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
             "user": member_real,
             "event": str(ctx["reg"].run),
             "number": ctx["reg"].num_payments,
         }
+        # Apply custom registration reason if applicable
         _custom_reason_reg(ctx, invoice, member_real)
 
+    # Handle membership payment type
     elif invoice.typ == PaymentType.MEMBERSHIP:
         invoice.causal = _("Membership fee of %(user)s for %(year)s") % {
             "user": member_real,
             "year": ctx["year"],
         }
+
+    # Handle donation payment type
     elif invoice.typ == PaymentType.DONATE:
         descr = form.cleaned_data["descr"]
         invoice.causal = _("Donation of %(user)s, with reason: '%(reason)s'") % {
             "user": member_real,
             "reason": descr,
         }
+
+    # Handle collection payment type
     elif invoice.typ == PaymentType.COLLECTION:
         invoice.idx = ctx["coll"].id
         invoice.causal = _("Collected contribution of %(user)s for %(recipient)s") % {
@@ -145,6 +161,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc_id):
             "recipient": ctx["coll"].display_member(),
         }
 
+    # Apply special code prefix if configured for this association
     if get_assoc_config(assoc_id, "payment_special_code", False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
@@ -518,34 +535,55 @@ def process_refund_request_status_change(refund_request):
     acc.save()
 
 
-def process_collection_status_change(collection):
+def process_collection_status_change(collection: Collection) -> None:
     """Update payment collection status and metadata.
 
-    Args:
-        collection: Collection instance being updated
+    Creates an accounting item credit when a collection's status changes from
+    any status to PAYED. This function is idempotent and safe to call multiple
+    times on the same collection.
 
-    Side effects:
-        Creates accounting item credit when collection status changes to PAYED
+    Args:
+        collection (Collection): Collection instance being updated. Must have
+            pk, status, assoc_id, member_id, run_id, total, and organizer attributes.
+
+    Returns:
+        None
+
+    Side Effects:
+        Creates an AccountingItemOther credit entry when collection status
+        changes to PAYED for the first time.
+
+    Note:
+        Function returns early if collection has no primary key or if the
+        previous status was already PAYED to prevent duplicate credits.
     """
+    # Early return if collection hasn't been saved to database yet
     if not collection.pk:
         return
 
+    # Attempt to fetch the previous state of the collection
     try:
         prev = Collection.objects.get(pk=collection.pk)
     except Exception:
+        # If we can't fetch previous state, safely return to avoid errors
         return
 
+    # Skip processing if collection was already marked as PAYED
     if prev.status == CollectionStatus.PAYED:
         return
 
+    # Only proceed if current status is PAYED (status change occurred)
     if collection.status != CollectionStatus.PAYED:
         return
 
+    # Create accounting credit item for the newly paid collection
     acc = AccountingItemOther()
     acc.assoc_id = collection.assoc_id
     acc.member_id = collection.member_id
     acc.run_id = collection.run_id
     acc.value = collection.total
+
+    # Set the accounting item type to credit and add descriptive text
     acc.oth = OtherChoices.CREDIT
     acc.descr = f"Collection of {collection.organizer}"
     acc.save()

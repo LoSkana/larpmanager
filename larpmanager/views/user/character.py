@@ -88,73 +88,99 @@ def character(request, s, num):
     return _character_sheet(request, ctx)
 
 
-def _character_sheet(request, ctx):
+def _character_sheet(request: HttpRequest, ctx: dict) -> HttpResponse:
     """Display character sheet with visibility and approval checks.
 
+    This function handles the display of character sheets with proper visibility
+    checks, approval validation, and contextual data preparation based on user
+    permissions and character settings.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with event, run, and character data
+        request: Django HTTP request object containing user session and metadata
+        ctx: Context dictionary containing event, run, character data and permissions
 
     Returns:
-        HttpResponse: Rendered character sheet or redirect
+        HttpResponse: Rendered character sheet template or redirect to gallery
+
+    Raises:
+        Redirect: When character visibility rules are violated or access is denied
     """
+    # Enable screen mode for character sheet display
     ctx["screen"] = True
 
+    # Check if characters are visible to regular users (non-staff)
     if "check" not in ctx and not ctx["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
         return redirect("gallery", s=ctx["run"].get_slug())
 
+    # Verify individual character visibility settings
     if "check" not in ctx and ctx["char"]["hide"]:
         messages.warning(request, _("Character not visible"))
         return redirect("gallery", s=ctx["run"].get_slug())
 
+    # Determine access level and load appropriate character data
     show_private = "check" in ctx
     if show_private:
+        # Load full character data for staff/admin users
         get_character_sheet(ctx)
         get_character_relationships(ctx)
         ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
         check_missing_mandatory(ctx)
     else:
+        # Load only visible elements for regular users
         ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
 
+    # Load casting details and preferences if applicable
     casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
+    # Set character approval configuration for template rendering
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return render(request, "larpmanager/event/character.html", ctx)
 
 
-def character_external(request, s, code):
+def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
     """Display character sheet via external access token.
 
+    This function provides external access to character sheets when enabled for an event.
+    It validates the access token and returns the character sheet view.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
-        code: External access token for character
+        request: Django HTTP request object containing user session and metadata
+        s: Event slug identifier used to locate the specific event
+        code: External access token for character authentication
 
     Returns:
-        Character sheet view or 404 if access not enabled or invalid code
+        HttpResponse: Character sheet view rendered for the authenticated character
 
     Raises:
-        Http404: If external access is disabled or token is invalid
+        Http404: If external access is disabled for the event or if the provided
+                access token is invalid or doesn't match any character
     """
+    # Get event and run context from the provided slug
     ctx = get_event_run(request, s)
 
+    # Check if external access feature is enabled for this event
     if not ctx["event"].get_config("writing_external_access", False):
         raise Http404("external access not active")
 
+    # Attempt to retrieve character using the provided access token
     try:
         char = ctx["event"].get_elements(Character).get(access_token=code)
     except ObjectDoesNotExist as err:
         raise Http404("invalid code") from err
 
+    # Load all cached event data including characters
     get_event_cache_all(ctx)
+
+    # Verify character exists in the cached character list
     if char.number not in ctx["chars"]:
         messages.warning(request, _("Character not found"))
         return redirect("/")
 
+    # Populate context with character data for template rendering
     ctx["char"] = ctx["chars"][char.number]
     ctx["character"] = char
     ctx["check"] = 1
@@ -176,37 +202,55 @@ def character_your_link(ctx, char, p=None):
 
 
 @login_required
-def character_your(request, s, p=None):
+def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
     """Display user's character information.
 
+    Shows the character information page for the authenticated user. If the user has
+    only one character, redirects directly to that character's page. If multiple
+    characters exist, displays a selection list.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        p: Optional character parameter
+        request: HTTP request object containing user authentication and session data
+        s: Event slug identifier for the specific event
+        p: Optional character parameter for additional filtering or display options
 
     Returns:
-        HttpResponse: Character template, character list, or redirect if no characters
+        HttpResponse: Rendered character template, character selection list, or
+                     redirect response if no characters are found
+
+    Raises:
+        Redirect: To home page if user has no assigned characters for the event
     """
+    # Get event and run context with signup and status validation
     ctx = get_event_run(request, s, signup=True, status=True)
 
+    # Retrieve all registration character relationships for this run
+    # Use select_related to optimize database queries for character data
     rcrs = list(ctx["run"].reg.rcrs.select_related("character").all())
 
+    # Handle case where user has no characters assigned to this event
     if not rcrs:
         messages.error(request, _("You don't have a character assigned for this event") + "!")
         return redirect("home")
 
+    # If user has exactly one character, redirect directly to character page
     if len(rcrs) == 1:
         char = rcrs[0].character
         url = character_your_link(ctx, char, p)
         return HttpResponseRedirect(url)
 
+    # Build character selection list for multiple characters
+    # Create URLs and display names for each character option
     ctx["urls"] = []
     for el in rcrs:
         url = character_your_link(ctx, el.character, p)
+        # Use custom name if available, otherwise use character's default name
         char = el.character.name
         if el.custom_name:
             char = el.custom_name
         ctx["urls"].append((char, url))
+
+    # Render character selection template with context data
     return render(request, "larpmanager/event/character/your.html", ctx)
 
 
@@ -562,42 +606,63 @@ def character_assign(request, s, num):
 
 
 @login_required
-def character_abilities(request, s, num):
+def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
     """
     Display character abilities with available and current abilities organized by type.
 
+    This view handles both GET requests (displaying abilities) and POST requests
+    (saving ability changes). It organizes abilities by type and provides undo
+    functionality for ability modifications.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        num: Character number
+        request: The HTTP request object containing user data and method info
+        s: The event slug identifier for the current event
+        num: The character number/ID to display abilities for
 
     Returns:
-        HttpResponse: Rendered character abilities template
+        HttpResponse: Rendered template with character abilities data, or redirect
+                     after successful POST operation
+
+    Raises:
+        Http404: If character or event is not found (via check_char_abilities)
+        PermissionDenied: If user lacks permission to view character abilities
     """
+    # Initialize context with character and permission checks
     ctx = check_char_abilities(request, s, num)
 
+    # Build available abilities dictionary organized by ability type
     ctx["available"] = {}
     for ability in get_available_ability_px(ctx["character"]):
+        # Create type entry if it doesn't exist
         if ability.typ_id not in ctx["available"]:
             ctx["available"][ability.typ_id] = {"name": ability.typ.name, "order": ability.typ.id, "list": {}}
+        # Add ability with name and cost to the type's list
         ctx["available"][ability.typ_id]["list"][ability.id] = f"{ability.name} - {ability.cost}"
 
+    # Build current character abilities organized by type name
     ctx["sheet_abilities"] = {}
     for el in get_current_ability_px(ctx["character"]):
+        # Create type list if it doesn't exist
         if el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
+        # Add ability to the type's list
         ctx["sheet_abilities"][el.typ.name].append(el)
 
+    # Handle POST request for saving ability changes
     if request.method == "POST":
         _save_character_abilities(ctx, request)
+        # Redirect to prevent duplicate submissions
         return redirect(request.path_info)
 
+    # Create ordered list of available types for template rendering
     ctx["type_available"] = {
         typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
     }
 
+    # Add undo functionality for recent ability changes
     ctx["undo_abilities"] = get_undo_abilities(request, ctx, ctx["character"])
 
+    # Render the abilities template with all context data
     return render(request, "larpmanager/event/character/abilities.html", ctx)
 
 
@@ -710,37 +775,59 @@ def get_undo_abilities(request, ctx, char, new_ability_id=None):
 
 
 @login_required
-def character_relationships(request, s, num):
+def character_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
     """
     Display character relationships with other characters in the event.
 
+    This function retrieves and displays all relationships that a character has
+    with other characters in the same event run. It handles missing characters
+    gracefully and calculates font sizes based on relationship text length.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        num: Character number
+        request: HTTP request object containing user session and data
+        s: Event slug identifier for URL routing
+        num: Character number to display relationships for
 
     Returns:
-        HttpResponse: Rendered character relationships template
+        HttpResponse: Rendered template showing character relationships with
+                     relationship text and dynamically sized fonts
+
+    Raises:
+        Http404: If event, run, or character access is denied
+        PermissionDenied: If user lacks permission to view character
     """
+    # Get event context and validate user access to event and character
     ctx = get_event_run(request, s, status=True, signup=True)
     get_char_check(request, ctx, num, True)
+
+    # Load all cached event data for performance
     get_event_cache_all(ctx)
 
+    # Initialize relationships list in context
     ctx["rel"] = []
+
+    # Query player relationships for the current character's player in this run
     que = PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
         reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
     )
+
+    # Process each relationship and build display data
     for tg_num, text in que.values_list("target__number", "text"):
+        # Try to get character data from cache first for performance
         if "chars" in ctx and tg_num in ctx["chars"]:
             show = ctx["chars"][tg_num]
         else:
+            # Fallback to database query if not in cache
             try:
                 ch = Character.objects.select_related("event", "player").get(event=ctx["event"], number=tg_num)
                 show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
+                # Skip relationships to non-existent characters
                 continue
 
+        # Add relationship text and calculate dynamic font size
         show["text"] = text
+        # Font size decreases as text length increases (min ~80%, max 100%)
         show["font_size"] = int(100 - ((len(text) / 50) * 4))
         ctx["rel"].append(show)
 

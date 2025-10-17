@@ -71,32 +71,50 @@ def clear_registration_accounting_cache(run_id):
 def _get_accounting_context(run, member_filter=None):
     """Get the context data needed for accounting calculations.
 
+    This function retrieves and organizes data required for accounting operations
+    including event features, registration tickets, and payment cache information.
+
     Args:
-        run: Run instance
-        member_filter: Optional member ID to filter payments for
+        run: Run instance representing the event run
+        member_filter (int, optional): Member ID to filter payments for specific member.
+            If None, includes all members. Defaults to None.
 
     Returns:
-        tuple: (features, reg_tickets, cache_aip)
+        tuple: A 3-tuple containing:
+            - features (dict): Event features configuration
+            - reg_tickets (dict): Registration tickets indexed by ticket ID
+            - cache_aip (dict): Aggregated payment data by member ID
     """
+    # Retrieve event features and ensure it's a dictionary
     features = get_event_features(run.event_id)
     if not isinstance(features, dict):
         features = {}
 
-    # Get all tickets for this event
+    # Get all registration tickets for this event, ordered by price (highest first)
     reg_tickets = {}
     for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
         reg_tickets[t.id] = t
 
-    # Build cache for token/credit payments
+    # Build cache for token/credit payments if feature is enabled
     cache_aip = {}
     if "token_credit" in features:
+        # Query accounting item payments for this run
         que = AccountingItemPayment.objects.filter(reg__run=run)
+
+        # Apply member filter if specified
         if member_filter:
             que = que.filter(member_id=member_filter)
+
+        # Filter for token and credit payments only
         que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+
+        # Aggregate payment data by member and payment type
         for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
+            # Initialize member entry if not exists
             if el[0] not in cache_aip:
                 cache_aip[el[0]] = {"total": 0}
+
+            # Add to total and payment type specific amounts
             cache_aip[el[0]]["total"] += el[1]
             if el[2] not in cache_aip[el[0]]:
                 cache_aip[el[0]][el[2]] = 0

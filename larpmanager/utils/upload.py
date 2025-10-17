@@ -100,18 +100,28 @@ def go_upload(request, ctx, form):
         return writing_load(request, ctx, form)
 
 
-def _read_uploaded_csv(uploaded_file):
+def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
     """Read CSV file with multiple encoding fallbacks.
 
+    Attempts to read a CSV file using various character encodings to handle
+    files from different sources and systems. Falls back through common
+    encodings until successful parsing or all options are exhausted.
+
     Args:
-        uploaded_file: Django uploaded file object
+        uploaded_file: Django uploaded file object containing CSV data.
 
     Returns:
-        pandas.DataFrame or None: Parsed CSV data or None if failed
+        pandas.DataFrame or None: Parsed CSV data with all columns as strings,
+            or None if parsing failed with all attempted encodings.
+
+    Raises:
+        None: All exceptions are caught and handled internally.
     """
+    # Early return if no file provided
     if not uploaded_file:
         return None
 
+    # Define encoding priority list - most common first
     encodings = [
         "utf-8",
         "utf-8-sig",
@@ -125,16 +135,24 @@ def _read_uploaded_csv(uploaded_file):
         "cp850",
     ]
 
+    # Try each encoding until one succeeds
     for encoding in encodings:
         try:
+            # Reset file pointer to beginning
             uploaded_file.seek(0)
+
+            # Decode file content with current encoding
             decoded = uploaded_file.read().decode(encoding)
             text_io = io.StringIO(decoded)
+
+            # Parse CSV with automatic delimiter detection
             return pd.read_csv(text_io, encoding=encoding, sep=None, engine="python", dtype=str)
         except Exception as err:
+            # Log error and continue to next encoding
             print(err)
             continue
 
+    # Return None if all encodings failed
     return None
 
 
@@ -494,20 +512,32 @@ def _assign_choice_answer(element, field, value, questions, logs, is_registratio
                 WritingChoice.objects.create(element_id=element.id, question_id=question["id"], option_id=option_id)
 
 
-def element_load(request, ctx, row, questions):
+def element_load(request, ctx: dict, row: dict, questions: list) -> str:
     """Load generic element data from CSV row for bulk import.
 
     Processes element creation or updates with field validation,
     question processing, and proper logging for various element types.
+
+    Args:
+        request: HTTP request object containing user information
+        ctx: Context dictionary with field_name, typ, event, and fields
+        row: CSV row data as dictionary with field names and values
+        questions: List of questions for element processing
+
+    Returns:
+        Status message string indicating success/failure and operation details
     """
+    # Validate that the required field name exists in the CSV row
     field_name = ctx["field_name"].lower()
     if field_name not in row:
         return "ERR - There is no name in fields"
 
+    # Extract element name and determine the appropriate model class
     name = row[field_name]
     typ = QuestionApplicable.get_applicable(ctx["typ"])
     writing_cls = QuestionApplicable.get_applicable_inverse(typ)
 
+    # Try to find existing element or create new one
     created = False
     try:
         element = writing_cls.objects.get(event=ctx["event"], name__iexact=name)
@@ -515,16 +545,21 @@ def element_load(request, ctx, row, questions):
         element = writing_cls.objects.create(event=ctx["event"], name=name)
         created = True
 
+    # Initialize logging for field processing errors
     logs = []
 
+    # Normalize field names to lowercase for consistent processing
     ctx["fields"] = {key.lower(): content for key, content in ctx["fields"].items()}
 
+    # Process each field in the CSV row and update element
     for field, value in row.items():
         _writing_load_field(ctx, element, field, value, questions, logs)
 
+    # Save the element and log the operation
     element.save()
     save_log(request.user.member, writing_cls, element)
 
+    # Return appropriate status message based on processing results
     if logs:
         return "KO - " + ",".join(logs)
 
@@ -808,42 +843,68 @@ def _get_mappings(is_registration):
     return mappings
 
 
-def _options_load(ctx, row, questions, is_registration):
+def _options_load(ctx: dict, row: dict, questions: dict, is_registration: bool) -> str:
     """Load question options from CSV row for bulk import.
 
     Creates or updates question options with proper validation,
     ordering, and association with the correct question type.
+
+    Args:
+        ctx: Context dictionary containing import configuration
+        row: CSV row data as dictionary with column headers as keys
+        questions: Dictionary mapping question names to question IDs
+        is_registration: Boolean flag indicating if this is for registration
+
+    Returns:
+        Status message string indicating success/failure of the operation
+        Format: "OK - Created/Updated {name}" or "ERR - {error_description}"
     """
+    # Validate required fields are present in the CSV row
     for field in ["name", "question"]:
         if field not in row:
             return f"ERR - column {field} missing"
 
+    # Extract and validate the option name
     name = row["name"]
     if not name:
         return "ERR - empty name"
 
+    # Find the associated question by name (case-insensitive)
     question = row["question"].lower()
     if question not in questions:
         return "ERR - question not found"
     question_id = questions[question]
 
+    # Get or create the option instance
     created, instance = _get_option(ctx, is_registration, name, question_id)
 
+    # Process each field in the CSV row
     for field, value in row.items():
+        # Skip empty or NaN values
         if not value or pd.isna(value):
             continue
         new_value = value
+
+        # Skip fields that are already processed
         if field in ["question", "name"]:
             continue
+
+        # Convert numeric fields to appropriate types
         if field in ["max_available", "price"]:
             new_value = int(new_value)
+
+        # Handle requirements field with special processing
         if field == "requirements":
             _assign_requirements(ctx, instance, [], value)
             continue
+
+        # Set the field value on the instance
         setattr(instance, field, new_value)
 
+    # Save the instance to database
     instance.save()
 
+    # Return appropriate success message
     if created:
         return f"OK - Created {name}"
     else:

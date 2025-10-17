@@ -78,15 +78,22 @@ class RegistrationForm(BaseRegistrationForm):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-                     Expected to contain 'params' with 'run' key.
+                     Expected to contain 'params' with 'run' key containing:
+                     - run: Run instance for the event registration
+                     - event: Event instance (accessed via run.event)
 
         Raises:
             KeyError: If 'params' or 'run' key is missing from kwargs.
+
+        Note:
+            The form handles waiting list placement, quota management, payment
+            processing, and dynamic question generation based on event configuration.
         """
         # Call parent constructor with all provided arguments
         super().__init__(*args, **kwargs)
 
         # Initialize core form state variables for tracking form data
+        # These store form configuration and user selections
         self.questions = []
         self.tickets_map = {}
         self.profiles = {}
@@ -94,17 +101,21 @@ class RegistrationForm(BaseRegistrationForm):
         self.ticket = None
 
         # Extract run and event objects from parameters for form configuration
+        # These provide context for all subsequent form setup operations
         run = self.params["run"]
         event = run.event
         self.event = event
 
         # Get current registration counts for quota calculations and availability checks
+        # This data determines ticket availability and waiting list status
         reg_counts = get_reg_counts(run)
 
         # Initialize ticket selection field and retrieve help text for user guidance
+        # Creates the primary ticket selection interface with availability info
         ticket_help = self.init_ticket(event, reg_counts, run)
 
         # Determine if registration should be placed in waiting list based on instance or run status
+        # Checks existing registration status or current run capacity
         self.waiting_check = (
             self.instance
             and self.instance.ticket
@@ -114,20 +125,25 @@ class RegistrationForm(BaseRegistrationForm):
         )
 
         # Initialize quota management system and additional registration options
+        # Sets up capacity limits and optional registration features
         self.init_quotas(event, run)
         self.init_additionals()
 
         # Setup payment-related form fields including pricing and surcharges
+        # Configures payment options and calculates total costs
         self.init_pay_what(run)
         self.init_surcharge(event)
 
         # Add dynamic registration questions based on event configuration and requirements
+        # Creates custom form fields for event-specific data collection
         self.init_questions(event, reg_counts)
 
         # Setup friend referral system functionality for social registration features
+        # Enables users to invite friends during registration process
         self.init_bring_friend()
 
         # Append additional help text to ticket selection field for complete user guidance
+        # Combines base help text with dynamic availability information
         self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket):
@@ -255,15 +271,23 @@ class RegistrationForm(BaseRegistrationForm):
         else:
             self.initial["pay_what"] = 0
 
-    def init_quotas(self, event, run):
+    def init_quotas(self, event: Event, run: Run) -> None:
         """Initialize payment quotas field based on event configuration.
 
+        Creates quota choices based on available RegistrationQuota objects for the event,
+        considering time constraints and current instance state. Sets up the quotas form
+        field with appropriate choices and widget configuration.
+
         Args:
-            event: Event instance
-            run: Run instance
+            event: Event instance containing quota configurations
+            run: Run instance with status and end date information
+
+        Returns:
+            None: Modifies self.fields and self.initial in place
         """
         quota_chs = []
 
+        # Check if quota feature is enabled and run is not in waiting status
         if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
             qt_label = [
                 _("Single payment"),
@@ -272,52 +296,75 @@ class RegistrationForm(BaseRegistrationForm):
                 _("Four quotas"),
                 _("Five quotas"),
             ]
+
+            # Calculate days difference between today and run end date
             dff = get_time_diff_today(run.end)
+
+            # Process each available quota option for the event
             for el in RegistrationQuota.objects.filter(event=event).order_by("quotas"):
+                # Include quota if sufficient time remains or if it's the current instance quota
                 if dff > el.days_available or (self.instance and el.quotas == self.instance.quotas):
                     # Ensure quotas value is within valid range (1-5)
                     quota_index = int(el.quotas) - 1
                     if 0 <= quota_index < len(qt_label):
                         label = qt_label[quota_index]
+
+                        # Add surcharge information to label if applicable
                         if el.surcharge > 0:
                             label += f" ({el.surcharge}€)"
                         quota_chs.append((el.quotas, label))
 
+        # Set default quota option if no valid quotas were found
         if not quota_chs:
             quota_chs.append((1, _("Default")))
 
+        # Create the quotas form field with available choices
         self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs)
+
+        # Hide field if only one option available and set initial value
         if len(quota_chs) == 1:
             self.fields["quotas"].widget = forms.HiddenInput()
             self.initial["quotas"] = quota_chs[0][0]
+
+        # Set initial value for existing instances with quota data
         if self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
 
-    def init_ticket(self, event, reg_counts, run):
+    def init_ticket(self, event: Event, reg_counts: dict, run: Run) -> str:
         """Initialize ticket selection field with available options.
 
+        Creates a ChoiceField for ticket selection based on available tickets
+        for the given event and run, including ticket descriptions as help text.
+
         Args:
-            event: Event instance
-            reg_counts: Registration count data
-            run: Run instance
+            event: Event instance to get tickets for
+            reg_counts: Dictionary containing registration count data
+            run: Run instance associated with the event
 
         Returns:
-            str: Help text for ticket descriptions
+            HTML string containing formatted ticket descriptions for help text
         """
-        # check registration tickets options
+        # Get available tickets based on event, registration counts and run
         tickets = self.get_available_tickets(event, reg_counts, run)
 
-        # get ticket names / description
+        # Build ticket choices and collect descriptions for help text
         ticket_choices = []
         ticket_help = ""
+
+        # Process each available ticket to create form choices and help text
         for r in tickets:
+            # Generate formatted ticket name with pricing information
             name = r.get_form_text(run, cs=self.params["currency_symbol"])
             ticket_choices.append((r.id, name))
+
+            # Add ticket description to help text if available
             if r.description:
                 ticket_help += f"<p><b>{r.name}</b>: {r.description}</p>"
 
+        # Create the ticket selection field with available choices
         self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
 
+        # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = self.instance.ticket.id
         elif "ticket" in self.params and self.params["ticket"]:

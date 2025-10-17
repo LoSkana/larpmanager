@@ -171,41 +171,62 @@ def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):
         collect["profile"].append(reg.member_id)
 
 
-def deadlines_membership(collect, features, fees, memberships, now, reg, run, tolerance):
+def deadlines_membership(
+    collect: dict[str, list[int]],
+    features: dict[str, any],
+    fees: set[int],
+    memberships: dict[int, any],
+    now: datetime,
+    reg: any,
+    run: any,
+    tolerance: int,
+) -> None:
     """Check membership and fee deadlines for registration.
 
-    Args:
-        collect (dict): Dictionary to collect deadline violations
-        features (dict): Event features
-        fees (set): Set of member IDs who paid membership fee
-        memberships (dict): Member ID to membership mapping
-        now (datetime): Current datetime
-        reg: Registration instance
-        run: Run instance
-        tolerance (int): Tolerance days for deadlines
+    Evaluates membership status and fee payment deadlines for a given registration,
+    updating the collect dictionary with any violations found based on tolerance periods.
 
-    Side effects:
-        Updates collect with membership and fee deadline violations
+    Args:
+        collect: Dictionary to collect deadline violations, organized by violation type
+        features: Event features configuration dictionary
+        fees: Set of member IDs who have paid their membership fee
+        memberships: Mapping from member ID to membership instance
+        now: Current datetime for deadline calculations
+        reg: Registration instance being evaluated
+        run: Run instance containing event start date
+        tolerance: Number of days tolerance allowed for deadlines
+
+    Side Effects:
+        Updates collect dictionary with membership and fee deadline violations
+        under keys: 'memb', 'memb_del', 'fee', 'fee_del'
     """
+    # Get membership for the registered member
     membership = memberships.get(reg.member_id)
     if not membership:
         return
 
+    # Check if membership is in incomplete states (empty, joined, uploaded)
     if membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
+        # Calculate days elapsed since registration creation
         elapsed = now.date() - reg.created.date()
+        # Classify as delayed if beyond tolerance, otherwise normal violation
         key = "memb_del" if elapsed.days > tolerance else "memb"
         collect[key].append(reg.member_id)
         return
 
+    # Skip further checks if membership is submitted (in review)
     if membership.status in [MembershipStatus.SUBMITTED]:
         return
 
+    # Determine if fee checking is required (not LAOG event and current year)
     check_fee = "laog" not in features and run.start.year == now.year
     if check_fee and reg.member_id not in fees:
-        # if we are now *tolerance* days away from the larp start
+        # Check if we're within tolerance days of the event start
         if now.date() + timedelta(days=tolerance) > run.start:
+            # Event is imminent - mark as delayed fee violation
             collect["fee_del"].append(reg.member_id)
         else:
+            # Event is still far enough - mark as regular fee violation
             collect["fee"].append(reg.member_id)
 
 

@@ -25,7 +25,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.forms import ModelForm, forms
+from django.forms import Form, ModelForm, forms
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -186,39 +186,62 @@ def check_assoc(el, ctx, afield=None):
         raise Http404("not your association")
 
 
-def user_edit(request, ctx, form_type, nm, eid):
+def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: int) -> bool:
     """Generic user data editing with validation.
 
+    Handles both GET and POST requests for editing user data. On POST, validates
+    the form and saves the instance. Supports deletion functionality when
+    'delete' parameter is set to '1' in POST data.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with model data
-        form_type: Form class to use for editing
-        nm: Name key for the model instance in context
-        eid: Entity ID for editing
+        request: HTTP request object containing method and POST data
+        ctx: Context dictionary containing model data and form instance
+        form_type: Django form class to use for data validation and editing
+        nm: Name key for accessing the model instance in context dictionary
+        eid: Entity ID for editing, used for form numbering (0 for new instances)
 
     Returns:
-        bool: True if form was successfully saved, False if form needs display
+        True if form was successfully processed and saved, False if form
+        validation failed or GET request requires form display.
+
+    Side Effects:
+        - Adds success message to request on successful save
+        - Logs the operation using save_log function
+        - Deletes instance if delete flag is set
+        - Updates ctx with 'saved', 'form', 'num', and optionally 'name' keys
     """
     if request.method == "POST":
+        # Initialize form with POST data and files, bind to existing instance
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
 
         if form.is_valid():
+            # Save the form and get the updated instance
             p = form.save()
             messages.success(request, _("Operation completed") + "!")
 
+            # Check if delete operation was requested
             dl = "delete" in request.POST and request.POST["delete"] == "1"
+
+            # Log the operation (save or delete)
             save_log(request.user.member, form_type, p, dl)
+
+            # Delete the instance if deletion was requested
             if dl:
                 p.delete()
 
+            # Store saved instance in context for template access
             ctx["saved"] = p
 
             return True
     else:
+        # Initialize empty form for GET request, bind to existing instance
         form = form_type(instance=ctx[nm], ctx=ctx)
 
+    # Add form and entity ID to context for template rendering
     ctx["form"] = form
     ctx["num"] = eid
+
+    # Add string representation of instance name for existing entities
     if eid != 0:
         ctx["name"] = str(ctx[nm])
 
@@ -521,32 +544,46 @@ def writing_edit_cache_key(eid, typ):
     return f"orga_edit_{eid}_{typ}"
 
 
-def writing_edit_save_ajax(form, request, ctx):
+def writing_edit_save_ajax(form: Form, request: HttpRequest, ctx: dict) -> "JsonResponse":
     """Handle AJAX save requests for writing elements with locking validation.
 
+    This function processes AJAX requests to save writing elements while validating
+    user permissions and checking for editing conflicts through a token-based
+    locking mechanism.
+
     Args:
-        form: Form instance to save
-        request: HTTP request object
-        ctx: Context dictionary
+        form: Django form instance containing the data to save
+        request: HTTP request object containing POST data and user information
+        ctx: Context dictionary for additional data (currently unused)
 
     Returns:
-        JSON response with success/warning status
+        JsonResponse: JSON response containing either success status or warning message
+            - On success: {"res": "ok"}
+            - On warning: {"res": "ok", "warn": "warning message"}
     """
+    # Initialize default success response
     res = {"res": "ok"}
+
+    # Superusers bypass all validation checks
     if request.user.is_superuser:
         return JsonResponse(res)
 
+    # Extract and validate element ID from POST data
     eid = int(request.POST["eid"])
     if eid <= 0:
         return res
 
+    # Get element type and editing token for conflict detection
     tp = request.POST["type"]
     token = request.POST["token"]
+
+    # Check for editing conflicts using token-based locking
     msg = writing_edit_working_ticket(request, tp, eid, token)
     if msg:
         res["warn"] = msg
         return JsonResponse(res)
 
+    # Save form data as temporary version
     p = form.save(commit=False)
     p.temp = True
     p.save()

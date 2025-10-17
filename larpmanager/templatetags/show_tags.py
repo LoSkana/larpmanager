@@ -20,6 +20,7 @@
 
 import os
 import re
+from typing import Union
 
 from allauth.utils import get_request_param
 from django import template
@@ -34,6 +35,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
+from larpmanager.models.event import Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.common import html_clean
@@ -266,33 +268,51 @@ def go_character(context: dict, search: str, number: int, tx: str, run, go_toolt
     return tx.replace(search, lk)
 
 
-def _remove_unimportant_prefix(text):
+def _remove_unimportant_prefix(text: str) -> str:
     """Remove first occurrence of $unimportant from text and clean up empty HTML tags at start.
 
+    This function removes the first occurrence of the '$unimportant' marker from the input text.
+    If the marker was found and removed, it then proceeds to clean up any empty HTML tags
+    and whitespace characters that appear at the beginning of the resulting text.
+
     Args:
-        text (str): Text that may contain $unimportant prefix
+        text: Text that may contain $unimportant prefix. Can be None or empty string.
 
     Returns:
-        str: Text with first occurrence of $unimportant removed and empty HTML tags cleaned up
+        The processed text with $unimportant removed and empty HTML tags cleaned up.
+        Returns the original text if it's None or empty, or if no $unimportant marker was found.
+
+    Example:
+        >>> _remove_unimportant_prefix("$unimportant<p></p>Hello world")
+        "Hello world"
+        >>> _remove_unimportant_prefix("Regular text")
+        "Regular text"
     """
+    # Return early if text is None or empty
     if not text:
         return text
 
+    # Store original text to check if replacement occurred
     original_text = text
+    # Remove first occurrence of $unimportant marker
     text = text.replace("$unimportant", "", 1)
 
-    # If $unimportant was replaced, remove empty HTML tags at the start
+    # Only clean up empty tags if $unimportant was actually replaced
     if text != original_text:
-        # Remove empty HTML tags and whitespace from the beginning
+        # Iteratively remove empty HTML tags and whitespace from the beginning
         while True:
+            # Remove leading whitespace before checking for empty tags
             stripped = text.lstrip()
+
             # Match empty HTML tags like <p></p>, <div></div>, <span></span>, etc.
             # Also match \r, \n, &nbsp; and other whitespace characters inside tags
             match = re.match(r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>", stripped)
+
+            # If empty tag found, remove it and continue loop
             if match:
-                # Remove the empty tag and continue
                 text = stripped[match.end() :]
             else:
+                # No more empty tags found, use stripped text and exit loop
                 text = stripped
                 break
 
@@ -300,18 +320,24 @@ def _remove_unimportant_prefix(text):
 
 
 @register.simple_tag(takes_context=True)
-def show_char(context, el, run, tooltip):
+def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool) -> str:
     """Template tag to process text and convert character references to links.
 
+    This function processes text content and converts character references (prefixed with
+    #, @, or ^) into clickable links. It also handles character tooltips and removes
+    unimportant tags from the processed text.
+
     Args:
-        context: Template context
-        el: Text element to process (string or dict with 'text' key)
-        run: Run instance for character lookup
-        tooltip (bool): Whether to include character tooltips
+        context: Template context dictionary containing rendering state
+        el: Text element to process - can be a string, dict with 'text' key, or None
+        run: Run instance used for character lookup and event context
+        tooltip: Whether to include character tooltips in generated links
 
     Returns:
-        str: Safe HTML with character references converted to links
+        Safe HTML string with character references converted to links and unimportant
+        tags removed
     """
+    # Extract text content from various input types
     if isinstance(el, dict) and "text" in el:
         tx = el["text"] + " "
     elif el is not None:
@@ -319,19 +345,22 @@ def show_char(context, el, run, tooltip):
     else:
         tx = ""
 
+    # Cache the maximum character number for this run's event to avoid repeated queries
     if "max_ch_number" not in context:
         context["max_ch_number"] = run.event.get_elements(Character).aggregate(Max("number"))["number__max"]
 
+    # Handle case where no characters exist in the event
     if not context["max_ch_number"]:
         context["max_ch_number"] = 0
 
-    # replace #XX (create relationships / count as character in faction / plot)
+    # Process character references in descending order to avoid partial matches
+    # #XX creates relationships, @XX counts as character in faction/plot, ^XX is simple reference
     for number in range(context["max_ch_number"], 0, -1):
         tx = go_character(context, f"#{number}", number, tx, run, tooltip)
         tx = go_character(context, f"@{number}", number, tx, run, tooltip)
         tx = go_character(context, f"^{number}", number, tx, run, tooltip, simple=True)
 
-    # replace unimportant tag - remove $unimportant prefix and clean up empty tags
+    # Clean up unimportant tags by removing $unimportant prefix and empty tags
     tx = _remove_unimportant_prefix(tx)
 
     return mark_safe(tx)
@@ -743,35 +772,52 @@ def get_char_profile(context, char):
 
 
 @register.simple_tag(takes_context=True)
-def get_login_url(context, provider, **params):
+def get_login_url(context: dict, provider: str, **params) -> str:
     """Template tag to generate OAuth login URL with parameters.
 
+    This function constructs a complete OAuth login URL by combining the provider's
+    login endpoint with query parameters. It handles redirect URLs, scope, and
+    authentication parameters while cleaning up empty values.
+
     Args:
-        context: Template context with request
-        provider (str): OAuth provider name
-        **params: Additional URL parameters
+        context: Template context dictionary containing the request object
+        provider: OAuth provider name (e.g., 'google', 'facebook')
+        **params: Additional URL parameters to include in the login URL
 
     Returns:
-        str: Complete login URL with query parameters
+        Complete login URL with properly encoded query parameters
+
+    Example:
+        >>> get_login_url(context, 'google', scope='email', process='redirect')
+        '/accounts/google/login/?scope=email&process=redirect&next=%2Fdashboard%2F'
     """
     request = context.get("request")
     query = dict(params)
+
+    # Extract and validate authentication-specific parameters
     auth_params = query.get("auth_params", None)
     scope = query.get("scope", None)
     process = query.get("process", None)
+
+    # Clean up empty string parameters to avoid cluttering the URL
     if scope == "":
         del query["scope"]
     if auth_params == "":
         del query["auth_params"]
+
+    # Handle redirect URL logic based on current request and process type
     if REDIRECT_FIELD_NAME not in query:
         redirect = get_request_param(request, REDIRECT_FIELD_NAME)
         if redirect:
             query[REDIRECT_FIELD_NAME] = redirect
         elif process == "redirect":
+            # Use current page as redirect target for redirect process
             query[REDIRECT_FIELD_NAME] = request.get_full_path()
     elif not query[REDIRECT_FIELD_NAME]:
+        # Remove redirect field if it exists but is empty
         del query[REDIRECT_FIELD_NAME]
 
+    # Construct the final URL with provider endpoint and encoded parameters
     url = reverse(provider + "_login")
     url = url + "?" + urlencode(query)
     return url

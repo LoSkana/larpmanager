@@ -76,14 +76,12 @@ class MyAuthForm(AuthenticationForm):
         """Initialize the form with custom widget configurations.
 
         Configures username and password fields with Bootstrap styling,
-        removes labels, and sets appropriate input attributes.
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
 
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None
         """
         super().__init__(*args, **kwargs)
 
@@ -231,27 +229,46 @@ class MyPasswordResetForm(PasswordResetForm):
 
     def send_mail(
         self,
-        subject_template_name,
-        email_template_name,
-        context,
-        from_email,
-        to_email,
-        html_email_template_name=None,
-    ):
+        subject_template_name: str,
+        email_template_name: str,
+        context: dict,
+        from_email: str,
+        to_email: str,
+        html_email_template_name: str | None = None,
+    ) -> None:
         """
         Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
+
+        Args:
+            subject_template_name: Template name for email subject
+            email_template_name: Template name for email body
+            context: Context dictionary for template rendering
+            from_email: Sender email address
+            to_email: Recipient email address
+            html_email_template_name: Optional HTML template name
+
+        Returns:
+            None
         """
+        # Render email subject from template and remove newlines
         subject = loader.render_to_string(subject_template_name, context)
         # Email subject *must not* contain newlines
         subject = "".join(subject.splitlines())
+
+        # Render email body from template
         body = loader.render_to_string(email_template_name, context)
 
+        # Extract association slug from domain and find association
         assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
         assoc = None
+
+        # If association slug exists, try to find association and update membership
         if assoc_slug:
             try:
                 assoc = Association.objects.get(slug=assoc_slug)
                 user = context["user"]
+
+                # Store password reset token in user membership
                 mb = get_user_membership(user.member, assoc.id)
                 mb.password_reset = f"{context['uid']}#{context['token']}"
                 mb.save()
@@ -259,8 +276,10 @@ class MyPasswordResetForm(PasswordResetForm):
                 # Invalid association slug - continue with None assoc
                 pass
 
+        # Log password reset attempt for debugging
         logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
 
+        # Send the email using custom mail function
         my_send_mail(subject, body, to_email, assoc)
 
     # ~ email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
@@ -890,13 +909,19 @@ class ExeProfileForm(MyForm):
             self.delete_field("fiscal_code")
 
     @staticmethod
-    def get_members_fields():
+    def get_members_fields() -> list[tuple[str, str, str]]:
         """
         Get available member fields for form configuration.
 
+        Retrieves all fields from the Member model, excluding system fields and
+        sensitive data fields that should not be configurable in forms.
+
         Returns:
-            list: List of tuples containing field information (name, verbose_name, help_text)
+            list[tuple[str, str, str]]: List of tuples containing field information
+                in the format (field_name, verbose_name, help_text)
         """
+        # Define fields to exclude from configuration options
+        # These are system fields or sensitive data that shouldn't be user-configurable
         skip = [
             "id",
             "deleted",
@@ -913,15 +938,23 @@ class ExeProfileForm(MyForm):
             "parent",
             "legal_gender",
         ]
-        choices = []
+
+        choices: list[tuple[str, str, str]] = []
+
+        # Iterate through all fields in the Member model
         # noinspection PyUnresolvedReferences,PyProtectedMember
         for f in Member._meta.get_fields():
+            # Filter only fields that belong to the Member model
             if not str(f).startswith("larpmanager.Member."):
                 continue
+
+            # Skip fields that are in the exclusion list
             if f.name in skip:
                 continue
 
+            # Add field information as tuple (name, verbose_name, help_text)
             choices.append((f.name, f.verbose_name, f.help_text))
+
         return choices
 
     def save(self, commit=True):

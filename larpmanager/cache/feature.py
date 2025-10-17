@@ -64,20 +64,31 @@ def get_assoc_features(assoc_id):
     return res
 
 
-def update_assoc_features(assoc_id):
+def update_assoc_features(assoc_id: int) -> dict[str, int]:
     """Update association feature cache from database.
 
+    Retrieves enabled features for an association and builds a cache dictionary
+    containing both database-stored features and configuration-based features.
+
     Args:
-        assoc_id (int): Association ID to update cache for
+        assoc_id: Association ID to update cache for
 
     Returns:
-        dict: Dictionary of enabled features including config-based features
+        Dictionary mapping feature slugs to enabled status (1 if enabled)
+
+    Raises:
+        No exceptions raised - ObjectDoesNotExist is handled gracefully
     """
     res = {}
     try:
+        # Get association object from database
         assoc = Association.objects.get(pk=assoc_id)
+
+        # Add all database-stored features to result
         for s in assoc.features.values_list("slug", flat=True):
             res[s] = 1
+
+        # Check calendar-related configuration features
         for sl in [
             "genre",
             "show_event",
@@ -89,14 +100,18 @@ def update_assoc_features(assoc_id):
             "visible",
             "tagline",
         ]:
+            # Add calendar features based on configuration
             if assoc.get_config("calendar_" + sl, False):
                 res[sl] = 1
 
+        # Check field-based features (safety and diet)
         for slug in ["safety", "diet"]:
+            # Enable if field is either mandatory or optional
             if slug in assoc.mandatory_fields or slug in assoc.optional_fields:
                 res[slug] = 1
 
     except ObjectDoesNotExist:
+        # Return empty dict if association doesn't exist
         pass
     return res
 

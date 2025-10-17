@@ -672,24 +672,35 @@ def clean(s):
     return s
 
 
-def _search_char_reg(ctx, char, js):
+def _search_char_reg(ctx: dict, char, js: dict) -> None:
     """
     Populate character search result with registration and player data.
 
+    This function extracts character and player information from registration data
+    and populates a JSON object for search results display.
+
     Args:
-        ctx: Context dictionary with run information
-        char: Character instance with registration data
-        js: JSON object to populate with search results
+        ctx : dict
+            Context dictionary containing run information and event data
+        char : Character
+            Character instance with associated registration data
+        js : dict
+            JSON object to populate with search results data
+
+    Returns: None -Modifies the js dictionary in place
     """
+    # Set character name, prioritizing custom name if available
     js["name"] = char.name
     if char.rcr and char.rcr.custom_name:
         js["name"] = char.rcr.custom_name
 
+    # Extract player information from registration
     js["player"] = char.reg.display_member()
     js["player_full"] = str(char.reg.member)
     js["player_id"] = char.reg.member.id
     js["first_aid"] = char.reg.member.first_aid
 
+    # Set profile image with fallback hierarchy: character custom -> member -> None
     if char.rcr.profile_thumb:
         js["player_prof"] = char.rcr.profile_thumb.url
         js["profile"] = char.rcr.profile_thumb.url
@@ -698,11 +709,12 @@ def _search_char_reg(ctx, char, js):
     else:
         js["player_prof"] = None
 
+    # Extract custom character attributes (pronoun, song, public, private notes)
     for s in ["pronoun", "song", "public", "private"]:
         if hasattr(char.rcr, "custom_" + s):
             js[s] = getattr(char.rcr, "custom_" + s)
 
-    # if the event has both cover and character created by user, use that as player profile
+    # Override profile with character cover if event supports both cover and user characters
     if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
         if char.cover:
             js["player_prof"] = char.thumb.url
@@ -713,32 +725,44 @@ def clear_messages(request):
         request._messages._queued_messages.clear()
 
 
-def _get_help_questions(ctx, request):
+def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
     """Retrieve and categorize help questions for the current association/run.
 
+    Fetches help questions filtered by association and optionally by run, then
+    categorizes them into open and closed questions based on their status and origin.
+
     Args:
-        ctx: Context dictionary containing association/run information
-        request: HTTP request object
+        ctx: Context dictionary containing association/run information.
+             Must include 'a_id' key, optionally includes 'run' key.
+        request: HTTP request object used to determine filtering behavior.
 
     Returns:
-        tuple: (closed_questions, open_questions) lists
+        A tuple containing two lists:
+        - closed_questions: List of closed or staff-originated questions
+        - open_questions: List of open user-originated questions
     """
+    # Filter questions by association ID
     base_qs = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
+
+    # Add run filter if run context exists
     if "run" in ctx:
         base_qs = base_qs.filter(run=ctx["run"])
 
+    # For non-POST requests, limit to questions from last 90 days
     if request.method != "POST":
         base_qs = base_qs.filter(created__gte=datetime.now() - timedelta(days=90))
 
-    # last created question for each member_id
+    # Find the latest creation timestamp for each member
     latest = base_qs.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
 
-    # last message for each member_id
+    # Get the most recent question for each member with related data
     que = base_qs.filter(created__in=Subquery(latest)).select_related("member", "run", "run__event")
 
+    # Categorize questions into open and closed lists
     open_q = []
     closed_q = []
     for cq in que:
+        # Open questions are user-originated and not closed
         if cq.is_user and not cq.closed:
             open_q.append(cq)
         else:

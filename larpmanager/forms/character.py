@@ -136,42 +136,67 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         return self.instance.status in question.get_editable()
 
-    def _init_custom_fields(self):
+    def _init_custom_fields(self) -> None:
         """Initialize custom form fields for character creation.
 
         Sets up dynamic form fields based on event configuration and custom field definitions,
         organizing fields into default and custom categories, and handling organizer-specific
         fields and character completion proposals.
+
+        Args:
+            self: The form instance containing event parameters and organizer status.
+
+        Returns:
+            None: This method modifies the form instance in place.
+
+        Note:
+            - Uses parent event if current event has a parent
+            - Handles different field types based on question configuration
+            - Adds organizer-specific fields when applicable
+            - Conditionally adds character proposal field for user approval workflow
         """
+        # Get event, preferring parent event if available
         event = self.params["event"]
         if event.parent:
             event = event.parent
+
+        # Initialize field categorization sets
         fields_default = {"event"}
         fields_custom = set()
+
+        # Initialize registration questions and get counts
         self._init_reg_question(self.instance, event)
         reg_counts = get_reg_counts(self.params["run"])
+
+        # Process each question to create form fields
         for question in self.questions:
             key = self._init_field(question, reg_counts=reg_counts, orga=self.orga)
             if not key:
                 continue
 
+            # Categorize fields based on question type length
             if len(question.typ) == 1:
                 fields_custom.add(key)
             else:
                 fields_default.add(key)
 
+        # Add organizer-specific fields and configurations
         if self.orga:
             for key in ["player", "status"]:
                 fields_default.add(key)
                 self.reorder_field(key)
+
+            # Add access token field for external writing access
             if event.get_config("writing_external_access", False) and self.instance.pk:
                 fields_default.add("access_token")
                 self.reorder_field("access_token")
 
+        # Remove unused fields from form
         all_fields = set(self.fields.keys()) - fields_default
         for lbl in all_fields - fields_custom:
             del self.fields[lbl]
 
+        # Add character completion proposal field for user approval workflow
         if not self.orga and event.get_config("user_character_approval", False):
             if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
                 self.fields["propose"] = forms.BooleanField(
@@ -610,38 +635,52 @@ class OrgaWritingQuestionForm(MyForm):
 
         self.check_applicable = self.params["writing_typ"]
 
-    def _init_type(self):
+    def _init_type(self) -> None:
         """Initialize character type field choices based on available writing question types.
 
-        Filters question types based on event features and existing usage.
+        Filters question types based on event features and existing usage to populate
+        the 'typ' field choices. Removes already used types (except for current instance)
+        and filters based on active features.
+
+        Side Effects:
+            - Modifies self.fields["typ"].choices
+            - Sets self.prevent_canc based on instance type length
         """
-        # Add type of character question to the available types
+        # Get writing questions applicable to current writing type
         que = self.params["event"].get_elements(WritingQuestion)
         que = que.filter(applicable=self.params["writing_typ"])
+
+        # Extract already used question types to avoid duplicates
         already = list(que.values_list("typ", flat=True).distinct())
 
+        # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
-            # prevent cancellation if one of the default types
+            # Prevent cancellation for multi-character default types
             self.prevent_canc = len(self.instance.typ) > 1
 
+        # Build filtered choices list based on features and usage
         choices = []
         for choice in WritingQuestionType.choices:
-            # if it is related to a feature
+            # Handle feature-related types (length > 1)
             if len(choice[0]) > 1:
-                # check it is not already present
+                # Skip if type already exists
                 if choice[0] in already:
                     continue
 
-                # check the feature is active
+                # Check feature activation for non-default types
                 elif choice[0] not in ["name", "teaser", "text"]:
                     if choice[0] not in self.params["features"]:
                         continue
 
+            # Handle character type 'c' - requires 'px' feature
             elif choice[0] == "c" and "px" not in self.params["features"]:
                 continue
 
+            # Add valid choice to final list
             choices.append(choice)
+
+        # Apply filtered choices to form field
         self.fields["typ"].choices = choices
 
     def _init_editable(self):

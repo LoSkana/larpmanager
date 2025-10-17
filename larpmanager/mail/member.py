@@ -36,39 +36,49 @@ from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-def send_membership_confirm(request, membership):
+def send_membership_confirm(request, membership) -> None:
     """Send confirmation email when membership application is submitted.
 
     Args:
         request: Django HTTP request object with user context
         membership: Membership instance that was submitted
 
-    Side effects:
+    Side Effects:
         Sends confirmation email to member about application status
     """
+    # Get user profile and set language context
     profile = request.user.member
-    # Send email when it is completed
     activate(profile.language)
+
+    # Prepare email subject and initial body content
     subj = hdr(membership) + _("Request of membership to the Organization")
     body = _(
         "You have completed your application for association membership: therefore, your "
         "event registrations are temporarily confirmed."
     )
+
+    # Add review process information
     body += "<br /><br />" + _(
         "As per the statutes, we will review your request at the next board meeting and "
         "send you an update e-mail as soon as possible (you should receive a reply within "
         "a few weeks at the latest)."
     )
+
+    # Add payment information for approved membership
     body += "<br /><br />" + _(
         "Once your admission is approved, you will be able to pay for the tickets for the "
         "events you have registered for."
     )
+
+    # Check if membership fee is required and add fee information
     amount = int(get_assoc_config(membership.assoc_id, "membership_fee", "0"))
     if amount:
         body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "
             "%(currency)s) is required to participate in events."
         ) % {"amount": amount, "currency": request.assoc["currency_symbol"]}
+
+    # Add closing message and send email
     body += "<br /><br />" + _("Thank you for choosing to be part of our community") + "!"
     my_send_mail(subj, body, profile, membership)
 

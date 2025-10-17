@@ -581,33 +581,48 @@ def _clean(new_val):
     return clean
 
 
-def _download_prepare(ctx, nm, query, typ):
+def _download_prepare(ctx: dict, nm: str, query, typ: dict) -> object:
     """Prepare and filter query for CSV download based on type and context.
 
+    Processes a queryset by applying appropriate filters based on the model type
+    and context, optimizes database queries with prefetch/select operations,
+    and enriches registration data with accounting information.
+
     Args:
-        ctx: Context dictionary containing event/run information
-        nm: Name/type of the model being downloaded
-        query: Initial queryset to filter
-        typ: Type configuration for filtering
+        ctx: Context dictionary containing event/run information and request data
+        nm: Name/type of the model being downloaded (e.g., 'character', 'registration')
+        query: Initial Django queryset to filter and optimize
+        typ: Type configuration dictionary containing filtering rules and field specifications
 
     Returns:
-        Filtered and optimized queryset ready for CSV export
+        Filtered and optimized Django queryset ready for CSV export with all
+        necessary related data loaded and additional computed fields attached
     """
+    # Apply event-based filtering if specified in type configuration
     if check_field(typ, "event"):
         query = query.filter(event=ctx["event"])
 
+    # Apply run-based filtering if specified in type configuration
     elif check_field(typ, "run"):
         query = query.filter(run=ctx["run"])
 
+    # Apply number-based ordering if specified in type configuration
     if check_field(typ, "number"):
         query = query.order_by("number")
 
+    # Optimize character queries by prefetching factions and selecting player data
     if nm == "character":
         query = query.prefetch_related("factions_list").select_related("player")
 
+    # Handle registration-specific filtering and data enrichment
     if nm == "registration":
+        # Filter out cancelled registrations and optimize ticket queries
         query = query.filter(cancellation_date__isnull=True).select_related("ticket")
+
+        # Get accounting data for all registrations in the queryset
         resp = _orga_registrations_acc(ctx, query)
+
+        # Attach accounting information as dynamic attributes to each registration
         for el in query:
             if el.id not in resp:
                 continue
@@ -630,35 +645,51 @@ def orga_registration_form_download(ctx):
     return zip_exports(ctx, export_registration_form(ctx), "Registration form")
 
 
-def export_registration_form(ctx):
+def export_registration_form(ctx: dict) -> list[tuple[str, list, list]]:
     """Export registration data to Excel format.
 
+    Extracts registration questions and options from the event context and formats
+    them for Excel export with proper column mappings and ordered data.
+
     Args:
-        ctx: Context dictionary with event and form data
+        ctx: Context dictionary containing event and form data. Must include
+            'event' key with an Event object that has get_elements method.
 
     Returns:
-        list: List of tuples containing sheet names, headers, and data for Excel export
+        List of tuples where each tuple contains:
+            - str: Sheet name for Excel export
+            - list: Column headers
+            - list: Data rows for the sheet
     """
+    # Initialize mappings for question types and status values
     mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
     }
 
+    # Set export type and extract column names from context
     ctx["typ"] = "registration_form"
     _get_column_names(ctx)
+
+    # Extract registration questions data
     key = ctx["columns"][0].keys()
     que = get_ordered_registration_questions(ctx)
     vals = _extract_values(key, que, mappings)
 
+    # Initialize exports list with registration questions sheet
     exports = [("registration_questions", key, vals)]
 
+    # Prepare registration options data with modified key for relation
     key = list(ctx["columns"][1].keys())
     new_key = key.copy()
     new_key[0] = f"{new_key[0]}__name"
+
+    # Query registration options ordered by question order and option order
     que = ctx["event"].get_elements(RegistrationOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
     vals = _extract_values(new_key, que, mappings)
 
+    # Add registration options sheet to exports
     exports.append(("registration_options", key, vals))
     return exports
 
@@ -681,37 +712,62 @@ def orga_character_form_download(ctx):
     return zip_exports(ctx, export_character_form(ctx), "Character form")
 
 
-def export_character_form(ctx):
+def export_character_form(ctx: dict) -> list[tuple[str, list, list]]:
     """
     Export character form questions and options to CSV format.
 
+    This function extracts writing questions and their associated options from an event
+    and formats them for CSV export. It processes question metadata (type, status,
+    applicability, visibility) and organizes the data into exportable tuples.
+
     Args:
-        ctx: Context dictionary with event and column information
+        ctx: Context dictionary containing:
+            - event: Event object with writing questions and options
+            - columns: Column configuration for export formatting
 
     Returns:
-        list: List of export tuples (name, keys, values) for character form data
+        List of export tuples, each containing:
+            - name (str): Export section name ('writing_questions' or 'writing_options')
+            - keys (list): Column headers for CSV export
+            - values (list): Data rows for CSV export
+
+    Note:
+        The function exports two sections:
+        1. Writing questions with their metadata
+        2. Writing options linked to their parent questions
     """
+    # Define mappings for enum fields to human-readable values
     mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
         "applicable": QuestionApplicable.get_mapping(),
         "visibility": QuestionVisibility.get_mapping(),
     }
+
+    # Set context type and prepare column configuration
     ctx["typ"] = "character_form"
     _get_column_names(ctx)
+
+    # Extract and export writing questions
     key = ctx["columns"][0].keys()
     que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
     vals = _extract_values(key, que, mappings)
 
+    # Initialize exports list with writing questions data
     exports = [("writing_questions", key, vals)]
 
+    # Prepare column configuration for writing options
     key = list(ctx["columns"][1].keys())
     new_key = key.copy()
+    # Modify first column to include question name relationship
     new_key[0] = f"{new_key[0]}__name"
+
+    # Extract and export writing options with related question data
     que = ctx["event"].get_elements(WritingOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
     vals = _extract_values(new_key, que, mappings)
 
+    # Add writing options data to exports
     exports.append(("writing_options", key, vals))
     return exports
 

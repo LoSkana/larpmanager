@@ -629,35 +629,48 @@ def char_add_addit(ctx):
             el.addit = {}
 
 
-def writing_view(request, ctx, nm):
+def writing_view(request: HttpRequest, ctx: dict[str, Any], nm: str) -> HttpResponse:
     """
     Display writing element view with character data and relationships.
 
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with element data
-        nm: Name of the writing element type
+        request: HTTP request object containing user session and request data
+        ctx: Context dictionary containing element data and cached information
+        nm: Name of the writing element type (e.g., 'character', 'plot')
 
     Returns:
-        HttpResponse: Rendered writing view template
+        HttpResponse: Rendered writing view template with populated context data
+
+    Note:
+        This function handles different writing element types and populates the context
+        with appropriate data for rendering. Special handling is provided for character
+        and plot elements.
     """
+    # Set up base element data and context
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
+
+    # Load event cache data for all related elements
     get_event_cache_all(ctx)
 
+    # Handle character-specific data and relationships
     if nm == "character":
         if ctx["el"].number in ctx["chars"]:
             ctx["char"] = ctx["chars"][ctx["el"].number]
         ctx["character"] = ctx["el"]
+
+        # Get character sheet and relationship data
         get_character_sheet(ctx)
         get_character_relationships(ctx)
     else:
+        # Handle non-character writing elements with applicable questions
         applicable = QuestionApplicable.get_applicable(nm)
         if applicable:
             ctx["element"] = get_writing_element_fields(ctx, nm, applicable, ctx["el"].id, only_visible=False)
         ctx["sheet_char"] = ctx["el"].show_complete()
 
+    # Add plot-specific character relationships
     if nm == "plot":
         ctx["sheet_plots"] = (
             PlotCharacterRel.objects.filter(plot=ctx["el"]).order_by("character__number").select_related("character")

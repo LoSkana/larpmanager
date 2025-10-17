@@ -335,37 +335,65 @@ def has_access_character(request, ctx):
     return False
 
 
-def check_event_permission(request, s, perm=None):
+def check_event_permission(request, s: str, perm: str | list[str] | None = None) -> dict:
     """Check event permissions and prepare management context.
 
+    Validates user permissions for event management operations and prepares
+    the necessary context including features, tutorials, and configuration links.
+
     Args:
-        request: Django HTTP request object
-        s (str): Event slug
-        perm (str or list, optional): Required permission(s)
+        request: Django HTTP request object containing user and session data
+        s: Event slug identifier for the target event
+        perm: Required permission(s). Can be a single permission string or list of permissions.
+            If None, only basic event access is checked.
 
     Returns:
-        dict: Event context with management permissions
+        Dictionary containing event context with management permissions including:
+            - Event and run objects
+            - Available features
+            - Tutorial information
+            - Configuration links
+            - Management flags
 
     Raises:
-        PermissionError: If user lacks required permissions
-        FeatureError: If required feature is not enabled
+        PermissionError: If user lacks required permissions for the event
+        FeatureError: If required feature is not enabled for the event
     """
+    # Get basic event context and run information
     ctx = get_event_run(request, s)
+
+    # Verify user has the required permissions for this event
     if not has_event_permission(request, ctx, s, perm):
         raise PermissionError()
+
+    # Process permission-specific features and configuration
     if perm:
+        # Handle permission lists by taking the first permission
         if isinstance(perm, list):
             perm = perm[0]
+
+        # Get feature configuration for this permission
         (feature, tutorial, config) = get_event_permission_feature(perm)
+
+        # Add tutorial information if not already present
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial
+
+        # Add configuration link if user has config permissions
         if config and has_event_permission(request, ctx, s, "orga_config"):
             ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config])
+
+        # Verify required feature is enabled for this event
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
+
+    # Load additional event permissions and management context
     get_index_event_permissions(ctx, request, s)
+
+    # Set management page flags
     ctx["orga_page"] = 1
     ctx["manage"] = 1
+
     return ctx
 
 
@@ -493,43 +521,66 @@ def save_event_tickets(features, instance):
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
-def save_event_character_form(features, instance):
+def save_event_character_form(features: dict, instance) -> None:
     """Create character form questions based on enabled features.
 
+    This function initializes character form questions for an event based on the
+    enabled features. It creates default writing question types and adds feature-specific
+    writing elements as needed.
+
     Args:
-        features (dict): Enabled features for the event
+        features: Dictionary of enabled features for the event, where keys are
+                 feature names and values indicate if they're active
         instance: Event instance to create form for
+
+    Returns:
+        None
+
+    Note:
+        - Returns early if 'character' feature is not enabled
+        - Uses parent event's form if instance has a parent
+        - Activates organization language before processing
     """
-    # create fields if not exists / delete if feature not active
+    # Early return if character feature is not enabled
     if "character" not in features:
         return
 
-    # if has parent, use those
+    # Use parent event's form if this event has a parent
     if instance.parent:
         return
 
+    # Activate the organization's language for proper localization
     _activate_orga_lang(instance)
 
+    # Define default question types with their properties
+    # (name, status, visibility, max_length)
     def_tps = {
         WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000),
         WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000),
         WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000),
     }
 
+    # Get basic custom question types from the system
     custom_tps = BaseQuestionType.get_basic_types()
 
+    # Initialize character form questions with both custom and default types
     _init_character_form_questions(custom_tps, def_tps, features, instance)
 
+    # Add quest and trait writing elements if questbuilder feature is enabled
     if "questbuilder" in features:
         _init_writing_element(instance, def_tps, [QuestionApplicable.QUEST, QuestionApplicable.TRAIT])
 
+    # Add prologue writing elements if prologue feature is enabled
     if "prologue" in features:
         _init_writing_element(instance, def_tps, [QuestionApplicable.PROLOGUE])
 
+    # Add faction writing elements if faction feature is enabled
     if "faction" in features:
         _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION])
 
+    # Add plot writing elements with modified teaser settings if plot feature is enabled
     if "plot" in features:
+        # Create a copy of default types with modified teaser for plot concept
         plot_tps = dict(def_tps)
         plot_tps[WritingQuestionType.TEASER] = (
             "Concept",
@@ -568,22 +619,38 @@ def _init_writing_element(instance, def_tps, applicables):
         WritingQuestion.objects.bulk_create(objs)
 
 
-def _init_character_form_questions(custom_tps, def_tps, features, instance):
+def _init_character_form_questions(
+    custom_tps: set,
+    def_tps: dict,
+    features: set,
+    instance,
+) -> None:
     """Initialize character form questions during model setup.
 
     Sets up default and custom question types for character creation forms,
     managing question creation and deletion based on enabled features and
     existing question configurations.
+
+    Args:
+        custom_tps: Set of custom question types to exclude from processing
+        def_tps: Dictionary mapping default question types to their configuration
+                (name, status, visibility, max_length)
+        features: Set of enabled feature names
+        instance: Event instance to create questions for
+
+    Returns:
+        None
     """
+    # Get existing character questions and their types
     que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 
-    # evaluate each question type field
+    # Get all available question types, excluding custom ones
     choices = dict(WritingQuestionType.choices)
     all_types = choices.keys()
     all_types -= custom_tps
 
-    # add default types if none are present
+    # Create default question types if no questions exist yet
     if not types:
         for el, add in def_tps.items():
             WritingQuestion.objects.create(
@@ -596,12 +663,15 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
                 applicable=QuestionApplicable.CHARACTER,
             )
 
-    # add types from feature if the feature is active but the field is missing
+    # Determine which types should not be removed (defaults + px feature)
     not_to_remove = set(def_tps.keys())
     if "px" in features:
         not_to_remove.add(WritingQuestionType.COMPUTED)
     all_types -= not_to_remove
+
+    # Process each remaining question type based on feature availability
     for el in sorted(list(all_types)):
+        # Create question if feature is enabled but question doesn't exist
         if el in features and el not in types:
             WritingQuestion.objects.create(
                 event=instance,
@@ -612,6 +682,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
                 max_length=1000,
                 applicable=QuestionApplicable.CHARACTER,
             )
+        # Remove question if feature is disabled but question exists
         if el not in features and el in types:
             WritingQuestion.objects.filter(event=instance, typ=el).delete()
 
@@ -712,29 +783,44 @@ def _activate_orga_lang(instance):
     activate(max_lang)
 
 
-def assign_previous_campaign_character(registration):
-    """Auto-assign last character for campaign registrations.
+def assign_previous_campaign_character(registration) -> None:
+    """Auto-assign last character from previous campaign run to new registration.
+
+    Automatically assigns the character from the most recent campaign run to a new
+    registration if the event is part of a campaign series. Only applies when the
+    member doesn't already have a character assigned to the current run.
 
     Args:
-        registration: Registration instance to assign character to
+        registration: Registration instance to assign character to. Must have
+            a member and run associated with it.
+
+    Returns:
+        None
+
+    Note:
+        - Only works for campaign events with a parent event
+        - Skips cancelled registrations
+        - Preserves custom character attributes from previous run
+        - Does nothing if character already assigned to current run
     """
+    # Skip if registration has no member or is cancelled
     if not registration.member:
         return
 
     if registration.cancellation_date:
         return
 
-    # auto assign last character if campaign
+    # Only proceed if this is a campaign event with parent
     if "campaign" not in get_event_features(registration.run.event_id):
         return
     if not registration.run.event.parent:
         return
 
-    # if already has a character, do not proceed
+    # Skip if member already has a character assigned to this run
     if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
         return
 
-    # get last run of campaign
+    # Find the most recent run from the same campaign series
     last = (
         Run.objects.filter(
             Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
@@ -746,9 +832,12 @@ def assign_previous_campaign_character(registration):
     if not last:
         return
 
+    # Get character relationship from previous run and create new one
     old_rcr = RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=last).first()
     if old_rcr:
         rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
+
+        # Copy custom character attributes from previous run
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):
                 value = getattr(old_rcr, "custom_" + s)

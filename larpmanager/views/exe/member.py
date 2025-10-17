@@ -265,17 +265,22 @@ def exe_membership_request(request, num):
 
 
 @login_required
-def exe_membership_check(request):
+def exe_membership_check(request: HttpRequest) -> HttpResponse:
     """Check and report membership status inconsistencies.
 
+    Analyzes membership data to identify and report various inconsistencies,
+    including fiscal code validation when the feature is enabled.
+
     Args:
-        request: HTTP request object
+        request: The HTTP request object containing user and session data.
 
     Returns:
-        HttpResponse: Rendered membership check report
+        HttpResponse: Rendered template with membership check report data.
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership_check")
 
+    # Get all members with active memberships (excluding empty/joined status)
     member_ids = set(
         Membership.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
@@ -283,13 +288,17 @@ def exe_membership_check(request):
         .values_list("member_id", flat=True)
     )
 
+    # Perform fiscal code validation if feature is enabled
     if "fiscal_code_check" in ctx["features"]:
         ctx["cf"] = []
+
+        # Check each member's fiscal code for correctness
         for mb in Member.objects.filter(pk__in=member_ids):
             check = calculate_fiscal_code(mb)
             if not check:
                 continue
 
+            # Add members with incorrect fiscal codes to report
             if not check["correct_cf"]:
                 check["member"] = str(mb)
                 check["member_id"] = mb.id
@@ -427,24 +436,35 @@ def exe_membership_status(request, num):
 
 
 @login_required
-def exe_membership_registry(request):
+def exe_membership_registry(request: HttpRequest) -> HttpResponse:
     """Generate membership registry with card numbers for association executives.
 
+    Creates a formatted list of association members who have card numbers,
+    with properly capitalized names split into first and last name components.
+
     Args:
-        request: HTTP request object
+        request: Django HTTP request object containing user session and context
 
     Returns:
-        Rendered registry.html template with formatted member list
+        HttpResponse: Rendered registry.html template with formatted member list
+        containing members with card numbers, ordered by card number
     """
+    # Check user permissions for accessing membership registry
     ctx = check_assoc_permission(request, "exe_membership_registry")
     split_two_names = 2
 
+    # Initialize empty list for processed members
     ctx["list"] = []
+
+    # Query memberships with card numbers for current association
     que = Membership.objects.filter(assoc_id=ctx["a_id"], card_number__isnull=False)
+
+    # Process each membership and format member data
     for mb in que.select_related("member").order_by("card_number"):
         member = mb.member
         member.membership = mb
 
+        # Split legal name into first and last name components
         if member.legal_name:
             splitted = member.legal_name.rsplit(" ", 1)
             if len(splitted) == split_two_names:
@@ -452,33 +472,54 @@ def exe_membership_registry(request):
             else:
                 member.name = splitted[0]
 
+        # Capitalize name components for consistent formatting
         member.name = member.name.capitalize()
         member.surname = member.surname.capitalize()
 
+        # Add processed member to context list
         ctx["list"].append(member)
 
+    # Render template with processed member data
     return render(request, "larpmanager/exe/users/registry.html", ctx)
 
 
 @login_required
-def exe_membership_fee(request):
+def exe_membership_fee(request: HttpRequest) -> HttpResponse:
     """
     Process membership fee payments for executives.
 
+    This function handles both GET and POST requests for processing membership fee
+    payments. It validates the form data, creates a payment invoice, and confirms
+    the payment automatically.
+
     Args:
-        request: HTTP request object with form data
+        request (HttpRequest): The HTTP request object containing form data for POST
+                              requests or empty for GET requests to display the form.
 
     Returns:
-        HttpResponse: Form page or redirect after successful processing
+        HttpResponse: For GET requests, returns the membership fee form page.
+                     For successful POST requests, redirects to the membership page.
+                     For invalid POST requests, returns the form with validation errors.
+
+    Raises:
+        PermissionDenied: If user lacks 'exe_membership' permission (handled by decorator).
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
+        # Initialize form with POST data and context
         form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
+
         if form.is_valid():
+            # Extract validated form data
             member = form.cleaned_data["member"]
             assoc_id = ctx["a_id"]
+
+            # Get membership fee amount from association configuration
             fee = get_assoc_config(assoc_id, "membership_fee", "0")
+
+            # Create payment invoice record with confirmed status
             payment = PaymentInvoice.objects.create(
                 member=member,
                 typ=PaymentType.MEMBERSHIP,
@@ -489,14 +530,20 @@ def exe_membership_fee(request):
                 assoc_id=assoc_id,
                 cod=unique_invoice_cod(),
             )
+
+            # Automatically confirm the payment and save
             payment.status = PaymentStatus.CONFIRMED
             payment.save()
+
+            # Show success message and redirect to membership page
             messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
+        # Initialize empty form for GET requests
         form = ExeMembershipFeeForm(ctx=ctx)
-    ctx["form"] = form
 
+    # Add form to context and render the edit template
+    ctx["form"] = form
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
@@ -628,39 +675,53 @@ def exe_volunteer_registry_print(request):
 
 
 @login_required
-def exe_vote(request):
+def exe_vote(request: HttpRequest) -> HttpResponse:
     """
     Handle voting functionality for executives.
 
+    Displays voting interface with candidates and current vote counts for the current year.
+    Shows list of voters who have already participated in the voting process.
+
     Args:
-        request: HTTP request object
+        request (HttpRequest): HTTP request object containing user session and data
 
     Returns:
-        HttpResponse: Voting interface or results page
+        HttpResponse: Rendered voting interface page with candidates, vote counts, and voter list
+
+    Note:
+        Requires 'exe_vote' permission for the associated organization.
+        Candidates are configured via 'vote_candidates' association config.
     """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_vote")
     ctx["year"] = datetime.today().year
     assoc_id = ctx["a_id"]
 
+    # Parse candidate IDs from association configuration
     idxs = []
     for el in get_assoc_config(assoc_id, "vote_candidates", "").split(","):
         if el.strip():
             idxs.append(el.strip())
 
+    # Fetch candidate member objects and build candidates dictionary
     ctx["candidates"] = {}
     for mb in Member.objects.filter(pk__in=idxs):
         ctx["candidates"][mb.id] = mb
 
+    # Query vote counts grouped by candidate for current year and association
     votes = (
         Vote.objects.filter(year=ctx["year"], assoc_id=ctx["a_id"])
         .values("candidate_id")
         .annotate(total=Count("candidate_id"))
     )
+
+    # Attach vote counts to candidate objects
     for el in votes:
         if el["candidate_id"] not in ctx["candidates"]:
             continue
         ctx["candidates"][el["candidate_id"]].votes = el["total"]
 
+    # Get list of members who have already voted this year
     ctx["voters"] = Member.objects.filter(votes_given__year=ctx["year"], votes_given__assoc_id=ctx["a_id"]).distinct()
 
     return render(request, "larpmanager/exe/users/vote.html", ctx)
@@ -843,36 +904,54 @@ def exe_newsletter(request):
 
 
 @login_required
-def exe_newsletter_csv(request, lang):
+def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
     """Export newsletter subscriber data as CSV for specific language.
 
+    Exports member information (email, membership number, name, surname) for all
+    members of an association who have the specified language preference.
+
     Args:
-        request: HTTP request object
-        lang: Language code to filter subscribers
+        request: HTTP request object containing user authentication and session data
+        lang: Language code to filter subscribers (e.g., 'en', 'it', 'fr')
 
     Returns:
-        CSV file response with member email, number, name, surname
+        HttpResponse: CSV file download response with member data, formatted as
+                     email, membership_number, name, surname per row
+
+    Raises:
+        PermissionDenied: If user lacks exe_newsletter permission for the association
     """
+    # Check user permissions for newsletter export functionality
     ctx = check_assoc_permission(request, "exe_newsletter")
+
+    # Set up CSV response with appropriate headers for file download
     response = HttpResponse(
         content_type="text/csv", headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'}
     )
     writer = csv.writer(response)
+
+    # Iterate through all memberships for the current association
     for el in Membership.objects.filter(assoc_id=ctx["a_id"]):
         m = el.member
+
+        # Skip members who don't match the requested language
         if m.language != lang:
             continue
 
+        # Build row data starting with member email
         lis = [m.email]
 
+        # Add membership number or empty string if not available
         if el.number:
             lis.append(el.number)
         else:
             lis.append("")
 
+        # Add member's personal information
         lis.append(m.name)
         lis.append(m.surname)
 
+        # Write the complete row to CSV
         writer.writerow(lis)
 
     return response

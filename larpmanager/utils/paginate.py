@@ -160,33 +160,49 @@ def _set_filtering(ctx, elements, filters):
     return elements
 
 
-def _get_ordering(ctx, order):
+def _get_ordering(ctx: dict, order: list) -> list[str]:
+    """Get database ordering fields from DataTables column order specification.
+
+    Args:
+        ctx: Context dictionary containing 'fields' list and optional 'callbacks' dict
+        order: List of column indices as strings, negative values indicate descending order
+
+    Returns:
+        List of Django ORM ordering field names with '-' prefix for descending order
+    """
     ordering = []
 
+    # Get field mapping for any field name transformations
     field_map = _get_field_map()
 
     for column in order:
+        # Convert column index to integer, skip if invalid
         column_ix = int(column)
         if not column_ix:
             continue
 
+        # Determine sort direction from sign of column index
         asc = True
         if column_ix < 0:
             asc = False
             column_ix = -column_ix
 
+        # Validate column index is within bounds
         if column_ix >= len(ctx["fields"]):
             print(f"this shouldn't happen! _get_ordering {order} {ctx['fields']}")
         field, name = ctx["fields"][column_ix - 1]
 
+        # Skip callback fields as they can't be used for database ordering
         if field in ctx.get("callbacks", {}):
             continue
 
+        # Map field name if transformation exists, otherwise use as-is
         if field in field_map:
             field = field_map[field]
         else:
             field = [field]
 
+        # Add ordering fields with proper direction prefix
         for el in field:
             if asc:
                 ordering.append(el)
@@ -228,15 +244,30 @@ def _get_query_params(request):
     return start, length, order, filters
 
 
-def _prepare_data_json(ctx, elements, view, edit, exe=True):
+def _prepare_data_json(ctx: dict, elements: list, view: str, edit: str, exe: bool = True) -> list[dict[str, str]]:
+    """Prepare data for JSON response in DataTables format.
+
+    Args:
+        ctx: Context dictionary containing fields, callbacks, and optionally run
+        elements: List of model objects to process
+        view: View name for generating edit URLs
+        edit: Tooltip text for edit links
+        exe: Whether to use executive view URLs (True) or organization view URLs (False)
+
+    Returns:
+        List of dictionaries where each dict represents a row with string keys
+        corresponding to column indices and HTML/text values
+    """
     data = []
 
+    # Map field names to lambda functions for data extraction and formatting
     field_map = {
         "created": lambda obj: obj.created.strftime("%d/%m/%Y"),
         "payment_date": lambda obj: obj.created.strftime("%d/%m/%Y"),
         "member": lambda obj: str(obj.member),
         "run": lambda obj: str(obj.run) if obj.run else "",
         "descr": lambda obj: str(obj.descr),
+        # Convert decimal values to int if they're whole numbers, otherwise keep as string
         "value": lambda obj: int(obj.value) if obj.value == obj.value.to_integral() else str(obj.value),
         "details": lambda obj: str(obj.details),
         "credits": lambda obj: int(obj.credits) if obj.credits == obj.credits.to_integral() else str(obj.credits),
@@ -245,18 +276,26 @@ def _prepare_data_json(ctx, elements, view, edit, exe=True):
         "vat_options": lambda obj: round(float(obj.vat_options), 2),
     }
 
+    # Allow custom field callbacks to override default mappings
     if "callbacks" in ctx:
         field_map.update(ctx["callbacks"])
 
+    # Process each element and build row data
     for row in elements:
+        # Generate appropriate URL based on view type (exe vs orga)
         if exe:
             url = reverse(view, args=[row.id])
         else:
             # For orga views, we need both slug and ID
             url = reverse(view, args=[ctx["run"].get_slug(), row.id])
+
+        # Start each row with edit link in column 0
         res = {"0": f'<a href="{url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
+
+        # Add data for each configured field, starting from column 1
         for idx, (field, _name) in enumerate(ctx["fields"], start=1):
             res[str(idx)] = field_map.get(field, lambda r: "")(row)
+
         data.append(res)
 
     return data

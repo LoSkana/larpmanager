@@ -20,7 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -215,8 +215,21 @@ def orga_credits_edit(request, s, num):
 
 
 @login_required
-def orga_payments(request, s):
+def orga_payments(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Display organization payments page with filterable payment data.
+
+    Args:
+        request: HTTP request object containing user session and form data
+        s: Event slug identifier for permission checking and context
+
+    Returns:
+        HttpResponse: Rendered payments page with paginated payment data
+    """
+    # Check user permissions for accessing organization payments
     ctx = check_event_permission(request, s, "orga_payments")
+
+    # Define base table fields for payment display
     fields = [
         ("member", _("Member")),
         ("method", _("Method")),
@@ -226,15 +239,19 @@ def orga_payments(request, s):
         ("trans", _("Fee")),
         ("created", _("Date")),
     ]
+
+    # Add VAT fields if VAT feature is enabled
     if "vat" in ctx["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    # Configure context with database relations and field callbacks
     ctx.update(
         {
             "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
             "afield": "reg",
             "fields": fields,
+            # Define callback functions for data formatting
             "callbacks": {
                 "member": lambda row: str(row.reg.member) if row.reg and row.reg.member else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
@@ -245,6 +262,8 @@ def orga_payments(request, s):
             },
         }
     )
+
+    # Return paginated payment data with configured template
     return orga_paginate(
         request, ctx, AccountingItemPayment, "larpmanager/orga/accounting/payments.html", "orga_payments_edit"
     )

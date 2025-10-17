@@ -55,28 +55,39 @@ class FileTypeValidator:
         self.allowed_mimes = self._normalize(allowed_types)
         self.allowed_exts = allowed_extensions
 
-    def __call__(self, fileobj):
-        """
-        Validate file type and extension against allowed types.
+    def __call__(self, fileobj) -> None:
+        """Validate file type and extension against allowed types.
+
+        Validates the uploaded file by checking both its MIME type (using libmagic)
+        and file extension against the configured allowed types and extensions.
 
         Args:
-            fileobj: File object to validate
+            fileobj: File object to validate. Must have 'read', 'seek', and 'name' methods.
 
         Raises:
-            ValidationError: If file type or extension is not allowed
+            ValidationError: If file type is not in allowed_mimes or if extension
+                is not in allowed_exts (when extension validation is enabled).
+
+        Note:
+            The file position is reset to the beginning after validation to ensure
+            the file can be read normally by subsequent operations.
         """
+        # Read file header to detect MIME type using libmagic
         detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
+
+        # Extract file extension from filename
         root, extension = os.path.splitext(fileobj.name.lower())
 
-        # seek back to start so a valid file could be read
-        # later without resetting the position
+        # Reset file position to beginning for subsequent reads
         fileobj.seek(0)
 
-        # some versions of libmagic do not report proper mimes for Office subtypes
-        # use detection details to transform it to proper mime
+        # Handle libmagic limitations with Office document detection
+        # Some versions return generic types instead of specific Office MIME types
         if detected_type in ("application/octet-stream", "application/vnd.ms-office"):
             detected_type = self._check_word_or_excel(fileobj, detected_type, extension)
 
+        # Validate MIME type against allowed types list
+        # Check both exact match and category match (e.g., "image/*")
         if detected_type not in self.allowed_mimes and detected_type.split("/")[0] not in self.allowed_mimes:
             raise ValidationError(
                 message=self.type_message,
@@ -87,6 +98,7 @@ class FileTypeValidator:
                 code="invalid_type",
             )
 
+        # Validate file extension if extension checking is enabled
         if self.allowed_exts and (extension not in self.allowed_exts):
             raise ValidationError(
                 message=self.extension_message,
@@ -122,10 +134,19 @@ class FileTypeValidator:
         return allowed_mimes
 
     @staticmethod
-    def _check_word_or_excel(fileobj, detected_type, extension):
+    def _check_word_or_excel(fileobj, detected_type: str, extension: str) -> str:
         """
-        Returns proper mimetype in case of word or excel files
+        Returns proper mimetype in case of word or excel files.
+
+        Args:
+            fileobj: File object to analyze
+            detected_type: Initially detected MIME type
+            extension: File extension (e.g., '.doc', '.xlsx')
+
+        Returns:
+            str: Corrected MIME type for Microsoft Office files
         """
+        # Define known Microsoft Office file type identifiers
         word_strings = [
             "Microsoft Word",
             "Microsoft Office Word",
@@ -138,17 +159,23 @@ class FileTypeValidator:
         ]
         office_strings = ["Microsoft OOXML"]
 
+        # Read file content to analyze file type details
         file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
 
+        # Reset file pointer to beginning
         fileobj.seek(0)
 
+        # Check for Word documents based on magic string detection
         if any(string in file_type_details for string in word_strings):
             detected_type = "application/msword"
+        # Check for Excel documents based on magic string detection
         elif any(string in file_type_details for string in excel_strings):
             detected_type = "application/vnd.ms-excel"
+        # Handle generic Office files or OOXML format - use extension for disambiguation
         elif any(string in file_type_details for string in office_strings) or (
             detected_type == "application/vnd.ms-office"
         ):
+            # Determine specific type based on file extension
             if extension in (".doc", ".docx"):
                 detected_type = "application/msword"
             if extension in (".xls", ".xlsx"):

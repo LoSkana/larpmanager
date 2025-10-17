@@ -421,26 +421,41 @@ def check_writing_form_type(ctx, typ):
 
 
 @login_required
-def orga_writing_form(request, s, typ):
+def orga_writing_form(request: HttpRequest, s: str, typ: str) -> HttpResponse:
     """Display and manage writing form questions for character creation.
 
+    This view handles both GET requests to display the writing form configuration
+    and POST requests to download form data. It manages writing questions that
+    are used during character creation and approval processes.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        typ: Writing form type (character, etc.)
+        request: The HTTP request object containing user session and form data
+        s: The event slug identifier used to locate the specific event
+        typ: The writing form type identifier (e.g., 'character', 'background')
 
     Returns:
-        HttpResponse: Rendered form page or download response
+        HttpResponse: Either a rendered HTML template for the form configuration
+                     page or a file download response containing form data
+
+    Raises:
+        PermissionDenied: If user lacks 'orga_character_form' permission
+        Http404: If the writing form type is invalid or event not found
     """
+    # Verify user has permission to access character form organization features
     ctx = check_event_permission(request, s, "orga_character_form")
+
+    # Validate the writing form type parameter and add to context
     check_writing_form_type(ctx, typ)
 
+    # Handle POST request for downloading character form data
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_character_form_download(ctx)
 
+    # Configure context for template rendering with upload/download settings
     ctx["upload"] = "character_form"
     ctx["download"] = 1
 
+    # Retrieve and order writing questions for the specified form type
     ctx["list"] = (
         ctx["event"]
         .get_elements(WritingQuestion)
@@ -448,9 +463,12 @@ def orga_writing_form(request, s, typ):
         .order_by("order")
         .prefetch_related("options")
     )
+
+    # Pre-process question options to ensure proper ordering
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
+    # Set approval configuration and status flags for template rendering
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
     ctx["status"] = "user_character" in ctx["features"] and typ.lower() == "character"
 

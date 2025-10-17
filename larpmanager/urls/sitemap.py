@@ -63,23 +63,34 @@ def _render_sitemap(urls):
     return stream
 
 
-def _organization_sitemap(request):
+def _organization_sitemap(request) -> list[str]:
     """Generate sitemap URLs for an organization's events and runs.
 
     Args:
-        request: HTTP request with organization context
+        request: HTTP request object containing organization context with assoc dict
 
     Returns:
-        List of URLs for the organization's public pages
+        List of fully qualified URLs for the organization's public pages.
+        Returns empty list if organization is marked as demo.
+
+    Note:
+        Only includes events that are not in START or CANCELLED status
+        and have end dates in the future.
     """
+    # Get organization and check if it's a demo instance
     assoc = Association.objects.get(pk=request.assoc["id"])
     cache = get_cache_assoc(assoc.slug)
     if cache.get("demo", False):
         return []
+
+    # Build base organization URL
     domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
     urls = [f"https://{assoc.slug}.{domain}/"]
-    # Event runs
+
+    # Track processed events to avoid duplicates
     cache_ev = {}
+
+    # Query active runs for future events
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
         .filter(event__assoc_id=request.assoc["id"])
@@ -87,13 +98,19 @@ def _organization_sitemap(request):
         .select_related("event", "event__assoc")
         .order_by("-end")
     )
+
+    # Generate URLs for each unique event
     for el in runs:
+        # Skip if event already processed
         if el.event_id in cache_ev:
             continue
         cache_ev[el.event_id] = 1
+
+        # Build event-specific URL
         assoc = el.event.assoc
         domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
         urls.append(f"https://{assoc.slug}.{domain}/{el.get_slug()}/event/")
+
     return urls
 
 

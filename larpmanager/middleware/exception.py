@@ -144,39 +144,49 @@ class ExceptionHandlingMiddleware:
         return redirect(reverse(viewname, args=args))
 
     @staticmethod
-    def _handle_feature_error(request, ex):
+    def _handle_feature_error(request: HttpRequest, ex: FeatureError) -> HttpResponse:
         """Handle feature access errors by rendering appropriate error page.
 
+        This function processes FeatureError exceptions by determining the appropriate
+        error response based on association settings and feature permissions.
+
         Args:
-            request: HTTP request object
-            ex: FeatureError exception containing feature and run information
+            request: The HTTP request object containing user and association context
+            ex: FeatureError exception containing feature slug and run ID information
 
         Returns:
-            Rendered feature error template or raises Http404
+            HttpResponse: Rendered feature error template with context data
 
         Raises:
-            Http404: If association skin is managed or feature/run not found
+            Http404: If association skin is managed, or if feature/run objects are not found
         """
-        # error is association skin is managed
+        # Check if association skin is managed - if so, deny access completely
         if request.assoc["skin_managed"]:
             raise Http404("not allowed")
 
+        # Retrieve the feature object or raise 404 if not found
         try:
             feature = Feature.objects.get(slug=ex.feature)
         except ObjectDoesNotExist as err:
             raise Http404("Feature not found") from err
 
+        # Build base context with exception and feature data
         ctx = {"exe": ex, "feature": feature}
 
+        # Handle permission checking based on feature scope
         if feature.overall:
+            # For organization-wide features, check association permissions
             ctx["permission"] = has_assoc_permission(request, {}, "exe_features")
         else:
+            # For event-specific features, retrieve run and check event permissions
             try:
                 run = Run.objects.get(pk=ex.run)
             except ObjectDoesNotExist as err:
                 raise Http404("Run not found") from err
 
+            # Add run context and check event-level permissions
             ctx["run"] = run
             ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
 
+        # Render the feature error template with assembled context
         return render(request, "exception/feature.html", ctx)

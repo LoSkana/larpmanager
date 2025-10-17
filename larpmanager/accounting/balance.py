@@ -53,8 +53,13 @@ from larpmanager.models.utils import get_sum
 logger = logging.getLogger(__name__)
 
 
-def get_acc_detail(nm, run, descr, cls, cho, typ, filters=None, reg=False):
+def get_acc_detail(
+    nm: str, run, descr: str, cls, cho, typ: str | None, filters: dict | None = None, reg: bool = False
+) -> dict:
     """Get detailed accounting breakdown for a specific accounting item type.
+
+    This function calculates totals, counts, and detailed breakdowns by type
+    for accounting items associated with a specific run or registration.
 
     Args:
         nm: Display name for the accounting category
@@ -62,30 +67,51 @@ def get_acc_detail(nm, run, descr, cls, cho, typ, filters=None, reg=False):
         descr: Description of the accounting category
         cls: Model class for accounting items (e.g., AccountingItemPayment)
         cho: Choices enumeration for display names
-        typ: Field name to group items by (e.g., 'pay', 'exp')
-        filters: Optional additional filters to apply
-        reg: If True, filter by reg__run instead of run
+        typ: Field name to group items by (e.g., 'pay', 'exp'). If None,
+             no detailed breakdown is generated
+        filters: Optional additional filters to apply to the queryset
+        reg: If True, filter by reg__run instead of run directly
 
     Returns:
-        dict: Breakdown with totals, counts, and details by type
+        dict: Accounting breakdown containing:
+            - tot: Total value sum
+            - num: Total item count
+            - detail: Dictionary with breakdown by type (if typ provided)
+            - name: Display name
+            - descr: Description
     """
+    # Initialize result dictionary with base structure
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
+
+    # Filter accounting items by run or registration run
     if reg:
         lst = cls.objects.filter(reg__run=run)
     else:
         lst = cls.objects.filter(run=run)
+
+    # Apply additional filters if provided
     if filters:
         lst = lst.filter(**filters)
+
+    # Process each accounting item
     for a in lst:
+        # Update global counters
         dc["num"] += 1
         dc["tot"] += a.value
+
+        # Skip detailed breakdown if no type field specified
         if typ is None:
             continue
+
+        # Get type value and create detail entry if needed
         tp = getattr(a, typ)
         if tp not in dc["detail"]:
             dc["detail"][tp] = {"tot": 0, "num": 0, "name": get_display_choice(cho, tp)}
+
+        # Update type-specific counters
         dc["detail"][tp]["num"] += 1
         dc["detail"][tp]["tot"] += a.value
+
     return dc
 
 

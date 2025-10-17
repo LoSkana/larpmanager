@@ -226,23 +226,35 @@ def get_character_element_fields(ctx, character_id, only_visible=True):
     )
 
 
-def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
+def get_writing_element_fields(
+    ctx: dict, feature_name: str, applicable, element_id: int, only_visible: bool = True
+) -> dict:
     """
     Get writing fields for a specific element with visibility filtering.
 
+    Retrieves writing questions, options, and field values for a given element,
+    applying visibility filters based on context configuration.
+
     Args:
-        ctx: Context dictionary with event and configuration data
-        feature_name: Name of the feature (e.g., 'character', 'faction')
-        applicable: QuestionApplicable enum value
-        element_id: ID of the element to get fields for
-        only_visible: Whether to include only visible fields (default: True)
+        ctx: Context dictionary containing event and configuration data including
+             'questions', 'options', and visibility settings
+        feature_name: Name of the feature (e.g., 'character', 'faction') used
+                     for determining visibility key
+        applicable: QuestionApplicable enum value defining question scope
+        element_id: Unique identifier of the element to retrieve fields for
+        only_visible: Whether to include only visible fields. Defaults to True
 
     Returns:
-        dict: Dictionary with questions, options, and field values
+        Dictionary containing:
+            - questions: Available questions from context
+            - options: Available options from context
+            - fields: Mapping of question_id to field values (text or list of option_ids)
     """
+    # Apply visibility filtering to populate context with visible fields
     visible_writing_fields(ctx, applicable, only_visible=only_visible)
 
-    # remove not visible questions
+    # Filter questions based on visibility configuration
+    # Only include questions that are explicitly shown or when show_all is enabled
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = str(question_id)
@@ -250,10 +262,15 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
             continue
         question_visible.append(question_id)
 
+    # Retrieve text answers for visible questions
+    # Store direct text responses in fields dictionary
     fields = {}
     que = WritingAnswer.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
+
+    # Retrieve choice answers for visible questions
+    # Group multiple choice options into lists per question
     que = WritingChoice.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "option_id"):
         if el[0] not in fields:

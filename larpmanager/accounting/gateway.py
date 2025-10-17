@@ -139,40 +139,62 @@ def satispay_check(request, ctx):
         satispay_verify(request, invoice.cod)
 
 
-def satispay_verify(request, cod):
+def satispay_verify(request, cod: str) -> None:
     """Verify Satispay payment status and process if accepted.
 
+    This function verifies a Satispay payment by checking the payment status
+    through the Satispay API and processes the payment if it has been accepted.
+
     Args:
-        request: Django HTTP request object
-        cod: Payment code to verify
+        request: Django HTTP request object containing the current request context
+        cod: Payment code/identifier to verify against Satispay API
+
+    Returns:
+        None: Function performs side effects but returns nothing
+
+    Note:
+        Logs warnings for various error conditions and returns early on failures.
+        Only processes payments with status "ACCEPTED" from Satispay.
     """
+    # Initialize context and update payment details from request
     ctx = {}
     update_payment_details(request, ctx)
 
+    # Retrieve invoice by payment code, log and return if not found
     try:
         invoice = PaymentInvoice.objects.get(cod=cod)
     except ObjectDoesNotExist:
         logger.warning(f"Not found - invoice {cod}")
         return
 
+    # Validate that invoice uses Satispay payment method
     if invoice.method.slug != "satispay":
         logger.warning(f"Wrong slug method - invoice {cod}")
         return
 
+    # Check if payment is still in created status (not already processed)
     if invoice.status != PaymentStatus.CREATED:
         logger.warning(f"Already confirmed - invoice {cod}")
         return
 
+    # Load Satispay API credentials and private key for authentication
     key_id = ctx["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
+    # Make API call to Satispay to get current payment status
     response = satispaython.get_payment_details(key_id, rsa_key, invoice.cod)
     # logger.debug(f"Response: {response}")
+
+    # Validate API response status code
     correct_response_code = 200
     if response.status_code != correct_response_code:
         return
+
+    # Parse response and extract payment details
     aux = json.loads(response.content)
     mc_gross = int(aux["amount_unit"]) / 100.0
+
+    # Process payment if Satispay marked it as accepted
     if aux["status"] == "ACCEPTED":
         invoice_received_money(invoice.cod, mc_gross)
 
@@ -254,29 +276,38 @@ def handle_invalid_paypal_ipn(ipn_obj):
     notify_admins("paypal ko", body)
 
 
-def get_stripe_form(request, ctx, invoice, amount):
+def get_stripe_form(request, ctx: dict, invoice, amount: float) -> None:
     """Create Stripe payment form and session.
 
+    Creates a Stripe product and price for the given invoice amount, then
+    generates a checkout session for payment processing. Updates the invoice
+    with the price ID for tracking purposes.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
-        invoice: PaymentInvoice instance
-        amount (float): Payment amount
+        request: Django HTTP request object for building absolute URLs
+        ctx: Context dictionary containing payment configuration including
+             'stripe_sk_api' (secret key) and 'payment_currency'
+        invoice: PaymentInvoice instance to be paid
+        amount: Payment amount in the configured currency
 
     Returns:
-        dict: Stripe checkout session context data
+        None: Updates ctx dictionary with 'stripe_ck' checkout session
     """
+    # Set Stripe API key from context configuration
     stripe.api_key = ctx["stripe_sk_api"]
 
+    # Create a new Stripe product with invoice description
     prod = stripe.Product.create(name=invoice.causal)
 
-    # create price
+    # Create price object with amount converted to cents
+    # Stripe requires amounts in smallest currency unit (cents for EUR/USD)
     price = stripe.Price.create(
         unit_amount=str(int(round(amount, 2) * 100)),
         currency=ctx["payment_currency"],
         product=prod.id,
     )
 
+    # Create checkout session with success/cancel URLs
     checkout_session = stripe.checkout.Session.create(
         line_items=[
             {
@@ -288,8 +319,11 @@ def get_stripe_form(request, ctx, invoice, amount):
         success_url=request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
         cancel_url=request.build_absolute_uri(reverse("acc_cancelled")),
     )
+
+    # Add checkout session to context for template rendering
     ctx["stripe_ck"] = checkout_session
 
+    # Store price ID in invoice for payment tracking
     invoice.cod = price.id
     invoice.save()
 
@@ -345,7 +379,7 @@ def stripe_webhook(request):
 
 
 def get_sumup_form(
-    request: "HttpRequest", ctx: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
+    request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 

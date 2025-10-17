@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssocRole, EventRole, get_assoc_executives, get_event_organizers
 from larpmanager.models.association import get_url, hdr
-from larpmanager.models.casting import Casting
+from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -261,43 +261,67 @@ def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
     my_send_mail(subj, body, reg.member, reg.run)
 
 
-def send_trait_assignment_email(instance, created):
+def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> None:
     """Notify member when a trait is assigned to them.
+
+    Deactivates related casting preferences and sends assignment notification email
+    to the member with trait and quest details.
 
     Args:
         instance: AssignmentTrait instance that was saved
-        created (bool): Whether this is a new assignment
+        created: Whether this is a new assignment (True) or an update (False)
 
-    Side effects:
-        Deactivates related casting preferences and sends assignment notification
+    Returns:
+        None
+
+    Side Effects:
+        - Deactivates related casting preferences for the member
+        - Sends email notification to the assigned member
+        - Sets language context to member's preferred language
     """
+    # Early return if no member or not a new assignment
     if not instance.member or not created:
         return
 
+    # Deactivate related casting preferences for this member and run
     que = Casting.objects.filter(member_id=instance.member_id, run_id=instance.run_id, typ=instance.typ)
     for c in que:
         c.active = False
         c.save()
 
+    # Set language context to member's preferred language
     activate(instance.member.language)
+
+    # Skip email if character mail is disabled for this event
     if instance.run.event.get_config("mail_character", False):
         return
+
+    # Get trait and quest display information for the current run
     t = instance.trait.show(instance.run)
     q = instance.trait.quest.show(instance.run)
+
+    # Build email subject with event header and localized text
     subj = hdr(instance.run.event) + _("Trait assigned for %(event)s") % {"event": instance.run}
+
+    # Create main email body with trait assignment details
     body = _(
         "In the event <b>%(event)s</b> to which you are enrolled, you have been assigned the "
         "trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
     ) % {"event": instance.run, "trait": t["name"], "quest": q["name"]}
+
+    # Add character access link to the email body
     url = get_url(
         f"{instance.run.get_slug()}/character/your",
         instance.run.event,
     )
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"
 
+    # Append custom assignment message if configured for this event
     custom_message_ass = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
+
+    # Send the notification email to the member
     my_send_mail(subj, body, instance.member, instance.run)
 
 

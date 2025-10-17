@@ -102,22 +102,39 @@ def mail_error(subj, body, e=None):
 
 
 @background_auto()
-def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=None):
+def send_mail_exec(
+    players: str,
+    subj: str,
+    body: str,
+    assoc_id: int | None = None,
+    run_id: int | None = None,
+    reply_to: str | None = None,
+) -> None:
     """Send bulk emails to multiple recipients with staggered delivery.
 
-    Args:
-        players (str): Comma-separated list of email addresses
-        subj (str): Email subject
-        body (str): Email body content
-        assoc_id (int, optional): Association ID for context
-        run_id (int, optional): Run ID for context
-        reply_to (str, optional): Reply-to email address
+    Sends emails to a comma-separated list of recipients with automatic delays
+    between sends to prevent spam filtering. Emails are prefixed with the
+    organization/run name and scheduled with 10-second intervals.
 
-    Side effects:
-        Schedules individual emails with delays to prevent spam issues
+    Args:
+        players: Comma-separated list of email addresses to send to
+        subj: Email subject line (will be prefixed with org/run name)
+        body: Email body content in HTML or plain text
+        assoc_id: Association ID for determining sender context
+        run_id: Run ID for determining sender context (alternative to assoc_id)
+        reply_to: Custom reply-to email address
+
+    Returns:
+        None
+
+    Side Effects:
+        - Schedules individual emails with 10-second delays via background tasks
+        - Sends notification to admins about bulk email operation
+        - Logs warning if neither assoc_id nor run_id are provided
     """
     aux = {}
 
+    # Determine sender context (Association or Run object)
     if assoc_id:
         obj = Association.objects.filter(pk=assoc_id).first()
     elif run_id:
@@ -126,19 +143,24 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
         logger.warning(f"Object not found! assoc_id: {assoc_id}, run_id: {run_id}")
         return
 
+    # Add organization/run prefix to subject line
     subj = f"[{obj}] {subj}"
 
+    # Parse comma-separated email list
     recipients = players.split(",")
 
+    # Notify administrators about bulk email operation
     notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
 
     cnt = 0
+    # Process each recipient with deduplication
     for email in recipients:
         if not email:
             continue
         if email in aux:
             continue
         cnt += 1
+        # Schedule email with 10-second delay per recipient to prevent spam filtering
         # noinspection PyUnboundLocalVariable
         my_send_mail(subj, body, email.strip(), obj, reply_to, schedule=cnt * 10)
         aux[email] = 1

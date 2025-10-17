@@ -290,26 +290,43 @@ def on_modifier_abilities_m2m_changed(sender, instance, action, pk_set, **kwargs
         calculate_character_experience_points(char)
 
 
-def apply_rules_computed(char):
+def apply_rules_computed(char) -> None:
     """
     Apply computed field rules to calculate character statistics.
 
+    This function processes all computed writing questions for a character's event,
+    applies mathematical rules based on the character's abilities, and saves the
+    calculated values as writing answers.
+
     Args:
-        char: Character instance to apply rules to
+        char: Character instance to apply rules to. Must have an associated event
+              and ability list.
+
+    Returns:
+        None: Function modifies character data in-place by creating/updating
+              WritingAnswer objects.
+
+    Note:
+        Division operations are safe-guarded against division by zero.
+        Computed values are formatted to remove trailing zeros and decimal points.
     """
-    # save computed field
+    # Get the character's event and initialize computed question values
     event = char.event
     computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
     values = {question.id: Decimal(0) for question in computed_ques}
 
-    # apply rules
+    # Retrieve character's ability IDs for rule filtering
     ability_ids = char.px_ability_list.values_list("pk", flat=True)
+
+    # Get applicable rules: either global rules or rules matching character's abilities
     rules = (
         event.get_elements(RulePx)
         .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
         .distinct()
         .order_by("order")
     )
+
+    # Define mathematical operations with division-by-zero protection
     ops = {
         Operation.ADDITION: lambda x, y: x + y,
         Operation.SUBTRACTION: lambda x, y: x - y,
@@ -317,12 +334,15 @@ def apply_rules_computed(char):
         Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
     }
 
+    # Apply each rule to update the corresponding computed field value
     for rule in rules:
         f_id = rule.field.id
         values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
 
+    # Save computed values as WritingAnswer objects with clean formatting
     for question_id, value in values.items():
         (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        # Format decimal value and remove trailing zeros/decimal point
         qa.text = format(value, "f").rstrip("0").rstrip(".")
         qa.save()
 

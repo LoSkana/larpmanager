@@ -248,26 +248,46 @@ def _info_donations(ctx, member, request):
     ctx["donations"] = que.order_by("-created")
 
 
-def _info_membership(ctx, member, request):
+def _info_membership(ctx: dict, member, request) -> None:
     """Get membership fee information if membership feature is enabled.
 
-    Args:
-        ctx: Context dictionary with association ID to update
-        member: Member instance to get membership info for
-        request: Django request with association features
+    Retrieves and adds membership-related information to the context dictionary,
+    including fee history, current year status, pending payments, and grace period
+    calculations. Only processes if the membership feature is enabled for the association.
 
-    Side effects:
-        Updates ctx with membership fee history, current year status,
-        pending status, and grace period information if feature enabled
+    Args:
+        ctx: Context dictionary containing association ID, will be updated with
+             membership information including fee history and status flags
+        member: Member instance to retrieve membership information for
+        request: Django request object containing association features configuration
+
+    Returns:
+        None: Function modifies ctx dictionary in-place
+
+    Side Effects:
+        Updates ctx with the following keys if membership feature is enabled:
+        - membership_fee: List of years with membership fees
+        - year_membership_fee: Boolean indicating if current year fee exists
+        - year_membership_pending: Boolean indicating pending membership payments
+        - year: Current year
+        - grazing: Boolean indicating if within grace period
     """
+    # Early return if membership feature is not enabled
     if "membership" not in request.assoc["features"]:
         return
 
+    # Get current year for membership calculations
     year = datetime.now().year
+
+    # Retrieve all membership fee years for this member and association
     ctx["membership_fee"] = []
     for el in AccountingItemMembership.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("year"):
         ctx["membership_fee"].append(el.year)
+
+    # Check if current year membership fee exists
     ctx["year_membership_fee"] = year in ctx["membership_fee"]
+
+    # Check for pending membership payment invoices
     pending_que = PaymentInvoice.objects.filter(
         member=member,
         status=PaymentStatus.SUBMITTED,
@@ -276,14 +296,24 @@ def _info_membership(ctx, member, request):
     if pending_que.count() > 0:
         ctx["year_membership_pending"] = True
 
+    # Store current year in context
     ctx["year"] = year
 
+    # Initialize config holder for association settings
     config_holder = Object()
 
+    # Get membership day configuration (default: January 1st)
     m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01", config_holder)
     if m_day:
+        # Get grace period in months (default: 0 months)
         m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0", config_holder))
+
+        # Build full date string with current year
         m_day += f"-{year}"
         dt = datetime.strptime(m_day, "%d-%m-%Y")
+
+        # Add grace period months to membership date
         dt += relativedelta(months=m_grazing)
+
+        # Check if we're still within the grace period
         ctx["grazing"] = datetime.now() < dt

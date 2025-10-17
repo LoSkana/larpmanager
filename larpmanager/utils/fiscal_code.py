@@ -107,40 +107,51 @@ def _slugify(text):
     return text
 
 
-def _extract_municipality_code(birth_place):
+def _extract_municipality_code(birth_place: str) -> str:
     """Extract municipality code from birth place name using ISTAT data.
 
+    This function searches for ISTAT codes by first checking against nation codes,
+    then municipality codes with exact matching, and finally partial matching.
+
     Args:
-        birth_place: Name of the birth place (city/nation)
+        birth_place (str): Name of the birth place (city/nation) to look up.
 
     Returns:
-        str: ISTAT code for the municipality, or empty string if not found
+        str: ISTAT code for the municipality, or empty string if not found.
+
+    Note:
+        The function performs case-insensitive matching using slugified names.
+        It searches first in nations data, then in municipality codes with
+        exact and partial matching strategies.
     """
+    # Convert birth place to slugified format for consistent matching
     slug = _slugify(birth_place)
-    # look for nations
+
+    # First search: Look for exact matches in nations data
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
     with open(file_path) as file:
         reader = csv.reader(file)
-        # second pass, search something *equal*
+        # Search for exact nation name matches
         for row in reader:
             if slug == _slugify(row[0]):
                 return row[1]
 
+    # Second search: Look in municipality codes file
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
     with open(file_path) as file:
         reader = csv.reader(file)
-        # second pass, search something *equal*
+        # First pass: Search for exact matches in split municipality names
         for row in reader:
             for el in row[0].split("/"):
                 if slug == _slugify(el):
                     return row[1]
 
-        # second pass, search something *in*
+        # Second pass: Search for partial matches in municipality names
         for row in reader:
             if slug in _slugify(row[0]):
                 return row[1]
 
-    # If not found
+    # Return empty string if no match found in any dataset
     return ""
 
 

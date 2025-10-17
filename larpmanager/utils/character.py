@@ -256,66 +256,98 @@ def get_character_sheet_fields(ctx):
     ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["character"].id, only_visible=False))
 
 
-def get_char_check(request, ctx, num, restrict=False, bypass=False):
+def get_char_check(request, ctx: dict, num: int, restrict: bool = False, bypass: bool = False) -> None:
     """Get character with access control checks.
 
+    Retrieves a character from the context and performs various access control
+    checks based on user permissions and character visibility settings.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary
-        num (int): Character number
-        restrict (bool): Whether to apply visibility restrictions
-        bypass (bool): Whether to bypass access checks
+        request: Django HTTP request object containing user and session data
+        ctx: Context dictionary containing cached character and event data
+        num: Character number/ID to retrieve from the character cache
+        restrict: Whether to apply strict visibility restrictions for non-owners
+        bypass: Whether to bypass all access checks (admin override)
 
     Returns:
-        Character: Character instance if accessible
+        None: Modifies ctx in-place, adding 'char' and potentially 'check' keys
 
     Raises:
-        Http404: If character not found or access denied
+        NotFoundError: If character not found in cache or is hidden from user
+        Http404: If character access is restricted and user lacks permission
     """
+    # Load all event and character data into context cache
     get_event_cache_all(ctx)
+
+    # Check if requested character exists in the cached character data
     if num not in ctx["chars"]:
         raise NotFoundError()
 
+    # Set the current character in context for further processing
     ctx["char"] = ctx["chars"][num]
 
+    # Allow access if bypassing checks or user has character access permissions
     if bypass or (request.user.is_authenticated and has_access_character(request, ctx)):
+        # Load full character data and mark as having elevated access
         get_char(ctx, num, True)
         ctx["check"] = 1
         return
 
+    # Block access to characters marked as hidden from public view
     if ctx["char"].get("hide", False):
         raise NotFoundError()
 
+    # Apply restriction check - deny access if restrict flag is set
     if restrict:
         raise Http404("Not your character")
 
 
-def get_chars_relations(text, chs_numbers):
-    """Retrieve character relationship data.
+def get_chars_relations(text: str, chs_numbers: list[int]) -> tuple[list[int], list[int]]:
+    """Retrieve character relationship data from text content.
+
+    Searches for character references in the format '#number' within the provided text
+    and categorizes them as either active (existing) or extinct (no longer valid)
+    characters based on the provided valid character numbers.
 
     Args:
-        text: Text content to search for character references
-        chs_numbers: List of valid character numbers
+        text (str): Text content to search for character references in format '#number'
+        chs_numbers (list[int]): List of valid/active character numbers
 
     Returns:
-        tuple: (active_characters, extinct_characters) found in text
+        tuple[list[int], list[int]]: A tuple containing:
+            - active_characters: List of character numbers found in text that exist in chs_numbers
+            - extinct_characters: List of character numbers found in text that don't exist in chs_numbers
+
+    Note:
+        The function searches from the highest possible number (max + 100) down to 1
+        to ensure longer numbers are matched first, preventing partial matches.
     """
     chs = []
     extinct = []
 
+    # Early return if no valid character numbers provided
     if not chs_numbers:
         return chs, extinct
 
+    # Strip HTML tags from text for clean processing
     tx = strip_tags(text)
 
+    # Start search from maximum character number plus buffer to catch any high numbers
     max_number = chs_numbers[0]
+
+    # Search from high to low numbers to avoid partial matching issues
+    # (e.g., matching #1 when #10 exists)
     for number in range(max_number + 100, 0, -1):
         k = f"#{number}"
+
+        # Skip if this character reference isn't in the text
         if k not in tx:
             continue
 
+        # Remove found reference to prevent duplicate matches
         tx = tx.replace(k, "")
 
+        # Categorize as active or extinct based on validity
         if number in chs_numbers:
             chs.append(number)
         else:

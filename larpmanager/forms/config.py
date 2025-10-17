@@ -202,38 +202,49 @@ class ConfigForm(MyForm):
         # Create and return the form field instance, or None if type is unsupported
         return factory() if factory else None
 
-    def _add_custom_field(self, config, res):
+    def _add_custom_field(self, config: dict, res: dict) -> None:
         """Add a custom configuration field to the form.
 
         Args:
-            config: Configuration field definition
-            res: Dictionary of existing configuration values
+            config : dict
+                Configuration field definition containing 'key', 'type', 'label',
+                'help_text', 'section', and optionally 'extra'
+            res : dict
+                Dictionary of existing configuration values
 
-        Side effects:
-            Adds field to form.fields and sets initial values
-            Updates sections mapping for UI organization
+        This method has side effects:
+            - Adds field to form.fields and sets initial values
+            - Updates sections mapping for UI organization
+            - Initializes custom_field list if not present
         """
+        # Extract key and initial value from configuration
         key = config["key"]
         init = str(res[key]) if key in res else None
 
+        # Initialize custom_field list if it doesn't exist
         if not hasattr(self, "custom_field"):
             self.custom_field = []
         self.custom_field.append(key)
 
+        # Get field type and extra configuration for specific field types
         field_type = config["type"]
-
         extra = config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL] else None
+
+        # Create and add the form field
         self.fields[key] = self._get_form_field(field_type, config["label"], config["help_text"], extra)
 
+        # Configure widget for MEMBERS field type
         if field_type == ConfigType.MEMBERS:
             self.fields[key].widget.set_assoc(config["extra"])
             if init:
                 init = [s.strip() for s in init.split(",")]
 
+        # Initialize sections dictionary and set field section
         if not hasattr(self, "sections"):
             self.sections = {}
         self.sections["id_" + key] = config["section"]
 
+        # Set initial value with type conversion for boolean fields
         if init:
             if field_type == ConfigType.BOOL:
                 init = init == "True"

@@ -552,21 +552,33 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_unimportant", ConfigType.BOOL, label, help_text)
 
-    def set_config_character(self):
+    def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.
 
-        Sets up configuration fields for campaign management, faction
-        independence, and character creation settings.
+        This method sets up configuration fields for various character-related features
+        including campaign management, faction independence, experience points system,
+        and player-managed character creation settings.
+
+        The configuration sections are conditionally created based on available features
+        in self.params["features"]. Each section contains relevant boolean, integer,
+        and other configuration options with appropriate labels and help text.
+
+        Note:
+            Requires self.params["features"] to contain feature flags and access to
+            self.set_section() and self.add_configs() methods.
         """
+        # Configure campaign-related settings if campaign feature is enabled
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
             label = _("Independent factions")
             help_text = _("If checked, do not use the parent event's factions")
             self.add_configs("campaign_faction_indep", ConfigType.BOOL, label, help_text)
 
+        # Configure experience points system if px feature is enabled
         if "px" in self.params["features"]:
             self.set_section("px", _("Experience points"))
 
+            # Player selection configuration - allows participants to choose abilities
             label = _("Player selection")
             help_text = _(
                 "If checked, participants may add abilities themselves, by selecting from those that "
@@ -574,27 +586,33 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("px_user", ConfigType.BOOL, label, help_text)
 
+            # Undo period configuration - time window for skill revocation
             label = _("Undo period")
             help_text = _(
                 "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)"
             )
             self.add_configs("px_undo", ConfigType.INT, label, help_text)
 
+            # Initial experience points configuration
             label = _("Initial experience points")
             help_text = _("Initial value of experience points for all characters")
             self.add_configs("px_start", ConfigType.INT, label, help_text)
 
+        # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))
 
+            # Maximum character limit configuration
             label = _("Maximum number")
             help_text = _("Maximum number of characters the player can create")
             self.add_configs("user_character_max", ConfigType.INT, label, help_text)
 
+            # Character approval process configuration
             label = _("Approval")
             help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs("user_character_approval", ConfigType.BOOL, label, help_text)
 
+            # Player relationships configuration
             label = _("Relationships")
             help_text = _("If checked, enables participants to write their own list of character relationships")
             self.add_configs("user_character_player_relationships", ConfigType.BOOL, label, help_text)
