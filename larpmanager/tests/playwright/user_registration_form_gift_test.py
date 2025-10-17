@@ -222,6 +222,8 @@ def gift(page, live_server):
     page.get_by_role("link", name="10€ within 8 days").click()
     page.get_by_role("button", name="Submit").click()
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()

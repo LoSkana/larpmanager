@@ -86,6 +86,8 @@ def donation(page, live_server):
     submit(page)
 
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)
@@ -142,6 +144,8 @@ def membership_fees(page, live_server):
 
     expect(page.locator("#one")).to_contain_text("15")
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)
@@ -172,6 +176,8 @@ def collections(page, live_server):
 
     expect(page.locator("#one")).to_contain_text("20")
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)

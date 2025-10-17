@@ -117,6 +117,8 @@ def pay(live_server, page):
     expect(page.locator("b")).to_contain_text("100")
     submit(page)
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")

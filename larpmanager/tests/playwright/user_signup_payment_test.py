@@ -100,6 +100,8 @@ def signup(page, live_server):
     submit(page)
 
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
 
     # approve payment

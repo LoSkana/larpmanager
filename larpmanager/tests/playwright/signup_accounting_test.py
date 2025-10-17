@@ -151,6 +151,8 @@ def pay(live_server, page):
     expect(page.locator("#one")).to_contain_text("52")
     submit(page)
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("52")
     submit(page)
 
