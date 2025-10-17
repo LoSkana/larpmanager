@@ -52,6 +52,10 @@ def signup(live_server, page):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
+
+    page.get_by_role("link", name="Payments ").click()
+    page.locator("#id_payment_require_receipt").check()
+
     submit_confirm(page)
     go_to(page, live_server, "/manage/methods")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
@@ -113,6 +117,8 @@ def pay(live_server, page):
     expect(page.locator("b")).to_contain_text("100")
     submit(page)
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")

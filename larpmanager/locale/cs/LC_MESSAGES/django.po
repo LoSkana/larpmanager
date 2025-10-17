@@ -2744,6 +2744,9 @@ msgstr "Platební měna"
 msgid "Payment priority"
 msgstr "Priorita platby"
 
+msgid "Payment received"
+msgstr "Přijatá platba"
+
 msgid "Payment to check"
 msgstr "Platba, která má být zkontrolována"
 
@@ -4797,6 +4800,9 @@ msgstr "Nevyřízené platby na delegovaných účtech"
 msgid "Reimbursement request for %(event)s"
 msgstr "Nárok na %(event)s"
 
+msgid "Require receipt for manual payments"
+msgstr "Vyžadovat potvrzení o ručních platbách"
+
 msgid "Review historical financial records"
 msgstr "Přezkoumání historických finančních záznamů"
 
@@ -5009,6 +5015,9 @@ msgstr "Účtování transakčních poplatků účastníkovi"
 
 msgid "Fill in your character's relationships"
 msgstr "Vyplňte vztahy své postavy"
+
+msgid "I confirm that I have made the payment"
+msgstr "Potvrzuji, že jsem provedl/a platbu"
 
 msgid "It will be shown to other participants"
 msgstr "Bude ukázán ostatním účastníkům"
@@ -5430,6 +5439,9 @@ msgstr "Tato stránka shrnuje rychlostní mapy této události"
 msgid "This page shows the types of event prologue"
 msgstr "Tato stránka shrnuje typy prologů událostí"
 
+msgid "Upload a PDF file or image (JPG, PNG, etc.)"
+msgstr "Nahrajte soubor PDF nebo obrázek (JPG, PNG atd.)"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Vaše darovaná registrace byla uplatněna!"
 
@@ -5793,6 +5805,9 @@ msgstr ""
 
 msgid "This page shows the types of quests in the event"
 msgstr "Tato stránka shrnuje typy úkolů v této akci"
+
+msgid "You can upload a file in pdf format, or an image"
+msgstr "Můžete nahrát soubor ve formátu pdf nebo obrázek"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
@@ -6305,6 +6320,9 @@ msgstr "po schválení jsou příslušné částky přiděleny jako"
 
 msgid "Allows you to copy any element directly from another event"
 msgstr "Umožňuje zkopírovat libovolný prvek přímo z jiné události"
+
+msgid "As soon as it is approved, your accounting will be updated"
+msgstr "Jakmile bude schválena, bude vaše účetnictví aktualizováno"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr ""
@@ -7343,10 +7361,6 @@ msgstr ""
 "Na této stránce můžete filtrovat postavy a přímo zobrazit jejich informace"
 
 msgid ""
-"Payment received! As soon as it is approved, your accounts will be updated"
-msgstr "Platba přijata! Jakmile bude schválena, vaše účty budou aktualizovány"
-
-msgid ""
 "Text visible only by the assigned participant, when 'show text' is checked"
 msgstr ""
 "Text viditelný pouze přiřazeným účastníkem, pokud je zaškrtnuto \"zobrazit "
@@ -7408,6 +7422,12 @@ msgid ""
 "If checked, it allows participants to indicate the song of their characters"
 msgstr ""
 "Pokud je tato možnost zaškrtnuta, mohou účastníci uvést píseň své postavy"
+
+msgid ""
+"If checked: Participants must provide a receipt/invoice for manual payments"
+msgstr ""
+"Pokud je zaškrtnuto: Účastníci musí předložit potvrzení/fakturu pro ruční "
+"platby"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
@@ -7943,6 +7963,13 @@ msgid ""
 "Lets members cast votes for the election of the organisation's Executive "
 "Committee"
 msgstr "Umožňuje členům hlasovat při volbě výkonného výboru organizace"
+
+msgid ""
+"Once the transfer is confirmed, submit the form below to notify us of your "
+"payment"
+msgstr ""
+"Jakmile je převod potvrzen, odešlete níže uvedený formulář, abyste nás "
+"informovali o své platbě"
 
 msgid ""
 "Theoretical total of income due to participation fees selected by the "
@@ -8929,6 +8956,12 @@ msgstr ""
 "záznamy"
 
 msgid ""
+"Once the transfer is confirmed, request the slip (the receipt of "
+"confirmation) and upload it below"
+msgstr ""
+"Po potvrzení převodu si vyžádejte potvrzení o převodu a nahrajte jej níže"
+
+msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -9261,6 +9294,13 @@ msgid ""
 msgstr ""
 "Denně zaznamenává finanční stav organizace a událostí a zobrazuje grafy "
 "vývoje v čase"
+
+msgid ""
+"Once you have made the payment, return to this page and submit the form "
+"below to notify us of your payment"
+msgstr ""
+"Po provedení platby se vraťte na tuto stránku a odešlete níže uvedený "
+"formulář, abyste nás informovali o své platbě"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
@@ -10090,14 +10130,6 @@ msgid ""
 msgstr ""
 "V textu prvku na levé straně je znak označen číslem uvedeným na pravé "
 "straně, které však neexistuje"
-
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below. You can upload a file in pdf format, or "
-"an image"
-msgstr ""
-"Po potvrzení převodu si vyžádejte potvrzení o převodu a nahrajte jej níže. "
-"Můžete nahrát soubor ve formátu pdf nebo obrázek"
 
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "

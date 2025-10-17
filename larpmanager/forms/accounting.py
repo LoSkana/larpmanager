@@ -420,9 +420,37 @@ class InvoiceSubmitForm(forms.Form):
 class WireInvoiceSubmitForm(InvoiceSubmitForm):
     # noinspection PyUnresolvedReferences, PyProtectedMember
     invoice = forms.FileField(
-        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        validators=[
+            FileTypeValidator(
+                allowed_types=[
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/png",
+                    "image/gif",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/webp",
+                    "application/pdf",
+                ]
+            )
+        ],
         label=PaymentInvoice._meta.get_field("invoice").verbose_name,
+        help_text=_("Upload a PDF file or image (JPG, PNG, etc.)"),
     )
+
+    payment_confirmed = forms.BooleanField(
+        required=True,
+        label=_("Payment confirmation"),
+        help_text=_("I confirm that I have made the payment"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        require_receipt = kwargs.pop("require_receipt", True)
+        super().__init__(*args, **kwargs)
+        if not require_receipt:
+            # Remove invoice field completely when receipt not required
+            if "invoice" in self.fields:
+                del self.fields["invoice"]
 
 
 class AnyInvoiceSubmitForm(InvoiceSubmitForm):
@@ -430,6 +458,12 @@ class AnyInvoiceSubmitForm(InvoiceSubmitForm):
         widget=forms.Textarea(attrs={"rows": 5, "cols": 20}),
         label=_("Info"),
         help_text=_("Enter any useful information for the organizers to verify the payment"),
+    )
+
+    payment_confirmed = forms.BooleanField(
+        required=True,
+        label=_("Payment confirmation"),
+        help_text=_("I confirm that I have made the payment"),
     )
 
 
