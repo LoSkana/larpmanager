@@ -22,7 +22,7 @@ from typing import Any
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -334,6 +334,14 @@ class WritingQuestion(BaseModel):
     def get_editable_display(self):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=["event", "applicable", "status"], condition=Q(deleted__isnull=True), name="wq_evt_app_stat_act"
+            ),
+            models.Index(fields=["event", "applicable"], condition=Q(deleted__isnull=True), name="wq_evt_app_act"),
+        ]
+
 
 class WritingOption(BaseModel):
     search = models.CharField(max_length=1000, editable=False)
@@ -407,6 +415,12 @@ class WritingChoice(BaseModel):
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wch_elem_q_act"),
+            models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wch_elem_act"),
+        ]
+
 
 class WritingAnswer(BaseModel):
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
@@ -418,6 +432,12 @@ class WritingAnswer(BaseModel):
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wan_elem_q_act"),
+            models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wan_elem_act"),
+        ]
 
 
 class RegistrationQuestion(BaseModel):
