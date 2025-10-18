@@ -23,7 +23,8 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -243,9 +244,56 @@ def get_character_sheet_factions(ctx):
 
     fac_event = ctx["event"].get_class_parent("faction")
     ctx["sheet_factions"] = []
-    for g in ctx["character"].factions_list.filter(event=fac_event):
+
+    # Fetch all factions
+    factions = list(ctx["character"].factions_list.filter(event=fac_event))
+
+    if not factions:
+        return
+
+    # Prepare writing fields query data
+    visible_writing_fields(ctx, QuestionApplicable.FACTION, only_visible=False)
+
+    # Get visible question IDs
+    question_visible = []
+    if "questions" in ctx:
+        for question_id in ctx["questions"].keys():
+            config = str(question_id)
+            if "show_all" not in ctx and config not in ctx.get("show_faction", {}):
+                continue
+            question_visible.append(question_id)
+
+    # Bulk fetch all writing answers and choices for all factions
+    faction_ids = [g.id for g in factions]
+
+    # Build answer mapping: faction_id -> {question_id -> text}
+    answer_map = {}
+    if question_visible:
+        for element_id, question_id, text in WritingAnswer.objects.filter(
+            element_id__in=faction_ids, question_id__in=question_visible
+        ).values_list("element_id", "question_id", "text"):
+            if element_id not in answer_map:
+                answer_map[element_id] = {}
+            answer_map[element_id][question_id] = text
+
+        # Build choice mapping: faction_id -> {question_id -> [option_ids]}
+        for element_id, question_id, option_id in WritingChoice.objects.filter(
+            element_id__in=faction_ids, question_id__in=question_visible
+        ).values_list("element_id", "question_id", "option_id"):
+            if element_id not in answer_map:
+                answer_map[element_id] = {}
+            if question_id not in answer_map[element_id]:
+                answer_map[element_id][question_id] = []
+            answer_map[element_id][question_id].append(option_id)
+
+    # Process each faction
+    for g in factions:
         data = g.show_complete()
-        data.update(get_writing_element_fields(ctx, "faction", QuestionApplicable.FACTION, g.id, only_visible=False))
+
+        # Add writing fields from pre-fetched data
+        fields = answer_map.get(g.id, {})
+        data.update({"questions": ctx.get("questions", {}), "options": ctx.get("options", {}), "fields": fields})
+
         ctx["sheet_factions"].append(data)
 
 
