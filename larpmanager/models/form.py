@@ -608,6 +608,12 @@ class RegistrationQuestion(BaseModel):
 
         return False
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="rq_evt_act"),
+            models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="rq_evt_stat_act"),
+        ]
+
 
 class RegistrationOption(BaseModel):
     search = models.CharField(max_length=1000, editable=False)
@@ -671,6 +677,12 @@ class RegistrationOption(BaseModel):
         js["question"] = self.question.name
         return js
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ro_evt_act"),
+            models.Index(fields=["question"], condition=Q(deleted__isnull=True), name="ro_quest_act"),
+        ]
+
 
 class RegistrationChoice(BaseModel):
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="choices")
@@ -683,6 +695,12 @@ class RegistrationChoice(BaseModel):
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
+        ]
+
 
 class RegistrationAnswer(BaseModel):
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="answers")
@@ -694,6 +712,12 @@ class RegistrationAnswer(BaseModel):
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.text[:100]}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
+        ]
 
 
 def get_ordered_registration_questions(ctx):
