@@ -24,6 +24,7 @@ import secrets
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -656,6 +657,10 @@ class PlayerRelationship(BaseModel):
         return f"{self.reg} - {self.target} ({self.reg.run.number})"
 
     class Meta:
+        indexes = [
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
+            models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="prel_target_act"),
+        ]
         constraints = [
             UniqueConstraint(
                 fields=["reg", "target", "deleted"],
@@ -891,8 +896,6 @@ class OneTimeAccessToken(BaseModel):
             request: Django HttpRequest object to extract metadata
             member: Member object if user is authenticated
         """
-        from django.utils import timezone
-
         self.used = True
         self.used_at = timezone.now()
         self.used_by = member

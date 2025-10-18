@@ -353,10 +353,11 @@ class Character(Writing):
         ]
         indexes = [
             models.Index(fields=["number", "event"]),
-            models.Index(fields=["event", "status"]),
-            models.Index(fields=["player", "event"]),
-            models.Index(fields=["event", "hide"]),
+            models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="char_evt_stat_act"),
+            models.Index(fields=["player", "event"], condition=Q(deleted__isnull=True), name="char_plyr_evt_act"),
+            models.Index(fields=["event", "hide"], condition=Q(deleted__isnull=True), name="char_evt_hide_act"),
             models.Index(fields=["mirror"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="char_evt_act"),
         ]
 
 
@@ -393,7 +394,10 @@ class Plot(Writing):
     order = models.IntegerField(default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="plot_evt_act"),
+        ]
         constraints = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_plot_with_optional"),
             UniqueConstraint(
@@ -482,7 +486,10 @@ class Faction(Writing):
         return self.name
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event", "order"])]
+        indexes = [
+            models.Index(fields=["number", "event", "order"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="fac_evt_act"),
+        ]
 
 
 class PrologueType(Writing):
@@ -490,7 +497,10 @@ class PrologueType(Writing):
         return self.name
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ptype_evt_act"),
+        ]
 
 
 class Prologue(Writing):
@@ -499,7 +509,10 @@ class Prologue(Writing):
     characters = models.ManyToManyField(Character, related_name="prologues_list", blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="prol_evt_act"),
+        ]
         ordering = ("event", "number", "typ")
         constraints = [
             UniqueConstraint(
@@ -550,7 +563,10 @@ class Handout(Writing):
     cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="hand_evt_act"),
+        ]
         constraints = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
@@ -621,7 +637,10 @@ class SpeedLarp(Writing):
         return f"S{self.number} {self.name} ({self.typ} - {self.station})"
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="speed_evt_act"),
+        ]
 
 
 def replace_char_names(v, chars):
@@ -722,7 +741,7 @@ class Relationship(BaseModel):
             ),
         ]
         indexes = [
-            models.Index(fields=["source"]),
-            models.Index(fields=["target"]),
-            models.Index(fields=["source", "target"]),
+            models.Index(fields=["source"], condition=Q(deleted__isnull=True), name="rel_src_act"),
+            models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="rel_tgt_act"),
+            models.Index(fields=["source", "target"], condition=Q(deleted__isnull=True), name="rel_src_tgt_act"),
         ]

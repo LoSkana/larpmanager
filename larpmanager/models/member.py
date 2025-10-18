@@ -429,6 +429,10 @@ class Membership(BaseModel):
     )
 
     class Meta:
+        indexes = [
+            models.Index(fields=["assoc", "member"], condition=Q(deleted__isnull=True), name="memb_assoc_mem_act"),
+            models.Index(fields=["assoc", "status"], condition=Q(deleted__isnull=True), name="memb_assoc_stat_act"),
+        ]
         constraints = [
             UniqueConstraint(
                 fields=["member", "assoc", "deleted"],
@@ -583,9 +587,9 @@ class Vote(BaseModel):
 
 
 def get_user_membership(user, assoc):
-    if hasattr(user, 'membership'):
+    if hasattr(user, "membership"):
         return user.membership
-    
+
     # noinspection PyUnresolvedReferences
     assoc_id = assoc.id if isinstance(assoc, Association) else assoc
 

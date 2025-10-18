@@ -333,7 +333,15 @@ class Registration(BaseModel):
         return self.member.display_profile()
 
     class Meta:
-        indexes = [models.Index(fields=["run", "member", "cancellation_date"])]
+        indexes = [
+            models.Index(fields=["run", "member", "cancellation_date"]),
+            models.Index(
+                fields=["member", "run", "cancellation_date", "redeem_code"],
+                condition=Q(deleted__isnull=True),
+                name="reg_mem_run_canc_red_act",
+            ),
+            models.Index(fields=["run"], condition=Q(deleted__isnull=True), name="reg_run_act"),
+        ]
 
         ordering = ["-created"]
 
