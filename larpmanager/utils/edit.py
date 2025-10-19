@@ -612,6 +612,10 @@ def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
         Uses Redis cache with a 15-second timeout window to track active editors.
         Cache timeout is set to minimum of ticket_time and 1 day.
     """
+    # Superusers bypass all validation checks
+    if request.user.is_superuser:
+        return ""
+
     # Handle plot objects by recursively checking all related characters
     # This prevents conflicts when editing plots that affect multiple characters
     if tp == "plot":
@@ -632,7 +636,7 @@ def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
 
     # Check for other active editors within the timeout window
     others = []
-    ticket_time = 15  # 15-second timeout for editing conflicts
+    ticket_time = 5  # 5 second timeout for editing conflicts
     for idx, el in ticket.items():
         (name, tm) = el
         # Only consider other users' tokens within the timeout period
