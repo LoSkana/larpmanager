@@ -341,6 +341,18 @@ class Registration(BaseModel):
                 name="reg_mem_run_canc_red_act",
             ),
             models.Index(fields=["run"], condition=Q(deleted__isnull=True), name="reg_run_act"),
+            # Index for active registrations with specific member and run (Query 1)
+            models.Index(
+                fields=["member", "run", "redeem_code"],
+                condition=Q(deleted__isnull=True, cancellation_date__isnull=True),
+                name="reg_mem_run_red_active",
+            ),
+            # Index for active registrations by run (Query 2)
+            models.Index(
+                fields=["run"],
+                condition=Q(deleted__isnull=True, cancellation_date__isnull=True),
+                name="reg_run_active_only",
+            ),
         ]
 
         ordering = ["-created"]

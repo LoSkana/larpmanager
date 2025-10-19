@@ -544,12 +544,24 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 
-            # Get registrations without assigned characters (excluding waiting list)
+            # Pre-filter ticket IDs to exclude from registration without character assigned
+            excluded_ticket_ids = RegistrationTicket.objects.filter(
+                event_id=ctx["event"].id,
+                tier__in=[
+                    TicketTier.WAITING,
+                    TicketTier.STAFF,
+                    TicketTier.NPC,
+                    TicketTier.COLLABORATOR,
+                    TicketTier.SELLER,
+                ],
+            ).values_list("id", flat=True)
+
+            # Get registrations without assigned characters
             que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
-            que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=TicketTier.WAITING)
+            que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
 
             # Add non-provisional registered members to the display list
-            for reg in que_reg.select_related("member", "ticket").order_by("search"):
+            for reg in que_reg.select_related("member"):
                 if not is_reg_provisional(reg, event=ctx["event"], features=features):
                     ctx["reg_list"].append(reg.member)
 
