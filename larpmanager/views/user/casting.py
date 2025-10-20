@@ -576,8 +576,8 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
         raise Http404("Not cool, bro!")
 
     # Build features map and check registration status
-    features_map = {ctx["event"].slug: ctx["features"]}
-    registration_status(ctx["run"], request.user, features_map=features_map)
+    ctx_reg = {"features_map": {ctx["event"].id: ctx["features"]}}
+    registration_status(ctx["run"], request.user, ctx_reg)
 
     # Verify user has valid registration for this event
     if ctx["run"].reg is None:

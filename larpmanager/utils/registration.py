@@ -24,7 +24,6 @@ from typing import Any
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -49,7 +48,7 @@ from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 
-def registration_available(run, features: dict | None = None, reg_counts: dict | None = None) -> None:
+def registration_available(run: Run, features: dict, ctx: dict | None = None) -> None:
     """Check if registration is available based on capacity and rules.
 
     Validates registration availability considering maximum participants,
@@ -58,21 +57,24 @@ def registration_available(run, features: dict | None = None, reg_counts: dict |
 
     Args:
         run: The run object containing event and status information
-        features: Optional dictionary of event features. If None, will be
-            fetched using get_event_features()
-        reg_counts: Optional dictionary of registration counts. If None,
-            will be fetched using get_reg_counts()
+        features: Dictionary of enabled features for the event
+        ctx: Optional context dictionary containing cached data
 
     Returns:
         None: Function modifies run.status in-place
     """
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
     # Skip advanced registration rules if no maximum participant limit is set
     if run.event.max_pg == 0:
         run.status["primary"] = True
         return
 
     # Get registration counts if not provided
-    if not reg_counts:
+    reg_counts = ctx.get("reg_counts")
+    if reg_counts is None:
         reg_counts = get_reg_counts(run)
 
     # Calculate remaining primary tickets
@@ -191,8 +193,7 @@ def registration_status_signed(
     member: Member,
     features: dict[str, Any],
     register_url: str,
-    character_rels_dict=None,
-    payment_invoices_dict=None,
+    ctx: dict | None = None,
 ) -> None:
     """
     Updates the registration status for a signed user based on membership and payment features.
@@ -203,10 +204,9 @@ def registration_status_signed(
         member: The member object for the registered user
         features: Dictionary of enabled features for the event
         register_url: URL for the registration page
-        character_rels_dict: Optional dictionary mapping registration IDs to
-            lists of RegistrationCharacterRel objects
-        payment_invoices_dict: Optional dictionary mapping registration IDs to
-            lists of PaymentInvoice objects
+        ctx: Optional context dictionary containing cached data:
+            - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
+            - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
 
     Returns:
         None: Updates run.status["text"] in place
@@ -214,15 +214,19 @@ def registration_status_signed(
     Raises:
         RewokedMembershipError: When membership status is revoked
     """
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
     # Initialize character registration status for the run
-    registration_status_characters(run, features, character_rels_dict)
+    registration_status_characters(run, features, ctx)
 
     # Get user membership for the event's association
     mb = get_user_membership(member, run.event.assoc_id)
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(reg, event=run.event)
+    provisional = is_reg_provisional(reg, features=features, event=run.event)
 
     # Update message for provisional registrations
     if provisional:
@@ -255,7 +259,7 @@ def registration_status_signed(
     # Handle payment feature processing and related status updates
     if "payment" in features:
         # Process payment status and return if payment handling is complete
-        if _status_payment(register_text, run, payment_invoices_dict):
+        if _status_payment(register_text, run, ctx):
             return
 
     # Check for incomplete user profile and prompt completion
@@ -279,7 +283,7 @@ def registration_status_signed(
         run.status["text"] += " " + _("Thanks for your support") + "!"
 
 
-def _status_payment(register_text: str, run, payment_invoices_dict=None) -> bool:
+def _status_payment(register_text: str, run: Run, ctx: dict | None = None) -> bool:
     """Check payment status and update registration status text accordingly.
 
     Handles pending payments, wire transfers, and payment alerts with
@@ -288,12 +292,18 @@ def _status_payment(register_text: str, run, payment_invoices_dict=None) -> bool
     Args:
         register_text: Base registration status text to append to
         run: Registration run object containing registration and status info
-        payment_invoices_dict: Optional dictionary mapping registration IDs to
-            lists of PaymentInvoice objects. If provided, avoids querying the database.
+        ctx: Optional context dictionary containing cached data:
+            - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
     """
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
+    payment_invoices_dict = ctx.get("payment_invoices_dict")
+
     # Get payment invoices for this registration
     if payment_invoices_dict is not None:
         invoices = payment_invoices_dict.get(run.reg.id, [])
@@ -365,12 +375,7 @@ def _status_payment(register_text: str, run, payment_invoices_dict=None) -> bool
 def registration_status(
     run: Run,
     user: User,
-    my_regs=None,
-    features_map: dict | None = None,
-    reg_count: int | None = None,
-    character_rels_dict=None,
-    payment_invoices_dict=None,
-    pre_registrations_dict=None,
+    ctx: dict | None = None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -380,23 +385,25 @@ def registration_status(
     Args:
         run: Event run object to check registration status for
         user: User object attempting registration
-        my_regs (QuerySet, optional): Pre-filtered user registrations. Defaults to None.
-        features_map (dict, optional): Cached features mapping. Defaults to None.
-        reg_count (int, optional): Pre-calculated registration count. Defaults to None.
-        character_rels_dict: Optional dictionary mapping registration IDs to
-            lists of RegistrationCharacterRel objects
-        payment_invoices_dict: Optional dictionary mapping registration IDs to
-            lists of PaymentInvoice objects
-        pre_registrations_dict: Optional dictionary mapping event IDs to
-            PreRegistration objects
+        ctx: Optional context dictionary containing cached data for efficiency:
+            - my_regs: Pre-filtered user registrations
+            - features_map: Cached features mapping
+            - reg_counts: Pre-calculated registration counts dictionary
+            - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
+            - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
+            - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
     """
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
-    registration_find(run, user, my_regs)
+    registration_find(run, user, ctx)
 
-    features = _get_features_map(features_map, run)
+    features = _get_features_map(run, ctx)
 
-    registration_available(run, features, reg_count)
+    registration_available(run, features, ctx)
     register_url = reverse("register", args=[run.get_slug()])
 
     if user.is_authenticated:
@@ -405,9 +412,7 @@ def registration_status(
             return
 
         if run.reg:
-            registration_status_signed(
-                run, run.reg, user.member, features, register_url, character_rels_dict, payment_invoices_dict
-            )
+            registration_status_signed(run, run.reg, user.member, features, register_url, ctx)
             return
 
     if run.end and get_time_diff_today(run.end) < 0:
@@ -415,7 +420,7 @@ def registration_status(
 
     # check pre-register
     if get_event_config(run.event_id, "pre_register_active", False):
-        _status_preregister(run, user, pre_registrations_dict)
+        _status_preregister(run, user, ctx)
 
     dt = datetime.today()
     # check registration open
@@ -451,7 +456,13 @@ def registration_status(
     status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed") + "."
 
 
-def _status_preregister(run, user, pre_registrations_dict=None):
+def _status_preregister(run, user, ctx: dict | None = None):
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
+    pre_registrations_dict = ctx.get("pre_registrations_dict")
+
     # Check if user already has a pre-registration for this event
     has_pre_registration = False
     if user.is_authenticated:
@@ -472,16 +483,29 @@ def _status_preregister(run, user, pre_registrations_dict=None):
         run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
 
 
-def _get_features_map(features_map, run):
+def _get_features_map(run: Run, ctx: dict):
+    """Get features map from context or create it if not available.
+
+    Args:
+        run: Run object to get features for
+        ctx: Context dictionary that may contain 'features_map'
+
+    Returns:
+        dict: Features dictionary for the run's event
+    """
+    if ctx is None:
+        ctx = {}
+
+    features_map = ctx.get("features_map")
     if features_map is None:
         features_map = {}
-    if run.event.slug not in features_map:
-        features_map[run.event.slug] = get_event_features(run.event_id)
-    features = features_map[run.event.slug]
+    if run.event_id not in features_map:
+        features_map[run.event_id] = get_event_features(run.event_id)
+    features = features_map[run.event_id]
     return features
 
 
-def registration_find(run: Run, user: User, my_regs: QuerySet = None):
+def registration_find(run: Run, user: User, ctx: dict | None = None):
     """Find and attach registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
@@ -490,17 +514,23 @@ def registration_find(run: Run, user: User, my_regs: QuerySet = None):
     Args:
         run: The Run object to find registration for
         user: The User object to search registration for
-        my_regs: Optional pre-fetched registrations queryset for performance optimization
+        ctx: Optional context dictionary containing cached data:
+            - my_regs: Pre-fetched registrations queryset for performance optimization
 
     Returns:
         None: Function modifies run.reg attribute in-place
     """
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
     # Early return if user is not authenticated
     if not user.is_authenticated:
         run.reg = None
         return
 
-    # Use pre-fetched registrations if provided for performance
+    # Use pre-fetched registrations if provided
+    my_regs = ctx.get("my_regs")
     if my_regs is not None:
         run.reg = get_match_reg(run, my_regs)
         return
@@ -521,7 +551,7 @@ def check_character_maximum(event, member):
     return current_chars >= max_chars, max_chars
 
 
-def registration_status_characters(run, features: dict, character_rels_dict: dict[int, list] | None = None) -> None:
+def registration_status_characters(run: Run, features: dict, ctx: dict | None = None) -> None:
     """Update registration status with character assignment information.
 
     Displays assigned characters with approval status and provides links
@@ -530,13 +560,18 @@ def registration_status_characters(run, features: dict, character_rels_dict: dic
     Args:
         run: The run object containing registration information
         features: Dictionary of enabled event features
-        character_rels_dict: Optional dictionary mapping registration IDs to
-            lists of RegistrationCharacterRel objects. If provided, avoids
-            querying the database for character relationships.
+        ctx: Optional context dictionary containing cached data:
+            - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
 
     Returns:
         None: Function modifies run.status["details"] in place
     """
+    # Extract values from context dictionary if provided
+    if ctx is None:
+        ctx = {}
+
+    character_rels_dict = ctx.get("character_rels_dict")
+
     # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:
         rcrs = character_rels_dict.get(run.reg.id, [])
@@ -571,28 +606,34 @@ def registration_status_characters(run, features: dict, character_rels_dict: dic
     elif len(aux) > 1:
         run.status["details"] += _("Your characters are") + ": " + ", ".join(aux)
 
-    # Check if registration is on waiting list
-    reg_waiting = run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING
+        _status_approval(aux, features, run)
 
+
+def _status_approval(aux, features, run):
     # Add character creation/selection links if feature is enabled and not waiting
-    if "user_character" in features and not reg_waiting:
-        check, max_chars = check_character_maximum(run.event, run.reg.member)
+    if "user_character" not in features:
+        return
 
-        # Show character creation link if user can create more characters
-        if not check:
-            url = reverse("character_create", args=[run.get_slug()])
-            if run.status["details"]:
-                run.status["details"] += " - "
-            mes = _("Access character creation!")
-            run.status["details"] += f"<a href='{url}'>{mes}</a>"
+    # Check if registration is on waiting list
+    if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
+        return
 
-        # Show character selection link if no characters assigned but max chars available
-        elif not aux and max_chars:
-            url = reverse("character_list", args=[run.get_slug()])
-            if run.status["details"]:
-                run.status["details"] += " - "
-            mes = _("Select your character!")
-            run.status["details"] += f"<a href='{url}'>{mes}</a>"
+    check, max_chars = check_character_maximum(run.event, run.reg.member)
+    # Show character creation link if user can create more characters
+    if not check:
+        url = reverse("character_create", args=[run.get_slug()])
+        if run.status["details"]:
+            run.status["details"] += " - "
+        mes = _("Access character creation!")
+        run.status["details"] += f"<a href='{url}'>{mes}</a>"
+
+    # Show character selection link if no characters assigned but max chars available
+    elif not aux and max_chars:
+        url = reverse("character_list", args=[run.get_slug()])
+        if run.status["details"]:
+            run.status["details"] += " - "
+        mes = _("Select your character!")
+        run.status["details"] += f"<a href='{url}'>{mes}</a>"
 
 
 def get_registration_options(instance) -> list[tuple[str, str]]:
