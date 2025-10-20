@@ -39,27 +39,40 @@ class Command(BaseCommand):
         self.go_polib()
         self.stdout.write(str(self.translator.get_usage()))
 
-    def translate_entry(self, entry, tgt):
+    def translate_entry(self, entry, tgt: str) -> None:
         """Translate a single entry using DeepL API.
 
         Args:
             entry: The POFile entry to translate
-            tgt: Target language code (e.g., 'EN', 'PT')
+            tgt (str): Target language code (e.g., 'EN', 'PT')
+
+        Raises:
+            Exception: When DeepL API usage limit is exceeded
+            deepl.exceptions.DeepLException: When DeepL API encounters an error
         """
+        # Check if DeepL API usage limit has been reached
         usage = self.translator.get_usage()
         if usage.any_limit_reached:
             raise Exception("LIMIT EXCEEDED!")
 
         try:
+            # Display the original text to be translated
             self.stdout.write(entry.msgid)
+
+            # Normalize target language code and apply any mappings
             tgt = tgt.upper()
             if tgt in self.target:
                 tgt = self.target[tgt]
+
+            # Perform the actual translation using DeepL API
             result = self.translator.translate_text(entry.msgid, source_lang="EN", target_lang=tgt)
             entry.msgstr = str(result)
+
+            # Display the translated result and add delay for API rate limiting
             self.stdout.write(f"-> {entry.msgstr}\n")
             time.sleep(1)
         except deepl.exceptions.DeepLException as e:
+            # Handle DeepL-specific exceptions and log the error
             self.stdout.write(e)
             self.stdout.write(entry.msgid)
 
@@ -114,15 +127,28 @@ class Command(BaseCommand):
 
             self.save_po(po, po_path)
 
-    def save_po(self, po, po_path):
-        # Crate new ordered po
+    def save_po(self, po: polib.POFile, po_path: str) -> None:
+        """Save a PO file with sorted and deduplicated entries.
+
+        Args:
+            po: The PO file object to process
+            po_path: Path where the processed PO file will be saved
+        """
+        # Create new ordered po file with original metadata
         sorted_po = polib.POFile()
         sorted_po.metadata = po.metadata
+
+        # Sort entries by message ID length first, then alphabetically
         sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
+
+        # Use set to track already processed message IDs for deduplication
         cache = set()
         for entry in sorted_entries:
+            # Skip duplicate entries based on message ID
             if entry.msgid in cache:
                 continue
             cache.add(entry.msgid)
             sorted_po.append(entry)
+
+        # Save the processed PO file to the specified path
         sorted_po.save(po_path)

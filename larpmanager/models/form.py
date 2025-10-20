@@ -22,7 +22,7 @@ from typing import Any
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
-from django.db.models import F
+from django.db.models import F, QuerySet
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -87,18 +87,40 @@ class BaseQuestionType(models.TextChoices):
         }
 
 
-def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+def extend_textchoices(
+    name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]
+) -> type[models.TextChoices]:
     """Extend Django TextChoices with additional options.
 
+    Creates a new TextChoices class that combines the choices from a base
+    TextChoices class with additional custom choices.
+
     Args:
-        name: Name for the new TextChoices class
-        base: Base TextChoices to extend
-        extra: List of (name, value, label) tuples to add
+        name: Name for the new TextChoices class to be created.
+        base: Base TextChoices class to extend from.
+        extra: List of tuples containing (name, value, label) for each
+            additional choice to add to the extended class.
 
     Returns:
-        models.TextChoices: Extended choices class
+        A new TextChoices class that includes all choices from the base
+        class plus the additional choices specified in extra.
+
+    Example:
+        >>> class BaseChoices(models.TextChoices):
+        ...     OPTION1 = 'opt1', 'Option 1'
+        >>> extended = extend_textchoices(
+        ...     'ExtendedChoices',
+        ...     BaseChoices,
+        ...     [('OPTION2', 'opt2', 'Option 2')]
+        ... )
     """
-    members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
+    # Extract existing choices from base class as (name, (value, label)) tuples
+    members = [(m.name, (m.value, m.label)) for m in base]
+
+    # Add extra choices in the same format
+    members += [(n, (v, lbl)) for (n, v, lbl) in extra]
+
+    # Create and return new TextChoices class with combined members
     return models.TextChoices(name, members)
 
 
@@ -306,7 +328,17 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event, features):
+    def get_instance_questions(event: Event) -> QuerySet:
+        """Get writing questions for a specific event instance.
+
+        Args:
+            event: The event instance to get questions for
+
+        Returns:
+            QuerySet of WritingQuestion objects ordered by their 'order' field
+        """
+        # Retrieve all writing questions associated with the event
+        # and order them by their specified order field
         return event.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod

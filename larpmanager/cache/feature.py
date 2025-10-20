@@ -47,37 +47,61 @@ def cache_assoc_features(assoc_id):
     return f"assoc_features_{assoc_id}"
 
 
-def get_assoc_features(assoc_id):
+def get_assoc_features(assoc_id: int) -> dict[str, int]:
     """Get cached association features, updating cache if needed.
 
+    Retrieves the enabled features for a specific association from cache.
+    If the data is not cached, fetches it from the database and caches it
+    for future requests.
+
     Args:
-        assoc_id (int): Association ID
+        assoc_id: The unique identifier for the association.
 
     Returns:
-        dict: Dictionary of enabled features {feature_slug: 1}
+        A dictionary mapping feature slugs to their enabled status.
+        Keys are feature slug strings, values are 1 for enabled features.
+
+    Example:
+        >>> get_assoc_features(123)
+        {'registration': 1, 'accounting': 1, 'character_creation': 1}
     """
+    # Generate the cache key for this association's features
     key = cache_assoc_features(assoc_id)
+
+    # Attempt to retrieve features from cache
     res = cache.get(key)
+
+    # If not cached, fetch from database and cache the result
     if res is None:
         res = update_assoc_features(assoc_id)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
-def update_assoc_features(assoc_id):
+def update_assoc_features(assoc_id: int) -> dict[str, int]:
     """Update association feature cache from database.
 
+    Retrieves enabled features for an association and builds a cache dictionary
+    containing both database-stored features and configuration-based features.
+
     Args:
-        assoc_id (int): Association ID to update cache for
+        assoc_id: Association ID to update cache for
 
     Returns:
-        dict: Dictionary of enabled features including config-based features
+        Dictionary mapping feature slugs to enabled status (1 for enabled)
+
+    Raises:
+        None: Catches ObjectDoesNotExist and returns empty dict on failure
     """
     res = {}
     try:
+        # Get association object and retrieve enabled features
         assoc = Association.objects.get(pk=assoc_id)
         for s in assoc.features.values_list("slug", flat=True):
             res[s] = 1
+
+        # Add calendar-based configuration features
         for sl in [
             "genre",
             "show_event",
@@ -92,11 +116,13 @@ def update_assoc_features(assoc_id):
             if assoc.get_config("calendar_" + sl, False):
                 res[sl] = 1
 
+        # Add field-based features (safety and diet)
         for slug in ["safety", "diet"]:
             if slug in assoc.mandatory_fields or slug in assoc.optional_fields:
                 res[slug] = 1
 
     except ObjectDoesNotExist:
+        # Return empty dict if association not found
         pass
     return res
 
@@ -109,20 +135,33 @@ def cache_event_features_key(ev_id):
     return f"event_features_{ev_id}"
 
 
-def get_event_features(ev_id):
+def get_event_features(ev_id: int) -> dict[str, int]:
     """Get cached event features, updating cache if needed.
 
+    Retrieves event features from cache. If not found in cache, updates
+    the cache by fetching fresh data and stores it for future requests.
+
     Args:
-        ev_id (int): Event ID
+        ev_id: Event ID to fetch features for.
 
     Returns:
-        dict: Dictionary of enabled event features {feature_slug: 1}
+        Dictionary mapping feature slugs to enabled status (1 for enabled).
+        Example: {'registration': 1, 'accounting': 1}
+
+    Note:
+        Cache timeout is set to 1 day as defined in conf_settings.
     """
+    # Generate cache key for this specific event
     key = cache_event_features_key(ev_id)
+
+    # Attempt to retrieve cached features
     res = cache.get(key)
+
+    # If not in cache, fetch fresh data and cache it
     if res is None:
         res = update_event_features(ev_id)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 

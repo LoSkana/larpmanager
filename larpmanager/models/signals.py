@@ -238,19 +238,33 @@ log = logging.getLogger(__name__)
 
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
-def pre_save_callback(sender, instance, *args, **kwargs):
+def pre_save_callback(sender: type, instance: object, *args: any, **kwargs: any) -> None:
     """Generic pre-save handler for automatic field population.
 
     Automatically sets number/order fields and updates search fields
-    for models that have them.
+    for models that have them. This function is designed to be used
+    as a Django model signal handler.
 
-    Args:
-        sender: Model class sending the signal
-        instance: Model instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
+    Parameters
+    ----------
+    sender : type
+        Model class sending the signal
+    instance : object
+        Model instance being saved
+    *args : any
+        Additional positional arguments passed by Django signal
+    **kwargs : any
+        Additional keyword arguments passed by Django signal
+
+    Returns
+    -------
+    None
+        This function performs side effects on the instance
     """
+    # Auto-assign sequential numbers for models with number/order fields
     auto_assign_sequential_numbers(instance)
+
+    # Update search fields for models that implement search functionality
     update_model_search_field(instance)
 
 
@@ -484,16 +498,35 @@ def post_character_update_px(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=Character)
-def post_save_character(sender, instance, **kwargs):
+def post_save_character(sender: type, instance: Character, **kwargs) -> None:
+    """Handle post-save operations for Character model instances.
+
+    This signal handler performs several maintenance tasks after a Character
+    instance is saved, including PDF cleanup, cache updates, and relationship
+    refreshes to maintain data consistency across the application.
+
+    Args:
+        sender: The model class that sent the signal (Character).
+        instance: The Character instance that was saved.
+        **kwargs: Additional keyword arguments from the signal.
+
+    Returns:
+        None
+    """
+    # Clean up any outdated PDF files associated with this character
     cleanup_character_pdfs_on_save(instance)
 
+    # Update registration-related cache entries for this character
     on_character_update_registration_cache(instance)
 
+    # Refresh the character's own relationship cache
     refresh_character_relationships(instance)
+
+    # Update relationship caches for all characters that have this character as a target
     for rel in Relationship.objects.filter(target=instance):
         refresh_character_relationships(rel.source)
 
-    # Update all related caches
+    # Update all other character-related caches (experience, skills, etc.)
     refresh_character_related_caches(instance)
 
 
@@ -561,21 +594,37 @@ def pre_save_event(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Event)
-def post_save_event_update(sender, instance, **kwargs):
-    clear_event_cache_all_runs(instance)
+def post_save_event_update(sender: type, instance: Event, **kwargs) -> None:
+    """Handle post-save operations for Event model instances.
 
+    This function is triggered after an Event instance is saved and performs
+    various cache invalidation and setup operations to maintain data consistency.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Event instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+
+    Returns:
+        None
+    """
+    # Clear event-related caches to ensure fresh data
+    clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
 
+    # Setup campaign inheritance if not explicitly skipped
     if not getattr(instance, "_skip_campaign_setup", False):
         copy_parent_event_to_campaign(instance)
 
+    # Clear run and registration related caches
     clear_run_event_links_cache(instance)
 
+    # Clear registration counts for all associated runs
     for run_id in instance.runs.values_list("id", flat=True):
         clear_registration_counts_cache(run_id)
 
+    # Reset configuration cache and create default setup
     on_event_post_save_reset_config_cache(instance)
-
     create_default_event_setup(instance)
 
 
@@ -966,17 +1015,37 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Registration)
-def post_save_registration_cache(sender, instance, created, **kwargs):
+def post_save_registration_cache(sender: type, instance: Registration, created: bool, **kwargs) -> None:
+    """Handle post-save operations for Registration instances.
+
+    This signal handler performs various cache updates and business logic
+    operations after a Registration instance is saved to the database.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Registration instance that was saved
+        created: True if this is a new instance, False if updated
+        **kwargs: Additional keyword arguments from the signal
+
+    Returns:
+        None
+    """
+    # Assign character from previous campaign if applicable
     assign_previous_campaign_character(instance)
 
+    # Process ticket options and character-related data
     process_character_ticket_options(instance)
 
+    # Update accounting records and balances
     handle_registration_accounting_updates(instance)
 
+    # Clear cached accounting data for this run
     clear_registration_accounting_cache(instance.run_id)
 
+    # Reset event navigation links cache
     on_registration_post_save_reset_event_links(instance)
 
+    # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
 

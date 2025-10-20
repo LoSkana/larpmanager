@@ -35,18 +35,36 @@ class DefModelAdmin(ImportExportModelAdmin):
     ordering = ["-updated"]
 
 
-def reduced(v):
+def reduced(v: str | None) -> str:
     """Truncate string to maximum length with ellipsis.
 
+    Truncates the input string to a maximum of 50 characters. If the string
+    is longer than the limit, it's cut off and "[...]" is appended to indicate
+    truncation.
+
     Args:
-        v (str): String to potentially truncate
+        v: String to potentially truncate. Can be None or empty.
 
     Returns:
-        str: Original string if under 50 chars, otherwise truncated with [...] suffix
+        Original string if under 50 chars, otherwise truncated with [...] suffix.
+        Returns empty string or None as-is if input is falsy.
+
+    Examples:
+        >>> reduced("short")
+        'short'
+        >>> reduced("a" * 60)
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa[...]'
+        >>> reduced(None)
+        None
     """
+    # Define maximum allowed length before truncation
     max_length = 50
+
+    # Return early if string is None, empty, or under limit
     if not v or len(v) < max_length:
         return v
+
+    # Truncate and append ellipsis indicator
     return v[:max_length] + "[...]"
 
 

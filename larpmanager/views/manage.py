@@ -38,7 +38,7 @@ from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
-def manage(request, s=None):
+def manage(request: HttpRequest, s: str | None = None) -> HttpResponse:
     """Main management dashboard routing.
 
     Routes to either executive management or organizer management
@@ -51,12 +51,16 @@ def manage(request, s=None):
     Returns:
         HttpResponse: Redirect to home or appropriate management view
     """
+    # Check if user has access to any association
     if request.assoc["id"] == 0:
         return redirect("home")
 
+    # Route based on presence of event slug
     if s:
+        # Event-specific organizer management
         return _orga_manage(request, s)
     else:
+        # Executive management for entire association
         return _exe_manage(request)
 
 
@@ -234,12 +238,21 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/manage/exe.html", ctx)
 
 
-def _exe_suggestions(ctx):
+def _exe_suggestions(ctx: dict) -> None:
     """Add priority tasks and suggestions to the executive management context.
 
+    This function provides contextual suggestions for executive management tasks
+    that haven't been completed yet, helping guide administrators through
+    platform setup and configuration.
+
     Args:
-        ctx: Context dictionary containing association ID and other data
+        ctx: Context dictionary containing association ID ('a_id') and other data
+            used for rendering the executive dashboard.
+
+    Returns:
+        None: Modifies the context dictionary in-place by adding suggestions.
     """
+    # Define mapping of permission keys to their descriptive suggestion texts
     suggestions = {
         "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
@@ -253,9 +266,13 @@ def _exe_suggestions(ctx):
         "exe_config": _("Set up specific values for the interface configuration or features"),
     }
 
+    # Iterate through each suggestion and check if it should be displayed
     for perm, text in suggestions.items():
+        # Skip suggestions that have already been completed/dismissed
         if get_assoc_config(ctx["a_id"], f"{perm}_suggestion"):
             continue
+
+        # Add the suggestion to the context for display
         _add_suggestion(ctx, text, perm)
 
 
@@ -336,24 +353,34 @@ def _exe_actions(request, ctx: dict, features: dict = None) -> None:
     _exe_users_actions(request, ctx, features)
 
 
-def _exe_users_actions(request, ctx, features):
+def _exe_users_actions(request: object, ctx: dict, features: set) -> None:
     """
     Process user management actions and setup tasks for executives.
 
+    Analyzes available features and adds priority tasks or actions to the context
+    based on missing configurations or pending items that require executive attention.
+
     Args:
-        request: HTTP request object
-        assoc: Association instance
-        ctx: Context dictionary to populate with actions
-        features: Set of enabled features
+        request: HTTP request object containing association data
+        ctx: Context dictionary to populate with actions and priorities
+        features: Set of enabled feature names for the association
+
+    Returns:
+        None: Modifies ctx dictionary in-place
     """
+    # Handle membership feature configuration
     if "membership" in features:
+        # Check if membership request text is configured
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
 
+        # Verify membership fee configuration exists
         if len(get_assoc_config(request.assoc["id"], "membership_fee", "")) == 0:
             _add_priority(ctx, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
+    # Handle voting feature configuration
     if "vote" in features:
+        # Check if voting candidates are configured
         if not get_assoc_config(request.assoc["id"], "vote_candidates", ""):
             _add_priority(
                 ctx,
@@ -361,9 +388,12 @@ def _exe_users_actions(request, ctx, features):
                 "exe_config",
             )
 
+    # Handle help/questions feature
     if "help" in features:
+        # Get help questions status and check for pending items
         _closed_q, open_q = _get_help_questions(ctx, request)
         if open_q:
+            # Add action for unanswered questions
             _add_action(
                 ctx,
                 _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_q)},
@@ -371,15 +401,23 @@ def _exe_users_actions(request, ctx, features):
             )
 
 
-def _exe_accounting_actions(request, ctx, features):
+def _exe_accounting_actions(request: HttpRequest, ctx: dict, features: set) -> None:
     """
     Process accounting-related setup actions for executives.
 
+    Checks for required configurations in payment methods, organization tax,
+    and VAT settings. Adds priority actions to the context when configurations
+    are missing or incomplete.
+
     Args:
-        request: request instance
+        request: HTTP request instance containing association data
         ctx: Context dictionary to populate with priority actions
         features: Set of enabled features for the association
+
+    Returns:
+        None: Function modifies ctx dictionary in-place
     """
+    # Check if payment methods are configured when payment feature is enabled
     if "payment" in features:
         if not request.assoc.get("methods", ""):
             _add_priority(
@@ -388,6 +426,7 @@ def _exe_accounting_actions(request, ctx, features):
                 "exe_methods",
             )
 
+    # Verify organization tax configuration is set up
     if "organization_tax" in features:
         if not get_assoc_config(request.assoc["id"], "organization_tax_perc", ""):
             _add_priority(
@@ -397,6 +436,7 @@ def _exe_accounting_actions(request, ctx, features):
                 "config/organization_tax",
             )
 
+    # Check VAT configuration completeness (both ticket and options required)
     if "vat" in features:
         if not get_assoc_config(request.assoc["id"], "vat_ticket", "") or not get_assoc_config(
             request.assoc["id"], "vat_options", ""
@@ -619,12 +659,20 @@ def _orga_user_actions(ctx, features, request):
             )
 
 
-def _orga_casting_actions(ctx, features):
+def _orga_casting_actions(ctx: dict, features: list[str]) -> None:
     """Add priority actions related to casting and quest builder setup.
 
     Checks for missing casting configurations and quest/trait relationships,
     adding appropriate priority suggestions for event organizers.
+
+    Args:
+        ctx: Context dictionary containing event data and other view context
+        features: List of feature names enabled for the current event
+
+    Returns:
+        None: Function modifies ctx in place by adding priority actions
     """
+    # Check if casting feature is enabled and needs configuration
     if "casting" in features:
         if not ctx["event"].get_config("casting_min", 0):
             _add_priority(
@@ -634,7 +682,9 @@ def _orga_casting_actions(ctx, features):
                 "config/casting",
             )
 
+    # Check if questbuilder feature is enabled and needs setup
     if "questbuilder" in features:
+        # Verify quest types exist for the event
         if not ctx["event"].get_elements(QuestType).count():
             _add_priority(
                 ctx,
@@ -642,6 +692,7 @@ def _orga_casting_actions(ctx, features):
                 "orga_quest_types",
             )
 
+        # Find quest types that don't have any associated quests
         unused_quest_types = (
             ctx["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
         )
@@ -653,6 +704,7 @@ def _orga_casting_actions(ctx, features):
                 "orga_quests",
             )
 
+        # Find quests that don't have any associated traits
         unused_quests = ctx["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
         if unused_quests.count():
             _add_priority(
@@ -663,15 +715,24 @@ def _orga_casting_actions(ctx, features):
             )
 
 
-def _orga_px_actions(ctx, features):
+def _orga_px_actions(ctx: dict, features: dict) -> None:
     """Add priority actions for experience points system setup.
 
     Checks for missing PX configurations, ability types, and deliveries,
     adding appropriate priority suggestions for event organizers.
+
+    Args:
+        ctx: Context dictionary containing event and other data
+        features: Dictionary of available features for the event
+
+    Returns:
+        None: Function modifies ctx in place by adding priority actions
     """
+    # Early return if PX feature is not enabled
     if "px" not in features:
         return
 
+    # Check if experience points are configured for the event
     if not ctx["event"].get_config("px_start", 0):
         _add_priority(
             ctx,
@@ -680,6 +741,7 @@ def _orga_px_actions(ctx, features):
             "config/px",
         )
 
+    # Verify that ability types exist for the event
     if not ctx["event"].get_elements(AbilityTypePx).count():
         _add_priority(
             ctx,
@@ -687,9 +749,11 @@ def _orga_px_actions(ctx, features):
             "orga_px_ability_types",
         )
 
+    # Find ability types that have no associated abilities
     unused_ability_types = (
         ctx["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
+    # Alert if there are unused ability types
     if unused_ability_types.count():
         _add_priority(
             ctx,
@@ -698,6 +762,7 @@ def _orga_px_actions(ctx, features):
             "orga_px_abilities",
         )
 
+    # Check if delivery methods are configured for experience points
     if not ctx["event"].get_elements(DeliveryPx).count():
         _add_priority(
             ctx,
@@ -785,12 +850,20 @@ def _orga_reg_acc_actions(ctx: dict, features: list[str]) -> None:
             )
 
 
-def _orga_reg_actions(ctx, features):
+def _orga_reg_actions(ctx: dict, features: list[str]) -> None:
     """Add priority actions for registration management setup.
 
     Checks registration status, required tickets, and registration features
     to provide guidance for event organizers.
+
+    Args:
+        ctx: Context dictionary containing event and run data
+        features: List of feature names enabled for the organization
+
+    Returns:
+        None: Modifies ctx in place by adding priority actions
     """
+    # Check if registration opening date needs to be configured
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_priority(
             ctx,
@@ -798,6 +871,7 @@ def _orga_reg_actions(ctx, features):
             "orga_event",
         )
 
+    # Check if registration secret link needs to be configured
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_priority(
             ctx,
@@ -805,6 +879,7 @@ def _orga_reg_actions(ctx, features):
             "orga_event",
         )
 
+    # Check if external registration link needs to be configured
     if "register_link" in features and not ctx["event"].register_link:
         _add_priority(
             ctx,
@@ -812,12 +887,15 @@ def _orga_reg_actions(ctx, features):
             "orga_event",
         )
 
+    # Check custom character configuration if feature is enabled
     if "custom_character" in features:
         configured = False
+        # Check if any custom character fields are configured
         for field in ["pronoun", "song", "public", "private", "profile"]:
             if ctx["event"].get_config("custom_character_" + field, False):
                 configured = True
 
+        # Add priority action if no custom character fields are configured
         if not configured:
             _add_priority(
                 ctx,
@@ -827,22 +905,33 @@ def _orga_reg_actions(ctx, features):
             )
 
 
-def _orga_suggestions(ctx):
+def _orga_suggestions(ctx: dict) -> None:
     """Add priority suggestions for event organization.
 
+    This function adds both priority and regular suggestions to the context based on
+    event configuration settings. Priority suggestions are shown first and include
+    the most important organizational tasks.
+
     Args:
-        ctx: Context dictionary to add suggestions to
+        ctx: Context dictionary containing event information and suggestions list.
+             Must contain an 'event' key with an object that has get_config method.
+
+    Returns:
+        None: Modifies the ctx dictionary in place by adding suggestions.
     """
+    # Define high-priority suggestions for critical event setup tasks
     priorities = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
     }
 
+    # Add priority suggestions if they haven't been dismissed
     for perm, text in priorities.items():
         if ctx["event"].get_config(f"{perm}_suggestion"):
             continue
         _add_priority(ctx, text, perm)
 
+    # Define regular suggestions for additional event configuration
     suggestions = {
         "orga_registration_form": _(
             "Define the registration form, and set up any number of registration questions and their options"
@@ -853,25 +942,31 @@ def _orga_suggestions(ctx):
         "orga_config": _("Set specific values for configuration of features of the event"),
     }
 
+    # Add regular suggestions if they haven't been dismissed
     for perm, text in suggestions.items():
         if ctx["event"].get_config(f"{perm}_suggestion"):
             continue
         _add_suggestion(ctx, text, perm)
 
 
-def _add_item(ctx, list_name, text, perm, link):
+def _add_item(ctx: dict, list_name: str, text: str, perm: str, link: str | None) -> None:
     """Add item to specific list in management context.
 
     Args:
-        ctx: Context dictionary to modify
-        list_name: Name of list to add item to
-        text: Item message text
-        perm: Permission key
-        link: Optional custom link
+        ctx: Context dictionary to modify in-place
+        list_name: Name of the list to add the item to
+        text: Display text for the item
+        perm: Permission key required for the item
+        link: Optional custom link URL for the item
+
+    Returns:
+        None: Modifies the context dictionary in-place
     """
+    # Initialize list if it doesn't exist in context
     if list_name not in ctx:
         ctx[list_name] = []
 
+    # Append new item tuple to the specified list
     ctx[list_name].append((text, perm, link))
 
 
@@ -911,37 +1006,55 @@ def _add_suggestion(ctx, text, perm, link=None):
     _add_item(ctx, "suggestions_list", text, perm, link)
 
 
-def _has_permission(request, ctx, perm):
+def _has_permission(request: HttpRequest, ctx: dict, perm: str) -> bool:
     """Check if user has required permission for action.
 
+    This function determines whether a user has the necessary permissions
+    to perform a specific action by checking either association-level or
+    event-level permissions based on the permission string prefix.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary
-        perm: Permission string to check
+        request: Django HTTP request object containing user information
+        ctx: Context dictionary containing event and other relevant data
+        perm: Permission string to check (e.g., 'exe_view' or 'orga_edit')
 
     Returns:
-        bool: True if user has permission
+        True if user has the required permission, False otherwise
+
+    Note:
+        Permissions starting with "exe" are checked at association level,
+        all other permissions are checked at event level.
     """
+    # Check if this is an association-level permission (exe prefix)
     if perm.startswith("exe"):
         return has_assoc_permission(request, ctx, perm)
+
+    # Otherwise, check event-level permission using event slug from context
     return has_event_permission(request, ctx, ctx["event"].slug, perm)
 
 
-def _get_href(ctx, perm, name, custom_link):
+def _get_href(ctx: dict, perm: str, name: str, custom_link: str | None) -> tuple[str, str]:
     """Generate href and title for management dashboard links.
 
+    Creates appropriate URL links and display titles for dashboard navigation
+    based on permissions and optional custom link suffixes.
+
     Args:
-        ctx: Context dictionary
-        perm: Permission string
-        name: Display name
-        custom_link: Optional custom link suffix
+        ctx: Context dictionary containing request and navigation data
+        perm: Permission string identifier for the dashboard section
+        name: Display name to be used as the link title
+        custom_link: Optional custom link suffix to append to base URL
 
     Returns:
-        tuple: (title, href) for dashboard link
+        A tuple containing:
+            - title (str): Translated display title for the link
+            - href (str): Complete URL for the dashboard link
     """
+    # Handle custom link configuration with standardized title
     if custom_link:
         return _("Configuration"), _get_perm_link(ctx, perm, "manage") + custom_link
 
+    # Default case: use permission name for both title and link generation
     return _(name), _get_perm_link(ctx, perm, perm)
 
 
@@ -951,43 +1064,61 @@ def _get_perm_link(ctx, perm, view):
     return reverse(view, args=[ctx["run"].get_slug()])
 
 
-def _compile(request, ctx):
+def _compile(request: HttpRequest, ctx: dict) -> None:
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
-    and providing appropriate user messaging.
+    and providing appropriate user messaging. Populates context with formatted
+    dashboard items including links, tutorials, and permissions.
+
+    Args:
+        request: Django HTTP request object containing user and session data
+        ctx: Context dictionary to populate with dashboard sections and items
+
+    Returns:
+        None: Modifies ctx dictionary in-place, returns early if no content
     """
+    # Define the main dashboard sections to process
     section_list = ["suggestions", "actions", "priorities"]
     empty = True
+
+    # Initialize empty lists for each section and check if any content exists
     for section in section_list:
         ctx[section] = []
         if f"{section}_list" in ctx:
             empty = False
 
+    # Early return if no content is available for any section
     if empty:
         return
 
+    # Build cache of permission data and collect all slugs that need permission checks
     cache = {}
     perm_list = []
     for section in section_list:
         if f"{section}_list" not in ctx:
             continue
 
+        # Extract slugs from section items and filter by permissions
         perm_list.extend([slug for _n, slug, _u in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
 
+    # Query both permission models to build cache of names and tutorials
     for model in (EventPermission, AssocPermission):
         queryset = model.objects.filter(slug__in=perm_list).select_related("feature")
         for slug, name, tutorial in queryset.values_list("slug", "name", "feature__tutorial"):
             cache[slug] = (name, tutorial)
 
+    # Process each section and build final dashboard items with links and metadata
     for section in section_list:
         if f"{section}_list" not in ctx:
             continue
 
+        # Transform raw section data into formatted dashboard items
         for text, slug, custom_link in ctx[f"{section}_list"]:
             if slug not in cache:
                 continue
 
+            # Extract cached permission data and generate appropriate links
             (name, tutorial) = cache[slug]
             link_name, link_url = _get_href(ctx, slug, name, custom_link)
             ctx[section].append({"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug})
@@ -1014,7 +1145,7 @@ def _check_intro_driver(request, ctx):
     ctx["intro_driver"] = True
 
 
-def orga_redirect(request, s, n, p=None):
+def orga_redirect(request: HttpRequest, s: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
     """
     Optimized redirect from /slug/number/path to /slug-number/path format.
 
@@ -1023,27 +1154,27 @@ def orga_redirect(request, s, n, p=None):
 
     Args:
         request: Django HTTP request object (not used in redirect logic)
-        s (str): Event slug
-        n (int): Run number
-        p (str, optional): Additional path components
+        s: Event slug
+        n: Run number
+        p: Additional path components
 
     Returns:
-        HttpResponsePermanentRedirect: 301 redirect to normalized URL
+        301 redirect to normalized URL format
     """
 
-    # Build path components efficiently
+    # Build path components efficiently starting with event slug
     path_parts = [s]
 
-    # Only add suffix for run numbers > 1
+    # Only add suffix for run numbers > 1 to avoid redundant "-1" suffix
     if n > 1:
         path_parts.append(f"-{n}")
 
-    # Join slug and number, add trailing slash
+    # Join slug and number components, add trailing slash for consistency
     base_path = "".join(path_parts) + "/"
 
-    # Add additional path if provided (p already includes leading slash if needed)
+    # Append additional path if provided (p already includes leading slash if needed)
     if p:
         base_path += p
 
-    # Use permanent redirect (301) for better caching and SEO
+    # Use permanent redirect (301) for better caching and SEO optimization
     return HttpResponsePermanentRedirect("/" + base_path)

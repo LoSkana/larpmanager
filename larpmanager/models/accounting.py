@@ -128,17 +128,31 @@ class PaymentInvoice(BaseModel):
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
-    def get_details(self):
+    def get_details(self) -> str:
+        """Generate HTML details string for payment method information.
+
+        Returns:
+            str: HTML formatted string containing download link, text description,
+                 and payment code if available. Returns empty string if no method.
+        """
         s = ""
+
+        # Return empty string if no payment method is set
         if not self.method:
             return s
-        # slug = self.method.slug
+
+        # Add download link if invoice is available
         if self.invoice:
             s += f" <a href='{self.download()}'>Download</a>"
+
+        # Append payment method text description
         if self.text:
             s += f" {self.text}"
+
+        # Append payment code if available
         if self.cod:
             s += f" {self.cod}"
+
         return s
 
 
@@ -181,16 +195,29 @@ class ElectronicInvoice(BaseModel):
             ),
         ]
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
+        """Save the ElectronicInvoice instance with auto-generated progressive and number.
+
+        Automatically assigns progressive and number values if not already set:
+        - progressive: Global sequential counter across all invoices
+        - number: Sequential counter per year and association
+
+        Args:
+            *args: Variable length argument list passed to parent save method.
+            **kwargs: Arbitrary keyword arguments passed to parent save method.
+        """
+        # Auto-generate progressive number if not set (global counter)
         if not self.progressive:
             highest_progressive = ElectronicInvoice.objects.aggregate(models.Max("progressive"))["progressive__max"]
             self.progressive = highest_progressive + 1 if highest_progressive else 1
 
+        # Auto-generate invoice number if not set (per year/association counter)
         if not self.number:
             que = ElectronicInvoice.objects.filter(year=self.year, assoc=self.assoc)
             highest_number = que.aggregate(models.Max("number"))["number__max"]
             self.number = highest_number + 1 if highest_number else 1
 
+        # Call parent save method to persist the instance
         super().save(*args, **kwargs)
 
 

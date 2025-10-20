@@ -74,19 +74,39 @@ from larpmanager.utils.paginate import exe_paginate
 
 
 @login_required
-def exe_outflows(request):
+def exe_outflows(request: HttpRequest) -> HttpResponse:
     """Display paginated list of accounting outflows for association.
 
-    Args:
-        request: Django HTTP request object (must be authenticated)
+    This view function retrieves and displays a paginated list of accounting outflows
+    for the current association. It requires proper association permissions and
+    configures field display with custom callbacks for formatting.
 
-    Returns:
-        HttpResponse: Rendered outflows list template
+    Parameters
+    ----------
+    request : HttpRequest
+        Django HTTP request object containing user authentication and session data.
+        Must be from an authenticated user with appropriate association permissions.
+
+    Returns
+    -------
+    HttpResponse
+        Rendered HTTP response containing the outflows list template with pagination
+        and configured field display options.
+
+    Notes
+    -----
+    The function uses exe_paginate for consistent pagination behavior and applies
+    custom formatting callbacks for statement downloads and expense type display.
     """
+    # Check user permissions and get base context for association
     ctx = check_assoc_permission(request, "exe_outflows")
+
+    # Configure context with field definitions and display options
     ctx.update(
         {
+            # Define related fields for efficient database queries
             "selrel": ("run", "run__event"),
+            # Configure visible fields with localized headers
             "fields": [
                 ("run", _("Event")),
                 ("type", _("Type")),
@@ -95,45 +115,66 @@ def exe_outflows(request):
                 ("payment_date", _("Date")),
                 ("statement", _("Statement")),
             ],
+            # Define custom display callbacks for specific fields
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 "type": lambda el: el.get_exp_display(),
             },
         }
     )
+
+    # Return paginated view with configured context and template
     return exe_paginate(
         request, ctx, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
     )
 
 
 @login_required
-def exe_outflows_edit(request, num):
+def exe_outflows_edit(request: HttpRequest, num: int) -> HttpResponse:
     """Edit accounting outflow record.
 
     Args:
-        request: Django HTTP request object (must be authenticated)
-        num (int): Outflow record ID
+        request: Django HTTP request object containing user authentication
+                and form data for editing the outflow record
+        num: Primary key identifier of the outflow record to edit
 
     Returns:
-        HttpResponse: Edit form or redirect after save
+        HttpResponse: Rendered edit form on GET request or redirect
+                     to outflows list on successful POST save
+
+    Raises:
+        Http404: If outflow record with given ID does not exist
+        PermissionDenied: If user lacks permission to edit outflows
     """
+    # Delegate to generic edit handler with outflow-specific form and redirect
     return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
 
 
 @login_required
-def exe_inflows(request):
+def exe_inflows(request: HttpRequest) -> HttpResponse:
     """Display paginated list of accounting inflows for association.
 
     Args:
-        request: Django HTTP request object (must be authenticated)
+        request: Django HTTP request object. Must be authenticated and have
+            appropriate association permissions for viewing accounting inflows.
 
     Returns:
-        HttpResponse: Rendered inflows list template
+        HttpResponse: Rendered template response containing paginated list of
+            accounting inflows with download links for statements.
+
+    Raises:
+        PermissionDenied: If user lacks required association permissions.
     """
+    # Check user permissions for association accounting inflows access
     ctx = check_assoc_permission(request, "exe_inflows")
+
+    # Configure pagination context with related field optimization
+    # and display field definitions for inflow data
     ctx.update(
         {
+            # Optimize database queries by selecting related event data
             "selrel": ("run", "run__event"),
+            # Define display fields with localized headers
             "fields": [
                 ("run", _("Event")),
                 ("descr", _("Description")),
@@ -141,11 +182,14 @@ def exe_inflows(request):
                 ("payment_date", _("Date")),
                 ("statement", _("Statement")),
             ],
+            # Configure custom rendering callbacks for special fields
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
             },
         }
     )
+
+    # Render paginated inflows list with edit functionality
     return exe_paginate(
         request, ctx, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
     )
@@ -157,26 +201,41 @@ def exe_inflows_edit(request, num):
 
 
 @login_required
-def exe_donations(request):
+def exe_donations(request: HttpRequest) -> HttpResponse:
     """Display paginated list of donations for association.
 
+    Renders a paginated table showing all donations made to the association,
+    including member information, description, value, and creation date.
+
     Args:
-        request: Django HTTP request object (must be authenticated)
+        request (HttpRequest): Django HTTP request object. Must be from an
+            authenticated user with appropriate association permissions.
 
     Returns:
-        HttpResponse: Rendered donations list template
+        HttpResponse: Rendered template displaying the donations list with
+            pagination controls and table headers for member, description,
+            value, and date columns.
+
+    Raises:
+        PermissionDenied: If user lacks required association permissions.
     """
+    # Check user has permission to view donations for this association
     ctx = check_assoc_permission(request, "exe_donations")
+
+    # Define table column headers and their corresponding field names
+    # These will be displayed in the donations list template
     ctx.update(
         {
             "fields": [
-                ("member", _("Member")),
-                ("descr", _("Description")),
-                ("value", _("Value")),
-                ("created", _("Date")),
+                ("member", _("Member")),  # Donation maker
+                ("descr", _("Description")),  # Donation description/purpose
+                ("value", _("Value")),  # Monetary amount
+                ("created", _("Date")),  # When donation was created
             ],
         }
     )
+
+    # Render paginated donations list using the accounting template
     return exe_paginate(
         request, ctx, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
     )
@@ -188,12 +247,30 @@ def exe_donations_edit(request, num):
 
 
 @login_required
-def exe_credits(request):
+def exe_credits(request: HttpRequest) -> dict:
+    """
+    Display and manage credits for an association.
+
+    This view function handles the display of accounting credits for an organization,
+    providing a paginated list with filtering and editing capabilities.
+
+    Args:
+        request: The HTTP request object containing user session and parameters.
+
+    Returns:
+        dict: A dictionary containing the rendered HTML response with credits data
+              and pagination controls.
+    """
+    # Check user permissions for credits management
     ctx = check_assoc_permission(request, "exe_credits")
+
+    # Configure display context with relationship selections and field definitions
     ctx.update(
         {
+            # Define related model fields for efficient database queries
             "selrel": ("run", "run__event"),
             "subtype": "credits",
+            # Define table columns for credits display
             "fields": [
                 ("member", _("Member")),
                 ("run", _("Event")),
@@ -203,6 +280,8 @@ def exe_credits(request):
             ],
         }
     )
+
+    # Render paginated credits list with editing capabilities
     return exe_paginate(
         request, ctx, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
     )
@@ -214,13 +293,33 @@ def exe_credits_edit(request, num):
 
 
 @login_required
-def exe_tokens(request):
+def exe_tokens(request: HttpRequest) -> HttpResponse:
+    """
+    Display paginated list of accounting tokens for organization executives.
+
+    This view handles the display of token-based accounting items with filtering
+    and pagination capabilities for organization-level administrators.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered template with paginated token data and context.
+
+    Raises:
+        PermissionDenied: If user lacks 'exe_tokens' permission for the association.
+    """
+    # Check user permissions for token management at organization level
     ctx = check_assoc_permission(request, "exe_tokens")
 
+    # Configure context with table display settings and field definitions
     ctx.update(
         {
+            # Define related field selections for optimized database queries
             "selrel": ("run", "run__event"),
+            # Set subtype identifier for template rendering
             "subtype": "tokens",
+            # Define table columns with localized headers
             "fields": [
                 ("member", _("Member")),
                 ("run", _("Event")),
@@ -230,6 +329,7 @@ def exe_tokens(request):
             ],
         }
     )
+    # Render paginated view with AccountingItemOther model data
     return exe_paginate(request, ctx, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit")
 
 
@@ -239,12 +339,29 @@ def exe_tokens_edit(request, num):
 
 
 @login_required
-def exe_expenses(request):
+def exe_expenses(request: HttpRequest) -> HttpResponse:
+    """
+    Handle expense management for organization executives.
+
+    Displays a paginated list of accounting expense items with approval functionality.
+    Only users with 'exe_expenses' permission can access this view.
+
+    Args:
+        request: HTTP request object containing user and session data
+
+    Returns:
+        HttpResponse: Rendered expenses page with paginated expense items
+    """
+    # Check user permissions for expense management
     ctx = check_assoc_permission(request, "exe_expenses")
     approve = _("Approve")
+
+    # Configure table display settings and field definitions
     ctx.update(
         {
+            # Define related field selection for optimization
             "selrel": ("run", "run__event"),
+            # Define table columns with display names
             "fields": [
                 ("member", _("Member")),
                 ("type", _("Type")),
@@ -255,15 +372,21 @@ def exe_expenses(request):
                 ("statement", _("Statement")),
                 ("action", _("Action")),
             ],
+            # Define custom rendering callbacks for specific fields
             "callbacks": {
+                # Render statement as downloadable link
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                # Show approve button only for non-approved expenses
                 "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.id])}'>{approve}</a>"
                 if not el.is_approved
                 else "",
+                # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
         }
     )
+
+    # Return paginated expense list with edit functionality
     return exe_paginate(
         request, ctx, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
     )
@@ -275,25 +398,61 @@ def exe_expenses_edit(request, num):
 
 
 @login_required
-def exe_expenses_approve(request, num):
+def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
+    """Approve an expense request for the current organization.
+
+    Args:
+        request: The HTTP request object containing user and organization context
+        num: The primary key identifier of the expense to approve
+
+    Returns:
+        HttpResponse: Redirect to the expenses list page
+
+    Raises:
+        Http404: If expense doesn't exist or doesn't belong to current organization
+    """
+    # Check user has permission to manage expenses
     check_assoc_permission(request, "exe_expenses")
+
+    # Retrieve the expense object, raise 404 if not found
     try:
         exp = AccountingItemExpense.objects.get(pk=num)
     except Exception as err:
         raise Http404("no id expense") from err
 
+    # Verify expense belongs to current organization
     if exp.assoc_id != request.assoc["id"]:
         raise Http404("not your orga")
 
+    # Mark expense as approved and save changes
     exp.is_approved = True
     exp.save()
+
+    # Show success message and redirect to expenses list
     messages.success(request, _("Request approved"))
     return redirect("exe_expenses")
 
 
 @login_required
-def exe_payments(request):
+def exe_payments(request: HttpRequest) -> HttpResponse:
+    """Handle payments list view for organization executives.
+
+    Displays a paginated list of accounting payments with filtering and sorting
+    capabilities. Includes conditional VAT fields based on organization features.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered payments list page with pagination context.
+
+    Raises:
+        PermissionDenied: If user lacks exe_payments permission.
+    """
+    # Check user permissions for payments access
     ctx = check_assoc_permission(request, "exe_payments")
+
+    # Define base table fields for payment display
     fields = [
         ("member", _("Member")),
         ("method", _("Method")),
@@ -305,15 +464,19 @@ def exe_payments(request):
         ("created", _("Date")),
         ("info", _("Info")),
     ]
+
+    # Add VAT fields if organization has VAT feature enabled
     if "vat" in ctx["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    # Configure pagination context with field mappings and callbacks
     ctx.update(
         {
             "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
             "afield": "reg",
             "fields": fields,
+            # Define display callbacks for complex field formatting
             "callbacks": {
                 "run": lambda row: str(row.reg.run) if row.reg and row.reg.run else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
@@ -324,6 +487,8 @@ def exe_payments(request):
             },
         }
     )
+
+    # Return paginated view with AccountingItemPayment queryset
     return exe_paginate(
         request, ctx, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
     )
@@ -335,12 +500,29 @@ def exe_payments_edit(request, num):
 
 
 @login_required
-def exe_invoices(request):
+def exe_invoices(request: HttpRequest) -> HttpResponse:
+    """
+    Handle invoice management page for organization executives.
+
+    Displays paginated list of payment invoices with filtering and action capabilities.
+    Only users with 'exe_invoices' permission can access this view.
+
+    Args:
+        request: The HTTP request object containing user session and parameters
+
+    Returns:
+        HttpResponse: Rendered invoice management page with pagination and context data
+    """
+    # Check user permissions for invoice management access
     ctx = check_assoc_permission(request, "exe_invoices")
     confirm = _("Confirm")
+
+    # Define table display configuration with field mappings
     ctx.update(
         {
+            # Specify relationship fields for database optimization
             "selrel": ("method", "member"),
+            # Define column headers for the invoice table
             "fields": [
                 ("member", _("Member")),
                 ("method", _("Method")),
@@ -353,20 +535,28 @@ def exe_invoices(request):
                 ("created", _("Date")),
                 ("action", _("Action")),
             ],
+            # Define data transformation callbacks for each column
             "callbacks": {
+                # Display payment method as string
                 "method": lambda el: str(el.method),
+                # Show human-readable type and status labels
                 "type": lambda el: el.get_typ_display(),
                 "status": lambda el: el.get_status_display(),
+                # Format monetary values with proper decimal formatting
                 "gross": lambda el: format_decimal(el.mc_gross),
                 "trans": lambda el: format_decimal(el.mc_fee) if el.mc_fee else "",
+                # Display invoice metadata and details
                 "causal": lambda el: el.causal,
                 "details": lambda el: el.get_details(),
+                # Show confirmation action link only for submitted invoices
                 "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.id])}'>{confirm}</a>"
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
             },
         }
     )
+
+    # Render paginated invoice list with edit functionality
     return exe_paginate(request, ctx, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit")
 
 
@@ -376,16 +566,40 @@ def exe_invoices_edit(request, num):
 
 
 @login_required
-def exe_invoices_confirm(request, num):
+def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
+    """Confirm a payment invoice by updating its status.
+
+    Changes invoice status from CREATED or SUBMITTED to CONFIRMED.
+    Only invoices in CREATED or SUBMITTED status can be confirmed.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        num: The invoice number/ID to confirm
+
+    Returns:
+        HttpResponse: Redirect to the invoices list page
+
+    Raises:
+        Http404: If invoice is already confirmed or in invalid status
+    """
+    # Check user permissions for invoice management
     ctx = check_assoc_permission(request, "exe_invoices")
+
+    # Retrieve the specific invoice by number
     backend_get(ctx, PaymentInvoice, num)
 
+    # Validate current status allows confirmation
     if ctx["el"].status == PaymentStatus.CREATED or ctx["el"].status == PaymentStatus.SUBMITTED:
+        # Update status to confirmed
         ctx["el"].status = PaymentStatus.CONFIRMED
     else:
+        # Reject if invoice already processed
         raise Http404("already done")
 
+    # Persist changes to database
     ctx["el"].save()
+
+    # Show success message and redirect to invoice list
     messages.success(request, _("Element approved") + "!")
     return redirect("exe_invoices")
 
@@ -405,9 +619,26 @@ def exe_collections_edit(request, num):
 
 
 @login_required
-def exe_refunds(request):
+def exe_refunds(request: HttpRequest) -> dict:
+    """Handle refund requests management for organization executives.
+
+    This view displays a paginated list of refund requests with status information
+    and action buttons for processing pending refunds.
+
+    Args:
+        request: HttpRequest object containing the user's request data
+
+    Returns:
+        dict: Context dictionary for rendering the refunds template with pagination
+
+    Raises:
+        PermissionDenied: If user lacks exe_refunds permission
+    """
+    # Check user permissions for refund management
     ctx = check_assoc_permission(request, "exe_refunds")
     done = _("Done")
+
+    # Define table column headers and their display names
     ctx.update(
         {
             "fields": [
@@ -418,14 +649,19 @@ def exe_refunds(request):
                 ("status", _("Status")),
                 ("action", _("Action")),
             ],
+            # Configure column data transformation callbacks
             "callbacks": {
+                # Display human-readable status text
                 "status": lambda el: el.get_status_display(),
+                # Show action button only for unpaid refunds
                 "action": lambda el: f"<a href='{reverse('exe_refunds_confirm', args=[el.id])}'>{done}</a>"
                 if el.status != RefundStatus.PAYED
                 else "",
             },
         }
     )
+
+    # Return paginated refund requests with template context
     return exe_paginate(request, ctx, RefundRequest, "larpmanager/exe/accounting/refunds.html", "exe_refunds_edit")
 
 
@@ -435,16 +671,40 @@ def exe_refunds_edit(request, num):
 
 
 @login_required
-def exe_refunds_confirm(request, num):
+def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
+    """Confirm a refund request by changing its status to PAYED.
+
+    This view handles the confirmation of refund requests by updating their status
+    from REQUEST to PAYED. Only requests in REQUEST status can be confirmed.
+
+    Args:
+        request: The HTTP request object containing user authentication and permissions
+        num: The unique identifier number of the refund request to confirm
+
+    Returns:
+        HttpResponse: Redirect to the refunds list page after successful confirmation
+
+    Raises:
+        Http404: If the refund request is not in REQUEST status (already processed)
+    """
+    # Check user permissions for accessing refund management
     ctx = check_assoc_permission(request, "exe_refunds")
+
+    # Retrieve the specific refund request by number
     backend_get(ctx, RefundRequest, num)
 
+    # Verify the refund request is in the correct status for confirmation
     if ctx["el"].status == RefundStatus.REQUEST:
+        # Update status to indicate the refund has been paid
         ctx["el"].status = RefundStatus.PAYED
     else:
+        # Prevent duplicate processing of already confirmed requests
         raise Http404("already done")
 
+    # Persist the status change to the database
     ctx["el"].save()
+
+    # Show success message to the user and redirect to refunds list
     messages.success(request, _("Element approved") + "!")
     return redirect("exe_refunds")
 
@@ -490,16 +750,37 @@ def exe_accounting_rec(request):
     return render(request, "larpmanager/exe/accounting/accounting_rec.html", ctx)
 
 
-def check_year(request, ctx):
+def check_year(request: HttpRequest, ctx: dict) -> int:
+    """Check and validate the year parameter from request data.
+
+    Retrieves the association from context, generates a list of valid years
+    from the association's creation year to the current year, and validates
+    the year parameter from POST data if present.
+
+    Args:
+        request: The HTTP request object containing POST data
+        ctx: Context dictionary containing association ID and other data
+
+    Returns:
+        int: The validated year value, defaults to current year if invalid
+
+    Raises:
+        Association.DoesNotExist: If association with given ID doesn't exist
+    """
+    # Get association and generate valid years range
     assoc = Association.objects.get(pk=ctx["a_id"])
     ctx["years"] = list(range(datetime.today().year, assoc.created.year - 1, -1))
 
+    # Process POST data if present
     if request.POST:
         try:
+            # Attempt to parse year from POST data
             ctx["year"] = int(request.POST.get("year"))
         except (ValueError, TypeError):
+            # Fall back to current year if parsing fails
             ctx["year"] = ctx["years"][0]
     else:
+        # Default to current year if no POST data
         ctx["year"] = ctx["years"][0]
 
     return ctx["year"]
@@ -697,18 +978,42 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_verification_manual(request, num):
+def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
+    """Manually verify a payment invoice for an organization.
+
+    This view allows organization executives to manually confirm payment invoices
+    that belong to their organization. It checks permissions, validates ownership,
+    and prevents duplicate verification.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        num: The primary key of the PaymentInvoice to verify
+
+    Returns:
+        HttpResponse: Redirect to the verification list page
+
+    Raises:
+        Http404: If the invoice doesn't belong to the user's organization
+    """
+    # Check user has permission to access manual verification
     ctx = check_assoc_permission(request, "exe_verification")
+
+    # Retrieve the invoice to verify
     invoice = PaymentInvoice.objects.get(pk=num)
 
+    # Ensure invoice belongs to user's organization
     if invoice.assoc_id != ctx["a_id"]:
         raise Http404("not your assoc!")
 
+    # Check if payment is already verified to prevent duplicates
     if invoice.verified:
         messages.warning(request, _("Payment already confirmed"))
         return redirect("exe_verification")
 
+    # Mark invoice as verified and save changes
     invoice.verified = True
     invoice.save()
+
+    # Notify user of successful verification
     messages.success(request, _("Payment confirmed"))
     return redirect("exe_verification")

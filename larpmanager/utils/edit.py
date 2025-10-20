@@ -117,21 +117,38 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
     tv.save()
 
 
-def _get_field_value(el, que):
+def _get_field_value(el, que) -> str | None:
+    """Get the field value for a given element and question.
+
+    Args:
+        el: The element object to get the value for
+        que: The question object containing type and configuration
+
+    Returns:
+        The field value as a string, or None if no value found
+
+    Raises:
+        None
+    """
+    # Get the mapping of question types to value extraction functions
     mapping = _get_values_mapping(el)
 
+    # Use direct mapping if question type is available
     if que.typ in mapping:
         return mapping[que.typ]()
 
+    # Handle text-based question types (paragraph, text, email)
     if que.typ in {"p", "t", "e"}:
         answers = WritingAnswer.objects.filter(question=que, element_id=el.id)
         if answers:
             return answers.first().text
         return ""
 
+    # Handle choice-based question types (single, multiple)
     if que.typ in {"s", "m"}:
         return ", ".join(c.option.name for c in WritingChoice.objects.filter(question=que, element_id=el.id))
 
+    # Return None for unhandled question types
     return None
 
 
@@ -146,31 +163,47 @@ def _get_values_mapping(el):
     return mapping
 
 
-def check_run(el, ctx, afield=None):
+def check_run(el: object, ctx: dict, afield: str = None) -> None:
     """Validate that element belongs to the correct run and event.
 
+    This function ensures that a model instance belongs to the expected run and event
+    based on the provided context. It handles both regular events and child events
+    (events with a parent).
+
     Args:
-        el: Model instance to validate
-        ctx: Context dictionary containing run and event information
-        afield: Optional field name to access nested element
+        el: Model instance to validate against run and event context
+        ctx: Context dictionary containing 'run' and 'event' keys with their
+             respective model instances
+        afield: Optional field name to access a nested element attribute from el
 
     Raises:
         Http404: If element doesn't belong to the expected run or event
+
+    Returns:
+        None
     """
+    # Early return if no run context is provided
     if "run" not in ctx:
         return
 
+    # Access nested element if field name is specified
     if afield:
         el = getattr(el, afield)
 
+    # Validate run ownership if element has run attribute
     if hasattr(el, "run") and el.run != ctx["run"]:
         raise Http404("not your run")
 
+    # Validate event ownership with support for parent-child event relationships
     if hasattr(el, "event"):
+        # Determine if current event is a child event
         is_child = ctx["event"].parent_id is not None
+
+        # Check direct event match and parent event match
         event_matches = el.event_id == ctx["event"].id
         parent_matches = el.event_id == ctx["event"].parent_id
 
+        # Validate event ownership based on parent-child relationship
         if (not is_child and not event_matches) or (is_child and not event_matches and not parent_matches):
             raise Http404("not your event")
 
@@ -186,39 +219,59 @@ def check_assoc(el, ctx, afield=None):
         raise Http404("not your association")
 
 
-def user_edit(request, ctx, form_type, nm, eid):
+def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: int) -> bool:
     """Generic user data editing with validation.
 
+    Handles both GET requests (displays form) and POST requests (processes form submission).
+    Supports creation, editing, and deletion of model instances through a unified interface.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with model data
-        form_type: Form class to use for editing
-        nm: Name key for the model instance in context
-        eid: Entity ID for editing
+        request: The HTTP request object containing method and data
+        ctx: Context dictionary containing model data and additional context
+        form_type: Django form class to instantiate for editing
+        nm: String key to access the model instance in the context dictionary
+        eid: Integer entity ID, used for editing existing instances (0 for new)
 
     Returns:
-        bool: True if form was successfully saved, False if form needs display
+        True if form was successfully processed and saved, False if form needs to be displayed
+
+    Note:
+        - On successful save, adds 'saved' key to ctx with the saved instance
+        - Supports soft deletion via 'delete' POST parameter
+        - Logs all operations for audit trail
     """
     if request.method == "POST":
+        # Initialize form with POST data and existing instance
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
 
         if form.is_valid():
+            # Save the form and get the model instance
             p = form.save()
             messages.success(request, _("Operation completed") + "!")
 
+            # Check if deletion was requested via POST parameter
             dl = "delete" in request.POST and request.POST["delete"] == "1"
+
+            # Log the operation before potential deletion
             save_log(request.user.member, form_type, p, dl)
+
+            # Perform deletion if requested
             if dl:
                 p.delete()
 
+            # Store saved instance in context for further processing
             ctx["saved"] = p
 
             return True
     else:
+        # GET request: initialize form with existing instance
         form = form_type(instance=ctx[nm], ctx=ctx)
 
+    # Add form and metadata to context for template rendering
     ctx["form"] = form
     ctx["num"] = eid
+
+    # Set display name for existing entities
     if eid != 0:
         ctx["name"] = str(ctx[nm])
 
@@ -323,47 +376,129 @@ def backend_edit(
     return False
 
 
-def orga_edit(request, s, perm, form_type, eid, red=None, add_ctx=None):
+def orga_edit(
+    request: HttpRequest,
+    s: str,
+    perm: str,
+    form_type: str,
+    eid: int,
+    red: Optional[str] = None,
+    add_ctx: Optional[dict[str, Any]] = None,
+) -> HttpResponse:
+    """Edit organization event objects through a unified interface.
+
+    Args:
+        request: The HTTP request object
+        s: The event slug identifier
+        perm: Permission name for access control
+        form_type: Type of form to render for editing
+        eid: Entity ID to edit
+        red: Optional redirect target after successful edit
+        add_ctx: Optional additional context to merge
+
+    Returns:
+        HttpResponse: Rendered edit form or redirect response
+    """
+    # Check user permissions and get base context
     ctx = check_event_permission(request, s, perm)
+
+    # Merge any additional context provided
     if add_ctx:
         ctx.update(add_ctx)
+
+    # Process the edit operation using backend handler
     if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+        # Set suggestion context for successful edit
         set_suggestion(ctx, perm)
+
+        # Handle continue editing workflow
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
+
+        # Determine redirect target and redirect to list view
         if not red:
             red = perm
         return redirect(red, s=ctx["run"].get_slug())
+
+    # Render edit form template for GET requests or failed edits
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None):
+def exe_edit(
+    request: HttpRequest,
+    form_type: str,
+    eid: int,
+    perm: str,
+    red: Optional[str] = None,
+    afield: Optional[str] = None,
+    add_ctx: Optional[dict[str, Any]] = None,
+) -> HttpResponse:
+    """Edit an organization-level entity through a form.
+
+    Args:
+        request: The HTTP request object
+        form_type: Type of form to use for editing
+        eid: Entity ID to edit
+        perm: Permission required to access this view
+        red: Redirect target after successful edit (defaults to perm)
+        afield: Additional field parameter for backend_edit
+        add_ctx: Additional context to merge into template context
+
+    Returns:
+        HttpResponse: Either a redirect on success or rendered edit template
+    """
+    # Check user has required association permission and get base context
     ctx = check_assoc_permission(request, perm)
+
+    # Merge any additional context provided by caller
     if add_ctx:
         ctx.update(add_ctx)
+
+    # Process the edit form submission through backend
     if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
+        # Set suggestion context for successful edit
         set_suggestion(ctx, perm)
+
+        # Handle "Save and continue editing" button
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, num=0)
+
+        # Determine redirect target (use provided or default to permission name)
         if not red:
             red = perm
         return redirect(red)
+
+    # Render edit form template with context
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def set_suggestion(ctx, perm):
+def set_suggestion(ctx: dict, perm: str) -> None:
+    """Set a suggestion flag for a specific permission in the given context.
+
+    Args:
+        ctx: Context dictionary containing either 'event' or 'a_id' key
+        perm: Permission name to create suggestion for
+
+    Returns:
+        None
+    """
+    # Determine the target object from context - either event or association
     if "event" in ctx:
         obj = ctx["event"]
     else:
         obj = Association.objects.get(pk=ctx["a_id"])
 
+    # Check if suggestion already exists for this permission
     key = f"{perm}_suggestion"
     suggestion = obj.get_config(key, False)
     if suggestion:
         return
 
+    # Create new suggestion config entry
     fk_field = _get_fkey_config(obj)
     (config, created) = obj.configs.model.objects.get_or_create(**{fk_field: obj, "name": key})
+
+    # Set suggestion flag to True and save
     config.value = True
     config.save()
 
@@ -434,20 +569,34 @@ def writing_edit(
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 
 
-def _setup_char_finder(ctx, typ):
+def _setup_char_finder(ctx: dict, typ: type) -> None:
+    """Set up character finder widget for event forms.
+
+    Args:
+        ctx: Template context dictionary to populate with finder data
+        typ: Model type (Trait or Character) to determine widget class
+
+    Returns:
+        None: Modifies ctx dictionary in place
+    """
+    # Check if character finder is disabled for this event
     if ctx["event"].get_config("writing_disable_char_finder", False):
         return
 
+    # Select appropriate widget class based on model type
     if typ == Trait:
         widget_class = EventTraitS2Widget
     else:
         widget_class = EventCharacterS2Widget
 
+    # Initialize widget with event context
     widget = widget_class(attrs={"id": "char_finder"})
     widget.set_event(ctx["event"])
 
+    # Populate context with finder configuration
     ctx["finder_typ"] = typ._meta.model_name
 
+    # Render widget and add to context
     ctx["char_finder"] = widget.render(name="char_finder", value="")
     ctx["char_finder_media"] = widget.media
 
@@ -521,32 +670,46 @@ def writing_edit_cache_key(eid, typ):
     return f"orga_edit_{eid}_{typ}"
 
 
-def writing_edit_save_ajax(form, request, ctx):
+def writing_edit_save_ajax(form, request, ctx) -> JsonResponse:
     """Handle AJAX save requests for writing elements with locking validation.
 
+    Processes form submissions for writing elements via AJAX, implementing
+    user permission checks and element locking to prevent concurrent edits.
+    Superusers bypass all validation checks.
+
     Args:
-        form: Form instance to save
-        request: HTTP request object
-        ctx: Context dictionary
+        form: Django form instance to save containing writing element data
+        request: HTTP request object containing POST data and user info
+        ctx: Context dictionary (currently unused but maintained for compatibility)
 
     Returns:
-        JSON response with success/warning status
+        JsonResponse: JSON response containing success status and optional warnings
+            - {"res": "ok"} on success
+            - {"res": "ok", "warn": "message"} on success with warnings
     """
+    # Initialize successful response structure
     res = {"res": "ok"}
+
+    # Superusers bypass all validation and locking mechanisms
     if request.user.is_superuser:
         return JsonResponse(res)
 
+    # Extract and validate element ID from POST data
     eid = int(request.POST["eid"])
     if eid <= 0:
         return res
 
+    # Extract element type and edit token for lock validation
     tp = request.POST["type"]
     token = request.POST["token"]
+
+    # Check if element is locked by another user or session
     msg = writing_edit_working_ticket(request, tp, eid, token)
     if msg:
         res["warn"] = msg
         return JsonResponse(res)
 
+    # Save form data as temporary version to preserve work
     p = form.save(commit=False)
     p.temp = True
     p.save()
@@ -618,26 +781,44 @@ def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
 
 
 @require_POST
-def working_ticket(request):
+def working_ticket(request: HttpRequest) -> JsonResponse:
     """Handle working ticket requests to prevent concurrent editing conflicts.
 
+    This function manages working tickets to prevent multiple users from editing
+    the same content simultaneously. Superusers bypass all checks.
+
     Args:
-        request: HTTP POST request with eid, type, and token parameters
+        request: HTTP POST request containing editing session parameters
+            - eid: Entity ID being edited
+            - type: Type of entity being edited
+            - token: Session token for the editing session
 
     Returns:
-        JsonResponse: Status response with optional warning if other users are editing
+        JsonResponse: Response containing status and optional warning
+            - res: "ok" if successful
+            - warn: Warning message if conflicts detected or user not authenticated
+
+    Note:
+        Superusers are exempt from working ticket validation and always
+        receive successful responses without conflict checking.
     """
+    # Check user authentication status
     if not request.user.is_authenticated:
         return JsonResponse({"warn": "User not logged"})
 
+    # Initialize default success response
     res = {"res": "ok"}
+
+    # Superusers bypass all working ticket checks
     if request.user.is_superuser:
         return JsonResponse(res)
 
+    # Extract POST parameters for working ticket validation
     eid = request.POST.get("eid")
     type = request.POST.get("type")
     token = request.POST.get("token")
 
+    # Check for editing conflicts and get warning message if any
     msg = writing_edit_working_ticket(request, type, eid, token)
     if msg:
         res["warn"] = msg

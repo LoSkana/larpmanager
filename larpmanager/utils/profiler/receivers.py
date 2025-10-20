@@ -27,25 +27,36 @@ from larpmanager.utils.profiler.signals import profiler_response_signal
 
 
 @receiver(profiler_response_signal)
-def handle_profiler_response(sender, domain, path, method, view_func_name, duration, **kwargs):
+def handle_profiler_response(
+    sender: object, domain: str, path: str, method: str, view_func_name: str, duration: float, **kwargs: object
+) -> None:
     """Handle profiler signal to record individual execution data.
 
-    Saves individual execution data with path and query parameters.
+    This function processes profiler signals and saves execution metrics
+    to the database for performance monitoring and analysis.
 
     Args:
-        sender: Signal sender
-        domain: Request domain
-        path: Request path
-        method: HTTP method
-        view_func_name: Name of the view function
-        duration: Response duration in seconds
-        **kwargs: Additional keyword arguments
+        sender: The signal sender object that triggered this handler
+        domain: The domain name of the request being profiled
+        path: The full request path including query parameters
+        method: The HTTP method used for the request (GET, POST, etc.)
+        view_func_name: The name of the Django view function that handled the request
+        duration: The total response time in seconds as a float
+        **kwargs: Additional keyword arguments passed by the signal
+
+    Returns:
+        None: This function doesn't return any value
     """
+    # Parse the URL to separate path from query parameters
     parsed_url = urlparse(path)
+
+    # Extract clean path without query string
     clean_path = parsed_url.path
+
+    # Extract query parameters for separate storage
     query_string = parsed_url.query
 
-    # Save individual execution data
+    # Save individual execution data to the profiler model
     LarpManagerProfiler.objects.create(
         domain=domain,
         path=clean_path,

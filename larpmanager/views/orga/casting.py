@@ -20,11 +20,12 @@
 
 import json
 import random
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -74,40 +75,69 @@ def orga_casting_history(request, s, typ=0):
     return render(request, "larpmanager/event/casting/history.html", ctx)
 
 
-def assign_casting(request, ctx, typ):
+def assign_casting(request: HttpRequest, ctx: dict, typ: int) -> None:
     """
     Handle character casting assignment for organizers.
 
+    Processes casting assignments from POST data, creating character-registration
+    relationships or trait assignments based on the assignment type.
+
     Args:
-        request: HTTP request object with assignment data
-        ctx: Context dictionary with casting information
+        request: HTTP request object containing assignment data in POST
+        ctx: Context dictionary containing casting information and features
         typ: Type of casting assignment (0 for characters, other for traits)
+
+    Returns:
+        None: Function handles assignment and displays messages via Django messages framework
+
+    Raises:
+        Displays error messages via Django messages if assignments fail
     """
     # TODO Assign member to mirror_inv
+    # Check if mirror feature is enabled for character mirroring
     mirror = "mirror" in ctx["features"]
+
+    # Extract assignment results from POST data
     res = request.POST.get("res")
     if not res:
         messages.error(request, _("Results not present"))
         return
+
+    # Initialize error accumulator for batch processing
     err = ""
+
+    # Process each assignment in the space-separated results string
     for sp in res.split():
         aux = sp.split("_")
         try:
+            # Extract member ID and get member object
             mb = Member.objects.get(pk=aux[0].replace("p", ""))
+
+            # Get active registration for this member and run
             reg = Registration.objects.get(member=mb, run=ctx["run"], cancellation_date__isnull=True)
+
+            # Extract entity ID (character or trait)
             eid = aux[1].replace("c", "")
+
+            # Handle character assignment (typ == 0)
             if typ == 0:
+                # Check for mirror character assignment if feature enabled
                 if mirror:
                     char = Character.objects.get(pk=eid)
                     if char.mirror:
                         eid = char.mirror_id
 
+                # Create character-registration relationship
                 RegistrationCharacterRel.objects.create(character_id=eid, reg=reg)
             else:
+                # Handle trait assignment for non-character types
                 AssignmentTrait.objects.create(trait_id=eid, run_id=reg.run_id, member=mb, typ=typ)
         except Exception as e:
+            # Accumulate errors for batch display
             print(e)
             err += str(e)
+
+    # Display accumulated errors if any occurred
     if err:
         messages.error(request, err)
 
@@ -355,96 +385,206 @@ def get_casting_data(request: HttpRequest, ctx: dict, typ: int, form: "Organizer
     ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 0))
 
 
-def _casting_prepare(ctx, request, typ):
+def _casting_prepare(ctx: dict, request, typ: str) -> tuple[int, dict[int, str], dict[int, list]]:
+    """Prepare casting data for a specific run and type.
+
+    Args:
+        ctx: Context dictionary containing run information
+        request: HTTP request object with association data
+        typ: Type of casting to filter
+
+    Returns:
+        tuple: A tuple containing:
+            - cache_aim: Membership fee year for the association
+            - cache_membs: Dictionary mapping member IDs to their membership status
+            - castings: Dictionary mapping member IDs to their list of casting objects
+    """
+    # Get the membership fee year for the current association
     cache_aim = get_membership_fee_year(request.assoc["id"])
+
+    # Build cache of member statuses for the association
     cache_membs = {}
     memb_que = Membership.objects.filter(assoc_id=request.assoc["id"])
     for el in memb_que.values("member_id", "status"):
         cache_membs[el["member_id"]] = el["status"]
+
+    # Group casting objects by member ID for the specified run and type
     castings = {}
     for el in Casting.objects.filter(run=ctx["run"], typ=typ).order_by("pref"):
+        # Initialize member's casting list if not exists
         if el.member_id not in castings:
             castings[el.member_id] = []
         castings[el.member_id].append(el)
+
     return cache_aim, cache_membs, castings
 
 
-def _get_player_info(players, reg):
-    # player info
+def _get_player_info(players: dict, reg: Registration) -> None:
+    """
+    Update the players dictionary with registration information for a single player.
+
+    Args:
+        players (dict): Dictionary to store player information, keyed by member ID
+        reg: Registration object containing member and ticket information
+
+    Returns:
+        None: Function modifies the players dictionary in-place
+    """
+    # Initialize basic player information with default priority
     players[reg.member.id] = {
         "name": str(reg.member),
         "prior": 1,
         "email": reg.member.email,
     }
+
+    # Override priority if ticket has casting priority defined
     if reg.ticket:
         players[reg.member.id]["prior"] = reg.ticket.casting_priority
-    # set registration days (number of days from registration created)
+
+    # Calculate registration days (number of days from registration creation)
     players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date()) + 1
-    # set payment days (number of days from full payment date, or default value 1)
+
+    # Calculate payment days (number of days from full payment, default to 1 if unpaid)
     players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) + 1 if reg.payment_date else 1
 
 
-def _get_player_preferences(allowed, castings, chosen, nopes, reg):
-    # get player preferences
+def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, nopes: dict, reg: Registration) -> list:
+    """Get player preferences from casting data.
+
+    Processes casting choices for a registration, filtering by allowed elements
+    and tracking both chosen preferences and rejected options.
+
+    Args:
+        allowed: Set of allowed elements to filter by, or None for no filtering
+        castings: Dictionary mapping member IDs to their casting choices
+        chosen: Dictionary to track chosen elements (modified in-place)
+        nopes: Dictionary to track rejected elements by member (modified in-place)
+        reg: Registration object containing member information
+
+    Returns:
+        List of preference elements for the player
+    """
+    # Initialize preferences list
     pref = []
+
+    # Check if this member has any casting choices
     if reg.member_id in castings:
+        # Process each casting choice for this member
         for c in castings[reg.member_id]:
+            # Skip elements not in allowed set (if filtering is enabled)
             if allowed and c.element not in allowed:
                 continue
+
+            # Add element to preferences and mark as chosen
             p = c.element
             pref.append(p)
             chosen[p] = 1
+
+            # Track rejected preferences ("nopes") for this member
             if c.nope:
                 if reg.member.id not in nopes:
                     nopes[reg.member.id] = []
                 nopes[reg.member.id].append(p)
+
     return pref
 
 
-def _fill_not_chosen(choices, chosen, ctx, preferences, taken):
-    # adds 3 non taken characters to each player preferences to resolve unlucky ties
+def _fill_not_chosen(choices: dict, chosen: set, ctx: dict, preferences: dict, taken: set) -> tuple[list, int]:
+    """Fill player preferences with non-chosen characters to resolve unlucky ties.
+
+    This function adds up to `ctx["casting_add"]` non-taken characters to each
+    player's preference list. Characters are shuffled randomly for each player
+    to ensure fair distribution when resolving casting conflicts.
+
+    Args:
+        choices: Dictionary mapping character IDs to character data
+        chosen: Set of character IDs that have already been chosen
+        ctx: Context dictionary containing casting configuration (must have "casting_add" key)
+        preferences: Dictionary mapping member IDs to their character preference lists
+        taken: Set of character IDs that are unavailable/taken
+
+    Returns:
+        tuple: A tuple containing:
+            - list: Sorted list of available character IDs that weren't chosen or taken
+            - int: Number of characters actually added to each preference list
+    """
+    # Collect all character IDs that are available (not chosen and not taken)
     not_chosen = []
     for cid in choices.keys():
         if cid not in chosen and cid not in taken:
             not_chosen.append(cid)
+
+    # Sort the available characters for consistent ordering
     not_chosen.sort()
+
+    # Determine how many characters to add (limited by available characters)
     not_chosen_add = min(ctx["casting_add"], len(not_chosen))
+
+    # Add randomly shuffled available characters to each player's preferences
     for _mid, pref in preferences.items():
+        # Shuffle for each player to ensure fair random distribution
         random.shuffle(not_chosen)
+        # Add the specified number of characters to this player's preferences
         for i in range(0, not_chosen_add):
             pref.append(not_chosen[i])
+
     return not_chosen, not_chosen_add
 
 
 @login_required
-def orga_casting(request, s, typ=None, tick=""):
-    """Handle organizational casting assignments.
+def orga_casting(request: HttpRequest, s: str, typ: Optional[int] = None, tick: str = "") -> HttpResponse:
+    """Handle organizational casting assignments for LARP events.
+
+    Manages the casting assignment process for event organizers, allowing them to
+    assign participants to specific casting types and roles within an event.
 
     Args:
-        request: HTTP request object
-        s: Event slug
-        typ: Casting type identifier (defaults to 0 if None)
-        tick: Ticket identifier string
+        request: The HTTP request object containing user data and POST parameters
+        s: Event slug identifier used to identify the specific event
+        typ: Casting type identifier. If None, redirects to default type 0
+        tick: Ticket identifier string for specific participant casting
 
     Returns:
-        HttpResponse: Casting template with form and data or redirect after assignment
+        HttpResponse: Rendered casting template with form and casting data,
+                     or redirect response after successful assignment
+
+    Raises:
+        Http404: When the submitted form is not valid
     """
+    # Check user permissions for accessing casting functionality
     ctx = check_event_permission(request, s, "orga_casting")
+
+    # Redirect to default casting type if none specified
     if typ is None:
         return redirect("orga_casting", s=ctx["run"].get_slug(), typ=0)
+
+    # Set context variables for template rendering
     ctx["typ"] = typ
     ctx["tick"] = tick
+
+    # Handle POST request for casting assignment
     if request.method == "POST":
         form = OrganizerCastingOptionsForm(request.POST, ctx=ctx)
+
+        # Validate form data before processing
         if not form.is_valid():
             raise Http404("form not valid")
+
+        # Process casting assignment if submit button was clicked
         if request.POST.get("submit"):
             assign_casting(request, ctx, typ)
             return redirect(request.path_info)
     else:
+        # Initialize empty form for GET requests
         form = OrganizerCastingOptionsForm(ctx=ctx)
+
+    # Retrieve and populate casting details for the specified type
     casting_details(ctx, typ)
+
+    # Get casting data and populate form with current selections
     get_casting_data(request, ctx, typ, form)
+
+    # Add form to context and render template
     ctx["form"] = form
     return render(request, "larpmanager/orga/casting.html", ctx)
 

@@ -76,19 +76,22 @@ class OrgaPersonalExpenseForm(MyFormRun):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and conditionally remove balance field.
 
-        Calls parent constructor and removes the 'balance' field if the
+        Calls the parent constructor and removes the 'balance' field if the
         'ita_balance' feature is not enabled in the form parameters.
 
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
+        Returns:
+            None: This method initializes the object and returns nothing.
         """
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
 
         # Check if Italian balance feature is disabled in form parameters
+        # and remove the balance field when feature is not available
         if "ita_balance" not in self.params["features"]:
-            # Remove balance field when feature is not available
             self.delete_field("balance")
 
 
@@ -532,56 +535,96 @@ class ExePaymentSettingsForm(MyForm):
                 data_string = self.mask_string(data_string)
             self.initial[el] = data_string
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Association:
         """Save payment form with details masking and change tracking.
 
+        Saves the payment instance and manages payment details with proper masking
+        and historical change tracking. Updates payment details fields and creates
+        historical records for any changes made.
+
         Args:
-            commit: Whether to commit changes to database
+            commit: Whether to commit changes to database. Defaults to True.
 
         Returns:
-            Payment instance with updated details and change history
+            Payment instance with updated details and change history.
+
+        Note:
+            Fields ending with '_descr' or '_fee' are not masked for security.
+            Historical changes are stored with timestamped keys for audit purposes.
         """
+        # Save the base form instance
         instance = super().save(commit=commit)
 
+        # Get current payment details from the instance
         res = get_payment_details(self.instance)
+
+        # Iterate through payment detail field groups by slug
         for _slug, lst in self.get_payment_details_fields().items():
             for el in lst:
+                # Process only fields present in cleaned form data
                 if el in self.cleaned_data:
                     input_value = self.cleaned_data[el]
 
+                    # Get original value or empty string if field doesn't exist
                     if el in res:
                         orig_value = res[el]
                     else:
                         orig_value = ""
 
+                    # Apply masking based on field type (skip for description/fee fields)
                     if el.endswith(("_descr", "_fee")):
                         data_string = orig_value
                     else:
                         data_string = self.mask_string(orig_value)
 
+                    # Check if value has changed and update with history tracking
                     if input_value != data_string:
+                        # Only track changes when at least one value is non-empty
                         if input_value not in [None, ""] or orig_value not in [None, ""]:
                             res[el] = input_value
+
+                            # Create timestamped historical record
                             now = datetime.now()
                             old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
                             res[old_key] = orig_value
 
+        # Persist updated payment details to storage
         save_payment_details(self.instance, res)
 
         return instance
 
-    def get_payment_details_fields(self):
-        res = {}
+    def get_payment_details_fields(self) -> dict[str, list[str]]:
+        """Get payment method fields mapping.
+
+        Returns a dictionary mapping payment method slugs to their required field names.
+        Each payment method includes description and fee fields, plus any custom fields
+        defined in the method's fields configuration.
+
+        Returns:
+            dict[str, list[str]]: Mapping of payment method slugs to field name lists.
+                Each list contains field names in format: {slug}_{field_type}.
+        """
+        res: dict[str, list[str]] = {}
+
         # noinspection PyUnresolvedReferences
         for el in self.methods:
-            ls = [el.slug + "_descr", el.slug + "_fee"]
+            # Skip methods without slug identifier
             if not el.slug:
                 continue
+
+            # Initialize with standard payment method fields (description and fee)
+            ls: list[str] = [el.slug + "_descr", el.slug + "_fee"]
+
+            # Parse custom fields from comma-separated string
             fields = el.fields.replace(" ", "")
             for field in fields.split(","):
+                # Add custom field if non-empty, prefixed with payment method slug
                 if field:
                     ls.append(el.slug + "_" + field)
+
+            # Store field list for this payment method
             res[el.slug] = ls
+
         return res
 
     @staticmethod
@@ -596,25 +639,49 @@ class ExePaymentSettingsForm(MyForm):
         else:
             return data_string
 
-    def clean(self):
+    def clean(self) -> dict[str, any]:
         """Validate and normalize fee field values.
 
+        Processes form fields identified as fee fields, converting string values
+        to normalized decimal representations. Validates that values are numeric
+        and non-negative.
+
         Returns:
-            dict: Cleaned form data with normalized fee values
+            dict[str, any]: Cleaned form data with normalized fee values as strings.
+                           Fee fields are converted to normalized decimal strings,
+                           other fields remain unchanged.
+
+        Raises:
+            ValidationError: Added to form errors when fee values are invalid
+                           (non-numeric or negative).
         """
+        # Get initial cleaned data from parent class
         cleaned = super().clean()
+
+        # Process each fee field for validation and normalization
         for name in self.fee_fields:
             val = cleaned.get(name)
+
+            # Skip empty or None values
             if val in (None, ""):
                 continue
+
+            # Normalize string representation by removing common formatting
             s = str(val).strip().replace("%", "").replace(",", ".")
+
+            # Attempt to convert to Decimal for validation
             try:
                 d = Decimal(s)
             except InvalidOperation:
                 self.add_error(name, _("Enter a valid numeric value"))
                 continue
+
+            # Validate that the value is non-negative
             if d < 0:
                 self.add_error(name, _("Value must be greater than or equal to 0"))
                 continue
+
+            # Store normalized decimal string representation
             cleaned[name] = str(d.normalize())
+
         return cleaned

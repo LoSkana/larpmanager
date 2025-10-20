@@ -127,16 +127,35 @@ class RegistrationTicket(BaseModel):
     def get_price(self):
         return self.price
 
-    def get_form_text(self, run=None, cs=None):
+    def get_form_text(self, run: Run = None, cs: str = None) -> str:
+        """Generate formatted text representation for form display.
+
+        Creates a text string combining the ticket name, price (if available),
+        and availability count (if the ticket has an available attribute).
+
+        Args:
+            run: Optional run parameter passed to show method
+            cs: Currency symbol string. If not provided, will be fetched
+                from the event's association
+
+        Returns:
+            Formatted string containing ticket information for display
+        """
+        # Get ticket display information from show method
         s = self.show(run)
         tx = s["name"]
+
+        # Add price information if available
         if s["price"]:
             if not cs:
                 # noinspection PyUnresolvedReferences
                 cs = self.event.assoc.get_currency_symbol()
             tx += f" - {decimal_to_str(s['price'])}{cs}"
+
+        # Add availability count if ticket has available attribute
         if hasattr(self, "available"):
             tx += f" - ({_('Available')}: {self.available})"
+
         return tx
 
 

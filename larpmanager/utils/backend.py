@@ -20,7 +20,9 @@
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.models import User
 from django.db.models import Q
+from django.http import HttpRequest
 
 
 class EmailOrUsernameModelBackend(ModelBackend):
@@ -31,23 +33,34 @@ class EmailOrUsernameModelBackend(ModelBackend):
     Source: https://stackoverflow.com/a/35836674/59984
     """
 
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(
+        self, request: HttpRequest, username: str | None = None, password: str | None = None, **kwargs
+    ) -> User | None:
         """
         Authenticate user with username/password allowing email or username.
 
+        Supports authentication using either username or email address. When multiple
+        users match the provided identifier, tests password against each candidate
+        until a valid match is found.
+
         Args:
-            request: HTTP request object
-            username: Username or email for authentication
-            password: Password for authentication
-            **kwargs: Additional authentication parameters
+            request: HTTP request object from Django authentication middleware
+            username: Username or email address for authentication
+            password: Plain text password for authentication
+            **kwargs: Additional authentication parameters from Django auth backends
 
         Returns:
-            User: Authenticated user object or None
+            Authenticated user object if credentials are valid, None otherwise
+
+        Note:
+            Implements timing attack protection by running password hasher even
+            when no matching users are found.
         """
         # n.b. Django <2.1 does not pass the `request`
 
         user_model = get_user_model()
 
+        # Extract username from kwargs if not provided directly
         if username is None:
             username = kwargs.get(user_model.USERNAME_FIELD)
 
@@ -56,15 +69,19 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # possibly even for different users, so we'll query for all matching
         # records and test each one.
 
+        # Query for users matching either username field or email field
         # noinspection PyProtectedMember
         users = user_model._default_manager.filter(
             Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username)
         )
 
         # Test whether any matched user has the provided password:
+        # Iterate through all potential matches to find valid credentials
         for user in users:
             if user.check_password(password):
                 return user
+
+        # Timing attack protection: run password hasher even when no users found
         if not users:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a non-existing user (see

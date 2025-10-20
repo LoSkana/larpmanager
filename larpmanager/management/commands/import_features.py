@@ -78,26 +78,49 @@ class Command(BaseCommand):
                         self.set_m2m(Model, field_name, instance, model_label, values)
 
     @staticmethod
-    def set_m2m(model, field_name, instance, model_label, values):
+    def set_m2m(model: type, field_name: str, instance: object, model_label: str, values: list[int | str]) -> None:
+        """Set many-to-many field values using IDs or slugs.
+
+        Args:
+            model: The Django model class containing the M2M field
+            field_name: Name of the many-to-many field to set
+            instance: Model instance to update
+            model_label: Human-readable model name for error messages
+            values: List of integer IDs or string slugs to set on the field
+
+        Raises:
+            ValueError: If field doesn't exist, isn't M2M, or slugs are missing
+        """
+        # Get the M2M field from the model metadata
         try:
             # noinspection PyUnresolvedReferences, PyProtectedMember
             m2m_field = model._meta.get_field(field_name)
         except FieldDoesNotExist as err:
             raise ValueError(f"{field_name} not found on {model_label}") from err
+
+        # Validate that the field is actually a many-to-many field
         if not isinstance(m2m_field, ManyToManyField):
             raise ValueError(f"{field_name} not m2m on {model_label}")
+
+        # Get the related model and separate integer IDs from string slugs
         rel_model = m2m_field.remote_field.model
         int_ids = [v for v in values if isinstance(v, int)]
         slug_vals = [v for v in values if not isinstance(v, int)]
+
+        # Resolve slug values to primary keys if any slugs were provided
         if slug_vals:
             qs = rel_model.objects.filter(slug__in=slug_vals).values_list("slug", "pk")
             slug_to_pk = dict(qs)
+
+            # Check for missing slugs and raise error if any are not found
             missing = sorted(set(slug_vals) - set(slug_to_pk.keys()))
             if missing:
                 raise ValueError(f"missing slugs for {model_label}.{field_name}: {', '.join(missing)}")
             resolved_from_slugs = [slug_to_pk[s] for s in slug_vals]
         else:
             resolved_from_slugs = []
+
+        # Combine all resolved IDs and set the M2M field
         resolved_ids = int_ids + resolved_from_slugs
         getattr(instance, field_name).set(resolved_ids)
 

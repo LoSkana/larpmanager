@@ -96,19 +96,27 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 
-def get_previous_sum(aip, typ):
+def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
     """Calculate sum of previous accounting items for the same member and run.
 
+    Computes the total value of all accounting items of the specified type
+    that were created before the given reference item, for the same member
+    and run combination.
+
     Args:
-        aip: AccountingItemPayment instance for reference
-        typ: Model class (AccountingItemPayment or AccountingItemTransaction)
+        aip: AccountingItemPayment instance used as reference point for
+            filtering by member, run, and creation timestamp
+        typ: Model class to query (AccountingItemPayment or AccountingItemTransaction)
 
     Returns:
-        int: Sum of values from previous items, or 0 if none found
+        Sum of values from previous items matching the criteria, or 0 if none found
+
+    Example:
+        >>> previous_total = get_previous_sum(payment_item, AccountingItemPayment)
+        >>> print(f"Previous payments total: {previous_total}")
     """
-    return (
-        typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created).aggregate(
-            total=Sum("value")
-        )["total"]
-        or 0
-    )
+    # Filter items by same member and run, created before reference item
+    queryset = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
+
+    # Aggregate the sum of values and return 0 if no items found
+    return queryset.aggregate(total=Sum("value"))["total"] or 0

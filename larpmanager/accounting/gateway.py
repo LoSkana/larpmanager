@@ -36,7 +36,7 @@ from Crypto.Cipher import DES3
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import Http404, HttpRequest
+from django.http import Http404, HttpRequest, HttpResponse
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.models import ST_PP_COMPLETED
@@ -116,63 +116,99 @@ def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: Paymen
     ctx["pay_id"] = aux["id"]
 
 
-def satispay_check(request, ctx):
+def satispay_check(request: HttpRequest, ctx: dict) -> None:
     """Check status of pending Satispay payments.
 
+    Verifies payment status for all pending Satispay invoices by calling the Satispay
+    verification API for each invoice found in CREATED status.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
+        request: Django HTTP request object containing user session and metadata
+        ctx: Context dictionary containing payment configuration, must include
+             'satispay_key_id' for API authentication
+
+    Returns:
+        None: Function performs side effects by updating payment statuses
     """
+    # Update payment configuration details from request context
     update_payment_details(request, ctx)
 
+    # Early return if Satispay API key is not configured
     if "satispay_key_id" not in ctx:
         return
 
+    # Query for all pending Satispay payment invoices
     que = PaymentInvoice.objects.filter(
         method__slug="satispay",
         status=PaymentStatus.CREATED,
     )
+
+    # Skip processing if no pending invoices exist
     if not que.exists():
         return
 
+    # Verify each pending invoice with Satispay API
     for invoice in que:
         satispay_verify(request, invoice.cod)
 
 
-def satispay_verify(request, cod):
+def satispay_verify(request: Any, cod: str) -> None:
     """Verify Satispay payment status and process if accepted.
 
+    Retrieves payment invoice by code, validates Satispay payment method,
+    checks payment status, and processes accepted payments by updating
+    the invoice with received money amount.
+
     Args:
-        request: Django HTTP request object
-        cod: Payment code to verify
+        request: Django HTTP request object containing payment context
+        cod: Payment code/identifier to verify and process
+
+    Returns:
+        None: Function returns early on validation failures or processes payment
+
+    Raises:
+        ObjectDoesNotExist: When invoice with given code is not found
+        Various exceptions from satispaython API calls (handled implicitly)
     """
+    # Initialize context and update with payment details from request
     ctx = {}
     update_payment_details(request, ctx)
 
+    # Retrieve invoice by payment code, log warning and return if not found
     try:
         invoice = PaymentInvoice.objects.get(cod=cod)
     except ObjectDoesNotExist:
         logger.warning(f"Not found - invoice {cod}")
         return
 
+    # Validate payment method is Satispay, log warning and return if incorrect
     if invoice.method.slug != "satispay":
         logger.warning(f"Wrong slug method - invoice {cod}")
         return
 
+    # Check invoice status is CREATED, log warning and return if already processed
     if invoice.status != PaymentStatus.CREATED:
         logger.warning(f"Already confirmed - invoice {cod}")
         return
 
+    # Extract Satispay credentials and load RSA private key for API authentication
     key_id = ctx["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
+    # Make API call to Satispay to get payment details using credentials
     response = satispaython.get_payment_details(key_id, rsa_key, invoice.cod)
     # logger.debug(f"Response: {response}")
+
+    # Validate API response status code, return early if not successful
     correct_response_code = 200
     if response.status_code != correct_response_code:
         return
+
+    # Parse response JSON and extract payment amount and status
     aux = json.loads(response.content)
     mc_gross = int(aux["amount_unit"]) / 100.0
+
+    # Process payment if status is accepted by updating invoice with received amount
     if aux["status"] == "ACCEPTED":
         invoice_received_money(invoice.cod, mc_gross)
 
@@ -187,28 +223,35 @@ def satispay_webhook(request):
     satispay_verify(request, cod)
 
 
-def get_paypal_form(request, ctx, invoice, amount):
-    """Create PayPal payment form.
+def get_paypal_form(request: HttpRequest, ctx: dict, invoice, amount: float) -> None:
+    """Create PayPal payment form and add it to context.
+
+    Creates a PayPal payment form with the provided invoice and amount details,
+    then adds the form to the context dictionary for template rendering.
 
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
-        invoice: PaymentInvoice instance
-        amount (float): Payment amount
+        request: Django HTTP request object for building absolute URIs
+        ctx: Context dictionary that will be updated with PayPal form data
+        invoice: PaymentInvoice instance containing payment details
+        amount: Payment amount in the configured currency
 
     Returns:
-        dict: PayPal form context data
+        None: Function modifies the ctx dictionary in-place
     """
+    # Build PayPal payment configuration dictionary
     paypal_dict = {
         "business": ctx["paypal_id"],
         "amount": float(amount),
         "currency_code": ctx["payment_currency"],
         "item_name": invoice.causal,
         "invoice": invoice.cod,
+        # Configure PayPal callback URLs for payment flow
         "notify_url": request.build_absolute_uri(reverse("paypal-ipn")),
         "return": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
         "cancel_return": request.build_absolute_uri(reverse("acc_cancelled")),
     }
+
+    # Create PayPal form and add to context for template rendering
     # logger.debug(f"PayPal dict: {paypal_dict}")
     ctx["paypal_form"] = PayPalPaymentsForm(initial=paypal_dict)
 
@@ -240,43 +283,68 @@ def handle_valid_paypal_ipn(ipn_obj):
         return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
 
 
-def handle_invalid_paypal_ipn(ipn_obj):
+def handle_invalid_paypal_ipn(ipn_obj: object) -> None:
     """Handle invalid PayPal IPN notifications.
 
+    Logs the invalid IPN object details and notifies administrators
+    about the failed PayPal notification.
+
     Args:
-        ipn_obj: Invalid IPN object from PayPal
+        ipn_obj: Invalid IPN object from PayPal containing notification data.
+            Can be None if no object was received.
+
+    Returns:
+        None: This function doesn't return any value.
     """
+    # Log the IPN object if it exists
     if ipn_obj:
         logger.info(f"PayPal IPN object: {ipn_obj}")
+
     # TODO send mail
+
+    # Format the IPN object for detailed logging
     body = pformat(ipn_obj)
     logger.info(f"PayPal IPN body: {body}")
+
+    # Notify administrators about the invalid PayPal notification
     notify_admins("paypal ko", body)
 
 
-def get_stripe_form(request, ctx, invoice, amount):
+def get_stripe_form(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, amount: float) -> dict:
     """Create Stripe payment form and session.
 
+    Creates a Stripe product and price for the given invoice, then generates
+    a checkout session for payment processing. Updates the invoice with the
+    price ID for tracking purposes.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
-        invoice: PaymentInvoice instance
-        amount (float): Payment amount
+        request: Django HTTP request object for building absolute URLs
+        ctx: Context dictionary containing Stripe API keys and payment configuration
+        invoice: PaymentInvoice instance to process payment for
+        amount: Payment amount in the configured currency
 
     Returns:
-        dict: Stripe checkout session context data
+        Context dictionary updated with Stripe checkout session data
+
+    Note:
+        The invoice's 'cod' field is updated with the Stripe price ID for
+        later reference during payment processing.
     """
+    # Set Stripe API key from context configuration
     stripe.api_key = ctx["stripe_sk_api"]
 
+    # Create a new Stripe product for this invoice
     prod = stripe.Product.create(name=invoice.causal)
 
-    # create price
+    # Create price object with amount converted to cents
+    # Stripe requires amounts in smallest currency unit (cents for EUR/USD)
     price = stripe.Price.create(
         unit_amount=str(int(round(amount, 2) * 100)),
         currency=ctx["payment_currency"],
         product=prod.id,
     )
 
+    # Create checkout session with success/cancel URLs
     checkout_session = stripe.checkout.Session.create(
         line_items=[
             {
@@ -288,50 +356,70 @@ def get_stripe_form(request, ctx, invoice, amount):
         success_url=request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
         cancel_url=request.build_absolute_uri(reverse("acc_cancelled")),
     )
+
+    # Add checkout session to context for template rendering
     ctx["stripe_ck"] = checkout_session
 
+    # Store price ID in invoice for payment tracking
     invoice.cod = price.id
     invoice.save()
 
 
-def stripe_webhook(request):
+def stripe_webhook(request: HttpRequest) -> HttpResponse:
     """Handle Stripe webhook events for payment processing.
 
+    This function processes Stripe webhook events, specifically handling checkout session
+    completion and async payment success events. It validates the webhook signature,
+    extracts payment information, and triggers invoice processing.
+
     Args:
-        request: Django HTTP request object containing Stripe webhook data
+        request: Django HTTP request object containing Stripe webhook data with
+            payload body and signature header
 
     Returns:
-        HttpResponse: Success or error response for webhook processing
+        HttpResponse: Success response for processed events or error response
+            for validation failures
+
+    Raises:
+        ValueError: When webhook payload is invalid or malformed
+        SignatureVerificationError: When webhook signature verification fails
     """
+    # Initialize context and configure Stripe API settings
     ctx = def_user_ctx(request)
     update_payment_details(request, ctx)
     stripe.api_key = ctx["stripe_sk_api"]
+
+    # Extract webhook payload and signature from request
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
     endpoint_secret = ctx["stripe_webhook_secret"]
 
     try:
+        # Verify webhook signature and construct event object
         event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
     except ValueError as e:
-        # Invalid payload
+        # Invalid payload - raise exception for proper error handling
         raise e
     except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
+        # Invalid signature - raise exception for proper error handling
         raise e
 
-    # Handle the event
+    # Process checkout session completion events
     if event["type"] == "checkout.session.completed" or event["type"] == "checkout.session.async_payment_succeeded":
+        # Retrieve full session details with line items expanded
         session = stripe.checkout.Session.retrieve(
             event["data"]["object"]["id"],
             expand=["line_items"],
         )
 
+        # Extract line items and process first item (assumes single item per session)
         line_items = session.line_items
-        # assume only one
         item = line_items["data"][0]
-        # logger.debug(f"Processing item: {item}")
+
+        # Extract price ID for invoice processing
         cod = item["price"]["id"]
-        # logger.debug(f"Code: {cod}")
+
+        # Process the received payment for the invoice
         return invoice_received_money(cod)
     # ~ elif event['type'] == 'checkout.session.async_payment_failed':
     # ~ return True
@@ -340,12 +428,13 @@ def stripe_webhook(request):
     # ~ elif event['type'] == 'checkout.session.async_payment_succeeded':
     # ~ return True
     else:
+        # Return success for unhandled but valid webhook events
         return True
         # raise Exception('Unhandled event type {}'.format(event['type']))
 
 
 def get_sumup_form(
-    request: "HttpRequest", ctx: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
+    request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 
@@ -419,18 +508,24 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request):
-    # Print (Request)
-    # pprint(request.body)
-    # Print (Request.Meta)
-    aux = json.loads(request.body)
-    # print (at ['id'])
-    # print (at ['status'])
+def sumup_webhook(request: HttpRequest) -> bool:
+    """Process SumUp webhook notification for payment status.
 
+    Args:
+        request: HTTP request object containing webhook payload
+
+    Returns:
+        bool: True if payment was successful and processed, False otherwise
+    """
+    # Parse the JSON payload from the webhook request body
+    aux = json.loads(request.body)
+
+    # Check if the payment status indicates success
     if aux["status"] != "SUCCESSFUL":
-        # Err_Paypal (Print (Request) + Print (Request.Body) + Print (Request.meta))
+        # Payment failed or pending - return False to indicate failure
         return False
 
+    # Process the successful payment using the transaction ID
     return invoice_received_money(aux["id"])
 
 
@@ -583,17 +678,41 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # ~ ctx['signature'] = sig
 
 
-def redsys_webhook(request, ok=True):
+def redsys_webhook(request: HttpRequest, ok: bool = True) -> Union[bool, HttpResponse]:
+    """Process Redsys payment gateway webhook notification.
+
+    Handles incoming webhook requests from Redsys payment gateway to process
+    payment confirmations and update invoice status accordingly.
+
+    Args:
+        request: Django HTTP request object containing POST data from Redsys
+        ok: Boolean flag indicating expected success status (default: True)
+
+    Returns:
+        Result from invoice_received_money() if payment verification succeeds,
+        False if verification fails
+
+    Note:
+        Expected POST parameters:
+        - Ds_MerchantParameters: Base64 encoded payment data
+        - Ds_Signature: HMAC signature for verification
+    """
+    # Initialize user context and update payment configuration
     ctx = def_user_ctx(request)
     update_payment_details(request, ctx)
-    # ver = request.POST["Ds_SignatureVersion"]
+
+    # Extract payment parameters and signature from POST data
+    # ver = request.POST["Ds_SignatureVersion"]  # Version currently unused
     pars = request.POST["Ds_MerchantParameters"]
     sig = request.POST["Ds_Signature"]
 
+    # Initialize Redsys client with merchant credentials
     redsyspayment = RedSysClient(business_code=ctx["redsys_merchant_code"], secret_key=ctx["redsys_secret_key"])
 
+    # Verify payment signature and extract transaction code
     cod = redsyspayment.redsys_check_response(sig, pars, ctx)
 
+    # Process successful payment verification
     if cod:
         return invoice_received_money(cod)
 
@@ -661,48 +780,98 @@ class RedSysClient:
         assert isinstance(merchant_parameters, str)
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
-    def encrypt_order(self, order):
+    def encrypt_order(self, order: str) -> bytes:
         """
-        This method creates a unique key for every request, based on the
-        Ds_Merchant_Order and in the shared secret (SERMEPA_SECRET_KEY).
-        This unique key is Triple DES ciphered.
-        :param Ds_Merchant_Order: Dict with all merchant parameters
-        :return  order_encrypted: The encrypted order
+        Creates a unique encrypted key for every request based on the merchant order and shared secret.
+
+        This method uses Triple DES encryption in CBC mode to cipher the order string.
+        The order is padded to 16 bytes and encrypted using the base64-decoded secret key.
+
+        Args:
+            order: The merchant order string to be encrypted
+
+        Returns:
+            The encrypted order as bytes
+
+        Raises:
+            AssertionError: If order is not a string
         """
+        # Validate input parameter type
         assert isinstance(order, str)
+
+        # Create Triple DES cipher with CBC mode and zero IV
         cipher = DES3.new(base64.b64decode(self.secret_key), DES3.MODE_CBC, IV=b"\0\0\0\0\0\0\0\0")
+
+        # Encode order to bytes and pad to 16-byte boundary, then encrypt
         return cipher.encrypt(order.encode().ljust(16, b"\0"))
 
     @staticmethod
-    def sign_hmac256(encrypted_order, merchant_parameters):
+    def sign_hmac256(encrypted_order: bytes, merchant_parameters: bytes) -> bytes:
+        """Sign merchant data using HMAC SHA256 algorithm.
+
+        Uses the encrypted order as the key to sign the merchant parameters
+        using HMAC SHA256, then encodes the result with Base64.
+
+        Args:
+            encrypted_order: Encrypted Ds_Merchant_Order used as HMAC key
+            merchant_parameters: Redsys already encoded parameters to sign
+
+        Returns:
+            Generated signature as a base64 encoded bytes string
+
+        Raises:
+            AssertionError: If parameters are not bytes
         """
-        Use the encrypted_order we have to sign the merchant data using
-        a HMAC SHA256 algorithm and encode the result using Base64.
-        :param encrypted_order: Encrypted Ds_Merchant_Order
-        :param merchant_parameters: Redsys already encoded parameters
-        :return Generated signature as a base64 encoded string
-        """
+        # Validate input types are bytes
         assert isinstance(encrypted_order, bytes)
         assert isinstance(merchant_parameters, bytes)
+
+        # Generate HMAC SHA256 digest using encrypted order as key
         digest = hmac.new(encrypted_order, merchant_parameters, hashlib.sha256).digest()
+
+        # Encode digest with Base64 and return
         return base64.b64encode(digest)
 
-    def redsys_generate_request(self, params):
+    def redsys_generate_request(self, params: dict) -> dict:
         """
-        Method to generate Redsys Ds_MerchantParameters and Ds_Signature
-        :param params: Dict with all transaction parameters
-        :return dict url, signature, parameters and type signature
+        Generate Redsys Ds_MerchantParameters and Ds_Signature for payment processing.
+
+        Args:
+            params: Dictionary containing all transaction parameters including:
+                - DS_MERCHANT_AMOUNT: Transaction amount (float)
+                - DS_MERCHANT_ORDER: Order identifier (string)
+                - DS_MERCHANT_MERCHANTCODE: Merchant code (string)
+                - DS_MERCHANT_CURRENCY: Currency code (int, optional)
+                - DS_MERCHANT_TRANSACTIONTYPE: Transaction type (string, optional)
+                - DS_MERCHANT_TERMINAL: Terminal identifier (string, optional)
+                - DS_MERCHANT_URLOK: Success URL (string)
+                - DS_MERCHANT_URLKO: Error URL (string)
+                - DS_MERCHANT_MERCHANTURL: Merchant notification URL (string)
+                - DS_MERCHANT_PRODUCTDESCRIPTION: Product description (string)
+                - DS_MERCHANT_TITULAR: Card holder name (string)
+                - DS_MERCHANT_MERCHANTNAME: Merchant name (string)
+                - DS_MERCHANT_CONSUMERLANGUAGE: Consumer language (string, optional)
+
+        Returns:
+            Dictionary containing:
+                - Ds_Redsys_Url: Payment gateway URL
+                - Ds_SignatureVersion: Signature version identifier
+                - Ds_MerchantParameters: Base64 encoded merchant parameters
+                - Ds_Signature: HMAC-SHA256 signature for request validation
         """
+        # Build merchant parameters with proper formatting and defaults
         merchant_parameters = {
             "DS_MERCHANT_AMOUNT": int(params["DS_MERCHANT_AMOUNT"] * 100),
             "DS_MERCHANT_ORDER": params["DS_MERCHANT_ORDER"].zfill(10),
             "DS_MERCHANT_MERCHANTCODE": params["DS_MERCHANT_MERCHANTCODE"][:9],
             "DS_MERCHANT_CURRENCY": params["DS_MERCHANT_CURRENCY"] or 978,  # EUR
             "DS_MERCHANT_TRANSACTIONTYPE": (params["DS_MERCHANT_TRANSACTIONTYPE"] or "0"),
+            # Set terminal and URLs with length restrictions
             "DS_MERCHANT_TERMINAL": params["DS_MERCHANT_TERMINAL"] or "1",
             "DS_MERCHANT_URLOK": params["DS_MERCHANT_URLOK"][:250],
             "DS_MERCHANT_URLKO": params["DS_MERCHANT_URLKO"][:250],
             "DS_MERCHANT_MERCHANTURL": params["DS_MERCHANT_MERCHANTURL"][:250],
+            # Set product and merchant details with length limits
             "DS_MERCHANT_PRODUCTDESCRIPTION": (params["DS_MERCHANT_PRODUCTDESCRIPTION"][:125]),
             "DS_MERCHANT_TITULAR": params["DS_MERCHANT_TITULAR"][:60],
             "DS_MERCHANT_MERCHANTNAME": params["DS_MERCHANT_MERCHANTNAME"][:25],
@@ -711,10 +880,14 @@ class RedSysClient:
 
         # Encode merchant_parameters in json + base64
         b64_params = base64.b64encode(json.dumps(merchant_parameters).encode())
-        # Encrypt order
+
+        # Encrypt order identifier for signature generation
         encrypted_order = self.encrypt_order(merchant_parameters["DS_MERCHANT_ORDER"])
-        # Sign parameters
+
+        # Generate HMAC-SHA256 signature using encrypted order and parameters
         signature = self.sign_hmac256(encrypted_order, b64_params).decode()
+
+        # Return complete request data for Redsys payment gateway
         return {
             "Ds_Redsys_Url": self.redsys_url,
             "Ds_SignatureVersion": "HMAC_SHA256_V1",

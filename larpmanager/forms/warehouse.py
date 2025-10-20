@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from typing import Any
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -57,11 +57,24 @@ class ExeWarehouseItemForm(MyForm):
             "tags": WarehouseTagS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with association-specific widget configuration.
+
+        Sets up container and tags widgets with the association ID from params,
+        then removes optional warehouse fields based on form configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+        """
+        # Initialize parent form with provided arguments
         super().__init__(*args, **kwargs)
+
+        # Configure widgets with association ID for proper filtering
         self.fields["container"].widget.set_assoc(self.params["a_id"])
         self.fields["tags"].widget.set_assoc(self.params["a_id"])
 
+        # Remove optional warehouse fields based on configuration
         _delete_optionals_warehouse(self)
 
 
@@ -154,28 +167,42 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
 
         _delete_optionals_warehouse(self)
 
-    def clean(self):
+    def clean(self) -> dict:
         """Validate form to prevent duplicate warehouse item assignments.
 
+        Validates that the combination of area and item does not already exist
+        in the database, excluding the current instance if editing an existing
+        assignment.
+
         Returns:
-            dict: Cleaned form data
+            dict: The cleaned form data containing validated field values.
 
         Raises:
-            ValidationError: If assignment for the same item and area already exists
+            ValidationError: If an assignment for the same item and area
+                combination already exists in the database.
         """
+        # Get cleaned data from parent validation
         cleaned = super().clean()
+
+        # Extract area and item from cleaned data
         area = cleaned.get("area")
         item = cleaned.get("item")
+
+        # Skip validation if either field is missing
         if not area or not item:
             return cleaned
 
+        # Query for existing assignments with same area and item
         qs = WarehouseItemAssignment.objects.filter(
             area=area,
             item=item,
         )
+
+        # Exclude current instance from query if editing existing assignment
         if self.instance and self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
 
+        # Raise validation error if duplicate assignment exists
         if qs.exists():
             raise ValidationError({"area": _("An assignment for this item and area already exists")})
 

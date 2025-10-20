@@ -17,8 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from decimal import Decimal
+
 from django.db import transaction
-from django.db.models import Case, F, IntegerField, Q, Value, When
+from django.db.models import Case, F, IntegerField, Q, QuerySet, Value, When
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import (
@@ -28,13 +30,14 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentChoices,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 
 
-def registration_tokens_credits_use(reg, remaining, assoc_id):
+def registration_tokens_credits_use(reg, remaining: float, assoc_id: int) -> None:
     """Apply available tokens and credits to a registration payment.
 
     Automatically uses member's available tokens first, then credits
@@ -43,25 +46,29 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
     Args:
         reg: Registration instance to apply payments to
         remaining: Outstanding balance amount
-        features: Event features dictionary
         assoc_id: Association ID for membership lookup
 
-    Side effects:
-        Creates AccountingItemPayment records and updates membership balances
-        Updates reg.tot_payed with applied amounts
+    Side Effects:
+        Creates AccountingItemPayment records and updates membership balances.
+        Updates reg.tot_payed with applied amounts.
     """
+    # Early return if no outstanding balance
     if remaining < 0:
         return
 
     with transaction.atomic():
-        # check token credits
+        # Get member and their membership for the association
         member = reg.member
         membership = get_user_membership(member, assoc_id)
+
+        # Apply tokens first if available
         if membership.tokens > 0:
             tk_use = min(remaining, membership.tokens)
             reg.tot_payed += tk_use
             membership.tokens -= tk_use
             membership.save()
+
+            # Create payment record for token usage
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.TOKEN,
                 value=tk_use,
@@ -71,11 +78,14 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
             )
             remaining -= tk_use
 
+        # Apply credits if still have remaining balance and credits available
         if membership.credit > 0:
             cr_use = min(remaining, membership.credit)
             reg.tot_payed += cr_use
             membership.credit -= cr_use
             membership.save()
+
+            # Create payment record for credit usage
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.CREDIT,
                 value=cr_use,
@@ -85,26 +95,31 @@ def registration_tokens_credits_use(reg, remaining, assoc_id):
             )
 
 
-def registration_tokens_credits_overpay(reg, overpay, assoc_id):
+def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, assoc_id: int) -> None:
     """
-    Offsets an overpayment by reducing or deleting `AccountingItemPayment`
-    rows with pay=TOKEN or CREDIT.
+    Offsets an overpayment by reducing or deleting AccountingItemPayment rows.
 
-    Rows are locked (SELECT FOR UPDATE) and ordered by:
-    CREDIT first, then TOKEN, then by value (desc) and id (desc).
-    Each row is reduced until the overpayment is covered, deleting the row
-    if its value reaches zero. Executed inside a single atomic transaction.
+    This function handles overpayments by systematically reducing or removing
+    AccountingItemPayment entries with payment types TOKEN or CREDIT. The
+    operation is performed within an atomic transaction to ensure data consistency.
 
     Args:
-        reg : Registration to adjust.
-        overpay : Positive amount to reverse.
-        assoc_id : Association id used to filter payments
+        reg: Registration instance to adjust payments for.
+        overpay: Positive decimal amount representing the overpayment to reverse.
+        assoc_id: Association ID used to filter relevant payment records.
+
+    Note:
+        Payments are processed in priority order: CREDIT first, then TOKEN,
+        ordered by value (descending) and ID (descending) within each type.
+        Rows are locked during processing to prevent race conditions.
     """
 
+    # Early return if no overpayment to process
     if overpay <= 0:
         return
 
     with transaction.atomic():
+        # Build queryset with payment priority annotation and locking
         qs = (
             AccountingItemPayment.objects.select_for_update()
             .filter(reg=reg, assoc_id=assoc_id, pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
@@ -118,53 +133,93 @@ def registration_tokens_credits_overpay(reg, overpay, assoc_id):
             .order_by("pay_priority", "-value", "-id")
         )
 
+        # Initialize tracking variables
         reversed_total = 0
         remaining = overpay
 
+        # Process each payment item in priority order
         for item in qs:
             if remaining <= 0:
                 break
+
+            # Calculate how much to cut from this payment
             cut = min(remaining, item.value)
             new_val = item.value - cut
 
+            # Delete item if value becomes zero or negative, otherwise update
             if new_val <= 0:
                 item.delete()
             else:
                 item.value = new_val
                 item.save(update_fields=["value"])
 
+            # Update tracking counters
             reversed_total += cut
             remaining -= cut
 
 
-def get_regs_paying_incomplete(assoc=None):
+def get_regs_paying_incomplete(assoc: Association = None) -> QuerySet[Registration]:
     """Get registrations with incomplete payments (excluding small differences).
 
+    This function identifies registrations where the total amount paid differs
+    from the total registration amount by more than 0.05 (either overpaid or underpaid).
+    Small differences within the 0.05 threshold are considered complete payments
+    to account for rounding errors or minor discrepancies.
+
     Args:
-        assoc: Optional association to filter by
+        assoc (Optional[Association]): Association to filter registrations by.
+            If None, returns registrations from all associations.
 
     Returns:
-        QuerySet: Registrations with payment differences > 0.05
+        QuerySet: Django QuerySet of Registration objects with payment
+            differences greater than 0.05 in absolute value. Each registration
+            includes an annotated 'diff' field showing the payment difference.
+
+    Examples:
+        >>> incomplete_regs = get_regs_paying_incomplete()
+        >>> assoc_incomplete = get_regs_paying_incomplete(my_association)
     """
+    # Get base registration queryset, optionally filtered by association
     reg_que = get_regs(assoc)
+
+    # Calculate payment difference: total_paid - total_registration_amount
     reg_que = reg_que.annotate(diff=F("tot_payed") - F("tot_iscr"))
+
+    # Filter for significant payment differences (> 0.05 absolute value)
+    # Excludes small differences that might be due to rounding or minor errors
     reg_que = reg_que.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
+
     return reg_que
 
 
-def get_regs(assoc):
+def get_regs(assoc: Association) -> QuerySet[Registration]:
     """Get active registrations (not cancelled, not from completed events).
 
+    Retrieves all registrations that are still active by filtering out cancelled
+    registrations and registrations from events that are cancelled or completed.
+
     Args:
-        assoc: Optional association to filter by
+        assoc: Optional association to filter registrations by. If provided,
+            only returns registrations for events belonging to this association.
 
     Returns:
-        QuerySet: Active registrations
+        QuerySet of Registration objects that are active and not from
+        completed/cancelled events.
+
+    Example:
+        >>> active_regs = get_regs(my_association)
+        >>> all_active_regs = get_regs(None)
     """
+    # Start with all non-cancelled registrations
     reg_que = Registration.objects.filter(cancellation_date__isnull=True)
+
+    # Exclude registrations from cancelled or completed events
     reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE])
+
+    # Filter by association if provided
     if assoc:
         reg_que = reg_que.filter(run__event__assoc=assoc)
+
     return reg_que
 
 

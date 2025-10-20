@@ -139,19 +139,29 @@ class LarpManagerShowcase(BaseModel):
         """
         return self.text[:100]
 
-    def as_dict(self, many_to_many=True):
+    def as_dict(self, many_to_many: bool = True) -> dict:
         """Convert model instance to dictionary with image URL.
 
+        Converts the model instance to a dictionary representation, including
+        many-to-many relationships if specified. Additionally includes a reduced
+        image URL if the instance has a reduced image available.
+
         Args:
-            many_to_many (bool): Whether to include many-to-many relationships
+            many_to_many: Whether to include many-to-many relationships in the
+                         resulting dictionary. Defaults to True.
 
         Returns:
-            dict: Model data as dictionary with reduced image URL if available
+            Dictionary representation of the model instance with image URLs
+            included if available.
         """
+        # Get base dictionary representation from parent class
         res = super().as_dict(many_to_many)
+
+        # Add reduced image URL if available
         if self.reduced:
             # noinspection PyUnresolvedReferences
             res["reduced_url"] = self.reduced.url
+
         return res
 
 

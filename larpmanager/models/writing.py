@@ -109,16 +109,29 @@ class Writing(BaseConceptModel):
         return js
 
     @classmethod
-    def get_example_csv(cls, features):
+    def get_example_csv(cls, features: set[str]) -> list[list[str]]:
         """
         Generate example CSV structure for writing element imports.
 
+        This method creates a template CSV with headers and example data for importing
+        writing elements. The CSV structure includes mandatory fields and optional
+        fields based on enabled features.
+
         Args:
-            features: Set of enabled features to include in CSV template
+            features: Set of enabled feature names to include in CSV template.
+                     Common features include 'title', 'mirror', 'cover', 'hide'.
 
         Returns:
-            list: List of CSV rows with headers and example data
+            List of CSV rows where first row contains headers and second row
+            contains example/description data for each column.
+
+        Example:
+            >>> features = {'title', 'cover'}
+            >>> csv_data = MyClass.get_example_csv(features)
+            >>> csv_data[0]  # Headers
+            ['number', 'name', 'presentation', 'text', 'title', 'cover']
         """
+        # Initialize base CSV structure with mandatory columns
         rows = [
             ["number", "name", "presentation", "text"],
             [
@@ -129,17 +142,22 @@ class Writing(BaseConceptModel):
             ],
         ]
 
-        for s in [
+        # Define optional features with their descriptions
+        # Each tuple contains (feature_name, description_text)
+        optional_features = [
             # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
             ("cover", "url of the element cover"),
             ("hide", "single character, t (true), f (false)"),
-        ]:
-            (f, d) = s
-            if f in features:
-                rows[0].extend([f])
-                rows[1].extend([d])
+        ]
+
+        # Add columns for enabled features only
+        for feature_name, description in optional_features:
+            if feature_name in features:
+                # Append feature column to headers and descriptions
+                rows[0].append(feature_name)
+                rows[1].append(description)
 
         return rows
 
@@ -268,20 +286,39 @@ class Character(Writing):
 
         return js
 
-    def show_factions(self, event, js):
+    def show_factions(self, event: Optional[Event], js: dict[str, Any]) -> None:
+        """Display factions for the given event in the JSON response.
+
+        Populates the 'factions' key in the js dictionary with faction numbers
+        and sets a thumbnail if a primary faction with cover exists.
+
+        Args:
+            event: The event to get factions for. If None, uses self.event.
+            js: Dictionary to populate with faction data.
+        """
         js["factions"] = []
+
+        # Determine which event to use for faction lookup
         if event:
             fac_event = event.get_class_parent("faction")
         else:
             fac_event = self.event.get_class_parent("faction")
+
         primary = False
+
+        # Process all factions for the event
         # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
+            # Check if this is a primary faction and set thumbnail
             if g.typ == FactionType.PRIM:
                 primary = True
                 if g.cover:
                     js["thumb"] = g.thumb.url
+
+            # Add faction number to the list
             js["factions"].append(g.number)
+
+        # Add default faction (0) if no primary faction exists
         if not primary:
             js["factions"].append(0)
 
@@ -605,16 +642,34 @@ class SpeedLarp(Writing):
         indexes = [models.Index(fields=["number", "event"])]
 
 
-def replace_char_names(v, chars):
+def replace_char_names(v: str, chars: dict[str, dict]) -> str:
+    """Replace character names in text with their corresponding values.
+
+    Args:
+        v: The input text to process. If falsy, returns empty string.
+        chars: Dictionary mapping character names to their replacement values.
+
+    Returns:
+        Text with character names replaced by their values prefixed with '@'.
+        Returns empty string if input text is falsy.
+    """
+    # Return early if input text is falsy (None, empty string, etc.)
     if not v:
         return ""
-    for name in chars:
+
+    # Iterate through each character name in the mapping
+    for name, char_value in chars.items():
         name_number = 2
+
+        # Skip names that are too short (less than 2 characters)
         if len(name) < name_number:
             continue
+
+        # Replace character name with '@' prefixed value if found in text
         if name in v:
-            c = f"@{chars[name]}"
+            c = f"@{char_value}"
             v = v.replace(name, c)
+
     return v
 
 
@@ -625,39 +680,58 @@ def replace_chars_el(el, chars):
         el.teaser = replace_char_names(el.teaser, chars)
 
 
-def replace_character_names_in_writing(instance):
+def replace_character_names_in_writing(instance) -> None:
     """
     Replace character names in writing content with character numbers.
 
+    This function processes a writing instance and replaces all character names
+    with their corresponding numbers if the event has writing substitution enabled.
+    It also handles related plot character relationships for Character and Plot instances.
+
     Args:
-        instance: Writing model instance to process for character substitution
+        instance: Writing model instance to process for character substitution.
+                 Can be Character, Plot, or other writing-related model instances.
+
+    Returns:
+        None
+
+    Note:
+        Function returns early if:
+        - Instance has no primary key (not saved)
+        - Instance has no event attribute
+        - Event has writing_substitute config disabled
     """
+    # Early return if instance is not saved yet
     if not instance.pk:
         return
 
+    # Early return if instance doesn't have an event
     if not hasattr(instance, "event"):
         return
 
+    # Early return if writing substitution is disabled for this event
     if not instance.event.get_config("writing_substitute", False):
         return
 
-    # get all characters name for replacement
+    # Build character name to number mapping for replacement
     chars = {}
     for c in instance.event.get_elements(Character):
         chars[c.name] = c.number
 
+    # Sort names by length (longest first) to avoid partial replacements
     names = list(chars.keys())
     names.sort(key=len, reverse=True)
 
+    # Replace character names in the main instance
     replace_chars_el(instance, chars)
 
-    # if type is character, adds also plot pieces
+    # Handle Character instances: process related plot character relationships
     if isinstance(instance, Character):
         for el in PlotCharacterRel.objects.filter(character=instance):
             replace_chars_el(el, chars)
             el.save()
 
-    # if type is plot, adds also plot pieces
+    # Handle Plot instances: process related plot character relationships
     if isinstance(instance, Plot):
         for el in PlotCharacterRel.objects.filter(plot=instance):
             replace_chars_el(el, chars)

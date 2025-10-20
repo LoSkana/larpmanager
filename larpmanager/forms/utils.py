@@ -21,7 +21,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 
 from django import forms
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -120,30 +120,48 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name, value, attrs=None, renderer=None):
+    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:
         """Render checkbox widget with tooltips and help links.
 
+        Creates a series of checkbox inputs with associated labels, help tooltips,
+        and tutorial links for each feature option.
+
         Args:
-            name: Field name
-            value: Selected values
-            attrs: HTML attributes
-            renderer: Form renderer
+            name: The HTML name attribute for the checkbox inputs
+            value: List of currently selected option values, or None if nothing selected
+            attrs: Dictionary of HTML attributes to apply to the widget
+            renderer: Django form renderer instance (unused in this implementation)
 
         Returns:
-            str: Rendered HTML for checkbox widget
+            Safe HTML string containing the rendered checkbox widget with tooltips
+            and help links for each option.
         """
         output = []
+        # Initialize value as empty list if None provided
         value = value or []
 
+        # Get localized tooltip text for help links
         know_more = _("click on the icon to open the tutorial")
 
+        # Generate HTML for each checkbox option
         for i, (option_value, option_label) in enumerate(self.choices):
+            # Create unique ID for each checkbox using index
             checkbox_id = f"{attrs.get('id', name)}_{i}"
+
+            # Set checked attribute if option is in selected values
             checked = "checked" if option_value in value else ""
+
+            # Build individual HTML components
             checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
             label_html = f'<label for="{checkbox_id}">{option_label}</label>'
+
+            # Create help link with feature mapping for tutorial functionality
             link_html = f'<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
+
+            # Get help text for tooltip display
             help_text = self.feature_help.get(option_value, "")
+
+            # Combine all elements into final checkbox container
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
                     <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
@@ -254,28 +272,37 @@ def prepare_permissions_role(form, typ) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance, form):
+def save_permissions_role(instance, form) -> None:
     """Save selected permissions for a role instance.
 
     Args:
         instance: Role instance to save permissions for
-        form: Form containing selected permission data
+        form: Form containing selected permission data and modules
 
-    Side effects:
-        Clears existing permissions and adds selected ones
-        Skips permission saving for role number 1 (executives)
+    Returns:
+        None
+
+    Note:
+        Clears existing permissions and adds selected ones.
+        Skips permission saving for role number 1 (executives).
     """
+    # Save the role instance first
     instance.save()
+
+    # Skip permission handling for executive role (number 1)
     if form.instance and form.instance.number == 1:
         return
 
+    # Collect all selected permission primary keys from form modules
     sel = []
     for el in form.modules:
         sel.extend([e.pk for e in form.cleaned_data[el]])
 
+    # Clear existing permissions and add the selected ones
     instance.permissions.clear()
     instance.permissions.add(*sel)
 
+    # Save the instance again to persist permission changes
     instance.save()
 
 
@@ -385,45 +412,68 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return f"{obj.display_real()} - {obj.email}"
 
 
-def get_assoc_people(assoc_id):
+def get_assoc_people(assoc_id: int) -> list[tuple[int, str]]:
     """Get list of people associated with an association for form choices.
 
+    Retrieves active members of an association, excluding those with empty
+    or revoked membership status, and formats them for use in form choice fields.
+
     Args:
-        assoc_id: Association ID to get members for
+        assoc_id: Association ID to get members for.
 
     Returns:
-        list: List of (member_id, display_string) tuples
+        List of tuples containing (member_id, display_string) where display_string
+        is formatted as "member_name - member_email".
     """
     ls = []
+
+    # Query memberships with related member data for the given association
     que = Membership.objects.select_related("member").filter(assoc_id=assoc_id)
+
+    # Exclude empty and revoked memberships to get only active members
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
+
+    # Build list of tuples with member ID and formatted display string
     for f in que:
         ls.append((f.member.id, f"{str(f.member)} - {f.member.email}"))
+
     return ls
 
 
-def get_run_choices(self, past=False):
+def get_run_choices(self, past: bool = False) -> None:
     """Generate run choices for form fields.
 
-    Args:
-        self: Form instance with params containing association ID
-        past: If True, filter to recent past runs only
+    Creates a choice field for runs associated with the form's organization,
+    with optional filtering for recent past runs only.
 
-    Side effects:
-        Creates or updates 'run' field in form with run choices
-        Sets initial value if run is in params
+    Args:
+        past: If True, filter to runs from last 30 days that are SHOW or DONE status.
+              If False, include all runs. Defaults to False.
+
+    Side Effects:
+        - Creates or updates 'run' field in self.fields with run choices
+        - Sets self.initial['run'] if 'run' exists in self.params
     """
+    # Initialize choices with empty option
     cho = [("", "-----")]
+
+    # Get all runs for the association, ordered by end date (newest first)
     runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
+
+    # Filter to recent past runs if requested
     if past:
         ref = datetime.now() - timedelta(days=30)
         runs = runs.filter(end__gte=ref.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
+
+    # Build choices list from run queryset
     for r in runs:
         cho.append((r.id, str(r)))
 
+    # Create run field if it doesn't exist
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
+    # Set choices and initial value
     self.fields["run"].choices = cho
     if "run" in self.params:
         self.initial["run"] = self.params["run"].id
@@ -690,20 +740,28 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
     pass
 
 
-def remove_choice(ch, typ):
+def remove_choice(ch: list[tuple[str, str]], typ: str) -> list[tuple[str, str]]:
     """Remove a specific choice from a list of choices.
 
     Args:
-        ch: List of (key, value) choice tuples
-        typ: Choice key to remove
+        ch: List of (key, value) choice tuples representing available options.
+        typ: Choice key to remove from the list.
 
     Returns:
-        list: New choice list without the specified type
+        New choice list without the specified type, maintaining original order.
+
+    Example:
+        >>> choices = [('red', 'Red'), ('blue', 'Blue'), ('green', 'Green')]
+        >>> remove_choice(choices, 'blue')
+        [('red', 'Red'), ('green', 'Green')]
     """
     new = []
+    # Iterate through each choice tuple in the original list
     for k, v in ch:
+        # Skip the choice if its key matches the type to remove
         if k == typ:
             continue
+        # Add the choice to the new list if it doesn't match
         new.append((k, v))
     return new
 
@@ -720,18 +778,32 @@ class RedirectForm(forms.Form):
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
 
 
-def get_members_queryset(aid):
+def get_members_queryset(aid: int) -> QuerySet[Member]:
     """Get queryset of members for an association with accepted status.
 
+    Retrieves all members who have an active membership relationship with the
+    specified association, filtering for members with accepted, submitted, or
+    joined membership status.
+
     Args:
-        aid: Association ID to filter members for
+        aid (int): Association ID to filter members for
 
     Returns:
-        QuerySet: Members with accepted, submitted, or joined membership status
+        QuerySet[Member]: Members with accepted, submitted, or joined membership status
+
+    Note:
+        The queryset includes prefetched membership relationships for efficient
+        database access when iterating over the results.
     """
+    # Define allowed membership statuses for active members
     allwd = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
+
+    # Create base queryset with prefetched membership relationships
     qs = Member.objects.prefetch_related("memberships")
+
+    # Filter members by association ID and allowed membership statuses
     qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
+
     return qs
 
 

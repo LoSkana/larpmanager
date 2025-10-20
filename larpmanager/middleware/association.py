@@ -23,7 +23,7 @@ from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
@@ -111,49 +111,69 @@ class AssociationIdentifyMiddleware:
         return cls.get_main_info(request, base_domain)
 
     @classmethod
-    def get_main_info(cls, request, base_domain):
+    def get_main_info(cls, request: HttpRequest, base_domain: str) -> Optional[HttpResponse]:
         """Handle requests to main domain without specific association.
 
         Handles demo user logout, skin loading, and default redirects
         for the main application domain.
 
         Args:
-            request: Django HTTP request object
-            base_domain (str): Base domain name
+            request: Django HTTP request object containing user session and path info
+            base_domain: Base domain name used for skin and association lookup
 
         Returns:
-            HttpResponse or None: Redirect/render response or None to continue
+            HttpResponse for redirects/renders, or None to continue normal processing
+
+        Note:
+            Demo users (emails ending with 'demo.it') are automatically logged out
+            when visiting the main page, except for after_login paths.
         """
-        # if logged in with demo user visiting main page, logout
+        # Check if demo user is visiting main page and logout if needed
         user = request.user
         if not request.path.startswith("/after_login/"):
             if user.is_authenticated and user.email.lower().endswith("demo.it"):
                 logout(request)
                 return redirect(request.path)
 
+        # Try to load association skin for the base domain
         skin = get_cache_skin(base_domain)
         if skin:
             return cls.load_assoc(request, skin)
 
+        # Redirect to canonical larpmanager.com domain if needed
         if request.get_host().endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
+        # Allow admin access without association
         if request.path.startswith("/admin"):
             return
 
+        # Render association not found page for all other requests
         return render(request, "exception/assoc.html", {})
 
     @staticmethod
-    def load_assoc(request, assoc):
+    def load_assoc(request: HttpRequest, assoc: dict) -> None:
         """Load association data into request context.
 
-        Args:
-            request: Django HTTP request object
-            assoc (dict): Association data dictionary
+        This function enriches the request object with association data and
+        localized footer text for the current language.
 
-        Side effects:
-            Sets request.assoc with association data and footer text
+        Args:
+            request: Django HTTP request object to be modified
+            assoc: Association data dictionary containing at minimum an 'id' key
+
+        Returns:
+            None
+
+        Side Effects:
+            - Sets request.assoc with the provided association data
+            - Adds localized footer text to request.assoc["footer"]
         """
+        # Attach association data to request for template access
         request.assoc = assoc
+
+        # Get current language for localization
         lang = get_language()
+
+        # Load and attach localized footer text for the association
         request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)

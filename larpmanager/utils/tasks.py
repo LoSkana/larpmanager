@@ -22,7 +22,7 @@ import logging
 import re
 import traceback
 from functools import wraps
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -43,31 +43,61 @@ logger = logging.getLogger(__name__)
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
 
-def background_auto(schedule=0, **background_kwargs):
+def background_auto(schedule: int = 0, **background_kwargs) -> Callable:
     """Decorator to conditionally run functions as background tasks.
 
     Creates a decorator that can run functions either synchronously
-    (if AUTO_BACKGROUND_TASKS is True) or as background tasks.
+    (if AUTO_BACKGROUND_TASKS is True) or as background tasks based on
+    configuration settings.
 
     Args:
-        schedule (int): Seconds to delay before execution
-        **background_kwargs: Additional arguments for background task
+        schedule: Seconds to delay before execution. Defaults to 0.
+        **background_kwargs: Additional keyword arguments passed to the
+            background task decorator.
 
     Returns:
-        function: Decorator function
+        A decorator function that wraps the target function to enable
+        conditional background task execution.
+
+    Example:
+        @background_auto(schedule=30)
+        def my_task():
+            pass
     """
 
-    def decorator(func):
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
+        """
+        Decorator that conditionally executes functions as background tasks.
+
+        Args:
+            func: The function to be decorated for potential background execution.
+
+        Returns:
+            A wrapper function that either executes synchronously or as a background task
+            based on the AUTO_BACKGROUND_TASKS setting.
+
+        Note:
+            When AUTO_BACKGROUND_TASKS is True, the function executes synchronously
+            with internal kwargs filtered out. When False, it executes as a background task.
+        """
+        # Create the background task using the provided function
         task = background(schedule=schedule, **background_kwargs)(func)
 
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            # Check if auto background tasks are enabled in settings
             if getattr(conf_settings, "AUTO_BACKGROUND_TASKS", False):
+                # Filter out internal kwargs before synchronous execution
+                # This ensures clean parameters are passed to the original function
                 clean_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
                 return func(*args, **clean_kwargs)
             else:
+                # Execute as background task when auto mode is disabled
+                # Pass all original arguments to the background task
                 return task(*args, **kwargs)
 
+        # Attach task references to the wrapper for external access
+        # This allows consumers to access both the task and original function
         wrapper.task = task
         wrapper.task_function = func
         return wrapper
@@ -78,46 +108,80 @@ def background_auto(schedule=0, **background_kwargs):
 # MAIL
 
 
-def mail_error(subj, body, e=None):
+def mail_error(subj: str, body: str, e: Exception | None = None) -> None:
     """Handle email sending errors and notify administrators.
 
-    Args:
-        subj (str): Email subject that failed
-        body (str): Email body that failed
-        e (Exception, optional): Exception that caused the failure
+    This function logs email failure details and sends error notifications
+    to all configured administrators. It formats the error information
+    including exception traceback when available.
 
-    Side effects:
-        Prints error details and sends error notification to admins
+    Args:
+        subj: Email subject that failed to send
+        body: Email body content that failed to send
+        e: Exception that caused the email failure, if any
+
+    Returns:
+        None
+
+    Side Effects:
+        - Logs error details to the application logger
+        - Sends error notification emails to all configured admins
+        - May raise exceptions from my_send_simple_mail if admin notification fails
     """
+    # Log the original error details for debugging
     logger.error(f"Mail error: {e}")
     logger.error(f"Subject: {subj}")
     logger.error(f"Body: {body}")
+
+    # Format error notification body with exception details if available
     if e:
         body = f"{traceback.format_exc()} <br /><br /> {subj} <br /><br /> {body}"
     else:
         body = f"{subj} <br /><br /> {body}"
+
+    # Set standardized subject for admin notifications
     subj = "[LarpManager] Mail error"
+
+    # Send error notification to each configured administrator
     for _name, email in conf_settings.ADMINS:
         my_send_simple_mail(subj, body, email)
 
 
 @background_auto()
-def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=None):
+def send_mail_exec(
+    players: str,
+    subj: str,
+    body: str,
+    assoc_id: int | None = None,
+    run_id: int | None = None,
+    reply_to: str | None = None,
+) -> None:
     """Send bulk emails to multiple recipients with staggered delivery.
 
-    Args:
-        players (str): Comma-separated list of email addresses
-        subj (str): Email subject
-        body (str): Email body content
-        assoc_id (int, optional): Association ID for context
-        run_id (int, optional): Run ID for context
-        reply_to (str, optional): Reply-to email address
+    Sends emails to a list of recipients with progressive delays to prevent
+    spam filtering issues. Emails are deduplicated and scheduled with 10-second
+    intervals between sends.
 
-    Side effects:
-        Schedules individual emails with delays to prevent spam issues
+    Args:
+        players: Comma-separated list of email addresses
+        subj: Email subject line
+        body: Email body content in HTML or plain text
+        assoc_id: Association ID for context and subject prefix
+        run_id: Run ID for context and subject prefix
+        reply_to: Custom reply-to email address
+
+    Returns:
+        None
+
+    Side Effects:
+        - Schedules individual emails with progressive delays
+        - Notifies administrators of bulk email initiation
+        - Logs warnings for invalid object IDs
     """
+    # Track processed emails to prevent duplicates
     aux = {}
 
+    # Determine context object (Association or Run)
     if assoc_id:
         obj = Association.objects.filter(pk=assoc_id).first()
     elif run_id:
@@ -126,18 +190,26 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
         logger.warning(f"Object not found! assoc_id: {assoc_id}, run_id: {run_id}")
         return
 
+    # Add organization prefix to subject line
     subj = f"[{obj}] {subj}"
 
+    # Parse and clean recipient list
     recipients = players.split(",")
 
+    # Notify administrators of bulk email operation
     notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
 
+    # Process each recipient with staggered delivery
     cnt = 0
     for email in recipients:
+        # Skip empty email addresses
         if not email:
             continue
+        # Skip duplicate email addresses
         if email in aux:
             continue
+
+        # Schedule email with progressive delay (10 seconds per email)
         cnt += 1
         # noinspection PyUnboundLocalVariable
         my_send_mail(subj, body, email.strip(), obj, reply_to, schedule=cnt * 10)
@@ -145,43 +217,63 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(email_pk):
+def my_send_mail_bkg(email_pk: int) -> None:
     """Background task to send a queued email.
 
     Args:
-        email_pk (int): Primary key of Email model instance to send
+        email_pk: Primary key of Email model instance to send
 
-    Side effects:
+    Side Effects:
         Sends the email and marks it as sent in database
     """
+    # Attempt to retrieve the email object from database
     try:
         email = Email.objects.get(pk=email_pk)
     except ObjectDoesNotExist:
+        # Email not found, exit silently
         return
 
+    # Check if email has already been sent to avoid duplicates
     if email.sent:
         logger.info("Email already sent!")
         return
 
+    # Send the email using the simple mail function
     my_send_simple_mail(email.subj, email.body, email.recipient, email.assoc_id, email.run_id, email.reply_to)
 
+    # Mark email as sent with current timestamp and save to database
     email.sent = timezone.now()
     email.save()
 
 
-def clean_sender(name):
+def clean_sender(name: str) -> str:
     """Clean sender name for email headers by removing special characters.
 
+    Sanitizes sender names to make them safe for use in email headers by removing
+    potentially problematic characters and normalizing whitespace.
+
     Args:
-        name (str): Original sender name
+        name: The original sender name to be cleaned.
 
     Returns:
-        str: Sanitized sender name safe for email headers
+        The sanitized sender name that is safe for email headers.
+
+    Example:
+        >>> clean_sender("John Doe: Manager, Sales")
+        "John Doe Manager"
     """
+    # Replace colons with spaces to handle titles/roles
     name = name.replace(":", " ")
+
+    # Take only the first part before any comma (removes titles, suffixes)
     name = name.split(",")[0]
+
+    # Remove all characters except letters, numbers, spaces, hyphens, and apostrophes
     name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", name)
+
+    # Normalize multiple consecutive spaces to single spaces and trim
     name = re.sub(r"\s+", " ", name).strip()
+
     return name
 
 
@@ -321,19 +413,26 @@ def my_send_simple_mail(
         raise e
 
 
-def add_unsubscribe_body(assoc):
+def add_unsubscribe_body(assoc) -> str:
     """Add unsubscribe footer to email body.
 
+    Creates an HTML footer with unsubscribe link for email communications.
+    The footer includes a separator line and translated unsubscribe text.
+
     Args:
-        assoc: Association instance for unsubscribe URL
+        assoc: Association instance containing configuration for unsubscribe URL generation.
 
     Returns:
-        str: HTML footer with unsubscribe link
+        HTML string containing formatted unsubscribe footer with link.
     """
+    # Create separator line for visual distinction
     txt = "<br /><br />======================"
+
+    # Add translated unsubscribe message with dynamic URL
     txt += "<br /><br />" + _(
         "Do you want to unsubscribe from our communication lists? <a href='%(url)s'>Unsubscribe</a>"
     ) % {"url": get_url("unsubscribe", assoc)}
+
     return txt
 
 
@@ -419,19 +518,28 @@ def my_send_mail(
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subj, text, exception=None):
+def notify_admins(subj: str, text: str, exception: Exception | None = None) -> None:
     """Send notification email to system administrators.
 
-    Args:
-        subj (str): Notification subject
-        text (str): Notification message
-        exception (Exception, optional): Exception to include in notification
+    Sends email notifications to all administrators configured in Django settings.
+    If an exception is provided, includes the full traceback in the message body.
 
-    Side effects:
-        Sends notification emails to all configured ADMINS
+    Args:
+        subj: Email subject line for the notification
+        text: Main notification message body
+        exception: Optional exception to include with full traceback
+
+    Returns:
+        None
+
+    Side Effects:
+        Sends individual emails to each administrator listed in settings.ADMINS
     """
+    # Format exception traceback if provided
     if exception:
         tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
         text += "\n" + tb
+
+    # Send notification to each configured admin
     for _name, email in conf_settings.ADMINS:
         my_send_mail(subj, text, email)

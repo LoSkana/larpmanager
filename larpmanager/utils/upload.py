@@ -23,11 +23,13 @@ import os
 import shutil
 from datetime import datetime
 from decimal import Decimal
+from typing import Any
 
 import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest
 
 from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
@@ -66,16 +68,25 @@ from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
 
 
-def go_upload(request, ctx, form):
+def go_upload(request, ctx: dict, form) -> list:
     """Route uploaded files to appropriate processing functions.
 
+    This function acts as a dispatcher, routing uploaded files to the correct
+    processing function based on the upload type specified in the context.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with upload type and settings
-        form: Uploaded file form data
+        request: Django HTTP request object containing the upload request
+        ctx: Context dictionary containing 'typ' key that specifies upload type
+             and other upload settings/configuration
+        form: Uploaded file form data to be processed
 
     Returns:
-        list: Result messages from processing function
+        list: Result messages from the appropriate processing function,
+              typically containing success/error information
+
+    Note:
+        Supported upload types include: registration_form, character_form,
+        registration, px_abilitie, registration_ticket, and writing (default)
     """
     # FIX
     # if request.POST.get("upload") == "cover":
@@ -86,32 +97,52 @@ def go_upload(request, ctx, form):
     #         z_obj.close()
     #         return ""
 
+    # Route registration form uploads
     if ctx["typ"] == "registration_form":
         return form_load(request, ctx, form, is_registration=True)
+
+    # Route character form uploads
     elif ctx["typ"] == "character_form":
         return form_load(request, ctx, form, is_registration=False)
+
+    # Route registration data uploads
     elif ctx["typ"] == "registration":
         return registrations_load(request, ctx, form)
+
+    # Route experience/abilities uploads
     elif ctx["typ"] == "px_abilitie":
         return abilities_load(request, ctx, form)
+
+    # Route registration ticket uploads
     elif ctx["typ"] == "registration_ticket":
         return tickets_load(request, ctx, form)
+
+    # Default route for writing/story uploads
     else:
         return writing_load(request, ctx, form)
 
 
-def _read_uploaded_csv(uploaded_file):
+def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
     """Read CSV file with multiple encoding fallbacks.
 
+    Attempts to read a CSV file using various character encodings in order of
+    preference. Falls back to different encodings if decoding fails.
+
     Args:
-        uploaded_file: Django uploaded file object
+        uploaded_file: Django uploaded file object containing CSV data.
 
     Returns:
-        pandas.DataFrame or None: Parsed CSV data or None if failed
+        pandas.DataFrame | None: Parsed CSV data with all columns as strings,
+            or None if all encoding attempts failed.
+
+    Note:
+        The function tries UTF-8 variants first, then common Western encodings,
+        followed by legacy encodings for maximum compatibility.
     """
     if not uploaded_file:
         return None
 
+    # Define encoding fallback chain - UTF-8 variants first for modern files
     encodings = [
         "utf-8",
         "utf-8-sig",
@@ -125,16 +156,26 @@ def _read_uploaded_csv(uploaded_file):
         "cp850",
     ]
 
+    # Try each encoding until one succeeds
     for encoding in encodings:
         try:
+            # Reset file pointer to beginning for each attempt
             uploaded_file.seek(0)
+
+            # Decode file content with current encoding
             decoded = uploaded_file.read().decode(encoding)
+
+            # Create string buffer for pandas to read from
             text_io = io.StringIO(decoded)
+
+            # Parse CSV with automatic delimiter detection and string dtype
             return pd.read_csv(text_io, encoding=encoding, sep=None, engine="python", dtype=str)
         except Exception as err:
+            # Log error and continue to next encoding
             print(err)
             continue
 
+    # All encoding attempts failed
     return None
 
 
@@ -186,25 +227,43 @@ def _get_file(ctx: dict, file, column_id: str = None) -> tuple[any, list[str]]:
     return input_df, []
 
 
-def registrations_load(request, ctx, form):
+def registrations_load(request: HttpRequest, ctx: dict, form) -> list:
     """Load registration data from uploaded CSV file.
 
+    Processes a CSV file containing registration data and creates registration
+    records for the specified event. Each row in the CSV is validated against
+    the event's registration questions and converted into a registration entry.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with event and form settings
-        form: Form data containing uploaded CSV file
+        request: Django HTTP request object containing user session data
+        ctx: Context dictionary containing event instance and form configuration
+        form: Django form instance with cleaned_data containing the uploaded CSV file
 
     Returns:
-        str: HTML formatted result message with processing statistics
+        List of log messages detailing the processing results and any errors
+        encountered during registration creation
+
+    Note:
+        The CSV file is expected to contain columns matching the event's
+        registration questions. Invalid rows will generate error logs but
+        won't stop processing of subsequent rows.
     """
+    # Extract CSV data and initialize processing logs
     (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
 
+    # Get registration questions for the current event with their options
     que = ctx["event"].get_elements(RegistrationQuestion).prefetch_related("options")
+
+    # Convert questions to a format suitable for data processing
     questions = _get_questions(que)
 
+    # Process each row in the CSV file if data was successfully loaded
     if input_df is not None:
+        # Convert DataFrame to dictionary records and process each registration
         for row in input_df.to_dict(orient="records"):
+            # Process individual registration and append result to logs
             logs.append(_reg_load(request, ctx, row, questions))
+
     return logs
 
 
@@ -272,43 +331,78 @@ def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
     return msg
 
 
-def _reg_field_load(ctx, reg, field, value, questions, logs):
+def _reg_field_load(ctx: dict, reg: Registration, field: str, value: any, questions: dict, logs: list) -> None:
     """Load individual registration field from CSV data.
 
+    Processes a single field from CSV data and updates the registration instance
+    accordingly. Handles special cases for email, ticket assignment, character
+    assignment, and pay-what-you-want values.
+
     Args:
-        ctx: Context dictionary with event data
-        reg: Registration instance to update
-        field: Field name from CSV
-        value: Field value from CSV
-        questions: Dictionary of registration questions
-        logs: List to append error messages to
+        ctx: Context dictionary containing event data and lookup tables
+        reg: Registration instance to update with the field value
+        field: Field name from CSV header
+        value: Field value from CSV row
+        questions: Dictionary mapping field names to registration questions
+        logs: List to append error messages to during processing
+
+    Returns:
+        None: Function modifies reg instance in place
     """
+    # Skip email field as it's handled elsewhere
     if field == "email":
         return
 
+    # Skip empty or NaN values
     if not value or pd.isna(value):
         return
 
+    # Handle ticket assignment using context lookup
     if field == "ticket":
         _assign_elem(ctx, reg, field, value, RegistrationTicket, logs)
+    # Handle character assignment with special processing
     elif field == "characters":
         _reg_assign_characters(ctx, reg, value, logs)
+    # Handle pay-what-you-want amount conversion
     elif field == "pwyw":
         reg.pay_what = Decimal(value)
+    # Handle all other fields as choice-based answers
     else:
         _assign_choice_answer(reg, field, value, questions, logs, is_registration=True)
 
 
-def _assign_elem(ctx, obj, field, value, typ, logs):
+def _assign_elem(ctx: dict, obj: object, field: str, value: str, typ: type, logs: list[str]) -> None:
+    """Assign an element to an object field based on event context.
+
+    Attempts to find an element by number (if value is numeric) or by name
+    (case-insensitive) within the given event context, then assigns it to
+    the specified object field.
+
+    Args:
+        ctx: Context dictionary containing 'event' key
+        obj: Target object to assign the element to
+        field: Name of the field to assign the element to
+        value: String value to search for (number or name)
+        typ: Model class to query for the element
+        logs: List to append error messages to
+
+    Returns:
+        None: Function modifies obj in place or appends to logs on error
+    """
     try:
+        # Check if value is numeric to determine search strategy
         if value.isdigit():
+            # Search by number field for numeric values
             el = typ.objects.get(event=ctx["event"], number=int(value))
         else:
+            # Search by name field (case-insensitive) for text values
             el = typ.objects.get(event=ctx["event"], name__iexact=value)
     except ObjectDoesNotExist:
+        # Log error and return early if element not found
         logs.append(f"ERR - element {field} not found")
         return
 
+    # Assign the found element to the specified field
     obj.__setattr__(field, el)
 
 
@@ -410,34 +504,61 @@ def writing_load(request, ctx: dict, form) -> list[str]:
     return logs
 
 
-def _plot_rels_load(row, chars, plots):
+def _plot_rels_load(row: dict, chars: dict, plots: dict) -> str:
+    """Load plot-character relationships from row data.
+
+    Args:
+        row: Dictionary containing character, plot, and text data
+        chars: Mapping of character names (lowercase) to character IDs
+        plots: Mapping of plot names (lowercase) to plot IDs
+
+    Returns:
+        Status message indicating success or error details
+    """
+    # Extract and normalize character name from row data
     char = row.get("character", "").lower()
     if char not in chars:
         return f"ERR - source not found {char}"
     char_id = chars[char]
 
+    # Extract and normalize plot name from row data
     plot = row.get("plot", "").lower()
     if plot not in plots:
         return f"ERR - target not found {plot}"
     plot_id = plots[plot]
 
+    # Create or retrieve the plot-character relationship
     rel, _ = PlotCharacterRel.objects.get_or_create(character_id=char_id, plot_id=plot_id)
+
+    # Update relationship text and save to database
     rel.text = row.get("text")
     rel.save()
     return f"OK - Plot role {char} {plot}"
 
 
-def _relationships_load(row, chars):
+def _relationships_load(row: dict, chars: dict[str, int]) -> str:
+    """Load relationship data from a row into the database.
+
+    Args:
+        row: Dictionary containing relationship data with 'source', 'target', and 'text' keys
+        chars: Dictionary mapping character names (lowercase) to their database IDs
+
+    Returns:
+        Status message indicating success or failure of the operation
+    """
+    # Extract and normalize source character name
     source_char = row.get("source", "").lower()
     if source_char not in chars:
         return f"ERR - source not found {source_char}"
     source_id = chars[source_char]
 
+    # Extract and normalize target character name
     target_char = row.get("target", "").lower()
     if target_char not in chars:
         return f"ERR - target not found {target_char}"
     target_id = chars[target_char]
 
+    # Create or retrieve relationship and update text
     relation, _ = Relationship.objects.get_or_create(source_id=source_id, target_id=target_id)
     relation.text = row.get("text")
     relation.save()
@@ -452,62 +573,102 @@ def _get_questions(que):
     return questions
 
 
-def _assign_choice_answer(element, field, value, questions, logs, is_registration=False):
+def _assign_choice_answer(
+    element, field: str, value: str, questions: dict, logs: list, is_registration: bool = False
+) -> None:
     """Assign choice answers to form elements during bulk import.
 
     Processes choice field assignments with validation, option matching,
     and proper relationship creation for registration or character forms.
+
+    Args:
+        element: The registration or writing element to assign answers to
+        field: The field name/question identifier to process
+        value: The answer value(s) to assign, comma-separated for choices
+        questions: Dictionary mapping field names to question metadata
+        logs: List to append error messages to
+        is_registration: Whether this is for registration (True) or writing (False)
+
+    Returns:
+        None: Function modifies element relationships and logs in-place
     """
+    # Normalize field name for case-insensitive matching
     field = field.lower()
     if field not in questions:
         logs.append(f"ERR - question not found {field}")
         return
 
+    # Retrieve question metadata from the questions dictionary
     question = questions[field]
 
-    # check if answer
+    # Handle text-based question types (TEXT, PARAGRAPH, EDITOR)
     if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+        # Create or retrieve the appropriate answer object based on context
         if is_registration:
             answer, _ = RegistrationAnswer.objects.get_or_create(reg_id=element.id, question_id=question["id"])
         else:
             answer, _ = WritingAnswer.objects.get_or_create(element_id=element.id, question_id=question["id"])
+
+        # Set the text value and save the answer
         answer.text = value
         answer.save()
 
-    # check if choice
+    # Handle choice-based question types (SINGLE_CHOICE, MULTIPLE_CHOICE, etc.)
     else:
+        # Clear existing choices to prevent duplicates
         if is_registration:
             RegistrationChoice.objects.filter(reg_id=element.id, question_id=question["id"]).delete()
         else:
             WritingChoice.objects.filter(element_id=element.id, question_id=question["id"]).delete()
 
+        # Process each comma-separated choice option
         for input_opt_orig in value.split(","):
+            # Normalize option text for matching
             input_opt = input_opt_orig.lower().strip()
             option_id = question["options"].get(input_opt)
+
+            # Validate that the option exists in the question's available options
             if not option_id:
                 logs.append(f"Problem with question {field}: couldn't find option {input_opt}")
                 continue
 
+            # Create the appropriate choice relationship
             if is_registration:
                 RegistrationChoice.objects.create(reg_id=element.id, question_id=question["id"], option_id=option_id)
             else:
                 WritingChoice.objects.create(element_id=element.id, question_id=question["id"], option_id=option_id)
 
 
-def element_load(request, ctx, row, questions):
+def element_load(request: HttpRequest, ctx: dict, row: dict, questions: list) -> str:
     """Load generic element data from CSV row for bulk import.
 
     Processes element creation or updates with field validation,
     question processing, and proper logging for various element types.
+
+    Args:
+        request: HTTP request object containing user information
+        ctx: Context dictionary with event, field_name, typ, and fields data
+        row: CSV row data as dictionary with field names as keys
+        questions: List of question objects for processing
+
+    Returns:
+        str: Status message indicating success/failure and operation details
+             Format: "OK - Created/Updated {name}" or "ERR/KO - {error_message}"
+
+    Raises:
+        May raise exceptions from Django ORM operations or field processing
     """
+    # Validate required field name exists in CSV row
     field_name = ctx["field_name"].lower()
     if field_name not in row:
         return "ERR - There is no name in fields"
 
+    # Extract element name and determine writing class type
     name = row[field_name]
     typ = QuestionApplicable.get_applicable(ctx["typ"])
     writing_cls = QuestionApplicable.get_applicable_inverse(typ)
 
+    # Attempt to find existing element or create new one
     created = False
     try:
         element = writing_cls.objects.get(event=ctx["event"], name__iexact=name)
@@ -515,16 +676,21 @@ def element_load(request, ctx, row, questions):
         element = writing_cls.objects.create(event=ctx["event"], name=name)
         created = True
 
+    # Initialize logging for field processing errors
     logs = []
 
+    # Normalize context fields to lowercase for consistent matching
     ctx["fields"] = {key.lower(): content for key, content in ctx["fields"].items()}
 
+    # Process each field from CSV row and update element
     for field, value in row.items():
         _writing_load_field(ctx, element, field, value, questions, logs)
 
+    # Save element changes and log the operation
     element.save()
     save_log(request.user.member, writing_cls, element)
 
+    # Return appropriate status message based on processing results
     if logs:
         return "KO - " + ",".join(logs)
 
@@ -598,37 +764,60 @@ def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, q
     _writing_question_load(ctx, element, field, field_type, logs, questions, value)
 
 
-def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
+def _writing_question_load(
+    ctx: dict, element: Any, field: str, field_type: Any, logs: list, questions: dict, value: Any
+) -> None:
     """Process and load writing question values into element fields.
 
+    Processes different types of writing questions and assigns the corresponding
+    values to the appropriate fields of the writing element. Handles special
+    cases like mirror instances, faction assignments, and choice answers.
+
     Args:
-        ctx: Context dictionary
-        element: Target writing element to update
-        field: Field identifier
-        field_type: WritingQuestionType enum value
-        logs: List to collect processing logs
-        questions: Dictionary of questions
-        value: Value to assign to the field
+        ctx: Context dictionary containing processing state and metadata.
+        element: Target writing element to update with the processed values.
+        field: Field identifier string specifying which field to update.
+        field_type: WritingQuestionType enum value indicating the question type.
+        logs: List to collect processing logs and error messages.
+        questions: Dictionary mapping question IDs to question objects.
+        value: Raw value from the form submission to be processed and assigned.
+
+    Returns:
+        None: Function modifies the element in-place and appends to logs.
     """
+    # Handle mirror instance creation for linked writing elements
     if field_type == WritingQuestionType.MIRROR:
         _get_mirror_instance(ctx, element, value, logs)
+
+    # Process boolean hide flag for element visibility
     elif field_type == WritingQuestionType.HIDE:
         element.hide = value.lower() == "true"
+
+    # Assign faction relationships to the writing element
     elif field_type == WritingQuestionType.FACTIONS:
         _assign_faction(ctx, element, value, logs)
+
+    # Set teaser text for preview display
     elif field_type == WritingQuestionType.TEASER:
         element.teaser = value
+
+    # Assign main sheet content to the element
     elif field_type == WritingQuestionType.SHEET:
         element.text = value
+
+    # Set the element title/name
     elif field_type == WritingQuestionType.TITLE:
         element.title = value
-    # TODO implement
+
+    # TODO implement additional question types
     # elif field_type == QuestionType.COVER:
     #     element.cover = value
     # elif field_type == QuestionType.PROGRESS:
     #     element.cover = value
     # elif field_type == QuestionType.ASSIGNED:
     #     element.cover = value
+
+    # Handle choice-based answers and custom field assignments
     else:
         _assign_choice_answer(element, field, value, questions, logs)
 
@@ -792,76 +981,132 @@ def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
     return msg
 
 
-def _get_mappings(is_registration):
+def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
+    """Get mappings for question form fields.
+
+    Args:
+        is_registration: Whether this is for a registration form, which
+                        enables additional writing question types.
+
+    Returns:
+        Dictionary containing inverted mappings for question field types:
+        - typ: Question type mappings
+        - status: Question status mappings
+        - applicable: Question applicable mappings
+        - visibility: Question visibility mappings
+    """
+    # Create base mappings by inverting enum dictionaries
     mappings = {
         "typ": invert_dict(BaseQuestionType.get_mapping()),
         "status": invert_dict(QuestionStatus.get_mapping()),
         "applicable": invert_dict(QuestionApplicable.get_mapping()),
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
     }
+
+    # Add writing question types for registration forms
     if is_registration:
-        # update typ with new types
+        # Update typ mapping with additional writing question types
         typ_mapping = mappings["typ"]
         for key, _ in WritingQuestionType.choices:
+            # Only add if not already present in base types
             if key not in typ_mapping:
                 typ_mapping[key] = key
+
     return mappings
 
 
-def _options_load(ctx, row, questions, is_registration):
+def _options_load(ctx, row: dict, questions: dict, is_registration: bool) -> str:
     """Load question options from CSV row for bulk import.
 
     Creates or updates question options with proper validation,
     ordering, and association with the correct question type.
+
+    Args:
+        ctx: Context object containing import state and configuration
+        row: Dictionary containing CSV row data with option fields
+        questions: Mapping of question names to question IDs
+        is_registration: Boolean indicating if this is for registration questions
+
+    Returns:
+        Status message indicating success/failure and operation performed
+
+    Raises:
+        ValueError: If required fields are missing or invalid
+        TypeError: If field values cannot be converted to expected types
     """
+    # Validate required fields are present in the CSV row
     for field in ["name", "question"]:
         if field not in row:
             return f"ERR - column {field} missing"
 
+    # Extract and validate the option name
     name = row["name"]
     if not name:
         return "ERR - empty name"
 
+    # Look up the question ID from the questions mapping
     question = row["question"].lower()
     if question not in questions:
         return "ERR - question not found"
     question_id = questions[question]
 
+    # Get or create the option instance
     created, instance = _get_option(ctx, is_registration, name, question_id)
 
+    # Process each field from the CSV row
     for field, value in row.items():
+        # Skip empty or null values
         if not value or pd.isna(value):
             continue
         new_value = value
+
+        # Skip fields that are already processed or metadata
         if field in ["question", "name"]:
             continue
+
+        # Convert numeric fields to appropriate types
         if field in ["max_available", "price"]:
             new_value = int(new_value)
+
+        # Handle special requirements field with custom assignment
         if field == "requirements":
             _assign_requirements(ctx, instance, [], value)
             continue
+
+        # Set the field value on the instance
         setattr(instance, field, new_value)
 
+    # Persist changes to the database
     instance.save()
 
+    # Return appropriate success message based on operation
     if created:
         return f"OK - Created {name}"
     else:
         return f"OK - Updated {name}"
 
 
-def _get_option(ctx, is_registration, name, question_id):
+def _get_option(ctx: dict, is_registration: bool, name: str, question_id: int) -> tuple[bool, object]:
     """Get or create a question option for registration or writing forms.
 
+    This function creates or retrieves an option object based on the form type
+    (registration vs writing) and the provided parameters.
+
     Args:
-        ctx: Context dictionary containing event data
-        is_registration: Boolean indicating if this is for registration (True) or writing (False)
-        name: Name of the option
-        question_id: ID of the parent question
+        ctx: Context dictionary containing event data with 'event' key
+        is_registration: True for registration forms, False for writing forms
+        name: Display name of the option to create or retrieve
+        question_id: Primary key of the parent question this option belongs to
 
     Returns:
-        tuple: (created, instance) where created is bool and instance is the option object
+        A tuple containing:
+            - created (bool): True if a new option was created, False if existing
+            - instance (object): The RegistrationOption or WritingOption instance
+
+    Note:
+        Uses case-insensitive name matching via name__iexact lookup.
     """
+    # Handle registration form options
     if is_registration:
         instance, created = RegistrationOption.objects.get_or_create(
             event=ctx["event"],
@@ -869,6 +1114,7 @@ def _get_option(ctx, is_registration, name, question_id):
             name__iexact=name,
             defaults={"name": name},
         )
+    # Handle writing form options
     else:
         instance, created = WritingOption.objects.get_or_create(
             event=ctx["event"],
@@ -876,55 +1122,107 @@ def _get_option(ctx, is_registration, name, question_id):
             question_id=question_id,
             defaults={"name": name},
         )
+
+    # Return tuple with created flag first, then instance
     return created, instance
 
 
-def get_csv_upload_tmp(csv_upload, run):
+def get_csv_upload_tmp(csv_upload, run) -> str:
+    """Create a temporary file for CSV upload processing.
+
+    Creates a temporary directory structure under MEDIA_ROOT/tmp/event_slug/
+    and saves the uploaded CSV file with a timestamp-based filename.
+
+    Args:
+        csv_upload: The uploaded CSV file object with chunks() method
+        run: Run object containing event information with slug attribute
+
+    Returns:
+        str: Absolute path to the created temporary file
+
+    Raises:
+        OSError: If directory creation or file writing fails
+    """
+    # Build temporary directory path: MEDIA_ROOT/tmp/event_slug
     tmp_file = os.path.join(conf_settings.MEDIA_ROOT, "tmp")
     tmp_file = os.path.join(tmp_file, run.event.slug)
+
+    # Create directory structure if it doesn't exist
     if not os.path.exists(tmp_file):
         os.makedirs(tmp_file)
+
+    # Generate unique filename with current timestamp
     tmp_file = os.path.join(tmp_file, datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
+
+    # Write uploaded file chunks to temporary file
     with open(tmp_file, "wb") as destination:
         for chunk in csv_upload.chunks():
             destination.write(chunk)
+
     return tmp_file
 
 
-def cover_load(ctx, z_obj):
+def cover_load(ctx: dict, z_obj) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
-    Args:
-        ctx: Context dictionary containing run and event information
-        z_obj: ZIP file object containing character cover images
+    Extracts character cover images from a ZIP file, processes them according to
+    the event/run structure, and updates character records with the new cover
+    image paths.
 
-    Side effects:
-        Extracts ZIP contents, processes images, updates character cover fields,
-        and moves files to proper media directory structure
+    Args:
+        ctx: Context dictionary containing 'run' key with Run instance that has
+            event and number attributes for organizing extracted files
+        z_obj: ZIP file object containing character cover images with filenames
+            matching character numbers (e.g., "123.jpg" for character #123)
+
+    Side Effects:
+        - Extracts ZIP contents to temporary directory structure
+        - Updates Character.cover field for matching characters
+        - Moves image files to Django media directory structure
+        - Removes temporary extraction directory after processing
+
+    Note:
+        Character cover images are matched by filename (without extension)
+        to character.number. Non-matching files are ignored.
     """
-    # extract images
+    # Create extraction path based on event slug and run number
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
     fpath = os.path.join(fpath, ctx["run"].event.slug)
     fpath = os.path.join(fpath, str(ctx["run"].number))
+
+    # Clean up any existing extraction directory
     if os.path.exists(fpath):
         shutil.rmtree(fpath)
+
+    # Extract all ZIP contents to the temporary directory
     z_obj.extractall(path=fpath)
     covers = {}
-    # get images
+
+    # Walk through extracted files and build character number -> file path mapping
     for root, _dirnames, filenames in os.walk(fpath):
         for el in filenames:
+            # Use filename (without extension) as character number key
             num = os.path.splitext(el)[0]
             covers[num] = os.path.join(root, el)
     print(covers)
+
+    # Initialize upload path generator for character cover images
     upload_to = UploadToPathAndRename("character/cover/")
-    # cicle characters
+
+    # Process each character in the current run's event
     for c in ctx["run"].event.get_elements(Character):
         num = str(c.number)
+
+        # Skip characters without corresponding cover images
         if num not in covers:
             continue
+
+        # Generate final media path for the character's cover image
         fn = upload_to.__call__(c, covers[num])
         c.cover = fn
         c.save()
+
+        # Move extracted image to final media location
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
 
 

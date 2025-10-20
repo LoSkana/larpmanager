@@ -20,11 +20,12 @@
 
 import json
 from datetime import datetime, timedelta
+from typing import Union
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, QuerySet
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -258,37 +259,69 @@ def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
     return runs
 
 
-def home_json(request, lang="it"):
+def home_json(request: HttpRequest, lang: str = "it") -> JsonResponse:
+    """
+    Get upcoming events for the association in JSON format.
+
+    Args:
+        request: HTTP request object containing association info
+        lang: Language code for localization (default: "it")
+
+    Returns:
+        JsonResponse: JSON response containing list of upcoming events
+    """
+    # Extract association ID from request
     aid = request.assoc["id"]
+
+    # Set language code if provided
     if lang:
         request.LANGUAGE_CODE = lang
 
     res = []
     runs = get_coming_runs(aid)
+
+    # Track already processed events to avoid duplicates
     already = []
+
+    # Process each run and add unique events to result
     for run in runs:
         if run.event.id not in already:
             res.append(run.event.show())
         already.append(run.event.id)
+
     return JsonResponse({"res": res})
 
 
-def carousel(request):
+def carousel(request: HttpRequest) -> HttpResponse:
     """
     Display event carousel with recent and upcoming events.
 
+    Retrieves events from the current association, excludes development/cancelled events,
+    and prepares them for carousel display. Events are deduplicated by event_id and
+    marked as "coming" if they end within 3 days of today.
+
     Args:
-        request: HTTP request object
+        request: HTTP request object containing association context
 
     Returns:
-        HttpResponse: Rendered carousel template with event list
+        HttpResponse: Rendered carousel template with event list and JSON data
+
+    Note:
+        Only shows events that have ended and are not in START or CANC development status.
+        Events ending after 3 days ago are marked as "coming".
     """
+    # Initialize context with default user context and empty list
     ctx = def_user_ctx(request)
     ctx.update({"list": []})
+
+    # Cache to track processed events and prevent duplicates
     cache = {}
+
+    # Reference date: 3 days ago from now
     ref = (datetime.now() - timedelta(days=3)).date()
-    # for run in get_coming_runs(request, ctx, aid):
-    # ref = datetime.now() - timedelta(days=3)
+
+    # Query runs for current association, excluding development/cancelled events
+    # Order by end date descending to get most recent first
     for run in (
         Run.objects.filter(event__assoc_id=request.assoc["id"])
         .exclude(development=DevelopStatus.START)
@@ -296,43 +329,68 @@ def carousel(request):
         .order_by("-end")
         .select_related("event")
     ):
+        # Skip if event already processed (deduplicate by event_id)
         if run.event_id in cache:
             continue
+
+        # Skip runs without end date
         if not run.end:
             continue
+
+        # Mark event as processed and get event display data
         cache[run.event_id] = 1
         el = run.event.show()
+
+        # Mark as "coming" if event ends after reference date
         el["coming"] = run.end > ref
         ctx["list"].append(el)
 
+    # Convert event list to JSON for frontend consumption
     ctx["json"] = json.dumps(ctx["list"])
 
     return render(request, "larpmanager/general/carousel.html", ctx)
 
 
 @login_required
-def share(request):
+def share(request: HttpRequest) -> HttpResponse:
     """Handle member data sharing consent for organization.
 
+    This view allows members to grant data sharing permissions with an organization.
+    If the member has already granted permission, they are redirected with a success message.
+    For POST requests, the membership status is updated to JOINED.
+
     Args:
-        request: HTTP request object
+        request (HttpRequest): The HTTP request object containing user and session data.
 
     Returns:
-        HttpResponse: Rendered template or redirect to home
+        HttpResponse: Either a rendered template for the sharing form or a redirect
+                     to the home page after successful consent or if already granted.
+
+    Raises:
+        AttributeError: If request.user.member or request.assoc is not available.
     """
+    # Initialize the user context for template rendering
     ctx = def_user_ctx(request)
 
+    # Get the user's membership status for this organization
     el = get_user_membership(request.user.member, request.assoc["id"])
+
+    # Check if user has already granted data sharing permission
     if el.status != MembershipStatus.EMPTY:
         messages.success(request, _("You have already granted data sharing with this organisation") + "!")
         return redirect("home")
 
+    # Handle POST request to grant data sharing consent
     if request.method == "POST":
+        # Update membership status to indicate consent granted
         el.status = MembershipStatus.JOINED
         el.save()
+
+        # Show success message and redirect to home
         messages.success(request, _("You have granted data sharing with this organisation!"))
         return redirect("home")
 
+    # Prepare context for rendering the consent form
     ctx["disable_join"] = True
 
     return render(request, "larpmanager/member/share.html", ctx)
@@ -346,56 +404,92 @@ def legal_notice(request):
 
 
 @login_required
-def event_register(request, s):
+def event_register(request: HttpRequest, s: str) -> Union[HttpResponseRedirect, HttpResponse]:
     """Display event registration options for future runs.
 
+    Shows available registration options for an event. If no future runs exist
+    and pre-registration is enabled, redirects to pre-registration. If only one
+    run is available, redirects directly to that run's registration. Otherwise,
+    displays a list of all available runs with their registration status.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
+        request: Django HTTP request object containing user and session data
+        s: Event slug identifier used to lookup the specific event
 
     Returns:
-        Redirect to single run registration or list of available runs
+        HttpResponseRedirect: Redirect to pre-registration or single run registration
+        HttpResponse: Rendered template with list of available runs for selection
+
+    Raises:
+        Event.DoesNotExist: If the event slug doesn't match any existing event
     """
+    # Get event context and validate access permissions
     ctx = get_event(request, s)
-    # check future runs
+
+    # Filter for future runs that are not in development and are visible
     runs = (
         Run.objects.filter(event=ctx["event"], end__gte=datetime.now())
         .exclude(development=DevelopStatus.START)
         .exclude(event__visible=False)
         .order_by("end")
     )
+
+    # Handle case where no future runs exist - check for pre-registration feature
     if len(runs) == 0 and "pre_register" in request.assoc["features"]:
         return redirect("pre_register", s=s)
+
+    # If only one run available, redirect directly to its registration
     elif len(runs) == 1:
         run = runs.first()
         return redirect("register", s=run.get_slug())
+
+    # Build list of runs with registration status for template rendering
     ctx["list"] = []
     features_map = {ctx["event"].slug: ctx["features"]}
+
+    # Process each run to determine and cache registration status
     for r in runs:
         registration_status(r, request.user, features_map=features_map)
         ctx["list"].append(r)
+
+    # Render template with list of available runs for user selection
     return render(request, "larpmanager/general/event_register.html", ctx)
 
 
-def calendar_past(request):
+def calendar_past(request: HttpRequest) -> HttpResponse:
     """Display calendar of past events for the association.
 
+    This view retrieves and displays all past events for the current association,
+    including user registration status and related information if the user is authenticated.
+
     Args:
-        request: HTTP request object with user authentication and association data
+        request: HTTP request object containing user authentication data and
+                association information in request.assoc
 
     Returns:
-        HttpResponse: Rendered past events calendar template
+        HttpResponse: Rendered template showing past events calendar with user-specific
+                     registration information and status for each event
+
+    Note:
+        Requires user to have access to the association specified in request.assoc.
+        Anonymous users will see events without registration information.
     """
+    # Get association ID and initialize user context
     aid = request.assoc["id"]
     ctx = def_user_ctx(request)
 
+    # Retrieve all past runs for this association
     runs = get_coming_runs(aid, future=False)
 
+    # Initialize dictionaries for user-specific data
     my_regs_dict = {}
     character_rels_dict = {}
     payment_invoices_dict = {}
     pre_registrations_dict = {}
+
+    # Fetch user registration data if authenticated
     if request.user.is_authenticated:
+        # Get all valid registrations for this user in this association
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
             cancellation_date__isnull=True,
@@ -404,16 +498,21 @@ def calendar_past(request):
         ).select_related("ticket", "run")
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
+        # Build related data dictionaries for efficient lookup
         character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
         payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
         pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
 
+    # Process each run and add registration status information
     runs_list = list(runs)
     ctx["list"] = []
 
     for run in runs_list:
+        # Get user's registration for this specific run
         user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
         my_regs_for_run = [user_reg] if user_reg else []
+
+        # Update run object with registration status and related data
         registration_status(
             run,
             request.user,
@@ -424,71 +523,102 @@ def calendar_past(request):
         )
         ctx["list"].append(run)
 
+    # Set page identifier and render template
     ctx["page"] = "calendar_past"
     return render(request, "larpmanager/general/past.html", ctx)
 
 
-def check_gallery_visibility(request, ctx):
+def check_gallery_visibility(request: HttpRequest, ctx: dict) -> bool:
     """Check if gallery is visible to the current user based on event configuration.
 
+    Determines gallery visibility based on admin status, management context,
+    authentication state, and event-specific configuration settings.
+
     Args:
-        request: HTTP request object with user authentication information
-        ctx: Context dictionary containing event and run data
+        request: HTTP request object containing user authentication information
+        ctx: Context dictionary containing event and run data with configuration
 
     Returns:
-        bool: True if gallery should be visible, False otherwise
+        True if gallery should be visible to the user, False otherwise
+
+    Note:
+        Modifies ctx dictionary by adding 'hide_login' or 'hide_signup' flags
+        when corresponding visibility restrictions are applied.
     """
+    # Admin users always have gallery access
     if is_lm_admin(request):
         return True
 
+    # Management context always allows gallery access
     if "manage" in ctx:
         return True
 
+    # Get event configuration for gallery visibility rules
     hide_signup = ctx["event"].get_config("gallery_hide_signup", False)
     hide_login = ctx["event"].get_config("gallery_hide_login", False)
 
+    # Check login requirement - hide gallery for unauthenticated users
     if hide_login and not request.user.is_authenticated:
         ctx["hide_login"] = True
         return False
 
+    # Check signup requirement - hide gallery for users without registration
     if hide_signup and not ctx["run"].reg:
         ctx["hide_signup"] = True
         return False
 
+    # Default: gallery is visible
     return True
 
 
-def gallery(request, s):
-    """Event gallery display with permissions.
+def gallery(request: HttpRequest, s: str) -> HttpResponse:
+    """Display event gallery with character and registration data.
+
+    Shows approved characters and unassigned registrations for events with
+    character features enabled. Handles visibility permissions and caching.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing user session and permissions
+        s: Event slug identifier for the specific event
 
     Returns:
-        HttpResponse: Gallery template with character and registration data
+        HttpResponse: Rendered gallery template with character and registration
+            context data, or redirect if character feature not enabled
+
+    Raises:
+        Http404: If event/run not found or user lacks permissions
     """
+    # Get event context and verify character feature is enabled
     ctx = get_event_run(request, s, status=True)
     if "character" not in ctx["features"]:
         return redirect("event", s=ctx["run"].get_slug())
 
+    # Initialize registration list for unassigned players
     ctx["reg_list"] = []
 
+    # Get event features for permission checks
     features = get_event_features(ctx["event"].id)
 
+    # Check if user has permission to view gallery content
     if check_gallery_visibility(request, ctx):
+        # Load character cache if writing fields are visible or character display forced
         if not ctx["event"].get_config("writing_field_visibility", False) or ctx.get("show_character"):
             get_event_cache_all(ctx)
 
+        # Check if uncasted players should be hidden from gallery
         hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
         if not hide_uncasted_players:
+            # Get registrations that already have assigned characters
             que = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id)
             if ctx["event"].get_config("user_character_approval", False):
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 
+            # Get active registrations without assigned characters
             que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
             que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=TicketTier.WAITING)
+
+            # Add non-provisional members to registration list
             for reg in que_reg.select_related("member", "ticket").order_by("search"):
                 if not is_reg_provisional(reg, event=ctx["event"], features=features):
                     ctx["reg_list"].append(reg.member)
@@ -566,35 +696,57 @@ def event_redirect(request, s):
     return redirect("event", s=s)
 
 
-def search(request, s):
+def search(request: HttpRequest, s: str) -> HttpResponse:
     """Display event search page with character gallery and search functionality.
 
+    This view handles the character search functionality for events, filtering
+    characters based on visibility permissions and preparing data for frontend
+    search capabilities.
+
     Args:
-        request: HTTP request object
-        s: Event slug string
+        request: The HTTP request object containing user session and permissions
+        s: The event slug string used to identify the specific event
 
     Returns:
-        Rendered search.html template with searchable character data
+        HttpResponse: Rendered search.html template with searchable character data,
+            including character fields, factions, questions, and search configuration
+
+    Note:
+        Characters are only displayed if gallery visibility is enabled and
+        character display is permitted for the current user and event.
     """
+    # Get event context with run information and status validation
     ctx = get_event_run(request, s, status=True)
 
+    # Check if user has permission to view gallery and characters are enabled
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
+        # Load all event cache data including characters, factions, etc.
         get_event_cache_all(ctx)
+
+        # Retrieve custom search text for this event if configured
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
+
+        # Determine which character fields should be visible to the user
         visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
+
+        # Filter character fields based on visibility permissions
         for _num, char in ctx["chars"].items():
             fields = char.get("fields")
             if not fields:
                 continue
+
+            # Remove fields that shouldn't be visible to current user
             to_delete = [
                 qid for qid in list(fields) if str(qid) not in ctx.get("show_character", []) and "show_all" not in ctx
             ]
             for qid in to_delete:
                 del fields[qid]
 
+    # Ensure all required context keys exist and convert to JSON for frontend
     for slug in ["chars", "factions", "questions", "options", "searchable"]:
         if slug not in ctx:
             ctx[slug] = {}
+        # Create JSON versions for JavaScript consumption
         ctx[f"{slug}_json"] = json.dumps(ctx[slug])
 
     return render(request, "larpmanager/event/search.html", ctx)
@@ -633,30 +785,38 @@ def factions(request, s):
     return render(request, "larpmanager/event/factions.html", ctx)
 
 
-def faction(request, s, g):
+def faction(request: HttpRequest, s: str, g: str) -> HttpResponse:
     """Display detailed information for a specific faction.
 
     Args:
-        request: HTTP request object
-        s: Event slug string
-        g: Faction identifier string
+        request: HTTP request object containing user and session data
+        s: Event slug string used to identify the specific event
+        g: Faction identifier string used to locate the faction
 
     Returns:
-        HttpResponse: Rendered faction detail page
+        HttpResponse: Rendered faction detail page with faction information
+
+    Raises:
+        Http404: If faction does not exist or has invalid type/missing ID
     """
+    # Get event context and verify user access permissions
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "faction", _("Factions"))
 
+    # Load all cached event data including factions
     get_event_cache_all(ctx)
 
+    # Check if faction exists in the cached data
     typ = None
     if g in ctx["factions"]:
         ctx["faction"] = ctx["factions"][g]
         typ = ctx["faction"]["typ"]
 
+    # Validate faction exists and has proper type and ID
     if "faction" not in ctx or typ == "g" or "id" not in ctx["faction"]:
         raise Http404("Faction does not exist")
 
+    # Get faction-specific writing elements and questions
     ctx["fact"] = get_writing_element_fields(
         ctx, "faction", QuestionApplicable.FACTION, ctx["faction"]["id"], only_visible=True
     )
@@ -664,42 +824,74 @@ def faction(request, s, g):
     return render(request, "larpmanager/event/faction.html", ctx)
 
 
-def quests(request, s, g=None):
+def quests(request, s: str, g: str = None) -> HttpResponse:
+    """Display quest types or specific quests for an event.
+
+    Shows either a list of quest types for an event, or if a quest type
+    is specified, shows all visible quests of that type.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        g: Optional quest type number. If None, shows quest types list
+
+    Returns:
+        HttpResponse: Rendered template with quest types or quests list
+    """
+    # Get event context and verify user can view quests
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
+    # If no quest type specified, show list of quest types
     if not g:
         ctx["list"] = QuestType.objects.filter(event=ctx["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", ctx)
 
+    # Get specific quest type by number
     get_element(ctx, g, "quest_type", QuestType, by_number=True)
+
+    # Build list of visible quests for the specified quest type
     ctx["list"] = []
     for el in Quest.objects.filter(event=ctx["event"], hide=False, typ=ctx["quest_type"]).order_by("number"):
         ctx["list"].append(el.show_complete())
+
     return render(request, "larpmanager/event/quests.html", ctx)
 
 
-def quest(request, s, g):
+def quest(request: HttpRequest, s: str, g: int) -> HttpResponse:
     """Display individual quest details and associated traits.
 
+    Retrieves and displays a specific quest along with its associated traits
+    and form fields. Checks user permissions and event visibility before
+    rendering the quest template.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        g: Quest number
+        request: HTTP request object containing user session and metadata
+        s: Event slug identifier for the specific event
+        g: Quest number identifier to retrieve the specific quest
 
     Returns:
-        HttpResponse: Rendered quest template
+        HttpResponse: Rendered quest template with quest details, fields, and traits
+
+    Raises:
+        Http404: If quest is not found or user lacks permission to view
     """
+    # Get event context and verify user has access to view quest content
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
+    # Retrieve the specific quest by number and add to context
     get_element(ctx, g, "quest", Quest, by_number=True)
+
+    # Get visible form fields associated with this quest
     ctx["quest_fields"] = get_writing_element_fields(
         ctx, "quest", QuestionApplicable.QUEST, ctx["quest"].id, only_visible=True
     )
 
+    # Build list of traits associated with this quest including their fields
     traits = []
     for el in ctx["quest"].traits.all():
+        # Get form fields for each trait and merge with trait display data
         res = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
         res.update(el.show())
         traits.append(res)
@@ -708,38 +900,49 @@ def quest(request, s, g):
     return render(request, "larpmanager/event/quest.html", ctx)
 
 
-def limitations(request, s):
-    """
-    Display event limitations including ticket availability and discounts.
+def limitations(request: HttpRequest, s: str) -> HttpResponse:
+    """Display event limitations including ticket availability and discounts.
+
+    This view shows the availability status of tickets, registration options, and
+    active discounts for a specific event run. It retrieves current registration
+    counts and calculates remaining availability for each item.
 
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: The HTTP request object containing user and session data.
+        s: The event slug identifier used to retrieve the specific event.
 
     Returns:
-        HttpResponse: Rendered limitations template
+        An HttpResponse object with the rendered limitations template containing
+        ticket availability, registration options, and discount information.
     """
+    # Get event context and verify event status
     ctx = get_event_run(request, s, status=True)
 
+    # Retrieve current registration counts for capacity calculations
     counts = get_reg_counts(ctx["run"])
 
+    # Process visible discounts for the event run
     ctx["disc"] = []
     for discount in ctx["run"].discounts.exclude(visible=False):
         ctx["disc"].append(discount.show(ctx["run"]))
 
+    # Process available tickets with usage tracking
     ctx["tickets"] = []
     for ticket in RegistrationTicket.objects.filter(event=ctx["event"], max_available__gt=0, visible=True):
         dt = ticket.show(ctx["run"])
         key = f"tk_{ticket.id}"
+        # Add current usage count if available
         if key in counts:
             dt["used"] = counts[key]
         ctx["tickets"].append(dt)
 
+    # Process registration options with availability limits
     ctx["opts"] = []
     que = RegistrationOption.objects.filter(question__event=ctx["event"], max_available__gt=0)
     for option in que:
         dt = option.show(ctx["run"])
         key = f"option_{option.id}"
+        # Track option usage against limits
         if key in counts:
             dt["used"] = counts[key]
         ctx["opts"].append(dt)
@@ -747,30 +950,55 @@ def limitations(request, s):
     return render(request, "larpmanager/event/limitations.html", ctx)
 
 
-def export(request, s, t):
+def export(request: HttpRequest, s: str, t: str) -> JsonResponse:
     """Export event elements as JSON for external consumption.
 
+    This function exports various types of event-related elements (characters,
+    factions, quests, or traits) in JSON format for external systems to consume.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        t: Type of elements to export ('char', 'faction', 'quest', 'trait')
+        request: The HTTP request object containing user and session information.
+        s: The event slug identifier used to locate the specific event.
+        t: The type of elements to export. Must be one of:
+           - 'char': Export characters associated with the event
+           - 'faction': Export factions associated with the event
+           - 'quest': Export quests belonging to the event
+           - 'trait': Export traits from quests in the event
 
     Returns:
-        JsonResponse: Exported elements data
+        JsonResponse: A JSON response containing the exported elements data,
+                     with element numbers as keys and element details as values.
+
+    Raises:
+        Http404: If the provided type parameter is not one of the valid options.
     """
+    # Get the event context using the provided slug
     ctx = get_event(request, s)
+
+    # Determine which type of elements to export based on the type parameter
     if t == "char":
+        # Export characters, ordered by their number field
         lst = ctx["event"].get_elements(Character).order_by("number")
     elif t == "faction":
+        # Export factions, ordered by their number field
         lst = ctx["event"].get_elements(Faction).order_by("number")
     elif t == "quest":
+        # Export quests directly filtered by event, ordered by number
         lst = Quest.objects.filter(event=ctx["event"]).order_by("number")
     elif t == "trait":
+        # Export traits from quests belonging to this event, ordered by number
         lst = Trait.objects.filter(quest__event=ctx["event"]).order_by("number")
     else:
+        # Raise 404 error for invalid export types
         raise Http404("wrong type")
+
     # r = Run(event=ctx["event"])
+
+    # Build the response dictionary with element numbers as keys
     aux = {}
     for el in lst:
+        # Convert each element to its display representation using the run context
         aux[el.number] = el.show(ctx["run"])
+
+    # Return the elements data as a JSON response
     return JsonResponse(aux)

@@ -120,26 +120,39 @@ def _init_skin(assoc, el):
     el["skin_managed"] = assoc.skin.managed
 
 
-def _init_features(assoc, el):
+def _init_features(assoc: Association, el: dict) -> None:
     """Initialize association features and related configuration in cache element.
+
+    Populates the cache element with association features and their corresponding
+    configuration values. Handles custom mail server settings, token/credit
+    configurations, and Centauri probability settings based on enabled features.
 
     Args:
         assoc: Association object to get features from
         el: Cache element dictionary to populate with features and configs
+
+    Returns:
+        None: Modifies the el dictionary in-place
     """
+    # Get all features for this association
     el["features"] = get_assoc_features(assoc.id)
 
+    # Configure custom mail server settings if feature is enabled
     if "custom_mail" in el["features"]:
         k = "mail_server_use_tls"
         el[k] = assoc.get_config(k, False)
+
+        # Add mail server connection parameters
         for s in ["host", "port", "host_user", "host_password"]:
             k = "mail_server_" + s
             el[k] = assoc.get_config(k)
 
+    # Configure token and credit naming if feature is enabled
     if "token_credit" in el["features"]:
         for s in ["token_name", "credit_name"]:
             el[s] = assoc.get_config("token_credit_" + s, None)
 
+    # Configure Centauri probability settings if feature is enabled
     if "centauri" in el["features"]:
         prob = assoc.get_config("centauri_prob")
         if prob:

@@ -139,36 +139,56 @@ def on_character_update_registration_cache(instance):
             rcr.reg.save()
 
 
-def search_player(char, js, ctx):
+def search_player(char: Character, js: dict, ctx: dict) -> None:
     """
     Search for players in registration cache and populate results.
 
+    This function searches for player registration data associated with a character
+    and populates the provided JSON object with the search results. It handles
+    both cached assignments and direct database queries.
+
     Args:
-        char: Character instance with player data
-        js: JSON object to populate with search results
-        ctx: Context dictionary with search parameters and assignments
+        char: Character instance with player data to search for
+        js (dict): JSON object to populate with search results
+        ctx (dict): Context dictionary containing search parameters, assignments,
+                   and run information
+
+    Returns:
+        None: Modifies char attributes and js dict in-place
+
+    Note:
+        Sets char.rcr, char.reg, and char.member attributes based on search results.
+        If no registration is found, these attributes are set to None and
+        js["player_id"] is set to 0.
     """
+    # Check if assignments are cached in context for faster lookup
     if "assignments" in ctx:
+        # Use cached assignment data if character number exists
         if char.number in ctx["assignments"]:
             char.rcr = ctx["assignments"][char.number]
             char.reg = char.rcr.reg
             char.member = char.reg.member
         else:
+            # Character not found in cached assignments
             char.rcr = None
             char.reg = None
             char.member = None
     else:
+        # No cached assignments - query database directly
         try:
+            # Fetch registration with related member data in single query
             char.rcr = RegistrationCharacterRel.objects.select_related("reg", "reg__member").get(
                 reg__run_id=ctx["run"].id, character=char
             )
             char.reg = char.rcr.reg
             char.member = char.reg.member
         except Exception:
+            # Handle any database errors or missing records
             char.rcr = None
             char.reg = None
             char.member = None
 
+    # Process registration data if found, otherwise set default player_id
     if char.reg:
         _search_char_reg(ctx, char, js)
     else:

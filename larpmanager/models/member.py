@@ -304,16 +304,31 @@ class Member(BaseModel):
         else:
             return str(self.user)
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Return a string representation of the member for display purposes.
+
+        Returns the member's display name in order of preference:
+        1. Nickname if available
+        2. Real name (name/surname combination) if available
+        3. Email address if available
+        4. Primary key as fallback
+
+        Returns:
+            str: The display representation of the member.
+        """
+        # Return nickname if available
         if self.nickname:
             return str(self.nickname)
 
+        # Return real name if name or surname is available
         if self.name or self.surname:
             return self.display_real()
 
+        # Return email as fallback if available
         if self.email:
             return self.email
 
+        # Return primary key as last resort
         return self.pk
 
     def display_real(self):
@@ -429,6 +444,9 @@ class Membership(BaseModel):
     )
 
     class Meta:
+        indexes = [
+            models.Index(fields=["assoc", "member", "deleted"]),
+        ]
         constraints = [
             UniqueConstraint(
                 fields=["member", "assoc", "deleted"],
@@ -583,9 +601,9 @@ class Vote(BaseModel):
 
 
 def get_user_membership(user, assoc):
-    if hasattr(user, 'membership'):
+    if hasattr(user, "membership"):
         return user.membership
-    
+
     # noinspection PyUnresolvedReferences
     assoc_id = assoc.id if isinstance(assoc, Association) else assoc
 

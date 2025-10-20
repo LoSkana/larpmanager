@@ -24,6 +24,8 @@ from typing import Any
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -104,41 +106,74 @@ def registration_available(run, features: dict | None = None, reg_counts: dict |
     return
 
 
-def _available_waiting(r, reg_counts):
-    # infinite waitings
+def _available_waiting(r: Registration, reg_counts: dict) -> bool:
+    """Check if waiting list spots are available for a registration.
+
+    Args:
+        r: Registration object with event and status attributes
+        reg_counts: Dictionary containing registration counts including 'count_wait'
+
+    Returns:
+        bool: True if waiting list spots are available, False otherwise
+
+    Side Effects:
+        Modifies r.status dictionary with waiting availability information
+    """
+    # Handle infinite waiting list capacity
     if r.event.max_waiting == 0:
         r.status["waiting"] = True
         r.status["count"] = None  # Infinite
         return True
 
-    # if we manage waiting and there are available, say so
+    # Check if limited waiting list has available spots
     if r.event.max_waiting > 0:
+        # Calculate remaining waiting list capacity
         remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
+
+        # Set status if spots are available
         if remaining_waiting > 0:
             r.status["waiting"] = True
             r.status["count"] = remaining_waiting
             r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting} + "."
             return True
 
+    # No waiting list spots available
     return False
 
 
-def _available_filler(r, reg_counts):
-    # infinite fillers
+def _available_filler(r, reg_counts) -> bool:
+    """Check if filler tickets are available for the given registration.
+
+    Args:
+        r: Registration object with event and status attributes
+        reg_counts: Dictionary containing registration counts including 'count_fill'
+
+    Returns:
+        bool: True if filler tickets are available, False otherwise
+
+    Side Effects:
+        Modifies r.status dictionary with filler availability information
+    """
+    # Handle infinite filler tickets case
     if r.event.max_filler == 0:
         r.status["filler"] = True
         r.status["count"] = None  # Infinite
         return True
 
-        # if we manage filler and there are available, say so
+    # Handle limited filler tickets case
     if r.event.max_filler > 0:
+        # Calculate remaining filler tickets
         remaining_filler = r.event.max_filler - reg_counts["count_fill"]
+
+        # Check if any filler tickets are still available
         if remaining_filler > 0:
             r.status["filler"] = True
             r.status["count"] = remaining_filler
+            # Add urgency message for limited availability
             r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
             return True
 
+    # No filler tickets available
     return False
 
 
@@ -445,19 +480,36 @@ def _get_features_map(features_map, run):
     return features
 
 
-def registration_find(run, user, my_regs=None):
+def registration_find(run: Run, user: User, my_regs: QuerySet = None):
+    """Find and attach registration for a user to a run.
+
+    Searches for an active registration (non-cancelled, non-redeemed) for the given
+    user and run. Sets run.reg to the found registration or None if not found.
+
+    Args:
+        run: The Run object to find registration for
+        user: The User object to search registration for
+        my_regs: Optional pre-fetched registrations queryset for performance optimization
+
+    Returns:
+        None: Function modifies run.reg attribute in-place
+    """
+    # Early return if user is not authenticated
     if not user.is_authenticated:
         run.reg = None
         return
 
+    # Use pre-fetched registrations if provided for performance
     if my_regs is not None:
         run.reg = get_match_reg(run, my_regs)
         return
 
+    # Query database for active registration (non-cancelled, non-redeemed)
     try:
         que = Registration.objects.select_related("ticket")
         run.reg = que.get(run=run, member=user.member, redeem_code__isnull=True, cancellation_date__isnull=True)
     except ObjectDoesNotExist:
+        # No active registration found for this user and run
         run.reg = None
 
 
@@ -468,7 +520,7 @@ def check_character_maximum(event, member):
     return current_chars >= max_chars, max_chars
 
 
-def registration_status_characters(run, features, character_rels_dict=None):
+def registration_status_characters(run, features: dict, character_rels_dict: dict[int, list] | None = None) -> None:
     """Update registration status with character assignment information.
 
     Displays assigned characters with approval status and provides links
@@ -480,41 +532,60 @@ def registration_status_characters(run, features, character_rels_dict=None):
         character_rels_dict: Optional dictionary mapping registration IDs to
             lists of RegistrationCharacterRel objects. If provided, avoids
             querying the database for character relationships.
+
+    Returns:
+        None: Function modifies run.status["details"] in place
     """
+    # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:
         rcrs = character_rels_dict.get(run.reg.id, [])
     else:
         que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
         rcrs = que.order_by("character__number").select_related("character")
 
+    # Check if character approval is required for this event
     approval = run.event.get_config("user_character_approval", False)
 
+    # Build list of character links with names and approval status
     aux = []
     for el in rcrs:
         url = reverse("character", args=[run.get_slug(), el.character.number])
         name = el.character.name
+
+        # Use custom name if provided
         if el.custom_name:
             name = el.custom_name
+
+        # Add approval status if character approval is enabled and not approved
         if approval and el.character.status != CharacterStatus.APPROVED:
             name += f" ({_(el.character.get_status_display())})"
+
+        # Create clickable link for character
         url = f"<a href='{url}'>{name}</a>"
         aux.append(url)
 
+    # Add character information to status details based on number of characters
     if len(aux) == 1:
         run.status["details"] += _("Your character is") + " " + aux[0]
     elif len(aux) > 1:
         run.status["details"] += _("Your characters are") + ": " + ", ".join(aux)
 
+    # Check if registration is on waiting list
     reg_waiting = run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING
 
+    # Add character creation/selection links if feature is enabled and not waiting
     if "user_character" in features and not reg_waiting:
         check, max_chars = check_character_maximum(run.event, run.reg.member)
+
+        # Show character creation link if user can create more characters
         if not check:
             url = reverse("character_create", args=[run.get_slug()])
             if run.status["details"]:
                 run.status["details"] += " - "
             mes = _("Access character creation!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
+
+        # Show character selection link if no characters assigned but max chars available
         elif not aux and max_chars:
             url = reverse("character_list", args=[run.get_slug()])
             if run.status["details"]:
@@ -603,19 +674,34 @@ def check_signup(request, ctx):
         raise WaitingError(ctx["run"].get_slug())
 
 
-def check_assign_character(request, ctx):
-    # if the player has a single character, then assign it to their signup
+def check_assign_character(request: HttpRequest, ctx: dict) -> None:
+    """Check and assign a character to player signup if conditions are met.
+
+    Automatically assigns the first available character to a player's signup
+    if they have exactly one character and no existing character assignments.
+
+    Args:
+        request: HTTP request object containing user information
+        ctx: Context dictionary containing event data
+
+    Returns:
+        None: Function performs side effects only
+    """
+    # Get the player's registration for this event
     reg = get_player_signup(request, ctx)
     if not reg:
         return
 
+    # Skip if player already has character assignments
     if reg.rcrs.exists():
         return
 
+    # Get all characters belonging to this player for the event
     chars = get_player_characters(request.user.member, ctx["event"])
     if not chars:
         return
 
+    # Auto-assign the first character to the registration
     RegistrationCharacterRel.objects.create(character_id=chars[0].id, reg=reg)
 
 
@@ -700,31 +786,64 @@ def process_registration_event_change(registration: Registration) -> None:
             answer.question = None
 
 
-def check_character_ticket_options(reg, char):
+def check_character_ticket_options(reg: Registration, char: Character) -> None:
+    """Remove writing choices incompatible with registration ticket.
+
+    Removes writing choices for a character that are not available
+    for the specific ticket type of the registration.
+
+    Args:
+        reg: Registration object containing ticket information
+        char: Character object to check writing choices for
+    """
+    # Get the ticket ID from the registration
     ticket_id = reg.ticket.id
 
+    # Track choice IDs that need to be deleted
     to_delete = []
 
-    # get options
+    # Iterate through all writing choices for this character
     for choice in WritingChoice.objects.filter(element_id=char.id):
+        # Get list of ticket IDs that allow this writing option
         tickets_map = choice.option.tickets.values_list("pk", flat=True)
+
+        # If option has ticket restrictions and current ticket not allowed
         if tickets_map and ticket_id not in tickets_map:
             to_delete.append(choice.id)
 
+    # Remove all incompatible choices in a single query
     WritingChoice.objects.filter(pk__in=to_delete).delete()
 
 
-def process_character_ticket_options(instance):
+def process_character_ticket_options(instance: Registration) -> None:
+    """Process ticket options for characters associated with a registration instance.
+
+    This function checks ticket options for both characters directly associated
+    with the registration instance and characters belonging to the member in
+    the same event.
+
+    Args:
+        instance: Registration instance containing member, ticket, and run information.
+                 Must have attributes: member, ticket, run, characters.
+
+    Returns:
+        None
+    """
+    # Early return if no member is associated with the instance
     if not instance.member:
         return
 
+    # Early return if no ticket is associated with the instance
     if not instance.ticket:
         return
 
+    # Get the event from the registration run
     event = instance.run.event
 
+    # Process ticket options for characters directly linked to this registration
     for char in instance.characters.all():
         check_character_ticket_options(instance, char)
 
+    # Process ticket options for all characters owned by the member in this event
     for char in event.get_elements(Character).filter(player=instance.member):
         check_character_ticket_options(instance, char)

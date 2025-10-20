@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -35,7 +36,14 @@ class PxBaseForm(MyForm):
     class Meta:
         abstract = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance with variable arguments.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+        """
+        # Call parent class constructor with all provided arguments
         super().__init__(*args, **kwargs)
 
 

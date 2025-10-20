@@ -109,6 +109,9 @@ class EventCharactersPdfForm(ConfigForm):
         - CSS styling for PDF appearance customization
         - Header HTML content for PDF documents
         - Footer HTML content for PDF documents
+
+        Returns:
+            None
         """
         # Set up the main PDF configuration section
         self.set_section("pdf", "PDF")
@@ -220,16 +223,31 @@ class OrgaEventForm(MyForm):
             dl.append("parent")
             return
 
-    def clean_slug(self):
+    def clean_slug(self) -> str:
+        """Validate and clean the slug field for an Event.
+
+        Ensures the slug is unique among Event objects and not a reserved word.
+        When editing an existing instance, excludes the current instance from
+        the uniqueness check.
+
+        Returns:
+            str: The cleaned and validated slug value.
+
+        Raises:
+            ValidationError: If slug is already used by another Event or is a
+                reserved word defined in STATIC_PREFIXES setting.
+        """
         data = self.cleaned_data["slug"]
         logger.debug(f"Validating event slug: {data}")
-        # check if already used
+
+        # Check if slug is already used by another Event
         lst = Event.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:
             lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
             raise ValidationError("Slug already used!")
 
+        # Check if slug is a reserved word defined in settings
         if data and hasattr(conf_settings, "STATIC_PREFIXES"):
             if data in conf_settings.STATIC_PREFIXES:
                 raise ValidationError("Reserved word, please choose another!")
@@ -256,10 +274,41 @@ class OrgaFeatureForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(False)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance with feature handling and cache clearing.
+
+        This method extends the default save behavior to handle feature
+        associations and clear related caches after saving.
+
+        Parameters
+        ----------
+        commit : bool, default=True
+            Whether to save the instance to the database immediately.
+
+        Returns
+        -------
+        Any
+            The saved model instance.
+
+        Notes
+        -----
+        This method performs the following operations:
+        1. Calls parent save method without committing
+        2. Saves any associated features for the instance
+        3. Clears cached event features for fresh data access
+        """
+        # Call parent save method without committing to database yet
+        # This allows us to modify the instance before final persistence
         instance = super().save(commit=False)
+
+        # Save any associated features for this instance
+        # Features need to be handled separately to maintain relationships
         self._save_features(instance)
+
+        # Clear cached event features to ensure fresh data on next access
+        # Cache invalidation prevents stale data from being served
         clear_event_features_cache(instance.id)
+
         return instance
 
 
@@ -327,32 +376,45 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_registration()
 
-    def set_config_gallery(self):
+    def set_config_gallery(self) -> None:
+        """Configure gallery settings for event forms.
+
+        Sets up gallery-related configuration options including login requirements,
+        registration requirements, and character visibility settings. Only adds
+        configurations if the 'character' feature is enabled.
+
+        Returns:
+            None
         """
-        Configure gallery settings for event forms.
-        """
+        # Early return if character feature is not enabled
         if "character" not in self.params["features"]:
             return
 
+        # Initialize gallery configuration section
         self.set_section("gallery", _("Gallery"))
 
+        # Configure login requirement for gallery access
         label = _("Request login")
         help_text = _("If checked, the gallery will not be displayed to those not logged in to the system")
         self.add_configs("gallery_hide_login", ConfigType.BOOL, label, help_text)
 
+        # Configure registration requirement for gallery access
         label = _("Request registration")
         help_text = _(
             "If checked, the subscribers' gallery will not be displayed to those who are not registered to the event"
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
+        # Configure character-specific visibility options
         if "character" in self.params["features"]:
+            # Hide characters without assigned participants
             label = _("Hide unassigned characters")
             help_text = _(
                 "If checked, does not show characters in the gallery who have not been assigned a participant"
             )
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, label, help_text)
 
+            # Hide participants without assigned characters
             label = _("Hide participants without a character")
             help_text = _(
                 "If checked, does not show participants in the gallery who have not been assigned a character"
@@ -446,35 +508,50 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, allows a option to be visible only if other options are selected")
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
-    def set_config_structure(self):
+    def set_config_structure(self) -> None:
+        """Configure structural event settings including pre-registration, mail server, and cover options.
+
+        This method conditionally sets up configuration sections based on available features
+        in self.params["features"]. Each feature adds specific configuration options to
+        the event configuration structure.
+
+        Features handled:
+            - pre_register: Adds pre-registration activation toggle
+            - custom_mail: Adds custom mail server configuration options
+            - cover: Adds character cover display options
         """
-        Configure structural event settings including pre-registration, mail server, and cover options.
-        """
+        # Configure pre-registration section if feature is available
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             label = _("Active")
             help_text = _("If checked, makes pre-registration for this event available")
             self.add_configs("pre_register_active", ConfigType.BOOL, label, help_text)
 
+        # Configure custom mail server section if feature is available
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             help_text = ""
 
+            # Add TLS configuration option
             label = _("Use TLD")
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, label, help_text)
 
+            # Add host address configuration
             label = _("Host Address")
             self.add_configs("mail_server_host", ConfigType.CHAR, label, help_text)
 
+            # Add port configuration
             label = _("Port")
             self.add_configs("mail_server_port", ConfigType.INT, label, help_text)
 
+            # Add authentication credentials
             label = _("Username of account")
             self.add_configs("mail_server_host_user", ConfigType.CHAR, label, help_text)
 
             label = _("Password of account")
             self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
 
+        # Configure character cover section if feature is available
         if "cover" in self.params["features"]:
             self.set_section("cover", _("Character cover"))
             label = _("Desalt thumbnail")
@@ -552,21 +629,32 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_unimportant", ConfigType.BOOL, label, help_text)
 
-    def set_config_character(self):
+    def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.
 
         Sets up configuration fields for campaign management, faction
-        independence, and character creation settings.
+        independence, and character creation settings based on enabled features.
+
+        This method processes three main feature categories:
+        - Campaign: Independent faction settings
+        - Experience Points (px): User selection, undo periods, and initial XP
+        - User Character: Player editor settings including limits and approval
+
+        Returns:
+            None
         """
+        # Configure campaign-specific settings
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
             label = _("Independent factions")
             help_text = _("If checked, do not use the parent event's factions")
             self.add_configs("campaign_faction_indep", ConfigType.BOOL, label, help_text)
 
+        # Configure experience points system settings
         if "px" in self.params["features"]:
             self.set_section("px", _("Experience points"))
 
+            # Player ability selection configuration
             label = _("Player selection")
             help_text = _(
                 "If checked, participants may add abilities themselves, by selecting from those that "
@@ -574,27 +662,33 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("px_user", ConfigType.BOOL, label, help_text)
 
+            # XP undo time window configuration
             label = _("Undo period")
             help_text = _(
                 "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)"
             )
             self.add_configs("px_undo", ConfigType.INT, label, help_text)
 
+            # Initial XP amount configuration
             label = _("Initial experience points")
             help_text = _("Initial value of experience points for all characters")
             self.add_configs("px_start", ConfigType.INT, label, help_text)
 
+        # Configure player character editor settings
         if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))
 
+            # Character creation limit configuration
             label = _("Maximum number")
             help_text = _("Maximum number of characters the player can create")
             self.add_configs("user_character_max", ConfigType.INT, label, help_text)
 
+            # Character approval workflow configuration
             label = _("Approval")
             help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs("user_character_approval", ConfigType.BOOL, label, help_text)
 
+            # Player-defined relationships configuration
             label = _("Relationships")
             help_text = _("If checked, enables participants to write their own list of character relationships")
             self.add_configs("user_character_player_relationships", ConfigType.BOOL, label, help_text)
@@ -895,16 +989,23 @@ class OrgaAppearanceForm(MyCssForm):
         return "event_css"
 
     @staticmethod
-    def get_css_path(instance):
+    def get_css_path(instance) -> str:
         """Generate CSS file path for event styling.
 
         Args:
-            instance: Event instance
+            instance: Event instance containing association and event details
 
         Returns:
-            str: Path to CSS file
+            str: Formatted path to the CSS file in format
+                 'css/{assoc_slug}_{event_slug}_{css_code}.css'
         """
-        return f"css/{instance.assoc.slug}_{instance.slug}_{instance.css_code}.css"
+        # Extract association slug, event slug, and CSS code from instance
+        assoc_slug = instance.assoc.slug
+        event_slug = instance.slug
+        css_code = instance.css_code
+
+        # Generate and return the CSS file path
+        return f"css/{assoc_slug}_{event_slug}_{css_code}.css"
 
 
 class OrgaEventTextForm(MyForm):
@@ -969,29 +1070,46 @@ class OrgaEventTextForm(MyForm):
             help_text.append(f"<b>{choice_typ.label}</b>: {text}")
         self.fields["typ"].help_text = " - ".join(help_text)
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
         """Validate event text uniqueness by type and language.
 
+        Validates that there is only one default text per type and only one text
+        per language-type combination for the event. Prevents duplicate entries
+        that would cause conflicts in the event text system.
+
         Returns:
-            dict: Cleaned form data
+            dict[str, Any]: The cleaned and validated form data containing default,
+                typ, and language fields.
 
         Raises:
-            ValidationError: If default or language conflicts exist
+            ValidationError: If a default text of the same type already exists,
+                or if a text with the same language and type combination already
+                exists for this event.
+
+        Note:
+            Uses self.params["event"] to access the current event instance and
+            self.instance.pk to exclude the current object from uniqueness checks.
         """
+        # Get cleaned data from parent class validation
         cleaned_data = super().clean()
 
+        # Extract form fields for validation
         default = cleaned_data.get("default")
         typ = cleaned_data.get("typ")
         language = cleaned_data.get("language")
 
+        # Validate default text uniqueness per type
         if default:
-            # check if there is already a default with that type
+            # Check if there is already a default with that type
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
+            # Exclude current instance from validation to allow updates
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
-        # check if there is already a language with that type
+        # Validate language-type combination uniqueness
+        # Check if there is already a language with that type
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
+        # Exclude current instance from validation to allow updates
         if res.count() > 0 and res.first().pk != self.instance.pk:
             self.add_error("language", "There is already a language of this type!")
 

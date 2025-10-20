@@ -33,17 +33,38 @@ def generate_tutorial_url_slug(instance):
         instance.slug = slugify(instance.name)
 
 
-def auto_assign_faq_sequential_number(faq):
+def auto_assign_faq_sequential_number(faq: LarpManagerFaq) -> None:
     """Assign number to FAQ if not already set.
 
+    Automatically assigns a sequential number to an FAQ item based on its type.
+    Numbers are assigned in increments of 10 (10, 20, 30, etc.) to allow for
+    future insertions between existing items.
+
     Args:
-        faq: LarpManagerFaq instance to assign number to
+        faq (LarpManagerFaq): FAQ instance to assign number to. Must have a 'typ'
+            attribute to determine the sequence group.
+
+    Returns:
+        None: This function modifies the FAQ object in place.
+
+    Note:
+        If the FAQ already has a number assigned, no action is taken.
+        The numbering starts at 1 for the first FAQ of each type.
     """
+    # Skip assignment if FAQ already has a number
     if faq.number:
         return
+
+    # Get the highest number for FAQs of the same type
     n = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
+
+    # Handle first FAQ of this type (no existing numbers)
     if not n:
         n = 1
     else:
-        n = ((n / 10) + 1) * 10
+        # Calculate next number in sequence (increments of 10)
+        # Example: if max is 25, next will be 30
+        n = ((n // 10) + 1) * 10
+
+    # Assign the calculated number to the FAQ
     faq.number = n

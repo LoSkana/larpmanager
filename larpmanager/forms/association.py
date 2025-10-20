@@ -185,31 +185,39 @@ class ExeAssocTextForm(MyForm):
             help_text.append(f"<b>{choice_typ.label}</b>: {text}")
         self.fields["typ"].help_text = " - ".join(help_text)
 
-    def clean(self):
+    def clean(self) -> dict:
         """Validate association text form to prevent duplicates and enforce default rules.
 
+        Validates that:
+        - Only one default text exists per type within an association
+        - Only one text exists per language-type combination within an association
+
         Returns:
-            dict: Cleaned form data
+            dict: The cleaned form data after validation
 
         Raises:
-            ValidationError: If duplicate default or language+type combination exists
+            ValidationError: If a duplicate default text or language-type combination
+                           already exists for this association
         """
         cleaned_data = super().clean()
 
+        # Extract form fields for validation
         default = cleaned_data.get("default")
         typ = cleaned_data.get("typ")
         language = cleaned_data.get("language")
 
+        # Check for duplicate default text of the same type
         if default:
-            # check if there is already a default with that type
             res = AssocText.objects.filter(assoc_id=self.params["request"].assoc["id"], default=True, typ=typ)
+            # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
-        # check if there is already a language with that type
+        # Check for duplicate language-type combination
         res = AssocText.objects.filter(assoc_id=self.params["a_id"], language=language, typ=typ)
         if res.count() > 0:
             first = res.first()
+            # Ensure we're not comparing against the current instance
             if first.pk != self.instance.pk:
                 self.add_error("language", "There is already a language of this type!")
 
@@ -749,13 +757,26 @@ class FirstAssociationForm(MyForm):
             "slug": SlugInput,
         }
 
-    def clean_slug(self):
-        data = self.cleaned_data["slug"]
+    def clean_slug(self) -> str:
+        """Validate that the slug is unique across all associations.
+
+        Returns:
+            str: The validated slug value.
+
+        Raises:
+            ValidationError: If the slug is already in use by another association.
+        """
+        data: str = self.cleaned_data["slug"]
         logger.debug(f"Validating association slug: {data}")
-        # check if already used
+
+        # Check if slug is already used by other associations
         lst = Association.objects.filter(slug=data)
+
+        # Exclude current instance from validation if editing existing association
         if self.instance is not None and self.instance.pk is not None:
-            lst.exclude(pk=self.instance.pk)
+            lst = lst.exclude(pk=self.instance.pk)
+
+        # Raise validation error if slug already exists
         if lst.count() > 0:
             raise ValidationError("Slug already used!")
 

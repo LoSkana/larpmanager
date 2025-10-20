@@ -11,29 +11,47 @@ from larpmanager.models.member import Member
 from larpmanager.utils.member import almost_equal, count_differences
 
 
-def calculate_fiscal_code(member):
+def calculate_fiscal_code(member: Member) -> dict:
     """Calculate and validate Italian fiscal code for a member.
 
+    This function calculates the Italian fiscal code (codice fiscale) for a given member
+    and validates its correctness. It handles gender ambiguity by trying both male and
+    female options if the initial calculation fails.
+
     Args:
-        member: Member object with personal data for fiscal code calculation
+        member: Member object containing personal data required for fiscal code calculation.
+                Must have attributes: nationality, fiscal_code, and other personal details.
 
     Returns:
-        dict: Dictionary containing fiscal code validation results
+        dict: Dictionary containing fiscal code validation results. Returns empty dict
+              if member is not Italian or has fiscal_code set to "n/a".
+              Otherwise contains validation status and calculated fiscal code.
+
+    Note:
+        Only processes Italian citizens (nationality "it"). Non-Italian citizens
+        and members with fiscal_code "n/a" are skipped.
     """
-    # ignore non-italian citizens
+    # Skip non-Italian citizens - fiscal code only applies to Italian residents
     if member.nationality and member.nationality.lower() != "it":
         return {}
+
+    # Skip members who explicitly don't have a fiscal code
     if member.fiscal_code and member.fiscal_code.lower() == "n/a":
         return {}
 
+    # First attempt: calculate fiscal code assuming male gender
     first_ctx = _go(member, True)
 
-    # If the first try didn't work, try if the user has to indicate the gender female
+    # If first calculation failed, try with female gender assumption
+    # This handles cases where gender determination is ambiguous
     if not first_ctx["correct_cf"]:
         second_ctx = _go(member, False)
+
+        # Return female calculation if it succeeded
         if second_ctx["correct_cf"]:
             return second_ctx
 
+    # Return the first calculation result (either successful or failed)
     return first_ctx
 
 
@@ -80,67 +98,91 @@ def _clean_birth_place(birth_place):
     return cleaned_birth_place
 
 
-def _slugify(text):
+def _slugify(text: str) -> str:
     """Normalize text for fiscal code generation by removing accents and special characters.
 
+    This function performs comprehensive text normalization by removing Italian accents,
+    converting to ASCII, normalizing whitespace, and creating URL-friendly slugs.
+
     Args:
-        text: Input text to be normalized
+        text (str): Input text to be normalized
 
     Returns:
         str: Normalized text with accents removed, lowercased, and special characters replaced
+
+    Example:
+        >>> _slugify("Café à Paris")
+        "cafe-a-paris"
     """
-    # Remove accents
+    # Remove common Italian accented characters manually
     for char in ["à", "è", "é", "ì", "ò", "ù"]:
         text = text.replace(char, "")
-    # Normalize text to remove accents and convert to ASCII
+
+    # Normalize text using Unicode normalization to decompose accented characters
+    # then encode to ASCII ignoring non-ASCII characters
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
-    # Convert text to lowercase
+
+    # Convert to lowercase for consistency
     text = text.lower()
-    # Remove quotes
+
+    # Remove quotation marks that could interfere with processing
     text = text.replace('"', "").replace("'", "")
-    # Replace any non-alphanumeric character (excluding hyphens) with a space
+
+    # Remove all non-alphanumeric characters except spaces and hyphens
     text = re.sub(r"[^a-z0-9\s-]", "", text)
-    # Replace any sequence of whitespace or hyphens with a single hyphen
+
+    # Replace sequences of whitespace or hyphens with single hyphen
     text = re.sub(r"[\s-]+", "-", text)
-    # Strip leading and trailing hyphens
+
+    # Clean up leading and trailing hyphens
     text = text.strip("-")
     return text
 
 
-def _extract_municipality_code(birth_place):
+def _extract_municipality_code(birth_place: str) -> str:
     """Extract municipality code from birth place name using ISTAT data.
 
+    Searches for the given birth place in ISTAT nation and municipality databases.
+    First checks for exact matches in nations, then in municipalities (including
+    alternative names separated by '/'), and finally performs partial matching.
+
     Args:
-        birth_place: Name of the birth place (city/nation)
+        birth_place (str): Name of the birth place (city/nation)
 
     Returns:
         str: ISTAT code for the municipality, or empty string if not found
+
+    Note:
+        Uses slugified comparison for fuzzy matching of place names.
     """
     slug = _slugify(birth_place)
-    # look for nations
+
+    # Search in nations database for exact matches
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
     with open(file_path) as file:
         reader = csv.reader(file)
-        # second pass, search something *equal*
+        # Check each nation name for exact match
         for row in reader:
             if slug == _slugify(row[0]):
                 return row[1]
 
+    # Search in municipalities database
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
     with open(file_path) as file:
         reader = csv.reader(file)
-        # second pass, search something *equal*
+
+        # First pass: check exact matches including alternative names (separated by '/')
         for row in reader:
             for el in row[0].split("/"):
                 if slug == _slugify(el):
                     return row[1]
 
-        # second pass, search something *in*
+        # Second pass: check partial matches in municipality names
         for row in reader:
             if slug in _slugify(row[0]):
                 return row[1]
 
-    # If not found
+    # Return empty string if no match found
     return ""
 
 

@@ -35,6 +35,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
+from django.http import HttpRequest
 from django.template import loader
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
@@ -76,7 +77,8 @@ class MyAuthForm(AuthenticationForm):
         """Initialize the form with custom widget configurations.
 
         Configures username and password fields with Bootstrap styling,
-        removes labels, and sets appropriate input attributes.
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
 
         Args:
             *args: Variable length argument list passed to parent class.
@@ -85,6 +87,7 @@ class MyAuthForm(AuthenticationForm):
         Returns:
             None
         """
+        # Initialize parent form class with provided arguments
         super().__init__(*args, **kwargs)
 
         # Configure username field with Bootstrap styling and email placeholder
@@ -177,21 +180,40 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             raise ValidationError("Email already used! It seems you already have an account!")
         return data
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> User:
         """Save user and associated member profile.
 
-        Args:
-            commit: Whether to save to database
+        Creates a new user instance and updates the associated member profile
+        with form data including newsletter preferences, language settings,
+        and personal information.
 
-        Returns:
-            User: Created user instance
+        Parameters
+        ----------
+        commit : bool, optional
+            Whether to save changes to the database, by default True
+
+        Returns
+        -------
+        User
+            The created user instance with updated member profile
+
+        Notes
+        -----
+        This method assumes the user already has an associated member
+        profile that can be accessed via user.member.
         """
+        # Create the user instance using parent class save method
         user = super(RegistrationFormUniqueEmail, self).save()
 
+        # Update member profile with newsletter and language preferences
         user.member.newsletter = self.cleaned_data["newsletter"]
         user.member.language = self.cleaned_data["lang"]
+
+        # Set personal information for the member
         user.member.name = self.cleaned_data["name"]
         user.member.surname = self.cleaned_data["surname"]
+
+        # Save the updated member profile to database
         user.member.save()
 
         return user
@@ -231,27 +253,46 @@ class MyPasswordResetForm(PasswordResetForm):
 
     def send_mail(
         self,
-        subject_template_name,
-        email_template_name,
-        context,
-        from_email,
-        to_email,
-        html_email_template_name=None,
-    ):
+        subject_template_name: str,
+        email_template_name: str,
+        context: dict,
+        from_email: str,
+        to_email: str,
+        html_email_template_name: str | None = None,
+    ) -> None:
         """
         Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
+
+        Args:
+            subject_template_name: Template name for email subject
+            email_template_name: Template name for email body
+            context: Template context dictionary
+            from_email: Sender email address
+            to_email: Recipient email address
+            html_email_template_name: Optional HTML template name
+
+        Returns:
+            None
         """
+        # Render email subject from template and sanitize newlines
         subject = loader.render_to_string(subject_template_name, context)
         # Email subject *must not* contain newlines
         subject = "".join(subject.splitlines())
+
+        # Render email body from template
         body = loader.render_to_string(email_template_name, context)
 
+        # Extract association slug from domain context
         assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
         assoc = None
+
+        # If association slug exists, try to find association and update membership
         if assoc_slug:
             try:
                 assoc = Association.objects.get(slug=assoc_slug)
                 user = context["user"]
+
+                # Store password reset token in user membership for this association
                 mb = get_user_membership(user.member, assoc.id)
                 mb.password_reset = f"{context['uid']}#{context['token']}"
                 mb.save()
@@ -259,8 +300,10 @@ class MyPasswordResetForm(PasswordResetForm):
                 # Invalid association slug - continue with None assoc
                 pass
 
+        # Log password reset context for debugging
         logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
 
+        # Send the email using custom mail function
         my_send_mail(subject, body, to_email, assoc)
 
     # ~ email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
@@ -394,14 +437,28 @@ class BaseProfileForm(MyForm):
         request._cached_assoc = assoc
         return assoc
 
-    def _get_cached_features(self, request, assoc_id=None):
-        """Get cached association features to avoid redundant function calls."""
+    def _get_cached_features(self, request: HttpRequest, assoc_id: int | None = None) -> dict:
+        """Get cached association features to avoid redundant function calls.
+
+        This method implements request-level caching for association features to prevent
+        multiple database queries within the same request cycle.
+
+        Args:
+            request: The HTTP request object where features will be cached
+            assoc_id: Optional association ID. If None, extracts from request.assoc["id"]
+
+        Returns:
+            dict: Dictionary containing the association's features
+        """
+        # Check if features are already cached on the request object
         if hasattr(request, "_cached_features"):
             return request._cached_features
 
+        # Use provided assoc_id or extract from request context
         if assoc_id is None:
             assoc_id = request.assoc["id"]
 
+        # Fetch features from database and cache on request object
         features = get_assoc_features(assoc_id)
         request._cached_features = features
         return features
@@ -574,27 +631,47 @@ class ProfileForm(BaseProfileForm):
     def clean_birth_date(self):
         """
         Optimized birth date validation with cached association data.
+
+        Validates the birth_date field against minimum age requirements defined
+        in the association's membership configuration. Uses cached features and
+        association data for improved performance.
+
+        Returns:
+            date: The validated birth date
+
+        Raises:
+            ValidationError: If the birth date doesn't meet minimum age requirements
         """
         data = self.cleaned_data["birth_date"]
         logger.debug(f"Validating birth date: {data}")
 
-        # Use cached association
+        # Extract association ID from cached request data
         request = self.params["request"]
         assoc_id = self.params["request"].assoc["id"]
 
-        # Use cached features
+        # Retrieve cached features for this association
         features = self._get_cached_features(request, assoc_id)
 
+        # Check if membership feature is enabled for this association
         if "membership" in features:
+            # Get minimum age configuration from association settings
             min_age = get_assoc_config(assoc_id, "membership_age", "")
+
             if min_age:
                 try:
+                    # Convert configuration value to integer for validation
                     min_age = int(min_age)
                     logger.debug(f"Checking minimum age {min_age} against birth date {data}")
+
+                    # Calculate age difference using relativedelta for accuracy
                     age_diff = relativedelta(datetime.now(), data).years
+
+                    # Validate minimum age requirement
                     if age_diff < min_age:
                         raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
+
                 except (ValueError, TypeError) as e:
+                    # Log configuration errors but continue validation
                     logger.warning(f"Invalid membership_age config: {min_age}, error: {e}")
 
         return data
@@ -890,13 +967,20 @@ class ExeProfileForm(MyForm):
             self.delete_field("fiscal_code")
 
     @staticmethod
-    def get_members_fields():
+    def get_members_fields() -> list[tuple[str, str, str]]:
         """
         Get available member fields for form configuration.
 
+        Retrieves all fields from the Member model, excluding system fields
+        and fields that shouldn't be exposed for form configuration.
+
         Returns:
-            list: List of tuples containing field information (name, verbose_name, help_text)
+            list[tuple[str, str, str]]: List of tuples containing field information:
+                - field name (str)
+                - verbose name (str)
+                - help text (str)
         """
+        # Define fields to exclude from form configuration
         skip = [
             "id",
             "deleted",
@@ -914,14 +998,21 @@ class ExeProfileForm(MyForm):
             "legal_gender",
         ]
         choices = []
+
+        # Iterate through all Member model fields
         # noinspection PyUnresolvedReferences,PyProtectedMember
         for f in Member._meta.get_fields():
+            # Only process fields that belong to the Member model
             if not str(f).startswith("larpmanager.Member."):
                 continue
+
+            # Skip fields that are in the exclusion list
             if f.name in skip:
                 continue
 
+            # Add field information tuple to choices
             choices.append((f.name, f.verbose_name, f.help_text))
+
         return choices
 
     def save(self, commit=True):

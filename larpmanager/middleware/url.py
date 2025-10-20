@@ -20,6 +20,7 @@
 
 from urllib.parse import urlparse, urlunparse
 
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 
 
@@ -33,33 +34,50 @@ class CorrectUrlMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
-        """Process request and fix URL issues.
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        """Process request and fix common URL formatting issues.
+
+        This middleware handles various URL malformation issues that can occur
+        from external redirects, social media links, or client-side routing errors.
 
         Args:
-            request: Django HTTP request object
+            request: Django HTTP request object containing the incoming request data
 
         Returns:
-            HttpResponse: Redirect to corrected URL or normal response
+            HttpResponse: Either a redirect response to the corrected URL or the
+                         normal response from the next middleware/view in the chain
+
+        Note:
+            This middleware should be placed early in the middleware stack to
+            catch URL issues before they reach view processing.
         """
         path = request.get_full_path()
 
+        # Fix double slashes in URLs, but preserve Google OAuth callback URLs
+        # which legitimately contain double slashes in their structure
         if "//" in path and "accounts/google/login/" not in path:
             return redirect(path.replace("//", "/"))
 
-        # check if there is an "undefined" at the end (social media redirects)
+        # Handle "undefined" suffixes commonly added by JavaScript redirects
+        # Parse the URL to safely manipulate path components
         parsed_url = urlparse(path)
         path_parts = parsed_url.path.split("/")
+
+        # Remove trailing "undefined" from social media or JS redirects
         if path_parts[-1] == "undefined":
             path_parts = path_parts[:-1]
             cleaned_path = "/".join(path_parts)
+            # Reconstruct URL without query params or fragments to avoid issues
             cleaned_url = urlunparse((parsed_url.scheme, parsed_url.netloc, cleaned_path, "", "", ""))
             return redirect(cleaned_url)
 
+        # Strip common trailing characters that break URL parsing
+        # These often come from copy-paste errors or malformed links
         for char in ['"', "'", "$"]:
             if path.endswith(char):
                 return redirect(path.strip(char))
 
+        # No URL issues found, continue with normal request processing
         response = self.get_response(request)
 
         return response

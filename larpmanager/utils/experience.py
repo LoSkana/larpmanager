@@ -127,69 +127,116 @@ def set_free_abilities(char, frees):
     save_single_config(char, config_name, json.dumps(frees))
 
 
-def calculate_character_experience_points(char):
+def calculate_character_experience_points(char: Character) -> None:
     """
     Update character experience points and apply ability calculations.
 
+    This function calculates the total, used, and available experience points
+    for a character, updates their configuration, and applies computed rules.
+    Only processes characters for events that have the "px" feature enabled.
+
     Args:
-        char: Character instance to update
+        char: Character instance to update with experience point calculations
+
+    Returns:
+        None
     """
+    # Check if experience points feature is enabled for this event
     if "px" not in get_event_features(char.event_id):
         return
 
+    # Get starting experience points from event configuration
     start = char.event.get_config("px_start", 0)
 
+    # Handle any free abilities that don't cost experience points
     _handle_free_abilities(char)
 
+    # Get all current abilities and their experience point costs
     abilities = get_current_ability_px(char)
 
+    # Calculate total experience points from starting amount and deliveries
     px_tot = int(start) + (char.px_delivery_list.aggregate(t=Coalesce(Sum("amount"), 0))["t"] or 0)
+
+    # Calculate used experience points from ability costs
     px_used = sum(a.cost for a in abilities)
 
+    # Prepare experience point summary for character configuration
     addit = {
         "px_tot": px_tot,
         "px_used": px_used,
         "px_avail": px_tot - px_used,
     }
 
+    # Save experience point calculations to character configuration
     save_all_element_configs(char, addit)
 
+    # Apply any computed rules based on updated experience points
     apply_rules_computed(char)
 
 
-def _handle_free_abilities(char):
+def _handle_free_abilities(char: Character) -> None:
     """
     Handle free abilities that characters should automatically receive.
 
+    This function manages the automatic assignment and removal of free abilities
+    based on their current cost. Abilities with cost 0 are automatically added
+    to the character, while abilities that previously had cost 0 but now have
+    a positive cost are removed.
+
     Args:
-        char: Character instance to process
+        char: Character instance to process for free ability management
+
+    Returns:
+        None
     """
+    # Get the current list of free abilities for this character
     free_abilities = get_free_abilities(char)
 
-    # look for available ability with cost 0, and not already in the free list: get them!
+    # Process available abilities with cost 0 - these should be automatically assigned
+    # Look for abilities that are visible, cost 0, and not already in the free list
     for ability in get_available_ability_px(char, 0):
         if ability.visible and ability.cost == 0:
+            # Add ability to character if not already marked as free
             if ability.id not in free_abilities:
                 char.px_ability_list.add(ability)
                 free_abilities.append(ability.id)
 
-    # look for current abilities with cost non 0, yet got in the past as free: remove them!
+    # Process current abilities that may need removal
+    # Look for abilities that now cost more than 0 but were previously free
     for ability in get_current_ability_px(char):
         if ability.visible and ability.cost > 0:
+            # Remove ability if it was previously free but now has a cost
             if ability.id in free_abilities:
                 removed_ids = remove_char_ability(char, ability.id)
+                # Update free abilities list by removing all removed IDs
                 free_abilities = list(set(free_abilities) - set(removed_ids))
 
+    # Save the updated free abilities list back to the character
     set_free_abilities(char, free_abilities)
 
 
-def get_current_ability_px(char):
+def get_current_ability_px(char: Character) -> list:
+    """Get current ability PX costs for a character with applied modifiers.
+
+    Retrieves all abilities available to the character and applies any cost
+    modifiers based on the character's current state and choices.
+
+    Args:
+        char: Character instance to get abilities for
+
+    Returns:
+        list: List of ability objects with modified costs applied
+    """
+    # Build context for current character state and modifiers
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
+    # Query abilities with only required fields for performance
     abilities_qs = char.px_ability_list.only("id", "cost").order_by("name")
 
+    # Process each ability and apply cost modifiers
     abilities = []
     for ability in abilities_qs:
+        # Apply any cost modifiers based on character state
         _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
         abilities.append(ability)
     return abilities
@@ -290,26 +337,44 @@ def on_modifier_abilities_m2m_changed(sender, instance, action, pk_set, **kwargs
         calculate_character_experience_points(char)
 
 
-def apply_rules_computed(char):
+def apply_rules_computed(char: Character) -> None:
     """
     Apply computed field rules to calculate character statistics.
 
+    This function processes computation rules for a character's event, calculating
+    values based on the character's abilities and applying mathematical operations
+    defined in the rules. The computed values are then saved as WritingAnswer objects.
+
     Args:
-        char: Character instance to apply rules to
+        char: Character instance to apply rules to. Must have an associated event
+              and px_ability_list relationship.
+
+    Returns:
+        None: Function modifies the database state by creating/updating WritingAnswer objects.
+
+    Note:
+        Rules are applied in order as defined by the 'order' field. Division by zero
+        is handled by keeping the original value unchanged.
     """
-    # save computed field
+    # Get the character's event and initialize computed questions
     event = char.event
     computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+
+    # Initialize values dictionary with zero for each computed question
     values = {question.id: Decimal(0) for question in computed_ques}
 
-    # apply rules
+    # Get character's ability IDs for rule filtering
     ability_ids = char.px_ability_list.values_list("pk", flat=True)
+
+    # Filter rules that apply to this character (no abilities specified or character has the ability)
     rules = (
         event.get_elements(RulePx)
         .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
         .distinct()
         .order_by("order")
     )
+
+    # Define mathematical operations with division by zero protection
     ops = {
         Operation.ADDITION: lambda x, y: x + y,
         Operation.SUBTRACTION: lambda x, y: x - y,
@@ -317,53 +382,93 @@ def apply_rules_computed(char):
         Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
     }
 
+    # Apply each rule in order to calculate field values
     for rule in rules:
         f_id = rule.field.id
         values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
 
+    # Save computed values as WritingAnswer objects
     for question_id, value in values.items():
         (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+
+        # Format decimal value removing trailing zeros and decimal point if integer
         qa.text = format(value, "f").rstrip("0").rstrip(".")
         qa.save()
 
 
-def add_char_addit(char):
+def add_char_addit(char: Character) -> None:
     """
     Add additional configuration data to character object.
 
+    This function populates the character's `addit` attribute with configuration
+    data from CharacterConfig objects. If no configurations exist, it calculates
+    experience points first to generate the necessary configs.
+
     Args:
-        char: Character instance to add additional data to
+        char (Character): Character instance to add additional data to.
+            The character object will be modified in-place with an `addit`
+            attribute containing configuration key-value pairs.
+
+    Returns:
+        None: The function modifies the character object in-place.
+
+    Note:
+        The `addit` attribute will be a dictionary where keys are config names
+        and values are the corresponding config values.
     """
+    # Initialize the additional data dictionary
     char.addit = {}
+
+    # Fetch existing character configurations
     configs = CharacterConfig.objects.filter(character__id=char.id)
+
+    # If no configs exist, calculate experience points to generate them
     if not configs.count():
         calculate_character_experience_points(char)
         configs = CharacterConfig.objects.filter(character__id=char.id)
 
+    # Populate the addit dictionary with config name-value pairs
     for config in configs:
         char.addit[config.name] = config.value
 
 
-def remove_char_ability(char, ability_id):
+def remove_char_ability(char: Character, ability_id: int) -> set[int]:
     """
     Remove character ability and all dependent abilities.
 
+    This function recursively identifies and removes abilities that depend on the
+    specified ability, ensuring no orphaned dependencies remain.
+
     Args:
-        char: Character instance
-        ability_id: ID of ability to remove
+        char: Character instance with px_ability_list relationship
+        ability_id: ID of the ability to remove
+
+    Returns:
+        Set of ability IDs that were removed, including the original ability
+        and all its dependents
+
+    Note:
+        The removal is performed atomically to ensure database consistency.
     """
+    # Start with the target ability to remove
     to_remove_ids = {ability_id}
 
+    # Recursively find all dependent abilities
     while True:
+        # Query for abilities that have prerequisites in our removal set
         dependents_qs = (
             char.px_ability_list.filter(prerequisites__in=to_remove_ids).values_list("id", flat=True).distinct()
         )
+
+        # Find new dependencies not already marked for removal
         new_ids = set(dependents_qs) - to_remove_ids
         if not new_ids:
             break
+
+        # Add newly found dependencies to removal set
         to_remove_ids |= new_ids
 
-    # atomic removal
+    # Perform atomic removal to ensure database consistency
     with transaction.atomic():
         char.px_ability_list.remove(*to_remove_ids)
 

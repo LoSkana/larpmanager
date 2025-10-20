@@ -35,21 +35,38 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--path", type=str, required=True, help="Backup path")
 
-    def handle(self, *args, **options):
+    def handle(self, *args: tuple, **options: dict) -> None:
         """Database backup command with compression.
 
-        Args:
-            *args: Command line arguments
-            **options: Command options including output path
+        Creates compressed backup files for all active runs (non-DONE, non-CANCELLED)
+        in an organized directory structure by event ID and date.
 
-        Side effects:
-            Creates compressed backup files for all active runs in organized directory structure
+        Args:
+            *args: Variable length argument list from command line
+            **options: Keyword arguments from command options, must include 'path' key
+                      for the output directory path
+
+        Returns:
+            None
+
+        Side Effects:
+            - Creates directory structure: {path}/{event_id}/{year}/{month}/{day}/
+            - Writes compressed ZIP backup files for each active run
+            - Creates intermediate directories as needed
         """
+        # Get current date for organizing backup files by date
         now_date = timezone.now().date()
+
+        # Process all runs that are not done or cancelled
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
+            # Prepare context with run, event, and feature information
             ctx = {"run": run, "event": run.event, "features": get_event_features(run.event_id)}
             prepare_run(ctx)
+
+            # Generate the backup content
             resp = _prepare_backup(ctx)
+
+            # Build hierarchical path: base_path/event_id/year/month/day/run_name.zip
             path = os.path.join(
                 options["path"],
                 str(run.event_id),
@@ -58,7 +75,11 @@ class Command(BaseCommand):
                 str(now_date.day).zfill(2),
                 f"{str(run)}.zip",
             )
+
+            # Create directory structure if it doesn't exist
             dir_path = os.path.dirname(path)
             os.makedirs(dir_path, exist_ok=True)
+
+            # Write the compressed backup file to disk
             with open(path, "wb") as f:
                 f.write(resp.content)

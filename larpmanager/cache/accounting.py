@@ -31,19 +31,37 @@ from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration, RegistrationTicket
 
 
-def round_to_nearest_cent(number):
+def round_to_nearest_cent(number: float) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
 
+    This function rounds the input number to the nearest 0.1 (cent) and returns
+    the rounded value only if the difference between the original and rounded
+    values is within an acceptable tolerance. Otherwise, it returns the original
+    number unchanged.
+
     Args:
-        number: Number to round
+        number: The number to round to the nearest cent.
 
     Returns:
-        float: Rounded number, original if difference exceeds tolerance
+        The rounded number if within tolerance, otherwise the original number.
+
+    Example:
+        >>> round_to_nearest_cent(1.23456)
+        1.2
+        >>> round_to_nearest_cent(1.26789)
+        1.26789
     """
+    # Round to nearest 0.1 (cent) by multiplying by 10, rounding, then dividing
     rounded = round(number * 10) / 10
+
+    # Set maximum acceptable difference between original and rounded values
     max_rounding = 0.03
+
+    # Check if the rounding difference is within acceptable tolerance
     if abs(float(number) - rounded) <= max_rounding:
         return rounded
+
+    # Return original number if rounding difference exceeds tolerance
     return float(number)
 
 
@@ -68,35 +86,51 @@ def clear_registration_accounting_cache(run_id):
     cache.delete(get_registration_accounting_cache_key(run_id))
 
 
-def _get_accounting_context(run, member_filter=None):
+def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, dict]:
     """Get the context data needed for accounting calculations.
 
+    This function retrieves features, registration tickets, and builds a cache
+    for token/credit payments associated with a specific run.
+
     Args:
-        run: Run instance
-        member_filter: Optional member ID to filter payments for
+        run: Run instance to get accounting context for
+        member_filter: Optional member ID to filter payments for a specific member
 
     Returns:
-        tuple: (features, reg_tickets, cache_aip)
+        tuple: A 3-tuple containing:
+            - features (dict): Event features configuration
+            - reg_tickets (dict): Registration tickets indexed by ID
+            - cache_aip (dict): Cached accounting item payments by member
     """
+    # Get event features configuration, ensuring we have a dict
     features = get_event_features(run.event_id)
     if not isinstance(features, dict):
         features = {}
 
-    # Get all tickets for this event
+    # Build dictionary of all registration tickets for this event
+    # Ordered by price descending for consistent processing
     reg_tickets = {}
     for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
         reg_tickets[t.id] = t
 
-    # Build cache for token/credit payments
+    # Initialize cache for token/credit payment tracking
     cache_aip = {}
+
+    # Build cache only if token_credit feature is enabled
     if "token_credit" in features:
+        # Query all token/credit payments for this run
         que = AccountingItemPayment.objects.filter(reg__run=run)
         if member_filter:
             que = que.filter(member_id=member_filter)
         que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+
+        # Process each payment and aggregate by member and payment type
         for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
+            # Initialize member entry if not exists
             if el[0] not in cache_aip:
                 cache_aip[el[0]] = {"total": 0}
+
+            # Add to total and payment type specific amounts
             cache_aip[el[0]]["total"] += el[1]
             if el[2] not in cache_aip[el[0]]:
                 cache_aip[el[0]][el[2]] = 0
@@ -157,18 +191,26 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
     cache.set(key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def get_registration_accounting_cache(run):
+def get_registration_accounting_cache(run: Run) -> dict:
     """Get or create registration accounting cache for a run.
 
+    Retrieves cached registration accounting data for the given run. If the cache
+    is empty or expired, regenerates the data and stores it in cache with a 1-day timeout.
+
     Args:
-        run: Run instance
+        run (Run): The Run instance to get accounting data for.
 
     Returns:
-        dict: Cached registration accounting data
+        dict: Cached registration accounting data containing payment summaries,
+              registration statistics, and financial information.
     """
+    # Generate the cache key for this specific run
     key = get_registration_accounting_cache_key(run.id)
+
+    # Attempt to retrieve cached data
     res = cache.get(key)
 
+    # If cache miss, regenerate and store the data
     if res is None:
         res = update_registration_accounting_cache(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -176,23 +218,32 @@ def get_registration_accounting_cache(run):
     return res
 
 
-def update_registration_accounting_cache(run):
+def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
     """Update registration accounting cache for the given run.
+
+    Processes all active (non-cancelled) registrations for a run and calculates
+    their accounting data, formatting monetary values as strings without trailing zeros.
 
     Args:
         run: Run instance to update accounting cache for
 
     Returns:
-        dict: Updated registration accounting data keyed by registration ID
+        Dictionary mapping registration IDs to their accounting data, where each
+        accounting entry contains string-formatted monetary values
     """
+    # Get accounting context data (features, tickets, pricing)
     features, reg_tickets, cache_aip = _get_accounting_context(run)
 
-    # Process all active registrations
+    # Filter for active registrations only (exclude cancelled ones)
     regs = Registration.objects.filter(run=run, cancellation_date__isnull=True)
     res = {}
 
+    # Process each registration to calculate accounting data
     for reg in regs:
+        # Calculate accounting details for this registration
         dt = _calculate_registration_accounting(reg, reg_tickets, cache_aip, features)
+
+        # Format monetary values as strings without trailing zeros
         res[reg.id] = {key: f"{value:g}" for key, value in dt.items()}
 
     return res

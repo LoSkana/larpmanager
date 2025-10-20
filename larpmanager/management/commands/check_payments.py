@@ -53,30 +53,45 @@ class Command(BaseCommand):
             notify_admins("Check Payments", "Error checking payments", e)
             logger.error(f"Error in check_payments command: {e}")
 
-    def check_satispay_payments(self):
+    def check_satispay_payments(self) -> None:
         """Check all pending Satispay payments and verify their status.
 
         Queries all payment invoices with Satispay method and CREATED status,
         then verifies each one with the Satispay API to update their status.
+        Logs warnings for any verification failures and reports the total
+        number of successfully checked payments.
+
+        Returns:
+            None: Outputs results to stdout and logs any errors.
         """
+        # Query all pending Satispay payment invoices
         pending_payments = PaymentInvoice.objects.filter(
             method__slug="satispay",
             status=PaymentStatus.CREATED,
         )
 
+        # Early return if no pending payments found
         if not pending_payments.exists():
             self.stdout.write("No pending Satispay payments found.")
             return
 
+        # Initialize counter for successfully checked payments
         checked_count = 0
+
+        # Iterate through each pending payment invoice
         for invoice in pending_payments:
             try:
-                # Use a mock request object since satispay_verify expects one
-                # but only uses it for logging context
+                # Create mock request object for satispay_verify function
+                # The function only uses request.assoc.id for logging context
                 mock_request = type("MockRequest", (), {"assoc": {"id": invoice.assoc_id}})()
+
+                # Verify payment status with Satispay API
                 satispay_verify(mock_request, invoice.cod)
                 checked_count += 1
+
             except Exception as e:
+                # Log verification failures but continue processing other payments
                 logger.warning(f"Failed to verify Satispay payment {invoice.cod}: {e}")
 
+        # Report successful completion with count of checked payments
         self.stdout.write(self.style.SUCCESS(f"Successfully checked {checked_count} pending Satispay payments."))

@@ -171,37 +171,52 @@ def exe_templates_roles(request, eid, num):
 
 
 @login_required
-def exe_pre_registrations(request):
+def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
     """Display pre-registration statistics for all association events.
 
+    This function retrieves and displays pre-registration data for events
+    belonging to the current association. It supports both preference-based
+    and simple count-based pre-registration systems.
+
     Args:
-        request: Django HTTP request object
+        request: Django HTTP request object containing user session and
+                association data
 
     Returns:
-        Rendered page showing pre-registration counts by preference level
+        HttpResponse: Rendered HTML page showing pre-registration counts
+                     organized by preference level or total counts
     """
+    # Check user permissions and initialize context
     ctx = check_assoc_permission(request, "exe_pre_registrations")
     ctx["list"] = []
     ctx["pr"] = []
-
     ctx["seen"] = []
 
+    # Get association configuration for preference-based pre-registration
     ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
+    # Iterate through all non-template events for this association
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
+        # Skip events that don't have pre-registration enabled
         if not r.get_config("pre_register_active", False):
             continue
 
+        # Get pre-registration data for current event
         pr = get_pre_registration(r)
+
         if ctx["preferences"]:
+            # Handle preference-based pre-registration system
             r.count = {}
-            # print (pr)
+            # Count registrations for each preference level (1-5)
             for idx in range(1, 6):
                 r.count[idx] = 0
                 if idx in pr:
                     r.count[idx] = pr[idx]
         else:
+            # Handle simple count-based pre-registration system
             r.total = len(pr["list"])
+
+        # Add event to context list for template rendering
         ctx["list"].append(r)
 
     return render(request, "larpmanager/exe/pre_registrations.html", ctx)

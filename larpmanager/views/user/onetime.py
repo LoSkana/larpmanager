@@ -20,7 +20,8 @@
 
 import os
 import re
-from typing import Optional
+from collections.abc import Generator
+from typing import BinaryIO, Optional
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, StreamingHttpResponse
@@ -33,26 +34,38 @@ from django.views.decorators.http import require_http_methods
 from larpmanager.models.miscellanea import OneTimeAccessToken
 
 
-def file_iterator(file_object, chunk_size=8192, start_pos=None, max_length=None):
-    """
-    Generator to stream file in chunks.
+def file_iterator(
+    file_object: BinaryIO, chunk_size: int = 8192, start_pos: Optional[int] = None, max_length: Optional[int] = None
+) -> Generator[bytes, None, None]:
+    """Generator to stream file in chunks with optional range support.
+
+    Efficiently reads a file in chunks, optionally starting from a specific
+    position and limiting the total bytes read. The file is automatically
+    closed when iteration completes or an exception occurs.
 
     Args:
-        file_object: File object to stream
-        chunk_size: Size of each chunk in bytes
-        start_pos: Starting position (if None, uses current position)
-        max_length: Maximum bytes to read (if None, reads to EOF)
+        file_object: Binary file object to stream from
+        chunk_size: Size of each chunk in bytes. Defaults to 8192
+        start_pos: Starting position in bytes. If None, uses current position
+        max_length: Maximum bytes to read. If None, reads until EOF
 
     Yields:
-        bytes: Chunks of file data
+        bytes: Sequential chunks of file data
+
+    Raises:
+        OSError: If file operations (seek/read) fail
+        ValueError: If chunk_size <= 0 or start_pos/max_length < 0
     """
     try:
+        # Seek to starting position if specified
         if start_pos is not None:
             file_object.seek(start_pos)
 
         bytes_read = 0
+
+        # Main reading loop - continue until EOF or max_length reached
         while True:
-            # Calculate chunk size for this iteration
+            # Calculate appropriate chunk size for this iteration
             if max_length is not None:
                 remaining = max_length - bytes_read
                 if remaining <= 0:
@@ -61,13 +74,17 @@ def file_iterator(file_object, chunk_size=8192, start_pos=None, max_length=None)
             else:
                 current_chunk_size = chunk_size
 
+            # Read the next chunk from file
             chunk = file_object.read(current_chunk_size)
-            if not chunk:
+            if not chunk:  # EOF reached
                 break
 
+            # Track total bytes read and yield the chunk
             bytes_read += len(chunk)
             yield chunk
+
     finally:
+        # Ensure file is always closed, even on exceptions
         file_object.close()
 
 

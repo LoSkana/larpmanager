@@ -30,35 +30,58 @@ class Command(BaseCommand):
     help = "Reset DB"
 
     # noinspection PyProtectedMember
-    def handle(self, *args, **options):
+    def handle(self, *args: tuple, **options: dict) -> None:
         """Database reset command with fixtures loading.
 
-        Args:
-            *args: Command line arguments
-            **options: Command options dictionary
+        This command truncates all database tables and reloads initial fixtures.
+        It handles both PostgreSQL and SQLite databases with appropriate SQL commands.
 
-        Side effects:
-            Truncates all database tables and loads initial fixtures
+        Args:
+            *args: Variable length argument list from command line
+            **options: Arbitrary keyword arguments containing command options
+
+        Returns:
+            None
+
+        Raises:
+            DatabaseError: If database operations fail
+            CommandError: If fixture loading fails
+
+        Side Effects:
+            - Truncates all database tables
+            - Resets auto-increment sequences
+            - Loads initial fixtures via init_db command
         """
+        # Verify we're not on main branch before proceeding
         check_branch()
 
         self.stdout.write("Resetting database...")
 
-        # Truncate all tables
+        # Handle PostgreSQL database truncation
         if connection.vendor == "postgresql":
             with connection.cursor() as cursor:
+                # Iterate through all models and truncate their tables
                 for model in apps.get_models():
                     table = model._meta.db_table
+                    # RESTART IDENTITY resets sequences, CASCADE handles foreign keys
                     cursor.execute(f'TRUNCATE TABLE "{table}" RESTART IDENTITY CASCADE')
+
+        # Handle SQLite database truncation
         elif connection.vendor == "sqlite":
             with transaction.atomic():
                 with connection.cursor() as cursor:
+                    # Temporarily disable foreign key constraints
                     cursor.execute("PRAGMA foreign_keys = OFF;")
+
+                    # Delete all data from each table and reset sequences
                     for model in apps.get_models():
                         table = model._meta.db_table
                         cursor.execute(f'DELETE FROM "{table}";')
-                        cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')  # reset AUTOINCREMENT
+                        # Reset AUTOINCREMENT counter for the table
+                        cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')
+
+                    # Re-enable foreign key constraints
                     cursor.execute("PRAGMA foreign_keys = ON;")
 
-        # Load fixtures
+        # Load initial fixtures and test data
         call_command("init_db")

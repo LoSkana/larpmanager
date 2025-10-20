@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from django.http import HttpRequest
 
 
 class FeatureError(Exception):
@@ -115,32 +116,55 @@ class MembershipError(Exception):
         self.assocs = assocs
 
 
-def check_assoc_feature(request, s):
+def check_assoc_feature(request: HttpRequest, s: str) -> None:
     """Check if association has required feature enabled.
 
+    Validates that the specified feature is enabled for the association
+    in the current request context. This is typically used as a guard
+    to ensure users only access functionality their organization has
+    subscribed to or enabled.
+
     Args:
-        request: Django HTTP request with association context
-        s (str): Feature slug to check
+        request: Django HTTP request object containing association context
+            with 'assoc' attribute that includes 'features' dictionary
+        s: Feature slug identifier to validate against enabled features
 
     Raises:
-        FeatureError: If feature is not enabled for the association
+        FeatureError: If the specified feature is not enabled for the
+            association, includes feature slug, error code 0, and request path
+
+    Example:
+        check_assoc_feature(request, 'advanced_registration')
     """
+    # Check if the requested feature slug exists in the association's enabled features
     if s not in request.assoc["features"]:
+        # Raise error with feature slug, error code 0, and current request path
         raise FeatureError(s, 0, request.path)
 
 
-def check_event_feature(request, ctx, s):
+def check_event_feature(request: HttpRequest, ctx: dict, s: str) -> None:
     """Check if event has required feature enabled.
 
+    Validates that a specific feature is enabled for the current event context.
+    Raises an exception if the feature is not available, preventing access to
+    functionality that requires the feature.
+
     Args:
-        request: Django HTTP request
-        ctx (dict): Event context with features
-        s (str): Feature slug to check
+        request: Django HTTP request object containing user and session data
+        ctx: Event context dictionary containing features and run information
+        s: Feature slug string identifier to check for availability
 
     Raises:
-        FeatureError: If feature is not enabled for the event
+        FeatureError: If the specified feature is not enabled for the event,
+                     includes feature slug, run ID, and request path for debugging
+
+    Example:
+        >>> check_event_feature(request, event_ctx, 'character_creation')
+        # Raises FeatureError if 'character_creation' feature is disabled
     """
+    # Check if the requested feature slug exists in the event's enabled features
     if s not in ctx["features"]:
+        # Raise detailed error with context information for debugging
         raise FeatureError(s, ctx["run"].id, request.path)
 
 

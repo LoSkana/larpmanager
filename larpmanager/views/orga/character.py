@@ -73,23 +73,36 @@ from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(ctx, num):
+def get_character_optimized(ctx: dict, num: int) -> None:
     """Get character with optimized queries for editing.
 
+    Builds an optimized database query based on enabled features to minimize
+    database hits when retrieving character data for editing contexts.
+
     Args:
-        ctx: Template context dictionary
-        num: Character ID
+        ctx: Template context dictionary containing event and features data
+        num: Character primary key identifier
+
+    Returns:
+        None: Modifies ctx dictionary in-place, adding 'character' and 'class_name' keys
 
     Raises:
-        Http404: If character does not exist
+        Http404: If character does not exist or is not found for the given event
+
+    Note:
+        The function optimizes queries by conditionally adding select_related and
+        prefetch_related fields based on the features available in the context.
     """
     try:
+        # Get the event class parent for Character model
         ev = ctx["event"].get_class_parent(Character)
         features = ctx.get("features", [])
 
+        # Base select_related fields - always include event
         select_related_fields = ["event"]
 
-        # Add other select_related fields based on features
+        # Conditionally add select_related fields based on enabled features
+        # This reduces database queries for related objects
         if "user_character" in features:
             select_related_fields.append("player")
         if "progress" in features:
@@ -99,18 +112,22 @@ def get_character_optimized(ctx, num):
         if "mirror" in features:
             select_related_fields.append("mirror")
 
+        # Build the base query with optimized select_related
         query = Character.objects.select_related(*select_related_fields)
 
-        # Only prefetch factions and plots if their features are enabled
+        # Build prefetch_related fields for many-to-many relationships
+        # Only include if the corresponding features are enabled
         prefetch_fields = []
         if "faction" in features:
             prefetch_fields.append("factions_list")
         if "plot" in features:
             prefetch_fields.append("plots")
 
+        # Apply prefetch_related if any fields were identified
         if prefetch_fields:
             query = query.prefetch_related(*prefetch_fields)
 
+        # Execute the optimized query and update context
         ctx["character"] = query.get(event=ev, pk=num)
         ctx["class_name"] = "character"
     except ObjectDoesNotExist as err:
@@ -131,63 +148,111 @@ def orga_characters(request, s):
 
 
 @login_required
-def orga_characters_edit(request, s, num):
+def orga_characters_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit characters for event organizers.
+
+    This function handles character editing functionality for event organizers,
+    including loading event cache data when needed for relationships or character
+    finder features, and delegating to the writing edit system.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for accessing the specific event
+        num: The character number/ID to edit (0 for new character creation)
+
+    Returns:
+        HttpResponse: The rendered character edit page or redirect response
+    """
+    # Check user permissions for character management in this event
     ctx = check_event_permission(request, s, "orga_characters")
 
-    # Only load full event cache if we need relationships or other features that require it
+    # Load full event cache only when relationship or finder features are active
+    # This optimization avoids expensive cache operations when not needed
     if "relationships" in ctx["features"] or "character_finder" in ctx.get("features", []):
         get_event_cache_all(ctx)
 
+    # Load specific character data when editing existing character (num != 0)
+    # Skip character loading for new character creation (num == 0)
     if num != 0:
         get_character_optimized(ctx, num)
 
+    # Initialize character relationships data in the context
+    # This sets up relationship mappings needed by the template
     _characters_relationships(ctx)
 
+    # Delegate to the generic writing edit handler with character-specific form
+    # Uses CHARACTER text version type for proper content handling
     return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
-def _characters_relationships(ctx):
+def _characters_relationships(ctx: dict) -> None:
     """Setup character relationships data and widgets for editing.
 
+    This function configures the context dictionary with relationship data,
+    tutorial information, TinyMCE configuration, and character selection widgets
+    for the relationship editing interface.
+
     Args:
-        ctx: Context dictionary to populate with relationship data
+        ctx: Context dictionary to populate with relationship data. Expected to
+            contain 'features', 'event', and optionally 'character' keys.
+
+    Returns:
+        None: Modifies the context dictionary in place.
+
+    Note:
+        Requires the 'relationships' feature to be enabled in ctx['features'].
+        If no character is present in context, only basic setup is performed.
     """
+    # Initialize relationships data structure
     ctx["relationships"] = {}
+
+    # Early return if relationships feature is not enabled
     if "relationships" not in ctx["features"]:
         return
 
+    # Attempt to load tutorial content for relationships feature
     try:
         ctx["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
     except ObjectDoesNotExist:
         pass
 
+    # Configure TinyMCE editor settings for rich text editing
     ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+
+    # Create and configure character selection widget for new relationships
     widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
     widget.set_event(ctx["event"])
     ctx["new_rel"] = widget.render(name="new_rel_select", value="")
 
+    # Process existing relationships if character is present in context
     if "character" in ctx:
         rels = {}
 
+        # Fetch direct relationships where current character is the source
         direct_rels = Relationship.objects.filter(source=ctx["character"]).select_related("target")
 
+        # Process direct relationships and populate relationship data
         for rel in direct_rels:
             if rel.target.id not in rels:
                 rels[rel.target.id] = {"char": rel.target}
             rels[rel.target.id]["direct"] = rel.text
 
+        # Fetch inverse relationships where current character is the target
         inverse_rels = Relationship.objects.filter(target=ctx["character"]).select_related("source")
 
+        # Process inverse relationships and merge with existing data
         for rel in inverse_rels:
             if rel.source.id not in rels:
                 rels[rel.source.id] = {"char": rel.source}
             rels[rel.source.id]["inverse"] = rel.text
 
+        # Sort relationships by total text length (direct + inverse) in descending order
         sorted_rels = sorted(
             rels.items(),
             key=lambda item: len(item[1].get("direct", "")) + len(item[1].get("inverse", "")),
             reverse=True,
         )
+        # Update context with sorted relationship data
         ctx["relationships"] = dict(sorted_rels)
 
 
@@ -204,19 +269,44 @@ def update_relationship(request, ctx, nm, fl):
 
 
 @login_required
-def orga_characters_relationships(request, s, num):
+def orga_characters_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """
+    Display character relationships for event organizers.
+
+    Shows both direct relationships (where this character is the source) and
+    inverse relationships (where this character is the target).
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        num: Character number identifier
+
+    Returns:
+        HttpResponse: Rendered template with character relationships data
+    """
+    # Check event permissions and get base context
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Retrieve the specific character and add to context
     get_char(ctx, num)
+
+    # Get direct relationships where this character is the source
+    # Ordered by text length (shortest first) then by target character number
     ctx["direct"] = (
         Relationship.objects.filter(source=ctx["character"])
         .select_related("target")
         .order_by(Length("text").asc(), "target__number")
     )
+
+    # Get inverse relationships where this character is the target
+    # Ordered by text length (shortest first) then by source character number
     ctx["inverse"] = (
         Relationship.objects.filter(target=ctx["character"])
         .select_related("source")
         .order_by(Length("text").asc(), "source__number")
     )
+
+    # Render the relationships template with complete context
     return render(request, "larpmanager/orga/characters/relationships.html", ctx)
 
 
@@ -236,18 +326,38 @@ def orga_characters_versions(request, s, num):
 
 
 @login_required
-def orga_characters_summary(request, s, num):
+def orga_characters_summary(request, s: str, num: int) -> HttpResponse:
+    """Display character summary with factions and plots for event organizers.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        num: Character number/ID
+
+    Returns:
+        HttpResponse: Rendered character summary template
+    """
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Retrieve character data and add to context
     get_char(ctx, num)
+
+    # Initialize factions list for character
     ctx["factions"] = []
 
+    # Fetch and process all factions associated with character
     for p in ctx["character"].factions_list.all().prefetch_related("characters"):
         ctx["factions"].append(p.show_complete())
+
+    # Initialize plots list for character
     ctx["plots"] = []
 
+    # Fetch and process all plots associated with character
     for p in ctx["character"].plots.all().prefetch_related("characters"):
         ctx["plots"].append(p.show_complete())
 
+    # Render template with complete character context
     return render(request, "larpmanager/orga/characters_summary.html", ctx)
 
 
@@ -421,26 +531,41 @@ def check_writing_form_type(ctx, typ):
 
 
 @login_required
-def orga_writing_form(request, s, typ):
+def orga_writing_form(request, s: str, typ: str) -> HttpResponse:
     """Display and manage writing form questions for character creation.
 
+    This view handles the display of writing form questions for character creation
+    and other writing-related forms. It supports downloading form data and manages
+    form permissions and configurations.
+
     Args:
-        request: HTTP request object
-        s: Event slug
-        typ: Writing form type (character, etc.)
+        request: The HTTP request object containing user data and form submissions.
+        s: The event slug identifier used to locate the specific event.
+        typ: The writing form type identifier (e.g., 'character', 'background').
 
     Returns:
-        HttpResponse: Rendered form page or download response
+        HttpResponse: Either a rendered form page template or a file download response
+        depending on the request method and parameters.
+
+    Raises:
+        PermissionDenied: If user lacks required permissions for the event.
+        Http404: If the event or writing form type is not found.
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_character_form")
+
+    # Validate the writing form type exists for this event
     check_writing_form_type(ctx, typ)
 
+    # Handle download request for character form data
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_character_form_download(ctx)
 
+    # Set upload and download configuration for the template
     ctx["upload"] = "character_form"
     ctx["download"] = 1
 
+    # Fetch writing questions for the specified type, ordered and with options
     ctx["list"] = (
         ctx["event"]
         .get_elements(WritingQuestion)
@@ -448,9 +573,12 @@ def orga_writing_form(request, s, typ):
         .order_by("order")
         .prefetch_related("options")
     )
+
+    # Sort options for each question by their display order
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
+    # Get approval settings and feature status for character forms
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
     ctx["status"] = "user_character" in ctx["features"] and typ.lower() == "character"
 
@@ -633,107 +761,174 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", ctx)
 
 
-def check_relations(cache, checks, chs_numbers, ctx, number_map):
+def check_relations(cache: dict, checks: dict, chs_numbers: set, ctx: dict, number_map: dict) -> None:
     """Check character relationships for missing and extinct references.
 
-    Args:
-        cache: Dictionary to store relationship data for each character
-        checks: Dictionary to accumulate validation errors
-        chs_numbers: Set of valid character numbers in the event
-        ctx: Context dictionary containing character data
-        number_map: Mapping from character IDs to numbers
+    This function validates character relationships by checking for:
+    1. References to non-existent characters (extinct)
+    2. One-way relationships that should be bidirectional (missing)
 
-    Side effects:
-        Updates checks with relat_missing and relat_extinct validation errors
-        Populates cache with character relationship data
+    Args:
+        cache: Dictionary to store relationship data for each character.
+            Will be populated with character_id -> (name, relations) mappings.
+        checks: Dictionary to accumulate validation errors.
+            Will be updated with 'relat_missing' and 'relat_extinct' keys.
+        chs_numbers: Set of valid character numbers in the current event.
+        ctx: Context dictionary containing character data under 'chars' key.
+        number_map: Mapping from character IDs to their numbers.
+
+    Returns:
+        None: Function modifies input dictionaries in place.
+
+    Side Effects:
+        - Updates checks with relat_missing and relat_extinct validation errors
+        - Populates cache with character relationship data for further processing
     """
+    # Initialize validation error lists
     checks["relat_missing"] = []
     checks["relat_extinct"] = []
+
+    # First pass: extract relationships and check for extinct references
     for c in ctx["chars"]:
         ch = ctx["chars"][c]
+        # Parse character text to find relationships and extinct references
         (from_text, extinct) = get_chars_relations(ch.get("text", ""), chs_numbers)
         name = f"#{ch['number']} {ch['name']}"
+
+        # Collect extinct relationship references
         for e in extinct:
             checks["relat_extinct"].append((name, e))
+
+        # Cache character name and their relationships for second pass
         cache[c] = (name, from_text)
+
+    # Second pass: check for missing bidirectional relationships
     for c, content in cache.items():
         (first, first_rel) = content
+
+        # For each character this one has a relationship with
         for oth in first_rel:
             (second, second_rel) = cache[oth]
+
+            # Check if the relationship is bidirectional
             if c not in second_rel:
                 checks["relat_missing"].append(
                     {"f_id": number_map[c], "f_name": first, "s_id": number_map[oth], "s_name": second}
                 )
 
 
-def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
+def check_writings(cache: dict, checks: dict, chs_numbers: set, ctx: dict, id_number_map: dict) -> None:
     """Validate writing submissions and requirements for different element types.
 
-    Args:
-        cache: Dictionary to store validation results
-        checks: Dictionary to store validation issues found
-        chs_numbers: Set of valid character numbers
-        ctx: Context with event and features data
-        id_number_map: Mapping from character IDs to numbers
+    This function checks for inconsistencies between character references in writing
+    elements (text content) and their actual character relationships. It identifies
+    extinct characters (referenced but not valid), missing relationships, and
+    interloper characters (related but not referenced in text).
 
-    Side effects:
-        Updates checks with extinct, missing, and interloper character issues
+    Args:
+        cache: Dictionary to store validation results for each element type
+        checks: Dictionary to store validation issues found during processing
+        chs_numbers: Set of valid character numbers for the current event
+        ctx: Context dictionary containing event data and available features
+        id_number_map: Mapping from character database IDs to character numbers
+
+    Side Effects:
+        Updates the checks dictionary with three types of issues for each element:
+        - {element}_extinct: Characters referenced in text but not valid
+        - {element}_missing: Characters that should be related but aren't
+        - {element}_interloper: Characters that are related but not in text
     """
+    # Iterate through all writing element types (Faction, Plot, Prologue, SpeedLarp)
     for el in [Faction, Plot, Prologue, SpeedLarp]:
         nm = str(el.__name__).lower()
+
+        # Skip element types not enabled in current context features
         if nm not in ctx["features"]:
             continue
+
+        # Initialize validation tracking structures for this element type
         checks[nm + "_extinct"] = []
         checks[nm + "_missing"] = []
         checks[nm + "_interloper"] = []
         cache[nm] = {}
-        # check s: all characters currently listed has
+
+        # Process all elements of this type for the current event
+        # Annotate with character mappings and prefetch relationships for efficiency
         for f in (
             ctx["event"].get_elements(el).annotate(characters_map=ArrayAgg("characters")).prefetch_related("characters")
         ):
+            # Extract character references from element text and identify extinct ones
             (from_text, extinct) = get_chars_relations(f.text, chs_numbers)
+
+            # Record any extinct character references found in the text
             for e in extinct:
                 checks[nm + "_extinct"].append((f, e))
 
+            # Build set of character numbers from actual database relationships
             from_rels = set()
             for ch_id in f.characters_map:
+                # Only include characters that have valid number mappings
                 if ch_id not in id_number_map:
                     continue
                 from_rels.add(id_number_map[ch_id])
 
+            # Identify missing relationships: characters in text but not in database relations
             for e in list(set(from_text) - set(from_rels)):
                 checks[nm + "_missing"].append((f, e))
+
+            # Identify interloper relationships: characters in database but not in text
             for e in list(set(from_rels) - set(from_text)):
                 checks[nm + "_interloper"].append((f, e))
                 # cache[nm][f.number] = (str(f), from_text)
 
 
-def check_speedlarp(checks, ctx, id_number_map):
+def check_speedlarp(checks: dict, ctx: dict, id_number_map: dict) -> None:
     """Validate speedlarp character configurations.
 
-    Args:
-        checks: Dictionary to store validation issues
-        ctx: Context with event features and character data
-        id_number_map: Mapping from character IDs to numbers
+    Checks for double assignments and missing configurations in speedlarp
+    character assignments across different types.
 
-    Side effects:
-        Updates checks with speedlarp double assignments and missing configurations
+    Args:
+        checks: Dictionary to store validation issues. Will be updated with
+            'speed_larps_double' and 'speed_larps_missing' keys.
+        ctx: Context dictionary containing:
+            - 'features': Available event features
+            - 'event': Event object with speedlarp elements
+            - 'chars': Character data indexed by character number
+        id_number_map: Mapping from character IDs to character numbers.
+
+    Returns:
+        None: Function modifies checks dictionary in-place.
+
+    Side Effects:
+        Updates checks dictionary with speedlarp validation results:
+        - speed_larps_double: List of (type, character) tuples with multiple assignments
+        - speed_larps_missing: List of (type, character) tuples with missing assignments
     """
+    # Early return if speedlarp feature is not enabled
     if "speedlarp" not in ctx["features"]:
         return
 
+    # Initialize validation result containers
     checks["speed_larps_double"] = []
     checks["speed_larps_missing"] = []
+
+    # Get maximum speedlarp type number from event elements
     max_typ = ctx["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
     if not max_typ or max_typ == 0:
         return
 
+    # Build speedlarp assignments mapping: character_num -> {type -> [assignments]}
     speeds = {}
     for el in ctx["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
         check_speedlarp_prepare(el, id_number_map, speeds)
+
+    # Validate each character's speedlarp assignments
     for chnum, c in ctx["chars"].items():
         if chnum not in speeds:
             continue
+
+        # Check each speedlarp type for missing or double assignments
         for typ in range(1, max_typ + 1):
             if typ not in speeds[chnum]:
                 checks["speed_larps_missing"].append((typ, c))
@@ -845,31 +1040,53 @@ def orga_writing_excel_edit(request: HttpRequest, s: str, typ: str) -> JsonRespo
 
 
 @require_POST
-def orga_writing_excel_submit(request, s, typ):
+def orga_writing_excel_submit(request: HttpRequest, s: str, typ: str) -> JsonResponse:
     """Handle Excel submission for writing data with validation.
 
-    Args:
-        request: HTTP request with form data
-        s: Event slug
-        typ: Writing type identifier
+    Parameters
+    ----------
+    request : HttpRequest
+        HTTP request object containing form data and user information
+    s : str
+        Event slug identifier for the specific event
+    typ : str
+        Writing type identifier specifying the category of writing
 
-    Returns:
-        JsonResponse: Success status, element updates, or validation errors
+    Returns
+    -------
+    JsonResponse
+        JSON response containing:
+        - Success status (k=1 for success, k=0 for not found, k=2 for validation errors)
+        - Element updates for successful submissions
+        - Validation errors for failed submissions
+        - Warning messages for authorization issues
+
+    Raises
+    ------
+    ObjectDoesNotExist
+        When the specified event or writing type cannot be found
     """
+    # Retrieve Excel form context with validation
     try:
         ctx = _get_excel_form(request, s, typ, submit=True)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
+    # Handle auto-submission mode with permission checks
     ctx["auto"] = int(request.POST.get("auto"))
     if ctx["auto"]:
+        # Allow superusers to bypass working ticket validation
         if request.user.is_superuser:
             return JsonResponse({"k": 1})
+
+        # Validate working ticket for non-superusers
         msg = _check_working_ticket(request, ctx, request.POST["token"])
         if msg:
             return JsonResponse({"warn": msg})
 
+    # Process valid form submissions
     if ctx["form"].is_valid():
+        # Save form data and prepare success response
         obj = ctx["form"].save()
         response = {
             "k": 1,
@@ -879,6 +1096,7 @@ def orga_writing_excel_submit(request, s, typ):
         }
         return JsonResponse(response)
     else:
+        # Return validation errors for invalid forms
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
 
 

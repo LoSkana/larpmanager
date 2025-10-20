@@ -83,38 +83,61 @@ def help_red(request, n):
 
 
 @login_required
-def help(request, s=None):
+def help(request: HttpRequest, s: str | None = None) -> HttpResponse:
     """
     Display help page with question submission form and user's previous questions.
 
+    This view handles both displaying the help form and processing question submissions.
+    It supports both organization-wide and event-specific help contexts.
+
     Args:
-        request: HTTP request object
-        s: Optional event slug for event-specific help
+        request: HTTP request object containing user data and form submissions
+        s: Optional event slug for event-specific help context. If None,
+           displays organization-wide help.
 
     Returns:
-        HttpResponse: Rendered help template with form and question list
+        HttpResponse: Rendered help template containing the question form and
+                     filtered list of user's previous questions.
+
+    Note:
+        - POST requests process form submissions and redirect on success
+        - Questions are filtered by association context (event or organization)
+        - Form context varies based on event slug presence
     """
+    # Initialize context based on event slug presence
     if s:
         ctx = get_event_run(request, s, status=True)
     else:
         ctx = def_user_ctx(request)
         ctx["a_id"] = request.assoc["id"]
 
+    # Process form submission for new help questions
     if request.method == "POST":
         form = HelpQuestionForm(request.POST, request.FILES, ctx=ctx)
         if form.is_valid():
+            # Create question instance without saving to database yet
             hp = form.save(commit=False)
             hp.member = request.user.member
+
+            # Associate question with current organization if available
             if ctx["a_id"] != 0:
                 hp.assoc_id = ctx["a_id"]
+
+            # Save question and redirect with success message
             hp.save()
             messages.success(request, _("Question saved!"))
             return redirect(request.path_info)
     else:
+        # Initialize empty form for GET requests
         form = HelpQuestionForm(ctx=ctx)
 
+    # Add form to context for template rendering
     ctx["form"] = form
+
+    # Retrieve user's previous questions ordered by creation date
     ctx["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
+
+    # Filter questions by association context
     if ctx["a_id"] != 0:
         ctx["list"] = ctx["list"].filter(assoc_id=ctx["a_id"])
     else:
@@ -124,16 +147,35 @@ def help(request, s=None):
 
 
 @login_required
-def help_attachment(request, p):
+def help_attachment(request, p: int) -> HttpResponse:
+    """
+    Serve attachment file for a help question.
+
+    Args:
+        request: HTTP request object containing user information
+        p: Primary key of the HelpQuestion to retrieve attachment for
+
+    Returns:
+        HttpResponse: Redirect to the attachment URL
+
+    Raises:
+        Http404: If HelpQuestion doesn't exist or user lacks access permissions
+    """
+    # Get user context for permission checking
     ctx = def_user_ctx(request)
+
+    # Retrieve the help question object
     try:
         hp = HelpQuestion.objects.get(pk=p)
     except ObjectDoesNotExist as err:
         raise Http404("HelpQuestion does not exist") from err
 
+    # Check if user has permission to access this attachment
+    # Either the question owner or someone with association role
     if hp.member != request.user.member and not ctx["assoc_role"]:
         raise Http404("illegal access")
 
+    # Redirect to the attachment file URL
     return redirect(hp.attachment.url)
 
 
@@ -144,22 +186,38 @@ def handout_ext(request, s, cod):
     return return_pdf(fp, str(ctx["handout"]))
 
 
-def album_aux(request, ctx, parent):
+def album_aux(request: HttpRequest, ctx: dict, parent: Album | None) -> HttpResponse:
     """Prepare album context with sub-albums and paginated uploads.
 
+    This function builds the context for displaying an album page, including
+    sub-albums and paginated uploads. It handles both root-level albums
+    (when parent is None) and nested albums.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary to update
-        parent: Parent album instance or None for root level
+        request: Django HTTP request object containing GET parameters
+        ctx: Context dictionary to update with album data
+        parent: Parent album instance for nested albums, or None for root level
 
     Returns:
-        Rendered album page with sub-albums and uploads
+        HttpResponse: Rendered album page template with context data
+
+    Note:
+        Pagination shows 20 uploads per page. Invalid page numbers default
+        to first page, out-of-range pages default to last page.
     """
+    # Fetch visible sub-albums for the current run, ordered by creation date
     ctx["subs"] = Album.objects.filter(run=ctx["run"], parent=parent, is_visible=True).order_by("-created")
+
+    # Handle pagination for uploads only when viewing a specific album
     if parent is not None:
+        # Get all uploads for the current album
         lst = AlbumUpload.objects.filter(album=ctx["album"]).order_by("-created")
+
+        # Set up pagination with 20 items per page
         paginator = Paginator(lst, 20)
         page = request.GET.get("page")
+
+        # Handle pagination edge cases and invalid page numbers
         try:
             lst = paginator.page(page)
         except PageNotAnInteger:
@@ -168,10 +226,15 @@ def album_aux(request, ctx, parent):
             lst = paginator.page(
                 paginator.num_pages
             )  # If page is out of range (e.g.  9999), deliver last page of results.
+
+        # Set context for specific album view
         ctx["page"] = lst
         ctx["name"] = f"{ctx['album']} - {str(ctx['run'])}"
     else:
+        # Set context for root album view
         ctx["name"] = f"Album - {str(ctx['run'])}"
+
+    # Set parent reference and render template
     ctx["parent"] = parent
     return render(request, "larpmanager/event/album.html", ctx)
 
@@ -190,47 +253,91 @@ def album_sub(request, s, num):
 
 
 @login_required
-def workshops(request, s):
+def workshops(request: HttpRequest, s: str) -> HttpResponse:
+    """Get workshops for an event and render the workshops index page.
+
+    Args:
+        request: The HTTP request object containing user information
+        s: The event slug identifier
+
+    Returns:
+        HttpResponse: Rendered workshops index template with context data
+    """
+    # Get event context with signup and status information
     ctx = get_event_run(request, s, signup=True, status=True)
-    # get modules assigned to this event
+
+    # Initialize empty list for workshop data
     ctx["list"] = []
+
+    # Process each workshop assigned to this event
     for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
+        # Get workshop display data
         dt = workshop.show()
+
+        # Set completion check limit to 365 days ago
         limit = datetime.now() - timedelta(days=365)
         logger.debug(f"Workshop completion limit date: {limit}")
+
+        # Check if user has completed this workshop within the time limit
         dt["done"] = (
             WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
             >= 1
         )
+
+        # Add workshop data to context list
         ctx["list"].append(dt)
+
+    # Render and return the workshops index template
     return render(request, "larpmanager/event/workshops/index.html", ctx)
 
 
-def valid_workshop_answer(request, ctx):
+def valid_workshop_answer(request, ctx: dict) -> bool:
     """Validate workshop quiz answers and determine pass/fail status.
 
+    Processes workshop quiz questions and compares user-submitted answers
+    against correct answers. Updates the context with answer validation
+    results for each question.
+
     Args:
-        request: HTTP request object containing quiz answers
-        ctx: Context dictionary containing workshop questions
+        request: HTTP request object containing POST data with quiz answers
+        ctx: Context dictionary containing workshop questions under 'list' key.
+             Each question has 'id', 'opt' list with options containing
+             'id' and 'is_correct' fields.
 
     Returns:
-        bool: True if all answers are correct, False otherwise
+        bool: True if all answers are correct, False if any answer is wrong.
+
+    Note:
+        Modifies ctx in-place by adding 'correct', 'answer', and 'failed'
+        fields to each question element.
     """
     res = True
+
+    # Process each workshop question
     for el in ctx["list"]:
         el["correct"] = []
         el["answer"] = []
+
+        # Extract correct answers and user submissions for this question
         for o in el["opt"]:
+            # Collect IDs of correct options
             if o["is_correct"]:
                 el["correct"].append(o["id"])
+
+            # Check if user selected this option (POST field format: questionId_optionId)
             ix = f"{el['id']}_{o['id']}"
             if request.POST.get(ix, "") == "on":
                 el["answer"].append(o["id"])
+
+        # Sort lists for reliable comparison
         el["correct"].sort()
         el["answer"].sort()
+
+        # Mark question as failed if answers don't match
         el["failed"] = el["correct"] != el["answer"]
         if el["failed"]:
             res = False
+
     return res
 
 
@@ -304,25 +411,39 @@ def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
 
 
 @login_required
-def shuttle(request):
+def shuttle(request: HttpRequest) -> HttpResponse:
     """Display shuttle service requests for the current association.
 
+    This view shows both active shuttle requests and recently completed ones.
+    Requires the 'shuttle' feature to be enabled for the association.
+
     Args:
-        request: HTTP request object
+        request: The HTTP request object containing user and association data.
 
     Returns:
-        Rendered shuttle template with active and recent requests
+        HttpResponse: Rendered template displaying shuttle requests with context
+        containing active requests, completed requests from last 5 days, and
+        user permissions.
     """
+    # Verify that shuttle feature is enabled for this association
     check_assoc_feature(request, "shuttle")
-    # get last shuttle requests
+
+    # Define reference date for filtering recent completed requests (last 5 days)
     ref = datetime.now() - timedelta(days=5)
+
+    # Initialize base context with user data
     ctx = def_user_ctx(request)
+
+    # Add shuttle-specific data to context
     ctx.update(
         {
+            # Get all active shuttle requests (excluding completed ones)
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
             .filter(assoc_id=request.assoc["id"])
             .order_by("status", "date", "time"),
+            # Check if current user has shuttle permissions
             "is_shuttle": is_shuttle(request),
+            # Get recently completed shuttle requests from last 5 days
             "past": ShuttleService.objects.filter(
                 created__gt=ref.date(),
                 status=ShuttleStatus.DONE,
@@ -330,31 +451,52 @@ def shuttle(request):
             ).order_by("status", "date", "time"),
         }
     )
+
+    # Render template with shuttle data
     return render(request, "larpmanager/general/shuttle.html", ctx)
 
 
 @login_required
-def shuttle_new(request):
+def shuttle_new(request: HttpRequest) -> HttpResponse:
     """Handle creation of new shuttle service requests.
 
+    Creates a new shuttle service request for authenticated users. Validates
+    user permissions, processes form submission, and redirects on success.
+
     Args:
-        request: HTTP request object
+        request: The HTTP request object containing user data and form submission
 
     Returns:
-        Redirect to shuttle list on success or form template on GET/invalid POST
+        HttpResponse: Redirect to shuttle list on successful form submission,
+                     or rendered form template for GET requests or validation errors
+
+    Raises:
+        PermissionDenied: If user lacks required 'shuttle' feature access
     """
+    # Verify user has permission to access shuttle functionality
     check_assoc_feature(request, "shuttle")
+
+    # Initialize context with default user data and association ID
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})
+
     if request.method == "POST":
+        # Process form submission with POST data
         form = ShuttleServiceForm(request.POST, request=request, ctx=ctx)
+
         if form.is_valid():
+            # Save form but don't commit to database yet
             el = form.save(commit=False)
+            # Associate the shuttle request with current user
             el.member = request.user.member
             el.save()
+            # Redirect to shuttle list after successful creation
             return redirect("shuttle")
     else:
+        # Initialize empty form for GET requests
         form = ShuttleServiceForm(request=request, ctx=ctx)
+
+    # Render form template with appropriate context
     return render(
         request,
         "larpmanager/general/writing.html",
@@ -363,28 +505,43 @@ def shuttle_new(request):
 
 
 @login_required
-def shuttle_edit(request, n):
+def shuttle_edit(request: HttpRequest, n: int) -> HttpResponse:
     """Edit existing shuttle service request.
 
     Args:
-        request: HTTP request object
-        n: Shuttle service ID to edit
+        request: The HTTP request object containing user data and form submission
+        n: Primary key of the ShuttleService instance to edit
 
     Returns:
-        HttpResponse: Rendered edit form or redirect after successful update
+        HttpResponse: Rendered edit form template or redirect to shuttle list view
+            after successful form submission and validation
+
+    Raises:
+        ShuttleService.DoesNotExist: If shuttle service with given ID doesn't exist
     """
+    # Verify user has permission to access shuttle feature
     check_assoc_feature(request, "shuttle")
+
+    # Initialize context with user data and association ID
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})
-    # check_shuttle(request)
+
+    # Retrieve the shuttle service instance to edit
     shuttle = ShuttleService.objects.get(pk=n)
+
+    # Handle form submission (POST request)
     if request.method == "POST":
         form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, ctx=ctx)
+
+        # Validate form and save if valid, then redirect
         if form.is_valid():
             form.save()
             return redirect("shuttle")
     else:
+        # Initialize form with existing shuttle data for GET request
         form = ShuttleServiceEditForm(instance=shuttle, request=request, ctx=ctx)
+
+    # Render the edit form template
     return render(
         request,
         "larpmanager/general/writing.html",

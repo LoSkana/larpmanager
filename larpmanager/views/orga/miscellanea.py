@@ -44,6 +44,7 @@ from larpmanager.forms.warehouse import (
     OrgaWarehouseAreaForm,
     OrgaWarehouseItemAssignmentForm,
 )
+from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
     Album,
     OneTimeAccessToken,
@@ -79,17 +80,44 @@ def orga_albums_edit(request, s, num):
 
 
 @login_required
-def orga_albums_upload(request, s, a):
+def orga_albums_upload(request: HttpRequest, s: Event, a: str) -> HttpResponse:
+    """Upload photos and videos to an event album.
+
+    Args:
+        request: The HTTP request object containing user data and files
+        s: The Event object for which albums are being managed
+        a: The album code/identifier string
+
+    Returns:
+        HttpResponse: Rendered upload form or redirect after successful upload
+
+    Raises:
+        PermissionDenied: If user lacks orga_albums permission for the event
+    """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_albums")
+
+    # Retrieve and validate the album using the provided code
     get_album_cod(ctx, a)
+
+    # Handle POST request for file upload
     if request.method == "POST":
+        # Create form with uploaded files and POST data
         form = UploadAlbumsForm(request, s.POST, request.FILES)
+
+        # Validate form data and process upload
         if form.is_valid():
+            # Upload files to the specified album
             upload_albums(ctx["album"], request.FILES["elem"])
+
+            # Show success message and redirect to same page
             messages.success(request, s, _("Photos and videos successfully uploaded") + "!")
             return redirect(request, s.path_info)
     else:
+        # Create empty form for GET request
         form = UploadAlbumsForm()
+
+    # Add form to context and render upload template
     ctx["form"] = form
     return render(request, "larpmanager/orga/albums_upload.html", ctx)
 
@@ -107,31 +135,50 @@ def orga_utils_edit(request, s, num):
 
 
 @login_required
-def orga_workshops(request, s):
+def orga_workshops(request: HttpRequest, s: str) -> HttpResponse:
     """Display workshop completion status for registered members.
 
+    Shows which registered members have completed all required workshops within
+    the last 365 days. Members who haven't completed all workshops are flagged
+    in the 'pinocchio' list.
+
     Args:
-        request: HTTP request object
-        s: Event slug
+        request: HTTP request object containing user session and data
+        s: Event slug identifier used to locate the specific event
 
     Returns:
-        HttpResponse: Rendered workshops status template
+        HttpResponse: Rendered template showing workshop completion status
+            with context containing workshop data and member completion info
     """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_workshops")
-    # get number of modules
+
+    # Get all workshops for this event
     workshops = ctx["event"].workshops.all()
+
+    # Set time limit for workshop completion (365 days ago)
     limit = datetime.now() - timedelta(days=365)
-    ctx["pinocchio"] = []
-    ctx["list"] = []
-    # count workshops done by players
+
+    # Initialize context lists for template rendering
+    ctx["pinocchio"] = []  # Members who haven't completed all workshops
+    ctx["list"] = []  # All registered members with completion counts
+
+    # Process each active registration for the event run
     for reg in Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True):
+        # Count completed workshops for this member
         reg.num = 0
         for w in workshops:
+            # Check if member completed this workshop within time limit
             if WorkshopMemberRel.objects.filter(member=reg.member, workshop=w, created__gte=limit).count() >= 1:
                 reg.num += 1
+
+        # Add member to pinocchio list if they haven't completed all workshops
         if reg.num != len(workshops):
             ctx["pinocchio"].append(reg.member)
+
+        # Add registration to main list with completion count
         ctx["list"].append(reg)
+
     return render(request, "larpmanager/orga/workshop/workshops.html", ctx)
 
 
@@ -274,32 +321,83 @@ def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> H
 
 
 @login_required
-def orga_warehouse_checks(request, s):
+def orga_warehouse_checks(request, s: str) -> HttpResponse:
+    """
+    Display warehouse item assignments for organization event management.
+
+    Args:
+        request: The HTTP request object containing user session and data
+        s: The event slug identifier for the specific event
+
+    Returns:
+        HttpResponse: Rendered template with warehouse items and their assignments
+    """
+    # Check user permissions for warehouse management in this event
     ctx = check_event_permission(request, s, "orga_warehouse_checks")
+
+    # Initialize items dictionary to store warehouse items with assignments
     ctx["items"] = {}
+
+    # Iterate through all warehouse item assignments for this event
     for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
+        # Check if item is already in our items dictionary
         if el.item_id not in ctx["items"]:
+            # First time seeing this item, initialize it with empty assignment list
             item = el.item
             item.assignment_list = []
             ctx["items"][el.item_id] = item
+
+        # Add this assignment to the item's assignment list
         ctx["items"][el.item_id].assignment_list.append(el)
+
+    # Add warehouse optional configurations to context
     get_warehouse_optionals(ctx, [])
+
+    # Render the warehouse checks template with populated context
     return render(request, "larpmanager/orga/warehouse/checks.html", ctx)
 
 
 @login_required
-def orga_warehouse_manifest(request, s):
+def orga_warehouse_manifest(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Generate a warehouse manifest view for an organization event.
+
+    This function creates a manifest of warehouse items organized by area
+    for the specified event. It checks permissions, retrieves warehouse
+    item assignments, and groups them by their assigned areas.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier as a string
+
+    Returns:
+        HttpResponse: Rendered template response with warehouse manifest data
+
+    Raises:
+        PermissionDenied: If user lacks orga_warehouse_manifest permission
+    """
+    # Check user permissions and get base context for the event
     ctx = check_event_permission(request, s, "orga_warehouse_manifest")
+
+    # Initialize empty area list and get warehouse optional configurations
     ctx["area_list"] = {}
     get_warehouse_optionals(ctx, [])
 
+    # Iterate through warehouse item assignments for this event
+    # Group items by their assigned areas for manifest organization
     for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
+        # Create area entry if it doesn't exist in the area list
         if el.area_id not in ctx["area_list"]:
             ctx["area_list"][el.area_id] = el.area
+
+        # Initialize items list for the area if not already present
         if not hasattr(ctx["area_list"][el.area_id], "items"):
             ctx["area_list"][el.area_id].items = []
+
+        # Add the warehouse item assignment to the area's items list
         ctx["area_list"][el.area_id].items.append(el)
 
+    # Render the warehouse manifest template with organized data
     return render(request, "larpmanager/orga/warehouse/manifest.html", ctx)
 
 
@@ -309,29 +407,47 @@ def orga_warehouse_assignment_item_edit(request, s, num):
 
 
 @require_POST
-def orga_warehouse_assignment_manifest(request, s):
+def orga_warehouse_assignment_manifest(request: HttpRequest, s: str) -> JsonResponse:
     """Update warehouse item assignment status via AJAX.
 
+    This function handles AJAX requests to update the loaded/deployed status
+    of warehouse item assignments for a specific event. It validates permissions,
+    retrieves the assignment, and updates the appropriate field.
+
     Args:
-        request: Django HTTP request object with POST data
-        s: Event slug identifier
+        request: Django HTTP request object containing POST data with:
+            - idx: Primary key of the WarehouseItemAssignment
+            - type: Field type to update ('load' or 'depl')
+            - value: Boolean value as string ('true'/'false')
+        s: Event slug identifier for permission checking
 
     Returns:
-        JsonResponse with success status or error message
+        JsonResponse: Contains either success confirmation or error message
+            - Success: {"ok": True}
+            - Error: {"error": "description"} with appropriate HTTP status
+
+    Raises:
+        ObjectDoesNotExist: When assignment with given idx doesn't exist
     """
+    # Check user permissions for warehouse manifest access
     ctx = check_event_permission(request, s, "orga_warehouse_manifest")
+
+    # Extract and validate POST parameters
     idx = request.POST.get("idx")
     type = request.POST.get("type").lower()
     value = request.POST.get("value").lower() == "true"
 
+    # Retrieve the warehouse item assignment
     try:
         assign = WarehouseItemAssignment.objects.get(pk=idx)
     except ObjectDoesNotExist:
         return JsonResponse({"error": "not found"}, status=400)
 
+    # Verify assignment belongs to the current event
     if assign.event_id != ctx["event"].id:
         return JsonResponse({"error": "not your event"}, status=400)
 
+    # Map request type to model field and update
     map_field = {"load": "loaded", "depl": "deployed"}
     field = map_field.get(type, "")
     setattr(assign, field, value)
@@ -341,29 +457,39 @@ def orga_warehouse_assignment_manifest(request, s):
 
 
 @require_POST
-def orga_warehouse_assignment_area(request, s, num):
+def orga_warehouse_assignment_area(request: HttpRequest, s: str, num: str) -> JsonResponse:
     """Handle warehouse item assignment to a specific area.
 
+    Manages the assignment of warehouse items to specific areas within an event.
+    Supports both adding new assignments and removing existing ones based on selection state.
+
     Args:
-        request: HTTP request object containing POST data with item assignment details
-        s: Event slug identifier
-        num: Area number identifier
+        request (HttpRequest): HTTP request object containing POST data with item assignment details
+        s (str): Event slug identifier
+        num (str): Area number identifier
 
     Returns:
         JsonResponse: Success confirmation with {"ok": True}
+
+    Raises:
+        ValidationError: If required permissions are not met or area doesn't exist
     """
+    # Check event permissions and retrieve the warehouse area
     ctx = check_event_permission(request, s, "orga_warehouse_manifest")
     get_element(ctx, num, "area", WarehouseArea)
 
+    # Extract assignment parameters from POST data
     idx = request.POST.get("idx")
     notes = request.POST.get("notes")
     quantity = int(request.POST.get("quantity", "0"))
     selected = request.POST.get("selected").lower() == "true"
 
+    # Handle item deselection - remove existing assignment
     if not selected:
         WarehouseItemAssignment.objects.filter(item_id=idx, area=ctx["area"]).delete()
         return JsonResponse({"ok": True})
 
+    # Handle item selection - create or update assignment
     (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(item_id=idx, area=ctx["area"], event=ctx["event"])
     assign.quantity = quantity
     assign.notes = notes

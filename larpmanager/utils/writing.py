@@ -129,24 +129,41 @@ def orga_list_progress_assign(ctx: dict, typ: type[Model]) -> None:
     ctx["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
 
 
-def writing_popup_question(ctx, idx, question_idx):
+def writing_popup_question(ctx: dict, idx: int, question_idx: int) -> JsonResponse:
     """Get writing question data for popup display.
 
+    This function retrieves a character's writing answer for a specific question
+    and formats it for display in a popup window.
+
     Args:
-        ctx: Context dictionary with event and writing element data
-        idx (int): Writing element ID
-        question_idx (int): Question index
+        ctx: Context dictionary containing event and writing element data.
+            Must include 'event' key with event object.
+        idx: Character ID to retrieve the writing answer for.
+        question_idx: Writing question ID to retrieve the answer for.
 
     Returns:
-        dict: Question data for popup rendering
+        JsonResponse containing either:
+            - Success response with formatted HTML content (k=1, v=html_string)
+            - Error response for missing objects (k=0)
+
+    Raises:
+        ObjectDoesNotExist: When character, question, or answer cannot be found.
     """
     try:
+        # Get the character from the event's parent class
         char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
+
+        # Get the writing question from the event's parent class
         question = WritingQuestion.objects.get(pk=question_idx, event=ctx["event"].get_class_parent(WritingQuestion))
+
+        # Retrieve the writing answer for this character and question
         el = WritingAnswer.objects.get(element_id=char.id, question=question)
+
+        # Format the response with character name, question name, and answer text
         tx = f"<h2>{char} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
+        # Return error response when any required object is not found
         return JsonResponse({"k": 0})
 
 
@@ -209,50 +226,68 @@ def writing_popup(request: HttpRequest, ctx: dict[str, Any], typ: type[Model]) -
     return JsonResponse({"k": 1, "v": tx})
 
 
-def writing_example(ctx, typ):
+def writing_example(ctx: dict, typ) -> HttpResponse:
     """Generate example writing content for a given type.
 
     Args:
-        ctx: Context dictionary with event information
-        typ (str): Type of writing element to generate example for
+        ctx: Context dictionary containing event information and features
+        typ: Writing type object that provides example CSV generation methods
 
     Returns:
-        dict: Example content and structure for the writing type
+        HttpResponse: CSV file download response with example content for the writing type
     """
+    # Get example CSV rows based on available features
     file_rows = typ.get_example_csv(ctx["features"])
 
+    # Create in-memory string buffer for CSV content
     buffer = io.StringIO()
     wr = csv.writer(buffer, quoting=csv.QUOTE_ALL)
+
+    # Write all example rows to CSV buffer
     wr.writerows(file_rows)
 
+    # Reset buffer position to beginning for reading
     buffer.seek(0)
+
+    # Create HTTP response with CSV content type
     response = HttpResponse(buffer, content_type="text/csv")
     response["Content-Disposition"] = "attachment; filename=example.csv"
 
     return response
 
 
-def writing_post(request, ctx, typ, nm):
+def writing_post(request: HttpRequest, ctx: dict, typ: type, nm: str) -> None:
     """Handle POST requests for writing operations.
 
+    Processes POST requests for writing-related operations including downloads,
+    examples, and popup displays. Uses early returns and exceptions for control flow.
+
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary with event data
-        typ: Writing element type class
-        nm: Template name
+        request: Django HTTP request object containing POST data
+        ctx: Context dictionary containing event data and configuration
+        typ: Writing element type class for processing operations
+        nm: Template name string for rendering operations
 
     Raises:
-        ReturnNowError: When download operation needs to return immediately
+        ReturnNowError: When download, example, or popup operations need to
+                       return immediately with their respective responses
+
+    Returns:
+        None: Function returns early if no POST data is present
     """
+    # Early return if no POST data is present
     if not request.POST:
         return
 
+    # Handle download request - triggers file download response
     if request.POST.get("download") == "1":
         raise ReturnNowError(download(ctx, typ, nm))
 
+    # Handle example request - generates example content
     if request.POST.get("example") == "1":
         raise ReturnNowError(writing_example(ctx, typ))
 
+    # Handle popup request - displays popup interface
     if request.POST.get("popup") == "1":
         raise ReturnNowError(writing_popup(request, ctx, typ))
 
@@ -341,46 +376,86 @@ def writing_list(request: HttpRequest, ctx: dict[str, Any], typ: type[Model], nm
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
 
 
-def writing_bulk(ctx, request, typ):
+def writing_bulk(ctx: dict, request: HttpRequest, typ: type) -> None:
     """Handle bulk operations for different writing element types.
 
-    Args:
-        ctx: Context dictionary with event data
-        request: Django HTTP request object
-        typ: Writing element type class
+    This function serves as a dispatcher that routes bulk operations to
+    type-specific handlers based on the writing element type provided.
 
-    Side effects:
-        Executes bulk operations through type-specific handlers
+    Args:
+        ctx: Context dictionary containing event data and related information
+        request: Django HTTP request object containing bulk operation parameters
+        typ: Writing element type class (Character, Quest, or Trait)
+
+    Returns:
+        None
+
+    Side Effects:
+        Executes bulk operations through type-specific handlers which may
+        modify database records, update context, or perform other mutations.
     """
+    # Define mapping of element types to their corresponding bulk handlers
     bulks = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
+    # Execute the appropriate handler if the type is supported
     if typ in bulks:
         bulks[typ](request, ctx)
 
 
-def _get_custom_form(ctx):
+def _get_custom_form(ctx: dict) -> None:
     """Setup custom form questions and field names for writing elements.
 
-    Args:
-        ctx: Context dictionary to populate with form data
+    This function configures form questions and field names for writing elements
+    based on the writing type specified in the context. It filters questions
+    by applicability and categorizes them into basic types and custom form questions.
 
-    Side effects:
-        Updates ctx with form_questions and fields_name dictionaries
+    Parameters
+    ----------
+    ctx : dict
+        Context dictionary containing 'writing_typ' and 'event' keys.
+        Must include:
+        - writing_typ: The type of writing element
+        - event: Event object with get_elements method
+
+    Returns
+    -------
+    None
+        Function modifies ctx in place, adding 'form_questions' and 'fields_name' keys.
+
+    Side Effects
+    ------------
+    Updates ctx with:
+    - form_questions: Dictionary mapping question IDs to question objects
+    - fields_name: Dictionary mapping question types to display names
     """
+    # Early return if no writing type is specified
     if not ctx["writing_typ"]:
         return
 
-    # default name for fields
+    # Initialize default field names with the NAME type
+    # This provides a base mapping for standard question types
     ctx["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
+    # Retrieve and filter questions for the current event and writing type
+    # Questions are ordered by their 'order' field for consistent display
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=ctx["writing_typ"])
+
+    # Initialize the form questions dictionary for custom questions
     ctx["form_questions"] = {}
+
+    # Process each question to categorize and configure display
     for q in que:
+        # Mark whether this question uses a basic input type
+        # Basic types are handled differently in form rendering
         q.basic_typ = q.typ in BaseQuestionType.get_basic_types()
+
+        # Handle field name mapping for recognized question types
+        # If the question type already exists in fields_name, update its display name
         if q.typ in ctx["fields_name"].keys():
             ctx["fields_name"][q.typ] = q.name
         else:
+            # For custom question types, add to form_questions for special handling
             ctx["form_questions"][q.id] = q
 
 
@@ -427,51 +502,95 @@ def writing_list_query(ctx: dict, ev, typ) -> tuple[list[str], bool]:
     return text_fields, writing
 
 
-def writing_list_text_fields(ctx, text_fields, typ):
+def writing_list_text_fields(ctx: dict, text_fields: list[str], typ: type) -> None:
     """
     Add editor-type question fields to text fields list and retrieve cached data.
 
+    Extends the provided text fields list with editor-type questions from the event's
+    writing questions, then retrieves cached text field data for the specified type.
+
     Args:
-        ctx: Context dictionary with event and writing type information
-        text_fields: List of text field names to extend
-        typ: Writing element model class
+        ctx: Context dictionary containing event and writing type information.
+             Must include 'event' and 'writing_typ' keys.
+        text_fields: List of text field names to extend with question IDs.
+        typ: Writing element model class used for cache retrieval.
+
+    Returns:
+        None: Modifies text_fields list in-place and updates context cache.
     """
-    # add editor type questions
+    # Get writing questions applicable to the current writing type
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
+
+    # Filter for editor-type questions and extract their primary keys
     for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
+        # Convert question ID to string and add to text fields list
         text_fields.append(str(que_id))
 
+    # Retrieve and cache text field data for the specified type
     retrieve_cache_text_field(ctx, text_fields, typ)
 
 
-def retrieve_cache_text_field(ctx, text_fields, typ):
+def retrieve_cache_text_field(ctx: dict, text_fields: list[str], typ: type) -> None:
     """
     Retrieve and attach cached text field data to writing elements.
 
+    This function fetches cached text field data for writing elements and attaches
+    the processed content (reduced text and line numbers) as new attributes to each
+    element in the context list.
+
     Args:
-        ctx: Context dictionary with list of elements
-        text_fields: List of text field names to cache
-        typ: Writing element model class
+        ctx: Context dictionary containing a 'list' key with writing elements
+             and an 'event' key for the current event
+        text_fields: List of text field names to process and cache
+        typ: Writing element model class used for cache retrieval
+
+    Returns:
+        None: Modifies elements in ctx['list'] in-place by adding new attributes
     """
+    # Get cached text field data for the specified type and event
     gctf = get_cache_text_field(typ, ctx["event"])
+
+    # Process each element in the context list
     for el in ctx["list"]:
+        # Skip elements that don't have cached data
         if el.id not in gctf:
             continue
+
+        # Process each requested text field for this element
         for f in text_fields:
+            # Skip fields that don't exist in the cached data
             if f not in gctf[el.id]:
                 continue
+
+            # Extract reduced text and line number from cached data
             (red, ln) = gctf[el.id][f]
+
+            # Attach processed data as new attributes to the element
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 
 
-def _prepare_writing_list(ctx, request):
+def _prepare_writing_list(ctx: dict, request: HttpRequest) -> None:
     """Prepare context data for writing list display and configuration.
 
+    This function configures the context dictionary with necessary data for
+    displaying and managing writing lists, including question IDs, default
+    fields configuration, auto-save settings, and importance flags.
+
     Args:
-        ctx: Template context dictionary to update
-        request: HTTP request object with user information
+        ctx: Template context dictionary to update with writing list data.
+            Expected to contain 'event', 'writing_typ', and 'label_typ' keys.
+        request: HTTP request object containing user information and member data.
+
+    Returns:
+        None: Modifies the ctx dictionary in-place.
+
+    Note:
+        Silently handles exceptions when retrieving name question ID to avoid
+        breaking the flow if no applicable writing questions are found.
     """
+    # Try to get the name question ID for the current writing type
+    # This may fail if no applicable questions exist, which is handled gracefully
     try:
         name_que = (
             ctx["event"]
@@ -482,30 +601,48 @@ def _prepare_writing_list(ctx, request):
     except Exception:
         pass
 
+    # Get user's saved field configuration or use default if none exists
     model_name = ctx["label_typ"].lower()
     ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "[]")
+
+    # If no user configuration exists, build default from writing_fields
     if ctx["default_fields"] == "[]":
         if model_name in ctx["writing_fields"]:
             lst = [f"q_{el}" for name, el in ctx["writing_fields"][model_name]["ids"].items()]
             ctx["default_fields"] = json.dumps(lst)
 
+    # Configure auto-save behavior based on event settings
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
 
+    # Set writing importance flag from event configuration
     ctx["writing_unimportant"] = ctx["event"].get_config("writing_unimportant", False)
 
 
-def writing_list_plot(ctx):
+def writing_list_plot(ctx: dict) -> None:
     """Build character associations for plot list display.
 
-    Args:
-        ctx: Context dictionary with list of plots and event data
+    This function enriches plot objects in the context with their associated
+    character relationships by fetching cached event relationship data.
 
-    Side effects:
-        Adds chars dictionary to context and attaches character lists to plot objects
+    Args:
+        ctx: Context dictionary containing:
+            - list: List of plot objects to enrich
+            - event: Event object used to retrieve cached relationships
+
+    Returns:
+        None: Function modifies the context dictionary in place
+
+    Side Effects:
+        - Adds character_rels attribute to each plot object in ctx["list"]
+        - character_rels contains list of character relationships for each plot
     """
+    # Retrieve cached relationship data for the event
     rels = get_event_rels_cache(ctx["event"]).get("plots", {})
 
+    # Iterate through each plot in the context list
     for el in ctx["list"]:
+        # Attach character relationships to each plot object
+        # Use empty list as fallback if no relationships exist
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
@@ -608,56 +745,95 @@ def writing_list_char(ctx: dict) -> None:
     char_add_addit(ctx)
 
 
-def char_add_addit(ctx):
+def char_add_addit(ctx: dict) -> None:
     """
     Add additional configuration data to all characters in the context list.
 
+    This function retrieves character configuration data for all characters in an event
+    and attaches it as an 'addit' attribute to each character object in the context list.
+
     Args:
-        ctx: Context dictionary containing character list and event information
+        ctx (dict): Context dictionary containing:
+            - 'event': Event object with character relationships
+            - 'list': List of character objects to enhance with additional data
+
+    Returns:
+        None: Modifies character objects in-place by adding 'addit' attribute
     """
+    # Initialize dictionary to store additional configuration data by character ID
     addits = {}
+
+    # Get the event class parent for Character model to filter configurations
     event = ctx["event"].get_class_parent(Character)
+
+    # Retrieve all character configurations for characters in this event
     for config in CharacterConfig.objects.filter(character__event=event):
+        # Initialize character's config dictionary if not exists
         if config.character_id not in addits:
             addits[config.character_id] = {}
+
+        # Store configuration value by name for this character
         addits[config.character_id][config.name] = config.value
 
+    # Attach additional configuration data to each character in the list
     for el in ctx["list"]:
+        # Add character's configuration data if available, otherwise empty dict
         if el.id in addits:
             el.addit = addits[el.id]
         else:
             el.addit = {}
 
 
-def writing_view(request, ctx, nm):
+def writing_view(request: HttpRequest, ctx: dict[str, Any], nm: str) -> HttpResponse:
     """
     Display writing element view with character data and relationships.
 
-    Args:
-        request: HTTP request object
-        ctx: Context dictionary with element data
-        nm: Name of the writing element type
+    Parameters
+    ----------
+    request : HttpRequest
+        Django HTTP request object containing user session and request data
+    ctx : dict[str, Any]
+        Context dictionary containing element data and view-specific information
+    nm : str
+        Name of the writing element type (e.g., 'character', 'plot', etc.)
 
-    Returns:
-        HttpResponse: Rendered writing view template
+    Returns
+    -------
+    HttpResponse
+        Rendered writing view template with populated context data
+
+    Notes
+    -----
+    This function handles different writing element types with specialized logic
+    for character elements including sheet data and relationship information.
     """
+    # Set up base element data and retrieve complete element information
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
+
+    # Load cached event data for performance optimization
     get_event_cache_all(ctx)
 
+    # Handle character-specific logic with sheet and relationship data
     if nm == "character":
         if ctx["el"].number in ctx["chars"]:
             ctx["char"] = ctx["chars"][ctx["el"].number]
         ctx["character"] = ctx["el"]
+
+        # Retrieve character sheet and relationship information
         get_character_sheet(ctx)
         get_character_relationships(ctx)
     else:
+        # Process non-character elements with applicable questions
         applicable = QuestionApplicable.get_applicable(nm)
         if applicable:
             ctx["element"] = get_writing_element_fields(ctx, nm, applicable, ctx["el"].id, only_visible=False)
+
+        # Set sheet data for non-character elements
         ctx["sheet_char"] = ctx["el"].show_complete()
 
+    # Add plot-specific character relationships if element is a plot
     if nm == "plot":
         ctx["sheet_plots"] = (
             PlotCharacterRel.objects.filter(plot=ctx["el"]).order_by("character__number").select_related("character")
@@ -666,41 +842,66 @@ def writing_view(request, ctx, nm):
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 
-def writing_versions(request, ctx, nm, tp):
+def writing_versions(request: HttpRequest, ctx: dict, nm: str, tp: str) -> HttpResponse:
     """Display text versions with diff comparison for writing elements.
 
+    This function retrieves all text versions for a specific writing element,
+    computes diffs between consecutive versions, and renders them in a template.
+
     Args:
-        request: HTTP request object
-        ctx: Context dictionary with writing element data
-        nm: Name of the writing element
-        tp: Type identifier for text versions
+        request: The HTTP request object containing user and session data.
+        ctx: Context dictionary containing writing element data and template variables.
+        nm: Name/key of the writing element in the context dictionary.
+        tp: Type identifier used to filter text versions from the database.
 
     Returns:
-        HttpResponse: Rendered versions template with diff data
+        HttpResponse: Rendered HTML response using the versions template with
+                     diff data and version history.
     """
+    # Retrieve all text versions for the specified element, ordered by version number
     ctx["versions"] = TextVersion.objects.filter(tp=tp, eid=ctx[nm].id).order_by("version").select_related("member")
+
+    # Initialize variable to track the previous version for diff computation
     last = None
+
+    # Iterate through versions to compute diffs between consecutive versions
     for v in ctx["versions"]:
         if last is not None:
+            # Compute diff between current and previous version
             compute_diff(v, last)
         else:
+            # For the first version, just format text with line breaks
             v.diff = v.text.replace("\n", "<br />")
         last = v
+
+    # Set template context variables for rendering
     ctx["element"] = ctx[nm]
     ctx["typ"] = nm
+
+    # Render and return the versions template with populated context
     return render(request, "larpmanager/orga/writing/versions.html", ctx)
 
 
-def replace_character_names_before_save(instance):
+def replace_character_names_before_save(instance: Character) -> None:
     """Django signal handler to replace character names before saving.
 
+    This function is called before a Character instance is saved to the database.
+    It replaces character names in writing content only for existing characters
+    (those with a primary key).
+
     Args:
-        sender: Model class sending the signal
-        instance: Character instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
+        instance: Character instance being saved to the database.
+
+    Returns:
+        None
+
+    Note:
+        This function is designed to be used as a Django signal handler.
+        It skips processing for new character instances without a primary key.
     """
+    # Skip processing for new character instances without a primary key
     if not instance.pk:
         return
 
+    # Replace character names in all associated writing content
     replace_character_names_in_writing(instance)
