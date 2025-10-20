@@ -442,6 +442,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     ctx["list"] = []
 
     ctx_reg = {
+        "my_regs": my_regs_dict,
         "character_rels_dict": character_rels_dict,
         "payment_invoices_dict": payment_invoices_dict,
         "pre_registrations_dict": pre_registrations_dict,

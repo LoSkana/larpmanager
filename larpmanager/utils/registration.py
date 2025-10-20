@@ -419,7 +419,7 @@ def registration_status(
         return
 
     # check pre-register
-    if get_event_config(run.event_id, "pre_register_active", False):
+    if get_event_config(run.event_id, "pre_register_active", False, ctx=ctx):
         _status_preregister(run, user, ctx)
 
     dt = datetime.today()
@@ -580,7 +580,7 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
         rcrs = que.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
-    approval = get_event_config(run.event_id, "user_character_approval", False)
+    approval = get_event_config(run.event_id, "user_character_approval", False, ctx=ctx)
 
     # Build list of character links with names and approval status
     aux = []
