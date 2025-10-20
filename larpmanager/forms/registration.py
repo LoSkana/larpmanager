@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
@@ -545,7 +545,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Handle filler ticket visibility based on event config and member status
         elif ticket.tier == TicketTier.FILLER:
-            filler_alway = event.get_config("filler_always", False)
+            filler_alway = get_event_config(event.id, "filler_always", False)
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
@@ -697,11 +697,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             return
 
         self.sections["id_pay_what"] = reg_section
-        self.fields["pay_what"].label = self.params["run"].event.get_config(
-            "pay_what_you_want_label", _("Free donation")
+        self.fields["pay_what"].label = get_event_config(
+            self.params["run"].event_id, "pay_what_you_want_label", _("Free donation")
         )
-        self.fields["pay_what"].help_text = self.params["run"].event.get_config(
-            "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
+        self.fields["pay_what"].help_text = get_event_config(
+            self.params["run"].event_id, "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
         )
 
     def init_ticket(self, reg_section):
@@ -869,7 +869,7 @@ class RegistrationCharacterRelForm(MyForm):
         dl = ["profile"]
 
         for s in ["name", "pronoun", "song", "public", "private"]:
-            if not self.params["event"].get_config("custom_character_" + s, False):
+            if not get_event_config(self.params["event"].id, "custom_character_" + s, False):
                 dl.append(s)
 
         if "custom_name" not in self.initial or not self.initial["custom_name"]:
@@ -962,7 +962,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
             # Skip ticket tiers that require configuration options not set
             if value in ticket_configs:
-                if not event.get_config(f"ticket_{ticket_configs[value]}", False):
+                if not get_event_config(event.id, f"ticket_{ticket_configs[value]}", False):
                     continue
 
             # Add tier to available options if all checks pass
@@ -1178,7 +1178,9 @@ class PreRegistrationForm(forms.Form):
         cho_pref = [(r, r) for r in prefs]
 
         # Check if preference editing is disabled via config
-        if self.ctx.get("event") and get_assoc_config(self.ctx["event"].assoc_id, "pre_reg_preferences", False):
+        if self.ctx.get("event") and get_assoc_config(
+            self.ctx["event"].assoc_id, "pre_reg_preferences", False, self.ctx
+        ):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,
                 choices=cho_pref,

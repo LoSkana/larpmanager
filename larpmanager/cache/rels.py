@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
@@ -50,14 +51,21 @@ def get_event_rels_key(event_id: int) -> str:
 def clear_event_relationships_cache(event_id: int) -> None:
     """Reset event relationships cache for given event ID.
 
+    This function clears the cache for the specified event and all its child events
+    to ensure data consistency when event relationships change.
+
     Args:
-        event_id: The ID of the event whose cache should be cleared
+        event_id: The ID of the event whose cache should be cleared.
+
+    Returns:
+        None
     """
+    # Clear cache for the main event
     cache_key = get_event_rels_key(event_id)
     cache.delete(cache_key)
     logger.debug(f"Reset cache for event {event_id}")
 
-    # invalidate also for children events
+    # Invalidate cache for all child events to maintain consistency
     for children_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
         cache_key = get_event_rels_key(children_id)
         cache.delete(cache_key)
@@ -130,8 +138,14 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
 def refresh_character_related_caches(char: Character) -> None:
     """Update all caches that are related to a character.
 
+    This function refreshes caches for all entities that have relationships
+    with the given character, including plots, factions, speedlarps, and prologues.
+
     Args:
-        char: The Character instance
+        char (Character): The Character instance whose related caches need to be refreshed.
+
+    Returns:
+        None
     """
     # Update plots that this character is part of
     for plot_rel in char.get_plot_characters():
@@ -191,17 +205,31 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
     """Get event relationships from cache, initializing if not present.
 
+    Retrieves cached relationship data for the specified event. If no cached
+    data exists, initializes the cache with fresh relationship data.
+
     Args:
-        event: The Event instance to get relationships for
+        event (Event): The Event instance to get relationships for.
 
     Returns:
-        dict[str, Any]: Dictionary containing cached relationship data
+        dict[str, Any]: Dictionary containing cached relationship data including
+            event associations, permissions, and related objects.
+
+    Note:
+        Cache miss will trigger full relationship initialization via
+        init_event_rels_all().
     """
+    # Generate cache key for this specific event
     cache_key = get_event_rels_key(event.id)
+
+    # Attempt to retrieve cached relationships
     res = cache.get(cache_key)
+
+    # Initialize cache if no data found
     if res is None:
         logger.debug(f"Cache miss for event {event.id}, initializing")
         res = init_event_rels_all(event)
+
     return res
 
 
@@ -294,31 +322,41 @@ def refresh_character_relationships(char: Character) -> None:
 def refresh_event_character_relationships(char: Character, event: Event) -> None:
     """Update character relationships in cache.
 
-    Updates the cached relationship data for a specific character.
+    Updates the cached relationship data for a specific character within an event.
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        char: The Character instance to update relationships for
-        event: The event for which we are building the cache
+        char: The Character instance to update relationships for.
+        event: The Event instance for which we are building the cache.
+
+    Raises:
+        Exception: If there's an error updating relationships, the cache is cleared.
     """
     try:
+        # Get the cache key for this event's relationships
         cache_key = get_event_rels_key(event.id)
         res = cache.get(cache_key)
 
+        # If cache doesn't exist, initialize it for the entire event
         if res is None:
             logger.debug(f"Cache miss during character update for event {event}, reinitializing")
             init_event_rels_all(event)
             return
 
+        # Ensure characters dictionary exists in cache structure
         if "characters" not in res:
             res["characters"] = {}
 
+        # Get event features and update character relationships
         features = get_event_features(event.id)
         res["characters"][char.id] = get_event_char_rels(char, features, event)
+
+        # Save updated cache with 1-day timeout
         cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:
+        # Log error and clear cache to prevent inconsistent state
         logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
         clear_event_relationships_cache(event.id)
 
@@ -358,12 +396,12 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
             rel_plots = char.get_plot_characters()
-            plot_list = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
+            plot_list = [(rel.plot_id, rel.plot.name) for rel in rel_plots]
             relations["plot_rels"] = build_relationship_dict(plot_list)
 
             # Calculate important plot count (excluding $unimportant entries)
             unimportant_count = 0
-            if char.event.get_config("writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", False):
                 unimportant_count = sum(
                     1 for rel in rel_plots if strip_tags(rel.text).lstrip().startswith("$unimportant")
                 )
@@ -371,17 +409,17 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
-            cache_event = event if event else char.event
-            if cache_event.get_config("campaign_faction_indep", False):
+            cache_event_id = event.id if event else char.event_id
+            if get_event_config(cache_event_id, "campaign_faction_indep", False):
                 # Use the cache event for independent faction lookup
-                fac_event = cache_event
+                fac_event_id = cache_event_id
             else:
                 # Use the parent event for inherited faction lookup
-                fac_event = char.event.get_class_parent("faction")
+                fac_event_id = char.event.get_class_parent("faction").id
 
             # Build faction list based on determined event
-            if fac_event:
-                factions = char.factions_list.filter(event=fac_event)
+            if fac_event_id:
+                factions = char.factions_list.filter(event_id=fac_event_id)
                 faction_list = [(faction.id, faction.name) for faction in factions]
             else:
                 faction_list = []
@@ -396,7 +434,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
             # Calculate important relationship count (excluding $unimportant entries)
             unimportant_count = 0
-            if char.event.get_config("writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", False):
                 unimportant_count = sum(
                     1 for rel in relationships if strip_tags(rel.text).lstrip().startswith("$unimportant")
                 )
@@ -425,24 +463,49 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
     """Get faction relationships for a specific faction.
 
+    Retrieves all characters associated with the given faction and formats
+    them into a relationship dictionary structure.
+
     Args:
-        faction: The Faction instance to get relationships for
+        faction (Faction): The Faction instance to get relationships for.
+            Must be a valid Faction model instance.
 
     Returns:
-        dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data with the structure:
             {
-                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
+                'character_rels': {
+                    'list': [(char_id, char_name), ...],
+                    'count': int
+                }
             }
+            Returns empty dict if an error occurs.
+
+    Raises:
+        Exception: Logs any database or processing errors and returns empty dict.
+
+    Example:
+        >>> faction = Faction.objects.get(id=1)
+        >>> rels = get_event_faction_rels(faction)
+        >>> print(rels['character_rels']['count'])
+        5
     """
     relations = {}
 
     try:
+        # Get all characters associated with this faction
         characters = faction.characters.all()
+
+        # Build list of character ID and name tuples
         char_list = [(char.id, char.name) for char in characters]
+
+        # Structure the relationship data using helper function
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
+        # Log error with full traceback for debugging
         logger.error(f"Error getting relationships for faction {faction.id}: {e}", exc_info=True)
+
+        # Return empty dict on error to prevent downstream issues
         relations = {}
 
     return relations
@@ -451,24 +514,42 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
 def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
     """Get plot relationships for a specific plot.
 
+    Retrieves all character relationships associated with the given plot
+    and formats them into a structured dictionary format.
+
     Args:
-        plot: The Plot instance to get relationships for
+        plot (Plot): The Plot instance to get relationships for
 
     Returns:
-        dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data with structure:
             {
-                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
+                'character_rels': {
+                    'list': [(char_id, char_name), ...],
+                    'count': int
+                }
             }
+            Returns empty dict if an error occurs.
+
+    Raises:
+        Logs errors but does not raise exceptions, returns empty dict instead.
     """
     relations = {}
 
     try:
+        # Get all character relationships for this plot
         char_rels = plot.get_plot_characters()
-        char_list = [(rel.character.id, rel.character.name) for rel in char_rels]
+
+        # Extract character ID and name tuples from relationships
+        char_list = [(rel.character_id, rel.character.name) for rel in char_rels]
+
+        # Build structured relationship dictionary with list and count
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
+        # Log error with full traceback for debugging
         logger.error(f"Error getting relationships for plot {plot.id}: {e}", exc_info=True)
+
+        # Return empty dict on any error to maintain consistent return type
         relations = {}
 
     return relations
@@ -477,23 +558,39 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
 def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
     """Get speedlarp relationships for a specific speedlarp.
 
+    Retrieves all characters associated with the given speedlarp and formats
+    them into a structured dictionary containing relationship data.
+
     Args:
-        speedlarp: The SpeedLarp instance to get relationships for
+        speedlarp (SpeedLarp): The SpeedLarp instance to get relationships for.
 
     Returns:
-        dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data with the structure:
             {
-                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
+                'character_rels': {
+                    'list': [(char_id, char_name), ...],
+                    'count': int
+                }
             }
+            Returns empty dict if an error occurs.
+
+    Raises:
+        Logs errors but does not raise exceptions.
     """
     relations = {}
 
     try:
+        # Fetch all characters associated with the speedlarp
         characters = speedlarp.characters.all()
+
+        # Build list of tuples containing character ID and name
         char_list = [(char.id, char.name) for char in characters]
+
+        # Structure the character data using helper function
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
+        # Log the error with full traceback for debugging
         logger.error(f"Error getting relationships for speedlarp {speedlarp.id}: {e}", exc_info=True)
         relations = {}
 
@@ -503,23 +600,48 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
 def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
     """Get prologue relationships for a specific prologue.
 
+    Retrieves all characters associated with the given prologue and formats
+    them into a structured relationship dictionary for use in templates
+    and API responses.
+
     Args:
-        prologue: The Prologue instance to get relationships for
+        prologue (Prologue): The Prologue instance to get relationships for.
+            Must be a valid Prologue object with accessible characters relationship.
 
     Returns:
-        dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data with the following structure:
             {
-                'character_rels': {'list': [(char_id, char_name), ...], 'count': int}
+                'character_rels': {
+                    'list': [(char_id, char_name), ...],
+                    'count': int
+                }
             }
+            Returns empty dict if an error occurs during processing.
+
+    Raises:
+        Exception: Logs any database or processing errors but returns empty dict
+            instead of propagating the exception.
+
+    Example:
+        >>> prologue = Prologue.objects.get(id=1)
+        >>> rels = get_event_prologue_rels(prologue)
+        >>> print(rels['character_rels']['count'])
+        3
     """
     relations = {}
 
     try:
+        # Fetch all characters associated with this prologue
         characters = prologue.characters.all()
+
+        # Build list of character ID and name tuples for template rendering
         char_list = [(char.id, char.name) for char in characters]
+
+        # Format character data using helper function to create standardized structure
         relations["character_rels"] = build_relationship_dict(char_list)
 
     except Exception as e:
+        # Log error with full traceback for debugging while preventing crashes
         logger.error(f"Error getting relationships for prologue {prologue.id}: {e}", exc_info=True)
         relations = {}
 
@@ -529,23 +651,39 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
 def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
     """Get quest relationships for a specific quest.
 
+    Retrieves all non-deleted traits associated with the given quest and formats
+    them into a relationship dictionary structure.
+
     Args:
-        quest: The Quest instance to get relationships for
+        quest (Quest): The Quest instance to get relationships for
 
     Returns:
-        dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data with the structure:
             {
-                'trait_rels': {'list': [(trait_id, trait_name), ...], 'count': int}
+                'trait_rels': {
+                    'list': [(trait_id, trait_name), ...],
+                    'count': int
+                }
             }
+            Returns empty dict if an error occurs during processing.
+
+    Raises:
+        Logs errors but does not raise exceptions - returns empty dict instead.
     """
     relations = {}
 
     try:
+        # Query for all non-deleted traits associated with this quest
         traits = Trait.objects.filter(quest=quest, deleted=None)
+
+        # Build list of tuples containing trait ID and name pairs
         trait_list = [(trait.id, trait.name) for trait in traits]
+
+        # Format trait data into standardized relationship dictionary structure
         relations["trait_rels"] = build_relationship_dict(trait_list)
 
     except Exception as e:
+        # Log error details for debugging while maintaining function stability
         logger.error(f"Error getting relationships for quest {quest.id}: {e}")
         relations = {}
 
@@ -555,23 +693,38 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
 def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
     """Get questtype relationships for a specific questtype.
 
+    Retrieves all related quests for the given questtype and formats them
+    into a structured dictionary with count information.
+
     Args:
-        questtype: The QuestType instance to get relationships for
+        questtype (QuestType): The QuestType instance to get relationships for.
 
     Returns:
-        dict[str, Any]: Dictionary containing relationship data:
+        dict[str, Any]: Dictionary containing relationship data with the following structure:
             {
-                'quest_rels': {'list': [(quest_id, quest_name), ...], 'count': int}
+                'quest_rels': {
+                    'list': [(quest_id, quest_name), ...],
+                    'count': int
+                }
             }
+
+    Raises:
+        Exception: Logs error if relationship retrieval fails and returns empty dict.
     """
     relations = {}
 
     try:
+        # Retrieve all related quests for the questtype
         quests = questtype.quests.all()
+
+        # Build list of tuples containing quest ID and name
         quest_list = [(quest.id, quest.name) for quest in quests]
+
+        # Format quest relationships using helper function
         relations["quest_rels"] = build_relationship_dict(quest_list)
 
     except Exception as e:
+        # Log error and return empty dict on failure
         logger.error(f"Error getting relationships for questtype {questtype.id}: {e}")
         relations = {}
 
@@ -585,35 +738,65 @@ def refresh_event_faction_relationships(faction: Faction) -> None:
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        faction: The Faction instance to update relationships for
+        faction (Faction): The Faction instance to update relationships for
+
+    Returns:
+        None
     """
+    # Get the current faction relationship data from the event
     faction_data = get_event_faction_rels(faction)
+
+    # Update the cache with the faction's relationship data
     update_cache_section(faction.event_id, "factions", faction.id, faction_data)
 
 
 def refresh_event_plot_relationships(plot: Plot) -> None:
     """Update plot relationships in cache.
 
-    Updates the cached relationship data for a specific plot.
+    Updates the cached relationship data for a specific plot within an event.
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        plot: The Plot instance to update relationships for
+        plot (Plot): The Plot instance to update relationships for.
+
+    Returns:
+        None
+
+    Note:
+        This function modifies the cache in-place and does not return any value.
+        The cache is organized by event_id with a "plots" section containing
+        plot-specific relationship data.
     """
+    # Retrieve the current plot relationship data from the event
     plot_data = get_event_plot_rels(plot)
+
+    # Update the cache with the new plot relationship data
+    # Cache structure: event_id -> "plots" -> plot.id -> plot_data
     update_cache_section(plot.event_id, "plots", plot.id, plot_data)
 
 
 def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
     """Update speedlarp relationships in cache.
 
-    Updates the cached relationship data for a specific speedlarp.
-    If the cache doesn't exist, it will be initialized for the entire event.
+    Updates the cached relationship data for a specific speedlarp by retrieving
+    fresh data and updating the cache section. If the cache doesn't exist for
+    the event, it will be initialized for the entire event.
 
     Args:
-        speedlarp: The SpeedLarp instance to update relationships for
+        speedlarp (SpeedLarp): The SpeedLarp instance to update relationships for.
+            Must have a valid event_id and id.
+
+    Returns:
+        None: This function performs cache updates and does not return a value.
+
+    Note:
+        This function depends on get_event_speedlarp_rels() and update_cache_section()
+        being available in the current scope.
     """
+    # Retrieve fresh speedlarp relationship data from the database
     speedlarp_data = get_event_speedlarp_rels(speedlarp)
+
+    # Update the cache with the new speedlarp relationship data
     update_cache_section(speedlarp.event_id, "speedlarps", speedlarp.id, speedlarp_data)
 
 
@@ -624,9 +807,15 @@ def refresh_event_prologue_relationships(prologue: Prologue) -> None:
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        prologue: The Prologue instance to update relationships for
+        prologue (Prologue): The Prologue instance to update relationships for
+
+    Returns:
+        None
     """
+    # Get the prologue relationship data for caching
     prologue_data = get_event_prologue_rels(prologue)
+
+    # Update the cache section with the prologue data
     update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_data)
 
 
@@ -637,9 +826,15 @@ def refresh_event_quest_relationships(quest: Quest) -> None:
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        quest: The Quest instance to update relationships for
+        quest (Quest): The Quest instance to update relationships for
+
+    Returns:
+        None
     """
+    # Get the current quest relationship data
     quest_data = get_event_quest_rels(quest)
+
+    # Update the cache with the new quest data
     update_cache_section(quest.event_id, "quests", quest.id, quest_data)
 
 
@@ -650,67 +845,139 @@ def refresh_event_questtype_relationships(questtype: QuestType) -> None:
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        questtype: The QuestType instance to update relationships for
+        questtype (QuestType): The QuestType instance to update relationships for.
+
+    Returns:
+        None
     """
+    # Get the current questtype relationship data from the database
     questtype_data = get_event_questtype_rels(questtype)
+
+    # Update the cache with the refreshed questtype data
     update_cache_section(questtype.event_id, "questtypes", questtype.id, questtype_data)
 
 
-def on_faction_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
+def on_faction_characters_m2m_changed(
+    sender: type, instance: Faction, action: str, pk_set: set[int] | None, **kwargs: dict
+) -> None:
     """Handle faction-character relationship changes.
 
     Updates both faction cache and character caches when relationships change.
+    This signal handler is triggered when characters are added to or removed
+    from a faction's characters many-to-many relationship.
 
     Args:
-        sender: The through model class
-        instance: The Faction instance
-        action: The type of change ('post_add', 'post_remove', 'post_clear', etc.)
-        pk_set: Set of primary keys of the Character objects
-        **kwargs: Additional keyword arguments from the signal
+        sender: The through model class that manages the M2M relationship
+        instance: The Faction instance whose relationships are changing
+        action: The type of change being performed on the relationship.
+            Common values include 'post_add', 'post_remove', 'post_clear'
+        pk_set: Set of primary keys of the Character objects being affected.
+            May be None for certain actions like 'post_clear'
+        **kwargs: Additional keyword arguments passed by the Django signal system
+
+    Returns:
+        None
+
+    Note:
+        This function delegates the actual cache update logic to the generic
+        update_m2m_related_characters helper function.
     """
+    # Delegate to the generic M2M character update handler
+    # This will handle cache invalidation for both the faction and related characters
     update_m2m_related_characters(instance, pk_set, action, refresh_event_faction_relationships)
 
 
-def on_plot_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
+def on_plot_characters_m2m_changed(
+    sender: type, instance: "Plot", action: str, pk_set: set[int] | None, **kwargs
+) -> None:
     """Handle plot-character relationship changes.
 
     Updates both plot cache and character caches when relationships change.
+    This signal handler is triggered when characters are added, removed, or
+    cleared from a plot's character relationships.
 
-    Args:
-        sender: The through model class (PlotCharacterRel)
-        instance: The Plot instance
-        action: The type of change ('post_add', 'post_remove', 'post_clear', etc.)
-        pk_set: Set of primary keys of the Character objects
-        **kwargs: Additional keyword arguments from the signal
+    Parameters
+    ----------
+    sender : type
+        The through model class (PlotCharacterRel)
+    instance : Plot
+        The Plot instance whose relationships are changing
+    action : str
+        The type of change ('post_add', 'post_remove', 'post_clear', etc.)
+    pk_set : set[int] | None
+        Set of primary keys of the Character objects being modified
+    **kwargs
+        Additional keyword arguments from the signal
+
+    Returns
+    -------
+    None
     """
+    # Delegate to the generic M2M relationship handler for character updates
+    # This ensures both plot and character caches are properly invalidated
     update_m2m_related_characters(instance, pk_set, action, refresh_event_plot_relationships)
 
 
-def on_speedlarp_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
+def on_speedlarp_characters_m2m_changed(
+    sender: type, instance: "SpeedLarp", action: str, pk_set: set[int] | None, **kwargs
+) -> None:
     """Handle speedlarp-character relationship changes.
 
     Updates both speedlarp cache and character caches when relationships change.
+    This signal handler is triggered when characters are added, removed, or cleared
+    from a speedlarp's character relationships.
 
     Args:
-        sender: The through model class
-        instance: The SpeedLarp instance
-        action: The type of change ('post_add', 'post_remove', 'post_clear', etc.)
-        pk_set: Set of primary keys of the Character objects
-        **kwargs: Additional keyword arguments from the signal
+        sender: The through model class for the many-to-many relationship
+        instance: The SpeedLarp instance whose relationships are changing
+        action: The type of change being performed on the relationship.
+            Common values include 'post_add', 'post_remove', 'post_clear'
+        pk_set: Set of primary keys of the Character objects being affected.
+            May be None for actions like 'post_clear'
+        **kwargs: Additional keyword arguments passed by Django's m2m_changed signal
+
+    Returns:
+        None
+
+    Note:
+        This function delegates the actual cache update logic to the generic
+        update_m2m_related_characters function with the speedlarp-specific
+        refresh callback.
     """
+    # Delegate to the generic M2M relationship handler with speedlarp-specific refresh function
     update_m2m_related_characters(instance, pk_set, action, refresh_event_speedlarp_relationships)
 
 
-def on_prologue_characters_m2m_changed(sender, instance, action, pk_set, **kwargs):
+def on_prologue_characters_m2m_changed(
+    sender: type, instance: Prologue, action: str, pk_set: set[int] | None, **kwargs
+) -> None:
     """Handle prologue-character relationship changes.
 
     Updates both prologue cache and character caches when relationships change.
+    This signal handler is triggered when characters are added, removed, or cleared
+    from a prologue's character relationships.
 
-    Args:
-        sender: The through model class
-        instance: The Prologue instance
-        action: The type of change ('post_add', 'post_remove', 'post_clear', etc.)
-        pk_set: Set of primary keys of the Character objects
-        **kwargs: Additional keyword arguments from the signal
+    Parameters
+    ----------
+    sender : type
+        The through model class for the many-to-many relationship
+    instance : Prologue
+        The Prologue instance whose relationships are changing
+    action : str
+        The type of change being performed:
+        - 'post_add': Characters were added to the prologue
+        - 'post_remove': Characters were removed from the prologue
+        - 'post_clear': All characters were cleared from the prologue
+    pk_set : set[int] | None
+        Set of primary keys of the Character objects being affected.
+        None when action is 'post_clear'
+    **kwargs
+        Additional keyword arguments passed by Django's m2m_changed signal
+
+    Returns
+    -------
+    None
     """
+    # Delegate to utility function that handles m2m relationship cache updates
+    # This ensures consistent cache invalidation for both prologue and character caches
     update_m2m_related_characters(instance, pk_set, action, refresh_event_prologue_relationships)

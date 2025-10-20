@@ -24,6 +24,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.button import get_event_button_cache
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
@@ -127,15 +128,15 @@ def init_cache_config_run(run) -> dict:
     # Initialize base context with buttons and core display settings
     ctx = {
         "buttons": get_event_button_cache(run.event_id),
-        "limitations": run.event.get_config("show_limitations", False),
-        "user_character_max": run.event.get_config("user_character_max", 0),
-        "cover_orig": run.event.get_config("cover_orig", False),
-        "px_user": run.event.get_config("px_user", False),
     }
+    ctx["limitations"] = get_event_config(run.event_id, "show_limitations", False, ctx)
+    ctx["user_character_max"] = get_event_config(run.event_id, "user_character_max", 0, ctx)
+    ctx["cover_orig"] = get_event_config(run.event_id, "cover_orig", False, ctx)
+    ctx["px_user"] = get_event_config(run.event_id, "px_user", False, ctx)
 
     # Handle parent event inheritance for px_user setting
     if run.event.parent:
-        ctx["px_user"] = run.event.parent.get_config("px_user", False)
+        ctx["px_user"] = get_event_config(run.event.parent.id, "px_user", False, ctx)
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()

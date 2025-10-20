@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from calmjs.parse.asttypes import Object
 from django.db.models import Sum
 
 from larpmanager.cache.config import get_assoc_config
@@ -65,9 +64,9 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     # Retrieve VAT rates from association configuration
     # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
-    config_holder = Object()
-    _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, config_holder)) / 100.0
-    _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, config_holder)) / 100.0
+    ctx = {}
+    _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, ctx=ctx)) / 100.0
+    _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, ctx=ctx)) / 100.0
 
     # Calculate total ticket cost including both base price and custom amounts
     ticket_total = 0
@@ -96,19 +95,27 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 
-def get_previous_sum(aip, typ):
+def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
     """Calculate sum of previous accounting items for the same member and run.
 
+    Computes the total value of all accounting items of the specified type
+    that were created before the given reference item, for the same member
+    and run combination.
+
     Args:
-        aip: AccountingItemPayment instance for reference
-        typ: Model class (AccountingItemPayment or AccountingItemTransaction)
+        aip: AccountingItemPayment instance used as reference point for
+            filtering by member, run, and creation timestamp
+        typ: Model class to query (AccountingItemPayment or AccountingItemTransaction)
 
     Returns:
-        int: Sum of values from previous items, or 0 if none found
+        Sum of values from previous items matching the criteria, or 0 if none found
+
+    Example:
+        >>> previous_total = get_previous_sum(payment_item, AccountingItemPayment)
+        >>> print(f"Previous payments total: {previous_total}")
     """
-    return (
-        typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created).aggregate(
-            total=Sum("value")
-        )["total"]
-        or 0
-    )
+    # Filter items by same member and run, created before reference item
+    queryset = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
+
+    # Aggregate the sum of values and return 0 if no items found
+    return queryset.aggregate(total=Sum("value"))["total"] or 0

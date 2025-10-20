@@ -48,29 +48,47 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         abstract = True
         ordering = ["-updated"]
 
-    def upd_js_attr(self, js, nm):
+    def upd_js_attr(self, js: dict, nm: str) -> dict:
         """Update JavaScript object with model attribute value.
 
+        Retrieves the value of the specified attribute from the model instance
+        and adds it to the provided JavaScript object dictionary.
+
         Args:
-            js (dict): JavaScript object to update
-            nm (str): Attribute name to get and set
+            js: JavaScript object dictionary to update
+            nm: Name of the model attribute to retrieve and add
 
         Returns:
-            dict: Updated JavaScript object
+            Updated JavaScript object dictionary with the new attribute
+
+        Example:
+            >>> obj.upd_js_attr({'existing': 'value'}, 'name')
+            {'existing': 'value', 'name': 'John'}
         """
+        # Get attribute value from model instance and add to JS object
         js[nm] = get_attr(self, nm)
         return js
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return string representation of the model.
 
+        Returns string representation based on model attributes in order of preference:
+        1. 'name' attribute if present
+        2. 'search' attribute if present and truthy
+        3. Parent class string representation as fallback
+
         Returns:
-            str: Model name, search field, or default string representation
+            str: Model name, search field, or default string representation.
         """
+        # Check for 'name' attribute first - most common display field
         if hasattr(self, "name"):
             return self.name
+
+        # Fall back to 'search' attribute if it exists and has a value
         if hasattr(self, "search") and self.search:
             return self.search
+
+        # Use parent class implementation as final fallback
         return super().__str__()
 
     def get_absolute_url(self):
@@ -92,27 +110,50 @@ class BaseModel(CloneMixin, SafeDeleteModel):
             return self.text[:100]
         return ""
 
-    def as_dict(self, many_to_many=True):
+    def as_dict(self, many_to_many: bool = True) -> dict[str, any]:
         """Convert model instance to dictionary representation.
 
+        This method serializes a Django model instance into a dictionary format,
+        optionally including many-to-many relationship data as lists of IDs.
+
         Args:
-            many_to_many (bool): Whether to include many-to-many relationships
+            many_to_many: Whether to include many-to-many relationships in the
+                output dictionary. Defaults to True.
 
         Returns:
-            dict: Dictionary with field names as keys and values as data
+            A dictionary with field names as keys and field values as data.
+            Many-to-many fields are represented as lists of related object IDs.
+
+        Example:
+            >>> instance = MyModel.objects.get(id=1)
+            >>> data = instance.as_dict()
+            >>> print(data)
+            {'id': 1, 'name': 'example', 'tags': [1, 2, 3]}
         """
+        # Get model metadata for field introspection
         # noinspection PyUnresolvedReferences
         opts = self._meta
         data = {}
+
+        # Process concrete and private fields (standard model fields)
+        # Extract field values using Django's field value accessor
         for f in chain(opts.concrete_fields, opts.private_fields):
             v = f.value_from_object(self)
+            # Only include fields with truthy values to keep dict clean
             if v:
                 data[f.name] = v
+
+        # Process many-to-many relationships if requested
         if many_to_many:
+            # Iterate through all many-to-many field definitions
             for f in opts.many_to_many:
+                # Extract IDs from related objects for serialization
+                # Convert queryset to list of primary key values
                 d = [i.id for i in f.value_from_object(self)]
+                # Only include non-empty relationship lists
                 if len(d) > 0:
                     data[f.name] = d
+
         return data
 
 

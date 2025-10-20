@@ -19,28 +19,42 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.conf import settings as conf_settings
+from django.http import HttpRequest
 
 
-def cache_association(request):
+def cache_association(request: HttpRequest) -> dict:
     """Cache association context for template rendering.
 
     Prepares association-specific context including interface settings,
-    staging environment flags, and language options.
+    staging environment flags, and language options for Django templates.
 
     Args:
-        request: Django HTTP request with association context
+        request: Django HTTP request object containing association context
+                and environment information
 
     Returns:
-        dict: Context dictionary with association and environment data
+        dict: Context dictionary containing:
+            - assoc: Association object if present in request
+            - staging: Flag (1) if environment is staging
+            - languages: Available language options if user has no member
+            - google_tag: Google Analytics tag ID from settings
+            - hotjar_siteid: Hotjar site ID from settings
     """
     ctx = {}
+
+    # Add association object if available in request
     if hasattr(request, "assoc"):
         ctx["assoc"] = request.assoc
+
+    # Set staging flag for staging environment
     if request.enviro == "staging":
         ctx["staging"] = 1
+
+    # Add language options for users without member association
     if not hasattr(request, "user") or not hasattr(request.user, "member"):
         ctx["languages"] = conf_settings.LANGUAGES
 
+    # Add tracking and analytics configuration
     ctx["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
     ctx["hotjar_siteid"] = getattr(conf_settings, "HOTJAR_SITEID", None)
 

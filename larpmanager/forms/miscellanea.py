@@ -78,17 +78,21 @@ class SendMailForm(forms.Form):
     def __init__(self, *args: object, **kwargs: object) -> None:
         """Initialize the form with show_link configuration.
 
+        Initializes the parent form class and configures specific fields to be
+        displayed as clickable links in the form interface.
+
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
 
         Returns:
-            None
+            None: This method doesn't return a value.
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
         # Configure fields that should display as links in the form
+        # These fields will be rendered as clickable links rather than standard form inputs
         self.show_link = ["id_reply_to", "id_raw"]
 
 
@@ -307,17 +311,26 @@ class OrganizerCastingOptionsForm(forms.Form):
 
             self.fields["factions"].initial = [str(el[0]) for el in factions]
 
-    def get_data(self):
+    def get_data(self) -> dict[str, list]:
         """Get form data, either cleaned or initial values.
 
+        Retrieves form data from cleaned_data if available (after validation),
+        otherwise falls back to initial field values converted to lists.
+
         Returns:
-            dict: Form data with field names as keys and values as lists
+            dict[str, list]: Form data with field names as keys and values as lists.
+                Keys are field names, values are lists containing field data.
         """
+        # Return cleaned data if form has been validated
         if hasattr(self, "cleaned_data"):
             return self.cleaned_data
+
+        # Build dictionary from initial field values
         dic = {}
         for key in self.fields:
+            # Convert initial values to list format for consistency
             dic[key] = list(self.fields[key].initial)
+
         return dic
 
 
@@ -413,19 +426,28 @@ class OrgaCopyForm(forms.Form):
         )
 
 
-def unique_util_cod():
+def unique_util_cod() -> str:
     """Generate a unique utility code for new Util instances.
 
+    Attempts to generate a unique 16-character code by checking against existing
+    Util objects in the database. Will retry up to 5 times before raising an error.
+
     Returns:
-        str: Unique 16-character code
+        str: A unique 16-character alphanumeric code that doesn't exist in the database.
 
     Raises:
-        ValueError: If unable to generate unique code after 5 attempts
+        ValueError: If unable to generate a unique code after 5 attempts.
     """
+    # Attempt to generate a unique code up to 5 times
     for _idx in range(5):
+        # Generate a new 16-character code
         cod = generate_id(16)
+
+        # Check if this code already exists in the database
         if not Util.objects.filter(cod=cod).exists():
             return cod
+
+    # If all attempts failed, raise an error
     raise ValueError("Too many attempts to generate the code")
 
 

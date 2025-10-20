@@ -24,7 +24,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
@@ -195,28 +195,28 @@ def exe_pre_registrations(request) -> HttpResponse:
     ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
     # Iterate through all non-template events for this association
-    for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
+    for event in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
         # Skip events that don't have pre-registration active
-        if not r.get_config("pre_register_active", False):
+        if not get_event_config(event.id, "pre_register_active", False):
             continue
 
         # Get pre-registration data for current event
-        pr = get_pre_registration(r)
+        pr = get_pre_registration(event)
 
         if ctx["preferences"]:
             # Process preference-based registration counts (1-5 scale)
-            r.count = {}
+            event.count = {}
             for idx in range(1, 6):
-                r.count[idx] = 0
+                event.count[idx] = 0
                 # Set actual count if preference level exists in data
                 if idx in pr:
-                    r.count[idx] = pr[idx]
+                    event.count[idx] = pr[idx]
         else:
             # Use simple total count for non-preference based systems
-            r.total = len(pr["list"])
+            event.total = len(pr["list"])
 
         # Add processed event to results list
-        ctx["list"].append(r)
+        ctx["list"].append(event)
 
     return render(request, "larpmanager/exe/pre_registrations.html", ctx)
 

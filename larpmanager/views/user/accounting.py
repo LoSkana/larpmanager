@@ -20,13 +20,13 @@
 
 import logging
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, Union
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -84,61 +84,104 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def accounting(request):
+def accounting(request: HttpRequest) -> HttpResponse:
     """Display user accounting information including balances and payment status.
 
+    This view renders the user's accounting page showing their balance, payment history,
+    and status. If delegated members feature is enabled, it also displays accounting
+    information for all delegated members.
+
     Args:
-        request: HTTP request object from authenticated user
+        request: HTTP request object from authenticated user. Must contain an
+                authenticated user with associated member and organization.
 
     Returns:
-        HttpResponse: Rendered accounting page with balance, payments, and delegated member info
+        HttpResponse: Rendered accounting page template with context containing:
+            - User balance and payment information
+            - Delegated members' accounting data (if feature enabled)
+            - Organization terms and conditions
+            - Payment todo status flags
+
+    Note:
+        Redirects to home page if user has no associated organization (a_id == 0).
     """
+    # Initialize base context and check for valid association
     ctx = def_user_ctx(request)
     if ctx["a_id"] == 0:
         return redirect("home")
+
+    # Populate main user's accounting information
     info_accounting(request, ctx)
 
+    # Initialize delegated members tracking
     ctx["delegated_todo"] = False
+
+    # Process delegated members if feature is enabled
     if "delegated_members" in request.assoc["features"]:
+        # Get all members delegated to current user
         ctx["delegated"] = Member.objects.filter(parent=request.user.member)
+
+        # Process accounting info for each delegated member
         for el in ctx["delegated"]:
             del_ctx = {"member": el, "a_id": ctx["a_id"]}
             info_accounting(request, del_ctx)
+
+            # Attach context to member object for template access
             el.ctx = del_ctx
+            # Track if any delegated member has pending payments
             ctx["delegated_todo"] = ctx["delegated_todo"] or del_ctx["payments_todo"]
 
+    # Load organization terms and conditions for display
     ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/member/accounting.html", ctx)
 
 
 @login_required
-def accounting_tokens(request):
+def accounting_tokens(request: HttpRequest) -> HttpResponse:
     """Display user's token accounting information including given and used tokens.
 
+    This view renders a page showing the authenticated user's token accounting
+    information, including tokens they have been given and tokens they have used
+    within their associated organization.
+
     Args:
-        request: HTTP request object from authenticated user
+        request (HttpRequest): HTTP request object from authenticated user
 
     Returns:
         HttpResponse: Rendered token accounting page with given/used token lists
+
+    Note:
+        Only shows non-hidden accounting items for the user's current association.
     """
+    # Initialize context with default user data
     ctx = def_user_ctx(request)
+
+    # Query for tokens given to the user (non-hidden, within current association)
+    given_tokens = AccountingItemOther.objects.filter(
+        member=ctx["member"],
+        hide=False,
+        oth=OtherChoices.TOKEN,
+        assoc_id=ctx["a_id"],
+    )
+
+    # Query for tokens used by the user (non-hidden, within current association)
+    used_tokens = AccountingItemPayment.objects.filter(
+        member=ctx["member"],
+        hide=False,
+        pay=PaymentChoices.TOKEN,
+        assoc_id=ctx["a_id"],
+    )
+
+    # Update context with token data
     ctx.update(
         {
-            "given": AccountingItemOther.objects.filter(
-                member=ctx["member"],
-                hide=False,
-                oth=OtherChoices.TOKEN,
-                assoc_id=ctx["a_id"],
-            ),
-            "used": AccountingItemPayment.objects.filter(
-                member=ctx["member"],
-                hide=False,
-                pay=PaymentChoices.TOKEN,
-                assoc_id=ctx["a_id"],
-            ),
+            "given": given_tokens,
+            "used": used_tokens,
         }
     )
+
+    # Render and return the token accounting template
     return render(request, "larpmanager/member/acc_tokens.html", ctx)
 
 
@@ -229,6 +272,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         # Process refund request form submission
         form = RefundRequestForm(request.POST, member=ctx["member"])
+
         if form.is_valid():
             # Save refund request with transaction safety
             with transaction.atomic():
@@ -294,6 +338,7 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
         result = calculate_fiscal_code(ctx["member"])
         # Redirect to profile if fiscal code has validation errors
         if "error_cf" in result:
+            # Redirect to profile page if fiscal code has errors
             messages.warning(
                 request, _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"]
             )
@@ -466,129 +511,255 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
 
 
 @login_required
-def acc_donate(request):
+def acc_donate(request: HttpRequest) -> HttpResponse:
+    """Handle donation form display and processing for authenticated users.
+
+    This view manages the donation workflow by displaying a donation form
+    and processing payment requests when the form is submitted.
+
+    Args:
+        request: The HTTP request object containing user data and form submission
+
+    Returns:
+        HttpResponse: Rendered donation page with form and context data
+
+    Raises:
+        PermissionDenied: If user lacks 'donate' feature access
+    """
+    # Check if user has permission to access donation feature
     check_assoc_feature(request, "donate")
+
+    # Initialize base context with user data and accounting visibility
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
+
+    # Process form submission for donation payment
     if request.method == "POST":
         form = DonateForm(request.POST, ctx=ctx)
         if form.is_valid():
+            # Generate payment form for valid donation request
             get_payment_form(request, form, PaymentType.DONATE, ctx)
     else:
+        # Display empty donation form for GET requests
         form = DonateForm(ctx=ctx)
+
+    # Add form and donation flag to template context
     ctx["form"] = form
     ctx["donate"] = 1
+
     return render(request, "larpmanager/member/acc_donate.html", ctx)
 
 
 @login_required
-def acc_collection(request):
+def acc_collection(request: HttpRequest) -> HttpResponse:
     """Handle member collection creation and payment processing.
 
+    This view function processes both GET and POST requests for creating
+    new collections. On GET, it displays an empty form. On POST, it validates
+    the form data and creates a new collection with the current user as organizer.
+
     Args:
-        request: HTTP request object
+        request (HttpRequest): The HTTP request object containing method,
+            POST data, user information, and association context.
 
     Returns:
-        HttpResponse: Rendered collection form template
+        HttpResponse: For GET requests, renders the collection form template.
+            For successful POST requests, redirects to collection management page.
+            For invalid POST requests, re-renders form with validation errors.
+
+    Raises:
+        DatabaseError: If the atomic transaction fails during collection creation.
     """
+    # Initialize context with user defaults and enable accounting display
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
+
     if request.method == "POST":
+        # Process form submission for new collection
         form = CollectionNewForm(request.POST)
+
         if form.is_valid():
+            # Create collection within atomic transaction to ensure data consistency
             with transaction.atomic():
                 p = form.save(commit=False)
                 p.organizer = request.user.member
                 p.assoc_id = request.assoc["id"]
                 p.save()
+
+            # Show success message and redirect to collection management
             messages.success(request, _("The collection has been activated!"))
             return redirect("acc_collection_manage", s=p.contribute_code)
     else:
+        # Initialize empty form for GET request
         form = CollectionNewForm()
+
+    # Add form to context and render template
     ctx["form"] = form
     return render(request, "larpmanager/member/acc_collection.html", ctx)
 
 
 @login_required
-def acc_collection_manage(request, s):
+def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Manage accounting collection for the authenticated user.
+
+    Args:
+        request: HTTP request object containing user and association data
+        s: Collection identifier string
+
+    Returns:
+        HttpResponse: Rendered template with collection management interface
+
+    Raises:
+        Http404: If the collection doesn't belong to the requesting user
+    """
+    # Retrieve the collection the user participates in
     c = get_collection_partecipate(request, s)
+
+    # Verify user ownership of the collection
     if request.user.member != c.organizer:
         raise Http404("Collection not yours")
+
+    # Initialize base user context and enable accounting display
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
+
+    # Add collection data and filtered accounting items to context
     ctx.update(
         {
             "coll": c,
             "list": AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"]),
         }
     )
+
+    # Render and return the collection management template
     return render(request, "larpmanager/member/acc_collection_manage.html", ctx)
 
 
 @login_required
-def acc_collection_participate(request, s):
+def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle user participation in a collection payment process.
+
+    Args:
+        request: The HTTP request object containing user session and POST data
+        s: String identifier for the collection to participate in
+
+    Returns:
+        HttpResponse: Rendered template with collection participation form
+
+    Raises:
+        Http404: When the collection is not in OPEN status
+    """
+    # Get the collection object and verify user permissions
     c = get_collection_partecipate(request, s)
+
+    # Initialize base context with user data and accounting flag
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
+
+    # Validate collection is open for participation
     if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
+    # Handle form submission for collection participation
     if request.method == "POST":
         form = CollectionForm(request.POST, ctx=ctx)
+        # Process valid form and setup payment gateway
         if form.is_valid():
             get_payment_form(request, form, PaymentType.COLLECTION, ctx)
     else:
+        # Initialize empty form for GET requests
         form = CollectionForm(ctx=ctx)
+
+    # Add form to context and render participation template
     ctx["form"] = form
     return render(request, "larpmanager/member/acc_collection_participate.html", ctx)
 
 
 @login_required
-def acc_collection_close(request, s):
+def acc_collection_close(request: HttpRequest, s: str) -> HttpResponse:
+    """Close an open collection by changing its status to DONE.
+
+    Args:
+        request: The HTTP request object containing user information
+        s: The collection identifier/slug
+
+    Returns:
+        HttpResponse: Redirect to the collection management page
+
+    Raises:
+        Http404: If collection doesn't belong to user or isn't open
+    """
+    # Get the collection the user participates in
     c = get_collection_partecipate(request, s)
+
+    # Verify the current user is the organizer of this collection
     if request.user.member != c.organizer:
         raise Http404("Collection not yours")
+
+    # Ensure the collection is in an open state before closing
     if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
+    # Atomically update the collection status to prevent race conditions
     with transaction.atomic():
         c.status = CollectionStatus.DONE
         c.save()
 
+    # Notify user of successful closure and redirect to management page
     messages.success(request, _("Collection closed"))
     return redirect("acc_collection_manage", s=s)
 
 
 @login_required
-def acc_collection_redeem(request, s):
+def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRedirect, HttpResponse]:
     """Handle redemption of completed accounting collections.
 
+    This function allows users to redeem completed accounting collections by changing
+    their status from DONE to PAYED and assigning them to the requesting user.
+
     Args:
-        request: HTTP request object
-        s: Collection slug identifier
+        request: The HTTP request object containing user and method information
+        s: The collection slug identifier used to retrieve the specific collection
 
     Returns:
-        Redirect to home on POST success or rendered redemption template
+        HttpResponseRedirect: Redirects to home page after successful POST redemption
+        HttpResponse: Rendered template with collection details for GET requests
+
+    Raises:
+        Http404: If the collection is not found or status is not DONE
     """
+    # Get the collection using the provided slug and validate access
     c = get_collection_redeem(request, s)
+
+    # Initialize the context with default user context and accounting flag
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
+
+    # Verify collection is in the correct status for redemption
     if c.status != CollectionStatus.DONE:
         raise Http404("Collection not found")
 
+    # Handle POST request for collection redemption
     if request.method == "POST":
+        # Use atomic transaction to ensure data consistency
         with transaction.atomic():
             c.member = request.user.member
             c.status = CollectionStatus.PAYED
             c.save()
+
+        # Display success message and redirect to home
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
 
+    # For GET requests, prepare collection items list for display
     ctx["list"] = AccountingItemCollection.objects.filter(
         collection=c, collection__assoc_id=request.assoc["id"]
     ).select_related("member", "collection")
+
+    # Render the redemption template with collection data
     return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
 
 
@@ -642,18 +813,34 @@ def acc_cancelled(request):
     return redirect("accounting")
 
 
-def acc_profile_check(request, mes, inv):
-    # check if profile is compiled
+def acc_profile_check(request: HttpRequest, mes: str, inv) -> HttpResponse:
+    """Check if user profile is compiled and redirect appropriately.
+
+    Validates that the user's membership profile is complete. If not compiled,
+    adds a message prompting profile completion and redirects to profile page.
+    Otherwise, displays success message and redirects to accounting page.
+
+    Args:
+        request: Django HTTP request object containing user information
+        mes: Success message string to display to user
+        inv: Invoice object for accounting redirect
+
+    Returns:
+        HttpResponse: Redirect to either profile page or accounting page
+    """
+    # Get current user's member object and membership for this association
     member = request.user.member
     mb = get_user_membership(member, request.assoc["id"])
 
+    # Check if membership profile has been completed
     if not mb.compiled:
+        # Add profile completion prompt to message and redirect to profile
         mes += " " + _("As a final step, we ask you to complete your profile") + "."
         messages.success(request, mes)
         return redirect("profile")
 
+    # Profile is complete - show success message and proceed to accounting
     messages.success(request, mes)
-
     return acc_redirect(inv)
 
 
@@ -665,16 +852,35 @@ def acc_redirect(inv):
 
 
 @login_required
-def acc_payed(request, p=0):
+def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
+    """Handle payment completion and redirect to profile check.
+
+    Args:
+        request: The HTTP request object containing user and association data
+        p: Payment invoice primary key. If 0, no specific invoice is processed
+
+    Returns:
+        HttpResponse from acc_profile_check with success message and invoice
+
+    Raises:
+        Http404: If payment invoice with given pk doesn't exist or doesn't belong to user
+    """
+    # Check if a specific payment invoice ID was provided
     if p:
         try:
+            # Retrieve the payment invoice for the current user and association
             inv = PaymentInvoice.objects.get(pk=p, member=request.user.member, assoc_id=request.assoc["id"])
         except Exception as err:
+            # Raise 404 if invoice not found or access denied
             raise Http404("eeeehm") from err
     else:
+        # No specific invoice to process
         inv = None
 
+    # Set success message for payment completion
     mes = _("You have completed the payment!")
+
+    # Redirect to profile check with success message and invoice
     return acc_profile_check(request, mes, inv)
 
 

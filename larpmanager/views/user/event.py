@@ -33,6 +33,7 @@ from larpmanager.cache.character import (
     get_event_cache_all,
     get_writing_element_fields,
 )
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
@@ -267,9 +268,9 @@ def home_json(request, lang="it"):
     runs = get_coming_runs(aid)
     already = []
     for run in runs:
-        if run.event.id not in already:
+        if run.event_id not in already:
             res.append(run.event.show())
-        already.append(run.event.id)
+        already.append(run.event_id)
     return JsonResponse({"res": res})
 
 
@@ -484,8 +485,8 @@ def check_gallery_visibility(request, ctx):
     if "manage" in ctx:
         return True
 
-    hide_signup = ctx["event"].get_config("gallery_hide_signup", False)
-    hide_login = ctx["event"].get_config("gallery_hide_login", False)
+    hide_signup = get_event_config(ctx["event"].id, "gallery_hide_signup", False, ctx)
+    hide_login = get_event_config(ctx["event"].id, "gallery_hide_login", False, ctx)
 
     if hide_login and not request.user.is_authenticated:
         ctx["hide_login"] = True
@@ -530,17 +531,17 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
     # Check if user has permission to view gallery content
     if check_gallery_visibility(request, ctx):
         # Load character cache if writing fields are visible or character display is forced
-        if not ctx["event"].get_config("writing_field_visibility", False) or ctx.get("show_character"):
+        if not get_event_config(ctx["event"].id, "writing_field_visibility", False, ctx) or ctx.get("show_character"):
             get_event_cache_all(ctx)
 
         # Check configuration for hiding uncasted players
-        hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
+        hide_uncasted_players = get_event_config(ctx["event"].id, "gallery_hide_uncasted_players", False, ctx)
         if not hide_uncasted_players:
             # Get registrations that have assigned characters
             que = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id)
 
             # Filter by character approval status if required
-            if ctx["event"].get_config("user_character_approval", False):
+            if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 

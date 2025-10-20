@@ -10,6 +10,16 @@ def get_function_length(node):
     return last_line - node.lineno + 1
 
 
+def has_docstring(node):
+    """Check if a function has a docstring."""
+    if not node.body:
+        return False
+    first_stmt = node.body[0]
+    return (isinstance(first_stmt, ast.Expr) and
+            isinstance(first_stmt.value, ast.Constant) and
+            isinstance(first_stmt.value.value, str))
+
+
 def analyze_file(filepath):
     with open(filepath, encoding="utf-8") as f:
         try:
@@ -19,8 +29,10 @@ def analyze_file(filepath):
     results = []
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            length = get_function_length(node)
-            results.append((node.name, filepath, length))
+            # Only include functions WITHOUT docstrings
+            if not has_docstring(node):
+                length = get_function_length(node)
+                results.append((node.name, filepath, length))
     return results
 
 

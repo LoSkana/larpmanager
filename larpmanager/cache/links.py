@@ -28,7 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
 
@@ -123,18 +123,31 @@ def cache_event_links(request: HttpRequest) -> dict:
     return ctx
 
 
-def clear_run_event_links_cache(event):
+def clear_run_event_links_cache(event: Event) -> None:
     """Reset event link cache for all users with roles in the event.
 
-    Args:
-        event: Event instance to reset links for
+    This function clears the cached event links for three categories of users:
+    1. All members with roles in the specific event
+    2. Association executives (role number 1) for the event's association
+    3. All superusers in the system
 
-    Side effects:
-        Clears link cache for event role members, association executives, and superusers
+    Args:
+        event: Event instance to reset links for. Must have assoc_id attribute.
+
+    Returns:
+        None
+
+    Side Effects:
+        Clears link cache entries via reset_event_links() for all relevant users.
+        May perform multiple database queries to fetch role memberships.
     """
+    # Clear cache for all members with roles in this specific event
     for er in EventRole.objects.filter(event=event).prefetch_related("members"):
         for mb in er.members.all():
             reset_event_links(mb.id, event.assoc_id)
+
+    # Clear cache for association executives (role number 1)
+    # These users typically have access to all events in the association
     try:
         ar = AssocRole.objects.prefetch_related("members").get(assoc_id=event.assoc_id, number=1)
         for mb in ar.members.all():
@@ -142,47 +155,76 @@ def clear_run_event_links_cache(event):
     except ObjectDoesNotExist:
         pass
 
+    # Clear cache for all superusers since they have global access
     superusers = User.objects.filter(is_superuser=True)
     for user in superusers:
         reset_event_links(user.member.id, event.assoc_id)
 
 
-def on_registration_post_save_reset_event_links(instance):
+def on_registration_post_save_reset_event_links(instance: Registration) -> None:
     """Handle registration post-save event link reset.
+
+    This function is triggered after a Registration model instance is saved.
+    It clears the cached event links for the registered member to ensure
+    fresh data is displayed after registration changes.
 
     Args:
         instance: Registration instance that was saved
 
-    Side effects:
-        Clears event link cache for the registered member
+    Returns:
+        None
+
+    Side Effects:
+        Clears event link cache for the registered member's user and associated event
     """
+    # Early return if no member is associated with the registration
     if not instance.member:
         return
 
+    # Reset cached event links for the member's user and event association
     reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
 
 
-def reset_event_links(uid, aid):
+def reset_event_links(uid: int, aid: int) -> None:
     """Clear event link cache for a specific user and association.
 
-    Args:
-        uid (int): User ID
-        aid (int): Association ID
-
-    Side effects:
-        Removes cached event links from cache
-    """
-    cache.delete(get_cache_event_key(uid, aid))
-
-
-def get_cache_event_key(uid, aid):
-    """Generate cache key for user event links.
+    This function removes cached event links from the cache system to ensure
+    fresh data is loaded on the next request.
 
     Args:
-        uid (int): User ID
-        aid (int): Association ID
+        uid: User ID to clear cache for
+        aid: Association ID to clear cache for
 
     Returns:
-        str: Cache key for user event links
+        None
+
+    Side Effects:
+        Removes cached event links from the cache system using the generated
+        cache key for the specified user and association combination.
     """
+    # Generate cache key for the specific user-association combination
+    cache_key = get_cache_event_key(uid, aid)
+
+    # Remove the cached event links from cache
+    cache.delete(cache_key)
+
+
+def get_cache_event_key(uid: int, aid: int) -> str:
+    """Generate cache key for user event links.
+
+    Creates a unique cache key string for storing user-specific event links
+    based on user ID and association ID combination.
+
+    Args:
+        uid: User ID for cache key generation
+        aid: Association ID for cache key generation
+
+    Returns:
+        Formatted cache key string for user event links storage
+
+    Example:
+        >>> get_cache_event_key(123, 456)
+        'ctx_event_links_123_456'
+    """
+    # Generate cache key using user and association IDs
     return f"ctx_event_links_{uid}_{aid}"

@@ -124,16 +124,36 @@ class Operations:
     SET_CHAR_ASSIGNED = 16
 
 
-def exec_bulk(request, ctx, mapping):
+def exec_bulk(request: HttpRequest, ctx: dict, mapping: dict) -> JsonResponse:
+    """Execute bulk operations on a collection of objects.
+
+    Args:
+        request: HTTP request object containing bulk operation parameters
+        ctx: Context dictionary with operation-specific data
+        mapping: Dictionary mapping operation names to their handler functions
+
+    Returns:
+        JsonResponse: Success response with "ok" status or error response with
+        appropriate error message and HTTP status code
+
+    Raises:
+        ObjectDoesNotExist: When target objects for the operation are not found
+    """
+    # Extract bulk operation parameters from request
     ids, operation, target = _get_bulk_params(request, ctx)
+
+    # Validate that the requested operation is supported
     if operation not in mapping:
         return JsonResponse({"error": "unknow operation"}, status=400)
 
     try:
+        # Execute the bulk operation using the mapped handler function
         mapping[operation](request, ctx, target, ids)
     except ObjectDoesNotExist:
+        # Handle case where target objects don't exist
         return JsonResponse({"error": "not found"}, status=400)
 
+    # Return success response
     return JsonResponse({"res": "ok"})
 
 
@@ -156,26 +176,37 @@ def exec_move_item_box(request, ctx, target, ids):
     WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).update(container=container)
 
 
-def handle_bulk_items(request, ctx):
+def handle_bulk_items(request: HttpRequest, ctx: dict) -> None:
     """Handle bulk operations on warehouse items.
 
+    This function processes bulk operations for warehouse items including adding/removing
+    tags and moving items between containers. For POST requests, it executes the
+    specified bulk operation. For GET requests, it populates the context with available
+    bulk operation choices.
+
     Args:
-        request: HTTP request object containing operation data
+        request: HTTP request object containing operation data and association info
         ctx: Context dictionary to update with bulk operation choices
 
     Raises:
-        ReturnNowError: If POST request processed successfully
+        ReturnNowError: If POST request processed successfully with operation results
     """
     if request.POST:
+        # Define mapping of operation types to their execution functions
         mapping = {
             Operations.ADD_ITEM_TAG: exec_add_item_tag,
             Operations.DEL_ITEM_TAG: exec_del_item_tag,
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
+        # Execute the bulk operation and raise ReturnNowError with results
         raise ReturnNowError(exec_bulk(request, ctx, mapping))
 
+    # Fetch available containers for the current association
     containers = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
+    # Fetch available tags for the current association
     tags = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
+
+    # Populate context with bulk operation choices and their associated objects
     ctx["bulk"] = [
         {"idx": Operations.MOVE_ITEM_BOX, "label": _("Move to container"), "objs": containers},
         {"idx": Operations.ADD_ITEM_TAG, "label": _("Add tag"), "objs": tags},

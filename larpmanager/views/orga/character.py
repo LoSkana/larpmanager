@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
@@ -123,8 +124,8 @@ def orga_characters(request, s):
 
     get_event_cache_all(ctx)
     for config_name in ["user_character_approval", "writing_external_access"]:
-        ctx[config_name] = ctx["event"].get_config(config_name, False)
-    if ctx["event"].get_config("show_export", False):
+        ctx[config_name] = get_event_config(ctx["event"].id, config_name, False, ctx)
+    if get_event_config(ctx["event"].id, "show_export", False, ctx):
         ctx["export"] = "character"
 
     return writing_list(request, ctx, Character, "character")
@@ -469,7 +470,7 @@ def orga_writing_form(request: HttpRequest, s: str, typ: str) -> HttpResponse:
         el.options_list = el.options.order_by("order")
 
     # Set approval configuration and status flags for template rendering
-    ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
+    ctx["approval"] = get_event_config(ctx["event"].id, "user_character_approval", False, ctx)
     ctx["status"] = "user_character" in ctx["features"] and typ.lower() == "character"
 
     return render(request, "larpmanager/orga/characters/form.html", ctx)

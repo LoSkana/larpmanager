@@ -115,27 +115,42 @@ def get_acc_detail(
     return dc
 
 
-def get_acc_reg_type(el):
+def get_acc_reg_type(el) -> tuple[str, str]:
     """Determine registration type for accounting categorization.
 
+    Analyzes a registration instance to categorize it for accounting purposes.
+    Returns appropriate type codes and display names based on cancellation status
+    and ticket tier information.
+
     Args:
-        el: Registration instance to categorize
+        el: Registration instance to categorize. Must have cancellation_date
+            and ticket attributes.
 
     Returns:
-        tuple: (type_code, display_name) for the registration type
+        tuple[str, str]: A tuple containing:
+            - type_code: Short code identifying the registration type
+            - display_name: Human-readable name for the registration type
     """
+    # Check if registration has been cancelled
     if el.cancellation_date:
         return "can", "Disdetta"
+
+    # Return empty values if no ticket is associated
     if not el.ticket:
         return "", ""
+
+    # Extract tier information from ticket and get display name
     return (
         el.ticket.tier,
         get_display_choice(TicketTier.choices, el.ticket.tier),
     )
 
 
-def get_acc_reg_detail(nm, run, descr):
+def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
     """Get detailed registration accounting breakdown by ticket tier.
+
+    Analyzes all non-cancelled registrations for a given run and provides
+    a comprehensive breakdown by ticket type, including totals and counts.
 
     Args:
         nm: Display name for the accounting category
@@ -143,35 +158,66 @@ def get_acc_reg_detail(nm, run, descr):
         descr: Description of the accounting category
 
     Returns:
-        dict: Breakdown of registrations by ticket tier with totals and counts
+        Dictionary containing:
+            - tot: Total amount across all registrations
+            - num: Total number of registrations
+            - detail: Breakdown by ticket type with individual totals/counts
+            - name: Display name passed as parameter
+            - descr: Description passed as parameter
     """
+    # Initialize result dictionary with base structure
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
-    for reg in Registration.objects.filter(run=run).select_related("ticket").filter(cancellation_date__isnull=True):
+
+    # Query all non-cancelled registrations for the run with ticket data
+    registrations = Registration.objects.filter(run=run).select_related("ticket").filter(cancellation_date__isnull=True)
+
+    # Process each registration to build breakdown by ticket type
+    for reg in registrations:
+        # Get ticket type and description for this registration
         (tp, descr) = get_acc_reg_type(reg)
+
+        # Initialize ticket type entry if not exists
         if tp not in dc["detail"]:
             dc["detail"][tp] = {"tot": 0, "num": 0, "name": descr}
+
+        # Update ticket type counters
         dc["detail"][tp]["num"] += 1
         dc["detail"][tp]["tot"] += reg.tot_iscr
 
+        # Update overall counters
         dc["num"] += 1
         dc["tot"] += reg.tot_iscr
+
     return dc
 
 
-def get_token_details(nm, run):
+def get_token_details(nm: str, run) -> dict:
     """Get token accounting details for a run.
 
+    Calculates the total value and count of accounting items for a specific run,
+    returning a summary dictionary with totals, counts, and metadata.
+
     Args:
-        nm: Display name for the token category
+        nm (str): Display name for the token category
         run: Run instance to get token details for
 
     Returns:
-        dict: Token totals and counts
+        dict: Dictionary containing:
+            - tot (int): Total value of all accounting items
+            - num (int): Number of accounting items
+            - detail (dict): Empty detail dictionary for future use
+            - name (str): Display name for the category
     """
+    # Initialize result dictionary with default values
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm}
+
+    # Iterate through all accounting items for the given run
     for a in AccountingItemOther.objects.filter(run=run):
+        # Increment item count
         dc["num"] += 1
+        # Add item value to total
         dc["tot"] += a.value
+
     return dc
 
 
@@ -348,31 +394,56 @@ def get_run_accounting(run: Run, ctx: dict, perform_update: bool = True) -> dict
     return dc
 
 
-def check_accounting(assoc_id):
+def check_accounting(assoc_id: int) -> None:
     """Perform association-wide accounting check and record results.
 
-    Args:
-        assoc_id: Association ID to check accounting for
+    This function executes an accounting verification for the specified association
+    and persists the calculated financial totals to the database.
 
-    Side effects:
-        Creates RecordAccounting entry with global and bank sums
+    Args:
+        assoc_id (int): The unique identifier of the association to check accounting for.
+
+    Returns:
+        None
+
+    Side Effects:
+        Creates a new RecordAccounting entry in the database containing the
+        calculated global_sum and bank_sum values for the association.
     """
+    # Initialize context dictionary with association ID for accounting calculation
     ctx = {"a_id": assoc_id}
+
+    # Execute association accounting calculation, populating ctx with financial sums
     assoc_accounting(ctx)
+
+    # Persist accounting results to database via RecordAccounting model
     RecordAccounting.objects.create(assoc_id=assoc_id, global_sum=ctx["global_sum"], bank_sum=ctx["bank_sum"])
 
 
-def check_run_accounting(run):
+def check_run_accounting(run: Run) -> None:
     """Perform run-specific accounting check and record results.
 
-    Args:
-        run: Run instance to check accounting for
+    This function performs accounting calculations for a specific run and records
+    the results in the database for audit purposes.
 
-    Side effects:
-        Updates run accounting and creates RecordAccounting entry
+    Args:
+        run: Run instance to check accounting for. Must have an associated event
+             with an organization (assoc).
+
+    Returns:
+        None
+
+    Side Effects:
+        - Updates run accounting calculations via get_run_accounting
+        - Creates a new RecordAccounting entry in the database
     """
+    # Perform accounting calculations and update run balance
     get_run_accounting(run, {})
+
+    # Log the accounting operation for debugging
     logger.debug(f"Recording accounting for run: {run}")
+
+    # Create audit record with current balance (bank_sum set to 0 as default)
     RecordAccounting.objects.create(assoc=run.event.assoc, run=run, global_sum=run.balance, bank_sum=0)
 
 

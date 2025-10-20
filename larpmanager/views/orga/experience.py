@@ -20,9 +20,11 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
     OrgaAbilityTypePxForm,
@@ -52,27 +54,41 @@ def orga_px_deliveries_edit(request, s, num):
 
 
 @login_required
-def orga_px_abilities(request, s):
+def orga_px_abilities(request: HttpRequest, s: str) -> HttpResponse:
     """Display and manage PX (experience) abilities for organizers.
 
+    This view handles the display of abilities available for purchase with experience points,
+    allowing organizers to manage the ability catalog for their events. It supports both
+    viewing the abilities list and exporting abilities data as a downloadable file.
+
     Args:
-        request: Django HTTP request object
-        s: Event slug identifier
+        request: Django HTTP request object containing user session and POST data
+        s: Event slug identifier used to identify the specific event
 
     Returns:
-        Rendered abilities management page or file export
+        HttpResponse: Rendered abilities management page template or file export response
+
+    Raises:
+        ReturnNowError: When file download is requested, triggers immediate file response
     """
+    # Check user permissions and retrieve event context
     ctx = check_event_permission(request, s, "orga_px_abilities")
 
+    # Handle file export request if download parameter is present
     if request.POST and request.POST.get("download") == "1":
         raise ReturnNowError(zip_exports(ctx, export_abilities(ctx), "Abilities"))
 
+    # Process any bulk ability operations from form submission
     handle_bulk_ability(request, ctx)
 
+    # Configure template context for file upload/download functionality
     ctx["upload"] = "px_abilities"
     ctx["download"] = 1
 
-    ctx["px_user"] = ctx["event"].get_config("px_user", False)
+    # Retrieve event configuration for user PX management permissions
+    ctx["px_user"] = get_event_config(ctx["event"].id, "px_user", False, ctx)
+
+    # Query and prepare abilities list with optimized database access
     ctx["list"] = (
         ctx["event"]
         .get_elements(AbilityPx)
@@ -80,6 +96,8 @@ def orga_px_abilities(request, s):
         .select_related("typ")
         .prefetch_related("requirements", "prerequisites")
     )
+
+    # Render the abilities management template with populated context
     return render(request, "larpmanager/orga/px/abilities.html", ctx)
 
 

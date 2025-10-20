@@ -25,11 +25,13 @@ from typing import Optional
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
+from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
-from larpmanager.models.event import Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
@@ -67,20 +69,30 @@ def get_event_cache_all_key(run):
     return f"event_factions_characters_{run.event.slug}_{run.number}"
 
 
-def init_event_cache_all(ctx):
+def init_event_cache_all(ctx: dict) -> dict:
     """Initialize complete event cache with characters, factions, and traits.
 
+    Builds a comprehensive cache for event data by sequentially loading
+    characters, factions, and conditionally traits based on available features.
+
     Args:
-        ctx: Context dictionary containing event and feature data
+        ctx: Context dictionary containing event and feature data.
+             Must include 'features' key for feature availability checks.
 
     Returns:
-        dict: Cached event data including characters, factions, and traits
+        dict: Cached event data including characters, factions, and
+              optionally traits if questbuilder feature is enabled.
     """
+    # Initialize empty result dictionary for cache storage
     res = {}
+
+    # Load character data into cache
     get_event_cache_characters(ctx, res)
 
+    # Load faction data into cache
     get_event_cache_factions(ctx, res)
 
+    # Conditionally load traits if questbuilder feature is available
     if "questbuilder" in ctx["features"]:
         get_event_cache_traits(ctx, res)
 
@@ -113,7 +125,7 @@ def get_event_cache_characters(ctx: dict, res: dict) -> dict:
         ctx["assignments"][el.character.number] = el
 
     # Get event configuration for hiding uncasted characters
-    hide_uncasted_characters = ctx["event"].get_config("gallery_hide_uncasted_characters", False)
+    hide_uncasted_characters = get_event_config(ctx["event"].id, "gallery_hide_uncasted_characters", False, ctx)
 
     # Get list of assigned character IDs for mirror filtering
     assigned_chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
@@ -258,6 +270,7 @@ def get_writing_element_fields(
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = str(question_id)
+        # Skip questions not marked as visible unless showing all
         if "show_all" not in ctx and config not in ctx[f"show_{feature_name}"]:
             continue
         question_visible.append(question_id)
@@ -265,6 +278,9 @@ def get_writing_element_fields(
     # Retrieve text answers for visible questions
     # Store direct text responses in fields dictionary
     fields = {}
+
+    # Retrieve text answers for visible questions
+    # Query WritingAnswer model for text-based responses
     que = WritingAnswer.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
@@ -273,6 +289,7 @@ def get_writing_element_fields(
     # Group multiple choice options into lists per question
     que = WritingChoice.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "option_id"):
+        # Initialize list if question not yet in fields
         if el[0] not in fields:
             fields[el[0]] = []
         fields[el[0]].append(el[1])
@@ -455,7 +472,7 @@ def reset_event_cache_all(run):
 
 
 def update_character_fields(instance, data):
-    features = get_event_features(instance.event.id)
+    features = get_event_features(instance.event_id)
     if "character" not in features:
         return
 
@@ -463,18 +480,42 @@ def update_character_fields(instance, data):
     data.update(get_character_element_fields(ctx, instance.pk, only_visible=False))
 
 
-def update_event_cache_all(run, instance):
+def update_event_cache_all(run: Run, instance: BaseModel) -> None:
+    """Update the event cache for all data based on the instance type.
+
+    This function updates cached event data by checking the instance type
+    and calling the appropriate update function. It handles Faction, Character,
+    and RegistrationCharacterRel instances.
+
+    Args:
+        run: The event run object containing event information
+        instance: The model instance that triggered the cache update
+
+    Returns:
+        None
+    """
+    # Get the cache key for the event and retrieve cached data
     k = get_event_cache_all_key(run)
     res = cache.get(k)
+
+    # Exit early if no cached data exists
     if res is None:
         return
+
+    # Update cache based on instance type - Faction updates
     if isinstance(instance, Faction):
         update_event_cache_all_faction(instance, res)
+
+    # Character updates include both character data and faction refresh
     if isinstance(instance, Character):
         update_event_cache_all_character(instance, res, run)
         get_event_cache_factions({"event": run.event}, res)
+
+    # Registration-character relationship updates
     if isinstance(instance, RegistrationCharacterRel):
         update_event_cache_all_character_reg(instance, res, run)
+
+    # Save the updated cache data with 1-day timeout
     cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
@@ -547,17 +588,30 @@ def on_character_factions_m2m_changed(sender, **kwargs):
     clear_event_cache_all_runs(instance.event)
 
 
-def on_faction_pre_save_update_cache(instance):
+def on_faction_pre_save_update_cache(instance: Faction) -> None:
+    """Handle faction pre-save signal to update related caches.
+
+    Clears or updates event caches based on which faction fields have changed.
+    For new factions or type changes, clears all event caches. For name/teaser
+    changes, updates caches with the modified faction data.
+
+    Args:
+        instance: The Faction instance being saved.
+    """
+    # Handle new faction creation - clear all event caches
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
         return
 
+    # Get the previous version from database for comparison
     prev = Faction.objects.get(pk=instance.pk)
 
+    # Check if faction type changed - requires full cache clear
     lst = ["typ"]
     if has_different_cache_values(instance, prev, lst):
         clear_event_cache_all_runs(instance.event)
 
+    # Check if display fields changed - update caches with new data
     lst = ["name", "teaser"]
     if has_different_cache_values(instance, prev, lst):
         update_event_cache_all_runs(instance.event, instance)

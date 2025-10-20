@@ -24,7 +24,6 @@ import random
 from datetime import date, datetime
 from uuid import uuid4
 
-from calmjs.parse.asttypes import Object
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login, user_logged_in
@@ -205,7 +204,7 @@ def profile(request):
 
     # Add vote configuration only if voting is enabled
     if "vote" in assoc_features:
-        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False)
+        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False, ctx)
 
     return render(request, "larpmanager/member/profile.html", ctx)
 
@@ -218,94 +217,169 @@ def load_profile(request, img, ext):
 
 
 @login_required
-def profile_upload(request):
+def profile_upload(request: HttpRequest) -> JsonResponse:
     """Handle profile image upload for authenticated users.
 
+    This function processes POST requests containing profile image uploads,
+    validates the uploaded file, saves it to storage with a unique filename,
+    and updates the user's member profile.
+
     Args:
-        request: HTTP request object containing POST data and uploaded image file
+        request (HttpRequest): HTTP request object containing POST data and
+            uploaded image file in the 'image' field.
 
     Returns:
-        JsonResponse: Success/failure status and image URL on success
+        JsonResponse: JSON response containing:
+            - "res": "ok" on success, "ko" on failure
+            - "src": URL of the uploaded image thumbnail on success
+
+    Note:
+        Requires authenticated user with associated member object.
+        Only accepts POST requests with valid image files.
     """
+    # Only accept POST requests
     if not request.method == "POST":
         return JsonResponse({"res": "ko"})
 
+    # Validate uploaded image using form
     form = AvatarForm(request.POST, request.FILES)
     if not form.is_valid():
         return JsonResponse({"res": "ko"})
 
+    # Extract image and file extension
     img = form.cleaned_data["image"]
     ext = img.name.split(".")[-1]
 
+    # Generate unique filename with member ID and UUID
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
+    # Save file to storage and get the actual path
     path = default_storage.save(n_path, ContentFile(img.read()))
 
+    # Update member profile with new image path
     request.user.member.profile = path
     request.user.member.save()
 
+    # Return success response with thumbnail URL
     return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
 
 
 @login_required
-def profile_rotate(request, n):
+def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
     """Rotate user's profile image 90 degrees clockwise or counterclockwise.
 
     Args:
-        request: Django HTTP request object
-        n: Rotation direction (1 for clockwise, other for counterclockwise)
+        request: Django HTTP request object containing authenticated user
+        n: Rotation direction indicator (1 for clockwise, any other value for counterclockwise)
 
     Returns:
-        JsonResponse with success/failure status and new image URL
+        JsonResponse: Contains status ('ok'/'ko') and optionally the new thumbnail URL
+            - Success: {"res": "ok", "src": "<thumbnail_url>"}
+            - Failure: {"res": "ko"}
+
+    Raises:
+        IOError: If image file cannot be opened or saved
+        AttributeError: If user has no associated member or profile
     """
+    # Get the current profile image path
     path = str(request.user.member.profile)
     if not path:
         return JsonResponse({"res": "ko"})
 
+    # Build full filesystem path and open image
     path = os.path.join(conf_settings.MEDIA_ROOT, path)
     im = Image.open(path)
+
+    # Rotate image based on direction parameter
     if n == 1:
-        out = im.rotate(90)
+        out = im.rotate(90)  # Clockwise rotation
     else:
-        out = im.rotate(-90)
+        out = im.rotate(-90)  # Counterclockwise rotation
 
+    # Extract file extension and generate new unique filename
     ext = path.split(".")[-1]
-
     n_path = f"{os.path.dirname(path)}/{request.user.member.pk}_{uuid4().hex}.{ext}"
-    out.save(n_path)
 
+    # Save rotated image and update member profile
+    out.save(n_path)
     request.user.member.profile = n_path
     request.user.member.save()
 
+    # Return success response with thumbnail URL
     return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
 
 
 @login_required
-def profile_privacy(request):
+def profile_privacy(request: HttpRequest) -> HttpResponse:
+    """Display user's privacy profile page with membership information.
+
+    Shows the user's privacy settings and their active memberships,
+    excluding empty and revoked memberships.
+
+    Args:
+        request: The HTTP request object containing user information.
+
+    Returns:
+        HttpResponse: Rendered privacy template with user context and memberships.
+    """
+    # Get default user context for the request
     ctx = def_user_ctx(request)
+
+    # Add member-specific data to context
     ctx.update(
         {
             "member": request.user.member,
+            # Get active memberships, excluding empty and revoked ones
             "joined": request.user.member.memberships.exclude(status=MembershipStatus.EMPTY).exclude(
                 status=MembershipStatus.REWOKED
             ),
         }
     )
+
+    # Render and return the privacy template with context
     return render(request, "larpmanager/member/privacy.html", ctx)
 
 
 @login_required
-def profile_privacy_rewoke(request, slug):
+def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
+    """
+    Revoke data sharing permission for a user's membership in an association.
+
+    Sets the membership status to EMPTY, effectively removing data sharing consent
+    for the user's membership in the specified association.
+
+    Args:
+        request: The HTTP request object containing user information
+        slug: The URL slug identifier for the association
+
+    Returns:
+        HttpResponse: Redirect to the profile_privacy page
+
+    Raises:
+        Http404: When association or membership is not found, or other errors occur
+    """
+    # Initialize context with default user data
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member})
+
     try:
+        # Retrieve the association by slug
         assoc = Association.objects.get(slug=slug)
+
+        # Get the user's membership for this association
         membership = Membership.objects.get(assoc=assoc, member=request.user.member)
+
+        # Revoke data sharing by setting status to EMPTY
         membership.status = MembershipStatus.EMPTY
         membership.save()
+
+        # Notify user of successful operation
         messages.success(request, _("Data share removed successfully") + "!")
     except Exception as err:
+        # Handle any errors by raising 404
         raise Http404("error in performing request") from err
+
+    # Redirect back to privacy settings page
     return redirect("profile_privacy")
 
 
@@ -579,23 +653,38 @@ def badge(request, n, p=1):
 
 
 @login_required
-def leaderboard(request, p=1):
+def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     """Display paginated leaderboard of members with badge scores.
 
+    This view renders a paginated leaderboard showing members ranked by their
+    badge scores. Requires the 'badge' feature to be enabled for the association.
+
     Args:
-        request: Django HTTP request object
-        p: Page number for pagination (default: 1)
+        request: Django HTTP request object containing user and association data
+        p: Page number for pagination, defaults to 1. Will be clamped to valid range.
 
     Returns:
-        Rendered leaderboard page with member rankings
+        HttpResponse: Rendered leaderboard page with member rankings and pagination
+
+    Raises:
+        PermissionDenied: If the 'badge' feature is not enabled for the association
     """
+    # Check if badge feature is enabled for the association
     check_assoc_feature(request, "badge")
+
+    # Get sorted list of members with their badge scores
     member_list = get_leaderboard(request.assoc["id"])
+
+    # Configure pagination settings
     num_el = 25
     num_pages = math.ceil(len(member_list) / num_el)
+
+    # Normalize page number to valid range
     if p < 0:
         p = 1
     p = min(p, num_pages)
+
+    # Build context with pagination data
     ctx = def_user_ctx(request)
     ctx.update(
         {
@@ -606,6 +695,8 @@ def leaderboard(request, p=1):
             "next_page_number": p + 1,
         }
     )
+
+    # Set page identifier for template
     ctx["page"] = "leaderboard"
     return render(request, "larpmanager/general/leaderboard.html", ctx)
 
@@ -661,12 +752,11 @@ def vote(request: HttpRequest) -> HttpResponse:
 
     # Retrieve voting configuration from association settings
     assoc_id = ctx["a_id"]
-    config_holder = Object()
 
-    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, config_holder)
-    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", config_holder).split(",")
-    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", config_holder)
-    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", config_holder)
+    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, ctx)
+    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", ctx).split(",")
+    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", ctx)
+    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", ctx)
 
     # Process vote submission if POST request
     if request.method == "POST":
@@ -809,29 +899,35 @@ def get_user_backend():
 
 
 @login_required
-def registrations(request):
+def registrations(request: HttpRequest) -> HttpResponse:
     """
     Display user's registrations with status information.
 
+    Retrieves and displays all registrations for the current user within their
+    association, including status information and related data for optimization.
+
     Args:
-        request: HTTP request object
+        request (HttpRequest): The HTTP request object containing user and
+            association information.
 
     Returns:
-        HttpResponse: Rendered registrations template
+        HttpResponse: Rendered template displaying the user's registrations
+            with status and related information.
     """
     nt = []
 
-    # Get user's registrations for caching
+    # Get user's registrations filtered by association for caching optimization
     my_regs = Registration.objects.filter(member=request.user.member, run__event_id=request.assoc["id"])
     my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
-    # Get cached data for optimization
+    # Retrieve cached dictionaries to optimize database queries
     character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
     payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
     pre_registrations_dict = get_pre_registrations_dict(request.assoc["id"], request.user.member)
 
-    # get all registrations in the future
+    # Process each registration to calculate status and append to results
     for reg in my_regs:
+        # Calculate registration status using cached data for performance
         registration_status(
             reg.run,
             request.user,
@@ -840,4 +936,6 @@ def registrations(request):
             payment_invoices_dict=payment_invoices_dict,
         )
         nt.append(reg)
+
+    # Render template with processed registration list
     return render(request, "larpmanager/member/registrations.html", {"reg_list": nt})

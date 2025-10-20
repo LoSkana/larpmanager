@@ -41,7 +41,7 @@ from django.views.decorators.http import require_POST
 from PIL import Image
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
-from larpmanager.cache.config import save_single_config
+from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
@@ -136,7 +136,7 @@ def _character_sheet(request: HttpRequest, ctx: dict) -> HttpResponse:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
     # Set character approval configuration for template rendering
-    ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
+    ctx["approval"] = get_event_config(ctx["event"].id, "user_character_approval", False, ctx)
 
     return render(request, "larpmanager/event/character.html", ctx)
 
@@ -163,7 +163,7 @@ def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
     ctx = get_event_run(request, s)
 
     # Check if external access feature is enabled for this event
-    if not ctx["event"].get_config("writing_external_access", False):
+    if not get_event_config(ctx["event"].id, "writing_external_access", False, ctx):
         raise Http404("external access not active")
 
     # Attempt to retrieve character using the provided access token
@@ -325,7 +325,7 @@ def character_form(
     init_form_submitted(ctx, form, request)
 
     # Configure form display options from event settings
-    ctx["hide_unavailable"] = ctx["event"].get_config("character_form_hide_unavailable", False)
+    ctx["hide_unavailable"] = get_event_config(ctx["event"].id, "character_form_hide_unavailable", False, ctx)
 
     return render(request, "larpmanager/event/character/edit.html", ctx)
 
@@ -337,7 +337,7 @@ def _update_character(ctx, element, form, mes, request):
     if not element.player:
         element.player = request.user.member
 
-    if ctx["event"].get_config("user_character_approval", False):
+    if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
         if element.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
             element.status = CharacterStatus.PROPOSED
             mes = _(
@@ -374,7 +374,7 @@ def character_customize(request, s, num):
         if rgr.custom_profile:
             ctx["custom_profile"] = rgr.profile_thumb.url
 
-        if ctx["event"].get_config("custom_character_profile", False):
+        if get_event_config(ctx["event"].id, "custom_character_profile", False, ctx):
             ctx["avatar_form"] = AvatarForm()
 
         return character_form(request, ctx, s, rgr, RegistrationCharacterRelForm)
@@ -521,7 +521,7 @@ def character_list(request, s):
 
     check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
     ctx["char_maximum"] = check
-    ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
+    ctx["approval"] = get_event_config(ctx["event"].id, "user_character_approval", False, ctx)
     ctx["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count()
     return render(request, "larpmanager/event/character/list.html", ctx)
 
@@ -669,12 +669,9 @@ def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
 def check_char_abilities(request, s, num):
     ctx = get_event_run(request, s, signup=True, status=True)
 
-    event = ctx["event"]
-    if event.parent:
-        event = event.parent
-
     # check the user can select abilities
-    if not event.get_config("px_user", False):
+    event_id = ctx["event"].parent_id or ctx["event"].id
+    if not get_event_config(event_id, "px_user", False):
         raise Http404("ehm.")
 
     get_char_check(request, ctx, num, True)
@@ -756,7 +753,7 @@ def get_undo_abilities(request, ctx, char, new_ability_id=None):
     Returns:
         list: List of ability IDs that can be undone
     """
-    px_undo = int(ctx["event"].get_config("px_undo", 0))
+    px_undo = int(get_event_config(ctx["event"].id, "px_undo", 0, ctx))
     config_name = f"added_px_{char.id}"
     val = char.get_config(config_name, "{}")
     added_map = ast.literal_eval(val)

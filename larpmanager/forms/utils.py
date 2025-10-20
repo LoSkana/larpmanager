@@ -416,7 +416,7 @@ def get_assoc_people(assoc_id):
     que = Membership.objects.select_related("member").filter(assoc_id=assoc_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
     for f in que:
-        ls.append((f.member.id, f"{str(f.member)} - {f.member.email}"))
+        ls.append((f.member_id, f"{str(f.member)} - {f.member.email}"))
     return ls
 
 

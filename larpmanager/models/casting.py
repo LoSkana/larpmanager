@@ -179,17 +179,30 @@ class CastingAvoid(BaseModel):
     text = models.TextField(max_length=5000)
 
 
-def update_traits_text(instance):
+def update_traits_text(instance: AssignmentTrait) -> list:
     """Extract and return trait references from instance text using pattern matching.
 
+    Parses text content to find trait references in two formats:
+    - #number: Traits to be returned in the result list
+    - @number: Traits to be validated but not returned
+
     Args:
-        instance: Model instance with event and text attributes containing trait references
+        instance: Model instance with event and text attributes containing trait references.
+                 Must have 'event_id' and 'text' attributes.
 
     Returns:
-        list: List of Trait objects found by parsing #number patterns in text
+        list: List of Trait objects found by parsing #number patterns in text.
+              Only includes traits that exist in the database for the given event.
+
+    Note:
+        @number patterns are validated but not included in the return value.
+        Invalid trait references are logged as warnings but don't raise exceptions.
     """
+    # Extract all #number patterns from text and find corresponding traits
     trait_search = re.findall(r"#([\d]+)", instance.text, re.IGNORECASE)
     traits = []
+
+    # Process each unique trait number found with # prefix
     for pid in set(trait_search):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=pid)
@@ -197,7 +210,10 @@ def update_traits_text(instance):
         except Exception as e:
             logger.warning(f"Error getting trait {pid}: {e}")
 
+    # Extract all @number patterns for validation (not added to return list)
     trait_search = re.findall(r"@([\d]+)", instance.text, re.IGNORECASE)
+
+    # Validate each unique trait number found with @ prefix
     for pid in set(trait_search):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=pid)

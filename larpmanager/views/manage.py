@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
@@ -80,7 +80,7 @@ def _get_registration_status_code(run):
         return "external", run.event.register_link
 
     # Check pre-registration
-    if not run.registration_open and run.event.get_config("pre_register_active", False):
+    if not run.registration_open and get_event_config(run.event_id, "pre_register_active", False):
         return "preregister", None
 
     # Check registration opening time
@@ -428,7 +428,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
         return redirect("orga_run", s=s)
 
     # Ensure quick setup is complete
-    if not ctx["event"].get_config("orga_quick_suggestion", False):
+    if not get_event_config(ctx["event"].id, "orga_quick_suggestion", False, ctx):
         msg = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
             "the features most useful for your event"
@@ -471,7 +471,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
     _compile(request, ctx)
 
     # Mobile shortcuts handling
-    if ctx["event"].get_config("show_shortcuts_mobile", False):
+    if get_event_config(ctx["event"].id, "show_shortcuts_mobile", False, ctx):
         origin_id = request.GET.get("origin", "")
         should_open = False
         if origin_id:
@@ -520,7 +520,7 @@ def _orga_actions_priorities(request: HttpRequest, ctx: dict) -> None:
         )
 
     # Check if user_character feature needs configuration
-    if "user_character" in features and ctx["event"].get_config("user_character_max", "") == "":
+    if "user_character" in features and get_event_config(ctx["event"].id, "user_character_max", "", ctx) == "":
         _add_priority(
             ctx,
             _("Set up the configuration for the creation or editing of characters by the participants"),
@@ -626,7 +626,7 @@ def _orga_casting_actions(ctx, features):
     adding appropriate priority suggestions for event organizers.
     """
     if "casting" in features:
-        if not ctx["event"].get_config("casting_min", 0):
+        if not get_event_config(ctx["event"].id, "casting_min", 0, ctx):
             _add_priority(
                 ctx,
                 _("Set the casting options in the configuration panel"),
@@ -681,7 +681,7 @@ def _orga_px_actions(ctx: dict, features: dict) -> None:
         return
 
     # Check if experience points configuration is missing
-    if not ctx["event"].get_config("px_start", 0):
+    if not get_event_config(ctx["event"].id, "px_start", 0, ctx):
         _add_priority(
             ctx,
             _("Set the experience points configuration"),
@@ -789,7 +789,7 @@ def _orga_reg_acc_actions(ctx: dict, features: list[str]) -> None:
 
     # Handle reduced tickets feature configuration
     if "reduced" in features:
-        if not ctx["event"].get_config("reduced_ratio", 0):
+        if not get_event_config(ctx["event"].id, "reduced_ratio", 0, ctx):
             _add_priority(
                 ctx,
                 _("Set up configuration for Patron and Reduced tickets"),
@@ -828,7 +828,7 @@ def _orga_reg_actions(ctx, features):
     if "custom_character" in features:
         configured = False
         for field in ["pronoun", "song", "public", "private", "profile"]:
-            if ctx["event"].get_config("custom_character_" + field, False):
+            if get_event_config(ctx["event"].id, "custom_character_" + field, False, ctx):
                 configured = True
 
         if not configured:
@@ -852,7 +852,7 @@ def _orga_suggestions(ctx):
     }
 
     for perm, text in priorities.items():
-        if ctx["event"].get_config(f"{perm}_suggestion"):
+        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx):
             continue
         _add_priority(ctx, text, perm)
 
@@ -867,7 +867,7 @@ def _orga_suggestions(ctx):
     }
 
     for perm, text in suggestions.items():
-        if ctx["event"].get_config(f"{perm}_suggestion"):
+        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx):
             continue
         _add_suggestion(ctx, text, perm)
 

@@ -60,7 +60,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'orga_questions_answer' run.get_slug el.member.id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'orga_questions_answer' run.get_slug el.member_id %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

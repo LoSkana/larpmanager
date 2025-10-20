@@ -36,35 +36,52 @@ def event_button_key(event_id):
     return f"event_button_{event_id}"
 
 
-def update_event_button(event_id):
+def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
     """Update event button cache from database.
 
+    Retrieves all event buttons for the specified event, orders them by number,
+    and caches the result for performance optimization.
+
     Args:
-        event_id (int): Event ID to update buttons for
+        event_id: Event ID to update buttons for.
 
     Returns:
-        list: List of (name, tooltip, link) tuples for event buttons
+        List of tuples containing (name, tooltip, link) for each event button,
+        ordered by the button's number field.
 
     Side effects:
-        Updates cache with current button data
+        Updates the cache with current button data using a 1-day timeout.
     """
     res = []
+
+    # Query event buttons ordered by number field
     for el in EventButton.objects.filter(event_id=event_id).order_by("number"):
+        # Extract button data as tuple
         res.append((el.name, el.tooltip, el.link))
+
+    # Cache the result with 1-day timeout
     cache.set(event_button_key(event_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
-def get_event_button_cache(event_id):
+def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
     """Get cached event buttons, updating if needed.
 
+    Retrieves event buttons from cache. If not found in cache,
+    triggers an update and returns the fresh data.
+
     Args:
-        event_id (int): Event ID to get buttons for
+        event_id: Event ID to get buttons for.
 
     Returns:
-        list: List of (name, tooltip, link) tuples for event buttons
+        List of (name, tooltip, link) tuples for event buttons.
     """
+    # Check if buttons are already cached for this event
     res = cache.get(event_button_key(event_id))
+
+    # If not in cache, update and get fresh data
     if res is None:
         res = update_event_button(event_id)
+
     return res

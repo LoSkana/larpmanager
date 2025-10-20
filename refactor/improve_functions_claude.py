@@ -68,7 +68,7 @@ def improve_function_with_claude_code(
 {function_source}
 ```
 
-1. Aggiungi type hints alla definizione della funzione (parametri e return type)
+1. Aggiungi type hints alla definizione della funzione (parametri e return type), non usare single o double quote per le classi
 2. Migliora il docstring seguendo lo stile Google/NumPy
 3. Aggiungi commenti inline ogni 4-5 linee o per ogni blocco logico
 

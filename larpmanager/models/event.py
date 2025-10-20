@@ -20,6 +20,7 @@
 
 import inspect
 import os
+from typing import Union
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -235,18 +236,31 @@ class Event(BaseModel):
             queryset = queryset.order_by("number")
         return queryset
 
-    def get_class_parent(self, nm):
+    def get_class_parent(self, nm: Union[type[BaseModel], str]):
         """Get the parent event for inheriting elements of a specific model class.
 
+        This method determines whether to use the parent event's elements or the current
+        event's elements based on inheritance settings and model class type.
+
         Args:
-            nm: Model class or class name string to check inheritance for
+            nm: Model class (subclass of BaseModel) or class name string to check
+                inheritance for. If a class is provided, it will be converted to
+                lowercase string format.
 
         Returns:
-            Event: Parent event if inheritance is enabled, otherwise self
+            Event: Parent event if inheritance is enabled for the given model class
+                   and a parent exists, otherwise returns self.
+
+        Note:
+            Only specific model classes support inheritance. The method checks against
+            a predefined list of inheritable elements and respects campaign independence
+            configuration settings.
         """
+        # Convert class objects to lowercase string representation
         if inspect.isclass(nm) and issubclass(nm, BaseModel):
             nm = nm.__name__.lower()
 
+        # Define which model elements can be inherited from parent events
         elements = [
             "character",
             "faction",
@@ -257,11 +271,14 @@ class Event(BaseModel):
             "writingoption",
         ]
 
+        # Check if inheritance conditions are met
         if self.parent and nm in elements:
-            # check if we don't want to actually use that event's elements
+            # Verify that campaign independence is not enabled for this element type
+            # If independence is disabled (False), use parent's elements
             if not self.get_config(f"campaign_{nm}_indep", False):
                 return self.parent
 
+        # Return self if no parent exists, element not inheritable, or independence enabled
         return self
 
     def get_cover_thumb_url(self):
@@ -530,6 +547,10 @@ class Run(BaseModel):
     plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
 
     class Meta:
+        indexes = [
+            models.Index(fields=["id", "deleted"]),
+            models.Index(fields=["event", "deleted"]),
+        ]
         constraints = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_run_with_optional"),
             UniqueConstraint(
@@ -559,17 +580,36 @@ class Run(BaseModel):
         # noinspection PyUnresolvedReferences
         return self.event.cover_thumb.url
 
-    def pretty_dates(self):
+    def pretty_dates(self) -> str:
+        """Format start and end dates into a human-readable string.
+
+        Returns a formatted date string that intelligently handles different
+        scenarios: missing dates, same dates, different years/months, etc.
+
+        Returns:
+            str: Formatted date string or "TBA" if dates are missing.
+                Examples: "15 January 2024", "15 - 20 January 2024",
+                "15 January - 20 February 2024", "15 January 2024 - 20 January 2025"
+        """
+        # Handle missing dates - return "TBA" if either date is None
         if not self.start or not self.end:
             return "TBA"
+
+        # Same date - show single date format
         if self.start == self.end:
             return formats.date_format(self.start, "j E Y")
+
+        # Different years - show full date format for both dates
         # noinspection PyUnresolvedReferences
         if self.start.year != self.end.year:
             return f"{formats.date_format(self.start, 'j E Y')} - {formats.date_format(self.end, 'j E Y')}"
+
+        # Different months (same year) - show month for start, full date for end
         # noinspection PyUnresolvedReferences
         if self.start.month != self.end.month:
             return f"{formats.date_format(self.start, 'j E')} - {formats.date_format(self.end, 'j E Y')}"
+
+        # Same month and year - show day range with single month/year
         # noinspection PyUnresolvedReferences
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 

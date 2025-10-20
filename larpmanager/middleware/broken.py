@@ -23,23 +23,37 @@ from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 
 class BrokenLinkEmailsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """
         Send broken link emails for relevant 404 NOT FOUND responses.
+
+        Args:
+            request: The HTTP request object being processed.
+
+        Returns:
+            The HTTP response object, potentially modified if a broken link
+            was detected and processed.
         """
+        # Get the initial response from the next middleware or view
         response = self.get_response(request)
+
+        # Define the status code we're interested in monitoring
         broken_link_status = 404
+
+        # Only process 404 errors when not in debug mode
         if response.status_code == broken_link_status and not conf_settings.DEBUG:
+            # Check if this broken link should trigger an email notification
             res = self.check(request, response)
             if res:
                 return res
+
         return response
 
     @staticmethod

@@ -23,8 +23,6 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
-from calmjs.parse.asttypes import Object
-
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
@@ -32,43 +30,74 @@ from larpmanager.utils.tasks import background_auto
 
 
 @background_auto(queue="e-invoice")
-def process_payment(invoice_id):
+def process_payment(invoice_id: int) -> None:
+    """Process payment by generating electronic invoice XML.
+
+    Args:
+        invoice_id: Primary key of the PaymentInvoice to process
+
+    Note:
+        Creates ElectronicInvoice if it doesn't exist, then generates and saves XML.
+    """
+    # Retrieve the payment invoice by ID
     inv = PaymentInvoice.objects.get(pk=invoice_id)
+
+    # Get or create electronic invoice record
     try:
         e_invoice = inv.electronicinvoice
     except Exception:
+        # Create new electronic invoice if none exists
         e_invoice = ElectronicInvoice(inv=inv, year=datetime.now().year, assoc=inv.assoc)
         e_invoice.save()
 
+    # Generate XML content for the electronic invoice
     xml = prepare_xml(inv, e_invoice)
+
+    # Save the generated XML to the electronic invoice
     e_invoice.xml = xml
     e_invoice.save()
     # Todo sends XML and track track
 
 
-def prepare_xml(inv, einvoice):
+def prepare_xml(inv, einvoice) -> str:
     """Generate XML structure for Italian electronic invoice.
 
+    This function creates a compliant XML structure according to the Italian
+    Sistema di Interscambio (SDI) standards for electronic invoicing.
+
     Args:
-        inv: Invoice instance containing billing data
-        einvoice: Electronic invoice configuration object
+        inv: Invoice instance containing billing data and member information
+        einvoice: Electronic invoice configuration object with header settings
 
     Returns:
         str: XML string formatted according to Italian e-invoice standards
+            (FatturaPA v1.2.2 specification)
+
+    Note:
+        The generated XML includes both header and body sections required
+        for Italian electronic invoice submission to the SDI system.
     """
+    # Extract member data from invoice
     member = inv.member
     name_number = 2
 
+    # Create root XML element with namespace declaration
     root = ET.Element("FatturaElettronica", xmlns="http://www.fatturapa.gov.it/sdi/fatturapa/v1.2.2")
 
+    # Generate invoice header section with sender/receiver data
     _einvoice_header(einvoice, inv, member, name_number, root)
 
+    # Generate invoice body section with line items and totals
     _einvoice_body(einvoice, inv, root)
 
-    # Convert to XML string
+    # Convert XML tree to string representation
     tree = ET.ElementTree(root)
     xml_bytes: IO[bytes] = io.BytesIO()
+
+    # Write XML with UTF-8 encoding and declaration
     tree.write(xml_bytes, encoding="utf-8", xml_declaration=True)
+
+    # Decode bytes to string for return
     # noinspection PyUnresolvedReferences
     xml_str = xml_bytes.getvalue().decode("utf-8")
     return xml_str
@@ -94,7 +123,7 @@ def _einvoice_header(
         with transmission data, supplier (association), and customer (member) details
     """
     # Create config holder to optimize repeated calls
-    config_holder = Object()
+    config_holder = {}
 
     # Create main invoice header element
     header = ET.SubElement(root, "FatturaElettronicaHeader")
@@ -210,7 +239,7 @@ def _einvoice_body(einvoice, inv, root) -> None:
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
     ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
 
-    config_holder = Object()
+    config_holder = {}
 
     # Get VAT rate and nature configuration from association settings
     aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "", config_holder)

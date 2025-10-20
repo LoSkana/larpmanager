@@ -40,6 +40,7 @@ from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_assoc
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
 from larpmanager.models.miscellanea import Util
@@ -175,7 +176,7 @@ def add_pdf_instructions(ctx: dict) -> None:
     """
     # Extract PDF configuration from event settings
     for instr in ["page_css", "header_content", "footer_content"]:
-        ctx[instr] = ctx["event"].get_config(instr, "", bypass_cache=True)
+        ctx[instr] = get_event_config(ctx["event"].id, instr, "", ctx, bypass_cache=True)
 
     # Build replacement codes dictionary with event and character data
     codes = {

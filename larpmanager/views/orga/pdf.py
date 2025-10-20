@@ -22,6 +22,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -42,18 +43,46 @@ from larpmanager.utils.pdf import (
 
 
 @login_required
-def orga_characters_pdf(request, s):
+def orga_characters_pdf(request: HttpRequest, s: str) -> HttpResponse:
+    """Generate PDF view for event characters with form handling.
+
+    This view allows organizers to configure and generate PDF exports of
+    character data for a specific event. Handles both GET requests to display
+    the form and POST requests to update event settings.
+
+    Args:
+        request: The HTTP request object containing user data and form submissions
+        s: The event slug identifier used to locate the specific event
+
+    Returns:
+        HttpResponse: Rendered template with character list and configuration form
+
+    Raises:
+        PermissionDenied: If user lacks 'orga_characters_pdf' permission for event
+    """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Handle form submission for PDF configuration updates
     if request.method == "POST":
         form = EventCharactersPdfForm(request.POST, request.FILES, instance=ctx["event"])
+
+        # Validate and save form data, then redirect to prevent resubmission
         if form.is_valid():
             form.save()
             messages.success(request, _("Updated") + "!")
             return redirect(request.path_info)
     else:
+        # Initialize form with current event data for GET requests
         form = EventCharactersPdfForm(instance=ctx["event"])
+
+    # Retrieve ordered character list for the event
     ctx["list"] = ctx["event"].get_elements(Character).order_by("number")
+
+    # Add form to context for template rendering
     ctx["form"] = form
+
+    # Render the PDF configuration template with character data
     return render(request, "larpmanager/orga/characters/pdf.html", ctx)
 
 

@@ -24,7 +24,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
@@ -148,7 +148,7 @@ def registration_options(instance) -> str:
             body += f" - {instance.ticket.description}"
 
     # Get user membership and event features for permission checks
-    get_user_membership(instance.member, instance.run.event.assoc.id)
+    get_user_membership(instance.member, instance.run.event.assoc_id)
     features = get_event_features(instance.run.event_id)
 
     # Get currency symbol for formatting monetary amounts
@@ -192,21 +192,35 @@ def registration_options(instance) -> str:
     return body
 
 
-def registration_payments(instance, currency):
+def registration_payments(instance: Registration, currency: str) -> str:
     """
     Generate payment information HTML for registration emails.
 
+    This function creates localized HTML content for registration payment notifications,
+    including payment amounts, deadlines, and payment links. The content varies based
+    on whether a payment deadline is set.
+
     Args:
-        instance: Registration instance with payment details
-        currency: Currency symbol/code for payment display
+        instance: Registration instance containing payment details and associated run/event data.
+                 Must have attributes: quota, deadline, run (with event and get_slug method).
+        currency: Currency symbol or code to display with the payment amount (e.g., '€', 'USD').
 
     Returns:
-        str: HTML formatted payment information with links and deadlines
+        Localized HTML string containing payment information with formatted amount,
+        deadline details, and a link to the payment page. Format depends on deadline value.
+
+    Note:
+        - If deadline > 0: Shows specific deadline in days with warning about cancellation
+        - If deadline <= 0: Shows immediate payment required message
     """
+    # Build the payment URL using the event and run slug
     f_url = get_url("accounting/pay", instance.run.event)
     url = f"{f_url}/{instance.run.get_slug()}"
+
+    # Prepare template data for localization
     data = {"url": url, "amount": instance.quota, "currency": currency, "deadline": instance.deadline}
 
+    # Handle case where payment has a specific deadline in days
     if instance.deadline > 0:
         return (
             "<br /><br />"
@@ -218,6 +232,7 @@ def registration_payments(instance, currency):
             % data
         )
 
+    # Handle immediate payment requirement (no specific deadline)
     return (
         "<br /><br />"
         + _(
@@ -256,7 +271,7 @@ def send_character_assignment_email(instance, created: bool) -> None:
         return
 
     # Check if character assignment emails are disabled for this event
-    if instance.reg.run.event.get_config("mail_character", False):
+    if get_event_config(instance.reg.run.event_id, "mail_character", False):
         return
 
     # Prepare context data for email template
@@ -289,24 +304,39 @@ def send_character_assignment_email(instance, created: bool) -> None:
     my_send_mail(subj, body, instance.reg.member, instance.reg.run)
 
 
-def update_registration_cancellation(instance):
+def update_registration_cancellation(instance: Registration) -> None:
     """Send cancellation notification emails to user and organizers.
 
+    Sends email notifications when a registration is cancelled:
+    - Confirmation email to the user who cancelled
+    - Optional notification emails to event organizers (if enabled in config)
+
     Args:
-        instance: Registration instance that was cancelled
+        instance: Registration instance that was cancelled. Must have attributes:
+            - run: Event run the registration was for
+            - member: User who had the registration
+
+    Returns:
+        None
+
+    Note:
+        Does nothing if the registration is provisional. Organizer notifications
+        are only sent if 'mail_signup_del' config is enabled for the association.
     """
+    # Skip processing for provisional registrations
     if is_reg_provisional(instance):
         return
 
-    # to user
+    # Send confirmation email to the user who cancelled
     context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancellation for %(event)s") % context
     body = _("We confirm that your registration for this event has been cancelled. We are sorry to see you go") + "!"
     my_send_mail(subj, body, instance.member, instance.run)
 
-    # to orga
+    # Send notification emails to organizers if feature is enabled
     if get_assoc_config(instance.run.event.assoc_id, "mail_signup_del", False):
+        # Iterate through all organizers for this event
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
@@ -314,15 +344,23 @@ def update_registration_cancellation(instance):
             my_send_mail(subj, body, orga, instance.run)
 
 
-def send_registration_cancellation_email(instance):
+def send_registration_cancellation_email(instance: Registration) -> None:
     """Handle pre-save events for registration instances.
+
+    Sends a cancellation email when a registration is cancelled for the first time.
+    Skips processing if the event run is already completed.
 
     Args:
         instance: Registration instance being saved
+
+    Returns:
+        None
     """
+    # Skip if run is completed/done
     if instance.run and instance.run.development == DevelopStatus.DONE:
         return
 
+    # Retrieve previous state of the registration if it exists
     prev = None
     if instance.pk:
         try:
@@ -330,33 +368,46 @@ def send_registration_cancellation_email(instance):
         except Exception:
             pass
 
+    # Send cancellation email only when registration is newly cancelled
     if prev and instance.cancellation_date and not prev.cancellation_date:
         # Send email when canceled
         update_registration_cancellation(instance)
 
 
-def send_registration_deletion_email(instance):
+def send_registration_deletion_email(instance: Registration) -> None:
     """Handle registration deletion notifications.
 
+    Sends email notifications to both the user and event organizers when a
+    registration is cancelled. Skips notifications for provisional registrations
+    or registrations that already have a cancellation date.
+
     Args:
-        instance: Registration instance being deleted
+        instance: Registration instance being deleted. Must have member, run,
+                 and cancellation_date attributes.
+
+    Returns:
+        None
     """
+    # Skip if registration already has a cancellation date
     if instance.cancellation_date:
         return
 
+    # Skip notifications for provisional registrations
     if is_reg_provisional(instance):
         return
 
+    # Prepare context for email templates
     context = {"event": instance.run, "user": instance.member}
 
-    # to user
+    # Send cancellation notification to the registered user
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
     body = _("We confirm that your registration for this event has been cancelled") + "."
     my_send_mail(subj, body, instance.member, instance.run)
 
+    # Check if organization wants to receive deletion notifications
     if get_assoc_config(instance.run.event.assoc_id, "mail_signup_del", False):
-        # to orga
+        # Send notification to all event organizers
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context

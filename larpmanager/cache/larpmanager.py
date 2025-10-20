@@ -49,19 +49,38 @@ def get_cache_lm_home():
     return res
 
 
-def update_cache_lm_home():
+def update_cache_lm_home() -> dict[str, int | list]:
+    """Update and return cached data for the LarpManager home page.
+
+    Collects statistics for various models including events, characters,
+    registrations, members, and payment invoices. Also gathers data about
+    active runs, promoters, showcases, and reviews.
+
+    Returns:
+        dict[str, int | list]: Dictionary containing:
+            - cnt_<model>: Rounded count for each model type
+            - cnt_run: Count of runs with more than 5 registrations
+            - promoters: List of promoter data
+            - showcase: List of showcase items
+            - reviews: List of review data
+    """
     ctx = {}
+
+    # Count objects for main models and round to two significant digits
     for el in [Event, Character, Registration, Member, PaymentInvoice]:
         nm = str(el.__name__).lower()
         cnt = el.objects.count()
         ctx[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
 
+    # Count runs that have more than 5 registrations
     que_run = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
     ctx["cnt_run"] = int(round_to_two_significant_digits(que_run.count()))
 
+    # Gather additional display data
     ctx["promoters"] = _get_promoters()
     ctx["showcase"] = _get_showcases()
     ctx["reviews"] = _get_reviews()
+
     return ctx
 
 

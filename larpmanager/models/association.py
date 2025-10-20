@@ -363,15 +363,35 @@ def hdr(obj):
         return "[LarpManager] "
 
 
-def get_url(s, obj=None):
+def get_url(s: str, obj: object = None) -> str:
+    """Generate a URL for the given path and object.
+
+    Constructs URLs based on the type of object provided. For Association objects,
+    uses the association's slug and domain. For objects with an 'assoc' attribute,
+    uses the associated organization's slug and domain. Falls back to default
+    larpmanager.com domain when no object is provided.
+
+    Args:
+        s: The path/route to append to the base URL
+        obj: Optional object to determine the base URL. Can be Association,
+             an object with 'assoc' attribute, or a string slug
+
+    Returns:
+        Complete URL string with proper protocol formatting
+    """
     if obj:
+        # Handle Association objects directly
         if isinstance(obj, Association):
             url = f"https://{obj.slug}.{obj.skin.domain}/{s}"
+        # Handle objects that belong to an association
         elif hasattr(obj, "assoc"):
             url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{s}"
+        # Handle string slugs or other objects
         else:
             url = f"https://{obj}.larpmanager.com/{s}"
     else:
+        # Default to main larpmanager.com domain
         url = "https://larpmanager.com/" + s
 
+    # Clean up double slashes while preserving protocol
     return url.replace("//", "/").replace(":/", "://")

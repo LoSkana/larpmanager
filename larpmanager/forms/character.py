@@ -28,6 +28,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
@@ -126,7 +127,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         self._init_character()
 
     def check_editable(self, question):
-        if not self.params["event"].get_config("user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False):
             return True
 
         statuses = question.get_editable()
@@ -187,7 +188,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 self.reorder_field(key)
 
             # Add access token field for external writing access
-            if event.get_config("writing_external_access", False) and self.instance.pk:
+            if get_event_config(event.id, "writing_external_access", False) and self.instance.pk:
                 fields_default.add("access_token")
                 self.reorder_field("access_token")
 
@@ -197,7 +198,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             del self.fields[lbl]
 
         # Add character completion proposal field for user approval workflow
-        if not self.orga and event.get_config("user_character_approval", False):
+        if not self.orga and get_event_config(event.id, "user_character_approval", False):
             if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
                 self.fields["propose"] = forms.BooleanField(
                     required=False,
@@ -293,7 +294,9 @@ class OrgaCharacterForm(CharacterForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.relationship_max_length = int(self.params["event"].get_config("writing_relationship_length", 10000))
+        self.relationship_max_length = int(
+            get_event_config(self.params["event"].id, "writing_relationship_length", 10000)
+        )
 
         if not self.instance.pk:
             return
@@ -317,7 +320,7 @@ class OrgaCharacterForm(CharacterForm):
         else:
             self.delete_field("player")
 
-        if not self.params["event"].get_config("user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False):
             self.delete_field("status")
 
         if "mirror" in self.fields:
@@ -355,7 +358,7 @@ class OrgaCharacterForm(CharacterForm):
         count = len(self.plots)
         for i, el in enumerate(self.plots):
             plot = el.plot.name
-            field = f"pl_{el.plot.id}"
+            field = f"pl_{el.plot_id}"
             id_field = f"id_{field}"
             self.fields[field] = forms.CharField(
                 widget=WritingTinyMCE(),
@@ -371,7 +374,7 @@ class OrgaCharacterForm(CharacterForm):
             self.show_link.append(id_field)
             self.add_char_finder.append(id_field)
 
-            reverse_args = [self.params["run"].get_slug(), el.plot.id]
+            reverse_args = [self.params["run"].get_slug(), el.plot_id]
             self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
 
             # if not first, add to ordering up
@@ -684,7 +687,7 @@ class OrgaWritingQuestionForm(MyForm):
         self.fields["typ"].choices = choices
 
     def _init_editable(self):
-        if not self.params["event"].get_config("user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False):
             self.delete_field("editable")
         else:
             self.fields["editable"] = forms.MultipleChoiceField(

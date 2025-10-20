@@ -31,7 +31,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.config import _get_fkey_config
+from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
@@ -182,7 +182,7 @@ def check_assoc(el, ctx, afield=None):
     if not hasattr(el, "assoc"):
         return
 
-    if el.assoc.id != ctx["a_id"]:
+    if el.assoc_id != ctx["a_id"]:
         raise Http404("not your association")
 
 
@@ -448,7 +448,7 @@ def writing_edit(
     ctx["continue_add"] = "continue" in request.POST
 
     # Set auto-save behavior based on event configuration
-    ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
+    ctx["auto_save"] = not get_event_config(ctx["event"].id, "writing_disable_auto", False, ctx)
     ctx["download"] = 1
 
     # Set up character finder functionality for the element type
@@ -458,7 +458,7 @@ def writing_edit(
 
 
 def _setup_char_finder(ctx, typ):
-    if ctx["event"].get_config("writing_disable_char_finder", False):
+    if get_event_config(ctx["event"].id, "writing_disable_char_finder", False, ctx):
         return
 
     if typ == Trait:

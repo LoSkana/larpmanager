@@ -19,11 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.db import models
-from django.db.models import Q, UniqueConstraint
+from django.db.models import Q, QuerySet, UniqueConstraint
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
-from larpmanager.models.event import BaseConceptModel
+from larpmanager.models.event import BaseConceptModel, Event
 from larpmanager.models.member import Member
 
 
@@ -88,34 +88,57 @@ class AssocRole(BaseModel):
         ]
 
 
-def get_assoc_executives(assoc):
+def get_assoc_executives(assoc: Association) -> QuerySet[Member]:
     """Get all executive members of an association.
 
     Args:
-        assoc: Association instance
+        assoc (Association): The association instance to get executives from.
 
     Returns:
-        QuerySet: Members with executive role (role number 1)
+        QuerySet[Member]: A queryset containing all members with executive role
+            (role number 1) for the specified association.
+
+    Raises:
+        AssocRole.DoesNotExist: If no executive role (number=1) exists for the association.
     """
+    # Get the executive role (number 1) for the association
     exe = AssocRole.objects.get(assoc=assoc, number=1)
+
+    # Return all members assigned to the executive role
     return exe.members.all()
 
 
-def get_assoc_inners(assoc):
+def get_assoc_inners(assoc: Association) -> list[Member]:
     """Get all non-executive members with association roles.
 
+    Retrieves all members that have roles in the given association, excluding
+    executive members (role number 1). Ensures each member appears only once
+    in the returned list, even if they have multiple roles.
+
     Args:
-        assoc: Association instance
+        assoc (Association): The association instance to get members from.
 
     Returns:
-        list: List of Member instances with non-executive roles
+        list[Member]: List of unique Member instances with non-executive roles
+            in the association. Returns empty list if no qualifying members found.
+
+    Example:
+        >>> assoc = Association.objects.get(name="My Association")
+        >>> members = get_assoc_inners(assoc)
+        >>> len(members)
+        5
     """
     lst = []
     already = {}
+
+    # Get all non-executive roles (exclude role number 1) for this association
     for role in AssocRole.objects.filter(assoc=assoc).exclude(number=1):
+        # Iterate through all members assigned to this role
         for mb in role.members.all():
+            # Skip if member already processed to avoid duplicates
             if mb.id in already:
                 continue
+            # Mark member as processed and add to results
             already[mb.id] = 1
             lst.append(mb)
     return lst
@@ -172,37 +195,62 @@ class EventRole(BaseConceptModel):
         ]
 
 
-def get_event_organizers(event):
+def get_event_organizers(event: Event) -> QuerySet[Member]:
     """Get all organizer members of an event.
 
+    Retrieves the event organizer role (role number 1) and returns all members
+    assigned to that role. Creates the organizer role if it doesn't exist.
+
     Args:
-        event: Event instance
+        event (Event): The event instance to get organizers for.
 
     Returns:
-        QuerySet: Members with event organizer role (role number 1)
+        QuerySet[Member]: QuerySet containing all members with event organizer
+            role (role number 1).
+
+    Note:
+        This function uses get_or_create to ensure the organizer role exists,
+        so it may create a new EventRole if none exists for this event.
     """
+    # Get or create the event organizer role (role number 1)
     (orga, cr) = EventRole.objects.get_or_create(event=event, number=1)
+
+    # Return all members assigned to the organizer role
     return orga.members.all()
 
 
-def get_event_staffers(event):
+def get_event_staffers(event: Event) -> list:
     """Get all non-organizer staff members of an event.
 
+    Retrieves all unique members who have roles in the specified event,
+    excluding organizers. Uses prefetch_related for optimized database queries.
+
     Args:
-        event: Event instance
+        event: Event instance to get staff members for
 
     Returns:
-        list: List of Member instances with non-organizer event roles
-    """
+        List of Member instances with non-organizer event roles, with duplicates removed
 
+    Note:
+        Members with multiple roles in the same event are only included once
+    """
+    # Fetch all event roles with their associated members in a single query
     roles = EventRole.objects.filter(event=event).prefetch_related("members")
 
+    # Initialize result list and tracking dictionary for unique members
     lst = []
     already = {}
+
+    # Iterate through each role in the event
     for role in roles:
+        # Process each member assigned to the current role
         for mb in role.members.all():
+            # Skip if member already processed to avoid duplicates
             if mb.id in already:
                 continue
+
+            # Mark member as processed and add to result list
             already[mb.id] = 1
             lst.append(mb)
+
     return lst

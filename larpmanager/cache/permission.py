@@ -41,41 +41,66 @@ def assoc_permission_feature_key(slug):
     return f"assoc_permission_feature_{slug}"
 
 
-def update_assoc_permission_feature(slug):
+def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
     """Update cached association permission feature data.
 
+    Retrieves association permission data by slug, processes the feature information,
+    and updates the cache with the processed data.
+
     Args:
-        slug (str): Permission slug
+        slug: Permission slug to look up
 
     Returns:
-        tuple: (feature_slug, tutorial, config) data
+        A tuple containing (feature_slug, tutorial, config) where:
+            - feature_slug: The feature slug or 'def' if placeholder
+            - tutorial: Feature tutorial text or empty string
+            - config: Permission config text or empty string
     """
+    # Fetch permission with related feature data to minimize queries
     perm = AssocPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
+
+    # Use default slug for placeholder features, otherwise use actual feature slug
     if feature.placeholder:
         slug = "def"
     else:
         slug = feature.slug
+
+    # Extract tutorial and config data with fallback to empty strings
     tutorial = feature.tutorial or ""
     config = perm.config or ""
+
+    # Cache the processed data for future requests
     cache.set(assoc_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return slug, tutorial, config
 
 
-def get_assoc_permission_feature(slug):
+def get_assoc_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
     """Get cached association permission feature data.
 
+    Retrieves feature data for an association permission from cache first,
+    falling back to database if not cached.
+
     Args:
-        slug (str): Permission slug
+        slug: Permission slug identifier
 
     Returns:
-        tuple: (feature_slug, tutorial, config) from cache or database
+        A tuple containing:
+            - feature_slug (str): The feature slug, defaults to "def" if slug is empty
+            - tutorial (str | None): Tutorial content if available
+            - config (dict | None): Configuration data if available
     """
+    # Return default values if no slug provided
     if not slug:
         return "def", None, None
+
+    # Attempt to retrieve from cache first
     res = cache.get(assoc_permission_feature_key(slug))
+
+    # If cache miss, update cache and return fresh data
     if res is None:
         res = update_assoc_permission_feature(slug)
+
     return res
 
 
@@ -95,20 +120,41 @@ def event_permission_feature_key(slug):
     return f"event_permission_feature_{slug}"
 
 
-def update_event_permission_feature(slug):
+def update_event_permission_feature(slug: str) -> tuple[str, str, str]:
+    """Update event permission feature cache with slug, tutorial, and config data.
+
+    Args:
+        slug: The permission slug to look up
+
+    Returns:
+        A tuple containing (feature_slug, tutorial, config):
+            - feature_slug: The feature slug or "def" if placeholder
+            - tutorial: The feature tutorial text or empty string
+            - config: The permission config or empty string
+    """
     try:
+        # Fetch permission with related feature to avoid additional queries
         perm = EventPermission.objects.select_related("feature").get(slug=slug)
     except ObjectDoesNotExist:
         logger.warning(f"Permission slug does not exist: {slug}")
         return "", "", ""
+
+    # Extract feature from permission
     feature = perm.feature
+
+    # Determine the appropriate slug based on feature type
     if feature.placeholder:
         slug = "def"
     else:
         slug = feature.slug
+
+    # Extract tutorial and config with fallback to empty strings
     tutorial = feature.tutorial or ""
     config = perm.config or ""
+
+    # Cache the result for 1 day to improve performance
     cache.set(event_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return slug, tutorial, config
 
 
@@ -129,10 +175,31 @@ def index_permission_key(typ):
     return f"index_permission_key_{typ}"
 
 
-def update_index_permission(typ):
+def update_index_permission(typ: str) -> list[dict]:
+    """Update and cache permission index for given type.
+
+    Retrieves permissions from database, orders them by module and number,
+    then caches the result for efficient access.
+
+    Args:
+        typ: Permission type, either 'event' or 'assoc'
+
+    Returns:
+        List of permission dictionaries with feature and module information
+
+    Raises:
+        KeyError: If typ is not 'event' or 'assoc'
+    """
+    # Map permission type to corresponding model class
     mapping = {"event": EventPermission, "assoc": AssocPermission}
+
+    # Get queryset with related feature and module data
     que = mapping[typ].objects.select_related("feature", "module")
+
+    # Order by module priority and permission number
     que = que.order_by("module__order", "number")
+
+    # Extract required fields for caching
     res = que.values(
         "name",
         "descr",
@@ -143,7 +210,10 @@ def update_index_permission(typ):
         "module__name",
         "module__icon",
     )
+
+    # Cache result with 1-day timeout
     cache.set(index_permission_key(typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 

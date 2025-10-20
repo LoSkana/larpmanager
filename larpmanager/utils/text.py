@@ -68,15 +68,30 @@ def get_event_text_cache_def(event_id, typ):
     return res
 
 
-def get_event_text(event_id, typ, lang=None):
+def get_event_text(event_id: int, typ: str, lang: str = None) -> str:
+    """Get event text for the specified event, type, and language.
+
+    Retrieves event text from cache if available, otherwise falls back to
+    default language cache. Uses current language if no language specified.
+
+    Args:
+        event_id: The ID of the event to get text for
+        typ: The type of text to retrieve
+        lang: Language code for the text. If None, uses current language
+
+    Returns:
+        The event text string for the specified parameters
+    """
+    # Use current language if no language specified
     if not lang:
         lang = get_language()
 
-    # check if there is an event_text with the requested charateristics
+    # Check if there is an event_text with the requested characteristics
     res = get_event_text_cache(event_id, typ, lang)
     if res:
         return res
 
+    # Fall back to default language cache if no text found
     return get_event_text_cache_def(event_id, typ)
 
 
@@ -158,13 +173,28 @@ def get_assoc_text_cache_def(assoc_id, typ):
     return res
 
 
-def get_assoc_text(assoc_id, typ, lang=None):
+def get_assoc_text(assoc_id: int, typ: str, lang: str = None) -> str:
+    """Get association text for the specified type and language.
+
+    Retrieves localized text for an association. Falls back to default
+    language if the requested language is not available.
+
+    Args:
+        assoc_id: The association ID to get text for.
+        typ: The type of text to retrieve.
+        lang: The language code. If None, uses current language.
+
+    Returns:
+        The localized text string, or default language text if not found.
+    """
+    # Use current language if none specified
     if not lang:
         lang = get_language()
 
-    # check if there is an assoc_text with the requested charateristics
+    # Check if there is an assoc_text with the requested characteristics
     res = get_assoc_text_cache(assoc_id, typ, lang)
     if res:
         return res
 
+    # Fall back to default language text if requested language not found
     return get_assoc_text_cache_def(assoc_id, typ)

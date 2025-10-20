@@ -20,6 +20,7 @@
 
 import logging
 
+from django.http import HttpRequest, HttpResponse
 from django.utils.timezone import now
 
 from larpmanager.utils.profiler.signals import profiler_response_signal
@@ -33,22 +34,39 @@ class ProfilerMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Process request and measure view function execution time.
 
+        This middleware measures the execution time of Django view functions
+        and sends a signal when the duration exceeds the configured threshold.
+        It silently handles any errors to avoid disrupting the request flow.
+
         Args:
-            request: HTTP request object
+            request: The incoming HTTP request object containing request data
+                    and metadata.
 
         Returns:
-            HttpResponse: Response from the view function
+            The HTTP response object returned by the view function.
+
+        Note:
+            The profiling data is only collected if the request has a
+            _profiler_func_name attribute set by the view decorator.
         """
+        # Record the start timestamp for duration calculation
         request._profiler_start_ts = now()
+
+        # Process the request through the view function
         response = self.get_response(request)
 
+        # Check if profiling is enabled for this request
         if hasattr(request, "_profiler_func_name"):
+            # Calculate the total execution duration
             duration = (now() - request._profiler_start_ts).total_seconds()
+
+            # Only emit signal if duration exceeds the threshold
             if duration >= self.threshold:
                 try:
+                    # Send profiling data via Django signal
                     # noinspection PyProtectedMember
                     profiler_response_signal.send(
                         sender=None,
@@ -59,7 +77,7 @@ class ProfilerMiddleware:
                         duration=duration,
                     )
                 except Exception as err:
-                    # fail silently in production, but log for debugging
+                    # Fail silently in production, but log for debugging
                     logger.warning(f"ProfilerMiddleware fail: {err}")
 
         return response

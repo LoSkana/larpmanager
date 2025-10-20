@@ -49,7 +49,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.member import Badge, Membership, MembershipStatus, get_user_membership
+from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.pdf import print_run_bkg
@@ -81,41 +81,70 @@ class Command(BaseCommand):
         except Exception as e:
             notify_admins("Automate", "", e)
 
-    def go(self):
+    def go(self) -> None:
         """Execute all automated processes.
 
-        Performs database cleanup, accounting updates, reminder checks,
-        badge processing, and payment validation across all associations.
+        Performs comprehensive automation tasks including database cleanup,
+        accounting updates, reminder checks, badge processing, and payment
+        validation across all associations and runs.
+
+        This method orchestrates the daily automation workflow by:
+        1. Cleaning up the database
+        2. Updating accounting for incomplete registrations
+        3. Running feature-specific checks for each association
+        4. Performing standard system-wide checks
+        5. Processing run-specific automation tasks
+
+        Note:
+            This method should be scheduled to run daily via cron job or
+            similar scheduling mechanism.
         """
+        # Clean up database records and perform initial maintenance
         self.clean_db()
 
-        # update accounting on all registrations
+        # Update accounting for all registrations with incomplete payments
+        # Process each registration to recalculate totals and payment status
         reg_que = get_regs_paying_incomplete()
         for reg in reg_que.select_related("run"):
             reg.save()
 
-        # perform checks on assocs
+        # Process feature-specific checks for each association
+        # Only run checks if the association has the required features enabled
         for assoc in Association.objects.all():
             features = get_assoc_features(assoc.id)
+
+            # Check if reminder notifications need to be sent
             if "remind" in features:
                 self.check_remind(assoc)
+
+            # Process achievement/badge updates for members
             if "badge" in features:
                 self.check_achievements(assoc)
+
+            # Validate and update accounting records
             if "record_acc" in features:
                 check_accounting(assoc.id)
 
-        # perform standard checks
+        # Perform standard system-wide maintenance checks
+        # These checks run regardless of feature flags
         self.check_password_reset()
         self.check_payment_not_approved()
         self.check_old_payments()
 
-        # perform check on runs
+        # Process automation tasks for active runs only
+        # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             ev_features = get_event_features(run.event_id)
+
+            # Check and process deadline notifications
             if "deadlines" in ev_features:
                 self.check_deadline(run)
+
+            # Update run-specific accounting records
             if "record_acc" in ev_features:
                 check_run_accounting(run)
+
+            # Generate background PDF documents for the run
             if "print_pdf" in ev_features:
                 print_run_bkg(run.event.assoc.slug, run.get_slug())
 
@@ -173,48 +202,70 @@ class Command(BaseCommand):
             for sql in conf_settings.CLEAN_DB:
                 cursor.execute(sql)
 
-    def check_achievements(self, assoc):
+    def check_achievements(self, assoc: Association) -> None:
         """Process badge achievements for association members.
 
         Analyzes past and future event registrations to award badges
-        based on participation and friend referral patterns.
+        based on participation and friend referral patterns. Processes
+        all completed events for participation badges and future events
+        for friend referral tracking.
 
         Args:
             assoc: Association instance to process badges for
+
+        Returns:
+            None: Function performs side effects by updating badge cache
         """
+        # Initialize cache for badges and player data
         cache = {"badges": {}, "players": {}}
         ev = {}
-        # past events
+
+        # Process past events for participation badges
         for run in Run.objects.filter(end__lt=datetime.today(), event__assoc=assoc):
+            # Get all non-cancelled registrations
             que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+
+            # Process registrations excluding waiting list, staff, and NPCs
             for reg in que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC]):
                 self.check_ach_player(reg, cache)
-            ev[run.event.id] = run.event
 
-        # future events
+            # Cache event data for reference
+            ev[run.event_id] = run.event
+
+        # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=datetime.today()):
+            # Get confirmed registrations (excluding waiting list)
             for reg in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
                 ticket__tier=TicketTier.WAITING
             ):
+                # Check friend referral achievements
                 self.check_friends_player(reg, cache)
 
-    def add_member_badge(self, cod, member, cache):
+    def add_member_badge(self, cod: str, member: Member, cache: dict) -> None:
         """Award a badge to a member if not already possessed.
 
+        This method checks if a member already has a specific badge and awards it
+        if they don't. It uses a cache for performance optimization to avoid
+        repeated database queries.
+
         Args:
-            cod (str): Badge code to award
-            member: Member instance to award badge to
-            cache (dict): Badge and player cache for performance
+            cod: Badge code identifier to award
+            member: Member instance to award the badge to
+            cache: Badge and player cache dictionary for performance optimization
+
+        Returns:
+            None
         """
-        # check if it has already
+        # Check if member already possesses this badge
         if cod in self.get_cache_badges_player(cache, member):
             return
-        # get badge
+
+        # Retrieve badge object from cache
         badge = self.get_cache_badge(cache, cod)
         if not badge:
             return
-        # print(reg.member)
-        # print(k)
+
+        # Award badge to member by adding to many-to-many relationship
         badge.members.add(member)
 
     def check_event_badge(self, event, m, cache):
@@ -228,180 +279,317 @@ class Command(BaseCommand):
         self.add_member_badge(event.slug, m, cache)
 
     @staticmethod
-    def get_cache_badges_player(cache, member):
+    def get_cache_badges_player(cache: dict, member: Member) -> list:
         """Get cached list of badge codes for a member.
 
+        Retrieves badge codes from cache if available, otherwise queries the database
+        to build the cache entry for the member's badges.
+
         Args:
-            cache (dict): Player badge cache
+            cache (dict): Player badge cache containing 'players' key with member IDs
             member: Member instance to get badges for
 
         Returns:
             list: Badge codes already possessed by member
+
+        Note:
+            Modifies the cache dictionary by adding member badge data if not present.
         """
+        # Check if member's badges are already cached
         if member.id not in cache["players"]:
+            # Build list of badge codes from member's badges
             ch = []
             for b in member.badges.all():
                 ch.append(b.cod)
+
+            # Cache the badge codes for this member
             cache["players"][member.id] = ch
+
+        # Return cached badge codes
         return cache["players"][member.id]
 
     @staticmethod
-    def get_cache_badge(cache, cod):
+    def get_cache_badge(cache: dict, cod: str) -> Badge | None:
         """Get badge instance from cache or database.
 
+        Retrieves a badge by code from the provided cache dictionary. If the badge
+        is not found in cache, attempts to fetch it from the database and stores
+        it in the cache for future use.
+
         Args:
-            cache (dict): Badge cache
-            cod (str): Badge code to retrieve
+            cache: Dictionary containing cached badge instances under 'badges' key
+            cod: Badge code string used to identify and retrieve the badge
 
         Returns:
-            Badge or None: Badge instance if found, None otherwise
+            Badge instance if found in cache or database, None if not found or on error
+
+        Note:
+            Modifies the cache dictionary by adding newly fetched badges
         """
         try:
+            # Check if badge code is not already cached
             if cod not in cache["badges"]:
+                # Fetch badge from database and store in cache
                 cache["badges"][cod] = Badge.objects.get(cod=cod)
+
+            # Return cached badge instance
             return cache["badges"][cod]
         except Exception:
+            # Return None on any error (badge not found, cache issues, etc.)
             return None
 
     @staticmethod
-    def get_count(nm, cache, m, v=1):
+    def get_count(nm: str, cache: dict[str, dict[int, int]], m, v: int = 1) -> int:
         """Track and increment member activity counters.
 
         Args:
-            nm (str): Counter name (e.g., 'play', 'staff', 'orga')
-            cache (dict): Activity cache
+            nm: Counter name (e.g., 'play', 'staff', 'orga')
+            cache: Activity cache mapping counter names to member ID counters
             m: Member instance
-            v (int): Value to add to counter
+            v: Value to add to counter (default: 1)
 
         Returns:
-            int: Updated counter value
+            Updated counter value for the member
         """
+        # Initialize counter type if not exists
         if nm not in cache:
             cache[nm] = {}
+
+        # Initialize member counter if not exists
         if m.id not in cache[nm]:
             cache[nm][m.id] = 0
+
+        # Increment counter and return new value
         cache[nm][m.id] += v
         return cache[nm][m.id]
 
-    def check_friends_player(self, reg, cache):
-        """Check and award friend referral badges.
+    def check_friends_player(self, reg: Registration, cache: dict) -> None:
+        """Check and award friend referral badges based on friend count.
+
+        This method counts how many friends a player has referred and awards
+        appropriate tier badges (bronze, silver, gold, platinum) based on
+        predefined thresholds.
 
         Args:
-            reg: Registration instance
-            cache (dict): Activity cache for tracking friend counts
+            reg: Registration instance to check friend count for
+            cache: Activity cache dictionary for tracking friend counts
+                  and preventing duplicate badge awards
+
+        Returns:
+            None
         """
-        # count how many friends you got
+        # Count total friend referral discounts associated with this registration
         c = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
+
+        # Get current friend count from cache or calculate if not cached
         count = self.get_count("friend", cache, reg.member, c)
+
+        # Define badge tiers and their corresponding friend count thresholds
         tp = ["bronze", "silver", "gold", "platinum"]
-        lm = [1, 4, 8, 12]
+        lm = [1, 4, 8, 12]  # Minimum friends required for each tier
+
+        # Iterate through each tier and award badges if threshold is met
         for i in range(0, len(tp)):
+            # Skip tier if friend count doesn't meet minimum requirement
             if count < lm[i]:
                 continue
+
+            # Generate badge key and award to member
             k = f"friends-{tp[i]}"
             self.add_member_badge(k, reg.member, cache)
 
-    def check_ach_player(self, reg, cache):
-        """Check and award player participation badges.
+    def check_ach_player(self, reg: Registration, cache: dict) -> None:
+        """Check and award player participation badges based on play count.
+
+        Awards bronze, silver, gold, and platinum badges to players based on
+        their number of registrations/participation events.
 
         Args:
-            reg: Registration instance
-            cache (dict): Activity cache for tracking play counts
+            reg: Registration instance for the current player
+            cache: Activity cache dictionary for tracking play counts across members
+
+        Returns:
+            None
         """
-        # count how many registrations
+        # Count total registrations/plays for this member
         count = self.get_count("play", cache, reg.member)
+
+        # Define badge tiers and their required play count thresholds
         tp = ["bronze", "silver", "gold", "platinum"]
         lm = [1, 5, 10, 15]
+
+        # Iterate through each badge tier and award if threshold is met
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
+
+            # Generate badge key and award to member
             k = f"player-{tp[i]}"
             self.add_member_badge(k, reg.member, cache)
 
-    def check_badge_help(self, m, cache):
-        """Check and award help/support badges.
+    def check_badge_help(self, m: Member, cache: dict) -> None:
+        """Check and award help/support badges based on member activity.
+
+        Evaluates a member's help activity count and awards bronze-level badges
+        when specific thresholds are met. Currently supports bronze tier badges
+        for members who have provided help at least once.
 
         Args:
-            m: Member instance
-            cache (dict): Activity cache for tracking help counts
+            m: Member instance to check for badge eligibility
+            cache: Activity cache dictionary for tracking help counts and badges
+
+        Returns:
+            None: Function modifies cache in-place by adding badges
         """
-        # count how many registration
+        # Retrieve the current help activity count for this member
         count = self.get_count("help", cache, m)
-        tp = ["bronze"]
-        lm = [1]
+
+        # Define badge tiers and their corresponding thresholds
+        tp = ["bronze"]  # Available badge tiers
+        lm = [1]  # Minimum help count required for each tier
+
+        # Iterate through each badge tier and check eligibility
         for i in range(0, len(tp)):
+            # Skip if member hasn't reached the threshold for this tier
             if count < lm[i]:
                 continue
+
+            # Generate badge key and award it to the member
             k = f"help-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
-    def check_badge_trad(self, m, cache):
-        """Check and award translation/localization badges.
+    def check_badge_trad(self, m: Member, cache: dict) -> None:
+        """Check and award translation/localization badges based on member activity.
+
+        Evaluates a member's translation contributions and awards appropriate badges
+        based on predefined thresholds. Currently supports bronze badge for 1+ translations.
 
         Args:
-            m: Member instance
-            cache (dict): Activity cache for tracking translation counts
+            m: Member instance to check for badge eligibility
+            cache: Activity cache dictionary for tracking translation counts and badge state
+
+        Returns:
+            None: Function modifies cache in-place by adding eligible badges
         """
-        # count how many registrations
+        # Retrieve translation count from cache for the member
         count = self.get_count("trad", cache, m)
+
+        # Define badge types and their minimum requirements
         tp = ["bronze"]
         lm = [1]
+
+        # Iterate through each badge type and check eligibility
         for i in range(0, len(tp)):
+            # Skip if member hasn't met minimum requirement for this badge
             if count < lm[i]:
                 continue
+
+            # Award badge if requirements are met
             k = f"trad-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
-    def check_badge_staff(self, m, cache):
-        """Check and award staff participation badges.
+    def check_badge_staff(self, m: Member, cache: dict) -> None:
+        """Check and award staff participation badges based on staff registration count.
+
+        Evaluates a member's staff participation history and awards bronze, silver,
+        gold, or platinum badges based on the number of staff registrations. Badges
+        are awarded cumulatively (e.g., a member with 7 registrations gets bronze,
+        silver, and gold badges).
 
         Args:
-            m: Member instance
-            cache (dict): Activity cache for tracking staff counts
+            m: Member instance to check for badge eligibility
+            cache: Activity cache dictionary for tracking staff participation counts
+                  and preventing duplicate badge awards
+
+        Returns:
+            None: Function modifies cache state and awards badges as side effects
         """
-        # count how many registrations
+        # Get total count of staff registrations for this member
         count = self.get_count("staff", cache, m)
+
+        # Define badge types and their minimum requirements
         tp = ["bronze", "silver", "gold", "platinum"]
         lm = [1, 4, 7, 10]
+
+        # Iterate through each badge tier and award if requirements are met
         for i in range(0, len(tp)):
+            # Skip if member hasn't reached the minimum count for this badge
             if count < lm[i]:
                 continue
+
+            # Generate badge key and award the badge to the member
             k = f"staff-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
-    def check_badge_orga(self, m, cache):
-        """Check and award organizer badges.
+    def check_badge_orga(self, m: Member, cache: dict) -> None:
+        """Check and award organizer badges based on event organization count.
+
+        Evaluates a member's organizing activity and awards bronze, silver, gold,
+        or platinum organizer badges based on predefined thresholds.
 
         Args:
-            m: Member instance
-            cache (dict): Activity cache for tracking organizer counts
+            m: Member instance to check for organizer badges
+            cache: Activity cache dictionary for tracking organizer counts
+                  and preventing duplicate badge awards
+
+        Returns:
+            None: Badges are awarded as side effects through add_member_badge
         """
-        # count how many registrations
+        # Get the total count of events organized by this member
         count = self.get_count("orga", cache, m)
+
+        # Define badge types and their corresponding thresholds
         tp = ["bronze", "silver", "gold", "platinum"]
         lm = [1, 3, 5, 7]
+
+        # Iterate through each badge tier and award if threshold is met
         for i in range(0, len(tp)):
+            # Skip if member hasn't reached this threshold yet
             if count < lm[i]:
                 continue
+
+            # Construct badge key and award the badge
             k = f"organizzatore-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
-    def check_remind(self, assoc):
+    def check_remind(self, assoc: Association) -> None:
         """Check and send reminder emails for association registrations.
 
+        This function processes reminders for upcoming event registrations based on
+        association configuration. It respects holiday settings and reminder day
+        preferences while filtering for future events.
+
         Args:
-            assoc: Association instance to process reminders for
+            assoc (Association): Association instance to process reminders for.
+                Must have get_config method for accessing configuration values.
+
+        Returns:
+            None: This function performs side effects (sending emails) but returns nothing.
+
+        Note:
+            The function filters out registrations for events that start within 3 days
+            or have already started, and only processes events with valid start dates.
         """
+        # Check if reminders should be sent during holidays
         holidays = assoc.get_config("remind_holidays", True)
 
+        # Skip processing if it's a holiday and holiday reminders are disabled
         if not holidays and check_holiday():
             return
 
+        # Get the number of days before event to send reminders
         remind_days = int(assoc.get_config("remind_days", 5))
 
+        # Get all registrations for this association
         reg_que = get_regs(assoc)
+
+        # Calculate reference date (3 days from now) to filter out immediate events
         ref = datetime.now() + timedelta(days=3)
+
+        # Filter registrations to exclude events without start dates or starting too soon
         reg_que = reg_que.exclude(run__start__isnull=True).exclude(run__start__lte=ref.date())
+
+        # Process each qualifying registration for reminder emails
         for reg in reg_que.select_related("run", "ticket"):
             self.remind_reg(reg, assoc, remind_days)
 
@@ -454,20 +642,36 @@ class Command(BaseCommand):
             self.check_payment(reg)
 
     @staticmethod
-    def check_membership_fee(reg):
+    def check_membership_fee(reg: Registration) -> None:
         """Check if membership fee reminder should be sent.
+
+        This function determines whether a membership fee reminder should be sent
+        to a member based on their registration status, payment history, and
+        pending invoices for the current year.
 
         Args:
             reg: Registration instance to check membership fee for
+
+        Returns:
+            None: Function performs side effects (sending reminders) but returns nothing
+
+        Note:
+            Only processes registrations for the current year and sends reminders
+            only if no membership fee has been paid and no payment is pending.
         """
+        # Get current year for membership fee validation
         year = datetime.today().year
+
+        # Skip if registration is not for current year
         if year != reg.run.end.year:
             return
 
+        # Check if membership fee has already been paid for this year
         membership_payed = AccountingItemMembership.objects.filter(year=reg.run.end.year, member=reg.member).count()
         if membership_payed > 0:
             return
 
+        # Check if there are pending membership payments
         membership_pending = PaymentInvoice.objects.filter(
             member=reg.member,
             status=PaymentStatus.SUBMITTED,
@@ -476,51 +680,78 @@ class Command(BaseCommand):
         if membership_pending > 0:
             return
 
+        # Send membership fee reminder if no payment exists and none pending
         remember_membership_fee(reg)
 
     @staticmethod
-    def check_payment(reg):
+    def check_payment(reg: Registration) -> None:
         """Check if payment reminder should be sent for registration.
+
+        This function determines whether a payment reminder should be sent to a member
+        for their registration by checking various conditions including alert status,
+        quota availability, and existing pending payments.
 
         Args:
             reg: Registration instance to check payment alerts for
+
+        Returns:
+            None: This function performs actions but does not return a value
         """
-        # check there is an alert
+        # Check if alerts are enabled for this registration
         if not reg.alert:
             return
 
+        # Verify that the registration has an associated quota
         if not reg.quota:
             return
 
-        # check if there is a submitted payment
+        # Query for any existing submitted payment invoices for this registration
+        # to avoid sending duplicate payment reminders
         pending_que = PaymentInvoice.objects.filter(
             member_id=reg.member_id,
             status=PaymentStatus.SUBMITTED,
             typ=PaymentType.REGISTRATION,
             idx=reg.id,
         )
+
+        # If there are pending payments, skip sending reminder
         if pending_que.count() > 0:
             return
 
+        # Send payment reminder if all conditions are met
         remember_pay(reg)
 
-    def check_deadline(self, run):
+    def check_deadline(self, run: Run) -> None:
         """Check and send deadline notifications for run.
 
+        This function performs deadline checking for a specific run, considering holidays,
+        run timing constraints, and configured deadline intervals. It will send notifications
+        when appropriate based on the deadline_days configuration.
+
         Args:
-            run: Run instance to check deadlines for
+            run: Run instance to check deadlines for. Must have start date and associated event.
+
+        Returns:
+            None
         """
+        # Skip processing if today is a holiday
         if check_holiday():
             return
 
+        # Calculate reference date (7 days ago) and skip if run is too old or has no start date
         ref = datetime.now() - timedelta(days=7)
         if not run.start or run.start < ref.date():
             return
 
+        # Get deadline interval configuration for the association
         deadline_days = int(get_assoc_config(run.event.assoc_id, "deadline_days", 0))
         if not deadline_days:
             return
+
+        # Check if today matches the deadline notification schedule
+        # Only notify when days until run start modulo deadline_days equals 1
         if get_time_diff_today(run.start) % deadline_days != 1:
             return
 
+        # Send deadline notifications for this run
         notify_deadlines(run)

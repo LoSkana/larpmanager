@@ -468,7 +468,7 @@ class TestCacheSignals(BaseTestCase):
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
-        member_id = payment.member.id
+        member_id = payment.member_id
         run = payment.reg.run
         mock_reset.reset_mock()  # Reset after create
         payment.delete()
@@ -504,7 +504,7 @@ class TestCacheSignals(BaseTestCase):
             run=self.get_run(),
             disc=discount,
         )
-        member_id = item.member.id
+        member_id = item.member_id
         run = item.run
         mock_reset.reset_mock()  # Reset after create to only test delete signal
         item.delete()
@@ -542,7 +542,7 @@ class TestCacheSignals(BaseTestCase):
             oth=OtherChoices.CREDIT,
             descr="Test credit",
         )
-        member_id = item.member.id
+        member_id = item.member_id
         mock_reset.reset_mock()  # Reset after create
         item.delete()
 

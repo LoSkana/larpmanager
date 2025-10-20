@@ -24,8 +24,10 @@ import os
 import random
 import string
 from datetime import datetime
+from decimal import Decimal
 from html.parser import HTMLParser
 from io import StringIO
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from cryptography.fernet import Fernet
@@ -33,8 +35,11 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django.utils.deconstruct import deconstructible
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeString, mark_safe
 from django.utils.translation import gettext_lazy as _
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
 
 
 def generate_id(length):
@@ -49,16 +54,29 @@ def generate_id(length):
     return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length))
 
 
-def decimal_to_str(v):
+def decimal_to_str(v: Decimal) -> str:
     """Convert decimal to string with .00 removed.
 
+    Takes a Decimal value and converts it to a string representation,
+    removing any trailing ".00" to provide cleaner output for whole numbers.
+
     Args:
-        v (Decimal): Decimal value to convert
+        v (Decimal): The decimal value to convert to string format.
 
     Returns:
-        str: String representation without trailing .00
+        str: String representation of the decimal without trailing ".00".
+            For example, Decimal('5.00') becomes '5', while Decimal('5.50')
+            becomes '5.50'.
+
+    Example:
+        >>> decimal_to_str(Decimal('10.00'))
+        '10'
+        >>> decimal_to_str(Decimal('10.50'))
+        '10.50'
     """
+    # Convert decimal to string representation
     s = str(v)
+    # Remove trailing .00 for cleaner display of whole numbers
     s = s.replace(".00", "")
     return s
 
@@ -76,16 +94,27 @@ def slug_url_validator(val):
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
 
 
-def remove_non_ascii(text):
+def remove_non_ascii(text: str) -> str:
     """Remove non-ASCII characters from text.
 
+    Filters out any characters with ordinal values >= 128, keeping only
+    standard ASCII characters (0-127). Useful for sanitizing text data
+    or ensuring compatibility with ASCII-only systems.
+
     Args:
-        text (str): Input text
+        text: Input text string to filter.
 
     Returns:
-        str: Text with only ASCII characters (ordinal < 128)
+        Filtered string containing only ASCII characters.
+
+    Example:
+        >>> remove_non_ascii("Hello 世界!")
+        "Hello !"
     """
+    # Define ASCII boundary (characters 0-127)
     max_ascii = 128
+
+    # Filter characters using generator expression for memory efficiency
     return "".join(char for char in text if ord(char) < max_ascii)
 
 
@@ -121,17 +150,27 @@ def download(url):
     return url
 
 
-def show_thumb(height, text):
+def show_thumb(height: int, text: str) -> SafeString:
     """Generate HTML img tag for thumbnail display.
 
+    Creates an HTML image element with specified height and source URL.
+    The image maintains aspect ratio while constraining height.
+
     Args:
-        height (int): Height in pixels for the image
-        text (str): URL or path to the image
+        height: Height in pixels for the image display
+        text: URL or file path to the image source
 
     Returns:
-        SafeString: HTML img tag with specified height and source
+        HTML img tag as a SafeString with specified height and source
+
+    Example:
+        >>> show_thumb(100, "/media/image.jpg")
+        '<img style="height:100px" src="/media/image.jpg" />'
     """
+    # Generate HTML img tag with inline height styling
     s = f'<img style="height:{height}px" src="{text}" />'
+
+    # Return as SafeString to prevent HTML escaping in templates
     return mark_safe(s)
 
 
@@ -227,52 +266,98 @@ def _key_id(fernet_key):
     return hashlib.sha256(raw).hexdigest()[:12]
 
 
-def get_payment_details_path(assoc):
+def get_payment_details_path(assoc: "Association") -> str:
     """
     Get encrypted payment details file path for association.
 
+    Constructs a secure file path for storing encrypted payment configuration
+    data specific to an association. Creates the payment settings directory
+    if it doesn't exist and generates a filename using the association's
+    slug and encryption key identifier.
+
     Args:
-        assoc: Association instance
+        assoc: Association instance containing slug and key attributes
 
     Returns:
-        str: Path to encrypted payment details file
+        str: Full path to the encrypted payment details file
+
+    Example:
+        >>> assoc = Association(slug='my-org', key='secret123')
+        >>> path = get_payment_details_path(assoc)
+        >>> path
+        '/path/to/payment/settings/my-org.abc123.enc'
     """
+    # Ensure payment settings directory exists
     os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
+
+    # Generate key identifier for filename security
     kid = _key_id(assoc.key)
+
+    # Create secure filename with association slug and key ID
     filename = f"{os.path.basename(assoc.slug)}.{kid}.enc"
+
+    # Return full path to encrypted payment file
     return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)
 
 
-def save_payment_details(assoc, payment_details):
+def save_payment_details(assoc: "Association", payment_details: dict) -> None:
     """
     Encrypt and save payment details for association.
 
     Args:
         assoc: Association instance with encryption key
         payment_details: Dictionary of payment details to encrypt
+
+    Returns:
+        None
+
+    Raises:
+        json.JSONEncoder: If payment_details cannot be serialized to JSON
+        FileNotFoundError: If the target directory doesn't exist
+        PermissionError: If insufficient permissions to write the file
     """
+    # Create cipher using association's encryption key
     cipher = Fernet(assoc.key)
+
+    # Convert payment details dictionary to JSON bytes
     data_bytes = json.dumps(payment_details).encode("utf-8")
+
+    # Encrypt the serialized data
     encrypted_data = cipher.encrypt(data_bytes)
+
+    # Get the file path for storing encrypted payment details
     encrypted_file_path = get_payment_details_path(assoc)
+
+    # Write encrypted data to file
     with open(encrypted_file_path, "wb") as f:
         f.write(encrypted_data)
 
 
-def strip_tags(html):
-    """
-    Strip HTML tags from text content.
+def strip_tags(html: str | None) -> str:
+    """Strip HTML tags from text content.
 
     Args:
-        html: HTML string to process
+        html: HTML string to process. Can be None or empty string.
 
     Returns:
-        str: Plain text with HTML tags removed
+        Plain text with HTML tags removed. Returns empty string if input
+        is None or empty.
+
+    Example:
+        >>> strip_tags("<p>Hello <b>world</b></p>")
+        "Hello world"
+        >>> strip_tags(None)
+        ""
     """
+    # Handle None and empty string cases early
     if html is None or html == "":
         return ""
+
+    # Create MLStripper instance and process HTML
     s = MLStripper()
     s.feed(html)
+
+    # Return the stripped text content
     return s.get_data()
 
 
