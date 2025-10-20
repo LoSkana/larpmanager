@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from calmjs.parse.asttypes import Object
 from django.db.models import Sum
 
 from larpmanager.cache.config import get_assoc_config
@@ -65,9 +64,9 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     # Retrieve VAT rates from association configuration
     # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
-    config_holder = Object()
-    _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, config_holder)) / 100.0
-    _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, config_holder)) / 100.0
+    ctx = {}
+    _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, ctx=ctx)) / 100.0
+    _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, ctx=ctx)) / 100.0
 
     # Calculate total ticket cost including both base price and custom amounts
     ticket_total = 0

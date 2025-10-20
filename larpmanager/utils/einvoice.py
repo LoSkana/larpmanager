@@ -23,8 +23,6 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
-from calmjs.parse.asttypes import Object
-
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
@@ -125,7 +123,7 @@ def _einvoice_header(
         with transmission data, supplier (association), and customer (member) details
     """
     # Create config holder to optimize repeated calls
-    config_holder = Object()
+    config_holder = {}
 
     # Create main invoice header element
     header = ET.SubElement(root, "FatturaElettronicaHeader")
@@ -241,7 +239,7 @@ def _einvoice_body(einvoice, inv, root) -> None:
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
     ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
 
-    config_holder = Object()
+    config_holder = {}
 
     # Get VAT rate and nature configuration from association settings
     aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "", config_holder)
