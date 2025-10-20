@@ -28,6 +28,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.button import event_button_key
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache, get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
@@ -171,7 +172,7 @@ def prepare_run(ctx):
     """
     config_run = get_cache_config_run(ctx["run"])
 
-    if "staff" in ctx or not ctx["event"].get_config("writing_field_visibility", False):
+    if "staff" in ctx or not get_event_config(ctx["event"].id, "writing_field_visibility", False, ctx):
         ctx["show_all"] = "1"
 
         for el in ["character", "faction", "quest", "trait"]:

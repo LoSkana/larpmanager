@@ -22,7 +22,7 @@ from datetime import datetime, timedelta
 
 from django.db.models import Count
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
@@ -117,7 +117,7 @@ def check_run_deadlines(runs: list) -> list:
         collect = {
             k: [] for k in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del", "profile", "profile_del"]
         }
-        features = get_event_features(run.event.id)
+        features = get_event_features(run.event_id)
         player_ids = []
 
         # Check each registration
@@ -268,7 +268,7 @@ def deadlines_casting(collect, features, player_ids, run):
     if "casting" not in features:
         return
 
-    casting_chars = run.event.get_config("casting_characters", 1)
+    casting_chars = get_event_config(run.event_id, "casting_characters", 1)
     # members that already have a character
     casted = (
         Registration.objects.filter(run=run)

@@ -255,8 +255,8 @@ def correct_plot_character(e_id, p_id):
         cache_p[obj[0]] = n_obj
 
     for el in PlotCharacterRel.objects.filter(character__event_id=p_id):
-        n_c = cache_c[el.character.id]
-        n_p = cache_p[el.plot.id]
+        n_c = cache_c[el.character_id]
+        n_p = cache_p[el.plot_id]
         if PlotCharacterRel.objects.filter(character_id=n_c, plot_id=n_p).count() > 0:
             continue
 

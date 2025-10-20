@@ -22,6 +22,7 @@ from django.core.cache import cache
 from django.db.models import Count
 
 from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
@@ -134,7 +135,7 @@ def update_reg_counts(run) -> dict[str, int]:
 def on_character_update_registration_cache(instance):
     for run_id in instance.event.runs.values_list("id", flat=True):
         clear_registration_counts_cache(run_id)
-    if instance.event.get_config("user_character_approval", False):
+    if get_event_config(instance.event_id, "user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()
 

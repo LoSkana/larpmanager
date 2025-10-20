@@ -24,6 +24,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
     OrgaAbilityTypePxForm,
@@ -85,7 +86,7 @@ def orga_px_abilities(request: HttpRequest, s: str) -> HttpResponse:
     ctx["download"] = 1
 
     # Retrieve event configuration for user PX management permissions
-    ctx["px_user"] = ctx["event"].get_config("px_user", False)
+    ctx["px_user"] = get_event_config(ctx["event"].id, "px_user", False, ctx)
 
     # Query and prepare abilities list with optimized database access
     ctx["list"] = (

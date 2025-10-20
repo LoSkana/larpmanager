@@ -697,7 +697,7 @@ def _search_char_reg(ctx: dict, char, js: dict) -> None:
     # Extract player information from registration
     js["player"] = char.reg.display_member()
     js["player_full"] = str(char.reg.member)
-    js["player_id"] = char.reg.member.id
+    js["player_id"] = char.reg.member_id
     js["first_aid"] = char.reg.member.first_aid
 
     # Set profile image with fallback hierarchy: character custom -> member -> None

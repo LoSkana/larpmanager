@@ -36,7 +36,7 @@ from django.views.decorators.http import require_POST
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.registration import (
     PreRegistrationForm,
@@ -124,13 +124,13 @@ def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
     ch = {}
     que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])
     for el in que.order_by("pref"):
-        ch[el.event.id] = True
+        ch[el.event_id] = True
         ctx["already"].append(el)
 
     # Find events available for pre-registration
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
         # Skip if pre-registration not active for this event
-        if not r.get_config("pre_register_active", False):
+        if not get_event_config(r.id, "pre_register_active", False):
             continue
 
         # Skip if user already pre-registered
@@ -481,8 +481,8 @@ def register_info(request, ctx, form, reg, dis):
     ctx["custom_text"] = get_event_text(ctx["event"].id, EventTextType.REGISTER)
     ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventTextType.TOC)
     ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
-    ctx["hide_unavailable"] = ctx["event"].get_config("registration_hide_unavailable", False)
-    ctx["no_provisional"] = ctx["event"].get_config("payment_no_provisional", False)
+    ctx["hide_unavailable"] = get_event_config(ctx["event"].id, "registration_hide_unavailable", False, ctx)
+    ctx["no_provisional"] = get_event_config(ctx["event"].id, "payment_no_provisional", False, ctx)
 
     init_form_submitted(ctx, form, request, reg)
 
@@ -665,7 +665,7 @@ def _check_redirect_registration(request, ctx: dict, event, secret_code: str | N
     if "registration_open" in ctx["features"]:
         if not ctx["run"].registration_open or ctx["run"].registration_open > timezone_now():
             # Redirect to pre-registration if available and active
-            if "pre_register" in ctx["features"] and event.get_config("pre_register_active", False):
+            if "pre_register" in ctx["features"] and get_event_config(event.id, "pre_register_active", False):
                 return redirect("pre_register", s=ctx["event"].slug)
             else:
                 return render(request, "larpmanager/event/not_open.html", ctx)
@@ -677,7 +677,7 @@ def _add_bring_friend_discounts(ctx):
     if "bring_friend" not in ctx["features"]:
         return
     for config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-        ctx[config_name] = ctx["event"].get_config(config_name, 0)
+        ctx[config_name] = get_event_config(ctx["event"].id, config_name, 0, ctx)
 
 
 def _register_prepare(ctx, reg):

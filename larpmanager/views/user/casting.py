@@ -31,6 +31,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import Registration, TicketTier
@@ -170,13 +171,12 @@ def casting_details(ctx: dict, typ: int) -> dict:
 
     # Set type identifier and numeric casting configuration
     ctx["typ"] = typ
-    ctx["casting_add"] = int(ctx["event"].get_config("casting_add", 0))
-    ctx["casting_min"] = int(ctx["event"].get_config("casting_min", 5))
-    ctx["casting_max"] = int(ctx["event"].get_config("casting_max", 5))
+    for key, default in (("add", 0), ("min", 5), ("max", 5)):
+        ctx[f"casting_{key}"] = int(get_event_config(ctx["event"].id, f"casting_{key}", default, ctx))
 
     # Set boolean casting preferences from event configuration
     for s in ["show_pref", "history", "avoid"]:
-        ctx["casting_" + s] = ctx["event"].get_config("casting_" + s, False)
+        ctx["casting_" + s] = get_event_config(ctx["event"].id, "casting_" + s, False, ctx)
 
     return ctx
 
@@ -308,7 +308,7 @@ def _get_previous(ctx: dict, request: HttpRequest, typ: int) -> None:
 def _check_already_done(ctx, request, typ):
     # check already done
     if typ == 0:
-        casting_chars = int(ctx["run"].event.get_config("casting_characters", 1))
+        casting_chars = int(get_event_config(ctx["run"].event_id, "casting_characters", 1))
         if ctx["run"].reg.rcrs.count() >= casting_chars:
             chars = []
             for el in ctx["run"].reg.rcrs.values_list("character__number", flat=True):

@@ -53,7 +53,7 @@ class MyUserAdmin(UserAdmin):
 
     @staticmethod
     def character_link(instance):
-        url = reverse("admin:larpmanager_member_change", args=[instance.member.id])
+        url = reverse("admin:larpmanager_member_change", args=[instance.member_id])
         return mark_safe(f"<a href='{url}'>{instance.member}</a>")
 
 

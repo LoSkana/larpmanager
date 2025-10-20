@@ -37,7 +37,7 @@ from larpmanager.accounting.gateway import (
     get_stripe_form,
     get_sumup_form,
 )
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
 from larpmanager.models.accounting import (
@@ -186,7 +186,7 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
     invoice.reg = ctx["reg"]
 
     # Get custom reason template from event configuration
-    custom_reason = ctx["reg"].run.event.get_config("payment_custom_reason")
+    custom_reason = get_event_config(ctx["reg"].run.event_id, "payment_custom_reason")
     if not custom_reason:
         return
 

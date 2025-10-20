@@ -27,7 +27,7 @@ from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
 
-from larpmanager.cache.config import save_all_element_configs, save_single_config
+from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, Operation, RulePx
 from larpmanager.models.form import (
@@ -137,7 +137,7 @@ def calculate_character_experience_points(char):
     if "px" not in get_event_features(char.event_id):
         return
 
-    start = char.event.get_config("px_start", 0)
+    start = get_event_config(char.event_id, "px_start", 0)
 
     _handle_free_abilities(char)
 

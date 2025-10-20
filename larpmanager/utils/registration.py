@@ -30,6 +30,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
@@ -413,7 +414,7 @@ def registration_status(
         return
 
     # check pre-register
-    if run.event.get_config("pre_register_active", False):
+    if get_event_config(run.event_id, "pre_register_active", False):
         _status_preregister(run, user, pre_registrations_dict)
 
     dt = datetime.today()
@@ -456,11 +457,11 @@ def _status_preregister(run, user, pre_registrations_dict=None):
     if user.is_authenticated:
         if pre_registrations_dict is not None:
             # Use cached data if available
-            has_pre_registration = run.event.id in pre_registrations_dict
+            has_pre_registration = run.event_id in pre_registrations_dict
         else:
             # Fallback to database query if no cache provided
             has_pre_registration = PreRegistration.objects.filter(
-                event_id=run.event.id, member=user.member, deleted__isnull=True
+                event_id=run.event_id, member=user.member, deleted__isnull=True
             ).exists()
     if has_pre_registration:
         mes = _("Pre-registration confirmed") + "!"
@@ -475,7 +476,7 @@ def _get_features_map(features_map, run):
     if features_map is None:
         features_map = {}
     if run.event.slug not in features_map:
-        features_map[run.event.slug] = get_event_features(run.event.id)
+        features_map[run.event.slug] = get_event_features(run.event_id)
     features = features_map[run.event.slug]
     return features
 
@@ -516,7 +517,7 @@ def registration_find(run: Run, user: User, my_regs: QuerySet = None):
 def check_character_maximum(event, member):
     # check the amount of characters of the character
     current_chars = event.get_elements(Character).filter(player=member).count()
-    max_chars = int(event.get_config("user_character_max", 0))
+    max_chars = int(get_event_config(event.id, "user_character_max", 0))
     return current_chars >= max_chars, max_chars
 
 
@@ -544,7 +545,7 @@ def registration_status_characters(run, features: dict, character_rels_dict: dic
         rcrs = que.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
-    approval = run.event.get_config("user_character_approval", False)
+    approval = get_event_config(run.event_id, "user_character_approval", False)
 
     # Build list of character links with names and approval status
     aux = []
@@ -706,7 +707,7 @@ def check_assign_character(request: HttpRequest, ctx: dict) -> None:
 
 
 def get_reduced_available_count(run):
-    ratio = int(run.event.get_config("reduced_ratio", 10))
+    ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
     red = Registration.objects.filter(run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True).count()
     pat = Registration.objects.filter(run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()

@@ -22,6 +22,7 @@ import os
 
 from cryptography.fernet import Fernet, InvalidToken
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, Collection
 from larpmanager.models.association import Association
@@ -54,7 +55,7 @@ def is_reg_provisional(instance: Registration, event: Event | None = None, featu
         features = get_event_features(event.id)
 
     # Check if provisional payments are disabled for this event
-    if event.get_config("payment_no_provisional", False):
+    if get_event_config(event.id, "payment_no_provisional", False):
         return False
 
     # Check if payment feature is enabled and registration has outstanding balance

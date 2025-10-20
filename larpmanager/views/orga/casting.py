@@ -30,6 +30,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import registration_payments_status
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.member import Member, Membership
@@ -225,7 +226,7 @@ def get_casting_choices_quests(ctx):
 
 def check_player_skip_characters(reg, ctx):
     # check it has a number of characters assigned less the allowed amount
-    casting_chars = int(ctx["event"].get_config("casting_characters", 1))
+    casting_chars = int(get_event_config(ctx["event"].id, "casting_characters", 1, ctx))
     return RegistrationCharacterRel.objects.filter(reg=reg).count() >= casting_chars
 
 
@@ -260,12 +261,12 @@ def check_casting_player(ctx: dict, reg, options: dict, typ: int, cache_membs: d
     # Filter by membership status when membership feature is enabled
     if "membership" in ctx["features"]:
         # Skip if member not found in membership cache
-        if reg.member.id not in cache_membs:
+        if reg.member_id not in cache_membs:
             return True
 
         # Determine actual membership status, accounting for AIM membership
-        status = cache_membs[reg.member.id]
-        if status == "a" and reg.member.id in cache_aim:
+        status = cache_membs[reg.member_id]
+        if status == "a" and reg.member_id in cache_aim:
             status = "p"  # Override status for AIM members
 
         # Skip if membership status not in allowed list
@@ -357,9 +358,9 @@ def get_casting_data(request: HttpRequest, ctx: dict, typ: int, form: "Organizer
 
         # Track players who didn't submit preferences
         if len(pref) == 0:
-            didnt_choose.append(reg.member.id)
+            didnt_choose.append(reg.member_id)
         else:
-            preferences[reg.member.id] = pref
+            preferences[reg.member_id] = pref
 
     # Add random unchosen characters to resolve ties fairly
     not_chosen, not_chosen_add = _fill_not_chosen(choices, chosen, ctx, preferences, taken)
@@ -383,8 +384,8 @@ def get_casting_data(request: HttpRequest, ctx: dict, typ: int, form: "Organizer
     ctx["avoids"] = json.dumps(avoids)
 
     # Load priority configuration for algorithm weighting
-    ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 0))
-    ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 0))
+    for key in ("reg_priority", "pay_priority"):
+        ctx[key] = int(get_event_config(ctx["event"].id, f"casting_{key}", 0, ctx))
 
 
 def _casting_prepare(ctx: dict, request, typ: str) -> tuple[int, dict[int, str], dict[int, list]]:
@@ -433,7 +434,7 @@ def _get_player_info(players: dict, reg: Registration) -> None:
         None: Function modifies the players dictionary in-place
     """
     # Initialize basic player information with default priority
-    players[reg.member.id] = {
+    players[reg.member_id] = {
         "name": str(reg.member),
         "prior": 1,
         "email": reg.member.email,
@@ -441,13 +442,13 @@ def _get_player_info(players: dict, reg: Registration) -> None:
 
     # Override priority if ticket has casting priority defined
     if reg.ticket:
-        players[reg.member.id]["prior"] = reg.ticket.casting_priority
+        players[reg.member_id]["prior"] = reg.ticket.casting_priority
 
     # Calculate registration days (number of days from registration creation)
-    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date()) + 1
+    players[reg.member_id]["reg_days"] = -get_time_diff_today(reg.created.date()) + 1
 
     # Calculate payment days (number of days from full payment, default to 1 if unpaid)
-    players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) + 1 if reg.payment_date else 1
+    players[reg.member_id]["pay_days"] = -get_time_diff_today(reg.payment_date) + 1 if reg.payment_date else 1
 
 
 def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, nopes: dict, reg: Registration) -> list:
@@ -484,9 +485,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
 
             # Track rejected preferences ("nopes") for this member
             if c.nope:
-                if reg.member.id not in nopes:
-                    nopes[reg.member.id] = []
-                nopes[reg.member.id].append(p)
+                if reg.member_id not in nopes:
+                    nopes[reg.member_id] = []
+                nopes[reg.member_id].append(p)
 
     return pref
 

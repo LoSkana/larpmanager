@@ -30,6 +30,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.models.access import get_event_staffers
@@ -489,9 +490,9 @@ def _prepare_writing_list(ctx, request):
             lst = [f"q_{el}" for name, el in ctx["writing_fields"][model_name]["ids"].items()]
             ctx["default_fields"] = json.dumps(lst)
 
-    ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
+    ctx["auto_save"] = not get_event_config(ctx["event"].id, "writing_disable_auto", False, ctx)
 
-    ctx["writing_unimportant"] = ctx["event"].get_config("writing_unimportant", False)
+    ctx["writing_unimportant"] = get_event_config(ctx["event"].id, "writing_unimportant", False, ctx)
 
 
 def writing_list_plot(ctx):

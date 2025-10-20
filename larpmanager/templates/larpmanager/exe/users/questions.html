@@ -75,7 +75,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'exe_questions_answer' el.member.id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'exe_questions_answer' el.member_id %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

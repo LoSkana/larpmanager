@@ -230,7 +230,7 @@ class Command(BaseCommand):
                 self.check_ach_player(reg, cache)
 
             # Cache event data for reference
-            ev[run.event.id] = run.event
+            ev[run.event_id] = run.event
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=datetime.today()):

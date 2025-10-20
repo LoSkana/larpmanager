@@ -29,7 +29,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import get_element_config
+from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
 from larpmanager.models.member import Member
@@ -281,7 +281,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if self.event.get_config("user_character_approval", False):
+        if get_event_config(self.event_id, "user_character_approval", False):
             if self.status not in [CharacterStatus.APPROVED]:
                 js["hide"] = True
 
@@ -690,7 +690,7 @@ def replace_character_names_in_writing(instance) -> None:
         return
 
     # Early return if event doesn't have character substitution enabled
-    if not instance.event.get_config("writing_substitute", False):
+    if not get_event_config(instance.event_id, "writing_substitute", False):
         return
 
     # Build character name to number mapping for replacement

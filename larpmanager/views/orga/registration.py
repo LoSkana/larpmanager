@@ -40,7 +40,7 @@ from larpmanager.accounting.registration import (
     get_reg_payments,
 )
 from larpmanager.cache.character import clear_run_cache_and_media, get_event_cache_all
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import clear_event_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
@@ -348,7 +348,7 @@ def _orga_registrations_custom_character(ctx):
         return
     ctx["custom_info"] = []
     for field in ["pronoun", "song", "public", "private", "profile"]:
-        if not ctx["event"].get_config("custom_character_" + field, False):
+        if not get_event_config(ctx["event"].id, "custom_character_" + field, False, ctx):
             continue
         ctx["custom_info"].append(field)
 
@@ -374,7 +374,7 @@ def _orga_registrations_prepare(ctx, request):
         ctx["reg_tickets"][t.id] = t
     ctx["reg_questions"] = _get_registration_fields(ctx, request.user.member)
 
-    ctx["no_grouping"] = ctx["event"].get_config("registration_no_grouping", False)
+    ctx["no_grouping"] = get_event_config(ctx["event"].id, "registration_no_grouping", False, ctx)
 
 
 def _get_registration_fields(ctx, member):
@@ -473,7 +473,7 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
     _orga_registrations_custom_character(ctx)
 
     # Check if age-based question filtering is enabled
-    ctx["registration_reg_que_age"] = ctx["event"].get_config("registration_reg_que_age", False)
+    ctx["registration_reg_que_age"] = get_event_config(ctx["event"].id, "registration_reg_que_age", False, ctx)
 
     # Initialize registration grouping dictionary
     ctx["reg_all"] = {}
@@ -518,7 +518,7 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
     ctx["upload"] = "registrations"
     ctx["download"] = 1
     # Enable export view if configured
-    if ctx["event"].get_config("show_export", False):
+    if get_event_config(ctx["event"].id, "show_export", False, ctx):
         ctx["export"] = "registration"
 
     # Load user's saved column visibility preferences
@@ -1023,8 +1023,8 @@ def orga_reload_cache(request, s):
 
 
 def lottery_info(request, ctx):
-    ctx["num_draws"] = int(ctx["event"].get_config("lottery_num_draws", 0))
-    ctx["ticket"] = ctx["event"].get_config("lottery_ticket", "")
+    ctx["num_draws"] = int(get_event_config(ctx["event"].id, "lottery_num_draws", 0, ctx))
+    ctx["ticket"] = get_event_config(ctx["event"].id, "lottery_ticket", "", ctx)
     ctx["num_lottery"] = Registration.objects.filter(
         run=ctx["run"],
         ticket__tier=TicketTier.LOTTERY,

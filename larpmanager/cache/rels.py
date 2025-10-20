@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
@@ -395,12 +396,12 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
             rel_plots = char.get_plot_characters()
-            plot_list = [(rel.plot.id, rel.plot.name) for rel in rel_plots]
+            plot_list = [(rel.plot_id, rel.plot.name) for rel in rel_plots]
             relations["plot_rels"] = build_relationship_dict(plot_list)
 
             # Calculate important plot count (excluding $unimportant entries)
             unimportant_count = 0
-            if char.event.get_config("writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", False):
                 unimportant_count = sum(
                     1 for rel in rel_plots if strip_tags(rel.text).lstrip().startswith("$unimportant")
                 )
@@ -408,17 +409,17 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
-            cache_event = event if event else char.event
-            if cache_event.get_config("campaign_faction_indep", False):
+            cache_event_id = event.id if event else char.event_id
+            if get_event_config(cache_event_id, "campaign_faction_indep", False):
                 # Use the cache event for independent faction lookup
-                fac_event = cache_event
+                fac_event_id = cache_event_id
             else:
                 # Use the parent event for inherited faction lookup
-                fac_event = char.event.get_class_parent("faction")
+                fac_event_id = char.event.get_class_parent("faction").id
 
             # Build faction list based on determined event
-            if fac_event:
-                factions = char.factions_list.filter(event=fac_event)
+            if fac_event_id:
+                factions = char.factions_list.filter(event_id=fac_event_id)
                 faction_list = [(faction.id, faction.name) for faction in factions]
             else:
                 faction_list = []
@@ -433,7 +434,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
             # Calculate important relationship count (excluding $unimportant entries)
             unimportant_count = 0
-            if char.event.get_config("writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", False):
                 unimportant_count = sum(
                     1 for rel in relationships if strip_tags(rel.text).lstrip().startswith("$unimportant")
                 )
@@ -539,7 +540,7 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
         char_rels = plot.get_plot_characters()
 
         # Extract character ID and name tuples from relationships
-        char_list = [(rel.character.id, rel.character.name) for rel in char_rels]
+        char_list = [(rel.character_id, rel.character.name) for rel in char_rels]
 
         # Build structured relationship dictionary with list and count
         relations["character_rels"] = build_relationship_dict(char_list)

@@ -25,6 +25,7 @@ from typing import Optional
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
@@ -124,7 +125,7 @@ def get_event_cache_characters(ctx: dict, res: dict) -> dict:
         ctx["assignments"][el.character.number] = el
 
     # Get event configuration for hiding uncasted characters
-    hide_uncasted_characters = ctx["event"].get_config("gallery_hide_uncasted_characters", False)
+    hide_uncasted_characters = get_event_config(ctx["event"].id, "gallery_hide_uncasted_characters", False, ctx)
 
     # Get list of assigned character IDs for mirror filtering
     assigned_chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
@@ -471,7 +472,7 @@ def reset_event_cache_all(run):
 
 
 def update_character_fields(instance, data):
-    features = get_event_features(instance.event.id)
+    features = get_event_features(instance.event_id)
     if "character" not in features:
         return
 

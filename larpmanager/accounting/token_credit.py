@@ -22,6 +22,7 @@ from decimal import Decimal
 from django.db import transaction
 from django.db.models import Case, F, IntegerField, Q, QuerySet, Value, When
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import (
     AccountingItemExpense,
@@ -342,7 +343,7 @@ def update_token_credit(instance, token: bool = True) -> None:
 
 
 def handle_tokes_credits(assoc_id, features, reg, remaining):
-    if "token_credit" not in features or reg.run.event.get_config("token_credit_disable_t", False):
+    if "token_credit" not in features or get_event_config(reg.run.event_id, "token_credit_disable_t", False):
         return
 
     if remaining > 0:

@@ -27,6 +27,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssocRole, EventRole, get_assoc_executives, get_event_organizers
 from larpmanager.models.association import Association, get_url, hdr
@@ -123,7 +124,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
                 for mid in pk_set:
                     mb = Member.objects.get(pk=mid)
                     # Reset cached event links to reflect permission changes
-                    reset_event_links(mb.user.id, instance.assoc.id)
+                    reset_event_links(mb.user.id, instance.assoc_id)
             return
 
         # Only process role additions from this point forward
@@ -143,7 +144,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
             # Trigger member association join process
             mb.join(instance.assoc)
             # Invalidate cached permissions for this member
-            reset_event_links(mb.user.id, instance.assoc.id)
+            reset_event_links(mb.user.id, instance.assoc_id)
 
             # Send role approval notification to the member
             # Set language context for proper localization
@@ -346,7 +347,7 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
     activate(instance.member.language)
 
     # Skip email if character mail is disabled for this event
-    if instance.run.event.get_config("mail_character", False):
+    if get_event_config(instance.run.event_id, "mail_character", False):
         return
 
     # Get trait and quest display information for the current run
@@ -444,7 +445,7 @@ def send_character_status_update_email(instance: Character) -> None:
         - Does nothing if approval feature disabled or no status change
     """
     # Early return if character approval feature is disabled for this event
-    if not instance.event.get_config("user_character_approval", False):
+    if not get_event_config(instance.event_id, "user_character_approval", False):
         return
 
     # Only proceed if character exists in DB and has an assigned player

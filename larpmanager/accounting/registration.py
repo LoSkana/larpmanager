@@ -28,6 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.mail.registration import update_registration_status_bkg
@@ -444,7 +445,7 @@ def cancel_reg(reg):
     AccountingItemOther.objects.filter(ref_addit=reg.id).delete()
 
     # Reset event links
-    reset_event_links(reg.member.id, reg.run.event.assoc_id)
+    reset_event_links(reg.member_id, reg.run.event.assoc_id)
 
 
 def get_display_choice(choices, k):
@@ -719,7 +720,7 @@ def update_registration_accounting(reg: Registration) -> None:
     handle_tokes_credits(assoc_id, features, reg, remaining)
 
     # Get payment alert threshold from event configuration
-    alert = int(reg.run.event.get_config("payment_alert", 30, bypass_cache=True))
+    alert = int(get_event_config(reg.run.event_id, "payment_alert", 30, bypass_cache=True))
 
     # Calculate payment schedule based on feature flags
     if "reg_installments" in features:

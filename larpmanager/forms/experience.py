@@ -22,6 +22,7 @@ from typing import Any
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
@@ -87,7 +88,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
 
-        px_user = self.params["event"].get_config("px_user", False)
+        px_user = get_event_config(self.params["event"].id, "px_user", False)
 
         self.fields["typ"].choices = [
             (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")

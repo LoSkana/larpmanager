@@ -27,6 +27,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.role import has_event_permission
 from larpmanager.forms.association import ExePreferencesForm
@@ -954,7 +955,7 @@ class OrgaEventTextForm(MyForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if not self.params["event"].get_config("user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW]
             )
@@ -1136,7 +1137,7 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"]:
             return ls
 
-        if not self.params["event"].get_config("writing_field_visibility", False):
+        if not get_event_config(self.params["event"].id, "writing_field_visibility", False):
             return
 
         help_text = _(
@@ -1526,11 +1527,11 @@ class OrgaPreferencesForm(ExePreferencesForm):
         # Add character-specific configuration options
         if s[0] == "character":
             # Add player field if character limit is set
-            if self.params["event"].get_config("user_character_max", 0):
+            if get_event_config(self.params["event"].id, "user_character_max", 0):
                 extra.append(("player", _("Player")))
 
             # Add status field if character approval is enabled
-            if self.params["event"].get_config("user_character_approval", False):
+            if get_event_config(self.params["event"].id, "user_character_approval", False):
                 extra.append(("status", _("Status")))
 
             # Define character feature fields with their config keys and labels

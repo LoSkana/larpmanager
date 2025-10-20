@@ -24,7 +24,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
@@ -148,7 +148,7 @@ def registration_options(instance) -> str:
             body += f" - {instance.ticket.description}"
 
     # Get user membership and event features for permission checks
-    get_user_membership(instance.member, instance.run.event.assoc.id)
+    get_user_membership(instance.member, instance.run.event.assoc_id)
     features = get_event_features(instance.run.event_id)
 
     # Get currency symbol for formatting monetary amounts
@@ -271,7 +271,7 @@ def send_character_assignment_email(instance, created: bool) -> None:
         return
 
     # Check if character assignment emails are disabled for this event
-    if instance.reg.run.event.get_config("mail_character", False):
+    if get_event_config(instance.reg.run.event_id, "mail_character", False):
         return
 
     # Prepare context data for email template
