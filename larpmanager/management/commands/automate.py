@@ -596,14 +596,14 @@ class Command(BaseCommand):
     def remind_reg(self, reg: Registration, assoc: Association, remind_days: int) -> None:
         """Process reminder logic for a specific registration.
 
-        Checks if a registration needs reminders based on the configured interval
-        and sends appropriate reminders for membership, profile completion, or
-        payment depending on the registration status and event features.
+        Handles various reminder scenarios based on registration status, membership state,
+        and event features. Sends appropriate reminder emails based on the registration's
+        current state and membership requirements.
 
         Args:
             reg: Registration instance to check reminders for
-            assoc: Association instance containing the organization context
-            remind_days: Interval in days for sending reminder notifications
+            assoc: Association instance containing the registration
+            remind_days: Interval in days for sending reminders
 
         Returns:
             None
@@ -613,7 +613,7 @@ class Command(BaseCommand):
         get_user_membership(reg.member, assoc.id)
 
         # Check if today is the scheduled day to send reminder emails
-        # Only proceed if the time difference modulo remind_days equals 1
+        # Only send reminders on specific intervals based on registration creation date
         if get_time_diff_today(reg.created) % remind_days != 1:
             return
 
@@ -622,23 +622,22 @@ class Command(BaseCommand):
             m = reg.member.membership
             handled = False
 
-            # Handle membership-related reminders if feature is enabled
+            # Handle membership-related reminders if membership feature is enabled
             if "membership" in ev_features:
-                # Send membership reminder for empty or joined status
+                # Send membership reminder for empty or joined members
                 if m.status in (MembershipStatus.EMPTY, MembershipStatus.JOINED):
                     remember_membership(reg)
                     handled = True
-                # Check membership fee payment for accepted members (excluding LAOG events)
+                # Check membership fee payment for accepted members (except LAOG events)
                 elif "laog" not in ev_features and m.status == MembershipStatus.ACCEPTED:
                     self.check_membership_fee(reg)
                     handled = True
 
-            # Send profile completion reminder if no other reminder was sent
-            # and member profile is incomplete
+            # Send profile completion reminder if membership wasn't handled and profile incomplete
             if not handled and not m.compiled:
                 remember_profile(reg)
 
-        # Check payment status if registration has alerts enabled
+        # Check payment status and send payment reminders if registration has alerts
         if reg.alert:
             self.check_payment(reg)
 

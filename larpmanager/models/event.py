@@ -520,7 +520,7 @@ class Run(BaseModel):
 
     start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 
-    end = models.DateField(blank=True, null=True, verbose_name=_("End date"))
+    end = models.DateField(blank=True, null=True, verbose_name=_("End date"), db_index=True)
 
     registration_open = models.DateTimeField(
         blank=True,

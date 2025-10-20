@@ -288,7 +288,9 @@ class AccountingItemMembership(AccountingItem):
     year = models.IntegerField()
 
     class Meta:
-        indexes = [models.Index(fields=["assoc", "year"])]
+        indexes = [
+            models.Index(fields=["assoc", "year"], condition=Q(deleted__isnull=True), name="acctmem_assoc_year_act"),
+        ]
 
 
 class AccountingItemDonation(AccountingItem):

@@ -213,45 +213,47 @@ def get_index_assoc_permissions(ctx: dict, request: HttpRequest, assoc_id: int, 
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
-def get_index_permissions(ctx: dict, features: list, has_default: bool, permissions: list, typ: str) -> dict:
+def get_index_permissions(
+    ctx: dict, features: list[str], has_default: bool, permissions: list[str], typ: str
+) -> dict[tuple[str, str], list[dict]]:
     """Build index permissions structure based on user access and features.
 
-    This function filters and groups permissions based on user access rights,
-    available features, and permission types. It creates a hierarchical structure
-    of permissions organized by module.
+    Filters and groups permissions by module based on user's access rights,
+    available features, and permission type. Only includes visible permissions
+    that the user is allowed to access.
 
     Args:
-        ctx: Context dictionary containing association information and user data
-        features: List of available feature slugs for the current context
-        has_default: Boolean indicating if user has default/admin permissions
-        permissions: List of specific permission slugs granted to the user
-        typ: Permission type string to filter permissions by (e.g., 'assoc', 'event')
+        ctx: Context dictionary containing association information
+        features: List of available feature slugs for the user
+        has_default: Whether user has default permissions (bypasses specific checks)
+        permissions: List of specific permission slugs the user has
+        typ: Permission type to filter (e.g., 'association', 'event')
 
     Returns:
-        Dictionary mapping module tuples (name, icon) to lists of permission objects.
-        Each permission object contains slug, feature info, and module details.
+        Dictionary mapping module info tuples (name, icon) to lists of
+        permission dictionaries for that module
     """
     res = {}
 
-    # Get cached permissions filtered by type
+    # Get cached permissions for the specified type
     for ar in get_cache_index_permission(typ):
-        # Skip hidden permissions from display
+        # Skip hidden permissions
         if ar["hidden"]:
             continue
 
-        # Check if permission is allowed in current management context
+        # Check if permission is allowed in current context
         if not is_allowed_managed(ar, ctx):
             continue
 
-        # Non-default users need explicit permission grants
+        # Check user has specific permission (unless has default access)
         if not has_default and ar["slug"] not in permissions:
             continue
 
-        # Skip permissions for unavailable features (except placeholders)
+        # Check feature is available (skip placeholder features)
         if not ar["feature__placeholder"] and ar["feature__slug"] not in features:
             continue
 
-        # Group permissions by module (name and icon as key)
+        # Group permissions by module
         mod_name = (_(ar["module__name"]), ar["module__icon"])
         if mod_name not in res:
             res[mod_name] = []

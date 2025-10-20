@@ -43,7 +43,10 @@ class QuestType(Writing):
         return js
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="qtype_evt_act"),
+        ]
 
 
 class Quest(Writing):
@@ -52,7 +55,10 @@ class Quest(Writing):
     )
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="quest_evt_act"),
+        ]
         constraints = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_quest_with_optional"),
             UniqueConstraint(
@@ -81,7 +87,10 @@ class Trait(Writing):
     traits = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="trait_evt_act"),
+        ]
         constraints = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_trait_with_optional"),
             UniqueConstraint(

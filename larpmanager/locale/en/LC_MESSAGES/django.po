@@ -130,6 +130,15 @@ msgstr ""
 msgid "Indicates the sessions for which the discount is available"
 msgstr ""
 
+msgid "Upload a PDF file or image (JPG, PNG, etc.)"
+msgstr ""
+
+msgid "Payment confirmation"
+msgstr ""
+
+msgid "I confirm that I have made the payment"
+msgstr ""
+
 msgid "Info"
 msgstr ""
 
@@ -531,6 +540,13 @@ msgstr ""
 msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to "
 "recognize it"
+msgstr ""
+
+msgid "Require receipt for manual payments"
+msgstr ""
+
+msgid ""
+"If checked: Participants must provide a receipt/invoice for manual payments"
 msgstr ""
 
 msgid "VAT"
@@ -1804,7 +1820,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Enter the 'bring a friend' code provided by a registered participant to "
+"Enter the “bring a friend” code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
 
@@ -2159,9 +2175,6 @@ msgid "Amount"
 msgstr ""
 
 msgid "Download document"
-msgstr ""
-
-msgid "Payment confirmation"
 msgstr ""
 
 msgid "Payment to check"
@@ -4273,8 +4286,15 @@ msgstr ""
 
 msgid ""
 "Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below. You can upload a file in pdf format, or "
-"an image"
+"confirmation) and upload it below"
+msgstr ""
+
+msgid "You can upload a file in pdf format, or an image"
+msgstr ""
+
+msgid ""
+"Once the transfer is confirmed, submit the form below to notify us of your "
+"payment"
 msgstr ""
 
 msgid ""
@@ -4312,6 +4332,11 @@ msgstr ""
 msgid ""
 "Once you have made the payment, return to this page, and upload below the "
 "screenshot of the confirmation sent by Paypal"
+msgstr ""
+
+msgid ""
+"Once you have made the payment, return to this page and submit the form "
+"below to notify us of your payment"
 msgstr ""
 
 msgid "Total registration fee"
@@ -9266,8 +9291,10 @@ msgstr ""
 msgid "Error processing payment, contact us"
 msgstr ""
 
-msgid ""
-"Payment received! As soon as it is approved, your accounts will be updated"
+msgid "Payment received"
+msgstr ""
+
+msgid "As soon as it is approved, your accounting will be updated"
 msgstr ""
 
 msgid "Invoice not found"

@@ -4,23 +4,22 @@
 
 {% if num %}
 
-var eid = {{ num }};
-var type = '{{ type }}';
+var w_eid = {{ num }};
+var w_type = '{{ type }}';
 
-var timeout = 10 * 1000;
-var post_url = "{% url 'working_ticket' %}";
+var w_timeout = 1 * 1000;
+var working_ticket_url = "{% url 'working_ticket' %}";
 
-function submitForm() {
+function callWorkingTicket() {
 
     $.ajax({
         type: "POST",
-        url: post_url,
-        data: {eid: eid, type: type, token: token},
+        url: working_ticket_url,
+        data: {eid: w_eid, type: w_type, token: token},
         success: function(msg) {
             if (msg.warn) {
                 $.toast({
                     text: msg.warn,
-                    showHideTransition: 'slide',
                     icon: 'error',
                     position: 'mid-center',
                     textAlign: 'center',
@@ -31,12 +30,12 @@ function submitForm() {
             }
         }
     });
-    setTimeout(()=>submitForm(), timeout);
+    setTimeout(()=>callWorkingTicket(), w_timeout);
 }
 
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
-        submitForm();
+        callWorkingTicket();
     });
 });
 

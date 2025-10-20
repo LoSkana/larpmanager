@@ -58,87 +58,59 @@ from larpmanager.utils.text import get_assoc_text
 logger = logging.getLogger(__name__)
 
 
-def fix_filename(s: str) -> str:
+def fix_filename(s):
     """Remove special characters from filename for safe PDF generation.
 
-    This function sanitizes filenames by removing all characters that are not
-    alphanumeric or spaces, making them safe for PDF generation and file system
-    operations.
-
     Args:
-        s: Original filename string to be sanitized.
+        s (str): Original filename string
 
     Returns:
-        Sanitized filename containing only alphanumeric characters and spaces.
-
-    Example:
-        >>> fix_filename("my-file@name!.pdf")
-        "my filename pdf"
+        str: Sanitized filename with only alphanumeric characters and spaces
     """
-    # Remove all non-alphanumeric characters except spaces using regex substitution
     return re.sub(r"[^A-Za-z0-9 ]+", "", s)
 
 
 # reprint if file not exists, older than 1 day, or debug
-def reprint(fp: str) -> bool:
+def reprint(fp):
     """Determine if PDF file should be regenerated.
 
-    Checks if a PDF file needs to be regenerated based on debug mode,
-    file existence, and modification time. Files are regenerated in debug
-    mode, when missing, or when older than 1 day.
-
     Args:
-        fp: File path to check for regeneration.
+        fp (str): File path to check
 
     Returns:
-        True if file should be regenerated, False otherwise.
+        bool: True if file should be regenerated (debug mode, missing, or older than 1 day)
     """
-    # Always regenerate in debug mode for development
     if conf_settings.DEBUG:
         return True
 
-    # Regenerate if file doesn't exist
     if not os.path.isfile(fp):
         return True
 
-    # Check if file is older than 1 day
     cutoff = datetime.now(timezone.utc) - timedelta(days=1)
     mtime = datetime.fromtimestamp(os.path.getmtime(fp), timezone.utc)
     return mtime < cutoff
 
 
-def return_pdf(fp: str, fn: str) -> HttpResponse:
-    """Return PDF file as HTTP response for download or inline viewing.
-
-    Opens a PDF file from the filesystem and returns it as an HTTP response
-    with appropriate headers for browser handling. The file is served with
-    inline disposition to allow viewing in browser.
+def return_pdf(fp, fn):
+    """Return PDF file as HTTP response.
 
     Args:
-        fp: File path to the PDF file on the filesystem
-        fn: Base filename for the download (without .pdf extension)
+        fp (str): File path to PDF file
+        fn (str): Filename for download
 
     Returns:
-        HttpResponse object containing the PDF file data with proper
-        content type and disposition headers
+        HttpResponse: PDF file response with appropriate headers
 
     Raises:
-        Http404: If the specified PDF file is not found at the given path
+        Http404: If PDF file is not found
     """
     try:
-        # Open PDF file in binary read mode
         f = open(fp, "rb")
-
-        # Create HTTP response with PDF content and proper MIME type
         response = HttpResponse(f.read(), content_type="application/pdf")
         f.close()
-
-        # Set content disposition header for inline viewing with sanitized filename
         response["Content-Disposition"] = f"inline;filename={fix_filename(fn)}.pdf"
-
         return response
     except FileNotFoundError as err:
-        # Convert file system error to HTTP 404 error
         raise Http404("File not found") from err
 
 
@@ -150,32 +122,32 @@ def link_callback(uri: str, rel: str) -> str:
 
     Args:
         uri: URI from HTML content (e.g., '/static/css/style.css')
-        rel: Relative URI reference (unused but required by xhtml2pdf)
+        rel: Relative URI reference (currently unused)
 
     Returns:
-        Absolute file path if file exists, empty string otherwise.
+        Absolute file path if file exists, empty string otherwise
 
     Example:
         >>> link_callback('/static/css/style.css', '')
         '/path/to/static/css/style.css'
     """
-    # Get Django settings for static and media configurations
+    # Get Django settings for URL and filesystem paths
     s_url = conf_settings.STATIC_URL
     s_root = conf_settings.STATIC_ROOT
     m_url = conf_settings.MEDIA_URL
     m_root = conf_settings.MEDIA_ROOT
 
-    # Check if URI is a media file and construct absolute path
+    # Check if URI is a media URL and build corresponding file path
     if uri.startswith(m_url):
         path = os.path.join(m_root, uri.replace(m_url, ""))
-    # Check if URI is a static file and construct absolute path
+    # Check if URI is a static URL and build corresponding file path
     elif uri.startswith(s_url):
         path = os.path.join(s_root, uri.replace(s_url, ""))
     # Return empty string for unrecognized URI patterns
     else:
         return ""
 
-    # Verify file exists before returning path
+    # Verify the file actually exists on the filesystem
     if not os.path.isfile(path):
         return ""
 
@@ -186,32 +158,32 @@ def add_pdf_instructions(ctx: dict) -> None:
     """Add PDF generation instructions to template context.
 
     Processes template variables and utility codes for PDF headers,
-    footers, and CSS styling. Modifies the context dictionary in-place
-    by adding processed PDF styling and content instructions.
+    footers, and CSS styling. Updates the context dictionary in-place
+    with processed PDF styling and content instructions.
 
     Args:
-        ctx: Template context dictionary containing event and sheet_char data.
+        ctx: Template context dictionary containing event and character data.
              Must include 'event' and 'sheet_char' keys.
 
     Returns:
-        None: Function modifies ctx dictionary in-place.
+        None: Modifies the context dictionary in-place.
 
     Side Effects:
         - Updates ctx with 'page_css', 'header_content', 'footer_content' keys
         - Replaces template variables with actual values
-        - Substitutes utility codes with their corresponding URLs
+        - Replaces utility codes with URLs
     """
     # Extract PDF configuration from event settings
     for instr in ["page_css", "header_content", "footer_content"]:
         ctx[instr] = ctx["event"].get_config(instr, "", bypass_cache=True)
 
-    # Define template variable replacements for organization and event info
+    # Build replacement codes dictionary with event and character data
     codes = {
         "<pdf:organization>": ctx["event"].assoc.name,
         "<pdf:event>": ctx["event"].name,
     }
 
-    # Add character-specific template variables (number, name, title)
+    # Add character-specific replacement codes
     for m in ["number", "name", "title"]:
         codes[f"<pdf:{m}>"] = str(ctx["sheet_char"][m])
 
@@ -219,54 +191,44 @@ def add_pdf_instructions(ctx: dict) -> None:
     for s in ["header_content", "footer_content"]:
         if s not in ctx:
             continue
-        # Substitute each template variable with its actual value
+        # Apply all code replacements to current section
         for el, value in codes.items():
             if el not in ctx[s]:
                 continue
             ctx[s] = ctx[s].replace(el, value)
 
-    # Replace utility codes (#code#) with their corresponding URLs
+    # Replace utility codes with actual URLs in all PDF sections
     for s in ["header_content", "footer_content", "page_css"]:
         if s not in ctx:
             continue
-        # Find all utility code patterns (#code#) and replace with URLs
+        # Find all utility codes in format #code# and replace with URLs
         for x in re.findall(r"(#[\w-]+#)", ctx[s]):
             cod = x.replace("#", "")
             util = get_object_or_404(Util, cod=cod)
             ctx[s] = ctx[s].replace(x, util.util.url)
-        # Log processing completion for debugging
         logger.debug(f"Processed PDF context for key '{s}': {len(ctx[s])} characters")
 
 
-def xhtml_pdf(context: dict, template_path: str, output_filename: str) -> None:
+def xhtml_pdf(context, template_path, output_filename):
     """Generate PDF from Django template using xhtml2pdf.
 
     Args:
-        context: Template context dictionary containing variables for rendering.
-        template_path: Path to Django template file to be converted to PDF.
-        output_filename: Output PDF file path where the generated PDF will be saved.
+        context (dict): Template context dictionary
+        template_path (str): Path to Django template file
+        output_filename (str): Output PDF file path
 
     Raises:
-        Http404: If PDF generation fails with errors during conversion process.
-
-    Example:
-        >>> context = {'title': 'Report', 'data': [1, 2, 3]}
-        >>> xhtml_pdf(context, 'reports/template.html', '/tmp/report.pdf')
+        Http404: If PDF generation fails with errors
     """
-    # Load the Django template from the specified path
     template = get_template(template_path)
 
-    # Render the template with provided context to generate HTML
     html = template.render(context)
 
-    # Open output file in binary write mode for PDF creation
     with open(output_filename, "wb") as result_file:
-        # Generate PDF from HTML using xhtml2pdf library
-        # link_callback handles external resources like images and CSS
+        # create a pdf
         result = pisa.CreatePDF(html, dest=result_file, link_callback=link_callback)
 
-        # Check for errors during PDF generation process
-        # Raise Http404 with HTML content for debugging if errors occurred
+        # check result
         if result.err:
             raise Http404("We had some errors <pre>" + html + "</pre>")
 
@@ -377,39 +339,17 @@ def print_character_rel(ctx, force=False):
     return return_pdf(fp, f"{ctx['character']} - " + _("Relationships"))
 
 
-def print_gallery(ctx: dict, force: bool = False) -> tuple:
-    """Generate and return a PDF gallery of character portraits.
-
-    Args:
-        ctx: Context dictionary containing run information and character data
-        force: If True, regenerate the PDF even if it already exists
-
-    Returns:
-        tuple: PDF response tuple containing the generated gallery file
-    """
-    # Get the file path for the gallery PDF
+def print_gallery(ctx, force=False):
     fp = ctx["run"].get_gallery_filepath()
-
-    # Check if we need to regenerate the PDF (force or file needs reprinting)
     if force or reprint(fp):
-        # Load all event cache data into context
         get_event_cache_all(ctx)
-
-        # Initialize first aid characters list
         ctx["first_aid"] = []
-
-        # Iterate through characters to find those with first aid capability
         for _num, el in ctx["chars"].items():
             if "first_aid" in el and el["first_aid"] == "y":
                 ctx["first_aid"].append(el)
-
-        # Get the file path again (in case it changed)
         fp = ctx["run"].get_gallery_filepath()
-
-        # Generate the PDF from the gallery template
         xhtml_pdf(ctx, "pdf/sheets/gallery.html", fp)
 
-    # Return the PDF file as a downloadable response
     return return_pdf(fp, str(ctx["run"]) + " - " + _("Portraits"))
 
 
@@ -574,29 +514,16 @@ def deactivate_castings_and_remove_pdfs(instance):
         delete_character_pdf_files(char, instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(instance: AssignmentTrait, created: bool) -> None:
+def cleanup_pdfs_on_trait_assignment(instance, created):
     """Handle assignment trait post-save PDF cleanup.
 
-    This function is called after an AssignmentTrait instance is saved.
-    It checks if the instance has a member and was newly created, then
-    triggers PDF cleanup and casting deactivation if conditions are met.
-
-    Parameters
-    ----------
-    instance : AssignmentTrait
-        The AssignmentTrait instance that was saved
-    created : bool
-        True if the instance was newly created, False if it was updated
-
-    Returns
-    -------
-    None
+    Args:
+        instance: AssignmentTrait instance that was saved
+        created: Boolean indicating if instance was created
     """
-    # Early return if no member associated or instance wasn't newly created
     if not instance.member or not created:
         return
 
-    # Deactivate related castings and remove associated PDF files
     deactivate_castings_and_remove_pdfs(instance)
 
 
@@ -642,29 +569,16 @@ def print_character_bkg(a, s, c):
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(a, s) -> None:
-    """Print all run background materials including gallery, profiles, characters, and handouts.
-
-    Args:
-        a: Association object for creating the fake request context
-        s: Run slug or identifier for retrieving the specific event run
-
-    Returns:
-        None: This function performs printing operations and returns nothing
-    """
-    # Create fake request context and retrieve event run data
+def print_run_bkg(a, s):
     request = get_fake_request(a)
     ctx = get_event_run(request, s)
 
-    # Print gallery and character profiles for the run
     print_gallery(ctx)
     print_profiles(ctx)
 
-    # Iterate through all characters in the event and print each one
     for ch in ctx["run"].event.get_elements(Character).values_list("number", flat=True):
         print_character_go(ctx, ch)
 
-    # Iterate through all handouts in the event and print each one
     for h in ctx["run"].event.get_elements(Handout).values_list("number", flat=True):
         print_handout_go(ctx, h)
 
@@ -672,47 +586,21 @@ def print_run_bkg(a, s) -> None:
 # ## OLD PRINTING
 
 
-def odt_template(ctx: dict, char: object, fp: str, template: str, aux_template: str) -> None:
-    """Generate ODT document from template with retry mechanism.
-
-    Attempts to execute ODT template generation with automatic retry on failure.
-    Uses exponential backoff between retries to handle transient errors.
-
-    Args:
-        ctx: Context dictionary containing template variables
-        char: Character object for template processing
-        fp: File path for output document
-        template: Main template file path or content
-        aux_template: Auxiliary template file path or content
-
-    Raises:
-        Exception: After max_attempts failures, logs all exceptions encountered
-    """
-    # Initialize retry mechanism variables
+def odt_template(ctx, char, fp, template, aux_template):
     attempt = 0
     excepts = []
     max_attempts = 5
-
-    # Retry loop with exponential backoff
     while attempt < max_attempts:
         try:
-            # Attempt ODT template execution
             exec_odt_template(ctx, char, fp, template, aux_template)
             return
         except Exception as e:
-            # Log detailed error information for debugging
             logger.error(f"Error in PDF creation: {e}")
             logger.error(f"Character: {char}")
             logger.error(f"Template: {template}")
-
-            # Update retry tracking variables
             attempt += 1
             excepts.append(e)
-
-            # Wait before next attempt (backoff strategy)
             time.sleep(2)
-
-    # Log final failure after all retry attempts exhausted
     logger.error(f"ERROR IN odt_template: {excepts}")
 
 
@@ -845,69 +733,39 @@ def get_odt_content(ctx: dict, working_dir: str, aux_template) -> dict:
     }
 
 
-def clean_tag(tag: str) -> str:
+def clean_tag(tag):
     """
     Clean XML tag by removing namespace prefix.
 
-    Removes the namespace prefix from an XML tag string. XML namespaces are
-    typically formatted as '{namespace}tagname', and this function extracts
-    only the tag name portion.
-
     Args:
-        tag (str): XML tag string to clean, potentially containing namespace prefix
+        tag: XML tag string to clean
 
     Returns:
         str: Cleaned tag without namespace prefix
-
-    Example:
-        >>> clean_tag('{http://example.com/ns}element')
-        'element'
-        >>> clean_tag('simple_tag')
-        'simple_tag'
     """
-    # Find the position of the closing brace in the namespace
     i = tag.find("}")
-
-    # If namespace exists, extract the tag name after the closing brace
     if i >= 0:
         tag = tag[i + 1 :]
-
     return tag
 
 
-def replace_data(path: str, char: dict[str, str]) -> None:
+def replace_data(path, char):
     """
     Replace character data placeholders in template file.
 
-    Reads a template file and replaces placeholder patterns (#{key}#) with
-    corresponding values from the character data dictionary. Supports
-    replacement of 'number', 'name', and 'title' placeholders.
-
     Args:
-        path: Path to the template file to process.
-        char: Dictionary containing character data with keys as placeholder
-            names and values as replacement strings.
-
-    Returns:
-        None: Modifies the file in-place.
-
-    Example:
-        >>> char_data = {'name': 'John', 'title': 'Knight'}
-        >>> replace_data('/path/to/template.txt', char_data)
+        path: Path to template file
+        char: Character data dictionary with replacement values
     """
-    # Read the entire template file content
     with open(path) as file:
         filedata = file.read()
 
-    # Process each supported placeholder type
     for s in ["number", "name", "title"]:
-        # Skip if placeholder key not present in character data
         if s not in char:
             continue
-        # Replace all occurrences of placeholder pattern with actual value
         filedata = filedata.replace(f"#{s}#", str(char[s]))
 
-    # Write the modified content back to the file
+    # Write the file out again
     with open(path, "w") as file:
         file.write(filedata)
 

@@ -42,42 +42,46 @@ class TokenAuthMiddleware:
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """Process token authentication from query parameters.
 
-        Authenticates users via token in query parameters, then redirects to clean URL
-        without the token parameter to prevent token exposure in browser history.
+        Authenticates users via token from URL query parameters, then redirects
+        to a clean URL without the token parameter to maintain security.
 
         Args:
             request: Django HTTP request object containing potential token parameter
 
         Returns:
-            HttpResponse: Redirect to clean URL (without token) if token was present,
-                         otherwise continues to next middleware/view
+            HttpResponse: Redirect response to clean URL if token found,
+                         otherwise normal middleware response
+
+        Note:
+            Token is validated against cached user_id. Invalid tokens or users
+            are silently ignored for security reasons.
         """
-        # Extract token from query parameters
+        # Extract authentication token from query parameters
         token = request.GET.get("token")
         if token:
-            # Attempt to retrieve user ID from cache using token
+            # Retrieve user_id associated with this token from cache
             user_id = cache.get(f"session_token:{token}")
             if user_id:
                 try:
-                    # Get user object and authenticate them
+                    # Authenticate user if valid user_id found
                     user = get_user_model().objects.get(pk=user_id)
                     welcome_user(request, user)
                     login(request, user, backend=get_user_backend())
                 except get_user_model().DoesNotExist:
-                    # Invalid user_id, ignore and continue with redirect
+                    # Invalid user_id, ignore silently for security
                     pass
 
             # Parse current URL to remove token parameter
             parsed = urlparse(request.get_full_path())
             query = parse_qs(parsed.query)
 
-            # Remove token from query parameters
+            # Remove token from query parameters and rebuild URL
             query.pop("token", None)
             cleaned_query = urlencode(query, doseq=True)
-
-            # Reconstruct URL without token and redirect
             clean_url = urlunparse(parsed._replace(query=cleaned_query))
+
+            # Redirect to clean URL without token exposure
             return redirect(clean_url)
 
-        # No token present, continue to next middleware/view
+        # Continue with normal request processing if no token
         return self.get_response(request)

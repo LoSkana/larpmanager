@@ -17,13 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any, Optional
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
-from django.http import Http404, HttpRequest
+from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -35,7 +34,6 @@ from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.access import EventRole, get_event_organizers
-from larpmanager.models.association import Association
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -47,7 +45,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
+from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.base import def_user_ctx, get_index_permissions
 from larpmanager.utils.common import copy_class
@@ -55,60 +53,43 @@ from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRu
 from larpmanager.utils.registration import check_signup, registration_status
 
 
-def get_event(request: HttpRequest, slug: str, number: Optional[int] = None) -> dict[str, Any]:
+def get_event(request, slug, number=None):
     """Get event context from slug and number.
 
-    Retrieves event context information including run details, event data, and
-    associated features. Handles association validation and TinyMCE configuration.
-
     Args:
-        request: Django HTTP request object containing user context, or None
-        slug: Event slug identifier used to locate the event
-        number: Optional run number to append to slug for specific event runs
+        request: Django HTTP request object or None
+        slug (str): Event slug identifier
+        number (int, optional): Run number to append to slug
 
     Returns:
-        Dictionary containing event context with the following keys:
-            - run: Event run object
-            - event: Event object
-            - features: Dictionary of event features
-            - a_id: Association ID
-            - show_available_chars: Localized string for UI display
+        dict: Event context with run, event, and features
 
     Raises:
         Http404: If event doesn't exist or belongs to wrong association
-
-    Note:
-        Modifies global TinyMCE configuration if 'paste_text' feature is enabled.
     """
-    # Initialize context from user request or empty dict
     if request:
         ctx = def_user_ctx(request)
     else:
         ctx = {}
 
     try:
-        # Construct full slug with run number if provided
         if number:
             slug += f"-{number}"
 
-        # Retrieve run object and populate context
         get_run(ctx, slug)
 
-        # Validate association ownership or set association ID
         if "a_id" in ctx:
             if ctx["event"].assoc_id != ctx["a_id"]:
                 raise Http404("wrong assoc")
         else:
             ctx["a_id"] = ctx["event"].assoc_id
 
-        # Load event-specific features
         ctx["features"] = get_event_features(ctx["event"].id)
 
-        # Configure TinyMCE paste behavior based on features
+        # paste as text tinymce
         if "paste_text" in ctx["features"]:
             conf_settings.TINYMCE_DEFAULT_CONFIG["paste_as_text"] = True
 
-        # Add localized UI text for character display
         ctx["show_available_chars"] = _("Show available characters")
 
         return ctx
@@ -179,84 +160,54 @@ def get_event_run(request, s: str, signup: bool = False, slug: str | None = None
     return ctx
 
 
-def prepare_run(ctx: dict) -> None:
+def prepare_run(ctx):
     """Prepare run context with visibility and field configurations.
 
-    This function configures the context for a LARP event run by setting up
-    visibility controls and writing field configurations based on user permissions
-    and event settings.
-
     Args:
-        ctx: Event context dictionary containing 'run', 'event', and optionally
-            'staff' and 'features' keys. Modified in place.
+        ctx (dict): Event context to update
 
-    Returns:
-        None: Function modifies ctx dictionary in place.
-
-    Side Effects:
-        - Updates ctx with run configuration from cache
-        - Sets visibility flags for writing elements when user has staff access
-        - Configures additional feature visibility based on available features
-        - Adds writing fields configuration to context
+    Side effects:
+        Updates ctx with run configuration, visibility settings, and writing fields
     """
-    # Get cached run configuration for the current run
     config_run = get_cache_config_run(ctx["run"])
 
-    # Check if user has staff access or writing field visibility is disabled
     if "staff" in ctx or not ctx["event"].get_config("writing_field_visibility", False):
-        # Enable full visibility for staff users
         ctx["show_all"] = "1"
 
-        # Configure visibility for main writing elements (character, faction, quest, trait)
         for el in ["character", "faction", "quest", "trait"]:
             config_name = f"show_{el}"
             if config_name not in config_run:
                 config_run[config_name] = {}
-            # Show all fields (name, teaser, text) for each element
             config_run[config_name].update({"name": 1, "teaser": 1, "text": 1})
 
-        # Configure visibility for additional features if they exist
         for el in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
             config_name = "show_addit"
             if config_name not in config_run:
                 config_run[config_name] = {}
-            # Only show feature if it's available in the current context
             if el in ctx["features"]:
                 config_run[config_name][el] = True
 
-    # Update context with the configured run settings
     ctx.update(config_run)
 
-    # Add writing fields configuration to the context
     ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
 
 
-def get_run(ctx: dict, s: str) -> None:
+def get_run(ctx, s):
     """Load run and event data from cache and database.
 
-    Retrieves run information using the provided slug and association ID,
-    then updates the context dictionary with run and event objects.
-    Uses select_related and defer optimizations for performance.
-
     Args:
-        ctx: Context dictionary to update with run and event data.
-        s: Run slug identifier used to locate the specific run.
+        ctx (dict): Context dictionary to update
+        s (str): Run slug identifier
+
+    Side effects:
+        Updates ctx with run and event objects
 
     Raises:
-        UnknowRunError: If run cannot be found or any database error occurs.
-
-    Note:
-        This function modifies the ctx dictionary in-place by adding
-        'run' and 'event' keys.
+        UnknowRunError: If run cannot be found
     """
     try:
-        # Get cached run ID using association ID and slug
         res = get_cache_run(ctx["a_id"], s)
-
-        # Build optimized query with select_related for event
         que = Run.objects.select_related("event")
-
-        # Define fields to defer for performance optimization
         fields = [
             "search",
             "balance",
@@ -275,72 +226,51 @@ def get_run(ctx: dict, s: str) -> None:
             "event__sec_rgb",
             "event__ter_rgb",
         ]
-
-        # Apply deferral and fetch the run object
         que = que.defer(*fields)
         ctx["run"] = que.get(pk=res)
-
-        # Extract related event object for context
         ctx["event"] = ctx["run"].event
     except Exception as err:
         raise UnknowRunError() from err
 
 
-def get_character_filter(ch, regs: dict, filters: list) -> bool:
+def get_character_filter(ch, regs, filters):
     """Check if character should be included based on filter criteria.
 
     Args:
         ch: Character instance to check
-        regs: Mapping of character IDs to registrations
-        filters: Filter criteria ('free', 'mirror', etc.)
+        regs (dict): Mapping of character IDs to registrations
+        filters (list): Filter criteria ('free', 'mirror', etc.)
 
     Returns:
-        True if character passes all filters, False otherwise
+        bool: True if character passes all filters
     """
-    # Check if character is free (not registered)
     if "free" in filters:
         if ch.id in regs:
             return False
-
-    # Check if character's mirror is free (not registered)
     if "mirror" in filters and ch.mirror_id:
         if ch.mirror_id in regs:
             return False
-
     return True
 
 
-def get_event_filter_characters(ctx: dict, filters: list) -> None:
+def get_event_filter_characters(ctx, filters):
     """Get filtered characters organized by factions for event display.
 
-    Retrieves characters from an event's registrations and organizes them by
-    factions based on filtering criteria. Updates the context with filtered
-    faction and character data for display purposes.
-
     Args:
-        ctx: Event context dictionary containing 'run', 'event', 'features',
-             and 'show_faction' keys. Will be updated with 'factions' list.
-        filters: List of character filter criteria to apply when selecting
-                characters for display.
+        ctx (dict): Event context to update
+        filters (list): Character filter criteria
 
-    Returns:
-        None: Function modifies ctx in-place by adding 'factions' key.
-
-    Side Effects:
-        - Updates ctx['factions'] with list of Faction objects
-        - Each faction contains filtered characters with registration data
-        - Characters get additional 'reg', 'member', and 'data' attributes
+    Side effects:
+        Updates ctx with filtered factions and characters lists
     """
     ctx["factions"] = []
 
-    # Build registration lookup dictionary for active registrations
     regs = {}
     for el in RegistrationCharacterRel.objects.filter(
         reg__run=ctx["run"], reg__cancellation_date__isnull=True
     ).select_related("reg", "reg__member"):
         regs[el.character_id] = el.reg
 
-    # Build character lookup dictionary with registration data
     chars = {}
     for c in ctx["event"].get_elements(Character).filter(hide=False):
         if c.id in regs:
@@ -348,21 +278,15 @@ def get_event_filter_characters(ctx: dict, filters: list) -> None:
             c.member = regs[c.id].member
         chars[c.id] = c
 
-    # Organize characters by factions if faction feature is enabled
     if "faction" in ctx["features"] and ctx["show_faction"]:
-        # Get primary factions ordered by their display order
         que = ctx["event"].get_elements(Faction).filter(typ=FactionType.PRIM).order_by("order")
         prefetch = Prefetch(
             "characters",
             queryset=Character.objects.filter(hide=False).order_by("number"),
         )
-
-        # Process each faction and filter its characters
         for f in que.prefetch_related(prefetch):
             f.data = f.show_red()
             f.chars = []
-
-            # Filter characters within this faction
             for ch in f.characters.all():
                 if ch.hide:
                     continue
@@ -370,20 +294,15 @@ def get_event_filter_characters(ctx: dict, filters: list) -> None:
                     continue
                 ch.data = ch.show_red()
                 f.chars.append(ch)
-
-            # Only include factions that have visible characters
             if len(f.chars) == 0:
                 continue
             ctx["factions"].append(f)
     else:
-        # Create single "all" faction when faction feature is disabled
         f = Faction()
         f.number = 0
         f.name = "all"
         f.data = f.show_red()
         f.chars = []
-
-        # Add all filtered characters to the single faction
         for _ch_id, ch in chars.items():
             if not get_character_filter(ch, regs, filters):
                 continue
@@ -392,60 +311,49 @@ def get_event_filter_characters(ctx: dict, filters: list) -> None:
         ctx["factions"].append(f)
 
 
-def has_access_character(request: HttpRequest, ctx: dict) -> bool:
+def has_access_character(request, ctx):
     """Check if user has access to view/edit a specific character.
 
-    This function determines whether the current user has permission to access
-    a character based on three criteria: organizer permissions, character
-    ownership, or being assigned as the character's player.
-
     Args:
-        request: Django HTTP request object containing user information
-        ctx (dict): Context dictionary containing character and event data.
-                   Expected keys: 'char' (with 'owner_id', 'player_id'),
-                   'event' (with 'slug' attribute)
+        request: Django HTTP request object
+        ctx (dict): Context with character information
 
     Returns:
-        bool: True if user has access (organizer, owner, or player), False otherwise
+        bool: True if user has access (organizer, owner, or player)
     """
-    # Check if user has organizer permissions for character management
     if has_event_permission(request, ctx, ctx["event"].slug, "orga_characters"):
         return True
 
-    # Get the current user's member ID for ownership/player checks
     member_id = request.user.member.id
 
-    # Check if user is the character owner
     if "owner_id" in ctx["char"] and ctx["char"]["owner_id"] == member_id:
         return True
 
-    # Check if user is assigned as the character's player
     if "player_id" in ctx["char"] and ctx["char"]["player_id"] == member_id:
         return True
 
-    # No access permissions found
     return False
 
 
-def check_event_permission(request: HttpRequest, s: str, perm: str | list[str] | None = None) -> dict:
+def check_event_permission(request, s: str, perm: str | list[str] | None = None) -> dict:
     """Check event permissions and prepare management context.
 
-    This function validates user permissions for event management operations and
-    prepares the necessary context for rendering management pages.
+    Validates user permissions for event management operations and prepares
+    the necessary context including features, tutorials, and configuration links.
 
     Args:
         request: Django HTTP request object containing user and session data
         s: Event slug identifier for the target event
-        perm: Required permission(s) - can be a single permission string,
-              a list of permissions, or None for basic access
+        perm: Required permission(s). Can be a single permission string or list of permissions.
+            If None, only basic event access is checked.
 
     Returns:
         Dictionary containing event context with management permissions including:
-        - Event and run objects
-        - Available features
-        - Tutorial configuration
-        - Config URL if applicable
-        - Management flags
+            - Event and run objects
+            - Available features
+            - Tutorial information
+            - Configuration links
+            - Management flags
 
     Raises:
         PermissionError: If user lacks required permissions for the event
@@ -460,18 +368,18 @@ def check_event_permission(request: HttpRequest, s: str, perm: str | list[str] |
 
     # Process permission-specific features and configuration
     if perm:
-        # Handle both single permission and list of permissions
+        # Handle permission lists by taking the first permission
         if isinstance(perm, list):
             perm = perm[0]
 
-        # Extract feature, tutorial, and config data for this permission
+        # Get feature configuration for this permission
         (feature, tutorial, config) = get_event_permission_feature(perm)
 
-        # Set tutorial context if not already present
+        # Add tutorial information if not already present
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial
 
-        # Add config URL if user has config permissions and config exists
+        # Add configuration link if user has config permissions
         if config and has_event_permission(request, ctx, s, "orga_config"):
             ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config])
 
@@ -479,50 +387,38 @@ def check_event_permission(request: HttpRequest, s: str, perm: str | list[str] |
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
 
-    # Load additional event permissions and set management flags
+    # Load additional event permissions and management context
     get_index_event_permissions(ctx, request, s)
+
+    # Set management page flags
     ctx["orga_page"] = 1
     ctx["manage"] = 1
 
     return ctx
 
 
-def get_index_event_permissions(ctx: dict, request: HttpRequest, slug: str, check: bool = True) -> None:
+def get_index_event_permissions(ctx, request, slug, check=True):
     """Load event permissions and roles for management interface.
 
-    Retrieves user roles and permissions for a specific event, updating the context
-    dictionary with role names and event permissions. Optionally enforces permission
-    requirements based on the check parameter.
-
     Args:
-        ctx: Context dictionary to update with permissions and roles.
-        request: Django HTTP request object containing user information.
-        slug: Event slug identifier for permission lookup.
-        check: Whether to enforce permission requirements. Defaults to True.
+        ctx (dict): Context dictionary to update
+        request: Django HTTP request object
+        slug (str): Event slug
+        check (bool): Whether to enforce permission requirements
+
+    Side effects:
+        Updates ctx with role names and event permissions
 
     Raises:
-        PermissionError: If check=True and user has no event permissions or organizer role.
-
-    Side Effects:
-        - Updates ctx with 'role_names' if user has event roles
-        - Updates ctx with 'event_pms' containing event permissions
+        PermissionError: If check=True and user has no permissions
     """
-    # Get user's event roles and permissions
     (is_organizer, user_event_permissions, names) = get_event_roles(request, slug)
-
-    # Override organizer status if user has association admin role
     if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
         is_organizer = True
-
-    # Enforce permission check if required
     if check and not names and not is_organizer:
         raise PermissionError()
-
-    # Add role names to context if user has roles
     if names:
         ctx["role_names"] = names
-
-    # Get event features and build permissions index
     features = get_event_features(ctx["event"].id)
     ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")
 
@@ -580,126 +476,94 @@ def copy_parent_event_to_campaign(event):
             del event._skip_campaign_setup
 
 
-def create_default_event_setup(event: Event) -> None:
+def create_default_event_setup(event):
     """Setup event with runs, tickets, and forms after save.
 
-    Creates default configurations for a newly saved event including:
-    - Default run if none exist
-    - Event-specific ticket tiers
-    - Registration and character forms based on enabled features
-    - Cache cleanup for updated configurations
-
     Args:
-        event: Event instance that was saved and needs default setup
-
-    Returns:
-        None
-
-    Note:
-        Skips setup if event is marked as a template.
+        event: Event instance that was saved
     """
-    # Skip setup for template events
     if event.template:
         return
 
-    # Create default run if no runs exist for this event
     if not event.runs.exists():
         Run.objects.create(event=event, number=1)
 
-    # Get enabled features for this event to determine what to configure
     features = get_event_features(event.id)
 
-    # Configure event-specific ticket tiers based on enabled features
     save_event_tickets(features, event)
 
-    # Set up registration form with appropriate fields for this event
     save_event_registration_form(features, event)
 
-    # Configure character creation form based on event requirements
     save_event_character_form(features, event)
 
-    # Clear cached feature and field data to reflect new configurations
     clear_event_features_cache(event.id)
+
     clear_event_fields_cache(event.id)
 
 
-def save_event_tickets(features: dict, instance: Event) -> None:
+def save_event_tickets(features, instance):
     """Create default registration tickets for event.
 
-    Creates three types of registration tickets (Standard, Waiting, Filler) for the given
-    event instance. Only creates tickets that don't already exist and respects feature
-    flags for conditional ticket types.
-
     Args:
-        features: Dictionary of enabled features for the event, used to check if
-                 conditional ticket types should be created.
-        instance: Event instance to create registration tickets for.
-
-    Returns:
-        None
+        features (dict): Enabled features for the event
+        instance: Event instance to create tickets for
     """
-    # Define ticket configurations: (feature_key, tier_enum, display_name)
-    # Empty feature_key means ticket is always created regardless of features
+    # create tickets if not exists
     tickets = [
         ("", TicketTier.STANDARD, "Standard"),
         ("waiting", TicketTier.WAITING, "Waiting"),
         ("filler", TicketTier.FILLER, "Filler"),
     ]
-
-    # Process each ticket configuration
     for ticket in tickets:
-        # Skip ticket creation if required feature is not enabled
         if ticket[0] and ticket[0] not in features:
             continue
-
-        # Create ticket only if it doesn't already exist for this event and tier
         if not RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).exists():
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
-def save_event_character_form(features: dict, instance: Event) -> None:
+def save_event_character_form(features: dict, instance) -> None:
     """Create character form questions based on enabled features.
 
-    This function initializes character form questions for an event based on
-    the features that are enabled. It creates default question types and
-    handles special cases for different feature combinations.
+    This function initializes character form questions for an event based on the
+    enabled features. It creates default writing question types and adds feature-specific
+    writing elements as needed.
 
     Args:
-        features: Dictionary containing enabled features for the event.
-            Expected to contain feature names as keys.
-        instance: Event instance to create form for. Should have 'parent'
-            attribute and support character form creation.
+        features: Dictionary of enabled features for the event, where keys are
+                 feature names and values indicate if they're active
+        instance: Event instance to create form for
 
     Returns:
-        None: This function modifies the instance in place.
+        None
 
     Note:
-        If the event has a parent event, this function returns early as
-        child events inherit form configuration from their parent.
+        - Returns early if 'character' feature is not enabled
+        - Uses parent event's form if instance has a parent
+        - Activates organization language before processing
     """
     # Early return if character feature is not enabled
     if "character" not in features:
         return
 
-    # Child events inherit form configuration from parent
+    # Use parent event's form if this event has a parent
     if instance.parent:
         return
 
-    # Activate organization language for proper localization
+    # Activate the organization's language for proper localization
     _activate_orga_lang(instance)
 
     # Define default question types with their properties
-    # Format: (label, status, visibility, max_length)
+    # (name, status, visibility, max_length)
     def_tps = {
         WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000),
         WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000),
         WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000),
     }
 
-    # Get available custom question types from the system
+    # Get basic custom question types from the system
     custom_tps = BaseQuestionType.get_basic_types()
 
-    # Initialize basic character form questions
+    # Initialize character form questions with both custom and default types
     _init_character_form_questions(custom_tps, def_tps, features, instance)
 
     # Add quest and trait writing elements if questbuilder feature is enabled
@@ -714,9 +578,9 @@ def save_event_character_form(features: dict, instance: Event) -> None:
     if "faction" in features:
         _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION])
 
-    # Add plot writing elements with custom teaser configuration
+    # Add plot writing elements with modified teaser settings if plot feature is enabled
     if "plot" in features:
-        # Create modified question types for plot with shorter teaser
+        # Create a copy of default types with modified teaser for plot concept
         plot_tps = dict(def_tps)
         plot_tps[WritingQuestionType.TEASER] = (
             "Concept",
@@ -759,7 +623,7 @@ def _init_character_form_questions(
     custom_tps: set,
     def_tps: dict,
     features: set,
-    instance: Event | Association,
+    instance,
 ) -> None:
     """Initialize character form questions during model setup.
 
@@ -768,20 +632,20 @@ def _init_character_form_questions(
     existing question configurations.
 
     Args:
-        custom_tps: Set of custom question type identifiers to exclude from processing.
-        def_tps: Dictionary mapping question types to their default configuration tuples
-                (name, status, visibility, max_length).
-        features: Set of enabled feature identifiers for the event/organization.
-        instance: The event or organization instance to configure questions for.
+        custom_tps: Set of custom question types to exclude from processing
+        def_tps: Dictionary mapping default question types to their configuration
+                (name, status, visibility, max_length)
+        features: Set of enabled feature names
+        instance: Event instance to create questions for
 
     Returns:
         None
     """
-    # Get existing character-applicable questions and their types
+    # Get existing character questions and their types
     que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 
-    # Determine available question types, excluding custom ones
+    # Get all available question types, excluding custom ones
     choices = dict(WritingQuestionType.choices)
     all_types = choices.keys()
     all_types -= custom_tps
@@ -799,7 +663,7 @@ def _init_character_form_questions(
                 applicable=QuestionApplicable.CHARACTER,
             )
 
-    # Determine which types should not be removed (defaults + computed if px feature enabled)
+    # Determine which types should not be removed (defaults + px feature)
     not_to_remove = set(def_tps.keys())
     if "px" in features:
         not_to_remove.add(WritingQuestionType.COMPUTED)
@@ -903,73 +767,60 @@ def save_event_registration_form(features: dict, instance) -> None:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
 
 
-def _activate_orga_lang(instance: Event) -> None:
-    """Activate the most common language among event organizers.
-
-    Analyzes the language preferences of all organizers for the given event
-    instance and activates the most frequently used language. Falls back to
-    English if no organizers are found or no languages are specified.
-
-    Args:
-        instance: The event instance to analyze organizers for.
-    """
-    # Initialize dictionary to count language occurrences
+def _activate_orga_lang(instance):
+    # get most common language between organizers
     langs = {}
-
-    # Iterate through all event organizers and count their languages
     for orga in get_event_organizers(instance):
         lang = orga.language
         if lang not in langs:
             langs[lang] = 1
         else:
             langs[lang] += 1
-
-    # Determine the most common language or fall back to English
     if langs:
         max_lang = max(langs, key=langs.get)
     else:
         max_lang = "en"
-
-    # Activate the selected language
     activate(max_lang)
 
 
-def assign_previous_campaign_character(registration: Registration) -> None:
-    """Auto-assign last character for campaign registrations.
+def assign_previous_campaign_character(registration) -> None:
+    """Auto-assign last character from previous campaign run to new registration.
 
-    Automatically assigns the character from the previous campaign run to a new
-    registration if the event is part of a campaign series. This ensures character
-    continuity across campaign events.
+    Automatically assigns the character from the most recent campaign run to a new
+    registration if the event is part of a campaign series. Only applies when the
+    member doesn't already have a character assigned to the current run.
 
     Args:
-        registration: Registration instance to assign character to. Must have a
-                     member and run associated with it.
+        registration: Registration instance to assign character to. Must have
+            a member and run associated with it.
 
     Returns:
         None
 
     Note:
-        This function only operates on campaign events with a parent event.
-        If the registration already has a character assigned, no action is taken.
+        - Only works for campaign events with a parent event
+        - Skips cancelled registrations
+        - Preserves custom character attributes from previous run
+        - Does nothing if character already assigned to current run
     """
-    # Early returns for invalid registration states
+    # Skip if registration has no member or is cancelled
     if not registration.member:
         return
 
     if registration.cancellation_date:
         return
 
-    # Check if this is a campaign event with parent
+    # Only proceed if this is a campaign event with parent
     if "campaign" not in get_event_features(registration.run.event_id):
         return
     if not registration.run.event.parent:
         return
 
-    # Skip if character already assigned to this registration
+    # Skip if member already has a character assigned to this run
     if RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=registration.run).count() > 0:
         return
 
-    # Find the most recent run in the same campaign
+    # Find the most recent run from the same campaign series
     last = (
         Run.objects.filter(
             Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
@@ -981,13 +832,12 @@ def assign_previous_campaign_character(registration: Registration) -> None:
     if not last:
         return
 
-    # Get the character relationship from the previous run
+    # Get character relationship from previous run and create new one
     old_rcr = RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=last).first()
     if old_rcr:
-        # Create new character relationship for current registration
         rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
 
-        # Copy custom character attributes from previous registration
+        # Copy custom character attributes from previous run
         for s in ["name", "pronoun", "song", "public", "private"]:
             if hasattr(old_rcr, "custom_" + s):
                 value = getattr(old_rcr, "custom_" + s)

@@ -22,7 +22,7 @@ from collections import defaultdict
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Prefetch, QuerySet
+from django.db.models import F, Prefetch
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -76,8 +76,9 @@ def orga_event(request, s):
 def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe: bool = False) -> HttpResponse:
     """Comprehensive event editing with validation.
 
-    Handles both GET and POST requests for editing event and run data.
-    Validates both forms and saves changes on successful submission.
+    Handles both GET requests for displaying edit forms and POST requests for
+    processing form submissions. Validates and saves both event and run forms
+    when submitted.
 
     Args:
         ctx: Context dictionary for template rendering
@@ -87,33 +88,31 @@ def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe
         exe: Whether this is an executive-level edit, defaults to False
 
     Returns:
-        HttpResponse: Edit form template or redirect after successful save
-
-    Raises:
-        ValidationError: If form validation fails
+        HttpResponse: Either the edit form template for GET requests or a
+        redirect response after successful form submission
     """
-    # Disable automatic numbering in template
+    # Disable numbering in the template context
     ctx["nonum"] = 1
 
     if request.method == "POST":
-        # Create forms with POST data and file uploads
+        # Create form instances with POST data and file uploads
         form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
         form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
 
         # Validate both forms before saving
         if form_event.is_valid() and form_run.is_valid():
-            # Save both forms atomically
+            # Save both forms to database
             form_event.save()
             form_run.save()
 
-            # Show success message and redirect based on user level
+            # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
             if exe:
                 return redirect("manage")
             else:
                 return redirect("manage", s=run.get_slug())
     else:
-        # Create forms with existing instance data for GET requests
+        # Create empty forms for GET requests
         form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
         form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
 
@@ -123,7 +122,6 @@ def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe
     ctx["num"] = event.id
     ctx["type"] = "event"
 
-    # Render the multi-form edit template
     return render(request, "larpmanager/orga/edit_multi.html", ctx)
 
 
@@ -139,54 +137,31 @@ def orga_roles(request, s):
     return render(request, "larpmanager/orga/roles.html", ctx)
 
 
-def prepare_roles_list(ctx: dict, permission_typ: type, role_query: QuerySet, def_callback: callable) -> None:
+def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
     """Prepare role list with permissions organized by module for display.
 
     Builds a formatted list of roles with their members and grouped permissions,
     handling special formatting for administrator roles and module organization.
-
-    Args:
-        ctx: Context dictionary to store the prepared role list
-        permission_typ: Permission model class for querying permissions
-        role_query: QuerySet of roles to process
-        def_callback: Callback function to generate default role when no roles exist
-
-    Returns:
-        None: Modifies ctx dictionary in-place by adding 'list' key
     """
-    # Build optimized queryset for permissions with related data and proper ordering
     qs_perm = permission_typ.objects.select_related("feature", "feature__module").order_by(
         F("feature__module__order").asc(nulls_last=True),
         F("feature__order").asc(nulls_last=True),
         "feature__name",
         "name",
     )
-
-    # Fetch roles with prefetched permissions to avoid N+1 queries
     roles = role_query.order_by("number").prefetch_related(Prefetch("permissions", queryset=qs_perm))
-
-    # Initialize the context list
     ctx["list"] = []
-
-    # Handle case when no roles exist - use default callback
     if not roles:
         ctx["list"].append(def_callback(ctx))
-
-    # Process each role to format members and permissions
     for role in roles:
-        # Format members list as comma-separated string
         role.members_list = ", ".join([str(mb) for mb in role.members.all()])
-
-        # Special handling for administrator role (number "1")
         if role.number == "1":
             role.perms_list = "All"
         else:
-            # Group permissions by their feature module
             buckets = defaultdict(list)
             for p in role.permissions.all():
                 buckets[p.feature.module].append(p)
 
-            # Sort modules by order (nulls last) then by name
             modules = sorted(
                 buckets.keys(),
                 key=lambda m: (
@@ -195,20 +170,13 @@ def prepare_roles_list(ctx: dict, permission_typ: type, role_query: QuerySet, de
                 ),
             )
 
-            # Build formatted permission list grouped by module
             aux = []
             for module in modules:
-                # Sort permissions within each module by number
                 perms_sorted = sorted(buckets[module], key=lambda p: p.number)
-                # Create comma-separated list of translated permission names
                 perms = ", ".join([str(_(ep.name)) for ep in perms_sorted])
-                # Format as "Module (perm1, perm2, ...)"
                 aux.append(f"<b>{module}</b> ({perms})")
-
-            # Join all module groups with commas
             role.perms_list = ", ".join(aux)
 
-        # Add processed role to the context list
         ctx["list"].append(role)
 
 
@@ -260,42 +228,24 @@ def orga_config(request, s, section=None):
 
 
 @login_required
-def orga_features(request: HttpRequest, s: str) -> HttpResponse:
+def orga_features(request, s):
     """Manage event features activation and configuration.
 
-    This view handles the activation and configuration of event features. When features
-    are successfully activated, it may redirect to post-activation pages or show a
-    confirmation page for multiple features.
-
     Args:
-        request: The HTTP request object containing user data and form submission
-        s: The event slug identifier used to locate the specific event
+        request: HTTP request object
+        s: Event slug
 
     Returns:
-        HttpResponse: Either a rendered features form page, redirect to event management,
-                     or redirect to post-activation feature configuration pages
-
-    Raises:
-        PermissionDenied: If user lacks 'orga_features' permission for this event
+        HttpResponse: Rendered features form or redirect after activation
     """
-    # Check user permissions and initialize context
     ctx = check_event_permission(request, s, "orga_features")
     ctx["add_another"] = False
-
-    # Process form submission using backend edit helper
     if backend_edit(request, ctx, OrgaFeatureForm, None, afield=None, assoc=False):
-        # Get newly activated features that have post-activation links
         ctx["new_features"] = Feature.objects.filter(pk__in=ctx["form"].added_features, after_link__isnull=False)
-
-        # If no features need post-activation setup, redirect to event management
         if not ctx["new_features"]:
             return redirect("manage", s=ctx["run"].get_slug())
-
-        # Generate follow-up links for each activated feature
         for el in ctx["new_features"]:
             el.follow_link = _orga_feature_after_link(el, s)
-
-        # Handle single feature activation - show success message and redirect
         if len(ctx["new_features"]) == 1:
             feature = ctx["new_features"][0]
             msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
@@ -303,44 +253,18 @@ def orga_features(request: HttpRequest, s: str) -> HttpResponse:
             messages.success(request, msg)
             return redirect(feature.follow_link)
 
-        # Handle multiple features - show features page with options
         get_index_event_permissions(ctx, request, s)
         return render(request, "larpmanager/manage/features.html", ctx)
-
-    # Render initial form or form with validation errors
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True) -> object:
-    """Toggle a feature on/off for an event.
-
-    Args:
-        request: The HTTP request object
-        ctx: Context dictionary containing event and feature information
-        slug: The feature slug identifier
-        on: Whether to turn the feature on (True) or off (False)
-
-    Returns:
-        The feature object that was toggled
-
-    Raises:
-        Http404: If the feature is an overall feature (not event-specific)
-    """
-    # Get the feature from context using the slug
+def orga_features_go(request, ctx, slug, on=True):
     get_feature(ctx, slug)
-
-    # Raise 404 if this is an overall feature (not event-specific)
     if ctx["feature"].overall:
         raise Http404("overall feature!")
-
-    # Get list of current feature IDs for this event
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
-
-    # Clear cache and media for the current run
     clear_run_cache_and_media(ctx["run"])
-
-    # Handle feature activation/deactivation logic
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
@@ -353,14 +277,11 @@ def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True
         ctx["event"].features.remove(f_id)
         msg = _("Feature %(name)s deactivated") + "!"
 
-    # Save the event to persist changes
     ctx["event"].save()
-
-    # Update cached event features for parent-child event relationships
+    # update cached event features, for itself, and the events for which they are parent
     for ev in Event.objects.filter(parent=ctx["event"]):
         ev.save()
 
-    # Format the success message with feature name and optional after_text
     msg = msg % {"name": _(ctx["feature"].name)}
     if ctx["feature"].after_text:
         msg += " " + ctx["feature"].after_text
@@ -420,23 +341,21 @@ def _prepare_backup(ctx: dict) -> HttpResponse:
     Prepare comprehensive event data backup by exporting various components.
 
     Creates a ZIP file containing exported event data including registrations,
-    characters, factions, plots, and other feature-specific data based on
-    enabled features in the event context.
+    characters, factions, plots, abilities, and quest builder components based
+    on enabled features.
 
     Args:
-        ctx: Context dictionary containing event information and enabled features.
-             Must include 'features' key with list of enabled feature names.
+        ctx: Context dictionary containing:
+            - event: Event object to backup
+            - features: Dict of enabled feature flags
+            - Other context data required by export functions
 
     Returns:
-        HttpResponse containing a ZIP file with all exported event data.
+        HttpResponse: ZIP file response containing all exported event data
 
-    Note:
-        The function conditionally exports data based on enabled features:
-        - character: Character data and forms
-        - faction: Faction data
-        - plot: Plot data
-        - px: Abilities data
-        - questbuilder: Quest types, quests, and traits
+    Raises:
+        KeyError: If required context keys are missing
+        Exception: If export or ZIP creation fails
     """
     exports = []
 
@@ -461,11 +380,11 @@ def _prepare_backup(ctx: dict) -> HttpResponse:
     if "plot" in ctx["features"]:
         exports.extend(export_data(ctx, Plot))
 
-    # Export abilities data if px feature is enabled
+    # Export experience/abilities data if feature is enabled
     if "px" in ctx["features"]:
         exports.extend(export_abilities(ctx))
 
-    # Export quest-related data if questbuilder feature is enabled
+    # Export quest builder data if feature is enabled
     if "questbuilder" in ctx["features"]:
         exports.extend(export_data(ctx, QuestType))
         exports.extend(export_data(ctx, Quest))
@@ -480,11 +399,12 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
     """
     Handle file uploads for organizers with element processing.
 
-    This function manages the upload workflow for various element types in LARP events,
-    including form validation, file processing, and user feedback.
+    This function manages the upload process for various types of elements
+    (characters, items, etc.) in LARP events. It validates permissions,
+    processes uploaded files, and returns appropriate responses.
 
     Args:
-        request: HTTP request object containing file data and form information
+        request: Django HTTP request object containing file data and POST parameters
         s: Event slug identifier for the specific event
         typ: Type of elements to upload (e.g., 'characters', 'items')
 
@@ -494,7 +414,7 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
     Raises:
         Exception: Any error during file processing is caught and displayed to user
     """
-    # Check user permissions and initialize context for the event
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
     ctx["name"] = ctx["typ"]
@@ -505,13 +425,13 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
     # Handle POST request (file upload submission)
     if request.POST:
         form = UploadElementsForm(request.POST, request.FILES)
+
+        # Prepare redirect URL for after processing
         redr = reverse(f"orga_{typ}", args=[ctx["run"].get_slug()])
 
-        # Validate form and process upload
         if form.is_valid():
             try:
-                # Process the uploaded file and generate logs
-                # print(request.FILES)
+                # Process the uploaded file and get processing logs
                 ctx["logs"] = go_upload(request, ctx, form)
                 ctx["redr"] = redr
 
@@ -520,19 +440,18 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
                 return render(request, "larpmanager/orga/uploads.html", ctx)
 
             except Exception as exp:
-                # Log error details and show user-friendly message
+                # Log the full traceback and show error to user
                 print(traceback.format_exc())
                 messages.error(request, _("Unknow error on upload") + f": {exp}")
 
-            # Redirect back to main page on error
+            # Redirect back to the main page on error or completion
             return HttpResponseRedirect(redr)
     else:
-        # Initialize empty form for GET request
+        # Handle GET request (show upload form)
         form = UploadElementsForm()
 
     # Add form to context and render upload page
     ctx["form"] = form
-
     return render(request, "larpmanager/orga/upload.html", ctx)
 
 
@@ -605,30 +524,16 @@ def orga_upload_template(request, s: str, typ: str) -> HttpResponse:
     return zip_exports(ctx, exports, "template")
 
 
-def _ability_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
+def _ability_template(ctx):
     """Generate template for ability uploads with example data.
 
-    Creates a template structure for ability data import containing predefined
-    example values that demonstrate the expected format for each field.
-
     Args:
-        ctx: Context dictionary containing column definitions with structure:
-            - columns: List of dictionaries with ability field names as keys
+        ctx: Context dictionary containing column definitions
 
     Returns:
-        List containing a single tuple with format:
-            - ("abilities", field_names, [example_values])
-        Where field_names are the column headers and example_values are
-        sample data for each corresponding field.
-
-    Example:
-        >>> ctx = {"columns": [{"name": "", "cost": "", "typ": ""}]}
-        >>> result = _ability_template(ctx)
-        >>> result[0][0]  # Returns "abilities"
+        list: Export data containing ability template with example values
     """
     exports = []
-
-    # Define example values for each ability field
     defs = {
         "name": "Ability name",
         "cost": "Ability cost",
@@ -637,18 +542,12 @@ def _ability_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]
         "prerequisites": "Ability prerequisite, comma-separated",
         "requirements": "Character options, comma-separated",
     }
-
-    # Extract column keys from context
     keys = list(ctx["columns"][0].keys())
     vals = []
-
-    # Build example values list matching available columns
     for field, value in defs.items():
         if field not in keys:
             continue
         vals.append(value)
-
-    # Create export structure with template data
     exports.append(("abilities", keys, [vals]))
     return exports
 
@@ -722,38 +621,17 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     return exports
 
 
-def _reg_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[str, list[str], list[list[str]]]]:
-    """Generate registration template data for export.
-
-    Args:
-        ctx: Context dictionary containing columns and fields data
-        typ: Template type identifier string
-        value_mapping: Mapping of field types to default values
-
-    Returns:
-        List of tuples containing template name, column headers, and sample data rows
-    """
-    # Extract available column keys from context
+def _reg_template(ctx, typ, value_mapping):
     keys = list(ctx["columns"][0].keys())
     vals = []
-
-    # Define default values for standard registration fields
     defs = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
-
-    # Add default values for existing standard fields
     for field, value in defs.items():
         if field not in keys:
             continue
         vals.append(value)
-
-    # Extend headers with custom field names
     keys.extend(ctx["fields"])
-
-    # Add mapped values for each custom field type
     for _field, field_typ in ctx["fields"].items():
         vals.append(value_mapping[field_typ])
-
-    # Return formatted export data structure
     exports = [(f"{typ} - template", keys, [vals])]
     return exports
 

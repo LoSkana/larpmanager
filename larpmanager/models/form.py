@@ -22,7 +22,7 @@ from typing import Any
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
-from django.db.models import F, QuerySet
+from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -87,40 +87,18 @@ class BaseQuestionType(models.TextChoices):
         }
 
 
-def extend_textchoices(
-    name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]
-) -> type[models.TextChoices]:
+def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
     """Extend Django TextChoices with additional options.
 
-    Creates a new TextChoices class that combines the choices from a base
-    TextChoices class with additional custom choices.
-
     Args:
-        name: Name for the new TextChoices class to be created.
-        base: Base TextChoices class to extend from.
-        extra: List of tuples containing (name, value, label) for each
-            additional choice to add to the extended class.
+        name: Name for the new TextChoices class
+        base: Base TextChoices to extend
+        extra: List of (name, value, label) tuples to add
 
     Returns:
-        A new TextChoices class that includes all choices from the base
-        class plus the additional choices specified in extra.
-
-    Example:
-        >>> class BaseChoices(models.TextChoices):
-        ...     OPTION1 = 'opt1', 'Option 1'
-        >>> extended = extend_textchoices(
-        ...     'ExtendedChoices',
-        ...     BaseChoices,
-        ...     [('OPTION2', 'opt2', 'Option 2')]
-        ... )
+        models.TextChoices: Extended choices class
     """
-    # Extract existing choices from base class as (name, (value, label)) tuples
-    members = [(m.name, (m.value, m.label)) for m in base]
-
-    # Add extra choices in the same format
-    members += [(n, (v, lbl)) for (n, v, lbl) in extra]
-
-    # Create and return new TextChoices class with combined members
+    members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
 
 
@@ -328,17 +306,7 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event: Event) -> QuerySet:
-        """Get writing questions for a specific event instance.
-
-        Args:
-            event: The event instance to get questions for
-
-        Returns:
-            QuerySet of WritingQuestion objects ordered by their 'order' field
-        """
-        # Retrieve all writing questions associated with the event
-        # and order them by their specified order field
+    def get_instance_questions(event, features):
         return event.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
@@ -365,6 +333,14 @@ class WritingQuestion(BaseModel):
 
     def get_editable_display(self):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=["event", "applicable", "status"], condition=Q(deleted__isnull=True), name="wq_evt_app_stat_act"
+            ),
+            models.Index(fields=["event", "applicable"], condition=Q(deleted__isnull=True), name="wq_evt_app_act"),
+        ]
 
 
 class WritingOption(BaseModel):
@@ -439,6 +415,12 @@ class WritingChoice(BaseModel):
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wch_elem_q_act"),
+            models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wch_elem_act"),
+        ]
+
 
 class WritingAnswer(BaseModel):
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
@@ -450,6 +432,12 @@ class WritingAnswer(BaseModel):
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wan_elem_q_act"),
+            models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wan_elem_act"),
+        ]
 
 
 class RegistrationQuestion(BaseModel):
@@ -620,6 +608,12 @@ class RegistrationQuestion(BaseModel):
 
         return False
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="rq_evt_act"),
+            models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="rq_evt_stat_act"),
+        ]
+
 
 class RegistrationOption(BaseModel):
     search = models.CharField(max_length=1000, editable=False)
@@ -683,6 +677,12 @@ class RegistrationOption(BaseModel):
         js["question"] = self.question.name
         return js
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ro_evt_act"),
+            models.Index(fields=["question"], condition=Q(deleted__isnull=True), name="ro_quest_act"),
+        ]
+
 
 class RegistrationChoice(BaseModel):
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="choices")
@@ -695,6 +695,12 @@ class RegistrationChoice(BaseModel):
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
+        ]
+
 
 class RegistrationAnswer(BaseModel):
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="answers")
@@ -706,6 +712,12 @@ class RegistrationAnswer(BaseModel):
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.text[:100]}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
+        ]
 
 
 def get_ordered_registration_questions(ctx):

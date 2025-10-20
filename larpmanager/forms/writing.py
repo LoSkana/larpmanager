@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -53,56 +53,39 @@ from larpmanager.utils.validators import FileTypeValidator
 
 
 class WritingForm(MyForm):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the form instance with show_link configuration.
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form with default show_link configuration.
 
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None
         """
-        # Initialize parent class with provided arguments
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Configure fields that should display as links in the form
-        # These field IDs will render with clickable link styling
+        # Configure which fields should display links in the form
         self.show_link = ["id_teaser", "id_text"]
 
-    def _init_special_fields(self) -> None:
+    def _init_special_fields(self):
         """Initialize special form fields based on available question types.
 
-        Configures cover, assigned, and progress fields based on writing question types
-        available in the current form's questions. Fields are dynamically added or
-        removed based on the presence of specific question types.
-
-        The method handles three special field types:
-        - cover: Removed if COVER question type is not present
-        - assigned: Populated with event staffers if ASSIGNED question type exists
-        - progress: Populated with progress steps if PROGRESS question type exists
+        Configures cover, assigned, and progress fields based on writing question types.
         """
-        # Collect all unique question types from the form's questions
-        types: set = set()
+        types = set()
         for que in self.questions:
             types.add(que.typ)
 
-        # Remove cover field if COVER question type is not available
         if WritingQuestionType.COVER not in types:
             if "cover" in self.fields:
                 del self.fields["cover"]
 
-        # Configure assigned field with event staffers or remove it
         if WritingQuestionType.ASSIGNED in types:
-            # Get all staffers for the current event and create choice tuples
             choices = [(m.id, m.show_nick()) for m in get_event_staffers(self.params["run"].event)]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
         else:
             self.delete_field("assigned")
 
-        # Configure progress field with event progress steps or remove it
         if WritingQuestionType.PROGRESS in types:
-            # Get all progress steps for the event ordered by their sequence
             self.fields["progress"].choices = [
                 (el.id, str(el)) for el in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
@@ -126,61 +109,28 @@ class PlayerRelationshipForm(MyForm):
         self.fields["target"].widget.set_event(self.params["run"].event)
         self.fields["target"].required = True
 
-    def clean(self) -> dict:
-        """Clean and validate form data for player relationships.
-
-        Validates that:
-        - A player cannot create a relationship with themselves
-        - No duplicate relationships exist for the same registration and target
-
-        Returns:
-            dict: The cleaned form data
-
-        Raises:
-            ValidationError: If validation rules are violated
-        """
+    def clean(self):
         cleaned_data = super().clean()
 
-        # Prevent self-referential relationships
         if self.cleaned_data["target"].id == self.params["char"]["id"]:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
-        # Check for existing relationships with the same target
-        # Skip this check if we're editing an existing relationship
         try:
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
-            # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship") + "!")
         except ObjectDoesNotExist:
-            # No existing relationship found - this is valid
             pass
 
         return cleaned_data
 
-    def save(self, commit: bool = True) -> object:
-        """Save the form instance with automatic registration assignment.
-
-        Creates or updates the form instance. If this is a new instance (no primary key),
-        automatically assigns the registration from the run parameters.
-
-        Args:
-            commit: Whether to save the instance to the database immediately.
-                   Defaults to True.
-
-        Returns:
-            The saved model instance.
-        """
-        # Call parent save method without committing to database yet
+    def save(self, commit=True):
         instance = super().save(commit=False)
 
-        # For new instances, automatically set registration from run parameters
         if not instance.pk:
             instance.reg = self.params["run"].reg
 
-        # Conditionally save based on commit parameter
-        if commit:
-            instance.save()
+        instance.save()
 
         return instance
 

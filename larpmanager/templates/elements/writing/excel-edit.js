@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var keyTinyMCE;
     var qid;
     var eid;
+    var workingTicketInterval = null;
 
     function closeEdit () {
         const x = window.scrollX;
@@ -24,6 +25,12 @@ window.addEventListener('DOMContentLoaded', function() {
             keyTinyMCE = null;
         }
 
+        // Stop working ticket updates when closing the editor
+        if (workingTicketInterval) {
+            clearInterval(workingTicketInterval);
+            workingTicketInterval = null;
+        }
+
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 window.scrollTo(x, y);
@@ -32,11 +39,34 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
+    function callWorkingTicket() {
+        if (!eid) return;
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'working_ticket' %}",
+            data: {eid: eid, type: '{{ label_typ }}', token: token},
+            success: function(msg) {
+                if (msg.warn) {
+                    $.toast({
+                        text: msg.warn,
+                        icon: 'error',
+                        position: 'mid-center',
+                        textAlign: 'center',
+                        allowToastClose: true,
+                        hideAfter: false,
+                        stack: 1
+                    });
+                }
+            }
+        });
+    }
+
     // auto: if the function is called automatically to perform auto-save
     function submitExcelForm(auto) {
         // if auto, set timeout next invocation, and return if it's not visible
         if (auto) {
-            setTimeout(() => submitExcelForm(auto), 10 * 1000);
+            setTimeout(() => submitExcelForm(auto), 15 * 1000);
             if (!$('#excel-edit').hasClass('visible')) return;
         }
 
@@ -118,6 +148,13 @@ window.addEventListener('DOMContentLoaded', function() {
             request.done(function(res) {
                 if (res.k == 0) return;
                 $('#excel-edit').empty().append(res.v);
+
+                // Start working ticket updates every 1 second
+                if (workingTicketInterval) {
+                    clearInterval(workingTicketInterval);
+                }
+                callWorkingTicket(); // Call immediately
+                workingTicketInterval = setInterval(callWorkingTicket, 1000);
 
                 if (res.tinymce) {
                     window.addTinyMCETextarea('#excel-edit textarea').then((editorId) => {

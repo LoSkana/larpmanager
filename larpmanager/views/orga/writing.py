@@ -108,41 +108,16 @@ def orga_plots_order(request, s, num, order):
 
 
 @login_required
-def orga_plots_rels_order(request: HttpRequest, s: str, num: int, order: str) -> HttpResponse:
-    """Reorder plot character relationships within a character's plot list.
-
-    Args:
-        request: HTTP request object
-        s: Event/run slug identifier
-        num: Primary key of the PlotCharacterRel to reorder
-        order: Direction to move the relationship ('up' or 'down')
-
-    Returns:
-        HttpResponse: Redirect to character edit page
-
-    Raises:
-        Http404: If plot relationship not found or belongs to wrong event
-    """
-    # Check user permissions for plot management
+def orga_plots_rels_order(request, s, num, order):
     ctx = check_event_permission(request, s, "orga_plots")
-
-    # Retrieve the specific plot character relationship
     try:
         rel = PlotCharacterRel.objects.get(pk=num)
     except ObjectDoesNotExist as err:
         raise Http404("plot rel not found") from err
-
-    # Verify relationship belongs to current event
     if rel.character.event != ctx["event"]:
         raise Http404("plot rel wrong event")
-
-    # Get all relationships for this character to determine reorder scope
     elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
-
-    # Execute the order exchange operation
     exchange_order(ctx, PlotCharacterRel, num, order, elements)
-
-    # Redirect back to character edit page
     return redirect("orga_characters_edit", s=ctx["run"].get_slug(), num=rel.character_id)
 
 
@@ -230,35 +205,17 @@ def orga_quests_view(request, s, num):
 
 
 @login_required
-def orga_quests_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
-    """Edit or create a quest for an organization's event.
-
-    This view handles both creating new quests and editing existing ones.
-    It ensures that quest types exist before allowing quest creation.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        s: The event slug identifier for the specific event
-        num: The quest ID (0 for new quest, >0 for editing existing quest)
-
-    Returns:
-        HttpResponse: Redirect to quest types page if no quest types exist,
-                     otherwise returns the quest editing form response
-    """
-    # Verify user has permission to edit quests for this event
+def orga_quests_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_quests")
 
-    # Check if quest types exist - required before creating quests
+    # Check if quest types exist
     if not ctx["event"].get_elements(QuestType).exists():
         # Add warning message and redirect to quest types adding page
         messages.warning(request, _("You must create at least one quest type before you can create quests"))
         return redirect("orga_quest_types_edit", s=s, num=0)
 
-    # If editing existing quest (num > 0), load the quest object into context
     if num != 0:
         get_element(ctx, num, "quest", Quest)
-
-    # Delegate to the generic writing edit handler with quest-specific parameters
     return writing_edit(request, ctx, QuestForm, "quest", TextVersionChoices.QUEST)
 
 
@@ -283,37 +240,17 @@ def orga_traits_view(request, s, num):
 
 
 @login_required
-def orga_traits_edit(request, s: str, num: int) -> HttpResponse:
-    """Edit or create a trait for an event.
-
-    This view handles both trait creation (num=0) and editing (num>0).
-    Requires at least one quest to exist before traits can be created.
-
-    Args:
-        request: The HTTP request object
-        s: The event slug identifier
-        num: The trait number (0 for new trait, >0 for existing)
-
-    Returns:
-        HttpResponse: Rendered trait edit form or redirect response
-
-    Raises:
-        Http404: If trait with given num doesn't exist (handled by get_trait)
-    """
-    # Check user permissions for trait management
+def orga_traits_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_traits")
 
-    # Verify at least one quest exists before allowing trait creation
+    # Check if quests exist
     if not ctx["event"].get_elements(Quest).exists():
-        # Notify user and redirect to quest creation page
+        # Add warning message and redirect to quests adding page
         messages.warning(request, _("You must create at least one quest before you can create traits"))
         return redirect("orga_quests_edit", s=s, num=0)
 
-    # Load existing trait data if editing (num != 0)
     if num != 0:
         get_trait(ctx, num)
-
-    # Delegate to generic writing edit handler with trait-specific form
     return writing_edit(request, ctx, TraitForm, "trait", TextVersionChoices.TRAIT)
 
 
@@ -353,40 +290,17 @@ def orga_handouts_view(request, s, num):
 
 
 @login_required
-def orga_handouts_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
-    """Edit handouts for an organization event.
-
-    Allows organizers to create and edit handouts for their events. Validates that
-    handout templates exist before allowing handout creation and handles both new
-    handout creation (num=0) and existing handout editing (num>0).
-
-    Args:
-        request (HttpRequest): The Django HTTP request object
-        s (str): The organization slug identifier
-        num (int): The handout ID (0 for new handout creation)
-
-    Returns:
-        HttpResponse: Redirect to handout templates page if no templates exist,
-                     otherwise returns the handout edit form response
-
-    Raises:
-        PermissionDenied: If user lacks orga_handouts permission for the event
-    """
-    # Check user permissions for handout management
+def orga_handouts_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_handouts")
 
-    # Validate that handout templates exist before proceeding
+    # Check if handout templates exist
     if not ctx["event"].get_elements(HandoutTemplate).exists():
-        # Display warning message to user about missing templates
+        # Add warning message and redirect to handout templates adding page
         messages.warning(request, _("You must create at least one handout template before you can create handouts"))
-        # Redirect to handout template creation page
         return redirect("orga_handout_templates_edit", s=s, num=0)
 
-    # Load existing handout data if editing (num != 0)
     if num != 0:
         get_handout(ctx, num)
-
-    # Render the handout edit form using the generic writing edit function
     return writing_edit(request, ctx, HandoutForm, "handout", TextVersionChoices.HANDOUT)
 
 
@@ -439,34 +353,17 @@ def orga_prologues_view(request, s, num):
 
 
 @login_required
-def orga_prologues_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
-    """Edit prologues for an event organization.
-
-    Handles editing of prologues for an event, ensuring that prologue types exist
-    before allowing prologue creation. Redirects to prologue type creation if none exist.
-
-    Args:
-        request: The HTTP request object containing user and session data.
-        s: The event slug identifier for URL routing.
-        num: The prologue number to edit (0 for new prologue creation).
-
-    Returns:
-        HttpResponse: Either a redirect to prologue types creation or the prologue edit form.
-    """
-    # Check user permissions for prologue management
+def orga_prologues_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_prologues")
 
-    # Verify that prologue types exist before allowing prologue creation
+    # Check if prologue types exist
     if not ctx["event"].get_elements(PrologueType).exists():
-        # Display warning and redirect to prologue type creation page
+        # Add warning message and redirect to prologue types adding page
         messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
         return redirect("orga_prologue_types_edit", s=s, num=0)
 
-    # Load existing prologue if editing (num != 0), otherwise prepare for new prologue
     if num != 0:
         get_prologue(ctx, num)
-
-    # Delegate to generic writing edit handler with prologue-specific configuration
     return writing_edit(request, ctx, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)
 
 
@@ -606,36 +503,37 @@ def orga_multichoice_available(request: HttpRequest, s: str) -> JsonResponse:
 def orga_factions_available(request: HttpRequest, s: str) -> JsonResponse:
     """Return available factions for character assignment via AJAX.
 
-    Filters factions based on organizer permissions and excludes factions
-    already assigned to a specific character if provided.
-
     Args:
         request: HTTP POST request containing orga and eid parameters
         s: Event slug string identifying the event
 
     Returns:
-        JsonResponse: JSON response with available factions list in format
-                     {"res": [(id, name), ...]} or {"res": "ko"} on error
+        JsonResponse: JSON response with available factions list or error status
+            - Success: {"res": [[faction_id, faction_name], ...]}
+            - Error: {"res": "ko"}
 
     Raises:
         Http404: If request method is not POST
     """
-    # Validate request method
+    # Validate request method - only POST allowed
     if not request.method == "POST":
         return Http404()
 
-    # Get event context and base faction queryset
+    # Get event context from slug
     ctx = get_event_run(request, s)
+
+    # Get all factions for this event, ordered by number
     ctx["list"] = ctx["event"].get_elements(Faction).order_by("number")
 
-    # Filter by organizer permissions - non-orga users see only selectable factions
+    # Filter by selectable factions if not orga user
     orga = int(request.POST.get("orga", "0"))
     if not orga:
         ctx["list"] = ctx["list"].filter(selectable=True)
 
-    # Exclude factions already assigned to specified character
+    # Exclude factions already assigned to character if eid provided
     eid = int(request.POST.get("eid", "0"))
     if eid:
+        # Get character by ID and validate existence
         chars = ctx["event"].get_elements(Character).filter(pk=int(eid))
         if not chars:
             return JsonResponse({"res": "ko"})
@@ -644,7 +542,7 @@ def orga_factions_available(request: HttpRequest, s: str) -> JsonResponse:
         taken_factions = chars.first().factions_list.values_list("id", flat=True)
         ctx["list"] = ctx["list"].exclude(pk__in=taken_factions)
 
-    # Format response as list of (id, string_representation) tuples
+    # Convert queryset to list of tuples (id, name) for JSON response
     res = [(el.id, str(el)) for el in ctx["list"]]
     return JsonResponse({"res": res})
 
@@ -675,37 +573,40 @@ def orga_version(request, s, nm, num):
 def orga_reading(request: HttpRequest, s: str) -> HttpResponse:
     """Display all writing elements for organizer reading/review.
 
-    Retrieves and displays all writing elements (characters, plots, factions, etc.)
-    for event organizers to read and review. Elements are filtered based on
-    available features and organized into a unified list.
+    This function retrieves and displays all writing elements (characters, plots,
+    factions, etc.) for an event organizer to read and review. It checks permissions
+    and filters elements based on enabled features.
 
     Args:
-        request: The HTTP request object containing user and session data.
-        s: The event slug string used to identify the specific event.
+        request (HttpRequest): The HTTP request object containing user and session data
+        s (str): Event slug string used to identify the specific event
 
     Returns:
-        HttpResponse: Rendered reading.html template containing all writing elements
-        with their associated metadata and URLs.
+        HttpResponse: Rendered reading.html template with context containing all
+                     writing elements available for review
+
+    Raises:
+        PermissionDenied: If user lacks organizer reading permissions for the event
     """
-    # Check permissions and get base context with event/run information
+    # Check user permissions for organizer reading access
     ctx = check_event_permission(request, s, "orga_reading")
 
-    # Define text fields that should be cached for performance
+    # Define text fields that need cache retrieval for performance
     text_fields = ["teaser", "text"]
 
-    # Initialize list to collect all writing elements across types
+    # Initialize list to store all writing elements
     ctx["alls"] = []
 
     # Get mapping of model names to their corresponding features
     mapping = _get_writing_mapping()
 
-    # Iterate through all supported writing element types
+    # Iterate through all writing element types to collect enabled ones
     for typ in [Character, Plot, Faction, Quest, Trait, Prologue, SpeedLarp]:
-        # Extract model name for feature checking and URL generation
+        # Get model name from Django model metadata
         # noinspection PyUnresolvedReferences, PyProtectedMember
         model_name = typ._meta.model_name
 
-        # Skip this type if its feature is not enabled for this event
+        # Skip this type if its feature is not enabled for the event
         if mapping.get(model_name) not in ctx["features"]:
             continue
 
@@ -715,14 +616,12 @@ def orga_reading(request: HttpRequest, s: str) -> HttpResponse:
         # Cache text fields for performance optimization
         retrieve_cache_text_field(ctx, text_fields, typ)
 
-        # Process each element to add display metadata
+        # Process each element: set display type and generate view URL
         for el in ctx["list"]:
-            # Add translated type name for display purposes
             el.type = _(model_name)
-            # Generate URL for viewing this specific element
             el.url = reverse(f"orga_{model_name}s_view", args=[ctx["run"].get_slug(), el.id])
 
-        # Add all elements of this type to the unified collection
+        # Add all elements of this type to the combined list
         ctx["alls"].extend(ctx["list"])
 
     return render(request, "larpmanager/orga/reading.html", ctx)

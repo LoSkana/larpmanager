@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any, Optional
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
 from django.http import HttpRequest
 
@@ -34,54 +35,54 @@ class EmailOrUsernameModelBackend(ModelBackend):
     """
 
     def authenticate(
-        self, request: HttpRequest, username: str | None = None, password: str | None = None, **kwargs
-    ) -> User | None:
+        self,
+        request: Optional[HttpRequest],
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Optional[AbstractUser]:
         """
         Authenticate user with username/password allowing email or username.
 
-        Supports authentication using either username or email address. When multiple
-        users match the provided identifier, tests password against each candidate
-        until a valid match is found.
+        Attempts to authenticate a user by checking both username and email fields
+        for a match. This allows users to login with either their username or email
+        address. Implements timing attack protection for non-existent users.
 
         Args:
-            request: HTTP request object from Django authentication middleware
+            request: HTTP request object (may be None in Django <2.1)
             username: Username or email address for authentication
             password: Plain text password for authentication
-            **kwargs: Additional authentication parameters from Django auth backends
+            **kwargs: Additional authentication parameters including USERNAME_FIELD
 
         Returns:
             Authenticated user object if credentials are valid, None otherwise
 
         Note:
-            Implements timing attack protection by running password hasher even
-            when no matching users are found.
+            Django <2.1 does not pass the request parameter.
         """
-        # n.b. Django <2.1 does not pass the `request`
-
+        # Get the user model for this authentication backend
         user_model = get_user_model()
 
         # Extract username from kwargs if not provided directly
         if username is None:
             username = kwargs.get(user_model.USERNAME_FIELD)
 
-        # The `username` field is allows to contain `@` characters so
-        # technically a given email address could be present in either field,
-        # possibly even for different users, so we'll query for all matching
-        # records and test each one.
-
         # Query for users matching either username field or email field
+        # The username field allows '@' characters so email addresses could
+        # potentially exist in either field, even for different users
         # noinspection PyProtectedMember
         users = user_model._default_manager.filter(
             Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username)
         )
 
-        # Test whether any matched user has the provided password:
-        # Iterate through all potential matches to find valid credentials
+        # Test password against each matching user record
+        # Return the first user with valid credentials
         for user in users:
             if user.check_password(password):
                 return user
 
         # Timing attack protection: run password hasher even when no users found
+        # This ensures consistent response time regardless of username existence
         if not users:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a non-existing user (see

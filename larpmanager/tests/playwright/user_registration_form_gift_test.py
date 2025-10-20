@@ -55,6 +55,10 @@ def prepare(page, live_server):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
+
+    page.get_by_role("link", name="Payments ").click()
+    page.locator("#id_payment_require_receipt").check()
+
     submit_confirm(page)
 
     go_to(page, live_server, "/manage/methods")
@@ -211,13 +215,15 @@ def gift(page, live_server):
     page.get_by_role("textbox", name="when").fill("fffdsfs")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("( Standard ) choice - prima (10.00€) , wow - one")
+    expect(page.locator("#one")).to_contain_text("( Standard ) wow - one , choice - prima (10.00€)")
     expect(page.locator("#one")).to_contain_text("10€ within 8 days")
 
     # pay
     page.get_by_role("link", name="10€ within 8 days").click()
     page.get_by_role("button", name="Submit").click()
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()

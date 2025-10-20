@@ -113,23 +113,23 @@ class Writing(BaseConceptModel):
         """
         Generate example CSV structure for writing element imports.
 
-        This method creates a template CSV with headers and example data for importing
-        writing elements. The CSV structure includes mandatory fields and optional
-        fields based on enabled features.
+        Creates a CSV template with headers and example data for importing writing elements.
+        The template includes mandatory fields (number, name, presentation, text) and
+        optional fields based on enabled features.
 
         Args:
-            features: Set of enabled feature names to include in CSV template.
-                     Common features include 'title', 'mirror', 'cover', 'hide'.
+            features: Set of enabled feature names to include in the CSV template.
+                     Each feature name corresponds to an optional column.
 
         Returns:
-            List of CSV rows where first row contains headers and second row
+            List of CSV rows where the first row contains headers and the second row
             contains example/description data for each column.
 
         Example:
-            >>> features = {'title', 'cover'}
-            >>> csv_data = MyClass.get_example_csv(features)
-            >>> csv_data[0]  # Headers
-            ['number', 'name', 'presentation', 'text', 'title', 'cover']
+            >>> features = {'title', 'hide'}
+            >>> result = get_example_csv(features)
+            >>> result[0]  # Headers
+            ['number', 'name', 'presentation', 'text', 'title', 'hide']
         """
         # Initialize base CSV structure with mandatory columns
         rows = [
@@ -142,7 +142,7 @@ class Writing(BaseConceptModel):
             ],
         ]
 
-        # Define optional features with their descriptions
+        # Define optional feature columns with their descriptions
         # Each tuple contains (feature_name, description_text)
         optional_features = [
             # ('assigned', 'email of the staff members to which to assign this element'),
@@ -152,11 +152,12 @@ class Writing(BaseConceptModel):
             ("hide", "single character, t (true), f (false)"),
         ]
 
-        # Add columns for enabled features only
+        # Add enabled feature columns to the CSV structure
         for feature_name, description in optional_features:
             if feature_name in features:
-                # Append feature column to headers and descriptions
+                # Append feature column to header row
                 rows[0].append(feature_name)
+                # Append description to example data row
                 rows[1].append(description)
 
         return rows
@@ -286,39 +287,20 @@ class Character(Writing):
 
         return js
 
-    def show_factions(self, event: Optional[Event], js: dict[str, Any]) -> None:
-        """Display factions for the given event in the JSON response.
-
-        Populates the 'factions' key in the js dictionary with faction numbers
-        and sets a thumbnail if a primary faction with cover exists.
-
-        Args:
-            event: The event to get factions for. If None, uses self.event.
-            js: Dictionary to populate with faction data.
-        """
+    def show_factions(self, event, js):
         js["factions"] = []
-
-        # Determine which event to use for faction lookup
         if event:
             fac_event = event.get_class_parent("faction")
         else:
             fac_event = self.event.get_class_parent("faction")
-
         primary = False
-
-        # Process all factions for the event
         # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
-            # Check if this is a primary faction and set thumbnail
             if g.typ == FactionType.PRIM:
                 primary = True
                 if g.cover:
                     js["thumb"] = g.thumb.url
-
-            # Add faction number to the list
             js["factions"].append(g.number)
-
-        # Add default faction (0) if no primary faction exists
         if not primary:
             js["factions"].append(0)
 
@@ -371,10 +353,11 @@ class Character(Writing):
         ]
         indexes = [
             models.Index(fields=["number", "event"]),
-            models.Index(fields=["event", "status"]),
-            models.Index(fields=["player", "event"]),
-            models.Index(fields=["event", "hide"]),
+            models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="char_evt_stat_act"),
+            models.Index(fields=["player", "event"], condition=Q(deleted__isnull=True), name="char_plyr_evt_act"),
+            models.Index(fields=["event", "hide"], condition=Q(deleted__isnull=True), name="char_evt_hide_act"),
             models.Index(fields=["mirror"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="char_evt_act"),
         ]
 
 
@@ -411,7 +394,10 @@ class Plot(Writing):
     order = models.IntegerField(default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="plot_evt_act"),
+        ]
         constraints = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_plot_with_optional"),
             UniqueConstraint(
@@ -500,7 +486,10 @@ class Faction(Writing):
         return self.name
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event", "order"])]
+        indexes = [
+            models.Index(fields=["number", "event", "order"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="fac_evt_act"),
+        ]
 
 
 class PrologueType(Writing):
@@ -508,7 +497,10 @@ class PrologueType(Writing):
         return self.name
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ptype_evt_act"),
+        ]
 
 
 class Prologue(Writing):
@@ -517,7 +509,10 @@ class Prologue(Writing):
     characters = models.ManyToManyField(Character, related_name="prologues_list", blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="prol_evt_act"),
+        ]
         ordering = ("event", "number", "typ")
         constraints = [
             UniqueConstraint(
@@ -568,7 +563,10 @@ class Handout(Writing):
     cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="hand_evt_act"),
+        ]
         constraints = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
@@ -639,37 +637,22 @@ class SpeedLarp(Writing):
         return f"S{self.number} {self.name} ({self.typ} - {self.station})"
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
+        indexes = [
+            models.Index(fields=["number", "event"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="speed_evt_act"),
+        ]
 
 
-def replace_char_names(v: str, chars: dict[str, dict]) -> str:
-    """Replace character names in text with their corresponding values.
-
-    Args:
-        v: The input text to process. If falsy, returns empty string.
-        chars: Dictionary mapping character names to their replacement values.
-
-    Returns:
-        Text with character names replaced by their values prefixed with '@'.
-        Returns empty string if input text is falsy.
-    """
-    # Return early if input text is falsy (None, empty string, etc.)
+def replace_char_names(v, chars):
     if not v:
         return ""
-
-    # Iterate through each character name in the mapping
-    for name, char_value in chars.items():
+    for name in chars:
         name_number = 2
-
-        # Skip names that are too short (less than 2 characters)
         if len(name) < name_number:
             continue
-
-        # Replace character name with '@' prefixed value if found in text
         if name in v:
-            c = f"@{char_value}"
+            c = f"@{chars[name]}"
             v = v.replace(name, c)
-
     return v
 
 
@@ -681,35 +664,32 @@ def replace_chars_el(el, chars):
 
 
 def replace_character_names_in_writing(instance) -> None:
-    """
-    Replace character names in writing content with character numbers.
+    """Replace character names in writing content with character numbers.
 
-    This function processes a writing instance and replaces all character names
-    with their corresponding numbers if the event has writing substitution enabled.
-    It also handles related plot character relationships for Character and Plot instances.
+    This function substitutes character names with their corresponding numbers
+    in writing content when the event has character substitution enabled.
+    It processes the main instance and related plot character relationships.
 
     Args:
         instance: Writing model instance to process for character substitution.
                  Can be Character, Plot, or other writing-related model instances.
 
     Returns:
-        None
+        None: Function performs in-place modifications and saves related objects.
 
     Note:
-        Function returns early if:
-        - Instance has no primary key (not saved)
-        - Instance has no event attribute
-        - Event has writing_substitute config disabled
+        Only processes instances that have a primary key, belong to an event,
+        and where the event has writing_substitute configuration enabled.
     """
-    # Early return if instance is not saved yet
+    # Early return if instance hasn't been saved to database yet
     if not instance.pk:
         return
 
-    # Early return if instance doesn't have an event
+    # Early return if instance doesn't have an associated event
     if not hasattr(instance, "event"):
         return
 
-    # Early return if writing substitution is disabled for this event
+    # Early return if event doesn't have character substitution enabled
     if not instance.event.get_config("writing_substitute", False):
         return
 
@@ -722,16 +702,16 @@ def replace_character_names_in_writing(instance) -> None:
     names = list(chars.keys())
     names.sort(key=len, reverse=True)
 
-    # Replace character names in the main instance
+    # Perform character name replacement on the main instance
     replace_chars_el(instance, chars)
 
-    # Handle Character instances: process related plot character relationships
+    # Handle Character instance: process related plot character relationships
     if isinstance(instance, Character):
         for el in PlotCharacterRel.objects.filter(character=instance):
             replace_chars_el(el, chars)
             el.save()
 
-    # Handle Plot instances: process related plot character relationships
+    # Handle Plot instance: process related plot character relationships
     if isinstance(instance, Plot):
         for el in PlotCharacterRel.objects.filter(plot=instance):
             replace_chars_el(el, chars)
@@ -761,7 +741,7 @@ class Relationship(BaseModel):
             ),
         ]
         indexes = [
-            models.Index(fields=["source"]),
-            models.Index(fields=["target"]),
-            models.Index(fields=["source", "target"]),
+            models.Index(fields=["source"], condition=Q(deleted__isnull=True), name="rel_src_act"),
+            models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="rel_tgt_act"),
+            models.Index(fields=["source", "target"], condition=Q(deleted__isnull=True), name="rel_src_tgt_act"),
         ]

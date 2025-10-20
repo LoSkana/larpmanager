@@ -53,34 +53,16 @@ from larpmanager.utils.event import check_event_permission
 
 
 @login_required
-def orga_registration_tickets(request: HttpRequest, s: str) -> HttpResponse:
-    """
-    Handle registration tickets management for event organizers.
-
-    Displays a list of registration tickets for an event and handles ticket downloads.
-    Requires 'orga_registration_tickets' permission to access.
-
-    Args:
-        request: HTTP request object containing user and POST data
-        s: Event slug identifier for permission checking
-
-    Returns:
-        HttpResponse: Rendered tickets template or download response
-    """
-    # Check user permissions for managing registration tickets
+def orga_registration_tickets(request, s):
     ctx = check_event_permission(request, s, "orga_registration_tickets")
 
-    # Handle ticket download request via POST
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_tickets_download(ctx)
 
-    # Set template context for upload and download functionality
     ctx["upload"] = "registration_tickets"
     ctx["download"] = 1
 
-    # Fetch ordered list of registration tickets for the event
     ctx["list"] = RegistrationTicket.objects.filter(event=ctx["event"]).order_by("order")
-    # Get available ticket tiers for the event
     ctx["tiers"] = OrgaRegistrationTicketForm.get_tier_available(ctx["event"])
 
     return render(request, "larpmanager/orga/registration/tickets.html", ctx)
@@ -118,32 +100,16 @@ def orga_registration_sections_order(request, s, num, order):
 
 
 @login_required
-def orga_registration_form(request: HttpRequest, s: str) -> HttpResponse:
-    """
-    Handle organization registration form view and download functionality.
-
-    Args:
-        request: The HTTP request object containing method and POST data
-        s: The event slug identifier for permission checking
-
-    Returns:
-        HttpResponse: Either a file download response or rendered template
-    """
-    # Check user permissions for accessing organization registration forms
+def orga_registration_form(request, s):
     ctx = check_event_permission(request, s, "orga_registration_form")
 
-    # Handle form download request if POST method with download flag
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_registration_form_download(ctx)
 
-    # Set context variables for template rendering
     ctx["upload"] = "registration_form"
     ctx["download"] = 1
 
-    # Fetch ordered registration questions with prefetched options for efficiency
     ctx["list"] = get_ordered_registration_questions(ctx).prefetch_related("options")
-
-    # Add ordered options list to each registration question object
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
@@ -155,47 +121,47 @@ def orga_registration_form_edit(request: HttpRequest, s: str, num: int) -> HttpR
     """
     Handle registration form question editing for organizers.
 
-    This function allows organizers to edit registration form questions, including
-    creating new questions and managing question options for single/multiple choice types.
+    This view allows organizers to edit registration questions, handle form submissions,
+    and redirect to appropriate pages based on the question type and user actions.
 
-    Parameters
-    ----------
-    request : HttpRequest
-        The HTTP request object containing form data and user information
-    s : str
-        Event slug identifier for the specific event
-    num : int
-        Question number/ID to edit (0 for new question creation)
+    Args:
+        request : HttpRequest
+            The HTTP request object containing form data and user information
+        s : str
+            Event slug identifier for the specific event
+        num : int
+            Question number/ID to edit (0 for new questions)
 
     Returns
-    -------
-    HttpResponse
-        Either a rendered form edit page or a redirect response after successful save
+        HttpResponse
+            Either a rendered form edit page or a redirect response after successful save
 
     Notes
-    -----
-    - Automatically redirects to option creation for single/multiple choice questions
-    - Validates that choice questions have at least one option before saving
-    - Supports continuation workflow for creating multiple questions
+        - Handles both creation (num=0) and editing of existing questions
+        - Automatically redirects to option creation for single/multiple choice questions
+        - Validates that choice questions have at least one option defined
     """
     # Check user permissions for registration form editing
     perm = "orga_registration_form"
     ctx = check_event_permission(request, s, perm)
 
-    # Process form submission and handle save logic
+    # Process form submission using backend edit helper
     if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
+        # Set suggestion flag for the current permission
         set_suggestion(ctx, perm)
 
-        # Handle continue workflow - redirect to create another question
+        # Handle "continue editing" action - redirect to create new question
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
-        # Determine if we need to edit options for this question type
+        # Determine if we need to redirect to option editing
         edit_option = False
+
+        # Check if user explicitly requested to add options
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
+        # For choice questions, ensure at least one option exists
         elif ctx["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-            # Check if single/multiple choice questions have required options
             if not RegistrationOption.objects.filter(question_id=ctx["saved"].id).exists():
                 edit_option = True
                 messages.warning(
@@ -203,12 +169,12 @@ def orga_registration_form_edit(request: HttpRequest, s: str, num: int) -> HttpR
                     _("You must define at least one option before saving a single-choice or multiple-choice question"),
                 )
 
-        # Redirect to option editing if needed, otherwise return to main form list
+        # Redirect to option creation if needed, otherwise back to form list
         if edit_option:
             return redirect(orga_registration_options_new, s=ctx["run"].get_slug(), num=ctx["saved"].id)
         return redirect(perm, s=ctx["run"].get_slug())
 
-    # Load existing options for display in the edit form
+    # Prepare context for rendering the edit form
     ctx["list"] = RegistrationOption.objects.filter(question=ctx["el"]).order_by("order")
     return render(request, "larpmanager/orga/registration/form_edit.html", ctx)
 
@@ -221,39 +187,17 @@ def orga_registration_form_order(request, s, num, order):
 
 
 @login_required
-def orga_registration_options_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
-    """Edit registration options for an event.
-
-    This function handles the editing of registration options for a specific event.
-    It first checks if the user has permission to access the registration form,
-    then verifies that registration questions exist before allowing option creation.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        s: The event slug identifier as a string
-        num: The registration option number to edit as an integer
-
-    Returns:
-        HttpResponse: Either a redirect to the registration questions page if no
-        questions exist, or the result of registration_option_edit function
-
-    Raises:
-        PermissionDenied: If user lacks required event permissions
-    """
-    # Check user permissions for accessing registration form functionality
+def orga_registration_options_edit(request, s, num):
     ctx = check_event_permission(request, s, "orga_registration_form")
 
-    # Verify that at least one registration question exists for this event
-    # Registration options require questions to be meaningful
+    # Check if registration questions exist
     if not ctx["event"].get_elements(RegistrationQuestion).exists():
-        # Display warning message to inform user about missing prerequisite
+        # Add warning message and redirect to registration questions adding page
         messages.warning(
             request, _("You must create at least one registration question before you can create registration options")
         )
-        # Redirect to registration questions creation page
         return redirect("orga_registration_form_edit", s=s, num=0)
 
-    # Proceed with registration option editing if all prerequisites are met
     return registration_option_edit(ctx, num, request)
 
 
@@ -264,36 +208,24 @@ def orga_registration_options_new(request, s, num):
     return registration_option_edit(ctx, 0, request)
 
 
-def registration_option_edit(ctx: dict, num: int, request: HttpRequest) -> HttpResponse:
+def registration_option_edit(ctx, num, request):
     """
     Handle editing of registration option with form processing and redirect logic.
 
     Args:
-        ctx: Context dictionary containing event and form data, including 'run' and 'saved' keys
-        num: Option number/ID being edited for the registration form
-        request: HTTP request object containing POST data and user information
+        ctx: Context dictionary with event and form data
+        num: Option number/ID being edited
+        request: HTTP request object
 
     Returns:
-        HttpResponse: Redirect response to next step or rendered edit form template
-
-    Note:
-        Uses backend_edit to process the OrgaRegistrationOptionForm. On successful edit,
-        redirects to either the form edit view or new options view based on POST data.
+        HttpResponse: Redirect to next step or rendered edit form
     """
-    # Process the registration option form using backend edit helper
-    # Returns True if form was successfully processed and saved
     if backend_edit(request, ctx, OrgaRegistrationOptionForm, num, assoc=False):
-        # Default redirect target is back to the form edit view
         redirect_target = "orga_registration_form_edit"
-
-        # Check if user wants to continue adding more options
         if "continue" in request.POST:
             redirect_target = "orga_registration_options_new"
-
-        # Redirect with the run slug and saved question ID as parameters
         return redirect(redirect_target, s=ctx["run"].get_slug(), num=ctx["saved"].question_id)
 
-    # If form processing failed or this is a GET request, render the edit template
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 

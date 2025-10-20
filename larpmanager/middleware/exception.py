@@ -147,32 +147,30 @@ class ExceptionHandlingMiddleware:
     def _handle_feature_error(request: HttpRequest, ex: FeatureError) -> HttpResponse:
         """Handle feature access errors by rendering appropriate error page.
 
-        This function processes FeatureError exceptions by checking permissions
-        and rendering an appropriate error template. It handles both overall
-        features (organization-wide) and event-specific features.
+        This function processes FeatureError exceptions by determining the appropriate
+        error response based on association settings and feature permissions.
 
         Args:
-            request: HTTP request object containing user and association data
+            request: The HTTP request object containing user and association context
             ex: FeatureError exception containing feature slug and run ID information
 
         Returns:
             HttpResponse: Rendered feature error template with context data
 
         Raises:
-            Http404: If association skin is managed, or if the referenced
-                    feature or run cannot be found in the database
+            Http404: If association skin is managed, or if feature/run objects are not found
         """
-        # Check if association skin is managed - if so, deny access entirely
+        # Check if association skin is managed - if so, deny access completely
         if request.assoc["skin_managed"]:
             raise Http404("not allowed")
 
-        # Retrieve the feature object from the exception's feature slug
+        # Retrieve the feature object or raise 404 if not found
         try:
             feature = Feature.objects.get(slug=ex.feature)
         except ObjectDoesNotExist as err:
             raise Http404("Feature not found") from err
 
-        # Initialize context with exception and feature data
+        # Build base context with exception and feature data
         ctx = {"exe": ex, "feature": feature}
 
         # Handle permission checking based on feature scope
@@ -186,9 +184,9 @@ class ExceptionHandlingMiddleware:
             except ObjectDoesNotExist as err:
                 raise Http404("Run not found") from err
 
-            # Add run to context and check event-level permissions
+            # Add run context and check event-level permissions
             ctx["run"] = run
             ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
 
-        # Render the feature error template with populated context
+        # Render the feature error template with assembled context
         return render(request, "exception/feature.html", ctx)

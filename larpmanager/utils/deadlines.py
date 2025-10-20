@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
-from typing import Any
 
 from django.db.models import Count
 
@@ -27,58 +26,37 @@ from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
-from larpmanager.models.event import Run
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
 
 
-def get_users_data(ids: list[int]) -> list[tuple[str, str]]:
+def get_users_data(ids):
     """Get user display names and emails for deadline notifications.
 
-    Retrieves member information including display names and email addresses
-    for a given list of member IDs, ordered by surname for consistent output.
-
     Args:
-        ids: List of member primary key IDs to fetch data for.
+        ids (list): List of member IDs
 
     Returns:
-        List of tuples containing (display_name, email) pairs for each member.
-        Display names are string representations of Member objects.
-
-    Example:
-        >>> get_users_data([1, 2, 3])
-        [('John Doe', 'john@example.com'), ('Jane Smith', 'jane@example.com')]
+        list: List of (display_name, email) tuples
     """
-    # Query members by primary key, ordered by surname for consistent results
-    members = Member.objects.filter(pk__in=ids).order_by("surname")
-
-    # Only fetch required fields to optimize database query performance
-    members = members.only("name", "surname", "email", "nickname")
-
-    # Build list of (display_name, email) tuples using string representation
-    return [(str(mb), mb.email) for mb in members]
+    return [
+        (str(mb), mb.email)
+        for mb in Member.objects.filter(pk__in=ids).order_by("surname").only("name", "surname", "email", "nickname")
+    ]
 
 
-def get_membership_fee_year(assoc_id: int, year: int | None = None) -> set[int]:
+def get_membership_fee_year(assoc_id, year=None):
     """Get set of member IDs who paid membership fee for given year.
 
     Args:
-        assoc_id: Association ID to filter by.
-        year: Year to check for membership payments. If None, defaults to current year.
+        assoc_id (int): Association ID
+        year (int, optional): Year to check, defaults to current year
 
     Returns:
-        Set of member IDs who paid membership fee for the specified year.
-
-    Example:
-        >>> get_membership_fee_year(1, 2023)
-        {123, 456, 789}
+        set: Set of member IDs who paid fee for the year
     """
-    # Use current year if no specific year provided
     if not year:
         year = datetime.now().year
-
-    # Query membership payments for the association and year
-    # Return as set of member IDs for efficient membership testing
     return set(
         AccountingItemMembership.objects.filter(assoc_id=assoc_id, year=year).values_list("member_id", flat=True)
     )
@@ -165,178 +143,133 @@ def check_run_deadlines(runs: list) -> list:
     return all_res
 
 
-def deadlines_profile(
-    collect: dict[str, list[int]],
-    features: dict,
-    memberships: dict[int, object],
-    now: datetime,
-    reg: object,
-    run: object,
-    tolerance: int,
-) -> None:
+def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):
     """Check profile completion deadlines for registration.
 
-    Determines if a member's profile completion deadline has been violated
-    based on the run start date and tolerance period. Updates the collect
-    dictionary with appropriate deadline violations.
-
     Args:
-        collect: Dictionary to collect deadline violations with keys 'profile_del'
-                and 'profile' containing lists of member IDs
-        features: Event features configuration dictionary
-        memberships: Mapping of member ID to membership objects
-        now: Current datetime for deadline comparison
-        reg: Registration instance containing member_id
-        run: Run instance containing start date
-        tolerance: Number of tolerance days before deadline enforcement
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        memberships (dict): Member ID to membership mapping
+        now (datetime): Current datetime
+        reg: Registration instance
+        run: Run instance
+        tolerance (int): Tolerance days for deadlines
 
     Side effects:
-        Updates collect dict by appending member IDs to 'profile_del' or
-        'profile' lists based on deadline status
+        Updates collect with profile deadline violations
     """
-    # Get membership object for the registration's member
     membership = memberships.get(reg.member_id)
     if not membership:
         return
 
-    # Skip check if member profile is already compiled
     if membership.compiled:
         return
 
-    # Check if deadline has passed considering tolerance period
-    # If current date plus tolerance exceeds run start, it's a deletion case
     if now.date() + timedelta(days=tolerance) > run.start:
         collect["profile_del"].append(reg.member_id)
     else:
-        # Otherwise, it's a regular profile deadline warning
         collect["profile"].append(reg.member_id)
 
 
 def deadlines_membership(
     collect: dict[str, list[int]],
-    features: dict[str, Any],
+    features: dict[str, any],
     fees: set[int],
-    memberships: dict[int, Any],
+    memberships: dict[int, any],
     now: datetime,
-    reg: Registration,
-    run: Run,
+    reg: any,
+    run: any,
     tolerance: int,
 ) -> None:
     """Check membership and fee deadlines for registration.
 
-    Examines registration membership status and fee payment deadlines,
-    updating the collect dictionary with any violations found.
+    Evaluates membership status and fee payment deadlines for a given registration,
+    updating the collect dictionary with any violations found based on tolerance periods.
 
     Args:
-        collect: Dictionary to collect deadline violations by type
-        features: Event features configuration
-        fees: Set of member IDs who paid membership fee
-        memberships: Mapping from member ID to membership object
+        collect: Dictionary to collect deadline violations, organized by violation type
+        features: Event features configuration dictionary
+        fees: Set of member IDs who have paid their membership fee
+        memberships: Mapping from member ID to membership instance
         now: Current datetime for deadline calculations
-        reg: Registration instance being checked
-        run: Run instance containing event details
-        tolerance: Number of tolerance days for deadlines
-
-    Returns:
-        None: Function updates collect dictionary in place
+        reg: Registration instance being evaluated
+        run: Run instance containing event start date
+        tolerance: Number of days tolerance allowed for deadlines
 
     Side Effects:
-        Updates collect with membership and fee deadline violations
+        Updates collect dictionary with membership and fee deadline violations
+        under keys: 'memb', 'memb_del', 'fee', 'fee_del'
     """
-    # Get membership for this registration's member
+    # Get membership for the registered member
     membership = memberships.get(reg.member_id)
     if not membership:
         return
 
-    # Check for incomplete membership statuses
-    # These require membership completion within tolerance period
+    # Check if membership is in incomplete states (empty, joined, uploaded)
     if membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
+        # Calculate days elapsed since registration creation
         elapsed = now.date() - reg.created.date()
-        # Use delayed key if tolerance exceeded, otherwise normal key
+        # Classify as delayed if beyond tolerance, otherwise normal violation
         key = "memb_del" if elapsed.days > tolerance else "memb"
         collect[key].append(reg.member_id)
         return
 
-    # Skip fee checks for submitted memberships (already processed)
+    # Skip further checks if membership is submitted (in review)
     if membership.status in [MembershipStatus.SUBMITTED]:
         return
 
-    # Check membership fee requirements
-    # Skip fee check if "laog" feature enabled or event not in current year
+    # Determine if fee checking is required (not LAOG event and current year)
     check_fee = "laog" not in features and run.start.year == now.year
     if check_fee and reg.member_id not in fees:
-        # Check if we're within tolerance days of event start
-        # Use delayed collection if deadline is imminent
+        # Check if we're within tolerance days of the event start
         if now.date() + timedelta(days=tolerance) > run.start:
+            # Event is imminent - mark as delayed fee violation
             collect["fee_del"].append(reg.member_id)
         else:
+            # Event is still far enough - mark as regular fee violation
             collect["fee"].append(reg.member_id)
 
 
-def deadlines_payment(
-    collect: dict[str, list[int]], features: dict[str, any], reg: Registration, tolerance: int
-) -> None:
-    """Check payment deadlines for registration and update violation collections.
-
-    Examines registration payment deadlines against tolerance thresholds and
-    categorizes violations into immediate and grace period collections.
+def deadlines_payment(collect, features, reg, tolerance):
+    """Check payment deadlines for registration.
 
     Args:
-        collect: Dictionary containing lists of member IDs for different violation types.
-                Must have 'pay_del' and 'pay' keys for deadline violations.
-        features: Event feature configuration dictionary. Function returns early
-                 if 'payment' feature is not enabled.
-        reg: Registration instance containing deadline attribute (negative values
-             indicate days past deadline).
-        tolerance: Maximum allowed days past deadline before escalating violation
-                  category (positive integer).
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        reg: Registration instance with deadline attribute
+        tolerance (int): Tolerance days for deadlines
 
-    Returns:
-        None: Function modifies collect dictionary in-place.
-
-    Side Effects:
-        - Appends member_id to collect['pay_del'] for severe deadline violations
-        - Appends member_id to collect['pay'] for minor deadline violations
+    Side effects:
+        Updates collect with payment deadline violations
     """
-    # Early return if payment feature is not enabled for this event
+    # check payments
     if "payment" not in features:
         return
 
-    # Check deadline violation severity and categorize appropriately
-    # Severe violation: past deadline beyond tolerance threshold
     if reg.deadline < -tolerance:
         collect["pay_del"].append(reg.member_id)
-    # Minor violation: past deadline but within tolerance period
     elif reg.deadline < 0:
         collect["pay"].append(reg.member_id)
 
 
-def deadlines_casting(collect: dict[str, set[int]], features: dict[str, bool], player_ids: list[int], run: Run) -> None:
+def deadlines_casting(collect, features, player_ids, run):
     """Check casting preference submission for players.
 
-    Identifies players who need to submit casting preferences by comparing
-    registered players against those who already have characters or have
-    submitted preferences.
-
     Args:
-        collect: Dictionary to collect deadline violations, updated with 'cast' key
-        features: Event features configuration mapping feature names to enabled status
-        player_ids: List of player member IDs to check for casting requirements
-        run: Run instance containing event and registration data
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        player_ids (list): List of player member IDs
+        run: Run instance
 
-    Side Effects:
-        Updates collect dictionary with 'cast' key containing set of member IDs
-        who haven't submitted casting preferences and don't have enough characters.
+    Side effects:
+        Updates collect with casting preference violations
     """
-    # Skip casting checks if feature is not enabled
+    # check casting
     if "casting" not in features:
         return
 
-    # Get minimum required characters per player from event configuration
     casting_chars = run.event.get_config("casting_characters", 1)
-
-    # Find members who already have sufficient characters assigned
-    # Query registrations and count related character assignments (rcrs)
+    # members that already have a character
     casted = (
         Registration.objects.filter(run=run)
         .annotate(chars=Count("rcrs"))
@@ -344,9 +277,7 @@ def deadlines_casting(collect: dict[str, set[int]], features: dict[str, bool], p
         .values_list("member_id", flat=True)
     )
 
-    # Find members who have submitted casting preferences
+    # members that sent casting preferences
     prefs = Casting.objects.filter(run=run).values_list("member_id", flat=True)
 
-    # Calculate players missing casting preferences
-    # Exclude those with enough characters or existing preferences
     collect["cast"] = set(player_ids) - (set(casted) | set(prefs))

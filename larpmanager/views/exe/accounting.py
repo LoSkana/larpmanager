@@ -435,24 +435,21 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
 
 @login_required
 def exe_payments(request: HttpRequest) -> HttpResponse:
-    """Handle payments list view for organization executives.
+    """Display paginated list of accounting payments for organization executives.
 
-    Displays a paginated list of accounting payments with filtering and sorting
-    capabilities. Includes conditional VAT fields based on organization features.
+    Shows payment records with configurable fields including member info, payment method,
+    type, status, event details, amounts, and VAT information (if VAT feature enabled).
 
     Args:
-        request: The HTTP request object containing user and session data.
+        request: Django HTTP request object containing user session and parameters
 
     Returns:
-        HttpResponse: Rendered payments list page with pagination context.
-
-    Raises:
-        PermissionDenied: If user lacks exe_payments permission.
+        HttpResponse: Rendered template with paginated payment data and context
     """
-    # Check user permissions for payments access
+    # Check user permissions for accessing payments section
     ctx = check_assoc_permission(request, "exe_payments")
 
-    # Define base table fields for payment display
+    # Define base fields to display in payments table
     fields = [
         ("member", _("Member")),
         ("method", _("Method")),
@@ -465,18 +462,18 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         ("info", _("Info")),
     ]
 
-    # Add VAT fields if organization has VAT feature enabled
+    # Add VAT-related fields if VAT feature is enabled for this organization
     if "vat" in ctx["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
-    # Configure pagination context with field mappings and callbacks
+    # Configure pagination context with field definitions and data callbacks
     ctx.update(
         {
-            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
-            "afield": "reg",
-            "fields": fields,
-            # Define display callbacks for complex field formatting
+            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),  # Related fields to select
+            "afield": "reg",  # Main field for filtering
+            "fields": fields,  # Table column definitions
+            # Callbacks for formatting display values in each column
             "callbacks": {
                 "run": lambda row: str(row.reg.run) if row.reg and row.reg.run else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
@@ -488,7 +485,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         }
     )
 
-    # Return paginated view with AccountingItemPayment queryset
+    # Return paginated view of AccountingItemPayment records
     return exe_paginate(
         request, ctx, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
     )
@@ -500,29 +497,28 @@ def exe_payments_edit(request, num):
 
 
 @login_required
-def exe_invoices(request: HttpRequest) -> HttpResponse:
-    """
-    Handle invoice management page for organization executives.
+def exe_invoices(request) -> HttpResponse:
+    """Display and manage payment invoices for the organization.
 
-    Displays paginated list of payment invoices with filtering and action capabilities.
-    Only users with 'exe_invoices' permission can access this view.
+    This view provides a paginated list of payment invoices with filtering
+    and confirmation capabilities for submitted invoices.
 
     Args:
-        request: The HTTP request object containing user session and parameters
+        request: HTTP request object containing user and session data
 
     Returns:
-        HttpResponse: Rendered invoice management page with pagination and context data
+        HttpResponse: Rendered template with invoice list and pagination
     """
-    # Check user permissions for invoice management access
+    # Check user permissions for invoice management
     ctx = check_assoc_permission(request, "exe_invoices")
     confirm = _("Confirm")
 
-    # Define table display configuration with field mappings
+    # Update context with table configuration
     ctx.update(
         {
-            # Specify relationship fields for database optimization
+            # Define selectable relationships for filtering
             "selrel": ("method", "member"),
-            # Define column headers for the invoice table
+            # Define table columns and headers
             "fields": [
                 ("member", _("Member")),
                 ("method", _("Method")),
@@ -535,7 +531,7 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
                 ("created", _("Date")),
                 ("action", _("Action")),
             ],
-            # Define data transformation callbacks for each column
+            # Define data formatting callbacks for each column
             "callbacks": {
                 # Display payment method as string
                 "method": lambda el: str(el.method),
@@ -545,10 +541,10 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
                 # Format monetary values with proper decimal formatting
                 "gross": lambda el: format_decimal(el.mc_gross),
                 "trans": lambda el: format_decimal(el.mc_fee) if el.mc_fee else "",
-                # Display invoice metadata and details
+                # Display causal and details information
                 "causal": lambda el: el.causal,
                 "details": lambda el: el.get_details(),
-                # Show confirmation action link only for submitted invoices
+                # Show confirm action only for submitted invoices
                 "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.id])}'>{confirm}</a>"
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
@@ -556,7 +552,7 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
         }
     )
 
-    # Render paginated invoice list with edit functionality
+    # Return paginated invoice list with edit functionality
     return exe_paginate(request, ctx, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit")
 
 

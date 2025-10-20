@@ -21,9 +21,10 @@
 import logging
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest
+from django.http import Http404
 
-from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -128,80 +129,42 @@ def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
     ctx["pr"] = pr
 
 
-def get_character_sheet(ctx: dict) -> None:
+def get_character_sheet(ctx):
     """Build complete character sheet data for display.
 
-    Constructs a comprehensive character sheet by gathering data from multiple
-    sources including basic character information, custom fields, factions,
-    plots, questbuilder content, speedlarp data, prologue, and experience points.
-
     Args:
-        ctx: Context dictionary containing character data and other relevant
-            information. Must include 'character' key with character object.
+        ctx: Context dictionary with character data
 
     Returns:
-        None: Function modifies the ctx dictionary in place by adding
-            character sheet data under various keys.
-
-    Note:
-        This function modifies the input dictionary in place, adding multiple
-        keys with character sheet sections.
+        dict: Complete character sheet with all sections
     """
-    # Get the complete character display data
     ctx["sheet_char"] = ctx["character"].show_complete()
 
-    # Build custom character fields section
     get_character_sheet_fields(ctx)
 
-    # Add faction information and relationships
     get_character_sheet_factions(ctx)
 
-    # Include plot hooks and story elements
     get_character_sheet_plots(ctx)
 
-    # Add questbuilder-specific content
     get_character_sheet_questbuilder(ctx)
 
-    # Include speedlarp game mechanics data
     get_character_sheet_speedlarp(ctx)
 
-    # Add character prologue and background
     get_character_sheet_prologue(ctx)
 
-    # Calculate and add experience points data
     get_character_sheet_px(ctx)
 
 
-def get_character_sheet_px(ctx: dict) -> None:
-    """Add character sheet abilities data to the context dictionary.
-
-    Processes the character's ability list and groups abilities by type name,
-    then adds the grouped data to the context for sheet rendering.
-
-    Args:
-        ctx: Context dictionary containing character and features data.
-             Must have 'features' and 'character' keys.
-
-    Returns:
-        None: Modifies the ctx dictionary in place.
-    """
-    # Early return if px feature is not enabled
+def get_character_sheet_px(ctx):
     if "px" not in ctx["features"]:
         return
 
-    # Initialize abilities dictionary for sheet rendering
     ctx["sheet_abilities"] = {}
-
-    # Group abilities by their type name
     for el in ctx["character"].px_ability_list.all():
-        # Check if ability has a valid type and name
         if el.typ and el.typ.name and el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
-
-        # Add ability to the appropriate type group
         ctx["sheet_abilities"][el.typ.name].append(el)
 
-    # Add additional character data to context
     add_char_addit(ctx["character"])
 
 
@@ -225,69 +188,38 @@ def get_character_sheet_speedlarp(ctx):
         ctx["sheet_speedlarps"].append(s)
 
 
-def get_character_sheet_questbuilder(ctx: dict) -> None:
+def get_character_sheet_questbuilder(ctx):
     """Build character sheet with quest and trait relationships.
 
-    Constructs a complete character sheet by processing trait data and their
-    associated quest relationships. Updates the context with enriched trait
-    information including quest details and character relationships.
-
     Args:
-        ctx: Context dictionary containing:
-            - features: Available features list
-            - char: Character data with player_id and traits
-            - traits: Trait definitions indexed by number
-            - chars: Character data indexed by number
-            - event: Event object for trait queries
+        ctx: Context dictionary with character, quest, and trait data
 
-    Returns:
-        None: Function modifies ctx in place
-
-    Side Effects:
-        Updates ctx['sheet_traits'] with list of enriched trait dictionaries
-        containing complete trait data, quest information, and relationships.
+    Side effects:
+        Updates ctx with sheet_traits containing complete trait and quest information
     """
-    # Early return if questbuilder feature is not available
     if "questbuilder" not in ctx["features"]:
         return
 
-    # Validate required character data exists
     if "char" not in ctx:
         return
 
-    # Ensure character has required player_id and traits fields
     if "player_id" not in ctx["char"] or "traits" not in ctx["char"]:
         return
 
-    # Initialize the sheet traits list for processed data
     ctx["sheet_traits"] = []
-
-    # Process each trait number associated with the character
     for tnum in ctx["char"]["traits"]:
-        # Get trait element from context traits dictionary
         el = ctx["traits"][tnum]
-
-        # Fetch complete trait object from database
         t = Trait.objects.get(event=ctx["event"], number=el["number"])
         data = t.show_complete()
-
-        # Add associated quest information to trait data
         data["quest"] = t.quest.show_complete()
 
-        # Initialize relationships list for this trait
         data["rels"] = []
-
-        # Process trait relationships and add character data
         for snum in el["traits"]:
-            # Skip if related trait not found in context
             if snum not in ctx["traits"]:
                 continue
-
-            # Get character number and add character data to relationships
             num = ctx["traits"][snum]["char"]
             data["rels"].append(ctx["chars"][num])
 
-        # Add completed trait data to sheet traits list
         ctx["sheet_traits"].append(data)
 
 
@@ -312,9 +244,56 @@ def get_character_sheet_factions(ctx):
 
     fac_event = ctx["event"].get_class_parent("faction")
     ctx["sheet_factions"] = []
-    for g in ctx["character"].factions_list.filter(event=fac_event):
+
+    # Fetch all factions
+    factions = list(ctx["character"].factions_list.filter(event=fac_event))
+
+    if not factions:
+        return
+
+    # Prepare writing fields query data
+    visible_writing_fields(ctx, QuestionApplicable.FACTION, only_visible=False)
+
+    # Get visible question IDs
+    question_visible = []
+    if "questions" in ctx:
+        for question_id in ctx["questions"].keys():
+            config = str(question_id)
+            if "show_all" not in ctx and config not in ctx.get("show_faction", {}):
+                continue
+            question_visible.append(question_id)
+
+    # Bulk fetch all writing answers and choices for all factions
+    faction_ids = [g.id for g in factions]
+
+    # Build answer mapping: faction_id -> {question_id -> text}
+    answer_map = {}
+    if question_visible:
+        for element_id, question_id, text in WritingAnswer.objects.filter(
+            element_id__in=faction_ids, question_id__in=question_visible
+        ).values_list("element_id", "question_id", "text"):
+            if element_id not in answer_map:
+                answer_map[element_id] = {}
+            answer_map[element_id][question_id] = text
+
+        # Build choice mapping: faction_id -> {question_id -> [option_ids]}
+        for element_id, question_id, option_id in WritingChoice.objects.filter(
+            element_id__in=faction_ids, question_id__in=question_visible
+        ).values_list("element_id", "question_id", "option_id"):
+            if element_id not in answer_map:
+                answer_map[element_id] = {}
+            if question_id not in answer_map[element_id]:
+                answer_map[element_id][question_id] = []
+            answer_map[element_id][question_id].append(option_id)
+
+    # Process each faction
+    for g in factions:
         data = g.show_complete()
-        data.update(get_writing_element_fields(ctx, "faction", QuestionApplicable.FACTION, g.id, only_visible=False))
+
+        # Add writing fields from pre-fetched data
+        fields = answer_map.get(g.id, {})
+        data.update({"questions": ctx.get("questions", {}), "options": ctx.get("options", {}), "fields": fields})
+
         ctx["sheet_factions"].append(data)
 
 
@@ -325,48 +304,48 @@ def get_character_sheet_fields(ctx):
     ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["character"].id, only_visible=False))
 
 
-def get_char_check(request: HttpRequest, ctx: dict, num: int, restrict: bool = False, bypass: bool = False) -> None:
+def get_char_check(request, ctx: dict, num: int, restrict: bool = False, bypass: bool = False) -> None:
     """Get character with access control checks.
 
-    Retrieves a character from the cache and applies appropriate access control
-    based on user permissions and character visibility settings.
+    Retrieves a character from the context and performs various access control
+    checks based on user permissions and character visibility settings.
 
     Args:
-        request: Django HTTP request object containing user information
-        ctx: Context dictionary containing cached character data
-        num: Character number/identifier to retrieve
-        restrict: If True, raises Http404 for unauthorized access instead of
-                 allowing restricted view
-        bypass: If True, skips all access control checks
+        request: Django HTTP request object containing user and session data
+        ctx: Context dictionary containing cached character and event data
+        num: Character number/ID to retrieve from the character cache
+        restrict: Whether to apply strict visibility restrictions for non-owners
+        bypass: Whether to bypass all access checks (admin override)
 
     Returns:
-        None: Modifies ctx in place with character data and check status
+        None: Modifies ctx in-place, adding 'char' and potentially 'check' keys
 
     Raises:
-        NotFoundError: If character number not found in cache
-        Http404: If character is hidden or access is restricted
+        NotFoundError: If character not found in cache or is hidden from user
+        Http404: If character access is restricted and user lacks permission
     """
-    # Load all cached event data including characters
+    # Load all event and character data into context cache
     get_event_cache_all(ctx)
 
-    # Check if character exists in cache
+    # Check if requested character exists in the cached character data
     if num not in ctx["chars"]:
         raise NotFoundError()
 
-    # Set current character in context
+    # Set the current character in context for further processing
     ctx["char"] = ctx["chars"][num]
 
-    # Handle bypass mode or authenticated users with character access
+    # Allow access if bypassing checks or user has character access permissions
     if bypass or (request.user.is_authenticated and has_access_character(request, ctx)):
+        # Load full character data and mark as having elevated access
         get_char(ctx, num, True)
         ctx["check"] = 1
         return
 
-    # Check if character is marked as hidden
+    # Block access to characters marked as hidden from public view
     if ctx["char"].get("hide", False):
         raise NotFoundError()
 
-    # Apply restriction policy for unauthorized access
+    # Apply restriction check - deny access if restrict flag is set
     if restrict:
         raise Http404("Not your character")
 
@@ -374,47 +353,49 @@ def get_char_check(request: HttpRequest, ctx: dict, num: int, restrict: bool = F
 def get_chars_relations(text: str, chs_numbers: list[int]) -> tuple[list[int], list[int]]:
     """Retrieve character relationship data from text content.
 
-    Searches through the provided text for character references in the format
-    '#number' and categorizes them as either active or extinct based on whether
-    the character number exists in the provided valid character numbers list.
+    Searches for character references in the format '#number' within the provided text
+    and categorizes them as either active (existing) or extinct (no longer valid)
+    characters based on the provided valid character numbers.
 
     Args:
-        text: Text content to search for character references in '#number' format.
-        chs_numbers: List of valid/active character numbers to check against.
+        text (str): Text content to search for character references in format '#number'
+        chs_numbers (list[int]): List of valid/active character numbers
 
     Returns:
-        A tuple containing two lists:
-        - active_characters: List of character numbers found in text that exist
-          in chs_numbers
-        - extinct_characters: List of character numbers found in text that don't
-          exist in chs_numbers
+        tuple[list[int], list[int]]: A tuple containing:
+            - active_characters: List of character numbers found in text that exist in chs_numbers
+            - extinct_characters: List of character numbers found in text that don't exist in chs_numbers
 
     Note:
-        The function searches from max_number + 100 down to 1 to ensure longer
-        numbers are matched before shorter ones (e.g., #123 before #12).
+        The function searches from the highest possible number (max + 100) down to 1
+        to ensure longer numbers are matched first, preventing partial matches.
     """
     chs = []
     extinct = []
 
-    # Early return if no character numbers provided
+    # Early return if no valid character numbers provided
     if not chs_numbers:
         return chs, extinct
 
     # Strip HTML tags from text for clean processing
     tx = strip_tags(text)
 
-    # Start search from highest number + buffer to avoid partial matches
+    # Start search from maximum character number plus buffer to catch any high numbers
     max_number = chs_numbers[0]
+
+    # Search from high to low numbers to avoid partial matching issues
+    # (e.g., matching #1 when #10 exists)
     for number in range(max_number + 100, 0, -1):
-        # Format character reference pattern
         k = f"#{number}"
+
+        # Skip if this character reference isn't in the text
         if k not in tx:
             continue
 
         # Remove found reference to prevent duplicate matches
         tx = tx.replace(k, "")
 
-        # Categorize character as active or extinct
+        # Categorize as active or extinct based on validity
         if number in chs_numbers:
             chs.append(number)
         else:
@@ -423,40 +404,25 @@ def get_chars_relations(text: str, chs_numbers: list[int]) -> tuple[list[int], l
     return chs, extinct
 
 
-def check_missing_mandatory(ctx: dict) -> None:
+def check_missing_mandatory(ctx):
     """Check for missing mandatory character writing fields.
-
-    Examines the event's writing questions that are mandatory for characters
-    and identifies which ones the character hasn't answered yet. Updates the
-    context with a comma-separated string of missing field names.
 
     Args:
         ctx: Context dictionary containing character and event data.
-             Must include 'char' dict with 'id' key and 'event' object.
-             Gets updated with 'missing_fields' key containing comma-separated
-             string of missing mandatory field names.
+              Updates ctx with 'missing_fields' list.
     """
     ctx["missing_fields"] = []
     aux = []
 
-    # Map question types to their corresponding model classes
-    # Answer types handle text/number inputs, choice types handle selections
     models = {
         **{t: WritingAnswer for t in BaseQuestionType.get_answer_types()},
         **{t: WritingChoice for t in BaseQuestionType.get_choice_types()},
     }
 
-    # Get all writing questions for this event
     questions = ctx["event"].get_elements(WritingQuestion)
-
-    # Filter for mandatory character-applicable questions only
     for que in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
-        # Get the appropriate model class for this question type
         model = models.get(que.typ)
-
-        # Check if character has answered this mandatory question
         if model and not model.objects.filter(element_id=ctx["char"]["id"], question=que).exists():
             aux.append(que.name)
 
-    # Convert list of missing field names to comma-separated string
     ctx["missing_fields"] = ", ".join(aux)

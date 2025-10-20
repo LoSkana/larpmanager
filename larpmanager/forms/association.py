@@ -618,6 +618,11 @@ class ExeConfigForm(ConfigForm):
             help_text = _("If checked: Adds a unique code to each payment, which helps in being able to recognize it")
             self.add_configs("payment_special_code", ConfigType.BOOL, label, help_text)
 
+            # Manual payment receipt requirement
+            label = _("Require receipt for manual payments")
+            help_text = _("If checked: Participants must provide a receipt/invoice for manual payments")
+            self.add_configs("payment_require_receipt", ConfigType.BOOL, label, help_text)
+
         # Configure VAT calculation settings for different cost components
         if "vat" in self.params["features"]:
             self.set_section("vat", _("VAT"))

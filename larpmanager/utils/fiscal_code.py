@@ -11,47 +11,29 @@ from larpmanager.models.member import Member
 from larpmanager.utils.member import almost_equal, count_differences
 
 
-def calculate_fiscal_code(member: Member) -> dict:
+def calculate_fiscal_code(member):
     """Calculate and validate Italian fiscal code for a member.
 
-    This function calculates the Italian fiscal code (codice fiscale) for a given member
-    and validates its correctness. It handles gender ambiguity by trying both male and
-    female options if the initial calculation fails.
-
     Args:
-        member: Member object containing personal data required for fiscal code calculation.
-                Must have attributes: nationality, fiscal_code, and other personal details.
+        member: Member object with personal data for fiscal code calculation
 
     Returns:
-        dict: Dictionary containing fiscal code validation results. Returns empty dict
-              if member is not Italian or has fiscal_code set to "n/a".
-              Otherwise contains validation status and calculated fiscal code.
-
-    Note:
-        Only processes Italian citizens (nationality "it"). Non-Italian citizens
-        and members with fiscal_code "n/a" are skipped.
+        dict: Dictionary containing fiscal code validation results
     """
-    # Skip non-Italian citizens - fiscal code only applies to Italian residents
+    # ignore non-italian citizens
     if member.nationality and member.nationality.lower() != "it":
         return {}
-
-    # Skip members who explicitly don't have a fiscal code
     if member.fiscal_code and member.fiscal_code.lower() == "n/a":
         return {}
 
-    # First attempt: calculate fiscal code assuming male gender
     first_ctx = _go(member, True)
 
-    # If first calculation failed, try with female gender assumption
-    # This handles cases where gender determination is ambiguous
+    # If the first try didn't work, try if the user has to indicate the gender female
     if not first_ctx["correct_cf"]:
         second_ctx = _go(member, False)
-
-        # Return female calculation if it succeeded
         if second_ctx["correct_cf"]:
             return second_ctx
 
-    # Return the first calculation result (either successful or failed)
     return first_ctx
 
 
@@ -98,43 +80,29 @@ def _clean_birth_place(birth_place):
     return cleaned_birth_place
 
 
-def _slugify(text: str) -> str:
+def _slugify(text):
     """Normalize text for fiscal code generation by removing accents and special characters.
 
-    This function performs comprehensive text normalization by removing Italian accents,
-    converting to ASCII, normalizing whitespace, and creating URL-friendly slugs.
-
     Args:
-        text (str): Input text to be normalized
+        text: Input text to be normalized
 
     Returns:
         str: Normalized text with accents removed, lowercased, and special characters replaced
-
-    Example:
-        >>> _slugify("Café à Paris")
-        "cafe-a-paris"
     """
-    # Remove common Italian accented characters manually
+    # Remove accents
     for char in ["à", "è", "é", "ì", "ò", "ù"]:
         text = text.replace(char, "")
-
-    # Normalize text using Unicode normalization to decompose accented characters
-    # then encode to ASCII ignoring non-ASCII characters
+    # Normalize text to remove accents and convert to ASCII
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
-
-    # Convert to lowercase for consistency
+    # Convert text to lowercase
     text = text.lower()
-
-    # Remove quotation marks that could interfere with processing
+    # Remove quotes
     text = text.replace('"', "").replace("'", "")
-
-    # Remove all non-alphanumeric characters except spaces and hyphens
+    # Replace any non-alphanumeric character (excluding hyphens) with a space
     text = re.sub(r"[^a-z0-9\s-]", "", text)
-
-    # Replace sequences of whitespace or hyphens with single hyphen
+    # Replace any sequence of whitespace or hyphens with a single hyphen
     text = re.sub(r"[\s-]+", "-", text)
-
-    # Clean up leading and trailing hyphens
+    # Strip leading and trailing hyphens
     text = text.strip("-")
     return text
 
@@ -142,47 +110,48 @@ def _slugify(text: str) -> str:
 def _extract_municipality_code(birth_place: str) -> str:
     """Extract municipality code from birth place name using ISTAT data.
 
-    Searches for the given birth place in ISTAT nation and municipality databases.
-    First checks for exact matches in nations, then in municipalities (including
-    alternative names separated by '/'), and finally performs partial matching.
+    This function searches for ISTAT codes by first checking against nation codes,
+    then municipality codes with exact matching, and finally partial matching.
 
     Args:
-        birth_place (str): Name of the birth place (city/nation)
+        birth_place (str): Name of the birth place (city/nation) to look up.
 
     Returns:
-        str: ISTAT code for the municipality, or empty string if not found
+        str: ISTAT code for the municipality, or empty string if not found.
 
     Note:
-        Uses slugified comparison for fuzzy matching of place names.
+        The function performs case-insensitive matching using slugified names.
+        It searches first in nations data, then in municipality codes with
+        exact and partial matching strategies.
     """
+    # Convert birth place to slugified format for consistent matching
     slug = _slugify(birth_place)
 
-    # Search in nations database for exact matches
+    # First search: Look for exact matches in nations data
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
     with open(file_path) as file:
         reader = csv.reader(file)
-        # Check each nation name for exact match
+        # Search for exact nation name matches
         for row in reader:
             if slug == _slugify(row[0]):
                 return row[1]
 
-    # Search in municipalities database
+    # Second search: Look in municipality codes file
     file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
     with open(file_path) as file:
         reader = csv.reader(file)
-
-        # First pass: check exact matches including alternative names (separated by '/')
+        # First pass: Search for exact matches in split municipality names
         for row in reader:
             for el in row[0].split("/"):
                 if slug == _slugify(el):
                     return row[1]
 
-        # Second pass: check partial matches in municipality names
+        # Second pass: Search for partial matches in municipality names
         for row in reader:
             if slug in _slugify(row[0]):
                 return row[1]
 
-    # Return empty string if no match found
+    # Return empty string if no match found in any dataset
     return ""
 
 

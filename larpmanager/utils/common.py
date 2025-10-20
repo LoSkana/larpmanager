@@ -35,7 +35,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
-from django.http import Http404, HttpRequest
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
@@ -79,87 +79,49 @@ utc = pytz.UTC
 
 
 # ## PROFILING CHECK
-def check_already(nm: str, params: str) -> bool:
+def check_already(nm, params):
     """Check if a background task is already queued.
 
-    This function queries the database to determine if a task with the given
-    name and parameters is already present in the task queue, preventing
-    duplicate task creation.
-
     Args:
-        nm: The name of the task to check for in the queue.
-        params: The serialized parameters of the task to match against.
+        nm (str): Task name
+        params: Task parameters
 
     Returns:
-        True if a task with matching name and parameters exists in the queue,
-        False otherwise.
-
-    Example:
-        >>> check_already('send_email', '{"recipient": "user@example.com"}')
-        True
+        bool: True if task already exists in queue
     """
-    # Query for existing tasks matching both name and parameters
     q = Task.objects.filter(task_name=nm, task_params=params)
-
-    # Return whether any matching tasks exist
     return q.exists()
 
 
-def get_channel(a: int, b: int) -> int:
-    """Generate unique channel ID for two entities using Cantor pairing function.
-
-    Creates a deterministic, unique channel identifier for any pair of entity IDs
-    by applying the Cantor pairing function to the ordered pair (larger, smaller).
-    This ensures that get_channel(a, b) == get_channel(b, a) for any valid inputs.
+def get_channel(a, b):
+    """Generate unique channel ID for two entities.
 
     Args:
-        a: First entity ID (must be convertible to int)
-        b: Second entity ID (must be convertible to int)
+        a (int): First entity ID
+        b (int): Second entity ID
 
     Returns:
-        Unique channel ID as integer using Cantor pairing
-
-    Example:
-        >>> get_channel(5, 3)
-        64
-        >>> get_channel(3, 5)  # Same result due to ordering
-        64
+        int: Unique channel ID using Cantor pairing
     """
-    # Convert inputs to integers to ensure type safety
     a = int(a)
     b = int(b)
-
-    # Order parameters consistently to ensure symmetry: get_channel(a,b) == get_channel(b,a)
     if a > b:
         return int(cantor(a, b))
     else:
         return int(cantor(b, a))
 
 
-def cantor(k1: int, k2: int) -> int:
+def cantor(k1, k2):
     """Cantor pairing function to map two integers to a unique integer.
 
-    The Cantor pairing function is a primitive recursive pairing function
-    that encodes two natural numbers into a single natural number.
-
     Args:
-        k1: First integer to be paired.
-        k2: Second integer to be paired.
+        k1 (int): First integer
+        k2 (int): Second integer
 
     Returns:
-        Unique integer result of the Cantor pairing.
-
-    Example:
-        >>> cantor(3, 4)
-        32
-        >>> cantor(0, 0)
-        0
+        float: Unique pairing result
     """
-    # Calculate the sum of both integers
-    sum_k = k1 + k2
-
-    # Apply Cantor pairing formula: ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
-    return int((sum_k * (sum_k + 1) // 2) + k2)
+    return ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
 
 
 def compute_diff(self, other):
@@ -172,114 +134,66 @@ def compute_diff(self, other):
     check_diff(self, other.text, self.text)
 
 
-def check_diff(self, tx1: str, tx2: str) -> None:
+def check_diff(self, tx1, tx2):
     """Generate HTML diff between two text strings.
 
     Args:
-        tx1: First text string to compare
-        tx2: Second text string to compare
-
-    Returns:
-        None: Sets self.diff attribute with HTML diff or None if strings are identical
-
-    Note:
-        Uses diff_match_patch library to generate semantic diffs with HTML formatting.
-        The diff is cleaned up for efficiency before HTML conversion.
+        self: Instance to store diff result
+        tx1: First text string
+        tx2: Second text string
     """
-    # Early return if strings are identical - no diff needed
     if tx1 == tx2:
         self.diff = None
         return
-
-    # Initialize diff_match_patch instance for text comparison
     dmp = diff_match_patch()
-
-    # Generate semantic diff between the two text strings
     self.diff = dmp.diff_main(tx1, tx2)
-
-    # Clean up diff for better efficiency and readability
     dmp.diff_cleanupEfficiency(self.diff)
-
-    # Convert diff to HTML format for display
     self.diff = dmp.diff_prettyHtml(self.diff)
 
 
-def get_assoc(request: HttpRequest) -> Association:
+def get_assoc(request):
     """Get association from request context.
 
-    Retrieves the Association instance associated with the current request
-    by looking up the association ID stored in the request context.
-
     Args:
-        request (HttpRequest): Django HTTP request object containing
-            association context data in request.assoc dictionary.
+        request: Django HTTP request object
 
     Returns:
-        Association: The Association instance matching the ID found in
-            the request context.
-
-    Raises:
-        Http404: If no Association exists with the given ID.
-
-    Example:
-        >>> association = get_assoc(request)
-        >>> print(association.name)
+        Association: Association instance from request context
     """
-    # Extract association ID from request context
-    assoc_id = request.assoc["id"]
-
-    # Retrieve and return the Association instance or raise 404
-    return get_object_or_404(Association, pk=assoc_id)
+    return get_object_or_404(Association, pk=request.assoc["id"])
 
 
-def get_member(n: int) -> dict[str, Member]:
+def get_member(n):
     """Get member by ID with proper error handling.
 
     Args:
-        n: The primary key ID of the member to retrieve.
+        n: Member ID
 
     Returns:
-        A dictionary containing the member instance under the 'member' key.
+        dict: Dictionary containing member instance
 
     Raises:
-        Http404: If the member with the specified ID does not exist.
-
-    Example:
-        >>> result = get_member(123)
-        >>> member = result['member']
+        Http404: If member does not exist
     """
     try:
-        # Attempt to retrieve the member by primary key
         return {"member": Member.objects.get(pk=n)}
     except ObjectDoesNotExist as err:
-        # Re-raise as Http404 with descriptive message for web context
         raise Http404("Member does not exist") from err
 
 
-def get_contact(mid: int, yid: int) -> Contact | None:
+def get_contact(mid, yid):
     """Get contact relationship between two members.
 
-    Retrieves the contact relationship record that exists between two members
-    in the system, where one member (mid) has a contact relationship with
-    another member (yid).
-
     Args:
-        mid (int): ID of the first member (the "me" in the relationship)
-        yid (int): ID of the second member (the "you" in the relationship)
+        mid: ID of first member
+        yid: ID of second member
 
     Returns:
-        Contact | None: Contact instance if relationship exists, None if not found
-
-    Example:
-        >>> contact = get_contact(123, 456)
-        >>> if contact:
-        ...     print(f"Contact found: {contact}")
+        Contact: Contact instance or None if not found
     """
     try:
-        # Query the Contact model for the specific relationship
         return Contact.objects.get(me_id=mid, you_id=yid)
     except ObjectDoesNotExist:
-        # Return None when no contact relationship exists
         return None
 
 
@@ -307,81 +221,53 @@ def get_char(ctx, n, by_number=False):
     get_element(ctx, n, "character", Character, by_number)
 
 
-def get_registration(ctx: dict, n: int) -> None:
+def get_registration(ctx, n):
     """Get registration by ID and add to context.
 
-    Retrieves a registration object by its primary key within the context of a specific run,
-    then adds both the registration object and its string representation to the template context.
-
     Args:
-        ctx: Template context dictionary that must contain a 'run' key
-        n: Registration primary key identifier
+        ctx: Template context dictionary
+        n: Registration ID
 
     Raises:
-        Http404: If registration does not exist for the given run and ID
-
-    Note:
-        This function modifies the ctx dictionary in-place by adding 'registration' and 'name' keys.
+        Http404: If registration does not exist
     """
     try:
-        # Retrieve registration object filtered by run context and primary key
         ctx["registration"] = Registration.objects.get(run=ctx["run"], pk=n)
-
-        # Add string representation of registration to context for display purposes
         ctx["name"] = str(ctx["registration"])
     except ObjectDoesNotExist as err:
-        # Convert Django's ObjectDoesNotExist to HTTP 404 response
         raise Http404("Registration does not exist") from err
 
 
-def get_discount(ctx: dict, n: int) -> None:
+def get_discount(ctx, n):
     """Get discount by ID and add to context.
 
-    Retrieves a discount object from the database using the provided ID and adds it
-    to the template context along with its string representation.
-
     Args:
-        ctx: Template context dictionary to be updated with discount data
-        n: Primary key of the discount to retrieve
+        ctx: Template context dictionary
+        n: Discount ID
 
     Raises:
-        Http404: If discount with the specified ID does not exist
-
-    Returns:
-        None: Function modifies the context dictionary in-place
+        Http404: If discount does not exist
     """
     try:
-        # Fetch discount object by primary key
         ctx["discount"] = Discount.objects.get(pk=n)
-
-        # Add string representation of discount to context
         ctx["name"] = str(ctx["discount"])
     except ObjectDoesNotExist as err:
-        # Raise 404 error if discount not found
         raise Http404("Discount does not exist") from err
 
 
-def get_album(ctx: dict, n: int) -> None:
+def get_album(ctx, n):
     """Get album by ID and add to context.
 
-    Retrieves an Album object from the database using the provided ID
-    and adds it to the template context dictionary.
-
     Args:
-        ctx: Template context dictionary to store the album
-        n: Primary key/ID of the album to retrieve
+        ctx: Template context dictionary
+        n: Album ID
 
     Raises:
-        Http404: If album with the specified ID does not exist
-
-    Returns:
-        None: Function modifies the context dictionary in-place
+        Http404: If album does not exist
     """
     try:
-        # Query database for album with the given primary key
         ctx["album"] = Album.objects.get(pk=n)
     except ObjectDoesNotExist as err:
-        # Raise HTTP 404 error if album is not found
         raise Http404("Album does not exist") from err
 
 
@@ -617,32 +503,15 @@ def check_field(cls, check):
     return False
 
 
-def round_to_two_significant_digits(number: float) -> int:
-    """Round a number to two significant digits using specific thresholds.
-
-    Args:
-        number: The numeric value to round.
-
-    Returns:
-        The rounded number as an integer.
-
-    Note:
-        Numbers with absolute value < 1000 are rounded to the nearest 10.
-        Numbers with absolute value >= 1000 are rounded to the nearest 100.
-        Uses ROUND_DOWN rounding mode for consistent behavior.
-    """
-    # Convert input to Decimal for precise arithmetic
+def round_to_two_significant_digits(number):
     d = Decimal(number)
     threshold = 1000
-
-    # Round by 10 for smaller numbers (< 1000)
+    # round by 10
     if abs(number) < threshold:
         rounded = d.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
-    # Round by 100 for larger numbers (>= 1000)
+    # round by 100
     else:
         rounded = d.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
-
-    # Return as integer
     return int(rounded)
 
 
@@ -715,151 +584,91 @@ def normalize_string(value):
     return value
 
 
-def copy_class(target_id: int, source_id: int, cls) -> None:
-    """Copy all objects of a given class from source event to target event.
-
-    This function deletes all existing objects of the specified class in the target event,
-    then copies all objects from the source event, including their many-to-many relationships.
-    Special handling is provided for access_token fields which are regenerated.
+def copy_class(target_id, source_id, cls):
+    """
+    Copy all objects of a given class from source event to target event.
 
     Args:
         target_id: Target event ID to copy objects to
         source_id: Source event ID to copy objects from
         cls: Django model class to copy instances of
-
-    Returns:
-        None
-
-    Raises:
-        Exception: Logs warnings for any errors during object copying
     """
-    # Remove all existing objects of this class from target event
     cls.objects.filter(event_id=target_id).delete()
 
-    # Iterate through all objects in source event
     for obj in cls.objects.filter(event_id=source_id):
         try:
-            # Store many-to-many relationships before cloning
+            # save a copy of m2m relations
             m2m_data = {}
 
             # noinspection PyProtectedMember
             for field in obj._meta.many_to_many:
                 m2m_data[field.name] = list(getattr(obj, field.name).all())
 
-            # Clone object by resetting primary key and updating event reference
             obj.pk = None
             obj.event_id = target_id
             # noinspection PyProtectedMember
             obj._state.adding = True
-
-            # Regenerate special fields that need unique values
             for field_name, func in {"access_token": my_uuid_short}.items():
                 if not hasattr(obj, field_name):
                     continue
                 setattr(obj, field_name, func())
-
-            # Save the cloned object
             obj.save()
 
-            # Restore many-to-many relationships on the new object
+            # copy m2m relations
             for field_name, values in m2m_data.items():
                 getattr(obj, field_name).set(values)
         except Exception as err:
             logging.warning(f"found exp: {err}")
 
 
-def get_payment_methods_ids(ctx: dict) -> set[int]:
+def get_payment_methods_ids(ctx):
     """
     Get set of payment method IDs for an association.
 
     Args:
-        ctx: Context dictionary containing association ID under 'a_id' key.
+        ctx: Context dictionary containing association ID
 
     Returns:
-        Set of payment method primary keys as integers.
-
-    Raises:
-        KeyError: If 'a_id' key is not found in context dictionary.
-        Association.DoesNotExist: If association with given ID does not exist.
+        set: Set of payment method primary keys
     """
-    # Extract association ID from context dictionary
-    association_id = ctx["a_id"]
-
-    # Retrieve association instance and get payment method IDs
-    association = Association.objects.get(pk=association_id)
-    payment_method_ids = association.payment_methods.values_list("pk", flat=True)
-
-    # Convert queryset to set and return
-    return set(payment_method_ids)
+    return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
 
 
-def detect_delimiter(content: str) -> str:
+def detect_delimiter(content):
     """
     Detect CSV delimiter from content header line.
 
-    This function analyzes the first line of CSV content to identify the most
-    likely delimiter character used to separate fields.
-
     Args:
-        content (str): CSV content string containing headers and data rows
+        content: CSV content string
 
     Returns:
-        str: Detected delimiter character (tab, semicolon, or comma)
+        str: Detected delimiter character
 
     Raises:
-        Exception: If no standard delimiter is found in the header line
-
-    Example:
-        >>> detect_delimiter("name,age,city\\nJohn,25,NYC")
-        ','
-        >>> detect_delimiter("name;age;city\\nJohn;25;NYC")
-        ';'
+        Exception: If no delimiter is found
     """
-    # Extract the first line which should contain column headers
     header = content.split("\n")[0]
-
-    # Check for common delimiters in order of preference
-    # Tab, semicolon, comma are the most standard CSV delimiters
     for d in ["\t", ";", ","]:
         if d in header:
             return d
-
-    # No standard delimiter found in header line
     raise Exception("no delimiter")
 
 
-def clean(s: str) -> str:
-    """Clean and normalize string by removing symbols, spaces, and accents.
-
-    Removes all non-word characters, normalizes whitespace, and replaces
-    common Italian accented characters with their unaccented equivalents.
+def clean(s):
+    """
+    Clean and normalize string by removing symbols, spaces, and accents.
 
     Args:
-        s: The input string to clean and normalize.
+        s: String to clean
 
     Returns:
-        A cleaned string with symbols removed, whitespace normalized,
-        and accented characters replaced with ASCII equivalents.
-
-    Example:
-        >>> clean("Ciao! Come stà?")
-        "ciaocomestaì"
+        str: Cleaned string with normalized characters
     """
-    # Convert to lowercase for consistent processing
     s = s.lower()
-
-    # Remove all symbols and non-word characters, replace with spaces
-    s = re.sub(r"[^\w]", " ", s)
-
-    # Normalize all whitespace characters to regular spaces
-    s = re.sub(r"\s", " ", s)
-
-    # Remove all spaces to create continuous string
-    s = re.sub(r" +", "", s)
-
-    # Replace common Italian accented characters with ASCII equivalents
+    s = re.sub(r"[^\w]", " ", s)  # remove symbols
+    s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
+    s = re.sub(r" +", "", s)  # remove spaces
     s = s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
-
     return s
 
 
@@ -867,32 +676,31 @@ def _search_char_reg(ctx: dict, char, js: dict) -> None:
     """
     Populate character search result with registration and player data.
 
-    Parameters
-    ----------
-    ctx : dict
-        Context dictionary containing run information and event data
-    char : Character
-        Character instance with associated registration and player data
-    js : dict
-        JSON object to populate with search results and character information
+    This function extracts character and player information from registration data
+    and populates a JSON object for search results display.
 
-    Returns
-    -------
-    None
-        Modifies the js dictionary in-place with character and player data
+    Args:
+        ctx : dict
+            Context dictionary containing run information and event data
+        char : Character
+            Character instance with associated registration data
+        js : dict
+            JSON object to populate with search results data
+
+    Returns: None -Modifies the js dictionary in place
     """
-    # Set character name, preferring custom name if available
+    # Set character name, prioritizing custom name if available
     js["name"] = char.name
     if char.rcr and char.rcr.custom_name:
         js["name"] = char.rcr.custom_name
 
-    # Populate player information from registration
+    # Extract player information from registration
     js["player"] = char.reg.display_member()
     js["player_full"] = str(char.reg.member)
     js["player_id"] = char.reg.member.id
     js["first_aid"] = char.reg.member.first_aid
 
-    # Set profile image, prioritizing character's custom profile
+    # Set profile image with fallback hierarchy: character custom -> member -> None
     if char.rcr.profile_thumb:
         js["player_prof"] = char.rcr.profile_thumb.url
         js["profile"] = char.rcr.profile_thumb.url
@@ -901,7 +709,7 @@ def _search_char_reg(ctx: dict, char, js: dict) -> None:
     else:
         js["player_prof"] = None
 
-    # Copy custom character attributes if they exist
+    # Extract custom character attributes (pronoun, song, public, private notes)
     for s in ["pronoun", "song", "public", "private"]:
         if hasattr(char.rcr, "custom_" + s):
             js[s] = getattr(char.rcr, "custom_" + s)
@@ -920,24 +728,23 @@ def clear_messages(request):
 def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
     """Retrieve and categorize help questions for the current association/run.
 
-    Fetches help questions from the database, filters them based on context and request method,
-    then categorizes them into open and closed questions based on their status.
+    Fetches help questions filtered by association and optionally by run, then
+    categorizes them into open and closed questions based on their status and origin.
 
     Args:
-        ctx: Context dictionary containing association/run information with keys:
-            - 'a_id': Association ID for filtering questions
-            - 'run': Optional run object for additional filtering
-        request: HTTP request object used to determine filtering behavior
+        ctx: Context dictionary containing association/run information.
+             Must include 'a_id' key, optionally includes 'run' key.
+        request: HTTP request object used to determine filtering behavior.
 
     Returns:
         A tuple containing two lists:
-            - closed_questions: List of closed or staff-created HelpQuestion objects
-            - open_questions: List of open user-created HelpQuestion objects
+        - closed_questions: List of closed or staff-originated questions
+        - open_questions: List of open user-originated questions
     """
     # Filter questions by association ID
     base_qs = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
 
-    # Apply run-specific filtering if run context exists
+    # Add run filter if run context exists
     if "run" in ctx:
         base_qs = base_qs.filter(run=ctx["run"])
 
@@ -945,52 +752,34 @@ def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
     if request.method != "POST":
         base_qs = base_qs.filter(created__gte=datetime.now() - timedelta(days=90))
 
-    # Get the latest creation timestamp for each member
+    # Find the latest creation timestamp for each member
     latest = base_qs.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
 
-    # Fetch the most recent question for each member with related data
+    # Get the most recent question for each member with related data
     que = base_qs.filter(created__in=Subquery(latest)).select_related("member", "run", "run__event")
 
-    # Categorize questions based on user type and closure status
+    # Categorize questions into open and closed lists
     open_q = []
     closed_q = []
     for cq in que:
-        # Open questions: user-created and not closed
+        # Open questions are user-originated and not closed
         if cq.is_user and not cq.closed:
             open_q.append(cq)
         else:
-            # Closed questions: staff-created or closed user questions
             closed_q.append(cq)
 
     return closed_q, open_q
 
 
-def get_recaptcha_secrets(request: HttpRequest) -> tuple[str | None, str | None]:
-    """Get reCAPTCHA public and private keys for the current request.
-
-    Handles both single-site and multi-site configurations. For multi-site setups,
-    keys are stored as comma-separated pairs in format "skin_id:key".
-
-    Args:
-        request: Django request object containing association data with skin_id.
-
-    Returns:
-        Tuple of (public_key, private_key). Both may be None if not found.
-    """
-    # Get base configuration keys
+def get_recaptcha_secrets(request):
     public = conf_settings.RECAPTCHA_PUBLIC_KEY
     private = conf_settings.RECAPTCHA_PRIVATE_KEY
 
-    # Handle multi-site configuration with comma-separated key pairs
+    # if multi-site settings
     if "," in public:
-        # Extract skin ID from request association data
         skin_id = request.assoc["skin_id"]
-
-        # Parse public key pairs and find matching skin ID
         pairs = dict(item.split(":") for item in public.split(",") if ":" in item)
         public = pairs.get(str(skin_id))
-
-        # Parse private key pairs and find matching skin ID
         pairs = dict(item.split(":") for item in private.split(",") if ":" in item)
         private = pairs.get(str(skin_id))
 

@@ -29,9 +29,8 @@ from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
-from django.core.files.uploadedfile import UploadedFile
 from django.db import models
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 from PIL import Image as PILImage
 from PIL import ImageOps
@@ -41,32 +40,30 @@ from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
 
 
-def upload_albums_dir(main: Album, cache_subs: dict[str, Album], name: str) -> Album:
+def upload_albums_dir(main, cache_subs: dict, name: str):
     """Create or find album directory structure for uploaded files.
 
-    This function handles the creation of nested album directory structures
-    when uploading files from zip archives. It maintains a cache to avoid
-    duplicate database queries and ensures proper parent-child relationships.
+    Creates a hierarchical album structure based on directory paths from zip files.
+    Uses caching to avoid duplicate database queries for existing albums.
 
     Args:
         main: Main album instance that serves as the root parent
-        cache_subs: Cache dictionary mapping directory paths to Album instances
-        name: Directory path from zip file (file path, not directory path)
+        cache_subs (dict): Cache mapping directory paths to Album instances
+        name (str): Full directory path from zip file entry
 
     Returns:
-        Album instance corresponding to the directory structure
+        Album: Album instance representing the directory structure
 
     Side Effects:
-        - Creates new Album instances in the database for missing directories
-        - Updates the cache_subs dictionary with newly created albums
-        - Establishes parent-child relationships between albums
+        - Creates new Album instances in database for missing directories
+        - Updates cache_subs dictionary with newly created albums
     """
-    # Extract directory path from the file path
+    # Extract directory path, removing filename component
     name = os.path.dirname(name)
 
-    # Check if directory album already exists in cache
+    # Check if this directory path is already cached
     if name not in cache_subs:
-        # Determine parent directory for nested structure
+        # Determine parent directory for hierarchy creation
         parent = os.path.dirname(name)
         if not parent or parent == "":
             parent = main
@@ -77,12 +74,12 @@ def upload_albums_dir(main: Album, cache_subs: dict[str, Album], name: str) -> A
         album = None
         a_name = os.path.basename(name)
 
-        # Check if album already exists as sub-album of parent
+        # Query existing sub-albums to avoid duplicates
         for a in parent.sub_albums.all():
             if a.name == a_name:
                 album = a
 
-        # Create new album if none found
+        # Create new album if none exists
         if not album:
             album = Album()
             album.cod = uuid4().hex
@@ -174,105 +171,80 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     img.save()
 
 
-def upload_albums(main: Album, el: UploadedFile) -> None:
+def upload_albums(main, el):
     """Extract and upload all files from zip archive to album structure.
 
-    Extracts a zip file and creates an album structure by organizing images
-    into subdirectories. Each directory in the zip becomes a sub-album, and
-    all images are uploaded to their respective albums.
-
     Args:
-        main: Main album instance to serve as the root container
-        el: Zip file to extract and process
+        main: Main album instance
+        el: Zip file to extract
 
-    Side Effects:
-        - Extracts zip file to temporary directory
-        - Creates album structure based on zip directory layout
-        - Uploads all images to corresponding albums
-        - Removes temporary extraction directory
+    Side effects:
+        Extracts zip file, creates album structure, uploads all images
     """
     cache_subs = {}
 
-    # Create unique temporary directory for extraction
     o_path = os.path.join(conf_settings.MEDIA_ROOT, "zip")
     o_path = os.path.join(o_path, uuid4().hex)
 
     with zipfile.ZipFile(el, "r") as f:
-        # Extract all contents to temporary directory
         f.extractall(o_path)
 
-        # Process each file/directory in the zip archive
         for name in f.namelist():
             info = f.getinfo(name)
-            # Get or create album for this directory path
             alb = upload_albums_dir(main, cache_subs, name)
-
-            # Skip directories, only process files
             if info.is_dir():
                 continue
-
-            # Upload individual file to its corresponding album
             upload_albums_el(f, alb, name, main, o_path)
 
-    # Clean up temporary extraction directory
     shutil.rmtree(o_path)
 
 
-def zipdir(path: str, ziph: zipfile.ZipFile) -> None:
+def zipdir(path, ziph):
     """Recursively add directory contents to zip file.
 
     Args:
-        path: Directory path to compress
+        path (str): Directory path to compress
         ziph: Zip file handle to write to
 
-    Returns:
-        None
-
-    Raises:
-        OSError: If the directory path does not exist or is not accessible
+    Side effects:
+        Adds all files in directory tree to zip archive
     """
-    # Walk through all directories and subdirectories
     for root, _dirs, files in os.walk(path):
-        # Process each file in the current directory
         for file in files:
-            # Create full file path
-            file_path = os.path.join(root, file)
-
-            # Calculate relative path for archive to maintain directory structure
-            archive_path = os.path.relpath(str(file_path), os.path.join(path, ".."))
-
-            # Add file to zip archive
-            ziph.write(file_path, archive_path)
+            ziph.write(
+                os.path.join(root, file),
+                os.path.relpath(str(os.path.join(root, file)), os.path.join(path, "..")),
+            )
 
 
-def check_centauri(request: HttpRequest) -> Optional[HttpResponse]:
+def check_centauri(request) -> Optional[HttpResponse]:
     """Check and display Centauri easter egg feature.
 
-    Randomly triggers a special Centauri easter egg feature with configurable
-    probability. When triggered, displays custom content and optionally awards
-    a badge to the authenticated user.
+    Randomly triggers a special Centauri easter egg feature that displays custom content
+    and may award badges to authenticated users. The feature must be enabled for the
+    association and pass a random probability check.
 
     Args:
-        request: Django HTTP request object containing user authentication
-                and association context with feature flags
+        request: Django HTTP request object containing user authentication and
+                association context with features configuration.
 
     Returns:
-        HttpResponse: Rendered Centauri page if easter egg is triggered
-        None: If feature is disabled or easter egg doesn't trigger
+        HttpResponse containing the rendered Centauri template if feature is triggered
+        and enabled, None otherwise.
 
     Side Effects:
-        - May award a badge to the authenticated user's member profile
-        - Badge assignment is permanent and saved to database
+        Awards a configurable badge to the authenticated user if Centauri is triggered
+        and a badge is configured for the association.
     """
-    # Check if Centauri feature is enabled for this association
+    # Early return if Centauri feature is not enabled for this association
     if "centauri" not in request.assoc["features"]:
         return
 
-    # Determine if easter egg should trigger based on random chance
+    # Check random probability condition for triggering Centauri
     if not _go_centauri(request):
         return
 
-    # Build context with association-specific Centauri configuration
+    # Build template context with association-specific Centauri content
     ctx = {}
     for s in ["centauri_descr", "centauri_content"]:
         ctx[s] = get_assoc_config(request.assoc["id"], s, None)
@@ -288,82 +260,51 @@ def check_centauri(request: HttpRequest) -> Optional[HttpResponse]:
     return render(request, "larpmanager/general/centauri.html", ctx)
 
 
-def _go_centauri(request: HttpRequest) -> bool:
+def _go_centauri(request):
     """Determine if Centauri easter egg should be triggered.
 
-    This function checks various conditions to determine whether the Centauri
-    easter egg should be displayed to the user, including authentication status,
-    language preference, and probability settings.
-
     Args:
-        request: Django HTTP request object containing user and association context.
-                Must have 'user' and 'assoc' attributes.
+        request: Django HTTP request with user and association context
 
     Returns:
-        bool: True if all conditions are met and random probability check passes,
-              False otherwise.
+        bool: True if Centauri should be displayed
     """
-    # Check if user is authenticated
     if not request.user.is_authenticated:
         return False
 
-    # Skip for English language users
     if request.user.member.language == "en":
         return False
 
-    # Verify centauri probability setting exists in association config
     if "centauri_prob" not in request.assoc:
         return False
 
-    # Get probability value and check if it's enabled
     prob = int(request.assoc["centauri_prob"])
     if not prob:
         return False
 
-    # Perform random probability check (prob out of 1000)
     if random.randint(0, 1000) > prob:
         return False
 
     return True
 
 
-def get_warehouse_optionals(ctx: dict, def_cols: list) -> None:
+def get_warehouse_optionals(ctx, def_cols):
     """Get warehouse optional field configuration for display.
 
-    Retrieves configuration for optional warehouse fields from association settings,
-    determines if any optional fields are active, and updates the context with
-    column configuration for display purposes.
-
     Args:
-        ctx: Context dictionary containing association ID ('a_id') that will be
-             updated with optionals configuration and header column settings
-        def_cols: Default column configuration list used for calculating
-                  header column offsets
+        ctx (dict): Context dictionary to update
+        def_cols (list): Default column configuration
 
-    Returns:
-        None: Function modifies ctx in place
-
-    Side Effects:
-        - Updates ctx['optionals'] with field name to boolean mapping
-        - Updates ctx['no_header_cols'] with JSON string of adjusted column indices
+    Side effects:
+        Updates ctx with optionals configuration and header column settings
     """
-    # Initialize optionals dictionary and active flag
     optionals = {}
     active = 0
-
-    # Iterate through all optional warehouse fields
     for field in WarehouseItem.get_optional_fields():
-        # Get configuration value for this field from association settings
         optionals[field] = get_assoc_config(ctx["a_id"], f"warehouse_{field}", False)
-
-        # Set active flag if any optional field is enabled
         if optionals[field]:
             active = 1
-
-    # Update context with optionals configuration
     ctx["optionals"] = optionals
-
-    # Calculate adjusted column indices and store as JSON string
     ctx["no_header_cols"] = json.dumps([el + active for el in def_cols])
 
 
@@ -445,26 +386,9 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     instance.photo = ContentFile(out.read(), name=basename)
 
 
-def _get_extension(f, img) -> str:
-    """Get the appropriate image format string for the given file and image.
-
-    Determines the image format based on the PIL Image format attribute first,
-    then falls back to file extension if format is not available.
-
-    Args:
-        f: File object with a 'name' attribute containing the filename
-        img: PIL Image object with optional 'format' attribute
-
-    Returns:
-        str: Uppercase format string (e.g., 'JPEG', 'PNG', 'WEBP')
-    """
-    # Extract file extension and normalize to lowercase
+def _get_extension(f, img):
     ext = os.path.splitext(f.name)[1].lower()
-
-    # Get format from PIL Image, defaulting to empty string
     fmt = (img.format or "").upper()
-
-    # If PIL didn't detect format, determine from file extension
     if not fmt:
         if ext in (".jpg", ".jpeg"):
             fmt = "JPEG"
@@ -473,46 +397,19 @@ def _get_extension(f, img) -> str:
         elif ext == ".webp":
             fmt = "WEBP"
         else:
-            # Default to JPEG for unknown extensions
             fmt = "JPEG"
-
     return fmt
 
 
-def _check_new(f, instance, sender) -> bool:
-    """
-    Check if a file field is new or unchanged from the previous version.
-
-    This function determines whether a file field on a model instance represents
-    a new file upload or if it's the same as the existing file in the database.
-
-    Args:
-        f: The file field to check
-        instance: The model instance being processed
-        sender: The model class that sent the signal
-
-    Returns:
-        bool: True if the file is unchanged from the database version,
-              False if it's a new file or if the instance is new
-    """
-    # Only check existing instances (those with a primary key)
+def _check_new(f, instance, sender):
     if instance.pk:
         try:
-            # Fetch only the photo field from the database for efficiency
             old = sender.objects.filter(pk=instance.pk).only("photo").first()
-
-            # If we found the old instance, compare file names
             if old:
-                # Get the old file name, defaulting to empty string if no file
                 old_name = old.photo.name if old.photo else ""
-
-                # Check if names match and no new file data is present
-                # This indicates the file field hasn't been changed
                 if f.name == old_name and not getattr(f, "file", None):
                     return True
         except Exception:
-            # Silently handle any database or attribute errors
             pass
 
-    # Return False for new instances or when file has changed
     return False

@@ -36,7 +36,6 @@ from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import Run
-from larpmanager.models.registration import Registration
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.common import html_clean
@@ -46,270 +45,166 @@ register = template.Library()
 
 
 @register.filter
-def modulo(num: int, val: int) -> int:
+def modulo(num, val):
     """Template filter to calculate modulo operation.
 
-    Calculates the remainder when num is divided by val using the modulo operator.
-    This function is typically used as a Django template filter to perform
-    modulo operations in templates.
-
     Args:
-        num: The dividend (number to be divided).
-        val: The divisor (number to divide by).
+        num (int): Number to divide
+        val (int): Divisor
 
     Returns:
-        The remainder of the division operation.
-
-    Raises:
-        ZeroDivisionError: If val is zero.
-
-    Examples:
-        >>> modulo(10, 3)
-        1
-        >>> modulo(15, 4)
-        3
+        int: Remainder of num divided by val
     """
-    # Perform modulo operation and return the remainder
     return num % val
 
 
 @register.filter
-def basename(value: str | None) -> str:
+def basename(value):
     """Template filter to extract basename from file path.
 
     Args:
-        value: File path string or None.
+        value (str): File path
 
     Returns:
-        Basename of the file path (filename without directory),
-        or empty string if value is None/empty.
-
-    Example:
-        >>> basename('/path/to/file.txt')
-        'file.txt'
-        >>> basename('')
-        ''
-        >>> basename(None)
-        ''
+        str: Basename of the file path (filename without directory)
     """
-    # Handle None or empty string cases
     if not value:
         return ""
-
-    # Extract and return the basename from the file path
     return os.path.basename(value)
 
 
 @register.filter
-def clean_tags(tx: str) -> str:
+def clean_tags(tx):
     """Template filter to clean HTML tags from text.
 
-    Removes all HTML tags from the input text and replaces HTML line breaks
-    with spaces for better readability in plain text contexts.
-
     Args:
-        tx: Text string that may contain HTML tags and formatting.
+        tx (str): Text containing HTML tags
 
     Returns:
-        Clean text string with all HTML tags removed and line breaks
-        converted to spaces.
-
-    Example:
-        >>> clean_tags("Hello<br />world<p>test</p>")
-        "Hello world test"
+        str: Text with HTML tags removed and br tags replaced with spaces
     """
-    # Replace HTML line breaks with spaces to maintain readability
     tx = tx.replace("<br />", " ")
-
-    # Strip all remaining HTML tags from the text
     return strip_tags(tx)
 
 
 @register.filter
-def get(value: dict, arg: str) -> any:
+def get(value, arg):
     """Template filter to get dictionary value by key.
 
     Args:
-        value: Dictionary to look up
-        arg: Key to retrieve
+        value (dict): Dictionary to look up
+        arg (str): Key to retrieve
 
     Returns:
-        Dictionary value for key, or empty string if not found
-
-    Examples:
-        >>> get({'a': 1, 'b': 2}, 'a')
-        1
-        >>> get({'a': 1}, 'c')
-        ''
-        >>> get(None, 'a')
-        ''
+        any: Dictionary value for key, or empty string if not found
     """
-    # Check if arg is provided and value is a valid dictionary
     if arg is not None and value and arg in value:
         return value[arg]
-
-    # Return empty string if key not found or invalid input
     return ""
 
 
-def get_tooltip(context: dict, ch: dict) -> str:
+def get_tooltip(context, ch):
     """Generate HTML tooltip for character display.
 
-    Creates an HTML tooltip containing character avatar and details for use in
-    character display components. The tooltip includes the character's profile
-    image (or default avatar), faction information, and teaser text if available.
-
     Args:
-        context (dict): Template context containing rendering data and utilities
-        ch (dict): Character data dictionary containing player info, faction data,
-                  teaser text, and other character details
+        context: Template context
+        ch (dict): Character data dictionary
 
     Returns:
-        str: Complete HTML string for character tooltip with avatar image,
-             faction details, and teaser text formatted for display
+        str: HTML string for character tooltip with avatar and details
     """
-    # Set default avatar or use player profile image if available
     avat = static("larpmanager/assets/blank-avatar.svg")
     if "player_id" in ch and ch["player_id"] > 0 and ch["player_prof"]:
         avat = ch["player_prof"]
-
-    # Initialize tooltip with avatar image
     tooltip = f"<img src='{avat}'>"
 
-    # Add character field information to tooltip
     tooltip = tooltip_fields(ch, tooltip)
 
-    # Add faction information with context processing
     tooltip = tooltip_factions(ch, context, tooltip)
 
-    # Append teaser text if present, with character replacement
     if ch["teaser"]:
         tooltip += "<span class='teaser'>" + replace_chars(context, ch["teaser"]) + " (...)</span>"
 
     return tooltip
 
 
-def tooltip_fields(ch: dict, tooltip: str) -> str:
+def tooltip_fields(ch, tooltip):
     """Add character name, title, and player information to tooltip.
 
-    Builds an HTML tooltip by appending character information including name,
-    title, pronouns, and player details to an existing tooltip string.
-
     Args:
-        ch: Character data dictionary containing name, title, pronoun,
-            player_id, and player_full fields
-        tooltip: Current tooltip HTML string to append to
+        ch (dict): Character data dictionary
+        tooltip (str): Current tooltip HTML string
 
     Returns:
-        Updated tooltip HTML string with character fields appended
-
-    Example:
-        >>> ch = {'name': 'John', 'title': 'Knight', 'pronoun': 'he/him'}
-        >>> tooltip_fields(ch, '<div>')
-        '<div><span><b class="name">John</b> - <b class="title">Knight</b> (he/him)</span>'
+        str: Updated tooltip HTML with character fields
     """
-    # Start building character name section with bold formatting
     tooltip += f"<span><b class='name'>{ch['name']}</b>"
 
-    # Add character title if present
     if ch["title"]:
         tooltip += " - <b class='title'>" + ch["title"] + "</b>"
 
-    # Add pronouns in parentheses if available
     if "pronoun" in ch and ch["pronoun"]:
         tooltip += " (" + ch["pronoun"] + ")"
 
     tooltip += "</span>"
 
-    # Add player information if player_id exists and is valid
     if "player_id" in ch and ch["player_id"] > 0:
         tooltip += "<span>" + _("Player") + ": <b>" + ch["player_full"] + "</b></span>"
 
     return tooltip
 
 
-def tooltip_factions(ch: dict, context: dict, tooltip: str) -> str:
+def tooltip_factions(ch, context, tooltip):
     """Add faction information to character tooltip.
 
-    Processes faction data from context and appends visible faction names
-    to the character tooltip. Secret factions are excluded from display.
-
     Args:
-        ch: Character data dictionary containing faction memberships
-        context: Template context containing faction data indexed by faction number
-        tooltip: Current tooltip HTML string to be extended
+        ch (dict): Character data dictionary
+        context: Template context with faction data
+        tooltip (str): Current tooltip HTML string
 
     Returns:
-        Updated tooltip HTML string with faction information appended
+        str: Updated tooltip HTML with faction information
     """
     factions = ""
-
-    # Iterate through all available factions in context
     for fnum in context["factions"]:
         el = context["factions"][fnum]
-
-        # Skip secret factions - they should not be visible in tooltips
         if el["typ"] == FactionType.SECRET:
             continue
-
-        # Check if character belongs to this faction
         if fnum in ch["factions"]:
-            # Add comma separator between multiple factions
             if factions:
                 factions += ", "
             factions += el["name"]
-
-    # Append faction information to tooltip if any factions found
     if factions:
         tooltip += "<span>" + _("Factions") + ": " + factions + "</span>"
-
     return tooltip
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context: dict, el: str, limit: int = 200) -> str:
+def replace_chars(context, el, limit=200):
     """Template tag to replace character number references with names.
 
-    Replaces character references in text using the following patterns:
-    - #XX: Full character name
-    - @XX: Full character name
-    - ^XX: First name only
+    Replaces #XX, @XX, and ^XX patterns with character names in text.
 
     Args:
-        context: Template context dictionary containing:
-            - max_ch_number: Maximum character number to check
-            - chars: Dictionary mapping character numbers to character data
-        el: Input text containing character references to replace
-        limit: Maximum length of returned text after replacements
+        context: Template context containing character data
+        el (str): Text containing character references
+        limit (int): Maximum length of returned text
 
     Returns:
-        Processed text with character references replaced by names,
-        truncated to the specified limit
+        str: Text with character references replaced by names
     """
-    # Clean HTML from input text
     el = html_clean(el)
-
-    # Iterate through character numbers from highest to lowest
-    # This prevents issues with overlapping replacements (e.g., #1 and #10)
     for number in range(context["max_ch_number"], 0, -1):
-        # Skip if character number doesn't exist in context
         if number not in context["chars"]:
             continue
-
-        # Get full character name for replacements
         lk = context["chars"][number]["name"]
-
-        # Replace # and @ patterns with full character name
         el = el.replace(f"#{number}", lk)
         el = el.replace(f"@{number}", lk)
 
-        # Extract first name for ^ pattern replacement
         lk = lk.split()
         if lk:
             lk = lk[0]
             el = el.replace(f"^{number}", lk)
-
-    # Return truncated result
     return el[:limit]
 
 
@@ -377,45 +272,44 @@ def _remove_unimportant_prefix(text: str) -> str:
     """Remove first occurrence of $unimportant from text and clean up empty HTML tags at start.
 
     This function removes the first occurrence of the '$unimportant' marker from the input text.
-    If the marker was found and removed, it additionally cleans up any empty HTML tags
-    that appear at the beginning of the resulting text.
+    If the marker was found and removed, it then proceeds to clean up any empty HTML tags
+    and whitespace characters that appear at the beginning of the resulting text.
 
     Args:
-        text: Text that may contain $unimportant prefix to be removed.
+        text: Text that may contain $unimportant prefix. Can be None or empty string.
 
     Returns:
-        Text with first occurrence of $unimportant removed and empty HTML tags cleaned up.
-        Returns the original text unchanged if it's empty or None.
+        The processed text with $unimportant removed and empty HTML tags cleaned up.
+        Returns the original text if it's None or empty, or if no $unimportant marker was found.
 
     Example:
-        >>> _remove_unimportant_prefix("$unimportant<p></p>Hello")
-        "Hello"
-        >>> _remove_unimportant_prefix("Normal text")
-        "Normal text"
+        >>> _remove_unimportant_prefix("$unimportant<p></p>Hello world")
+        "Hello world"
+        >>> _remove_unimportant_prefix("Regular text")
+        "Regular text"
     """
-    # Early return for empty or None input
+    # Return early if text is None or empty
     if not text:
         return text
 
     # Store original text to check if replacement occurred
     original_text = text
-
-    # Remove first occurrence of the $unimportant marker
+    # Remove first occurrence of $unimportant marker
     text = text.replace("$unimportant", "", 1)
 
-    # Only clean up empty HTML tags if $unimportant was actually removed
+    # Only clean up empty tags if $unimportant was actually replaced
     if text != original_text:
         # Iteratively remove empty HTML tags and whitespace from the beginning
         while True:
-            # Strip leading whitespace for pattern matching
+            # Remove leading whitespace before checking for empty tags
             stripped = text.lstrip()
 
             # Match empty HTML tags like <p></p>, <div></div>, <span></span>, etc.
-            # Also handles whitespace, &nbsp;, \r, \n inside the tags
+            # Also match \r, \n, &nbsp; and other whitespace characters inside tags
             match = re.match(r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>", stripped)
 
+            # If empty tag found, remove it and continue loop
             if match:
-                # Remove the matched empty tag and continue searching
                 text = stripped[match.end() :]
             else:
                 # No more empty tags found, use stripped text and exit loop
@@ -429,20 +323,21 @@ def _remove_unimportant_prefix(text: str) -> str:
 def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool) -> str:
     """Template tag to process text and convert character references to links.
 
-    Processes text content and converts character reference patterns (#XX, @XX, ^XX)
-    into clickable links. Handles both string and dictionary inputs, and manages
-    character number context for efficient processing.
+    This function processes text content and converts character references (prefixed with
+    #, @, or ^) into clickable links. It also handles character tooltips and removes
+    unimportant tags from the processed text.
 
     Args:
-        context: Template rendering context dictionary containing shared state
-        el: Text element to process - can be string, dict with 'text' key, or None
-        run: Run instance used for character lookup and event access
-        tooltip: Whether to include interactive character tooltips in generated links
+        context: Template context dictionary containing rendering state
+        el: Text element to process - can be a string, dict with 'text' key, or None
+        run: Run instance used for character lookup and event context
+        tooltip: Whether to include character tooltips in generated links
 
     Returns:
-        Safe HTML string with character references converted to clickable links
+        Safe HTML string with character references converted to links and unimportant
+        tags removed
     """
-    # Extract text content from input element
+    # Extract text content from various input types
     if isinstance(el, dict) and "text" in el:
         tx = el["text"] + " "
     elif el is not None:
@@ -450,7 +345,7 @@ def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool
     else:
         tx = ""
 
-    # Cache maximum character number for efficient range processing
+    # Cache the maximum character number for this run's event to avoid repeated queries
     if "max_ch_number" not in context:
         context["max_ch_number"] = run.event.get_elements(Character).aggregate(Max("number"))["number__max"]
 
@@ -458,16 +353,14 @@ def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool
     if not context["max_ch_number"]:
         context["max_ch_number"] = 0
 
-    # Process character references in descending order to avoid conflicts
-    # #XX creates relationships/counts as character in faction/plot
-    # @XX creates standard character references
-    # ^XX creates simple character references without full processing
+    # Process character references in descending order to avoid partial matches
+    # #XX creates relationships, @XX counts as character in faction/plot, ^XX is simple reference
     for number in range(context["max_ch_number"], 0, -1):
         tx = go_character(context, f"#{number}", number, tx, run, tooltip)
         tx = go_character(context, f"@{number}", number, tx, run, tooltip)
         tx = go_character(context, f"^{number}", number, tx, run, tooltip, simple=True)
 
-    # Clean up unimportant tags by removing $unimportant prefix
+    # Clean up unimportant tags by removing $unimportant prefix and empty tags
     tx = _remove_unimportant_prefix(tx)
 
     return mark_safe(tx)
@@ -543,84 +436,51 @@ def go_trait(context: dict, search: str, number: int, tx: str, run, go_tooltip: 
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict, tx: str, run, tooltip: bool) -> str:
+def show_trait(context, tx, run, tooltip):
     """Template tag to process text and convert trait references to character links.
 
-    Processes text containing trait references (marked with #, @, or ^ prefixes) and
-    converts them to HTML links pointing to character pages. The function handles
-    three types of trait references with different formatting options.
-
     Args:
-        context (dict): Template context containing cached trait data
-        tx (str): Text containing trait references to be processed
-        run: Run instance used for trait lookup and character resolution
-        tooltip (bool): Whether to include character tooltips in generated links
+        context: Template context
+        tx (str): Text containing trait references
+        run: Run instance for trait lookup
+        tooltip (bool): Whether to include character tooltips
 
     Returns:
-        str: Safe HTML string with trait references converted to character links
+        str: Safe HTML with trait references converted to character links
     """
-    # Initialize max_trait in context if not already present
     if "max_trait" not in context:
         context["max_trait"] = Trait.objects.filter(event_id=run.event_id).aggregate(Max("number"))["number__max"]
 
-    # Set default value if no traits exist
     if not context["max_trait"]:
         context["max_trait"] = 0
 
-    # Process trait references in descending order to avoid partial replacements
     # replace #XX (create relationships / count as character in faction / plot)
     for number in range(context["max_trait"], 0, -1):
-        # Process standard trait reference (#XX)
         tx = go_trait(context, f"#{number}", number, tx, run, tooltip)
-
-        # Process alternate trait reference (@XX)
         tx = go_trait(context, f"@{number}", number, tx, run, tooltip)
-
-        # Process simple trait reference (^XX) with simplified formatting
         tx = go_trait(context, f"^{number}", number, tx, run, tooltip, simple=True)
 
     return mark_safe(tx)
 
 
 @register.simple_tag
-def key(d: dict, key_name: any, s_key_name: any = None) -> any:
+def key(d, key_name, s_key_name=None):
     """Template tag to safely get dictionary value by key.
 
-    Safely retrieves a value from a dictionary using a primary key and an optional
-    secondary key. If the secondary key is provided, it's concatenated with the
-    primary key using an underscore separator.
-
     Args:
-        d: Dictionary to look up values from.
-        key_name: Primary key name to search for in the dictionary.
-        s_key_name: Optional secondary key to append to the primary key
-            with underscore separator. Defaults to None.
+        d (dict): Dictionary to look up
+        key_name: Primary key name
+        s_key_name: Optional secondary key to append
 
     Returns:
-        The value associated with the key if found, otherwise an empty string.
-
-    Examples:
-        >>> data = {'user_id': 123, 'name': 'John'}
-        >>> key(data, 'user', 'id')
-        123
-        >>> key(data, 'name')
-        'John'
-        >>> key(data, 'missing')
-        ''
+        any: Dictionary value or empty string if not found
     """
-    # Return empty string if no primary key provided
     if not key_name:
         return ""
-
-    # Concatenate primary and secondary keys if both exist
     if s_key_name:
         key_name = str(key_name) + "_" + str(s_key_name)
-
-    # Try direct key lookup first (preserves original key type)
     if key_name in d:
         return d[key_name]
-
-    # Fallback to string conversion of key for lookup
     key_name = str(key_name)
     if key_name in d:
         return d[key_name]
@@ -629,521 +489,285 @@ def key(d: dict, key_name: any, s_key_name: any = None) -> any:
 
 
 @register.simple_tag
-def get_field(form: object, name: str) -> object:
+def get_field(form, name):
     """Template tag to safely get form field by name.
 
-    This function provides safe access to Django form fields by name,
-    returning an empty string if the field doesn't exist to prevent
-    template rendering errors.
-
     Args:
-        form: Django form instance containing the fields to search
-        name: The name of the field to retrieve from the form
+        form: Django form instance
+        name (str): Field name to retrieve
 
     Returns:
-        The form field object if found, otherwise an empty string
-
-    Example:
-        >>> field = get_field(my_form, 'username')
-        >>> if field:
-        ...     # Field exists and can be rendered
-        ...     pass
+        Field: Form field or empty string if not found
     """
-    # Check if the requested field name exists in the form
     if name in form:
-        # Return the field object for template rendering
         return form[name]
-
-    # Return empty string to prevent template errors when field doesn't exist
     return ""
 
 
 @register.simple_tag(takes_context=True)
-def get_field_show_char(context: dict, form: object, name: str, run: object, tooltip: bool) -> str:
+def get_field_show_char(context, form, name, run, tooltip):
     """Template tag to get form field and process character references.
 
-    Retrieves a form field by name and processes it through the show_char
-    function to generate character links with optional tooltips.
-
     Args:
-        context: Template context dictionary containing request and other data
-        form: Django form instance containing the field to retrieve
-        name: Field name to retrieve from the form
-        run: Run instance used for character processing and link generation
-        tooltip: Whether to include tooltips in the generated character links
+        context: Template context
+        form: Django form instance
+        name (str): Field name to retrieve
+        run: Run instance for character processing
+        tooltip (bool): Whether to include tooltips
 
     Returns:
-        Processed field value with character links as HTML string, or empty
-        string if field not found in form
-
-    Example:
-        >>> get_field_show_char(context, form, 'description', run, True)
-        '<a href="/character/1">John Doe</a>'
+        str: Processed field value with character links
     """
-    # Check if the requested field exists in the form
     if name in form:
-        # Retrieve the form field value
         v = form[name]
-
-        # Process the field value through show_char to generate character links
         return show_char(context, v, run, tooltip)
-
-    # Return empty string if field is not found in the form
     return ""
 
 
 @register.simple_tag
-def get_deep_field(form: dict | object, key1: str, key2: str) -> str:
+def get_deep_field(form, key1, key2):
     """Template tag to get nested form field value.
 
-    Safely retrieves a nested value from a form dictionary or object
-    using two-level key access. Returns empty string if any key is missing.
-
     Args:
-        form: Form dictionary or object containing nested data
-        key1: First level key to access in the form
-        key2: Second level key to access within the first level
+        form: Form or dictionary
+        key1: First level key
+        key2: Second level key
 
     Returns:
-        The nested value if found, otherwise empty string
-
-    Example:
-        >>> form_data = {'field1': {'subfield': 'value'}}
-        >>> get_deep_field(form_data, 'field1', 'subfield')
-        'value'
-        >>> get_deep_field(form_data, 'missing', 'key')
-        ''
+        any: Nested value or empty string if not found
     """
-    # Check if first level key exists in form
     if key1 in form:
-        # Check if second level key exists within first level
         if key2 in form[key1]:
             return form[key1][key2]
-
-    # Return empty string if any key is missing
     return ""
 
 
 @register.filter
-def get_form_field(form: object, name: str) -> object:
+def get_form_field(form, name):
     """Template filter to get form field by name.
 
-    This function safely retrieves a field from a Django form by name,
-    returning an empty string if the field doesn't exist to prevent
-    template rendering errors.
-
     Args:
-        form: Django form instance containing the fields
-        name: Field name to retrieve from the form
+        form: Django form instance
+        name (str): Field name
 
     Returns:
-        Form field object if found, empty string otherwise
-
-    Example:
-        >>> field = get_form_field(my_form, 'username')
-        >>> if field:
-        ...     # Field exists and can be rendered
-        ...     pass
+        Field: Form field or empty string if not found
     """
-    # Check if the requested field name exists in the form's fields
     if name in form.fields:
-        # Return the bound field which can be rendered in templates
         return form[name]
-
-    # Return empty string to prevent template errors when field doesn't exist
     return ""
 
 
 @register.simple_tag
-def lookup(obj: object, prop: str) -> any:
+def lookup(obj, prop):
     """Template tag to safely get object attribute.
 
-    Safely retrieves an attribute from an object, returning the value if it exists
-    and is truthy, otherwise returns an empty string. This is commonly used in
-    Django templates to avoid AttributeError exceptions.
-
     Args:
-        obj: The object to inspect for the specified attribute.
-        prop: The name of the property/attribute to retrieve from the object.
+        obj: Object to inspect
+        prop (str): Property name to retrieve
 
     Returns:
-        The value of the attribute if it exists and is truthy, otherwise an
-        empty string.
-
-    Example:
-        >>> class MyObj:
-        ...     def __init__(self):
-        ...         self.name = "test"
-        >>> obj = MyObj()
-        >>> lookup(obj, "name")
-        'test'
-        >>> lookup(obj, "nonexistent")
-        ''
+        any: Property value or empty string if not found
     """
-    # Check if the object has the requested attribute
     if hasattr(obj, prop):
-        # Get the attribute value using getattr
         value = getattr(obj, prop)
-
-        # Return value only if it's truthy (not None, empty string, etc.)
         if value:
             return value
-
-    # Return empty string as fallback for missing or falsy attributes
     return ""
 
 
 @register.simple_tag
-def get_registration_option(reg: Registration, number: int) -> str:
+def get_registration_option(reg, number):
     """Template tag to get registration option form text.
 
-    Retrieves the form text for a specific registration option by its number.
-    If the option exists and has form text, returns it; otherwise returns empty string.
-
     Args:
-        reg: Registration instance containing the options
-        number: Option number to retrieve (1-based indexing)
+        reg: Registration instance
+        number (int): Option number
 
     Returns:
-        Option form text if available, empty string otherwise
-
-    Example:
-        >>> get_registration_option(registration, 1)
-        'Please select your meal preference'
+        str: Option form text or empty string
     """
-    # Get the option attribute dynamically using the number
     v = getattr(reg, f"option_{number}")
-
-    # Check if option exists and return its form text
     if v:
         return v.get_form_text()
-
-    # Return empty string if option doesn't exist
     return ""
 
 
 @register.simple_tag
-def gt(value: int | float, arg: str) -> bool:
+def gt(value, arg):
     """Template tag for greater than comparison.
 
     Args:
-        value: The numeric value to compare against the argument.
-        arg: The comparison value as a string that will be converted to integer.
+        value: Value to compare
+        arg: Comparison value
 
     Returns:
-        True if value is greater than the integer conversion of arg, False otherwise.
-
-    Example:
-        >>> gt(5, "3")
-        True
-        >>> gt(2, "5")
-        False
+        bool: True if value > arg
     """
-    # Convert string argument to integer for comparison
     return value > int(arg)
 
 
 @register.simple_tag
-def lt(value: int | float, arg: str) -> bool:
+def lt(value, arg):
     """Template tag for less than comparison.
 
-    Compares a numeric value with a string representation of a number
-    to determine if the value is less than the converted argument.
-
     Args:
-        value (int | float): The numeric value to compare.
-        arg (str): String representation of the comparison value.
+        value: Value to compare
+        arg: Comparison value
 
     Returns:
-        bool: True if value is less than the integer conversion of arg,
-              False otherwise.
-
-    Example:
-        >>> lt(5, "10")
-        True
-        >>> lt(15, "10")
-        False
+        bool: True if value < arg
     """
-    # Convert string argument to integer for comparison
-    comparison_value = int(arg)
-
-    # Perform less than comparison
-    return value < comparison_value
+    return value < int(arg)
 
 
 @register.simple_tag
-def gte(value: int | float, arg: str) -> bool:
+def gte(value, arg):
     """Template tag for greater than or equal comparison.
 
-    Compares a numeric value against a string argument that represents an integer.
-    The argument is converted to an integer before comparison.
-
     Args:
-        value (int | float): The numeric value to compare.
-        arg (str): String representation of the comparison value that will be
-                  converted to an integer.
+        value: Value to compare
+        arg: Comparison value
 
     Returns:
-        bool: True if value is greater than or equal to the integer conversion
-              of arg, False otherwise.
-
-    Example:
-        >>> gte(5, "3")
-        True
-        >>> gte(2, "5")
-        False
+        bool: True if value >= arg
     """
-    # Convert string argument to integer for comparison
-    comparison_value = int(arg)
-
-    # Return the result of greater than or equal comparison
-    return value >= comparison_value
+    return value >= int(arg)
 
 
 @register.simple_tag
-def lte(value, arg) -> bool:
+def lte(value, arg):
     """Template tag for less than or equal comparison.
 
-    Compares two values using the less than or equal operator. The second
-    argument is automatically converted to an integer for comparison.
-
     Args:
-        value: The left operand value to compare (can be any numeric type)
-        arg: The right operand value to compare (will be converted to int)
+        value: Value to compare
+        arg: Comparison value
 
     Returns:
-        True if value is less than or equal to the integer conversion of arg,
-        False otherwise
-
-    Example:
-        >>> lte(5, "10")
-        True
-        >>> lte(15, "10")
-        False
+        bool: True if value <= arg
     """
-    # Convert the comparison argument to integer for consistent comparison
-    comparison_value = int(arg)
-
-    # Perform the less than or equal comparison
-    return value <= comparison_value
+    return value <= int(arg)
 
 
 @register.simple_tag
-def length_gt(value: object, arg: str) -> bool:
+def length_gt(value, arg):
     """Template tag for length greater than comparison.
 
-    Compares the length of a collection against a specified threshold value.
-    Used in Django templates to check if a collection has more items than
-    a given number.
-
     Args:
-        value: Collection to check length (list, tuple, string, etc.)
-        arg: String representation of the length to compare against
+        value: Collection to check length
+        arg: Length to compare against
 
     Returns:
-        True if len(value) > arg, False otherwise
-
-    Examples:
-        >>> length_gt([1, 2, 3], "2")
-        True
-        >>> length_gt("hello", "10")
-        False
+        bool: True if len(value) > arg
     """
-    # Convert string argument to integer for comparison
-    threshold = int(arg)
-
-    # Compare collection length against threshold
-    return len(value) > threshold
+    return len(value) > int(arg)
 
 
 @register.simple_tag
 def length_lt(value, arg):
     """Template tag for length less than comparison.
 
-    Compares the length of a collection against a specified threshold value.
-    Used in Django templates to conditionally display content based on
-    collection size.
-
     Args:
-        value: Collection to check length (list, tuple, string, etc.)
-        arg: Length threshold to compare against (string or integer)
+        value: Collection to check length
+        arg: Length to compare against
 
     Returns:
-        bool: True if len(value) < arg, False otherwise
-
-    Example:
-        >>> length_lt([1, 2, 3], "5")
-        True
-        >>> length_lt("hello", "3")
-        False
+        bool: True if len(value) < arg
     """
-    # Convert the argument to integer for comparison
-    threshold = int(arg)
-
-    # Compare collection length against threshold
-    return len(value) < threshold
+    return len(value) < int(arg)
 
 
 @register.simple_tag
-def length_gte(value, arg) -> bool:
+def length_gte(value, arg):
     """Template tag for length greater than or equal comparison.
 
     Args:
-        value: Collection to check length (any object with __len__ method)
-        arg: Length to compare against (string or integer)
+        value: Collection to check length
+        arg: Length to compare against
 
     Returns:
-        True if len(value) >= arg, False otherwise
-
-    Raises:
-        TypeError: If value doesn't have __len__ method
-        ValueError: If arg cannot be converted to integer
+        bool: True if len(value) >= arg
     """
-    # Convert argument to integer for comparison
-    threshold = int(arg)
-
-    # Compare collection length against threshold
-    return len(value) >= threshold
+    return len(value) >= int(arg)
 
 
 @register.simple_tag
-def length_lte(value, arg) -> bool:
+def length_lte(value, arg):
     """Template tag for length less than or equal comparison.
 
-    Compares the length of a collection against a numeric threshold value.
-    Useful in Django templates for conditional rendering based on collection size.
-
     Args:
-        value: Collection object (list, tuple, string, etc.) to check length of.
-            Must support len() function.
-        arg: Length threshold to compare against. Will be converted to integer.
+        value: Collection to check length
+        arg: Length to compare against
 
     Returns:
-        bool: True if the length of value is less than or equal to arg,
-            False otherwise.
-
-    Example:
-        >>> length_lte([1, 2, 3], 5)
-        True
-        >>> length_lte("hello", 3)
-        False
+        bool: True if len(value) <= arg
     """
-    # Convert argument to integer for comparison
-    threshold = int(arg)
-
-    # Compare collection length against threshold
-    return len(value) <= threshold
+    return len(value) <= int(arg)
 
 
 @register.filter
-def hex_to_rgb(value: str) -> str:
+def hex_to_rgb(value):
     """Template filter to convert hex color to RGB values.
 
-    Converts a hexadecimal color string to comma-separated RGB values.
-    Handles colors with or without the '#' prefix.
-
     Args:
-        value: Hex color string (e.g., '#FF0000' or 'FF0000')
+        value (str): Hex color string (e.g., '#FF0000')
 
     Returns:
-        Comma-separated RGB values as string (e.g., '255,0,0')
-
-    Example:
-        >>> hex_to_rgb('#FF0000')
-        '255,0,0'
-        >>> hex_to_rgb('00FF00')
-        '0,255,0'
+        str: Comma-separated RGB values (e.g., '255,0,0')
     """
-    # Remove the '#' prefix if present
     h = value.lstrip("#")
-
-    # Convert each pair of hex digits to decimal and format as string
-    # Extract pairs at positions 0-1, 2-3, 4-5 for R, G, B respectively
     h = [str(int(h[i : i + 2], 16)) for i in (0, 2, 4)]
-
-    # Join RGB values with commas
     return ",".join(h)
 
 
 @register.simple_tag
-def define(val: any = None) -> any:
+def define(val=None):
     """Template tag to define/store a value in templates.
 
-    This function serves as a simple passthrough utility for Django templates,
-    allowing template authors to store and reference values within template context.
-
     Args:
-        val: The value to store and return. Can be of any type.
-            Defaults to None if not provided.
+        val: Value to store
 
     Returns:
-        The input value unchanged, maintaining its original type and content.
-
-    Example:
-        In Django templates:
-        {% define "some_value" as stored_val %}
-        {{ stored_val }}  <!-- outputs: some_value -->
+        any: The input value unchanged
     """
-    # Return the input value without any modification
     return val
 
 
 @register.filter(name="template_trans")
-def template_trans(text: str) -> str:
+def template_trans(text):
     """Template filter for safe translation of text.
 
-    This function safely translates text using Django's translation system.
-    If translation fails, it returns the original text unchanged to prevent
-    template rendering errors.
-
     Args:
-        text: The text string to be translated.
+        text (str): Text to translate
 
     Returns:
-        The translated text if successful, otherwise the original text.
-
-    Example:
-        >>> template_trans("Hello")
-        "Ciao"  # If Italian is the active language
+        str: Translated text or original text if translation fails
     """
     try:
-        # Attempt to translate the text using Django's translation function
         return _(text)
     except Exception as e:
-        # Log the exception for debugging purposes
         print(e)
-        # Return original text if translation fails to prevent template errors
         return text
 
 
 @register.simple_tag(takes_context=True)
-def get_char_profile(context: dict, char: dict) -> str:
+def get_char_profile(context, char):
     """Template tag to get character profile image URL.
 
     Args:
-        context: Template context dictionary containing features and other data
-        char: Character data dictionary with profile and image information
+        context: Template context with features
+        char (dict): Character data dictionary
 
     Returns:
-        URL string to character profile image or default avatar if none found
-
-    Note:
-        Priority order: player_prof -> cover (if feature enabled) -> thumb -> default avatar
+        str: URL to character profile image or default avatar
     """
-    # Check if player profile image is available and set
     if "player_prof" in char and char["player_prof"]:
         return char["player_prof"]
-
-    # Check if cover feature is enabled in context
     if "cover" in context["features"]:
-        # Prefer original cover if available in context and character
         if "cover_orig" in context and "cover" in char:
             return char["cover"]
-        # Fall back to thumbnail if available
         elif "thumb" in char:
             return char["thumb"]
-
-    # Return default avatar as final fallback
     return "/static/larpmanager/assets/blank-avatar.svg"
 
 
@@ -1151,287 +775,178 @@ def get_char_profile(context: dict, char: dict) -> str:
 def get_login_url(context: dict, provider: str, **params) -> str:
     """Template tag to generate OAuth login URL with parameters.
 
-    Generates a complete OAuth login URL for the specified provider, handling
-    query parameters, redirects, and authentication scope configuration.
+    This function constructs a complete OAuth login URL by combining the provider's
+    login endpoint with query parameters. It handles redirect URLs, scope, and
+    authentication parameters while cleaning up empty values.
 
     Args:
         context: Template context dictionary containing the request object
         provider: OAuth provider name (e.g., 'google', 'facebook')
-        **params: Additional URL parameters including:
-            - auth_params: Authentication parameters string
-            - scope: OAuth scope specification
-            - process: Process type ('redirect' for auto-redirect)
+        **params: Additional URL parameters to include in the login URL
 
     Returns:
         Complete login URL with properly encoded query parameters
 
     Example:
-        >>> get_login_url({'request': request}, 'google', scope='email')
-        '/auth/google/login/?scope=email&next=/dashboard/'
+        >>> get_login_url(context, 'google', scope='email', process='redirect')
+        '/accounts/google/login/?scope=email&process=redirect&next=%2Fdashboard%2F'
     """
-    # Extract request object from template context
     request = context.get("request")
     query = dict(params)
 
-    # Extract and validate OAuth-specific parameters
+    # Extract and validate authentication-specific parameters
     auth_params = query.get("auth_params", None)
     scope = query.get("scope", None)
     process = query.get("process", None)
 
-    # Clean up empty OAuth parameters to avoid malformed URLs
+    # Clean up empty string parameters to avoid cluttering the URL
     if scope == "":
         del query["scope"]
     if auth_params == "":
         del query["auth_params"]
 
-    # Handle redirect URL configuration based on request context
+    # Handle redirect URL logic based on current request and process type
     if REDIRECT_FIELD_NAME not in query:
-        # Try to get redirect from request parameters first
         redirect = get_request_param(request, REDIRECT_FIELD_NAME)
         if redirect:
             query[REDIRECT_FIELD_NAME] = redirect
-        # For redirect process, use current page as redirect target
         elif process == "redirect":
+            # Use current page as redirect target for redirect process
             query[REDIRECT_FIELD_NAME] = request.get_full_path()
-    # Remove empty redirect parameters to clean up URL
     elif not query[REDIRECT_FIELD_NAME]:
+        # Remove redirect field if it exists but is empty
         del query[REDIRECT_FIELD_NAME]
 
-    # Build final URL with provider endpoint and encoded query parameters
+    # Construct the final URL with provider endpoint and encoded parameters
     url = reverse(provider + "_login")
     url = url + "?" + urlencode(query)
     return url
 
 
 @register.filter
-def replace_underscore(value: str) -> str:
+def replace_underscore(value):
     """Template filter to replace underscores with spaces.
 
-    This function is typically used as a Django template filter to convert
-    underscore-separated strings into human-readable format by replacing
-    all underscore characters with spaces.
-
     Args:
-        value: The input string containing underscores to be replaced.
+        value (str): String to process
 
     Returns:
-        A new string with all underscore characters replaced by spaces.
-
-    Example:
-        >>> replace_underscore("hello_world_test")
-        "hello world test"
+        str: String with underscores replaced by spaces
     """
-    # Replace all underscore characters with spaces
     return value.replace("_", " ")
 
 
 @register.filter
-def remove(value: str, args: str) -> str:
+def remove(value, args):
     """Template filter to remove specific text from string.
 
-    This filter performs case-insensitive removal of specified text from a source
-    string. Underscores in the removal argument are automatically converted to spaces
-    to allow for more flexible template usage.
-
     Args:
-        value: The source string from which text will be removed.
-        args: The text pattern to remove. Underscores are replaced with spaces
-              before matching.
+        value (str): Source string
+        args (str): Text to remove (underscores replaced with spaces)
 
     Returns:
-        The source string with all occurrences of the specified text removed,
-        with leading/trailing whitespace stripped.
-
-    Example:
-        >>> remove("Hello World Test", "world")
-        "Hello  Test"
-        >>> remove("Remove_this_text", "this_text")
-        "Remove_"
+        str: String with specified text removed (case-insensitive)
     """
-    # Convert underscores to spaces for more flexible matching
     args = args.replace("_", " ")
-
-    # Remove all occurrences of the specified text (case-insensitive)
     txt = re.sub(re.escape(args), "", value, flags=re.IGNORECASE)
-
-    # Strip leading/trailing whitespace and return result
     return txt.strip()
 
 
 @register.simple_tag
-def get_character_field(value: str | list[int], options: dict[int, dict[str, str]]) -> str:
+def get_character_field(value, options):
     """Template tag to format character field values using options.
 
-    This function handles both string values (returned as-is) and lists of indices
-    that are mapped to option names from the provided options dictionary.
-
     Args:
-        value: Field value, either a string to return directly or a list of
-               integer indices to map to option names
-        options: Dictionary mapping integer indices to option data dictionaries,
-                where each option dict contains at least a 'name' key
+        value: Field value (string or list of indices)
+        options (dict): Options mapping indices to data
 
     Returns:
-        Formatted field value as a string. For string inputs, returns the input
-        unchanged. For list inputs, returns comma-separated option names.
-
-    Example:
-        >>> options = {0: {"name": "Option A"}, 1: {"name": "Option B"}}
-        >>> get_character_field([0, 1], options)
-        'Option A, Option B'
-        >>> get_character_field("Simple text", options)
-        'Simple text'
+        str: Formatted field value or comma-separated option names
     """
-    # Return string values unchanged
     if isinstance(value, str):
         return value
-
-    # Process list of indices to extract option names
     result = []
     for idx in value:
         try:
-            # Attempt to get option name from the options dictionary
             result.append(options[idx]["name"])
         except (IndexError, KeyError, TypeError):
-            # Skip invalid indices or malformed option entries
             pass
-
-    # Join all valid option names with commas
     return ", ".join(result)
 
 
 @register.filter
-def format_decimal(value) -> str:
+def format_decimal(value):
     """Template filter to format decimal values for display.
 
-    Formats numeric values by rounding to nearest cent, removing trailing zeros,
-    and handling special cases for zero values and integers.
-
     Args:
-        value: Numeric value to format (int, float, Decimal, or string convertible to float)
+        value: Numeric value to format
 
     Returns:
-        str: Formatted decimal string. Returns empty string for zero values,
-             integer format when decimal part is zero, otherwise formatted
-             with up to 2 decimal places with trailing zeros removed.
-
-    Examples:
-        >>> format_decimal(0)
-        ''
-        >>> format_decimal(5.0)
-        '5'
-        >>> format_decimal(5.50)
-        '5.5'
-        >>> format_decimal(5.123)
-        '5.12'
+        str: Formatted decimal string, empty for zero, integer format when possible
     """
     try:
-        # Round to nearest cent using existing utility function
         rounded = round_to_nearest_cent(float(value))
-
-        # Return empty string for zero values
         if rounded == 0:
             return ""
-
-        # Return integer format if no decimal part
         if rounded == int(rounded):
             return str(int(rounded))
-
-        # Format with 2 decimals and strip trailing zeros and decimal point
         return f"{rounded:.2f}".rstrip("0").rstrip(".")
     except (ValueError, TypeError):
-        # Return original value if conversion fails
         return value
 
 
 @register.filter
-def get_attributes(obj: object) -> dict[str, any]:
+def get_attributes(obj):
     """Template filter to get object attributes as dictionary.
 
-    Extracts all non-private attributes from an object and returns them
-    as a dictionary. Private attributes (those starting with underscore)
-    are excluded from the result.
-
     Args:
-        obj: The object to inspect for attributes.
+        obj: Object to inspect
 
     Returns:
-        A dictionary mapping attribute names to their values, excluding
-        private attributes (those starting with '_').
-
-    Example:
-        >>> class Example:
-        ...     def __init__(self):
-        ...         self.public = 'value'
-        ...         self._private = 'hidden'
-        >>> get_attributes(Example())
-        {'public': 'value'}
+        dict: Dictionary of non-private attributes
     """
-    # Extract all object attributes and filter out private ones
     return {k: v for k, v in vars(obj).items() if not k.startswith("_")}
 
 
 @register.filter
-def not_in(value: any, arg: str) -> bool:
+def not_in(value, arg):
     """Template filter to check if value is not in comma-separated list.
 
     Args:
-        value: Value to check for presence in the list
-        arg: Comma-separated string of values to check against
+        value: Value to check
+        arg (str): Comma-separated list of values
 
     Returns:
-        True if value is not found in the comma-separated list, False otherwise
-
-    Example:
-        >>> not_in('apple', 'banana,orange,grape')
-        True
-        >>> not_in('banana', 'banana,orange,grape')
-        False
+        bool: True if value not in the list
     """
-    # Split the comma-separated string into individual values
-    values_list = arg.split(",")
-
-    # Check if the input value is not present in the list
-    return value not in values_list
+    return value not in arg.split(",")
 
 
 @register.filter
-def abs_value(value: float | int) -> float | int:
+def abs_value(value):
     """Template filter to get absolute value.
 
     Args:
-        value: Numeric value to get absolute value of.
+        value: Numeric value
 
     Returns:
-        The absolute value of the input if it's numeric, otherwise returns
-        the original value unchanged.
-
-    Raises:
-        None: Errors are caught and handled gracefully by returning the
-        original value.
+        Absolute value or original value if conversion fails
     """
     try:
-        # Attempt to calculate absolute value for numeric types
         return abs(value)
     except (TypeError, ValueError):
-        # Return original value if conversion fails (non-numeric types)
         return value
 
 
 @register.filter
-def concat(val1: str, val2: str) -> str:
+def concat(val1, val2):
     """Template filter to concatenate two values.
 
     Args:
-        val1: First value to concatenate.
-        val2: Second value to concatenate.
+        val1: First value to concatenate
+        val2: Second value to concatenate
 
     Returns:
-        Concatenated string of val1 and val2.
-
-    Example:
-        >>> concat("hello", "world")
-        'helloworld'
+        str: Concatenated string
     """
-    # Concatenate the two values using f-string formatting
     return f"{val1}{val2}"

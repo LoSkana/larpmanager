@@ -268,26 +268,19 @@ def exe_membership_request(request, num):
 def exe_membership_check(request: HttpRequest) -> HttpResponse:
     """Check and report membership status inconsistencies.
 
-    This function analyzes membership data to identify potential issues,
-    particularly focusing on fiscal code validation when the feature is enabled.
-    It excludes members with EMPTY or JOINED status from the analysis.
+    Analyzes membership data to identify and report various inconsistencies,
+    including fiscal code validation when the feature is enabled.
 
     Args:
-        request (HttpRequest): The HTTP request object containing user session
-            and authentication information.
+        request: The HTTP request object containing user and session data.
 
     Returns:
-        HttpResponse: Rendered HTML response containing the membership check
-            report with any identified inconsistencies.
-
-    Note:
-        Requires 'exe_membership_check' permission. When 'fiscal_code_check'
-        feature is enabled, validates fiscal codes for all eligible members.
+        HttpResponse: Rendered template with membership check report data.
     """
     # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership_check")
 
-    # Get member IDs for active memberships (excluding EMPTY and JOINED status)
+    # Get all members with active memberships (excluding empty/joined status)
     member_ids = set(
         Membership.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
@@ -295,23 +288,21 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
         .values_list("member_id", flat=True)
     )
 
-    # Process fiscal code validation if feature is enabled
+    # Perform fiscal code validation if feature is enabled
     if "fiscal_code_check" in ctx["features"]:
         ctx["cf"] = []
 
-        # Iterate through each member to validate fiscal codes
+        # Check each member's fiscal code for correctness
         for mb in Member.objects.filter(pk__in=member_ids):
-            # Calculate and validate the fiscal code for current member
             check = calculate_fiscal_code(mb)
             if not check:
                 continue
 
-            # If fiscal code is incorrect, collect member details for report
+            # Add members with incorrect fiscal codes to report
             if not check["correct_cf"]:
                 check["member"] = str(mb)
                 check["member_id"] = mb.id
                 check["email"] = mb.email
-                # Get membership details for this association
                 check["membership"] = get_user_membership(mb, ctx["a_id"])
                 ctx["cf"].append(check)
 
@@ -413,53 +404,32 @@ def member_add_accountingitemother(ctx, request):
 
 
 @login_required
-def exe_membership_status(request: HttpRequest, num: str) -> HttpResponse:
+def exe_membership_status(request, num):
     """Edit membership status and details for a specific member.
 
-    This function handles both GET and POST requests for editing a member's
-    membership information within an organization. It validates permissions,
-    retrieves the member and membership data, processes form submissions,
-    and renders the appropriate response.
-
     Args:
-        request: Django HTTP request object containing user session and form data
-        num: Member number identifier used to lookup the specific member
+        request: Django HTTP request object
+        num: Member number identifier
 
     Returns:
-        HttpResponse: Rendered membership editing form template for GET requests,
-                     or redirect response after successful form submission for POST requests
-
-    Raises:
-        Http404: If the member or membership record is not found
-        PermissionDenied: If user lacks required association permissions
+        Rendered membership editing form or redirect after successful update
     """
-    # Check user permissions and get base context with association data
     ctx = check_assoc_permission(request, "exe_membership")
-
-    # Retrieve member data and add to context
     ctx.update(get_member(num))
-
-    # Get the membership record for this member in the current association
     ctx["membership"] = get_object_or_404(Membership, member_id=ctx["member"].id, assoc_id=request.assoc["id"])
 
     if request.method == "POST":
-        # Process form submission with uploaded files and current membership instance
         form = ExeMembershipForm(request.POST, request.FILES, instance=ctx["membership"], request=request)
-
-        # Validate and save form data, then redirect to prevent duplicate submissions
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
-        # Initialize form with existing membership data for GET requests
         form = ExeMembershipForm(instance=ctx["membership"], request=request)
-
-    # Add form to context and set additional template variables
     ctx["form"] = form
+
     ctx["num"] = num
 
-    # Set dynamic page title combining member name and section title
     ctx["form"].page_title = str(ctx["member"]) + " - " + _("Membership")
 
     return render(request, "larpmanager/exe/edit.html", ctx)
@@ -470,37 +440,31 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
     """Generate membership registry with card numbers for association executives.
 
     Creates a formatted list of association members who have card numbers,
-    processes their names for proper capitalization, and renders them in
-    a registry template for executive viewing.
+    with properly capitalized names split into first and last name components.
 
     Args:
-        request (HttpRequest): The HTTP request object containing user session
-            and association context.
+        request: Django HTTP request object containing user session and context
 
     Returns:
-        HttpResponse: Rendered registry.html template containing the formatted
-            member list with card numbers and processed names.
-
-    Note:
-        Only includes members with non-null card numbers, ordered by card number.
-        Names are split and capitalized for consistent formatting.
+        HttpResponse: Rendered registry.html template with formatted member list
+        containing members with card numbers, ordered by card number
     """
-    # Check user permissions and get association context
+    # Check user permissions for accessing membership registry
     ctx = check_assoc_permission(request, "exe_membership_registry")
     split_two_names = 2
 
-    # Initialize empty member list for template context
+    # Initialize empty list for processed members
     ctx["list"] = []
 
     # Query memberships with card numbers for current association
     que = Membership.objects.filter(assoc_id=ctx["a_id"], card_number__isnull=False)
 
-    # Process each membership and associated member data
+    # Process each membership and format member data
     for mb in que.select_related("member").order_by("card_number"):
         member = mb.member
         member.membership = mb
 
-        # Split legal name into name and surname components
+        # Split legal name into first and last name components
         if member.legal_name:
             splitted = member.legal_name.rsplit(" ", 1)
             if len(splitted) == split_two_names:
@@ -508,13 +472,14 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
             else:
                 member.name = splitted[0]
 
-        # Apply proper capitalization to name components
+        # Capitalize name components for consistent formatting
         member.name = member.name.capitalize()
         member.surname = member.surname.capitalize()
 
         # Add processed member to context list
         ctx["list"].append(member)
 
+    # Render template with processed member data
     return render(request, "larpmanager/exe/users/registry.html", ctx)
 
 
@@ -523,26 +488,27 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
     """
     Process membership fee payments for executives.
 
-    This view handles the creation and confirmation of membership fee payments
-    for organization members. It displays a form for payment details and
-    processes the payment upon form submission.
+    This function handles both GET and POST requests for processing membership fee
+    payments. It validates the form data, creates a payment invoice, and confirms
+    the payment automatically.
 
     Args:
-        request (HttpRequest): The HTTP request object containing form data
-            and user session information.
+        request (HttpRequest): The HTTP request object containing form data for POST
+                              requests or empty for GET requests to display the form.
 
     Returns:
-        HttpResponse: Either renders the membership fee form page or
-            redirects to the membership list after successful payment processing.
+        HttpResponse: For GET requests, returns the membership fee form page.
+                     For successful POST requests, redirects to the membership page.
+                     For invalid POST requests, returns the form with validation errors.
 
     Raises:
-        PermissionDenied: If user lacks exe_membership permission.
+        PermissionDenied: If user lacks 'exe_membership' permission (handled by decorator).
     """
-    # Check user permissions for membership management
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
-        # Process form submission with uploaded files
+        # Initialize form with POST data and context
         form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
 
         if form.is_valid():
@@ -565,82 +531,56 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
                 cod=unique_invoice_cod(),
             )
 
-            # Mark payment as confirmed and save changes
+            # Automatically confirm the payment and save
             payment.status = PaymentStatus.CONFIRMED
             payment.save()
 
-            # Show success message and redirect to membership list
+            # Show success message and redirect to membership page
             messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
         # Initialize empty form for GET requests
         form = ExeMembershipFeeForm(ctx=ctx)
 
-    # Add form to template context
+    # Add form to context and render the edit template
     ctx["form"] = form
-
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
 @login_required
-def exe_membership_document(request: HttpRequest) -> HttpResponse:
+def exe_membership_document(request):
     """Handle membership document upload and approval process.
 
-    This function processes both GET and POST requests for uploading membership
-    documents. On POST, it validates the form data and updates the membership
-    with the provided document, request details, card number, and date, then
-    sets the status to ACCEPTED.
-
     Args:
-        request: Django HTTP request object containing form data and files
+        request: Django HTTP request object
 
     Returns:
-        HttpResponse: Rendered form template for document upload on GET requests,
-                     or redirect to membership list on successful POST
-
-    Raises:
-        DoesNotExist: If the membership for the given association and member
-                     does not exist
+        Rendered form for document upload or redirect to membership list
     """
-    # Check user permissions for membership management
     ctx = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
-        # Create form instance with submitted data and files
         form = ExeMembershipDocumentForm(request.POST, request.FILES, ctx=ctx)
-
         if form.is_valid():
-            # Extract validated form data
             member = form.cleaned_data["member"]
-
-            # Retrieve the membership record for this association and member
             membership = Membership.objects.get(assoc_id=ctx["a_id"], member=member)
-
-            # Update membership with form data
             membership.document = form.cleaned_data["document"]
             membership.request = form.cleaned_data["request"]
             membership.card_number = form.cleaned_data["card_number"]
             membership.date = form.cleaned_data["date"]
-
-            # Set membership status to accepted and save changes
             membership.status = MembershipStatus.ACCEPTED
             membership.save()
-
-            # Display success message and redirect to membership list
             messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
-        # Create empty form for GET requests
         form = ExeMembershipDocumentForm(ctx=ctx)
-
-    # Add form to template context
     ctx["form"] = form
 
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
 @login_required
-def exe_enrolment(request: HttpRequest) -> HttpResponse:
+def exe_enrolment(request) -> HttpResponse:
     """Display yearly enrollment list with membership card numbers.
 
     Generates a list of enrolled members for the current year, including their
@@ -721,44 +661,16 @@ def exe_volunteer_registry_edit(request, num):
 
 
 @login_required
-def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
-    """Generate and return a PDF of the volunteer registry for an association.
-
-    This function creates a printable PDF document containing all volunteer
-    registry entries for the current association, ordered by start date and
-    member surname.
-
-    Args:
-        request: The HTTP request object containing user and association context.
-
-    Returns:
-        HttpResponse: PDF file response with the volunteer registry report.
-
-    Raises:
-        PermissionDenied: If user lacks 'exe_volunteer_registry' permission.
-        Association.DoesNotExist: If association ID is invalid.
-    """
-    # Check user permissions and get association context
+def exe_volunteer_registry_print(request):
     ctx = check_assoc_permission(request, "exe_volunteer_registry")
-
-    # Retrieve the association object for the current context
     ctx["assoc"] = Association.objects.get(pk=ctx["a_id"])
-
-    # Query volunteer registry entries with member data preloaded
-    # Ordered by start date first, then by member surname
     ctx["list"] = (
         VolunteerRegistry.objects.filter(assoc=ctx["assoc"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
-
-    # Generate current date string for filename and document metadata
     ctx["date"] = datetime.today().strftime("%Y-%m-%d")
-
-    # Generate the PDF file using the volunteer registry template
     fp = print_volunteer_registry(ctx)
-
-    # Return the PDF as an HTTP response with descriptive filename
     return return_pdf(fp, f"Registro_Volontari_{ctx['assoc'].name}_{ctx['date']}")
 
 
@@ -767,20 +679,20 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     """
     Handle voting functionality for executives.
 
-    Displays the voting interface with candidate information and voting results
-    for the current year. Shows vote counts per candidate and list of voters.
+    Displays voting interface with candidates and current vote counts for the current year.
+    Shows list of voters who have already participated in the voting process.
 
     Args:
-        request: The HTTP request object containing user and session information
+        request (HttpRequest): HTTP request object containing user session and data
 
     Returns:
-        HttpResponse: Rendered voting interface page with candidate data and results
+        HttpResponse: Rendered voting interface page with candidates, vote counts, and voter list
 
     Note:
-        Requires 'exe_vote' permission. Candidates are configured via association
-        settings under 'vote_candidates' key.
+        Requires 'exe_vote' permission for the associated organization.
+        Candidates are configured via 'vote_candidates' association config.
     """
-    # Check permissions and get association context
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_vote")
     ctx["year"] = datetime.today().year
     assoc_id = ctx["a_id"]
@@ -791,12 +703,12 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
         if el.strip():
             idxs.append(el.strip())
 
-    # Fetch candidate member objects and create candidates dictionary
+    # Fetch candidate member objects and build candidates dictionary
     ctx["candidates"] = {}
     for mb in Member.objects.filter(pk__in=idxs):
         ctx["candidates"][mb.id] = mb
 
-    # Aggregate vote counts per candidate for current year
+    # Query vote counts grouped by candidate for current year and association
     votes = (
         Vote.objects.filter(year=ctx["year"], assoc_id=ctx["a_id"])
         .values("candidate_id")
@@ -809,7 +721,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
             continue
         ctx["candidates"][el["candidate_id"]].votes = el["total"]
 
-    # Get list of members who have voted this year
+    # Get list of members who have already voted this year
     ctx["voters"] = Member.objects.filter(votes_given__year=ctx["year"], votes_given__assoc_id=ctx["a_id"]).distinct()
 
     return render(request, "larpmanager/exe/users/vote.html", ctx)
@@ -828,60 +740,24 @@ def exe_badges_edit(request, num):
 
 
 @login_required
-def exe_send_mail(request: HttpRequest) -> HttpResponse:
-    """Handle sending bulk emails to association members.
-
-    This view allows association executives to send batch emails to members.
-    On GET requests, displays the email form. On POST requests, validates
-    the form and queues the email for batch processing.
-
-    Args:
-        request: The HTTP request object containing user and association data.
-
-    Returns:
-        HttpResponse: Rendered template with form context or redirect response.
-    """
-    # Check if user has permission to send emails for this association
+def exe_send_mail(request):
     ctx = check_assoc_permission(request, "exe_send_mail")
-
     if request.method == "POST":
-        # Process form submission for sending emails
         form = SendMailForm(request.POST)
-
         if form.is_valid():
-            # Queue the email batch for processing
             send_mail_batch(request, assoc_id=request.assoc["id"])
-
-            # Show success message and redirect to prevent re-submission
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
-        # Display empty form for GET requests
         form = SendMailForm()
-
-    # Add form to template context and render the page
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
 
 @login_required
-def exe_archive_email(request: HttpRequest) -> dict:
-    """Archive email view for organization executives.
-
-    Displays a paginated list of archived emails with formatted fields
-    and custom callbacks for data presentation.
-
-    Args:
-        request: HTTP request object containing user and session data
-
-    Returns:
-        dict: Context dictionary containing pagination data and field definitions
-    """
-    # Check user permissions for email archive access
+def exe_archive_email(request):
     ctx = check_assoc_permission(request, "exe_archive_email")
     ctx["exe"] = True
-
-    # Define table field configuration with display names
     ctx.update(
         {
             "fields": [
@@ -891,16 +767,15 @@ def exe_archive_email(request: HttpRequest) -> dict:
                 ("body", _("Body")),
                 ("sent", _("Sent")),
             ],
-            # Custom formatting callbacks for data display
             "callbacks": {
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
+                "recipient": lambda el: str(el.recipient),
+                "subj": lambda el: str(el.subj),
             },
         }
     )
-
-    # Return paginated email list with configured template
     return exe_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
@@ -913,31 +788,15 @@ def exe_read_mail(request, nm):
 
 
 @login_required
-def exe_questions(request: HttpRequest) -> HttpResponse:
-    """Handle display and management of help questions for organization executives.
-
-    This view allows organization executives to view and manage help questions,
-    with the ability to show/hide closed questions via POST request.
-
-    Args:
-        request: The HTTP request object containing user authentication and method data
-
-    Returns:
-        HttpResponse: Rendered template with open and closed questions context
-    """
-    # Check user permissions for accessing executive questions functionality
+def exe_questions(request):
     ctx = check_assoc_permission(request, "exe_questions")
 
-    # Retrieve help questions categorized as closed and open
     closed_q, open_q = _get_help_questions(ctx, request)
 
-    # Handle POST request to show all questions (merge closed into open)
     if request.method == "POST":
         open_q.extend(closed_q)
         closed_q = []
 
-    # Sort open questions by creation date (oldest first)
-    # Sort closed questions by creation date (newest first)
     ctx["open"] = sorted(open_q, key=lambda x: x.created)
     ctx["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
 
@@ -1016,54 +875,31 @@ def exe_questions_close(request, r):
 
 
 @login_required
-def exe_newsletter(request: HttpRequest) -> HttpResponse:
+def exe_newsletter(request):
     """Display newsletter subscription management for association members.
 
-    This view provides a comprehensive interface for managing newsletter subscriptions
-    across different languages within an association. It organizes members by their
-    preferred language and newsletter subscription status.
-
     Args:
-        request (HttpRequest): The HTTP request object containing user session
-            and authentication information.
+        request: HTTP request object
 
     Returns:
-        HttpResponse: Rendered newsletter management page containing subscriber
-            lists organized by language and subscription status.
-
-    Note:
-        Requires 'exe_newsletter' permission for the current association.
+        HttpResponse: Rendered newsletter management page with subscriber lists by language
     """
-    # Check user permissions for newsletter management
     ctx = check_assoc_permission(request, "exe_newsletter")
 
-    # Initialize nested dictionary to organize subscribers by language and status
     ctx["lst"] = {}
-
-    # Query memberships with related member data for current association
     for el in (
         Membership.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
         .values_list("member__email", "member__language", "newsletter")
     ):
-        # Extract member data from query result tuple
-        m = el[0]  # member email
-        language = el[1]  # member preferred language
-
-        # Initialize language group if not exists
+        m = el[0]
+        language = el[1]
         if language not in ctx["lst"]:
             ctx["lst"][language] = {}
-
-        # Extract newsletter subscription status
         newsletter = el[2]
-
-        # Initialize newsletter status group if not exists
         if newsletter not in ctx["lst"][language]:
             ctx["lst"][language][newsletter] = []
-
-        # Add member email to appropriate language/newsletter group
         ctx["lst"][language][newsletter].append(m)
-
     return render(request, "larpmanager/exe/users/newsletter.html", ctx)
 
 
@@ -1071,23 +907,24 @@ def exe_newsletter(request: HttpRequest) -> HttpResponse:
 def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
     """Export newsletter subscriber data as CSV for specific language.
 
-    Exports member data filtered by language to a CSV file containing
-    email, membership number, name, and surname.
+    Exports member information (email, membership number, name, surname) for all
+    members of an association who have the specified language preference.
 
     Args:
-        request: HTTP request object containing user authentication
-        lang: Language code to filter subscribers (e.g., 'en', 'it')
+        request: HTTP request object containing user authentication and session data
+        lang: Language code to filter subscribers (e.g., 'en', 'it', 'fr')
 
     Returns:
-        HttpResponse: CSV file download response with member data
+        HttpResponse: CSV file download response with member data, formatted as
+                     email, membership_number, name, surname per row
 
     Raises:
-        PermissionDenied: If user lacks exe_newsletter permission
+        PermissionDenied: If user lacks exe_newsletter permission for the association
     """
     # Check user permissions for newsletter export functionality
     ctx = check_assoc_permission(request, "exe_newsletter")
 
-    # Setup CSV response with appropriate headers and filename
+    # Set up CSV response with appropriate headers for file download
     response = HttpResponse(
         content_type="text/csv", headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'}
     )
@@ -1101,7 +938,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
         if m.language != lang:
             continue
 
-        # Build row data starting with email
+        # Build row data starting with member email
         lis = [m.email]
 
         # Add membership number or empty string if not available
@@ -1110,11 +947,11 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
         else:
             lis.append("")
 
-        # Add member name and surname to complete the row
+        # Add member's personal information
         lis.append(m.name)
         lis.append(m.surname)
 
-        # Write the row to CSV output
+        # Write the complete row to CSV
         writer.writerow(lis)
 
     return response

@@ -205,29 +205,33 @@ class MyForm(forms.ModelForm):
         Validate field uniqueness within event scope.
 
         This method ensures that a field value is unique within the context of a specific
-        event or association. It handles different model types and applies various filters
-        based on the form's configuration.
+        event or association, preventing duplicate entries that could cause conflicts.
 
-        Args:
-            field_name (str): Name of the field to validate for uniqueness
+        Parameters
+        ----------
+        field_name : str
+            Name of the field to validate for uniqueness
 
-        Returns:
-            any: The validated field value if unique
+        Returns
+        -------
+        any
+            The validated field value if unique
 
-        Raises:
-            ValidationError: If value is not unique within the event scope
+        Raises
+        ------
+        ValidationError
+            If the value is not unique within the event scope
         """
-        # Get the field value and required parameters
+        # Get the field value and event context parameters
         value = self.cleaned_data.get(field_name)
         event = self.params.get("event")
         typ = self.params.get("elementTyp")
 
-        # Only validate if we have both event and type parameters
         if event and typ:
-            # Get the appropriate event ID based on the element type
+            # Determine the appropriate event ID based on the element type
             event_id = event.get_class_parent(typ).id
 
-            # Build the base queryset based on the model type
+            # Build the base queryset for uniqueness checking
             model = self._meta.model
             if model == Event:
                 # For Event model, filter by association ID
@@ -236,20 +240,20 @@ class MyForm(forms.ModelForm):
                 # For other models, filter by event ID
                 qs = model.objects.filter(**{field_name: value}, event_id=event_id)
 
-            # Apply additional filters if question is specified
+            # Apply additional filters if question context exists
             question = self.cleaned_data.get("question")
             if question:
                 qs = qs.filter(question_id=question.id)
 
-            # Apply applicable filter if the form supports it
+            # Filter by applicability if the check method exists
             if hasattr(self, "check_applicable"):
                 qs = qs.filter(applicable=self.check_applicable)
 
-            # Exclude current instance for updates (not for new instances)
+            # Exclude current instance from uniqueness check during updates
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
 
-            # Check if any duplicates exist and raise error if found
+            # Raise validation error if duplicate exists
             if qs.exists():
                 raise ValidationError(field_name.capitalize() + " " + _("already used"))
 
@@ -534,14 +538,13 @@ class BaseRegistrationForm(MyFormRun):
         """
         Check option availability and update display name with availability info.
 
-        This function determines if an option is available for selection by checking
-        if it was previously chosen and if there are remaining available spots.
-        It updates the display name to show availability information.
+        Verifies if an option is available for selection based on current registrations
+        and maximum capacity. Updates the display name to show availability count.
 
         Args:
-            chosen: List of previously chosen options for this registration
-            name: Display name for the option that will be updated
-            option: Option instance to check availability for
+            chosen: List of previously chosen options for the current registration
+            name: Display name for the option to be potentially modified
+            option: Option instance to check for availability
             reg_count: Dictionary containing registration count data by option key
             run: Run instance for the current event
 
@@ -550,7 +553,7 @@ class BaseRegistrationForm(MyFormRun):
                 - updated_name: Display name with availability info appended
                 - is_valid: Boolean indicating if the option is valid/available
         """
-        # Check if this option was previously chosen by the user
+        # Check if this option was already chosen by the user
         found = False
         valid = True
 
@@ -561,22 +564,22 @@ class BaseRegistrationForm(MyFormRun):
 
         # If option wasn't previously chosen, check availability
         if not found:
-            # Get the count key and calculate remaining availability
+            # Get the registration count key for this option
             key = self.get_option_key_count(option)
             avail = option.max_available
 
-            # Subtract current registrations from max available
+            # Calculate remaining availability based on current registrations
             if key in reg_count:
                 avail -= reg_count[key]
 
-            # Handle unavailable options or update name with availability
+            # Handle unavailable options or add availability info to name
             if avail <= 0:
-                # Track unavailable options for this question
+                # Track unavailable options by question ID
                 if option.question_id not in self.unavail:
                     self.unavail[option.question_id] = []
                 self.unavail[option.question_id].append(option.id)
             else:
-                # Append availability count to display name
+                # Append availability count to the display name
                 name += " - (" + _("Available") + f" {avail})"
 
         return name, valid
@@ -659,49 +662,48 @@ class BaseRegistrationForm(MyFormRun):
 
         return key
 
-    def init_orga_fields(self, reg_section: str = None) -> list[str]:
+    def init_orga_fields(self, reg_section: str | None = None) -> list[str]:
         """
         Initialize form fields for organizer view with registration questions.
 
-        This method processes registration questions for the event associated with the
-        current run, filtering and initializing fields based on feature availability
-        and organizer permissions.
+        This method processes registration questions for an event and creates
+        corresponding form fields that organizers can use to manage registrations.
+        It filters questions based on availability and permissions.
 
         Args:
-            reg_section: Optional registration section name override. If provided,
-                        overrides the section name from question.section.
+            reg_section: Optional registration section name to override the
+                        question's default section assignment.
 
         Returns:
-            List of initialized field keys that were successfully processed and added
-            to the form.
+            List of initialized field keys that were successfully created.
         """
-        # Get the event from the current run and initialize registration questions
+        # Get the event from the current run context
         event = self.params["run"].event
         self._init_reg_question(self.instance, event)
 
-        # Initialize list to track successfully processed field keys
+        # Initialize container for field keys that will be created
         keys = []
 
-        # Process each registration question for organizer view
+        # Process each registration question for field creation
         for question in self.questions:
-            # Skip questions that don't apply to current context/features
+            # Skip questions that don't meet visibility/permission criteria
             if question.skip(self.instance, self.params["features"], self.params, True):
                 continue
 
-            # Initialize the field for this question in organizer mode
+            # Create form field for this question (organizer context)
             k = self._init_field(question, reg_counts=None, orga=True)
             if not k:
                 continue
 
-            # Add successfully initialized field key to results
+            # Add the field key to our collection
             keys.append(k)
 
-            # Determine section name - use override or question's section
+            # Determine section name for field grouping
             sec_name = reg_section
             if hasattr(question, "section") and question.section:
                 sec_name = question.section.name
 
-            # Associate field with its section for UI organization
+            # Assign field to section if section name is available
             if sec_name:
                 self.sections["id_" + k] = sec_name
 
@@ -780,31 +782,32 @@ class BaseRegistrationForm(MyFormRun):
 
         return key
 
-    def init_type(self, key: str, orga: bool, question: object, reg_counts: dict, required: bool) -> str:
+    def init_type(self, key: str, orga: bool, question: BaseModel, reg_counts: dict, required: bool) -> str:
         """Initialize form field based on question type.
 
-        Creates and configures form fields according to the question type, handling
-        multiple choice, single choice, text input, paragraph, editor, and special
-        question types with appropriate field initialization.
+        Creates and configures the appropriate form field type based on the question's
+        type attribute. Handles multiple choice, single choice, text input, paragraph,
+        editor, and special question types.
 
         Args:
-            key: Field key identifier for form field mapping
+            key: Field key identifier used to reference the form field
             orga: Organization context flag indicating organizational scope
-            question: Question object containing type and configuration data
-            reg_counts: Registration count data for field population
-            required: Whether the field is mandatory for form submission
+            question: Question object containing type and configuration information
+            reg_counts: Dictionary containing registration count data for choices
+            required: Whether the field should be marked as required
 
         Returns:
-            str: The field key identifier, potentially modified by special handlers
+            The field key identifier, potentially modified for special question types
 
         Note:
-            Sets the 'key' attribute on the created field for later reference.
+            For special question types, the key may be replaced with a new identifier
+            generated by the init_special method.
         """
-        # Handle multiple choice questions with checkboxes or select widgets
+        # Handle multiple choice questions (checkboxes, multi-select)
         if question.typ == BaseQuestionType.MULTIPLE:
             self.init_multiple(key, orga, question, reg_counts, required)
 
-        # Handle single choice questions with radio buttons or dropdowns
+        # Handle single choice questions (radio buttons, dropdowns)
         elif question.typ == BaseQuestionType.SINGLE:
             self.init_single(key, orga, question, reg_counts, required)
 
@@ -812,19 +815,19 @@ class BaseRegistrationForm(MyFormRun):
         elif question.typ == BaseQuestionType.TEXT:
             self.init_text(key, question, required)
 
-        # Handle multi-line paragraph text areas
+        # Handle multi-line text areas
         elif question.typ == BaseQuestionType.PARAGRAPH:
             self.init_paragraph(key, question, required)
 
-        # Handle rich text editor fields with formatting options
+        # Handle rich text editor fields
         elif question.typ == BaseQuestionType.EDITOR:
             self.init_editor(key, question, required)
 
-        # Handle special question types that may modify the key
+        # Handle special question types (custom implementations)
         else:
             key = self.init_special(question, required)
 
-        # Set the key attribute on the field for form processing
+        # Assign the key attribute to the created field for reference
         if key:
             self.fields[key].key = key
 
@@ -833,20 +836,20 @@ class BaseRegistrationForm(MyFormRun):
     def init_special(self, question: BaseModel, required: bool) -> str | None:
         """Initialize special form field configurations.
 
-        This method configures special form fields based on question type,
-        applying labels, help text, validation, and field ordering.
+        Configures special form fields based on the question type, mapping certain
+        question types to their corresponding field names and applying question
+        properties like label, help text, and validation rules.
 
         Args:
-            question: Question object containing type, name, description, and validation data
+            question: Question object containing type, name, description, and
+                     validation configuration data
             required: Whether the field should be marked as required
 
         Returns:
-            The field key if successfully initialized, None if field doesn't exist
-
-        Note:
-            Only applies max_length validation to text-based fields (name, teaser, text).
+            The field key if successfully initialized, None if the field
+            doesn't exist in the form
         """
-        # Map question types to their corresponding field keys
+        # Get the field key, either directly from question type or mapped
         key = question.typ
         mapping = {
             "faction": "factions_list",
@@ -860,17 +863,17 @@ class BaseRegistrationForm(MyFormRun):
         if key in mapping:
             key = mapping[key]
 
-        # Exit early if field doesn't exist in form
+        # Early return if field doesn't exist in form
         if key not in self.fields:
             return None
 
-        # Configure field properties from question data
+        # Configure basic field properties from question data
         self.fields[key].label = question.name
         self.fields[key].help_text = question.description
         self.reorder_field(key)
         self.fields[key].required = required
 
-        # Apply length validation only to text-based fields
+        # Apply length validation for text-based fields
         if key in ["name", "teaser", "text"]:
             self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
 

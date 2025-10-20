@@ -58,38 +58,36 @@ class FileTypeValidator:
     def __call__(self, fileobj) -> None:
         """Validate file type and extension against allowed types.
 
-        Validates both the MIME type (detected via libmagic) and file extension
-        against the configured allowed types and extensions. Special handling
-        is provided for Microsoft Office files which may be misdetected.
+        Validates the uploaded file by checking both its MIME type (using libmagic)
+        and file extension against the configured allowed types and extensions.
 
         Args:
-            fileobj: File object to validate, must have 'read', 'seek' and 'name' attributes
+            fileobj: File object to validate. Must have 'read', 'seek', and 'name' methods.
 
         Raises:
-            ValidationError: If file type or extension is not allowed, with details
-                about the detected type and allowed types in error parameters
+            ValidationError: If file type is not in allowed_mimes or if extension
+                is not in allowed_exts (when extension validation is enabled).
 
         Note:
-            The file position is reset to the beginning after validation to allow
-            subsequent reads without manual seeking.
+            The file position is reset to the beginning after validation to ensure
+            the file can be read normally by subsequent operations.
         """
-        # Read initial bytes to detect MIME type via libmagic
+        # Read file header to detect MIME type using libmagic
         detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
 
-        # Extract file extension from filename (case-insensitive)
+        # Extract file extension from filename
         root, extension = os.path.splitext(fileobj.name.lower())
 
-        # Reset file position to beginning for subsequent operations
-        # This ensures the file can be read normally after validation
+        # Reset file position to beginning for subsequent reads
         fileobj.seek(0)
 
-        # Handle libmagic detection issues with Microsoft Office files
-        # Some versions report generic types instead of specific Office MIME types
+        # Handle libmagic limitations with Office document detection
+        # Some versions return generic types instead of specific Office MIME types
         if detected_type in ("application/octet-stream", "application/vnd.ms-office"):
             detected_type = self._check_word_or_excel(fileobj, detected_type, extension)
 
-        # Validate detected MIME type against allowed types
-        # Check both exact MIME type and general category (e.g., "image/*")
+        # Validate MIME type against allowed types list
+        # Check both exact match and category match (e.g., "image/*")
         if detected_type not in self.allowed_mimes and detected_type.split("/")[0] not in self.allowed_mimes:
             raise ValidationError(
                 message=self.type_message,
@@ -100,7 +98,7 @@ class FileTypeValidator:
                 code="invalid_type",
             )
 
-        # Validate file extension if extension restrictions are configured
+        # Validate file extension if extension checking is enabled
         if self.allowed_exts and (extension not in self.allowed_exts):
             raise ValidationError(
                 message=self.extension_message,
@@ -111,43 +109,22 @@ class FileTypeValidator:
                 code="invalid_extension",
             )
 
-    def _normalize(self, allowed_types: list[str | bytes]) -> list[str]:
+    def _normalize(self, allowed_types):
         """
-        Validate and transform given allowed MIME types.
-
-        Wildcard character specifications are normalized (e.g., 'text/*' becomes 'text').
-
-        Args:
-            allowed_types: List of MIME type strings or bytes to validate and normalize.
-                          Can include wildcards like 'text/*'.
-
-        Returns:
-            List of normalized MIME type strings.
-
-        Raises:
-            ValidationError: If any MIME type format is invalid (not in 'type/subtype' format).
+        Validate and transforms given allowed types
+        e.g; wildcard character specification will be normalized as text/* -> text
         """
         allowed_mimes = []
-
-        # Process each allowed type in the input list
         for allowed_type_orig in allowed_types:
-            # Convert bytes to string if necessary
             allowed_type = allowed_type_orig.decode() if type(allowed_type_orig) is bytes else allowed_type_orig
-
-            # Split MIME type into parts (type/subtype)
             parts = allowed_type.split("/")
             max_parts = 2
-
-            # Validate MIME type format and normalize wildcards
             if len(parts) == max_parts:
                 if parts[1] == "*":
-                    # Wildcard subtype: use only the main type (e.g., 'text/*' -> 'text')
                     allowed_mimes.append(parts[0])
                 else:
-                    # Specific subtype: use full MIME type
                     allowed_mimes.append(allowed_type)
             else:
-                # Invalid MIME type format
                 raise ValidationError(
                     message=self.invalid_message,
                     params={"allowed_type": allowed_type},
@@ -169,7 +146,7 @@ class FileTypeValidator:
         Returns:
             str: Corrected MIME type for Microsoft Office files
         """
-        # Define signature strings for different Microsoft Office applications
+        # Define known Microsoft Office file type identifiers
         word_strings = [
             "Microsoft Word",
             "Microsoft Office Word",
@@ -182,16 +159,16 @@ class FileTypeValidator:
         ]
         office_strings = ["Microsoft OOXML"]
 
-        # Read file content to detect specific Office application type
+        # Read file content to analyze file type details
         file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
 
-        # Reset file pointer to beginning for subsequent operations
+        # Reset file pointer to beginning
         fileobj.seek(0)
 
-        # Check for Word document signatures in file content
+        # Check for Word documents based on magic string detection
         if any(string in file_type_details for string in word_strings):
             detected_type = "application/msword"
-        # Check for Excel document signatures in file content
+        # Check for Excel documents based on magic string detection
         elif any(string in file_type_details for string in excel_strings):
             detected_type = "application/vnd.ms-excel"
         # Handle generic Office files or OOXML format - use extension for disambiguation

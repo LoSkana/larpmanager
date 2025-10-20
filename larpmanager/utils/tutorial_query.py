@@ -43,48 +43,49 @@ def get_or_create_index_tutorial(index_dir):
 
 @background_auto(queue="whoosh")
 def add_tutorial_to_search_index(tutorial_id: int) -> None:
-    """Index tutorial content for search functionality.
+    """
+    Index tutorial content for search functionality.
 
-    Retrieves a tutorial by ID, parses its HTML description to extract sections,
-    and adds each section as a separate document to the search index. Existing
-    entries for the tutorial are removed before adding new ones.
+    Parses tutorial HTML content to extract sections and indexes them
+    for full-text search. Each H2/H3 section is indexed separately
+    with its associated content.
 
     Args:
-        tutorial_id: The ID of the tutorial to index in the search system.
+        tutorial_id: The primary key ID of the tutorial to index.
 
     Returns:
         None: Function performs indexing operations but returns nothing.
 
     Raises:
-        No exceptions are raised; ObjectDoesNotExist is caught and handled silently.
+        No exceptions are raised - ObjectDoesNotExist is handled internally.
     """
-    # Attempt to retrieve the tutorial instance from database
+    # Attempt to retrieve the tutorial instance
     try:
         instance = LarpManagerTutorial.objects.get(pk=tutorial_id)
     except ObjectDoesNotExist:
         return
 
-    # Get or create the tutorial search index and prepare writer
+    # Initialize search index and writer
     ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
     writer = ix.writer()
 
-    # Remove any existing entries for this tutorial to avoid duplicates
+    # Remove any existing index entries for this tutorial
     writer.delete_by_term("tutorial_id", str(tutorial_id))
 
-    # Parse the tutorial description HTML to extract structured content
+    # Parse HTML content to extract sections
     soup = BeautifulSoup(instance.descr, "html.parser")
 
-    # Process each section (h2, h3) as a separate searchable document
+    # Process each section (H2/H3 headings)
     for section in soup.find_all(["h2", "h3"]):
         content = []
 
-        # Collect all content following this section until next section header
+        # Collect content following this section until next heading
         for sib in section.find_next_siblings():
             if sib.name in ["h2", "h3"]:
                 break
             content.append(sib.get_text())
 
-        # Add the section as a document to the search index
+        # Add section to search index
         writer.add_document(
             tutorial_id=str(tutorial_id),
             slug=instance.slug,
@@ -93,7 +94,7 @@ def add_tutorial_to_search_index(tutorial_id: int) -> None:
             content="\n".join(content),
         )
 
-    # Commit all changes to the search index
+    # Commit changes to the index
     writer.commit()
 
 
@@ -116,49 +117,32 @@ def get_or_create_index_guide(index_dir):
 
 
 @background_auto(queue="whoosh")
-def add_guide_to_search_index(guide_id: int) -> None:
+def add_guide_to_search_index(guide_id):
     """Index a guide document for search functionality.
-
-    Adds a published LarpManagerGuide to the search index. If the guide is not
-    published or doesn't exist, the function returns early without indexing.
-    Any existing index entry for the guide is removed before adding the new one.
 
     Args:
         guide_id: ID of the LarpManagerGuide to index
-
-    Returns:
-        None
     """
-    # Attempt to retrieve the guide instance
     try:
         instance = LarpManagerGuide.objects.get(pk=guide_id)
     except ObjectDoesNotExist:
         return
 
-    # Only index published guides
     if not instance.published:
         return
 
-    # Get or create the search index and prepare writer
     ix = get_or_create_index_guide(GUIDE_INDEX)
     writer = ix.writer()
-
-    # Remove any existing index entry for this guide
     writer.delete_by_term("guide_id", str(guide_id))
 
-    # Extract plain text content from HTML using BeautifulSoup
     soup = BeautifulSoup(instance.text, "html.parser")
     text = soup.get_text(" ", strip=True)
-
-    # Add the guide document to the search index
     writer.add_document(
         guide_id=str(guide_id),
         slug=instance.slug,
         title=instance.title,
         content=text,
     )
-
-    # Commit changes to the index
     writer.commit()
 
 

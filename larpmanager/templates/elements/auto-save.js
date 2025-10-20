@@ -9,7 +9,7 @@ var eid = 0;
 {% endif %}
 var type = '{{ type }}';
 
-var timeout = 10 * 1000;
+var timeout = 15 * 1000;
 var post_url = '{{ request.path }}';
 
 function submitForm(auto) {

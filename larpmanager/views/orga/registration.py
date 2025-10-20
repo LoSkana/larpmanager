@@ -26,7 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Substr
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -60,7 +60,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType
-from larpmanager.models.event import Event, PreRegistration
+from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -86,96 +86,49 @@ from larpmanager.utils.event import check_event_permission
 from larpmanager.views.orga.member import member_field_correct
 
 
-def check_time(times: dict[str, list[float]], step: str, start: float | None = None) -> float:
+def check_time(times, step, start=None):
     """Record timing information for performance monitoring.
 
-    This function tracks execution times for different steps in a process by storing
-    the elapsed time since a reference start time in a dictionary structure.
-
     Args:
-        times (dict[str, list[float]]): Dictionary mapping step names to lists of timing measurements.
-            Each step can have multiple timing records for statistical analysis.
-        step (str): Name identifier for the current step being measured. Used as the key
-            in the times dictionary.
-        start (float | None, optional): Reference timestamp (from time.time()) to calculate
-            elapsed time from. If None, timing calculation may produce unexpected results.
-            Defaults to None.
+        times: Dictionary to store timing data
+        step: Current step name
+        start: Start time reference
 
     Returns:
-        float: Current timestamp from time.time(), which can be used as the start
-            parameter for subsequent timing measurements.
-
-    Example:
-        >>> times = {}
-        >>> start_time = time.time()
-        >>> current = check_time(times, "initialization", start_time)
-        >>> check_time(times, "processing", current)
+        float: Current time
     """
-    # Initialize step list if this is the first measurement for this step
     if step not in times:
         times[step] = []
-
-    # Capture current timestamp for consistent timing
     now = time.time()
-
-    # Calculate and store elapsed time since start reference
     times[step].append(now - start)
-
-    # Return current time for use as next measurement's start reference
     return now
 
 
-def _orga_registrations_traits(r: object, ctx: dict) -> None:
+def _orga_registrations_traits(r, ctx):
     """Process and organize character traits for registration display.
 
-    Extracts character traits from registration data and organizes them by quest type
-    for easier display in the registration interface. Only processes traits if the
-    questbuilder feature is enabled.
-
     Args:
-        r: Registration instance to process and modify with organized traits
-        ctx: Context dictionary containing:
-            - features: Available feature flags
-            - traits: Dictionary mapping trait numbers to trait data
-            - quests: Dictionary mapping quest numbers to quest data
-            - quest_types: Dictionary mapping quest type numbers to type data
-
-    Returns:
-        None: Modifies the registration instance in-place by adding traits attribute
+        r: Registration instance to process
+        ctx: Context dictionary with traits and quest data
     """
-    # Early return if questbuilder feature is not available
     if "questbuilder" not in ctx["features"]:
         return
 
-    # Initialize traits dictionary for this registration
     r.traits = {}
-
-    # Skip processing if registration has no character data
     if not hasattr(r, "chars"):
         return
-
-    # Process each character in the registration
     for char in r.chars:
-        # Skip characters without trait data
         if "traits" not in char:
             continue
-
-        # Process each trait for the current character
         for tr_num in char["traits"]:
-            # Get trait, quest, and quest type information from context
             trait = ctx["traits"][tr_num]
             quest = ctx["quests"][trait["quest"]]
             typ = ctx["quest_types"][quest["typ"]]
             typ_num = typ["number"]
-
-            # Initialize trait list for this quest type if needed
             if typ_num not in r.traits:
                 r.traits[typ_num] = []
-
-            # Add formatted trait description to the appropriate type category
             r.traits[typ_num].append(f"{quest['name']} - {trait['name']}")
 
-    # Convert trait lists to comma-separated strings for display
     for typ in r.traits:
         r.traits[typ] = ",".join(r.traits[typ])
 
@@ -248,337 +201,192 @@ def _orga_registrations_tickets(reg, ctx: dict) -> None:
     ctx["reg_all"][typ[0]]["list"].append(reg)
 
 
-def orga_registrations_membership(r: Registration, ctx: dict) -> None:
+def orga_registrations_membership(r, ctx):
     """Process membership status for registration display.
 
-    Retrieves and processes membership information for a registration,
-    adding the membership status to the context for display purposes.
-
     Args:
-        r: Registration instance containing member information
-        ctx: Context dictionary containing membership data and association ID
-            Expected keys: 'memberships', 'a_id'
-
-    Returns:
-        None: Function modifies the registration object and context in-place
+        r: Registration instance
+        ctx: Context dictionary with membership data
     """
-    # Get the member associated with this registration
     member = r.member
-
-    # Check if membership data is already cached in context
     if member.id in ctx["memberships"]:
         member.membership = ctx["memberships"][member.id]
     else:
-        # Fetch membership data if not cached
         get_user_membership(member, ctx["a_id"])
-
-    # Get the human-readable membership status
     nm = member.membership.get_status_display()
-
-    # Add membership info to the context list for display
     regs_list_add(ctx, "list_membership", nm, r.member)
-
-    # Store the membership status display method on the registration
     r.membership = member.membership.get_status_display
 
 
-def regs_list_add(ctx: dict, list: str, name: str, member: Member) -> None:
+def regs_list_add(ctx, list, name, member):
     """Add member to categorized registration lists.
 
-    Creates or updates a categorized list within the context dictionary,
-    adding the member's email and display information if not already present.
-
     Args:
-        ctx: Context dictionary containing categorized lists
-        list: List key identifier to add the member to
-        name: Category name for the registration list
-        member: Member instance with email and display_member() method
-
-    Returns:
-        None: Modifies ctx dictionary in place
+        ctx: Context dictionary containing lists
+        list: List key to add to
+        name: Category name
+        member: Member instance to add
     """
-    # Create slugified key for consistent categorization
     key = slugify(name)
-
-    # Initialize list category if it doesn't exist
     if list not in ctx:
         ctx[list] = {}
-
-    # Initialize specific category with empty structure
     if key not in ctx[list]:
         ctx[list][key] = {"name": name, "emails": [], "players": []}
-
-    # Add member only if email not already present to avoid duplicates
     if member.email not in ctx[list][key]["emails"]:
         ctx[list][key]["emails"].append(member.email)
         ctx[list][key]["players"].append(member.display_member())
 
 
-def _orga_registrations_standard(reg: Registration, ctx: dict) -> None:
+def _orga_registrations_standard(reg, ctx):
     """Process standard registration data including characters and membership.
-
-    Processes a registration instance by adding it to the appropriate lists,
-    handling character data, membership status, and calculating age at run time.
-    Gift registrations (with redeem codes) are skipped entirely.
 
     Args:
         reg: Registration instance to process
-        ctx: Context dictionary containing event data, features, and configuration
-
-    Returns:
-        None
+        ctx: Context dictionary with event data
     """
-    # Skip processing if this is a gift registration with a redeem code
+    # skip if it is gift
     if reg.redeem_code:
         return
 
-    # Add member to the main registration list for tracking
     regs_list_add(ctx, "list_all", "all", reg.member)
 
-    # Process character-specific registration data
     _orga_registration_character(ctx, reg)
 
-    # Handle membership status if membership feature is enabled
+    # membership status
     if "membership" in ctx["features"]:
         orga_registrations_membership(reg, ctx)
 
-    # Calculate member's age at the time of the run if age tracking is enabled
+    # age at run
     if ctx["registration_reg_que_age"]:
         if reg.member.birth_date and ctx["run"].start:
             reg.age = calculate_age(reg.member.birth_date, ctx["run"].start)
 
 
-def _orga_registration_character(ctx: dict, reg: Registration) -> None:
+def _orga_registration_character(ctx, reg):
     """Process character data for registration including factions and customizations.
 
     Args:
-        ctx: Context dictionary containing character data, features, factions,
-             and custom_info configuration
-        reg: Registration instance to update with character information
-
-    Returns:
-        None: Function modifies the registration instance in place
+        ctx: Context dictionary with character data
+        reg: Registration instance to update
     """
-    # Skip processing if member has no characters in context
     if reg.member_id not in ctx["reg_chars"]:
         return
 
-    # Initialize factions list and get character data for this member
     reg.factions = []
     reg.chars = ctx["reg_chars"][reg.member_id]
-
-    # Process each character for this registration
     for char in reg.chars:
-        # Handle character faction assignments
         if "factions" in char:
             reg.factions.extend(char["factions"])
             for fnum in char["factions"]:
                 if fnum in ctx["factions"]:
                     regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], reg.member)
 
-        # Process custom character data if feature is enabled
         if "custom_character" in ctx["features"]:
             orga_registrations_custom(reg, ctx, char)
 
-    # Finalize custom character information formatting
     if "custom_character" in ctx["features"] and reg.custom:
         for s in ctx["custom_info"]:
-            # Skip empty custom fields
             if not reg.custom[s]:
                 continue
-            # Convert custom field lists to comma-separated strings
             reg.custom[s] = ", ".join(reg.custom[s])
 
 
-def orga_registrations_custom(r: object, ctx: dict, char: dict) -> None:
+def orga_registrations_custom(r, ctx, char):
     """Process custom character information for registration.
 
-    Processes custom field information from character data and adds it to the
-    registration's custom data structure. Handles special formatting for profile
-    images by wrapping them in HTML img tags.
-
     Args:
-        r: Registration instance that will store the custom data
-        ctx: Context dictionary containing 'custom_info' list of field names
-        char: Character data dictionary with field values to process
-
-    Returns:
-        None: Modifies the registration instance in-place
+        r: Registration instance
+        ctx: Context dictionary with custom field info
+        char: Character data dictionary
     """
-    # Initialize custom data structure if it doesn't exist
     if not hasattr(r, "custom"):
         r.custom = {}
 
-    # Process each custom field defined in the context
     for s in ctx["custom_info"]:
-        # Initialize field list if not present
         if s not in r.custom:
             r.custom[s] = []
-
-        # Extract value from character data, default to empty string
         v = ""
         if s in char:
             v = char[s]
-
-        # Special handling for profile field - wrap in HTML img tag
         if s == "profile" and v:
             v = f"<img src='{v}' class='reg_profile' />"
-
-        # Add non-empty values to the custom field list
         if v:
             r.custom[s].append(v)
 
 
-def registrations_popup(request: HttpRequest, ctx: dict) -> JsonResponse:
+def registrations_popup(request, ctx):
     """Handle AJAX popup requests for registration details.
 
-    Retrieves and formats registration answer data for display in a popup modal.
-    Validates the registration belongs to the current run and the question belongs
-    to the event before returning the formatted response.
-
     Args:
-        request: HTTP request object containing POST data with 'idx' (registration ID)
-                and 'tp' (question ID) parameters
-        ctx: Context dictionary containing 'run' and 'event' objects for validation
+        request: HTTP request with popup parameters
+        ctx: Context dictionary with registration data
 
     Returns:
-        JsonResponse: Success response with formatted HTML content (k=1, v=html_string)
-                     or error response (k=0) if objects don't exist or validation fails
-
-    Raises:
-        ValueError: If 'idx' parameter cannot be converted to integer
+        dict: Response data for popup
     """
-    # Extract and validate request parameters
     idx = int(request.POST.get("idx", ""))
     tp = request.POST.get("tp", "")
 
     try:
-        # Retrieve registration and validate it belongs to current run
         reg = Registration.objects.get(pk=idx, run=ctx["run"])
-
-        # Retrieve question and validate it belongs to current event
         question = RegistrationQuestion.objects.get(pk=tp, event=ctx["event"].get_class_parent(RegistrationQuestion))
-
-        # Get the specific answer for this registration and question
         el = RegistrationAnswer.objects.get(reg=reg, question=question)
-
-        # Format response with registration info, question name, and answer text
         tx = f"<h2>{reg} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
-        # Return error response if any required object is not found
         return JsonResponse({"k": 0})
 
 
-def _orga_registrations_custom_character(ctx: dict) -> None:
+def _orga_registrations_custom_character(ctx):
     """
     Prepare custom character information for registration display.
 
-    Iterates through predefined character fields and adds those that are
-    enabled in the event configuration to the context for template rendering.
-
     Args:
-        ctx: Context dictionary containing event data and features.
-             Will be modified to include 'custom_info' list if applicable.
-
-    Returns:
-        None: Modifies the ctx dictionary in place.
+        ctx: Context dictionary to populate with custom character info
     """
-    # Skip processing if custom character feature is not enabled
     if "custom_character" not in ctx["features"]:
         return
-
-    # Initialize list to store enabled custom character fields
     ctx["custom_info"] = []
-
-    # Check each predefined field and add to context if enabled in event config
     for field in ["pronoun", "song", "public", "private", "profile"]:
-        # Skip field if not enabled in event configuration
         if not ctx["event"].get_config("custom_character_" + field, False):
             continue
-        # Add enabled field to custom info list for template display
         ctx["custom_info"].append(field)
 
 
-def _orga_registrations_prepare(ctx: dict, request: HttpRequest) -> None:
+def _orga_registrations_prepare(ctx, request):
     """
     Prepare registration data including characters, tickets, and questions.
 
-    This function populates the context dictionary with registration-related data
-    needed for organizing event registrations, including character assignments,
-    ticket information, and registration questions.
-
     Args:
-        ctx (dict): Context dictionary to populate with registration data. Expected
-                   to contain 'chars' and 'event' keys.
-        request: HTTP request object containing user information and session data.
-
-    Returns:
-        None: Modifies the ctx dictionary in place.
-
-    Side Effects:
-        Modifies ctx dictionary by adding:
-        - reg_chars: Dict mapping player IDs to their character lists
-        - reg_tickets: Dict mapping ticket IDs to RegistrationTicket objects
-        - reg_questions: Registration form fields for the current user
-        - no_grouping: Boolean flag for registration grouping setting
+        ctx: Context dictionary to populate with registration data
+        request: HTTP request object
     """
-    # Initialize character mapping by player ID
     ctx["reg_chars"] = {}
-
-    # Group characters by their associated player ID
     for _chnum, char in ctx["chars"].items():
         if "player_id" not in char:
             continue
         if char["player_id"] not in ctx["reg_chars"]:
             ctx["reg_chars"][char["player_id"]] = []
         ctx["reg_chars"][char["player_id"]].append(char)
-
-    # Fetch and prepare registration tickets ordered by price (highest first)
     ctx["reg_tickets"] = {}
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
-        # Initialize empty email list for each ticket
         t.emails = []
         ctx["reg_tickets"][t.id] = t
-
-    # Get registration form fields specific to the current user
     ctx["reg_questions"] = _get_registration_fields(ctx, request.user.member)
 
-    # Check if registration grouping is disabled for this event
     ctx["no_grouping"] = ctx["event"].get_config("registration_no_grouping", False)
 
 
-def _get_registration_fields(ctx: dict, member: Member) -> dict:
-    """Get registration questions available for a member in the current context.
-
-    Args:
-        ctx: Context dictionary containing event, features, run, and all_runs information
-        member: Member object to check permissions for
-
-    Returns:
-        Dictionary mapping question IDs to RegistrationQuestion objects that the member
-        can access based on feature flags and permission settings
-    """
+def _get_registration_fields(ctx, member):
     reg_questions = {}
-
-    # Get all questions for this event and feature set
     que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
-
     for q in que:
-        # Check if question has restricted access and feature is enabled
         if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
             run_id = ctx["run"].id
-
-            # Check if user is an organizer for this run
             organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
-
-            # Skip question if member is not organizer and not in allowed list
             if not organizer and member.id not in q.allowed_map:
                 continue
-
-        # Add question to available questions
         reg_questions[q.id] = q
-
     return reg_questions
 
 
@@ -594,44 +402,26 @@ def _orga_registrations_discount(ctx):
         ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
 
 
-def _orga_registrations_text_fields(ctx: dict) -> None:
+def _orga_registrations_text_fields(ctx):
     """Process editor-type registration questions and add them to context.
 
-    Filters registration questions of type EDITOR for the event, retrieves cached
-    field data, and dynamically adds reduced text and line count attributes to
-    registration objects.
-
     Args:
-        ctx: Context dictionary containing:
-            - event: Event object to filter questions for
-            - run: Run object for cache retrieval
-            - reg_list: List of registration objects to process
-
-    Returns:
-        None: Modifies registration objects in ctx["reg_list"] in-place
+        ctx: Context dictionary containing event and registration data
     """
-    # Collect editor-type question IDs as strings for field name matching
+    # add editor type questions
     text_fields = []
     que = RegistrationQuestion.objects.filter(event=ctx["event"])
     for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 
-    # Get cached registration field data for this run
     gctf = get_cache_reg_field(ctx["run"])
-
-    # Process each registration in the context list
     for el in ctx["reg_list"]:
-        # Skip if registration has no cached field data
         if el.id not in gctf:
             continue
-
-        # Add reduced text and line count attributes for each editor field
         for f in text_fields:
             if f not in gctf[el.id]:
                 continue
-            # Extract reduced text and line count from cache
             (red, ln) = gctf[el.id][f]
-            # Dynamically set attributes: field_id + "_red" and field_id + "_ln"
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 
@@ -970,52 +760,33 @@ def _save_questbuilder(ctx, form, reg):
 
 
 @login_required
-def orga_registrations_customization(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_registrations_customization(request, s, num):
     """Handle organization customization of player registration character relationships.
 
-    This view allows organization administrators to customize player registration
-    character relationships for a specific event run. It provides a form interface
-    for editing registration character relationship data.
-
     Args:
-        request: The HTTP request object containing user data and method information
-        s: The event slug string used to identify the specific event
-        num: The character number identifier used to locate the specific character
+        request: HTTP request object
+        s: Event slug string
+        num: Character number identifier
 
     Returns:
-        HttpResponse: Either a rendered edit form template for GET requests or
-                     a redirect to the registrations page after successful POST
-
-    Raises:
-        Http404: If the character or registration relationship is not found
-        PermissionDenied: If user lacks permission to access organization registrations
+        HttpResponse: Rendered edit form or redirect to registrations page
     """
-    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_registrations")
-
-    # Load event-related data into context
     get_event_cache_all(ctx)
     get_char(ctx, num)
-
-    # Retrieve the registration character relationship for this character and run
     rcr = RegistrationCharacterRel.objects.get(
         character_id=ctx["character"].id, reg__run_id=ctx["run"].id, reg__cancellation_date__isnull=True
     )
 
-    # Handle form submission for updating registration data
     if request.method == "POST":
         form = RegistrationCharacterRelForm(request.POST, ctx=ctx, instance=rcr)
-
-        # Validate and save form data if valid
         if form.is_valid():
             form.save()
             messages.success(request, _("Player customisation updated") + "!")
             return redirect("orga_registrations", s=ctx["run"].get_slug())
     else:
-        # Create form instance for GET requests
         form = RegistrationCharacterRelForm(instance=rcr, ctx=ctx)
 
-    # Add form to context and render edit template
     ctx["form"] = form
     return render(request, "larpmanager/orga/edit.html", ctx)
 
@@ -1043,36 +814,21 @@ def orga_registration_discounts(request, s, num):
 
 
 @login_required
-def orga_registration_discount_add(request: HttpRequest, s: str, num: int, dis: int) -> HttpResponseRedirect:
+def orga_registration_discount_add(request, s, num, dis):
     """Add a discount to a member's registration.
 
-    Applies a discount to a specific registration by creating an AccountingItemDiscount
-    object with the discount value and associating it with the member and event run.
-
     Args:
-        request: The HTTP request object containing user and session information.
-        s: Event slug identifier used to locate the specific event.
-        num: Registration ID to identify which registration receives the discount.
-        dis: Discount ID to identify which discount to apply.
+        request: HTTP request object
+        s: Event slug
+        num: Registration ID
+        dis: Discount ID
 
     Returns:
-        HttpResponseRedirect: Redirects to the registration discounts management page
-            for the specified registration.
-
-    Raises:
-        PermissionDenied: If user lacks 'orga_registrations' permission for the event.
-        Http404: If registration or discount with given IDs don't exist.
+        HttpResponseRedirect: Redirect to registration discounts page
     """
-    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_registrations")
-
-    # Retrieve and validate registration exists
     get_registration(ctx, num)
-
-    # Retrieve and validate discount exists
     get_discount(ctx, dis)
-
-    # Create the discount item linking member, discount, and event run
     AccountingItemDiscount.objects.create(
         value=ctx["discount"].value,
         member=ctx["registration"].member,
@@ -1080,11 +836,7 @@ def orga_registration_discount_add(request: HttpRequest, s: str, num: int, dis: 
         run=ctx["run"],
         assoc_id=ctx["a_id"],
     )
-
-    # Save registration to trigger any model signals/updates
     ctx["registration"].save()
-
-    # Redirect to registration discounts management page
     return redirect(
         "orga_registration_discounts",
         s=ctx["run"].get_slug(),
@@ -1229,42 +981,20 @@ def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", ctx)
 
 
-def get_pre_registration(event: Event) -> dict[str, list | int]:
-    """Get pre-registration data with signed status and preference counts.
-
-    Args:
-        event: The event object to get pre-registrations for.
-
-    Returns:
-        Dictionary containing:
-            - "list": All pre-registrations for the event
-            - "pred": Pre-registrations for members not yet signed up
-            - preference values: Count of pre-registrations per preference
-    """
-    # Initialize result dictionary with empty lists
+def get_pre_registration(event):
     dc = {"list": [], "pred": []}
-
-    # Get set of member IDs who have already registered for this event
     signed = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
-
-    # Query pre-registrations ordered by preference and creation date
     que = PreRegistration.objects.filter(event=event).order_by("pref", "created")
-
-    # Process each pre-registration with related member data
     for p in que.select_related("member"):
-        # Check if member hasn't signed up yet and add to pred list
         if p.member_id not in signed:
             dc["pred"].append(p)
         else:
-            # Mark as signed for template usage
             p.signed = True
 
-        # Add to main list and count preferences
         dc["list"].append(p)
         if p.pref not in dc:
             dc[p.pref] = 0
         dc[p.pref] += 1
-
     return dc
 
 
@@ -1279,41 +1009,15 @@ def orga_pre_registrations(request, s):
 
 
 @login_required
-def orga_reload_cache(request: HttpRequest, s: str) -> HttpResponse:
-    """Reset all cache entries for a specific event run.
-
-    This function clears various cache layers including run cache, media cache,
-    event features, registration counts, and relationship caches to ensure
-    fresh data is loaded for the event management interface.
-
-    Args:
-        request: The HTTP request object containing user and session data.
-        s: The event run slug identifier used to locate the specific run.
-
-    Returns:
-        HttpResponse: Redirect response to the manage page for the event run.
-
-    Raises:
-        PermissionDenied: If user lacks permission to access the event.
-        Http404: If the event run with the given slug doesn't exist.
-    """
-    # Verify user permissions and get event context
+def orga_reload_cache(request, s):
     ctx = check_event_permission(request, s)
-
-    # Clear run-specific cache and associated media files
     clear_run_cache_and_media(ctx["run"])
     reset_cache_run(ctx["event"].assoc_id, ctx["run"].get_slug())
-
-    # Clear event-level cache entries for features and configuration
     clear_event_features_cache(ctx["event"].id)
     clear_run_event_links_cache(ctx["event"])
-
-    # Clear registration and relationship cache data
     clear_registration_counts_cache(ctx["run"].id)
     clear_event_fields_cache(ctx["event"].id)
     clear_event_relationships_cache(ctx["event"].id)
-
-    # Notify user of successful cache reset and redirect
     messages.success(request, _("Cache reset!"))
     return redirect("manage", s=ctx["run"].get_slug())
 
@@ -1337,53 +1041,55 @@ def lottery_info(request, ctx):
 def orga_lottery(request: HttpRequest, s: str) -> HttpResponse:
     """Manage registration lottery system for event organizers.
 
-    Handles the lottery process for event registrations, allowing organizers to
-    randomly select participants from lottery ticket holders and upgrade them
-    to definitive tickets.
+    This function handles the lottery process for event registrations, allowing organizers
+    to randomly select participants from lottery tier registrations and upgrade them to
+    a specific ticket tier.
 
     Args:
         request: HTTP request object containing POST data for lottery execution
-        s: Event slug identifier for the target event
+        s: Event slug identifier for the specific event
 
     Returns:
-        HttpResponse: Rendered lottery template with chosen registrations or form
+        HttpResponse: Rendered lottery template with either the lottery form or
+                     results showing chosen registrations
 
     Raises:
-        Http404: When lottery slots are already filled (no upgrades needed)
+        Http404: When lottery is already filled (no more spots available for upgrade)
     """
-    # Check organizer permissions for lottery management
+    # Check user permissions for lottery management
     ctx = check_event_permission(request, s, "orga_lottery")
 
-    # Process lottery execution if form submitted
+    # Handle lottery execution when form is submitted
     if request.method == "POST" and request.POST.get("submit"):
+        # Get current lottery statistics and context
         lottery_info(request, ctx)
-        to_upgrade = ctx["num_draws"] - ctx["num_def"]
 
-        # Validate lottery capacity - ensure slots available for upgrade
+        # Calculate how many registrations need to be upgraded
+        to_upgrade = ctx["num_draws"] - ctx["num_def"]
         if to_upgrade <= 0:
             raise Http404("already filled!")
 
-        # Retrieve all lottery registrations for random selection
+        # Fetch all lottery tier registrations for this event run
         regs = Registration.objects.filter(run=ctx["run"], ticket__tier=TicketTier.LOTTERY)
         regs = list(regs)
 
-        # Perform random shuffle and select winners
+        # Randomly shuffle and select registrations for upgrade
         shuffle(regs)
         chosen = regs[0:to_upgrade]
 
-        # Get target ticket for upgrades
+        # Get the target ticket for upgrading selected registrations
         ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, name=ctx["ticket"])
 
-        # Upgrade chosen registrations to definitive tickets
+        # Upgrade chosen registrations to the target ticket tier
         for el in chosen:
             el.ticket = ticket
             el.save()
-            # send mail?
+            # TODO: Consider sending notification email to selected participants
 
-        # Store chosen registrations in context for display
+        # Store chosen registrations in context for template display
         ctx["chosen"] = chosen
 
-    # Refresh lottery information and render response
+    # Refresh lottery information for template rendering
     lottery_info(request, ctx)
     return render(request, "larpmanager/orga/registration/lottery.html", ctx)
 

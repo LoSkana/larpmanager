@@ -26,6 +26,7 @@ from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
+from django.forms import Form
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
@@ -71,78 +72,60 @@ from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
 
 
-def get_payment_fee(assoc_id: int, slug: str) -> float:
+def get_payment_fee(assoc_id, slug):
     """Get payment processing fee for a specific payment method.
 
     Args:
-        assoc_id: Association instance ID.
-        slug: Payment method slug identifier.
+        assoc_id: Association instance ID
+        slug (str): Payment method slug
 
     Returns:
-        Payment fee amount as float. Returns 0.0 if fee is not configured
-        or payment method is not found.
+        float: Payment fee amount, 0.0 if not configured
     """
-    # Fetch payment configuration details for the association
     payment_details = fetch_payment_details(assoc_id)
-
-    # Construct the fee key using the payment method slug
     k = slug + "_fee"
-
-    # Check if fee configuration exists and has a value
     if k not in payment_details or not payment_details[k]:
         return 0.0
 
-    # Convert fee string to float, handling comma decimal separators
     return float(payment_details[k].replace(",", "."))
 
 
-def unique_invoice_cod(length: int = 16) -> str:
+def unique_invoice_cod(length=16):
     """Generate a unique invoice code.
 
-    This function attempts to generate a unique invoice code by creating
-    random IDs and checking for uniqueness in the database. It will retry
-    up to 5 times before raising an exception.
-
     Args:
-        length: Length of the generated code. Defaults to 16.
+        length (int): Length of the generated code, defaults to 16
 
     Returns:
-        A unique invoice code string.
+        str: Unique invoice code
 
     Raises:
-        ValueError: If unable to generate a unique code after 5 attempts.
+        Exception: If unable to generate unique code after 5 attempts
     """
-    # Attempt to generate a unique code up to 5 times
     for _idx in range(5):
-        # Generate a random code of specified length
         cod = generate_id(length)
-
-        # Check if this code already exists in the database
         if not PaymentInvoice.objects.filter(cod=cod).exists():
             return cod
-
-    # If all attempts failed, raise an exception
     raise ValueError("Too many attempts to generate the code")
 
 
-def set_data_invoice(request, ctx: dict, invoice, form, assoc_id: int) -> None:
+def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, form: Form, assoc_id: int) -> None:
     """Set invoice data from form submission.
 
-    Sets the causal (description) field of a PaymentInvoice based on the payment type
-    and form data. Handles different payment types: registration, membership, donation,
-    and collection fees.
+    Updates the invoice object with appropriate causal text based on payment type
+    and applies special formatting if configured for the association.
 
     Args:
         request: Django HTTP request object containing user information
-        ctx: Context dictionary with payment-specific data (reg, year, coll)
+        ctx: Context dictionary with registration, year, or collection data
         invoice: PaymentInvoice instance to update with causal information
-        form: Form containing cleaned invoice data
+        form: Form containing cleaned invoice data (used for donations)
         assoc_id: Association instance ID for configuration lookup
 
     Returns:
-        None: Modifies the invoice object in place
+        None: Function modifies the invoice object in place
     """
-    # Get the display name of the current user
+    # Get the real display name of the current user
     member_real = request.user.member.display_real()
 
     # Handle registration payment type
@@ -152,7 +135,7 @@ def set_data_invoice(request, ctx: dict, invoice, form, assoc_id: int) -> None:
             "event": str(ctx["reg"].run),
             "number": ctx["reg"].num_payments,
         }
-        # Apply custom registration reasoning if needed
+        # Apply custom registration reason if applicable
         _custom_reason_reg(ctx, invoice, member_real)
 
     # Handle membership payment type
@@ -178,7 +161,7 @@ def set_data_invoice(request, ctx: dict, invoice, form, assoc_id: int) -> None:
             "recipient": ctx["coll"].display_member(),
         }
 
-    # Prepend invoice code to causal if special code configuration is enabled
+    # Apply special code prefix if configured for this association
     if get_assoc_config(assoc_id, "payment_special_code", False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
@@ -264,44 +247,29 @@ def round_up_to_two_decimals(number):
     return math.ceil(number * 100) / 100
 
 
-def update_invoice_gross_fee(request, invoice, amount: float, assoc_id: int, pay_method) -> float:
+def update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method):
     """Update invoice with gross amount including payment processing fees.
 
-    Calculates and applies payment processing fees to the invoice based on the
-    payment method configuration. If user fee configuration is enabled, adjusts
-    the amount to account for fees being passed to the user.
-
     Args:
-        request: Django HTTP request object for context
-        invoice: PaymentInvoice instance to update with calculated amounts
-        amount: Base amount before fees are applied
-        assoc_id: Association instance ID for fee configuration lookup
-        pay_method: Payment method object containing slug for fee calculation
-
-    Returns:
-        Final calculated amount after fee adjustments
+        request: Django HTTP request object
+        invoice: PaymentInvoice instance to update
+        amount (Decimal): Base amount before fees
+        assoc_id: Association instance ID
+        pay_method (str): Payment method slug
     """
-    # Convert amount to float for fee calculations
+    # add fee for paymentmethod
     amount = float(amount)
-
-    # Retrieve payment processing fee percentage for this method
     fee = get_payment_fee(assoc_id, pay_method.slug)
 
-    # Apply fee calculations if a fee is configured
     if fee is not None:
-        # Check if fees should be passed to the user
         if get_assoc_config(assoc_id, "payment_fees_user", False):
-            # Adjust amount so user pays the fee (reverse calculation)
             amount = (amount * 100) / (100 - fee)
             amount = round_up_to_two_decimals(amount)
 
-        # Calculate and store the monetary fee amount
         invoice.mc_fee = round_up_to_two_decimals(amount * fee / 100.0)
 
-    # Set the final gross amount and persist changes
     invoice.mc_gross = amount
     invoice.save()
-
     return amount
 
 
@@ -370,10 +338,14 @@ def get_payment_form(request: HttpRequest, form: Any, typ: str, ctx: dict[str, A
     amount = update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method)
     ctx["invoice"] = invoice
 
+    # Check if receipt is required for manual payments (applies to all payment types)
+    require_receipt = get_assoc_config(assoc_id, "payment_require_receipt", False)
+    ctx["require_receipt"] = require_receipt
+
     # Prepare gateway-specific forms based on selected payment method
     if method in {"wire", "paypal_nf"}:
         # Wire transfer or non-financial PayPal forms
-        ctx["wire_form"] = WireInvoiceSubmitForm()
+        ctx["wire_form"] = WireInvoiceSubmitForm(require_receipt=require_receipt)
         ctx["wire_form"].set_initial("cod", invoice.cod)
     elif method == "any":
         # Generic payment method form
@@ -396,31 +368,21 @@ def get_payment_form(request: HttpRequest, form: Any, typ: str, ctx: dict[str, A
         get_satispay_form(request, ctx, invoice, amount)
 
 
-def payment_received(invoice: PaymentInvoice) -> bool:
+def payment_received(invoice):
     """Process a received payment and update related records.
 
     Args:
-        invoice (PaymentInvoice): The payment invoice instance that was paid.
+        invoice: PaymentInvoice instance that was paid
 
-    Returns:
-        bool: Always returns True to indicate successful processing.
-
-    Side Effects:
-        - Creates accounting records for payment fees
-        - Processes registration payments
-        - Handles membership payments
-        - Processes donations
-        - Handles collection payments
+    Side effects:
+        Creates accounting records, processes collections/donations
     """
-    # Get association features and calculate payment fee
     features = get_assoc_features(invoice.assoc_id)
     fee = get_payment_fee(invoice.assoc_id, invoice.method.slug)
 
-    # Process payment fee if applicable and not already processed
     if fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
         _process_fee(features, fee, invoice)
 
-    # Route payment processing based on payment type
     if invoice.typ == PaymentType.REGISTRATION:
         _process_payment(invoice)
 
@@ -502,118 +464,68 @@ def _process_payment(invoice):
             process_payment(invoice.id)
 
 
-def _process_fee(features, fee: float, invoice) -> None:
-    """Process payment fee for an invoice by creating an accounting transaction.
-
-    Creates an AccountingItemTransaction to track payment processing fees.
-    The fee can be assigned to either the user or the organization based on
-    configuration settings.
-
-    Args:
-        features: Feature configuration object
-        fee: Fee percentage to apply to the invoice gross amount
-        invoice: Invoice object containing payment details
-
-    Returns:
-        None
-    """
-    # Create new accounting transaction for the fee
+def _process_fee(features, fee, invoice):
     trans = AccountingItemTransaction()
     trans.member_id = invoice.member_id
     trans.inv = invoice
-
-    # Calculate fee amount as percentage of gross payment
     # trans.value = invoice.mc_fee
     trans.value = (float(invoice.mc_gross) * fee) / 100
     trans.assoc_id = invoice.assoc_id
-
-    # Check if payment fees should be user's burden based on config
     if get_assoc_config(invoice.assoc_id, "payment_fees_user", False):
         trans.user_burden = True
     trans.save()
-
-    # Link transaction to registration if this is a registration payment
     if invoice.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(pk=invoice.idx)
         trans.reg = reg
         trans.save()
 
 
-def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
+def process_payment_invoice_status_change(invoice):
     """Process payment invoice status changes and trigger payment received.
 
-    This function monitors invoice status transitions and triggers payment
-    processing when an invoice moves from an unpaid state to a paid state
-    (CHECKED or CONFIRMED).
-
     Args:
-        invoice (PaymentInvoice): The PaymentInvoice instance being saved.
-            Must have a primary key to process status changes.
-
-    Returns:
-        None
-
-    Note:
-        Only processes invoices that transition FROM non-paid status
-        TO CHECKED or CONFIRMED status. Ignores new invoices without pk.
+        invoice: PaymentInvoice instance being saved
     """
-    # Skip processing for new invoices without primary key
     if not invoice.pk:
         return
 
-    # Attempt to fetch previous invoice state from database
     try:
         prev = PaymentInvoice.objects.get(pk=invoice.pk)
     except Exception:
         return
 
-    # Skip if previous status was already paid (CHECKED or CONFIRMED)
     if prev.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    # Skip if current status is not a paid status
     if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    # Trigger payment received processing for status transition to paid
     payment_received(invoice)
 
 
-def process_refund_request_status_change(refund_request: "RefundRequest") -> None:
+def process_refund_request_status_change(refund_request):
     """Process refund request status changes.
 
-    Creates an accounting item when a refund request status changes to PAYED.
-    Only processes existing refund requests and ignores if previous status was
-    already PAYED to prevent duplicate accounting entries.
-
     Args:
-        refund_request: RefundRequest instance being updated with new status
+        refund_request: RefundRequest instance being updated
 
-    Returns:
-        None
-
-    Side Effects:
-        Creates AccountingItemOther record when refund status changes to PAYED
+    Side effects:
+        Creates accounting item when refund status changes to PAYED
     """
-    # Skip processing for new refund requests (not yet saved)
     if not refund_request.pk:
         return
 
-    # Retrieve previous state to detect status changes
     try:
         prev = RefundRequest.objects.get(pk=refund_request.pk)
     except Exception:
         return
 
-    # Skip if previous status was already PAYED (avoid duplicates)
     if prev.status == RefundStatus.PAYED:
         return
 
-    # Only proceed if current status is PAYED
     if refund_request.status != RefundStatus.PAYED:
         return
 
-    # Create accounting item for the delivered refund
     acc = AccountingItemOther()
     acc.member_id = refund_request.member_id
     acc.value = refund_request.value
@@ -626,8 +538,9 @@ def process_refund_request_status_change(refund_request: "RefundRequest") -> Non
 def process_collection_status_change(collection: Collection) -> None:
     """Update payment collection status and metadata.
 
-    This function handles the business logic when a collection's status changes
-    to PAYED, automatically creating an accounting credit item for the payment.
+    Creates an accounting item credit when a collection's status changes from
+    any status to PAYED. This function is idempotent and safe to call multiple
+    times on the same collection.
 
     Args:
         collection (Collection): Collection instance being updated. Must have
@@ -638,13 +551,13 @@ def process_collection_status_change(collection: Collection) -> None:
 
     Side Effects:
         Creates an AccountingItemOther credit entry when collection status
-        changes from any status to PAYED.
+        changes to PAYED for the first time.
 
     Note:
         Function returns early if collection has no primary key or if the
         previous status was already PAYED to prevent duplicate credits.
     """
-    # Early return if collection hasn't been saved yet
+    # Early return if collection hasn't been saved to database yet
     if not collection.pk:
         return
 
@@ -652,27 +565,25 @@ def process_collection_status_change(collection: Collection) -> None:
     try:
         prev = Collection.objects.get(pk=collection.pk)
     except Exception:
-        # If we can't get previous state, skip processing
+        # If we can't fetch previous state, safely return to avoid errors
         return
 
-    # Skip if collection was already marked as paid
+    # Skip processing if collection was already marked as PAYED
     if prev.status == CollectionStatus.PAYED:
         return
 
-    # Only process if current status is PAYED
+    # Only proceed if current status is PAYED (status change occurred)
     if collection.status != CollectionStatus.PAYED:
         return
 
-    # Create accounting credit item for the paid collection
+    # Create accounting credit item for the newly paid collection
     acc = AccountingItemOther()
     acc.assoc_id = collection.assoc_id
     acc.member_id = collection.member_id
     acc.run_id = collection.run_id
-
-    # Set credit value and type
     acc.value = collection.total
+
+    # Set the accounting item type to credit and add descriptive text
     acc.oth = OtherChoices.CREDIT
     acc.descr = f"Collection of {collection.organizer}"
-
-    # Save the accounting item to database
     acc.save()

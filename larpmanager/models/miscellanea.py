@@ -657,6 +657,10 @@ class PlayerRelationship(BaseModel):
         return f"{self.reg} - {self.target} ({self.reg.run.number})"
 
     class Meta:
+        indexes = [
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
+            models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="prel_target_act"),
+        ]
         constraints = [
             UniqueConstraint(
                 fields=["reg", "target", "deleted"],
@@ -757,66 +761,36 @@ class OneTimeContent(BaseModel):
     def __str__(self):
         return f"{self.name} ({self.event.name})"
 
-    def save(self, *args, **kwargs) -> None:
-        """Override save to capture file metadata.
-
-        Automatically sets file_size and content_type based on the uploaded file.
-        The content_type is determined from the file extension if not already set.
-
-        Args:
-            *args: Variable length argument list passed to parent save method.
-            **kwargs: Arbitrary keyword arguments passed to parent save method.
-        """
+    def save(self, *args, **kwargs):
+        """Override save to capture file metadata."""
         if self.file:
-            # Capture the file size for metadata tracking
             self.file_size = self.file.size
-
-            # Auto-detect content type from file extension if not already set
+            # Try to determine content type
             if not self.content_type:
                 file_name = self.file.name.lower()
-
-                # Check for video file extensions
                 if file_name.endswith(".mp4"):
                     self.content_type = "video/mp4"
                 elif file_name.endswith(".webm"):
                     self.content_type = "video/webm"
-
-                # Check for audio file extensions
                 elif file_name.endswith(".mp3"):
                     self.content_type = "audio/mpeg"
                 elif file_name.endswith(".ogg"):
                     self.content_type = "audio/ogg"
-
-                # Default fallback for unknown file types
                 else:
                     self.content_type = "application/octet-stream"
-
-        # Call parent save method to complete the save operation
         super().save(*args, **kwargs)
 
-    def generate_token(self, note: str = "") -> "OneTimeAccessToken":
-        """Generate a new access token for this content.
-
-        Creates a new OneTimeAccessToken instance associated with this content object.
-        The token can be used for temporary access without authentication.
+    def generate_token(self, note=""):
+        """
+        Generate a new access token for this content.
 
         Args:
-            note: Optional note describing the purpose of this token.
-                Defaults to empty string.
+            note (str): Optional note describing the purpose of this token
 
         Returns:
-            OneTimeAccessToken: The newly created token instance with unique
-                access credentials.
-
-        Example:
-            >>> content = MyContent.objects.get(id=1)
-            >>> token = content.generate_token("API access for client X")
-            >>> print(token.token)
+            OneTimeAccessToken: The newly created token
         """
-        # Create new token instance linked to this content
         token = OneTimeAccessToken.objects.create(content=self, note=note)
-
-        # Return the created token for immediate use
         return token
 
     def get_token_stats(self):
@@ -914,50 +888,27 @@ class OneTimeAccessToken(BaseModel):
             self.token = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def mark_as_used(self, request=None, member=None) -> None:
+    def mark_as_used(self, request=None, member=None):
         """
         Mark this token as used and record access information.
 
-        This method updates the token's status to indicate it has been consumed,
-        recording timestamp, user, and request metadata for audit purposes.
-
-        Parameters
-        ----------
-        request : HttpRequest, optional
-            Django HttpRequest object to extract IP address and user agent metadata.
-            If None, only basic usage information is recorded.
-        member : Member, optional
-            Member object representing the authenticated user who used the token.
-            If None, the token is marked as used without user association.
-
-        Returns
-        -------
-        None
-            This method modifies the token instance in place and saves to database.
-
-        Notes
-        -----
-        The IP address extraction prioritizes X-Forwarded-For header for proxy
-        compatibility, falling back to REMOTE_ADDR for direct connections.
-        User agent strings are truncated to 500 characters to prevent database errors.
+        Args:
+            request: Django HttpRequest object to extract metadata
+            member: Member object if user is authenticated
         """
-        # Mark token as consumed with timestamp
         self.used = True
         self.used_at = timezone.now()
         self.used_by = member
 
         if request:
-            # Extract client IP address with proxy support
+            # Extract IP address
             x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
             if x_forwarded_for:
-                # Use first IP in comma-separated list for proxied requests
                 self.ip_address = x_forwarded_for.split(",")[0].strip()
             else:
-                # Fallback to direct connection IP
                 self.ip_address = request.META.get("REMOTE_ADDR")
 
-            # Record user agent with length constraint
+            # Extract user agent
             self.user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
 
-        # Persist changes to database
         self.save()

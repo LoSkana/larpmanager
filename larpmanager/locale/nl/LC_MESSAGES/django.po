@@ -2744,6 +2744,9 @@ msgstr "Betaling Valuta"
 msgid "Payment priority"
 msgstr "Prioriteit betaling"
 
+msgid "Payment received"
+msgstr "Ontvangen betaling"
+
 msgid "Payment to check"
 msgstr "Te controleren betaling"
 
@@ -4797,6 +4800,9 @@ msgstr "Betalingen in afwachting van gedelegeerde rekeningen"
 msgid "Reimbursement request for %(event)s"
 msgstr "Vordering voor %(event)s"
 
+msgid "Require receipt for manual payments"
+msgstr "Ontvangstbewijs vereisen voor handmatige betalingen"
+
 msgid "Review historical financial records"
 msgstr "Historische financiële gegevens bekijken"
 
@@ -5011,6 +5017,9 @@ msgstr "Breng transactiekosten in rekening bij de deelnemer"
 
 msgid "Fill in your character's relationships"
 msgstr "Vul de relaties van je personage in"
+
+msgid "I confirm that I have made the payment"
+msgstr "Ik bevestig dat ik de betaling heb gedaan"
 
 msgid "It will be shown to other participants"
 msgstr "Het wordt getoond aan andere deelnemers"
@@ -5433,6 +5442,9 @@ msgstr "Deze pagina vat de speedlarps van het evenement samen"
 msgid "This page shows the types of event prologue"
 msgstr "Deze pagina geeft een overzicht van de soorten proloog"
 
+msgid "Upload a PDF file or image (JPG, PNG, etc.)"
+msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Je geschonken registratie is verzilverd!"
 
@@ -5800,6 +5812,9 @@ msgstr ""
 msgid "This page shows the types of quests in the event"
 msgstr ""
 "Deze pagina geeft een overzicht van de soorten quests in het evenement"
+
+msgid "You can upload a file in pdf format, or an image"
+msgstr "Je kunt een bestand in pdf-formaat of een afbeelding uploaden"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
@@ -6323,6 +6338,9 @@ msgstr "na goedkeuring worden de overeenkomstige bedragen toegewezen als"
 msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Hiermee kun je elk element rechtstreeks uit een andere gebeurtenis kopiëren"
+
+msgid "As soon as it is approved, your accounting will be updated"
+msgstr "Zodra het is goedgekeurd, wordt je boekhouding bijgewerkt"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr ""
@@ -7513,12 +7531,6 @@ msgstr ""
 "bekijken"
 
 msgid ""
-"Payment received! As soon as it is approved, your accounts will be updated"
-msgstr ""
-"Betaling ontvangen! Zodra de betaling is goedgekeurd, worden je accounts "
-"bijgewerkt"
-
-msgid ""
 "Text visible only by the assigned participant, when 'show text' is checked"
 msgstr ""
 "Tekst die alleen zichtbaar is voor de toegewezen deelnemer wanneer 'toon "
@@ -7585,6 +7597,12 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, kunnen deelnemers het lied van hun personages "
 "aangeven"
+
+msgid ""
+"If checked: Participants must provide a receipt/invoice for manual payments"
+msgstr ""
+"Indien aangevinkt: Deelnemers moeten een kwitantie/factuur overleggen voor "
+"handmatige betalingen"
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
@@ -8169,6 +8187,13 @@ msgid ""
 msgstr ""
 "De leden brengen hun stem uit voor de verkiezing van het uitvoerend comité "
 "van de organisatie"
+
+msgid ""
+"Once the transfer is confirmed, submit the form below to notify us of your "
+"payment"
+msgstr ""
+"Zodra de overschrijving is bevestigd, kunt u het onderstaande formulier "
+"verzenden om ons op de hoogte te stellen van uw betaling"
 
 msgid ""
 "Theoretical total of income due to participation fees selected by the "
@@ -9194,6 +9219,13 @@ msgstr ""
 "betalingsbedrag voor zijn vermeldingen te wijzigen"
 
 msgid ""
+"Once the transfer is confirmed, request the slip (the receipt of "
+"confirmation) and upload it below"
+msgstr ""
+"Zodra de overboeking is bevestigd, vraag je het bewijs van bevestiging op en"
+" upload je het hieronder"
+
+msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -9530,6 +9562,13 @@ msgid ""
 msgstr ""
 "Houdt dagelijks de financiële status van de organisatie en evenementen bij "
 "en toont trendgrafieken over een bepaalde periode"
+
+msgid ""
+"Once you have made the payment, return to this page and submit the form "
+"below to notify us of your payment"
+msgstr ""
+"Ga na de betaling terug naar deze pagina en verzend het onderstaande "
+"formulier om ons op de hoogte te stellen van je betaling"
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
@@ -10044,11 +10083,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Enter the 'bring a friend' code provided by a registered participant to "
+"Enter the “bring a friend” code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Voer de 'bring a friend'-code in die is verstrekt door een geregistreerde "
-"deelnemer om een %(amount)d korting op je inschrijfgeld te ontvangen"
+"Voer de 'bring a friend' code in van een geregistreerde deelnemer om een "
+"%(amount)d korting op je inschrijfgeld te ontvangen"
 
 msgid ""
 "Indicate the special discount code, to be communicated to the participants, "
@@ -10390,15 +10429,6 @@ msgid ""
 msgstr ""
 "In de tekst van het element links wordt een teken aangegeven met het nummer "
 "dat rechts wordt aangegeven, maar dit laatste bestaat niet"
-
-msgid ""
-"Once the transfer is confirmed, request the slip (the receipt of "
-"confirmation) and upload it below. You can upload a file in pdf format, or "
-"an image"
-msgstr ""
-"Zodra de overschrijving is bevestigd, vraag je het bewijs van bevestiging "
-"aan en upload je het hieronder. Je kunt een bestand in pdf-formaat of een "
-"afbeelding uploaden"
 
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "

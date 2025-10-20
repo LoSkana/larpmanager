@@ -53,11 +53,11 @@ def orga_newsletter(request, s):
 
 @login_required
 def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
-    """Process safety-related member data forms for event organizers.
+    """Process safety-related member data forms.
 
-    Retrieves and displays safety information for registered members who have
-    provided safety data for a specific event run. Groups characters by player
-    and filters out members with insufficient safety information.
+    Retrieves and displays safety information for all registered members
+    who have provided safety data longer than the minimum required length.
+    Associates each member with their character information.
 
     Args:
         request: HTTP request object containing user session and form data
@@ -65,35 +65,38 @@ def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered safety information template containing member
-                     data, associated characters, and safety details
+                     data and their associated characters
 
-    Raises:
-        PermissionDenied: If user lacks 'orga_safety' permission for the event
+    Note:
+        Only includes members with safety information longer than min_length
+        and excludes cancelled registrations.
     """
     # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_safety")
     get_event_cache_all(ctx)
     min_length = 3
 
-    # Group characters by their player ID
+    # Build mapping of member IDs to their character list
     member_chars = {}
     for _num, el in ctx["chars"].items():
         if "player_id" not in el:
             continue
-        # Initialize player character list if not exists
+        # Initialize member's character list if not exists
         if el["player_id"] not in member_chars:
             member_chars[el["player_id"]] = []
+        # Add formatted character info to member's list
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     # Query registered members with safety information
     ctx["list"] = []
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    # Exclude members without safety data and optimize with select_related
     que = que.exclude(member__safety__isnull=True).select_related("member")
 
     # Filter members with sufficient safety information length
     for el in que:
         if len(el.member.safety) > min_length:
-            # Attach character list to member if they have characters
+            # Attach character list to member if available
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
@@ -108,22 +111,22 @@ def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
 def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
     """Handle dietary preference management forms.
 
-    This function retrieves and displays dietary preferences for all registered
+    This view collects and displays dietary preferences for all registered
     members of an event, along with their associated characters.
 
     Args:
-        request: The HTTP request object containing user and session data
-        s: The event slug identifier used to locate the specific event
+        request: HTTP request object containing user session and form data
+        s: Event slug identifier for the specific event
 
     Returns:
-        HttpResponse: Rendered template displaying diet preferences with member
-        data and their associated characters
+        HttpResponse: Rendered template displaying diet preferences with
+                     member data and their associated characters
 
     Note:
-        Only processes members with dietary preferences longer than 3 characters
-        and excludes cancelled registrations.
+        Only shows members with dietary preferences longer than min_length
+        characters and excludes cancelled registrations.
     """
-    # Check permissions and initialize context with event data
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_diet")
     get_event_cache_all(ctx)
     min_length = 3
@@ -133,25 +136,23 @@ def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
     for _num, el in ctx["chars"].items():
         if "player_id" not in el:
             continue
-        # Group characters by player ID for easy lookup
         if el["player_id"] not in member_chars:
             member_chars[el["player_id"]] = []
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
-    # Query active registrations with dietary preferences
+    # Query all non-cancelled registrations with dietary preferences
     ctx["list"] = []
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
     que = que.exclude(member__diet__isnull=True).select_related("member")
 
-    # Filter members with meaningful dietary information and attach character data
+    # Filter members with substantial dietary info and attach character data
     for el in que:
         if len(el.member.diet) > min_length:
-            # Attach character list to member if they have characters
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
 
-    # Sort members alphabetically by display name for consistent presentation
+    # Sort members alphabetically by display name
     ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
 
     return render(request, "larpmanager/orga/users/diet.html", ctx)
@@ -159,24 +160,24 @@ def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
 
 @login_required
 def orga_spam(request: HttpRequest, s: str) -> HttpResponse:
-    """Manage spam/newsletter preference settings.
+    """Manage spam/newsletter preference settings for event organizers.
 
-    Retrieves members who are subscribed to newsletters and not already registered
-    for current/future runs of the event, then groups them by language for
-    targeted newsletter distribution.
+    This function retrieves members who have opted into newsletters, excludes those
+    already registered for current/future event runs or are event staff, and groups
+    the remaining members by language for targeted email campaigns.
 
     Args:
-        request: HTTP request object containing user session and data
-        s: Event slug identifier for the specific event
+        request: The HTTP request object containing user session and data
+        s: The event slug identifier used to look up the specific event
 
     Returns:
-        HttpResponse: Rendered newsletter management template with email lists
-        grouped by member language preferences
+        HttpResponse: Rendered template with newsletter management interface
+        containing email lists grouped by member language preferences
     """
-    # Check user permissions for spam management functionality
+    # Check user permissions for spam management feature
     ctx = check_event_permission(request, s, "orga_spam")
 
-    # Get members already registered for current/future runs of this event
+    # Get members already registered for current or future runs
     already = list(
         Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
             "member_id", flat=True
@@ -186,16 +187,14 @@ def orga_spam(request: HttpRequest, s: str) -> HttpResponse:
     # Add event staff members to exclusion list
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
-    # Get active members of the association (excluding empty memberships)
+    # Get all active association members (exclude empty memberships)
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
-    # Build email lists grouped by language preference
+    # Build language-grouped email lists for newsletter subscribers
     lst = {}
-    # Query members who want all newsletters and are association members
     que = Member.objects.filter(newsletter=NewsletterChoices.ALL)
     que = que.filter(id__in=members)
-    # Exclude already registered members and staff
     que = que.exclude(id__in=already)
 
     # Group email addresses by member language preference
@@ -379,57 +378,23 @@ def send_mail_batch(request, assoc_id=None, run_id=None):
 
 
 @login_required
-def orga_send_mail(request: HttpRequest, s: str) -> HttpResponse:
-    """Send mail to event participants through batch processing.
-
-    This view handles the display and processing of a mail sending form for event
-    organizers. It validates permissions, processes form submissions, and queues
-    emails for batch delivery.
-
-    Args:
-        request: The HTTP request object containing user data and form submission
-        s: String identifier for the event/run context
-
-    Returns:
-        HttpResponse: Rendered template with form or redirect after successful submission
-    """
-    # Check if user has permission to send mail for this event
+def orga_send_mail(request, s):
     ctx = check_event_permission(request, s, "orga_send_mail")
-
     if request.method == "POST":
-        # Process form submission for mail sending
         form = SendMailForm(request.POST)
         if form.is_valid():
-            # Queue the mail batch for processing
             send_mail_batch(request, run_id=ctx["run"].id)
-            # Notify user of successful queue addition
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
-        # Display empty form for GET requests
         form = SendMailForm()
-
-    # Add form to context and render template
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
 
 @login_required
-def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
-    """Display paginated archive of emails for event organizers.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        s: Event slug identifier for permission checking and context
-
-    Returns:
-        HttpResponse: Rendered template with paginated email archive data
-    """
-    # Check user permissions for accessing email archive functionality
+def orga_archive_email(request, s):
     ctx = check_event_permission(request, s, "orga_archive_email")
-
-    # Define table fields configuration for email display
-    # Maps database fields to human-readable column headers
     ctx.update(
         {
             "fields": [
@@ -438,17 +403,15 @@ def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
                 ("body", _("Body")),
                 ("sent", _("Sent")),
             ],
-            # Configure data formatting callbacks for each field
-            # Handles proper display of email body, timestamps, and run references
             "callbacks": {
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
+                "recipient": lambda el: str(el.recipient),
+                "subj": lambda el: str(el.subj),
             },
         }
     )
-
-    # Render paginated email archive using the configured context
     return orga_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 
@@ -530,31 +493,15 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)
 
 
-def member_field_correct(el: object, member_fields: list[str]) -> None:
-    """Correct and format member fields for display purposes.
-
-    Args:
-        el: Member object to modify fields on
-        member_fields: List of field names to process and format
-
-    Returns:
-        None: Modifies the el object in place
-    """
-    # Format residence address field if requested
+def member_field_correct(el, member_fields):
     if "residence_address" in member_fields:
         el.residence_address = el.get_residence()
-
-    # Format first aid field with check icon for YES responses
     if "first_aid" in member_fields:
         if el.first_aid == FirstAidChoices.YES:
             el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
         else:
             el.first_aid = ""
-
-    # Format document type field with human-readable display value
     if "document_type" in member_fields:
         el.document_type = el.get_document_type_display()
-
-    # Format gender field with human-readable display value
     if "gender" in member_fields:
         el.gender = el.get_gender_display()

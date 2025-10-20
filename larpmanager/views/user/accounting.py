@@ -190,42 +190,43 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
     """
     Display user's accounting credits including expenses, credits given/used, and refunds.
 
-    This view retrieves and displays all accounting-related items for the current user
-    within their association, including approved expenses, credit transactions,
-    payment records using credits, and refunds.
+    This view retrieves all accounting-related items for the current user within their
+    associated organization, including approved expenses, credit transactions, payment
+    records using credits, and refunds.
 
     Args:
-        request (HttpRequest): The HTTP request object containing user and session data.
+        request (HttpRequest): The HTTP request object containing user session data
+            and request metadata.
 
     Returns:
         HttpResponse: Rendered template displaying the user's accounting credits
-                     and related financial transactions.
+            summary with expenses, given credits, used credits, and refunds.
     """
-    # Get base user context with member and association information
+    # Get base user context with member and association info
     ctx = def_user_ctx(request)
 
-    # Add accounting data to context - approved expenses for the user
+    # Add accounting data to context with filtered queries for current user/association
     ctx.update(
         {
-            # Get approved expenses that are not hidden for current member/association
+            # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
                 member=ctx["member"], hide=False, is_approved=True, assoc_id=ctx["a_id"]
             ),
-            # Get credit items given to the member
+            # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
                 oth=OtherChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
-            # Get payments made using credits by the member
+            # Payments made using credits by the user in current association
             "used": AccountingItemPayment.objects.filter(
                 member=ctx["member"],
                 hide=False,
                 pay=PaymentChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
-            # Get refund items for the member
+            # Refunds issued to the user in current association
             "ref": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
@@ -234,7 +235,8 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
             ),
         }
     )
-    # Render the accounting credits template with the populated context
+
+    # Render the accounting credits template with populated context
     return render(request, "larpmanager/member/acc_credits.html", ctx)
 
 
@@ -242,52 +244,53 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
 def acc_refund(request: HttpRequest) -> HttpResponse:
     """Handle refund request form processing and notifications.
 
-    Processes refund requests submitted by users, validates the form data,
-    saves the refund request to the database, and sends notifications.
+    Processes user refund requests by displaying a form for GET requests and
+    handling form submission for POST requests. Creates refund records and
+    sends notifications to administrators.
 
     Args:
         request: HTTP request object containing user data and form submission
 
     Returns:
         HttpResponse: Rendered refund form template for GET requests or
-        redirect to accounting page after successful POST submission
+                     redirect to accounting page after successful POST submission
 
     Raises:
-        PermissionDenied: If user lacks required 'refund' feature access
+        PermissionDenied: If user lacks refund feature access
     """
-    # Check if user has permission to access refund feature
+    # Check user has permission to access refund functionality
     check_assoc_feature(request, "refund")
 
-    # Initialize context with user defaults and accounting settings
+    # Initialize base context with user and association data
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
-    # Verify user membership status for the association
+    # Verify user membership in current association
     get_user_membership(request.user.member, ctx["a_id"])
 
     if request.method == "POST":
-        # Process form submission with member context
+        # Process refund request form submission
         form = RefundRequestForm(request.POST, member=ctx["member"])
 
         if form.is_valid():
-            # Save refund request within atomic transaction
+            # Save refund request with transaction safety
             with transaction.atomic():
                 p = form.save(commit=False)
                 p.member = ctx["member"]
                 p.assoc_id = ctx["a_id"]
                 p.save()
 
-            # Send notification for the new refund request
+            # Send notification to administrators about new refund request
             notify_refund_request(p)
 
-            # Display success message and redirect to accounting
+            # Show success message and redirect to accounting dashboard
             messages.success(
                 request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
             )
             return redirect("accounting")
     else:
-        # Initialize empty form for GET request
+        # Display empty form for GET request
         form = RefundRequestForm(member=ctx["member"])
 
     # Add form to context and render template
@@ -299,27 +302,29 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpResponse:
     """Handle payment redirection for event registration.
 
-    Validates user permissions and registration status, checks fiscal code if required,
-    then redirects to the appropriate payment processing page.
+    Validates user permissions and registration status before redirecting to
+    the appropriate payment processing page. Performs fiscal code validation
+    if the feature is enabled for the association.
 
     Args:
-        request: The HTTP request object containing user session and data.
-        s: Event slug string used to identify the specific event.
-        method: Optional payment method identifier to specify payment type.
+        request: Django HTTP request object containing user session and data
+        s: Event slug string identifier for the specific event
+        method: Optional payment method identifier (e.g., 'paypal', 'stripe')
 
     Returns:
-        HttpResponse: Redirect response to payment page or error page.
+        HttpResponse: Redirect response to payment page or error page
 
     Raises:
-        PermissionDenied: If user lacks payment feature access.
+        PermissionDenied: If user lacks payment feature access
+        Http404: If event or registration not found
     """
     # Check if user has permission to access payment features
     check_assoc_feature(request, "payment")
 
-    # Get event context including run and registration information
+    # Get event context and validate user registration status
     ctx = get_event_run(request, s, signup=True, status=True)
 
-    # Validate that user has a valid registration for this event
+    # Verify user has valid registration for this event
     if not ctx["run"].reg:
         messages.warning(
             request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
@@ -328,9 +333,10 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
     else:
         reg = ctx["run"].reg
 
-    # Check fiscal code validity if the feature is enabled
+    # Validate fiscal code if feature is enabled for this association
     if "fiscal_code_check" in ctx["features"]:
         result = calculate_fiscal_code(ctx["member"])
+        # Redirect to profile if fiscal code has validation errors
         if "error_cf" in result:
             # Redirect to profile page if fiscal code has errors
             messages.warning(
@@ -338,7 +344,7 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
             )
             return redirect("profile")
 
-    # Redirect to payment page with or without specific method
+    # Redirect to payment processing with or without specific method
     if method:
         return redirect("acc_reg", reg_id=reg.id, method=method)
     else:
@@ -901,9 +907,12 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
+    # Check if receipt is required for manual payments
+    require_receipt = get_assoc_config(request.assoc["id"], "payment_require_receipt", False)
+
     # Select appropriate form based on payment type
     if s in {"wire", "paypal_nf"}:
-        form = WireInvoiceSubmitForm(request.POST, request.FILES)
+        form = WireInvoiceSubmitForm(request.POST, request.FILES, require_receipt=require_receipt)
     elif s == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
     else:
@@ -926,7 +935,9 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
     # Update invoice with submitted data atomically
     with transaction.atomic():
         if s in {"wire", "paypal_nf"}:
-            inv.invoice = form.cleaned_data["invoice"]
+            # Only set invoice if one was provided
+            if form.cleaned_data.get("invoice"):
+                inv.invoice = form.cleaned_data["invoice"]
         elif s == "any":
             inv.text = form.cleaned_data["text"]
 
@@ -939,7 +950,7 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
     notify_invoice_check(inv)
 
     # Display success message and redirect to profile check
-    mes = _("Payment received! As soon as it is approved, your accounts will be updated") + "."
+    mes = _("Payment received") + "!" + _("As soon as it is approved, your accounting will be updated") + "."
     return acc_profile_check(request, mes, inv)
 
 

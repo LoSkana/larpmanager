@@ -119,36 +119,38 @@ class AssociationIdentifyMiddleware:
 
         Args:
             request: Django HTTP request object containing user session and path info
-            base_domain: Base domain name used for skin and association lookup
+            base_domain: Base domain name used for skin lookup and routing decisions
 
         Returns:
             HttpResponse for redirects/renders, or None to continue normal processing
 
         Note:
-            Demo users (emails ending with 'demo.it') are automatically logged out
-            when visiting the main page, except for after_login paths.
+            Demo users (ending with 'demo.it') are automatically logged out when
+            visiting the main page, except for post-login flows.
         """
-        # Check if demo user is visiting main page and logout if needed
+        # Check for demo user logout requirement - skip if already in post-login flow
         user = request.user
         if not request.path.startswith("/after_login/"):
+            # Demo users should be logged out when visiting main domain
             if user.is_authenticated and user.email.lower().endswith("demo.it"):
                 logout(request)
                 return redirect(request.path)
 
-        # Try to load association skin for the base domain
+        # Attempt to load association skin for the base domain
         skin = get_cache_skin(base_domain)
         if skin:
+            # Skin found - load the associated organization
             return cls.load_assoc(request, skin)
 
-        # Redirect to canonical larpmanager.com domain if needed
+        # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
-        # Allow admin access without association
+        # Allow admin panel access without association
         if request.path.startswith("/admin"):
             return
 
-        # Render association not found page for all other requests
+        # No valid association found - render error page
         return render(request, "exception/assoc.html", {})
 
     @staticmethod

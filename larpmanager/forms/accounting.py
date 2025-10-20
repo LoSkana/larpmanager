@@ -423,9 +423,37 @@ class InvoiceSubmitForm(forms.Form):
 class WireInvoiceSubmitForm(InvoiceSubmitForm):
     # noinspection PyUnresolvedReferences, PyProtectedMember
     invoice = forms.FileField(
-        validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
+        validators=[
+            FileTypeValidator(
+                allowed_types=[
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/png",
+                    "image/gif",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/webp",
+                    "application/pdf",
+                ]
+            )
+        ],
         label=PaymentInvoice._meta.get_field("invoice").verbose_name,
+        help_text=_("Upload a PDF file or image (JPG, PNG, etc.)"),
     )
+
+    payment_confirmed = forms.BooleanField(
+        required=True,
+        label=_("Payment confirmation"),
+        help_text=_("I confirm that I have made the payment"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        require_receipt = kwargs.pop("require_receipt", True)
+        super().__init__(*args, **kwargs)
+        if not require_receipt:
+            # Remove invoice field completely when receipt not required
+            if "invoice" in self.fields:
+                del self.fields["invoice"]
 
 
 class AnyInvoiceSubmitForm(InvoiceSubmitForm):
@@ -433,6 +461,12 @@ class AnyInvoiceSubmitForm(InvoiceSubmitForm):
         widget=forms.Textarea(attrs={"rows": 5, "cols": 20}),
         label=_("Info"),
         help_text=_("Enter any useful information for the organizers to verify the payment"),
+    )
+
+    payment_confirmed = forms.BooleanField(
+        required=True,
+        label=_("Payment confirmation"),
+        help_text=_("I confirm that I have made the payment"),
     )
 
 
@@ -535,12 +569,12 @@ class ExePaymentSettingsForm(MyForm):
                 data_string = self.mask_string(data_string)
             self.initial[el] = data_string
 
-    def save(self, commit: bool = True) -> Association:
+    def save(self, commit: bool = True) -> PaymentInvoice:
         """Save payment form with details masking and change tracking.
 
-        Saves the payment instance and manages payment details with proper masking
-        and historical change tracking. Updates payment details fields and creates
-        historical records for any changes made.
+        This method saves the payment form instance, processes payment details
+        by masking sensitive information, tracks changes with timestamps,
+        and maintains a history of modifications.
 
         Args:
             commit: Whether to commit changes to database. Defaults to True.
@@ -549,41 +583,43 @@ class ExePaymentSettingsForm(MyForm):
             Payment instance with updated details and change history.
 
         Note:
-            Fields ending with '_descr' or '_fee' are not masked for security.
-            Historical changes are stored with timestamped keys for audit purposes.
+            Changes are tracked by storing old values with timestamped keys.
+            Description and fee fields are not masked for readability.
         """
-        # Save the base form instance
         instance = super().save(commit=commit)
 
         # Get current payment details from the instance
         res = get_payment_details(self.instance)
 
-        # Iterate through payment detail field groups by slug
+        # Iterate through payment detail fields by category
         for _slug, lst in self.get_payment_details_fields().items():
             for el in lst:
                 # Process only fields present in cleaned form data
                 if el in self.cleaned_data:
+                    # Extract input value from cleaned form data
                     input_value = self.cleaned_data[el]
 
-                    # Get original value or empty string if field doesn't exist
+                    # Get original value or default to empty string
                     if el in res:
                         orig_value = res[el]
                     else:
                         orig_value = ""
 
-                    # Apply masking based on field type (skip for description/fee fields)
+                    # Apply masking based on field type
+                    # Description and fee fields remain unmasked for clarity
                     if el.endswith(("_descr", "_fee")):
                         data_string = orig_value
                     else:
                         data_string = self.mask_string(orig_value)
 
-                    # Check if value has changed and update with history tracking
+                    # Track changes only when values actually differ
                     if input_value != data_string:
-                        # Only track changes when at least one value is non-empty
+                        # Ensure we don't track trivial empty-to-empty changes
                         if input_value not in [None, ""] or orig_value not in [None, ""]:
+                            # Update with new value
                             res[el] = input_value
 
-                            # Create timestamped historical record
+                            # Create timestamped backup of old value
                             now = datetime.now()
                             old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
                             res[old_key] = orig_value

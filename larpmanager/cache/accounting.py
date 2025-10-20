@@ -89,42 +89,46 @@ def clear_registration_accounting_cache(run_id):
 def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, dict]:
     """Get the context data needed for accounting calculations.
 
-    This function retrieves features, registration tickets, and builds a cache
-    for token/credit payments associated with a specific run.
+    This function retrieves and organizes data required for accounting operations
+    including event features, registration tickets, and payment cache information.
 
     Args:
-        run: Run instance to get accounting context for
-        member_filter: Optional member ID to filter payments for a specific member
+        run: Run instance representing the event run
+        member_filter (int, optional): Member ID to filter payments for specific member.
+            If None, includes all members. Defaults to None.
 
     Returns:
         tuple: A 3-tuple containing:
             - features (dict): Event features configuration
-            - reg_tickets (dict): Registration tickets indexed by ID
-            - cache_aip (dict): Cached accounting item payments by member
+            - reg_tickets (dict): Registration tickets indexed by ticket ID
+            - cache_aip (dict): Aggregated payment data by member ID
     """
-    # Get event features configuration, ensuring we have a dict
+    # Retrieve event features and ensure it's a dictionary
     features = get_event_features(run.event_id)
     if not isinstance(features, dict):
         features = {}
 
-    # Build dictionary of all registration tickets for this event
-    # Ordered by price descending for consistent processing
+    # Get all registration tickets for this event, ordered by price (highest first)
     reg_tickets = {}
     for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
         reg_tickets[t.id] = t
 
-    # Initialize cache for token/credit payment tracking
+    # Build cache for token/credit payments if feature is enabled
     cache_aip = {}
 
     # Build cache only if token_credit feature is enabled
     if "token_credit" in features:
-        # Query all token/credit payments for this run
+        # Query accounting item payments for this run
         que = AccountingItemPayment.objects.filter(reg__run=run)
+
+        # Apply member filter if specified
         if member_filter:
             que = que.filter(member_id=member_filter)
+
+        # Filter for token and credit payments only
         que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
 
-        # Process each payment and aggregate by member and payment type
+        # Aggregate payment data by member and payment type
         for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
             # Initialize member entry if not exists
             if el[0] not in cache_aip:
