@@ -70,7 +70,6 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.utils import my_uuid
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.common import get_assoc
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,
@@ -499,7 +498,7 @@ def register_info(request, ctx, form, reg, dis):
         else:
             ctx["membership_fee"] = "todo"
 
-        ctx["membership_amount"] = get_assoc(request).get_config("membership_fee")
+        ctx["membership_amount"] = get_assoc_config(request.assoc["id"], "membership_fee", 0)
 
 
 def init_form_submitted(ctx, form, request, reg=None):
