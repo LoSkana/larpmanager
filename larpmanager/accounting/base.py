@@ -32,7 +32,9 @@ from larpmanager.models.utils import get_payment_details_path
 from larpmanager.utils.tasks import notify_admins
 
 
-def is_reg_provisional(instance: Registration, event: Event | None = None, features: dict | None = None) -> bool:
+def is_reg_provisional(
+    instance: Registration, event: Event | None = None, features: dict | None = None, ctx: dict | None = None
+) -> bool:
     """Check if a registration is in provisional status.
 
     A registration is provisional if payment is enabled, has outstanding balance,
@@ -42,6 +44,7 @@ def is_reg_provisional(instance: Registration, event: Event | None = None, featu
         instance: Registration instance to check
         event: Optional event instance, will be retrieved from instance.run.event if None
         features: Optional event features dict, will query if None
+        ctx: Optional dict for common data
 
     Returns:
         bool: True if registration is provisional, False otherwise
@@ -55,7 +58,7 @@ def is_reg_provisional(instance: Registration, event: Event | None = None, featu
         features = get_event_features(event.id)
 
     # Check if provisional payments are disabled for this event
-    if get_event_config(event.id, "payment_no_provisional", False):
+    if get_event_config(event.id, "payment_no_provisional", False, ctx=ctx):
         return False
 
     # Check if payment feature is enabled and registration has outstanding balance

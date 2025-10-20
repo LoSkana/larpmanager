@@ -226,7 +226,7 @@ def registration_status_signed(
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(reg, features=features, event=run.event)
+    provisional = is_reg_provisional(reg, features=features, event=run.event, ctx=ctx)
 
     # Update message for provisional registrations
     if provisional:
