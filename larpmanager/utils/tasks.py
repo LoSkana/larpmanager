@@ -278,11 +278,11 @@ def my_send_simple_mail(
             assoc = Association.objects.get(pk=assoc_id)
 
             # Add association main email to BCC if configured
-            if assoc.get_config("mail_cc", False, ctx=ctx, bypass_cache=True) and assoc.main_mail:
+            if assoc.get_config("mail_cc", False, bypass_cache=True) and assoc.main_mail:
                 bcc.append(assoc.main_mail)
 
             # Apply custom SMTP settings if configured (only if event settings not already applied)
-            email_host_user = assoc.get_config("mail_server_host_user", "", ctx=ctx, bypass_cache=True)
+            email_host_user = assoc.get_config("mail_server_host_user", "", bypass_cache=True)
 
             # Check if association has custom SMTP and event settings aren't active
             if email_host_user:
@@ -292,11 +292,11 @@ def my_send_simple_mail(
 
                     # Create custom SMTP connection for association
                     connection = get_connection(
-                        host=assoc.get_config("mail_server_host", "", ctx=ctx, bypass_cache=True),
-                        port=assoc.get_config("mail_server_port", "", ctx=ctx, bypass_cache=True),
-                        username=assoc.get_config("mail_server_host_user", "", ctx=ctx, bypass_cache=True),
-                        password=assoc.get_config("mail_server_host_password", "", ctx=ctx, bypass_cache=True),
-                        use_tls=assoc.get_config("mail_server_use_tls", False, ctx=ctx, bypass_cache=True),
+                        host=assoc.get_config("mail_server_host", "", bypass_cache=True),
+                        port=assoc.get_config("mail_server_port", "", bypass_cache=True),
+                        username=assoc.get_config("mail_server_host_user", "", bypass_cache=True),
+                        password=assoc.get_config("mail_server_host_password", "", bypass_cache=True),
+                        use_tls=assoc.get_config("mail_server_use_tls", False, bypass_cache=True),
                     )
             # Use standard LarpManager subdomain sender if no custom SMTP configured
             elif not event_settings:
