@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from calmjs.parse.asttypes import Object
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -239,28 +238,43 @@ def get_element_config(element, name: str, def_value, bypass_cache: bool = False
             element.aux_configs = get_configs(element)
 
     # Evaluate and return the configuration value with type conversion
-    return evaluate_config(element, name, def_value)
+    return evaluate_config(element.aux_configs, name, def_value)
 
 
-def get_assoc_config(assoc_id, name, def_value=None, holder=None, bypass_cache=False):
-    if not holder:
-        holder = Object()
+def _get_cached_config(element_id, element_type, name, def_value=None, ctx=None, bypass_cache=False):
+    """Helper function to get cached configuration for any element type."""
+    cache_key = f"{element_type}_configs"
 
-    if not hasattr(holder, "aux_configs"):
+    if ctx is None:
+        ctx = {}
+    if cache_key not in ctx:
+        ctx[cache_key] = {}
+
+    configs = ctx[cache_key].get(element_id, None)
+    if configs is None:
         if bypass_cache:
             # do not trust cache for background processes
-            holder.aux_configs = update_configs(assoc_id, "association")
+            configs = update_configs(element_id, element_type)
         else:
-            holder.aux_configs = get_element_configs(assoc_id, "association")
+            configs = get_element_configs(element_id, element_type)
+        ctx[cache_key][element_id] = configs
 
-    return evaluate_config(holder, name, def_value)
+    return evaluate_config(configs, name, def_value)
 
 
-def evaluate_config(element: object, name: str, def_value: any) -> any:
+def get_assoc_config(assoc_id, name, def_value=None, ctx=None, bypass_cache=False):
+    return _get_cached_config(assoc_id, "association", name, def_value, ctx, bypass_cache)
+
+
+def get_event_config(event_id, name, def_value=None, ctx=None, bypass_cache=False):
+    return _get_cached_config(event_id, "event", name, def_value, ctx, bypass_cache)
+
+
+def evaluate_config(configs: dict, name: str, def_value: any) -> any:
     """Evaluate configuration value from element's aux_configs with type conversion.
 
     Args:
-        element: Object containing aux_configs dictionary attribute
+        configs: Dict with all the configs
         name: Configuration key to lookup in aux_configs
         def_value: Default value to return if key not found or value is empty
 
@@ -268,11 +282,11 @@ def evaluate_config(element: object, name: str, def_value: any) -> any:
         Configuration value with appropriate type conversion, or default value
     """
     # Return default if configuration key doesn't exist
-    if name not in element.aux_configs:
+    if name not in configs:
         return def_value
 
     # Get the raw configuration value
-    value = element.aux_configs[name]
+    value = configs[name]
 
     # Handle boolean type conversion for string "True"/"False"
     if isinstance(def_value, bool):

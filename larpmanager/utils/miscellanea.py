@@ -247,10 +247,10 @@ def check_centauri(request) -> Optional[HttpResponse]:
     # Build template context with association-specific Centauri content
     ctx = {}
     for s in ["centauri_descr", "centauri_content"]:
-        ctx[s] = get_assoc_config(request.assoc["id"], s, None)
+        ctx[s] = get_assoc_config(request.assoc["id"], s, None, ctx)
 
     # Award badge to user if configured for this association
-    badge = get_assoc_config(request.assoc["id"], "centauri_badge", None)
+    badge = get_assoc_config(request.assoc["id"], "centauri_badge", None, ctx)
     if badge:
         bdg = Badge.objects.get(cod=badge)
         bdg.members.add(request.user.member)
@@ -301,7 +301,7 @@ def get_warehouse_optionals(ctx, def_cols):
     optionals = {}
     active = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_assoc_config(ctx["a_id"], f"warehouse_{field}", False)
+        optionals[field] = get_assoc_config(ctx["a_id"], f"warehouse_{field}", False, ctx)
         if optionals[field]:
             active = 1
     ctx["optionals"] = optionals

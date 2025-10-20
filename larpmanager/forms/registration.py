@@ -1178,7 +1178,9 @@ class PreRegistrationForm(forms.Form):
         cho_pref = [(r, r) for r in prefs]
 
         # Check if preference editing is disabled via config
-        if self.ctx.get("event") and get_assoc_config(self.ctx["event"].assoc_id, "pre_reg_preferences", False):
+        if self.ctx.get("event") and get_assoc_config(
+            self.ctx["event"].assoc_id, "pre_reg_preferences", False, self.ctx
+        ):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,
                 choices=cho_pref,

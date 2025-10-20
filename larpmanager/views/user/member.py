@@ -24,7 +24,6 @@ import random
 from datetime import date, datetime
 from uuid import uuid4
 
-from calmjs.parse.asttypes import Object
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login, user_logged_in
@@ -205,7 +204,7 @@ def profile(request):
 
     # Add vote configuration only if voting is enabled
     if "vote" in assoc_features:
-        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False)
+        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False, ctx)
 
     return render(request, "larpmanager/member/profile.html", ctx)
 
@@ -753,12 +752,11 @@ def vote(request: HttpRequest) -> HttpResponse:
 
     # Retrieve voting configuration from association settings
     assoc_id = ctx["a_id"]
-    config_holder = Object()
 
-    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, config_holder)
-    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", config_holder).split(",")
-    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", config_holder)
-    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", config_holder)
+    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, ctx)
+    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", ctx).split(",")
+    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", ctx)
+    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", ctx)
 
     # Process vote submission if POST request
     if request.method == "POST":

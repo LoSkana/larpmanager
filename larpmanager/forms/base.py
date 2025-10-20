@@ -1190,4 +1190,4 @@ class BaseAccForm(forms.Form):
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
-        self.ctx["user_fees"] = get_assoc_config(self.ctx["a_id"], "payment_fees_user", False)
+        self.ctx["user_fees"] = get_assoc_config(self.ctx["a_id"], "payment_fees_user", False, self.ctx)

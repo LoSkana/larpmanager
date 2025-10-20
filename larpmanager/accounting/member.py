@@ -21,7 +21,6 @@
 from datetime import datetime
 from typing import Any
 
-from calmjs.parse.asttypes import Object
 from dateutil.relativedelta import relativedelta
 from django.http import HttpRequest
 
@@ -299,14 +298,11 @@ def _info_membership(ctx: dict, member, request) -> None:
     # Store current year in context
     ctx["year"] = year
 
-    # Initialize config holder for association settings
-    config_holder = Object()
-
     # Get membership day configuration (default: January 1st)
-    m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01", config_holder)
+    m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01", ctx)
     if m_day:
         # Get grace period in months (default: 0 months)
-        m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0", config_holder))
+        m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0", ctx))
 
         # Build full date string with current year
         m_day += f"-{year}"

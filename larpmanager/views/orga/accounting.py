@@ -494,7 +494,7 @@ def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
     ctx = check_event_permission(request, s, "orga_expenses")
 
     # Determine if approval functionality should be disabled for this organization
-    ctx["disable_approval"] = get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False)
+    ctx["disable_approval"] = get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False, ctx)
 
     # Cache the translated approval text for callback usage
     approve = _("Approve")

@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from calmjs.parse.asttypes import Object
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -198,7 +197,7 @@ def get_token_credit_name(assoc_id: int) -> tuple[str, str]:
         default translated values if custom names are not configured.
     """
     # Create configuration holder for caching retrieved values
-    config_holder = Object()
+    config_holder = {}
 
     # Retrieve custom token and credit names from association config
     token_name = get_assoc_config(assoc_id, "token_credit_token_name", None, config_holder)
