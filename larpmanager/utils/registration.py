@@ -532,7 +532,7 @@ def registration_find(run: Run, user: User, ctx: dict | None = None):
     # Use pre-fetched registrations if provided
     my_regs = ctx.get("my_regs")
     if my_regs is not None:
-        run.reg = get_match_reg(run, my_regs)
+        run.reg = my_regs.get(run.id)
         return
 
     # Query database for active registration (non-cancelled, non-redeemed)

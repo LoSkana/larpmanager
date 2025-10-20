@@ -137,7 +137,6 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
-        my_regs = None
 
     # Initialize context with default user context and empty collections
     ctx = def_user_ctx(request)
@@ -148,7 +147,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         ctx["lang"] = lang
 
     ctx_reg = {
-        "my_regs": my_regs,
+        "my_regs": my_regs_dict,
         "character_rels_dict": character_rels_dict,
         "payment_invoices_dict": payment_invoices_dict,
         "pre_registrations_dict": pre_registrations_dict,
@@ -156,10 +155,6 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
 
     # Process each run to determine registration status and categorize
     for run in runs:
-        # Get user's registration for this run if it exists
-        user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
-        ctx["my_regs"] = [user_reg] if user_reg else []
-
         # Calculate registration status (open, closed, full, etc.)
         registration_status(run, request.user, ctx_reg)
 
@@ -454,10 +449,6 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
 
     # Process each run to add registration status information
     for run in runs_list:
-        # Get user's registration for this run if it exists
-        user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
-        ctx["my_regs"] = [user_reg] if user_reg else []
-
         # Update run object with registration status data
         registration_status(run, request.user, ctx_reg)
 
@@ -607,7 +598,7 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
 
     # Prepare features mapping for registration status checking
     features_map = {ctx["event"].id: ctx["features"]}
-    ctx_reg = {"my_regs": my_regs, "features_map": features_map}
+    ctx_reg = {"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map}
 
     # Process each run to determine registration status and categorize by timing
     for r in runs:
