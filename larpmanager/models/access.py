@@ -57,6 +57,11 @@ class AssocPermission(BaseModel):
     def __str__(self):
         return self.name
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["slug"], condition=Q(deleted__isnull=True), name="aperm_slug_act"),
+        ]
+
 
 class AssocRole(BaseModel):
     name = models.CharField(max_length=100)
@@ -138,6 +143,11 @@ class EventPermission(BaseModel):
 
     def get_display_name(self):
         return self.name
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["slug"], condition=Q(deleted__isnull=True), name="eperm_slug_act"),
+        ]
 
 
 class EventRole(BaseConceptModel):

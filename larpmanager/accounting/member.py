@@ -174,7 +174,7 @@ def _init_choices(member):
     """
     choices = {}
     choice_que = RegistrationChoice.objects.filter(reg__member_id=member.id)
-    choice_que = choice_que.select_related("option", "question")
+    choice_que = choice_que.select_related("option", "question").order_by("question__order")
     for el in choice_que:
         if el.reg_id not in choices:
             choices[el.reg_id] = {}

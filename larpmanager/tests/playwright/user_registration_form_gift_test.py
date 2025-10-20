@@ -215,7 +215,7 @@ def gift(page, live_server):
     page.get_by_role("textbox", name="when").fill("fffdsfs")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("( Standard ) choice - prima (10.00€) , wow - one")
+    expect(page.locator("#one")).to_contain_text("( Standard ) wow - one , choice - prima (10.00€)")
     expect(page.locator("#one")).to_contain_text("10€ within 8 days")
 
     # pay
