@@ -22,13 +22,13 @@ from typing import Any
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
@@ -37,7 +37,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
-from larpmanager.models.writing import CharacterStatus, Faction
+from larpmanager.models.writing import Character, CharacterStatus, Faction
 
 
 class BaseQuestionType(models.TextChoices):
@@ -306,7 +306,23 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event, features):
+    def get_instance_questions(event: Event, features: QuerySet) -> QuerySet:
+        """Get all writing questions for a specific event ordered by their sequence.
+
+        Parameters
+        ----------
+        event : Event
+            The event instance to retrieve questions for
+        features : QuerySet
+            Feature queryset (currently unused but kept for compatibility)
+
+        Returns
+        -------
+        QuerySet
+            Ordered queryset of writing questions for the event
+        """
+        # Retrieve all WritingQuestion elements associated with the event
+        # and order them by their defined sequence
         return event.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
@@ -393,8 +409,20 @@ class WritingOption(BaseModel):
     def __str__(self):
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run=None, cs=None):
+    def get_form_text(self, run: Run | None = None, cs: Character | None = None) -> str:
+        """Get the display name for this form element.
+
+        Args:
+            run: Optional Run instance to provide context for form display
+            cs: Optional Character instance for character-specific context
+
+        Returns:
+            The name of the form element as it should be displayed
+        """
+        # Get the form display data for the current context
         s = self.show(run)
+
+        # Extract and return the display name
         return s["name"]
 
     def show(self, run=None):
@@ -725,25 +753,48 @@ def get_ordered_registration_questions(ctx):
     return que.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
-def _get_writing_elements():
+def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
+    """Get a list of writing elements for form display.
+
+    Returns a list of tuples containing element information for UI rendering.
+    Each tuple contains the element key, display name, and applicable type.
+
+    Returns
+    -------
+    list[tuple[str, str, QuestionApplicable]]
+        List of writing element tuples with (key, display_name, applicable_type)
+    """
+    # Core story elements - characters and organizational structures
     shows = [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
+        # Narrative content - plots and quests for story progression
         ("plot", _("Plots"), QuestionApplicable.PLOT),
         ("quest", _("Quests"), QuestionApplicable.QUEST),
+        # Character development - traits and background elements
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
         ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
     return shows
 
 
-def _get_writing_mapping():
+def _get_writing_mapping() -> dict[str, str]:
+    """Get mapping of writing types to their corresponding modules.
+
+    Returns:
+        dict[str, str]: Dictionary mapping writing type names to module names.
+            Keys are writing type identifiers, values are module names used
+            for routing and organization.
+    """
+    # Core character and faction mappings
     mapping = {
         "character": "character",
         "faction": "faction",
         "plot": "plot",
+        # Quest-related writings use questbuilder module
         "quest": "questbuilder",
         "trait": "questbuilder",
+        # Prologue has dedicated module
         "prologue": "prologue",
     }
     return mapping

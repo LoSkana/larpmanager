@@ -709,14 +709,30 @@ def pre_save_faction(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=Faction)
-def post_save_faction_reset_rels(sender, instance, **kwargs):
-    # Update faction cache
+def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs) -> None:
+    """Handle post-save signal for Faction model to update related caches and files.
+
+    This signal handler is triggered after a Faction instance is saved and performs
+    three main operations: refreshes faction relationship cache, updates character
+    caches for all faction members, and cleans up associated PDF files.
+
+    Args:
+        sender: The model class that sent the signal (typically Faction)
+        instance: The Faction instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+
+    Returns:
+        None
+    """
+    # Update faction relationship cache to reflect any changes
     refresh_event_faction_relationships(instance)
 
-    # Update cache for all characters in this faction
+    # Update cache for all characters belonging to this faction
+    # This ensures character data stays consistent with faction changes
     for char in instance.characters.all():
         refresh_character_relationships(char)
 
+    # Clean up any outdated PDF files associated with this faction
     cleanup_faction_pdfs_on_save(instance)
 
 
@@ -1132,15 +1148,36 @@ def pre_save_run(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Run)
-def post_save_run_links(sender, instance, **kwargs):
+def post_save_run_links(sender: type, instance: Run, **kwargs) -> None:
+    """
+    Signal handler for post-save events on Run model instances.
+
+    Clears various caches and updates run plans when a Run instance is saved.
+    This ensures data consistency across the application by invalidating
+    cached data that depends on the run configuration.
+
+    Parameters
+    ----------
+    sender : type
+        The model class that sent the signal
+    instance : Run
+        The Run instance that was saved
+    **kwargs
+        Additional keyword arguments from the signal
+    """
+    # Clear registration-related caches for this specific run
     clear_registration_counts_cache(instance.id)
 
+    # Reset configuration cache to reflect any config changes
     on_run_post_save_reset_config_cache(instance)
 
+    # Update run planning data based on event modifications
     update_run_plan_on_event_change(instance)
 
+    # Clear run-specific cache and associated media files
     clear_run_cache_and_media(instance)
 
+    # Clear event-level cache for run links to maintain consistency
     clear_run_event_links_cache(instance.event)
 
 

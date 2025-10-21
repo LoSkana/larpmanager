@@ -101,19 +101,25 @@ class CharacterForm(WritingForm, BaseWritingForm):
         dynamic custom fields based on event configuration, and optional
         character completion workflow for approval processes.
 
-        Args:
-            *args: Positional arguments passed to parent form class.
-            **kwargs: Keyword arguments passed to parent form class. Must include
-                     'params' dict with event, run, and features configuration.
+        Parameters
+        ----------
+        *args : Any
+            Positional arguments passed to parent form class.
+        **kwargs : dict[str, Any]
+            Keyword arguments passed to parent form class. Must include
+            'params' dict with event, run, and features configuration.
 
-        Raises:
-            KeyError: If required 'params' key is missing from kwargs.
+        Raises
+        ------
+        KeyError
+            If required 'params' key is missing from kwargs.
 
-        Note:
-            The 'params' dict should contain:
-            - event: Event instance for context
-            - run: Run instance for current event run
-            - features: Available features configuration
+        Notes
+        -----
+        The 'params' dict should contain:
+        - event: Event instance for context
+        - run: Run instance for current event run
+        - features: Available features configuration
         """
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -126,15 +132,27 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # This method handles dynamic field creation based on event configuration
         self._init_character()
 
-    def check_editable(self, question):
+    def check_editable(self, question: Any) -> bool:
+        """Check if a question is editable based on event configuration and character status.
+
+        Args:
+            question: The question to check for editability
+
+        Returns:
+            True if the question is editable, False otherwise
+        """
+        # Check if user character approval is disabled - if so, always allow editing
         if not get_event_config(self.params["event"].id, "user_character_approval", False):
             return True
 
+        # Get the list of statuses where this question can be edited
         statuses = question.get_editable()
 
+        # If no specific statuses are defined, allow editing by default
         if not statuses:
             return True
 
+        # Check if current character status allows editing this question
         return self.instance.status in question.get_editable()
 
     def _init_custom_fields(self) -> None:
@@ -579,12 +597,28 @@ class OrgaCharacterForm(CharacterForm):
             (rel, cr) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=ch_id)
         return rel
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance and related data.
+
+        Args:
+            commit: Whether to save the instance to the database.
+                   Defaults to True.
+
+        Returns:
+            The saved model instance.
+        """
+        # Save the main form instance
         instance = super().save()
 
+        # Only process related data if instance has been saved to database
         if instance.pk:
+            # Save plot-related data
             self._save_plot(instance)
+
+            # Save experience points data
             self._save_px(instance)
+
+            # Save relationship data
             self._save_relationships(instance)
 
         return instance

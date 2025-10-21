@@ -84,9 +84,6 @@ class SendMailForm(forms.Form):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None: This method doesn't return a value.
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)

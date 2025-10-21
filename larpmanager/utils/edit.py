@@ -150,12 +150,22 @@ def _get_field_value(el, que) -> str | None:
     return None
 
 
-def _get_values_mapping(el):
+def _get_values_mapping(el) -> dict[str, callable]:
+    """Get mapping of field names to their value extraction functions.
+
+    Args:
+        el: Object containing various attributes like text, teaser, name, etc.
+
+    Returns:
+        Dictionary mapping field names to lambda functions that extract values.
+    """
+    # Basic text fields mapping
     mapping = {
         "text": lambda: el.text,
         "teaser": lambda: el.teaser,
         "name": lambda: el.name,
         "title": lambda: el.title,
+        # Faction field requires joining multiple faction names
         "faction": lambda: ", ".join([fac.name for fac in el.factions_list.all()]),
     }
     return mapping
@@ -190,13 +200,26 @@ def check_run(el, ctx, afield=None):
             raise Http404("not your event")
 
 
-def check_assoc(el, ctx, afield=None):
+def check_assoc(el: object, ctx: dict, afield: str = None) -> None:
+    """Check if an object belongs to the current association context.
+
+    Args:
+        el: The object to check for association membership
+        ctx: Context dictionary containing association ID ('a_id' key)
+        afield: Optional field name to access on el before checking association
+
+    Raises:
+        Http404: If the object doesn't belong to the current association
+    """
+    # If afield is provided, get the specified attribute from el
     if afield:
         el = getattr(el, afield)
 
+    # Skip check if object doesn't have an assoc attribute
     if not hasattr(el, "assoc"):
         return
 
+    # Verify the object belongs to the current association
     if el.assoc_id != ctx["a_id"]:
         raise Http404("not your association")
 
@@ -263,14 +286,36 @@ def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: in
     return False
 
 
-def backend_get(ctx, typ, eid, afield=None):
+def backend_get(ctx: dict, typ: type, eid: int, afield: str | None = None) -> None:
+    """
+    Retrieve a model instance and populate context with validation.
+
+    Args:
+        ctx: Context dictionary to populate with retrieved data
+        typ: Model class to query
+        eid: Primary key of the instance to retrieve
+        afield: Optional field name for additional validation
+
+    Raises:
+        NotFoundError: When the instance with given ID doesn't exist
+    """
     try:
+        # Retrieve the model instance by primary key
         el = typ.objects.get(pk=eid)
     except Exception as err:
+        # Convert any database exception to NotFoundError
         raise NotFoundError() from err
+
+    # Store the retrieved element in context
     ctx["el"] = el
+
+    # Perform run-level permission checks
     check_run(el, ctx, afield)
+
+    # Perform association-level permission checks
     check_assoc(el, ctx, afield)
+
+    # Store string representation for display purposes
     ctx["name"] = str(el)
 
 

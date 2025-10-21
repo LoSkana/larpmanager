@@ -464,16 +464,34 @@ def _process_payment(invoice):
             process_payment(invoice.id)
 
 
-def _process_fee(features, fee, invoice):
+def _process_fee(features, fee: float, invoice) -> None:
+    """Process payment processing fees for an invoice.
+
+    Creates an accounting transaction to track payment processing fees,
+    which can be either absorbed by the organization or passed to the user
+    based on configuration settings.
+
+    Args:
+        features: Feature configuration object
+        fee: Fee percentage to apply to the gross amount
+        invoice: Invoice object containing payment details
+    """
+    # Create new accounting transaction for the fee
     trans = AccountingItemTransaction()
     trans.member_id = invoice.member_id
     trans.inv = invoice
+
+    # Calculate fee amount based on gross payment and fee percentage
     # trans.value = invoice.mc_fee
     trans.value = (float(invoice.mc_gross) * fee) / 100
     trans.assoc_id = invoice.assoc_id
+
+    # Check if fees should be charged to user or absorbed by organization
     if get_assoc_config(invoice.assoc_id, "payment_fees_user", False):
         trans.user_burden = True
     trans.save()
+
+    # For registration payments, link transaction to the registration record
     if invoice.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(pk=invoice.idx)
         trans.reg = reg

@@ -62,7 +62,7 @@ from larpmanager.models.event import (
     PreRegistration,
     Run,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -719,14 +719,33 @@ def register_reduced(request, s):
 
 
 @login_required
-def register_conditions(request, s=None):
+def register_conditions(request: HttpRequest, s: str | None = None) -> HttpResponse:
+    """
+    Render the registration terms and conditions page for an association or event.
+
+    This view displays the terms of service and conditions that users must accept
+    before registering for events or joining an association.
+
+    Args:
+        request: The HTTP request object containing user and association data
+        s: Optional event slug to display event-specific conditions
+
+    Returns:
+        HttpResponse: Rendered template with terms and conditions content
+    """
+    # Initialize base context with user and association data
     ctx = def_user_ctx(request)
+
+    # Add event-specific context if event slug is provided
     if s:
         ctx["event"] = get_event(request, s)["event"]
+        # Retrieve terms of conditions text for the specific event
         ctx["event_text"] = get_event_text(ctx["event"].id, EventTextType.TOC)
 
+    # Add association-level terms and conditions
     ctx["assoc_text"] = get_assoc_text(request.assoc["id"], AssocTextType.TOC)
 
+    # Render the conditions template with all gathered context
     return render(request, "larpmanager/event/register_conditions.html", ctx)
 
 
@@ -895,16 +914,38 @@ def _is_discount_maxed(disc, run):
     return count > disc.max_redeem
 
 
-def _validate_exclusive_logic(disc, member, run, event):
+def _validate_exclusive_logic(disc: Discount, member: Member, run: Run, event: Event) -> bool:
+    """
+    Validate exclusive discount logic to prevent incompatible discount combinations.
+
+    Args:
+        disc: The discount being validated
+        member: The member applying for the discount
+        run: The specific run for the registration
+        event: The event containing the run
+
+    Returns:
+        True if the discount can be applied, False if it conflicts with existing discounts
+
+    Notes:
+        - PLAYAGAIN discounts cannot be combined with other discounts
+        - PLAYAGAIN discounts require another registration in the same event
+        - If a PLAYAGAIN discount exists, no other discounts are allowed
+    """
     # For PLAYAGAIN discount: no other discounts and has another registration
     if disc.typ == Discount.PLAYAGAIN:
+        # Check if member already has any discount for this run
         if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
             return False
+
+        # Verify member has another registration in the same event (different run)
         if not Registration.objects.filter(member=member, run__event=event).exclude(run=run).exists():
             return False
-    # If PLAYAGAIN discount was already applied, no other allowed
+
+    # If PLAYAGAIN discount was already applied, no other discounts allowed
     elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=Discount.PLAYAGAIN).exists():
         return False
+
     return True
 
 

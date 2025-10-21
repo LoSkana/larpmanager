@@ -2,6 +2,7 @@ import csv
 import os
 import re
 import unicodedata
+from datetime import datetime
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -52,23 +53,71 @@ def _extract_last_name(last_name):
     return (consonants + vowels + "XXX")[:3]
 
 
-def _extract_first_name(first_name):
+def _extract_first_name(first_name: str) -> str:
+    """Extract a 3-character code from a first name using consonants and vowels.
+
+    Args:
+        first_name: The first name to process.
+
+    Returns:
+        A 3-character string code derived from the name's consonants and vowels,
+        padded with 'X' if necessary.
+    """
+    # Convert to uppercase for consistent processing
     first_name = first_name.upper()
+
+    # Extract consonants from the name
     consonants = _calculate_consonants(first_name)
     max_consonants = 4
+
+    # Use specific consonant positions if we have enough
     if len(consonants) >= max_consonants:
         consonants = consonants[0] + consonants[2] + consonants[3]
+
+    # Extract vowels to fill remaining positions
     vowels = _calculate_vowels(first_name)
+
+    # Combine consonants and vowels, pad with X, return first 3 chars
     return (consonants + vowels + "XXX")[:3]
 
 
-def _extract_birth_date(birth_date, male):
+def _extract_birth_date(birth_date: datetime.date | None, male: bool) -> str:
+    """Extract birth date components for Italian fiscal code generation.
+
+    Converts a birth date into the specific format required for Italian fiscal codes,
+    including gender-specific day adjustments.
+
+    Args:
+        birth_date: The birth date to convert. Can be None.
+        male: True if the person is male, False if female.
+
+    Returns:
+        Formatted birth date string (YYMDD format) or empty string if birth_date is None.
+        For females, day is incremented by 40.
+
+    Examples:
+        >>> _extract_birth_date(datetime.date(1990, 3, 15), True)
+        '90C15'
+        >>> _extract_birth_date(datetime.date(1990, 3, 15), False)
+        '90C55'
+    """
+    # Month codes used in Italian fiscal code system
     month_codes = "ABCDEHLMPRST"
+
+    # Return empty string if no birth date provided
     if not birth_date:
         return ""
+
+    # Extract last two digits of year
     year = str(birth_date.year)[-2:]
+
+    # Map month number to corresponding letter code
     month = month_codes[birth_date.month - 1]
+
+    # Add 40 to day for females, keep original for males
     day = birth_date.day + (40 if not male else 0)
+
+    # Combine year, month code, and zero-padded day
     return f"{year}{month}{str(day).zfill(2)}"
 
 

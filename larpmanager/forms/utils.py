@@ -109,15 +109,24 @@ class SlugInput(forms.TextInput):
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
     """Custom checkbox widget for role permission selection with help text."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize widget with feature help text and mapping.
 
         Args:
-            *args: Variable positional arguments
-            **kwargs: Arbitrary keyword arguments including help_text and feature_map
+            *args: Variable positional arguments passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments. Special keys include:
+                - help_text: Dictionary mapping feature names to help text
+                - feature_map: Dictionary mapping features to their configurations
+                Other kwargs are passed to parent constructor.
+
+        Returns:
+            None
         """
+        # Extract feature-specific configuration from kwargs
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
+
+        # Initialize parent class with remaining arguments
         super().__init__(*args, **kwargs)
 
     def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:

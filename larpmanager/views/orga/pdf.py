@@ -87,13 +87,38 @@ def orga_characters_pdf(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_pdf_regenerate(request, s):
+def orga_pdf_regenerate(request: HttpRequest, s: str) -> HttpResponse:
+    """Regenerate PDF files for all characters in future runs of an event.
+
+    This function triggers the regeneration of character background PDFs for all
+    characters associated with an event, but only for runs that haven't ended yet.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The slug identifier for the event run
+
+    Returns:
+        HttpResponse: Redirect response to the characters PDF page
+
+    Raises:
+        PermissionDenied: If user lacks "orga_characters_pdf" permission
+    """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Get all characters associated with this event
     chs = ctx["event"].get_elements(Character)
+
+    # Process each future run (runs that haven't ended yet)
     for run in Run.objects.filter(event=ctx["event"], end__gte=datetime.now()):
+        # Generate PDF for each character in the current run
         for ch in chs:
             print_character_bkg(ctx["event"].assoc.slug, run.get_slug(), ch.number)
+
+    # Show success message to user
     messages.success(request, _("Regeneration pdf started") + "!")
+
+    # Redirect back to the characters PDF management page
     return redirect("orga_characters_pdf", s=ctx["run"].get_slug())
 
 

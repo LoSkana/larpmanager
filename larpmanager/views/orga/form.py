@@ -224,17 +224,35 @@ def orga_registration_form_order(request, s, num, order):
 
 
 @login_required
-def orga_registration_options_edit(request, s, num):
+def orga_registration_options_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """
+    Edit registration options for an event after validating prerequisites.
+
+    This view handles the editing of registration options, ensuring that at least
+    one registration question exists before allowing option creation/editing.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for URL routing
+        num: The registration option number/ID to edit
+
+    Returns:
+        HttpResponse: Either a redirect to registration questions page or
+                     the registration option edit form
+    """
+    # Check user permissions for registration form management
     ctx = check_event_permission(request, s, "orga_registration_form")
 
-    # Check if registration questions exist
+    # Validate that registration questions exist as prerequisite
+    # Registration options depend on having at least one question defined
     if not ctx["event"].get_elements(RegistrationQuestion).exists():
-        # Add warning message and redirect to registration questions adding page
+        # Inform user about missing prerequisite and redirect to question creation
         messages.warning(
             request, _("You must create at least one registration question before you can create registration options")
         )
         return redirect("orga_registration_form_edit", s=s, num=0)
 
+    # Proceed with registration option editing workflow
     return registration_option_edit(ctx, num, request)
 
 

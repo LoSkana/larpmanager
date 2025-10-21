@@ -25,7 +25,7 @@ from django.http import HttpRequest
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_assoc_permission_feature, get_event_permission_feature
-from larpmanager.models.access import AssocRole, EventRole
+from larpmanager.models.access import AssocRole, EventPermission, EventRole
 from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import PermissionError
 
@@ -34,13 +34,31 @@ def cache_assoc_role_key(ar_id):
     return f"assoc_role_{ar_id}"
 
 
-def get_assoc_role(ar):
+def get_assoc_role(ar: AssocRole) -> tuple[str, list[str]]:
+    """Get association role name and associated permission slugs.
+
+    Filters permissions based on feature availability and placeholder status,
+    returning only permissions for enabled features or placeholder permissions.
+
+    Args:
+        ar: The AssocRole instance to extract permissions from.
+
+    Returns:
+        A tuple containing the role name and list of permission slugs.
+    """
     ls = []
+
+    # Get available features for the association
     features = get_assoc_features(ar.assoc_id)
+
+    # Iterate through role permissions to build filtered list
     for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
+        # Skip permissions for disabled features unless they are placeholders
         if not el[2] and el[1] not in features:
             continue
+        # Add permission slug to results
         ls.append(el[0])
+
     return ar.name, ls
 
 
@@ -169,13 +187,30 @@ def cache_event_role_key(ar_id):
     return f"event_role_{ar_id}"
 
 
-def get_event_role(ar):
+def get_event_role(ar: EventPermission) -> tuple[str, list[str]]:
+    """Get event role name and associated permission slugs.
+
+    Args:
+        ar: EventPermission instance containing role information and permissions
+
+    Returns:
+        Tuple containing the role name and list of permission slugs that are
+        either placeholders or have features enabled for the event
+    """
     ls = []
+
+    # Get the list of enabled features for this event
     features = get_event_features(ar.event_id)
+
+    # Iterate through permissions to filter based on feature availability
     for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
+        # Skip permissions that are not placeholders and have disabled features
         if not el[2] and el[1] not in features:
             continue
+
+        # Add valid permission slug to the result list
         ls.append(el[0])
+
     return ar.name, ls
 
 

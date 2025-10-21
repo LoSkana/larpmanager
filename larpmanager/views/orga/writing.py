@@ -17,13 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Union
 
 import inflection
 from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -108,16 +109,45 @@ def orga_plots_order(request, s, num, order):
 
 
 @login_required
-def orga_plots_rels_order(request, s, num, order):
+def orga_plots_rels_order(request: HttpRequest, s: str, num: int, order: str) -> HttpResponseRedirect:
+    """
+    Reorder plot-character relationships for a specific character.
+
+    Updates the order of plot relationships associated with a character
+    and redirects to the character edit page.
+
+    Args:
+        request: The HTTP request object
+        s: The event/run slug identifier
+        num: The primary key of the plot-character relationship
+        order: The ordering direction ('up' or 'down')
+
+    Returns:
+        HttpResponseRedirect: Redirect to character edit page
+
+    Raises:
+        Http404: If plot relationship not found or belongs to wrong event
+    """
+    # Check user permissions for plot management
     ctx = check_event_permission(request, s, "orga_plots")
+
+    # Retrieve the plot-character relationship by primary key
     try:
         rel = PlotCharacterRel.objects.get(pk=num)
     except ObjectDoesNotExist as err:
         raise Http404("plot rel not found") from err
+
+    # Verify the relationship belongs to the current event
     if rel.character.event != ctx["event"]:
         raise Http404("plot rel wrong event")
+
+    # Get all plot relationships for this character to reorder
     elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
+
+    # Execute the ordering operation
     exchange_order(ctx, PlotCharacterRel, num, order, elements)
+
+    # Redirect back to character edit page
     return redirect("orga_characters_edit", s=ctx["run"].get_slug(), num=rel.character_id)
 
 
@@ -205,17 +235,40 @@ def orga_quests_view(request, s, num):
 
 
 @login_required
-def orga_quests_edit(request, s, num):
+def orga_quests_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """
+    Handle quest editing for organization administrators.
+
+    Allows creating new quests or editing existing ones. Ensures quest types
+    exist before allowing quest creation, redirecting to quest type creation
+    if none are found.
+
+    Args:
+        request: The HTTP request object containing user and form data
+        s: The organization/event slug identifier
+        num: Quest ID for editing (0 for new quest creation)
+
+    Returns:
+        HttpResponse: Rendered quest edit form or redirect response
+
+    Raises:
+        PermissionDenied: If user lacks quest management permissions
+        Http404: If specified quest ID doesn't exist
+    """
+    # Verify user has quest management permissions for this event
     ctx = check_event_permission(request, s, "orga_quests")
 
-    # Check if quest types exist
+    # Check if quest types exist before allowing quest creation
     if not ctx["event"].get_elements(QuestType).exists():
-        # Add warning message and redirect to quest types adding page
+        # Notify user and redirect to quest type creation page
         messages.warning(request, _("You must create at least one quest type before you can create quests"))
         return redirect("orga_quest_types_edit", s=s, num=0)
 
+    # Load existing quest if editing (num != 0), otherwise prepare for new quest
     if num != 0:
         get_element(ctx, num, "quest", Quest)
+
+    # Delegate to generic writing edit handler with quest-specific parameters
     return writing_edit(request, ctx, QuestForm, "quest", TextVersionChoices.QUEST)
 
 
@@ -240,17 +293,36 @@ def orga_traits_view(request, s, num):
 
 
 @login_required
-def orga_traits_edit(request, s, num):
+def orga_traits_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit or create traits for an organization's event.
+
+    This view handles the creation and editing of traits associated with quests.
+    It ensures that at least one quest exists before allowing trait creation.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The organization/event slug identifier
+        num: The trait ID (0 for new trait creation, >0 for editing existing)
+
+    Returns:
+        HttpResponse: Redirect to quest creation if no quests exist,
+                     otherwise returns the trait editing form
+    """
+    # Check user permissions for trait management
     ctx = check_event_permission(request, s, "orga_traits")
 
-    # Check if quests exist
+    # Verify that quests exist before allowing trait creation
+    # Traits must be associated with quests in the system
     if not ctx["event"].get_elements(Quest).exists():
-        # Add warning message and redirect to quests adding page
+        # Notify user about missing prerequisite and redirect
         messages.warning(request, _("You must create at least one quest before you can create traits"))
         return redirect("orga_quests_edit", s=s, num=0)
 
+    # Load existing trait data if editing (num > 0)
     if num != 0:
         get_trait(ctx, num)
+
+    # Delegate to the generic writing edit handler
     return writing_edit(request, ctx, TraitForm, "trait", TextVersionChoices.TRAIT)
 
 
@@ -290,17 +362,45 @@ def orga_handouts_view(request, s, num):
 
 
 @login_required
-def orga_handouts_edit(request, s, num):
+def orga_handouts_edit(request: HttpRequest, s: str, num: int) -> Union[HttpResponse, HttpResponseRedirect]:
+    """
+    Handle editing of handouts for an organization event.
+
+    This view manages the creation and editing of handouts, ensuring that
+    handout templates exist before allowing handout creation. If no templates
+    exist, redirects to the template creation page.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The HTTP request object containing user and session data
+    s : str
+        The event slug identifier
+    num : int
+        The handout number/ID (0 for new handout creation)
+
+    Returns
+    -------
+    Union[HttpResponse, HttpResponseRedirect]
+        Either the handout edit form or redirect to template creation
+    """
+    # Check user permissions for handout management
     ctx = check_event_permission(request, s, "orga_handouts")
 
-    # Check if handout templates exist
+    # Verify that handout templates exist before proceeding
+    # This ensures users have the necessary templates to create handouts
     if not ctx["event"].get_elements(HandoutTemplate).exists():
-        # Add warning message and redirect to handout templates adding page
+        # Display warning and redirect to template creation
         messages.warning(request, _("You must create at least one handout template before you can create handouts"))
         return redirect("orga_handout_templates_edit", s=s, num=0)
 
+    # Load existing handout data if editing (num != 0)
+    # For new handouts (num == 0), skip this step
     if num != 0:
         get_handout(ctx, num)
+
+    # Delegate to the generic writing edit function
+    # Uses HandoutForm and HANDOUT text version type
     return writing_edit(request, ctx, HandoutForm, "handout", TextVersionChoices.HANDOUT)
 
 
@@ -353,7 +453,21 @@ def orga_prologues_view(request, s, num):
 
 
 @login_required
-def orga_prologues_edit(request, s, num):
+def orga_prologues_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit or create event prologues with validation for prologue types.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for URL routing
+        num: The prologue ID (0 for new prologue creation)
+
+    Returns:
+        HttpResponse: Rendered prologue edit form or redirect response
+
+    Raises:
+        Http404: If the requested prologue or event is not found
+    """
+    # Validate user permissions and get event context
     ctx = check_event_permission(request, s, "orga_prologues")
 
     # Check if prologue types exist
@@ -362,8 +476,11 @@ def orga_prologues_edit(request, s, num):
         messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
         return redirect("orga_prologue_types_edit", s=s, num=0)
 
+    # Load existing prologue if editing (num != 0)
     if num != 0:
         get_prologue(ctx, num)
+
+    # Render the writing edit form with prologue-specific configuration
     return writing_edit(request, ctx, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)
 
 
@@ -548,14 +665,36 @@ def orga_factions_available(request: HttpRequest, s: str) -> JsonResponse:
 
 
 @login_required
-def orga_export(request, s, nm):
+def orga_export(request: HttpRequest, s: str, nm: str) -> HttpResponse:
+    """Export data for a specific model type in organization context.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for permission checking
+        nm: The model name (lowercase) to export data from
+
+    Returns:
+        HttpResponse: Rendered export page with model data and context
+
+    Raises:
+        PermissionDenied: If user lacks required permissions for the event
+        LookupError: If the specified model name doesn't exist
+    """
+    # Build permission string and validate user access to event
     perm = f"orga_{nm}s"
     ctx = check_event_permission(request, s, perm)
+
+    # Get the Django model class from the model name
     model = apps.get_model("larpmanager", nm.capitalize())
 
+    # Add model name to context for template rendering
     ctx["nm"] = nm
+
+    # Export data and extract the first result tuple
     export = export_data(ctx, model, True)[0]
     _model, ctx["key"], ctx["vals"] = export
+
+    # Render the export template with populated context
     return render(request, "larpmanager/orga/export.html", ctx)
 
 

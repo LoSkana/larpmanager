@@ -115,7 +115,14 @@ class PaymentInvoice(BaseModel):
             models.Index(fields=["status", "-created"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return a string representation of the invoice.
+
+        Returns:
+            str: A formatted string containing invoice status, member,
+                 causal, transaction ID, gross amount, and fee.
+        """
+        # Format invoice details with status, member info, and transaction data
         return (
             f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
         )

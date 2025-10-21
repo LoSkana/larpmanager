@@ -423,13 +423,24 @@ def _row_header(ctx: dict, el: object, key: list, member_cover: bool, model: str
         _header_regs(ctx, el, key, val)
 
 
-def _expand_val(val, el, field):
+def _expand_val(val: list, el: object, field: str) -> None:
+    """Expand a list with a field value from an object.
+
+    Args:
+        val: The list to append the value to.
+        el: The object to extract the field value from.
+        field: The name of the field/attribute to extract.
+    """
+    # Check if the object has the specified field attribute
     if hasattr(el, field):
+        # Get the field value from the object
         value = getattr(el, field)
+        # Append the value if it exists (truthy)
         if value:
             val.append(value)
             return
 
+    # Append empty string if field doesn't exist or value is falsy
     val.append("")
 
 
@@ -1090,13 +1101,30 @@ def orga_tickets_download(ctx):
     return zip_exports(ctx, export_tickets(ctx), "Tickets")
 
 
-def export_tickets(ctx):
+def export_tickets(ctx: dict) -> list[tuple[str, list[str], list]]:
+    """Export ticket data for an event.
+
+    Extracts ticket information including name, tier, description, price,
+    and availability from the event's registration tickets.
+
+    Args:
+        ctx: Context dictionary containing event and related data
+
+    Returns:
+        List containing a tuple with export format: (section_name, keys, values)
+    """
+    # Define mappings for ticket tier references
     mappings = {
         "tier": TicketTier.get_mapping(),
     }
+
+    # Specify the fields to extract from each ticket
     keys = ["name", "tier", "description", "price", "max_available"]
 
+    # Query registration tickets ordered by number
     que = ctx["event"].get_elements(RegistrationTicket).order_by("number")
+
+    # Extract values using the defined keys and mappings
     vals = _extract_values(keys, que, mappings)
 
     return [("tickets", keys, vals)]

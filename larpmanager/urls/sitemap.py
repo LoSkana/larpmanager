@@ -20,7 +20,7 @@
 from datetime import datetime
 from io import StringIO
 
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.urls import path
 from django.utils import translation
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -35,14 +35,30 @@ translation.activate("en")
 
 
 @cache_page(60 * 60)
-def manual_sitemap_view(request):
+def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
+    """Generate XML sitemap for the organization.
+
+    Creates a sitemap containing all URLs for either the main site or
+    a specific organization based on the request context.
+
+    Args:
+        request: HTTP request object containing association context
+
+    Returns:
+        HttpResponse containing XML sitemap with application/xml content type
+    """
+    # Check if this is the main site (id=0) or a specific organization
     if request.assoc["id"] == 0:
+        # Generate sitemap for main larpmanager site
         urls = larpmanager_sitemap()
     else:
+        # Generate organization-specific sitemap
         urls = _organization_sitemap(request)
 
+    # Render the URL list into XML sitemap format
     stream = _render_sitemap(urls)
 
+    # Return XML response with proper content type
     return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
@@ -129,14 +145,25 @@ def _organization_sitemap(request) -> list[str]:
     return urls
 
 
-def larpmanager_sitemap():
+def larpmanager_sitemap() -> list[str]:
+    """Generate a list of URLs for the LarpManager sitemap.
+
+    Creates URLs for static pages and dynamically generated blog post pages
+    from the LarpManagerGuide model.
+
+    Returns:
+        A list of fully qualified URLs for the sitemap.
+    """
     urls = []
-    # Static pages
+
+    # Static pages - core site sections
     for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
-    # Blog posts
+
+    # Blog posts - dynamically generated from guide entries
     for el in LarpManagerGuide.objects.all():
         urls.append(f"https://larpmanager.com/guide/{el.slug}/")
+
     return urls
 
 

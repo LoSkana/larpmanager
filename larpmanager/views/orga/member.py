@@ -270,14 +270,32 @@ def orga_persuade(request, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_questions(request, s):
+def orga_questions(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle organization questions page for event organizers.
+
+    Displays help questions categorized as open and closed, with appropriate
+    sorting by creation date.
+
+    Args:
+        request: Django HTTP request object containing user and session data
+        s: Event slug identifier for permission checking and context setup
+
+    Returns:
+        Rendered HTML response with questions context data
+    """
+    # Check user permissions for accessing organization questions
     ctx = check_event_permission(request, s, "orga_questions")
 
+    # Retrieve and categorize help questions into closed and open lists
     ctx["closed"], ctx["open"] = _get_help_questions(ctx, request)
 
+    # Sort open questions by creation date (oldest first)
     ctx["open"].sort(key=lambda x: x.created)
+
+    # Sort closed questions by creation date (newest first)
     ctx["closed"].sort(key=lambda x: x.created, reverse=True)
 
+    # Render template with organized questions context
     return render(request, "larpmanager/orga/users/questions.html", ctx)
 
 
@@ -365,29 +383,73 @@ def orga_questions_close(request, s, r):
     return redirect("orga_questions", s=s)
 
 
-def send_mail_batch(request, assoc_id=None, run_id=None):
+def send_mail_batch(request, assoc_id: int | None = None, run_id: int | None = None) -> None:
+    """Send batch emails to multiple players.
+
+    Args:
+        request: HTTP request object containing POST data with email details
+        assoc_id: Optional association ID for context
+        run_id: Optional run ID for context
+
+    Note:
+        Uses 'raw' field from POST data if available, otherwise falls back to 'body'.
+        All email parameters are extracted from request.POST.
+    """
+    # Extract email recipients and core message data
     players = request.POST["players"]
     subj = request.POST["subject"]
     body = request.POST["body"]
+
+    # Get optional raw content and reply-to address
     raw = request.POST["raw"]
     reply_to = request.POST["reply_to"]
+
+    # Use raw content if provided, otherwise use formatted body
     if raw:
         body = raw
 
+    # Execute the actual email sending process
     send_mail_exec(players, subj, body, assoc_id, run_id, reply_to)
 
 
 @login_required
-def orga_send_mail(request, s):
+def orga_send_mail(request: HttpRequest, s: str) -> HttpResponse:
+    """Send mail to event participants through batch processing.
+
+    Handles both GET requests (display form) and POST requests (process form submission).
+    Requires 'orga_send_mail' permission for the specified event.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The HTTP request object containing user and form data
+    s : str
+        Event slug identifier for permission checking
+
+    Returns
+    -------
+    HttpResponse
+        Rendered template response or redirect after successful submission
+    """
+    # Check user permissions for the event and get context
     ctx = check_event_permission(request, s, "orga_send_mail")
+
     if request.method == "POST":
+        # Process form submission for sending mail
         form = SendMailForm(request.POST)
+
         if form.is_valid():
+            # Add mail to batch processing queue
             send_mail_batch(request, run_id=ctx["run"].id)
             messages.success(request, _("Mail added to queue!"))
+
+            # Redirect to same page to prevent resubmission
             return redirect(request.path_info)
     else:
+        # Display empty form for GET requests
         form = SendMailForm()
+
+    # Add form to template context and render
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
@@ -514,15 +576,31 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)
 
 
-def member_field_correct(el, member_fields):
+def member_field_correct(el: object, member_fields: list[str]) -> None:
+    """Correct and format member fields for display purposes.
+
+    Args:
+        el: Member object to modify fields on
+        member_fields: List of field names to process and format
+
+    Returns:
+        None: Modifies the el object in place
+    """
+    # Format residence address field
     if "residence_address" in member_fields:
         el.residence_address = el.get_residence()
+
+    # Format first aid field with check icon or empty string
     if "first_aid" in member_fields:
         if el.first_aid == FirstAidChoices.YES:
             el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
         else:
             el.first_aid = ""
+
+    # Format document type field using display value
     if "document_type" in member_fields:
         el.document_type = el.get_document_type_display()
+
+    # Format gender field using display value
     if "gender" in member_fields:
         el.gender = el.get_gender_display()

@@ -209,13 +209,39 @@ def orga_workshop_questions_edit(request, s, num):
 
 
 @login_required
-def orga_workshop_options(request, s):
+def orga_workshop_options(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Handle workshop options management for event organizers.
+
+    Allows organizers to view and manage workshop options for their events.
+    Supports both GET (display options) and POST (create/update options) requests.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The HTTP request object containing method and form data
+    s : str
+        The event slug identifier
+
+    Returns
+    -------
+    HttpResponse
+        Rendered template response or redirect after POST processing
+    """
+    # Check user permissions for workshop options management
     ctx = check_event_permission(request, s, "orga_workshop_options")
+
+    # Handle POST request for creating/updating workshop options
     if request.method == "POST":
         return writing_post(request, ctx, WorkshopOption, "workshop_option")
+
+    # Retrieve and order workshop options for the current event
+    # Ordered by module number, question number, and correctness flag
     ctx["list"] = WorkshopOption.objects.filter(question__module__event=ctx["event"]).order_by(
         "question__module__number", "question__number", "is_correct"
     )
+
+    # Render the workshop options management template
     return render(request, "larpmanager/orga/workshop/options.html", ctx)
 
 

@@ -629,26 +629,72 @@ def chat(request, n):
 
 
 @login_required
-def badges(request):
+def badges(request: HttpRequest) -> HttpResponse:
+    """Display badges page for the current association.
+
+    Retrieves and displays all badges associated with the current organization,
+    ordered by badge number. Requires the 'badge' feature to be enabled.
+
+    Args:
+        request: The HTTP request object containing user and association context.
+
+    Returns:
+        Rendered HTML response with badges list and user context.
+
+    Raises:
+        PermissionDenied: If the 'badge' feature is not enabled for the association.
+    """
+    # Initialize user context with empty badges list
     ctx = def_user_ctx(request)
     ctx.update({"badges": []})
+
+    # Verify badge feature is enabled for this association
     check_assoc_feature(request, "badge")
+
+    # Retrieve and process all badges for current association
     for badge in Badge.objects.filter(assoc_id=request.assoc["id"]).order_by("number"):
+        # Add localized badge representation to context
         ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
+
+    # Set current page identifier for navigation
     ctx["page"] = "badges"
+
     return render(request, "larpmanager/general/badges.html", ctx)
 
 
 @login_required
-def badge(request, n, p=1):
+def badge(request: HttpRequest, n: int, p: int = 1) -> HttpResponse:
+    """
+    Display a badge page with randomized member list.
+
+    Args:
+        request: The HTTP request object
+        n: Badge identifier
+        p: Page number (defaults to 1)
+
+    Returns:
+        Rendered badge template with context data
+    """
+    # Check if user has permission to access badge feature
     check_assoc_feature(request, "badge")
+
+    # Retrieve the badge object and prepare base context
     badge = get_badge(n, request)
     ctx = def_user_ctx(request)
+
+    # Add badge data to context with localized display
     ctx.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+
+    # Collect all badge members into a list
     for el in badge.members.all():
         ctx["list"].append(el)
+
+    # Generate deterministic random seed based on days since epoch
     v = datetime.today().date() - date(1970, 1, 1)
+
+    # Shuffle member list using date-based seed for consistent daily ordering
     random.Random(v.days).shuffle(ctx["list"])
+
     return render(request, "larpmanager/general/badge.html", ctx)
 
 
@@ -702,12 +748,27 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
 
 
 @login_required
-def unsubscribe(request):
+def unsubscribe(request: HttpRequest) -> HttpResponse:
+    """Unsubscribe a user from newsletter communications.
+
+    Args:
+        request: The HTTP request object containing user and association data.
+
+    Returns:
+        HttpResponse: Redirect to home page with success message.
+    """
+    # Get default user context and add member/association data
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
+
+    # Retrieve user membership for the current association
     mb = get_user_membership(ctx["member"], ctx["a_id"])
+
+    # Update newsletter preference to opt-out
     mb.newsletter = NewsletterChoices.NO
     mb.save()
+
+    # Display success message and redirect to home
     messages.success(request, _("The request of removal from further communication has been successfull!"))
     return redirect("home")
 

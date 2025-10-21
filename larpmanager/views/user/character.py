@@ -188,7 +188,18 @@ def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
     return _character_sheet(request, ctx)
 
 
-def character_your_link(ctx, char, p=None):
+def character_your_link(ctx: dict, char: Character, p: str | None = None) -> str:
+    """Generate URL link for a character page.
+
+    Args:
+        ctx: Context dictionary containing run information
+        char: Character object with number attribute
+        p: Optional path parameter to append to URL
+
+    Returns:
+        Complete URL string for the character page
+    """
+    # Build base URL using character number and run slug
     url = reverse(
         "character",
         kwargs={
@@ -196,8 +207,11 @@ def character_your_link(ctx, char, p=None):
             "num": char.number,
         },
     )
+
+    # Append optional path parameter if provided
     if p:
         url += p
+
     return url
 
 
@@ -591,16 +605,33 @@ def character_edit(request, s, num):
     return character_form(request, ctx, s, ctx["character"], CharacterForm)
 
 
-def get_options_dependencies(ctx):
+def get_options_dependencies(ctx: dict) -> None:
+    """Get writing option dependencies for character creation.
+
+    Populates the context with option dependencies by analyzing writing questions
+    and their associated options that have requirements. Only processes character-
+    applicable questions when the character feature is enabled.
+
+    Args:
+        ctx: Context dictionary containing event, features, and other template data.
+             Gets modified in-place to include 'dependencies' key.
+    """
+    # Initialize empty dependencies dictionary
     ctx["dependencies"] = {}
+
+    # Early return if character feature is not enabled
     if "character" not in ctx["features"]:
         return
 
+    # Get all character-applicable writing questions ordered by sequence
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=QuestionApplicable.CHARACTER)
     question_idxs = que.values_list("id", flat=True)
 
+    # Find writing options for these questions that have requirements
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
+
+    # Build dependencies mapping for options with requirements
     for el in que.filter(requirements__isnull=False).distinct():
         ctx["dependencies"][el.id] = list(el.requirements.values_list("id", flat=True))
 

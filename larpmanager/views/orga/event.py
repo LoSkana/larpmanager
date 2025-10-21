@@ -127,14 +127,32 @@ def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe
 
 
 @login_required
-def orga_roles(request, s):
+def orga_roles(request: HttpRequest, s: str) -> HttpResponse:
+    """Manage event roles for organizers.
+
+    This view allows organizers to view and manage roles for a specific event.
+    It checks permissions, prepares the roles list, and renders the roles template.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for the specific event
+
+    Returns:
+        HttpResponse: Rendered template with event roles context
+    """
+    # Check if user has permission to manage roles for this event
     ctx = check_event_permission(request, s, "orga_roles")
 
-    def def_callback(ctx):
+    # Define callback function to create default organizer role
+    def def_callback(ctx: dict) -> EventRole:
+        """Create a default organizer role for the event."""
         return EventRole.objects.create(event=ctx["event"], number=1, name="Organizer")
 
+    # Prepare the roles list with existing roles and default callback
+    # This populates the context with role data for template rendering
     prepare_roles_list(ctx, EventPermission, EventRole.objects.filter(event=ctx["event"]), def_callback)
 
+    # Render the roles management template with prepared context
     return render(request, "larpmanager/orga/roles.html", ctx)
 
 

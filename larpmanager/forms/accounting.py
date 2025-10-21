@@ -76,8 +76,8 @@ class OrgaPersonalExpenseForm(MyFormRun):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and conditionally remove balance field.
 
-        Calls the parent constructor and removes the 'balance' field if the
-        'ita_balance' feature is not enabled in the form parameters.
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
 
         Args:
             *args: Variable length argument list passed to parent constructor.

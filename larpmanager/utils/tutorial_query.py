@@ -30,14 +30,25 @@ def _save_index(index_dir, schema):
     return open_dir(index_dir, "MAIN")
 
 
-def get_or_create_index_tutorial(index_dir):
+def get_or_create_index_tutorial(index_dir: str) -> object:
+    """Create or retrieve a Whoosh index for tutorial search functionality.
+
+    Args:
+        index_dir: Directory path where the search index will be stored
+
+    Returns:
+        Index object for tutorial search operations
+    """
+    # Define the schema structure for tutorial documents
     schema = Schema(
-        tutorial_id=ID(stored=True),
-        slug=TEXT(stored=True),
-        title=TEXT(stored=True),
-        section_title=TEXT(stored=True),
-        content=TEXT(stored=True),
+        tutorial_id=ID(stored=True),  # Unique identifier for each tutorial
+        slug=TEXT(stored=True),  # URL-friendly tutorial identifier
+        title=TEXT(stored=True),  # Tutorial title for display and search
+        section_title=TEXT(stored=True),  # Section/chapter title within tutorial
+        content=TEXT(stored=True),  # Full text content for search indexing
     )
+
+    # Create or open the index using the defined schema
     return _save_index(index_dir, schema)
 
 
@@ -106,13 +117,27 @@ def remove_tutorial_from_search_index(tutorial_id):
     writer.commit()
 
 
-def get_or_create_index_guide(index_dir):
+def get_or_create_index_guide(index_dir: str) -> object:
+    """Get or create a Whoosh index for guide documents.
+
+    Creates a search index with fields for guide identification, URL slugs,
+    titles, and content. Uses the provided directory to store index files.
+
+    Args:
+        index_dir: Directory path where the index files will be stored.
+
+    Returns:
+        The created or existing Whoosh index object.
+    """
+    # Define the schema with fields for guide document structure
     schema = Schema(
-        guide_id=ID(stored=True),
-        slug=TEXT(stored=True),
-        title=TEXT(stored=True),
-        content=TEXT(stored=True),
+        guide_id=ID(stored=True),  # Unique identifier for each guide
+        slug=TEXT(stored=True),  # URL-friendly slug for routing
+        title=TEXT(stored=True),  # Human-readable title for display
+        content=TEXT(stored=True),  # Full text content for searching
     )
+
+    # Create or open the index using the defined schema
     return _save_index(index_dir, schema)
 
 

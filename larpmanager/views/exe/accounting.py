@@ -713,14 +713,34 @@ def exe_accounting(request):
 
 
 @login_required
-def exe_year_accounting(request):
+def exe_year_accounting(request: HttpRequest) -> JsonResponse:
+    """
+    Retrieve accounting data for a specific year within an organization.
+
+    Args:
+        request: HTTP request object containing POST data with year parameter
+
+    Returns:
+        JsonResponse containing accounting data for the specified year or error message
+
+    Raises:
+        Returns 400 status if year parameter is invalid
+    """
+    # Check user permissions for accounting access
     ctx = check_assoc_permission(request, "exe_accounting")
+
+    # Extract and validate year parameter from POST data
     try:
         year = int(request.POST.get("year"))
     except (ValueError, TypeError):
         return JsonResponse({"error": "Invalid year parameter"}, status=400)
+
+    # Initialize response data with association ID
     res = {"a_id": ctx["a_id"]}
+
+    # Populate response with accounting data for the specified year
     assoc_accounting_data(res, year)
+
     return JsonResponse({"res": res})
 
 
@@ -735,14 +755,33 @@ def exe_run_accounting(request, num):
 
 
 @login_required
-def exe_accounting_rec(request):
+def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
+    """Handle accounting records view for organization executives.
+
+    Displays accounting records for the organization, automatically checking
+    and redirecting if no records exist. Shows creation date range for existing records.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered template with accounting records context or redirect response.
+    """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_accounting_rec")
+
+    # Fetch accounting records for the association, excluding run-specific records
     ctx["list"] = RecordAccounting.objects.filter(assoc_id=ctx["a_id"], run__isnull=True).order_by("created")
+
+    # If no records exist, trigger accounting check and redirect
     if len(ctx["list"]) == 0:
         check_accounting(ctx["a_id"])
         return redirect("exe_accounting_rec")
+
+    # Set date range based on first and last record creation dates
     ctx["start"] = ctx["list"][0].created
     ctx["end"] = ctx["list"].reverse()[0].created
+
     return render(request, "larpmanager/exe/accounting/accounting_rec.html", ctx)
 
 

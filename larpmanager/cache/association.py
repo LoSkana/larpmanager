@@ -37,14 +37,36 @@ def cache_assoc_key(s):
     return f"assoc_{s}"
 
 
-def get_cache_assoc(s):
+def get_cache_assoc(s: str) -> dict | None:
+    """Get association cache data by slug.
+
+    Retrieves cached association data for the given slug. If not found in cache,
+    initializes the cache with fresh data from the database.
+
+    Args:
+        s: The association slug to retrieve cache data for.
+
+    Returns:
+        Dictionary containing association cache data, or None if association
+        not found or initialization failed.
+    """
+    # Generate cache key for the association slug
     key = cache_assoc_key(s)
+
+    # Attempt to retrieve cached data
     res = cache.get(key)
+
+    # If not in cache, initialize fresh data
     if res is None:
         res = init_cache_assoc(s)
+
+        # Return None if initialization failed
         if not res:
             return None
+
+        # Cache the initialized data with 1-day timeout
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 

@@ -28,9 +28,11 @@ import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.uploadedfile import UploadedFile
 
 from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
+from larpmanager.models.event import Run
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -317,20 +319,47 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
         _assign_choice_answer(reg, field, value, questions, logs, is_registration=True)
 
 
-def _assign_elem(ctx, obj, field, value, typ, logs):
+def _assign_elem(ctx: dict, obj: object, field: str, value: str, typ: type, logs: list) -> None:
+    """
+    Assign an element to an object field based on value lookup.
+
+    Args:
+        ctx: Context dictionary containing event information
+        obj: Target object to assign the field to
+        field: Name of the field to assign
+        value: Value to search for (number or name)
+        typ: Model type to query for the element
+        logs: List to append error messages to
+
+    Returns:
+        None
+    """
     try:
+        # Check if value is numeric to determine lookup strategy
         if value.isdigit():
+            # Lookup by number field for numeric values
             el = typ.objects.get(event=ctx["event"], number=int(value))
         else:
+            # Lookup by name field (case-insensitive) for string values
             el = typ.objects.get(event=ctx["event"], name__iexact=value)
     except ObjectDoesNotExist:
+        # Log error and return early if element not found
         logs.append(f"ERR - element {field} not found")
         return
 
+    # Assign the found element to the specified field
     obj.__setattr__(field, el)
 
 
-def _reg_assign_characters(ctx, reg, value, logs):
+def _reg_assign_characters(ctx: dict, reg: Registration, value: str, logs: list[str]) -> None:
+    """Assign characters to a registration based on comma-separated character names.
+
+    Args:
+        ctx: Context dictionary containing 'event' and 'run' information
+        reg: Registration object to assign characters to
+        value: Comma-separated string of character names
+        logs: List to append error messages to
+    """
     # Clear existing character assignments for this registration
     RegistrationCharacterRel.objects.filter(reg=reg).delete()
 
@@ -338,25 +367,30 @@ def _reg_assign_characters(ctx, reg, value, logs):
     character_names = [name.strip() for name in value.split(",")]
 
     for char_name in character_names:
+        # Skip empty character names
         if not char_name:
             continue
 
+        # Try to find the character by name (case insensitive)
         try:
             char = Character.objects.get(event=ctx["event"], name__iexact=char_name)
         except ObjectDoesNotExist:
             logs.append(f"ERR - Character not found: {char_name}")
             continue
 
-        # check if we have a registration with the same character
+        # Check if character is already assigned to another active registration
         que = RegistrationCharacterRel.objects.filter(
             reg__run=ctx["run"],
             reg__cancellation_date__isnull=True,
             character=char,
         )
+
+        # Exclude current registration from the check
         if que.exclude(reg_id=reg.id).exists():
             logs.append(f"ERR - character already assigned: {char_name}")
             continue
 
+        # Create the character assignment relationship
         RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
 
 
@@ -982,15 +1016,38 @@ def _get_option(ctx, is_registration, name, question_id):
     return created, instance
 
 
-def get_csv_upload_tmp(csv_upload, run):
+def get_csv_upload_tmp(csv_upload: UploadedFile, run: Run) -> str:
+    """
+    Create a temporary file for uploaded CSV data.
+
+    Args:
+        csv_upload: The uploaded CSV file object
+        run: The run instance associated with the upload
+
+    Returns:
+        str: The absolute path to the created temporary file
+
+    Creates a temporary directory structure under MEDIA_ROOT/tmp/event_slug/
+    and saves the uploaded CSV file with a timestamp-based filename.
+    """
+    # Create base temporary directory path
     tmp_file = os.path.join(conf_settings.MEDIA_ROOT, "tmp")
+
+    # Add event-specific subdirectory
     tmp_file = os.path.join(tmp_file, run.event.slug)
+
+    # Ensure the directory exists
     if not os.path.exists(tmp_file):
         os.makedirs(tmp_file)
+
+    # Generate timestamped filename and create full path
     tmp_file = os.path.join(tmp_file, datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
+
+    # Write uploaded file data to temporary location
     with open(tmp_file, "wb") as destination:
         for chunk in csv_upload.chunks():
             destination.write(chunk)
+
     return tmp_file
 
 

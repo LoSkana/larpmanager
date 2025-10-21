@@ -53,26 +53,70 @@ from larpmanager.views.user.casting import (
 
 
 @login_required
-def orga_casting_preferences(request, s, typ=0):
+def orga_casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+    """
+    Display casting preferences for characters or traits in an event.
+
+    This view renders the casting preferences page for event organizers,
+    showing either character preferences (typ=0) or trait preferences (typ>0).
+
+    Args:
+        request: The HTTP request object containing user session and data
+        s: Event slug identifier for the specific event
+        typ: Preference type selector - 0 for characters, >0 for traits
+
+    Returns:
+        HttpResponse: Rendered template with casting preferences context
+
+    Raises:
+        PermissionDenied: If user lacks orga_casting_preferences permission
+    """
+    # Check user permissions for casting preferences access
     ctx = check_event_permission(request, s, "orga_casting_preferences")
+
+    # Load common casting details into context
     casting_details(ctx, typ)
+
+    # Branch logic based on preference type
     if typ == 0:
+        # Load character-specific casting preferences
         casting_preferences_characters(ctx)
     else:
+        # Load trait-specific casting preferences for given type
         casting_preferences_traits(ctx, typ)
 
+    # Render the casting preferences template with populated context
     return render(request, "larpmanager/event/casting/preferences.html", ctx)
 
 
 @login_required
-def orga_casting_history(request, s, typ=0):
+def orga_casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+    """
+    Display casting history for an event, showing either characters or traits.
+
+    Args:
+        request: The HTTP request object containing user session and data
+        s: The event slug identifier for permission checking
+        typ: Type of casting history to display (0 for characters, 1 for traits)
+
+    Returns:
+        Rendered HTML response with casting history data
+    """
+    # Check user permissions for accessing casting history in this event
     ctx = check_event_permission(request, s, "orga_casting_history")
+
+    # Load common casting details into context
     casting_details(ctx, typ)
+
+    # Load specific history data based on type parameter
     if typ == 0:
+        # Load character-based casting history
         casting_history_characters(ctx)
     else:
+        # Load trait-based casting history
         casting_history_traits(ctx)
 
+    # Render the casting history template with populated context
     return render(request, "larpmanager/event/casting/history.html", ctx)
 
 
@@ -212,15 +256,38 @@ def get_casting_choices_characters(
     return choices, taken, mirrors, allowed
 
 
-def get_casting_choices_quests(ctx):
+def get_casting_choices_quests(ctx: dict) -> tuple[dict[int, str], list[int], dict]:
+    """
+    Get casting choices for quests with trait assignment tracking.
+
+    Builds a dictionary of available quest traits and tracks which ones
+    are already assigned to characters in the current run.
+
+    Args:
+        ctx: Context dictionary containing 'event', 'quest_type', and 'run' keys
+
+    Returns:
+        tuple: A 3-tuple containing:
+            - choices: Dict mapping trait IDs to formatted quest-trait names
+            - taken: List of trait IDs that are already assigned
+            - empty dict: Additional data (currently unused)
+    """
     choices = {}
     taken = []
+
+    # Get all quests for the event and quest type, ordered by number
     for q in Quest.objects.filter(event=ctx["event"], typ=ctx["quest_type"]).order_by("number"):
         # gr = q.show()["name"]
+
+        # Process traits for each quest
         for t in Trait.objects.filter(quest=q).order_by("number"):
+            # Check if trait is already assigned to a character in this run
             if AssignmentTrait.objects.filter(trait=t, run=ctx["run"]).count() > 0:
                 taken.append(t.id)
+
+            # Build formatted choice label: "Quest Name - Trait Name"
             choices[t.id] = f"{q.name} - {t.name}"
+
     return choices, taken, {}
 
 

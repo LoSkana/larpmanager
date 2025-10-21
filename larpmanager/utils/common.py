@@ -35,7 +35,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
@@ -462,13 +462,29 @@ def dump(obj):
         s += f"obj.{attr} = {repr(getattr(obj, attr))}\n"
 
 
-def rmdir(directory):
+def rmdir(directory: Path | str) -> None:
+    """Remove a directory and all its contents recursively.
+
+    Args:
+        directory: Path to the directory to remove. Can be a Path object or string.
+
+    Note:
+        This function will remove all files and subdirectories within the
+        specified directory before removing the directory itself.
+    """
+    # Convert string path to Path object for consistent handling
     directory = Path(directory)
+
+    # Iterate through all items in the directory
     for item in directory.iterdir():
         if item.is_dir():
+            # Recursively remove subdirectories
             rmdir(item)
         else:
+            # Remove individual files
             item.unlink()
+
+    # Remove the now-empty directory
     directory.rmdir()
 
 
@@ -476,14 +492,32 @@ def average(lst):
     return sum(lst) / len(lst)
 
 
-def pretty_request(request):
+def pretty_request(request: HttpRequest) -> str:
+    """Format an HTTP request into a human-readable string representation.
+
+    Args:
+        request: The Django HttpRequest object to format.
+
+    Returns:
+        A formatted string containing the request method, headers, and body.
+
+    Example:
+        >>> pretty_request(request)
+        'GET HTTP/1.1\nMeta: {...}\nContent-Type: application/json\n\n{"data": "value"}'
+    """
     headers = ""
+
+    # Iterate through all META items to extract HTTP headers
     for header, value in request.META.items():
+        # Skip non-HTTP headers (Django adds HTTP_ prefix to actual HTTP headers)
         if not header.startswith("HTTP"):
             continue
+
+        # Convert HTTP_CONTENT_TYPE to Content-Type format
         header_value = "-".join([h.capitalize() for h in header[5:].lower().split("_")])
         headers += f"{header_value}: {value}\n"
 
+    # Combine method, meta info, formatted headers, and request body
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
 
 
@@ -503,15 +537,33 @@ def check_field(cls, check):
     return False
 
 
-def round_to_two_significant_digits(number):
+def round_to_two_significant_digits(number: float | int) -> int:
+    """Round a number to two significant digits with threshold-based precision.
+
+    Args:
+        number: The number to round. Can be float or int.
+
+    Returns:
+        The rounded number as an integer.
+
+    Notes:
+        Numbers with absolute value < 1000 are rounded to nearest 10.
+        Numbers with absolute value >= 1000 are rounded to nearest 100.
+        Uses ROUND_DOWN rounding mode for consistent behavior.
+    """
+    # Convert input to Decimal for precise arithmetic
     d = Decimal(number)
     threshold = 1000
-    # round by 10
+
+    # Apply different rounding precision based on magnitude
     if abs(number) < threshold:
+        # Round to nearest 10 for smaller numbers
         rounded = d.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
-    # round by 100
     else:
+        # Round to nearest 100 for larger numbers
         rounded = d.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
+
+    # Convert result back to integer
     return int(rounded)
 
 
@@ -574,13 +626,24 @@ def exchange_order(ctx: dict, cls: type, num: int, order: bool, elements=None) -
     ctx["current"] = current
 
 
-def normalize_string(value):
+def normalize_string(value: str) -> str:
+    """Normalize a string by converting to lowercase, removing spaces and accented characters.
+
+    Args:
+        value: The input string to normalize.
+
+    Returns:
+        The normalized string with lowercase characters, no spaces, and no accents.
+    """
     # Convert to lowercase
     value = value.lower()
+
     # Remove spaces
     value = value.replace(" ", "")
-    # Remove accented characters
+
+    # Remove accented characters using Unicode normalization
     value = "".join(c for c in unicodedata.normalize("NFD", value) if unicodedata.category(c) != "Mn")
+
     return value
 
 

@@ -658,16 +658,33 @@ class SpeedLarp(Writing):
         ]
 
 
-def replace_char_names(v, chars):
+def replace_char_names(v: str | None, chars: dict[str, str]) -> str:
+    """Replace character names in text with formatted references.
+
+    Args:
+        v: The input text to process. Can be None or empty string.
+        chars: Dictionary mapping character names to their identifiers.
+
+    Returns:
+        The processed text with character names replaced by @identifier format,
+        or empty string if input is None/empty.
+    """
     if not v:
         return ""
-    for name in chars:
+
+    # Iterate through all character names in the mapping
+    for name, cnt in chars.items():
         name_number = 2
+
+        # Skip names that are too short (less than 2 characters)
         if len(name) < name_number:
             continue
+
+        # Replace character name with formatted reference if found in text
         if name in v:
-            c = f"@{chars[name]}"
+            c = f"@{cnt}"
             v = v.replace(name, c)
+
     return v
 
 

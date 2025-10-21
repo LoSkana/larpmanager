@@ -20,6 +20,7 @@
 import time
 from os import listdir
 from os.path import isdir, join
+from typing import Any
 
 import deepl
 import polib
@@ -30,13 +31,32 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     """Translate elements in .po file untraslated, or with fuzzy translation, using deepl"""
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:
+        """Handle the translation command execution.
+
+        Initializes the DeepL translator, configures target languages,
+        and processes PO files for translation.
+
+        Args:
+            *args: Variable length argument list passed to the command
+            **options: Arbitrary keyword arguments passed to the command
+
+        Returns:
+            None
+        """
+        # Initialize DeepL translator with API key from settings
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
+
+        # Display initial API usage statistics
         self.stdout.write(str(self.translator.get_usage()))
 
+        # Configure target language mappings for specific locales
         self.target = {"EN": "EN-GB", "PT": "PT-PT"}
 
+        # Process all PO files for translation
         self.go_polib()
+
+        # Display final API usage statistics after processing
         self.stdout.write(str(self.translator.get_usage()))
 
     def translate_entry(self, entry, tgt: str) -> None:

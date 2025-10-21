@@ -33,7 +33,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
+from django.db.models import Max, QuerySet
 from django.forms import Textarea
 from django.template import loader
 from django.utils import translation
@@ -82,7 +82,11 @@ class MyAuthForm(AuthenticationForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None
         """
+        # Initialize parent form with provided arguments
         super().__init__(*args, **kwargs)
 
         # Configure username field with Bootstrap styling and email placeholder
@@ -385,18 +389,39 @@ class ResidenceField(forms.MultiValueField):
         values = [v if v is not None else "" for v in values]
         return "|".join(values)
 
-    def clean(self, value):
+    def clean(self, value: list[Any] | None) -> Any:
+        """Clean and validate the multi-widget field values.
+
+        Processes each field's value through its individual clean method,
+        with special handling for the second field (index 1) which allows
+        empty values when None or empty string.
+
+        Args:
+            value: List of values from each widget field, or None if no input
+
+        Returns:
+            Compressed cleaned data from all fields
+
+        Raises:
+            ValidationError: If any field validation fails
+        """
+        # Handle empty or None input by creating default empty values
         if not value:
             value = self.compress([None] * len(self.fields))
             return value
 
         try:
             cleaned_data = []
+            # Process each field with its corresponding value
             for i, field in enumerate(self.fields):
+                # Special case: second field (index 1) allows empty values
                 if i == 1 and (value[i] in (None, "")):
                     cleaned_data.append("")
                 else:
+                    # Standard field cleaning for all other cases
                     cleaned_data.append(field.clean(value[i]))
+
+            # Compress all cleaned field data into final result
             return self.compress(cleaned_data)
         except forms.ValidationError as err:
             raise err
@@ -691,11 +716,30 @@ class ExeVolunteerRegistryForm(MyForm):
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
-    def clean_member(self):
-        member = self.cleaned_data["member"]
+    def clean_member(self) -> Member:
+        """Validate the member field in the form.
 
-        # check if already used
-        lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
+        Checks if the member is already registered as a volunteer
+        in the current association to prevent duplicate entries.
+
+        Returns
+        -------
+        Member
+            The validated member instance.
+
+        Raises
+        ------
+        ValidationError
+            If the member already has a volunteer entry in this association.
+        """
+        # Get the member from cleaned data
+        member: Member = self.cleaned_data["member"]
+
+        # Query for existing volunteer registries for this member and association
+        # Filter by member and association ID from form parameters
+        lst: QuerySet[VolunteerRegistry] = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
+
+        # Check if duplicate entries exist (more than 1 entry means duplication)
         if lst.count() > 1:
             raise ValidationError("Volunteer entry already existing!")
 

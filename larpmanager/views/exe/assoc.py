@@ -58,14 +58,29 @@ def exe_association(request):
 
 
 @login_required
-def exe_roles(request):
+def exe_roles(request: HttpRequest) -> HttpResponse:
+    """Handles organization role management page.
+
+    This view displays and manages roles for an organization, allowing
+    administrators to view, create, and modify organizational roles.
+
+    Args:
+        request: The HTTP request object containing user and organization context.
+
+    Returns:
+        HttpResponse: Rendered roles management page with role list and permissions.
+    """
+    # Check if user has permission to access organization roles
     ctx = check_assoc_permission(request, "exe_roles")
 
     def def_callback(ctx):
+        # Create default admin role for new organizations
         return AssocRole.objects.create(assoc_id=ctx["a_id"], number=1, name="Admin")
 
+    # Prepare roles list with permissions and existing roles for the organization
     prepare_roles_list(ctx, AssocPermission, AssocRole.objects.filter(assoc_id=request.assoc["id"]), def_callback)
 
+    # Render the roles management template with prepared context
     return render(request, "larpmanager/exe/roles.html", ctx)
 
 

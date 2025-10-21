@@ -183,13 +183,26 @@ def _handle_free_abilities(char):
     set_free_abilities(char, free_abilities)
 
 
-def get_current_ability_px(char):
+def get_current_ability_px(char: Character) -> list[AbilityPx]:
+    """Get current abilities with applied pricing modifiers for a character.
+
+    Args:
+        char: The character to get abilities for.
+
+    Returns:
+        List of abilities with modified costs applied based on character's
+        current abilities, choices, and modifiers.
+    """
+    # Build the context for pricing calculations including current abilities and modifiers
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
+    # Get abilities queryset with only required fields for performance
     abilities_qs = char.px_ability_list.only("id", "cost").order_by("name")
 
+    # Process each ability and apply cost modifiers
     abilities = []
     for ability in abilities_qs:
+        # Apply pricing modifiers based on character's current state
         _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
         abilities.append(ability)
     return abilities

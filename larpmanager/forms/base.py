@@ -63,53 +63,55 @@ class MyForm(forms.ModelForm):
         Args:
             *args: Positional arguments passed to parent ModelForm.
             **kwargs: Keyword arguments that may include:
-                - ctx: Context data dictionary
-                - run: Run instance for form context
-                - request: HTTP request object
+                ctx: Context data dictionary containing form configuration.
+                run: Run instance for form context.
+                request: HTTP request object for access control.
 
         Note:
             Automatically removes 'deleted' and 'temp' fields if present.
             Sets up character widget with event context when available.
             Configures automatic fields as hidden or removes them based on instance state.
         """
-        # Initialize parent class and extract context parameters
+        # Initialize parent class first to establish basic form structure
         super().__init__()
+
+        # Extract and store context data from kwargs, defaulting to empty dict
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
         else:
             self.params = {}
 
-        # Extract run and request parameters if provided
+        # Extract additional context parameters (run, request) if provided
         for k in ["run", "request"]:
             if k in kwargs:
                 self.params[k] = kwargs.pop(k)
 
-        # Call parent ModelForm initialization with remaining arguments
+        # Call parent ModelForm initialization with cleaned arguments
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
-        # Remove system fields that shouldn't be user-editable
+        # Remove system-managed fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
             if m in self.fields:
                 del self.fields[m]
 
-        # Configure characters field widget with event context
+        # Configure characters field widget with event context for filtering
         if "characters" in self.fields:
             self.fields["characters"].widget.set_event(self.params["event"])
-            # Optimize queryset to load only necessary fields for rendering
+            # Optimize queryset to load only necessary fields for rendering performance
             self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
 
-        # Handle automatic fields based on instance state
+        # Handle automatic fields based on whether this is a new or existing instance
         for s in self.get_automatic_field():
             if s in self.fields:
                 if self.instance.pk:
-                    # Remove automatic fields for existing instances
+                    # Remove automatic fields for existing instances (already set)
                     del self.fields[s]
                 else:
-                    # Hide automatic fields for new instances
+                    # Hide automatic fields for new instances but keep them in form
                     self.fields[s].widget = forms.HiddenInput()
                     self.fields[s].required = False
 
-        # Initialize tracking dictionaries for form state management
+        # Initialize tracking dictionaries for form state and validation management
         self.mandatory = []
         self.answers = {}
         self.singles = {}
@@ -908,8 +910,21 @@ class BaseRegistrationForm(MyFormRun):
         # Add field to show_link list for frontend handling
         self.show_link.append(f"id_{key}")
 
-    def init_paragraph(self, key, question, required):
+    def init_paragraph(self, key: str, question: Any, required: bool) -> None:
+        """Initialize a paragraph field for a form question.
+
+        Creates a textarea field with validation based on the question's maximum
+        length constraint and populates it with existing answer data if available.
+
+        Args:
+            key: The field identifier for the form
+            question: Question object containing field configuration
+            required: Whether the field is mandatory
+        """
+        # Set up length validation if maximum length is specified
         validators = [max_length_validator(question.max_length)] if question.max_length else []
+
+        # Create textarea field with question configuration
         self.fields[key] = forms.CharField(
             required=required,
             widget=forms.Textarea(attrs={"rows": 4}),
@@ -917,6 +932,8 @@ class BaseRegistrationForm(MyFormRun):
             help_text=question.description,
             validators=validators,
         )
+
+        # Populate field with existing answer if available
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
 

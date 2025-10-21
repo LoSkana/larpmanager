@@ -262,7 +262,22 @@ def _get_cached_config(element_id, element_type, name, def_value=None, ctx=None,
     return evaluate_config(configs, name, def_value)
 
 
-def get_assoc_config(assoc_id, name, def_value=None, ctx=None, bypass_cache=False):
+def get_assoc_config(
+    assoc_id: int, name: str, def_value: any = None, ctx: dict | None = None, bypass_cache: bool = False
+) -> any:
+    """Get association configuration value with optional caching.
+
+    Args:
+        assoc_id: The association ID to get configuration for
+        name: The configuration key name to retrieve
+        def_value: Default value to return if configuration not found
+        ctx: Optional context dictionary for the request
+        bypass_cache: Whether to bypass the cache and fetch fresh data
+
+    Returns:
+        The configuration value if found, otherwise the default value
+    """
+    # Delegate to the cached configuration retrieval function
     return _get_cached_config(assoc_id, "association", name, def_value, ctx, bypass_cache)
 
 

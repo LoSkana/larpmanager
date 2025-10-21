@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
-from typing import Union
+from typing import Any, Union
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -305,16 +305,31 @@ class Member(BaseModel):
         else:
             return str(self.user)
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Return the best available display name for the member.
+
+        Returns the member's display name in order of preference:
+        1. Nickname if available
+        2. Real name (first + last) if available
+        3. Email address if available
+        4. Primary key as fallback
+
+        Returns:
+            The most appropriate display string for this member.
+        """
+        # Use nickname as primary display option
         if self.nickname:
             return str(self.nickname)
 
+        # Fall back to real name if available
         if self.name or self.surname:
             return self.display_real()
 
+        # Use email as tertiary option
         if self.email:
             return self.email
 
+        # Final fallback to primary key
         return self.pk
 
     def display_real(self):
@@ -533,14 +548,28 @@ class Badge(BaseModel):
             return show_thumb(100, self.img_thumb.url)
         return ""
 
-    def show(self, lang):
+    def show(self, lang: str) -> dict[str, Any]:
+        """Return a dictionary representation of the object for display purposes.
+
+        Args:
+            lang: Language code for localization
+
+        Returns:
+            Dictionary containing object data with id, number, localized attributes,
+            and optional image URL
+        """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
+
+        # Add localized string attributes (name, description)
         for s in ["name", "descr"]:
             self.upd_js_attr(js, s)
+
+        # Add thumbnail image URL if image exists
         if self.img:
             # noinspection PyUnresolvedReferences
             js["img_url"] = self.img_thumb.url
+
         return js
 
 

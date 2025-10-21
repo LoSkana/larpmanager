@@ -320,10 +320,22 @@ class WorkshopModule(BaseModel):
     def __str__(self):
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, int | str]:
+        """Show object data as a dictionary.
+
+        Returns a dictionary containing the object's ID, number, and name
+        (if available through upd_js_attr method).
+
+        Returns:
+            Dictionary with object data including id, number, and optionally name.
+        """
+        # Create base dictionary with ID and number
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
+
+        # Add name attribute if available
         self.upd_js_attr(js, "name")
+
         return js
 
 

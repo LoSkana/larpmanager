@@ -645,13 +645,31 @@ def exe_enrolment(request) -> HttpResponse:
 
 
 @login_required
-def exe_volunteer_registry(request):
+def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
+    """
+    Display volunteer registry for the current association.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered template with volunteer registry list.
+
+    Raises:
+        PermissionDenied: If user lacks exe_volunteer_registry permission.
+    """
+    # Check user permissions for volunteer registry access
     ctx = check_assoc_permission(request, "exe_volunteer_registry")
+
+    # Fetch volunteer registries for current association with member details
+    # Order by start date and member surname for consistent display
     ctx["list"] = (
         VolunteerRegistry.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
+
+    # Render template with context data
     return render(request, "larpmanager/exe/users/volunteer_registry.html", ctx)
 
 
@@ -661,16 +679,44 @@ def exe_volunteer_registry_edit(request, num):
 
 
 @login_required
-def exe_volunteer_registry_print(request):
+def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
+    """Generate and return a PDF of the volunteer registry for an association.
+
+    This function creates a printable PDF document containing all volunteer
+    registry entries for the current association, ordered by start date and
+    member surname.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The HTTP request object containing user and session information.
+
+    Returns
+    -------
+    HttpResponse
+        PDF response containing the volunteer registry document.
+    """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_volunteer_registry")
+
+    # Retrieve the association object from database
     ctx["assoc"] = Association.objects.get(pk=ctx["a_id"])
+
+    # Query volunteer registry entries with optimized database access
+    # Order by start date first, then by member surname for logical grouping
     ctx["list"] = (
         VolunteerRegistry.objects.filter(assoc=ctx["assoc"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
+
+    # Generate current date for filename and document metadata
     ctx["date"] = datetime.today().strftime("%Y-%m-%d")
+
+    # Generate PDF file using the volunteer registry template
     fp = print_volunteer_registry(ctx)
+
+    # Return the PDF as an HTTP response with descriptive filename
     return return_pdf(fp, f"Registro_Volontari_{ctx['assoc'].name}_{ctx['date']}")
 
 
@@ -740,16 +786,37 @@ def exe_badges_edit(request, num):
 
 
 @login_required
-def exe_send_mail(request):
+def exe_send_mail(request: HttpRequest) -> HttpResponse:
+    """Handle email sending functionality for organization administrators.
+
+    This view allows organization administrators to send batch emails to members.
+    On GET requests, displays the email composition form. On POST requests,
+    processes the form and queues the email for batch sending.
+
+    Args:
+        request: The HTTP request object containing user data and form submission
+
+    Returns:
+        HttpResponse: Rendered template with form context or redirect after successful submission
+    """
+    # Check if user has permission to send organization-wide emails
     ctx = check_assoc_permission(request, "exe_send_mail")
+
     if request.method == "POST":
+        # Process form submission for email sending
         form = SendMailForm(request.POST)
         if form.is_valid():
+            # Queue the email for batch processing
             send_mail_batch(request, assoc_id=request.assoc["id"])
+
+            # Show success message and redirect to prevent resubmission
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
+        # Display empty form for GET requests
         form = SendMailForm()
+
+    # Add form to context and render template
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
@@ -897,13 +964,34 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 
 
 @login_required
-def exe_questions_close(request, r):
+def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
+    """Close a help question for the current association.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        r: Primary key of the member whose question should be closed
+
+    Returns:
+        HTTP redirect response to the questions list page
+
+    Raises:
+        Member.DoesNotExist: If no member exists with the given primary key
+        AttributeError: If no help question is found for the member
+    """
+    # Check user permissions for accessing questions functionality
     ctx = check_assoc_permission(request, "exe_questions")
 
+    # Retrieve the member object using the provided primary key
     member = Member.objects.get(pk=r)
+
+    # Find the most recent help question for this member in the current association
     h = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created").first()
+
+    # Mark the question as closed and save the changes
     h.closed = True
     h.save()
+
+    # Redirect back to the questions overview page
     return redirect("exe_questions")
 
 

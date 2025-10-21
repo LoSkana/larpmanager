@@ -503,13 +503,38 @@ def copy_writing(e_id: int, targets: list[str], p_id: int) -> None:
         correct_workshop(e_id, p_id)
 
 
-def copy_css(ctx, event, parent):
+def copy_css(ctx, event, parent) -> None:
+    """Copy CSS file from parent event to current event.
+
+    Creates a copy of the CSS file associated with the parent event and assigns it
+    to the current event with a new generated identifier. If the parent CSS file
+    doesn't exist, the function returns early without making changes.
+
+    Args:
+        ctx: Context object containing request and association information
+        event: Target event object that will receive the copied CSS
+        parent: Source event object from which to copy the CSS file
+
+    Returns:
+        None
+    """
+    # Initialize appearance form to handle CSS file operations
     app_form = OrgaAppearanceForm(ctx=ctx)
+
+    # Get the file path for the parent event's CSS
     path = app_form.get_css_path(parent)
+
+    # Early return if parent CSS file doesn't exist
     if not default_storage.exists(path):
         return
+
+    # Read the CSS content from the parent file
     value = default_storage.open(path).read().decode("utf-8")
+
+    # Generate new unique identifier for the target event's CSS
     event.css_code = generate_id(32)
+
+    # Create file path for the new CSS file and save the content
     npath = app_form.get_css_path(event)
     default_storage.save(npath, ContentFile(value))
 

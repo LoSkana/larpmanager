@@ -223,17 +223,44 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     return traits
 
 
-def refresh_all_instance_traits(instance):
+def refresh_all_instance_traits(instance) -> None:
+    """Refresh all traits for a given instance by updating trait assignments.
+
+    This function updates the traits associated with an instance by:
+    1. Checking if the instance is valid and not temporary
+    2. Getting updated traits from update_traits_text()
+    3. Removing traits that are no longer applicable
+    4. Adding new traits that should be applied
+
+    Args:
+        instance: The instance object to refresh traits for. Must have an 'id'
+                 attribute and optionally 'temp' and 'traits' attributes.
+
+    Returns:
+        None: This function modifies the instance in-place.
+
+    Note:
+        - Returns early if instance has no ID or is marked as temporary
+        - Only processes instances that have a 'traits' attribute
+    """
+    # Skip processing if instance is not saved to database yet
     if instance.id is None:
         return
 
+    # Skip processing for temporary instances
     if instance.temp:
         return
 
+    # Get the updated list of traits that should be applied to this instance
     pgs = update_traits_text(instance)
+
+    # Only proceed if the instance has a traits relationship
     if hasattr(instance, "traits"):
+        # Remove traits that are no longer applicable
         for el in instance.traits.all():
             if el not in pgs:
                 instance.traits.remove(el)
+
+        # Add new traits that should be applied
         for ch in pgs:
             instance.traits.add(ch)

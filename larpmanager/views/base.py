@@ -176,13 +176,38 @@ def tutorial_query(request):
 
 
 @csrf_exempt
-def upload_media(request):
+def upload_media(request: HttpRequest) -> JsonResponse:
+    """
+    Handle media file uploads for TinyMCE editor.
+
+    Processes POST requests containing file uploads, generates unique filenames
+    with timestamps and UUIDs, saves files to organization-specific directories,
+    and returns the file URL for TinyMCE integration.
+
+    Args:
+        request: HTTP request object containing the uploaded file
+
+    Returns:
+        JsonResponse containing either the file location URL or an error message
+
+    Raises:
+        No exceptions are explicitly raised, errors return 400 status responses
+    """
+    # Validate request method and file presence
     if request.method == "POST" and request.FILES.get("file"):
         file = request.FILES["file"]
+
+        # Generate unique filename with timestamp and UUID
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         filename = f"{timestamp}_{uuid.uuid4().hex}{file.name[file.name.rfind('.') :]}"
+
+        # Save file to organization-specific directory
         path = default_storage.save(f"tinymce_uploads/{request.assoc['id']}/{filename}", file)
+
+        # Return file URL for TinyMCE
         return JsonResponse({"location": default_storage.url(path)})
+
+    # Return error for invalid requests
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 

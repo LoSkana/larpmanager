@@ -56,14 +56,22 @@ class WritingForm(MyForm):
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize the form with default show_link configuration.
 
+        Initializes the parent class and configures which form fields should display
+        links in the rendered form interface. The show_link attribute determines
+        which field IDs will have clickable links rendered in the UI.
+
         Args:
-            *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments passed to parent class.
+            *args: Variable length argument list passed to parent class constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent class constructor.
+
+        Returns:
+            None
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Configure which fields should display links in the form
+        # Configure which fields should display links in the form interface
+        # These field IDs will have clickable links rendered in the UI
         self.show_link = ["id_teaser", "id_text"]
 
     def _init_special_fields(self):
@@ -146,22 +154,34 @@ class PlayerRelationshipForm(MyForm):
         Creates or updates the model instance, automatically assigning
         the registration from the run parameter for new instances.
 
-        Args:
-            commit: Whether to save the instance to the database.
-                   Defaults to True.
+        Parameters
+        ----------
+        commit : bool, default True
+            Whether to save the instance to the database.
 
-        Returns:
+        Returns
+        -------
+        Any
             The saved model instance.
+
+        Raises
+        ------
+        KeyError
+            If 'run' parameter is not found in self.params.
+        AttributeError
+            If run object doesn't have 'reg' attribute.
         """
         # Create instance without committing to database yet
         instance = super().save(commit=False)
 
         # For new instances, assign registration from run parameter
         if not instance.pk:
+            # Extract registration from the run parameter and assign to instance
             instance.reg = self.params["run"].reg
 
-        # Save the instance to database
-        instance.save()
+        # Only save to database if commit is True
+        if commit:
+            instance.save()
 
         return instance
 

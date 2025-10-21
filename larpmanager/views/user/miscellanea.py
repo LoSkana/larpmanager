@@ -73,13 +73,31 @@ def util(request, cod):
         raise Http404("not found") from err
 
 
-def help_red(request, n):
+def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
+    """Redirect to help page for a specific run.
+
+    Args:
+        request: The HTTP request object containing user and association context
+        n: Primary key of the run to display help for
+
+    Returns:
+        HttpResponseRedirect to the help page for the specified run
+
+    Raises:
+        Http404: If the run with the given primary key does not exist
+            or does not belong to the current association
+    """
+    # Get base user context and add association ID
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})
+
+    # Retrieve run ensuring it belongs to current association
     try:
         ctx["run"] = Run.objects.get(pk=n, event__assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
+
+    # Redirect to help page using run's slug
     return redirect("help", s=ctx["run"].get_slug())
 
 
@@ -139,16 +157,33 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
 
 
 @login_required
-def help_attachment(request, p):
+def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
+    """Serve attachment file for a help question.
+
+    Args:
+        request: HTTP request object containing user information
+        p: Primary key of the HelpQuestion object
+
+    Returns:
+        Redirect response to the attachment URL
+
+    Raises:
+        Http404: If HelpQuestion doesn't exist or user lacks access permission
+    """
+    # Get user context for permission checking
     ctx = def_user_ctx(request)
+
+    # Retrieve the help question object or raise 404
     try:
         hp = HelpQuestion.objects.get(pk=p)
     except ObjectDoesNotExist as err:
         raise Http404("HelpQuestion does not exist") from err
 
+    # Check if user owns the question or has association role
     if hp.member != request.user.member and not ctx["assoc_role"]:
         raise Http404("illegal access")
 
+    # Redirect to the attachment file URL
     return redirect(hp.attachment.url)
 
 

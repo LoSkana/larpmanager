@@ -155,16 +155,40 @@ def get_character_sheet(ctx):
     get_character_sheet_px(ctx)
 
 
-def get_character_sheet_px(ctx):
+def get_character_sheet_px(ctx: dict) -> None:
+    """
+    Populates the context with character sheet abilities organized by type.
+
+    This function processes a character's px_ability_list and groups abilities
+    by their type name for display in character sheets. Only processes if the
+    'px' feature is enabled in the context.
+
+    Args:
+        ctx: Dictionary context containing character data and features.
+             Must contain 'features' dict and 'character' object.
+             Modified in-place to add 'sheet_abilities' key.
+
+    Returns:
+        None: Function modifies the context dictionary in-place.
+    """
+    # Check if px feature is enabled, return early if not
     if "px" not in ctx["features"]:
         return
 
+    # Initialize abilities dictionary for grouping by type
     ctx["sheet_abilities"] = {}
+
+    # Process each ability in the character's px ability list
     for el in ctx["character"].px_ability_list.all():
+        # Check if ability has a valid type and type name
         if el.typ and el.typ.name and el.typ.name not in ctx["sheet_abilities"]:
+            # Create new list for this ability type
             ctx["sheet_abilities"][el.typ.name] = []
+
+        # Add ability to the appropriate type group
         ctx["sheet_abilities"][el.typ.name].append(el)
 
+    # Add additional character data to context
     add_char_addit(ctx["character"])
 
 

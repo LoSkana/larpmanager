@@ -254,19 +254,34 @@ class RegistrationForm(BaseRegistrationForm):
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
         self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
-    def init_pay_what(self, run):
+    def init_pay_what(self, run: Run) -> None:
         """Initialize pay-what-you-want donation field.
 
-        Args:
-            run: Run instance
+        Creates an IntegerField for pay-what-you-want donations if the feature
+        is enabled and the run is not in waiting status. Sets initial value
+        from existing instance data or defaults to 0.
+
+        Parameters
+        ----------
+        run : Run
+            Run instance to check status and initialize field for
+
+        Returns
+        -------
+        None
         """
+        # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
 
+        # Skip if run is in waiting status
         if "waiting" in run.status:
             return
 
+        # Create the pay-what-you-want field with validation constraints
         self.fields["pay_what"] = forms.IntegerField(min_value=0, max_value=1000, required=False)
+
+        # Set initial value from existing instance or default to 0
         if self.instance.pk and self.instance.pay_what:
             self.initial["pay_what"] = int(self.instance.pay_what)
         else:
@@ -343,18 +358,24 @@ class RegistrationForm(BaseRegistrationForm):
         Creates a ChoiceField for ticket selection based on available tickets
         for the given event and run, including ticket descriptions as help text.
 
-        Args:
-            event: Event instance to get tickets for
-            reg_counts: Dictionary containing registration count data
-            run: Run instance associated with the event
+        Parameters
+        ----------
+        event : Event
+            Event instance to get tickets for
+        reg_counts : dict
+            Dictionary containing registration count data
+        run : Run
+            Run instance associated with the event
 
-        Returns:
+        Returns
+        -------
+        str
             HTML string containing formatted ticket descriptions for help text
         """
         # Get available tickets based on event, registration counts and run
         tickets = self.get_available_tickets(event, reg_counts, run)
 
-        # Build ticket choices and collect descriptions for help text
+        # Initialize collections for ticket choices and help text
         ticket_choices = []
         ticket_help = ""
 
@@ -842,15 +863,33 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         que = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return que.values_list("character_id", flat=True)
 
-    def _save_multi(self, s, instance):
+    def _save_multi(self, s: str, instance) -> None:
+        """Save multi-select field data for character relationships.
+
+        For the 'characters_new' field, manages the many-to-many relationship
+        between registrations and characters by comparing old and new selections
+        and updating the database accordingly.
+
+        Args:
+            s: The field name being processed
+            instance: The registration instance being saved
+
+        Returns:
+            None for 'characters_new' field, otherwise delegates to parent
+        """
+        # Delegate non-character fields to parent implementation
         if s != "characters_new":
             return super()._save_multi(s, instance)
 
+        # Get current and new character selections as sets for comparison
         old = set(self.get_init_multi_character())
         new = set(self.cleaned_data["characters_new"].values_list("pk", flat=True))
 
+        # Remove relationships for characters no longer selected
         for ch in old - new:
             RegistrationCharacterRel.objects.filter(character_id=ch, reg_id=instance.pk).delete()
+
+        # Create relationships for newly selected characters
         for ch in new - old:
             RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
 

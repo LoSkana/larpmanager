@@ -312,13 +312,38 @@ def get_membership_request(ctx):
     return return_pdf(fp, _("Membership registration of %(user)s") % {"user": ctx["member"]})
 
 
-def print_character(ctx, force=False):
+def print_character(ctx: dict, force: bool = False) -> HttpResponse:
+    """
+    Generate and return a PDF character sheet for a given character and run.
+
+    Args:
+        ctx: Context dictionary containing character, run, and other data needed
+             for PDF generation. Must contain 'character' and 'run' keys.
+        force: If True, regenerates the PDF even if it already exists.
+               If False, only regenerates if the file needs updating.
+
+    Returns:
+        HttpResponse containing the PDF file data with appropriate headers
+        for download/display.
+    """
+    # Get the file path where the character sheet PDF should be stored
     fp = ctx["character"].get_sheet_filepath(ctx["run"])
+
+    # Mark context as PDF generation mode
     ctx["pdf"] = True
+
+    # Generate PDF if forced or if file needs to be reprinted
     if force or reprint(fp):
+        # Populate context with character sheet data
         get_character_sheet(ctx)
+
+        # Add PDF-specific formatting instructions to context
         add_pdf_instructions(ctx)
+
+        # Generate the PDF from HTML template and save to file path
         xhtml_pdf(ctx, "pdf/sheets/auxiliary.html", fp)
+
+    # Return the PDF file as an HTTP response for download
     return return_pdf(fp, f"{ctx['character']}")
 
 
@@ -596,16 +621,29 @@ def print_character_bkg(a, s, c):
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(a, s):
+def print_run_bkg(a, s) -> None:
+    """Print run background materials including gallery, profiles, characters, and handouts.
+
+    Args:
+        a: Association object for the event
+        s: Run slug identifier
+
+    Returns:
+        None
+    """
+    # Get fake request and event run context
     request = get_fake_request(a)
     ctx = get_event_run(request, s)
 
+    # Print gallery and profile materials
     print_gallery(ctx)
     print_profiles(ctx)
 
+    # Print all character materials for the run
     for ch in ctx["run"].event.get_elements(Character).values_list("number", flat=True):
         print_character_go(ctx, ch)
 
+    # Print all handout materials for the run
     for h in ctx["run"].event.get_elements(Handout).values_list("number", flat=True):
         print_handout_go(ctx, h)
 

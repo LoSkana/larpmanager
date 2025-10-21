@@ -119,15 +119,40 @@ def get_character_optimized(ctx, num):
 
 
 @login_required
-def orga_characters(request, s):
+def orga_characters(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Handle character management view for event organizers.
+
+    This view provides access to character management functionality for event
+    organizers, including character approval and writing access controls.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The HTTP request object containing user and session information
+    s : str
+        The event slug identifier used to determine which event's characters to manage
+
+    Returns
+    -------
+    HttpResponse
+        Rendered template response with character list and management controls
+    """
+    # Check if user has permission to access character management for this event
     ctx = check_event_permission(request, s, "orga_characters")
 
+    # Load all event-related cached data into context
     get_event_cache_all(ctx)
+
+    # Configure character approval and external writing access settings
     for config_name in ["user_character_approval", "writing_external_access"]:
         ctx[config_name] = get_event_config(ctx["event"].id, config_name, False, ctx)
+
+    # Enable export functionality if configured for this event
     if get_event_config(ctx["event"].id, "show_export", False, ctx):
         ctx["export"] = "character"
 
+    # Delegate to generic writing list view with Character model
     return writing_list(request, ctx, Character, "character")
 
 
@@ -482,12 +507,30 @@ def orga_character_form(request, s):
     return redirect("orga_writing_form", s=s, typ="character")
 
 
-def check_writing_form_type(ctx, typ):
+def check_writing_form_type(ctx: dict, typ: str) -> None:
+    """Check and validate writing form type, updating context with type information.
+
+    Args:
+        ctx: Context dictionary to be updated with type information
+        typ: Writing form type string to validate and process
+
+    Raises:
+        Http404: If the provided type is not available in current features
+    """
+    # Normalize type to lowercase for consistent processing
     typ = typ.lower()
+
+    # Get the writing type mapping configuration
     mapping = _get_writing_mapping()
+
+    # Build available types based on enabled features
     available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
+
+    # Validate that the requested type is available
     if typ not in available:
         raise Http404(f"unknown writing form type: {typ}")
+
+    # Update context with processed type information
     ctx["typ"] = typ
     ctx["writing_typ"] = available[typ]
     ctx["label_typ"] = typ.capitalize()
@@ -1110,12 +1153,27 @@ def _get_question_update(ctx: dict, el) -> str:
     return value
 
 
-def _check_working_ticket(request, ctx, token):
-    # perform normal check, if somebody else has opened the character to edit it
+def _check_working_ticket(request: HttpRequest, ctx: dict[str, Any], token: str) -> str | None:
+    """Check if anyone else is currently editing the character or specific field.
+
+    Performs a two-level check: first for the entire character element, then for
+    the specific field if the character check passes.
+
+    Args:
+        request: The HTTP request object containing user information
+        ctx: Context dictionary containing 'typ', 'element', and 'question' keys
+        token: Unique token identifying the current editing session
+
+    Returns:
+        Error message if someone else is editing, None if editing is allowed
+    """
+    # Check if someone else has opened the character element for editing
     msg = writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, token)
 
-    # perform check if somebody has opened the same field to edit it
+    # If character is available, check if the specific field is being edited
     if not msg:
-        msg = writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", token)
+        # Create field-specific identifier by combining element ID and question ID
+        field_identifier = f"{ctx['element'].id}_{ctx['question'].id}"
+        msg = writing_edit_working_ticket(request, ctx["typ"], field_identifier, token)
 
     return msg

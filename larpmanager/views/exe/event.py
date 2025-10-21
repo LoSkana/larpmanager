@@ -139,13 +139,35 @@ def exe_events_appearance(request, num):
 
 
 @login_required
-def exe_templates(request):
+def exe_templates(request: HttpRequest) -> HttpResponse:
+    """
+    Display and manage event templates for an association.
+
+    Retrieves all event templates for the current association and ensures
+    each template has at least one organizer role. Creates a default
+    organizer role if none exists.
+
+    Args:
+        request: HTTP request object containing user and session data
+
+    Returns:
+        Rendered HTML response with templates list and context data
+    """
+    # Check user permissions for template management
     ctx = check_assoc_permission(request, "exe_templates")
+
+    # Retrieve all event templates for the association, ordered by most recent
     ctx["list"] = Event.objects.filter(assoc_id=ctx["a_id"], template=True).order_by("-updated")
+
+    # Process each template to ensure it has required roles
     for el in ctx["list"]:
+        # Get all roles associated with this template
         el.roles = EventRole.objects.filter(event=el).order_by("number")
+
+        # Create default organizer role if template has no roles
         if not el.roles:
             el.roles = [EventRole.objects.create(event=el, number=1, name="Organizer")]
+
     return render(request, "larpmanager/exe/templates.html", ctx)
 
 

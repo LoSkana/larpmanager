@@ -61,15 +61,31 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class ConfigForm(MyForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the configuration form with custom fields.
+
+        Sets up the form with configuration fields and adds custom fields
+        based on element configurations retrieved from the system.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+        """
+        # Initialize parent class with provided arguments
         super().__init__(*args, **kwargs)
+
+        # Initialize instance attributes for configuration management
         self.config_fields = []
         self._section = None
         self.jump_section = None
 
+        # Set up configuration parameters
         self.set_configs()
 
+        # Retrieve all available element configurations
         res = self._get_all_element_configs()
+
+        # Add custom fields for each configured element
         for el in self.config_fields:
             self._add_custom_field(el, res)
 

@@ -34,14 +34,32 @@ def cache_skin_key(s):
     return f"skin_{s}"
 
 
-def get_cache_skin(s):
+def get_cache_skin(s: str) -> dict | None:
+    """Get cached skin data or initialize if not cached.
+
+    Args:
+        s: The skin identifier string.
+
+    Returns:
+        The cached skin data as a dictionary, or None if initialization fails.
+    """
+    # Generate cache key for the skin identifier
     key = cache_skin_key(s)
+
+    # Attempt to retrieve cached result
     res = cache.get(key)
+
+    # If cache miss, initialize new skin data
     if res is None:
         res = init_cache_skin(s)
+
+        # Return None if initialization failed
         if not res:
             return None
+
+        # Cache the successful result with 1-day timeout
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 

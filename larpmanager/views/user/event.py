@@ -769,14 +769,30 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/event/search.html", ctx)
 
 
-def get_fact(qs):
+def get_fact(qs) -> list[dict]:
+    """Get faction data with complete information for factions that have characters.
+
+    Args:
+        qs: QuerySet of faction objects to process.
+
+    Returns:
+        List of dictionaries containing complete faction data for factions
+        that have at least one character.
+    """
     ls = []
+
+    # Iterate through each faction in the queryset
     for f in qs:
+        # Get complete faction data including characters
         fac = f.show_complete()
-        # print(fac)
+
+        # Skip factions that have no characters
         if len(fac["characters"]) == 0:
             continue
+
+        # Add faction with characters to results
         ls.append(fac)
+
     return ls
 
 
