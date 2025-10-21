@@ -264,16 +264,15 @@ class AccountingItem(BaseModel):
     hide = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        """Return a string representation of the invoice.
-
-        Returns:
-            str: A formatted string containing invoice status, member,
-                causal, transaction ID, gross amount, and fee.
-        """
-        # Format invoice details with status, member info, and transaction data
-        return (
-            f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
-        )
+        s = "Payment invoice"
+        # noinspection PyUnresolvedReferences
+        if self.id:
+            # noinspection PyUnresolvedReferences
+            s += f" &{self.id}"
+        s += f" - {self.__class__.__name__}"
+        if self.member:
+            s += f" - {self.member}"
+        return s
 
     class Meta:
         abstract = True
