@@ -118,9 +118,6 @@ msgstr ""
 msgid "Manage invoices"
 msgstr ""
 
-msgid "Assignment"
-msgstr ""
-
 msgid "Collections"
 msgstr ""
 
@@ -1640,14 +1637,6 @@ msgstr ""
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
-msgid "Authorisation"
-msgstr ""
-
-msgid ""
-"Do you consent to the sharing of your personal data in accordance with the "
-"GDPR and our Privacy Policy"
-msgstr ""
-
 msgid "Select Language"
 msgstr ""
 
@@ -1666,16 +1655,18 @@ msgstr ""
 msgid "Quota"
 msgstr ""
 
-msgid "Postal code"
-msgstr ""
-
-msgid "Street"
-msgstr ""
-
 msgid "Character not allowed"
 msgstr ""
 
 msgid "Residence address"
+msgstr ""
+
+msgid "Authorisation"
+msgstr ""
+
+msgid ""
+"Do you consent to the sharing of your personal data in accordance with the "
+"GDPR and our Privacy Policy"
 msgstr ""
 
 #, python-format
@@ -1726,9 +1717,6 @@ msgid "Invoice"
 msgstr ""
 
 msgid "Method"
-msgstr ""
-
-msgid "Membership fee already existing for this user and for this year"
 msgstr ""
 
 msgid "Manage membership document upload"
@@ -1846,15 +1834,6 @@ msgid "Default"
 msgstr ""
 
 msgid "Manage event signups"
-msgstr ""
-
-msgid "Registration"
-msgstr ""
-
-msgid "Details"
-msgstr ""
-
-msgid "Main"
 msgstr ""
 
 msgid "Free donation"
@@ -1976,9 +1955,6 @@ msgid "Already existing relationship"
 msgstr ""
 
 msgid "Plot"
-msgstr ""
-
-msgid "This text will be added to the sheet of"
 msgstr ""
 
 msgid "Faction"
@@ -2761,6 +2737,9 @@ msgid "Delivered"
 msgstr ""
 
 msgid "Request"
+msgstr ""
+
+msgid "Details"
 msgstr ""
 
 msgid ""
@@ -5356,6 +5335,9 @@ msgid "Personal data"
 msgstr ""
 
 msgid "Given"
+msgstr ""
+
+msgid "Registration"
 msgstr ""
 
 msgid "Detail"

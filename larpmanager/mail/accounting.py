@@ -629,17 +629,35 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
     return subj, body
 
 
-def notify_token(instance, token_name):
-    # to user
+def notify_token(instance, token_name: str) -> None:
+    """Send token notification emails to user and event organizers.
+
+    Sends email notifications about tokens to both the user who received them
+    and to all organizers of the associated event (if applicable).
+
+    Parameters
+    ----------
+    instance : object
+        The token instance containing member and run information
+    token_name : str
+        Name of the token type for email content generation
+    """
+    # Send notification to the token recipient
     activate(instance.member.language)
     subj, body = get_token_email(instance, token_name)
+
+    # Add automatic usage notice to user email
     add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
     my_send_mail(subj, body + add_body, instance.member, instance)
-    # to orga
+
+    # Send notification to event organizers if token is associated with a run
     if instance.run:
         for orga in get_event_organizers(instance.run.event):
+            # Set organizer's language for localized email
             activate(orga.language)
             subj, body = get_token_email(instance, token_name)
+
+            # Customize subject line with user information for organizers
             subj += _(" for %(user)s") % {"user": instance.member}
             my_send_mail(subj, body, orga, instance)
 

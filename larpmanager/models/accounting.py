@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.db import models
 from django.db.models import Q
@@ -119,8 +120,8 @@ class PaymentInvoice(BaseModel):
         """Return a string representation of the invoice.
 
         Returns:
-            str: A formatted string containing invoice status, member,
-                 causal, transaction ID, gross amount, and fee.
+            A formatted string containing invoice status, member,
+            causal, transaction ID, gross amount, and fee.
         """
         # Format invoice details with status, member info, and transaction data
         return (
@@ -262,16 +263,17 @@ class AccountingItem(BaseModel):
 
     hide = models.BooleanField(default=False)
 
-    def __str__(self):
-        s = "Voce contabile"
-        # noinspection PyUnresolvedReferences
-        if self.id:
-            # noinspection PyUnresolvedReferences
-            s += f" &{self.id}"
-        s += f" - {self.__class__.__name__}"
-        if self.member:
-            s += f" - {self.member}"
-        return s
+    def __str__(self) -> str:
+        """Return a string representation of the invoice.
+
+        Returns:
+            str: A formatted string containing invoice status, member,
+                causal, transaction ID, gross amount, and fee.
+        """
+        # Format invoice details with status, member info, and transaction data
+        return (
+            f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
+        )
 
     class Meta:
         abstract = True
@@ -546,14 +548,24 @@ class AccountingItemDiscount(AccountingItem):
 
     detail = models.IntegerField(null=True, blank=True)
 
-    def show(self):
-        j = {"name": self.disc.name, "value": self.value}
-        if self.expires:
-            # noinspection PyUnresolvedReferences
-            j["expires"] = self.expires.strftime("%H:%M")
-        else:
-            j["expires"] = ""
-        return j
+    def show(self, run: Any = None) -> dict[str, Any]:
+        """Return a dictionary representation of the object for display purposes.
+
+        Args:
+            run: Optional run parameter (currently unused in implementation).
+
+        Returns:
+            Dictionary containing the object's value, max_redeem, and additional
+            attributes updated via upd_js_attr method.
+        """
+        # Initialize base dictionary with core attributes
+        js = {"value": self.value, "max_redeem": self.max_redeem}
+
+        # Update additional attributes from predefined list
+        for s in ["name"]:
+            self.upd_js_attr(js, s)
+
+        return js
 
 
 class CollectionStatus(models.TextChoices):

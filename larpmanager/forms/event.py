@@ -44,7 +44,6 @@ from larpmanager.forms.utils import (
     TemplateS2Widget,
     prepare_permissions_role,
     remove_choice,
-    save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.event import (
@@ -268,9 +267,24 @@ class OrgaFeatureForm(FeatureForm):
         model = Event
         fields = []
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance with cancellation prevention.
+
+        Initializes the parent class with all provided arguments and sets up
+        the instance to prevent cancellation operations.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
-        self._init_features(False)
+
+        # Set flag to prevent cancellation operations on this instance
+        self.prevent_canc: bool = True
 
     def save(self, commit: bool = True) -> Any:
         """Save the form instance with feature management and cache clearing.
@@ -1028,12 +1042,13 @@ class OrgaEventTextForm(MyForm):
         combinations are unique within an event.
 
         Returns:
-            dict: Cleaned form data containing validated fields.
+            Cleaned form data containing validated fields.
 
         Raises:
             ValidationError: If a default text already exists for the type or if
                 the language-type combination already exists.
         """
+        # Get cleaned data from parent validation
         cleaned_data = super().clean()
 
         # Extract form fields for validation
@@ -1045,12 +1060,14 @@ class OrgaEventTextForm(MyForm):
         if default:
             # Check if there is already a default with that type
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
+            # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Validate language-type combination uniqueness
         # Check if there is already a language with that type
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
+        # Ensure we're not comparing against the current instance
         if res.count() > 0 and res.first().pk != self.instance.pk:
             self.add_error("language", "There is already a language of this type!")
 
@@ -1076,9 +1093,31 @@ class OrgaEventRoleForm(MyForm):
         self.fields["members"].widget.set_assoc(self.params["a_id"])
         prepare_permissions_role(self, EventPermission)
 
-    def save(self, commit=True):
-        instance = super().save()
-        save_permissions_role(instance, self)
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance with feature management and cache clearing.
+
+        This method saves the form instance while handling feature persistence
+        and ensuring the event features cache is properly invalidated.
+
+        Parameters
+        ----------
+        commit : bool, default True
+            Whether to commit the instance to the database immediately.
+
+        Returns
+        -------
+        Any
+            The saved model instance.
+        """
+        # Save the instance without committing to database yet
+        instance = super().save(commit=False)
+
+        # Persist any feature-related data for this instance
+        self._save_features(instance)
+
+        # Clear cached event features to ensure fresh data on next access
+        clear_event_features_cache(instance.id)
+
         return instance
 
 

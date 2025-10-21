@@ -75,19 +75,25 @@ class RegistrationForm(BaseRegistrationForm):
         Sets up form fields for event registration including ticket selection,
         quota management, payment options, and registration questions.
 
-        Args:
-            *args: Variable length argument list passed to parent constructor.
-            **kwargs: Arbitrary keyword arguments passed to parent constructor.
-                Expected to contain 'params' with 'run' key containing:
-                - run: Run instance for the event registration
-                - event: Event instance (accessed via run.event)
+        Parameters
+        ----------
+        *args : Any
+            Variable length argument list passed to parent constructor.
+        **kwargs : Any
+            Arbitrary keyword arguments passed to parent constructor.
+            Expected to contain 'params' with 'run' key containing:
+            - run: Run instance for the event registration
+            - event: Event instance (accessed via run.event)
 
-        Raises:
-            KeyError: If 'params' or 'run' key is missing from kwargs.
+        Raises
+        ------
+        KeyError
+            If 'params' or 'run' key is missing from kwargs.
 
-        Note:
-            The form handles waiting list placement, quota management, payment
-            processing, and dynamic question generation based on event configuration.
+        Notes
+        -----
+        The form handles waiting list placement, quota management, payment
+        processing, and dynamic question generation based on event configuration.
         """
         # Call parent constructor with all provided arguments
         super().__init__(*args, **kwargs)
@@ -98,6 +104,7 @@ class RegistrationForm(BaseRegistrationForm):
         self.tickets_map: dict = {}
         self.profiles: dict = {}
         self.section_descriptions: dict = {}
+
         # Initialize ticket reference for later assignment
         self.ticket = None
 
@@ -261,14 +268,11 @@ class RegistrationForm(BaseRegistrationForm):
         is enabled and the run is not in waiting status. Sets initial value
         from existing instance data or defaults to 0.
 
-        Parameters
-        ----------
-        run : Run
-            Run instance to check status and initialize field for
+        Args:
+            run: Run instance to check status and initialize field for
 
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
         # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
@@ -294,17 +298,13 @@ class RegistrationForm(BaseRegistrationForm):
         considering time constraints and current instance state. Sets up the quotas form
         field with appropriate choices and widget configuration.
 
-        Parameters
-        ----------
-        event : Event
-            Event instance containing quota configurations
-        run : Run
-            Run instance with status and end date information
+        Args:
+            event: Event instance containing quota configurations
+            run: Run instance with status and end date information
 
-        Notes
-        -----
-        Modifies self.fields and self.initial in place. The quotas field is hidden
-        when only one option is available.
+        Note:
+            Modifies self.fields and self.initial in place. The quotas field is hidden
+            when only one option is available.
         """
         quota_chs = []
 
@@ -358,18 +358,12 @@ class RegistrationForm(BaseRegistrationForm):
         Creates a ChoiceField for ticket selection based on available tickets
         for the given event and run, including ticket descriptions as help text.
 
-        Parameters
-        ----------
-        event : Event
-            Event instance to get tickets for
-        reg_counts : dict
-            Dictionary containing registration count data
-        run : Run
-            Run instance associated with the event
+        Args:
+            event: Event instance to get tickets for
+            reg_counts: Dictionary containing registration count data
+            run: Run instance associated with the event
 
-        Returns
-        -------
-        str
+        Returns:
             HTML string containing formatted ticket descriptions for help text
         """
         # Get available tickets based on event, registration counts and run
@@ -599,7 +593,7 @@ class RegistrationForm(BaseRegistrationForm):
         exists as a special_cod in Registration objects for the current event.
 
         Returns:
-            The cleaned form data dictionary.
+            dict[str, Any]: The cleaned form data dictionary.
 
         Raises:
             ValidationError: When the friend code is not found in the system.
@@ -627,20 +621,84 @@ class RegistrationForm(BaseRegistrationForm):
 class RegistrationGiftForm(RegistrationForm):
     gift = True
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        keep = ["run", "ticket"]
-        for q in self.questions:
-            if q.giftable:
-                keep.append("q" + str(q.id))
-        list_del = [s for s in self.fields if s not in keep]
-        for field in list_del:
-            del self.fields[field]
-            key = f"id_{field}"
-            if key in self.mandatory:
-                self.mandatory.remove(key)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize registration form with tickets, questions, and event-specific options.
 
-        self.has_mandatory = len(self.mandatory) > 0
+        Sets up form fields for event registration including ticket selection,
+        quota management, payment options, and registration questions.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+                Expected to contain 'params' with 'run' key containing:
+                - run: Run instance for the event registration
+                - event: Event instance (accessed via run.event)
+
+        Raises:
+            KeyError: If 'params' or 'run' key is missing from kwargs.
+
+        Note:
+            The form handles waiting list placement, quota management, payment
+            processing, and dynamic question generation based on event configuration.
+        """
+        # Call parent constructor with all provided arguments
+        super().__init__(*args, **kwargs)
+
+        # Initialize core form state variables for tracking form data
+        # These store form configuration and user selections
+        self.questions: list = []
+        self.tickets_map: dict = {}
+        self.profiles: dict = {}
+        self.section_descriptions: dict = {}
+
+        # Initialize ticket reference for later assignment
+        self.ticket = None
+
+        # Extract run and event objects from parameters for form configuration
+        # These provide context for all subsequent form setup operations
+        run = self.params["run"]
+        event = run.event
+        self.event = event
+
+        # Get current registration counts for quota calculations and availability checks
+        # This data determines ticket availability and waiting list status
+        reg_counts = get_reg_counts(run)
+
+        # Initialize ticket selection field and retrieve help text for user guidance
+        # Creates the primary ticket selection interface with availability info
+        ticket_help = self.init_ticket(event, reg_counts, run)
+
+        # Determine if registration should be placed in waiting list based on instance or run status
+        # Checks existing registration status or current run capacity
+        self.waiting_check = (
+            self.instance
+            and self.instance.ticket
+            and self.instance.ticket.tier == TicketTier.WAITING
+            or not self.instance
+            and "waiting" in run.status
+        )
+
+        # Initialize quota management system and additional registration options
+        # Sets up capacity limits and optional registration features
+        self.init_quotas(event, run)
+        self.init_additionals()
+
+        # Setup payment-related form fields including pricing and surcharges
+        # Configures payment options and calculates total costs
+        self.init_pay_what(run)
+        self.init_surcharge(event)
+
+        # Add dynamic registration questions based on event configuration and requirements
+        # Creates custom form fields for event-specific data collection
+        self.init_questions(event, reg_counts)
+
+        # Setup friend referral system functionality for social registration features
+        # Enables users to invite friends during registration process
+        self.init_bring_friend()
+
+        # Append additional help text to ticket selection field for complete user guidance
+        # Combines base help text with dynamic availability information
+        self.fields["ticket"].help_text += ticket_help
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
@@ -680,56 +738,84 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         s.remove("run")
         return s
 
-    def __init__(self, *args, **kwargs):
-        """Initialize registration form with run and event specific configuration.
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize registration form with tickets, questions, and event-specific options.
+
+        Sets up form fields for event registration including ticket selection,
+        quota management, payment options, and registration questions.
 
         Args:
-            *args: Variable length argument list passed to parent form
-            **kwargs: Arbitrary keyword arguments passed to parent form
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+                Expected to contain 'params' with 'run' key containing:
+                - run: Run instance for the event registration
+                - event: Event instance (accessed via run.event)
+
+        Raises:
+            KeyError: If 'params' or 'run' key is missing from kwargs.
+
+        Note:
+            The form handles waiting list placement, quota management, payment
+            processing, and dynamic question generation based on event configuration.
         """
+        # Call parent constructor with all provided arguments
         super().__init__(*args, **kwargs)
 
-        self.run = self.params["run"]
-        self.event = self.params["run"].event
+        # Initialize core form state variables for tracking form data
+        # These store form configuration and user selections
+        self.questions: list = []
+        self.tickets_map: dict = {}
+        self.profiles: dict = {}
+        self.section_descriptions: dict = {}
 
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        # Initialize ticket reference for later assignment
+        self.ticket = None
 
-        self.allow_run_choice()
+        # Extract run and event objects from parameters for form configuration
+        # These provide context for all subsequent form setup operations
+        run = self.params["run"]
+        event = run.event
+        self.event = event
 
-        reg_section = _("Registration")
-        char_section = _("Character")
-        add_section = _("Details")
-        main_section = _("Main")
+        # Get current registration counts for quota calculations and availability checks
+        # This data determines ticket availability and waiting list status
+        reg_counts = get_reg_counts(run)
 
-        self.sections["id_member"] = reg_section
-        self.sections["id_run"] = reg_section
+        # Initialize ticket selection field and retrieve help text for user guidance
+        # Creates the primary ticket selection interface with availability info
+        ticket_help = self.init_ticket(event, reg_counts, run)
 
-        self.init_quotas(reg_section)
+        # Determine if registration should be placed in waiting list based on instance or run status
+        # Checks existing registration status or current run capacity
+        self.waiting_check = (
+            self.instance
+            and self.instance.ticket
+            and self.instance.ticket.tier == TicketTier.WAITING
+            or not self.instance
+            and "waiting" in run.status
+        )
 
-        self.init_ticket(reg_section)
+        # Initialize quota management system and additional registration options
+        # Sets up capacity limits and optional registration features
+        self.init_quotas(event, run)
+        self.init_additionals()
 
-        self.init_additionals(reg_section)
+        # Setup payment-related form fields including pricing and surcharges
+        # Configures payment options and calculates total costs
+        self.init_pay_what(run)
+        self.init_surcharge(event)
 
-        self.init_pay_what(reg_section)
+        # Add dynamic registration questions based on event configuration and requirements
+        # Creates custom form fields for event-specific data collection
+        self.init_questions(event, reg_counts)
 
-        # CHARACTERS
-        if "character" in self.params["features"]:
-            self.init_character(char_section)
+        # Setup friend referral system functionality for social registration features
+        # Enables users to invite friends during registration process
+        self.init_bring_friend()
 
-        if "unique_code" in self.params["features"]:
-            self.sections["id_special_cod"] = add_section
-            self.reorder_field("special_cod")
-        else:
-            self.delete_field("special_cod")
-
-        # REGISTRATION OPTIONS
-        keys = self.init_orga_fields(main_section)
-        all_fields = set(self.fields.keys()) - {field.replace("id_", "") for field in self.sections.keys()}
-        for lbl in all_fields - set(keys):
-            self.delete_field(lbl)
-
-        if "reg_que_sections" not in self.params["features"]:
-            self.show_sections = True
+        # Append additional help text to ticket selection field for complete user guidance
+        # Combines base help text with dynamic availability information
+        self.fields["ticket"].help_text += ticket_help
 
     def init_additionals(self, reg_section):
         if "additional_tickets" not in self.params["features"]:

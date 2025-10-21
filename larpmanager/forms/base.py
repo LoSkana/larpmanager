@@ -424,10 +424,70 @@ class BaseRegistrationForm(MyFormRun):
     class Meta:
         abstract = True
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.show_link = []
-        self.sections = {}
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with optional context parameters.
+
+        Sets up the form with context data, removes unnecessary fields,
+        configures widgets, and initializes tracking dictionaries for form state.
+
+        Args:
+            *args: Positional arguments passed to parent ModelForm.
+            **kwargs: Keyword arguments that may include:
+                - ctx: Context data dictionary containing form configuration
+                - run: Run instance for form context
+                - request: HTTP request object for access control
+
+        Note:
+            Automatically removes 'deleted' and 'temp' fields if present.
+            Sets up character widget with event context when available.
+            Configures automatic fields as hidden or removes them based on instance state.
+        """
+        # Initialize parent class first to establish basic form structure
+        super().__init__()
+
+        # Extract and store context data from kwargs, defaulting to empty dict
+        if "ctx" in kwargs:
+            self.params = kwargs.pop("ctx")
+        else:
+            self.params = {}
+
+        # Extract additional context parameters (run, request) if provided
+        for k in ["run", "request"]:
+            if k in kwargs:
+                self.params[k] = kwargs.pop(k)
+
+        # Call parent ModelForm initialization with cleaned arguments
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+
+        # Remove system-managed fields that shouldn't be user-editable
+        for m in ["deleted", "temp"]:
+            if m in self.fields:
+                del self.fields[m]
+
+        # Configure characters field widget with event context for filtering
+        if "characters" in self.fields:
+            self.fields["characters"].widget.set_event(self.params["event"])
+            # Optimize queryset to load only necessary fields for rendering performance
+            self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
+
+        # Handle automatic fields based on whether this is a new or existing instance
+        for s in self.get_automatic_field():
+            if s in self.fields:
+                if self.instance.pk:
+                    # Remove automatic fields for existing instances (already set)
+                    del self.fields[s]
+                else:
+                    # Hide automatic fields for new instances but keep them in form
+                    self.fields[s].widget = forms.HiddenInput()
+                    self.fields[s].required = False
+
+        # Initialize tracking dictionaries for form state and validation management
+        self.mandatory = []
+        self.answers = {}
+        self.singles = {}
+        self.multiples = {}
+        self.unavail = {}
+        self.max_lengths = {}
 
     def _init_reg_question(self, instance: Optional[Any], event: Any) -> None:
         """Initialize registration questions and answers from existing instance.
@@ -1118,18 +1178,70 @@ class MyCssForm(MyForm):
     customization with support for backgrounds, fonts, and color themes.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with optional context parameters.
 
-        if not self.instance.pk:
-            return
+        This method sets up the form with context data, removes unnecessary fields,
+        configures widgets, and initializes tracking dictionaries for form state.
 
-        path = self.get_css_path(self.instance)
-        if default_storage.exists(path):
-            css = default_storage.open(path).read().decode("utf-8")
-            if css_delimeter in css:
-                css = css.split(css_delimeter)[0]
-            self.initial[self.get_input_css()] = css
+        Args:
+            *args: Positional arguments passed to parent ModelForm.
+            **kwargs: Keyword arguments that may include:
+                ctx: Context data dictionary containing form configuration.
+                run: Run instance for form context.
+                request: HTTP request object for access control.
+
+        Note:
+            Automatically removes 'deleted' and 'temp' fields if present.
+            Sets up character widget with event context when available.
+            Configures automatic fields as hidden or removes them based on instance state.
+        """
+        # Initialize parent class first to establish basic form structure
+        super().__init__()
+
+        # Extract and store context data from kwargs, defaulting to empty dict
+        if "ctx" in kwargs:
+            self.params = kwargs.pop("ctx")
+        else:
+            self.params = {}
+
+        # Extract additional context parameters (run, request) if provided
+        for k in ["run", "request"]:
+            if k in kwargs:
+                self.params[k] = kwargs.pop(k)
+
+        # Call parent ModelForm initialization with cleaned arguments
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+
+        # Remove system-managed fields that shouldn't be user-editable
+        for m in ["deleted", "temp"]:
+            if m in self.fields:
+                del self.fields[m]
+
+        # Configure characters field widget with event context for filtering
+        if "characters" in self.fields:
+            self.fields["characters"].widget.set_event(self.params["event"])
+            # Optimize queryset to load only necessary fields for rendering performance
+            self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
+
+        # Handle automatic fields based on whether this is a new or existing instance
+        for s in self.get_automatic_field():
+            if s in self.fields:
+                if self.instance.pk:
+                    # Remove automatic fields for existing instances (already set)
+                    del self.fields[s]
+                else:
+                    # Hide automatic fields for new instances but keep them in form
+                    self.fields[s].widget = forms.HiddenInput()
+                    self.fields[s].required = False
+
+        # Initialize tracking dictionaries for form state and validation management
+        self.mandatory = []
+        self.answers = {}
+        self.singles = {}
+        self.multiples = {}
+        self.unavail = {}
+        self.max_lengths = {}
 
     def save(self, commit=True):
         self.instance.css_code = generate_id(32)

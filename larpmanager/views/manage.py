@@ -1018,12 +1018,30 @@ def orga_close_suggestion(request, s, perm):
     return redirect("manage", s=s)
 
 
-def _check_intro_driver(request, ctx):
+def _check_intro_driver(request, ctx) -> None:
+    """Check if intro driver should be shown to the user.
+
+    Sets intro_driver flag in context if the user hasn't seen the intro driver yet.
+    The intro driver is a UI walkthrough shown to new users.
+
+    Args:
+        request: Django HTTP request object containing user information
+        ctx: Template context dictionary to modify
+
+    Returns:
+        None: Function modifies ctx in-place
+    """
+    # Get the member associated with the current user
     member = request.user.member
+
+    # Configuration key for tracking intro driver state
     config_name = "intro_driver"
+
+    # Check if user has already seen the intro driver
     if member.get_config(config_name, False):
         return
 
+    # Set flag to show intro driver in template
     ctx["intro_driver"] = True
 
 

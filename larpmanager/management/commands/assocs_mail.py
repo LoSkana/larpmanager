@@ -27,11 +27,28 @@ from larpmanager.models.association import Association
 class Command(BaseCommand):
     help = "List of all assocs mails"
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
+        """Handle the command to list association emails.
+
+        This command retrieves all non-demo associations that have a main email
+        address and prints their slug and email in a formatted manner. It also
+        prints the admin email from settings.
+
+        Args:
+            *args: Variable length argument list passed to the command.
+            **options: Arbitrary keyword arguments passed to the command.
+
+        Returns:
+            None: This method outputs to stdout and doesn't return a value.
+        """
+        # Filter associations with valid main emails, excluding demo accounts
         lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)
+
+        # Iterate through associations ordered by slug and output formatted email info
         for el in lst.order_by("slug").values_list("slug", "main_mail"):
             if el[1]:
                 self.stdout.write(f"{el[0]}@larpmanager.com {el[1]}")
 
+        # Get admin email from settings and output it
         name, email = conf_settings.ADMINS[0]
         self.stdout.write(f"@larpmanager.com {email}")

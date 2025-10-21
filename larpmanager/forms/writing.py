@@ -22,7 +22,6 @@ from typing import Any
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
@@ -31,7 +30,6 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import (
-    QuestionApplicable,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -154,22 +152,15 @@ class PlayerRelationshipForm(MyForm):
         Creates or updates the model instance, automatically assigning
         the registration from the run parameter for new instances.
 
-        Parameters
-        ----------
-        commit : bool, default True
-            Whether to save the instance to the database.
+        Args:
+            commit: Whether to save the instance to the database.
 
-        Returns
-        -------
-        Any
+        Returns:
             The saved model instance.
 
-        Raises
-        ------
-        KeyError
-            If 'run' parameter is not found in self.params.
-        AttributeError
-            If run object doesn't have 'reg' attribute.
+        Raises:
+            KeyError: If 'run' parameter is not found in self.params.
+            AttributeError: If run object doesn't have 'reg' attribute.
         """
         # Create instance without committing to database yet
         instance = super().save(commit=False)
@@ -214,10 +205,23 @@ class BaseWritingForm(BaseRegistrationForm):
     question_class = WritingQuestion
     instance_key = "element_id"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form with default show_link configuration.
+
+        Initializes the parent class and configures which form fields should display
+        links in the rendered form interface. The show_link attribute determines
+        which field IDs will have clickable links rendered in the UI.
+
+        Args:
+            *args: Variable length argument list passed to parent class constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent class constructor.
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
-        # noinspection PyProtectedMember
-        self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
+
+        # Configure which fields should display links in the form interface
+        # These field IDs will have clickable links rendered in the UI
+        self.show_link = ["id_teaser", "id_text"]
 
     def _init_questions(self, event):
         super()._init_questions(event)
@@ -232,15 +236,33 @@ class BaseWritingForm(BaseRegistrationForm):
         key = f"option_char_{option.id}"
         return key
 
-    def save(self, commit=True):
-        instance = super().save()
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance with registration assignment.
 
-        instance.save()
-        if hasattr(self, "questions"):
-            orga = True
-            if hasattr(self, "orga"):
-                orga = self.orga
-            self.save_reg_questions(instance, orga=orga)
+        Creates or updates the model instance, automatically assigning
+        the registration from the run parameter for new instances.
+
+        Args:
+            commit: Whether to save the instance to the database. Defaults to True.
+
+        Returns:
+            The saved model instance.
+
+        Raises:
+            KeyError: If 'run' parameter is not found in self.params.
+            AttributeError: If run object doesn't have 'reg' attribute.
+        """
+        # Create instance without committing to database yet
+        instance = super().save(commit=False)
+
+        # For new instances, assign registration from run parameter
+        if not instance.pk:
+            # Extract registration from the run parameter and assign to instance
+            instance.reg = self.params["run"].reg
+
+        # Only save to database if commit is True
+        if commit:
+            instance.save()
 
         return instance
 
@@ -261,56 +283,23 @@ class PlotForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
-        """Initialize plot form with character relationships and dynamic fields.
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form with default show_link configuration.
 
-        Sets up plot editing form with character selection, role text fields,
-        and character finder functionality for plot management.
+        Initializes the parent class and configures which form fields should display
+        links in the rendered form interface. The show_link attribute determines
+        which field IDs will have clickable links rendered in the UI.
+
+        Args:
+            *args: Variable length argument list passed to parent class constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent class constructor.
         """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
-        self.init_orga_fields()
-        self.reorder_field("characters")
-
-        # Cache plot characters data to avoid multiple queries
-        if self.instance.pk:
-            plot_characters_data = list(
-                self.instance.get_plot_characters().values_list(
-                    "character__id", "character__number", "character__name", "text"
-                )
-            )
-            self.init_characters = [ch[0] for ch in plot_characters_data]
-        else:
-            plot_characters_data = []
-            self.init_characters = []
-
-        self.initial["characters"] = self.init_characters
-
-        self.role_help_text = _("This text will be added to the sheet of")
-
-        self._init_special_fields()
-
-        # PLOT CHARACTERS REL
-        self.add_char_finder = []
-        self.field_link = {}
-        if self.instance.pk:
-            for ch in plot_characters_data:
-                char = f"#{ch[1]} {ch[2]}"
-                field = f"char_role_{ch[0]}"
-                id_field = f"id_{field}"
-                self.fields[field] = forms.CharField(
-                    widget=WritingTinyMCE(),
-                    label=char,
-                    help_text=f"{self.role_help_text} {char}",
-                    required=False,
-                )
-
-                self.initial[field] = ch[3]
-
-                self.show_link.append(id_field)
-                self.add_char_finder.append(id_field)
-                reverse_args = [self.params["run"].get_slug(), ch[0]]
-                self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
+        # Configure which fields should display links in the form interface
+        # These field IDs will have clickable links rendered in the UI
+        self.show_link = ["id_teaser", "id_text"]
 
     def _save_multi(self, s, instance):
         self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
@@ -399,14 +388,26 @@ class QuestForm(WritingForm, BaseWritingForm):
         model = Quest
         exclude = ("number", "temp", "hide", "order")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form with default show_link configuration.
+
+        Initializes the parent class and configures which form fields should display
+        links in the rendered form interface. The show_link attribute determines
+        which field IDs will have clickable links rendered in the UI.
+
+        Args:
+            *args: Variable length argument list passed to parent class constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent class constructor.
+
+        Returns:
+            None: This method doesn't return a value.
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
-        self.init_orga_fields()
-        self._init_special_fields()
-
-        que = self.params["run"].event.get_elements(QuestType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        # Configure which fields should display links in the form interface
+        # These field IDs will have clickable links rendered in the UI
+        self.show_link = ["id_teaser", "id_text"]
 
 
 class TraitForm(WritingForm, BaseWritingForm):

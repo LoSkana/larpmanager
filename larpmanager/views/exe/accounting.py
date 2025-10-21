@@ -745,12 +745,38 @@ def exe_year_accounting(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def exe_run_accounting(request, num):
+def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
+    """
+    Display accounting information for a specific run.
+
+    This view handles the accounting page for a run, showing financial data
+    and related accounting information. Access is restricted to users with
+    accounting permissions for the associated organization.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        num: Primary key of the run to display accounting information for
+
+    Returns:
+        HttpResponse: Rendered accounting page with run financial data
+
+    Raises:
+        Http404: If the run doesn't belong to the user's organization
+    """
+    # Check user has accounting permissions for the organization
     ctx = check_assoc_permission(request, "exe_accounting")
+
+    # Retrieve the specific run and add to context
     ctx["run"] = Run.objects.get(pk=num)
+
+    # Verify the run belongs to the user's organization
     if ctx["run"].event.assoc_id != ctx["a_id"]:
         raise Http404("not your run")
+
+    # Generate accounting data for the run
     ctx["dc"] = get_run_accounting(ctx["run"], ctx)
+
+    # Render the accounting template with context data
     return render(request, "larpmanager/orga/accounting/accounting.html", ctx)
 
 

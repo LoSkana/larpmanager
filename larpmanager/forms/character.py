@@ -101,25 +101,19 @@ class CharacterForm(WritingForm, BaseWritingForm):
         dynamic custom fields based on event configuration, and optional
         character completion workflow for approval processes.
 
-        Parameters
-        ----------
-        *args : Any
-            Positional arguments passed to parent form class.
-        **kwargs : dict[str, Any]
-            Keyword arguments passed to parent form class. Must include
-            'params' dict with event, run, and features configuration.
+        Args:
+            *args: Positional arguments passed to parent form class.
+            **kwargs: Keyword arguments passed to parent form class. Must include
+                'params' dict with event, run, and features configuration.
 
-        Raises
-        ------
-        KeyError
-            If required 'params' key is missing from kwargs.
+        Raises:
+            KeyError: If required 'params' key is missing from kwargs.
 
-        Notes
-        -----
-        The 'params' dict should contain:
-        - event: Event instance for context
-        - run: Run instance for current event run
-        - features: Available features configuration
+        Note:
+            The 'params' dict should contain:
+            - event: Event instance for context
+            - run: Run instance for current event run
+            - features: Available features configuration
         """
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -500,12 +494,27 @@ class OrgaCharacterForm(CharacterForm):
         self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
         self.show_link.append("id_px_delivery_list")
 
-    def _save_px(self, instance):
+    def _save_px(self, instance: Any) -> None:
+        """Save experience points (PX) data to the character.
+
+        Updates the character with ability and delivery lists from cleaned form data
+        if the 'px' feature is enabled in the form parameters.
+
+        Args:
+            instance: The model instance to update with PX data
+
+        Returns:
+            None
+        """
+        # Check if PX feature is enabled in form configuration
         if "px" not in self.params["features"]:
             return
 
+        # Set ability list if present in cleaned data
         if "px_ability_list" in self.cleaned_data:
             instance.px_ability_list.set(self.cleaned_data["px_ability_list"])
+
+        # Set delivery list if present in cleaned data
         if "px_delivery_list" in self.cleaned_data:
             instance.px_delivery_list.set(self.cleaned_data["px_delivery_list"])
 
@@ -764,11 +773,22 @@ class OrgaWritingQuestionForm(MyForm):
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
 
-    def _init_applicable(self):
+    def _init_applicable(self) -> None:
+        """Initialize the applicable field based on instance state.
+
+        If the instance has a primary key (existing object), removes the applicable
+        field from the form. Otherwise, hides the field and sets its initial value
+        from the writing_typ parameter.
+
+        Returns:
+            None
+        """
+        # Remove applicable field for existing instances
         if self.instance.pk:
             del self.fields["applicable"]
             return
 
+        # Hide applicable field and set initial value for new instances
         self.fields["applicable"].widget = forms.HiddenInput()
         self.initial["applicable"] = self.params["writing_typ"]
 

@@ -29,6 +29,8 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.uploadedfile import UploadedFile
+from django.forms import Form
+from django.http import HttpRequest
 
 from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
@@ -1088,12 +1090,27 @@ def cover_load(ctx, z_obj):
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
 
 
-def tickets_load(request, ctx, form):
+def tickets_load(request: HttpRequest, ctx: dict, form: Form) -> list[str]:
+    """Load tickets from uploaded file and process each record.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        ctx: Context dictionary containing processing state and configuration
+        form: Form instance with cleaned data including the uploaded file
+
+    Returns:
+        List of log messages from the ticket loading process
+    """
+    # Extract and validate the uploaded file, expecting tickets data
     (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
 
+    # Process each ticket record if file was successfully loaded
     if input_df is not None:
+        # Convert DataFrame to dictionary records for individual processing
         for row in input_df.to_dict(orient="records"):
+            # Load each ticket record and collect processing logs
             logs.append(_ticket_load(request, ctx, row))
+
     return logs
 
 
@@ -1163,12 +1180,31 @@ def _ticket_load(request, ctx: dict, row: dict) -> str:
     return msg
 
 
-def abilities_load(request, ctx, form):
+def abilities_load(request: HttpRequest, ctx: dict, form: Form) -> list[str]:
+    """Load abilities from uploaded file and process each row.
+
+    Args:
+        request: The HTTP request object containing user session and metadata
+        ctx: Context dictionary containing processing state and configuration
+        form: Django form object with cleaned data including the uploaded file
+
+    Returns:
+        List of log messages generated during the ability loading process
+
+    Note:
+        Processes abilities from the first uploaded file in the form data.
+        Each row in the file is processed individually through _ability_load.
+    """
+    # Extract and parse the uploaded file, getting DataFrame and initial logs
     (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
 
+    # Process each row if file was successfully parsed
     if input_df is not None:
+        # Convert DataFrame to list of dictionaries for row-by-row processing
         for row in input_df.to_dict(orient="records"):
+            # Process individual ability record and append result to logs
             logs.append(_ability_load(request, ctx, row))
+
     return logs
 
 

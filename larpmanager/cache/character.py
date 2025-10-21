@@ -20,7 +20,7 @@
 
 import os
 import shutil
-from typing import Optional
+from typing import Any, Optional
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -486,12 +486,30 @@ def reset_event_cache_all(run):
     cache.delete(k)
 
 
-def update_character_fields(instance, data):
+def update_character_fields(instance: Any, data: dict[str, Any]) -> None:
+    """Update character fields in the provided data dictionary based on event features.
+
+    This function checks if character features are enabled for the event and updates
+    the data dictionary with character element fields if the feature is available.
+
+    Args:
+        instance: The instance containing event information (must have event_id attribute)
+        data: Dictionary to update with character element fields
+
+    Returns:
+        None: Function modifies the data dictionary in-place
+    """
+    # Get features available for this specific event
     features = get_event_features(instance.event_id)
+
+    # Early return if character features are not enabled
     if "character" not in features:
         return
 
+    # Build context for character element field retrieval
     ctx = {"features": features, "event": instance.event}
+
+    # Update data with all character element fields (including non-visible ones)
     data.update(get_character_element_fields(ctx, instance.pk, only_visible=False))
 
 
@@ -534,21 +552,56 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
     cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_event_cache_all_character_reg(instance, res, run):
+def update_event_cache_all_character_reg(instance: Any, res: dict[str, dict[int, dict[str, Any]]], run: Any) -> None:
+    """Update event cache with character registration data.
+
+    Updates the cache with character data from a registration instance,
+    including character display information and player search results.
+
+    Args:
+        instance: Registration instance containing character data
+        res: Result dictionary with 'chars' key containing character cache data
+        run: Run instance for context in player search
+    """
+    # Extract character from the registration instance
     char = instance.character
+
+    # Get character display data
     data = char.show()
+
+    # Update player search with current registration assignment
     search_player(char, data, {"run": run, "assignments": {char.number: instance}})
+
+    # Initialize character entry in cache if not present
     if char.number not in res["chars"]:
         res["chars"][char.number] = {}
+
+    # Update character cache with latest data
     res["chars"][char.number].update(data)
 
 
-def update_event_cache_all_character(instance, res, run):
+def update_event_cache_all_character(instance: Character, res: dict[str, Any], run: Run) -> None:
+    """Update character cache data for event display.
+
+    Args:
+        instance: The character instance to process
+        res: Result dictionary containing character cache data
+        run: The event run context for character data retrieval
+    """
+    # Get character display data for the specified run
     data = instance.show(run)
+
+    # Update character fields with the retrieved data
     update_character_fields(instance, data)
+
+    # Search and update player information with run context
     search_player(instance, data, {"run": run})
+
+    # Initialize character entry in result cache if not exists
     if instance.number not in res["chars"]:
         res["chars"][instance.number] = {}
+
+    # Update character cache with the processed data
     res["chars"][instance.number].update(data)
 
 
@@ -610,12 +663,30 @@ def on_character_pre_save_update_cache(char):
         clear_event_cache_all_runs(char.event)
 
 
-def on_character_factions_m2m_changed(sender, **kwargs):
+def on_character_factions_m2m_changed(sender, **kwargs) -> None:
+    """Handle character factions many-to-many field changes.
+
+    Clears event cache for all runs when character faction relationships
+    are modified through post_add, post_remove, or post_clear actions.
+
+    Args:
+        sender: The model class that sent the signal
+        **kwargs: Signal keyword arguments including action and instance
+
+    Returns:
+        None
+    """
+    # Extract the action type from signal kwargs
     action = kwargs.pop("action", None)
+
+    # Only process specific m2m change actions
     if action not in ["post_add", "post_remove", "post_clear"]:
         return
 
+    # Get the faction instance from signal kwargs
     instance: Optional[Faction] = kwargs.pop("instance", None)
+
+    # Clear cache for all runs of the faction's event
     clear_event_cache_all_runs(instance.event)
 
 

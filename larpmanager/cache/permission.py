@@ -158,12 +158,27 @@ def update_event_permission_feature(slug: str) -> tuple[str, str, str]:
     return slug, tutorial, config
 
 
-def get_event_permission_feature(slug):
+def get_event_permission_feature(slug: str | None) -> tuple[str, None, None]:
+    """Get event permission feature from cache or update if not cached.
+
+    Args:
+        slug: The event slug to retrieve permissions for. Can be None.
+
+    Returns:
+        A tuple containing the permission feature data. Returns ("def", None, None)
+        if slug is empty or None.
+    """
+    # Return default values if no slug provided
     if not slug:
         return "def", None, None
+
+    # Try to get cached result using the event permission feature key
     res = cache.get(event_permission_feature_key(slug))
+
+    # If not in cache, update and return the result
     if res is None:
         res = update_event_permission_feature(slug)
+
     return res
 
 

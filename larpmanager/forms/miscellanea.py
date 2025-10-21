@@ -205,12 +205,25 @@ class UploadAlbumsForm(forms.Form):
 
 
 class CompetencesForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        self.list = kwargs.pop("list")
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Initialize the form with show_link configuration.
+
+        Initializes the parent form class and configures specific fields to be
+        displayed as clickable links in the form interface.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None
+        """
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
-        for el in self.list:
-            self.fields[f"{el.id}_exp"] = forms.IntegerField(required=False)
-            self.fields[f"{el.id}_info"] = forms.CharField(required=False)
+
+        # Configure fields that should display as links in the form
+        # These fields will be rendered as clickable links rather than standard form inputs
+        self.show_link = ["id_reply_to", "id_raw"]
 
         # ~ class ContactForm(forms.Form):
 

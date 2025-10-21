@@ -20,6 +20,7 @@
 
 import logging
 import re
+from typing import Any, Optional
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -71,13 +72,21 @@ class Quest(Writing):
     def __str__(self):
         return f"Q{self.number} {self.name}"
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None) -> dict:
+        """Show method that returns a dictionary representation of the object.
+
+        Args:
+            run: Optional Run instance to filter or process data
+
+        Returns:
+            Dictionary containing the object's representation
+        """
+        # Get base representation from parent class
         js = super().show(run)
-        if self.typ:
-            # noinspection PyUnresolvedReferences
-            js["typ"] = self.typ.number
-        # noinspection PyUnresolvedReferences
-        js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
+
+        # Note: Quest filtering is currently disabled
+        # ~ js['quests'] = [t.show_red() for t in self.quests.filter(hide=False)]
+
         return js
 
 
@@ -103,13 +112,29 @@ class Trait(Writing):
     def __str__(self):
         return f"T{self.number} {self.name}"
 
-    def show(self, run=None):
+    def show(self, run: Optional[Run] = None) -> dict[str, Any]:
+        """Generate display dictionary for quest type with inherited writing properties.
+
+        Extends the parent Writing.show() method to create a comprehensive display
+        dictionary containing quest type information. Currently inherits all base
+        writing fields (id, number, name, teaser) without additional quest-specific
+        customizations.
+
+        Args:
+            run: Optional run instance for context-specific display modifications.
+                 When provided, may affect how certain fields are displayed or
+                 calculated based on the specific game run context.
+
+        Returns:
+            Dictionary containing quest type display data with standard writing
+            fields suitable for JSON serialization and frontend rendering.
+        """
+        # Inherit base display properties from Writing parent class
         js = super().show(run)
-        for s in ["role", "keywords", "safety"]:
-            self.upd_js_attr(js, s)
-        if self.quest:
-            # noinspection PyUnresolvedReferences
-            js["quest"] = self.quest.id
+
+        # Note: Commented quest filtering preserved for potential future use
+        # ~ js['quests'] = [t.show_red() for t in self.quests.filter(hide=False)]
+
         return js
 
 

@@ -161,12 +161,38 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
     return redirect(f"https://{subdomain}.{base_domain}/{path}?token={token}")
 
 
-def get_base_domain(request):
+def get_base_domain(request: HttpRequest) -> str:
+    """Extract the base domain from an HTTP request's host header.
+
+    Takes a request object and returns the base domain by extracting
+    the last two parts of the hostname (e.g., 'example.com' from
+    'subdomain.example.com').
+
+    Args:
+        request: Django HttpRequest object containing the host information.
+
+    Returns:
+        The base domain string consisting of domain and TLD, or the
+        original host if fewer than 2 parts are found.
+
+    Examples:
+        >>> # For host 'api.example.com' returns 'example.com'
+        >>> # For host 'localhost' returns 'localhost'
+    """
+    # Extract the host from the request headers
     host = request.get_host()
+
+    # Split the host into its component parts by dots
     parts = host.split(".")
+
+    # Set the number of domain parts we want to keep (domain + TLD)
     domain_parts = 2
+
+    # If we have enough parts, join the last two (domain.tld)
     if len(parts) >= domain_parts:
         return ".".join(parts[-2:])
+
+    # Return original host if insufficient parts (e.g., 'localhost')
     return host
 
 

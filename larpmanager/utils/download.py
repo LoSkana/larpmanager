@@ -513,10 +513,24 @@ def _header_regs(ctx: dict, el: object, key: list, val: list) -> None:
         key.append(ctx.get("token_name", _("Credits")))
 
 
-def _get_standard_row(ctx, el):
+def _get_standard_row(ctx: dict, el: object) -> tuple[list, list]:
+    """Extract and format data from an element for display in a standard row.
+
+    Args:
+        ctx: Context dictionary containing formatting and display parameters
+        el: Element object that provides show_complete() method for data extraction
+
+    Returns:
+        tuple: A tuple containing:
+            - val (list): List of formatted values for display
+            - key (list): List of corresponding keys/labels
+    """
     val = []
     key = []
+
+    # Iterate through all items from element's complete data representation
     for k, v in el.show_complete().items():
+        # Process each key-value pair and append to respective lists
         _writing_field(ctx, k, key, v, val)
 
     return val, key
@@ -643,12 +657,26 @@ def _download_prepare(ctx: dict, nm: str, query, typ: dict) -> object:
     return query
 
 
-def get_writer(ctx, nm):
+def get_writer(ctx: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
+    """
+    Create a CSV writer for HTTP response with proper headers.
+
+    Args:
+        ctx: Context dictionary containing event information
+        nm: Name component for the CSV filename
+
+    Returns:
+        Tuple containing the HTTP response object and CSV writer instance
+    """
+    # Create HTTP response with CSV content type and download headers
     response = HttpResponse(
         content_type="text/csv",
         headers={"Content-Disposition": 'attachment; filename="{}-{}.csv"'.format(ctx["event"], nm)},
     )
+
+    # Initialize CSV writer with tab delimiter
     writer = csv.writer(response, delimiter="\t")
+
     return response, writer
 
 

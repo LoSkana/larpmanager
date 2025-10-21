@@ -1,6 +1,7 @@
 import ast
 import csv
 import os
+from collections import defaultdict
 
 
 def get_function_length(node):
@@ -26,13 +27,29 @@ def analyze_file(filepath):
             tree = ast.parse(f.read(), filename=filepath)
         except SyntaxError:
             return []
+
     results = []
+    function_counts = defaultdict(int)  # Track count of each function name
+
+    # Collect all function definitions first, sorted by line number
+    functions = []
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            # Only include functions WITHOUT docstrings
-            if not has_docstring(node):
-                length = get_function_length(node)
-                results.append((node.name, filepath, length))
+            functions.append(node)
+
+    # Sort by line number to maintain file order
+    functions.sort(key=lambda n: n.lineno)
+
+    for node in functions:
+        # Only include functions WITHOUT docstrings
+        if not has_docstring(node):
+            # Count occurrence of this function name
+            function_counts[node.name] += 1
+            function_number = function_counts[node.name]
+
+            length = get_function_length(node)
+            results.append((node.name, filepath, length, function_number))
+
     return results
 
 
@@ -46,9 +63,9 @@ def main(folder="."):
                 path = os.path.join(root, file)
                 all_results.extend(analyze_file(path))
 
-    with open("function_analysis.csv", "w", newline="", encoding="utf-8") as csvfile:
+    with open("refactor/function_pydocs.csv", "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["function_name", "file_path", "length"])
+        writer.writerow(["name", "path", "length", "number"])
         writer.writerows(all_results)
 
 

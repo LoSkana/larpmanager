@@ -347,21 +347,70 @@ def print_character(ctx: dict, force: bool = False) -> HttpResponse:
     return return_pdf(fp, f"{ctx['character']}")
 
 
-def print_character_friendly(ctx, force=False):
+def print_character_friendly(ctx: dict, force: bool = False) -> any:
+    """Generate a lightweight PDF character sheet for friendly viewing.
+
+    Creates a simplified character sheet PDF that's optimized for casual viewing
+    rather than official game use. The PDF is cached and only regenerated when
+    forced or when the source data has changed.
+
+    Args:
+        ctx: Context dictionary containing character and run information.
+             Must include 'character' and 'run' keys.
+        force: If True, forces regeneration of the PDF even if cached
+               version exists. Defaults to False.
+
+    Returns:
+        PDF response object containing the generated character sheet
+        with filename formatted as "{character_name} - Lightweight".
+    """
+    # Get the filepath for the friendly character sheet PDF
     fp = ctx["character"].get_sheet_friendly_filepath(ctx["run"])
+
+    # Set PDF context flag for template rendering
     ctx["pdf"] = True
+
+    # Generate PDF if forced or if reprint is needed (file doesn't exist/outdated)
     if force or reprint(fp):
+        # Populate context with character sheet data
         get_character_sheet(ctx)
+
+        # Generate PDF using the friendly template
         pdf_template(ctx, "pdf/sheets/friendly.html", fp, True)
+
+    # Return the PDF file response with localized filename
     return return_pdf(fp, f"{ctx['character']} - " + _("Lightweight"))
 
 
-def print_character_rel(ctx, force=False):
+def print_character_rel(ctx: dict, force: bool = False) -> HttpResponse:
+    """Print character relationships PDF document.
+
+    Generates a PDF containing the character's relationships for a specific run.
+    The PDF is cached and only regenerated if forced or if the cached version
+    is outdated.
+
+    Args:
+        ctx: Context dictionary containing character and run information
+        force: If True, regenerates PDF even if cached version exists
+
+    Returns:
+        HttpResponse containing the PDF file with appropriate headers
+    """
+    # Get the file path for the relationships PDF
     fp = ctx["character"].get_relationships_filepath(ctx["run"])
+
+    # Check if PDF needs to be regenerated (forced or outdated)
     if force or reprint(fp):
+        # Load event cache data for performance
         get_event_cache_all(ctx)
+
+        # Retrieve character relationships data
         get_character_relationships(ctx)
+
+        # Generate PDF from template
         pdf_template(ctx, "pdf/sheets/relationships.html", fp, True)
+
+    # Return PDF response with proper filename
     return return_pdf(fp, f"{ctx['character']} - " + _("Relationships"))
 
 
@@ -556,12 +605,31 @@ def cleanup_faction_pdfs_on_save(instance):
         delete_character_pdf_files(char, runs=runs)
 
 
-def deactivate_castings_and_remove_pdfs(instance):
+def deactivate_castings_and_remove_pdfs(instance) -> None:
+    """
+    Deactivate castings for a specific member/run/type combination and remove associated PDF files.
+
+    This function performs two main operations:
+    1. Deactivates all castings matching the instance's member, run, and type
+    2. Removes PDF files for the character associated with the trait
+
+    Args:
+        instance: An object containing member, run, typ, and trait attributes.
+                 Expected to have member (Member), run (Run), typ (casting type),
+                 and trait (Trait with number attribute).
+
+    Returns:
+        None
+    """
+    # Deactivate all matching castings for this member/run/type combination
     for casting in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
         casting.active = False
         casting.save()
 
+    # Get the character associated with this trait number and run
     char = get_trait_character(instance.run, instance.trait.number)
+
+    # Remove PDF files if character exists
     if char:
         delete_character_pdf_files(char, instance.run)
 

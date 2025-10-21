@@ -392,15 +392,49 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         "user__email__icontains",
     ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.allowed = None
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize widget with feature help text and mapping.
 
-    def set_run(self, run):
+        Extracts feature-specific configuration from kwargs and initializes
+        the parent class with the remaining arguments.
+
+        Args:
+            *args: Variable positional arguments passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments containing:
+                help_text (dict, optional): Mapping of feature names to help text.
+                    Defaults to empty dict.
+                feature_map (dict, optional): Mapping of features to their
+                    configurations. Defaults to empty dict.
+                **remaining: Additional kwargs passed to parent constructor.
+
+        Returns:
+            None
+        """
+        # Extract feature-specific configuration from kwargs
+        self.feature_help = kwargs.pop("help_text", {})
+        self.feature_map = kwargs.pop("feature_map", {})
+
+        # Initialize parent class with remaining arguments
+        super().__init__(*args, **kwargs)
+
+    def set_run(self, run: Run) -> None:
+        """Set the allowed members for a specific run.
+
+        Updates the allowed set with member IDs from active registrations
+        and event role assignments for the given run.
+
+        Args:
+            run: The Run instance to process registrations and roles for
+        """
+        # Get active registrations (non-cancelled) for this run
         que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
         self.allowed = set(que.values_list("member_id", flat=True))
+
+        # Get event roles and their assigned members
         que = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
         self.allowed.update(que.values_list("members__id", flat=True))
+
+        # Set the field as required
         # noinspection PyUnresolvedReferences
         self.attrs["required"] = "required"
 

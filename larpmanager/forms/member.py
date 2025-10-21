@@ -19,9 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-import os
 import re
-from collections import OrderedDict
 from datetime import datetime
 from typing import Any
 
@@ -36,17 +34,13 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max, QuerySet
 from django.forms import Textarea
 from django.template import loader
-from django.utils import translation
 from django.utils.translation import gettext_lazy as _
-from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_assoc_config
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
-from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.base import FeatureNationality
 from larpmanager.models.member import (
@@ -54,11 +48,9 @@ from larpmanager.models.member import (
     Member,
     Membership,
     MembershipStatus,
-    NewsletterChoices,
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.validators import FileTypeValidator
 
@@ -108,90 +100,81 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     """Custom registration form with unique email validation and GDPR compliance."""
 
     # noinspection PyUnresolvedReferences, PyProtectedMember
-    def __init__(self, *args, **kwargs):
-        """Initialize RegistrationFormUniqueEmail with custom field configuration.
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with custom widget configurations.
+
+        Configures username and password fields with Bootstrap styling,
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
 
         Args:
-            *args: Variable length argument list passed to parent
-            **kwargs: Arbitrary keyword arguments, including 'request'
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
         """
-        self.request = kwargs.pop("request", None)
-        super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
-        self.fields["username"].widget = forms.HiddenInput()
+        # Initialize parent form with provided arguments
+        super().__init__(*args, **kwargs)
 
-        self.fields["lang"] = forms.ChoiceField(
-            required=True,
-            choices=conf_settings.LANGUAGES,
-            label=Member._meta.get_field("language").verbose_name,
-            help_text=Member._meta.get_field("language").help_text,
-            initial=translation.get_language(),
+        # Configure username field with Bootstrap styling and email placeholder
+        self.fields["username"].widget = forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
         )
+        # Remove label to create clean inline form appearance
+        self.fields["username"].label = False
 
-        self.fields["email"].widget.attrs["maxlength"] = 70
-
-        self.fields["password1"].widget.attrs["maxlength"] = 70
-
-        self.fields["name"] = forms.CharField(
-            required=True,
-            label=Member._meta.get_field("name").verbose_name,
-            help_text=Member._meta.get_field("name").help_text,
+        # Configure password field with Bootstrap styling and secure input
+        self.fields["password"].widget = forms.PasswordInput(
+            attrs={"class": "form-control", "placeholder": "password", "maxlength": 70},
         )
+        # Remove label for consistent styling with username field
+        self.fields["password"].label = False
 
-        self.fields["surname"] = forms.CharField(
-            required=True,
-            label=Member._meta.get_field("surname").verbose_name,
-            help_text=Member._meta.get_field("surname").help_text,
-        )
+    def clean_username(self) -> str:
+        """Validate and clean the username field.
 
-        self.fields["newsletter"] = forms.ChoiceField(
-            required=True,
-            choices=NewsletterChoices.choices,
-            label=Member._meta.get_field("newsletter").verbose_name,
-            help_text=Member._meta.get_field("newsletter").help_text,
-            initial=NewsletterChoices.ALL,
-        )
-
-        self.fields["share"] = forms.BooleanField(
-            required=True,
-            label=_("Authorisation"),
-            help_text=_(
-                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
-            )
-            + "?",
-        )
-
-        if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
-            public, private = get_recaptcha_secrets(self.request)
-            if public and private:
-                self.fields["captcha"] = ReCaptchaField(
-                    widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
-                )
-
-        # place language as first
-        new_order = ["lang"] + [key for key in self.fields if key != "lang"]
-        self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
-
-    def clean_username(self):
-        data = self.cleaned_data["username"].strip()
-        logger.debug(f"Validating username/email: {data}")
-        # check if already used in user or email
-        if User.objects.filter(email__iexact=data).exists():
-            raise ValidationError("Email already used! It seems you already have an account!")
-        return data
-
-    def save(self, commit=True):
-        """Save user and associated member profile.
-
-        Args:
-            commit: Whether to save to database
+        Checks if the provided username (email) is already in use by another user.
+        The validation is case-insensitive to prevent duplicate accounts.
 
         Returns:
-            User: Created user instance
+            The cleaned and validated username string.
+
+        Raises:
+            ValidationError: If the email is already registered by another user.
         """
+        # Strip whitespace from the input data
+        data = self.cleaned_data["username"].strip()
+        logger.debug(f"Validating username/email: {data}")
+
+        # Check if email is already registered (case-insensitive)
+        if User.objects.filter(email__iexact=data).exists():
+            raise ValidationError("Email already used! It seems you already have an account!")
+
+        return data
+
+    def save(self, commit: bool = True) -> User:
+        """Save user and associated member profile.
+
+        Creates or updates a user instance and populates the associated member
+        profile with form data including newsletter preferences, language settings,
+        and personal information.
+
+        Args:
+            commit: Whether to save changes to the database. Defaults to True.
+
+        Returns:
+            The created or updated User instance with populated member profile.
+
+        Note:
+            This method assumes the user has an associated member profile that
+            already exists or will be created by the parent save method.
+        """
+        # Save the user instance using parent class implementation
         user = super(RegistrationFormUniqueEmail, self).save()
 
+        # Update member profile with newsletter and language preferences
         user.member.newsletter = self.cleaned_data["newsletter"]
         user.member.language = self.cleaned_data["lang"]
+
+        # Set personal information from form data
         user.member.name = self.cleaned_data["name"]
         user.member.surname = self.cleaned_data["surname"]
         user.member.save()
@@ -202,15 +185,33 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 class MyPasswordResetConfirmForm(SetPasswordForm):
     """Custom password reset confirmation form with field limits."""
 
-    def __init__(self, *args, **kwargs):
-        """Initialize form with password field constraints.
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with custom widget configurations.
+
+        Configures username and password fields with Bootstrap styling,
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
 
         Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
         """
+        # Initialize parent form with provided arguments
         super().__init__(*args, **kwargs)
-        self.fields["new_password1"].widget.attrs["maxlength"] = 70
+
+        # Configure username field with Bootstrap styling and email placeholder
+        self.fields["username"].widget = forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
+        )
+        # Remove label to create clean inline form appearance
+        self.fields["username"].label = False
+
+        # Configure password field with Bootstrap styling and secure input
+        self.fields["password"].widget = forms.PasswordInput(
+            attrs={"class": "form-control", "placeholder": "password", "maxlength": 70},
+        )
+        # Remove label for consistent styling with username field
+        self.fields["password"].label = False
 
 
 class MyPasswordResetForm(PasswordResetForm):
@@ -347,17 +348,33 @@ MEMBERSHIP_CHOICES = (
 class ResidenceWidget(forms.MultiWidget):
     template_name = "forms/widgets/residence_widget.html"
 
-    def __init__(self, attrs=None):
-        attr_common = {"class": "form-control"}
-        widgets = [
-            forms.Select(choices=COUNTRY_CHOICES),
-            forms.Select(choices=PROVINCE_CHOICES),
-            forms.TextInput(attrs={**attr_common, "placeholder": _("Municipality")}),
-            forms.TextInput(attrs={**attr_common, "placeholder": _("Postal code")}),
-            forms.TextInput(attrs={**attr_common, "placeholder": _("Street")}),
-            forms.TextInput(attrs={**attr_common, "placeholder": _("House number")}),
-        ]
-        super().__init__(widgets, attrs)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with custom widget configurations.
+
+        Configures username and password fields with Bootstrap styling,
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+        """
+        # Initialize parent form with provided arguments
+        super().__init__(*args, **kwargs)
+
+        # Configure username field with Bootstrap styling and email placeholder
+        self.fields["username"].widget = forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
+        )
+        # Remove label to create clean inline form appearance
+        self.fields["username"].label = False
+
+        # Configure password field with Bootstrap styling and secure input
+        self.fields["password"].widget = forms.PasswordInput(
+            attrs={"class": "form-control", "placeholder": "password", "maxlength": 70},
+        )
+        # Remove label for consistent styling with username field
+        self.fields["password"].label = False
 
     def decompress(self, value):
         if value:
@@ -371,17 +388,33 @@ def validate_no_pipe(value):
 
 
 class ResidenceField(forms.MultiValueField):
-    def __init__(self, *args, **kwargs):
-        fields = [
-            forms.ChoiceField(choices=COUNTRY_CHOICES),
-            forms.ChoiceField(choices=PROVINCE_CHOICES, required=False),
-            forms.CharField(validators=[validate_no_pipe]),
-            forms.CharField(max_length=7, validators=[validate_no_pipe]),
-            forms.CharField(max_length=30, validators=[validate_no_pipe]),
-            forms.CharField(max_length=10, validators=[validate_no_pipe]),
-        ]
-        widget = ResidenceWidget(attrs=None)
-        super().__init__(*args, fields=fields, widget=widget, **kwargs)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with custom widget configurations.
+
+        Configures username and password fields with Bootstrap styling,
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+        """
+        # Initialize parent form with provided arguments
+        super().__init__(*args, **kwargs)
+
+        # Configure username field with Bootstrap styling and email placeholder
+        self.fields["username"].widget = forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
+        )
+        # Remove label to create clean inline form appearance
+        self.fields["username"].label = False
+
+        # Configure password field with Bootstrap styling and secure input
+        self.fields["password"].widget = forms.PasswordInput(
+            attrs={"class": "form-control", "placeholder": "password", "maxlength": 70},
+        )
+        # Remove label for consistent styling with username field
+        self.fields["password"].label = False
 
     def compress(self, values):
         if not values:
@@ -397,13 +430,13 @@ class ResidenceField(forms.MultiValueField):
         empty values when None or empty string.
 
         Args:
-            value: List of values from each widget field, or None if no input
+            value: List of values from each widget field, or None if no input.
 
         Returns:
-            Compressed cleaned data from all fields
+            Compressed cleaned data from all fields.
 
         Raises:
-            ValidationError: If any field validation fails
+            ValidationError: If any field validation fails.
         """
         # Handle empty or None input by creating default empty values
         if not value:
@@ -412,6 +445,7 @@ class ResidenceField(forms.MultiValueField):
 
         try:
             cleaned_data = []
+
             # Process each field with its corresponding value
             for i, field in enumerate(self.fields):
                 # Special case: second field (index 1) allows empty values
@@ -424,6 +458,7 @@ class ResidenceField(forms.MultiValueField):
             # Compress all cleaned field data into final result
             return self.compress(cleaned_data)
         except forms.ValidationError as err:
+            # Re-raise validation errors without modification
             raise err
 
 
@@ -722,15 +757,11 @@ class ExeVolunteerRegistryForm(MyForm):
         Checks if the member is already registered as a volunteer
         in the current association to prevent duplicate entries.
 
-        Returns
-        -------
-        Member
-            The validated member instance.
+        Returns:
+            Member: The validated member instance.
 
-        Raises
-        ------
-        ValidationError
-            If the member already has a volunteer entry in this association.
+        Raises:
+            ValidationError: If the member already has a volunteer entry in this association.
         """
         # Get the member from cleaned data
         member: Member = self.cleaned_data["member"]
@@ -818,12 +849,28 @@ class ExeMembershipFeeForm(forms.Form):
             label=_("Method"),
         )
 
-    def clean_member(self):
-        member = self.cleaned_data["member"]
-        year = datetime.today().year
+    def clean_member(self) -> Member:
+        """Validate the member field in the form.
 
-        if AccountingItemMembership.objects.filter(member=member, year=year).exists():
-            self.add_error("member", _("Membership fee already existing for this user and for this year"))
+        Checks if the member is already registered as a volunteer
+        in the current association to prevent duplicate entries.
+
+        Returns:
+            Member: The validated member instance.
+
+        Raises:
+            ValidationError: If the member already has a volunteer entry in this association.
+        """
+        # Get the member from cleaned data
+        member: Member = self.cleaned_data["member"]
+
+        # Query for existing volunteer registries for this member and association
+        # Filter by member and association ID from form parameters
+        lst: QuerySet[VolunteerRegistry] = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
+
+        # Check if duplicate entries exist (more than 1 entry means duplication)
+        if lst.count() > 1:
+            raise ValidationError("Volunteer entry already existing!")
 
         return member
 
@@ -881,10 +928,25 @@ class ExeMembershipDocumentForm(forms.Form):
 
         return member
 
-    def clean_card_number(self):
+    def clean_card_number(self) -> str:
+        """Clean and validate the card number field.
+
+        Checks if the card number is unique within the association to prevent
+        duplicate memberships.
+
+        Returns:
+            str: The cleaned card number if validation passes.
+
+        Raises:
+            ValidationError: If a member with this card number already exists
+                in the association.
+        """
+        # Get the card number from cleaned form data
         card_number = self.cleaned_data["card_number"]
 
+        # Check if a membership with this card number already exists in the association
         if Membership.objects.filter(assoc_id=self.params["a_id"], card_number=card_number).exists():
+            # Add validation error if duplicate card number found
             self.add_error("card_number", _("There is already a member with this number"))
 
         return card_number

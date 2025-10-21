@@ -82,14 +82,11 @@ class OrgaPersonalExpenseForm(MyFormRun):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-
-        Returns:
-            None
         """
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Check if Italian balance feature is disabled and remove balance field
+        # Check if Italian balance feature is disabled and remove balance field if so
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
@@ -172,10 +169,22 @@ class OrgaPaymentForm(MyFormRun):
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
         widgets = {"reg": EventRegS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
-        self.fields["reg"].widget.set_event(self.params["event"])
-        self.fields["reg"].required = True
+
+        # Check if Italian balance feature is disabled and remove balance field
+        if "ita_balance" not in self.params["features"]:
+            self.delete_field("balance")
 
 
 class ExeOutflowForm(MyForm):
@@ -205,9 +214,25 @@ class ExeOutflowForm(MyForm):
 
 
 class OrgaOutflowForm(ExeOutflowForm):
-    def __init__(self, *args, **kwargs):
-        self.auto_run = True
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
+        Returns:
+            None
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
+
+        # Check if Italian balance feature is disabled and remove balance field if so
+        if "ita_balance" not in self.params["features"]:
+            self.delete_field("balance")
 
 
 class ExeInflowForm(MyForm):
@@ -277,9 +302,25 @@ class ExeInvoiceForm(MyForm):
         exclude = ("hide", "reg", "key", "idx", "txn_id")
         widgets = {"member": AssocMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
+        Returns:
+            None
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
+
+        # Check if Italian balance feature is disabled and remove balance field if so
+        if "ita_balance" not in self.params["features"]:
+            self.delete_field("balance")
 
 
 class ExeCreditForm(MyForm):
@@ -290,14 +331,22 @@ class ExeCreditForm(MyForm):
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
-        self.page_title = _("Assignment") + f" {self.params['credit_name']}"
-        get_run_choices(self)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
-        self.fields["run"].widget.set_assoc(self.params["a_id"])
-        self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = OtherChoices.CREDIT
+
+        # Check if Italian balance feature is disabled and remove balance field
+        if "ita_balance" not in self.params["features"]:
+            self.delete_field("balance")
 
 
 class ExeTokenForm(MyForm):
@@ -306,15 +355,25 @@ class ExeTokenForm(MyForm):
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
+        Returns:
+            None
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
-        self.page_title = _("Assignment") + f" {self.params['token_name']}"
-        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
-        get_run_choices(self)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
-        self.fields["run"].widget.set_assoc(self.params["a_id"])
-        self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = OtherChoices.TOKEN
+
+        # Check if Italian balance feature is disabled and remove balance field if so
+        if "ita_balance" not in self.params["features"]:
+            self.delete_field("balance")
 
 
 class ExeExpenseForm(MyForm):
@@ -378,9 +437,22 @@ class ExeCollectionForm(CollectionNewForm):
         fields = ("name", "member", "status", "contribute_code", "redeem_code")
         widgets = {"member": AssocMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and conditionally remove balance field.
+
+        Initializes the parent form with provided arguments and conditionally
+        removes the 'balance' field based on the Italian balance feature status.
+
+        Args:
+            *args: Variable length argument list passed to parent constructor.
+            **kwargs: Arbitrary keyword arguments passed to parent constructor.
+        """
+        # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
+
+        # Check if Italian balance feature is disabled and remove balance field
+        if "ita_balance" not in self.params["features"]:
+            self.delete_field("balance")
 
 
 class OrgaDiscountForm(MyForm):

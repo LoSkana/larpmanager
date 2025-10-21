@@ -1078,12 +1078,36 @@ def get_pre_registration(event) -> dict[str, list | dict[str, int]]:
 
 
 @login_required
-def orga_pre_registrations(request, s):
+def orga_pre_registrations(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Display pre-registrations for an event in the organization dashboard.
+
+    This view handles the display of pre-registration data for event organizers,
+    including user preferences for pre-registration management.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The HTTP request object containing user and session information
+    s : str
+        The event slug identifier used to identify the specific event
+
+    Returns
+    -------
+    HttpResponse
+        Rendered HTML response containing the pre-registrations template
+        with event data and user preferences
+    """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_pre_registrations")
+
+    # Retrieve pre-registration data for the event
     ctx["dc"] = get_pre_registration(ctx["event"])
 
+    # Get user preferences for pre-registration management
     ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
+    # Render the pre-registrations template with context data
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 
 

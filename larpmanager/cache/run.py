@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
 
@@ -39,12 +40,30 @@ def cache_run_key(a, s):
     return f"run_{a}_{s}"
 
 
-def get_cache_run(a, s):
+def get_cache_run(a: Association, s: str) -> dict:
+    """Get cached run data for an association and slug.
+
+    Args:
+        a: The association object to get run data for
+        s: The run slug identifier
+
+    Returns:
+        Dictionary containing cached run data
+
+    Notes:
+        If cache miss occurs, initializes new cache entry with 1-day timeout
+    """
+    # Generate cache key from association and slug
     key = cache_run_key(a, s)
+
+    # Attempt to retrieve cached data
     res = cache.get(key)
+
+    # Initialize cache if data not found
     if res is None:
         res = init_cache_run(a, s)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
@@ -92,12 +111,29 @@ def cache_config_run_key(run):
     return f"run_config_{run.id}"
 
 
-def get_cache_config_run(run):
+def get_cache_config_run(run: Run) -> dict:
+    """Get cached configuration for a run.
+
+    Retrieves the configuration from cache if available, otherwise initializes
+    and caches the configuration for the specified run.
+
+    Args:
+        run: The Run instance to get configuration for.
+
+    Returns:
+        Dictionary containing the run configuration data.
+    """
+    # Generate the cache key for this specific run
     key = cache_config_run_key(run)
+
+    # Attempt to retrieve cached configuration
     res = cache.get(key)
+
+    # If not cached, initialize and store the configuration
     if res is None:
         res = init_cache_config_run(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 

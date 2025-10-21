@@ -367,13 +367,27 @@ def pre_save_accounting_item_payment(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_payment_accounting_cache(sender, instance, created, **kwargs):
+def post_save_payment_accounting_cache(sender: type, instance: PaymentInvoice, created: bool, **kwargs) -> None:
+    """Handle post-save signal for Payment model to update accounting caches.
+
+    Updates registration and member accounting caches when a payment is saved,
+    processes token credits, and calculates VAT for the payment.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Payment instance that was saved
+        created: True if a new record was created, False if updated
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update registration and member accounting cache if payment has valid registration
     if instance.reg and instance.reg.run:
         instance.reg.save()
         refresh_member_accounting_cache(instance.reg.run, instance.member_id)
 
+    # Process token credit updates based on payment changes
     update_token_credit_on_payment_save(instance, created)
 
+    # Calculate and update VAT information for this payment
     calculate_payment_vat(instance)
 
 
@@ -457,13 +471,37 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Association)
-def post_save_association_reset_lm_home(sender, instance, **kwargs):
+def post_save_association_reset_lm_home(sender: type, instance: Association, **kwargs) -> None:
+    """Handle post-save operations for Association instances.
+
+    This signal handler is triggered after an Association instance is saved and performs
+    cache invalidation and feature application to maintain data consistency across
+    the application.
+
+    Parameters
+    ----------
+    sender : type
+        The model class that sent the signal (Association)
+    instance : Association
+        The Association instance that was saved
+    **kwargs
+        Additional keyword arguments from the Django signal
+
+    Returns
+    -------
+    None
+        This function performs side effects through cache operations
+    """
+    # Clear the main LarpManager home page cache
     clear_larpmanager_home_cache()
 
+    # Apply configured skin features to this association
     apply_skin_features_to_association(instance)
 
+    # Clear association-specific cache using the slug identifier
     clear_association_cache(instance.slug)
 
+    # Reset feature cache for this association to reflect any changes
     on_association_post_save_reset_features_cache(instance)
 
 

@@ -394,12 +394,23 @@ def get_workshop_question(ctx, n, mod):
         raise Http404("WorkshopQuestion does not exist") from err
 
 
-def get_workshop_option(ctx, m):
+def get_workshop_option(ctx: dict, m: int) -> None:
+    """Get workshop option and validate it belongs to the current event.
+
+    Args:
+        ctx: Context dictionary to store the workshop option
+        m: Primary key of the WorkshopOption to retrieve
+
+    Raises:
+        Http404: If WorkshopOption doesn't exist or belongs to wrong event
+    """
     try:
+        # Retrieve workshop option by primary key
         ctx["workshop_option"] = WorkshopOption.objects.get(pk=m)
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopOption does not exist") from err
 
+    # Validate workshop option belongs to current event
     if ctx["workshop_option"].question.module.event != ctx["event"]:
         raise Http404("wrong event")
 
@@ -521,11 +532,23 @@ def pretty_request(request: HttpRequest) -> str:
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
 
 
-def remove_choice(lst, trm):
+def remove_choice(lst: list[tuple], trm: str) -> list[tuple]:
+    """Remove all tuples from a list where the first element matches the term.
+
+    Args:
+        lst: List of tuples to filter
+        trm: Term to match against the first element of each tuple
+
+    Returns:
+        New list with matching tuples removed
+    """
     new = []
+    # Iterate through each tuple in the input list
     for el in lst:
+        # Skip tuples where first element matches the term
         if el[0] == trm:
             continue
+        # Add non-matching tuples to the result list
         new.append(el)
     return new
 

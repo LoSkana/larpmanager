@@ -130,12 +130,50 @@ def orga_characters_sheet_pdf(request, s, num):
 
 
 @login_required
-def orga_characters_sheet_test(request, s, num):
+def orga_characters_sheet_test(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate a test character sheet PDF for organization members.
+
+    This function creates a test version of the character sheet PDF that allows
+    organization members to preview how the character sheet will appear when
+    generated. It includes PDF-specific formatting and instructions.
+
+    Parameters
+    ----------
+    request : HttpRequest
+        The Django HTTP request object containing user and session information
+    s : str
+        The event slug identifier used to locate the specific event
+    num : int
+        The character number/ID to generate the test sheet for
+
+    Returns
+    -------
+    HttpResponse
+        Rendered HTML response for the character sheet PDF template
+
+    Raises
+    ------
+    PermissionDenied
+        If user lacks required 'orga_characters_pdf' permission for the event
+    Http404
+        If the specified character or event cannot be found
+    """
+    # Check user permissions for character PDF generation in the specified event
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Validate character exists and user has access, add character data to context
     get_char_check(request, ctx, num, True)
+
+    # Enable PDF-specific rendering mode for template processing
     ctx["pdf"] = True
+
+    # Populate context with character sheet data and formatting
     get_character_sheet(ctx)
+
+    # Add PDF-specific instructions and metadata to context
     add_pdf_instructions(ctx)
+
+    # Render the auxiliary character sheet template with complete context
     return render(request, "pdf/sheets/auxiliary.html", ctx)
 
 

@@ -40,12 +40,27 @@ def cache_cache_lm_home_key():
     return "cache_lm_home"
 
 
-def get_cache_lm_home():
+def get_cache_lm_home() -> dict:
+    """Get cached LM home data with automatic refresh if cache miss.
+
+    Retrieves the cached home page data for LarpManager. If the cache is empty,
+    it automatically refreshes the cache by calling update_cache_lm_home() and
+    stores the result with a 1-day timeout.
+
+    Returns:
+        dict: The cached home page data containing relevant LarpManager information.
+    """
+    # Generate the cache key for LM home data
     key = cache_cache_lm_home_key()
+
+    # Attempt to retrieve cached data
     res = cache.get(key)
+
+    # If cache miss, refresh the data and store it
     if res is None:
         res = update_cache_lm_home()
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
@@ -98,10 +113,20 @@ def _get_showcases():
     return res
 
 
-def _get_promoters():
+def _get_promoters() -> list[dict]:
+    """Get all promoters from associations that have a promoter defined.
+
+    Returns:
+        A list of dictionaries containing promoter information from associations
+        that have a non-null and non-empty promoter field.
+    """
+    # Filter associations to exclude those without promoters
     que = Association.objects.exclude(promoter__isnull=True)
     que = que.exclude(promoter__exact="")
+
+    # Build result list from promoter dictionaries
     res = []
     for element in que:
         res.append(element.promoter_dict())
+
     return res

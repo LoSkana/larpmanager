@@ -52,12 +52,29 @@ from larpmanager.views.user.event import get_coming_runs
 
 
 @login_required
-def exe_events(request):
+def exe_events(request: HttpRequest) -> HttpResponse:
+    """Display list of events/runs for an association with registration status and counts.
+
+    This view shows all runs for events belonging to the current association,
+    ordered by end date. Each run includes registration status and participant counts.
+
+    Args:
+        request: HTTP request object containing user and session data
+
+    Returns:
+        Rendered HTML response with events list and registration data
+    """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_events")
+
+    # Fetch all runs for this association's events, ordered by end date
     ctx["list"] = Run.objects.filter(event__assoc_id=ctx["a_id"]).select_related("event").order_by("end")
+
+    # Enhance each run with registration status and participant counts
     for run in ctx["list"]:
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
+
     return render(request, "larpmanager/exe/events.html", ctx)
 
 

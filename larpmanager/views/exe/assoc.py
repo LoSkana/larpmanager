@@ -248,12 +248,31 @@ def exe_features_off(request, slug):
 
 
 @login_required
-def exe_larpmanager(request):
+def exe_larpmanager(request: HttpRequest) -> HttpResponse:
+    """Display LarpManager dashboard with run payment information.
+
+    Shows all runs for the current association with their payment status.
+    Requires 'exe_association' permission to access.
+
+    Args:
+        request: HTTP request object containing user and session data
+
+    Returns:
+        Rendered HTML response with runs list and payment information
+    """
+    # Check user has permission to access association dashboard
     ctx = check_assoc_permission(request, "exe_association")
+
+    # Get all runs for the current association
     que = Run.objects.filter(event__assoc_id=ctx["a_id"])
+
+    # Order runs by start date and optimize queries with select_related
     ctx["list"] = que.select_related("event").order_by("start")
+
+    # Calculate payment information for each run
     for run in ctx["list"]:
         get_run_lm_payment(run)
+
     return render(request, "larpmanager/exe/larpmanager.html", ctx)
 
 

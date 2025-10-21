@@ -66,9 +66,6 @@ class ExeWarehouseItemForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-
-        Returns:
-            None
         """
         # Initialize parent form with provided arguments
         super().__init__(*args, **kwargs)

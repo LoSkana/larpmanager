@@ -2,8 +2,8 @@ import csv
 import os
 import re
 import unicodedata
-from datetime import datetime
-from typing import Any
+from datetime import date
+from typing import Any, Union
 
 from django.conf import settings as conf_settings
 from django.utils.translation import gettext_lazy as _
@@ -81,7 +81,7 @@ def _extract_first_name(first_name: str) -> str:
     return (consonants + vowels + "XXX")[:3]
 
 
-def _extract_birth_date(birth_date: datetime.date | None, male: bool) -> str:
+def _extract_birth_date(birth_date: Union[date, None], male: bool) -> str:
     """Extract birth date components for Italian fiscal code generation.
 
     Converts a birth date into the specific format required for Italian fiscal codes,

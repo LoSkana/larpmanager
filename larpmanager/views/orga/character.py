@@ -682,12 +682,35 @@ def orga_writing_options_new(request, s, typ, num):
     return writing_option_edit(ctx, 0, request, typ)
 
 
-def writing_option_edit(ctx, num, request, typ):
+def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> HttpResponse:
+    """Edit a writing option for an organization event.
+
+    Handles the editing of writing options through a form submission process.
+    Redirects to appropriate pages based on user action (save or continue).
+
+    Args:
+        ctx: Context dictionary containing run and form data
+        num: The identifier number for the writing option
+        request: The HTTP request object
+        typ: The type identifier for the writing option
+
+    Returns:
+        HttpResponse: Either a redirect response or rendered edit template
+    """
+    # Attempt to process the form submission using backend_edit
+    # This handles form validation and saving for the writing option
     if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
+        # Default redirect target after successful save
         redirect_target = "orga_writing_form_edit"
+
+        # Check if user clicked "continue" to create another option
         if "continue" in request.POST:
             redirect_target = "orga_writing_options_new"
+
+        # Redirect with appropriate parameters including run slug and question ID
         return redirect(redirect_target, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].question_id)
+
+    # Form validation failed or initial GET request - render the edit template
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
@@ -876,17 +899,35 @@ def check_speedlarp(checks, ctx, id_number_map):
                 checks["speed_larps_double"].append((typ, c))
 
 
-def check_speedlarp_prepare(el, id_number_map, speeds):
+def check_speedlarp_prepare(el, id_number_map: dict[int, int], speeds: dict[int, dict[str, list[str]]]) -> None:
+    """Prepare speed LARP data by mapping character relationships to speeds dictionary.
+
+    Args:
+        el: Element object containing characters_map and typ attributes
+        id_number_map: Mapping from character IDs to number identifiers
+        speeds: Dictionary storing speed data organized by character number and type
+
+    Returns:
+        None: Modifies speeds dictionary in-place
+    """
+    # Collect valid character numbers from element's character map
     from_rels = set()
     for ch_id in el.characters_map:
         if ch_id not in id_number_map:
             continue
         from_rels.add(id_number_map[ch_id])
+
+    # Update speeds dictionary for each character
     for ch in from_rels:
+        # Initialize character entry if not exists
         if ch not in speeds:
             speeds[ch] = {}
+
+        # Initialize type entry for character if not exists
         if el.typ not in speeds[ch]:
             speeds[ch][el.typ] = []
+
+        # Add element string representation to character's type list
         speeds[ch][el.typ].append(str(el))
 
 

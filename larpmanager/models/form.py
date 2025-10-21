@@ -309,16 +309,11 @@ class WritingQuestion(BaseModel):
     def get_instance_questions(event: Event, features: QuerySet) -> QuerySet:
         """Get all writing questions for a specific event ordered by their sequence.
 
-        Parameters
-        ----------
-        event : Event
-            The event instance to retrieve questions for
-        features : QuerySet
-            Feature queryset (currently unused but kept for compatibility)
+        Args:
+            event: The event instance to retrieve questions for
+            features: Feature queryset (currently unused but kept for compatibility)
 
-        Returns
-        -------
-        QuerySet
+        Returns:
             Ordered queryset of writing questions for the event
         """
         # Retrieve all WritingQuestion elements associated with the event
@@ -412,17 +407,22 @@ class WritingOption(BaseModel):
     def get_form_text(self, run: Run | None = None, cs: Character | None = None) -> str:
         """Get the display name for this form element.
 
-        Args:
-            run: Optional Run instance to provide context for form display
-            cs: Optional Character instance for character-specific context
+        Parameters
+        ----------
+        run : Run | None, optional
+            Run instance to provide context for form display, by default None
+        cs : Character | None, optional
+            Character instance for character-specific context, by default None
 
-        Returns:
+        Returns
+        -------
+        str
             The name of the form element as it should be displayed
         """
         # Get the form display data for the current context
         s = self.show(run)
 
-        # Extract and return the display name
+        # Extract and return the display name from the show data
         return s["name"]
 
     def show(self, run=None):

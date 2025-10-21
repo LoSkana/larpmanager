@@ -327,13 +327,14 @@ class WorkshopModule(BaseModel):
         (if available through upd_js_attr method).
 
         Returns:
-            Dictionary with object data including id, number, and optionally name.
+            dict[str, int | str]: Dictionary with object data including id, number,
+                and optionally name.
         """
         # Create base dictionary with ID and number
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
 
-        # Add name attribute if available
+        # Add name attribute if available through upd_js_attr method
         self.upd_js_attr(js, "name")
 
         return js

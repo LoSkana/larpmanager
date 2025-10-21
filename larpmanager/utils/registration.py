@@ -620,27 +620,41 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
     _status_approval(aux, features, run)
 
 
-def _status_approval(aux, features, run):
-    # Add character creation/selection links if feature is enabled and not waiting
+def _status_approval(aux: bool, features: dict[str, bool], run: Run) -> None:
+    """Add character creation/selection links to run status based on user permissions.
+
+    Args:
+        aux: Whether user has auxiliary character assigned
+        features: Dictionary of enabled features for the event
+        run: The event run instance to modify status for
+
+    Returns:
+        None: Modifies run.status["details"] in place
+    """
+    # Early return if user_character feature is disabled
     if "user_character" not in features:
         return
 
-    # Check if registration is on waiting list
+    # Early return if registration is on waiting list - no character actions allowed
     if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
         return
 
+    # Check current character count against maximum allowed for this user
     check, max_chars = check_character_maximum(run.event, run.reg.member)
-    # Show character creation link if user can create more characters
+
+    # If user hasn't reached character limit, show character creation link
     if not check:
         url = reverse("character_create", args=[run.get_slug()])
+        # Add separator if status details already exist
         if run.status["details"]:
             run.status["details"] += " - "
         mes = _("Access character creation!")
         run.status["details"] += f"<a href='{url}'>{mes}</a>"
 
-    # Show character selection link if no characters assigned but max chars available
+    # If no auxiliary character assigned but user can have characters, show selection link
     elif not aux and max_chars:
         url = reverse("character_list", args=[run.get_slug()])
+        # Add separator if status details already exist
         if run.status["details"]:
             run.status["details"] += " - "
         mes = _("Select your character!")
@@ -709,9 +723,20 @@ def get_player_characters(member, event):
     return event.get_elements(Character).filter(player=member).order_by("-updated")
 
 
-def get_player_signup(request, ctx):
+def get_player_signup(request, ctx) -> Registration | None:
+    """Get the active registration for the current player in the specified run.
+
+    Args:
+        request: The HTTP request object containing the authenticated user
+        ctx: Context dictionary containing the 'run' key with the Run instance
+
+    Returns:
+        Registration object if an active registration exists, None otherwise
+    """
+    # Filter registrations for the current run and user, excluding cancelled ones
     regs = Registration.objects.filter(run=ctx["run"], member=request.user.member, cancellation_date__isnull=True)
 
+    # Return the first registration if any exist
     if regs:
         return regs[0]
 

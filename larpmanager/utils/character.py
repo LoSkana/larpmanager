@@ -247,18 +247,43 @@ def get_character_sheet_questbuilder(ctx):
         ctx["sheet_traits"].append(data)
 
 
-def get_character_sheet_plots(ctx):
+def get_character_sheet_plots(ctx: dict) -> None:
+    """Get and format plot information for character sheet display.
+
+    Retrieves all plots associated with a character and formats them for display
+    on the character sheet. Only processes plots if the 'plot' feature is enabled.
+
+    Args:
+        ctx: Context dictionary containing character data and features.
+             Must include 'character' and 'features' keys.
+
+    Returns:
+        None. Modifies ctx in-place by adding 'sheet_plots' key with formatted plot data.
+    """
+    # Check if plot feature is enabled, exit early if not
     if "plot" not in ctx["features"]:
         return
 
+    # Initialize the plots list in context
     ctx["sheet_plots"] = []
+
+    # Query all plot-character relationships for this character
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
+
+    # Process each plot relationship in order
     for el in que.order_by("order"):
+        # Start with the base plot text
         tx = el.plot.text
+
+        # Add separator if both plot text and relationship text exist
         if tx and el.text:
             tx += "<hr />"
+
+        # Append relationship-specific text if it exists
         if el.text:
             tx += el.text
+
+        # Add formatted plot data to context
         ctx["sheet_plots"].append({"name": el.plot.name, "text": tx})
 
 

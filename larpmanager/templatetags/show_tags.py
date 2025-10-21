@@ -88,18 +88,26 @@ def clean_tags(tx):
 
 
 @register.filter
-def get(value, arg):
+def get(value: dict, arg: str) -> any:
     """Template filter to get dictionary value by key.
 
-    Args:
-        value (dict): Dictionary to look up
-        arg (str): Key to retrieve
+    Parameters
+    ----------
+    value : dict
+        Dictionary to look up
+    arg : str
+        Key to retrieve
 
-    Returns:
-        any: Dictionary value for key, or empty string if not found
+    Returns
+    -------
+    any
+        Dictionary value for key, or empty string if not found
     """
+    # Check if arg is provided and value is a valid dictionary
     if arg is not None and value and arg in value:
         return value[arg]
+
+    # Return empty string if key not found or invalid input
     return ""
 
 

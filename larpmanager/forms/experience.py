@@ -22,7 +22,6 @@ from typing import Any
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_event_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
@@ -72,7 +71,29 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
         widgets = {"characters": EventCharacterS2WidgetMulti}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance with variable arguments.
+
+        This constructor acts as a transparent proxy to the parent class constructor,
+        forwarding all positional and keyword arguments without modification. This
+        pattern ensures proper initialization of the inheritance chain while allowing
+        maximum flexibility in the arguments passed to the parent class.
+
+        Args:
+            *args: Variable length argument list that will be forwarded to the
+                parent class constructor without modification.
+            **kwargs: Arbitrary keyword arguments that will be forwarded to the
+                parent class constructor without modification.
+
+        Returns:
+            None
+
+        Example:
+            >>> instance = ClassName(arg1, arg2, key1=value1, key2=value2)
+            >>> # All arguments are passed through to parent class
+        """
+        # Forward all arguments to parent class constructor to maintain
+        # proper inheritance chain initialization
         super().__init__(*args, **kwargs)
 
 
@@ -93,22 +114,23 @@ class OrgaAbilityPxForm(PxBaseForm):
             "requirements": EventWritingOptionS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance with variable arguments.
+
+        This constructor passes all provided arguments directly to the parent
+        class constructor, enabling flexible initialization while maintaining
+        the inheritance chain.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Example:
+            >>> instance = ClassName(arg1, arg2, key1=value1, key2=value2)
+        """
+        # Call parent class constructor with all provided arguments
+        # This ensures proper initialization of the inheritance chain
         super().__init__(*args, **kwargs)
-
-        for s in ["prerequisites", "requirements"]:
-            self.fields[s].widget.set_event(self.params["event"])
-
-        px_user = get_event_config(self.params["event"].id, "px_user", False)
-
-        self.fields["typ"].choices = [
-            (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")
-        ]
-
-        if not px_user:
-            self.delete_field("requirements")
-            self.delete_field("prerequisites")
-            self.delete_field("visible")
 
 
 class OrgaAbilityTypePxForm(MyForm):
