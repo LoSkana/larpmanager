@@ -283,6 +283,9 @@ class OrgaFeatureForm(FeatureForm):
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
+        # Init features (event-level)
+        self._init_features(False)
+
         # Set flag to prevent cancellation operations on this instance
         self.prevent_canc: bool = True
 
