@@ -95,6 +95,8 @@ class MyForm(forms.ModelForm):
         # Configure characters field widget with event context
         if "characters" in self.fields:
             self.fields["characters"].widget.set_event(self.params["event"])
+            # Optimize queryset to load only necessary fields for rendering
+            self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
 
         # Handle automatic fields based on instance state
         for s in self.get_automatic_field():

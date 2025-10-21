@@ -606,7 +606,7 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
     elif len(aux) > 1:
         run.status["details"] += _("Your characters are") + ": " + ", ".join(aux)
 
-        _status_approval(aux, features, run)
+    _status_approval(aux, features, run)
 
 
 def _status_approval(aux, features, run):
