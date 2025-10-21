@@ -584,7 +584,7 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
     ctx["past"] = []
 
     # Retrieve user's registrations for this event if authenticated
-    my_regs = None
+    my_regs = []
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
             run__event=ctx["event"],
