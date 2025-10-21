@@ -414,7 +414,7 @@ def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResp
 
     # Get event context and validate user permissions
     ctx = get_event_run(request, s, signup=True)
-    registration_find(ctx["run"], request.user)
+    registration_find(ctx["run"], request.user, None)
     get_char_check(request, ctx, num, True)
 
     # Retrieve character registration relationship

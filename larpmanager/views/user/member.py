@@ -920,21 +920,17 @@ def registrations(request: HttpRequest) -> HttpResponse:
     my_regs = Registration.objects.filter(member=request.user.member, run__event_id=request.assoc["id"])
     my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
-    # Retrieve cached dictionaries to optimize database queries
-    character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
-    payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
-    pre_registrations_dict = get_pre_registrations_dict(request.assoc["id"], request.user.member)
+    # Prepare context data
+    ctx_reg = {
+        "pre_registrations_dict": get_pre_registrations_dict(request.assoc["id"], request.user.member),
+        "character_rels_dict": get_character_rels_dict(my_regs_dict, request.user.member),
+        "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, request.user.member),
+    }
 
     # Process each registration to calculate status and append to results
     for reg in my_regs:
-        # Calculate registration status using cached data for performance
-        registration_status(
-            reg.run,
-            request.user,
-            pre_registrations_dict=pre_registrations_dict,
-            character_rels_dict=character_rels_dict,
-            payment_invoices_dict=payment_invoices_dict,
-        )
+        # Calculate registration status
+        registration_status(reg.run, request.user, ctx_reg)
         nt.append(reg)
 
     # Render template with processed registration list

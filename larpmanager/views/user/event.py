@@ -137,7 +137,6 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
-        my_regs = None
 
     # Initialize context with default user context and empty collections
     ctx = def_user_ctx(request)
@@ -147,20 +146,17 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     if lang:
         ctx["lang"] = lang
 
+    ctx_reg = {
+        "my_regs": my_regs_dict,
+        "character_rels_dict": character_rels_dict,
+        "payment_invoices_dict": payment_invoices_dict,
+        "pre_registrations_dict": pre_registrations_dict,
+    }
+
     # Process each run to determine registration status and categorize
     for run in runs:
-        # Attach user's registration to run object for template access
-        run.my_reg = my_regs_dict.get(run.id) if my_regs_dict else None
-
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(
-            run,
-            request.user,
-            my_regs=my_regs,
-            character_rels_dict=character_rels_dict,
-            payment_invoices_dict=payment_invoices_dict,
-            pre_registrations_dict=pre_registrations_dict,
-        )
+        registration_status(run, request.user, ctx_reg)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -388,9 +384,9 @@ def event_register(request, s):
         run = runs.first()
         return redirect("register", s=run.get_slug())
     ctx["list"] = []
-    features_map = {ctx["event"].slug: ctx["features"]}
+    ctx_reg = {"features_map": {ctx["event"].id: ctx["features"]}}
     for r in runs:
-        registration_status(r, request.user, features_map=features_map)
+        registration_status(r, request.user, ctx_reg)
         ctx["list"].append(r)
     return render(request, "larpmanager/general/event_register.html", ctx)
 
@@ -445,21 +441,17 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     runs_list = list(runs)
     ctx["list"] = []
 
+    ctx_reg = {
+        "my_regs": my_regs_dict,
+        "character_rels_dict": character_rels_dict,
+        "payment_invoices_dict": payment_invoices_dict,
+        "pre_registrations_dict": pre_registrations_dict,
+    }
+
     # Process each run to add registration status information
     for run in runs_list:
-        # Get user's registration for this run if it exists
-        user_reg = my_regs_dict.get(run.id) if my_regs_dict else None
-        my_regs_for_run = [user_reg] if user_reg else []
-
         # Update run object with registration status data
-        registration_status(
-            run,
-            request.user,
-            my_regs=my_regs_for_run,
-            character_rels_dict=character_rels_dict,
-            payment_invoices_dict=payment_invoices_dict,
-            pre_registrations_dict=pre_registrations_dict,
-        )
+        registration_status(run, request.user, ctx_reg)
 
         # Add processed run to context list
         ctx["list"].append(run)
@@ -606,7 +598,8 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
     ref = datetime.now() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking
-    features_map = {ctx["event"].slug: ctx["features"]}
+    features_map = {ctx["event"].id: ctx["features"]}
+    ctx_reg = {"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map}
 
     # Process each run to determine registration status and categorize by timing
     for r in runs:
@@ -614,7 +607,7 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
             continue
 
         # Update run with registration status information
-        registration_status(r, request.user, my_regs=my_regs, features_map=features_map)
+        registration_status(r, request.user, ctx_reg)
 
         # Categorize run as coming (recent) or past based on end date
         if r.end > ref.date():
