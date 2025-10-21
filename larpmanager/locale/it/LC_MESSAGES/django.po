@@ -3390,6 +3390,9 @@ msgstr "Percentuale restituzione"
 msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
+msgid "Set character status"
+msgstr "Imposta lo stato dei personaggi"
+
 msgid "Set up ability types"
 msgstr "Imposta i tipi di abilità"
 

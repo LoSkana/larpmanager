@@ -3390,6 +3390,9 @@ msgstr "Prozentsatz der Rendite"
 msgid "Selezione non valida"
 msgstr "Ungültige Auswahl"
 
+msgid "Set character status"
+msgstr "Zeichenstatus einstellen"
+
 msgid "Set up ability types"
 msgstr "Fähigkeitstypen einrichten"
 

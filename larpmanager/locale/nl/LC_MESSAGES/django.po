@@ -3390,6 +3390,9 @@ msgstr "Rendement percentage"
 msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
+msgid "Set character status"
+msgstr "Tekenstatus instellen"
+
 msgid "Set up ability types"
 msgstr "Typen vaardigheden instellen"
 
