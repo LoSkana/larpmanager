@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script to automatically improve functions using Claude Code CLI.
-Can accept a specific function as input or process from function_analysis.csv.
+Can accept a specific function as input or process from function_pydocs.csv.
 Processes each function: adds type hints, improves docstrings, adds comments.
 """
 
@@ -28,22 +28,40 @@ def max_parts():
     return 2
 
 
-def extract_function_from_file(file_path: Path, function_name: str) -> str | None:
-    """Extract the source code of a specific function from a file."""
+def extract_function_from_file(file_path: Path, function_name: str, function_number: int = 1) -> str | None:
+    """Extract the source code of a specific function from a file.
+
+    Args:
+        file_path: Path to the Python file
+        function_name: Name of the function to extract
+        function_number: Which occurrence of the function to extract (1-based)
+    """
     try:
         with open(file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         tree = ast.parse("".join(lines))
 
+        # Collect all function definitions with the matching name
+        matching_functions = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if node.name == function_name:
-                    start_line = node.lineno - 1  # Convert to 0-based
-                    end_line = node.end_lineno
-                    return "".join(lines[start_line:end_line])
+                    matching_functions.append(node)
 
-        return None
+        # Sort by line number to maintain file order
+        matching_functions.sort(key=lambda n: n.lineno)
+
+        # Check if the requested function number exists
+        if function_number > len(matching_functions) or function_number < 1:
+            return None
+
+        # Get the requested function (convert to 0-based index)
+        target_function = matching_functions[function_number - 1]
+        start_line = target_function.lineno - 1  # Convert to 0-based
+        end_line = target_function.end_lineno
+        return "".join(lines[start_line:end_line])
+
     except Exception as e:
         print(f"  ⚠️  Error extracting function: {e}")
         return None
@@ -77,6 +95,7 @@ IMPORTANTE:
 - NON aggiungere MAI import statements
 - MANTIENI esattamente la stessa indentazione della funzione originale
 - Non modificare l'indentazione esistente del codice
+- Non modificare in NESSUN MODO la logica del codice originale
 """
 
     try:
@@ -120,10 +139,17 @@ IMPORTANTE:
         return False, None
 
 
-def get_function_line_range(file_path: Path, function_name: str) -> tuple[int, int] | None:
+def get_function_line_range(file_path: Path, function_name: str, function_number: int = 1) -> tuple[int, int] | None:
     """
     Get the line range of a function in a file.
-    Returns (start_line, end_line) or None if not found.
+
+    Args:
+        file_path: Path to the Python file
+        function_name: Name of the function to find
+        function_number: Which occurrence of the function to find (1-based)
+
+    Returns:
+        (start_line, end_line) or None if not found.
     """
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -131,13 +157,24 @@ def get_function_line_range(file_path: Path, function_name: str) -> tuple[int, i
 
         tree = ast.parse(content)
 
-        # Find the function in the AST
+        # Collect all function definitions with the matching name
+        matching_functions = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if node.name == function_name:
-                    return node.lineno, node.end_lineno
+                    matching_functions.append(node)
 
-        return None
+        # Sort by line number to maintain file order
+        matching_functions.sort(key=lambda n: n.lineno)
+
+        # Check if the requested function number exists
+        if function_number > len(matching_functions) or function_number < 1:
+            return None
+
+        # Get the requested function (convert to 0-based index)
+        target_function = matching_functions[function_number - 1]
+        return target_function.lineno, target_function.end_lineno
+
     except Exception as e:
         print(f"  ⚠️  Error parsing file: {e}")
         return None
@@ -203,34 +240,54 @@ def normalize_function_indentation(improved_code: str, original_indentation: str
 
 
 def replace_function_in_file(
-    file_path: Path, function_name: str, new_function_code: str, original_function: str
+    file_path: Path, function_name: str, new_function_code: str, original_function: str, function_number: int = 1
 ) -> bool:
-    """Replace a function in a file with improved code, maintaining original indentation."""
+    """Replace a function in a file with improved code, maintaining original indentation.
+
+    Args:
+        file_path: Path to the Python file
+        function_name: Name of the function to replace
+        new_function_code: The improved function code
+        original_function: The original function source
+        function_number: Which occurrence of the function to replace (1-based)
+    """
     try:
         with open(file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         tree = ast.parse("".join(lines))
 
+        # Collect all function definitions with the matching name
+        matching_functions = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if node.name == function_name:
-                    start_line = node.lineno - 1  # Convert to 0-based
-                    end_line = node.end_lineno
+                    matching_functions.append(node)
 
-                    # Get original indentation and normalize the improved code
-                    original_indentation = get_function_indentation(original_function)
-                    normalized_code = normalize_function_indentation(new_function_code, original_indentation)
+        # Sort by line number to maintain file order
+        matching_functions.sort(key=lambda n: n.lineno)
 
-                    # Replace the function
-                    new_lines = lines[:start_line] + [normalized_code + "\n"] + lines[end_line:]
+        # Check if the requested function number exists
+        if function_number > len(matching_functions) or function_number < 1:
+            return False
 
-                    # Write back to file
-                    with open(file_path, "w", encoding="utf-8") as f:
-                        f.writelines(new_lines)
-                    return True
+        # Get the requested function (convert to 0-based index)
+        target_function = matching_functions[function_number - 1]
+        start_line = target_function.lineno - 1  # Convert to 0-based
+        end_line = target_function.end_lineno
 
-        return False
+        # Get original indentation and normalize the improved code
+        original_indentation = get_function_indentation(original_function)
+        normalized_code = normalize_function_indentation(new_function_code, original_indentation)
+
+        # Replace the function
+        new_lines = lines[:start_line] + [normalized_code + "\n"] + lines[end_line:]
+
+        # Write back to file
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.writelines(new_lines)
+        return True
+
     except Exception as e:
         print(f"  ⚠️  Error replacing function: {e}")
         return False
@@ -286,7 +343,7 @@ def improve_single_function(file_path: str, function_name: str) -> bool:
 
 def process_csv_batch():
     """Process functions from CSV file in batch mode."""
-    csv_path = Path.cwd() / "refactor/function_analysis.csv"
+    csv_path = Path.cwd() / "refactor/function_pydocs.csv"
 
     while True:
         # Read all rows from CSV
@@ -302,8 +359,9 @@ def process_csv_batch():
         row = rows[0]
         function_name = row["name"]
         csv_file_path = row["path"]
+        function_number = int(row.get("number", 1))  # Default to 1 for backward compatibility
 
-        print(f"\nProcessing: {function_name} in {csv_file_path}")
+        print(f"\nProcessing: {function_name} #{function_number} in {csv_file_path}")
 
         # Convert path
         file_path = convert_path(csv_file_path)
@@ -315,9 +373,9 @@ def process_csv_batch():
             success = True  # Skip this entry
         else:
             # Get function line range
-            line_range = get_function_line_range(file_path, function_name)
+            line_range = get_function_line_range(file_path, function_name, function_number)
             if not line_range:
-                print(f"  ⚠️  Function {function_name} not found in {file_path}")
+                print(f"  ⚠️  Function {function_name} #{function_number} not found in {file_path}")
                 success = True  # Skip this entry
             else:
                 start_line, end_line = line_range
@@ -325,17 +383,17 @@ def process_csv_batch():
 
                 # Call Claude Code to improve
                 print("  🤖 Calling Claude Code...")
-                original_function = extract_function_from_file(file_path, function_name)
+                original_function = extract_function_from_file(file_path, function_name, function_number)
                 success, improved_code = improve_function_with_claude_code(function_name, file_path)
                 if success and improved_code and original_function:
-                    if replace_function_in_file(file_path, function_name, improved_code, original_function):
-                        print(f"  ✅ Successfully processed {function_name}")
+                    if replace_function_in_file(file_path, function_name, improved_code, original_function, function_number):
+                        print(f"  ✅ Successfully processed {function_name} #{function_number}")
                         success = True
                     else:
-                        print(f"  ❌ Failed to replace {function_name}")
+                        print(f"  ❌ Failed to replace {function_name} #{function_number}")
                         success = False
                 else:
-                    print(f"  ❌ Failed to improve {function_name}")
+                    print(f"  ❌ Failed to improve {function_name} #{function_number}")
 
         # Remove processed row from CSV if successful or skipped
         if success:

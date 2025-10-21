@@ -221,6 +221,8 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_orga_fields()
         self.reorder_field("characters")
 
+        self.chars_id = []
+
         # Cache plot characters data to avoid multiple queries
         if self.instance.pk:
             plot_characters_data = list(
