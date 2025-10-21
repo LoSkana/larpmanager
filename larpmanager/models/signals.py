@@ -22,12 +22,14 @@ import logging
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
+from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 
 from larpmanager.accounting.base import (
     handle_accounting_item_collection_post_save,
     handle_accounting_item_payment_pre_save,
     handle_collection_pre_save,
 )
+from larpmanager.accounting.gateway import handle_invalid_paypal_ipn, handle_valid_paypal_ipn
 from larpmanager.accounting.payment import (
     process_collection_status_change,
     process_payment_invoice_status_change,
@@ -1269,3 +1271,28 @@ m2m_changed.connect(on_association_roles_m2m_changed, sender=AssocRole.members.t
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+
+@receiver(valid_ipn_received)
+def paypal_webhook(sender, **kwargs):
+    """Handle valid PayPal IPN notifications.
+
+    Args:
+        sender: IPN object from PayPal
+        **kwargs: Additional keyword arguments
+
+    Returns:
+        Result from invoice_received_money or None
+    """
+    return handle_valid_paypal_ipn(sender)
+
+
+@receiver(invalid_ipn_received)
+def paypal_ko_webhook(sender, **kwargs):
+    """Handle invalid PayPal IPN notifications.
+
+    Args:
+        sender: Invalid IPN object from PayPal
+        **kwargs: Additional keyword arguments
+    """
+    handle_invalid_paypal_ipn(sender)
