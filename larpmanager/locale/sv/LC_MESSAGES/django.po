@@ -3390,6 +3390,9 @@ msgstr "Procentuell avkastning"
 msgid "Selezione non valida"
 msgstr "Valet är inte giltigt"
 
+msgid "Set character status"
+msgstr "Ange teckenstatus"
+
 msgid "Set up ability types"
 msgstr "Ställ in förmågetyper"
 

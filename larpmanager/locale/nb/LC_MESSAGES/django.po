@@ -3390,6 +3390,9 @@ msgstr "Avkastning i prosent"
 msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
+msgid "Set character status"
+msgstr "Angi tegnstatus"
+
 msgid "Set up ability types"
 msgstr "Sett opp evnetyper"
 

@@ -3390,6 +3390,9 @@ msgstr "Pourcentage de retour"
 msgid "Selezione non valida"
 msgstr "Sélection non valide"
 
+msgid "Set character status"
+msgstr "Définir l'état des caractères"
+
 msgid "Set up ability types"
 msgstr "Configurer les types d'aptitudes"
 

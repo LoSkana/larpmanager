@@ -8550,6 +8550,9 @@ msgstr ""
 msgid "Set assigned staff member"
 msgstr ""
 
+msgid "Set character status"
+msgstr ""
+
 msgid "Set quest type"
 msgstr ""
 

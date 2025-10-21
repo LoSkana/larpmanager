@@ -3390,6 +3390,9 @@ msgstr "Zwracający się procent"
 msgid "Selezione non valida"
 msgstr "Wybór nie jest prawidłowy"
 
+msgid "Set character status"
+msgstr "Ustawianie stanu znaków"
+
 msgid "Set up ability types"
 msgstr "Konfigurowanie typów umiejętności"
 

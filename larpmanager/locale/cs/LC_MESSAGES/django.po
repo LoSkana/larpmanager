@@ -3390,6 +3390,9 @@ msgstr "Procento návratnosti"
 msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
+msgid "Set character status"
+msgstr "Nastavení stavu znaku"
+
 msgid "Set up ability types"
 msgstr "Nastavení typů schopností"
 

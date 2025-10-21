@@ -23,6 +23,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
@@ -33,7 +34,7 @@ from larpmanager.models.miscellanea import (
     WarehouseItem,
     WarehouseTag,
 )
-from larpmanager.models.writing import Character, Faction, Plot, Prologue
+from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot, Prologue
 from larpmanager.utils.exceptions import ReturnNowError
 
 
@@ -122,6 +123,7 @@ class Operations:
     DEL_CHAR_PROLOGUE = 14
     SET_CHAR_PROGRESS = 15
     SET_CHAR_ASSIGNED = 16
+    SET_CHAR_STATUS = 17
 
 
 def exec_bulk(request: HttpRequest, ctx: dict, mapping: dict) -> JsonResponse:
@@ -268,6 +270,10 @@ def exec_set_char_assigned(request, ctx, target, ids):
     ctx["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
+def exec_set_char_status(request, ctx, target, ids):
+    ctx["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
+
+
 def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
     """Process bulk operations on character objects.
 
@@ -299,6 +305,7 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
             Operations.DEL_CHAR_PROLOGUE: exec_del_char_prologue,
             Operations.SET_CHAR_PROGRESS: exec_set_char_progress,
             Operations.SET_CHAR_ASSIGNED: exec_set_char_assigned,
+            Operations.SET_CHAR_STATUS: exec_set_char_status,
         }
         # Execute the bulk operation and raise exception to return result
         raise ReturnNowError(exec_bulk(request, ctx, mapping))
@@ -360,6 +367,13 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
         staff_members = [{"id": m.id, "name": m.show_nick()} for m in event_staff]
         ctx["bulk"].append(
             {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members}
+        )
+
+    # Add status assignment operation if enabled
+    if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
+        status_choices = [{"id": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
+        ctx["bulk"].append(
+            {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices}
         )
 
 
