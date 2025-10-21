@@ -22,7 +22,7 @@ import logging
 import re
 import traceback
 from functools import wraps
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -58,17 +58,31 @@ def background_auto(schedule=0, **background_kwargs):
         function: Decorator function
     """
 
-    def decorator(func):
+    def decorator(func: Callable) -> Callable:
+        """Decorator that conditionally runs a function as a background task.
+
+        Args:
+            func: The function to be decorated and potentially run in background.
+
+        Returns:
+            A wrapper function that either executes immediately or schedules
+            as a background task based on AUTO_BACKGROUND_TASKS setting.
+        """
+        # Create the background task version of the function
         task = background(schedule=schedule, **background_kwargs)(func)
 
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs) -> Any:
+            # Check if auto background tasks are enabled in settings
             if getattr(conf_settings, "AUTO_BACKGROUND_TASKS", False):
+                # Filter out internal kwargs before direct execution
                 clean_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
                 return func(*args, **clean_kwargs)
             else:
+                # Schedule as background task when auto mode is disabled
                 return task(*args, **kwargs)
 
+        # Attach task references to wrapper for external access
         wrapper.task = task
         wrapper.task_function = func
         return wrapper

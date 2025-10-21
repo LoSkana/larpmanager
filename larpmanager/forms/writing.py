@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from typing import Any
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -109,27 +109,58 @@ class PlayerRelationshipForm(MyForm):
         self.fields["target"].widget.set_event(self.params["run"].event)
         self.fields["target"].required = True
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
+        """Clean and validate form data for player relationships.
+
+        Validates that:
+        - A player cannot create a relationship with themselves
+        - No duplicate relationships exist for the same registration and target
+
+        Returns:
+            The cleaned form data dictionary
+
+        Raises:
+            ValidationError: If validation rules are violated
+        """
         cleaned_data = super().clean()
 
+        # Prevent self-relationships
         if self.cleaned_data["target"].id == self.params["char"]["id"]:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
+        # Check for duplicate relationships (excluding current instance during edits)
         try:
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
+            # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship") + "!")
         except ObjectDoesNotExist:
+            # No existing relationship found - this is expected for new relationships
             pass
 
         return cleaned_data
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance with registration assignment.
+
+        Creates or updates the model instance, automatically assigning
+        the registration from the run parameter for new instances.
+
+        Args:
+            commit: Whether to save the instance to the database.
+                   Defaults to True.
+
+        Returns:
+            The saved model instance.
+        """
+        # Create instance without committing to database yet
         instance = super().save(commit=False)
 
+        # For new instances, assign registration from run parameter
         if not instance.pk:
             instance.reg = self.params["run"].reg
 
+        # Save the instance to database
         instance.save()
 
         return instance

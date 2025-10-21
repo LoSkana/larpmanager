@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import traceback
 from collections import defaultdict
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -258,13 +259,34 @@ def orga_features(request, s):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def orga_features_go(request, ctx, slug, on=True):
+def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True) -> Feature:
+    """Toggle a feature on or off for an event.
+
+    Args:
+        request: The HTTP request object
+        ctx: Context dictionary containing event, run, and feature data
+        slug: Feature slug identifier
+        on: Whether to activate (True) or deactivate (False) the feature
+
+    Returns:
+        The feature object that was toggled
+
+    Raises:
+        Http404: If the feature is an overall feature (not event-specific)
+    """
+    # Get the feature and validate it's not an overall feature
     get_feature(ctx, slug)
     if ctx["feature"].overall:
         raise Http404("overall feature!")
+
+    # Get current event features and target feature ID
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
+
+    # Clear cache for the current run
     clear_run_cache_and_media(ctx["run"])
+
+    # Handle feature activation/deactivation logic
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
@@ -277,11 +299,12 @@ def orga_features_go(request, ctx, slug, on=True):
         ctx["event"].features.remove(f_id)
         msg = _("Feature %(name)s deactivated") + "!"
 
+    # Save the event and update cached features for child events
     ctx["event"].save()
-    # update cached event features, for itself, and the events for which they are parent
     for ev in Event.objects.filter(parent=ctx["event"]):
         ev.save()
 
+    # Format and display success message
     msg = msg % {"name": _(ctx["feature"].name)}
     if ctx["feature"].after_text:
         msg += " " + ctx["feature"].after_text
@@ -621,17 +644,53 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     return exports
 
 
-def _reg_template(ctx, typ, value_mapping):
+def _reg_template(
+    ctx: dict[str, Any], typ: str, value_mapping: dict[str, Any]
+) -> list[tuple[str, list[str], list[list[str]]]]:
+    """
+    Generate a registration template with predefined defaults and dynamic fields.
+
+    Creates an export template for registration data by combining default column
+    values with dynamic field mappings based on field types.
+
+    Parameters
+    ----------
+    ctx : dict[str, Any]
+        Context dictionary containing 'columns' and 'fields' data
+    typ : str
+        Template type identifier used in the export name
+    value_mapping : dict[str, Any]
+        Mapping of field types to their corresponding values
+
+    Returns
+    -------
+    list[tuple[str, list[str], list[list[str]]]]
+        List containing a single tuple with:
+        - Template name (str)
+        - Column headers (list[str])
+        - Row data (list[list[str]])
+    """
+    # Extract column keys from the first row of context data
     keys = list(ctx["columns"][0].keys())
     vals = []
+
+    # Define default values for standard registration fields
     defs = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
+
+    # Add default values for existing columns in the specified order
     for field, value in defs.items():
         if field not in keys:
             continue
         vals.append(value)
+
+    # Extend keys with dynamic field names from context
     keys.extend(ctx["fields"])
+
+    # Map dynamic field types to their corresponding values
     for _field, field_typ in ctx["fields"].items():
         vals.append(value_mapping[field_typ])
+
+    # Create the final export structure as a list of tuples
     exports = [(f"{typ} - template", keys, [vals])]
     return exports
 

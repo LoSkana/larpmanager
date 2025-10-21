@@ -287,20 +287,35 @@ class Character(Writing):
 
         return js
 
-    def show_factions(self, event, js):
+    def show_factions(self, event: Event, js: dict) -> None:
+        """Show factions data for the given event.
+
+        Args:
+            event: The event to get factions for, if None uses self.event
+            js: Dictionary to populate with faction data
+        """
         js["factions"] = []
+
+        # Determine which event to use for faction lookup
         if event:
             fac_event = event.get_class_parent("faction")
         else:
             fac_event = self.event.get_class_parent("faction")
+
         primary = False
+
+        # Process all factions for the event
         # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
+            # Check if this is a primary faction
             if g.typ == FactionType.PRIM:
                 primary = True
+                # Set thumbnail if cover exists
                 if g.cover:
                     js["thumb"] = g.thumb.url
             js["factions"].append(g.number)
+
+        # Add default faction if no primary found
         if not primary:
             js["factions"].append(0)
 

@@ -40,11 +40,22 @@ class PxBaseForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the instance with variable arguments.
 
+        This constructor passes all provided arguments directly to the parent
+        class constructor, enabling flexible initialization while maintaining
+        the inheritance chain.
+
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        Returns:
+            None: This method does not return a value.
+
+        Example:
+            >>> instance = ClassName(arg1, arg2, key1=value1, key2=value2)
         """
         # Call parent class constructor with all provided arguments
+        # This ensures proper initialization of the inheritance chain
         super().__init__(*args, **kwargs)
 
 

@@ -205,19 +205,42 @@ def album_sub(request, s, num):
 
 
 @login_required
-def workshops(request, s):
+def workshops(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Display workshops for an event with completion status for the current user.
+
+    Args:
+        request: The HTTP request object containing user information
+        s: String identifier for the event/run
+
+    Returns:
+        HttpResponse: Rendered template with workshop list and completion status
+    """
+    # Get event context with signup and status information
     ctx = get_event_run(request, s, signup=True, status=True)
-    # get modules assigned to this event
+
+    # Initialize empty list for workshop data
     ctx["list"] = []
+
+    # Iterate through workshops assigned to this event, ordered by number
     for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
+        # Get workshop display data
         dt = workshop.show()
+
+        # Set completion check limit to 365 days ago
         limit = datetime.now() - timedelta(days=365)
         logger.debug(f"Workshop completion limit date: {limit}")
+
+        # Check if user has completed this workshop within the time limit
         dt["done"] = (
             WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
             >= 1
         )
+
+        # Add workshop data to context list
         ctx["list"].append(dt)
+
+    # Render and return the workshops template
     return render(request, "larpmanager/event/workshops/index.html", ctx)
 
 

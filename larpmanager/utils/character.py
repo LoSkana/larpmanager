@@ -238,62 +238,84 @@ def get_character_sheet_plots(ctx):
         ctx["sheet_plots"].append({"name": el.plot.name, "text": tx})
 
 
-def get_character_sheet_factions(ctx):
+def get_character_sheet_factions(ctx: dict) -> None:
+    """Get character sheet factions with associated writing fields and answers.
+
+    Fetches faction data for a character including writing questions and answers,
+    with optimized bulk queries to avoid N+1 problems.
+
+    Args:
+        ctx: Context dictionary containing character, event, and features data.
+             Must include 'character', 'event', and 'features' keys.
+
+    Returns:
+        None. Modifies ctx in-place by adding 'sheet_factions' key with faction data.
+    """
+    # Early return if faction feature is not enabled
     if "faction" not in ctx["features"]:
         return
 
+    # Get the faction event context and initialize sheet factions list
     fac_event = ctx["event"].get_class_parent("faction")
     ctx["sheet_factions"] = []
 
-    # Fetch all factions
+    # Fetch all factions for the character in this event
     factions = list(ctx["character"].factions_list.filter(event=fac_event))
 
+    # Early return if no factions found
     if not factions:
         return
 
-    # Prepare writing fields query data
+    # Prepare writing fields query data for faction-type questions
     visible_writing_fields(ctx, QuestionApplicable.FACTION, only_visible=False)
 
-    # Get visible question IDs
+    # Determine which questions should be visible based on context settings
     question_visible = []
     if "questions" in ctx:
         for question_id in ctx["questions"].keys():
             config = str(question_id)
+            # Skip questions that are not in show_faction config (unless show_all is set)
             if "show_all" not in ctx and config not in ctx.get("show_faction", {}):
                 continue
             question_visible.append(question_id)
 
-    # Bulk fetch all writing answers and choices for all factions
+    # Extract faction IDs for bulk queries
     faction_ids = [g.id for g in factions]
 
-    # Build answer mapping: faction_id -> {question_id -> text}
+    # Build comprehensive answer mapping using bulk queries to avoid N+1 problem
     answer_map = {}
     if question_visible:
+        # Bulk fetch all writing answers for visible questions
         for element_id, question_id, text in WritingAnswer.objects.filter(
             element_id__in=faction_ids, question_id__in=question_visible
         ).values_list("element_id", "question_id", "text"):
+            # Initialize nested dictionary structure if needed
             if element_id not in answer_map:
                 answer_map[element_id] = {}
             answer_map[element_id][question_id] = text
 
-        # Build choice mapping: faction_id -> {question_id -> [option_ids]}
+        # Bulk fetch all writing choices for visible questions
         for element_id, question_id, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids, question_id__in=question_visible
         ).values_list("element_id", "question_id", "option_id"):
+            # Initialize nested dictionary structure if needed
             if element_id not in answer_map:
                 answer_map[element_id] = {}
             if question_id not in answer_map[element_id]:
                 answer_map[element_id][question_id] = []
+            # Append option ID to the list for this question
             answer_map[element_id][question_id].append(option_id)
 
-    # Process each faction
+    # Process each faction and build complete data structure
     for g in factions:
+        # Get base faction data
         data = g.show_complete()
 
-        # Add writing fields from pre-fetched data
+        # Merge pre-fetched writing fields data to avoid additional queries
         fields = answer_map.get(g.id, {})
         data.update({"questions": ctx.get("questions", {}), "options": ctx.get("options", {}), "fields": fields})
 
+        # Add processed faction data to context
         ctx["sheet_factions"].append(data)
 
 

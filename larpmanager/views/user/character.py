@@ -330,20 +330,44 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", ctx)
 
 
-def _update_character(ctx, element, form, mes, request):
+def _update_character(ctx: dict, element: Character, form, mes: str, request) -> str:
+    """Update character status and player assignment based on form data and event configuration.
+
+    This function handles character updates during the character creation/editing process,
+    including automatic player assignment and status transitions for approval workflows.
+
+    Args:
+        ctx: Context dictionary containing event and other contextual data
+        element: Character instance to be updated
+        form: Form instance with cleaned data from user input
+        mes: Current message string to be displayed to user
+        request: HTTP request object containing user information
+
+    Returns:
+        Updated message string for user feedback
+
+    Note:
+        Only processes Character instances. Returns early for other element types.
+    """
+    # Early return if element is not a Character instance
     if not isinstance(element, Character):
         return
 
+    # Auto-assign current user as player if no player is set
     if not element.player:
         element.player = request.user.member
 
+    # Handle character approval workflow if enabled for this event
     if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
+        # Check if character is in creation/review status and user wants to propose
         if element.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
+            # Update status to proposed for staff review
             element.status = CharacterStatus.PROPOSED
             mes = _(
                 "The character has been proposed to the staff, who will examine it and approve it "
                 "or request changes if necessary."
             )
+
     return mes
 
 
@@ -666,14 +690,31 @@ def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
     return render(request, "larpmanager/event/character/abilities.html", ctx)
 
 
-def check_char_abilities(request, s, num):
+def check_char_abilities(request: HttpRequest, s: str, num: int) -> dict:
+    """Check if user can access character abilities for a specific event.
+
+    Args:
+        request: The HTTP request object containing user information
+        s: Event slug identifier
+        num: Character number to check abilities for
+
+    Returns:
+        Context dictionary containing event and run information
+
+    Raises:
+        Http404: When user doesn't have permission to select abilities
+    """
+    # Get event run context with signup and status validation
     ctx = get_event_run(request, s, signup=True, status=True)
 
-    # check the user can select abilities
+    # Determine the parent event ID for configuration lookup
     event_id = ctx["event"].parent_id or ctx["event"].id
+
+    # Check if user ability selection is enabled for this event
     if not get_event_config(event_id, "px_user", False):
         raise Http404("ehm.")
 
+    # Validate character access permissions for the user
     get_char_check(request, ctx, num, True)
 
     return ctx
@@ -858,17 +899,39 @@ def character_relationships_edit(request, s, num, oth):
 
 
 @require_POST
-def show_char(request, s):
+def show_char(request: HttpRequest, s: str) -> JsonResponse:
+    """Show character tooltip information via AJAX.
+
+    Args:
+        request: The HTTP request object containing POST data with search text
+        s: The event slug string used to identify the event context
+
+    Returns:
+        JsonResponse containing character tooltip HTML content
+
+    Raises:
+        Http404: When search format is invalid, character ID is invalid,
+                or character doesn't exist in the current event context
+    """
+    # Get event context and populate character cache
     ctx = get_event_run(request, s)
     get_event_cache_all(ctx)
+
+    # Extract and validate search parameter from POST data
     search = request.POST.get("text", "").strip()
     if not search.startswith(("#", "@", "^")):
         raise Http404(f"malformed request {search}")
+
+    # Parse character ID from search string
     search = int(search[1:])
     if not search:
         raise Http404(f"not valid search {search}")
+
+    # Verify character exists in current event context
     if search not in ctx["chars"]:
         raise Http404(f"not present char number {search}")
+
+    # Generate tooltip content and return JSON response
     ch = ctx["chars"][search]
     tooltip = get_tooltip(ctx, ch)
     return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})

@@ -755,9 +755,23 @@ def exe_send_mail(request):
 
 
 @login_required
-def exe_archive_email(request):
+def exe_archive_email(request) -> dict:
+    """Archive email view for organization executives.
+
+    Provides a paginated view of all emails sent within the organization,
+    allowing executives to browse and search through the email archive.
+
+    Args:
+        request: Django HTTP request object containing user session and parameters
+
+    Returns:
+        dict: Context dictionary containing pagination data and email formatting callbacks
+    """
+    # Check user permissions for accessing email archive
     ctx = check_assoc_permission(request, "exe_archive_email")
     ctx["exe"] = True
+
+    # Define table columns and their display names for the email archive
     ctx.update(
         {
             "fields": [
@@ -767,6 +781,7 @@ def exe_archive_email(request):
                 ("body", _("Body")),
                 ("sent", _("Sent")),
             ],
+            # Define formatting callbacks for each column to control display
             "callbacks": {
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
@@ -776,6 +791,8 @@ def exe_archive_email(request):
             },
         }
     )
+
+    # Return paginated email list with context and template configuration
     return exe_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
@@ -788,18 +805,34 @@ def exe_read_mail(request, nm):
 
 
 @login_required
-def exe_questions(request):
+def exe_questions(request: HttpRequest) -> HttpResponse:
+    """Handle the execution of questions page for association administrators.
+
+    This view displays open and closed help questions for the association.
+    When a POST request is made, all questions are moved to the open state.
+
+    Args:
+        request: The HTTP request object containing user and session data.
+
+    Returns:
+        HttpResponse: Rendered template with questions context data.
+    """
+    # Check if user has permission to access questions management
     ctx = check_assoc_permission(request, "exe_questions")
 
+    # Retrieve and categorize help questions into closed and open
     closed_q, open_q = _get_help_questions(ctx, request)
 
+    # Handle POST request - move all closed questions to open state
     if request.method == "POST":
         open_q.extend(closed_q)
         closed_q = []
 
+    # Sort questions by creation date (open: oldest first, closed: newest first)
     ctx["open"] = sorted(open_q, key=lambda x: x.created)
     ctx["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
 
+    # Render the questions management template with context
     return render(request, "larpmanager/exe/users/questions.html", ctx)
 
 

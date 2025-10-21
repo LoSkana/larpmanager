@@ -428,37 +428,65 @@ def writing_load(request, ctx: dict, form) -> list[str]:
     return logs
 
 
-def _plot_rels_load(row, chars, plots):
+def _plot_rels_load(row: dict, chars: dict[str, int], plots: dict[str, int]) -> str:
+    """Load plot-character relationships from a row of data.
+
+    Args:
+        row: Dictionary containing character, plot, and text data
+        chars: Mapping of character names (lowercase) to character IDs
+        plots: Mapping of plot names (lowercase) to plot IDs
+
+    Returns:
+        Status message indicating success or failure with details
+    """
+    # Extract and normalize character name from row data
     char = row.get("character", "").lower()
     if char not in chars:
         return f"ERR - source not found {char}"
     char_id = chars[char]
 
+    # Extract and normalize plot name from row data
     plot = row.get("plot", "").lower()
     if plot not in plots:
         return f"ERR - target not found {plot}"
     plot_id = plots[plot]
 
+    # Create or retrieve the plot-character relationship
     rel, _ = PlotCharacterRel.objects.get_or_create(character_id=char_id, plot_id=plot_id)
+
+    # Update relationship text and save to database
     rel.text = row.get("text")
     rel.save()
     return f"OK - Plot role {char} {plot}"
 
 
-def _relationships_load(row, chars):
+def _relationships_load(row: dict, chars: dict[str, int]) -> str:
+    """Load relationship data from a row into the database.
+
+    Args:
+        row: Dictionary containing relationship data with 'source', 'target', and 'text' keys
+        chars: Dictionary mapping character names (lowercase) to their IDs
+
+    Returns:
+        Status message indicating success or error details
+    """
+    # Extract and validate source character
     source_char = row.get("source", "").lower()
     if source_char not in chars:
         return f"ERR - source not found {source_char}"
     source_id = chars[source_char]
 
+    # Extract and validate target character
     target_char = row.get("target", "").lower()
     if target_char not in chars:
         return f"ERR - target not found {target_char}"
     target_id = chars[target_char]
 
+    # Create or retrieve relationship and update text
     relation, _ = Relationship.objects.get_or_create(source_id=source_id, target_id=target_id)
     relation.text = row.get("text")
     relation.save()
+
     return f"OK - Relationship {source_char} {target_char}"
 
 
@@ -827,19 +855,33 @@ def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
     return msg
 
 
-def _get_mappings(is_registration):
+def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
+    """Generate mappings for question types and attributes.
+
+    Args:
+        is_registration: Whether to include writing question types for registration forms.
+
+    Returns:
+        Dictionary containing inverted mappings for question types, status,
+        applicable context, and visibility settings.
+    """
+    # Create base mappings by inverting enum dictionaries
     mappings = {
         "typ": invert_dict(BaseQuestionType.get_mapping()),
         "status": invert_dict(QuestionStatus.get_mapping()),
         "applicable": invert_dict(QuestionApplicable.get_mapping()),
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
     }
+
+    # Add writing question types for registration forms
     if is_registration:
-        # update typ with new types
+        # Update typ mapping with additional writing question types
         typ_mapping = mappings["typ"]
         for key, _ in WritingQuestionType.choices:
+            # Only add new types that aren't already present
             if key not in typ_mapping:
                 typ_mapping[key] = key
+
     return mappings
 
 

@@ -453,18 +453,34 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request):
+def sumup_webhook(request: HttpRequest) -> bool:
+    """Handle SumUp webhook notifications for payment processing.
+
+    Processes incoming webhook requests from SumUp payment gateway,
+    validates the payment status, and triggers invoice processing
+    for successful payments.
+
+    Args:
+        request: Django HTTP request object containing webhook payload
+
+    Returns:
+        bool: True if payment was successful and processed, False otherwise
+    """
     # Print (Request)
     # pprint(request.body)
     # Print (Request.Meta)
+
+    # Parse the JSON payload from the webhook request
     aux = json.loads(request.body)
     # print (at ['id'])
     # print (at ['status'])
 
+    # Check if payment status indicates failure
     if aux["status"] != "SUCCESSFUL":
         # Err_Paypal (Print (Request) + Print (Request.Body) + Print (Request.meta))
         return False
 
+    # Process the successful payment using the transaction ID
     return invoice_received_money(aux["id"])
 
 
@@ -617,17 +633,36 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # ~ ctx['signature'] = sig
 
 
-def redsys_webhook(request, ok=True):
+def redsys_webhook(request, ok: bool = True) -> bool:
+    """
+    Process Redsys payment webhook notifications.
+
+    Handles incoming payment notifications from Redsys payment gateway,
+    validates the signature, and processes successful payments.
+
+    Args:
+        request: HTTP request object containing POST data with payment parameters
+        ok: Optional flag to indicate expected success status (default: True)
+
+    Returns:
+        bool: True if payment was successfully processed, False otherwise
+    """
+    # Initialize user context and update payment configuration
     ctx = def_user_ctx(request)
     update_payment_details(request, ctx)
-    # ver = request.POST["Ds_SignatureVersion"]
+
+    # Extract payment parameters and signature from POST data
+    # ver = request.POST["Ds_SignatureVersion"]  # Version not currently used
     pars = request.POST["Ds_MerchantParameters"]
     sig = request.POST["Ds_Signature"]
 
+    # Initialize Redsys client with merchant credentials
     redsyspayment = RedSysClient(business_code=ctx["redsys_merchant_code"], secret_key=ctx["redsys_secret_key"])
 
+    # Validate the payment response signature and extract order code
     cod = redsyspayment.redsys_check_response(sig, pars, ctx)
 
+    # Process payment if signature validation successful
     if cod:
         return invoice_received_money(cod)
 

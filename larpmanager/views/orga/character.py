@@ -132,18 +132,42 @@ def orga_characters(request, s):
 
 
 @login_required
-def orga_characters_edit(request, s, num):
+def orga_characters_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """
+    Edit character details in the organization characters view.
+
+    This function handles the editing of character information for organization
+    members, with conditional loading of event cache based on enabled features.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for the specific event
+        num: The character ID to edit (0 for new character creation)
+
+    Returns:
+        HttpResponse: The rendered character edit page with form and context
+
+    Note:
+        Conditionally loads full event cache only when relationships or character
+        finder features are enabled to optimize performance.
+    """
+    # Check user permissions for organization character management
     ctx = check_event_permission(request, s, "orga_characters")
 
     # Only load full event cache if we need relationships or other features that require it
+    # This optimization prevents unnecessary data loading when features aren't enabled
     if "relationships" in ctx["features"] or "character_finder" in ctx.get("features", []):
         get_event_cache_all(ctx)
 
+    # Load specific character data when editing existing character (num != 0)
+    # Skip this step for new character creation
     if num != 0:
         get_character_optimized(ctx, num)
 
+    # Process character relationships data for the context
     _characters_relationships(ctx)
 
+    # Delegate to the generic writing edit function with character-specific parameters
     return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
@@ -205,19 +229,45 @@ def update_relationship(request, ctx, nm, fl):
 
 
 @login_required
-def orga_characters_relationships(request, s, num):
+def orga_characters_relationships(request: HttpRequest, s: str, num: str) -> HttpResponse:
+    """
+    Display character relationships for organization management.
+
+    Shows both direct relationships (where the character is the source) and
+    inverse relationships (where the character is the target) for organization
+    staff to review and manage character connections.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for URL routing
+        num: The character number/identifier to display relationships for
+
+    Returns:
+        HttpResponse: Rendered template with character relationship data
+    """
+    # Check organization permissions and get event context
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Load the specific character into context
     get_char(ctx, num)
+
+    # Get relationships where this character is the source
+    # Ordered by text length (shortest first), then by target character number
     ctx["direct"] = (
         Relationship.objects.filter(source=ctx["character"])
         .select_related("target")
         .order_by(Length("text").asc(), "target__number")
     )
+
+    # Get relationships where this character is the target
+    # Ordered by text length (shortest first), then by source character number
     ctx["inverse"] = (
         Relationship.objects.filter(target=ctx["character"])
         .select_related("source")
         .order_by(Length("text").asc(), "source__number")
     )
+
+    # Render the relationships template with populated context
     return render(request, "larpmanager/orga/characters/relationships.html", ctx)
 
 
@@ -237,18 +287,41 @@ def orga_characters_versions(request, s, num):
 
 
 @login_required
-def orga_characters_summary(request, s, num):
+def orga_characters_summary(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Display character summary page for organization members.
+
+    Shows detailed character information including associated factions and plots
+    for event organizers to review character details and relationships.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        num: Character number/ID
+
+    Returns:
+        Rendered HTML response with character summary data
+    """
+    # Check user permissions and get base context
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Load character data into context
     get_char(ctx, num)
+
+    # Initialize faction data collection
     ctx["factions"] = []
 
+    # Process character factions with optimized queries
     for p in ctx["character"].factions_list.all().prefetch_related("characters"):
         ctx["factions"].append(p.show_complete())
+
+    # Initialize plot data collection
     ctx["plots"] = []
 
+    # Process character plots with optimized queries
     for p in ctx["character"].plots.all().prefetch_related("characters"):
         ctx["plots"].append(p.show_complete())
 
+    # Render template with complete context data
     return render(request, "larpmanager/orga/characters_summary.html", ctx)
 
 

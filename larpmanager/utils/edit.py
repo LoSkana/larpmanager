@@ -117,21 +117,36 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
     tv.save()
 
 
-def _get_field_value(el, que):
+def _get_field_value(el, que) -> str | None:
+    """Get the field value for a given element and question.
+
+    Args:
+        el: The element object to get the value from
+        que: The question object containing type and configuration
+
+    Returns:
+        The field value as a string, or None if no value found
+
+    """
+    # Get the mapping of question types to value extraction functions
     mapping = _get_values_mapping(el)
 
+    # Check if question type has a direct mapping function
     if que.typ in mapping:
         return mapping[que.typ]()
 
+    # Handle text-based question types (paragraph, text, email)
     if que.typ in {"p", "t", "e"}:
         answers = WritingAnswer.objects.filter(question=que, element_id=el.id)
         if answers:
             return answers.first().text
         return ""
 
+    # Handle selection question types (single, multiple choice)
     if que.typ in {"s", "m"}:
         return ", ".join(c.option.name for c in WritingChoice.objects.filter(question=que, element_id=el.id))
 
+    # Return None for unsupported question types
     return None
 
 
@@ -346,47 +361,128 @@ def backend_edit(
     return False
 
 
-def orga_edit(request, s, perm, form_type, eid, red=None, add_ctx=None):
+def orga_edit(
+    request: HttpRequest, s: str, perm: str, form_type: str, eid: int, red: str = None, add_ctx: dict = None
+) -> HttpResponse:
+    """
+    Handle organization event editing with permission checks and form processing.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        perm: Permission string to check against
+        form_type: Type of form to process
+        eid: Entity ID to edit
+        red: Optional redirect target after successful edit
+        add_ctx: Optional additional context to merge
+
+    Returns:
+        HttpResponse: Either a redirect on success or rendered edit template
+    """
+    # Check user permissions and get base context
     ctx = check_event_permission(request, s, perm)
+
+    # Merge any additional context provided
     if add_ctx:
         ctx.update(add_ctx)
+
+    # Process the backend edit operation
     if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+        # Set suggestion context for successful edit
         set_suggestion(ctx, perm)
+
+        # Handle continue editing workflow
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
+
+        # Determine redirect target and redirect
         if not red:
             red = perm
         return redirect(red, s=ctx["run"].get_slug())
+
+    # Render edit template if edit was not successful
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None):
+def exe_edit(
+    request: HttpRequest,
+    form_type: str,
+    eid: int,
+    perm: str,
+    red: str | None = None,
+    afield: str | None = None,
+    add_ctx: dict | None = None,
+) -> HttpResponse:
+    """Edit an organization-level object through a form interface.
+
+    Handles editing of organization-wide objects with permission checks,
+    form processing, and redirect logic after successful saves.
+
+    Args:
+        request: The HTTP request object containing user and POST data
+        form_type: Type of form to use for editing (maps to form class)
+        eid: ID of the object to edit (0 for new objects)
+        perm: Permission string required to access this edit function
+        red: Optional redirect target after successful edit
+        afield: Optional specific field to focus on in the form
+        add_ctx: Optional additional context data for the template
+
+    Returns:
+        HttpResponse: Redirect on successful edit, or rendered edit template
+    """
+    # Check user has required permission and get base context
     ctx = check_assoc_permission(request, perm)
+
+    # Merge any additional context data provided
     if add_ctx:
         ctx.update(add_ctx)
+
+    # Process the edit form and handle save operations
     if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
+        # Set up suggestions for the current permission context
         set_suggestion(ctx, perm)
+
+        # Handle "Save and continue editing" button
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, num=0)
+
+        # Determine redirect target (use provided or default to permission)
         if not red:
             red = perm
         return redirect(red)
+
+    # Render edit form template with context data
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def set_suggestion(ctx, perm):
+def set_suggestion(ctx: dict, perm: str) -> None:
+    """
+    Set a permission suggestion flag in the configuration for an event or association.
+
+    Args:
+        ctx: Context dictionary containing either 'event' key or 'a_id' key
+        perm: Permission name to create suggestion for
+
+    Returns:
+        None
+    """
+    # Determine the target object based on context
     if "event" in ctx:
         obj = ctx["event"]
     else:
         obj = Association.objects.get(pk=ctx["a_id"])
 
+    # Check if suggestion already exists
     key = f"{perm}_suggestion"
     suggestion = obj.get_config(key, False)
     if suggestion:
         return
 
+    # Create or get the configuration object
     fk_field = _get_fkey_config(obj)
     (config, created) = obj.configs.model.objects.get_or_create(**{fk_field: obj, "name": key})
+
+    # Set the suggestion flag to True
     config.value = True
     config.save()
 
@@ -457,20 +553,43 @@ def writing_edit(
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 
 
-def _setup_char_finder(ctx, typ):
+def _setup_char_finder(ctx: dict, typ: type) -> None:
+    """Setup character finder widget for the given context and type.
+
+    Configures and renders a character finder widget based on the event configuration
+    and the specified type (Trait or Character). Adds the widget and its media to
+    the template context.
+
+    Parameters
+    ----------
+    ctx : dict
+        Template context dictionary containing event and other data
+    typ : type
+        Model type to determine widget class (Trait or other)
+
+    Returns
+    -------
+    None
+        Modifies ctx dict in place by adding finder_typ, char_finder, and char_finder_media
+    """
+    # Check if character finder is disabled for this event
     if get_event_config(ctx["event"].id, "writing_disable_char_finder", False, ctx):
         return
 
+    # Select appropriate widget class based on type
     if typ == Trait:
         widget_class = EventTraitS2Widget
     else:
         widget_class = EventCharacterS2Widget
 
+    # Initialize widget with required attributes and event
     widget = widget_class(attrs={"id": "char_finder"})
     widget.set_event(ctx["event"])
 
+    # Add widget data to template context
     ctx["finder_typ"] = typ._meta.model_name
 
+    # Render widget and add to context with its media
     ctx["char_finder"] = widget.render(name="char_finder", value="")
     ctx["char_finder_media"] = widget.media
 

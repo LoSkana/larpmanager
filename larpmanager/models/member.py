@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+from typing import Union
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -586,16 +587,35 @@ class Vote(BaseModel):
         return f"V{self.number} {self.member} ({self.assoc} - {self.year})"
 
 
-def get_user_membership(user, assoc):
+def get_user_membership(user: Member, assoc: Union[Association, int]) -> Membership:
+    """
+    Get or create a membership for a user in an association.
+
+    Args:
+        user: The member for whom to get the membership
+        assoc: The association object or association ID
+
+    Returns:
+        The membership object for the user in the association
+
+    Raises:
+        Http404: If the association is not found or invalid
+    """
+    # Check if user already has a cached membership
     if hasattr(user, "membership"):
         return user.membership
 
+    # Extract association ID from object or use directly if it's an int
     # noinspection PyUnresolvedReferences
     assoc_id = assoc.id if isinstance(assoc, Association) else assoc
 
+    # Validate association ID exists
     if not assoc_id:
         raise Http404("Association not found")
 
+    # Get existing membership or create new one
     membership, _ = Membership.objects.get_or_create(member=user, assoc_id=assoc_id)
+
+    # Cache membership on user object for future calls
     user.membership = membership
     return membership

@@ -771,15 +771,33 @@ def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
     return closed_q, open_q
 
 
-def get_recaptcha_secrets(request):
+def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
+    """Get reCAPTCHA public and private keys for the current association.
+
+    Retrieves reCAPTCHA credentials from settings. If multi-site configuration
+    is detected (comma-separated values), extracts keys specific to the
+    current association's skin ID.
+
+    Args:
+        request: HTTP request object containing association data with skin_id
+
+    Returns:
+        tuple: (public_key, private_key) - reCAPTCHA credentials for current site
+    """
+    # Get base reCAPTCHA keys from settings
     public = conf_settings.RECAPTCHA_PUBLIC_KEY
     private = conf_settings.RECAPTCHA_PRIVATE_KEY
 
-    # if multi-site settings
+    # Check if multi-site configuration is enabled (comma-separated values)
     if "," in public:
+        # Extract current association's skin identifier
         skin_id = request.assoc["skin_id"]
+
+        # Parse public key pairs (format: "skin_id:key,skin_id:key")
         pairs = dict(item.split(":") for item in public.split(",") if ":" in item)
         public = pairs.get(str(skin_id))
+
+        # Parse private key pairs with same format
         pairs = dict(item.split(":") for item in private.split(",") if ":" in item)
         private = pairs.get(str(skin_id))
 

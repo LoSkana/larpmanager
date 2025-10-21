@@ -244,34 +244,66 @@ class CharacterForm(WritingForm, BaseWritingForm):
         for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(fc[0])
 
-    def _save_multi(self, s, instance):
+    def _save_multi(self, s: str, instance) -> None:
+        """Save multi-select field data for character factions.
+
+        Handles the special case of factions_list field by managing
+        the many-to-many relationship between characters and factions.
+        For all other fields, delegates to the parent implementation.
+
+        Args:
+            s: The field name being processed
+            instance: The model instance being saved
+        """
+        # Delegate non-faction fields to parent class
         if s != "factions_list":
             return super()._save_multi(s, instance)
 
-        # Only process factions if the factions_list field is present in the form
+        # Skip processing if factions_list field is not in form data
         if "factions_list" not in self.cleaned_data:
             return
 
+        # Get new faction IDs from cleaned form data
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
+        # Get the faction event context for filtering existing factions
         faction_event = self.params["run"].event.get_class_parent(Faction)
+
+        # Get current faction IDs associated with this instance
         old = set(instance.factions_list.filter(event=faction_event).values_list("id", flat=True))
 
+        # Remove factions that are no longer selected
         for ch in old - new:
             instance.factions_list.remove(ch)
+
+        # Add newly selected factions
         for ch in new - old:
             instance.factions_list.add(ch)
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
+        """Clean and validate the form data.
+
+        Validates that only one primary faction is selected from the factions list.
+        Ensures data integrity by preventing multiple primary faction assignments.
+
+        Returns:
+            dict[str, Any]: The cleaned form data after validation.
+
+        Raises:
+            ValidationError: If more than one primary faction is selected.
+        """
         cleaned_data = super().clean()
 
+        # Check if factions_list exists in cleaned data
         if "factions_list" in self.cleaned_data:
-            # check only one primary
+            # Count primary factions to ensure only one is selected
             prim = 0
             for el in self.cleaned_data["factions_list"]:
+                # Increment counter for each primary faction found
                 if el.typ == FactionType.PRIM:
                     prim += 1
 
+            # Validate that no more than one primary faction is selected
             if prim > 1:
                 raise ValidationError({"factions_list": _("Select only one primary faction")})
 

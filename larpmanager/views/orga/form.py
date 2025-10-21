@@ -53,16 +53,35 @@ from larpmanager.utils.event import check_event_permission
 
 
 @login_required
-def orga_registration_tickets(request, s):
+def orga_registration_tickets(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Handle organization registration tickets view for event management.
+
+    Displays and manages registration ticket tiers for a specific event.
+    Supports downloading tickets when POST request with download=1 is made.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: Event slug identifier for the specific event
+
+    Returns:
+        HttpResponse: Rendered template with ticket data or download response
+    """
+    # Check user permissions for accessing registration tickets management
     ctx = check_event_permission(request, s, "orga_registration_tickets")
 
+    # Handle POST request for ticket download functionality
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_tickets_download(ctx)
 
+    # Set context variables for template rendering
     ctx["upload"] = "registration_tickets"
     ctx["download"] = 1
 
+    # Retrieve all registration tickets for the event, ordered by sequence
     ctx["list"] = RegistrationTicket.objects.filter(event=ctx["event"]).order_by("order")
+
+    # Get available ticket tiers for the current event
     ctx["tiers"] = OrgaRegistrationTicketForm.get_tier_available(ctx["event"])
 
     return render(request, "larpmanager/orga/registration/tickets.html", ctx)
@@ -100,16 +119,34 @@ def orga_registration_sections_order(request, s, num, order):
 
 
 @login_required
-def orga_registration_form(request, s):
+def orga_registration_form(request: HttpRequest, s: str) -> HttpResponse:
+    """Render the organization registration form page.
+
+    Handles both GET requests to display the form and POST requests
+    to download the registration form data.
+
+    Args:
+        request: The HTTP request object containing user data and method
+        s: The event slug identifier for permission checking
+
+    Returns:
+        HttpResponse: Rendered registration form template or download response
+    """
+    # Check user permissions for accessing registration form functionality
     ctx = check_event_permission(request, s, "orga_registration_form")
 
+    # Handle POST request for downloading registration form data
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_registration_form_download(ctx)
 
+    # Configure context for upload functionality and download option
     ctx["upload"] = "registration_form"
     ctx["download"] = 1
 
+    # Retrieve ordered registration questions with prefetched options for efficiency
     ctx["list"] = get_ordered_registration_questions(ctx).prefetch_related("options")
+
+    # Order options for each question to ensure consistent display
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 

@@ -84,13 +84,12 @@ class OrgaPersonalExpenseForm(MyFormRun):
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
 
         Returns:
-            None: This method initializes the object and returns nothing.
+            None
         """
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Check if Italian balance feature is disabled in form parameters
-        # and remove the balance field when feature is not available
+        # Check if Italian balance feature is disabled and remove balance field
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 

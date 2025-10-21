@@ -456,28 +456,39 @@ def registration_status(
     status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed") + "."
 
 
-def _status_preregister(run, user, ctx: dict | None = None):
+def _status_preregister(run, user, ctx: dict | None = None) -> None:
+    """Update run status based on user's pre-registration state.
+
+    Args:
+        run: The run object to update status for
+        user: The user to check pre-registration status for
+        ctx: Optional context dictionary containing cached pre-registration data
+    """
     # Extract values from context dictionary if provided
     if ctx is None:
         ctx = {}
 
+    # Get cached pre-registrations dictionary from context
     pre_registrations_dict = ctx.get("pre_registrations_dict")
 
     # Check if user already has a pre-registration for this event
     has_pre_registration = False
     if user.is_authenticated:
+        # Use cached data if available to avoid database queries
         if pre_registrations_dict is not None:
-            # Use cached data if available
             has_pre_registration = run.event_id in pre_registrations_dict
         else:
             # Fallback to database query if no cache provided
             has_pre_registration = PreRegistration.objects.filter(
                 event_id=run.event_id, member=user.member, deleted__isnull=True
             ).exists()
+
+    # Set appropriate status message based on pre-registration state
     if has_pre_registration:
         mes = _("Pre-registration confirmed") + "!"
         run.status["text"] = mes
     else:
+        # Create link to pre-registration page for non-registered users
         mes = _("Pre-register to the event") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"

@@ -16,7 +16,7 @@ from django.db.models import (
     When,
 )
 from django.db.models.functions import Cast, Coalesce
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -34,12 +34,32 @@ from larpmanager.models.accounting import (
 from larpmanager.models.member import Membership
 
 
-def paginate(request, ctx, typ, template, view, exe=True):
+def paginate(
+    request: HttpRequest, ctx: dict, typ: type[Model], template: str, view: str, exe: bool = True
+) -> HttpResponse | JsonResponse:
+    """
+    Handle pagination for DataTables AJAX requests and initial page renders.
+
+    Args:
+        request: The HTTP request object
+        ctx: Context dictionary containing template variables
+        typ: Django model class to paginate
+        template: Template path for initial render
+        view: View name for generating edit URLs
+        exe: Whether this is an organization-wide view (True) or event-specific (False)
+
+    Returns:
+        HttpResponse for GET requests (initial page render)
+        JsonResponse for POST requests (DataTables AJAX data)
+    """
     cls = typ.objects
+    # Extract model name for table identification
     # noinspection PyProtectedMember
     class_name = typ._meta.model_name
 
+    # Handle initial page load (GET request)
     if request.method != "POST":
+        # Set unique table name based on context type
         if exe:
             ctx["table_name"] = f"{class_name}_{ctx['a_id']}"
         else:
@@ -47,15 +67,23 @@ def paginate(request, ctx, typ, template, view, exe=True):
 
         return render(request, template, ctx)
 
+    # Handle DataTables AJAX request (POST)
+    # Extract draw parameter for DataTables synchronization
     draw = int(request.POST.get("draw", 0))
 
+    # Get filtered elements and count based on search/filter criteria
     elements, records_filtered = _get_elements_query(cls, ctx, request, typ, exe)
 
+    # Get total record count (unfiltered)
     records_total = typ.objects.count()
 
+    # Prepare localized strings for UI
     edit = _("Edit")
+
+    # Transform model instances into JSON-serializable data
     data = _prepare_data_json(ctx, elements, view, edit, exe)
 
+    # Return DataTables-compatible JSON response
     return JsonResponse(
         {
             "draw": draw,
@@ -129,32 +157,60 @@ def _get_elements_query(cls, ctx: dict, request, typ, exe: bool = True) -> tuple
     return elements, records_filtered
 
 
-def _set_filtering(ctx, elements, filters):
+def _set_filtering(ctx: dict, elements: QuerySet, filters: dict) -> QuerySet:
+    """
+    Apply filtering to a QuerySet based on provided filters and field mappings.
+
+    Args:
+        ctx: Context dictionary containing fields, callbacks, and optional afield
+        elements: Django QuerySet to filter
+        filters: Dictionary mapping column indices to filter values
+
+    Returns:
+        Filtered QuerySet with applied filters
+
+    Note:
+        Handles special cases for 'run' fields and callback fields. Uses field
+        mappings for complex field relationships and applies case-insensitive
+        filtering with OR conditions for multiple mapped fields.
+    """
+    # Get field mapping configuration for complex field relationships
     field_map = _get_field_map()
 
+    # Process each filter by column index and value
     for column, value in filters.items():
         column_ix = int(column)
+
+        # Validate column index against available fields
         if column_ix >= len(ctx["fields"]):
             print(f"this shouldn't happen! _get_ordering {filters} {ctx['fields']}")
+
+        # Extract field name and display name from context
         field, name = ctx["fields"][column_ix - 1]
 
+        # Handle special case for 'run' field with search optimization
         if field == "run":
             field = "run__search"
             afield = ctx.get("afield")
+            # Apply additional field prefix if available
             if afield:
                 field = f"{afield}__{field}"
+        # Skip fields that have callback handlers
         elif field in ctx.get("callbacks", {}):
             continue
 
+        # Apply field mapping or use single field as list
         if field in field_map:
             field = field_map[field]
         else:
             field = [field]
 
+        # Build OR query for multiple field mappings with case-insensitive search
         q_filter = Q()
         for el in field:
             q_filter |= Q(**{f"{el}__icontains": value})
 
+        # Apply the constructed filter to the QuerySet
         elements = elements.filter(q_filter)
 
     return elements
@@ -217,25 +273,47 @@ def _get_field_map():
     return field_map
 
 
-def _get_query_params(request):
+def _get_query_params(request) -> tuple[int, int, list[str], dict[str, str]]:
+    """Extract and parse DataTables query parameters from POST request.
+
+    Parses DataTables AJAX request parameters including pagination,
+    ordering, and column filtering information.
+
+    Args:
+        request: HTTP request object containing POST data
+
+    Returns:
+        A tuple containing:
+            - start: Starting record number for pagination
+            - length: Number of records to return
+            - order: List of column names with direction prefixes
+            - filters: Dictionary mapping column names to filter values
+    """
+    # Extract pagination parameters
     start = int(request.POST.get("start", 0))
     length = int(request.POST.get("length", 10))
 
+    # Parse ordering configuration
     order = []
     for i in range(len(request.POST.getlist("order[0][column]"))):
         col_idx = request.POST.get(f"order[{i}][column]")
         col_dir = request.POST.get(f"order[{i}][dir]")
+
+        # Get column name and apply direction prefix
         col_name = request.POST.get(f"columns[{col_idx}][data]")
         prefix = "" if col_dir == "asc" else "-"
         order.append(prefix + col_name)
 
+    # Extract column filters
     filters = {}
     i = 0
     while True:
+        # Check if column exists at current index
         col_name = request.POST.get(f"columns[{i}][data]")
         if col_name is None:
             break
 
+        # Get search term and validate it's not a function
         search_value = request.POST.get(f"columns[{i}][search][fixed][0][term]")
         if search_value and not search_value.startswith("function"):
             filters[col_name] = search_value

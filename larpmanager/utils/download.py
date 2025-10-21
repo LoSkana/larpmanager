@@ -694,16 +694,32 @@ def export_registration_form(ctx: dict) -> list[tuple[str, list, list]]:
     return exports
 
 
-def _extract_values(key, que, mappings):
+def _extract_values(key: list[str], que: object, mappings: dict[str, dict]) -> list[list]:
+    """Extract and transform values from a queryset using field mappings.
+
+    Args:
+        key: List of field names to extract from the queryset
+        que: Django queryset object to extract values from
+        mappings: Dictionary mapping field names to value transformation dictionaries
+
+    Returns:
+        List of lists containing extracted and transformed values for each row
+    """
     all_vals = []
+
+    # Iterate through each row in the queryset values
     for row in que.values(*key):
         vals = []
+
+        # Process each field-value pair in the current row
         for field, value in row.items():
+            # Apply mapping transformation if field and value exist in mappings
             if field in mappings and value in mappings[field]:
                 new_value = mappings[field][value]
             else:
                 new_value = value
             vals.append(new_value)
+
         all_vals.append(vals)
     return all_vals
 

@@ -46,18 +46,33 @@ def manual_sitemap_view(request):
     return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
-def _render_sitemap(urls):
-    # XML rendering
+def _render_sitemap(urls: list[str]) -> StringIO:
+    """
+    Render a list of URLs into XML sitemap format.
+
+    Args:
+        urls: List of URL strings to include in the sitemap
+
+    Returns:
+        StringIO object containing the XML sitemap content
+    """
+    # Initialize XML stream and generator
     stream = StringIO()
     xml = SimplerXMLGenerator(stream, "utf-8")
+
+    # Start XML document and root urlset element
     xml.startDocument()
     xml.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
+
+    # Generate URL entries for each location
     for loc in urls:
         xml.startElement("url", {})
         xml.startElement("loc", {})
         xml.characters(loc)
         xml.endElement("loc")
         xml.endElement("url")
+
+    # Close root element and finalize document
     xml.endElement("urlset")
     xml.endDocument()
     return stream

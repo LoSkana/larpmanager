@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from enum import IntEnum
+from typing import Any
 
 from django import forms
 from django.forms import Textarea
@@ -23,15 +24,37 @@ class ConfigType(IntEnum):
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
-    def render(self, name, value, attrs=None, renderer=None):
+    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:
+        """
+        Render checkboxes for multiple choice selection.
+
+        Args:
+            name: The name attribute for the form field
+            value: List of selected values, defaults to empty list if None
+            attrs: Dictionary of HTML attributes for the widget
+            renderer: Template renderer (unused in this implementation)
+
+        Returns:
+            HTML string containing rendered checkboxes with labels
+        """
         output = []
         value = value or []
 
+        # Iterate through each choice option to create checkbox elements
         for i, (option_value, option_label) in enumerate(self.choices):
+            # Generate unique ID for each checkbox using field name and index
             checkbox_id = f"{escape(attrs.get('id', name))}_{i}"
+
+            # Set checked attribute if option value is in selected values
             checked = "checked" if str(option_value) in value else ""
+
+            # Create checkbox input element with proper escaping
             checkbox_html = f'<input type="checkbox" name="{escape(name)}" value="{escape(option_value)}" id="{checkbox_id}" {checked}>'
+
+            # Create associated label element for accessibility
             link_html = f'<label for="{checkbox_id}">{escape(option_label)}</label>'
+
+            # Wrap checkbox and label in container div
             output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
 
         return mark_safe("\n".join(output))
@@ -92,16 +115,31 @@ class ConfigForm(MyForm):
             }
         )
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance and handle configuration fields.
+
+        Args:
+            commit: Whether to save the instance to the database immediately.
+                   Defaults to True.
+
+        Returns:
+            The saved model instance.
+        """
+        # Save the parent form instance
         instance = super().save(commit=commit)
 
+        # Collect configuration values from custom fields
         config_values = {}
         for el in self.config_fields:
             self._get_custom_field(el, config_values)
+
+        # Save all collected configuration values
         save_all_element_configs(instance, config_values)
 
+        # Reset cached configuration for this instance
         reset_element_configs(instance)
 
+        # Final save to persist any additional changes
         instance.save()
 
         return instance

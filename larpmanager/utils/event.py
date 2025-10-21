@@ -768,19 +768,34 @@ def save_event_registration_form(features: dict, instance) -> None:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
 
 
-def _activate_orga_lang(instance):
-    # get most common language between organizers
+def _activate_orga_lang(instance) -> None:
+    """Activate the most common language among event organizers.
+
+    Analyzes the preferred languages of all organizers for the given event
+    instance and activates the most frequently used language. Falls back
+    to English if no organizers are found.
+
+    Args:
+        instance: The event instance to analyze organizers for.
+    """
+    # Initialize language frequency counter
     langs = {}
+
+    # Count language preferences for each organizer
     for orga in get_event_organizers(instance):
         lang = orga.language
         if lang not in langs:
             langs[lang] = 1
         else:
             langs[lang] += 1
+
+    # Determine the most common language or fallback to English
     if langs:
         max_lang = max(langs, key=langs.get)
     else:
         max_lang = "en"
+
+    # Activate the selected language
     activate(max_lang)
 
 

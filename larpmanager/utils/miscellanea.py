@@ -386,9 +386,26 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     instance.photo = ContentFile(out.read(), name=basename)
 
 
-def _get_extension(f, img):
+def _get_extension(f, img) -> str:
+    """Get the appropriate image format extension.
+
+    Determines the correct image format based on the file extension or PIL image format.
+    Falls back to JPEG if format cannot be determined.
+
+    Args:
+        f: File object with a name attribute containing the file path
+        img: PIL Image object with optional format attribute
+
+    Returns:
+        Uppercase string representing the image format (e.g., 'JPEG', 'PNG', 'WEBP')
+    """
+    # Extract file extension and normalize to lowercase
     ext = os.path.splitext(f.name)[1].lower()
+
+    # Get format from PIL image object, default to empty string if None
     fmt = (img.format or "").upper()
+
+    # If no format detected from image, determine from file extension
     if not fmt:
         if ext in (".jpg", ".jpeg"):
             fmt = "JPEG"
@@ -397,19 +414,40 @@ def _get_extension(f, img):
         elif ext == ".webp":
             fmt = "WEBP"
         else:
+            # Default fallback format for unknown extensions
             fmt = "JPEG"
     return fmt
 
 
-def _check_new(f, instance, sender):
+def _check_new(f, instance, sender) -> bool:
+    """Check if a file field represents a new upload or an existing file.
+
+    Compares the current file field with the existing database record to determine
+    if this is a new file upload or if the file field is unchanged.
+
+    Args:
+        f: File field object to check
+        instance: Model instance being processed
+        sender: Model class that sent the signal
+
+    Returns:
+        True if the file is unchanged (not a new upload), False otherwise
+    """
+    # Only check existing instances (those with a primary key)
     if instance.pk:
         try:
+            # Fetch only the photo field to minimize database load
             old = sender.objects.filter(pk=instance.pk).only("photo").first()
+
+            # Compare file names and check if file object exists
             if old:
                 old_name = old.photo.name if old.photo else ""
+                # Return True if names match and no new file data is present
                 if f.name == old_name and not getattr(f, "file", None):
                     return True
         except Exception:
+            # Silently handle any database or attribute errors
             pass
 
+    # Default to False for new instances or when comparison fails
     return False

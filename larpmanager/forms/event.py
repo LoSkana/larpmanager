@@ -88,9 +88,6 @@ class EventCharactersPdfForm(ConfigForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
-
-        Returns:
-            None
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -221,16 +218,34 @@ class OrgaEventForm(MyForm):
             dl.append("parent")
             return
 
-    def clean_slug(self):
+    def clean_slug(self) -> str:
+        """
+        Validate and clean the slug field for Event model.
+
+        Ensures the slug is unique among existing events and not a reserved word.
+        Excludes the current instance from uniqueness validation during updates.
+
+        Returns:
+            str: The cleaned and validated slug value.
+
+        Raises:
+            ValidationError: If slug is already used by another event or is a reserved word.
+        """
         data = self.cleaned_data["slug"]
         logger.debug(f"Validating event slug: {data}")
-        # check if already used
+
+        # Check if slug is already used by another event
         lst = Event.objects.filter(slug=data)
+
+        # Exclude current instance from validation during updates
         if self.instance is not None and self.instance.pk is not None:
-            lst.exclude(pk=self.instance.pk)
+            lst = lst.exclude(pk=self.instance.pk)
+
+        # Raise error if slug is already taken
         if lst.count() > 0:
             raise ValidationError("Slug already used!")
 
+        # Check if slug conflicts with static URL prefixes
         if data and hasattr(conf_settings, "STATIC_PREFIXES"):
             if data in conf_settings.STATIC_PREFIXES:
                 raise ValidationError("Reserved word, please choose another!")
@@ -257,10 +272,28 @@ class OrgaFeatureForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(False)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance with feature management and cache clearing.
+
+        This method saves the form instance while handling feature persistence
+        and ensuring the event features cache is properly invalidated.
+
+        Args:
+            commit: Whether to commit the instance to the database immediately.
+                   Defaults to True.
+
+        Returns:
+            The saved model instance.
+        """
+        # Save the instance without committing to database yet
         instance = super().save(commit=False)
+
+        # Persist any feature-related data for this instance
         self._save_features(instance)
+
+        # Clear cached event features to ensure fresh data on next access
         clear_event_features_cache(instance.id)
+
         return instance
 
 
@@ -988,28 +1021,35 @@ class OrgaEventTextForm(MyForm):
             help_text.append(f"<b>{choice_typ.label}</b>: {text}")
         self.fields["typ"].help_text = " - ".join(help_text)
 
-    def clean(self):
+    def clean(self) -> dict:
         """Validate event text uniqueness by type and language.
 
+        Ensures that only one default text exists per type and that language-type
+        combinations are unique within an event.
+
         Returns:
-            dict: Cleaned form data
+            dict: Cleaned form data containing validated fields.
 
         Raises:
-            ValidationError: If default or language conflicts exist
+            ValidationError: If a default text already exists for the type or if
+                the language-type combination already exists.
         """
         cleaned_data = super().clean()
 
+        # Extract form fields for validation
         default = cleaned_data.get("default")
         typ = cleaned_data.get("typ")
         language = cleaned_data.get("language")
 
+        # Validate default text uniqueness per type
         if default:
-            # check if there is already a default with that type
+            # Check if there is already a default with that type
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
-        # check if there is already a language with that type
+        # Validate language-type combination uniqueness
+        # Check if there is already a language with that type
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
         if res.count() > 0 and res.first().pk != self.instance.pk:
             self.add_error("language", "There is already a language of this type!")

@@ -393,25 +393,46 @@ def orga_send_mail(request, s):
 
 
 @login_required
-def orga_archive_email(request, s):
+def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Display archived emails for an organization event.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for permission checking
+
+    Returns:
+        HttpResponse: Rendered template with paginated email archive data
+    """
+    # Check user permissions for accessing email archive
     ctx = check_event_permission(request, s, "orga_archive_email")
+
+    # Define table fields for email display
+    fields = [
+        ("recipient", _("Recipient")),
+        ("subj", _("Subject")),
+        ("body", _("Body")),
+        ("sent", _("Sent")),
+    ]
+
+    # Define callback functions for data formatting
+    callbacks = {
+        "body": format_email_body,
+        "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+        "run": lambda el: str(el.run) if el.run else "",
+        "recipient": lambda el: str(el.recipient),
+        "subj": lambda el: str(el.subj),
+    }
+
+    # Update context with field definitions and formatting callbacks
     ctx.update(
         {
-            "fields": [
-                ("recipient", _("Recipient")),
-                ("subj", _("Subject")),
-                ("body", _("Body")),
-                ("sent", _("Sent")),
-            ],
-            "callbacks": {
-                "body": format_email_body,
-                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
-                "run": lambda el: str(el.run) if el.run else "",
-                "recipient": lambda el: str(el.recipient),
-                "subj": lambda el: str(el.subj),
-            },
+            "fields": fields,
+            "callbacks": callbacks,
         }
     )
+
+    # Return paginated view of Email objects with archive template
     return orga_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 

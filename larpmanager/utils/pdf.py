@@ -340,17 +340,43 @@ def print_character_rel(ctx, force=False):
     return return_pdf(fp, f"{ctx['character']} - " + _("Relationships"))
 
 
-def print_gallery(ctx, force=False):
+def print_gallery(ctx: dict, force: bool = False) -> dict:
+    """Generate and return a PDF gallery of character portraits with first aid information.
+
+    This function creates a PDF containing character portraits and filters characters
+    who have first aid capabilities. The PDF is cached and only regenerated when
+    forced or when the cache is outdated.
+
+    Args:
+        ctx: Context dictionary containing run information and character data
+        force: Whether to force regeneration of the PDF regardless of cache status
+
+    Returns:
+        Dictionary containing PDF response data for the gallery
+    """
+    # Get the gallery file path from the current run
     fp = ctx["run"].get_gallery_filepath()
+
+    # Check if we need to regenerate the PDF (forced or cache outdated)
     if force or reprint(fp):
+        # Load all event cache data into context
         get_event_cache_all(ctx)
+
+        # Initialize first aid characters list
         ctx["first_aid"] = []
+
+        # Filter characters who have first aid capabilities
         for _num, el in ctx["chars"].items():
             if "first_aid" in el and el["first_aid"] == "y":
                 ctx["first_aid"].append(el)
+
+        # Get the file path again (in case it changed)
         fp = ctx["run"].get_gallery_filepath()
+
+        # Generate the PDF from the gallery template
         xhtml_pdf(ctx, "pdf/sheets/gallery.html", fp)
 
+    # Return the PDF response with localized title
     return return_pdf(fp, str(ctx["run"]) + " - " + _("Portraits"))
 
 
@@ -587,21 +613,49 @@ def print_run_bkg(a, s):
 # ## OLD PRINTING
 
 
-def odt_template(ctx, char, fp, template, aux_template):
+def odt_template(ctx: dict, char: object, fp: str, template: str, aux_template: str) -> None:
+    """Generate ODT template with retry mechanism.
+
+    Attempts to execute ODT template generation with automatic retry on failure.
+    Uses exponential backoff between attempts and logs all errors for debugging.
+
+    Args:
+        ctx: Context dictionary containing template variables
+        char: Character object with template data
+        fp: File path for the output document
+        template: Primary template identifier or path
+        aux_template: Auxiliary template identifier or path
+
+    Returns:
+        None
+
+    Raises:
+        Exception: After max_attempts failures, logs all exceptions but doesn't re-raise
+    """
     attempt = 0
     excepts = []
     max_attempts = 5
+
+    # Retry loop with exponential backoff
     while attempt < max_attempts:
         try:
+            # Execute the main ODT template generation
             exec_odt_template(ctx, char, fp, template, aux_template)
             return
         except Exception as e:
+            # Log detailed error information for debugging
             logger.error(f"Error in PDF creation: {e}")
             logger.error(f"Character: {char}")
             logger.error(f"Template: {template}")
+
+            # Track attempt and store exception
             attempt += 1
             excepts.append(e)
+
+            # Wait before retry (2 second delay)
             time.sleep(2)
+
+    # Log final failure after all attempts exhausted
     logger.error(f"ERROR IN odt_template: {excepts}")
 
 

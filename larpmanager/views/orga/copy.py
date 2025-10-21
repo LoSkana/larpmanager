@@ -294,24 +294,48 @@ def copy_character_config(e_id, p_id):
                     raise
 
 
-def copy(request, ctx, parent, event, targets):
+def copy(request, ctx, parent, event, targets) -> None:
+    """
+    Copy event data from a parent event to a target event.
+
+    This function copies various aspects of an event including event configuration,
+    registration settings, and writing content from a parent event to the current event.
+
+    Args:
+        request: HTTP request object for displaying messages
+        ctx: Context object containing user and organization information
+        parent: Parent event object to copy data from
+        event: Target event object to copy data to
+        targets: List or dict specifying which data types to copy
+
+    Returns:
+        None: Function performs operations and shows success/error messages
+    """
+    # Check if parent event exists
     if not parent:
         return messages.error(request, _("Parent empty"))
 
+    # Get event IDs for comparison and copying operations
     p_id = parent.id
     e_id = event.id
 
+    # Prevent copying from the same event
     if p_id == e_id:
         return messages.error(request, _("Can't copy from same event"))
 
+    # Copy main event configuration and settings
     copy_event(ctx, e_id, targets, event, p_id, parent)
 
+    # Copy registration-related data (tiers, questions, etc.)
     copy_registration(e_id, targets, p_id)
 
+    # Copy writing system data (backgrounds, stories, etc.)
     copy_writing(e_id, targets, p_id)
 
+    # Save the updated event object with copied data
     event.save()
 
+    # Show success message to user
     messages.success(request, _("Copy done"))
 
 
@@ -371,20 +395,44 @@ def _copy_features(event, parent):
     event.save()
 
 
-def copy_registration(e_id, targets, p_id):
+def copy_registration(e_id: int, targets: list[str], p_id: int) -> None:
+    """Copy registration components from one event to another.
+
+    Args:
+        e_id: Source event ID to copy registration data from
+        targets: List of registration component types to copy
+        p_id: Target event ID to copy registration data to
+
+    Note:
+        Supported target types: 'ticket', 'question', 'discount', 'quota',
+        'installment', 'surcharge'
+    """
+    # Copy ticket configurations if requested
     if "ticket" in targets:
         copy_class(e_id, p_id, RegistrationTicket)
+
+    # Copy registration questions and their options
     if "question" in targets:
         copy_class(e_id, p_id, RegistrationQuestion)
         copy_class(e_id, p_id, RegistrationOption)
+        # Fix relationships between questions and their options
         correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "name")
+
+    # Copy discount configurations
     if "discount" in targets:
         copy_class(e_id, p_id, Discount)
+
+    # Copy registration quota settings
     if "quota" in targets:
         copy_class(e_id, p_id, RegistrationQuota)
+
+    # Copy installment plans and link them to tickets
     if "installment" in targets:
         copy_class(e_id, p_id, RegistrationInstallment)
+        # Restore many-to-many relationships between tickets and installments
         correct_rels_many(e_id, RegistrationTicket, RegistrationInstallment, "tickets", "name")
+
+    # Copy surcharge configurations
     if "surcharge" in targets:
         copy_class(e_id, p_id, RegistrationSurcharge)
 

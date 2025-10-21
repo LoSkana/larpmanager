@@ -78,9 +78,9 @@ class RegistrationForm(BaseRegistrationForm):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-                     Expected to contain 'params' with 'run' key containing:
-                     - run: Run instance for the event registration
-                     - event: Event instance (accessed via run.event)
+                Expected to contain 'params' with 'run' key containing:
+                - run: Run instance for the event registration
+                - event: Event instance (accessed via run.event)
 
         Raises:
             KeyError: If 'params' or 'run' key is missing from kwargs.
@@ -94,10 +94,11 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Initialize core form state variables for tracking form data
         # These store form configuration and user selections
-        self.questions = []
-        self.tickets_map = {}
-        self.profiles = {}
-        self.section_descriptions = {}
+        self.questions: list = []
+        self.tickets_map: dict = {}
+        self.profiles: dict = {}
+        self.section_descriptions: dict = {}
+        # Initialize ticket reference for later assignment
         self.ticket = None
 
         # Extract run and event objects from parameters for form configuration
@@ -278,17 +279,23 @@ class RegistrationForm(BaseRegistrationForm):
         considering time constraints and current instance state. Sets up the quotas form
         field with appropriate choices and widget configuration.
 
-        Args:
-            event: Event instance containing quota configurations
-            run: Run instance with status and end date information
+        Parameters
+        ----------
+        event : Event
+            Event instance containing quota configurations
+        run : Run
+            Run instance with status and end date information
 
-        Returns:
-            None: Modifies self.fields and self.initial in place
+        Notes
+        -----
+        Modifies self.fields and self.initial in place. The quotas field is hidden
+        when only one option is available.
         """
         quota_chs = []
 
         # Check if quota feature is enabled and run is not in waiting status
         if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
+            # Define labels for different quota options (1-5 payments)
             qt_label = [
                 _("Single payment"),
                 _("Two quotas"),
@@ -564,16 +571,33 @@ class RegistrationForm(BaseRegistrationForm):
 
         return result
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
+        """Clean and validate form data, specifically handling friend codes.
+
+        Validates the bring_friend field by checking if the provided friend code
+        exists as a special_cod in Registration objects for the current event.
+
+        Returns:
+            The cleaned form data dictionary.
+
+        Raises:
+            ValidationError: When the friend code is not found in the system.
+        """
+        # Get cleaned data from parent class validation
         form_data = super().clean()
         run = self.params["run"]
 
+        # Check if bring_friend feature is enabled and field is present in form
         if "bring_friend" in self.params["features"] and "bring_friend" in form_data:
             cod = form_data["bring_friend"]
+
+            # Validate friend code if provided (skip validation for empty codes)
             if cod:
                 try:
+                    # Look for registration with matching special code in current event
                     Registration.objects.get(special_cod=cod, run__event=run.event)
                 except Exception:
+                    # Add validation error if friend code not found in system
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
 
         return form_data

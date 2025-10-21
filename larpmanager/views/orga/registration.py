@@ -981,20 +981,40 @@ def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", ctx)
 
 
-def get_pre_registration(event):
+def get_pre_registration(event) -> dict[str, list | dict[str, int]]:
+    """Get pre-registration data for an event.
+
+    Args:
+        event: The event object to get pre-registrations for.
+
+    Returns:
+        Dictionary containing:
+            - 'list': All pre-registrations for the event
+            - 'pred': Pre-registrations for members not yet signed up
+            - preference counts: Count of pre-registrations by preference
+    """
     dc = {"list": [], "pred": []}
+
+    # Get set of member IDs who already have registrations for this event
     signed = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
+
+    # Get all pre-registrations ordered by preference and creation date
     que = PreRegistration.objects.filter(event=event).order_by("pref", "created")
+
+    # Process each pre-registration
     for p in que.select_related("member"):
+        # Check if member hasn't signed up yet
         if p.member_id not in signed:
             dc["pred"].append(p)
         else:
             p.signed = True
 
+        # Add to complete list and count preferences
         dc["list"].append(p)
         if p.pref not in dc:
             dc[p.pref] = 0
         dc[p.pref] += 1
+
     return dc
 
 

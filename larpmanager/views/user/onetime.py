@@ -31,7 +31,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
 
-from larpmanager.models.miscellanea import OneTimeAccessToken
+from larpmanager.models.miscellanea import OneTimeAccessToken, OneTimeContent
 
 
 def file_iterator(
@@ -262,28 +262,50 @@ def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
     return response
 
 
-def _onetime_prepare(token):
+def _onetime_prepare(token: str) -> tuple[OneTimeContent, BinaryIO]:
+    """Prepare and validate a one-time access token for file access.
+
+    Validates the token, checks expiration, and opens the associated file
+    for streaming. The token must have been used within the last hour
+    and the content must be active.
+
+    Args:
+        token: The one-time access token string to validate
+
+    Returns:
+        A tuple containing the content object and opened file handle
+
+    Raises:
+        Http404: If token is invalid, expired, not initialized, or file unavailable
+    """
     max_time_use = 3600  # 3600 seconds = 1 hour
+
     # Validate and retrieve the access token with related content
     try:
         access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
     except ObjectDoesNotExist as err:
         raise Http404(_("Invalid token")) from err
+
     # Verify token has been properly initialized
     if not access_token.used:
         raise Http404(_("Token not initialized"))
+
     # Verify token was used within the last hour
     if access_token.used_at:
         time_since_used = timezone.now() - access_token.used_at
         if time_since_used.total_seconds() > max_time_use:
             raise Http404(_("Token expired"))
+
     # Ensure the content is still active and available
     if not access_token.content.active:
         raise Http404(_("Content unavailable"))
+
     content = access_token.content
+
     # Open the file in binary read mode for streaming
     try:
         file = content.file.open("rb")
     except Exception as err:
         raise Http404(_("File not found")) from err
+
     return content, file

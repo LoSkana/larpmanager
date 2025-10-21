@@ -909,24 +909,42 @@ def _validate_exclusive_logic(disc, member, run, event):
 
 
 @login_required
-def discount_list(request, s):
+def discount_list(request: HttpRequest, s: str) -> JsonResponse:
+    """Get valid discount items for the current user and event run.
+
+    Automatically removes expired discount items and returns a JSON response
+    containing the remaining valid discounts with their names, values, and
+    expiration times.
+
+    Args:
+        request: HTTP request object containing user information
+        s: Event slug identifier
+
+    Returns:
+        JSON response with list of valid discount items containing name,
+        value, and expiration time for each discount
+    """
+    # Get event run context for the specified slug
     ctx = get_event_run(request, s)
     now = timezone_now()
 
-    # Bulk delete expired discount items for this user and run
+    # Clean up expired discount items for this user and run
     AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"], expires__lte=now).delete()
 
-    # Get remaining valid discount items with optimized query
+    # Fetch remaining valid discount items with related discount info
     discount_items = (
         AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"])
         .select_related("disc")
         .filter(models.Q(expires__isnull=True) | models.Q(expires__gt=now))
     )
 
-    # Build response list efficiently
+    # Build response list with discount details
     lst = []
     for aid in discount_items:
+        # Create discount item dictionary with name and value
         j = {"name": aid.disc.name, "value": aid.value}
+
+        # Add formatted expiration time or empty string if no expiration
         if aid.expires:
             j["expires"] = aid.expires.strftime("%H:%M")
         else:
@@ -1085,10 +1103,31 @@ def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
     return render(request, "larpmanager/event/gift_edit.html", ctx)
 
 
-def get_registration_gift(ctx, r, request):
+def get_registration_gift(ctx: dict, r: int | None, request) -> Registration | None:
+    """
+    Retrieve a registration with gift redemption code for the current user.
+
+    Args:
+        ctx: Context dictionary containing 'run' key with the current run instance
+        r: Registration primary key to lookup, can be None
+        request: HTTP request object with authenticated user
+
+    Returns:
+        Registration instance if found and valid, None if r parameter is None
+
+    Raises:
+        Http404: If registration not found or user doesn't have access
+    """
     reg = None
+
+    # Early return if no registration ID provided
     if r:
         try:
+            # Find registration matching all gift criteria:
+            # - Belongs to current user
+            # - Has redemption code (is a gift)
+            # - Not cancelled
+            # - Belongs to current run
             reg = Registration.objects.get(
                 pk=r,
                 run=ctx["run"],
@@ -1097,7 +1136,9 @@ def get_registration_gift(ctx, r, request):
                 cancellation_date__isnull=True,
             )
         except Exception as err:
+            # Convert any lookup error to 404 for security
             raise Http404("what are you trying to do?") from err
+
     return reg
 
 
