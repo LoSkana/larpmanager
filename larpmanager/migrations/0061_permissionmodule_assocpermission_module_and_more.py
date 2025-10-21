@@ -7,11 +7,6 @@ import model_clone.mixin
 from django.db import migrations, models
 
 
-def first_module(apps, schema_editor):
-    PermissionModule = apps.get_model("larpmanager", "PermissionModule")
-    PermissionModule.objects.create(pk=1, name="def", order=1)
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ("larpmanager", "0060_larpmanagerticket"),
@@ -36,7 +31,6 @@ class Migration(migrations.Migration):
             },
             bases=(model_clone.mixin.CloneMixin, models.Model),
         ),
-        migrations.RunPython(first_module),
         migrations.AddField(
             model_name="assocpermission",
             name="module",
