@@ -202,7 +202,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         return redirect("exe_events_edit", num=0)
 
     # Redirect to quick setup if not completed
-    if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False, ctx):
+    if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False, ctx=ctx):
         msg = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization"
@@ -262,7 +262,7 @@ def _exe_suggestions(ctx):
     }
 
     for perm, text in suggestions.items():
-        if get_assoc_config(ctx["a_id"], f"{perm}_suggestion", ctx):
+        if get_assoc_config(ctx["a_id"], f"{perm}_suggestion", ctx=ctx):
             continue
         _add_suggestion(ctx, text, perm)
 
@@ -358,11 +358,11 @@ def _exe_users_actions(request, ctx, features):
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", ctx)) == 0:
+        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", ctx=ctx)) == 0:
             _add_priority(ctx, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in features:
-        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", ctx):
+        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", ctx=ctx):
             _add_priority(
                 ctx,
                 _("Set up the voting configuration"),
@@ -397,7 +397,7 @@ def _exe_accounting_actions(request, ctx, features):
             )
 
     if "organization_tax" in features:
-        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", ctx):
+        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", ctx=ctx):
             _add_priority(
                 ctx,
                 _("Set up the organization tax configuration"),
@@ -406,8 +406,8 @@ def _exe_accounting_actions(request, ctx, features):
             )
 
     if "vat" in features:
-        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", ctx)
-        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", ctx)
+        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", ctx=ctx)
+        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", ctx=ctx)
         if not vat_ticket or not vat_options:
             _add_priority(
                 ctx,
@@ -443,7 +443,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
         return redirect("orga_run", s=s)
 
     # Ensure quick setup is complete
-    if not get_event_config(ctx["event"].id, "orga_quick_suggestion", False, ctx):
+    if not get_event_config(ctx["event"].id, "orga_quick_suggestion", False, ctx=ctx):
         msg = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
             "the features most useful for your event"
@@ -453,7 +453,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(ctx, request, s)
-    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, ctx):
+    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, ctx=ctx):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
     # Load registration status
@@ -482,7 +482,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
     _compile(request, ctx)
 
     # Mobile shortcuts handling
-    if get_event_config(ctx["event"].id, "show_shortcuts_mobile", False, ctx):
+    if get_event_config(ctx["event"].id, "show_shortcuts_mobile", False, ctx=ctx):
         origin_id = request.GET.get("origin", "")
         should_open = False
         if origin_id:
@@ -531,7 +531,7 @@ def _orga_actions_priorities(request: HttpRequest, ctx: dict) -> None:
         )
 
     # Check if user_character feature needs configuration
-    if "user_character" in features and get_event_config(ctx["event"].id, "user_character_max", "", ctx) == "":
+    if "user_character" in features and get_event_config(ctx["event"].id, "user_character_max", "", ctx=ctx) == "":
         _add_priority(
             ctx,
             _("Set up the configuration for the creation or editing of characters by the participants"),
@@ -557,7 +557,7 @@ def _orga_actions_priorities(request: HttpRequest, ctx: dict) -> None:
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False, ctx):
+    if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False, ctx=ctx):
         expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
         if expenses_approve:
             _add_action(
@@ -637,7 +637,7 @@ def _orga_casting_actions(ctx, features):
     adding appropriate priority suggestions for event organizers.
     """
     if "casting" in features:
-        if not get_event_config(ctx["event"].id, "casting_min", 0, ctx):
+        if not get_event_config(ctx["event"].id, "casting_min", 0, ctx=ctx):
             _add_priority(
                 ctx,
                 _("Set the casting options in the configuration panel"),
@@ -692,7 +692,7 @@ def _orga_px_actions(ctx: dict, features: dict) -> None:
         return
 
     # Check if experience points configuration is missing
-    if not get_event_config(ctx["event"].id, "px_start", 0, ctx):
+    if not get_event_config(ctx["event"].id, "px_start", 0, ctx=ctx):
         _add_priority(
             ctx,
             _("Set the experience points configuration"),
@@ -800,7 +800,7 @@ def _orga_reg_acc_actions(ctx: dict, features: list[str]) -> None:
 
     # Handle reduced tickets feature configuration
     if "reduced" in features:
-        if not get_event_config(ctx["event"].id, "reduced_ratio", 0, ctx):
+        if not get_event_config(ctx["event"].id, "reduced_ratio", 0, ctx=ctx):
             _add_priority(
                 ctx,
                 _("Set up configuration for Patron and Reduced tickets"),
@@ -839,7 +839,7 @@ def _orga_reg_actions(ctx, features):
     if "custom_character" in features:
         configured = False
         for field in ["pronoun", "song", "public", "private", "profile"]:
-            if get_event_config(ctx["event"].id, "custom_character_" + field, False, ctx):
+            if get_event_config(ctx["event"].id, "custom_character_" + field, False, ctx=ctx):
                 configured = True
 
         if not configured:
@@ -863,7 +863,7 @@ def _orga_suggestions(ctx):
     }
 
     for perm, text in priorities.items():
-        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx):
+        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx=ctx):
             continue
         _add_priority(ctx, text, perm)
 
@@ -878,7 +878,7 @@ def _orga_suggestions(ctx):
     }
 
     for perm, text in suggestions.items():
-        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx):
+        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx=ctx):
             continue
         _add_suggestion(ctx, text, perm)
 
