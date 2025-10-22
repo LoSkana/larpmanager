@@ -1193,5 +1193,5 @@ def _handle_tutorial_redirect(choice_value):
     """Handle tutorial redirect with optional section anchor."""
     if "#" in choice_value:
         tutorial_slug, section_slug = choice_value.split("#", 1)
-        return reverse("tutorial", args=[tutorial_slug]) + f"#{section_slug}"
-    return reverse("tutorial", args=[choice_value])
+        return reverse("tutorials", args=[tutorial_slug]) + f"#{section_slug}"
+    return reverse("tutorials", args=[choice_value])
