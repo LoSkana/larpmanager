@@ -241,9 +241,9 @@ class TestModelSignals(BaseTestCase):
         # Should call replace_character_names_in_writing
         mock_replace.assert_called_once_with(speed_larp)
 
-    @patch("larpmanager.models.signals.add_tutorial_to_search_index")
+    @patch("larpmanager.models.signals.reset_tutorials_cache")
     @patch("larpmanager.models.signals.replace_character_names_in_writing")
-    def test_larp_manager_tutorial_pre_save_creates_slug(self, mock_replace, mock_index):
+    def test_larp_manager_tutorial_pre_save_creates_slug(self, mock_replace, mock_reset_cache):
         """Test that LarpManagerTutorial pre_save signal creates slug"""
         tutorial = LarpManagerTutorial(name="Test Tutorial", order=1, descr="Test description")
         tutorial.save()
@@ -482,17 +482,16 @@ class TestModelSignals(BaseTestCase):
         # Just verify the association was created successfully
         self.assertIsNotNone(assoc.id)
 
-    @patch("larpmanager.models.signals.add_tutorial_to_search_index")
-    def test_larp_manager_tutorial_post_save_indexes_tutorial(self, mock_index):
-        """Test that LarpManagerTutorial post_save signal indexes tutorial"""
+    @patch("larpmanager.models.signals.reset_tutorials_cache")
+    def test_larp_manager_tutorial_post_save_indexes_tutorial(self, mock_reset_cache):
+        """Test that LarpManagerTutorial post_save signal resets tutorials cache"""
         tutorial = LarpManagerTutorial(name="Test Tutorial", order=1, descr="Test description")
         tutorial.save()
 
-        mock_index.assert_called_once_with(tutorial.id)
+        mock_reset_cache.assert_called_once()
 
-    @patch("larpmanager.models.signals.remove_tutorial_from_search_index")
-    @patch("larpmanager.models.signals.add_tutorial_to_search_index")
-    def test_larp_manager_tutorial_can_be_deleted(self, mock_index, mock_delete_index):
+    @patch("larpmanager.models.signals.reset_tutorials_cache")
+    def test_larp_manager_tutorial_can_be_deleted(self, mock_reset_cache):
         """Test that LarpManagerTutorial can be deleted"""
         tutorial = LarpManagerTutorial.objects.create(name="Test Tutorial", order=1, descr="Test description")
         tutorial_id = tutorial.id
@@ -500,19 +499,20 @@ class TestModelSignals(BaseTestCase):
 
         # Tutorial should be deleted (soft delete)
         self.assertIsNone(LarpManagerTutorial.objects.filter(id=tutorial_id, deleted__isnull=True).first())
+        # Cache should be reset on deletion
+        mock_reset_cache.assert_called()
 
-    @patch("larpmanager.models.signals.add_guide_to_search_index")
+    @patch("larpmanager.models.signals.reset_guides_cache")
     @patch("larpmanager.models.signals.replace_character_names_in_writing")
-    def test_larp_manager_guide_post_save_indexes_guide(self, mock_replace, mock_index):
-        """Test that LarpManagerGuide post_save signal indexes guide"""
+    def test_larp_manager_guide_post_save_indexes_guide(self, mock_replace, mock_reset_cache):
+        """Test that LarpManagerGuide post_save signal resets guides cache"""
         guide = LarpManagerGuide(title="Test Guide", slug="test-guide", text="Test content")
         guide.save()
 
-        mock_index.assert_called_once_with(guide.id)
+        mock_reset_cache.assert_called_once()
 
-    @patch("larpmanager.models.signals.remove_guide_from_search_index")
-    @patch("larpmanager.models.signals.add_guide_to_search_index")
-    def test_larp_manager_guide_can_be_deleted(self, mock_index, mock_delete_index):
+    @patch("larpmanager.models.signals.reset_guides_cache")
+    def test_larp_manager_guide_can_be_deleted(self, mock_reset_cache):
         """Test that LarpManagerGuide can be deleted"""
         guide = LarpManagerGuide.objects.create(title="Test Guide", slug="test-guide", text="Test content")
         guide_id = guide.id
@@ -520,6 +520,8 @@ class TestModelSignals(BaseTestCase):
 
         # Guide should be deleted (soft delete)
         self.assertIsNone(LarpManagerGuide.objects.filter(id=guide_id, deleted__isnull=True).first())
+        # Cache should be reset on deletion
+        mock_reset_cache.assert_called()
 
     @patch("larpmanager.models.signals.clear_event_fields_cache")
     def test_writing_question_post_save_resets_cache(self, mock_reset):

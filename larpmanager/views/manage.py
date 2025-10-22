@@ -14,6 +14,7 @@ from slugify import slugify
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
 from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.guides_tutorials import get_guides_cache, get_tutorials_cache
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.access import AssocPermission, EventPermission
@@ -39,7 +40,6 @@ from larpmanager.utils.event import check_event_permission, get_event_run, get_i
 from larpmanager.utils.exceptions import RedirectError
 from larpmanager.utils.registration import registration_available
 from larpmanager.utils.text import get_assoc_text
-from larpmanager.utils.tutorial_query import GUIDE_INDEX, TUTORIAL_INDEX, get_or_create_index_tutorial
 
 
 @login_required
@@ -1106,27 +1106,20 @@ class WhatWouldYouLikeForm(Form):
         if self.ctx.get("assoc_role", None):
             choices.append(("manage_exe|", self.ctx.get("name") + " - " + _("Dashboard")))
 
-        # Add to choices all tutorials
-        ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
-        with ix.searcher() as searcher:
-            for doc in searcher.all_stored_fields():
-                slug = doc.get("slug", "")
-                title = doc.get("title", "")
-                section_title = doc.get("section_title", "")
-                content = doc.get("content", "")
+        # Add tutorials (including sections)
+        for tutorial in get_tutorials_cache():
+            title = tutorial["title"]
+            if tutorial["section_title"] and slugify(tutorial["section_title"]) != slugify(tutorial["title"]):
+                title += " - " + tutorial["section_title"]
+                choice_value = f"{tutorial['slug']}#{tutorial['section_slug']}"
+            else:
+                choice_value = tutorial["slug"]
 
-                if slugify(title) != slugify(section_title):
-                    title += " - " + section_title
-                choices.append((f"tutorial|{slug}#{slugify(section_title)}", f"{title} [TUTORIAL] - {content[:50]}"))
+            choices.append((f"tutorial|{choice_value}", f"{title} [TUTORIAL] - {tutorial['content_preview']}"))
 
-        # Add to choices all guides
-        ix = get_or_create_index_tutorial(GUIDE_INDEX)
-        with ix.searcher() as searcher:
-            for doc in searcher.all_stored_fields():
-                slug = doc.get("slug", "")
-                title = doc.get("title", "")
-                content = doc.get("content", "")
-                choices.append((f"guide|{slug}", f"{title} [GUIDE] - {content[:50]}"))
+        # Add guides
+        for guide in get_guides_cache():
+            choices.append((f"guide|{guide['slug']}", f"{guide['title']} [GUIDE] - {guide['content_preview']}"))
 
         self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
 
@@ -1200,5 +1193,5 @@ def _handle_tutorial_redirect(choice_value):
     """Handle tutorial redirect with optional section anchor."""
     if "#" in choice_value:
         tutorial_slug, section_slug = choice_value.split("#", 1)
-        return reverse("tutorial", args=[tutorial_slug]) + f"#{section_slug}"
-    return reverse("tutorial", args=[choice_value])
+        return reverse("tutorials", args=[tutorial_slug]) + f"#{section_slug}"
+    return reverse("tutorials", args=[choice_value])

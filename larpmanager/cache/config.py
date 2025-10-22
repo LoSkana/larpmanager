@@ -274,7 +274,7 @@ def evaluate_config(configs: dict, name: str, def_value: any) -> any:
     """Evaluate configuration value from element's aux_configs with type conversion.
 
     Args:
-        configs: Dict with all the configs
+        configs: dict with all the configs
         name: Configuration key to lookup in aux_configs
         def_value: Default value to return if key not found or value is empty
 

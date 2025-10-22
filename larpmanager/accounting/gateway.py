@@ -700,7 +700,7 @@ class RedSysClient:
         This method creates a unique key for every request, based on the
         Ds_Merchant_Order and in the shared secret (SERMEPA_SECRET_KEY).
         This unique key is Triple DES ciphered.
-        :param Ds_Merchant_Order: Dict with all merchant parameters
+        :param Ds_Merchant_Order: dict with all merchant parameters
         :return  order_encrypted: The encrypted order
         """
         assert isinstance(order, str)
@@ -724,7 +724,7 @@ class RedSysClient:
     def redsys_generate_request(self, params):
         """
         Method to generate Redsys Ds_MerchantParameters and Ds_Signature
-        :param params: Dict with all transaction parameters
+        :param params: dict with all transaction parameters
         :return dict url, signature, parameters and type signature
         """
         merchant_parameters = {

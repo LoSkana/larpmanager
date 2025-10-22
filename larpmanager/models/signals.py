@@ -65,6 +65,7 @@ from larpmanager.cache.character import (
 from larpmanager.cache.config import clear_config_cache
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
+from larpmanager.cache.guides_tutorials import reset_guides_cache, reset_tutorials_cache
 from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
@@ -226,12 +227,6 @@ from larpmanager.utils.text import (
     clear_event_text_cache_on_delete,
     update_association_text_cache_on_save,
     update_event_text_cache_on_save,
-)
-from larpmanager.utils.tutorial_query import (
-    add_guide_to_search_index,
-    add_tutorial_to_search_index,
-    remove_guide_from_search_index,
-    remove_tutorial_from_search_index,
 )
 from larpmanager.utils.writing import replace_character_names_before_save
 
@@ -798,13 +793,13 @@ def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
 
 # LarpManagerGuide signals
 @receiver(post_save, sender=LarpManagerGuide)
-def post_save_index_guide(sender, instance, **kwargs):
-    add_guide_to_search_index(instance.id)
+def post_save_reset_guides_cache(sender, instance, **kwargs):
+    reset_guides_cache()
 
 
 @receiver(post_delete, sender=LarpManagerGuide)
-def delete_guide_from_index(sender, instance, **kwargs):
-    remove_guide_from_search_index(instance.id)
+def post_delete_reset_guides_cache(sender, instance, **kwargs):
+    reset_guides_cache()
 
 
 # LarpManagerTicket signals
@@ -820,13 +815,13 @@ def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=LarpManagerTutorial)
-def post_save_index_tutorial(sender, instance, **kwargs):
-    add_tutorial_to_search_index(instance.id)
+def post_save_reset_tutorials_cache(sender, instance, **kwargs):
+    reset_tutorials_cache()
 
 
 @receiver(post_delete, sender=LarpManagerTutorial)
-def delete_tutorial_from_index(sender, instance, **kwargs):
-    remove_tutorial_from_search_index(instance.id)
+def post_delete_reset_tutorials_cache(sender, instance, **kwargs):
+    reset_tutorials_cache()
 
 
 # Member signals
