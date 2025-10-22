@@ -9167,11 +9167,11 @@ msgstr ""
 msgid "choice value not provided"
 msgstr ""
 
-msgid "Event context not available"
-msgstr ""
-
 #, python-format
 msgid "Unknown choice type: %(type)s"
+msgstr ""
+
+msgid "Event context not available"
 msgstr ""
 
 msgid "Reimbursement request item added"

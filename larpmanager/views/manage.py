@@ -1078,17 +1078,28 @@ class WhatWouldYouLikeForm(Form):
         super().__init__(*args, **kwargs)
 
         choices = []
+        event_priority_choices = []
+        regular_choices = []
 
         # Add to choices all links in the current interface
         for type_pms in ["event_pms", "assoc_pms"]:
             all_pms = self.ctx.get(type_pms, {})
             for _mod, list in all_pms.items():
                 for pms in list:
-                    choices.append((f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"])))
+                    choice_tuple = (f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"]))
+                    # Prioritize permissions with slug starting with "event"
+                    if pms["slug"].startswith("event"):
+                        event_priority_choices.append(choice_tuple)
+                    else:
+                        regular_choices.append(choice_tuple)
+
+        # Add prioritized event choices first
+        choices.extend(event_priority_choices)
+        choices.extend(regular_choices)
 
         # Add to choices all dashboard that can be accessed by this user
-        open_runs = self.ctx.get("open_runs", {})
-        for _rid, run in open_runs.items():
+        all_runs = self.ctx.get("all_runs", {})
+        for _rid, run in all_runs.items():
             choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
 
         if self.ctx.get("assoc_role", None):
@@ -1153,35 +1164,40 @@ def _get_choice_redirect_url(choice, ctx):
 
     choice_type, choice_value = choice.split("|", 1)
 
+    # Handle executive dashboard (no value needed)
     if choice_type == "manage_exe":
-        # Executive dashboard: redirect to association management
         return reverse("manage")
 
+    # Validate choice_value for all other types
     if not choice_value:
         raise ValueError(_("choice value not provided"))
 
-    # Handle different choice types
-    if choice_type == "event_pms":
-        # Event permissions: redirect to event view with run slug
-        if "run" not in ctx:
-            raise ValueError(_("Event context not available"))
-        return reverse(choice_value, args=[ctx["run"].get_slug()])
+    # Define redirect mapping
+    redirect_handlers = {
+        "event_pms": lambda: _handle_event_pms_redirect(choice_value, ctx),
+        "assoc_pms": lambda: reverse(choice_value),
+        "manage_orga": lambda: reverse("manage", args=[choice_value]),
+        "tutorial": lambda: _handle_tutorial_redirect(choice_value),
+        "guide": lambda: reverse("guide", args=[choice_value]),
+    }
 
-    elif choice_type == "assoc_pms":
-        # Association permissions: redirect to association view
-        return reverse(choice_value)
-
-    elif choice_type == "manage_orga":
-        # Organizer dashboard: redirect to event management
-        return reverse("manage", args=[choice_value])
-
-    elif choice_type == "tutorial":
-        # Tutorial: redirect to tutorial view
-        return reverse("tutorial", args=[choice_value])
-
-    elif choice_type == "guide":
-        # Guide: redirect to guide view
-        return reverse("guide", args=[choice_value])
-
-    else:
+    handler = redirect_handlers.get(choice_type)
+    if not handler:
         raise ValueError(_("Unknown choice type: %(type)s") % {"type": choice_type})
+
+    return handler()
+
+
+def _handle_event_pms_redirect(choice_value, ctx):
+    """Handle event permissions redirect."""
+    if "run" not in ctx:
+        raise ValueError(_("Event context not available"))
+    return reverse(choice_value, args=[ctx["run"].get_slug()])
+
+
+def _handle_tutorial_redirect(choice_value):
+    """Handle tutorial redirect with optional section anchor."""
+    if "#" in choice_value:
+        tutorial_slug, section_slug = choice_value.split("#", 1)
+        return reverse("tutorial", args=[tutorial_slug]) + f"#{section_slug}"
+    return reverse("tutorial", args=[choice_value])
