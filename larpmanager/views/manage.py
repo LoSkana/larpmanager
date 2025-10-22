@@ -202,7 +202,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         return redirect("exe_events_edit", num=0)
 
     # Redirect to quick setup if not completed
-    if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False):
+    if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False, ctx):
         msg = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization"
@@ -262,7 +262,7 @@ def _exe_suggestions(ctx):
     }
 
     for perm, text in suggestions.items():
-        if get_assoc_config(ctx["a_id"], f"{perm}_suggestion"):
+        if get_assoc_config(ctx["a_id"], f"{perm}_suggestion", ctx):
             continue
         _add_suggestion(ctx, text, perm)
 
@@ -358,11 +358,11 @@ def _exe_users_actions(request, ctx, features):
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(get_assoc_config(request.assoc["id"], "membership_fee", "")) == 0:
+        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", ctx)) == 0:
             _add_priority(ctx, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in features:
-        if not get_assoc_config(request.assoc["id"], "vote_candidates", ""):
+        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", ctx):
             _add_priority(
                 ctx,
                 _("Set up the voting configuration"),
@@ -397,7 +397,7 @@ def _exe_accounting_actions(request, ctx, features):
             )
 
     if "organization_tax" in features:
-        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", ""):
+        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", ctx):
             _add_priority(
                 ctx,
                 _("Set up the organization tax configuration"),
@@ -406,9 +406,9 @@ def _exe_accounting_actions(request, ctx, features):
             )
 
     if "vat" in features:
-        if not get_assoc_config(request.assoc["id"], "vat_ticket", "") or not get_assoc_config(
-            request.assoc["id"], "vat_options", ""
-        ):
+        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", ctx)
+        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", ctx)
+        if not vat_ticket or not vat_options:
             _add_priority(
                 ctx,
                 _("Set up the taxes configuration"),
@@ -453,7 +453,7 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(ctx, request, s)
-    if get_assoc_config(request.assoc["id"], "interface_admin_links", False):
+    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, ctx):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
     # Load registration status
@@ -557,7 +557,7 @@ def _orga_actions_priorities(request: HttpRequest, ctx: dict) -> None:
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False):
+    if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False, ctx):
         expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
         if expenses_approve:
             _add_action(
