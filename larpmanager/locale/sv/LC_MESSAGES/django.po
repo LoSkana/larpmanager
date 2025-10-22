@@ -7851,6 +7851,13 @@ msgstr ""
 "på"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Skapa och hantera evenemang genom att ange namn, datum, status och "
+"registreringsinformation"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

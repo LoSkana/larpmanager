@@ -7995,6 +7995,13 @@ msgstr ""
 "lidmaatschapsbijdrage van"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Evenementen maken en beheren door namen, data, status en registratiedetails "
+"in te stellen"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

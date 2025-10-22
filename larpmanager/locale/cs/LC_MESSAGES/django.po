@@ -7788,6 +7788,13 @@ msgstr ""
 "ve výši"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Vytvářet a spravovat události, nastavovat názvy, data, stav a podrobnosti o "
+"registraci"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

@@ -8163,6 +8163,11 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
+msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+
 msgid "Pre-Registrations"
 msgstr ""
 

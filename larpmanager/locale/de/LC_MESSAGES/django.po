@@ -8162,6 +8162,13 @@ msgstr ""
 "Mitgliedsbeitrag bezahlen"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Erstellen und Verwalten von Veranstaltungen, Festlegen von Namen, Datum, "
+"Status und Registrierungsdetails"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

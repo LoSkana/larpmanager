@@ -7849,6 +7849,13 @@ msgstr ""
 "For å delta i dette arrangementet må du betale den årlige medlemsavgiften på"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Opprett og administrer arrangementer, angi navn, datoer, status og "
+"påmeldingsdetaljer"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""
