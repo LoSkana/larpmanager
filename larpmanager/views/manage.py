@@ -1098,7 +1098,8 @@ class WhatWouldYouLikeForm(Form):
         choices.extend(regular_choices)
 
         # Add to choices all dashboard that can be accessed by this user
-        all_runs = self.ctx.get("all_runs", {})
+        all_runs = self.ctx.get("open_runs", {})
+        all_runs.update(self.ctx.get("past_runs", {}))
         for _rid, run in all_runs.items():
             choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
 
