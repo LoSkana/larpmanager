@@ -8102,6 +8102,13 @@ msgstr ""
 " annuelle d'un montant de 1 000 euros "
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Créer et gérer des événements, en définissant les noms, les dates, le statut"
+" et les détails de l'inscription"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

@@ -7979,6 +7979,13 @@ msgstr ""
 "afiliación de"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Cree y gestione eventos, estableciendo nombres, fechas, estado y detalles de"
+" inscripción"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

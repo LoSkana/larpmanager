@@ -7917,6 +7917,13 @@ msgstr ""
 " wysokości"
 
 msgid ""
+"Create and manage events, setting names, dates, status, and registration "
+"details"
+msgstr ""
+"Twórz wydarzenia i zarządzaj nimi, ustawiając nazwy, daty, status i "
+"szczegóły rejestracji"
+
+msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""

@@ -202,7 +202,7 @@
 - model: larpmanager.assocpermission
   fields:
     name: Events
-    descr: Manage events
+    descr: Create and manage events, setting names, dates, status, and registration details
     slug: exe_events
     number: 11
     config: null
