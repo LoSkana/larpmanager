@@ -29,7 +29,6 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
@@ -355,10 +354,8 @@ def add_unsubscribe_body(assoc):
     Returns:
         str: HTML footer with unsubscribe link
     """
-    txt = "<br /><br />======================"
-    txt += "<br /><br />" + _(
-        "Do you want to unsubscribe from our communication lists? <a href='%(url)s'>Unsubscribe</a>"
-    ) % {"url": get_url("unsubscribe", assoc)}
+    txt = "<br /><br />-<br />"
+    txt += f"<a href='{get_url('unsubscribe', assoc)}'>Unsubscribe</a>"
     return txt
 
 

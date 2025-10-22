@@ -8526,14 +8526,6 @@ msgstr ""
 "Du kan skapa nya delegatkonton eller logga in med dem genom att trycka på "
 "relevant knapp"
 
-#, python-format
-msgid ""
-"Do you want to unsubscribe from our communication lists? <a "
-"href='%(url)s'>Unsubscribe</a>"
-msgstr ""
-"Vill du avregistrera dig från våra kommunikationslistor? <a "
-"href='%(url)s'>Avregistrera</a>"
-
 msgid ""
 "Enter the date and time when registrations open - leave blank to keep "
 "registrations closed"
