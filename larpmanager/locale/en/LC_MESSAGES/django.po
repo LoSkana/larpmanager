@@ -5708,12 +5708,7 @@ msgstr ""
 msgid "Launch guided interface tour"
 msgstr ""
 
-msgid "What would you like to do"
-msgstr ""
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
+msgid "Go"
 msgstr ""
 
 msgid "Dates"
@@ -9161,6 +9156,22 @@ msgid "Activate new features and enhance the functionality of the event"
 msgstr ""
 
 msgid "Set specific values for configuration of features of the event"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Invalid choice format"
+msgstr ""
+
+msgid "choice value not provided"
+msgstr ""
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr ""
+
+msgid "Event context not available"
 msgstr ""
 
 msgid "Reimbursement request item added"

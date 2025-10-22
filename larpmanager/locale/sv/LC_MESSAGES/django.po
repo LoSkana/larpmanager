@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Av"
 
+msgid "Go"
+msgstr "Gå"
+
 msgid "Hi"
 msgstr "Hej"
 
@@ -1265,6 +1268,9 @@ msgstr "Utförd kopia"
 
 msgid "Customize"
 msgstr "Anpassa"
+
+msgid "Dashboard"
+msgstr "Instrumentpanel"
 
 msgid "Deadlines"
 msgstr "Tidsfrister"
@@ -3466,6 +3472,9 @@ msgstr "Gå till casting för"
 msgid "If absent, indicate 0"
 msgstr "Om frånvarande, ange 0"
 
+msgid "Invalid choice format"
+msgstr "Ogiltigt valformat"
+
 msgid "Manage URL shorteners"
 msgstr "Hantera URL-förkortare"
 
@@ -4022,11 +4031,11 @@ msgstr "Användning av tredje parts tillgångar"
 msgid "We're sorry to see you go"
 msgstr "Vi är ledsna att se dig gå"
 
-msgid "What would you like to do"
-msgstr "Vad skulle du vilja göra"
-
 msgid "cancel your registrations"
 msgstr "avboka din registrering"
+
+msgid "choice value not provided"
+msgstr "valfritt värde anges inte"
 
 msgid "Access character creation!"
 msgstr "Få tillgång till karaktärsskapande!"
@@ -4131,6 +4140,9 @@ msgstr "Ange ett giltigt numeriskt värde"
 
 msgid "Enter your preferences here"
 msgstr "Ange dina preferenser här"
+
+msgid "Event context not available"
+msgstr "Händelsekontext inte tillgänglig"
 
 msgid "Loading performed, see logs"
 msgstr "Lastning utförd, se loggar"
@@ -4317,6 +4329,10 @@ msgstr "Transport - bensin, motorväg"
 
 msgid "Unconverted pre-registrations"
 msgstr "Förhandsregistreringar som inte konverterats"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Okänd typ av val: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Du har inga evenemang ännu"
@@ -7800,13 +7816,6 @@ msgid ""
 msgstr ""
 "För att bekräfta det, vänligen betala följande belopp så snart som möjligt: "
 "%(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Skriv ett nyckelord i sökfältet för att hitta en referens - skriv på "
-"engelska"
 
 msgid ""
 "You have activated the following features, for each here's the links to "

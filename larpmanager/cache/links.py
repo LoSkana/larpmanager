@@ -47,10 +47,9 @@ def cache_event_links(request: HttpRequest) -> dict:
     Returns:
         Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
     """
-    ctx = {}
     # Skip if not authenticated or no association
     if not request.user.is_authenticated or request.assoc["id"] == 0:
-        return ctx
+        return {}
 
     # Return cached data if available
     ctx = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
@@ -58,69 +57,98 @@ def cache_event_links(request: HttpRequest) -> dict:
         return ctx
 
     # Build navigation context from scratch
-    ctx = {}
-    ref = datetime.now() - timedelta(days=10)
-    ref = ref.date()
-
-    member = request.user.member
-
-    # Get user's active registrations for upcoming events
-    que = Registration.objects.filter(member=member, run__end__gte=ref)
-    que = que.filter(cancellation_date__isnull=True, run__event__assoc_id=request.assoc["id"])
-    que = que.select_related("run", "run__event")
-    ctx["reg_menu"] = [(r.run.get_slug(), str(r.run)) for r in que]
-
-    assoc_id = request.assoc["id"]
-
-    # Collect association-level roles
-    ctx["assoc_role"] = {}
-    for ar in member.assoc_roles.filter(assoc_id=assoc_id):
-        ctx["assoc_role"][ar.number] = ar.id
-    # Grant admin role to LarpManager admins
-    if is_lm_admin(request):
-        ctx["assoc_role"][1] = 1
-
-    # Collect event-level roles
-    ctx["event_role"] = {}
-    for er in member.event_roles.filter(event__assoc_id=assoc_id).select_related("event"):
-        if er.event.slug not in ctx["event_role"]:
-            ctx["event_role"][er.event.slug] = {}
-        ctx["event_role"][er.event.slug][er.number] = er.id
-
-    # Build accessible runs list based on user's roles
-    ctx["all_runs"] = {}
-    ctx["open_runs"] = {}
-    all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
-    admin = 1 in ctx["assoc_role"]
-    for r in all_runs:
-        # Skip deleted events
-        if r.event.deleted:
-            continue
-        # Determine user's roles for this run
-        roles = None
-        if admin:
-            roles = [1]
-        if r.event.slug in ctx["event_role"]:
-            roles = list(ctx["event_role"][r.event.slug].keys())
-        if not roles:
-            continue
-        ctx["all_runs"][r.id] = roles
-        # Add to open runs if not completed or cancelled
-        if r.development not in (DevelopStatus.DONE, DevelopStatus.CANC):
-            ctx["open_runs"][r.id] = {
-                "slug": r.get_slug(),
-                "e": r.event.slug,
-                "r": r.number,
-                "s": str(r),
-                "k": (r.start if r.start else datetime.max.date()),
-            }
-
-    # Determine if topbar should be shown
-    ctx["topbar"] = ctx["event_role"] or ctx["assoc_role"]
+    ctx = _build_navigation_context(request)
 
     # Cache for 1 day
     cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return ctx
+
+
+def _build_navigation_context(request: HttpRequest) -> dict:
+    """Build navigation context for authenticated user."""
+    ctx = {}
+    ref = (datetime.now() - timedelta(days=10)).date()
+    member = request.user.member
+    assoc_id = request.assoc["id"]
+
+    # Get user's active registrations for upcoming events
+    que = Registration.objects.filter(
+        member=member, run__end__gte=ref, cancellation_date__isnull=True, run__event__assoc_id=assoc_id
+    ).select_related("run", "run__event")
+    ctx["reg_menu"] = [(r.run.get_slug(), str(r.run)) for r in que]
+
+    # Collect roles
+    ctx["assoc_role"] = _get_assoc_roles(member, assoc_id, request)
+    ctx["event_role"] = _get_event_roles(member, assoc_id)
+
+    # Build accessible runs
+    ctx.update(_get_accessible_runs(assoc_id, ctx["assoc_role"], ctx["event_role"]))
+
+    # Determine if topbar should be shown
+    ctx["topbar"] = bool(ctx["event_role"] or ctx["assoc_role"])
+
+    return ctx
+
+
+def _get_assoc_roles(member, assoc_id: int, request: HttpRequest) -> dict:
+    """Get association-level roles for the member."""
+    assoc_roles = {}
+    for ar in member.assoc_roles.filter(assoc_id=assoc_id):
+        assoc_roles[ar.number] = ar.id
+
+    # Grant admin role to LarpManager admins
+    if is_lm_admin(request):
+        assoc_roles[1] = 1
+
+    return assoc_roles
+
+
+def _get_event_roles(member, assoc_id: int) -> dict:
+    """Get event-level roles for the member."""
+    event_roles = {}
+    for er in member.event_roles.filter(event__assoc_id=assoc_id).select_related("event"):
+        event_slug = er.event.slug
+        event_roles.setdefault(event_slug, {})[er.number] = er.id
+    return event_roles
+
+
+def _get_accessible_runs(assoc_id: int, assoc_roles: dict, event_roles: dict) -> dict:
+    """Get runs accessible to the user based on their roles."""
+    result = {"all_runs": {}, "open_runs": {}, "past_runs": {}}
+    all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
+    admin = 1 in assoc_roles
+
+    for run in all_runs:
+        if run.event.deleted:
+            continue
+
+        roles = _determine_run_roles(run, admin, event_roles)
+        if not roles:
+            continue
+
+        result["all_runs"][run.id] = roles
+
+        # Create run element for display
+        elm = {
+            "slug": run.get_slug(),
+            "e": run.event.slug,
+            "r": run.number,
+            "s": str(run),
+            "k": (run.start if run.start else datetime.max.date()),
+        }
+
+        # Categorize as open or past run
+        target_dict = "open_runs" if run.development not in (DevelopStatus.DONE, DevelopStatus.CANC) else "past_runs"
+        result[target_dict][run.id] = elm
+
+    return result
+
+
+def _determine_run_roles(run, admin: bool, event_roles: dict) -> list:
+    """Determine user roles for a specific run."""
+    if admin:
+        return [1]
+    return list(event_roles.get(run.event.slug, {}).keys()) or None
 
 
 def clear_run_event_links_cache(event: Event) -> None:

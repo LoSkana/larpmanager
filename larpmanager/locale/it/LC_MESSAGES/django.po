@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Da"
 
+msgid "Go"
+msgstr "Vai"
+
 msgid "Hi"
 msgstr "Ciao"
 
@@ -1265,6 +1268,9 @@ msgstr "Copia eseguita"
 
 msgid "Customize"
 msgstr "Personalizza"
+
+msgid "Dashboard"
+msgstr "Cruscotto"
 
 msgid "Deadlines"
 msgstr "Scadenze"
@@ -3466,6 +3472,9 @@ msgstr "Vai al casting per"
 msgid "If absent, indicate 0"
 msgstr "Se assente, indicare 0"
 
+msgid "Invalid choice format"
+msgstr "Formato di scelta non valido"
+
 msgid "Manage URL shorteners"
 msgstr "Gestisci gli accorciatori di URL"
 
@@ -4022,11 +4031,11 @@ msgstr "Godimento di beni di terzi"
 msgid "We're sorry to see you go"
 msgstr "Ci dispiace vederti andare via"
 
-msgid "What would you like to do"
-msgstr "Cosa vuoi fare"
-
 msgid "cancel your registrations"
 msgstr "cancellare la tua iscrizione"
+
+msgid "choice value not provided"
+msgstr "valore di scelta non fornito"
 
 msgid "Access character creation!"
 msgstr "Accedi alla creazione personaggio!"
@@ -4131,6 +4140,9 @@ msgstr "Inserire un valore numerico valido"
 
 msgid "Enter your preferences here"
 msgstr "Indica qui le tue preferenze"
+
+msgid "Event context not available"
+msgstr "Contesto dell'evento non disponibile"
 
 msgid "Loading performed, see logs"
 msgstr "Caricamento eseguito, consulta i log"
@@ -4317,6 +4329,10 @@ msgstr "Trasporti - benzina, autostrada"
 
 msgid "Unconverted pre-registrations"
 msgstr "Preiscrizioni non convertite"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Tipo di scelta sconosciuto: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Non ci sono ancora eventi"
@@ -7956,13 +7972,6 @@ msgid ""
 msgstr ""
 "Per confermarla, per favore paga al più presto il seguente importo: "
 "%(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Digita una parola chiave nella barra di ricerca per trovare un riferimento -"
-" per favore scrivi in inglese"
 
 msgid ""
 "You have activated the following features, for each here's the links to "
