@@ -524,14 +524,14 @@ class RegistrationForm(BaseRegistrationForm):
             The logic considers ticket selection state, player history, run status,
             and member's existing registrations to determine ticket visibility.
         """
+        # If this ticket is already selected in current registration flow, don't skip it
+        if "ticket" in self.params and self.params["ticket"] == ticket.id:
+            return False
+
         result = False
 
-        # Skip if ticket already selected in current registration flow
-        if "ticket" in self.params:
-            result = True
-
         # Hide new player tickets if member has previous non-waiting/staff/npc registrations
-        elif ticket.tier == TicketTier.NEW_PLAYER:
+        if ticket.tier == TicketTier.NEW_PLAYER:
             past_regs = Registration.objects.filter(cancellation_date__isnull=True)
             past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
             past_regs = past_regs.filter(member=self.params["member"]).exclude(run=run)

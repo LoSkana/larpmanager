@@ -157,15 +157,15 @@ def get_casting_choices_characters(
         ctx: Context dictionary containing:
             - event: Event instance for character filtering
             - run: Run instance for registration filtering
-            - features: Dict of enabled features
+            - features: dict of enabled features
         options: Dictionary containing:
             - factions: List of allowed faction IDs for filtering
 
     Returns:
         Tuple containing:
-            - choices: Dict mapping character IDs to display names
+            - choices: dict mapping character IDs to display names
             - taken: List of character IDs that are already assigned
-            - mirrors: Dict mapping character IDs to their mirror character IDs
+            - mirrors: dict mapping character IDs to their mirror character IDs
             - allowed: List of character IDs allowed by faction filtering
     """
     choices = {}
