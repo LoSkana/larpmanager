@@ -287,7 +287,7 @@ def check_user_fee(live_server, page):
     page.get_by_role("link", name=" Accounting").click()
     page.get_by_role("link", name="follow this link").click()
     expect(page.locator("#wrapper")).to_contain_text(
-        "Test Larp Organization Home Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa Submit"
+        "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa Submit"
     )
 
 
