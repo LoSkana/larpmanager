@@ -1088,7 +1088,7 @@ class WhatWouldYouLikeForm(Form):
                 for pms in list:
                     choice_tuple = (f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"]))
                     # Prioritize permissions with slug starting with "event"
-                    if pms["slug"].startswith("event"):
+                    if pms["slug"] in ["exe_events", "orga_event"]:
                         event_priority_choices.append(choice_tuple)
                     else:
                         regular_choices.append(choice_tuple)
