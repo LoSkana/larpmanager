@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Door"
 
+msgid "Go"
+msgstr "Ga naar"
+
 msgid "Hi"
 msgstr "Hoi"
 
@@ -1265,6 +1268,9 @@ msgstr "Uitgevoerd exemplaar"
 
 msgid "Customize"
 msgstr "aanpassen"
+
+msgid "Dashboard"
+msgstr "Dashboard"
 
 msgid "Deadlines"
 msgstr "Deadlines"
@@ -3466,6 +3472,9 @@ msgstr "Ga naar casting voor"
 msgid "If absent, indicate 0"
 msgstr "Indien afwezig, geef 0 aan"
 
+msgid "Invalid choice format"
+msgstr "Ongeldig keuzeformaat"
+
 msgid "Manage URL shorteners"
 msgstr "URL-verkorters beheren"
 
@@ -4022,11 +4031,11 @@ msgstr "Gebruik van activa van derden"
 msgid "We're sorry to see you go"
 msgstr "We vinden het jammer dat je weggaat"
 
-msgid "What would you like to do"
-msgstr "Wat zou je willen doen"
-
 msgid "cancel your registrations"
 msgstr "annuleer je registratie"
+
+msgid "choice value not provided"
+msgstr "keuzewaarde niet opgegeven"
 
 msgid "Access character creation!"
 msgstr "Toegang tot het maken van personages!"
@@ -4131,6 +4140,9 @@ msgstr "Voer een geldige numerieke waarde in"
 
 msgid "Enter your preferences here"
 msgstr "Geef hier je voorkeuren aan"
+
+msgid "Event context not available"
+msgstr "Gebeurteniscontext niet beschikbaar"
 
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
@@ -4317,6 +4329,10 @@ msgstr "Vervoer - benzine, snelweg"
 
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Type keuze onbekend: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Je hebt nog geen evenementen"
@@ -7942,13 +7958,6 @@ msgid ""
 msgstr ""
 "Om dit te bevestigen, gelieve het volgende bedrag zo snel mogelijk te "
 "betalen: %(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Typ een trefwoord in de zoekbalk om een referentie te vinden - schrijf "
-"a.u.b. in het Engels"
 
 msgid ""
 "You have activated the following features, for each here's the links to "

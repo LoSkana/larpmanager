@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Przez"
 
+msgid "Go"
+msgstr "Idź"
+
 msgid "Hi"
 msgstr "Cześć"
 
@@ -1265,6 +1268,9 @@ msgstr "Kopia wykonana"
 
 msgid "Customize"
 msgstr "Dostosuj"
+
+msgid "Dashboard"
+msgstr "Pulpit nawigacyjny"
 
 msgid "Deadlines"
 msgstr "Terminy"
@@ -3466,6 +3472,9 @@ msgstr "Przejdź do castingu na"
 msgid "If absent, indicate 0"
 msgstr "Jeśli nieobecny, wskaż 0"
 
+msgid "Invalid choice format"
+msgstr "Nieprawidłowy format wyboru"
+
 msgid "Manage URL shorteners"
 msgstr "Zarządzanie skracaczami adresów URL"
 
@@ -4022,11 +4031,11 @@ msgstr "Korzystanie z aktywów stron trzecich"
 msgid "We're sorry to see you go"
 msgstr "Przykro nam, że odchodzisz"
 
-msgid "What would you like to do"
-msgstr "Co chciałbyś robić"
-
 msgid "cancel your registrations"
 msgstr "anulować rejestrację"
+
+msgid "choice value not provided"
+msgstr "nie podano wartości wyboru"
 
 msgid "Access character creation!"
 msgstr "Dostęp do tworzenia postaci!"
@@ -4131,6 +4140,9 @@ msgstr "Wprowadź prawidłową wartość liczbową"
 
 msgid "Enter your preferences here"
 msgstr "Wprowadź swoje preferencje tutaj"
+
+msgid "Event context not available"
+msgstr "Kontekst zdarzenia nie jest dostępny"
 
 msgid "Loading performed, see logs"
 msgstr "Wykonano ładowanie, patrz dzienniki"
@@ -4317,6 +4329,10 @@ msgstr "Transport - gaz, autostrady"
 
 msgid "Unconverted pre-registrations"
 msgstr "Niekonwertowane rejestracje wstępne"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Nieznany typ wyboru: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Nie masz jeszcze żadnych wydarzeń"
@@ -7865,13 +7881,6 @@ msgid ""
 msgstr ""
 "Aby to potwierdzić, prosimy o jak najszybsze wpłacenie następującej kwoty: "
 "%(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Wpisz słowo kluczowe w pasku wyszukiwania, aby znaleźć odnośnik - pisz w "
-"języku angielskim"
 
 msgid ""
 "You have activated the following features, for each here's the links to "

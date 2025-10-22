@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Par"
 
+msgid "Go"
+msgstr "Aller"
+
 msgid "Hi"
 msgstr "Bonjour"
 
@@ -1265,6 +1268,9 @@ msgstr "Copie exécutée"
 
 msgid "Customize"
 msgstr "Personnaliser"
+
+msgid "Dashboard"
+msgstr "Tableau de bord"
 
 msgid "Deadlines"
 msgstr "Délais"
@@ -3466,6 +3472,9 @@ msgstr "Aller au casting pour"
 msgid "If absent, indicate 0"
 msgstr "En cas d'absence, indiquer 0"
 
+msgid "Invalid choice format"
+msgstr "Format de choix non valide"
+
 msgid "Manage URL shorteners"
 msgstr "Gérer les raccourcisseurs d'URL"
 
@@ -4022,11 +4031,11 @@ msgstr "Utilisation d'actifs de tiers"
 msgid "We're sorry to see you go"
 msgstr "Nous sommes désolés de vous voir partir"
 
-msgid "What would you like to do"
-msgstr "Qu'aimeriez-vous faire"
-
 msgid "cancel your registrations"
 msgstr "annuler votre inscription"
+
+msgid "choice value not provided"
+msgstr "valeur de choix non fournie"
 
 msgid "Access character creation!"
 msgstr "Accédez à la création de personnages !"
@@ -4131,6 +4140,9 @@ msgstr "Saisir une valeur numérique valide"
 
 msgid "Enter your preferences here"
 msgstr "Indiquez vos préférences ici"
+
+msgid "Event context not available"
+msgstr "Le contexte de l'événement n'est pas disponible"
 
 msgid "Loading performed, see logs"
 msgstr "Chargement effectué, voir les journaux"
@@ -4317,6 +4329,10 @@ msgstr "Transport - essence, autoroute"
 
 msgid "Unconverted pre-registrations"
 msgstr "Préinscriptions non converties"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Type de choix inconnu : %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Vous n'avez pas encore d'événements"
@@ -8049,13 +8065,6 @@ msgid ""
 msgstr ""
 "Pour le confirmer, veuillez verser le montant suivant dans les plus brefs "
 "délais : %(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Tapez un mot-clé dans la barre de recherche pour trouver une référence - "
-"veuillez écrire en anglais"
 
 msgid ""
 "You have activated the following features, for each here's the links to "

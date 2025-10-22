@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Unter"
 
+msgid "Go"
+msgstr "Weiter"
+
 msgid "Hi"
 msgstr "Hallo"
 
@@ -1265,6 +1268,9 @@ msgstr "Ausgeführtes Exemplar"
 
 msgid "Customize"
 msgstr "Anpassen"
+
+msgid "Dashboard"
+msgstr "Dashboard"
 
 msgid "Deadlines"
 msgstr "Fristen"
@@ -3466,6 +3472,9 @@ msgstr "Gehen Sie zum Casting für"
 msgid "If absent, indicate 0"
 msgstr "Falls nicht vorhanden, 0 angeben"
 
+msgid "Invalid choice format"
+msgstr "Ungültiges Auswahlformat"
+
 msgid "Manage URL shorteners"
 msgstr "Verwalten von URL-Verkürzern"
 
@@ -4022,11 +4031,11 @@ msgstr "Nutzung von Vermögenswerten Dritter"
 msgid "We're sorry to see you go"
 msgstr "Es tut uns leid, dass Sie gehen"
 
-msgid "What would you like to do"
-msgstr "Was würden Sie gerne tun"
-
 msgid "cancel your registrations"
 msgstr "Ihre Anmeldung stornieren"
+
+msgid "choice value not provided"
+msgstr "Auswahlwert nicht angegeben"
 
 msgid "Access character creation!"
 msgstr "Zugang zur Charaktererstellung!"
@@ -4131,6 +4140,9 @@ msgstr "Geben Sie einen gültigen numerischen Wert ein"
 
 msgid "Enter your preferences here"
 msgstr "Geben Sie hier Ihre Präferenzen an"
+
+msgid "Event context not available"
+msgstr "Ereigniskontext nicht verfügbar"
 
 msgid "Loading performed, see logs"
 msgstr "Laden durchgeführt, siehe Protokolle"
@@ -4317,6 +4329,10 @@ msgstr "Verkehr - Benzin, Autobahn"
 
 msgid "Unconverted pre-registrations"
 msgstr "Nicht umgewandelte Vorregistrierungen"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Unbekannter Auswahltyp: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Sie haben noch keine Veranstaltungen"
@@ -8109,13 +8125,6 @@ msgid ""
 msgstr ""
 "Zur Bestätigung überweisen Sie bitte so bald wie möglich den folgenden "
 "Betrag: %(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Geben Sie ein Stichwort in die Suchleiste ein, um eine Referenz zu finden - "
-"bitte schreiben Sie auf Englisch"
 
 msgid ""
 "You have activated the following features, for each here's the links to "

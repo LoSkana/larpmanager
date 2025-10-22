@@ -3,10 +3,13 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.forms import ChoiceField, Form
 from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django_select2.forms import Select2Widget
+from slugify import slugify
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
 from larpmanager.cache.config import get_assoc_config, get_event_config
@@ -33,8 +36,10 @@ from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_ind
 from larpmanager.utils.common import _get_help_questions, format_datetime
 from larpmanager.utils.edit import set_suggestion
 from larpmanager.utils.event import check_event_permission, get_event_run, get_index_event_permissions
+from larpmanager.utils.exceptions import RedirectError
 from larpmanager.utils.registration import registration_available
 from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.tutorial_query import GUIDE_INDEX, TUTORIAL_INDEX, get_or_create_index_tutorial
 
 
 @login_required
@@ -173,6 +178,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
     ctx["manage"] = 1
+
+    # Check what would you like form
+    what_would_you_like(ctx, request)
 
     # Get available features for this association
     features = get_assoc_features(ctx["a_id"])
@@ -419,7 +427,14 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
     Returns:
         Rendered dashboard
     """
+
+    # Set page context
     ctx = get_event_run(request, s)
+    ctx["orga_page"] = 1
+    ctx["manage"] = 1
+
+    # Check what would you like form
+    what_would_you_like(ctx, request)
 
     # Ensure run dates are set
     if not ctx["run"].start or not ctx["run"].end:
@@ -435,10 +450,6 @@ def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
         )
         messages.success(request, msg)
         return redirect("orga_quick", s=s)
-
-    # Set page context
-    ctx["orga_page"] = 1
-    ctx["manage"] = 1
 
     # Load permissions and navigation
     get_index_event_permissions(ctx, request, s)
@@ -1059,3 +1070,118 @@ def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermane
 
     # Return permanent redirect (301) for better caching and SEO
     return HttpResponsePermanentRedirect("/" + base_path)
+
+
+class WhatWouldYouLikeForm(Form):
+    def __init__(self, *args, **kwargs):
+        self.ctx = kwargs.pop("ctx")
+        super().__init__(*args, **kwargs)
+
+        choices = []
+
+        # Add to choices all links in the current interface
+        for type_pms in ["event_pms", "assoc_pms"]:
+            all_pms = self.ctx.get(type_pms, {})
+            for _mod, list in all_pms.items():
+                for pms in list:
+                    choices.append((f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"])))
+
+        # Add to choices all dashboard that can be accessed by this user
+        open_runs = self.ctx.get("open_runs", {})
+        for _rid, run in open_runs.items():
+            choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
+
+        if self.ctx.get("assoc_role", None):
+            choices.append(("manage_exe|", self.ctx.get("name") + " - " + _("Dashboard")))
+
+        # Add to choices all tutorials
+        ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
+        with ix.searcher() as searcher:
+            for doc in searcher.all_stored_fields():
+                slug = doc.get("slug", "")
+                title = doc.get("title", "")
+                section_title = doc.get("section_title", "")
+                content = doc.get("content", "")
+
+                if slugify(title) != slugify(section_title):
+                    title += " - " + section_title
+                choices.append((f"tutorial|{slug}#{slugify(section_title)}", f"{title} [TUTORIAL] - {content[:50]}"))
+
+        # Add to choices all guides
+        ix = get_or_create_index_tutorial(GUIDE_INDEX)
+        with ix.searcher() as searcher:
+            for doc in searcher.all_stored_fields():
+                slug = doc.get("slug", "")
+                title = doc.get("title", "")
+                content = doc.get("content", "")
+                choices.append((f"guide|{slug}", f"{title} [GUIDE] - {content[:50]}"))
+
+        self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
+
+
+def what_would_you_like(ctx, request):
+    if request.POST:
+        form = WhatWouldYouLikeForm(request.POST, ctx=ctx)
+        if form.is_valid():
+            choice = form.cleaned_data["wwyltd"]
+            try:
+                redirect_url = _get_choice_redirect_url(choice, ctx)
+                raise RedirectError(redirect_url)
+            except ValueError as err:
+                messages.error(request, str(err))
+                raise RedirectError(request.path) from err
+    else:
+        form = WhatWouldYouLikeForm(ctx=ctx)
+    ctx["form"] = form
+
+
+def _get_choice_redirect_url(choice, ctx):
+    """Get the appropriate redirect URL based on the user's choice.
+
+    Args:
+        choice: The choice value from the form (format: "type#value")
+        ctx: Context dictionary containing association and event data
+
+    Returns:
+        str: URL to redirect to
+
+    Raises:
+        ValueError: If the choice format is invalid or redirect cannot be determined
+    """
+    if not choice or "|" not in choice:
+        raise ValueError(_("Invalid choice format"))
+
+    choice_type, choice_value = choice.split("|", 1)
+
+    if choice_type == "manage_exe":
+        # Executive dashboard: redirect to association management
+        return reverse("manage")
+
+    if not choice_value:
+        raise ValueError(_("choice value not provided"))
+
+    # Handle different choice types
+    if choice_type == "event_pms":
+        # Event permissions: redirect to event view with run slug
+        if "run" not in ctx:
+            raise ValueError(_("Event context not available"))
+        return reverse(choice_value, args=[ctx["run"].get_slug()])
+
+    elif choice_type == "assoc_pms":
+        # Association permissions: redirect to association view
+        return reverse(choice_value)
+
+    elif choice_type == "manage_orga":
+        # Organizer dashboard: redirect to event management
+        return reverse("manage", args=[choice_value])
+
+    elif choice_type == "tutorial":
+        # Tutorial: redirect to tutorial view
+        return reverse("tutorial", args=[choice_value])
+
+    elif choice_type == "guide":
+        # Guide: redirect to guide view
+        return reverse("guide", args=[choice_value])
+
+    else:
+        raise ValueError(_("Unknown choice type: %(type)s") % {"type": choice_type})

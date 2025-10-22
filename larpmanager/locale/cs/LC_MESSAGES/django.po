@@ -8,6 +8,9 @@ msgstr "e"
 msgid "By"
 msgstr "Podle"
 
+msgid "Go"
+msgstr "Přejít na"
+
 msgid "Hi"
 msgstr "Ahoj"
 
@@ -1265,6 +1268,9 @@ msgstr "Provedená kopie"
 
 msgid "Customize"
 msgstr "Přizpůsobení"
+
+msgid "Dashboard"
+msgstr "Přístrojová deska"
 
 msgid "Deadlines"
 msgstr "Termíny"
@@ -3466,6 +3472,9 @@ msgstr "Přejděte na casting"
 msgid "If absent, indicate 0"
 msgstr "Pokud chybí, uveďte 0"
 
+msgid "Invalid choice format"
+msgstr "Nesprávný formát výběru"
+
 msgid "Manage URL shorteners"
 msgstr "Správa zkracovačů URL"
 
@@ -4022,11 +4031,11 @@ msgstr "Použití majetku třetích stran"
 msgid "We're sorry to see you go"
 msgstr "Je nám líto, že odcházíte"
 
-msgid "What would you like to do"
-msgstr "Co byste chtěli dělat"
-
 msgid "cancel your registrations"
 msgstr "zrušit svou registraci"
+
+msgid "choice value not provided"
+msgstr "hodnota výběru není uvedena"
 
 msgid "Access character creation!"
 msgstr "Přístup k tvorbě postavy!"
@@ -4131,6 +4140,9 @@ msgstr "Zadejte platnou číselnou hodnotu"
 
 msgid "Enter your preferences here"
 msgstr "Zde uveďte své preference"
+
+msgid "Event context not available"
+msgstr "Kontext události není k dispozici"
 
 msgid "Loading performed, see logs"
 msgstr "Provedeno načítání, viz protokoly"
@@ -4317,6 +4329,10 @@ msgstr "Doprava - benzín, dálnice"
 
 msgid "Unconverted pre-registrations"
 msgstr "Nepřepočtené předběžné registrace"
+
+#, python-format
+msgid "Unknown choice type: %(type)s"
+msgstr "Neznámý typ výběru: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Zatím nemáte žádné události"
@@ -7736,13 +7752,6 @@ msgid ""
 "%(amount)s"
 msgstr ""
 "Pro potvrzení prosím co nejdříve zaplaťte následující částku: %(amount)s"
-
-msgid ""
-"Type a keyword in the search bar to find a reference - please write in "
-"English"
-msgstr ""
-"Zadejte klíčové slovo do vyhledávacího řádku a najděte odkaz - pište prosím "
-"v angličtině"
 
 msgid ""
 "You have activated the following features, for each here's the links to "
