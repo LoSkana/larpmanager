@@ -29,7 +29,6 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
@@ -135,23 +134,23 @@ def send_mail_exec(
     """
     aux = {}
 
-    # Determine sender context (Association or Run object)
+    obj = None
+    # Determine sender context (Association or Run object, or LM )
     if assoc_id:
         obj = Association.objects.filter(pk=assoc_id).first()
     elif run_id:
         obj = Run.objects.filter(pk=run_id).first()
-    else:
-        logger.warning(f"Object not found! assoc_id: {assoc_id}, run_id: {run_id}")
-        return
 
-    # Add organization/run prefix to subject line
-    subj = f"[{obj}] {subj}"
+    if obj:
+        # Add organization/run prefix to subject line
+        subj = f"[{obj}] {subj}"
 
     # Parse comma-separated email list
     recipients = players.split(",")
 
     # Notify administrators about bulk email operation
-    notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
+    if obj:
+        notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
 
     cnt = 0
     # Process each recipient with deduplication
@@ -355,10 +354,8 @@ def add_unsubscribe_body(assoc):
     Returns:
         str: HTML footer with unsubscribe link
     """
-    txt = "<br /><br />======================"
-    txt += "<br /><br />" + _(
-        "Do you want to unsubscribe from our communication lists? <a href='%(url)s'>Unsubscribe</a>"
-    ) % {"url": get_url("unsubscribe", assoc)}
+    txt = "<br /><br />-<br />"
+    txt += f"<a href='{get_url('unsubscribe', assoc)}'>Unsubscribe</a>"
     return txt
 
 
