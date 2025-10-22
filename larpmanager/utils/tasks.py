@@ -135,23 +135,23 @@ def send_mail_exec(
     """
     aux = {}
 
-    # Determine sender context (Association or Run object)
+    obj = None
+    # Determine sender context (Association or Run object, or LM )
     if assoc_id:
         obj = Association.objects.filter(pk=assoc_id).first()
     elif run_id:
         obj = Run.objects.filter(pk=run_id).first()
-    else:
-        logger.warning(f"Object not found! assoc_id: {assoc_id}, run_id: {run_id}")
-        return
 
-    # Add organization/run prefix to subject line
-    subj = f"[{obj}] {subj}"
+    if obj:
+        # Add organization/run prefix to subject line
+        subj = f"[{obj}] {subj}"
 
     # Parse comma-separated email list
     recipients = players.split(",")
 
     # Notify administrators about bulk email operation
-    notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
+    if obj:
+        notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
 
     cnt = 0
     # Process each recipient with deduplication
