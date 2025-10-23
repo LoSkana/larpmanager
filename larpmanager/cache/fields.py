@@ -105,10 +105,15 @@ def update_event_fields(event_id: int) -> dict:
     return res
 
 
-def get_event_fields_cache(event_id):
+def get_event_fields_cache(event_id: int) -> dict:
+    """Get event fields from cache or update if not cached."""
+    # Try to retrieve from cache
     res = cache.get(event_fields_key(event_id))
+
+    # Update cache if not found
     if res is None:
         res = update_event_fields(event_id)
+
     return res
 
 

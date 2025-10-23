@@ -379,11 +379,15 @@ def strip_tags(html: str | None) -> str:
 
 
 class MLStripper(HTMLParser):
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize the HTML parser with default settings."""
         super().__init__()
+        # Reset parser state to initial conditions
         self.reset()
+        # Configure parser behavior
         self.strict = False
         self.convert_charrefs = True
+        # Initialize text buffer for content extraction
         self.text = StringIO()
 
     def handle_data(self, d):

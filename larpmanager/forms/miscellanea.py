@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime
+from typing import Any
 
 from django import forms
 from django.forms import Textarea
@@ -101,8 +102,10 @@ class UtilForm(MyForm):
         model = Util
         fields = ("name", "util", "cod", "event")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and set unique code if not provided."""
         super().__init__(*args, **kwargs)
+        # Set unique code if not present in initial data
         if "cod" not in self.initial or not self.initial["cod"]:
             self.initial["cod"] = unique_util_cod()
 
@@ -208,9 +211,17 @@ class UploadAlbumsForm(forms.Form):
 
 
 class CompetencesForm(forms.Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize form with dynamic fields for each element in the provided list.
+
+        Args:
+            *args: Variable positional arguments passed to parent class.
+            **kwargs: Variable keyword arguments. Must contain 'list' key with iterable of objects.
+        """
         self.list = kwargs.pop("list")
         super().__init__(*args, **kwargs)
+
+        # Create dynamic fields for each element: one for experience points and one for info
         for el in self.list:
             self.fields[f"{el.id}_exp"] = forms.IntegerField(required=False)
             self.fields[f"{el.id}_info"] = forms.CharField(required=False)
@@ -268,34 +279,44 @@ class OrganizerCastingOptionsForm(forms.Form):
         choices=MEMBERSHIP_CHOICES, widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize casting form with payment, membership, ticket, and faction options.
 
         Sets up form fields based on enabled features and initializes choices
         for payments, memberships, tickets, and factions.
+
+        Args:
+            *args: Variable length argument list passed to parent form.
+            **kwargs: Arbitrary keyword arguments. Expects 'ctx' with event context.
         """
+        # Extract context parameters if provided
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
+
+        # Set default payment types (ticket, card, paypal)
         self.fields["pays"].initial = ("t", "c", "p")
 
+        # Configure membership field based on feature availability
         if "membership" in self.params["features"]:
             self.fields["memberships"].initial = ("s", "a", "p")
         else:
             del self.fields["memberships"]
 
+        # Fetch available tickets excluding waiting list, staff, and NPC tiers
         ticks = (
             RegistrationTicket.objects.filter(event=self.params["event"])
             .exclude(tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
             .values_list("id", "name")
         )
 
+        # Create ticket selection field with all available tickets
         self.fields["tickets"] = forms.MultipleChoiceField(
             choices=ticks, widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
         )
-
         self.fields["tickets"].initial = [str(el[0]) for el in ticks]
 
+        # Configure faction field if faction feature is enabled
         if "faction" in self.params["features"]:
             factions = (
                 self.params["event"]
@@ -305,10 +326,10 @@ class OrganizerCastingOptionsForm(forms.Form):
                 .values_list("id", "name")
             )
 
+            # Create faction selection field with primary factions
             self.fields["factions"] = forms.MultipleChoiceField(
                 choices=factions, widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
             )
-
             self.fields["factions"].initial = [str(el[0]) for el in factions]
 
     def get_data(self) -> dict[str, list]:

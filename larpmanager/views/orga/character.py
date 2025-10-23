@@ -26,7 +26,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.db.models.functions import Length, Substr
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -276,10 +276,24 @@ def orga_characters_relationships(request: HttpRequest, s: str, num: int) -> Htt
 
 
 @login_required
-def orga_characters_view(request, s, num):
+def orga_characters_view(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Display character view for event organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Character number/ID
+
+    Returns:
+        Rendered writing view for character
+    """
+    # Check permissions and initialize context
     ctx = check_event_permission(request, s, ["orga_reading", "orga_characters"])
+
+    # Load character and event cache data
     get_char(ctx, num)
     get_event_cache_all(ctx)
+
     return writing_view(request, ctx, "character")
 
 
@@ -633,10 +647,35 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
 
 
 @login_required
-def orga_writing_form_order(request, s, typ, num, order):
+def orga_writing_form_order(
+    request: HttpRequest,
+    s: str,
+    typ: str,
+    num: int,
+    order: str,
+) -> HttpResponse:
+    """Reorder writing form questions by swapping positions.
+
+    Args:
+        request: The HTTP request object.
+        s: The run slug identifier.
+        typ: The writing form type to reorder questions for.
+        num: The question number to move.
+        order: The direction to move ('up' or 'down').
+
+    Returns:
+        Redirect to the writing form page.
+    """
+    # Verify user has permission to modify character forms
     ctx = check_event_permission(request, s, "orga_character_form")
+
+    # Validate the writing form type exists
     check_writing_form_type(ctx, typ)
+
+    # Exchange the order of questions
     exchange_order(ctx, WritingQuestion, num, order)
+
+    # Redirect back to the writing form page
     return redirect("orga_writing_form", s=ctx["run"].get_slug(), typ=typ)
 
 
@@ -648,9 +687,19 @@ def orga_writing_options_edit(request, s, typ, num):
 
 
 @login_required
-def orga_writing_options_new(request, s, typ, num):
+def orga_writing_options_new(request: HttpRequest, s: str, typ: str, num: int) -> HttpResponse:
+    """Create new writing option for character form question.
+
+    Validates permissions and creates a new writing option for the specified
+    question type and number.
+    """
+    # Validate user has permission to edit character forms
     ctx = check_event_permission(request, s, "orga_character_form")
+
+    # Ensure the writing form type is valid
     check_writing_form_type(ctx, typ)
+
+    # Set question ID in context and delegate to option editor
     ctx["question_id"] = num
     return writing_option_edit(ctx, 0, request, typ)
 
@@ -673,10 +722,29 @@ def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> 
 
 
 @login_required
-def orga_writing_options_order(request, s, typ, num, order):
+def orga_writing_options_order(request: HttpRequest, s: str, typ: str, num: int, order: int) -> HttpResponseRedirect:
+    """Reorder writing options within a writing form question.
+
+    Args:
+        request: HTTP request object
+        s: Run slug identifier
+        typ: Writing form type identifier
+        num: Question ID number
+        order: New order position for the option
+
+    Returns:
+        Redirect to the writing form edit page
+    """
+    # Check event permission and initialize context
     ctx = check_event_permission(request, s, "orga_character_form")
+
+    # Validate writing form type exists in context
     check_writing_form_type(ctx, typ)
+
+    # Exchange order positions of WritingOption objects
     exchange_order(ctx, WritingOption, num, order)
+
+    # Redirect back to writing form edit view
     return redirect("orga_writing_form_edit", s=ctx["run"].get_slug(), typ=typ, num=ctx["current"].question_id)
 
 
@@ -876,15 +944,29 @@ def check_speedlarp_prepare(el, id_number_map: dict[int, int], speeds: dict[int,
 
 
 @require_POST
-def orga_character_get_number(request, s):
+def orga_character_get_number(request: HttpRequest, s: str) -> JsonResponse:
+    """Get the number attribute for a Trait or Character element.
+
+    Args:
+        request: The HTTP request containing idx and type in POST data.
+        s: The event slug identifier.
+
+    Returns:
+        JsonResponse with element number or error status.
+    """
+    # Check user permissions for the event
     ctx = check_event_permission(request, s, "orga_characters")
     idx = request.POST.get("idx")
     type = request.POST.get("type")
+
     try:
+        # Get element based on type (Trait or Character)
         if type.lower() == "trait":
             el = ctx["event"].get_elements(Trait).get(pk=idx)
         else:
             el = ctx["event"].get_elements(Character).get(pk=idx)
+
+        # Return the element's number
         return JsonResponse({"res": "ok", "number": el.number})
     except ObjectDoesNotExist:
         JsonResponse({"res": "ko"})

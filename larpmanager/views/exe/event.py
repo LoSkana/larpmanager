@@ -245,8 +245,13 @@ def exe_pre_registrations(request) -> HttpResponse:
 
 
 @login_required
-def exe_deadlines(request):
+def exe_deadlines(request: HttpRequest) -> HttpResponse:
+    """Display upcoming run deadlines for the association."""
+    # Check user has permission to view deadlines
     ctx = check_assoc_permission(request, "exe_deadlines")
+
+    # Get upcoming runs and check their deadlines
     runs = get_coming_runs(request.assoc["id"])
     ctx["list"] = check_run_deadlines(runs)
+
     return render(request, "larpmanager/exe/deadlines.html", ctx)

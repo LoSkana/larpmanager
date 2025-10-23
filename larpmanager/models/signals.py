@@ -393,11 +393,23 @@ def pre_delete_assignment_trait(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AssignmentTrait)
-def post_save_assignment_trait(sender, instance, created, **kwargs):
+def post_save_assignment_trait(
+    sender: type,
+    instance: AssignmentTrait,
+    created: bool,
+    **kwargs: dict,
+) -> None:
+    """Handle post-save actions for AssignmentTrait instances.
+
+    Clears caches, sends notification emails, and manages PDF cleanup.
+    """
+    # Clear cached data and generated media for the run
     clear_run_cache_and_media(instance.run)
 
+    # Notify relevant users about trait assignment
     send_trait_assignment_email(instance, created)
 
+    # Remove outdated PDF files if necessary
     cleanup_pdfs_on_trait_assignment(instance, created)
 
 
@@ -492,11 +504,21 @@ def post_save_association_skin_reset_cache(sender, instance, **kwargs):
 
 # Character signals
 @receiver(pre_save, sender=Character)
-def pre_save_character_update_status(sender, instance, **kwargs):
+def pre_save_character_update_status(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Update character status and cache before saving.
+
+    Args:
+        sender: Model class sending the signal.
+        instance: Character instance being saved.
+        **kwargs: Additional signal arguments.
+    """
+    # Send email notification for character status changes
     send_character_status_update_email(instance)
 
+    # Replace character name placeholders in related fields
     replace_character_names_before_save(instance)
 
+    # Update cached character data
     on_character_pre_save_update_cache(instance)
 
 
@@ -545,11 +567,15 @@ def pre_delete_character_reset(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Character)
-def post_delete_character_reset_rels(sender, instance, **kwargs):
+def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Clear caches for deleted character and update related relationships."""
     # Update all related caches
     refresh_character_related_caches(instance)
 
+    # Clear event-level relationship cache
     clear_event_relationships_cache(instance.event_id)
+
+    # Refresh cache for characters that had this character as target
     for rel in Relationship.objects.filter(target=instance):
         refresh_character_relationships(rel.source)
 
@@ -906,7 +932,8 @@ def pre_save_plot(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=Plot)
-def post_save_plot_reset_rels(sender, instance, **kwargs):
+def post_save_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
+    """Update plot and character relationship caches after plot save."""
     # Update plot cache
     refresh_event_plot_relationships(instance)
 
@@ -939,7 +966,8 @@ def pre_save_prologue(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=Prologue)
-def post_save_prologue_reset_rels(sender, instance, **kwargs):
+def post_save_prologue_reset_rels(sender, instance: Prologue, **kwargs: Any) -> None:
+    """Reset relationship cache for prologue and associated characters."""
     # Update prologue cache
     refresh_event_prologue_relationships(instance)
 
@@ -966,7 +994,8 @@ def pre_save_quest_reset(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Quest)
-def post_save_quest_reset_rels(sender, instance, **kwargs):
+def post_save_quest_reset_rels(sender, instance: Quest, **kwargs: Any) -> None:
+    """Update quest and questtype cache relationships after quest save."""
     # Update quest cache
     refresh_event_quest_relationships(instance)
 

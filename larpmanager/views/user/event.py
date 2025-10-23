@@ -816,10 +816,17 @@ def check_visibility(ctx: dict, typ: str, name: str) -> None:
         raise HiddenError(ctx["run"].get_slug(), name)
 
 
-def factions(request, s):
+def factions(request: HttpRequest, s: str) -> HttpResponse:
+    """Render factions page for an event run."""
+    # Get event run context and validate status
     ctx = get_event_run(request, s, status=True)
+
+    # Verify user has permission to view factions
     check_visibility(ctx, "faction", _("Factions"))
+
+    # Load all event cache data into context
     get_event_cache_all(ctx)
+
     return render(request, "larpmanager/event/factions.html", ctx)
 
 

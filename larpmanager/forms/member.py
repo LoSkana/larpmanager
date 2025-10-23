@@ -104,17 +104,28 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     """Custom registration form with unique email validation and GDPR compliance."""
 
     # noinspection PyUnresolvedReferences, PyProtectedMember
-    def __init__(self, *args, **kwargs):
-        """Initialize RegistrationFormUniqueEmail with custom field configuration.
+    def __init__(
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        """Initialize registration form with custom field configuration.
+
+        Configures form fields for user registration including language selection,
+        email validation, password fields, user details, newsletter preferences,
+        GDPR consent, and reCAPTCHA when not in debug mode.
 
         Args:
-            *args: Variable length argument list passed to parent
-            **kwargs: Arbitrary keyword arguments, including 'request'
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments. 'request' is extracted and stored
+                if present, remaining kwargs passed to parent.
         """
+        # Extract request object and initialize parent form
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
 
+        # Configure language selection field
         self.fields["lang"] = forms.ChoiceField(
             required=True,
             choices=conf_settings.LANGUAGES,
@@ -123,10 +134,12 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             initial=translation.get_language(),
         )
 
+        # Set maximum length for email and password fields
         self.fields["email"].widget.attrs["maxlength"] = 70
 
         self.fields["password1"].widget.attrs["maxlength"] = 70
 
+        # Add name and surname fields from Member model metadata
         self.fields["name"] = forms.CharField(
             required=True,
             label=Member._meta.get_field("name").verbose_name,
@@ -139,6 +152,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             help_text=Member._meta.get_field("surname").help_text,
         )
 
+        # Configure newsletter subscription preferences
         self.fields["newsletter"] = forms.ChoiceField(
             required=True,
             choices=NewsletterChoices.choices,
@@ -147,6 +161,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             initial=NewsletterChoices.ALL,
         )
 
+        # Add GDPR consent checkbox
         self.fields["share"] = forms.BooleanField(
             required=True,
             label=_("Authorisation"),
@@ -156,6 +171,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             + "?",
         )
 
+        # Add reCAPTCHA field in production environments
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
             public, private = get_recaptcha_secrets(self.request)
             if public and private:
@@ -163,28 +179,31 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
                     widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
                 )
 
-        # place language as first
+        # Reorder fields to place language selection first
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
-    def clean_username(self):
+    def clean_username(self) -> str:
+        """Validate username field and check for duplicate email addresses."""
+        # Extract and normalize username input
         data = self.cleaned_data["username"].strip()
         logger.debug(f"Validating username/email: {data}")
 
-        # Check if email is already registered to prevent duplicates
+        # Prevent duplicate email registrations
         if User.objects.filter(email__iexact=data).exists():
             raise ValidationError("Email already used! It seems you already have an account!")
         return data
 
-    def save(self, commit=True):
-        """Save user and associated member profile.
+    def save(self, commit: bool = True) -> User:
+        """Save user and update associated member profile with form data.
 
         Args:
-            commit: Whether to save to database
+            commit: Whether to save to database. Defaults to True.
 
         Returns:
-            User: Created user instance
+            Created user instance with updated member profile.
         """
+        # Create user instance from parent form
         user = super(RegistrationFormUniqueEmail, self).save()
 
         # Update member profile with form data
@@ -200,14 +219,10 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 class MyPasswordResetConfirmForm(SetPasswordForm):
     """Custom password reset confirmation form with field limits."""
 
-    def __init__(self, *args, **kwargs):
-        """Initialize form with password field constraints.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-        """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with password field constraints."""
         super().__init__(*args, **kwargs)
+        # Limit password field to 70 characters
         self.fields["new_password1"].widget.attrs["maxlength"] = 70
 
 
@@ -345,8 +360,12 @@ MEMBERSHIP_CHOICES = (
 class ResidenceWidget(forms.MultiWidget):
     template_name = "forms/widgets/residence_widget.html"
 
-    def __init__(self, attrs=None):
+    def __init__(self, attrs: dict[str, Any] | None = None) -> None:
+        """Initialize the multi-widget with country, province, city, postal code, street, and house number fields."""
+        # Common attributes for all text input widgets
         attr_common = {"class": "form-control"}
+
+        # Define all address component widgets
         widgets = [
             forms.Select(choices=COUNTRY_CHOICES),
             forms.Select(choices=PROVINCE_CHOICES),
@@ -355,6 +374,7 @@ class ResidenceWidget(forms.MultiWidget):
             forms.TextInput(attrs={**attr_common, "placeholder": _("Street")}),
             forms.TextInput(attrs={**attr_common, "placeholder": _("House number")}),
         ]
+
         super().__init__(widgets, attrs)
 
     def decompress(self, value):
@@ -369,7 +389,9 @@ def validate_no_pipe(value):
 
 
 class ResidenceField(forms.MultiValueField):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the field with residence-specific subfields and widget."""
+        # Define subfields for country, province, city, postal code, address, and civic number
         fields = [
             forms.ChoiceField(choices=COUNTRY_CHOICES),
             forms.ChoiceField(choices=PROVINCE_CHOICES, required=False),
@@ -378,12 +400,16 @@ class ResidenceField(forms.MultiValueField):
             forms.CharField(max_length=30, validators=[validate_no_pipe]),
             forms.CharField(max_length=10, validators=[validate_no_pipe]),
         ]
+
+        # Initialize custom widget for residence input
         widget = ResidenceWidget(attrs=None)
         super().__init__(*args, fields=fields, widget=widget, **kwargs)
 
-    def compress(self, values):
+    def compress(self, values: list[str | None]) -> str:
+        """Join list values into pipe-separated string, replacing None with empty string."""
         if not values:
             return ""
+        # Replace None values with empty strings
         values = [v if v is not None else "" for v in values]
         return "|".join(values)
 
@@ -395,9 +421,12 @@ class ResidenceField(forms.MultiValueField):
 
         Returns:
             Compressed list of cleaned field values.
+
+        Raises:
+            forms.ValidationError: If any field validation fails.
         """
+        # Handle empty/None input by creating default values for all fields
         if not value:
-            # Handle empty/None input by creating default values for all fields
             value = self.compress([None] * len(self.fields))
             return value
 
@@ -411,6 +440,8 @@ class ResidenceField(forms.MultiValueField):
                 else:
                     # Apply field-specific validation and cleaning
                     cleaned_data.append(field.clean(value[i]))
+
+            # Compress cleaned data into final format
             return self.compress(cleaned_data)
         except forms.ValidationError as err:
             raise err
@@ -706,10 +737,10 @@ class ExeVolunteerRegistryForm(MyForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
     def clean_member(self) -> Member:
-        """Validates that the member is not already registered as a volunteer."""
+        """Validates member is not already registered as volunteer for this association."""
         member = self.cleaned_data["member"]
 
-        # Check if member already has a volunteer entry for this association
+        # Check for existing volunteer entries for this member and association
         lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
         if lst.count() > 1:
             raise ValidationError("Volunteer entry already existing!")
@@ -789,10 +820,12 @@ class ExeMembershipFeeForm(forms.Form):
             label=_("Method"),
         )
 
-    def clean_member(self):
+    def clean_member(self) -> Member:
+        """Validate that the member doesn't already have a membership fee for the current year."""
         member = self.cleaned_data["member"]
         year = datetime.today().year
 
+        # Check if membership fee already exists for this year
         if AccountingItemMembership.objects.filter(member=member, year=year).exists():
             self.add_error("member", _("Membership fee already existing for this user and for this year"))
 

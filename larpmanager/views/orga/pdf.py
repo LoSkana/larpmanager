@@ -156,10 +156,26 @@ def orga_characters_friendly_pdf(request, s, num):
 
 
 @login_required
-def orga_characters_friendly_test(request, s, num):
+def orga_characters_friendly_test(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate friendly test character sheet PDF.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Character number
+
+    Returns:
+        Rendered PDF template for friendly test sheet
+    """
+    # Verify user has permission to access character PDFs
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Retrieve and validate character, ensuring user has access
     get_char_check(request, ctx, num, True)
+
+    # Populate context with character sheet data
     get_character_sheet(ctx)
+
     return render(request, "pdf/sheets/friendly.html", ctx)
 
 

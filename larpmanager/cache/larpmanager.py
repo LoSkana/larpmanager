@@ -93,15 +93,23 @@ def update_cache_lm_home() -> dict[str, int | list]:
     return ctx
 
 
-def _get_reviews():
+def _get_reviews() -> list[dict]:
+    """Get all LARP manager reviews as dictionaries.
+
+    Returns:
+        List of review dictionaries.
+    """
     res = []
+    # Convert each review object to dictionary representation
     for element in LarpManagerReview.objects.all():
         res.append(element.as_dict())
     return res
 
 
-def _get_showcases():
+def _get_showcases() -> list[dict]:
+    """Return all showcases as a list of dictionaries ordered by number."""
     res = []
+    # Iterate through showcases ordered by number and convert to dict
     for element in LarpManagerShowcase.objects.order_by("number"):
         res.append(element.as_dict())
     return res

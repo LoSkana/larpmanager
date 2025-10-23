@@ -78,9 +78,8 @@ class RegistrationForm(BaseRegistrationForm):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-                     Expected to contain 'params' with 'run' key containing:
-                     - run: Run instance for the event registration
-                     - event: Event instance (accessed via run.event)
+                Expected to contain 'params' with 'run' key containing Run instance
+                and 'event' key containing Event instance (accessed via run.event).
 
         Raises:
             KeyError: If 'params' or 'run' key is missing from kwargs.
@@ -168,14 +167,18 @@ class RegistrationForm(BaseRegistrationForm):
             if ticket not in tm:
                 self.fields[k].required = False
 
-    def init_additionals(self):
+    def init_additionals(self) -> None:
         """Initialize additional tickets field if feature is enabled."""
+        # Skip if additional tickets feature is not enabled
         if "additional_tickets" not in self.params["features"]:
             return
 
+        # Create choice field with ticket quantity options (1-5)
         self.fields["additionals"] = forms.ChoiceField(
             required=False, choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
         )
+
+        # Set initial value from instance if available
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
 
@@ -254,7 +257,11 @@ class RegistrationForm(BaseRegistrationForm):
         self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
     def init_pay_what(self, run: Run) -> None:
-        """Initialize pay-what-you-want donation field for non-waiting runs."""
+        """Initialize pay-what-you-want donation field for non-waiting runs.
+
+        Args:
+            run: The Run instance to check status for field initialization.
+        """
         # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
@@ -263,7 +270,7 @@ class RegistrationForm(BaseRegistrationForm):
         if "waiting" in run.status:
             return
 
-        # Create the pay-what-you-want field with validation
+        # Create the pay-what-you-want field with validation (0-1000 range)
         self.fields["pay_what"] = forms.IntegerField(min_value=0, max_value=1000, required=False)
 
         # Set initial value from existing instance or default to 0
@@ -275,16 +282,13 @@ class RegistrationForm(BaseRegistrationForm):
     def init_quotas(self, event: Event, run: Run) -> None:
         """Initialize payment quotas field based on event configuration.
 
-        Creates quota choices based on available RegistrationQuota objects for the event,
-        considering time constraints and current instance state. Sets up the quotas form
-        field with appropriate choices and widget configuration.
+        Creates quota choices from available RegistrationQuota objects for the event,
+        considering time constraints and current instance state. Sets up the quotas
+        form field with appropriate choices and widget configuration.
 
         Args:
-            event: Event instance containing quota configurations
-            run: Run instance with status and end date information
-
-        Returns:
-            None: Modifies self.fields and self.initial in place
+            event: Event instance containing quota configurations.
+            run: Run instance with status and end date information.
         """
         quota_chs = []
 
@@ -334,9 +338,6 @@ class RegistrationForm(BaseRegistrationForm):
 
     def init_ticket(self, event: Event, reg_counts: dict, run: Run) -> str:
         """Initialize ticket selection field with available options.
-
-        Creates a ChoiceField for ticket selection based on available tickets
-        for the given event and run, including ticket descriptions as help text.
 
         Args:
             event: Event instance to get tickets for
@@ -567,15 +568,7 @@ class RegistrationForm(BaseRegistrationForm):
         return result
 
     def clean(self) -> dict:
-        """
-        Validates the form data and checks for valid friend codes.
-
-        Returns:
-            dict: The cleaned form data after validation.
-
-        Raises:
-            ValidationError: When friend code is invalid or not found.
-        """
+        """Validates form data and checks for valid friend codes."""
         # Get cleaned data from parent class
         form_data = super().clean()
         run = self.params["run"]
@@ -599,12 +592,17 @@ class RegistrationForm(BaseRegistrationForm):
 class RegistrationGiftForm(RegistrationForm):
     gift = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and filter fields based on giftable questions."""
         super().__init__(*args, **kwargs)
+
+        # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
         for q in self.questions:
             if q.giftable:
                 keep.append("q" + str(q.id))
+
+        # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]
         for field in list_del:
             del self.fields[field]
@@ -646,36 +644,45 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         widgets = {"member": AssocMemberS2Widget}
 
-    def get_automatic_field(self):
+    def get_automatic_field(self) -> set[str]:
+        """Get automatic field names, excluding 'run' from parent's set."""
+        # Get automatic fields from parent class
         s = super().get_automatic_field()
-        # I decide in the init code whether to remove run field or not
+
+        # Remove 'run' field (determined during initialization)
         s.remove("run")
+
         return s
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with run and event specific configuration.
 
         Args:
-            *args: Variable length argument list passed to parent form
-            **kwargs: Arbitrary keyword arguments passed to parent form
+            *args: Variable length argument list passed to parent form.
+            **kwargs: Arbitrary keyword arguments passed to parent form.
         """
         super().__init__(*args, **kwargs)
 
+        # Extract run and event from params
         self.run = self.params["run"]
         self.event = self.params["run"].event
 
+        # Configure member widget with association
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
         self.allow_run_choice()
 
+        # Define form sections for field organization
         reg_section = _("Registration")
         char_section = _("Character")
         add_section = _("Details")
         main_section = _("Main")
 
+        # Assign registration fields to registration section
         self.sections["id_member"] = reg_section
         self.sections["id_run"] = reg_section
 
+        # Initialize registration-related fields
         self.init_quotas(reg_section)
 
         self.init_ticket(reg_section)
@@ -684,22 +691,24 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         self.init_pay_what(reg_section)
 
-        # CHARACTERS
+        # Initialize character fields if feature is enabled
         if "character" in self.params["features"]:
             self.init_character(char_section)
 
+        # Handle unique code field based on feature flag
         if "unique_code" in self.params["features"]:
             self.sections["id_special_cod"] = add_section
             self.reorder_field("special_cod")
         else:
             self.delete_field("special_cod")
 
-        # REGISTRATION OPTIONS
+        # Initialize organization-specific fields and clean up unused ones
         keys = self.init_orga_fields(main_section)
         all_fields = set(self.fields.keys()) - {field.replace("id_", "") for field in self.sections.keys()}
         for lbl in all_fields - set(keys):
             self.delete_field(lbl)
 
+        # Control section visibility based on feature flag
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
 

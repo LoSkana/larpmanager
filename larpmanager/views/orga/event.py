@@ -318,10 +318,23 @@ def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True
     return ctx["feature"]
 
 
-def _orga_feature_after_link(feature, s):
+def _orga_feature_after_link(feature: Feature, s: str) -> str:
+    """Build redirect URL after feature interaction.
+
+    Args:
+        feature: Feature object with after_link attribute
+        s: Event slug identifier
+
+    Returns:
+        Full URL path for redirect
+    """
     after_link = feature.after_link
+
+    # Use reverse if after_link is a named URL pattern starting with "orga"
     if after_link and after_link.startswith("orga"):
         return reverse(after_link, kwargs={"s": s})
+
+    # Otherwise append after_link as fragment to manage URL
     return reverse("manage", kwargs={"s": s}) + (after_link or "")
 
 
