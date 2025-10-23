@@ -65,7 +65,6 @@ from larpmanager.cache.character import (
 from larpmanager.cache.config import clear_config_cache
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.guides_tutorials import reset_guides_cache, reset_tutorials_cache
 from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
@@ -103,6 +102,7 @@ from larpmanager.cache.run import (
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
+from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
     send_donation_confirmation_email,
@@ -736,12 +736,14 @@ def post_delete_faction_reset_rels(sender, instance, **kwargs):
 def post_save_feature_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
+    reset_features_cache()
 
 
 @receiver(post_delete, sender=Feature)
 def post_delete_feature_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
+    reset_features_cache()
 
 
 # FeatureModule signals
@@ -749,12 +751,14 @@ def post_delete_feature_index_permission(sender, instance, **kwargs):
 def post_save_feature_module_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
+    reset_features_cache()
 
 
 @receiver(post_delete, sender=FeatureModule)
 def post_delete_feature_module_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
+    reset_features_cache()
 
 
 # Handout signals

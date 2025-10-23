@@ -3411,6 +3411,9 @@ msgstr "Podmínky a pravidla"
 msgid "Terms and conditions"
 msgstr "Podmínky a pravidla"
 
+msgid "The collection grows"
+msgstr "Sbírka se rozrůstá"
+
 msgid "The tax code matches"
 msgstr "Daňový zákoník odpovídá"
 
@@ -4182,6 +4185,9 @@ msgstr "Připomínka žádosti o členství"
 
 msgid "Set up dynamic installments"
 msgstr "Nastavení dynamických splátek"
+
+msgid "Thank you for participating"
+msgstr "Děkujeme za účast"
 
 msgid "Ticket name (keep it short)"
 msgstr "Název tipu (zkrácený)"
@@ -8871,13 +8877,6 @@ msgstr ""
 "tuto událost!"
 
 msgid ""
-"The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience"
-msgstr ""
-"Sbírka se rozrůstá: nepochybujeme o tom, že šťastlivec brzy zažije něco "
-"nevídaného"
-
-msgid ""
 "This is the overall amount that should be held in the organization’s bank "
 "and financial accounts"
 msgstr ""
@@ -8980,11 +8979,6 @@ msgid ""
 msgstr ""
 "Žádáme vás pouze o chvilku času na kontrolu nahraných dokumentů, nebude to "
 "trvat dlouho"
-
-msgid ""
-"We thank you for participating in the collection: we are sure they will live"
-" a terrific experience"
-msgstr "Děkujeme vám za účast ve sbírce: poskytli jste nám nevídaný zážitek"
 
 msgid ""
 "You will be notified when a new session is organized, and you will have "

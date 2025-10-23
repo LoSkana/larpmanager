@@ -14,9 +14,9 @@ from slugify import slugify
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
 from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.cache.guides_tutorials import get_guides_cache, get_tutorials_cache
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
+from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
 from larpmanager.models.access import AssocPermission, EventPermission
 from larpmanager.models.accounting import (
     AccountingItemExpense,
@@ -1078,33 +1078,25 @@ class WhatWouldYouLikeForm(Form):
         super().__init__(*args, **kwargs)
 
         choices = []
-        event_priority_choices = []
-        regular_choices = []
 
-        # Add to choices all links in the current interface
-        for type_pms in ["event_pms", "assoc_pms"]:
-            all_pms = self.ctx.get(type_pms, {})
-            for _mod, list in all_pms.items():
-                for pms in list:
-                    choice_tuple = (f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"]))
-                    # Prioritize permissions with slug starting with "event"
-                    if pms["slug"] in ["exe_events", "orga_event"]:
-                        event_priority_choices.append(choice_tuple)
-                    else:
-                        regular_choices.append(choice_tuple)
+        self._add_function_choices(choices)
 
-        # Add prioritized event choices first
-        choices.extend(event_priority_choices)
-        choices.extend(regular_choices)
+        self._add_dashboard_choices(choices)
 
-        # Add to choices all dashboard that can be accessed by this user
-        all_runs = {**self.ctx.get("open_runs", {}), **self.ctx.get("past_runs", {})}
-        for _rid, run in all_runs.items():
-            choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
+        self._add_features_choices(choices)
 
-        if self.ctx.get("assoc_role", None):
-            choices.append(("manage_exe|", self.ctx.get("name") + " - " + _("Dashboard")))
+        self._add_tutorials_choices(choices)
 
+        self._add_guides_tutorials(choices)
+
+        self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
+
+    def _add_guides_tutorials(self, choices):
+        # Add guides
+        for guide in get_guides_cache():
+            choices.append((f"guide|{guide['slug']}", f"{guide['title']} [GUIDE] - {guide['content_preview']}"))
+
+    def _add_tutorials_choices(self, choices):
         # Add tutorials (including sections)
         for tutorial in get_tutorials_cache():
             title = tutorial["title"]
@@ -1116,11 +1108,42 @@ class WhatWouldYouLikeForm(Form):
 
             choices.append((f"tutorial|{choice_value}", f"{title} [TUTORIAL] - {tutorial['content_preview']}"))
 
-        # Add guides
-        for guide in get_guides_cache():
-            choices.append((f"guide|{guide['slug']}", f"{guide['title']} [GUIDE] - {guide['content_preview']}"))
+    def _add_features_choices(self, choices):
+        # Add features recap
+        for feature in get_features_cache():
+            text = _(feature["name"])
+            if feature["module_name"]:
+                text += " - " + _(feature["module_name"])
+            text += " [FEATURE] "
+            if feature["descr"]:
+                text += _(feature["descr"])
+            choices.append((f"feature|{feature['tutorial']}", text))
 
-        self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
+    def _add_dashboard_choices(self, choices):
+        # Add to choices all dashboard that can be accessed by this user
+        all_runs = {**self.ctx.get("open_runs", {}), **self.ctx.get("past_runs", {})}
+        for _rid, run in all_runs.items():
+            choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
+        if self.ctx.get("assoc_role", None):
+            choices.append(("manage_exe|", self.ctx.get("name") + " - " + _("Dashboard")))
+
+    def _add_function_choices(self, choices):
+        event_priority_choices = []
+        regular_choices = []
+        # Add to choices all links in the current interface
+        for type_pms in ["event_pms", "assoc_pms"]:
+            all_pms = self.ctx.get(type_pms, {})
+            for _mod, list in all_pms.items():
+                for pms in list:
+                    choice_tuple = (f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"]))
+                    # Prioritize permissions with slug starting with "event"
+                    if pms["slug"] in ["exe_events", "orga_event"]:
+                        event_priority_choices.append(choice_tuple)
+                    else:
+                        regular_choices.append(choice_tuple)
+        # Add prioritized event choices first
+        choices.extend(event_priority_choices)
+        choices.extend(regular_choices)
 
 
 def what_would_you_like(ctx, request):
@@ -1172,6 +1195,7 @@ def _get_choice_redirect_url(choice, ctx):
         "manage_orga": lambda: reverse("manage", args=[choice_value]),
         "tutorial": lambda: _handle_tutorial_redirect(choice_value),
         "guide": lambda: reverse("guide", args=[choice_value]),
+        "feature": lambda: _handle_tutorial_redirect(choice_value),
     }
 
     handler = redirect_handlers.get(choice_type)
@@ -1192,5 +1216,11 @@ def _handle_tutorial_redirect(choice_value):
     """Handle tutorial redirect with optional section anchor."""
     if "#" in choice_value:
         tutorial_slug, section_slug = choice_value.split("#", 1)
+        # Remove forward slashes from both parts
+        tutorial_slug = tutorial_slug.replace("/", "")
+        section_slug = section_slug.replace("/", "")
         return reverse("tutorials", args=[tutorial_slug]) + f"#{section_slug}"
+
+    # Remove forward slashes from choice_value
+    choice_value = choice_value.replace("/", "")
     return reverse("tutorials", args=[choice_value])
