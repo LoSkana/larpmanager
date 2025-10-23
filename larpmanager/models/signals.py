@@ -1129,16 +1129,6 @@ def post_delete_rule_px(sender, instance, *args, **kwargs):
 def pre_save_run(sender, instance, **kwargs):
     on_run_pre_save_invalidate_cache(instance)
 
-    # Store the old development status for comparison in post_save
-    if instance.pk:
-        try:
-            old_instance = Run.objects.get(pk=instance.pk)
-            instance._old_development = old_instance.development
-        except Run.DoesNotExist:
-            instance._old_development = None
-    else:
-        instance._old_development = None
-
 
 @receiver(post_save, sender=Run)
 def post_save_run_links(sender, instance, **kwargs):
@@ -1150,14 +1140,7 @@ def post_save_run_links(sender, instance, **kwargs):
 
     clear_run_cache_and_media(instance)
 
-    # Check if development status changed and reset event links cache if so
-    old_development = getattr(instance, "_old_development", None)
-    if old_development is not None and old_development != instance.development:
-        # Status changed - reset event links cache for all users with roles in this event
-        clear_run_event_links_cache(instance.event)
-    elif old_development is None:
-        # New run - also reset cache
-        clear_run_event_links_cache(instance.event)
+    clear_run_event_links_cache(instance.event)
 
 
 @receiver(pre_delete, sender=Run)
