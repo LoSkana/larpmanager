@@ -774,10 +774,7 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection):
         subj = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
             "recipient": instance.collection.display_member()
         }
-        body = (
-            _("We thank you for participating in the collection: we are sure they will live a terrific experience")
-            + "!"
-        )
+        body = _("Thank you for participating") + "!"
         my_send_mail(subj, body, instance.member, instance.collection)
 
         activate(instance.collection.organizer.language)
@@ -785,9 +782,7 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection):
             "recipient": instance.collection.display_member(),
             "user": instance.member.display_member(),
         }
-        body = (
-            _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience") + "!"
-        )
+        body = _("The collection grows") + "!"
         my_send_mail(subj, body, instance.collection.organizer, instance.collection)
 
 

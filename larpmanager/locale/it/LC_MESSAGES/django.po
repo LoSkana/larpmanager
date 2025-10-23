@@ -3411,6 +3411,9 @@ msgstr "Terms and Conditions"
 msgid "Terms and conditions"
 msgstr "Termini e condizioni"
 
+msgid "The collection grows"
+msgstr "La collezione cresce"
+
 msgid "The tax code matches"
 msgstr "Il codice fiscale corrisponde"
 
@@ -4182,6 +4185,9 @@ msgstr "Promemoria richiesta di adesione"
 
 msgid "Set up dynamic installments"
 msgstr "Imposta le rate dinamiche"
+
+msgid "Thank you for participating"
+msgstr "Grazie per la partecipazione"
 
 msgid "Ticket name (keep it short)"
 msgstr "Nome del biglietto (tienilo corto)"
@@ -9147,13 +9153,6 @@ msgstr ""
 "questo evento!"
 
 msgid ""
-"The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience"
-msgstr ""
-"La colletta cresce: non abbiamo dubbi, la persona fortunata vivrà "
-"prestissimo un'esperienza senza precedenti"
-
-msgid ""
 "This is the overall amount that should be held in the organization’s bank "
 "and financial accounts"
 msgstr ""
@@ -9257,13 +9256,6 @@ msgid ""
 msgstr ""
 "Ti chiediamo solo un attimo del tuo tempo per controllare i documenti che "
 "hai caricato, ci vorrà pochissimo"
-
-msgid ""
-"We thank you for participating in the collection: we are sure they will live"
-" a terrific experience"
-msgstr ""
-"Ti ringraziamo per aver partecipato alla colletta: hai regalato "
-"un'esperienza senza precedenti"
 
 msgid ""
 "You will be notified when a new session is organized, and you will have "

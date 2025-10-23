@@ -24,6 +24,7 @@ import re
 from django.core.cache import cache
 from slugify import slugify
 
+from larpmanager.models.base import Feature
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
 
 
@@ -43,6 +44,15 @@ def get_tutorials_cache_key() -> str:
         str: The cache key used for storing/retrieving tutorials data
     """
     return "tutorials_cache"
+
+
+def get_features_cache_key() -> str:
+    """Get the cache key for features data.
+
+    Returns:
+        str: The cache key used for storing/retrieving features data
+    """
+    return "features_cache"
 
 
 def get_guides_cache() -> list[dict]:
@@ -85,6 +95,26 @@ def get_tutorials_cache() -> list[dict]:
     return data
 
 
+def get_features_cache() -> list[dict]:
+    """Get cached features data for 'what would you like to do'.
+
+    Returns:
+        List of feature items with: tutorial, name, module_name, descr
+    """
+    cache_key = get_features_cache_key()
+    cached_data = cache.get(cache_key)
+
+    if cached_data is not None:
+        return cached_data
+
+    # Build cache data
+    data = _build_features_cache()
+
+    # Cache for 1 day (86400 seconds)
+    cache.set(cache_key, data, timeout=86400)
+    return data
+
+
 def reset_guides_cache():
     """Reset the guides cache."""
     cache_key = get_guides_cache_key()
@@ -97,10 +127,10 @@ def reset_tutorials_cache():
     cache.delete(cache_key)
 
 
-def reset_guides_tutorials_cache():
-    """Reset both guides and tutorials caches."""
-    reset_guides_cache()
-    reset_tutorials_cache()
+def reset_features_cache():
+    """Reset the features cache."""
+    cache_key = get_features_cache_key()
+    cache.delete(cache_key)
 
 
 def _build_guides_cache() -> list[dict]:
@@ -135,6 +165,27 @@ def _build_tutorials_cache() -> list[dict]:
             )
 
     return tutorials
+
+
+def _build_features_cache() -> list[dict]:
+    """Build cache data for features with tutorials."""
+    features = []
+
+    for feature in (
+        Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False)
+        .exclude(tutorial__exact="")
+        .select_related("module")
+    ):
+        features.append(
+            {
+                "tutorial": feature.tutorial,
+                "name": feature.name,
+                "module_name": feature.module.name if feature.module else None,
+                "descr": feature.descr,
+            }
+        )
+
+    return features
 
 
 def _extract_h2_sections(content: str) -> list[tuple]:

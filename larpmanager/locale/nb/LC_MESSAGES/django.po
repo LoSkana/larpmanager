@@ -3411,6 +3411,9 @@ msgstr "Vilkår og betingelser"
 msgid "Terms and conditions"
 msgstr "Vilkår og betingelser"
 
+msgid "The collection grows"
+msgstr "Samlingen vokser"
+
 msgid "The tax code matches"
 msgstr "Skattelovgivningen stemmer overens"
 
@@ -4182,6 +4185,9 @@ msgstr "Påminnelse om medlemskap"
 
 msgid "Set up dynamic installments"
 msgstr "Sett opp dynamiske avdrag"
+
+msgid "Thank you for participating"
+msgstr "Takk for at du deltok"
 
 msgid "Ticket name (keep it short)"
 msgstr "Billettens navn (hold det kort)"
@@ -8964,13 +8970,6 @@ msgstr ""
 "spesielt for dette arrangementet!"
 
 msgid ""
-"The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience"
-msgstr ""
-"Samlingen vokser: Vi er ikke i tvil om at den heldige personen snart vil "
-"oppleve noe helt nytt"
-
-msgid ""
 "This is the overall amount that should be held in the organization’s bank "
 "and financial accounts"
 msgstr ""
@@ -9074,13 +9073,6 @@ msgid ""
 msgstr ""
 "Vi ber bare om et øyeblikk av din tid til å sjekke dokumentene du har lastet"
 " opp, det tar ikke lang tid"
-
-msgid ""
-"We thank you for participating in the collection: we are sure they will live"
-" a terrific experience"
-msgstr ""
-"Vi takker deg for at du deltok i innsamlingen: Du ga oss en opplevelse uten "
-"sidestykke"
 
 msgid ""
 "You will be notified when a new session is organized, and you will have "

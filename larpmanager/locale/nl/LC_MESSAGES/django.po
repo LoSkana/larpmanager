@@ -3411,6 +3411,9 @@ msgstr "Algemene voorwaarden"
 msgid "Terms and conditions"
 msgstr "Algemene voorwaarden"
 
+msgid "The collection grows"
+msgstr "De collectie groeit"
+
 msgid "The tax code matches"
 msgstr "De belastingcode komt overeen"
 
@@ -4182,6 +4185,9 @@ msgstr "Herinnering lidmaatschapsverzoek"
 
 msgid "Set up dynamic installments"
 msgstr "Dynamische afbetalingen instellen"
+
+msgid "Thank you for participating"
+msgstr "Bedankt voor uw deelname"
 
 msgid "Ticket name (keep it short)"
 msgstr "Ticketnaam (houd het kort)"
@@ -9132,13 +9138,6 @@ msgstr ""
 "speciaal voor dit evenement!"
 
 msgid ""
-"The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience"
-msgstr ""
-"De collectie groeit: we twijfelen er niet aan dat de gelukkige binnenkort "
-"iets ongekends zal beleven"
-
-msgid ""
 "This is the overall amount that should be held in the organization’s bank "
 "and financial accounts"
 msgstr ""
@@ -9242,13 +9241,6 @@ msgid ""
 msgstr ""
 "We vragen slechts een momentje van je tijd om de documenten die je hebt "
 "geüpload te controleren, het duurt niet lang"
-
-msgid ""
-"We thank you for participating in the collection: we are sure they will live"
-" a terrific experience"
-msgstr ""
-"We danken je voor je deelname aan de collectie: je gaf een ongekende "
-"ervaring"
 
 msgid ""
 "You will be notified when a new session is organized, and you will have "

@@ -2143,18 +2143,14 @@ msgstr ""
 msgid "Collection participation for: %(recipient)s"
 msgstr ""
 
-msgid ""
-"We thank you for participating in the collection: we are sure they will live "
-"a terrific experience"
+msgid "Thank you for participating"
 msgstr ""
 
 #, python-format
 msgid "New participation in the collection for %(recipient)s by %(user)s"
 msgstr ""
 
-msgid ""
-"The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience"
+msgid "The collection grows"
 msgstr ""
 
 #, python-format
