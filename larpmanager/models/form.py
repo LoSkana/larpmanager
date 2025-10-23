@@ -22,13 +22,13 @@ from typing import Any
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
@@ -554,16 +554,29 @@ class RegistrationQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event, features):
+    def get_instance_questions(event: Event, features: list[str]) -> QuerySet:
+        """Get registration questions for an event with optional feature-specific annotations.
+
+        Args:
+            event: Event instance to filter questions for
+            features: List of feature flag strings to determine which annotations to add
+
+        Returns:
+            QuerySet of RegistrationQuestion objects ordered by section and question order
+        """
+        # Get all questions for the event, ordered by section first, then by question order
         que = RegistrationQuestion.objects.filter(event=event).order_by(
             F("section__order").asc(nulls_first=True), "order"
         )
+
+        # Conditionally add annotations based on enabled features
         if "reg_que_tickets" in features:
             que = que.annotate(tickets_map=ArrayAgg("tickets"))
         if "reg_que_faction" in features:
             que = que.annotate(factions_map=ArrayAgg("factions"))
         if "reg_que_allowed" in features:
             que = que.annotate(allowed_map=ArrayAgg("allowed"))
+
         return que
 
     def skip(self, reg, features, params=None, orga=False):
@@ -658,9 +671,13 @@ class RegistrationOption(BaseModel):
     def get_price(self):
         return self.price
 
-    def get_form_text(self, run=None, cs=None):
+    def get_form_text(self, run: Run | None = None, cs: str | None = None) -> str:
+        """Return formatted text with name and optional price."""
+        # Get display data for the current instance
         s = self.show(run)
         tx = s["name"]
+
+        # Append formatted price with currency symbol if applicable
         if s["price"] and int(s["price"]) > 0:
             if not cs:
                 # noinspection PyUnresolvedReferences
@@ -669,12 +686,26 @@ class RegistrationOption(BaseModel):
 
         return tx
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None) -> dict[str, Any]:
+        """Return ticket tier display data as dictionary.
+
+        Args:
+            run: Optional Run instance (currently unused).
+
+        Returns:
+            Dictionary with tier name, price, description, question, and max availability.
+        """
+        # Build base dictionary with max availability
         js = {"max_available": self.max_available}
+
+        # Add name, price, and description attributes
         for s in ["name", "price", "description"]:
             self.upd_js_attr(js, s)
+
+        # Add associated question name
         # noinspection PyUnresolvedReferences
         js["question"] = self.question.name
+
         return js
 
     class Meta:

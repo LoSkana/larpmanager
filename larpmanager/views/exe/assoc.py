@@ -224,10 +224,22 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
     return ctx["feature"]
 
 
-def _exe_feature_after_link(feature):
+def _exe_feature_after_link(feature: Feature) -> str:
+    """Generate the appropriate redirect URL after feature setup.
+
+    Args:
+        feature: Feature object containing after_link configuration
+
+    Returns:
+        Full URL path for redirection
+    """
     after_link = feature.after_link
+
+    # Check if after_link is a named URL pattern starting with "exe"
     if after_link and after_link.startswith("exe"):
         return reverse(after_link)
+
+    # Otherwise append after_link as a URL fragment to manage page
     return reverse("manage") + after_link
 
 

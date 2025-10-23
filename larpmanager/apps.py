@@ -26,6 +26,7 @@ class LarpManagerConfig(AppConfig):
 
     # Import signals
     def ready(self) -> None:
+        """Initialize signal handlers and profiler receivers on app startup."""
         # Import model signal handlers for database events
         _ = __import__("larpmanager.models.signals")
 

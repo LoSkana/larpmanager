@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from larpmanager.forms.miscellanea import ExeUrlShortnerForm
@@ -103,10 +103,17 @@ def exe_warehouse_items_edit(request, num):
 
 
 @login_required
-def exe_warehouse_movements(request):
+def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
+    """Render warehouse movements list for association."""
+    # Check permissions and initialize context
     ctx = check_assoc_permission(request, "exe_warehouse_movements")
+
+    # Fetch movements with item details
     ctx["list"] = WarehouseMovement.objects.filter(assoc_id=request.assoc["id"]).select_related("item")
+
+    # Add optional warehouse fields
     get_warehouse_optionals(ctx, [3])
+
     return render(request, "larpmanager/exe/warehouse/movements.html", ctx)
 
 

@@ -179,9 +179,22 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
     return redirect(hp.attachment.url)
 
 
-def handout_ext(request, s, cod):
+def handout_ext(request: HttpRequest, s: str, cod: str) -> HttpResponse:
+    """Generate and return a PDF for a specific event handout.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        cod: Handout code identifier
+
+    Returns:
+        PDF file response with the handout content
+    """
+    # Retrieve event/run context and fetch handout by code
     ctx = get_event_run(request, s)
     ctx["handout"] = get_object_or_404(Handout, event=ctx["event"], cod=cod)
+
+    # Generate PDF and return as downloadable response
     fp = print_handout(ctx)
     return return_pdf(fp, str(ctx["handout"]))
 

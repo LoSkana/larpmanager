@@ -187,9 +187,17 @@ class MyForm(forms.ModelForm):
             return self.params["run"]
         return self.cleaned_data["run"]
 
-    def clean_event(self):
+    def clean_event(self) -> Event:
+        """Returns the appropriate event based on form configuration.
+
+        Returns event directly if choose_event exists, otherwise returns parent event
+        based on element type.
+        """
+        # Return selected event if form has choose_event field
         if hasattr(self, "choose_event"):
             return self.cleaned_data["event"]
+
+        # Get parent event based on element type from params
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 
@@ -262,11 +270,10 @@ class MyForm(forms.ModelForm):
         return value
 
     def save(self, commit: bool = True) -> BaseModel:
-        """Save the form instance with custom field handling.
+        """Save form instance with custom field handling.
 
         Args:
-            commit: Whether to save the instance to the database immediately.
-                   Defaults to True.
+            commit: Whether to save to database immediately. Defaults to True.
 
         Returns:
             The saved model instance.
@@ -394,6 +401,7 @@ def max_length_validator(max_length: int) -> callable:
     """
 
     def validator(value: str) -> None:
+        """Validate that plain text length does not exceed max_length."""
         # Strip HTML tags from the input value to get plain text
         plain_text = strip_tags(value)
 
@@ -422,9 +430,12 @@ class BaseRegistrationForm(MyFormRun):
     class Meta:
         abstract = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with link tracking and section structures."""
         super().__init__(*args, **kwargs)
+        # Track visible links for form navigation
         self.show_link = []
+        # Store form sections organized by category
         self.sections = {}
 
     def _init_reg_question(self, instance: Optional[Any], event: Any) -> None:
@@ -1082,32 +1093,61 @@ class BaseRegistrationForm(MyFormRun):
         elif oid:  # Only create new answers if there's actually content
             self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
 
-    def save_reg_single(self, instance, oid, q):
+    def save_reg_single(self, instance: Any, oid: str | None, q: Any) -> None:
+        """Save or update a single-choice question response.
+
+        Args:
+            instance: The parent instance (registration/application)
+            oid: The option ID as string (or None)
+            q: The question object
+        """
+        # Skip if no option ID provided
         if not oid:
             return
         oid = int(oid)
+
+        # Update existing choice: delete if 0, otherwise update option_id
         if q.id in self.singles:
             if oid == 0:
                 self.singles[q.id].delete()
             elif oid != self.singles[q.id].option_id:
                 self.singles[q.id].option_id = oid
                 self.singles[q.id].save()
+        # Create new choice if option is not 0
         elif oid != 0:
             self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": oid})
 
-    def save_reg_multiple(self, instance, oid, q):
+    def save_reg_multiple(
+        self,
+        instance: Any,
+        oid: list[int] | None,
+        q: Any,
+    ) -> None:
+        """Save multiple-choice registration answers by syncing selected options.
+
+        Creates new choices for added options and deletes removed ones.
+        """
         if not oid:
             return
+
+        # Convert option IDs to a set of integers
         oid = set([int(o) for o in oid])
+
+        # If question already has existing choices, sync the differences
         if q.id in self.multiples:
             old = set([el.option_id for el in self.multiples[q.id]])
+
+            # Create new choices for added options
             for add in oid - old:
                 self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": add})
+
+            # Delete choices for removed options
             rem = old - oid
             self.choice_class.objects.filter(
                 **{"question": q, self.instance_key: instance.id, "option_id__in": rem}
             ).delete()
         else:
+            # Create all choices from scratch if none exist
             for pkoid in oid:
                 self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": pkoid})
 
@@ -1119,15 +1159,19 @@ class MyCssForm(MyForm):
     customization with support for backgrounds, fonts, and color themes.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and load existing CSS from storage if instance exists."""
         super().__init__(*args, **kwargs)
 
+        # Skip CSS loading for new instances
         if not self.instance.pk:
             return
 
+        # Load and parse existing CSS file
         path = self.get_css_path(self.instance)
         if default_storage.exists(path):
             css = default_storage.open(path).read().decode("utf-8")
+            # Extract CSS content before delimiter if present
             if css_delimeter in css:
                 css = css.split(css_delimeter)[0]
             self.initial[self.get_input_css()] = css

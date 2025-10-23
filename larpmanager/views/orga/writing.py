@@ -93,10 +93,25 @@ def orga_plots_view(request, s, num):
 
 
 @login_required
-def orga_plots_edit(request, s, num):
+def orga_plots_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit or create a plot for an event.
+
+    Args:
+        request: The HTTP request object
+        s: The event slug identifier
+        num: Plot ID (0 for new plot creation)
+
+    Returns:
+        HTTP response with the plot editing form
+    """
+    # Check user has permission to edit plots for this event
     ctx = check_event_permission(request, s, "orga_plots")
+
+    # Load existing plot if editing (num != 0)
     if num != 0:
         get_element(ctx, num, "plot", Plot)
+
+    # Render the plot editing form
     return writing_edit(request, ctx, PlotForm, "plot", TextVersionChoices.PLOT)
 
 
@@ -168,10 +183,25 @@ def orga_factions_view(request, s, num):
 
 
 @login_required
-def orga_factions_edit(request, s, num):
+def orga_factions_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Handle faction editing for event organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Faction ID (0 for new faction)
+
+    Returns:
+        Rendered faction editing page
+    """
+    # Check permissions and initialize context
     ctx = check_event_permission(request, s, "orga_factions")
+
+    # Load existing faction if editing (num != 0)
     if num != 0:
         get_element(ctx, num, "faction", Faction)
+
+    # Delegate to generic writing edit view
     return writing_edit(request, ctx, FactionForm, "faction", TextVersionChoices.FACTION)
 
 
@@ -203,10 +233,25 @@ def orga_quest_types_view(request, s, num):
 
 
 @login_required
-def orga_quest_types_edit(request, s, num):
+def orga_quest_types_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit or create quest types for an event.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Quest type ID (0 for new quest type)
+
+    Returns:
+        Rendered writing edit form response
+    """
+    # Check user permissions for quest type management
     ctx = check_event_permission(request, s, "orga_quest_types")
+
+    # Load existing quest type if editing (num != 0)
     if num != 0:
         get_quest_type(ctx, num)
+
+    # Render the writing edit form with quest type configuration
     return writing_edit(request, ctx, QuestTypeForm, "quest_type", TextVersionChoices.QUEST_TYPE)
 
 
@@ -341,10 +386,18 @@ def orga_handouts_test(request, s, num):
 
 
 @login_required
-def orga_handouts_print(request, s, num):
+def orga_handouts_print(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate and return a PDF for a specific handout."""
+    # Check permissions and initialize event context
     ctx = check_event_permission(request, s, "orga_handouts")
+
+    # Retrieve handout data and add to context
     get_handout(ctx, num)
+
+    # Generate PDF file path
     fp = print_handout(ctx)
+
+    # Return PDF response
     return return_pdf(fp, str(ctx["handout"]))
 
 
@@ -405,10 +458,24 @@ def orga_handout_templates(request, s):
 
 
 @login_required
-def orga_handout_templates_edit(request, s, num):
+def orga_handout_templates_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit handout template for an event.
+
+    Args:
+        request: HTTP request object
+        s: Event slug
+        num: Handout template ID (0 for new template)
+
+    Returns:
+        Rendered handout template edit page
+    """
+    # Check user has permission to manage handout templates
     ctx = check_event_permission(request, s, "orga_handout_templates")
+
+    # Load existing template if num is not 0 (new template)
     if num != 0:
         get_handout_template(ctx, num)
+
     return writing_edit(request, ctx, HandoutTemplateForm, "handout_template", None)
 
 
@@ -419,10 +486,25 @@ def orga_prologue_types(request, s):
 
 
 @login_required
-def orga_prologue_types_edit(request, s, num):
+def orga_prologue_types_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit or create a prologue type for an event.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Prologue type ID (0 for new, otherwise existing ID)
+
+    Returns:
+        HTTP response with prologue type edit form
+    """
+    # Check user has permission to manage prologue types
     ctx = check_event_permission(request, s, "orga_prologue_types")
+
+    # Load existing prologue type if editing (num != 0)
     if num != 0:
         get_prologue_type(ctx, num)
+
+    # Render edit form using generic writing_edit handler
     return writing_edit(request, ctx, PrologueTypeForm, "prologue_type", None)
 
 
@@ -490,10 +572,16 @@ def orga_speedlarps_view(request, s, num):
 
 
 @login_required
-def orga_speedlarps_edit(request, s, num):
+def orga_speedlarps_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit speedlarp writing content for an event."""
+    # Check permissions and initialize context
     ctx = check_event_permission(request, s, "orga_speedlarps")
+
+    # Load existing speedlarp if editing (num != 0 means edit mode)
     if num != 0:
         get_speedlarp(ctx, num)
+
+    # Render writing edit form
     return writing_edit(request, ctx, SpeedLarpForm, "speedlarp", TextVersionChoices.SPEEDLARP)
 
 

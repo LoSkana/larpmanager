@@ -266,14 +266,20 @@ class AccountingItem(BaseModel):
     hide = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        """Return string representation of the invoice."""
+        """Return string representation of the accounting entry.
 
+        Returns:
+            String with ID, class name, and member info if available.
+        """
+        # Build base string with class name
         s = "Voce contabile"
         # noinspection PyUnresolvedReferences
         if self.id:
             # noinspection PyUnresolvedReferences
             s += f" &{self.id}"
         s += f" - {self.__class__.__name__}"
+
+        # Append member info if present
         if self.member:
             s += f" - {self.member}"
         return s
@@ -329,12 +335,16 @@ class AccountingItemOther(AccountingItem):
     class Meta:
         indexes = [models.Index(fields=["run", "oth"])]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation based on other type and member."""
+        # Determine base string based on other type
         s = _("Credit assignment")
         if self.oth == OtherChoices.TOKEN:
             s = _("Tokens assignment")
         elif self.oth == OtherChoices.REFUND:
             s = _("Refund")
+
+        # Append member information if present
         if self.member:
             s += f" - {self.member}"
         return s
@@ -551,8 +561,12 @@ class AccountingItemDiscount(AccountingItem):
 
     detail = models.IntegerField(null=True, blank=True)
 
-    def show(self):
+    def show(self) -> dict[str, str]:
+        """Return dictionary representation of the discount with name, value, and expiration time."""
+        # Build base discount information
         j = {"name": self.disc.name, "value": self.value}
+
+        # Add formatted expiration time if available
         if self.expires:
             # noinspection PyUnresolvedReferences
             j["expires"] = self.expires.strftime("%H:%M")

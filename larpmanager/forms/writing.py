@@ -141,7 +141,14 @@ class PlayerRelationshipForm(MyForm):
         return cleaned_data
 
     def save(self, commit: bool = True) -> Any:
-        """Save the form instance, setting registration if new."""
+        """Save the form instance, setting registration if new.
+
+        Args:
+            commit: Whether to save the instance to the database.
+
+        Returns:
+            The saved instance.
+        """
         instance = super().save(commit=False)
 
         # Set registration for new instances
@@ -166,9 +173,18 @@ class UploadElementsForm(forms.Form):
     first = forms.FileField(validators=[validator], required=False)
     second = forms.FileField(validators=[validator], required=False)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, only_one: bool = False, **kwargs: Any) -> None:
+        """Initialize form, optionally removing the 'second' field.
+
+        Args:
+            *args: Positional arguments passed to parent class.
+            only_one: If True, removes 'second' field if present.
+            **kwargs: Keyword arguments passed to parent class.
+        """
         only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
+
+        # Remove 'second' field when only_one is True
         if only_one and "second" in self.fields:
             del self.fields["second"]
 
@@ -182,9 +198,16 @@ class BaseWritingForm(BaseRegistrationForm):
     instance_key = "element_id"
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
-        """Initialize form with default show_link configuration."""
+        """Initialize form with applicable questions configuration.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+        """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
+
+        # Get applicable questions for this model type
         # noinspection PyProtectedMember
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
 
@@ -201,10 +224,20 @@ class BaseWritingForm(BaseRegistrationForm):
         key = f"option_char_{option.id}"
         return key
 
-    def save(self, commit=True):
-        instance = super().save()
+    def save(self, commit: bool = True) -> Any:
+        """Save the form and handle registration questions if present.
 
+        Args:
+            commit: Whether to save the instance to database
+
+        Returns:
+            The saved instance
+        """
+        # Save parent form and persist instance
+        instance = super().save()
         instance.save()
+
+        # Save registration questions if form has them
         if hasattr(self, "questions"):
             orga = True
             if hasattr(self, "orga"):
@@ -322,18 +355,15 @@ class FactionForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
-        """Initialize faction form with field configuration and help text.
-
-        Args:
-            *args: Positional arguments passed to parent
-            **kwargs: Keyword arguments passed to parent
-        """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize faction form with field configuration and help text."""
         super().__init__(*args, **kwargs)
-        self.init_orga_fields()
 
+        # Configure organization-specific fields and reorder characters field
+        self.init_orga_fields()
         self.reorder_field("characters")
 
+        # Handle selectable field based on user_character feature
         if "user_character" not in self.params["features"]:
             self.delete_field("selectable")
         else:
@@ -341,7 +371,7 @@ class FactionForm(WritingForm, BaseWritingForm):
 
         self._init_special_fields()
 
-        # set typ help text
+        # Configure faction type help text with descriptions
         help_texts = {
             _("Primary"): _("main grouping / affiliation for characters"),
             _("Transversal"): _("secondary grouping across primary factions"),

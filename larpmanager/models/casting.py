@@ -72,21 +72,26 @@ class Quest(Writing):
         return f"Q{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
-        """Return serialized representation of the object.
+        """Return serialized representation with traits and type information.
 
         Args:
             run: Optional run instance for context
 
         Returns:
-            Dictionary containing serialized object data
+            Dictionary with base data, type number, and visible traits
         """
         # Get base serialized data from parent class
         js = super().show(run)
+
+        # Add type number if type exists
         if self.typ:
             # noinspection PyUnresolvedReferences
             js["typ"] = self.typ.number
+
+        # Serialize visible traits
         # noinspection PyUnresolvedReferences
         js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
+
         return js
 
 

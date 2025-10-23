@@ -118,26 +118,13 @@ class Writing(BaseConceptModel):
 
     @classmethod
     def get_example_csv(cls, features: set[str]) -> list[list[str]]:
-        """
-        Generate example CSV structure for writing element imports.
-
-        Creates a CSV template with headers and example data for importing writing elements.
-        The template includes mandatory fields (number, name, presentation, text) and
-        optional fields based on enabled features.
+        """Generate example CSV structure for writing element imports.
 
         Args:
             features: Set of enabled feature names to include in the CSV template.
-                     Each feature name corresponds to an optional column.
 
         Returns:
-            List of CSV rows where the first row contains headers and the second row
-            contains example/description data for each column.
-
-        Example:
-            >>> features = {'title', 'hide'}
-            >>> result = get_example_csv(features)
-            >>> result[0]  # Headers
-            ['number', 'name', 'presentation', 'text', 'title', 'hide']
+            List of CSV rows: first row contains headers, second row contains example data.
         """
         # Initialize base CSV structure with mandatory columns
         rows = [

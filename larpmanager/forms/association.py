@@ -303,10 +303,15 @@ class ExeFeatureForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(True)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Association:
+        """Save form and reset association features cache."""
+        # Save form without committing to database yet
         instance = super().save(commit=False)
+
+        # Update related features and reset cache
         self._save_features(instance)
         reset_assoc_features(instance.id)
+
         return instance
 
 
@@ -335,39 +340,36 @@ class ExeConfigForm(ConfigForm):
         Manages UI preferences, theme settings, and display options for the
         association's interface customization. Configures calendar display options,
         email notification preferences, and delegates to other configuration methods.
-
-        Returns:
-            None
         """
         # CALENDAR SECTION - Configure calendar display options
         self.set_section("calendar", _("Calendar"))
 
-        # Past events visibility toggle
+        # Configure visibility of past events link in calendar
         label = _("Past events")
         help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, label, help_text)
 
-        # Website link display option
+        # Configure website link display for each event
         label = _("Website")
         help_text = _("If checked: shows the website for each event")
         self.add_configs("calendar_website", ConfigType.BOOL, label, help_text)
 
-        # Event location display toggle
+        # Configure event location display toggle
         label = _("Where")
         help_text = _("If checked: shows the position for each event")
         self.add_configs("calendar_where", ConfigType.BOOL, label, help_text)
 
-        # Authors list visibility option
+        # Configure authors list visibility for events
         label = _("Authors")
         help_text = _("If checked: shows the list of authors for each event")
         self.add_configs("calendar_authors", ConfigType.BOOL, label, help_text)
 
-        # Event genre display setting
+        # Configure event genre display setting
         label = pgettext("event", "Genre")
         help_text = pgettext("event", "If checked: shows the genre for each event")
         self.add_configs("calendar_genre", ConfigType.BOOL, label, help_text)
 
-        # Event tagline visibility toggle
+        # Configure event tagline visibility toggle
         label = _("Tagline")
         help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
@@ -375,33 +377,33 @@ class ExeConfigForm(ConfigForm):
         # EMAIL SECTION - Configure notification preferences
         self.set_section("email", _("Email notifications"))
 
-        # Carbon copy setting (only if main_mail exists)
+        # Configure carbon copy setting (only if main_mail exists)
         if self.instance.main_mail:
             label = _("Carbon copy")
             help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
 
-        # New signup notification toggle
+        # Configure new signup notification toggle
         label = _("New signup")
         help_text = _("If checked: Send an email notification to the organisers for new signups")
         self.add_configs("mail_signup_new", ConfigType.BOOL, label, help_text)
 
-        # Signup update notification setting
+        # Configure signup update notification setting
         label = _("Signup update")
         help_text = _("If checked: Send an email notification to the organisers for updated signups")
         self.add_configs("mail_signup_update", ConfigType.BOOL, label, help_text)
 
-        # Signup cancellation notification option
+        # Configure signup cancellation notification option
         label = _("Signup cancellation")
         help_text = _("If checked: Send a notification email to the organisers for cancellation of registration")
         self.add_configs("mail_signup_del", ConfigType.BOOL, label, help_text)
 
-        # Payment notification toggle
+        # Configure payment notification toggle
         label = _("Payments received")
         help_text = _("If checked: Send an email to the organisers for each payment received")
         self.add_configs("mail_payment", ConfigType.BOOL, label, help_text)
 
-        # Delegate to specialized configuration methods
+        # Delegate to specialized configuration methods for other settings
         self.set_config_members()
         self.set_config_accounting()
         self.set_config_einvoice()
