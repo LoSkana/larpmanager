@@ -1,13 +1,4 @@
 name,path,length,number
-save,larpmanager/forms/event.py,5,1
-save,larpmanager/forms/event.py,5,2
-__init__,larpmanager/forms/experience.py,5,4
-__init__,larpmanager/forms/miscellanea.py,5,2
-get_automatic_field,larpmanager/forms/registration.py,5,1
-init_additionals,larpmanager/forms/registration.py,5,1
-get_queryset,larpmanager/forms/utils.py,5,1
-get_queryset,larpmanager/forms/utils.py,5,2
-save,larpmanager/forms/association.py,5,2
 set_configs,larpmanager/forms/association.py,5,1
 _get_captcha,larpmanager/forms/larpmanager.py,5,1
 __init__,larpmanager/forms/warehouse.py,5,2
