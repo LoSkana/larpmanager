@@ -601,11 +601,16 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_collections(request):
+def exe_collections(request: HttpRequest) -> HttpResponse:
+    """Display collections list for association executives."""
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_collections")
+
+    # Fetch collections with related data, ordered by creation date
     ctx["list"] = (
         Collection.objects.filter(assoc_id=ctx["a_id"]).select_related("member", "organizer").order_by("-created")
     )
+
     return render(request, "larpmanager/exe/accounting/collections.html", ctx)
 
 
@@ -713,36 +718,67 @@ def exe_accounting(request):
 
 
 @login_required
-def exe_year_accounting(request):
+def exe_year_accounting(request: HttpRequest) -> JsonResponse:
+    """Get accounting data for a specific year."""
+    # Check association permissions for accounting access
     ctx = check_assoc_permission(request, "exe_accounting")
+
+    # Parse and validate year parameter from POST data
     try:
         year = int(request.POST.get("year"))
     except (ValueError, TypeError):
         return JsonResponse({"error": "Invalid year parameter"}, status=400)
+
+    # Build response with association ID and accounting data
     res = {"a_id": ctx["a_id"]}
     assoc_accounting_data(res, year)
     return JsonResponse({"res": res})
 
 
 @login_required
-def exe_run_accounting(request, num):
+def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
+    """Display accounting information for a specific run.
+
+    Args:
+        request: The HTTP request object
+        num: Primary key of the run to display accounting for
+
+    Returns:
+        Rendered accounting template with run and accounting data
+
+    Raises:
+        Http404: If run doesn't belong to user's association
+    """
+    # Check user has accounting permissions for this association
     ctx = check_assoc_permission(request, "exe_accounting")
+
+    # Get the run and verify ownership
     ctx["run"] = Run.objects.get(pk=num)
     if ctx["run"].event.assoc_id != ctx["a_id"]:
         raise Http404("not your run")
+
+    # Get accounting data for this run
     ctx["dc"] = get_run_accounting(ctx["run"], ctx)
     return render(request, "larpmanager/orga/accounting/accounting.html", ctx)
 
 
 @login_required
-def exe_accounting_rec(request):
+def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
+    """Display accounting records for the organization."""
     ctx = check_assoc_permission(request, "exe_accounting_rec")
+
+    # Get accounting records for the organization (not tied to specific runs)
     ctx["list"] = RecordAccounting.objects.filter(assoc_id=ctx["a_id"], run__isnull=True).order_by("created")
+
+    # If no records exist, create them and redirect
     if len(ctx["list"]) == 0:
         check_accounting(ctx["a_id"])
         return redirect("exe_accounting_rec")
+
+    # Set date range based on first and last records
     ctx["start"] = ctx["list"][0].created
     ctx["end"] = ctx["list"].reverse()[0].created
+
     return render(request, "larpmanager/exe/accounting/accounting_rec.html", ctx)
 
 

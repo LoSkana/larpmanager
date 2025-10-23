@@ -26,6 +26,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
 
@@ -39,12 +40,19 @@ def cache_run_key(a, s):
     return f"run_{a}_{s}"
 
 
-def get_cache_run(a, s):
+def get_cache_run(a: Association, s: str) -> dict:
+    """Get cached run data for association and slug."""
+    # Generate cache key for the association and slug
     key = cache_run_key(a, s)
+
+    # Try to retrieve cached result
     res = cache.get(key)
+
+    # If not cached, initialize and cache the result
     if res is None:
         res = init_cache_run(a, s)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
@@ -92,12 +100,26 @@ def cache_config_run_key(run):
     return f"run_config_{run.id}"
 
 
-def get_cache_config_run(run):
+def get_cache_config_run(run: Run) -> dict:
+    """Retrieve cached run configuration, initializing if not found.
+
+    Args:
+        run: The run object to get configuration for.
+
+    Returns:
+        Dictionary containing the run configuration data.
+    """
+    # Generate cache key for this specific run
     key = cache_config_run_key(run)
+
+    # Attempt to retrieve from cache
     res = cache.get(key)
+
+    # Initialize and cache if not found
     if res is None:
         res = init_cache_config_run(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 

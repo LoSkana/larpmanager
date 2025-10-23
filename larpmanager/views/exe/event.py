@@ -52,12 +52,19 @@ from larpmanager.views.user.event import get_coming_runs
 
 
 @login_required
-def exe_events(request):
+def exe_events(request: HttpRequest) -> HttpResponse:
+    """Display events for the current association with registration status and counts."""
+    # Check permissions and get association context
     ctx = check_assoc_permission(request, "exe_events")
+
+    # Get all runs for the association, ordered by end date
     ctx["list"] = Run.objects.filter(event__assoc_id=ctx["a_id"]).select_related("event").order_by("end")
+
+    # Add registration status and counts to each run
     for run in ctx["list"]:
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
+
     return render(request, "larpmanager/exe/events.html", ctx)
 
 
@@ -139,13 +146,24 @@ def exe_events_appearance(request, num):
 
 
 @login_required
-def exe_templates(request):
+def exe_templates(request: HttpRequest) -> HttpResponse:
+    """View for managing event templates in the organization.
+
+    Displays a list of template events with their associated roles,
+    creating default organizer role if none exist.
+    """
+    # Check user permissions for template management
     ctx = check_assoc_permission(request, "exe_templates")
+
+    # Get all template events for the organization, ordered by last update
     ctx["list"] = Event.objects.filter(assoc_id=ctx["a_id"], template=True).order_by("-updated")
+
+    # Ensure each template has at least one role (organizer by default)
     for el in ctx["list"]:
         el.roles = EventRole.objects.filter(event=el).order_by("number")
         if not el.roles:
             el.roles = [EventRole.objects.create(event=el, number=1, name="Organizer")]
+
     return render(request, "larpmanager/exe/templates.html", ctx)
 
 
@@ -155,11 +173,16 @@ def exe_templates_edit(request, num):
 
 
 @login_required
-def exe_templates_config(request, num):
+def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
+    """Configure templates for organization events."""
+    # Initialize user context and get event template
     add_ctx = def_user_ctx(request)
     get_event_template(add_ctx, num)
+
+    # Update context with event features and configuration
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
     add_ctx["add_another"] = False
+
     return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx)
 
 

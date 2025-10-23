@@ -350,7 +350,12 @@ class WorkshopQuestion(BaseModel):
     def __str__(self):
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, any]:
+        """Return dictionary representation for display purposes.
+
+        Returns:
+            Dictionary containing id, number and name attributes.
+        """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "opt": [], "number": self.number}
         self.upd_js_attr(js, "name")
@@ -624,12 +629,25 @@ class Problem(BaseModel):
 
     comments = models.TextField(blank=True)
 
-    def get_small_text(self, s):
+    def get_small_text(self, s: str) -> str:
+        """Get truncated text value from object attribute.
+
+        Args:
+            s: Attribute name to retrieve and truncate.
+
+        Returns:
+            Truncated string (max 100 chars) or original string if attribute doesn't exist.
+        """
+        # Check if attribute exists on object
         if not hasattr(self, s):
             return s
+
+        # Get attribute value
         v = getattr(self, s)
         if not v:
             return s
+
+        # Return truncated value (max 100 characters)
         return v[:100]
 
     def where_l(self):

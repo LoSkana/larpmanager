@@ -30,13 +30,19 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     """Translate elements in .po file untraslated, or with fuzzy translation, using deepl"""
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
+        """Handle the translation command by initializing translator and processing translations."""
+        # Initialize DeepL translator and display initial usage
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
         self.stdout.write(str(self.translator.get_usage()))
 
+        # Set target language mappings for translation
         self.target = {"EN": "EN-GB", "PT": "PT-PT"}
 
+        # Process .po files for translation
         self.go_polib()
+
+        # Display final usage statistics
         self.stdout.write(str(self.translator.get_usage()))
 
     def translate_entry(self, entry, tgt: str) -> None:

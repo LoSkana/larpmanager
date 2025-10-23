@@ -20,7 +20,7 @@
 from datetime import datetime
 from io import StringIO
 
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.urls import path
 from django.utils import translation
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -35,29 +35,46 @@ translation.activate("en")
 
 
 @cache_page(60 * 60)
-def manual_sitemap_view(request):
+def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
+    """Generate XML sitemap for organization or global site."""
+    # Check if this is the global site (id=0) or organization-specific
     if request.assoc["id"] == 0:
         urls = larpmanager_sitemap()
     else:
         urls = _organization_sitemap(request)
 
+    # Render URLs to XML format
     stream = _render_sitemap(urls)
 
     return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
-def _render_sitemap(urls):
-    # XML rendering
+def _render_sitemap(urls: list[str]) -> StringIO:
+    """Generate XML sitemap from a list of URLs.
+
+    Args:
+        urls: List of URL strings to include in the sitemap
+
+    Returns:
+        StringIO object containing the generated XML sitemap
+    """
+    # Initialize XML stream and generator
     stream = StringIO()
     xml = SimplerXMLGenerator(stream, "utf-8")
+
+    # Start XML document and root urlset element
     xml.startDocument()
     xml.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
+
+    # Generate URL entries for each location
     for loc in urls:
         xml.startElement("url", {})
         xml.startElement("loc", {})
         xml.characters(loc)
         xml.endElement("loc")
         xml.endElement("url")
+
+    # Close root element and document
     xml.endElement("urlset")
     xml.endDocument()
     return stream
@@ -114,14 +131,22 @@ def _organization_sitemap(request) -> list[str]:
     return urls
 
 
-def larpmanager_sitemap():
+def larpmanager_sitemap() -> list[str]:
+    """Generate sitemap URLs for LarpManager website.
+
+    Returns:
+        List of complete URLs for static pages and blog posts.
+    """
     urls = []
+
     # Static pages
     for el in ["", "usage", "about-us"]:
         urls.append(f"https://larpmanager.com/{el}/")
-    # Blog posts
+
+    # Blog posts from guides
     for el in LarpManagerGuide.objects.all():
         urls.append(f"https://larpmanager.com/guide/{el.slug}/")
+
     return urls
 
 

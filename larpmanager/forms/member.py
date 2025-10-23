@@ -170,7 +170,8 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     def clean_username(self):
         data = self.cleaned_data["username"].strip()
         logger.debug(f"Validating username/email: {data}")
-        # check if already used in user or email
+
+        # Check if email is already registered to prevent duplicates
         if User.objects.filter(email__iexact=data).exists():
             raise ValidationError("Email already used! It seems you already have an account!")
         return data
@@ -186,6 +187,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         """
         user = super(RegistrationFormUniqueEmail, self).save()
 
+        # Update member profile with form data
         user.member.newsletter = self.cleaned_data["newsletter"]
         user.member.language = self.cleaned_data["lang"]
         user.member.name = self.cleaned_data["name"]
@@ -385,17 +387,29 @@ class ResidenceField(forms.MultiValueField):
         values = [v if v is not None else "" for v in values]
         return "|".join(values)
 
-    def clean(self, value):
+    def clean(self, value: list | None) -> list:
+        """Clean and validate field values, handling empty values appropriately.
+
+        Args:
+            value: List of field values to clean, or None if empty.
+
+        Returns:
+            Compressed list of cleaned field values.
+        """
         if not value:
+            # Handle empty/None input by creating default values for all fields
             value = self.compress([None] * len(self.fields))
             return value
 
         try:
             cleaned_data = []
+            # Process each field value individually
             for i, field in enumerate(self.fields):
+                # Special handling for second field (index 1) - allow empty strings
                 if i == 1 and (value[i] in (None, "")):
                     cleaned_data.append("")
                 else:
+                    # Apply field-specific validation and cleaning
                     cleaned_data.append(field.clean(value[i]))
             return self.compress(cleaned_data)
         except forms.ValidationError as err:
@@ -691,10 +705,11 @@ class ExeVolunteerRegistryForm(MyForm):
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
-    def clean_member(self):
+    def clean_member(self) -> Member:
+        """Validates that the member is not already registered as a volunteer."""
         member = self.cleaned_data["member"]
 
-        # check if already used
+        # Check if member already has a volunteer entry for this association
         lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
         if lst.count() > 1:
             raise ValidationError("Volunteer entry already existing!")
@@ -837,9 +852,11 @@ class ExeMembershipDocumentForm(forms.Form):
 
         return member
 
-    def clean_card_number(self):
+    def clean_card_number(self) -> str:
+        """Validate that card number is unique within the association."""
         card_number = self.cleaned_data["card_number"]
 
+        # Check if another member already has this card number in the same association
         if Membership.objects.filter(assoc_id=self.params["a_id"], card_number=card_number).exists():
             self.add_error("card_number", _("There is already a member with this number"))
 

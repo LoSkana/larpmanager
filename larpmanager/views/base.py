@@ -161,9 +161,19 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
     return redirect(f"https://{subdomain}.{base_domain}/{path}?token={token}")
 
 
-def get_base_domain(request):
+def get_base_domain(request: HttpRequest) -> str:
+    """Extract the base domain from the request host.
+
+    Args:
+        request: Django HTTP request object.
+
+    Returns:
+        Base domain (e.g., 'example.com' from 'subdomain.example.com').
+    """
     host = request.get_host()
     parts = host.split(".")
+
+    # Use last 2 parts for base domain (domain.tld)
     domain_parts = 2
     if len(parts) >= domain_parts:
         return ".".join(parts[-2:])
@@ -176,12 +186,25 @@ def tutorial_query(request):
 
 
 @csrf_exempt
-def upload_media(request):
+def upload_media(request: HttpRequest) -> JsonResponse:
+    """Handle media file uploads for TinyMCE editor.
+
+    Args:
+        request: HTTP request containing file upload data
+
+    Returns:
+        JSON response with file location or error message
+    """
     if request.method == "POST" and request.FILES.get("file"):
         file = request.FILES["file"]
+
+        # Generate timestamp and unique filename
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         filename = f"{timestamp}_{uuid.uuid4().hex}{file.name[file.name.rfind('.') :]}"
+
+        # Save file to association-specific directory
         path = default_storage.save(f"tinymce_uploads/{request.assoc['id']}/{filename}", file)
+
         return JsonResponse({"location": default_storage.url(path)})
     return JsonResponse({"error": "Invalid request"}, status=400)
 

@@ -34,13 +34,24 @@ def cache_assoc_role_key(ar_id):
     return f"assoc_role_{ar_id}"
 
 
-def get_assoc_role(ar):
+def get_assoc_role(ar: AssocRole) -> tuple[str, list[str]]:
+    """Get association role name and available permission slugs.
+
+    Args:
+        ar: AssocRole instance to extract permissions from
+
+    Returns:
+        Tuple containing role name and list of permission slugs
+    """
     ls = []
     features = get_assoc_features(ar.assoc_id)
+
+    # Filter permissions based on feature availability and placeholders
     for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
         if not el[2] and el[1] not in features:
             continue
         ls.append(el[0])
+
     return ar.name, ls
 
 
@@ -169,13 +180,24 @@ def cache_event_role_key(ar_id):
     return f"event_role_{ar_id}"
 
 
-def get_event_role(ar):
+def get_event_role(ar) -> tuple[str, list[str]]:
+    """Get event role name and available permission slugs.
+
+    Args:
+        ar: Assignment role object with permissions and event access.
+
+    Returns:
+        Tuple of role name and list of available permission slugs.
+    """
     ls = []
     features = get_event_features(ar.event_id)
+
+    # Filter permissions based on feature availability and placeholder status
     for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
         if not el[2] and el[1] not in features:
             continue
         ls.append(el[0])
+
     return ar.name, ls
 
 

@@ -125,10 +125,20 @@ class Command(BaseCommand):
         getattr(instance, field_name).set(resolved_ids)
 
     @staticmethod
-    def prepare_m2m(fields):
+    def prepare_m2m(fields: dict) -> dict:
+        """Extract many-to-many fields from the fields dictionary.
+
+        Args:
+            fields: Dictionary of field names and values
+
+        Returns:
+            Dictionary containing only the many-to-many fields (list values)
+        """
         m2m_fields = {}
+        # Iterate through a copy of keys to safely modify the original dict
         for key in list(fields.keys()):
             value = fields[key]
+            # Check if value is a list (indicates m2m field)
             if isinstance(value, list):
                 m2m_fields[key] = value
                 fields.pop(key)

@@ -908,8 +908,18 @@ class BaseRegistrationForm(MyFormRun):
         # Add field to show_link list for frontend handling
         self.show_link.append(f"id_{key}")
 
-    def init_paragraph(self, key, question, required):
+    def init_paragraph(self, key: str, question, required: bool) -> None:
+        """Initialize a paragraph text field for the form.
+
+        Args:
+            key: Form field key
+            question: Question object with configuration
+            required: Whether field is required
+        """
+        # Configure validators based on question settings
         validators = [max_length_validator(question.max_length)] if question.max_length else []
+
+        # Create textarea field with question properties
         self.fields[key] = forms.CharField(
             required=required,
             widget=forms.Textarea(attrs={"rows": 4}),
@@ -917,14 +927,22 @@ class BaseRegistrationForm(MyFormRun):
             help_text=question.description,
             validators=validators,
         )
+
+        # Set initial value if answer exists
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
 
-    def init_text(self, key, question, required):
+    def init_text(self, key: str, question, required: bool) -> None:
+        """Initialize a text field with validators and initial values."""
+        # Create validators based on max_length constraint
         validators = [max_length_validator(question.max_length)] if question.max_length else []
+
+        # Create the form field with proper configuration
         self.fields[key] = forms.CharField(
             required=required, label=question.name, help_text=question.description, validators=validators
         )
+
+        # Set initial value if answer exists
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
 

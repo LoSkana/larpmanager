@@ -53,16 +53,34 @@ from larpmanager.utils.event import check_event_permission
 
 
 @login_required
-def orga_registration_tickets(request, s):
+def orga_registration_tickets(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle organization registration tickets management.
+
+    Manages the display and download of registration tickets for an event.
+    Supports both GET requests for displaying the tickets page and POST
+    requests for downloading tickets.
+
+    Args:
+        request: The HTTP request object containing user data and method info
+        s: The event slug identifier for permission checking and context
+
+    Returns:
+        HttpResponse: Rendered tickets template or download response
+    """
+    # Check user permissions for accessing registration tickets management
     ctx = check_event_permission(request, s, "orga_registration_tickets")
 
+    # Handle POST request for ticket download functionality
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_tickets_download(ctx)
 
+    # Set up context variables for template rendering
     ctx["upload"] = "registration_tickets"
     ctx["download"] = 1
 
+    # Fetch registration tickets ordered by their sequence number
     ctx["list"] = RegistrationTicket.objects.filter(event=ctx["event"]).order_by("order")
+    # Get available ticket tiers for the current event
     ctx["tiers"] = OrgaRegistrationTicketForm.get_tier_available(ctx["event"])
 
     return render(request, "larpmanager/orga/registration/tickets.html", ctx)
@@ -100,16 +118,34 @@ def orga_registration_sections_order(request, s, num, order):
 
 
 @login_required
-def orga_registration_form(request, s):
+def orga_registration_form(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle the organization registration form view.
+
+    Displays the registration form configuration page for event organizers,
+    allowing them to view and download the current registration questions.
+
+    Args:
+        request: The HTTP request object containing user and POST data
+        s: The event slug identifier for permission checking
+
+    Returns:
+        HttpResponse: Rendered registration form page or download response
+    """
+    # Check if user has permission to access the registration form management
     ctx = check_event_permission(request, s, "orga_registration_form")
 
+    # Handle download request for registration form data
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_registration_form_download(ctx)
 
+    # Configure context for template rendering
     ctx["upload"] = "registration_form"
     ctx["download"] = 1
 
+    # Fetch ordered registration questions with their options
     ctx["list"] = get_ordered_registration_questions(ctx).prefetch_related("options")
+
+    # Sort options by order field for each question
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
@@ -187,17 +223,33 @@ def orga_registration_form_order(request, s, num, order):
 
 
 @login_required
-def orga_registration_options_edit(request, s, num):
+def orga_registration_options_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit registration options for an event.
+
+    Validates that registration questions exist before allowing creation of
+    registration options. Redirects to question creation if none exist.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        num: Registration option number to edit
+
+    Returns:
+        HttpResponse: Rendered registration option edit page or redirect
+    """
+    # Check user permissions for registration form management
     ctx = check_event_permission(request, s, "orga_registration_form")
 
-    # Check if registration questions exist
+    # Verify that registration questions exist before proceeding
     if not ctx["event"].get_elements(RegistrationQuestion).exists():
-        # Add warning message and redirect to registration questions adding page
+        # Display warning message to user about missing prerequisites
         messages.warning(
             request, _("You must create at least one registration question before you can create registration options")
         )
+        # Redirect to registration questions creation page
         return redirect("orga_registration_form_edit", s=s, num=0)
 
+    # Proceed with registration option editing
     return registration_option_edit(ctx, num, request)
 
 

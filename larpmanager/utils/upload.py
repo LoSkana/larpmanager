@@ -23,11 +23,15 @@ import os
 import shutil
 from datetime import datetime
 from decimal import Decimal
+from typing import Union
 
 import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
+from django.forms import Form
+from django.http import HttpRequest
 
 from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
@@ -317,20 +321,46 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
         _assign_choice_answer(reg, field, value, questions, logs, is_registration=True)
 
 
-def _assign_elem(ctx, obj, field, value, typ, logs):
+def _assign_elem(ctx: dict, obj: object, field: str, value: str, typ: type, logs: list) -> None:
+    """Assign an element to an object field based on value lookup.
+
+    Attempts to find an element by number (if value is digit) or by name (case-insensitive).
+    If the element is not found, logs an error and returns without assignment.
+
+    Args:
+        ctx: Context dictionary containing event information
+        obj: Target object to assign the element to
+        field: Field name on the target object
+        value: Value to search for (number or name)
+        typ: Model type to query for the element
+        logs: List to append error messages to
+    """
     try:
+        # Check if value is a digit to determine lookup method
         if value.isdigit():
+            # Look up element by number for the given event
             el = typ.objects.get(event=ctx["event"], number=int(value))
         else:
+            # Look up element by name (case-insensitive) for the given event
             el = typ.objects.get(event=ctx["event"], name__iexact=value)
     except ObjectDoesNotExist:
+        # Log error if element not found and return without assignment
         logs.append(f"ERR - element {field} not found")
         return
 
+    # Assign the found element to the object field
     obj.__setattr__(field, el)
 
 
-def _reg_assign_characters(ctx, reg, value, logs):
+def _reg_assign_characters(ctx: dict, reg: Registration, value: str, logs: list[str]) -> None:
+    """Assign characters to a registration based on comma-separated character names.
+
+    Args:
+        ctx: Context dictionary containing event and run information
+        reg: Registration object to assign characters to
+        value: Comma-separated string of character names
+        logs: List to append error messages to
+    """
     # Clear existing character assignments for this registration
     RegistrationCharacterRel.objects.filter(reg=reg).delete()
 
@@ -341,13 +371,14 @@ def _reg_assign_characters(ctx, reg, value, logs):
         if not char_name:
             continue
 
+        # Find character by name in the current event
         try:
             char = Character.objects.get(event=ctx["event"], name__iexact=char_name)
         except ObjectDoesNotExist:
             logs.append(f"ERR - Character not found: {char_name}")
             continue
 
-        # check if we have a registration with the same character
+        # Check if character is already assigned to another active registration
         que = RegistrationCharacterRel.objects.filter(
             reg__run=ctx["run"],
             reg__cancellation_date__isnull=True,
@@ -357,6 +388,7 @@ def _reg_assign_characters(ctx, reg, value, logs):
             logs.append(f"ERR - character already assigned: {char_name}")
             continue
 
+        # Create the character assignment relationship
         RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
 
 
@@ -428,44 +460,89 @@ def writing_load(request, ctx: dict, form) -> list[str]:
     return logs
 
 
-def _plot_rels_load(row, chars, plots):
+def _plot_rels_load(row: dict, chars: dict[str, int], plots: dict[str, int]) -> str:
+    """Load plot-character relationships from row data.
+
+    Creates or updates PlotCharacterRel objects based on the provided row data,
+    linking characters to plots with optional descriptive text.
+
+    Args:
+        row: Dictionary containing character, plot, and text data
+        chars: Mapping of character names (lowercase) to character IDs
+        plots: Mapping of plot names (lowercase) to plot IDs
+
+    Returns:
+        Status message indicating success or failure with details
+    """
+    # Extract and normalize character name from row data
     char = row.get("character", "").lower()
     if char not in chars:
         return f"ERR - source not found {char}"
     char_id = chars[char]
 
+    # Extract and normalize plot name from row data
     plot = row.get("plot", "").lower()
     if plot not in plots:
         return f"ERR - target not found {plot}"
     plot_id = plots[plot]
 
+    # Create or retrieve existing plot-character relationship
     rel, _ = PlotCharacterRel.objects.get_or_create(character_id=char_id, plot_id=plot_id)
+
+    # Update relationship text and save to database
     rel.text = row.get("text")
     rel.save()
     return f"OK - Plot role {char} {plot}"
 
 
-def _relationships_load(row, chars):
+def _relationships_load(row: dict, chars: dict) -> str:
+    """Load relationships from CSV row data.
+
+    Creates or updates a Relationship object based on source and target character
+    names provided in the row data. Characters are looked up in the chars dictionary
+    using lowercase names as keys.
+
+    Args:
+        row: Dictionary containing relationship data with 'source', 'target', and 'text' keys
+        chars: Dictionary mapping lowercase character names to character IDs
+
+    Returns:
+        Status message indicating success or error with details
+    """
+    # Get source character name and validate it exists
     source_char = row.get("source", "").lower()
     if source_char not in chars:
         return f"ERR - source not found {source_char}"
     source_id = chars[source_char]
 
+    # Get target character name and validate it exists
     target_char = row.get("target", "").lower()
     if target_char not in chars:
         return f"ERR - target not found {target_char}"
     target_id = chars[target_char]
 
+    # Create or retrieve relationship and update text
     relation, _ = Relationship.objects.get_or_create(source_id=source_id, target_id=target_id)
     relation.text = row.get("text")
     relation.save()
     return f"OK - Relationship {source_char} {target_char}"
 
 
-def _get_questions(que):
+def _get_questions(que: QuerySet) -> dict[str, dict[str, Union[int, str, dict[str, int]]]]:
+    """Build a dictionary mapping question names to their metadata.
+
+    Args:
+        que: QuerySet of question objects with name, id, typ, and options attributes.
+
+    Returns:
+        Dictionary with lowercase question names as keys and question metadata as values.
+    """
     questions = {}
     for question in que:
+        # Extract options as name->id mapping
         options = {option.name.lower(): option.id for option in question.options.all()}
+
+        # Store question metadata with lowercase name as key
         questions[question.name.lower()] = {"id": question.id, "typ": question.typ, "options": options}
     return questions
 
@@ -827,19 +904,37 @@ def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
     return msg
 
 
-def _get_mappings(is_registration):
+def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
+    """
+    Generate mappings for question field types and attributes.
+
+    Args:
+        is_registration: Whether to include additional registration-specific
+                        question types in the type mapping.
+
+    Returns:
+        Dictionary containing inverted mappings for question types, status,
+        applicable contexts, and visibility settings.
+    """
+    # Create base mappings by inverting enum dictionaries
     mappings = {
         "typ": invert_dict(BaseQuestionType.get_mapping()),
         "status": invert_dict(QuestionStatus.get_mapping()),
         "applicable": invert_dict(QuestionApplicable.get_mapping()),
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
     }
+
+    # Add registration-specific question types if needed
     if is_registration:
         # update typ with new types
         typ_mapping = mappings["typ"]
+
+        # Iterate through writing question type choices
         for key, _ in WritingQuestionType.choices:
+            # Add missing keys to maintain consistency
             if key not in typ_mapping:
                 typ_mapping[key] = key
+
     return mappings
 
 
@@ -940,15 +1035,37 @@ def _get_option(ctx, is_registration, name, question_id):
     return created, instance
 
 
-def get_csv_upload_tmp(csv_upload, run):
+def get_csv_upload_tmp(csv_upload, run) -> str:
+    """Create a temporary file for CSV upload processing.
+
+    Creates a temporary directory structure under MEDIA_ROOT/tmp/event_slug/
+    and saves the uploaded CSV file with a timestamp-based filename.
+
+    Args:
+        csv_upload: The uploaded CSV file object with chunks() method
+        run: Run object containing event information with slug attribute
+
+    Returns:
+        str: Full path to the created temporary file
+    """
+    # Create base temporary directory path
     tmp_file = os.path.join(conf_settings.MEDIA_ROOT, "tmp")
+
+    # Add event-specific subdirectory
     tmp_file = os.path.join(tmp_file, run.event.slug)
+
+    # Ensure directory exists
     if not os.path.exists(tmp_file):
         os.makedirs(tmp_file)
+
+    # Generate timestamped filename
     tmp_file = os.path.join(tmp_file, datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
+
+    # Write uploaded file chunks to temporary file
     with open(tmp_file, "wb") as destination:
         for chunk in csv_upload.chunks():
             destination.write(chunk)
+
     return tmp_file
 
 
@@ -989,10 +1106,23 @@ def cover_load(ctx, z_obj):
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
 
 
-def tickets_load(request, ctx, form):
+def tickets_load(request: HttpRequest, ctx: dict, form: Form) -> list[str]:
+    """Load tickets from uploaded file data.
+
+    Args:
+        request: The HTTP request object
+        ctx: Context dictionary containing processing state
+        form: Form containing cleaned file data
+
+    Returns:
+        List of log messages from the loading process
+    """
+    # Extract and validate file data from form
     (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
 
+    # Process each row if data frame is valid
     if input_df is not None:
+        # Convert dataframe to dictionary records and process each ticket
         for row in input_df.to_dict(orient="records"):
             logs.append(_ticket_load(request, ctx, row))
     return logs
@@ -1064,11 +1194,24 @@ def _ticket_load(request, ctx: dict, row: dict) -> str:
     return msg
 
 
-def abilities_load(request, ctx, form):
+def abilities_load(request, ctx: dict, form) -> list:
+    """Load abilities from uploaded file and process each row.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing processing state
+        form: Form object with cleaned data containing file reference
+
+    Returns:
+        List of processing logs from ability loading operations
+    """
+    # Extract and validate input file data
     (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
 
+    # Process each row if valid dataframe exists
     if input_df is not None:
         for row in input_df.to_dict(orient="records"):
+            # Load individual ability and collect processing logs
             logs.append(_ability_load(request, ctx, row))
     return logs
 

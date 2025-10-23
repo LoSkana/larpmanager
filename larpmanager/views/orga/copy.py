@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import IntegrityError, transaction
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -294,24 +295,44 @@ def copy_character_config(e_id, p_id):
                     raise
 
 
-def copy(request, ctx, parent, event, targets):
+def copy(request: HttpRequest, ctx: dict, parent: Event, event: Event, targets: list) -> HttpResponseRedirect | None:
+    """Copy event data from a parent event to the current event.
+
+    Args:
+        request: The HTTP request object
+        ctx: Context dictionary for the operation
+        parent: The source event to copy data from
+        event: The target event to copy data to
+        targets: List of data types to copy
+
+    Returns:
+        HttpResponseRedirect if error occurs, None if successful
+    """
+    # Validate parent event exists
     if not parent:
         return messages.error(request, _("Parent empty"))
 
+    # Extract event IDs for copying operations
     p_id = parent.id
     e_id = event.id
 
+    # Prevent copying from the same event
     if p_id == e_id:
         return messages.error(request, _("Can't copy from same event"))
 
+    # Copy event-specific data based on targets
     copy_event(ctx, e_id, targets, event, p_id, parent)
 
+    # Copy registration data between events
     copy_registration(e_id, targets, p_id)
 
+    # Copy writing/story data between events
     copy_writing(e_id, targets, p_id)
 
+    # Save changes to the target event
     event.save()
 
+    # Notify user of successful completion
     messages.success(request, _("Copy done"))
 
 
@@ -371,20 +392,39 @@ def _copy_features(event, parent):
     event.save()
 
 
-def copy_registration(e_id, targets, p_id):
+def copy_registration(e_id: int, targets: list[str], p_id: int) -> None:
+    """Copy registration components from one event to another based on specified targets.
+
+    Args:
+        e_id: Source event ID to copy from
+        targets: List of registration component types to copy ('ticket', 'question',
+                'discount', 'quota', 'installment', 'surcharge')
+        p_id: Target event ID to copy to
+    """
+    # Copy registration tickets if requested
     if "ticket" in targets:
         copy_class(e_id, p_id, RegistrationTicket)
+
+    # Copy registration questions and their options, then fix relationships
     if "question" in targets:
         copy_class(e_id, p_id, RegistrationQuestion)
         copy_class(e_id, p_id, RegistrationOption)
         correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "name")
+
+    # Copy discount configurations
     if "discount" in targets:
         copy_class(e_id, p_id, Discount)
+
+    # Copy registration quotas
     if "quota" in targets:
         copy_class(e_id, p_id, RegistrationQuota)
+
+    # Copy installment plans and link them to tickets
     if "installment" in targets:
         copy_class(e_id, p_id, RegistrationInstallment)
         correct_rels_many(e_id, RegistrationTicket, RegistrationInstallment, "tickets", "name")
+
+    # Copy surcharge configurations
     if "surcharge" in targets:
         copy_class(e_id, p_id, RegistrationSurcharge)
 
@@ -455,12 +495,26 @@ def copy_writing(e_id: int, targets: list[str], p_id: int) -> None:
         correct_workshop(e_id, p_id)
 
 
-def copy_css(ctx, event, parent):
+def copy_css(ctx, event, parent) -> None:
+    """Copy CSS file from parent event to current event.
+
+    Args:
+        ctx: Context object
+        event: Target event to copy CSS to
+        parent: Source event to copy CSS from
+    """
+    # Initialize appearance form and get source CSS path
     app_form = OrgaAppearanceForm(ctx=ctx)
     path = app_form.get_css_path(parent)
+
+    # Exit early if source CSS file doesn't exist
     if not default_storage.exists(path):
         return
+
+    # Read CSS content from source file
     value = default_storage.open(path).read().decode("utf-8")
+
+    # Generate new CSS ID and save to target event
     event.css_code = generate_id(32)
     npath = app_form.get_css_path(event)
     default_storage.save(npath, ContentFile(value))

@@ -3412,7 +3412,7 @@ msgid "Terms and conditions"
 msgstr "Termini e condizioni"
 
 msgid "The collection grows"
-msgstr "La colletta cresce"
+msgstr "La collezione cresce"
 
 msgid "The tax code matches"
 msgstr "Il codice fiscale corrisponde"

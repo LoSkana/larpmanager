@@ -1029,12 +1029,16 @@ def orga_close_suggestion(request, s, perm):
     return redirect("manage", s=s)
 
 
-def _check_intro_driver(request, ctx):
+def _check_intro_driver(request: HttpRequest, ctx: dict) -> None:
+    """Check if intro driver should be shown and update context."""
     member = request.user.member
     config_name = "intro_driver"
+
+    # Skip if user has already seen the intro driver
     if member.get_config(config_name, False):
         return
 
+    # Enable intro driver in template context
     ctx["intro_driver"] = True
 
 
@@ -1073,22 +1077,37 @@ def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermane
 
 
 class WhatWouldYouLikeForm(Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize the form with context and populate choice field options.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments. Must contain 'ctx' key which
+                     is extracted and stored as instance variable.
+        """
+        # Extract context from kwargs and call parent constructor
         self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
 
+        # Initialize empty choices list for dynamic population
         choices = []
 
+        # Add function-related choices to the list
         self._add_function_choices(choices)
 
+        # Add dashboard-related choices to the list
         self._add_dashboard_choices(choices)
 
+        # Add feature-related choices to the list
         self._add_features_choices(choices)
 
+        # Add tutorial-related choices to the list
         self._add_tutorials_choices(choices)
 
+        # Add guide and tutorial choices to the list
         self._add_guides_tutorials(choices)
 
+        # Create the choice field with populated options and Select2 widget
         self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
 
     def _add_guides_tutorials(self, choices):
@@ -1119,46 +1138,88 @@ class WhatWouldYouLikeForm(Form):
                 text += _(feature["descr"])
             choices.append((f"feature|{feature['tutorial']}", text))
 
-    def _add_dashboard_choices(self, choices):
-        # Add to choices all dashboard that can be accessed by this user
+    def _add_dashboard_choices(self, choices: list[tuple[str, str]]) -> None:
+        """Add dashboard choices for runs and associations accessible by user."""
+        # Combine open and past runs into single dictionary
         all_runs = {**self.ctx.get("open_runs", {}), **self.ctx.get("past_runs", {})}
+
+        # Add run dashboard choices for each accessible run
         for _rid, run in all_runs.items():
             choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
+
+        # Add association dashboard choice if user has association role
         if self.ctx.get("assoc_role", None):
             choices.append(("manage_exe|", self.ctx.get("name") + " - " + _("Dashboard")))
 
-    def _add_function_choices(self, choices):
+    def _add_function_choices(self, choices: list[tuple[str, str]]) -> None:
+        """Add function choices to the provided choices list.
+
+        Processes event and association permissions from context and adds them
+        as choice tuples to the choices list. Event-related permissions are
+        prioritized and added first.
+
+        Args:
+            choices: List of choice tuples to extend with function choices.
+                    Each tuple contains (value, display_name).
+        """
         event_priority_choices = []
         regular_choices = []
+
         # Add to choices all links in the current interface
         for type_pms in ["event_pms", "assoc_pms"]:
             all_pms = self.ctx.get(type_pms, {})
+
+            # Iterate through modules and their permission lists
             for _mod, list in all_pms.items():
                 for pms in list:
+                    # Create choice tuple with translated name and description
                     choice_tuple = (f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"]))
+
                     # Prioritize permissions with slug starting with "event"
                     if pms["slug"] in ["exe_events", "orga_event"]:
                         event_priority_choices.append(choice_tuple)
                     else:
                         regular_choices.append(choice_tuple)
-        # Add prioritized event choices first
+
+        # Add prioritized event choices first, then regular choices
         choices.extend(event_priority_choices)
         choices.extend(regular_choices)
 
 
-def what_would_you_like(ctx, request):
+def what_would_you_like(ctx: dict, request: HttpRequest) -> None:
+    """Handle "What would you like to do?" form submission and display.
+
+    Processes POST requests to redirect users based on their selected choice,
+    or displays the form for GET requests. Uses RedirectError for navigation.
+
+    Args:
+        ctx: Template context dictionary to store form data
+        request: HTTP request object containing POST data or GET request
+
+    Raises:
+        RedirectError: Always raised for navigation (success or error cases)
+    """
     if request.POST:
+        # Process form submission with POST data
         form = WhatWouldYouLikeForm(request.POST, ctx=ctx)
+
         if form.is_valid():
+            # Extract user's choice from validated form
             choice = form.cleaned_data["wwyltd"]
+
             try:
+                # Get redirect URL based on user's choice
                 redirect_url = _get_choice_redirect_url(choice, ctx)
                 raise RedirectError(redirect_url)
             except ValueError as err:
+                # Handle invalid choice with error message
                 messages.error(request, str(err))
                 raise RedirectError(request.path) from err
     else:
+        # Display empty form for GET requests
         form = WhatWouldYouLikeForm(ctx=ctx)
+
+    # Add form to template context
     ctx["form"] = form
 
 

@@ -253,19 +253,20 @@ class RegistrationForm(BaseRegistrationForm):
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
         self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
-    def init_pay_what(self, run):
-        """Initialize pay-what-you-want donation field.
-
-        Args:
-            run: Run instance
-        """
+    def init_pay_what(self, run: Run) -> None:
+        """Initialize pay-what-you-want donation field for non-waiting runs."""
+        # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
 
+        # Skip for waiting runs
         if "waiting" in run.status:
             return
 
+        # Create the pay-what-you-want field with validation
         self.fields["pay_what"] = forms.IntegerField(min_value=0, max_value=1000, required=False)
+
+        # Set initial value from existing instance or default to 0
         if self.instance.pk and self.instance.pay_what:
             self.initial["pay_what"] = int(self.instance.pay_what)
         else:
@@ -289,6 +290,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Check if quota feature is enabled and run is not in waiting status
         if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
+            # Define labels for different quota options (1-5 quotas)
             qt_label = [
                 _("Single payment"),
                 _("Two quotas"),
@@ -564,16 +566,31 @@ class RegistrationForm(BaseRegistrationForm):
 
         return result
 
-    def clean(self):
+    def clean(self) -> dict:
+        """
+        Validates the form data and checks for valid friend codes.
+
+        Returns:
+            dict: The cleaned form data after validation.
+
+        Raises:
+            ValidationError: When friend code is invalid or not found.
+        """
+        # Get cleaned data from parent class
         form_data = super().clean()
         run = self.params["run"]
 
+        # Check if bring_friend feature is enabled and field exists in form data
         if "bring_friend" in self.params["features"] and "bring_friend" in form_data:
             cod = form_data["bring_friend"]
+
+            # Validate friend code if provided
             if cod:
                 try:
+                    # Look for registration with matching special code in same event
                     Registration.objects.get(special_cod=cod, run__event=run.event)
                 except Exception:
+                    # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
 
         return form_data
@@ -818,15 +835,25 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         que = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return que.values_list("character_id", flat=True)
 
-    def _save_multi(self, s, instance):
+    def _save_multi(self, s: str, instance) -> None:
+        """Save multi-character relationships for registration.
+
+        Args:
+            s: Field name being saved
+            instance: Registration instance
+        """
         if s != "characters_new":
             return super()._save_multi(s, instance)
 
+        # Get current and new character sets
         old = set(self.get_init_multi_character())
         new = set(self.cleaned_data["characters_new"].values_list("pk", flat=True))
 
+        # Remove characters no longer selected
         for ch in old - new:
             RegistrationCharacterRel.objects.filter(character_id=ch, reg_id=instance.pk).delete()
+
+        # Add newly selected characters
         for ch in new - old:
             RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
 

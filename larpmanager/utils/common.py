@@ -24,7 +24,7 @@ import random
 import re
 import string
 import unicodedata
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 
@@ -394,12 +394,23 @@ def get_workshop_question(ctx, n, mod):
         raise Http404("WorkshopQuestion does not exist") from err
 
 
-def get_workshop_option(ctx, m):
+def get_workshop_option(ctx: dict, m: int) -> None:
+    """Get workshop option by ID and validate it belongs to the current event.
+
+    Args:
+        ctx: Context dictionary to store the workshop option
+        m: Workshop option primary key
+
+    Raises:
+        Http404: If workshop option doesn't exist or belongs to wrong event
+    """
     try:
+        # Retrieve workshop option by primary key
         ctx["workshop_option"] = WorkshopOption.objects.get(pk=m)
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopOption does not exist") from err
 
+    # Validate workshop option belongs to current event
     if ctx["workshop_option"].question.module.event != ctx["event"]:
         raise Http404("wrong event")
 
@@ -416,11 +427,14 @@ def get_element(ctx, n, name, typ, by_number=False):
         raise Http404(name + " does not exist") from err
 
 
-def get_relationship(ctx, num):
+def get_relationship(ctx: dict, num: int) -> None:
+    """Retrieves a relationship by ID and validates it belongs to the event."""
     try:
         ctx["relationship"] = Relationship.objects.get(pk=num)
     except ObjectDoesNotExist as err:
         raise Http404("relationship does not exist") from err
+
+    # Validate relationship belongs to the current event
     if ctx["relationship"].source.event_id != ctx["event"].id:
         raise Http404("wrong event")
 
@@ -436,11 +450,22 @@ def get_time_diff(dt1, dt2):
     return (dt1 - dt2).days
 
 
-def get_time_diff_today(dt1):
+def get_time_diff_today(dt1: datetime | date | None) -> int:
+    """Calculate time difference between given date and today.
+
+    Args:
+        dt1: Date to compare with today
+
+    Returns:
+        Time difference in days, or -1 if dt1 is None
+    """
     if not dt1:
         return -1
+
+    # Convert datetime to date if necessary
     if isinstance(dt1, datetime):
         dt1 = dt1.date()
+
     return get_time_diff(dt1, datetime.today().date())
 
 
@@ -448,10 +473,20 @@ def generate_number(length):
     return "".join(random.choice(string.digits) for idx in range(length))
 
 
-def html_clean(tx):
+def html_clean(tx: str | None) -> str:
+    """Clean HTML tags and unescape HTML entities from text.
+
+    Args:
+        tx: Input text that may contain HTML tags and entities.
+
+    Returns:
+        Cleaned text with HTML tags removed and entities unescaped.
+    """
     if not tx:
         return ""
+    # Remove all HTML tags from the text
     tx = strip_tags(tx)
+    # Unescape HTML entities (e.g., &amp; -> &, &lt; -> <)
     tx = html.unescape(tx)
     return tx
 
@@ -462,13 +497,20 @@ def dump(obj):
         s += f"obj.{attr} = {repr(getattr(obj, attr))}\n"
 
 
-def rmdir(directory):
+def rmdir(directory: Path) -> None:
+    """Recursively remove a directory and all its contents."""
     directory = Path(directory)
+
+    # Iterate through all items in the directory
     for item in directory.iterdir():
         if item.is_dir():
+            # Recursively remove subdirectories
             rmdir(item)
         else:
+            # Remove files
             item.unlink()
+
+    # Remove the empty directory
     directory.rmdir()
 
 
@@ -476,19 +518,33 @@ def average(lst):
     return sum(lst) / len(lst)
 
 
-def pretty_request(request):
+def pretty_request(request) -> str:
+    """Format HTTP request details into a readable string representation.
+
+    Args:
+        request: Django HttpRequest object to format
+
+    Returns:
+        Formatted string containing request method, headers, and body
+    """
     headers = ""
+
+    # Extract and format HTTP headers from request META
     for header, value in request.META.items():
         if not header.startswith("HTTP"):
             continue
+        # Convert HTTP_HEADER_NAME to Header-Name format
         header_value = "-".join([h.capitalize() for h in header[5:].lower().split("_")])
         headers += f"{header_value}: {value}\n"
 
+    # Combine method, meta info, headers and body into formatted output
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
 
 
-def remove_choice(lst, trm):
+def remove_choice(lst: list[tuple], trm: str) -> list[tuple]:
+    """Remove choice from list where first element matches term."""
     new = []
+    # Iterate through each element in the list
     for el in lst:
         if el[0] == trm:
             continue
@@ -496,22 +552,48 @@ def remove_choice(lst, trm):
     return new
 
 
-def check_field(cls, check):
+def check_field(cls: type, check: str) -> bool:
+    """Check if a field exists in the Django model class.
+
+    Args:
+        cls: The Django model class to check
+        check: The name of the field to look for
+
+    Returns:
+        True if field exists, False otherwise
+    """
+    # Iterate through all fields including hidden ones
     for field in cls._meta.get_fields(include_hidden=True):
         if field.name == check:
             return True
     return False
 
 
-def round_to_two_significant_digits(number):
+def round_to_two_significant_digits(number: float | int) -> int:
+    """Round a number to two significant digits using specific thresholds.
+
+    Args:
+        number: The number to round. Can be float or int.
+
+    Returns:
+        The rounded number as an integer.
+
+    Notes:
+        - Numbers with absolute value < 1000 are rounded to nearest 10 (down)
+        - Numbers with absolute value >= 1000 are rounded to nearest 100 (down)
+    """
+    # Convert input to Decimal for precise arithmetic
     d = Decimal(number)
     threshold = 1000
-    # round by 10
+
+    # Round by 10 for smaller numbers
     if abs(number) < threshold:
         rounded = d.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
-    # round by 100
+    # Round by 100 for larger numbers
     else:
         rounded = d.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
+
+    # Convert back to integer and return
     return int(rounded)
 
 
@@ -574,13 +656,24 @@ def exchange_order(ctx: dict, cls: type, num: int, order: bool, elements=None) -
     ctx["current"] = current
 
 
-def normalize_string(value):
+def normalize_string(value: str) -> str:
+    """Normalize a string by converting to lowercase, removing spaces and accents.
+
+    Args:
+        value: Input string to normalize.
+
+    Returns:
+        Normalized string with lowercase, no spaces, and no accented characters.
+    """
     # Convert to lowercase
     value = value.lower()
+
     # Remove spaces
     value = value.replace(" ", "")
-    # Remove accented characters
+
+    # Remove accented characters using Unicode normalization
     value = "".join(c for c in unicodedata.normalize("NFD", value) if unicodedata.category(c) != "Mn")
+
     return value
 
 
@@ -771,15 +864,32 @@ def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
     return closed_q, open_q
 
 
-def get_recaptcha_secrets(request):
+def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
+    """Get reCAPTCHA public and private keys for the current request.
+
+    Handles both single-site and multi-site configurations. In multi-site mode,
+    keys are stored as comma-separated pairs in format "skin_id:key".
+
+    Args:
+        request: Django request object with assoc data containing skin_id
+
+    Returns:
+        Tuple of (public_key, private_key) or (None, None) if not found
+    """
+    # Get base configuration values
     public = conf_settings.RECAPTCHA_PUBLIC_KEY
     private = conf_settings.RECAPTCHA_PRIVATE_KEY
 
-    # if multi-site settings
+    # Handle multi-site configuration with comma-separated values
     if "," in public:
+        # Extract skin_id from request association data
         skin_id = request.assoc["skin_id"]
+
+        # Parse public key pairs and find matching skin_id
         pairs = dict(item.split(":") for item in public.split(",") if ":" in item)
         public = pairs.get(str(skin_id))
+
+        # Parse private key pairs and find matching skin_id
         pairs = dict(item.split(":") for item in private.split(",") if ":" in item)
         private = pairs.get(str(skin_id))
 
@@ -790,9 +900,24 @@ def welcome_user(request, user):
     messages.success(request, _("Welcome") + ", " + user.get_username() + "!")
 
 
-def format_email_body(email):
+def format_email_body(email) -> str:
+    """Format email body for display by cleaning HTML and truncating text.
+
+    Args:
+        email: Email object with body attribute containing HTML content.
+
+    Returns:
+        Cleaned and truncated email body text.
+    """
+    # Replace HTML line breaks with spaces
     body_with_spaces = email.body.replace("<br />", " ").replace("<br>", " ")
+
+    # Strip all HTML tags
     stripped = strip_tags(body_with_spaces)
+
+    # Remove content after separator line
     cleaned = stripped.split("============")[0]
+
+    # Truncate text if longer than cutoff
     cutoff = 200
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned

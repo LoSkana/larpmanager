@@ -629,13 +629,15 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
     return subj, body
 
 
-def notify_token(instance, token_name):
-    # to user
+def notify_token(instance, token_name: str) -> None:
+    """Send token notification emails to user and event organizers."""
+    # Send notification to the token recipient
     activate(instance.member.language)
     subj, body = get_token_email(instance, token_name)
     add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
     my_send_mail(subj, body + add_body, instance.member, instance)
-    # to orga
+
+    # Send notification to event organizers if run exists
     if instance.run:
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)

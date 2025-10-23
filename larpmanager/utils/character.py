@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -155,34 +156,59 @@ def get_character_sheet(ctx):
     get_character_sheet_px(ctx)
 
 
-def get_character_sheet_px(ctx):
+def get_character_sheet_px(ctx: dict) -> None:
+    """
+    Populates the character sheet with ability data grouped by type.
+
+    Args:
+        ctx: Context dictionary containing character data and features.
+             Expected to have 'features' dict and 'character' object with
+             px_ability_list attribute.
+
+    Returns:
+        None: Modifies ctx dictionary in-place by adding 'sheet_abilities'.
+    """
+    # Check if px feature is enabled before processing
     if "px" not in ctx["features"]:
         return
 
+    # Initialize abilities dictionary for grouping by type
     ctx["sheet_abilities"] = {}
+
+    # Group abilities by their type name
     for el in ctx["character"].px_ability_list.all():
+        # Ensure ability has valid type and name before processing
         if el.typ and el.typ.name and el.typ.name not in ctx["sheet_abilities"]:
             ctx["sheet_abilities"][el.typ.name] = []
         ctx["sheet_abilities"][el.typ.name].append(el)
 
+    # Add additional character data to context
     add_char_addit(ctx["character"])
 
 
-def get_character_sheet_prologue(ctx):
+def get_character_sheet_prologue(ctx: dict) -> None:
+    """Adds character prologues to context if prologue feature is enabled."""
     if "prologue" not in ctx["features"]:
         return
 
+    # Initialize empty list for sheet prologues
     ctx["sheet_prologues"] = []
+
+    # Process each prologue in order and add complete data
     for s in ctx["character"].prologues_list.order_by("typ__number"):
         s.data = s.show_complete()
         ctx["sheet_prologues"].append(s)
 
 
-def get_character_sheet_speedlarp(ctx):
+def get_character_sheet_speedlarp(ctx: dict) -> None:
+    """Populates context with speedlarp sheet data if feature is enabled."""
     if "speedlarp" not in ctx["features"]:
         return
 
+    # Initialize speedlarp sheets list
     ctx["sheet_speedlarps"] = []
+
+    # Process each speedlarp ordered by type
     for s in ctx["character"].speedlarps_list.order_by("typ"):
         s.data = s.show_complete()
         ctx["sheet_speedlarps"].append(s)
@@ -223,84 +249,122 @@ def get_character_sheet_questbuilder(ctx):
         ctx["sheet_traits"].append(data)
 
 
-def get_character_sheet_plots(ctx):
+def get_character_sheet_plots(ctx: dict) -> None:
+    """Adds character plot information to context if plot feature is enabled."""
     if "plot" not in ctx["features"]:
         return
 
     ctx["sheet_plots"] = []
+
+    # Get all plot relations for the character ordered by sequence
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
+
     for el in que.order_by("order"):
+        # Start with the base plot text
         tx = el.plot.text
+
+        # Add separator and additional text if both exist
         if tx and el.text:
             tx += "<hr />"
         if el.text:
             tx += el.text
+
+        # Add plot entry to context
         ctx["sheet_plots"].append({"name": el.plot.name, "text": tx})
 
 
-def get_character_sheet_factions(ctx):
+def get_character_sheet_factions(ctx: dict[str, Any]) -> None:
+    """
+    Retrieves and processes faction data for character sheet display.
+
+    Fetches factions associated with a character, along with their writing answers
+    and choices, then adds the processed data to the context for rendering.
+
+    Args:
+        ctx: Context dictionary containing character, event, features, and other
+             rendering data. Modified in-place to add 'sheet_factions' key.
+
+    Returns:
+        None: Function modifies ctx dictionary in-place.
+    """
+    # Early return if faction feature is not enabled
     if "faction" not in ctx["features"]:
         return
 
+    # Get the parent event that handles factions
     fac_event = ctx["event"].get_class_parent("faction")
     ctx["sheet_factions"] = []
 
-    # Fetch all factions
+    # Fetch all factions associated with the character
     factions = list(ctx["character"].factions_list.filter(event=fac_event))
 
+    # Early return if no factions found
     if not factions:
         return
 
-    # Prepare writing fields query data
+    # Prepare writing fields query data for faction-applicable questions
     visible_writing_fields(ctx, QuestionApplicable.FACTION, only_visible=False)
 
-    # Get visible question IDs
+    # Determine which questions should be visible based on configuration
     question_visible = []
     if "questions" in ctx:
         for question_id in ctx["questions"].keys():
             config = str(question_id)
+            # Skip questions that are not configured to show for factions
             if "show_all" not in ctx and config not in ctx.get("show_faction", {}):
                 continue
             question_visible.append(question_id)
 
-    # Bulk fetch all writing answers and choices for all factions
+    # Extract faction IDs for bulk database queries
     faction_ids = [g.id for g in factions]
 
-    # Build answer mapping: faction_id -> {question_id -> text}
+    # Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}
     answer_map = {}
     if question_visible:
+        # Bulk fetch all writing answers for performance
         for element_id, question_id, text in WritingAnswer.objects.filter(
             element_id__in=faction_ids, question_id__in=question_visible
         ).values_list("element_id", "question_id", "text"):
+            # Initialize nested dictionary structure as needed
             if element_id not in answer_map:
                 answer_map[element_id] = {}
             answer_map[element_id][question_id] = text
 
-        # Build choice mapping: faction_id -> {question_id -> [option_ids]}
+        # Bulk fetch all writing choices and group by faction and question
         for element_id, question_id, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids, question_id__in=question_visible
         ).values_list("element_id", "question_id", "option_id"):
+            # Initialize nested dictionary and list structures as needed
             if element_id not in answer_map:
                 answer_map[element_id] = {}
             if question_id not in answer_map[element_id]:
                 answer_map[element_id][question_id] = []
             answer_map[element_id][question_id].append(option_id)
 
-    # Process each faction
+    # Process each faction and prepare display data
     for g in factions:
+        # Get base faction data
         data = g.show_complete()
 
-        # Add writing fields from pre-fetched data
+        # Merge in writing fields from pre-fetched bulk data
         fields = answer_map.get(g.id, {})
         data.update({"questions": ctx.get("questions", {}), "options": ctx.get("options", {}), "fields": fields})
 
+        # Add processed faction data to context
         ctx["sheet_factions"].append(data)
 
 
-def get_character_sheet_fields(ctx):
+def get_character_sheet_fields(ctx: dict) -> None:
+    """Updates character sheet context with character element fields.
+
+    Args:
+        ctx: Context dictionary containing features and sheet_char data.
+    """
+    # Check if character feature is enabled
     if "character" not in ctx["features"]:
         return
 
+    # Update sheet character context with element fields
     ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["character"].id, only_visible=False))
 
 

@@ -423,13 +423,17 @@ def _row_header(ctx: dict, el: object, key: list, member_cover: bool, model: str
         _header_regs(ctx, el, key, val)
 
 
-def _expand_val(val, el, field):
+def _expand_val(val: list, el: object, field: str) -> None:
+    """Append field value from element to list, or empty string if not found."""
+    # Check if element has the specified field attribute
     if hasattr(el, field):
         value = getattr(el, field)
+        # Append value if it exists (truthy)
         if value:
             val.append(value)
             return
 
+    # Append empty string if field doesn't exist or value is falsy
     val.append("")
 
 
@@ -502,9 +506,20 @@ def _header_regs(ctx: dict, el: object, key: list, val: list) -> None:
         key.append(ctx.get("token_name", _("Credits")))
 
 
-def _get_standard_row(ctx, el):
+def _get_standard_row(ctx: dict, el: object) -> tuple[list, list]:
+    """Extract values and keys from element's complete data.
+
+    Args:
+        ctx: Context dictionary for processing
+        el: Element object with show_complete method
+
+    Returns:
+        Tuple of (values list, keys list)
+    """
     val = []
     key = []
+
+    # Process each key-value pair from element's complete data
     for k, v in el.show_complete().items():
         _writing_field(ctx, k, key, v, val)
 
@@ -632,11 +647,23 @@ def _download_prepare(ctx: dict, nm: str, query, typ: dict) -> object:
     return query
 
 
-def get_writer(ctx, nm):
+def get_writer(ctx: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
+    """Create CSV writer with proper headers for file download.
+
+    Args:
+        ctx: Context dictionary containing event information
+        nm: Name component for the filename
+
+    Returns:
+        Tuple of HTTP response and CSV writer objects
+    """
+    # Create HTTP response with CSV content type and download headers
     response = HttpResponse(
         content_type="text/csv",
         headers={"Content-Disposition": 'attachment; filename="{}-{}.csv"'.format(ctx["event"], nm)},
     )
+
+    # Initialize CSV writer with tab delimiter
     writer = csv.writer(response, delimiter="\t")
     return response, writer
 
@@ -694,17 +721,35 @@ def export_registration_form(ctx: dict) -> list[tuple[str, list, list]]:
     return exports
 
 
-def _extract_values(key, que, mappings):
+def _extract_values(key: list, que: object, mappings: dict) -> list[list]:
+    """Extract and transform values from queryset based on field mappings.
+
+    Args:
+        key: List of field names to extract from queryset
+        que: Django queryset object to extract values from
+        mappings: Dictionary mapping field names to value transformation dictionaries
+
+    Returns:
+        List of lists containing extracted and transformed values for each row
+    """
     all_vals = []
+
+    # Iterate through each row in the queryset values
     for row in que.values(*key):
         vals = []
+
+        # Process each field-value pair in the current row
         for field, value in row.items():
+            # Apply mapping transformation if field and value exist in mappings
             if field in mappings and value in mappings[field]:
                 new_value = mappings[field][value]
             else:
                 new_value = value
             vals.append(new_value)
+
+        # Add processed row to results
         all_vals.append(vals)
+
     return all_vals
 
 
@@ -1074,13 +1119,27 @@ def orga_tickets_download(ctx):
     return zip_exports(ctx, export_tickets(ctx), "Tickets")
 
 
-def export_tickets(ctx):
+def export_tickets(ctx: dict) -> list[tuple[str, list[str], list]]:
+    """Export ticket data for the given event context.
+
+    Args:
+        ctx: Event context dictionary containing the event object.
+
+    Returns:
+        List containing tuple of (table_name, headers, data_rows).
+    """
+    # Define field mappings for data transformation
     mappings = {
         "tier": TicketTier.get_mapping(),
     }
+
+    # Specify fields to extract from ticket objects
     keys = ["name", "tier", "description", "price", "max_available"]
 
+    # Get all registration tickets for the event, ordered by number
     que = ctx["event"].get_elements(RegistrationTicket).order_by("number")
+
+    # Extract and transform values using the defined mappings
     vals = _extract_values(keys, que, mappings)
 
     return [("tickets", keys, vals)]

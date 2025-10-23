@@ -645,13 +645,25 @@ def exe_enrolment(request) -> HttpResponse:
 
 
 @login_required
-def exe_volunteer_registry(request):
+def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
+    """Display volunteer registry for organization.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered volunteer registry template
+    """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_volunteer_registry")
+
+    # Fetch volunteer registries with member info, ordered by start date and surname
     ctx["list"] = (
         VolunteerRegistry.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
+
     return render(request, "larpmanager/exe/users/volunteer_registry.html", ctx)
 
 
@@ -661,16 +673,39 @@ def exe_volunteer_registry_edit(request, num):
 
 
 @login_required
-def exe_volunteer_registry_print(request):
+def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
+    """Generate and return a PDF of the volunteer registry for an association.
+
+    Args:
+        request: The HTTP request object containing user and permission data.
+
+    Returns:
+        HttpResponse containing the PDF file with volunteer registry data.
+
+    Raises:
+        PermissionDenied: If user lacks exe_volunteer_registry permission.
+        Association.DoesNotExist: If association not found.
+    """
+    # Check user permissions and get association context
     ctx = check_assoc_permission(request, "exe_volunteer_registry")
+
+    # Retrieve the association object for the current context
     ctx["assoc"] = Association.objects.get(pk=ctx["a_id"])
+
+    # Query volunteer registry entries with member data, ordered by start date and surname
     ctx["list"] = (
         VolunteerRegistry.objects.filter(assoc=ctx["assoc"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
+
+    # Generate current date string for filename
     ctx["date"] = datetime.today().strftime("%Y-%m-%d")
+
+    # Generate the PDF file using the context data
     fp = print_volunteer_registry(ctx)
+
+    # Return the PDF as an HTTP response with descriptive filename
     return return_pdf(fp, f"Registro_Volontari_{ctx['assoc'].name}_{ctx['date']}")
 
 
@@ -740,24 +775,58 @@ def exe_badges_edit(request, num):
 
 
 @login_required
-def exe_send_mail(request):
+def exe_send_mail(request: HttpRequest) -> HttpResponse:
+    """Handle sending mail to association members.
+
+    This view allows association administrators to send bulk emails to members.
+    On GET requests, displays the mail sending form. On POST requests with valid
+    form data, queues the mail for batch sending.
+
+    Args:
+        request: The HTTP request object containing user data and form submission.
+
+    Returns:
+        HttpResponse: Rendered template with form or redirect after successful submission.
+    """
+    # Check if user has permission to send mail for this association
     ctx = check_assoc_permission(request, "exe_send_mail")
+
     if request.method == "POST":
+        # Process form submission for mail sending
         form = SendMailForm(request.POST)
         if form.is_valid():
+            # Queue mail for batch processing
             send_mail_batch(request, assoc_id=request.assoc["id"])
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
+        # Display empty form for GET requests
         form = SendMailForm()
+
+    # Add form to context and render template
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
 
 @login_required
-def exe_archive_email(request):
+def exe_archive_email(request: HttpRequest) -> HttpResponse:
+    """
+    Display archived emails for the organization with pagination and formatting.
+
+    This view shows a paginated list of all emails sent through the system,
+    with formatted display of email content and metadata.
+
+    Args:
+        request: The HTTP request object containing user session and parameters
+
+    Returns:
+        HttpResponse: Rendered template with paginated email archive
+    """
+    # Check user permissions for accessing email archive
     ctx = check_assoc_permission(request, "exe_archive_email")
     ctx["exe"] = True
+
+    # Define table columns for the email archive display
     ctx.update(
         {
             "fields": [
@@ -767,6 +836,7 @@ def exe_archive_email(request):
                 ("body", _("Body")),
                 ("sent", _("Sent")),
             ],
+            # Define formatting callbacks for each field
             "callbacks": {
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
@@ -776,6 +846,8 @@ def exe_archive_email(request):
             },
         }
     )
+
+    # Return paginated view of Email objects
     return exe_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
@@ -788,15 +860,32 @@ def exe_read_mail(request, nm):
 
 
 @login_required
-def exe_questions(request):
+def exe_questions(request: HttpRequest) -> HttpResponse:
+    """Handle display and management of help questions for organization executives.
+
+    Retrieves open and closed help questions for the organization. When POST method
+    is used, moves all questions to open status by combining open and closed lists.
+
+    Args:
+        request: The HTTP request object containing user and method information.
+
+    Returns:
+        Rendered template response with question lists and context data.
+    """
+    # Check user permissions for accessing executive questions feature
     ctx = check_assoc_permission(request, "exe_questions")
 
+    # Retrieve categorized help questions for the organization
     closed_q, open_q = _get_help_questions(ctx, request)
 
+    # Handle POST request to reopen all closed questions
     if request.method == "POST":
+        # Move all closed questions to open list
         open_q.extend(closed_q)
         closed_q = []
 
+    # Sort questions by creation date for display
+    # Open questions: oldest first, closed questions: newest first
     ctx["open"] = sorted(open_q, key=lambda x: x.created)
     ctx["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
 
@@ -864,13 +953,18 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 
 
 @login_required
-def exe_questions_close(request, r):
+def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
+    """Close a help question for a member."""
     ctx = check_assoc_permission(request, "exe_questions")
 
+    # Get the member and their most recent help question
     member = Member.objects.get(pk=r)
     h = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created").first()
+
+    # Mark the question as closed and save
     h.closed = True
     h.save()
+
     return redirect("exe_questions")
 
 

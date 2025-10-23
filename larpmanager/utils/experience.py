@@ -183,13 +183,29 @@ def _handle_free_abilities(char):
     set_free_abilities(char, free_abilities)
 
 
-def get_current_ability_px(char):
+def get_current_ability_px(char: Character) -> list[AbilityPx]:
+    """
+    Get current abilities with modified costs for a character.
+
+    Retrieves character abilities and applies cost modifications based on
+    character context including current abilities, choices, and modifiers.
+
+    Args:
+        char: The character to get abilities for
+
+    Returns:
+        List of abilities with modified costs applied
+    """
+    # Build the context for PX calculations including current abilities and modifiers
     current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
 
+    # Get character abilities ordered by name, only fetching needed fields for performance
     abilities_qs = char.px_ability_list.only("id", "cost").order_by("name")
 
+    # Process each ability and apply cost modifications
     abilities = []
     for ability in abilities_qs:
+        # Apply modifier-based cost adjustments based on character context
         _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
         abilities.append(ability)
     return abilities
@@ -256,36 +272,61 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
     return abilities
 
 
-def on_experience_characters_m2m_changed(sender, instance: Optional[DeliveryPx], action, pk_set, **kwargs):
+def on_experience_characters_m2m_changed(
+    sender, instance: Optional[DeliveryPx], action: str, pk_set: Optional[set], **kwargs
+) -> None:
+    """Handle m2m changes for experience-character relationships."""
+    # Only process relevant m2m actions
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
+    # Handle direct Character instance updates
     if isinstance(instance, Character):
         calculate_character_experience_points(instance)
     else:
+        # Get characters from pk_set or instance relationship
         if pk_set:
             characters = Character.objects.filter(pk__in=pk_set)
         else:
             characters = instance.characters.all()
 
+        # Update experience points for each affected character
         for char in characters:
             calculate_character_experience_points(char)
 
 
-def on_rule_abilities_m2m_changed(sender, instance, action, pk_set, **kwargs):
+def on_rule_abilities_m2m_changed(
+    sender: type, instance: RulePx, action: str, pk_set: set[int] | None, **kwargs
+) -> None:
+    """Handle changes to rule abilities many-to-many relationships.
+
+    Recalculates experience points for all characters in the event when
+    rule abilities are added, removed, or cleared.
+    """
+    # Only process meaningful m2m changes
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
+    # Get the parent event containing this rule
     event = instance.event.get_class_parent(RulePx)
+
+    # Recalculate experience for all characters in the event
     for char in event.get_elements(Character).all():
         calculate_character_experience_points(char)
 
 
-def on_modifier_abilities_m2m_changed(sender, instance, action, pk_set, **kwargs):
+def on_modifier_abilities_m2m_changed(
+    sender: type, instance: ModifierPx, action: str, pk_set: set[int] | None, **kwargs
+) -> None:
+    """Handle modifier abilities m2m changes by recalculating character experience."""
+    # Only process relevant m2m actions
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 
+    # Get the event containing this modifier
     event = instance.event.get_class_parent(ModifierPx)
+
+    # Recalculate experience for all characters in the event
     for char in event.get_elements(Character).all():
         calculate_character_experience_points(char)
 

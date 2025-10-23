@@ -71,7 +71,16 @@ class Quest(Writing):
     def __str__(self):
         return f"Q{self.number} {self.name}"
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None) -> dict:
+        """Return serialized representation of the object.
+
+        Args:
+            run: Optional run instance for context
+
+        Returns:
+            Dictionary containing serialized object data
+        """
+        # Get base serialized data from parent class
         js = super().show(run)
         if self.typ:
             # noinspection PyUnresolvedReferences
@@ -223,14 +232,18 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     return traits
 
 
-def refresh_all_instance_traits(instance):
+def refresh_all_instance_traits(instance) -> None:
+    """Refresh traits for an instance by updating and synchronizing with calculated traits."""
     if instance.id is None:
         return
 
     if instance.temp:
         return
 
+    # Calculate updated traits for the instance
     pgs = update_traits_text(instance)
+
+    # Synchronize instance traits with calculated traits
     if hasattr(instance, "traits"):
         for el in instance.traits.all():
             if el not in pgs:

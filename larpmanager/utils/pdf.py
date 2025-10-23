@@ -41,7 +41,7 @@ from xhtml2pdf import pisa
 from larpmanager.cache.association import get_cache_assoc
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
-from larpmanager.models.association import AssocTextType
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
 from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -304,69 +304,181 @@ def pdf_template(ctx: dict, tmp: str, out: str, small: bool = False, html: bool 
 # ##print
 
 
-def get_membership_request(ctx):
+def get_membership_request(ctx: dict) -> HttpResponse:
+    """Generate and return a PDF membership registration document."""
+    # Get the file path for the member's request document
     fp = ctx["member"].get_request_filepath()
+
+    # Prepare template context with member data
     temp_ctx = {"member": ctx["member"]}
+
+    # Retrieve association-specific membership template text
     template = get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP)
+
+    # Generate PDF from template and return as HTTP response
     pdf_template(temp_ctx, template, fp, html=True)
     return return_pdf(fp, _("Membership registration of %(user)s") % {"user": ctx["member"]})
 
 
-def print_character(ctx, force=False):
+def print_character(ctx: dict, force: bool = False) -> dict:
+    """Generate character sheet PDF with optional force regeneration.
+
+    Args:
+        ctx: Context dictionary containing character and run data
+        force: Whether to force PDF regeneration regardless of existing file
+
+    Returns:
+        PDF response dictionary for character sheet
+    """
+    # Get the file path for the character sheet PDF
     fp = ctx["character"].get_sheet_filepath(ctx["run"])
     ctx["pdf"] = True
+
+    # Generate PDF if forced or if reprint is needed
     if force or reprint(fp):
         get_character_sheet(ctx)
         add_pdf_instructions(ctx)
         xhtml_pdf(ctx, "pdf/sheets/auxiliary.html", fp)
+
+    # Return the PDF response
     return return_pdf(fp, f"{ctx['character']}")
 
 
-def print_character_friendly(ctx, force=False):
+def print_character_friendly(ctx: dict, force: bool = False) -> HttpResponse:
+    """Generate and return a lightweight character sheet PDF.
+
+    Args:
+        ctx: Context dictionary containing character and run data
+        force: Whether to force regeneration of the PDF file
+
+    Returns:
+        HTTP response containing the PDF file
+    """
+    # Get the file path for the friendly character sheet
     fp = ctx["character"].get_sheet_friendly_filepath(ctx["run"])
     ctx["pdf"] = True
+
+    # Generate PDF if forced or if file needs reprinting
     if force or reprint(fp):
         get_character_sheet(ctx)
         pdf_template(ctx, "pdf/sheets/friendly.html", fp, True)
+
+    # Return the PDF file as HTTP response
     return return_pdf(fp, f"{ctx['character']} - " + _("Lightweight"))
 
 
-def print_character_rel(ctx, force=False):
+def print_character_rel(ctx: dict, force: bool = False) -> HttpResponse:
+    """Generate and return character relationships PDF.
+
+    Args:
+        ctx: Context dictionary containing character and run data
+        force: Whether to force regeneration of the PDF
+
+    Returns:
+        HTTP response with the relationships PDF
+    """
+    # Get the filepath for the character relationships PDF
     fp = ctx["character"].get_relationships_filepath(ctx["run"])
+
+    # Generate PDF if forced or if reprint is needed
     if force or reprint(fp):
         get_event_cache_all(ctx)
         get_character_relationships(ctx)
         pdf_template(ctx, "pdf/sheets/relationships.html", fp, True)
+
+    # Return the PDF response with localized filename
     return return_pdf(fp, f"{ctx['character']} - " + _("Relationships"))
 
 
-def print_gallery(ctx, force=False):
+def print_gallery(ctx: dict, force: bool = False) -> object:
+    """
+    Generate and return a PDF gallery of character portraits.
+
+    Creates a PDF containing character portraits for characters with first aid
+    capabilities. The PDF is cached and only regenerated when forced or when
+    the cache is outdated.
+
+    Parameters
+    ----------
+    ctx : dict
+        Context dictionary containing run information and character data
+    force : bool, default False
+        Whether to force regeneration of the PDF even if cache is valid
+
+    Returns
+    -------
+    object
+        PDF response object for download/display
+    """
+    # Get the filepath where the gallery PDF should be stored
     fp = ctx["run"].get_gallery_filepath()
+
+    # Check if we need to regenerate the PDF (forced or cache outdated)
     if force or reprint(fp):
+        # Load all event cache data into context
         get_event_cache_all(ctx)
+
+        # Initialize list to store characters with first aid capability
         ctx["first_aid"] = []
+
+        # Iterate through all characters to find those with first aid
         for _num, el in ctx["chars"].items():
             if "first_aid" in el and el["first_aid"] == "y":
                 ctx["first_aid"].append(el)
+
+        # Re-get filepath (in case it changed during cache loading)
         fp = ctx["run"].get_gallery_filepath()
+
+        # Generate the PDF from the gallery template
         xhtml_pdf(ctx, "pdf/sheets/gallery.html", fp)
 
+    # Return the PDF file as a downloadable response
     return return_pdf(fp, str(ctx["run"]) + " - " + _("Portraits"))
 
 
-def print_profiles(ctx, force=False):
+def print_profiles(ctx: dict, force: bool = False) -> tuple:
+    """Generate and return PDF profiles for the event run.
+
+    Args:
+        ctx: Context dictionary containing run and event data
+        force: If True, regenerate PDF even if it exists
+
+    Returns:
+        Tuple containing PDF response and filename
+    """
+    # Get the filepath for the profiles PDF
     fp = ctx["run"].get_profiles_filepath()
+
+    # Check if we need to regenerate the PDF
     if force or reprint(fp):
+        # Load all event cache data
         get_event_cache_all(ctx)
+        # Generate PDF from HTML template
         xhtml_pdf(ctx, "pdf/sheets/profiles.html", fp)
+
+    # Return the PDF file with appropriate filename
     return return_pdf(fp, str(ctx["run"]) + " - " + _("Profiles"))
 
 
-def print_handout(ctx, force=True):
+def print_handout(ctx: dict, force: bool = True) -> Any:
+    """Generate and return a PDF handout for the given context.
+
+    Args:
+        ctx: Context dictionary containing handout and run information
+        force: Whether to force regeneration of the PDF
+
+    Returns:
+        PDF response for the handout
+    """
+    # Get the file path for the handout PDF
     fp = ctx["handout"].get_filepath(ctx["run"])
+
+    # Generate PDF if forced or if reprint is needed
     if force or reprint(fp):
         ctx["handout"].data = ctx["handout"].show_complete()
         xhtml_pdf(ctx, "pdf/sheets/handout.html", fp)
+
+    # Return the PDF file response
     return return_pdf(fp, f"{ctx['handout'].data['name']}")
 
 
@@ -505,11 +617,14 @@ def cleanup_faction_pdfs_on_save(instance):
         delete_character_pdf_files(char, runs=runs)
 
 
-def deactivate_castings_and_remove_pdfs(instance):
+def deactivate_castings_and_remove_pdfs(instance: Any) -> None:
+    """Deactivate castings and remove PDF files for a trait instance."""
+    # Deactivate all matching castings for this member, run, and type
     for casting in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
         casting.active = False
         casting.save()
 
+    # Get character associated with this trait and remove PDF files
     char = get_trait_character(instance.run, instance.trait.number)
     if char:
         delete_character_pdf_files(char, instance.run)
@@ -536,9 +651,19 @@ def print_handout_go(ctx, c):
     print_handout(ctx)
 
 
-def get_fake_request(assoc_slug):
+def get_fake_request(assoc_slug: str) -> HttpRequest:
+    """Create a fake HTTP request with association and anonymous user.
+
+    Args:
+        assoc_slug: The association slug to attach to the request.
+
+    Returns:
+        HttpRequest object with assoc and user attributes set.
+    """
     request = HttpRequest()
+    # Attach association from cache
     request.assoc = get_cache_assoc(assoc_slug)
+    # Set anonymous user for the request
     request.user = AnonymousUser()
     return request
 
@@ -570,16 +695,29 @@ def print_character_bkg(a, s, c):
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(a, s):
+def print_run_bkg(a: Association, s: str) -> None:
+    """Print all background materials for a run including gallery, profiles, characters, and handouts.
+
+    Args:
+        a: The association object containing event data
+        s: String identifier for the specific run
+
+    Returns:
+        None
+    """
+    # Create fake request context and get event run data
     request = get_fake_request(a)
     ctx = get_event_run(request, s)
 
+    # Print gallery and character profiles
     print_gallery(ctx)
     print_profiles(ctx)
 
+    # Print individual character sheets for all characters in the event
     for ch in ctx["run"].event.get_elements(Character).values_list("number", flat=True):
         print_character_go(ctx, ch)
 
+    # Print all handouts associated with the event
     for h in ctx["run"].event.get_elements(Handout).values_list("number", flat=True):
         print_handout_go(ctx, h)
 
@@ -587,21 +725,49 @@ def print_run_bkg(a, s):
 # ## OLD PRINTING
 
 
-def odt_template(ctx, char, fp, template, aux_template):
+def odt_template(ctx: dict, char: object, fp: str, template: str, aux_template: str) -> None:
+    """Execute ODT template generation with retry mechanism.
+
+    Attempts to execute ODT template generation with automatic retry
+    on failure. Logs errors and implements exponential backoff.
+
+    Args:
+        ctx: Context dictionary for template rendering
+        char: Character object for template processing
+        fp: File path for output generation
+        template: Primary template identifier
+        aux_template: Auxiliary template identifier
+
+    Returns:
+        None
+
+    Raises:
+        Exception: After maximum retry attempts are exhausted
+    """
     attempt = 0
     excepts = []
     max_attempts = 5
+
+    # Retry loop with maximum attempt limit
     while attempt < max_attempts:
         try:
+            # Execute the main ODT template processing
             exec_odt_template(ctx, char, fp, template, aux_template)
             return
         except Exception as e:
+            # Log detailed error information for debugging
             logger.error(f"Error in PDF creation: {e}")
             logger.error(f"Character: {char}")
             logger.error(f"Template: {template}")
+
+            # Increment attempt counter and store exception
             attempt += 1
             excepts.append(e)
+
+            # Wait before retry to allow transient issues to resolve
             time.sleep(2)
+
+    # Log final error after all attempts exhausted
     logger.error(f"ERROR IN odt_template: {excepts}")
 
 

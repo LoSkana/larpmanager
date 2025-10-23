@@ -212,25 +212,41 @@ class OrgaEventForm(MyForm):
         for m in dl:
             self.delete_field(m)
 
-    def init_campaign(self, dl):
+    def init_campaign(self, dl: list) -> None:
+        """Initialize campaign field by setting association and exclusions."""
+        # Set association for parent widget and exclude current instance if editing
         self.fields["parent"].widget.set_assoc(self.params["a_id"])
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
+        # Remove parent field if campaign feature disabled or no parent options available
         if "campaign" not in self.params["features"] or not self.fields["parent"].widget.get_queryset().count():
             dl.append("parent")
             return
 
-    def clean_slug(self):
+    def clean_slug(self) -> str:
+        """Validate event slug for uniqueness and reserved word conflicts.
+
+        Ensures that the slug is unique among all events (excluding current instance
+        during updates) and is not a reserved static prefix.
+
+        Returns:
+            str: The validated slug value.
+
+        Raises:
+            ValidationError: If slug is already used by another event or is a reserved word.
+        """
         data = self.cleaned_data["slug"]
         logger.debug(f"Validating event slug: {data}")
-        # check if already used
+
+        # Check if slug is already used by another event
         lst = Event.objects.filter(slug=data)
         if self.instance is not None and self.instance.pk is not None:
             lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
             raise ValidationError("Slug already used!")
 
+        # Check if slug conflicts with reserved static prefixes
         if data and hasattr(conf_settings, "STATIC_PREFIXES"):
             if data in conf_settings.STATIC_PREFIXES:
                 raise ValidationError("Reserved word, please choose another!")
@@ -988,28 +1004,35 @@ class OrgaEventTextForm(MyForm):
             help_text.append(f"<b>{choice_typ.label}</b>: {text}")
         self.fields["typ"].help_text = " - ".join(help_text)
 
-    def clean(self):
+    def clean(self) -> dict:
         """Validate event text uniqueness by type and language.
 
+        Ensures that only one default text exists per type and that no duplicate
+        language-type combinations exist for the same event.
+
         Returns:
-            dict: Cleaned form data
+            dict: The cleaned form data after validation.
 
         Raises:
-            ValidationError: If default or language conflicts exist
+            ValidationError: If a default text already exists for the given type,
+                           or if a text with the same language and type already exists.
         """
         cleaned_data = super().clean()
 
+        # Extract form field values
         default = cleaned_data.get("default")
         typ = cleaned_data.get("typ")
         language = cleaned_data.get("language")
 
+        # Validate default text uniqueness per type
         if default:
-            # check if there is already a default with that type
+            # Check if there is already a default with that type
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
-        # check if there is already a language with that type
+        # Validate language-type combination uniqueness
+        # Check if there is already a language with that type
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
         if res.count() > 0 and res.first().pk != self.instance.pk:
             self.add_error("language", "There is already a language of this type!")

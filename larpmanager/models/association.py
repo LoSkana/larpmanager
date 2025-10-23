@@ -260,8 +260,11 @@ class Association(BaseModel):
     def get_config(self, name, def_v=None, bypass_cache=False):
         return get_element_config(self, name, def_v, bypass_cache)
 
-    def promoter_dict(self):
+    def promoter_dict(self) -> dict[str, str]:
+        """Return a dictionary with promoter information including slug, name, and optional thumbnail URL."""
         res = {"slug": self.slug, "name": self.name}
+
+        # Add thumbnail URL if available
         if self.promoter_thumb:
             # noinspection PyUnresolvedReferences
             res["promoter_url"] = self.promoter_thumb.url

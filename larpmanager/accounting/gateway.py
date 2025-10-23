@@ -453,26 +453,57 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request):
+def sumup_webhook(request: HttpRequest) -> bool:
+    """Handle SumUp webhook notifications for payment processing.
+
+    Processes incoming webhook requests from SumUp payment gateway,
+    validates the payment status, and triggers invoice payment processing
+    for successful transactions.
+
+    Args:
+        request: HTTP request object containing webhook payload from SumUp
+
+    Returns:
+        bool: True if payment was processed successfully, False if payment
+              failed or was not successful
+    """
     # Print (Request)
     # pprint(request.body)
     # Print (Request.Meta)
+
+    # Parse the JSON payload from the webhook request body
     aux = json.loads(request.body)
     # print (at ['id'])
     # print (at ['status'])
 
+    # Check if the payment status indicates failure or non-success
     if aux["status"] != "SUCCESSFUL":
         # Err_Paypal (Print (Request) + Print (Request.Body) + Print (Request.meta))
         return False
 
+    # Process the successful payment using the transaction ID
     return invoice_received_money(aux["id"])
 
 
-def redsys_invoice_cod():
+def redsys_invoice_cod() -> str:
+    """Generate a unique Redsys invoice code.
+
+    Returns:
+        str: A 12-character unique invoice code.
+
+    Raises:
+        ValueError: If unable to generate unique code after 5 attempts.
+    """
+    # Try up to 5 times to generate a unique code
     for _idx in range(5):
+        # Generate 12-character code: 5 random numbers + 7 character ID
         cod = generate_number(5) + generate_id(7)
+
+        # Check if code is unique in database
         if not PaymentInvoice.objects.filter(cod=cod).exists():
             return cod
+
+    # Raise error if all attempts failed
     raise ValueError("Too many attempts to generate the code")
 
 
@@ -617,17 +648,35 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # ~ ctx['signature'] = sig
 
 
-def redsys_webhook(request, ok=True):
+def redsys_webhook(request, ok: bool = True) -> bool:
+    """Handle RedSys payment webhook notifications.
+
+    Processes incoming webhook requests from RedSys payment gateway,
+    validates the signature, and updates payment status accordingly.
+
+    Args:
+        request: Django HTTP request object containing webhook data
+        ok: Boolean flag indicating expected success state (default: True)
+
+    Returns:
+        bool: True if payment was successfully processed, False otherwise
+    """
+    # Initialize user context and update payment details
     ctx = def_user_ctx(request)
     update_payment_details(request, ctx)
-    # ver = request.POST["Ds_SignatureVersion"]
+
+    # Extract RedSys parameters and signature from POST data
+    # ver = request.POST["Ds_SignatureVersion"]  # Version not currently used
     pars = request.POST["Ds_MerchantParameters"]
     sig = request.POST["Ds_Signature"]
 
+    # Initialize RedSys client with merchant credentials
     redsyspayment = RedSysClient(business_code=ctx["redsys_merchant_code"], secret_key=ctx["redsys_secret_key"])
 
+    # Validate the webhook signature and extract order code
     cod = redsyspayment.redsys_check_response(sig, pars, ctx)
 
+    # Process successful payment if signature validation passed
     if cod:
         return invoice_received_money(cod)
 
@@ -672,12 +721,23 @@ class RedSysClient:
 
     ALPHANUMERIC_CHARACTERS = re.compile(b"[^a-zA-Z0-9]")
 
-    def __init__(self, business_code, secret_key, sandbox=False):
-        # init params
+    def __init__(self, business_code: str, secret_key: str, sandbox: bool = False) -> None:
+        """Initialize Redsys payment gateway with merchant credentials.
+
+        Args:
+            business_code: Merchant code provided by Redsys
+            secret_key: Secret key for transaction signing
+            sandbox: Whether to use sandbox environment
+        """
+        # Initialize all data parameters to None
         for param in self.DATA:
             setattr(self, param, None)
+
+        # Set merchant credentials
         self.Ds_Merchant_MerchantCode = business_code
         self.secret_key = secret_key
+
+        # Configure environment URL based on sandbox flag
         if sandbox:
             self.redsys_url = "https://sis-t.redsys.es:25443/sis/realizarPago"
         else:

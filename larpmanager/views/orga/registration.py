@@ -26,7 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Substr
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -377,24 +377,49 @@ def _orga_registrations_prepare(ctx, request):
     ctx["no_grouping"] = get_event_config(ctx["event"].id, "registration_no_grouping", False, ctx)
 
 
-def _get_registration_fields(ctx, member):
+def _get_registration_fields(ctx: dict, member) -> dict:
+    """Get registration questions that are accessible to the given member.
+
+    Args:
+        ctx: Context dictionary containing event, features, run, and all_runs information
+        member: Member object to check question access permissions for
+
+    Returns:
+        Dictionary mapping question IDs to RegistrationQuestion objects that the member can access
+    """
     reg_questions = {}
+
+    # Get all registration questions for the event based on available features
     que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
+
     for q in que:
+        # Check if question has access restrictions enabled
         if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
             run_id = ctx["run"].id
+
+            # Check if user is an organizer for this run
             organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
+
+            # Skip question if user is not organizer and not in allowed list
             if not organizer and member.id not in q.allowed_map:
                 continue
+
+        # Add accessible question to results
         reg_questions[q.id] = q
+
     return reg_questions
 
 
-def _orga_registrations_discount(ctx):
+def _orga_registrations_discount(ctx: dict) -> None:
+    """Populate context with registration discounts for members if discount feature is enabled."""
     if "discount" not in ctx["features"]:
         return
+
+    # Initialize discount tracking structures
     ctx["reg_discounts"] = {}
     que = AccountingItemDiscount.objects.filter(run=ctx["run"])
+
+    # Process each discount item and organize by member
     for aid in que.select_related("member", "disc").exclude(hide=True):
         regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
         if aid.member_id not in ctx["reg_discounts"]:
@@ -792,24 +817,34 @@ def orga_registrations_customization(request, s, num):
 
 
 @login_required
-def orga_registrations_reload(request, s):
+def orga_registrations_reload(request: HttpRequest, s: str) -> HttpResponseRedirect:
+    """Reload registrations for an event run by triggering background checks."""
+    # Check user permissions for the event
     ctx = check_event_permission(request, s, "orga_registrations")
+
+    # Collect all registration IDs for the current run
     reg_ids = []
     for reg in Registration.objects.filter(run=ctx["run"]):
         reg_ids.append(str(reg.id))
+
+    # Trigger background registration checks
     check_reg_bkg(reg_ids)
     # print(f"@@@@ orga_registrations_reload {request} {datetime.now()}")
     return redirect("orga_registrations", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_registration_discounts(request, s, num):
+def orga_registration_discounts(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Handle registration discounts management for organizers."""
     ctx = check_event_permission(request, s, "orga_registrations")
     get_registration(ctx, num)
-    # get active discounts
+
+    # Get active discounts for this registration's member
     ctx["active"] = AccountingItemDiscount.objects.filter(run=ctx["run"], member=ctx["registration"].member)
-    # get available discounts
+
+    # Get all available discounts for this run
     ctx["available"] = ctx["run"].discounts.all()
+
     return render(request, "larpmanager/orga/registration/discounts.html", ctx)
 
 
@@ -845,11 +880,19 @@ def orga_registration_discount_add(request, s, num, dis):
 
 
 @login_required
-def orga_registration_discount_del(request, s, num, dis):
+def orga_registration_discount_del(request: HttpRequest, s: str, num: int, dis: int) -> HttpResponse:
+    """Delete a discount from a registration and redirect to discounts page."""
+    # Check event permissions and get context
     ctx = check_event_permission(request, s, "orga_registrations")
+
+    # Get the registration object
     get_registration(ctx, num)
+
+    # Delete the discount and save registration
     AccountingItemDiscount.objects.get(pk=dis).delete()
     ctx["registration"].save()
+
+    # Redirect to registration discounts page
     return redirect(
         "orga_registration_discounts",
         s=ctx["run"].get_slug(),
@@ -981,55 +1024,116 @@ def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", ctx)
 
 
-def get_pre_registration(event):
+def get_pre_registration(event) -> dict[str, list | dict[int, int]]:
+    """Get pre-registration data for an event.
+
+    Args:
+        event: The event to get pre-registration data for.
+
+    Returns:
+        Dictionary containing:
+        - 'list': All pre-registrations for the event
+        - 'pred': Pre-registrations from members who haven't signed up yet
+        - Additional keys with preference counts
+    """
+    # Initialize result dictionary with empty lists
     dc = {"list": [], "pred": []}
+
+    # Get set of member IDs who have already registered for this event
     signed = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
+
+    # Get all pre-registrations ordered by preference and creation date
     que = PreRegistration.objects.filter(event=event).order_by("pref", "created")
+
+    # Process each pre-registration
     for p in que.select_related("member"):
+        # Check if member hasn't signed up yet
         if p.member_id not in signed:
             dc["pred"].append(p)
         else:
+            # Mark as already signed up
             p.signed = True
 
+        # Add to main list and count preferences
         dc["list"].append(p)
         if p.pref not in dc:
             dc[p.pref] = 0
         dc[p.pref] += 1
+
     return dc
 
 
 @login_required
-def orga_pre_registrations(request, s):
+def orga_pre_registrations(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle pre-registrations view for organization users."""
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_pre_registrations")
+
+    # Get pre-registration data for the event
     ctx["dc"] = get_pre_registration(ctx["event"])
 
+    # Retrieve pre-registration preferences from association config
     ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
     return render(request, "larpmanager/orga/registration/pre_registrations.html", ctx)
 
 
 @login_required
-def orga_reload_cache(request, s):
+def orga_reload_cache(request: HttpRequest, s: str) -> HttpResponse:
+    """Reset all cache entries for the specified event run.
+
+    Clears multiple cache layers including run media, event features,
+    registration counts, and relationship caches to ensure fresh data.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: String identifier for the event run slug
+
+    Returns:
+        HttpResponse: Redirect to the manage page for the event run
+    """
+    # Verify user permissions and get event context
     ctx = check_event_permission(request, s)
+
+    # Clear run-specific cache and associated media files
     clear_run_cache_and_media(ctx["run"])
     reset_cache_run(ctx["event"].assoc_id, ctx["run"].get_slug())
+
+    # Clear event-level feature and configuration caches
     clear_event_features_cache(ctx["event"].id)
     clear_run_event_links_cache(ctx["event"])
+
+    # Clear registration and relationship data caches
     clear_registration_counts_cache(ctx["run"].id)
     clear_event_fields_cache(ctx["event"].id)
     clear_event_relationships_cache(ctx["event"].id)
+
+    # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
     return redirect("manage", s=ctx["run"].get_slug())
 
 
-def lottery_info(request, ctx):
+def lottery_info(request, ctx: dict) -> None:
+    """Add lottery-related information to the context dictionary.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary to update with lottery info
+    """
+    # Get number of lottery draws from event configuration
     ctx["num_draws"] = int(get_event_config(ctx["event"].id, "lottery_num_draws", 0, ctx))
+
+    # Get lottery ticket configuration
     ctx["ticket"] = get_event_config(ctx["event"].id, "lottery_ticket", "", ctx)
+
+    # Count active lottery registrations
     ctx["num_lottery"] = Registration.objects.filter(
         run=ctx["run"],
         ticket__tier=TicketTier.LOTTERY,
         cancellation_date__isnull=True,
     ).count()
+
+    # Count definitive (confirmed) registrations excluding special tiers
     ctx["num_def"] = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.LOTTERY, TicketTier.STAFF, TicketTier.NPC, TicketTier.WAITING])

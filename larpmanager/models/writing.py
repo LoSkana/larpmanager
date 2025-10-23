@@ -73,9 +73,17 @@ class Writing(BaseConceptModel):
     class Meta:
         abstract = True
 
-    def show_red(self):
+    def show_red(self) -> dict[str, Any]:
+        """Returns a dictionary representation for red display.
+
+        Returns:
+            Dictionary containing id, number, and name attributes.
+        """
         # noinspection PyUnresolvedReferences
+        # Create base dictionary with id and number
         js = {"id": self.id, "number": self.number}
+
+        # Update dictionary with name attribute
         for s in ["name"]:
             self.upd_js_attr(js, s)
         return js
@@ -143,7 +151,6 @@ class Writing(BaseConceptModel):
         ]
 
         # Define optional feature columns with their descriptions
-        # Each tuple contains (feature_name, description_text)
         optional_features = [
             # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
@@ -287,20 +294,42 @@ class Character(Writing):
 
         return js
 
-    def show_factions(self, event, js):
+    def show_factions(self, event: Event | None, js: dict) -> None:
+        """Add faction information to the JavaScript data structure.
+
+        Populates the 'factions' list in the js dictionary with faction numbers
+        from the event. If no primary faction is found, adds 0 as default.
+        Also sets thumbnail URL if primary faction has cover image.
+
+        Args:
+            event: Event object to get factions from. If None, uses self.event.
+            js: Dictionary to populate with faction data.
+        """
         js["factions"] = []
+
+        # Determine which event to use for faction lookup
         if event:
             fac_event = event.get_class_parent("faction")
         else:
             fac_event = self.event.get_class_parent("faction")
+
+        # Track if we find a primary faction
         primary = False
+
+        # Process all factions for this event
         # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
+            # Check if this is a primary faction
             if g.typ == FactionType.PRIM:
                 primary = True
+                # Set thumbnail if cover image exists
                 if g.cover:
                     js["thumb"] = g.thumb.url
+
+            # Add faction number to the list
             js["factions"].append(g.number)
+
+        # Add default faction if no primary found
         if not primary:
             js["factions"].append(0)
 
@@ -643,16 +672,33 @@ class SpeedLarp(Writing):
         ]
 
 
-def replace_char_names(v, chars):
+def replace_char_names(v: str, chars: dict[str, str]) -> str:
+    """Replace character names in text with formatted references.
+
+    Args:
+        v: The input text to process
+        chars: Dictionary mapping character names to their replacements
+
+    Returns:
+        The processed text with character names replaced, or empty string if input is falsy
+    """
+    # Return empty string if input is falsy
     if not v:
         return ""
-    for name in chars:
+
+    # Iterate through each character name in the dictionary
+    for name, value in chars.items():
         name_number = 2
+
+        # Skip names that are too short (less than 2 characters)
         if len(name) < name_number:
             continue
+
+        # Replace character name with formatted reference if found in text
         if name in v:
-            c = f"@{chars[name]}"
+            c = f"@{value}"
             v = v.replace(name, c)
+
     return v
 
 

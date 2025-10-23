@@ -62,7 +62,7 @@ from larpmanager.models.event import (
     PreRegistration,
     Run,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -719,12 +719,25 @@ def register_reduced(request, s):
 
 
 @login_required
-def register_conditions(request, s=None):
+def register_conditions(request: HttpRequest, s: str = None) -> HttpResponse:
+    """Render registration conditions page with event and association terms.
+
+    Args:
+        request: HTTP request object
+        s: Optional event slug for event-specific conditions
+
+    Returns:
+        Rendered HTML response with terms and conditions
+    """
+    # Initialize base user context
     ctx = def_user_ctx(request)
+
+    # Add event-specific context if event slug provided
     if s:
         ctx["event"] = get_event(request, s)["event"]
         ctx["event_text"] = get_event_text(ctx["event"].id, EventTextType.TOC)
 
+    # Add association terms and conditions
     ctx["assoc_text"] = get_assoc_text(request.assoc["id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/event/register_conditions.html", ctx)
@@ -895,21 +908,54 @@ def _is_discount_maxed(disc, run):
     return count > disc.max_redeem
 
 
-def _validate_exclusive_logic(disc, member, run, event):
+def _validate_exclusive_logic(disc: Discount, member: Member, run: Run, event: Event) -> bool:
+    """
+    Validate exclusive discount logic for member registrations.
+
+    Ensures that PLAYAGAIN discounts are mutually exclusive with other discounts
+    and validates eligibility requirements.
+
+    Args:
+        disc: The discount to validate
+        member: The member applying for the discount
+        run: The specific run for this registration
+        event: The event containing multiple runs
+
+    Returns:
+        True if the discount can be applied, False otherwise
+    """
     # For PLAYAGAIN discount: no other discounts and has another registration
     if disc.typ == Discount.PLAYAGAIN:
+        # Check if member already has any discount for this run
         if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
             return False
+
+        # Verify member has registration in another run of the same event
         if not Registration.objects.filter(member=member, run__event=event).exclude(run=run).exists():
             return False
+
     # If PLAYAGAIN discount was already applied, no other allowed
     elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=Discount.PLAYAGAIN).exists():
         return False
+
     return True
 
 
 @login_required
-def discount_list(request, s):
+def discount_list(request: HttpRequest, s: str) -> JsonResponse:
+    """Get list of valid discount items for the current user and event run.
+
+    This function retrieves all non-expired discount items for the authenticated user
+    within the specified event run context. Expired items are automatically cleaned up.
+
+    Args:
+        request: The HTTP request object containing user authentication
+        s: String identifier for the event run
+
+    Returns:
+        JsonResponse containing a list of discount items with name, value, and expiration
+    """
+    # Get the event run context from the request and identifier
     ctx = get_event_run(request, s)
     now = timezone_now()
 
@@ -917,6 +963,7 @@ def discount_list(request, s):
     AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"], expires__lte=now).delete()
 
     # Get remaining valid discount items with optimized query
+    # Filter for current user/run and non-expired items
     discount_items = (
         AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"])
         .select_related("disc")
@@ -924,9 +971,11 @@ def discount_list(request, s):
     )
 
     # Build response list efficiently
+    # Convert discount items to JSON-serializable format
     lst = []
     for aid in discount_items:
         j = {"name": aid.disc.name, "value": aid.value}
+        # Format expiration time or set empty string for permanent discounts
         if aid.expires:
             j["expires"] = aid.expires.strftime("%H:%M")
         else:
@@ -1085,19 +1134,37 @@ def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
     return render(request, "larpmanager/event/gift_edit.html", ctx)
 
 
-def get_registration_gift(ctx, r, request):
+def get_registration_gift(ctx: dict, r: int | None, request) -> Registration | None:
+    """Get a registration with gift redeem code for the current user.
+
+    Args:
+        ctx: Context dictionary containing run information
+        r: Registration primary key to lookup
+        request: HTTP request object with authenticated user
+
+    Returns:
+        Registration object if found and valid, None otherwise
+
+    Raises:
+        Http404: If registration lookup fails or invalid parameters provided
+    """
     reg = None
+
+    # Early return if no registration ID provided
     if r:
         try:
+            # Query for valid gift registration matching all criteria
             reg = Registration.objects.get(
                 pk=r,
                 run=ctx["run"],
                 member=request.user.member,
-                redeem_code__isnull=False,
-                cancellation_date__isnull=True,
+                redeem_code__isnull=False,  # Must have a redeem code (gift)
+                cancellation_date__isnull=True,  # Must not be cancelled
             )
         except Exception as err:
+            # Convert any lookup error to 404 for security
             raise Http404("what are you trying to do?") from err
+
     return reg
 
 

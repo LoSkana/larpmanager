@@ -126,12 +126,16 @@ def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe
 
 
 @login_required
-def orga_roles(request, s):
+def orga_roles(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle organization roles management for an event."""
+    # Check if user has permission to manage roles for this event
     ctx = check_event_permission(request, s, "orga_roles")
 
     def def_callback(ctx):
+        # Create default "Organizer" role if none exist
         return EventRole.objects.create(event=ctx["event"], number=1, name="Organizer")
 
+    # Prepare the roles list with permissions and existing roles
     prepare_roles_list(ctx, EventPermission, EventRole.objects.filter(event=ctx["event"]), def_callback)
 
     return render(request, "larpmanager/orga/roles.html", ctx)
@@ -258,13 +262,36 @@ def orga_features(request, s):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def orga_features_go(request, ctx, slug, on=True):
+def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True) -> Feature:
+    """Toggle a feature for an event.
+
+    Args:
+        request: The HTTP request object
+        ctx: Context dictionary containing event and feature information
+        slug: The feature slug to toggle
+        on: Whether to activate (True) or deactivate (False) the feature
+
+    Returns:
+        The feature object that was toggled
+
+    Raises:
+        Http404: If the feature is an overall feature (not event-specific)
+    """
+    # Get the feature from context using the slug
     get_feature(ctx, slug)
+
+    # Check if feature is overall - these cannot be toggled per event
     if ctx["feature"].overall:
         raise Http404("overall feature!")
+
+    # Get current event features and target feature ID
     feat_id = list(ctx["event"].features.values_list("id", flat=True))
     f_id = ctx["feature"].id
+
+    # Clear cache and media for the current run
     clear_run_cache_and_media(ctx["run"])
+
+    # Handle feature activation/deactivation logic
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
@@ -277,11 +304,12 @@ def orga_features_go(request, ctx, slug, on=True):
         ctx["event"].features.remove(f_id)
         msg = _("Feature %(name)s deactivated") + "!"
 
+    # Save the event and update cached features for child events
     ctx["event"].save()
-    # update cached event features, for itself, and the events for which they are parent
     for ev in Event.objects.filter(parent=ctx["event"]):
         ev.save()
 
+    # Format and display the success message
     msg = msg % {"name": _(ctx["feature"].name)}
     if ctx["feature"].after_text:
         msg += " " + ctx["feature"].after_text
@@ -621,17 +649,41 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     return exports
 
 
-def _reg_template(ctx, typ, value_mapping):
+def _reg_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[str, list[str], list[list[str]]]]:
+    """Generate registration template data for export.
+
+    Creates a template with predefined default values and dynamic fields
+    based on the provided context and value mapping.
+
+    Args:
+        ctx: Context dictionary containing columns and fields information
+        typ: Template type identifier for naming
+        value_mapping: Mapping of field types to their default values
+
+    Returns:
+        List of tuples containing template name, column keys, and row values
+    """
+    # Extract existing column keys from context
     keys = list(ctx["columns"][0].keys())
     vals = []
+
+    # Define default values for common registration fields
     defs = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
+
+    # Add default values for existing fields only
     for field, value in defs.items():
         if field not in keys:
             continue
         vals.append(value)
+
+    # Extend keys with additional context fields
     keys.extend(ctx["fields"])
+
+    # Add values for dynamic fields based on field type mapping
     for _field, field_typ in ctx["fields"].items():
         vals.append(value_mapping[field_typ])
+
+    # Create export tuple with template name, keys, and values
     exports = [(f"{typ} - template", keys, [vals])]
     return exports
 

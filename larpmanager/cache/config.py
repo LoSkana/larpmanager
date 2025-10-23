@@ -40,10 +40,23 @@ def get_configs(element):
     return get_element_configs(element.id, element._meta.model_name.lower())
 
 
-def get_element_configs(element_id, model_name):
+def get_element_configs(element_id: int, model_name: str) -> dict:
+    """Get element configurations from cache or database.
+
+    Args:
+        element_id: The ID of the element to get configs for
+        model_name: The name of the model to retrieve configs from
+
+    Returns:
+        Dictionary containing the element configurations
+    """
+    # Generate cache key for the element and model combination
     key = cache_configs_key(element_id, model_name)
+
+    # Try to get cached result first
     res = cache.get(key)
     if res is None:
+        # Cache miss: update configs from database and cache the result
         res = update_configs(element_id, model_name)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res

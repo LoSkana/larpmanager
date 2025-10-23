@@ -24,6 +24,7 @@ from django.db.models import Count
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.event import Run
 from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
@@ -38,23 +39,47 @@ def cache_reg_counts_key(run_id):
     return f"reg_counts{run_id}"
 
 
-def get_reg_counts(run, reset=False):
+def get_reg_counts(run: Run, reset: bool = False) -> dict:
+    """Get registration counts for a run, with caching support.
+
+    Args:
+        run: The run instance to get counts for
+        reset: If True, force cache refresh
+
+    Returns:
+        Dictionary containing registration count data
+    """
+    # Generate cache key for this run
     key = cache_reg_counts_key(run.id)
+
+    # Check if we should bypass cache
     if reset:
         res = None
     else:
         res = cache.get(key)
+
+    # Update and cache if not found
     if res is None:
         res = update_reg_counts(run)
         cache.set(key, res, timeout=60 * 5)
+
     return res
 
 
-def add_count(s, param, v=1):
+def add_count(s: dict, param: str, v: int = 1) -> None:
+    """Add or increment a counter value in a dictionary.
+
+    Args:
+        s: Dictionary to modify
+        param: Key to add or increment
+        v: Value to add (default: 1)
+    """
+    # Initialize parameter if not present
     if param not in s:
         s[param] = v
         return
 
+    # Increment existing value
     s[param] += v
 
 
