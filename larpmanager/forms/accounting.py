@@ -74,23 +74,16 @@ class OrgaPersonalExpenseForm(MyFormRun):
         exclude = ("member", "is_approved", "inv", "hide")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the form and conditionally remove balance field.
-
-        Calls the parent constructor and removes the 'balance' field if the
-        'ita_balance' feature is not enabled in the form parameters.
+        """Initialize form and conditionally remove balance field based on feature flag.
 
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-
-        Returns:
-            None: This method initializes the object and returns nothing.
         """
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Check if Italian balance feature is disabled in form parameters
-        # and remove the balance field when feature is not available
+        # Remove balance field if Italian balance feature is not enabled
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
@@ -111,13 +104,18 @@ class OrgaExpenseForm(MyFormRun):
         exclude = ("inv", "hide")
         widgets = {"member": RunMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure fields based on run features and association config."""
         super().__init__(*args, **kwargs)
+
+        # Configure member widget with run context
         self.fields["member"].widget.set_run(self.params["run"])
 
+        # Remove balance field if Italian balance feature is disabled
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
+        # Remove approval field if organization has disabled expense approval
         if get_assoc_config(self.params["event"].assoc_id, "expense_disable_orga", False):
             self.delete_field("is_approved")
 
@@ -134,10 +132,15 @@ class OrgaTokenForm(MyFormRun):
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
         widgets = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with token-specific page information and field configuration."""
         super().__init__(*args, **kwargs)
+
+        # Set page metadata with token name
         self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
         self.page_title = self.params["token_name"]
+
+        # Configure initial form values and widget
         self.initial["oth"] = OtherChoices.TOKEN
         self.fields["member"].widget.set_run(self.params["run"])
 
@@ -173,8 +176,10 @@ class OrgaPaymentForm(MyFormRun):
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
         widgets = {"reg": EventRegS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure registration field for the event."""
         super().__init__(*args, **kwargs)
+        # Configure registration widget with event context and make field required
         self.fields["reg"].widget.set_event(self.params["event"])
         self.fields["reg"].required = True
 
@@ -206,7 +211,8 @@ class ExeOutflowForm(MyForm):
 
 
 class OrgaOutflowForm(ExeOutflowForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with auto_run enabled by default."""
         self.auto_run = True
         super().__init__(*args, **kwargs)
 
@@ -278,7 +284,8 @@ class ExeInvoiceForm(MyForm):
         exclude = ("hide", "reg", "key", "idx", "txn_id")
         widgets = {"member": AssocMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
@@ -291,12 +298,19 @@ class ExeCreditForm(MyForm):
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with credit assignment configuration."""
         super().__init__(*args, **kwargs)
+
+        # Set page title with credit name
         self.page_title = _("Assignment") + f" {self.params['credit_name']}"
+
+        # Configure run choices and association widgets
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
+
+        # Set other field as hidden with credit value
         self.fields["oth"].widget = forms.HiddenInput()
         self.initial["oth"] = OtherChoices.CREDIT
 
@@ -307,13 +321,20 @@ class ExeTokenForm(MyForm):
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with page title, info, and field configurations."""
         super().__init__(*args, **kwargs)
+
+        # Set page title and info with token name
         self.page_title = _("Assignment") + f" {self.params['token_name']}"
         self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
+
+        # Configure run choices and association filtering
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
+
+        # Hide 'oth' field and set default value
         self.fields["oth"].widget = forms.HiddenInput()
         self.initial["oth"] = OtherChoices.TOKEN
 
@@ -379,8 +400,10 @@ class ExeCollectionForm(CollectionNewForm):
         fields = ("name", "member", "status", "contribute_code", "redeem_code")
         widgets = {"member": AssocMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member field widget with association."""
         super().__init__(*args, **kwargs)
+        # Set association for member widget filtering
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
 

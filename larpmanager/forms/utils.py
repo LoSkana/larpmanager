@@ -19,9 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from collections import defaultdict
 from datetime import datetime, timedelta
+from typing import Any
 
 from django import forms
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -308,10 +309,15 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
     def set_exclude(self, excl):
         self.excl = excl
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Event]:
+        """Get non-template events for the association, optionally excluding a specific event."""
+        # Filter non-template events for the association
         que = Event.objects.filter(assoc_id=self.aid, template=False)
+
+        # Exclude specific event if excl attribute is set
         if hasattr(self, "excl"):
             que = que.exclude(pk=self.excl)
+
         return que
 
 
@@ -329,10 +335,15 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
     def set_exclude(self, excl):
         self.excl = excl
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Event]:
+        """Return events excluding templates and child events."""
+        # Filter for parent events only, excluding templates
         que = Event.objects.filter(parent_id__isnull=True, assoc_id=self.aid, template=False)
+
+        # Exclude specific event if specified
         if hasattr(self, "excl"):
             que = que.exclude(pk=self.excl)
+
         return que
 
 
@@ -383,7 +394,8 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         "user__email__icontains",
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and set allowed attribute to None."""
         super().__init__(*args, **kwargs)
         self.allowed = None
 
@@ -404,7 +416,15 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     def get_queryset(self):
         return Member.objects.filter(pk__in=self.allowed)
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: Any) -> str:
+        """Generate label combining object display name and email.
+
+        Args:
+            obj: Object with display_real() method and email attribute.
+
+        Returns:
+            Formatted string with display name and email.
+        """
         # noinspection PyUnresolvedReferences
         return f"{obj.display_real()} - {obj.email}"
 
@@ -464,7 +484,8 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
     def get_queryset(self):
         return Registration.objects.prefetch_related("run", "run__event").filter(run__event=self.event)
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for instance, appending cancellation marker if cancelled."""
         s = str(obj)
         # noinspection PyUnresolvedReferences
         if obj.cancellation_date:

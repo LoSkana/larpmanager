@@ -231,10 +231,22 @@ def update_index_permission(typ: str) -> list[dict]:
     return res
 
 
-def get_cache_index_permission(typ):
+def get_cache_index_permission(typ: type) -> list:
+    """Get or update cached permission index for a given type.
+
+    Args:
+        typ: The permission type to retrieve from cache.
+
+    Returns:
+        The cached or freshly updated permission index.
+    """
+    # Attempt to retrieve from cache
     res = cache.get(index_permission_key(typ))
+
+    # Update cache if not found
     if res is None:
         res = update_index_permission(typ)
+
     return res
 
 

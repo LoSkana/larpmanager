@@ -600,16 +600,26 @@ def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int 
     return render(request, "larpmanager/event/register.html", ctx)
 
 
-def _apply_ticket(ctx, tk):
+def _apply_ticket(ctx: dict, tk: int | None) -> None:
+    """Apply ticket information to context if ticket exists.
+
+    Args:
+        ctx: Context dictionary to update with ticket data
+        tk: Ticket ID to retrieve, or None
+    """
     if not tk:
         return
 
     try:
+        # Retrieve ticket and set tier in context
         tick = RegistrationTicket.objects.get(pk=tk)
         ctx["tier"] = tick.tier
+
+        # Remove closed status for staff/NPC tickets
         if tick.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in ctx["run"].status:
             del ctx["run"].status["closed"]
 
+        # Store ticket ID in context
         ctx["ticket"] = tk
     except ObjectDoesNotExist:
         pass
@@ -711,9 +721,10 @@ def _register_prepare(ctx, reg):
     return new_reg
 
 
-def register_reduced(request, s):
+def register_reduced(request: HttpRequest, s: str) -> JsonResponse:
+    """Return count of available reduced-price tickets for an event run."""
     ctx = get_event_run(request, s)
-    # count the number of reduced tickets
+    # Count reduced tickets still available for this run
     ct = get_reduced_available_count(ctx["run"])
     return JsonResponse({"res": ct})
 

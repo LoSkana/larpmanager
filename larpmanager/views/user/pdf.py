@@ -63,10 +63,27 @@ def character_pdf_sheet(request: HttpRequest, s: str, num: int) -> HttpResponse:
 
 
 @login_required
-def character_pdf_sheet_friendly(request, s, num):
+def character_pdf_sheet_friendly(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate a printer-friendly character sheet PDF.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        num: Character number
+
+    Returns:
+        HttpResponse containing the printer-friendly character PDF
+    """
+    # Get event run context and validate signup access
     ctx = get_event_run(request, s, signup=True)
+
+    # Verify PDF printing permissions
     check_print_pdf(ctx)
+
+    # Retrieve and validate character access
     get_char_check(request, ctx, num, True)
+
+    # Generate and return the printer-friendly PDF
     return print_character_friendly(ctx)
 
 

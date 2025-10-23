@@ -81,8 +81,21 @@ from larpmanager.views.user.casting import casting_details, get_casting_preferen
 from larpmanager.views.user.registration import init_form_submitted
 
 
-def character(request, s, num):
+def character(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Return character sheet for specified character in event run.
+
+    Args:
+        request: HTTP request object
+        s: Event run slug identifier
+        num: Character number/ID
+
+    Returns:
+        Rendered character sheet response
+    """
+    # Get event run context and verify status
     ctx = get_event_run(request, s, status=True)
+
+    # Validate character access permissions
     get_char_check(request, ctx, num)
 
     return _character_sheet(request, ctx)

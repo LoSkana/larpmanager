@@ -794,9 +794,12 @@ def acc_webhook_redsys(request):
 
 
 @csrf_exempt
-def acc_redsys_ko(request):
+def acc_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
+    """Handle failed Redsys payment callback."""
     # printpretty_request(request))
     # err_paypal(pretty_request(request))
+
+    # Notify user about payment failure
     messages.error(request, _("The payment has not been completed"))
     return redirect("accounting")
 
@@ -844,10 +847,14 @@ def acc_profile_check(request: HttpRequest, mes: str, inv) -> HttpResponse:
     return acc_redirect(inv)
 
 
-def acc_redirect(inv):
+def acc_redirect(inv: PaymentInvoice) -> HttpResponseRedirect:
+    """Redirect to appropriate page after payment based on invoice type."""
+    # Redirect to run gallery if invoice is for registration
     if inv.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(id=inv.idx)
         return redirect("gallery", s=reg.run.get_slug())
+
+    # Default redirect to accounting page
     return redirect("accounting")
 
 

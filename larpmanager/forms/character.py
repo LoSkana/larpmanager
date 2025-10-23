@@ -97,33 +97,21 @@ class CharacterForm(WritingForm, BaseWritingForm):
     def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
         """Initialize character form with custom fields and configuration.
 
-        Sets up the character creation/editing form including faction selection,
-        dynamic custom fields based on event configuration, and optional
-        character completion workflow for approval processes.
-
         Args:
             *args: Positional arguments passed to parent form class.
-            **kwargs: Keyword arguments passed to parent form class. Must include
-                     'params' dict with event, run, and features configuration.
+            **kwargs: Keyword arguments including 'params' dict with event, run,
+                and features configuration.
 
         Raises:
             KeyError: If required 'params' key is missing from kwargs.
-
-        Note:
-            The 'params' dict should contain:
-            - event: Event instance for context
-            - run: Run instance for current event run
-            - features: Available features configuration
         """
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
 
         # Initialize storage for field details and metadata
-        # This dict will store additional information about dynamic fields
         self.details: dict[str, Any] = {}
 
         # Set up character-specific fields including factions and custom questions
-        # This method handles dynamic field creation based on event configuration
         self._init_character()
 
     def check_editable(self, question) -> bool:

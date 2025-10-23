@@ -86,8 +86,18 @@ def get_single_cache_text_field(el_id: str, f: str, v: str | None) -> tuple[str,
 # Writing
 
 
-def init_cache_text_field(typ, event):
+def init_cache_text_field(typ: type, event: Event) -> dict:
+    """Initialize cache for text fields of model instances related to an event.
+
+    Args:
+        typ: Model class to filter instances from.
+        event: Event instance to get the parent class from.
+
+    Returns:
+        Dictionary mapping instance identifiers to cached text field data.
+    """
     res = {}
+    # Iterate through all instances of the given type for the event's parent
     for el in typ.objects.filter(event=event.get_class_parent(typ)):
         _init_element_cache_text_field(el, res, typ)
     return res
@@ -206,8 +216,17 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
 # Registration
 
 
-def init_cache_reg_field(run):
+def init_cache_reg_field(run: Run) -> dict:
+    """Initialize registration field cache for all registrations in a run.
+
+    Args:
+        run: The Run instance to initialize cache for.
+
+    Returns:
+        Dictionary mapping registration field cache data.
+    """
     res = {}
+    # Iterate through all registrations for this run and populate cache
     for el in Registration.objects.filter(run=run):
         _init_element_cache_reg_field(el, res)
     return res

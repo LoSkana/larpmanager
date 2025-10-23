@@ -44,7 +44,6 @@ class PxBaseForm(MyForm):
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
         """
-        # Call parent class constructor with all provided arguments
         super().__init__(*args, **kwargs)
 
 
@@ -60,27 +59,6 @@ class OrgaDeliveryPxForm(PxBaseForm):
         exclude = ("number",)
 
         widgets = {"characters": EventCharacterS2WidgetMulti}
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the instance with variable arguments.
-
-        This constructor accepts any combination of positional and keyword
-        arguments and forwards them to the parent class constructor.
-
-        Parameters
-        ----------
-        *args : Any
-            Variable length argument list passed to parent class.
-        **kwargs : Any
-            Arbitrary keyword arguments passed to parent class.
-
-        Returns
-        -------
-        None
-            This method does not return a value.
-        """
-        # Call parent class constructor with all provided arguments
-        super().__init__(*args, **kwargs)
 
 
 class OrgaAbilityPxForm(PxBaseForm):
@@ -100,18 +78,22 @@ class OrgaAbilityPxForm(PxBaseForm):
             "requirements": EventWritingOptionS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with event-specific ability configuration."""
         super().__init__(*args, **kwargs)
 
+        # Configure prerequisite and requirement widgets with event context
         for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
 
         px_user = get_event_config(self.params["event"].id, "px_user", False)
 
+        # Set ability type choices from event-specific elements
         self.fields["typ"].choices = [
             (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")
         ]
 
+        # Remove user-experience fields if px_user is disabled
         if not px_user:
             self.delete_field("requirements")
             self.delete_field("prerequisites")

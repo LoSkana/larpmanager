@@ -47,6 +47,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.association import AssociationSkin
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -269,14 +270,29 @@ class OrgaFeatureForm(FeatureForm):
         model = Event
         fields = []
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and features."""
         super().__init__(*args, **kwargs)
         self._init_features(False)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> EventConfig:
+        """Save the form instance and update event features cache.
+
+        Args:
+            commit: Whether to save the instance to database.
+
+        Returns:
+            The saved EventConfig instance.
+        """
+        # Save form without committing to database yet
         instance = super().save(commit=False)
+
+        # Update associated features for this event
         self._save_features(instance)
+
+        # Invalidate cached event features
         clear_event_features_cache(instance.id)
+
         return instance
 
 
@@ -914,9 +930,13 @@ class OrgaAppearanceForm(MyCssForm):
         for m in dl:
             del self.fields[m]
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> AssociationSkin:
+        """Save the form and generate a unique CSS code for the skin."""
+        # Generate unique 32-character identifier for CSS code
         self.instance.css_code = generate_id(32)
         instance = super().save()
+
+        # Save associated CSS file
         self.save_css(instance)
         return instance
 
@@ -1007,15 +1027,14 @@ class OrgaEventTextForm(MyForm):
     def clean(self) -> dict:
         """Validate event text uniqueness by type and language.
 
-        Ensures that only one default text exists per type and that no duplicate
-        language-type combinations exist for the same event.
+        Ensures only one default text exists per type and prevents duplicate
+        language-type combinations for the same event.
 
         Returns:
-            dict: The cleaned form data after validation.
+            Cleaned form data after validation.
 
         Raises:
-            ValidationError: If a default text already exists for the given type,
-                           or if a text with the same language and type already exists.
+            ValidationError: If default or language-type combination already exists.
         """
         cleaned_data = super().clean()
 
@@ -1026,14 +1045,14 @@ class OrgaEventTextForm(MyForm):
 
         # Validate default text uniqueness per type
         if default:
-            # Check if there is already a default with that type
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
+            # Ensure the existing default is not the current instance being edited
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Validate language-type combination uniqueness
-        # Check if there is already a language with that type
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
+        # Ensure the existing combination is not the current instance being edited
         if res.count() > 0 and res.first().pk != self.instance.pk:
             self.add_error("language", "There is already a language of this type!")
 
@@ -1267,22 +1286,27 @@ class ExeEventForm(OrgaEventForm):
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Event:
         """Save event with optional template copying.
 
         Args:
-            commit: Whether to commit changes to database
+            commit: Whether to commit changes to database.
 
         Returns:
-            Event: Saved event instance
+            Saved event instance.
         """
         instance = super().save(commit=False)
 
+        # Copy template event data if template feature enabled and event is new
         if "template" in self.params["features"] and not self.instance.pk:
             if "template_event" in self.cleaned_data and self.cleaned_data["template_event"]:
                 event_id = self.cleaned_data["template_event"].id
                 event = Event.objects.get(pk=event_id)
+
+                # Save instance first to get pk for M2M and FK relations
                 instance.save()
+
+                # Copy features and configurations from template
                 instance.features.add(*event.features.all())
                 copy_class(instance.id, event_id, EventConfig)
                 copy_class(instance.id, event_id, EventRole)

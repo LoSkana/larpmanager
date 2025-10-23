@@ -58,19 +58,13 @@ class ExeWarehouseItemForm(MyForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the form with association-specific widget configuration.
-
-        Sets up container and tags widgets with the association ID from params,
-        then removes optional warehouse fields based on form configuration.
+        """Initialize form with association-specific widget configuration.
 
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
-
-        Returns:
-            None
         """
-        # Initialize parent form with provided arguments
+        # Initialize parent form
         super().__init__(*args, **kwargs)
 
         # Configure widgets with association ID for proper filtering
@@ -104,17 +98,23 @@ class ExeWarehouseTagForm(MyForm):
             "description": Textarea(attrs={"rows": 5}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with warehouse items field for the association."""
         super().__init__(*args, **kwargs)
 
+        # Create dynamic items field filtered by association
         self.fields["items"] = forms.ModelMultipleChoiceField(
             queryset=WarehouseItem.objects.filter(assoc_id=self.params["a_id"]),
             label=_("Items"),
             widget=WarehouseItemS2WidgetMulti,
             required=False,
         )
+
+        # Set initial selected items if editing existing instance
         if self.instance.pk:
             self.initial["items"] = self.instance.items.values_list("pk", flat=True)
+
+        # Configure widget with association context
         self.fields["items"].widget.set_assoc(self.params["a_id"])
 
 
@@ -131,10 +131,13 @@ class ExeWarehouseMovementForm(MyForm):
             "item": WarehouseItemS2Widget,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure warehouse item field for association."""
         super().__init__(*args, **kwargs)
+        # Configure item widget with association ID
         self.fields["item"].widget.set_assoc(self.params["a_id"])
 
+        # Remove optional warehouse fields
         _delete_optionals_warehouse(self)
 
 

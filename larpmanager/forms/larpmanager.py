@@ -17,9 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django import forms
 from django.forms import Textarea
+from django.http import HttpRequest
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
@@ -28,10 +30,14 @@ from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.common import get_recaptcha_secrets
 
 
-def _get_captcha(form, request):
+def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
+    """Add reCAPTCHA field to form if secrets are configured."""
+    # Get reCAPTCHA public and private keys from settings
     public, private = get_recaptcha_secrets(request)
     if not public or not private:
         return
+
+    # Add reCAPTCHA v3 field to form
     form.fields["captcha"] = ReCaptchaField(widget=ReCaptchaV3, label="", public_key=public, private_key=private)
 
 
@@ -62,10 +68,14 @@ class LarpManagerTicketForm(MyForm):
         fields = ("email", "content", "screenshot")
         widgets = {"content": Textarea(attrs={"rows": 5})}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and setup captcha for unauthenticated users."""
         super().__init__(*args, **kwargs)
+
+        # Add captcha field for unauthenticated users
         if not self.params["request"].user.is_authenticated:
             _get_captcha(self, self.params["request"])
 
+        # Remove screenshot field if reason is provided
         if self.params.get("reason"):
             del self.fields["screenshot"]

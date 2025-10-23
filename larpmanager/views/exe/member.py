@@ -377,10 +377,17 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     return render(request, "larpmanager/exe/users/member.html", ctx)
 
 
-def member_add_accountingitempayment(ctx, request):
+def member_add_accountingitempayment(ctx: dict, request: HttpRequest) -> dict:
+    """Add accounting item payment information to context for a member.
+
+    Retrieves non-hidden payments for the member and sets display type based on payment method.
+    """
+    # Fetch visible payments for the member in the current association
     ctx["pays"] = AccountingItemPayment.objects.filter(
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("reg")
+
+    # Set display type based on payment method
     for el in ctx["pays"]:
         if el.pay == PaymentChoices.TOKEN:
             el.typ = ctx.get("token_name", _("Credits"))
@@ -390,10 +397,14 @@ def member_add_accountingitempayment(ctx, request):
             el.typ = el.get_pay_display()
 
 
-def member_add_accountingitemother(ctx, request):
+def member_add_accountingitemother(ctx: dict, request: HttpRequest) -> None:
+    """Add accounting other items to member context with localized type labels."""
+    # Query non-hidden accounting items for the member in current association
     ctx["others"] = AccountingItemOther.objects.filter(
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("run")
+
+    # Set localized type labels based on item category
     for el in ctx["others"]:
         if el.oth == OtherChoices.TOKEN:
             el.typ = ctx.get("token_name", _("Credits"))
@@ -852,10 +863,15 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_read_mail(request, nm):
+def exe_read_mail(request: HttpRequest, nm: str) -> HttpResponse:
+    """Display archived email details for organization executives."""
+    # Verify user has email archive access permissions
     ctx = check_assoc_permission(request, "exe_archive_email")
     ctx["exe"] = True
+
+    # Retrieve and add email data to context
     ctx["email"] = get_mail(request, ctx, nm)
+
     return render(request, "larpmanager/exe/users/read_mail.html", ctx)
 
 

@@ -1,5 +1,5 @@
 name,path,invocation_count,function_number
-get,larpmanager/templatetags/show_tags.py,543,1
+get,larpmanager/templatetags/show_tags.py,542,1
 save,larpmanager/forms/accounting.py,244,1
 save,larpmanager/forms/association.py,244,1
 save,larpmanager/forms/association.py,244,2
@@ -340,7 +340,6 @@ cache_text_field_key,larpmanager/cache/text_fields.py,6,1
 check_event_feature,larpmanager/utils/exceptions.py,6,1
 check_lm_admin,larpmanager/utils/auth.py,6,1
 clear_event_fields_cache,larpmanager/cache/fields.py,6,1
-clear_run_event_links_cache,larpmanager/cache/links.py,6,1
 format_decimal,larpmanager/templatetags/show_tags.py,6,1
 get_assoc_executives,larpmanager/models/access.py,6,1
 get_char,larpmanager/utils/common.py,6,1
@@ -369,6 +368,7 @@ check_field,larpmanager/utils/common.py,5,1
 clear_event_features_cache,larpmanager/cache/feature.py,5,1
 clear_event_relationships_cache,larpmanager/cache/rels.py,5,1
 clear_registration_counts_cache,larpmanager/cache/registration.py,5,1
+clear_run_event_links_cache,larpmanager/cache/links.py,5,1
 exec_bulk,larpmanager/utils/bulk.py,5,1
 get_element_config,larpmanager/cache/config.py,5,1
 get_filepath,larpmanager/models/writing.py,5,1

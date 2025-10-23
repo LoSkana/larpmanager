@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -175,10 +176,13 @@ def _init_features(assoc: Association, el: dict) -> None:
             el["centauri_prob"] = prob
 
 
-def _init_member_fields(assoc, el):
+def _init_member_fields(assoc: Association, el: dict[str, Any]) -> None:
+    """Initialize member fields set from association's mandatory and optional fields."""
     el["members_fields"] = set()
+    # Collect mandatory fields
     for fl in assoc.mandatory_fields.split(","):
         el["members_fields"].add(fl)
+    # Collect optional fields
     for fl in assoc.optional_fields.split(","):
         el["members_fields"].add(fl)
 
