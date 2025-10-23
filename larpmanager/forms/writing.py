@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from typing import Any
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -109,24 +109,42 @@ class PlayerRelationshipForm(MyForm):
         self.fields["target"].widget.set_event(self.params["run"].event)
         self.fields["target"].required = True
 
-    def clean(self):
+    def clean(self) -> dict:
+        """Clean and validate form data for player relationships.
+
+        Validates that:
+        - User cannot create relationship with themselves
+        - No duplicate relationships exist for the same registration and target
+
+        Returns:
+            dict: Cleaned form data
+
+        Raises:
+            ValidationError: When validation rules are violated
+        """
         cleaned_data = super().clean()
 
+        # Check if user is trying to create relationship with themselves
         if self.cleaned_data["target"].id == self.params["char"]["id"]:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
+        # Check for existing relationships with same target and registration
         try:
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
+            # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship") + "!")
         except ObjectDoesNotExist:
+            # No existing relationship found - this is valid
             pass
 
         return cleaned_data
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save the form instance, setting registration if new."""
         instance = super().save(commit=False)
 
+        # Set registration for new instances
         if not instance.pk:
             instance.reg = self.params["run"].reg
 
@@ -163,7 +181,9 @@ class BaseWritingForm(BaseRegistrationForm):
     question_class = WritingQuestion
     instance_key = "element_id"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize form with default show_link configuration."""
+        # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
         # noinspection PyProtectedMember
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)

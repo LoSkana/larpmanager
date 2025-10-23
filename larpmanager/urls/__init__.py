@@ -65,10 +65,21 @@ handler404 = "larpmanager.views.error_404"
 handler500 = "larpmanager.views.error_500"
 
 
-def walk_patterns(patterns):
+def walk_patterns(patterns) -> set[str]:
+    """Extract URL prefixes from Django URL patterns.
+
+    Args:
+        patterns: Collection of URL pattern objects.
+
+    Returns:
+        Set of URL prefixes without angle brackets or regex anchors.
+    """
     prefixes = set()
     for element in patterns:
+        # Extract first path segment from pattern string
         part = str(element.pattern).strip("/").split("/")[0]
+
+        # Remove regex anchor and filter valid prefixes
         part = part.replace("^", "")
         if part and not part.startswith("<"):
             prefixes.add(part)

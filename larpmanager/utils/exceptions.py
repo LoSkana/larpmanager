@@ -19,6 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from django.http import HttpRequest
 
+from larpmanager.models.base import Feature
+from larpmanager.models.event import Run
+
 
 class FeatureError(Exception):
     """Exception raised when a required feature is not enabled.
@@ -29,10 +32,20 @@ class FeatureError(Exception):
         path (str): Request path where the error occurred
     """
 
-    def __init__(self, feature, run, path):
+    def __init__(self, feature: Feature, run: Run, path: str) -> None:
+        """Initialize the object with feature, run, and path parameters.
+
+        Args:
+            feature: The feature object to associate
+            run: The run object to associate
+            path: The file path string
+        """
         super().__init__()
+        # Store the feature reference
         self.feature = feature
+        # Store the run reference
         self.run = run
+        # Store the path string
         self.path = path
 
 

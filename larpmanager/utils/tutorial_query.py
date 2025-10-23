@@ -23,14 +23,35 @@ TUTORIAL_INDEX = "data/whoosh/tutorial_index"
 GUIDE_INDEX = "data/whoosh/GUIDE_INDEX"
 
 
-def _save_index(index_dir, schema):
+def _save_index(index_dir: str, schema) -> object:
+    """Create or open a Whoosh index directory.
+
+    Args:
+        index_dir: Path to the index directory
+        schema: Whoosh schema object for index creation
+
+    Returns:
+        Whoosh index object
+    """
+    # Create directory if it doesn't exist and return new index
     if not os.path.exists(index_dir):
         os.makedirs(index_dir, exist_ok=True)
         return create_in(index_dir, schema, "MAIN")
+
+    # Open existing index directory
     return open_dir(index_dir, "MAIN")
 
 
-def get_or_create_index_tutorial(index_dir):
+def get_or_create_index_tutorial(index_dir: str) -> object:
+    """Get or create a tutorial search index with predefined schema.
+
+    Args:
+        index_dir: Directory path where the index will be stored.
+
+    Returns:
+        The created or existing search index object.
+    """
+    # Define schema for tutorial search indexing
     schema = Schema(
         tutorial_id=ID(stored=True),
         slug=TEXT(stored=True),
@@ -38,6 +59,7 @@ def get_or_create_index_tutorial(index_dir):
         section_title=TEXT(stored=True),
         content=TEXT(stored=True),
     )
+    # Create and return the index using the defined schema
     return _save_index(index_dir, schema)
 
 
@@ -99,20 +121,34 @@ def add_tutorial_to_search_index(tutorial_id: int) -> None:
 
 
 @background_auto(queue="whoosh")
-def remove_tutorial_from_search_index(tutorial_id):
+def remove_tutorial_from_search_index(tutorial_id: int) -> None:
+    """Remove a tutorial from the search index by ID."""
+    # Get or create the tutorial index
     ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
+
+    # Create writer and delete tutorial by ID
     writer = ix.writer()
     writer.delete_by_term("tutorial_id", str(tutorial_id))
     writer.commit()
 
 
-def get_or_create_index_guide(index_dir):
+def get_or_create_index_guide(index_dir: str) -> object:
+    """Get or create a search index for guide documents.
+
+    Args:
+        index_dir: Directory path where the index will be stored.
+
+    Returns:
+        The created or existing search index object.
+    """
+    # Define schema for guide documents with searchable fields
     schema = Schema(
         guide_id=ID(stored=True),
         slug=TEXT(stored=True),
         title=TEXT(stored=True),
         content=TEXT(stored=True),
     )
+    # Create or open the index using the defined schema
     return _save_index(index_dir, schema)
 
 
@@ -147,8 +183,12 @@ def add_guide_to_search_index(guide_id):
 
 
 @background_auto(queue="whoosh")
-def remove_guide_from_search_index(guide_id):
+def remove_guide_from_search_index(guide_id: int) -> None:
+    """Remove a guide from the search index by ID."""
+    # Get or create the guide search index
     ix = get_or_create_index_guide(GUIDE_INDEX)
+
+    # Create writer and delete guide by ID
     writer = ix.writer()
     writer.delete_by_term("guide_id", str(guide_id))
     writer.commit()
@@ -158,10 +198,22 @@ def similarity(a, b):
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
 
 
-def get_sorted_permissions(model, query):
+def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
+    """Get permissions filtered by query and sorted by name similarity.
+
+    Args:
+        model: The model class to query permissions from
+        query: Search string to filter permissions by name or description
+
+    Returns:
+        List of permission dictionaries sorted by name similarity to query
+    """
+    # Filter permissions by name or description containing the query
     permissions = model.objects.filter(Q(name__icontains=query) | Q(descr__icontains=query)).values(
         "name", "slug", "descr"
     )
+
+    # Sort by similarity to query string, most similar first
     return sorted(permissions, key=lambda p: similarity(p["name"], query), reverse=True)
 
 

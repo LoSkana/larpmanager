@@ -386,9 +386,26 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     instance.photo = ContentFile(out.read(), name=basename)
 
 
-def _get_extension(f, img):
+def _get_extension(f, img) -> str:
+    """Get the appropriate image format extension.
+
+    Determines the correct image format based on the file extension and image format.
+    Falls back to JPEG if format cannot be determined.
+
+    Args:
+        f: File object with a name attribute
+        img: Image object with a format attribute
+
+    Returns:
+        str: Image format string (e.g., 'JPEG', 'PNG', 'WEBP')
+    """
+    # Extract file extension and normalize to lowercase
     ext = os.path.splitext(f.name)[1].lower()
+
+    # Get image format, defaulting to empty string if None
     fmt = (img.format or "").upper()
+
+    # If no format detected from image, determine from file extension
     if not fmt:
         if ext in (".jpg", ".jpeg"):
             fmt = "JPEG"
@@ -397,19 +414,39 @@ def _get_extension(f, img):
         elif ext == ".webp":
             fmt = "WEBP"
         else:
+            # Default fallback format
             fmt = "JPEG"
     return fmt
 
 
-def _check_new(f, instance, sender):
+def _check_new(f, instance, sender) -> bool:
+    """Check if the file field represents a new file upload.
+
+    Args:
+        f: The file field to check
+        instance: The model instance being saved
+        sender: The model class that sent the signal
+
+    Returns:
+        True if this is not a new file upload (file already exists and unchanged),
+        False if this is a new file upload or the file has changed
+    """
+    # Check if instance already exists in database
     if instance.pk:
         try:
+            # Retrieve existing instance with only photo field for efficiency
             old = sender.objects.filter(pk=instance.pk).only("photo").first()
+
             if old:
+                # Get the old file name, defaulting to empty string if no photo
                 old_name = old.photo.name if old.photo else ""
+
+                # Compare file names and check if no new file data is present
                 if f.name == old_name and not getattr(f, "file", None):
                     return True
         except Exception:
+            # Silently handle any database or attribute errors
             pass
 
+    # Default to treating as new file upload
     return False

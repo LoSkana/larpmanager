@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from larpmanager.forms.miscellanea import ExeUrlShortnerForm
@@ -78,13 +79,19 @@ def exe_warehouse_tags_edit(request, num):
 
 
 @login_required
-def exe_warehouse_items(request):
+def exe_warehouse_items(request) -> HttpResponse:
+    """Display warehouse items for organization administrators."""
+    # Check user permissions for warehouse management
     ctx = check_assoc_permission(request, "exe_warehouse_items")
 
+    # Handle any bulk operations on items
     handle_bulk_items(request, ctx)
 
+    # Get warehouse items for current association with related data
     ctx["list"] = WarehouseItem.objects.filter(assoc_id=request.assoc["id"])
     ctx["list"] = ctx["list"].select_related("container").prefetch_related("tags")
+
+    # Add optional warehouse context data
     get_warehouse_optionals(ctx, [5])
 
     return render(request, "larpmanager/exe/warehouse/items.html", ctx)

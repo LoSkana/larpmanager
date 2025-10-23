@@ -180,7 +180,17 @@ def _available_filler(r, reg_counts) -> bool:
     return False
 
 
-def get_match_reg(r, my_regs):
+def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
+    """Find registration matching the given run ID.
+
+    Args:
+        r: Run object to match against
+        my_regs: List of registration objects to search
+
+    Returns:
+        Matching registration or None if not found
+    """
+    # Iterate through registrations to find matching run
     for m in my_regs:
         if m and m.run_id == r.id:
             return m
@@ -456,16 +466,28 @@ def registration_status(
     status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed") + "."
 
 
-def _status_preregister(run, user, ctx: dict | None = None):
+def _status_preregister(run, user, ctx: dict | None = None) -> None:
+    """Update run status based on user's pre-registration state.
+
+    Sets the run status text to either confirm existing pre-registration
+    or provide a link to pre-register for the event.
+
+    Args:
+        run: Event run object to update status for
+        user: User object to check pre-registration status
+        ctx: Optional context dictionary containing cached pre-registration data
+    """
     # Extract values from context dictionary if provided
     if ctx is None:
         ctx = {}
 
+    # Get cached pre-registrations dictionary from context
     pre_registrations_dict = ctx.get("pre_registrations_dict")
 
     # Check if user already has a pre-registration for this event
     has_pre_registration = False
     if user.is_authenticated:
+        # Use cached data if available, otherwise query database
         if pre_registrations_dict is not None:
             # Use cached data if available
             has_pre_registration = run.event_id in pre_registrations_dict
@@ -474,10 +496,13 @@ def _status_preregister(run, user, ctx: dict | None = None):
             has_pre_registration = PreRegistration.objects.filter(
                 event_id=run.event_id, member=user.member, deleted__isnull=True
             ).exists()
+
+    # Set status message based on pre-registration state
     if has_pre_registration:
         mes = _("Pre-registration confirmed") + "!"
         run.status["text"] = mes
     else:
+        # Create pre-registration link for unauthenticated or non-pre-registered users
         mes = _("Pre-register to the event") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
@@ -544,10 +569,23 @@ def registration_find(run: Run, user: User, ctx: dict | None = None):
         run.reg = None
 
 
-def check_character_maximum(event, member):
-    # check the amount of characters of the character
+def check_character_maximum(event, member) -> tuple[bool, int]:
+    """Check if member has reached the maximum character limit for an event.
+
+    Args:
+        event: The event to check character limits for
+        member: The member whose character count to verify
+
+    Returns:
+        Tuple of (has_reached_limit, max_allowed_characters)
+    """
+    # Count current characters for this member in the event
     current_chars = event.get_elements(Character).filter(player=member).count()
+
+    # Get the maximum allowed characters from event configuration
     max_chars = int(get_event_config(event.id, "user_character_max", 0))
+
+    # Return whether limit is reached and the maximum allowed
     return current_chars >= max_chars, max_chars
 
 
@@ -609,16 +647,32 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
     _status_approval(aux, features, run)
 
 
-def _status_approval(aux, features, run):
-    # Add character creation/selection links if feature is enabled and not waiting
+def _status_approval(aux: bool, features: dict, run: Any) -> None:
+    """Add character creation/selection links to run status based on feature availability.
+
+    This function checks if the user_character feature is enabled and the registration
+    is not on a waiting list, then adds appropriate character creation or selection
+    links to the run status details.
+
+    Args:
+        aux: Boolean indicating if character is already assigned
+        features: Dictionary of enabled features for the event
+        run: Run object containing registration and event information
+
+    Returns:
+        None: Modifies run.status["details"] in place
+    """
+    # Check if user_character feature is enabled
     if "user_character" not in features:
         return
 
-    # Check if registration is on waiting list
+    # Skip if registration is on waiting list
     if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
         return
 
+    # Get character creation limits for this user and event
     check, max_chars = check_character_maximum(run.event, run.reg.member)
+
     # Show character creation link if user can create more characters
     if not check:
         url = reverse("character_create", args=[run.get_slug()])
@@ -698,20 +752,35 @@ def get_player_characters(member, event):
     return event.get_elements(Character).filter(player=member).order_by("-updated")
 
 
-def get_player_signup(request, ctx):
+def get_player_signup(request: HttpRequest, ctx: dict) -> Registration | None:
+    """Get active registration for current user in the given run context."""
+    # Filter registrations for current run and user, excluding cancelled ones
     regs = Registration.objects.filter(run=ctx["run"], member=request.user.member, cancellation_date__isnull=True)
 
+    # Return first registration if exists
     if regs:
         return regs[0]
 
     return None
 
 
-def check_signup(request, ctx):
+def check_signup(request: HttpRequest, ctx: dict) -> None:
+    """Check if player signup is valid and not in waiting status.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing run information
+
+    Raises:
+        SignupError: If no valid signup found
+        WaitingError: If signup ticket is in waiting tier
+    """
+    # Get player registration for current run
     reg = get_player_signup(request, ctx)
     if not reg:
         raise SignupError(ctx["run"].get_slug())
 
+    # Check if registration is in waiting list
     if reg.ticket and reg.ticket.tier == TicketTier.WAITING:
         raise WaitingError(ctx["run"].get_slug())
 
@@ -747,11 +816,24 @@ def check_assign_character(request: HttpRequest, ctx: dict) -> None:
     RegistrationCharacterRel.objects.create(character_id=chars[0].id, reg=reg)
 
 
-def get_reduced_available_count(run):
+def get_reduced_available_count(run) -> int:
+    """Calculate remaining reduced ticket slots based on patron registrations and ratio.
+
+    Args:
+        run: Run object to calculate reduced tickets for
+
+    Returns:
+        Number of reduced tickets still available
+    """
+    # Get the ratio for reduced tickets per patron registrations
     ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
+
+    # Count current reduced and patron registrations (excluding cancelled)
     red = Registration.objects.filter(run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True).count()
     pat = Registration.objects.filter(run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
+
+    # Calculate available reduced slots: floor(patron_count * ratio / 10) - used_reduced
     return math.floor(pat * ratio / 10.0) - red
 
 

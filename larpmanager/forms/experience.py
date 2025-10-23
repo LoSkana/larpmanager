@@ -61,7 +61,25 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
         widgets = {"characters": EventCharacterS2WidgetMulti}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance with variable arguments.
+
+        This constructor accepts any combination of positional and keyword
+        arguments and forwards them to the parent class constructor.
+
+        Parameters
+        ----------
+        *args : Any
+            Variable length argument list passed to parent class.
+        **kwargs : Any
+            Arbitrary keyword arguments passed to parent class.
+
+        Returns
+        -------
+        None
+            This method does not return a value.
+        """
+        # Call parent class constructor with all provided arguments
         super().__init__(*args, **kwargs)
 
 

@@ -119,12 +119,25 @@ def get_character_optimized(ctx, num):
 
 
 @login_required
-def orga_characters(request, s):
+def orga_characters(request: HttpRequest, s: str) -> HttpResponse:
+    """Return character list view for event organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered character list template
+    """
+    # Check user permissions for character management
     ctx = check_event_permission(request, s, "orga_characters")
 
+    # Load event data and configuration settings
     get_event_cache_all(ctx)
     for config_name in ["user_character_approval", "writing_external_access"]:
         ctx[config_name] = get_event_config(ctx["event"].id, config_name, False, ctx)
+
+    # Enable export functionality if configured
     if get_event_config(ctx["event"].id, "show_export", False, ctx):
         ctx["export"] = "character"
 
@@ -132,18 +145,34 @@ def orga_characters(request, s):
 
 
 @login_required
-def orga_characters_edit(request, s, num):
+def orga_characters_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit character information in organization context.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The organization/event slug identifier
+        num: The character ID to edit (0 for new character)
+
+    Returns:
+        HttpResponse: Rendered character edit form page
+    """
+    # Check user permissions for character organization features
     ctx = check_event_permission(request, s, "orga_characters")
 
-    # Only load full event cache if we need relationships or other features that require it
+    # Load full event cache only when specific features require relationship data
+    # This optimization avoids expensive cache operations for basic character editing
     if "relationships" in ctx["features"] or "character_finder" in ctx.get("features", []):
         get_event_cache_all(ctx)
 
+    # Load specific character data when editing existing character (num != 0)
+    # Skip character loading for new character creation
     if num != 0:
         get_character_optimized(ctx, num)
 
+    # Process character relationships for display and validation
     _characters_relationships(ctx)
 
+    # Delegate to writing edit system with character-specific form and version type
     return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
@@ -205,19 +234,44 @@ def update_relationship(request, ctx, nm, fl):
 
 
 @login_required
-def orga_characters_relationships(request, s, num):
+def orga_characters_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Display character relationships for organization view.
+
+    Shows both direct relationships (where character is source) and inverse
+    relationships (where character is target), ordered by text length and
+    character number.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Character number identifier
+
+    Returns:
+        Rendered HTML response with character relationships
+    """
+    # Check user permissions for character management
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Load character data into context
     get_char(ctx, num)
+
+    # Get relationships where this character is the source
+    # Ordered by text length (ascending) then target character number
     ctx["direct"] = (
         Relationship.objects.filter(source=ctx["character"])
         .select_related("target")
         .order_by(Length("text").asc(), "target__number")
     )
+
+    # Get relationships where this character is the target
+    # Ordered by text length (ascending) then source character number
     ctx["inverse"] = (
         Relationship.objects.filter(target=ctx["character"])
         .select_related("source")
         .order_by(Length("text").asc(), "source__number")
     )
+
+    # Render the relationships template with context data
     return render(request, "larpmanager/orga/characters/relationships.html", ctx)
 
 
@@ -237,18 +291,38 @@ def orga_characters_versions(request, s, num):
 
 
 @login_required
-def orga_characters_summary(request, s, num):
+def orga_characters_summary(request: HttpRequest, s: str, num: str) -> HttpResponse:
+    """Display character summary page for organization staff.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Character identifier
+
+    Returns:
+        Rendered HTML response with character summary
+    """
+    # Check permissions and get base context
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Retrieve character data and add to context
     get_char(ctx, num)
+
+    # Initialize factions list in context
     ctx["factions"] = []
 
+    # Process character factions with complete data
     for p in ctx["character"].factions_list.all().prefetch_related("characters"):
         ctx["factions"].append(p.show_complete())
+
+    # Initialize plots list in context
     ctx["plots"] = []
 
+    # Process character plots with complete data
     for p in ctx["character"].plots.all().prefetch_related("characters"):
         ctx["plots"].append(p.show_complete())
 
+    # Render template with populated context
     return render(request, "larpmanager/orga/characters_summary.html", ctx)
 
 
@@ -409,12 +483,27 @@ def orga_character_form(request, s):
     return redirect("orga_writing_form", s=s, typ="character")
 
 
-def check_writing_form_type(ctx, typ):
+def check_writing_form_type(ctx: dict, typ: str) -> None:
+    """Validates writing form type and updates context with type information.
+
+    Args:
+        ctx: Context dictionary to update with type information
+        typ: Writing form type to validate
+
+    Raises:
+        Http404: If the writing form type is not available
+    """
     typ = typ.lower()
     mapping = _get_writing_mapping()
+
+    # Build available types from choices that have corresponding features
     available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
+
+    # Validate the requested type is available
     if typ not in available:
         raise Http404(f"unknown writing form type: {typ}")
+
+    # Update context with type information
     ctx["typ"] = typ
     ctx["writing_typ"] = available[typ]
     ctx["label_typ"] = typ.capitalize()
@@ -566,12 +655,20 @@ def orga_writing_options_new(request, s, typ, num):
     return writing_option_edit(ctx, 0, request, typ)
 
 
-def writing_option_edit(ctx, num, request, typ):
+def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> HttpResponse:
+    """Edit a writing option and handle form submission with redirect logic."""
+    # Process form submission and save changes
     if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
         redirect_target = "orga_writing_form_edit"
+
+        # Check if user wants to continue adding more options
         if "continue" in request.POST:
             redirect_target = "orga_writing_options_new"
+
+        # Redirect to appropriate target with context parameters
         return redirect(redirect_target, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].question_id)
+
+    # Render edit form if no successful submission
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
@@ -760,12 +857,16 @@ def check_speedlarp(checks, ctx, id_number_map):
                 checks["speed_larps_double"].append((typ, c))
 
 
-def check_speedlarp_prepare(el, id_number_map, speeds):
+def check_speedlarp_prepare(el, id_number_map: dict[int, int], speeds: dict[int, dict[str, list[str]]]) -> None:
+    """Prepare speed LARP data by mapping character relationships to speeds structure."""
+    # Extract character numbers from element's character map
     from_rels = set()
     for ch_id in el.characters_map:
         if ch_id not in id_number_map:
             continue
         from_rels.add(id_number_map[ch_id])
+
+    # Update speeds structure for each character
     for ch in from_rels:
         if ch not in speeds:
             speeds[ch] = {}
@@ -1037,11 +1138,21 @@ def _get_question_update(ctx: dict, el) -> str:
     return value
 
 
-def _check_working_ticket(request, ctx, token):
-    # perform normal check, if somebody else has opened the character to edit it
+def _check_working_ticket(request, ctx: dict, token: str) -> str | None:
+    """Check if ticket is being edited by another user.
+
+    Args:
+        request: Django HTTP request object
+        ctx: Context dictionary containing 'typ', 'element', and 'question'
+        token: Working ticket token
+
+    Returns:
+        Error message if ticket is locked, None otherwise
+    """
+    # Check if somebody else has opened the character to edit it
     msg = writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, token)
 
-    # perform check if somebody has opened the same field to edit it
+    # Check if somebody has opened the same field to edit it
     if not msg:
         msg = writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", token)
 

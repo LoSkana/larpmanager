@@ -43,11 +43,26 @@ from larpmanager.utils.tasks import send_mail_exec
 
 
 @login_required
-def orga_newsletter(request, s):
+def orga_newsletter(request: HttpRequest, s: str) -> HttpResponse:
+    """Get newsletter recipients for an event.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered newsletter template with recipient list
+    """
+    # Check user permissions for newsletter feature
     ctx = check_event_permission(request, s, "orga_newsletter")
+
+    # Get active registrations (non-cancelled, non-waiting)
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
     que = que.exclude(ticket__tier=TicketTier.WAITING).select_related("member")
+
+    # Extract member details for newsletter recipients
     ctx["list"] = que.values_list("member__id", "member__email", "member__name", "member__surname")
+
     return render(request, "larpmanager/orga/users/newsletter.html", ctx)
 
 
@@ -270,12 +285,16 @@ def orga_persuade(request, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_questions(request, s):
+def orga_questions(request: HttpRequest, s: str) -> HttpResponse:
+    """Render questions page for event organizers with open and closed questions sorted by creation date."""
     ctx = check_event_permission(request, s, "orga_questions")
 
+    # Get help questions separated by status
     ctx["closed"], ctx["open"] = _get_help_questions(ctx, request)
 
+    # Sort open questions by creation date (oldest first)
     ctx["open"].sort(key=lambda x: x.created)
+    # Sort closed questions by creation date (newest first)
     ctx["closed"].sort(key=lambda x: x.created, reverse=True)
 
     return render(request, "larpmanager/orga/users/questions.html", ctx)
@@ -356,45 +375,96 @@ def orga_questions_answer(request: HttpRequest, s: str, r: int) -> HttpResponse:
 
 
 @login_required
-def orga_questions_close(request, s, r):
+def orga_questions_close(request: HttpRequest, s: str, r: str) -> HttpResponse:
+    """Close a help question for an organization event."""
     ctx = check_event_permission(request, s, "orga_questions")
 
+    # Get the most recent help question for this member and run
     h = HelpQuestion.objects.filter(member_id=r, assoc_id=ctx["a_id"], run_id=ctx["run"]).order_by("-created").first()
+
+    # Mark the question as closed and save
     h.closed = True
     h.save()
+
     return redirect("orga_questions", s=s)
 
 
-def send_mail_batch(request, assoc_id=None, run_id=None):
+def send_mail_batch(request: HttpRequest, assoc_id: int | None = None, run_id: int | None = None) -> None:
+    """Send batch email to players with specified subject and body.
+
+    Args:
+        request: HTTP request containing POST data with email details
+        assoc_id: Optional association ID for context
+        run_id: Optional run ID for context
+    """
+    # Extract email parameters from POST data
     players = request.POST["players"]
     subj = request.POST["subject"]
     body = request.POST["body"]
     raw = request.POST["raw"]
     reply_to = request.POST["reply_to"]
+
+    # Use raw body if provided, otherwise use formatted body
     if raw:
         body = raw
 
+    # Execute the email sending operation
     send_mail_exec(players, subj, body, assoc_id, run_id, reply_to)
 
 
 @login_required
-def orga_send_mail(request, s):
+def orga_send_mail(request: HttpRequest, s: str) -> HttpResponse:
+    """Send mail to event participants.
+
+    Handles both GET requests (displays form) and POST requests (processes form submission).
+    On successful form submission, queues mail for batch sending and redirects to same page.
+
+    Args:
+        request: The HTTP request object containing form data and user session
+        s: Event slug identifier for permission checking and context building
+
+    Returns:
+        HttpResponse: Rendered template with form or redirect response after successful submission
+    """
+    # Check user permissions and build event context
     ctx = check_event_permission(request, s, "orga_send_mail")
+
     if request.method == "POST":
+        # Process form submission for mail sending
         form = SendMailForm(request.POST)
         if form.is_valid():
+            # Queue mail for batch processing using current run
             send_mail_batch(request, run_id=ctx["run"].id)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
+        # Display empty form for GET requests
         form = SendMailForm()
+
+    # Add form to context and render template
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
 
 @login_required
-def orga_archive_email(request, s):
+def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
+    """Archive email view for organization event management.
+
+    Displays a paginated archive of emails sent for a specific event,
+    with formatting callbacks for proper display of email data.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        s: The event slug identifier for permission checking
+
+    Returns:
+        HttpResponse: Rendered template with email archive data and pagination
+    """
+    # Check user permissions for accessing email archive
     ctx = check_event_permission(request, s, "orga_archive_email")
+
+    # Define display fields for email archive table
+    # Each tuple contains (field_name, display_label)
     ctx.update(
         {
             "fields": [
@@ -403,6 +473,8 @@ def orga_archive_email(request, s):
                 ("body", _("Body")),
                 ("sent", _("Sent")),
             ],
+            # Define formatting callbacks for each field
+            # These functions control how data is displayed in the template
             "callbacks": {
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
@@ -412,6 +484,8 @@ def orga_archive_email(request, s):
             },
         }
     )
+
+    # Return paginated email archive using the Email model
     return orga_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 
@@ -493,15 +567,31 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)
 
 
-def member_field_correct(el, member_fields):
+def member_field_correct(el: object, member_fields: list[str]) -> None:
+    """Correct and format specific member fields for display purposes.
+
+    Args:
+        el: Member object to modify fields on
+        member_fields: List of field names to process and format
+
+    Returns:
+        None: Modifies the member object in place
+    """
+    # Format residence address using the member's get_residence method
     if "residence_address" in member_fields:
         el.residence_address = el.get_residence()
+
+    # Convert first aid boolean to checkmark icon or empty string
     if "first_aid" in member_fields:
         if el.first_aid == FirstAidChoices.YES:
             el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
         else:
             el.first_aid = ""
+
+    # Convert document type enum to human-readable display value
     if "document_type" in member_fields:
         el.document_type = el.get_document_type_display()
+
+    # Convert gender enum to human-readable display value
     if "gender" in member_fields:
         el.gender = el.get_gender_display()

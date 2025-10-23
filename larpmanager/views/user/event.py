@@ -170,57 +170,115 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_character_rels_dict(my_regs_dict, member):
-    # Precalculate RegistrationCharacterRel data for all runs to optimize queries
+def get_character_rels_dict(my_regs_dict: dict, member) -> dict:
+    """Get character relations dictionary grouped by registration ID.
+
+    Precalculates RegistrationCharacterRel data for all runs to optimize queries
+    by fetching all character relations in a single database query and grouping
+    them by registration ID.
+
+    Args:
+        my_regs_dict: Dictionary of user's registrations
+        member: Member object to filter registrations
+
+    Returns:
+        Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
+    """
+    # Initialize empty dictionary to store character relations grouped by registration ID
     character_rels_dict = {}
+
+    # Only proceed if user has registrations
     if my_regs_dict:
-        # Get all RegistrationCharacterRel objects for user's registrations in one query
+        # Extract all registration IDs from the registrations dictionary
         reg_ids = [reg.id for reg in my_regs_dict.values()]
+
+        # Fetch all RegistrationCharacterRel objects for user's registrations in one optimized query
+        # Include character data and order by character number for consistent results
         character_rels = (
             RegistrationCharacterRel.objects.filter(reg_id__in=reg_ids, reg__member=member)
             .select_related("character")
             .order_by("character__number")
         )
 
-        # Group character relations by registration ID
+        # Group character relations by registration ID for efficient lookup
         for rel in character_rels:
+            # Initialize list for new registration IDs
             if rel.reg_id not in character_rels_dict:
                 character_rels_dict[rel.reg_id] = []
+            # Add character relation to the appropriate registration group
             character_rels_dict[rel.reg_id].append(rel)
+
     return character_rels_dict
 
 
-def get_payment_invoices_dict(my_regs_dict, member):
-    # Precalculate PaymentInvoice data for all registrations to optimize queries
+def get_payment_invoices_dict(my_regs_dict: dict, member) -> dict:
+    """Get payment invoices organized by registration ID for the given member.
+
+    Precalculates PaymentInvoice data for all registrations to optimize database queries
+    by fetching all relevant invoices in a single query and grouping them by registration ID.
+
+    Args:
+        my_regs_dict: Dictionary containing registration objects as values
+        member: Member object to filter payment invoices for
+
+    Returns:
+        Dictionary mapping registration IDs to lists of PaymentInvoice objects
+    """
+    # Initialize empty dictionary to store grouped payment invoices
     payment_invoices_dict = {}
+
+    # Only proceed if we have registrations to process
     if my_regs_dict:
+        # Extract all registration IDs for bulk query optimization
         reg_ids = [reg.id for reg in my_regs_dict.values()]
 
-        # Get all payment invoices for user's registrations in one query
+        # Fetch all payment invoices for user's registrations in single optimized query
+        # Include method relation to avoid N+1 queries when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
             reg_id__in=reg_ids, member=member, typ=PaymentType.REGISTRATION
         ).select_related("method")
 
-        # Group payment invoices by registration ID (idx field)
+        # Group payment invoices by registration ID using idx field as key
+        # This allows quick lookup of all invoices for a specific registration
         for invoice in payment_invoices:
             if invoice.idx not in payment_invoices_dict:
                 payment_invoices_dict[invoice.idx] = []
             payment_invoices_dict[invoice.idx].append(invoice)
+
     return payment_invoices_dict
 
 
-def get_pre_registrations_dict(assoc_id, member):
-    # Precalculate PreRegistration data for all events to optimize queries
+def get_pre_registrations_dict(assoc_id: int, member) -> dict:
+    """Get pre-registrations for a member organized by event ID.
+
+    Precalculates PreRegistration data for all events to optimize queries
+    by fetching all relevant pre-registrations in a single database query
+    and organizing them in a dictionary for fast lookup.
+
+    Args:
+        assoc_id: The association ID to filter events by
+        member: The member object to get pre-registrations for
+
+    Returns:
+        Dictionary mapping event IDs to PreRegistration objects.
+        Empty dict if member is None or has no pre-registrations.
+    """
+    # Initialize empty dictionary for pre-registration lookup
     pre_registrations_dict = {}
+
+    # Only proceed if member is provided
     if member:
         # Get all pre-registrations for user's events in one query
+        # Filter by association, member, and exclude deleted records
         pre_registrations = PreRegistration.objects.filter(
             event__assoc_id=assoc_id, member=member, deleted__isnull=True
         ).select_related("event")
 
-        # Group pre-registrations by event ID
+        # Group pre-registrations by event ID for fast lookup
+        # Each event can have only one pre-registration per member
         for pre_reg in pre_registrations:
             pre_registrations_dict[pre_reg.event_id] = pre_reg
+
     return pre_registrations_dict
 
 
@@ -255,18 +313,36 @@ def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
     return runs
 
 
-def home_json(request, lang="it"):
+def home_json(request: object, lang: str = "it") -> object:
+    """
+    Returns JSON response with upcoming events for the association.
+
+    Args:
+        request: HTTP request object containing association context
+        lang: Language code for localization, defaults to "it"
+
+    Returns:
+        JsonResponse: JSON object containing list of upcoming events
+    """
+    # Extract association ID from request context
     aid = request.assoc["id"]
+
+    # Set language code if provided
     if lang:
         request.LANGUAGE_CODE = lang
 
+    # Initialize result list and tracking set
     res = []
     runs = get_coming_runs(aid)
     already = []
+
+    # Process each run and avoid duplicate events
     for run in runs:
+        # Only add event if not already processed
         if run.event_id not in already:
             res.append(run.event.show())
         already.append(run.event_id)
+
     return JsonResponse({"res": res})
 
 
@@ -687,13 +763,25 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/event/search.html", ctx)
 
 
-def get_fact(qs):
+def get_fact(qs) -> list[dict]:
+    """Filter queryset to return only factions with characters.
+
+    Args:
+        qs: QuerySet of faction objects to filter
+
+    Returns:
+        List of faction dictionaries containing character data
+    """
     ls = []
+
+    # Iterate through each faction in the queryset
     for f in qs:
         fac = f.show_complete()
-        # print(fac)
+
+        # Skip factions that have no characters
         if len(fac["characters"]) == 0:
             continue
+
         ls.append(fac)
     return ls
 
@@ -704,11 +792,26 @@ def get_factions(ctx):
     ctx["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
 
 
-def check_visibility(ctx, typ, name):
+def check_visibility(ctx: dict, typ: str, name: str) -> None:
+    """Check if a writing type is visible and accessible to the current user.
+
+    Args:
+        ctx: Context dictionary containing features, staff status, and visibility flags
+        typ: Type of writing content to check
+        name: Name identifier for error reporting
+
+    Raises:
+        Http404: If the writing type is not active in current features
+        HiddenError: If user lacks permission to view the content
+    """
+    # Get the mapping of writing types to features
     mapping = _get_writing_mapping()
+
+    # Check if the writing type feature is active
     if mapping.get(typ) not in ctx["features"]:
         raise Http404(typ + " not active")
 
+    # Check user permissions - staff can see all, others need specific visibility flag
     if "staff" not in ctx and not ctx[f"show_{typ}"]:
         raise HiddenError(ctx["run"].get_slug(), name)
 
@@ -751,18 +854,34 @@ def faction(request, s, g):
     return render(request, "larpmanager/event/faction.html", ctx)
 
 
-def quests(request, s, g=None):
+def quests(request: HttpRequest, s: str, g: str | None = None) -> HttpResponse:
+    """Display quest types or quests for a specific type in an event.
+
+    Args:
+        request: The HTTP request object
+        s: The event slug identifier
+        g: Optional quest type number. If None, shows all quest types
+
+    Returns:
+        HttpResponse: Rendered template with quest types or specific quests
+    """
+    # Get event context and verify user can view quests
     ctx = get_event_run(request, s, status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
+    # If no quest type specified, show all quest types for the event
     if not g:
         ctx["list"] = QuestType.objects.filter(event=ctx["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", ctx)
 
+    # Get specific quest type and build list of visible quests
     get_element(ctx, g, "quest_type", QuestType, by_number=True)
     ctx["list"] = []
+
+    # Filter quests by event, visibility, and type, then add complete quest data
     for el in Quest.objects.filter(event=ctx["event"], hide=False, typ=ctx["quest_type"]).order_by("number"):
         ctx["list"].append(el.show_complete())
+
     return render(request, "larpmanager/event/quests.html", ctx)
 
 

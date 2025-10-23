@@ -37,13 +37,25 @@ def cache_assoc_key(s):
     return f"assoc_{s}"
 
 
-def get_cache_assoc(s):
+def get_cache_assoc(s: str) -> dict | None:
+    """Get cached association data or initialize if not found.
+
+    Args:
+        s: Association identifier string.
+
+    Returns:
+        Association data dictionary or None if initialization fails.
+    """
+    # Generate cache key for the association
     key = cache_assoc_key(s)
     res = cache.get(key)
+
+    # Initialize cache if not found
     if res is None:
         res = init_cache_assoc(s)
         if not res:
             return None
+        # Cache the result for one day
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return res
 
@@ -112,10 +124,14 @@ def init_cache_assoc(a_slug: str) -> dict | None:
     return assoc_dict
 
 
-def _init_skin(assoc, el):
+def _init_skin(assoc, el: dict) -> None:
+    """Initialize skin-related properties in the element dictionary."""
+    # Set CSS and domain configuration from association skin
     el["skin_css"] = assoc.skin.default_css
     el["main_domain"] = assoc.skin.domain
     el["platform"] = assoc.skin.name
+
+    # Set skin identification and management status
     el["skin_id"] = assoc.skin.id
     el["skin_managed"] = assoc.skin.managed
 
@@ -167,13 +183,25 @@ def _init_member_fields(assoc, el):
         el["members_fields"].add(fl)
 
 
-def _init_payments(assoc, el):
+def _init_payments(assoc, el: dict) -> None:
+    """Initialize payment information for the given association element.
+
+    Args:
+        assoc: Association object containing payment configuration
+        el: Dictionary to populate with payment information
+    """
+    # Set currency display information
     el["payment_currency"] = assoc.get_payment_currency_display()
     el["currency_symbol"] = assoc.get_currency_symbol()
     el["methods"] = {}
+
+    # Get payment details configuration
     payment_details = get_payment_details(assoc)
+
+    # Process each payment method for the association
     for m in assoc.payment_methods.all():
         mel = m.as_dict()
+        # Add fee and description from payment details
         for s in ["fee", "descr"]:
             mel[s] = payment_details.get(f"{m.slug}_{s}")
         el["methods"][m.slug] = mel

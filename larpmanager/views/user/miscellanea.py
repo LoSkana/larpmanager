@@ -73,13 +73,19 @@ def util(request, cod):
         raise Http404("not found") from err
 
 
-def help_red(request, n):
+def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
+    """Redirect to help page for a specific run."""
+    # Set up context with user data and association ID
     ctx = def_user_ctx(request)
     ctx.update({"a_id": request.assoc["id"]})
+
+    # Get the run object or raise 404 if not found
     try:
         ctx["run"] = Run.objects.get(pk=n, event__assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
+
+    # Redirect to help page with run slug
     return redirect("help", s=ctx["run"].get_slug())
 
 
@@ -139,16 +145,37 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
 
 
 @login_required
-def help_attachment(request, p):
+def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
+    """
+    Handle attachment download for help questions.
+
+    Validates user permissions and redirects to the attachment URL if authorized.
+    Only the question owner or users with association role can access attachments.
+
+    Args:
+        request: The HTTP request object containing user information
+        p: Primary key of the HelpQuestion to get attachment from
+
+    Returns:
+        HttpResponseRedirect: Redirect to the attachment URL
+
+    Raises:
+        Http404: If HelpQuestion doesn't exist or user lacks permissions
+    """
+    # Get default user context with permissions
     ctx = def_user_ctx(request)
+
+    # Attempt to retrieve the help question by primary key
     try:
         hp = HelpQuestion.objects.get(pk=p)
     except ObjectDoesNotExist as err:
         raise Http404("HelpQuestion does not exist") from err
 
+    # Check access permissions: owner or association role required
     if hp.member != request.user.member and not ctx["assoc_role"]:
         raise Http404("illegal access")
 
+    # Redirect to attachment URL for authorized users
     return redirect(hp.attachment.url)
 
 
@@ -205,19 +232,41 @@ def album_sub(request, s, num):
 
 
 @login_required
-def workshops(request, s):
+def workshops(request: HttpRequest, s: str) -> HttpResponse:
+    """
+    Display workshops for a specific event with completion status for the current user.
+
+    Args:
+        request: The HTTP request object containing user information
+        s: The event slug identifier
+
+    Returns:
+        HttpResponse: Rendered template with workshop list and completion status
+    """
+    # Get event context with signup and status validation
     ctx = get_event_run(request, s, signup=True, status=True)
-    # get modules assigned to this event
+
+    # Initialize workshop list for template context
     ctx["list"] = []
+
+    # Process each workshop assigned to this event
     for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
+        # Get workshop display data
         dt = workshop.show()
+
+        # Set completion check limit to 365 days ago
         limit = datetime.now() - timedelta(days=365)
         logger.debug(f"Workshop completion limit date: {limit}")
+
+        # Check if user has completed this workshop within the time limit
         dt["done"] = (
             WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
             >= 1
         )
+
+        # Add workshop data to context list
         ctx["list"].append(dt)
+
     return render(request, "larpmanager/event/workshops/index.html", ctx)
 
 

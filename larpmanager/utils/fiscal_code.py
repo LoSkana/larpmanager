@@ -2,6 +2,7 @@ import csv
 import os
 import re
 import unicodedata
+from datetime import date
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -45,34 +46,83 @@ def _calculate_vowels(s):
     return "".join([c for c in s if c in "AEIOU"])
 
 
-def _extract_last_name(last_name):
+def _extract_last_name(last_name: str) -> str:
+    """Extract 3-character code from last name using consonants, vowels, and padding.
+
+    Args:
+        last_name: The last name to process.
+
+    Returns:
+        3-character string code.
+    """
+    # Convert to uppercase for consistent processing
     last_name = last_name.upper()
+
+    # Extract consonants and vowels from the name
     consonants = _calculate_consonants(last_name)
     vowels = _calculate_vowels(last_name)
+
+    # Combine and pad with 'X' if needed, then take first 3 characters
     return (consonants + vowels + "XXX")[:3]
 
 
-def _extract_first_name(first_name):
+def _extract_first_name(first_name: str) -> str:
+    """Extract first 3 characters from first name using consonants and vowels.
+
+    Args:
+        first_name: The first name to process.
+
+    Returns:
+        A 3-character string extracted from the first name.
+    """
     first_name = first_name.upper()
+
+    # Calculate consonants and limit to first 4
     consonants = _calculate_consonants(first_name)
     max_consonants = 4
     if len(consonants) >= max_consonants:
         consonants = consonants[0] + consonants[2] + consonants[3]
+
+    # Add vowels and pad with X if needed
     vowels = _calculate_vowels(first_name)
     return (consonants + vowels + "XXX")[:3]
 
 
-def _extract_birth_date(birth_date, male):
+def _extract_birth_date(birth_date: date | None, male: bool) -> str:
+    """Extract birth date in fiscal code format.
+
+    Args:
+        birth_date: The birth date to extract from
+        male: Whether the person is male (affects day calculation)
+
+    Returns:
+        Formatted birth date string (YYMDD format)
+    """
     month_codes = "ABCDEHLMPRST"
     if not birth_date:
         return ""
+
+    # Extract last two digits of year
     year = str(birth_date.year)[-2:]
+
+    # Get month code from lookup table
     month = month_codes[birth_date.month - 1]
+
+    # Add 40 to day for females, keep original for males
     day = birth_date.day + (40 if not male else 0)
+
     return f"{year}{month}{str(day).zfill(2)}"
 
 
-def _clean_birth_place(birth_place):
+def _clean_birth_place(birth_place: str | None) -> str:
+    """Remove parenthetical content from birth place string.
+
+    Args:
+        birth_place: The birth place string to clean.
+
+    Returns:
+        Cleaned birth place string with parenthetical content removed.
+    """
     if not birth_place:
         return ""
     # Remove everything in parenthesis

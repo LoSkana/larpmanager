@@ -387,11 +387,17 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         super().__init__(*args, **kwargs)
         self.allowed = None
 
-    def set_run(self, run):
+    def set_run(self, run: Run) -> None:
+        """Set allowed members for a run based on registrations and event roles."""
+        # Get registered members for this run (non-cancelled)
         que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
         self.allowed = set(que.values_list("member_id", flat=True))
+
+        # Add members with event roles
         que = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
         self.allowed.update(que.values_list("members__id", flat=True))
+
+        # Set required attribute
         # noinspection PyUnresolvedReferences
         self.attrs["required"] = "required"
 

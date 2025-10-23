@@ -725,7 +725,9 @@ def get_ordered_registration_questions(ctx):
     return que.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
-def _get_writing_elements():
+def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
+    """Return list of writing elements with their display names and applicable types."""
+    # Define available writing elements with their identifiers, translated names, and applicable types
     shows = [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
@@ -737,7 +739,13 @@ def _get_writing_elements():
     return shows
 
 
-def _get_writing_mapping():
+def _get_writing_mapping() -> dict[str, str]:
+    """Return mapping of writing types to their corresponding modules.
+
+    Returns:
+        Dictionary mapping writing types to module names.
+    """
+    # Core writing type mappings
     mapping = {
         "character": "character",
         "faction": "faction",

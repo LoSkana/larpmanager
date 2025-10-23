@@ -53,9 +53,15 @@ from larpmanager.views.user.casting import (
 
 
 @login_required
-def orga_casting_preferences(request, s, typ=0):
+def orga_casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+    """Handle casting preferences for characters or traits based on type."""
+    # Check user permissions for casting preferences
     ctx = check_event_permission(request, s, "orga_casting_preferences")
+
+    # Get base casting details
     casting_details(ctx, typ)
+
+    # Load preferences based on type
     if typ == 0:
         casting_preferences_characters(ctx)
     else:
@@ -65,9 +71,24 @@ def orga_casting_preferences(request, s, typ=0):
 
 
 @login_required
-def orga_casting_history(request, s, typ=0):
+def orga_casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+    """Render casting history page with characters or traits based on type.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        typ: History type (0 for characters, 1 for traits)
+
+    Returns:
+        Rendered casting history template
+    """
+    # Check user permissions for casting history access
     ctx = check_event_permission(request, s, "orga_casting_history")
+
+    # Add casting details to context
     casting_details(ctx, typ)
+
+    # Add type-specific history data to context
     if typ == 0:
         casting_history_characters(ctx)
     else:
@@ -212,15 +233,31 @@ def get_casting_choices_characters(
     return choices, taken, mirrors, allowed
 
 
-def get_casting_choices_quests(ctx):
+def get_casting_choices_quests(ctx: dict) -> tuple[dict[int, str], list[int], dict]:
+    """Get quest-based casting choices and track assigned traits.
+
+    Args:
+        ctx: Context dict containing 'event', 'quest_type', and 'run'
+
+    Returns:
+        Tuple of (choices dict, taken trait IDs, empty dict)
+    """
     choices = {}
     taken = []
+
+    # Get all quests for the event and quest type, ordered by number
     for q in Quest.objects.filter(event=ctx["event"], typ=ctx["quest_type"]).order_by("number"):
         # gr = q.show()["name"]
+
+        # Process traits for each quest
         for t in Trait.objects.filter(quest=q).order_by("number"):
+            # Check if trait is already assigned to someone in this run
             if AssignmentTrait.objects.filter(trait=t, run=ctx["run"]).count() > 0:
                 taken.append(t.id)
+
+            # Build choice label with quest and trait names
             choices[t.id] = f"{q.name} - {t.name}"
+
     return choices, taken, {}
 
 

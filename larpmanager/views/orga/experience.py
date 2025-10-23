@@ -102,15 +102,27 @@ def orga_px_abilities(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_abilities_edit(request, s, num):
+def orga_px_abilities_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Edit organization PX abilities with validation for ability types.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Ability ID number for editing
+
+    Returns:
+        HTTP response for ability editing or redirect
+    """
+    # Check user permissions for PX abilities management
     ctx = check_event_permission(request, s, "orga_px_abilities")
 
-    # Check if ability types exist
+    # Validate that ability types exist before allowing ability creation
     if not ctx["event"].get_elements(AbilityTypePx).exists():
-        # Add warning message and redirect to ability types adding page
+        # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
         return redirect("orga_px_ability_types_edit", s=s, num=0)
 
+    # Process ability editing with standard organization edit workflow
     return orga_edit(request, s, "orga_px_abilities", OrgaAbilityPxForm, num)
 
 

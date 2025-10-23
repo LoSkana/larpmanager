@@ -153,8 +153,12 @@ def update_leaderboard(a_id: int) -> list[dict]:
     return res
 
 
-def get_leaderboard(a_id):
+def get_leaderboard(a_id: int) -> dict:
+    """Get leaderboard data for an association, using cache when available."""
+    # Try to retrieve cached leaderboard data
     res = cache.get(leaderboard_key(a_id))
+
+    # If not cached, compute and cache the leaderboard
     if not res:
         res = update_leaderboard(a_id)
     return res

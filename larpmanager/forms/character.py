@@ -126,15 +126,27 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # This method handles dynamic field creation based on event configuration
         self._init_character()
 
-    def check_editable(self, question):
+    def check_editable(self, question) -> bool:
+        """Check if a question is editable based on event config and instance status.
+
+        Args:
+            question: Question object to check editability for
+
+        Returns:
+            True if question is editable, False otherwise
+        """
+        # If character approval is disabled, all questions are editable
         if not get_event_config(self.params["event"].id, "user_character_approval", False):
             return True
 
+        # Get allowed statuses for editing this question
         statuses = question.get_editable()
 
+        # If no status restrictions, question is always editable
         if not statuses:
             return True
 
+        # Check if current instance status allows editing
         return self.instance.status in question.get_editable()
 
     def _init_custom_fields(self) -> None:
@@ -244,7 +256,21 @@ class CharacterForm(WritingForm, BaseWritingForm):
         for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(fc[0])
 
-    def _save_multi(self, s, instance):
+    def _save_multi(self, s: str, instance) -> None:
+        """Save multi-select field data for the given instance.
+
+        Handles special processing for factions_list field by managing
+        faction relationships through set operations to efficiently
+        add/remove faction associations.
+
+        Args:
+            s: The field name being processed
+            instance: The model instance being saved
+
+        Returns:
+            None
+        """
+        # Handle non-faction fields using parent implementation
         if s != "factions_list":
             return super()._save_multi(s, instance)
 
@@ -252,26 +278,47 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if "factions_list" not in self.cleaned_data:
             return
 
+        # Get new faction IDs from cleaned form data
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
+        # Get the faction event context for filtering existing factions
         faction_event = self.params["run"].event.get_class_parent(Faction)
+
+        # Get current faction IDs associated with the instance
         old = set(instance.factions_list.filter(event=faction_event).values_list("id", flat=True))
 
+        # Remove factions that are no longer selected
         for ch in old - new:
             instance.factions_list.remove(ch)
+
+        # Add newly selected factions
         for ch in new - old:
             instance.factions_list.add(ch)
 
-    def clean(self):
+    def clean(self) -> dict:
+        """Clean and validate form data.
+
+        Validates that only one primary faction is selected from the factions list.
+        Inherits base validation from parent class and adds custom faction validation.
+
+        Returns:
+            dict: Cleaned form data after validation
+
+        Raises:
+            ValidationError: If more than one primary faction is selected
+        """
         cleaned_data = super().clean()
 
+        # Check if factions_list field exists in cleaned data
         if "factions_list" in self.cleaned_data:
-            # check only one primary
+            # Count primary factions to ensure only one is selected
             prim = 0
             for el in self.cleaned_data["factions_list"]:
+                # Increment counter for each primary faction found
                 if el.typ == FactionType.PRIM:
                     prim += 1
 
+            # Validate that no more than one primary faction is selected
             if prim > 1:
                 raise ValidationError({"factions_list": _("Select only one primary faction")})
 
@@ -450,12 +497,17 @@ class OrgaCharacterForm(CharacterForm):
         self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
         self.show_link.append("id_px_delivery_list")
 
-    def _save_px(self, instance):
+    def _save_px(self, instance: Any) -> None:
+        """Save PX-related data to the instance if PX feature is enabled."""
+        # Check if PX feature is available
         if "px" not in self.params["features"]:
             return
 
+        # Set ability list if present in cleaned data
         if "px_ability_list" in self.cleaned_data:
             instance.px_ability_list.set(self.cleaned_data["px_ability_list"])
+
+        # Set delivery list if present in cleaned data
         if "px_delivery_list" in self.cleaned_data:
             instance.px_delivery_list.set(self.cleaned_data["px_delivery_list"])
 
@@ -540,16 +592,38 @@ class OrgaCharacterForm(CharacterForm):
             rel.text = value
             rel.save()
 
-    def _get_rel(self, ch_id, instance, rel_type):
+    def _get_rel(self, ch_id: int, instance, rel_type: str) -> Relationship:
+        """Get or create a relationship between characters based on type.
+
+        Args:
+            ch_id: Character ID for the relationship
+            instance: Source or target instance depending on rel_type
+            rel_type: Either "direct" or reverse relationship type
+
+        Returns:
+            The relationship object
+        """
+        # Create direct relationship (instance -> character)
         if rel_type == "direct":
             (rel, cr) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=ch_id)
+        # Create reverse relationship (character -> instance)
         else:
             (rel, cr) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=ch_id)
         return rel
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> object:
+        """Save the form instance and handle related data.
+
+        Args:
+            commit: Whether to save to database.
+
+        Returns:
+            The saved instance.
+        """
+        # Save the main instance using parent's save method
         instance = super().save()
 
+        # Only process related data if instance has been persisted
         if instance.pk:
             self._save_plot(instance)
             self._save_px(instance)
@@ -698,11 +772,14 @@ class OrgaWritingQuestionForm(MyForm):
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
 
-    def _init_applicable(self):
+    def _init_applicable(self) -> None:
+        """Initialize the applicable field based on instance state."""
+        # Remove applicable field if instance already exists
         if self.instance.pk:
             del self.fields["applicable"]
             return
 
+        # Hide applicable field and set default value for new instances
         self.fields["applicable"].widget = forms.HiddenInput()
         self.initial["applicable"] = self.params["writing_typ"]
 

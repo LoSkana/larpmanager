@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+from typing import Union
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -304,16 +305,28 @@ class Member(BaseModel):
         else:
             return str(self.user)
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Return a user-friendly display name for the member.
+
+        Returns the member's display name in order of preference:
+        nickname > real name > email > primary key.
+
+        Returns:
+            str: The display name for the member.
+        """
+        # Use nickname if available
         if self.nickname:
             return str(self.nickname)
 
+        # Fall back to real name (first/last name combination)
         if self.name or self.surname:
             return self.display_real()
 
+        # Use email as last resort before ID
         if self.email:
             return self.email
 
+        # Final fallback to primary key
         return self.pk
 
     def display_real(self):
@@ -332,10 +345,18 @@ class Member(BaseModel):
             return self.nickname
         return str(self)
 
-    def get_member_filepath(self):
+    def get_member_filepath(self) -> str:
+        """Get the file path for member PDF storage.
+
+        Returns:
+            The absolute path to the member's PDF directory.
+        """
+        # Build base PDF members directory path
         fp = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
         # noinspection PyUnresolvedReferences
+        # Add member-specific subdirectory using ID
         fp = os.path.join(fp, str(self.id))
+        # Ensure directory exists
         os.makedirs(fp, exist_ok=True)
         return fp
 
@@ -348,11 +369,16 @@ class Member(BaseModel):
             mmb.status = MembershipStatus.JOINED
             mmb.save()
 
-    def get_residence(self):
+    def get_residence(self) -> str:
+        """Return formatted residence address string or empty string if no address."""
         if not self.residence_address:
             return ""
+
+        # Split address components by pipe delimiter
         # noinspection PyUnresolvedReferences
         aux = self.residence_address.split("|")
+
+        # Format: street number, city (province), country_code (country)
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
     def get_config(self, name, def_v=None, bypass_cache=False):
@@ -532,11 +558,23 @@ class Badge(BaseModel):
             return show_thumb(100, self.img_thumb.url)
         return ""
 
-    def show(self, lang):
+    def show(self, lang: str) -> dict:
+        """Return a dictionary representation for display purposes.
+
+        Args:
+            lang: Language code for localization
+
+        Returns:
+            Dictionary with id, number, name, description and optional image URL
+        """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
+
+        # Add localized name and description attributes
         for s in ["name", "descr"]:
             self.upd_js_attr(js, s)
+
+        # Add thumbnail image URL if available
         if self.img:
             # noinspection PyUnresolvedReferences
             js["img_url"] = self.img_thumb.url
@@ -586,16 +624,38 @@ class Vote(BaseModel):
         return f"V{self.number} {self.member} ({self.assoc} - {self.year})"
 
 
-def get_user_membership(user, assoc):
+def get_user_membership(user: Member, assoc: Union[Association, int]) -> Membership:
+    """Get or create a membership for a user in an association.
+
+    This function first checks if the user already has a cached membership
+    attribute. If not, it retrieves or creates a membership record for the
+    user in the specified association.
+
+    Args:
+        user: The member object for whom to get the membership
+        assoc: Either an Association instance or an association ID (int)
+
+    Returns:
+        The membership object for the user in the association
+
+    Raises:
+        Http404: If the association ID is invalid or not found
+    """
+    # Check if user already has a cached membership attribute
     if hasattr(user, "membership"):
         return user.membership
 
+    # Extract association ID from either Association object or integer
     # noinspection PyUnresolvedReferences
     assoc_id = assoc.id if isinstance(assoc, Association) else assoc
 
+    # Validate that we have a valid association ID
     if not assoc_id:
         raise Http404("Association not found")
 
+    # Get existing membership or create a new one for this user/association pair
     membership, _ = Membership.objects.get_or_create(member=user, assoc_id=assoc_id)
+
+    # Cache the membership on the user object for future access
     user.membership = membership
     return membership

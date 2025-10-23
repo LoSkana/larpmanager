@@ -382,11 +382,21 @@ def exec_set_quest_type(request, ctx, target, ids):
     ctx["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
 
 
-def handle_bulk_quest(request, ctx):
+def handle_bulk_quest(request, ctx) -> None:
+    """Handle bulk operations for quest management.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing event and other data
+    """
+    # Handle POST request - execute bulk operations
     if request.POST:
         raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
+    # Get available quest types for the event, ordered by name
     quest_types = ctx["event"].get_elements(QuestType).values("id", "name").order_by("name")
+
+    # Set up bulk operation options in context
     ctx["bulk"] = [
         {"idx": Operations.SET_QUEST_TYPE, "label": _("Set quest type"), "objs": quest_types},
     ]
@@ -397,11 +407,16 @@ def exec_set_quest(request, ctx, target, ids):
     ctx["event"].get_elements(Trait).filter(pk__in=ids).update(quest=quest)
 
 
-def handle_bulk_trait(request, ctx):
+def handle_bulk_trait(request: HttpRequest, ctx: dict) -> None:
+    """Handle bulk trait operations for quest assignment."""
     if request.POST:
+        # Execute bulk operation for setting quest traits
         raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
 
+    # Get available quests for the current event
     quests = ctx["event"].get_elements(Quest).values("id", "name").order_by("name")
+
+    # Configure bulk operation options
     ctx["bulk"] = [
         {"idx": Operations.SET_TRAIT_QUEST, "label": _("Set quest"), "objs": quests},
     ]
@@ -412,11 +427,21 @@ def exec_set_ability_type(request, ctx, target, ids):
     ctx["event"].get_elements(AbilityPx).filter(pk__in=ids).update(typ=typ)
 
 
-def handle_bulk_ability(request, ctx):
+def handle_bulk_ability(request: HttpRequest, ctx: dict) -> None:
+    """Handle bulk operations for abilities.
+
+    Args:
+        request: HTTP request object
+        ctx: Context dictionary containing event data
+    """
     if request.POST:
+        # Execute bulk operation and return early if POST request
         raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
+    # Get ability types for the event, ordered by name
     quests = ctx["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
+
+    # Setup bulk operations context
     ctx["bulk"] = [
         {"idx": Operations.SET_ABILITY_TYPE, "label": _("Set ability type"), "objs": quests},
     ]

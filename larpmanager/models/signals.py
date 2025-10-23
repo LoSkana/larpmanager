@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import logging
+from typing import Any
 
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
@@ -362,13 +363,18 @@ def pre_save_accounting_item_payment(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_payment_accounting_cache(sender, instance, created, **kwargs):
+def post_save_payment_accounting_cache(sender, instance: PaymentInvoice, created: bool, **kwargs) -> None:
+    """Updates accounting caches and processes payment-related calculations after payment save."""
+
+    # Update registration and member accounting cache if payment has associated registration
     if instance.reg and instance.reg.run:
         instance.reg.save()
         refresh_member_accounting_cache(instance.reg.run, instance.member_id)
 
+    # Update token credits based on payment changes
     update_token_credit_on_payment_save(instance, created)
 
+    # Calculate and update VAT information for the payment
     calculate_payment_vat(instance)
 
 
@@ -452,13 +458,18 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Association)
-def post_save_association_reset_lm_home(sender, instance, **kwargs):
+def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
+    """Reset caches and apply features when an association is saved."""
+    # Clear global home cache
     clear_larpmanager_home_cache()
 
+    # Apply skin features to the association
     apply_skin_features_to_association(instance)
 
+    # Clear association-specific cache
     clear_association_cache(instance.slug)
 
+    # Reset features cache for this association
     on_association_post_save_reset_features_cache(instance)
 
 
@@ -704,14 +715,22 @@ def pre_save_faction(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=Faction)
-def post_save_faction_reset_rels(sender, instance, **kwargs):
-    # Update faction cache
+def post_save_faction_reset_rels(sender, instance: Faction, **kwargs) -> None:
+    """Reset faction relationships and update character caches after faction save.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The faction instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Update faction cache for event relationships
     refresh_event_faction_relationships(instance)
 
-    # Update cache for all characters in this faction
+    # Update cache for all characters belonging to this faction
     for char in instance.characters.all():
         refresh_character_relationships(char)
 
+    # Clean up faction PDFs after save operation
     cleanup_faction_pdfs_on_save(instance)
 
 
@@ -722,7 +741,8 @@ def pre_delete_faction(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Faction)
-def post_delete_faction_reset_rels(sender, instance, **kwargs):
+def post_delete_faction_reset_rels(sender, instance, **kwargs) -> None:
+    """Reset character relationships when a faction is deleted."""
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
         refresh_character_relationships(char)
@@ -896,7 +916,8 @@ def post_save_plot_reset_rels(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Plot)
-def post_delete_plot_reset_rels(sender, instance, **kwargs):
+def post_delete_plot_reset_rels(sender, instance: Plot, **kwargs: Any) -> None:
+    """Reset character relationships and cache when a plot is deleted."""
     # Update cache for all characters that were in this plot
     for char_rel in instance.get_plot_characters():
         refresh_character_relationships(char_rel.character)
@@ -928,7 +949,8 @@ def post_save_prologue_reset_rels(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Prologue)
-def post_delete_prologue_reset_rels(sender, instance, **kwargs):
+def post_delete_prologue_reset_rels(sender, instance, **kwargs) -> None:
+    """Reset character relationships and cache when prologue is deleted."""
     # Update cache for all characters that were in this prologue
     for char in instance.characters.all():
         refresh_character_relationships(char)
@@ -959,7 +981,14 @@ def pre_delete_quest_reset(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Quest)
-def post_delete_quest_reset_rels(sender, instance, **kwargs):
+def post_delete_quest_reset_rels(sender, instance, **kwargs) -> None:
+    """Reset quest relationships after quest deletion.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The quest instance being deleted
+        **kwargs: Additional keyword arguments from the signal
+    """
     # Update questtype cache if quest had a type
     if instance.typ:
         refresh_event_questtype_relationships(instance.typ)
@@ -990,7 +1019,8 @@ def pre_delete_quest_type_reset(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=QuestType)
-def post_delete_questtype_reset_rels(sender, instance, **kwargs):
+def post_delete_questtype_reset_rels(sender, instance: QuestType, **kwargs) -> None:
+    """Reset quest relationships when a quest type is deleted."""
     # Update cache for all quests that were of this type
     for quest in instance.quests.all():
         refresh_event_quest_relationships(quest)
@@ -1131,13 +1161,28 @@ def pre_save_run(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Run)
-def post_save_run_links(sender, instance, **kwargs):
+def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
+    """Handle post-save actions for Run model instances.
+
+    This signal handler performs cache clearing and configuration updates
+    when a Run instance is saved. It handles both new runs and updates
+    to existing runs, with special handling for development status changes.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Run instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+    """
+    # Clear registration-related caches for this run
     clear_registration_counts_cache(instance.id)
 
+    # Reset configuration cache when run changes
     on_run_post_save_reset_config_cache(instance)
 
+    # Update run plan based on event changes
     update_run_plan_on_event_change(instance)
 
+    # Clear run-specific cache and media files
     clear_run_cache_and_media(instance)
 
     clear_run_event_links_cache(instance.event)
@@ -1181,7 +1226,8 @@ def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=SpeedLarp)
-def post_delete_speedlarp_reset_rels(sender, instance, **kwargs):
+def post_delete_speedlarp_reset_rels(sender, instance: SpeedLarp, **kwargs: Any) -> None:
+    """Reset character relationships and cache when speedlarp is deleted."""
     # Update cache for all characters that were in this speedlarp
     for char in instance.characters.all():
         refresh_character_relationships(char)

@@ -27,11 +27,16 @@ from larpmanager.models.association import Association
 class Command(BaseCommand):
     help = "List of all assocs mails"
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
+        """Print email mappings for associations and admin."""
+        # Get associations with valid email addresses, excluding demo accounts
         lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)
+
+        # Output association slug and email mappings
         for el in lst.order_by("slug").values_list("slug", "main_mail"):
             if el[1]:
                 self.stdout.write(f"{el[0]}@larpmanager.com {el[1]}")
 
+        # Output admin email mapping
         name, email = conf_settings.ADMINS[0]
         self.stdout.write(f"@larpmanager.com {email}")

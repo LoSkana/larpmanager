@@ -40,12 +40,21 @@ def cache_cache_lm_home_key():
     return "cache_lm_home"
 
 
-def get_cache_lm_home():
+def get_cache_lm_home() -> dict:
+    """Get cached LM home data, computing if not cached.
+
+    Returns:
+        Cached or freshly computed home data.
+    """
+    # Get cache key and attempt to retrieve cached data
     key = cache_cache_lm_home_key()
     res = cache.get(key)
+
+    # If cache miss, compute fresh data and cache it
     if res is None:
         res = update_cache_lm_home()
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
@@ -98,9 +107,17 @@ def _get_showcases():
     return res
 
 
-def _get_promoters():
+def _get_promoters() -> list[dict]:
+    """Get all promoters from associations that have promoter data.
+
+    Returns:
+        List of promoter dictionaries from associations with valid promoter data.
+    """
+    # Filter associations that have promoter data
     que = Association.objects.exclude(promoter__isnull=True)
     que = que.exclude(promoter__exact="")
+
+    # Convert each association's promoter to dictionary format
     res = []
     for element in que:
         res.append(element.promoter_dict())

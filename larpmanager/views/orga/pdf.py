@@ -87,12 +87,29 @@ def orga_characters_pdf(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_pdf_regenerate(request, s):
+def orga_pdf_regenerate(request: HttpRequest, s: str) -> HttpResponse:
+    """Regenerate PDF files for all characters in future event runs.
+
+    Args:
+        request: HTTP request object
+        s: Event slug string
+
+    Returns:
+        Redirect response to characters PDF page
+    """
+    # Check user permissions for PDF operations
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Get all characters associated with the event
     chs = ctx["event"].get_elements(Character)
+
+    # Iterate through all future runs of the event
     for run in Run.objects.filter(event=ctx["event"], end__gte=datetime.now()):
+        # Generate PDF for each character in each run
         for ch in chs:
             print_character_bkg(ctx["event"].assoc.slug, run.get_slug(), ch.number)
+
+    # Show success message and redirect
     messages.success(request, _("Regeneration pdf started") + "!")
     return redirect("orga_characters_pdf", s=ctx["run"].get_slug())
 
@@ -105,12 +122,29 @@ def orga_characters_sheet_pdf(request, s, num):
 
 
 @login_required
-def orga_characters_sheet_test(request, s, num):
+def orga_characters_sheet_test(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate a character sheet PDF for testing purposes.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        num: Character number
+
+    Returns:
+        Rendered PDF template response
+    """
+    # Check user permissions for character PDF generation
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Validate and retrieve character data
     get_char_check(request, ctx, num, True)
+
+    # Configure context for PDF rendering
     ctx["pdf"] = True
     get_character_sheet(ctx)
     add_pdf_instructions(ctx)
+
+    # Render the auxiliary PDF template
     return render(request, "pdf/sheets/auxiliary.html", ctx)
 
 
@@ -137,11 +171,27 @@ def orga_characters_relationships_pdf(request, s, num):
 
 
 @login_required
-def orga_characters_relationships_test(request, s, num):
+def orga_characters_relationships_test(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate character relationships test PDF for organization view.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Character number
+
+    Returns:
+        Rendered relationships template response
+    """
+    # Check organization permissions for character PDF access
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Validate character access and retrieve character data
     get_char_check(request, ctx, num, True)
+
+    # Populate context with character sheet and relationship data
     get_character_sheet(ctx)
     get_character_relationships(ctx)
+
     return render(request, "pdf/sheets/relationships.html", ctx)
 
 

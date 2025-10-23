@@ -450,13 +450,23 @@ def get_event_cache_traits(ctx: dict, res: dict) -> None:
         res["max_tr_number"] = 0
 
 
-def get_event_cache_all(ctx):
+def get_event_cache_all(ctx: dict) -> None:
+    """Get and update event cache data for the given context.
+
+    Args:
+        ctx: Context dictionary containing run information.
+    """
+    # Get cache key for the current run
     k = get_event_cache_all_key(ctx["run"])
+
+    # Try to retrieve cached result
     res = cache.get(k)
     if res is None:
+        # Initialize cache if not found
         res = init_event_cache_all(ctx)
         cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
+    # Update context with cached data
     ctx.update(res)
 
 
@@ -471,11 +481,19 @@ def reset_event_cache_all(run):
     cache.delete(k)
 
 
-def update_character_fields(instance, data):
+def update_character_fields(instance, data: dict) -> None:
+    """Updates character fields with event-specific data if character features are enabled.
+
+    Args:
+        instance: Event instance with event_id attribute
+        data: Dictionary to update with character element fields
+    """
+    # Check if character features are enabled for this event
     features = get_event_features(instance.event_id)
     if "character" not in features:
         return
 
+    # Build context and update data with character element fields
     ctx = {"features": features, "event": instance.event}
     data.update(get_character_element_fields(ctx, instance.pk, only_visible=False))
 
@@ -519,21 +537,53 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
     cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_event_cache_all_character_reg(instance, res, run):
+def update_event_cache_all_character_reg(instance, res: dict, run) -> None:
+    """Updates character registration cache data for an event.
+
+    Args:
+        instance: Character registration instance
+        res: Result dictionary to update with character data
+        run: Event run instance
+    """
+    # Get character from registration instance
     char = instance.character
+
+    # Generate character display data
     data = char.show()
+
+    # Search and update player information
     search_player(char, data, {"run": run, "assignments": {char.number: instance}})
+
+    # Initialize character entry if not exists
     if char.number not in res["chars"]:
         res["chars"][char.number] = {}
+
+    # Update character data in result
     res["chars"][char.number].update(data)
 
 
-def update_event_cache_all_character(instance, res, run):
+def update_event_cache_all_character(instance: Character, res: dict, run: Run) -> None:
+    """Update character cache data for event display.
+
+    Args:
+        instance: Character instance to update
+        res: Result dictionary to store character data
+        run: Event run context
+    """
+    # Generate character display data for the specific run
     data = instance.show(run)
+
+    # Update character fields with the generated data
     update_character_fields(instance, data)
+
+    # Search and update player information
     search_player(instance, data, {"run": run})
+
+    # Initialize character entry in results if not exists
     if instance.number not in res["chars"]:
         res["chars"][instance.number] = {}
+
+    # Update the character data in results
     res["chars"][instance.number].update(data)
 
 
@@ -545,10 +595,23 @@ def update_event_cache_all_faction(instance, res):
         res["factions"][instance.number] = data
 
 
-def has_different_cache_values(instance, prev, lst):
+def has_different_cache_values(instance: object, prev: object, lst: list) -> bool:
+    """Check if any attributes in lst have different values between instance and prev.
+
+    Args:
+        instance: Current object instance
+        prev: Previous object instance
+        lst: List of attribute names to compare
+
+    Returns:
+        True if any attribute differs, False otherwise
+    """
     for v in lst:
+        # Get attribute values from both instances
         p_v = getattr(prev, v)
         c_v = getattr(instance, v)
+
+        # Return immediately if values differ
         if p_v != c_v:
             return True
 
@@ -562,28 +625,37 @@ def update_member_event_character_cache(instance):
         update_event_cache_all(rcr.reg.run, rcr)
 
 
-def on_character_pre_save_update_cache(char):
+def on_character_pre_save_update_cache(char: Character) -> None:
+    """Update or clear character cache before save based on changed fields."""
+    # Clear cache for new characters (no primary key yet)
     if not char.pk:
         clear_event_cache_all_runs(char.event)
         return
 
     try:
+        # Get previous version to compare changes
         prev = Character.objects.get(pk=char.pk)
 
+        # Check if cache-affecting fields changed
         lst = ["player_id", "mirror_id"]
         if has_different_cache_values(char, prev, lst):
             clear_event_cache_all_runs(char.event)
         else:
+            # Update cache with new character data
             update_event_cache_all_runs(char.event, char)
     except Exception:
+        # Fallback: clear cache on any error
         clear_event_cache_all_runs(char.event)
 
 
-def on_character_factions_m2m_changed(sender, **kwargs):
+def on_character_factions_m2m_changed(sender, **kwargs) -> None:
+    """Clear event cache when character factions change."""
+    # Check if action is one that affects the relationship
     action = kwargs.pop("action", None)
     if action not in ["post_add", "post_remove", "post_clear"]:
         return
 
+    # Get the faction instance and clear related event cache
     instance: Optional[Faction] = kwargs.pop("instance", None)
     clear_event_cache_all_runs(instance.event)
 
@@ -617,33 +689,46 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
         update_event_cache_all_runs(instance.event, instance)
 
 
-def on_quest_type_pre_save_update_cache(instance):
+def on_quest_type_pre_save_update_cache(instance: QuestType) -> None:
+    """Clear event cache when QuestType changes that affect caching."""
+    # Handle new QuestType creation
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
         return
 
+    # Check if cache-affecting fields have changed
     lst = ["name"]
     prev = QuestType.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
         clear_event_cache_all_runs(instance.event)
 
 
-def on_quest_pre_save_update_cache(instance):
+def on_quest_pre_save_update_cache(instance: Quest) -> None:
+    """Clear event cache when quest fields change."""
+    # Clear cache for new quests
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
         return
 
+    # Check if cache-relevant fields have changed
     lst = ["name", "teaser", "typ_id"]
     prev = Quest.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
         clear_event_cache_all_runs(instance.event)
 
 
-def on_trait_pre_save_update_cache(instance):
+def on_trait_pre_save_update_cache(instance: Trait) -> None:
+    """Clear event cache when trait changes affect cached data.
+
+    Args:
+        instance: The trait instance being saved.
+    """
+    # Clear cache for new traits
     if not instance.pk:
         clear_event_cache_all_runs(instance.event)
         return
 
+    # Check if cache-relevant fields have changed
     lst = ["name", "teaser", "quest_id"]
     prev = Trait.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
@@ -661,18 +746,23 @@ def reset_character_registration_cache(instance):
     clear_run_cache_and_media(instance.reg.run)
 
 
-def clear_event_cache_all_runs(event):
+def clear_event_cache_all_runs(event: Event) -> None:
+    """Clear cache and media for all runs of event, children, siblings, and parent."""
+    # Clear cache for all runs of the current event
     for r in event.runs.all():
         clear_run_cache_and_media(r)
-    # reset also runs of child events
+
+    # Clear cache for runs of child events
     for child in Event.objects.filter(parent=event).prefetch_related("runs"):
         for r in child.runs.all():
             clear_run_cache_and_media(r)
+
     if event.parent:
-        # reset also runs of sibling events
+        # Clear cache for runs of sibling events
         for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
             for r in child.runs.all():
                 clear_run_cache_and_media(r)
-        # reset also runs of parent event
+
+        # Clear cache for runs of parent event
         for r in event.parent.runs.all():
             clear_run_cache_and_media(r)

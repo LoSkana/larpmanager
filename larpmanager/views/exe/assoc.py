@@ -58,12 +58,23 @@ def exe_association(request):
 
 
 @login_required
-def exe_roles(request):
+def exe_roles(request) -> HttpResponse:
+    """Handle association roles management page.
+
+    Args:
+        request: HTTP request object
+
+    Returns:
+        Rendered roles management template
+    """
+    # Check user permissions for role management
     ctx = check_assoc_permission(request, "exe_roles")
 
     def def_callback(ctx):
+        # Create default admin role for association
         return AssocRole.objects.create(assoc_id=ctx["a_id"], number=1, name="Admin")
 
+    # Prepare roles list with existing association roles
     prepare_roles_list(ctx, AssocPermission, AssocRole.objects.filter(assoc_id=request.assoc["id"]), def_callback)
 
     return render(request, "larpmanager/exe/roles.html", ctx)
@@ -233,12 +244,19 @@ def exe_features_off(request, slug):
 
 
 @login_required
-def exe_larpmanager(request):
+def exe_larpmanager(request: HttpRequest) -> HttpResponse:
+    """Display association's run list with payment information."""
+    # Check user permissions for association management
     ctx = check_assoc_permission(request, "exe_association")
+
+    # Get all runs for the current association
     que = Run.objects.filter(event__assoc_id=ctx["a_id"])
     ctx["list"] = que.select_related("event").order_by("start")
+
+    # Add payment information to each run
     for run in ctx["list"]:
         get_run_lm_payment(run)
+
     return render(request, "larpmanager/exe/larpmanager.html", ctx)
 
 

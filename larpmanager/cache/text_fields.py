@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.base import BaseModel
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -134,20 +135,37 @@ def _init_element_cache_text_field(el: BaseModel, res: dict[int, dict[str, Any]]
             res[el.id][field] = get_single_cache_text_field(el.id, field, v)
 
 
-def get_cache_text_field(typ, event):
+def get_cache_text_field(typ: str, event: Event) -> str:
+    """Get cached text field value for event, initializing if not found."""
+    # Generate cache key for the specific type and event
     key = cache_text_field_key(typ, event)
+
+    # Try to retrieve cached value
     res = cache.get(key)
+
+    # Initialize and cache if not found
     if res is None:
         res = init_cache_text_field(typ, event)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
-def update_cache_text_fields(el):
+def update_cache_text_fields(el: object) -> None:
+    """Update cache for text fields of the given element.
+
+    Args:
+        el: Element object to update cache for
+    """
+    # Get element type and associated event
     typ = el.__class__
     event = el.event
+
+    # Generate cache key and retrieve current cache data
     key = cache_text_field_key(typ, event)
     res = get_cache_text_field(typ, event)
+
+    # Initialize element cache and update cache storage
     _init_element_cache_text_field(el, res, typ)
     cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
@@ -195,12 +213,22 @@ def init_cache_reg_field(run):
     return res
 
 
-def _init_element_cache_reg_field(el, res):
+def _init_element_cache_reg_field(el: Registration, res: dict[int, dict[str, Any]]) -> None:
+    """Initialize cache for registration element fields.
+
+    Args:
+        el: Registration element to process
+        res: Result dictionary to populate with cached data
+    """
+    # Initialize element entry in result dictionary if not present
     if el.id not in res:
         res[el.id] = {}
 
+    # Get all editor-type questions for the event
     # noinspection PyProtectedMember
     que = RegistrationQuestion.objects.filter(event_id=el.run.event_id)
+
+    # Process each editor question and cache the answer text
     for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         try:
             v = RegistrationAnswer.objects.get(question_id=que_id, reg_id=el.id).text
@@ -210,19 +238,39 @@ def _init_element_cache_reg_field(el, res):
             pass
 
 
-def get_cache_reg_field(run):
+def get_cache_reg_field(run: Run) -> dict:
+    """Get cached registration field data for a run.
+
+    Args:
+        run: The run instance to get cached registration fields for.
+
+    Returns:
+        Dictionary containing cached registration field data.
+    """
+    # Generate cache key for the run's registration fields
     key = cache_text_field_key(Registration, run)
+
+    # Try to retrieve cached result
     res = cache.get(key)
+
+    # If not cached, initialize and cache the result
     if res is None:
         res = init_cache_reg_field(run)
         cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
     return res
 
 
-def update_cache_reg_fields(el):
+def update_cache_reg_fields(el: Registration) -> None:
+    """Updates cached registration fields for the given element's run."""
+    # Get the run associated with the registration element
     run = el.run
+
+    # Generate cache key and retrieve current cached registration fields
     key = cache_text_field_key(Registration, run)
     res = get_cache_reg_field(run)
+
+    # Initialize element cache and update cache with new data
     _init_element_cache_reg_field(el, res)
     cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 

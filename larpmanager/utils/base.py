@@ -262,11 +262,13 @@ def get_index_permissions(
     return res
 
 
-def is_allowed_managed(ar, ctx):
-    # check if the association skin is managed and the user is not staff
+def is_allowed_managed(ar: dict, ctx: dict) -> bool:
+    """Check if user is allowed to access managed association features."""
+    # Check if the association skin is managed and the user is not staff
     if ctx.get("skin_managed", False) and not ctx.get("is_staff", False):
         allowed = get_allowed_managed()
-        # if the feature is a placeholder different than the management of events:
+
+        # If the feature is a placeholder different than the management of events
         if ar["feature__placeholder"] and ar["slug"] not in allowed:
             return False
 

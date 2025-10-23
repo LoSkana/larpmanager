@@ -120,11 +120,21 @@ class PaymentInvoice(BaseModel):
             f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
         )
 
-    def download(self):
+    def download(self) -> str:
+        """Download the invoice file if available.
+
+        Returns:
+            Download URL or empty string if no invoice/name available.
+        """
+        # Check if invoice exists
         if not self.invoice:
             return ""
+
+        # Check if invoice has a name
         if not self.invoice.name:
             return ""
+
+        # Return download URL for the invoice
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
@@ -255,7 +265,9 @@ class AccountingItem(BaseModel):
 
     hide = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the invoice."""
+
         s = "Voce contabile"
         # noinspection PyUnresolvedReferences
         if self.id:
@@ -598,20 +610,30 @@ class Collection(BaseModel):
             return self.member.display_member()
         return self.name
 
-    def unique_contribute_code(self):
+    def unique_contribute_code(self) -> None:
+        """Generate a unique contribute code for the collection."""
+        # Try up to 5 times to generate a unique code
         for _idx in range(5):
             cod = generate_id(16)
+
+            # Check if the generated code is already in use
             if not Collection.objects.filter(contribute_code=cod).exists():
                 self.contribute_code = cod
                 return
+
+        # If all attempts failed, raise an error
         raise ValueError("Too many attempts to generate the code")
 
-    def unique_redeem_code(self):
+    def unique_redeem_code(self) -> None:
+        """Generate a unique redeem code for the collection."""
+        # Try up to 5 attempts to generate a unique code
         for _idx in range(5):
             cod = generate_id(16)
+            # Check if the generated code is already in use
             if not Collection.objects.filter(redeem_code=cod).exists():
                 self.redeem_code = cod
                 return
+        # Raise error if unable to generate unique code after max attempts
         raise ValueError("Too many attempts to generate the code")
 
 

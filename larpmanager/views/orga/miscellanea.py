@@ -195,11 +195,18 @@ def orga_workshop_modules_edit(request, s, num):
 
 
 @login_required
-def orga_workshop_questions(request, s):
+def orga_workshop_questions(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle workshop questions management for organizers."""
+    # Check user permissions for workshop questions management
     ctx = check_event_permission(request, s, "orga_workshop_questions")
+
+    # Process POST requests for creating/updating questions
     if request.method == "POST":
         return writing_post(request, ctx, WorkshopQuestion, "workshop_question")
+
+    # Retrieve and order workshop questions by module and question number
     ctx["list"] = WorkshopQuestion.objects.filter(module__event=ctx["event"]).order_by("module__number", "number")
+
     return render(request, "larpmanager/orga/workshop/questions.html", ctx)
 
 
@@ -209,13 +216,29 @@ def orga_workshop_questions_edit(request, s, num):
 
 
 @login_required
-def orga_workshop_options(request, s):
+def orga_workshop_options(request: HttpRequest, s: str) -> HttpResponse:
+    """Handle workshop options management for organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered template response or POST redirect
+    """
+    # Check user permissions for workshop options management
     ctx = check_event_permission(request, s, "orga_workshop_options")
+
+    # Handle POST requests for creating/updating workshop options
     if request.method == "POST":
         return writing_post(request, ctx, WorkshopOption, "workshop_option")
+
+    # Fetch and order workshop options for the event
     ctx["list"] = WorkshopOption.objects.filter(question__module__event=ctx["event"]).order_by(
         "question__module__number", "question__number", "is_correct"
     )
+
+    # Render the workshop options template
     return render(request, "larpmanager/orga/workshop/options.html", ctx)
 
 

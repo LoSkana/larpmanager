@@ -142,9 +142,12 @@ def download_d(s):
     return download(s)
 
 
-def download(url):
+def download(url: str) -> str:
+    """Extract media path from URL if present, otherwise return original URL."""
     s = url
+    # Find the last occurrence of "/media/" in the URL
     p = s.rfind("/media/")
+    # If "/media/" is found, extract the path from that point
     if p >= 0:
         url = s[p:]
     return url
@@ -174,10 +177,24 @@ def show_thumb(height: int, text: str) -> SafeString:
     return mark_safe(s)
 
 
-def get_attr(ob, nm):
+def get_attr(ob: object, nm: str) -> str | None:
+    """Get attribute value from object, returning None if missing or empty string if falsy.
+
+    Args:
+        ob: Object to get attribute from
+        nm: Name of the attribute to retrieve
+
+    Returns:
+        Attribute value if truthy, empty string if falsy, None if missing
+    """
+    # Check if object has the requested attribute
     if not hasattr(ob, nm):
         return None
+
+    # Get the attribute value
     v = getattr(ob, nm)
+
+    # Return value if truthy, otherwise empty string
     if v:
         return v
     return ""

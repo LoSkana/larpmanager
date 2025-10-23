@@ -562,12 +562,19 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 
 
 @login_required
-def chats(request):
+def chats(request: HttpRequest) -> HttpResponse:
+    """Render chat list page for the current user."""
+    # Check if user has access to chat feature
     check_assoc_feature(request, "chat")
+
+    # Build base context for the user
     ctx = def_user_ctx(request)
+
+    # Add user's contacts ordered by last message timestamp
     ctx.update(
         {"list": Contact.objects.filter(me=request.user.member, assoc_id=request.assoc["id"]).order_by("-last_message")}
     )
+
     return render(request, "larpmanager/member/chats.html", ctx)
 
 
@@ -629,26 +636,42 @@ def chat(request, n):
 
 
 @login_required
-def badges(request):
+def badges(request: HttpRequest) -> HttpResponse:
+    """Display list of badges for the current association."""
+    # Initialize context with user data and empty badges list
     ctx = def_user_ctx(request)
     ctx.update({"badges": []})
+
+    # Verify user has permission to view badges feature
     check_assoc_feature(request, "badge")
+
+    # Fetch and add badges to context, ordered by number
     for badge in Badge.objects.filter(assoc_id=request.assoc["id"]).order_by("number"):
         ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
+
+    # Set page identifier and render template
     ctx["page"] = "badges"
     return render(request, "larpmanager/general/badges.html", ctx)
 
 
 @login_required
-def badge(request, n, p=1):
+def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
+    """Display a badge with shuffled member list."""
     check_assoc_feature(request, "badge")
     badge = get_badge(n, request)
+
+    # Initialize context with badge data
     ctx = def_user_ctx(request)
     ctx.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+
+    # Collect all badge members
     for el in badge.members.all():
         ctx["list"].append(el)
+
+    # Shuffle members using deterministic daily seed
     v = datetime.today().date() - date(1970, 1, 1)
     random.Random(v.days).shuffle(ctx["list"])
+
     return render(request, "larpmanager/general/badge.html", ctx)
 
 
@@ -702,12 +725,25 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
 
 
 @login_required
-def unsubscribe(request):
+def unsubscribe(request: HttpRequest) -> HttpResponse:
+    """Unsubscribe user from newsletter communications.
+
+    Args:
+        request: HTTP request object containing user and association data
+
+    Returns:
+        Redirect response to home page
+    """
+    # Build context with user and association information
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
+
+    # Get user membership and update newsletter preference
     mb = get_user_membership(ctx["member"], ctx["a_id"])
     mb.newsletter = NewsletterChoices.NO
     mb.save()
+
+    # Show success message and redirect to home
     messages.success(request, _("The request of removal from further communication has been successfull!"))
     return redirect("home")
 
