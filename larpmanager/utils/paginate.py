@@ -264,7 +264,8 @@ def _get_ordering(ctx: dict, order: list) -> list[str]:
     return ordering
 
 
-def _get_field_map():
+def _get_field_map() -> dict[str, list[str]]:
+    """Return field mapping for member-related queries."""
     field_map = {"member": ["member__surname", "member__name"]}
     return field_map
 

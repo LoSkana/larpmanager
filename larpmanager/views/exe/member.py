@@ -258,7 +258,8 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_membership_request(request, num):
+def exe_membership_request(request: HttpRequest, num: int) -> HttpResponse:
+    """Handle membership request display for organization executives."""
     ctx = check_assoc_permission(request, "exe_membership")
     ctx.update(get_member(num))
     return get_membership_request(ctx)
@@ -774,9 +775,14 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_badges(request):
+def exe_badges(request: HttpRequest) -> HttpResponse:
+    """Display and manage association badges."""
+    # Check user permissions for badge management
     ctx = check_assoc_permission(request, "exe_badges")
+
+    # Load all badges for the association with member relationships
     ctx["list"] = Badge.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("members")
+
     return render(request, "larpmanager/exe/users/badges.html", ctx)
 
 

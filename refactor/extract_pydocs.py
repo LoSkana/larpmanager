@@ -41,12 +41,12 @@ def analyze_file(filepath):
     functions.sort(key=lambda n: n.lineno)
 
     for node in functions:
+        # Count occurrence of this function name (for all functions)
+        function_counts[node.name] += 1
+        function_number = function_counts[node.name]
+
         # Only include functions WITHOUT docstrings
         if not has_docstring(node):
-            # Count occurrence of this function name
-            function_counts[node.name] += 1
-            function_number = function_counts[node.name]
-
             length = get_function_length(node)
             results.append((node.name, filepath, length, function_number))
 

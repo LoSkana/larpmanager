@@ -553,7 +553,8 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_registrations_accounting(request, s):
+def orga_registrations_accounting(request: HttpRequest, s: str) -> JsonResponse:
+    """Retrieve accounting data for event registrations."""
     ctx = check_event_permission(request, s, "orga_registrations")
     res = _orga_registrations_acc(ctx)
     return JsonResponse(res)

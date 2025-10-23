@@ -491,10 +491,12 @@ def html_clean(tx: str | None) -> str:
     return tx
 
 
-def dump(obj):
+def dump(obj: object) -> str:
+    """Return a string representation of all object attributes and their values."""
     s = ""
     for attr in dir(obj):
         s += f"obj.{attr} = {repr(getattr(obj, attr))}\n"
+    return s
 
 
 def rmdir(directory: Path) -> None:

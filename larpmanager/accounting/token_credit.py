@@ -342,11 +342,27 @@ def update_token_credit(instance, token: bool = True) -> None:
         reg.save()
 
 
-def handle_tokes_credits(assoc_id, features, reg, remaining):
+def handle_tokes_credits(
+    assoc_id: int,
+    features: list[str],
+    reg: Registration,
+    remaining: Decimal,
+) -> None:
+    """Handle token credits for a registration based on remaining balance.
+
+    Args:
+        assoc_id: Association ID for token credit operations
+        features: List of enabled feature names
+        reg: Registration object to process
+        remaining: Remaining balance (positive = use credits, negative = add credits)
+    """
+    # Skip if token credits are disabled globally or for this event
     if "token_credit" not in features or get_event_config(reg.run.event_id, "token_credit_disable_t", False):
         return
 
+    # Handle positive balance by using available token credits
     if remaining > 0:
         registration_tokens_credits_use(reg, remaining, assoc_id)
+    # Handle negative balance (overpayment) by adding token credits
     else:
         registration_tokens_credits_overpay(reg, -remaining, assoc_id)

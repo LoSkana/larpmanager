@@ -711,9 +711,14 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_accounting(request):
+def exe_accounting(request: HttpRequest) -> HttpResponse:
+    """Render organization-wide accounting dashboard."""
+    # Check user permissions for accounting access
     ctx = check_assoc_permission(request, "exe_accounting")
+
+    # Populate context with accounting data
     assoc_accounting(ctx)
+
     return render(request, "larpmanager/exe/accounting/accounting.html", ctx)
 
 

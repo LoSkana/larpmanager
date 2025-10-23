@@ -20,6 +20,7 @@
 import secrets
 from datetime import datetime
 from itertools import chain
+from typing import Any
 
 from django.core.validators import RegexValidator
 from django.db import models
@@ -263,7 +264,8 @@ class PublisherApiKey(BaseModel):
 
     usage_count = models.PositiveIntegerField(default=0)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Generate a secure random key if one doesn't exist, then save the instance."""
         if not self.key:
             self.key = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)

@@ -37,9 +37,9 @@ class QuestType(Writing):
     def __str__(self):
         return self.name
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None) -> dict:
+        # Return base serialized data (commented quest list excluded)
         js = super().show(run)
-        # ~ js['quests'] = [t.show_red() for t in self.quests.filter(hide=False)]
         return js
 
     class Meta:
@@ -117,13 +117,19 @@ class Trait(Writing):
     def __str__(self):
         return f"T{self.number} {self.name}"
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None) -> dict:
+        """Generate JSON representation with role, keywords, safety, and quest data."""
         js = super().show(run)
+
+        # Add role, keywords, and safety attributes to JSON
         for s in ["role", "keywords", "safety"]:
             self.upd_js_attr(js, s)
+
+        # Add quest ID if quest exists
         if self.quest:
             # noinspection PyUnresolvedReferences
             js["quest"] = self.quest.id
+
         return js
 
 

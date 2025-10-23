@@ -37,6 +37,7 @@ from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
 )
+from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 
@@ -470,7 +471,8 @@ def get_event_cache_all(ctx: dict) -> None:
     ctx.update(res)
 
 
-def clear_run_cache_and_media(run):
+def clear_run_cache_and_media(run: Run) -> None:
+    """Clear cache and delete all media files for a run."""
     reset_event_cache_all(run)
     media_path = run.get_media_filepath()
     delete_all_in_path(media_path)
@@ -618,9 +620,13 @@ def has_different_cache_values(instance: object, prev: object, lst: list) -> boo
     return False
 
 
-def update_member_event_character_cache(instance):
+def update_member_event_character_cache(instance: Member) -> None:
+    """Update event cache for all active character registrations of a member."""
+    # Get all active character registrations for this member
     que = RegistrationCharacterRel.objects.filter(reg__member_id=instance.id, reg__cancellation_date__isnull=True)
     que = que.select_related("character", "reg", "reg__run")
+
+    # Update cache for each character registration
     for rcr in que:
         update_event_cache_all(rcr.reg.run, rcr)
 
@@ -740,9 +746,12 @@ def update_event_cache_all_runs(event, instance):
         update_event_cache_all(r, instance)
 
 
-def reset_character_registration_cache(instance):
+def reset_character_registration_cache(instance) -> None:
+    """Reset cache for character's registration and run."""
+    # Save registration to trigger cache invalidation
     if instance.reg:
         instance.reg.save()
+    # Clear run-level cache and media
     clear_run_cache_and_media(instance.reg.run)
 
 

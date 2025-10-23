@@ -157,9 +157,13 @@ def update_reg_counts(run) -> dict[str, int]:
     return s
 
 
-def on_character_update_registration_cache(instance):
+def on_character_update_registration_cache(instance: Character) -> None:
+    """Clear registration caches and update related registrations when character changes."""
+    # Clear registration count caches for all event runs
     for run_id in instance.event.runs.values_list("id", flat=True):
         clear_registration_counts_cache(run_id)
+
+    # Trigger registration updates if character approval is enabled
     if get_event_config(instance.event_id, "user_character_approval", False):
         for rcr in RegistrationCharacterRel.objects.filter(character=instance):
             rcr.reg.save()

@@ -50,7 +50,9 @@ class FileTypeValidator:
         "https://www.iana.org/assignments/media-types/media-types.xhtml"
     )
 
-    def __init__(self, allowed_types, allowed_extensions=()):
+    def __init__(self, allowed_types: list[str], allowed_extensions: tuple[str, ...] = ()) -> None:
+        """Initialize validator with allowed MIME types and file extensions."""
+        # Store original input and normalize MIME types
         self.input_allowed_types = allowed_types
         self.allowed_mimes = self._normalize(allowed_types)
         self.allowed_exts = allowed_extensions

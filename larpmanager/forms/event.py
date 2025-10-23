@@ -311,7 +311,8 @@ class OrgaConfigForm(ConfigForm):
         model = Event
         fields = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Initialize parent class and set cancellation prevention flag
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
@@ -913,13 +914,16 @@ class OrgaAppearanceForm(MyCssForm):
         help_text=_("These CSS commands will be carried over to all pages in your Association space"),
     )
 
-    def __init__(self, *args: object, **kwargs: object):
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        """Initialize form with conditional field handling based on carousel feature."""
         super().__init__(*args, **kwargs)
 
         self.prevent_canc = True
 
+        # Configure visible links for event CSS
         self.show_link = ["id_event_css"]
 
+        # Remove carousel fields if feature is disabled
         dl = []
         if "carousel" not in self.params["features"]:
             dl.append("carousel_text")
@@ -927,6 +931,7 @@ class OrgaAppearanceForm(MyCssForm):
         else:
             self.show_link.append("id_carousel_text")
 
+        # Delete unused fields from form
         for m in dl:
             del self.fields[m]
 
@@ -1073,12 +1078,16 @@ class OrgaEventRoleForm(MyForm):
         fields = ("name", "members", "event")
         widgets = {"members": AssocMemberS2WidgetMulti}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure members widget with association context."""
         super().__init__(*args, **kwargs)
+        # Configure members widget with association ID from params
         self.fields["members"].widget.set_assoc(self.params["a_id"])
+        # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save form instance and update role permissions."""
         instance = super().save()
         save_permissions_role(instance, self)
         return instance
@@ -1233,14 +1242,26 @@ class OrgaRunForm(ConfigForm):
 
         return ls
 
-    def clean(self):
+    def clean(self) -> dict[str, any]:
+        """Validate that end date is defined and not before start date.
+
+        Returns:
+            Cleaned form data.
+
+        Raises:
+            ValidationError: If end/start dates are missing or end is before start.
+        """
         cleaned_data = super().clean()
+
+        # Validate end date is present
         if "end" not in cleaned_data or not cleaned_data["end"]:
             raise ValidationError({"end": _("You need to define the end date!")})
 
+        # Validate start date is present
         if "start" not in cleaned_data or not cleaned_data["start"]:
             raise ValidationError({"start": _("You need to define the start date!")})
 
+        # Ensure end date is not before start date
         if cleaned_data["end"] < cleaned_data["start"]:
             raise ValidationError({"end": _("End date cannot be before start date!")})
 
@@ -1327,19 +1348,31 @@ class ExeTemplateForm(FeatureForm):
         model = Event
         fields = ["name"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Initialize parent class and feature system
         super().__init__(*args, **kwargs)
         self._init_features(False)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Event:
+        """Save the form instance, setting template and association defaults.
+
+        Args:
+            commit: Whether to save the instance to the database.
+
+        Returns:
+            The saved Event instance.
+        """
         instance = super().save(commit=False)
 
+        # Ensure template flag is set
         if not instance.template:
             instance.template = True
 
+        # Set association from params if not already set
         if not instance.assoc_id:
             instance.assoc_id = self.params["a_id"]
 
+        # Save instance before processing features
         if not instance.pk:
             instance.save()
 

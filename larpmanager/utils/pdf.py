@@ -482,9 +482,14 @@ def print_handout(ctx: dict, force: bool = True) -> Any:
     return return_pdf(fp, f"{ctx['handout'].data['name']}")
 
 
-def print_volunteer_registry(ctx):
+def print_volunteer_registry(ctx: dict) -> str:
+    """Generate volunteer registry PDF and return file path."""
+    # Build file path for volunteer registry PDF
     fp = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{ctx['assoc'].slug}.pdf")
+
+    # Generate PDF from template
     xhtml_pdf(ctx, "pdf/volunteer_registry.html", fp)
+
     return fp
 
 
@@ -545,9 +550,19 @@ def remove_run_pdf(event):
         safe_remove(run.get_gallery_filepath())
 
 
-def delete_character_pdf_files(instance, single=None, runs=None):
+def delete_character_pdf_files(instance, single=None, runs=None) -> None:
+    """Delete PDF files for a character across specified runs.
+
+    Args:
+        instance: Character instance whose PDF files should be deleted
+        single: Optional specific run to delete files for
+        runs: Optional queryset of runs, defaults to all event runs
+    """
+    # Default to all runs if none specified
     if not runs:
         runs = instance.event.runs.all()
+
+    # Delete PDF files for each run
     for run in runs:
         if single and run != single:
             continue
@@ -646,9 +661,10 @@ def cleanup_pdfs_on_trait_assignment(instance, created):
 # ## TASKS
 
 
-def print_handout_go(ctx, c):
+def print_handout_go(ctx: HttpRequest, c: Character) -> HttpResponse:
+    """Retrieve character handout and generate printable version."""
     get_handout(ctx, c)
-    print_handout(ctx)
+    return print_handout(ctx)
 
 
 def get_fake_request(assoc_slug: str) -> HttpRequest:
@@ -669,7 +685,8 @@ def get_fake_request(assoc_slug: str) -> HttpRequest:
 
 
 @background_auto(queue="pdf")
-def print_handout_bkg(a, s, c):
+def print_handout_bkg(a: Association, s: str, c: Character) -> None:
+    """Prints character handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(a)
     ctx = get_event_run(request, s)
     print_handout_go(ctx, c)
@@ -688,7 +705,8 @@ def print_character_go(ctx, c):
 
 
 @background_auto(queue="pdf")
-def print_character_bkg(a, s, c):
+def print_character_bkg(a: Association, s: str, c: Character) -> None:
+    """Print character background for a given association, event slug, and character."""
     request = get_fake_request(a)
     ctx = get_event_run(request, s)
     print_character_go(ctx, c)

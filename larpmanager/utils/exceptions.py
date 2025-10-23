@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 from django.http import HttpRequest
 
 from larpmanager.models.base import Feature
@@ -56,7 +58,8 @@ class RedirectError(Exception):
         view (str): View name to redirect to
     """
 
-    def __init__(self, view):
+    def __init__(self, view: Any) -> None:
+        # Initialize base class
         super().__init__()
         self.view = view
 
@@ -68,7 +71,8 @@ class SignupError(Exception):
         slug (str): Event slug associated with the signup error
     """
 
-    def __init__(self, slug):
+    def __init__(self, slug: str) -> None:
+        """Initialize with association slug."""
         super().__init__()
         self.slug = slug
 
@@ -80,7 +84,7 @@ class WaitingError(Exception):
         slug (str): Event slug for the waiting period
     """
 
-    def __init__(self, slug):
+    def __init__(self, slug: str) -> None:
         super().__init__()
         self.slug = slug
 
@@ -93,7 +97,8 @@ class HiddenError(Exception):
         name (str): Name of the hidden content
     """
 
-    def __init__(self, slug, name):
+    def __init__(self, slug: str, name: str) -> None:
+        """Initialize with slug and name."""
         super().__init__()
         self.slug = slug
         self.name = name
@@ -124,7 +129,8 @@ class MembershipError(Exception):
         assocs (list, optional): List of associations related to the error
     """
 
-    def __init__(self, assocs=None):
+    def __init__(self, assocs: list | None = None) -> None:
+        """Initialize form with optional associations list."""
         super().__init__()
         self.assocs = assocs
 
@@ -188,7 +194,8 @@ class MainPageError(Exception):
         path (str, optional): Original request path
     """
 
-    def __init__(self, request=None):
+    def __init__(self, request: HttpRequest | None = None) -> None:
+        """Initialize with request path and base domain from association."""
         super().__init__()
         self.path = request.path
         self.base_domain = request.assoc["main_domain"]
@@ -202,7 +209,7 @@ class ReturnNowError(Exception):
         value: Value to return (typically JSON response)
     """
 
-    def __init__(self, value=None):
+    def __init__(self, value: Any = None) -> None:
         super().__init__()
         self.value = value
 

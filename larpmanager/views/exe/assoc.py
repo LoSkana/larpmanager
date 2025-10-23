@@ -86,9 +86,12 @@ def exe_roles_edit(request, num):
 
 
 @login_required
-def exe_config(request, section=None):
+def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse:
+    """Handle organization configuration editing with optional section jump."""
+    # Prepare context with section jump if specified
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
+
     return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_ctx=add_ctx)
 
 
@@ -98,9 +101,14 @@ def exe_profile(request):
 
 
 @login_required
-def exe_texts(request):
+def exe_texts(request: HttpRequest) -> HttpResponse:
+    """Display list of association texts grouped by type, default flag, and language."""
+    # Check permission and get base context
     ctx = check_assoc_permission(request, "exe_texts")
+
+    # Fetch and order association texts for display
     ctx["list"] = AssocText.objects.filter(assoc_id=request.assoc["id"]).order_by("typ", "default", "language")
+
     return render(request, "larpmanager/exe/texts.html", ctx)
 
 

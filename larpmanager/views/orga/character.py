@@ -298,8 +298,12 @@ def orga_characters_view(request: HttpRequest, s: str, num: int) -> HttpResponse
 
 
 @login_required
-def orga_characters_versions(request, s, num):
+def orga_characters_versions(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Display version history for a character's writing content."""
+    # Check event permission and get context
     ctx = check_event_permission(request, s, "orga_characters")
+
+    # Retrieve the character and render version history
     get_char(ctx, num)
     return writing_versions(request, ctx, "character", TextVersionChoices.CHARACTER)
 
@@ -680,9 +684,25 @@ def orga_writing_form_order(
 
 
 @login_required
-def orga_writing_options_edit(request, s, typ, num):
+def orga_writing_options_edit(request: HttpRequest, s: str, typ: str, num: int) -> HttpResponse:
+    """Edit writing form option for event organizers.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+        typ: Writing form type (background, origin, etc.)
+        num: Option number to edit
+
+    Returns:
+        HTTP response with the option edit form
+    """
+    # Verify user has character form permissions and get event context
     ctx = check_event_permission(request, s, "orga_character_form")
+
+    # Validate the writing form type exists and is allowed
     check_writing_form_type(ctx, typ)
+
+    # Process the option edit form and return response
     return writing_option_edit(ctx, num, request, typ)
 
 

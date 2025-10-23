@@ -340,7 +340,8 @@ class Member(BaseModel):
         # noinspection PyUnresolvedReferences
         return self.id
 
-    def show_nick(self):
+    def show_nick(self) -> str:
+        """Return nickname if present, otherwise the string representation."""
         if self.nickname:
             return self.nickname
         return str(self)
@@ -552,7 +553,8 @@ class Badge(BaseModel):
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def thumb(self):
+    def thumb(self) -> str:
+        """Return HTML for thumbnail image if available, otherwise empty string."""
         if self.img_thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.img_thumb.url)

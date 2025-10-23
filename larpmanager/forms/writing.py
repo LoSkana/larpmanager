@@ -29,7 +29,7 @@ from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import ProgressStep
+from larpmanager.models.event import Event, ProgressStep
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
@@ -104,8 +104,10 @@ class PlayerRelationshipForm(MyForm):
         }
         labels = {"target": _("Character")}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure target field for the event."""
         super().__init__(*args, **kwargs)
+        # Configure target field widget with event from run params
         self.fields["target"].widget.set_event(self.params["run"].event)
         self.fields["target"].required = True
 
@@ -211,16 +213,22 @@ class BaseWritingForm(BaseRegistrationForm):
         # noinspection PyProtectedMember
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
 
-    def _init_questions(self, event):
+    def _init_questions(self, event: Event) -> None:
+        """Initialize questions filtered by applicable type."""
         super()._init_questions(event)
+        # Filter questions to only include those matching this form's applicable type
         # noinspection PyProtectedMember
         self.questions = self.questions.filter(applicable=self.applicable)
 
-    def get_options_query(self, event):
+    def get_options_query(self, event: Event) -> Any:
+        """Get annotated queryset of options with ticket mappings."""
+        # Get base options query from parent class
         query = super().get_options_query(event)
+        # Annotate with array-aggregated tickets for each option
         return query.annotate(tickets_map=ArrayAgg("tickets"))
 
-    def get_option_key_count(self, option):
+    def get_option_key_count(self, option) -> str:
+        """Return cache key for tracking option character count."""
         key = f"option_char_{option.id}"
         return key
 
@@ -316,23 +324,42 @@ class PlotForm(WritingForm, BaseWritingForm):
                 reverse_args = [self.params["run"].get_slug(), ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
-    def _save_multi(self, s, instance):
+    def _save_multi(self, s: str, instance: Plot) -> None:
+        """Delete plot-character relations for unselected characters."""
+        # Extract character IDs from cleaned form data
         self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
 
+        # Remove relations for characters not in the current selection
         PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> PlotCharacterRel:
+        """
+        Save the form instance and update plot-character relationships.
+
+        Args:
+            commit: Whether to save the instance to the database.
+
+        Returns:
+            The saved instance with updated plot-character relationships.
+        """
         instance = super().save()
 
+        # Persist the instance to ensure it has a primary key
         instance.save()
+
+        # Create or update plot-character relationships for each character
         for ch_id in self.chars_id:
             (pr, created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+
+            # Extract role text from cleaned_data or raw data
             field = f"char_role_{pr.character_id}"
             value = self.cleaned_data.get(field, "")
             if not value:
                 value = self.data.get(field, "")
             if not value:
                 continue
+
+            # Update and save the relationship with role text
             pr.text = value
             pr.save()
 
@@ -400,12 +427,15 @@ class QuestForm(WritingForm, BaseWritingForm):
         model = Quest
         exclude = ("number", "temp", "hide", "order")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with organization fields and quest type choices."""
         super().__init__(*args, **kwargs)
 
+        # Initialize organization-specific and special fields
         self.init_orga_fields()
         self._init_special_fields()
 
+        # Populate quest type choices from event elements
         que = self.params["run"].event.get_elements(QuestType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
 
@@ -419,12 +449,15 @@ class TraitForm(WritingForm, BaseWritingForm):
         model = Trait
         exclude = ("number", "temp", "hide", "order", "traits")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure quest field choices."""
         super().__init__(*args, **kwargs)
 
+        # Initialize organization-specific and special fields
         self.init_orga_fields()
         self._init_special_fields()
 
+        # Populate quest choices from event elements
         que = self.params["run"].event.get_elements(Quest)
         self.fields["quest"].choices = [(m.id, m.name) for m in que]
 
@@ -440,9 +473,12 @@ class HandoutForm(WritingForm):
             "text": WritingTinyMCE(),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and populate template choices from run's handout templates."""
         super().__init__(*args, **kwargs)
+        # Retrieve handout templates for the associated run's event
         que = self.params["run"].event.get_elements(HandoutTemplate)
+        # Populate template field choices with template IDs and names
         self.fields["template"].choices = [(m.id, m.name) for m in que]
 
 
@@ -478,15 +514,17 @@ class PrologueForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with prologue choices and field configuration."""
         super().__init__(*args, **kwargs)
+
+        # Populate prologue type choices from event elements
         que = self.params["run"].event.get_elements(PrologueType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
 
+        # Initialize organization-specific fields and reorder characters
         self.init_orga_fields()
-
         self.reorder_field("characters")
-
         self._init_special_fields()
 
 

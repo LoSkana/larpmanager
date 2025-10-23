@@ -429,7 +429,9 @@ def share(request):
 
 
 @login_required
-def legal_notice(request):
+def legal_notice(request: HttpRequest) -> HttpResponse:
+    """Render legal notice page with association-specific text."""
+    # Build context with user data and legal notice text
     ctx = def_user_ctx(request)
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", ctx)
@@ -786,9 +788,12 @@ def get_fact(qs) -> list[dict]:
     return ls
 
 
-def get_factions(ctx):
+def get_factions(ctx: dict) -> None:
+    """Populate context with faction data organized by type."""
     fcs = ctx["event"].get_elements(Faction)
+    # Get primary factions ordered by number
     ctx["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
+    # Get transversal factions ordered by number
     ctx["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
 
 

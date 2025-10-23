@@ -379,9 +379,15 @@ def post_save_payment_accounting_cache(sender, instance: PaymentInvoice, created
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_payment_accounting_cache(sender, instance, **kwargs):
+def post_delete_payment_accounting_cache(
+    sender: type,
+    instance: Any,
+    **kwargs: Any,
+) -> None:
+    """Update accounting caches after payment deletion."""
     update_token_credit_on_payment_delete(instance)
 
+    # Refresh member accounting cache if payment is linked to a registration
     if instance.reg and instance.reg.run:
         refresh_member_accounting_cache(instance.reg.run, instance.member_id)
 
@@ -779,29 +785,43 @@ def post_delete_faction_reset_rels(sender, instance, **kwargs) -> None:
 
 # Feature signals
 @receiver(post_save, sender=Feature)
-def post_save_feature_index_permission(sender, instance, **kwargs):
+def post_save_feature_index_permission(sender: type, instance: object, **kwargs: dict) -> None:
+    """Clear permission and feature caches after feature/permission save."""
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
     reset_features_cache()
 
 
 @receiver(post_delete, sender=Feature)
-def post_delete_feature_index_permission(sender, instance, **kwargs):
+def post_delete_feature_index_permission(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear permission and feature caches after deleting feature index permission."""
+    # Clear both event and association permission caches
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
+
+    # Reset global features cache
     reset_features_cache()
 
 
 # FeatureModule signals
 @receiver(post_save, sender=FeatureModule)
-def post_save_feature_module_index_permission(sender, instance, **kwargs):
+def post_save_feature_module_index_permission(sender: type, instance: object, **kwargs: object) -> None:
+    """Clear cached permissions and features after feature/module/permission changes."""
+    # Clear cached index permissions for event and organization contexts
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
+
+    # Invalidate the global features cache
     reset_features_cache()
 
 
 @receiver(post_delete, sender=FeatureModule)
-def post_delete_feature_module_index_permission(sender, instance, **kwargs):
+def post_delete_feature_module_index_permission(
+    sender: type,
+    instance: object,
+    **kwargs: object,
+) -> None:
+    """Clear permission and feature caches after deletion."""
     clear_index_permission_cache("event")
     clear_index_permission_cache("assoc")
     reset_features_cache()
@@ -1033,7 +1053,18 @@ def pre_save_questtype_reset(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=QuestType)
-def post_save_questtype_reset_rels(sender, instance, **kwargs):
+def post_save_questtype_reset_rels(
+    sender: type,
+    instance: QuestType,
+    **kwargs: Any,
+) -> None:
+    """Reset quest type and related quest caches after save.
+
+    Args:
+        sender: The model class that sent the signal.
+        instance: The QuestType instance being saved.
+        **kwargs: Additional keyword arguments from the signal.
+    """
     # Update questtype cache
     refresh_event_questtype_relationships(instance)
 
@@ -1066,11 +1097,15 @@ def pre_save_refund_request(sender, instance, **kwargs):
 
 # Registration signals
 @receiver(pre_save, sender=Registration)
-def pre_save_registration_switch_event(sender, instance, **kwargs):
+def pre_save_registration_switch_event(sender: type, instance: Registration, **kwargs: Any) -> None:
+    """Handle registration updates when switching events."""
+    # Process event change logic
     process_registration_event_change(instance)
 
+    # Send cancellation notification if needed
     send_registration_cancellation_email(instance)
 
+    # Execute pre-save registration processing
     process_registration_pre_save(instance)
 
 
@@ -1139,9 +1174,16 @@ def post_save_registration_option(sender, instance, created, **kwargs):
 
 # RegistrationTicket signals
 @receiver(post_save, sender=RegistrationTicket)
-def post_save_ticket_accounting_cache(sender, instance, created, **kwargs):
+def post_save_ticket_accounting_cache(
+    sender: type,
+    instance: Any,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Clears accounting cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
 
+    # Clear accounting cache for all runs in the ticket's event
     for run in instance.event.runs.all():
         clear_registration_accounting_cache(run.id)
 
@@ -1159,10 +1201,9 @@ def pre_delete_relationship(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Relationship)
-def post_save_relationship_reset_rels(sender, instance, **kwargs):
-    # Update cache for source character
+def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    # Update cached relationships and delete PDF files after saving a relationship
     refresh_character_relationships(instance.source)
-
     delete_character_pdf_files(instance.source)
 
 
@@ -1245,7 +1286,8 @@ def pre_save_speed_larp(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=SpeedLarp)
-def post_save_speedlarp_reset_rels(sender, instance, **kwargs):
+def post_save_speedlarp_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset speedlarp and character relationship caches after speedlarp save."""
     # Update speedlarp cache
     refresh_event_speedlarp_relationships(instance)
 
@@ -1272,11 +1314,13 @@ def pre_save_trait_reset(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Trait)
-def post_save_trait_reset_rels(sender, instance, **kwargs):
+def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> None:
+    """Update quest relationships and trait cache when a trait is saved."""
     # Update quest cache if trait has a quest
     if instance.quest:
         refresh_event_quest_relationships(instance.quest)
 
+    # Refresh all trait relationships for this instance
     refresh_all_instance_traits(instance)
 
 

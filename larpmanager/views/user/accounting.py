@@ -810,7 +810,8 @@ def acc_wait(request):
 
 
 @login_required
-def acc_cancelled(request):
+def acc_cancelled(request: HttpRequest) -> HttpResponse:
+    """Handle cancelled payment redirecting to accounting page."""
     mes = _("The payment was not completed. Please contact us to find out why") + "."
     messages.warning(request, mes)
     return redirect("accounting")

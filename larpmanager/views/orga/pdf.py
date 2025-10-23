@@ -115,9 +115,24 @@ def orga_pdf_regenerate(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_characters_sheet_pdf(request, s, num):
+def orga_characters_sheet_pdf(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate PDF character sheet for organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Character number/ID
+
+    Returns:
+        HTTP response containing the generated PDF
+    """
+    # Check organizer permissions for PDF access
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Retrieve and validate character data
     get_char_check(request, ctx, num, True)
+
+    # Generate and return the character sheet PDF
     return print_character(ctx, True)
 
 
@@ -149,9 +164,14 @@ def orga_characters_sheet_test(request: HttpRequest, s: str, num: int) -> HttpRe
 
 
 @login_required
-def orga_characters_friendly_pdf(request, s, num):
+def orga_characters_friendly_pdf(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate friendly PDF for a character."""
+    # Check permissions for PDF generation
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Validate and retrieve character
     get_char_check(request, ctx, num, True)
+
     return print_character_friendly(ctx, True)
 
 
@@ -180,9 +200,15 @@ def orga_characters_friendly_test(request: HttpRequest, s: str, num: int) -> Htt
 
 
 @login_required
-def orga_characters_relationships_pdf(request, s, num):
+def orga_characters_relationships_pdf(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate PDF of character relationships for organization view."""
+    # Verify event permissions for PDF generation
     ctx = check_event_permission(request, s, "orga_characters_pdf")
+
+    # Retrieve and validate character data
     get_char_check(request, ctx, num, False, True)
+
+    # Generate and return relationship PDF
     return print_character_rel(ctx, True)
 
 

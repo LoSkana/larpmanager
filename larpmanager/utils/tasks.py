@@ -71,7 +71,8 @@ def background_auto(schedule=0, **background_kwargs):
         task = background(schedule=schedule, **background_kwargs)(func)
 
         @wraps(func)
-        def wrapper(*args, **kwargs) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Execute function directly or schedule as background task based on settings."""
             # Check if auto background tasks are enabled in settings
             if getattr(conf_settings, "AUTO_BACKGROUND_TASKS", False):
                 # Filter out internal kwargs that shouldn't be passed to the function

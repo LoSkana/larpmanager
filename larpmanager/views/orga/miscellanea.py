@@ -68,7 +68,8 @@ from larpmanager.utils.writing import writing_post
 
 
 @login_required
-def orga_albums(request, s):
+def orga_albums(request: HttpRequest, s: str) -> HttpResponse:
+    """Display albums for an event run in the organizer dashboard."""
     ctx = check_event_permission(request, s, "orga_albums")
     ctx["list"] = Album.objects.filter(run=ctx["run"]).order_by("-created")
     return render(request, "larpmanager/orga/albums.html", ctx)
@@ -123,7 +124,8 @@ def orga_albums_upload(request: HttpRequest, s: Event, a: str) -> HttpResponse:
 
 
 @login_required
-def orga_utils(request, s):
+def orga_utils(request: HttpRequest, s: str) -> HttpResponse:
+    """Render utility items management page for event organizers."""
     ctx = check_event_permission(request, s, "orga_utils")
     ctx["list"] = Util.objects.filter(event=ctx["event"]).order_by("number")
     return render(request, "larpmanager/orga/utils.html", ctx)
@@ -183,9 +185,22 @@ def orga_workshops(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_workshop_modules(request, s):
+def orga_workshop_modules(request: HttpRequest, s: str) -> HttpResponse:
+    """Display workshop modules for event organizers.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered workshop modules page
+    """
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_workshop_modules")
+
+    # Retrieve and order workshop modules
     ctx["list"] = WorkshopModule.objects.filter(event=ctx["event"]).order_by("number")
+
     return render(request, "larpmanager/orga/workshop/modules.html", ctx)
 
 
@@ -248,9 +263,14 @@ def orga_workshop_options_edit(request, s, num):
 
 
 @login_required
-def orga_problems(request, s):
+def orga_problems(request: HttpRequest, s: str) -> HttpResponse:
+    """Display filterable list of reported problems for an event."""
+    # Check event access permissions
     ctx = check_event_permission(request, s, "orga_problems")
+
+    # Fetch problems ordered by status and severity
     ctx["list"] = Problem.objects.filter(event=ctx["event"]).order_by("status", "-severity")
+
     return render(request, "larpmanager/orga/problems.html", ctx)
 
 
@@ -260,9 +280,14 @@ def orga_problems_edit(request, s, num):
 
 
 @login_required
-def orga_warehouse_area(request, s):
+def orga_warehouse_area(request: HttpRequest, s: str) -> HttpResponse:
+    """Render warehouse area management page for event organizers."""
+    # Check organizer permissions and get event context
     ctx = check_event_permission(request, s, "orga_warehouse_area")
+
+    # Retrieve all warehouse areas for the event
     ctx["list"] = ctx["event"].get_elements(WarehouseArea)
+
     return render(request, "larpmanager/orga/warehouse/area.html", ctx)
 
 
@@ -536,9 +561,22 @@ def orga_onetimes_edit(request, s, num):
 
 
 @login_required
-def orga_onetimes_tokens(request, s):
+def orga_onetimes_tokens(request: HttpRequest, s: str) -> HttpResponse:
+    """Display one-time access tokens for an event.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered template with token list
+    """
+    # Check user has permission to view one-time tokens for this event
     ctx = check_event_permission(request, s, "orga_onetimes")
+
+    # Fetch all tokens for the event, ordered by creation date
     ctx["list"] = OneTimeAccessToken.objects.filter(content__event=ctx["event"]).order_by("-created")
+
     return render(request, "larpmanager/orga/onetimes_tokens.html", ctx)
 
 

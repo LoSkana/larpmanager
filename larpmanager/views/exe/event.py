@@ -187,7 +187,8 @@ def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_templates_roles(request, eid, num):
+def exe_templates_roles(request: HttpRequest, eid: int, num: int | None) -> HttpResponse:
+    """Edit or create template roles for an event."""
     add_ctx = def_user_ctx(request)
     get_event_template(add_ctx, eid)
     return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", add_ctx=add_ctx)

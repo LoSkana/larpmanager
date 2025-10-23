@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.forms import ChoiceField, Form
-from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -969,7 +969,8 @@ def _get_href(ctx, perm, name, custom_link):
     return _(name), _get_perm_link(ctx, perm, perm)
 
 
-def _get_perm_link(ctx, perm, view):
+def _get_perm_link(ctx: dict, perm: str, view: str) -> str:
+    """Generate permission link URL based on permission type."""
     if perm.startswith("exe"):
         return reverse(view)
     return reverse(view, args=[ctx["run"].get_slug()])
@@ -1017,15 +1018,21 @@ def _compile(request, ctx):
             ctx[section].append({"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug})
 
 
-def exe_close_suggestion(request, perm):
+def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirect:
+    """Close a suggestion and redirect to management page."""
     ctx = check_assoc_permission(request, perm)
     set_suggestion(ctx, perm)
     return redirect("manage")
 
 
-def orga_close_suggestion(request, s, perm):
+def orga_close_suggestion(request: HttpRequest, s: str, perm: EventPermission) -> HttpResponseRedirect:
+    """Close a suggestion by setting its status and redirect to manage page."""
+    # Check user has permission to access this event
     ctx = check_event_permission(request, s, perm)
+
+    # Update suggestion status to closed
     set_suggestion(ctx, perm)
+
     return redirect("manage", s=s)
 
 

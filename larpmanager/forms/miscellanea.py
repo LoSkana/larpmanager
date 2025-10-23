@@ -119,10 +119,12 @@ class HelpQuestionForm(MyForm):
             "text": Textarea(attrs={"rows": 5}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with run choices and optional run parameter."""
         super().__init__(*args, **kwargs)
         get_run_choices(self, True)
 
+        # Set initial run value from params if provided
         if "run" in self.params:
             self.initial["run"] = self.params["run"]
 
@@ -152,8 +154,10 @@ class WorkshopQuestionForm(MyForm):
         model = WorkshopQuestion
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and populate module choices from event workshops."""
         super().__init__(*args, **kwargs)
+        # Filter workshop modules by event and populate dropdown choices
         self.fields["module"].choices = [
             (m.id, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
         ]
@@ -164,8 +168,10 @@ class WorkshopOptionForm(MyForm):
         model = WorkshopOption
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and populate question choices from event's workshop questions."""
         super().__init__(*args, **kwargs)
+        # Filter workshop questions by event and populate choices
         self.fields["question"].choices = [
             (m.id, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
         ]
@@ -181,8 +187,10 @@ class OrgaAlbumForm(MyForm):
         fields = "__all__"
         exclude = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with filtered parent album choices for the current run."""
         super().__init__(*args, **kwargs)
+        # Build choices: unassigned option + existing albums excluding self
         self.fields["parent"].choices = [("", _("--- NOT ASSIGNED ---"))] + [
             (m.id, m.name) for m in Album.objects.filter(run=self.params["run"]).exclude(pk=self.instance.id)
         ]
@@ -365,13 +373,15 @@ class ShuttleServiceForm(MyForm):
             "time": TimePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with default time value if not provided."""
         super().__init__(*args, **kwargs)
         # ~ if 'date' not in self.initial or not self.initial['date']:
         # ~ self.initial['date'] = datetime.now().date().isoformat()
         # ~ else:
         # ~ self.initial['date'] = self.instance.date.isoformat()
 
+        # Set default time to current time if not already set
         if "time" not in self.initial or not self.initial["time"]:
             self.initial["time"] = datetime.now().time()
 
@@ -387,11 +397,15 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
             "working": AssocMemberS2Widget,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with default working member from request user."""
         super().__init__(*args, **kwargs)
+
+        # Set default working member to current user if not already set
         if "working" not in self.initial or not self.initial["working"]:
             self.initial["working"] = self.params["request"].user.member
 
+        # Configure widget with association context
         self.fields["working"].widget.set_assoc(self.params["a_id"])
 
 

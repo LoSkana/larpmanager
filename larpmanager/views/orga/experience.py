@@ -42,9 +42,14 @@ from larpmanager.utils.exceptions import ReturnNowError
 
 
 @login_required
-def orga_px_deliveries(request, s):
+def orga_px_deliveries(request: HttpRequest, s: str) -> HttpResponse:
+    """Display list of experience deliveries for an event."""
+    # Verify user has permission and retrieve event context
     ctx = check_event_permission(request, s, "orga_px_deliveries")
+
+    # Get all deliveries ordered by number
     ctx["list"] = ctx["event"].get_elements(DeliveryPx).order_by("number")
+
     return render(request, "larpmanager/orga/px/deliveries.html", ctx)
 
 
@@ -127,9 +132,14 @@ def orga_px_abilities_edit(request: HttpRequest, s: str, num: int) -> HttpRespon
 
 
 @login_required
-def orga_px_ability_types(request, s):
+def orga_px_ability_types(request: HttpRequest, s: str) -> HttpResponse:
+    """Display ability type list for experience management."""
+    # Check user has permission to access ability types management
     ctx = check_event_permission(request, s, "orga_px_ability_types")
+
+    # Retrieve and order ability types by number
     ctx["list"] = ctx["event"].get_elements(AbilityTypePx).order_by("number")
+
     return render(request, "larpmanager/orga/px/ability_types.html", ctx)
 
 
@@ -139,7 +149,9 @@ def orga_px_ability_types_edit(request, s, num):
 
 
 @login_required
-def orga_px_rules(request, s):
+def orga_px_rules(request: HttpRequest, s: str) -> HttpResponse:
+    """Display experience rules for an event."""
+    # Check permission and get event context
     ctx = check_event_permission(request, s, "orga_px_rules")
     ctx["list"] = ctx["event"].get_elements(RulePx).order_by("order")
     return render(request, "larpmanager/orga/px/rules.html", ctx)
@@ -151,16 +163,31 @@ def orga_px_rules_edit(request, s, num):
 
 
 @login_required
-def orga_px_rules_order(request, s, num, order):
+def orga_px_rules_order(
+    request: HttpRequest,
+    s: str,
+    num: int,
+    order: str,
+) -> HttpResponse:
+    """Reorder PX rules for an event."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_px_rules")
+
+    # Exchange rule order in database
     exchange_order(ctx, RulePx, num, order)
+
     return redirect("orga_px_rules", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_px_modifiers(request, s):
+def orga_px_modifiers(request: HttpRequest, s: str) -> HttpResponse:
+    """Display and manage experience modifiers for an event."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_px_modifiers")
+
+    # Retrieve ordered list of experience modifiers
     ctx["list"] = ctx["event"].get_elements(ModifierPx).order_by("order")
+
     return render(request, "larpmanager/orga/px/modifiers.html", ctx)
 
 
@@ -170,7 +197,17 @@ def orga_px_modifiers_edit(request, s, num):
 
 
 @login_required
-def orga_px_modifiers_order(request, s, num, order):
+def orga_px_modifiers_order(
+    request: HttpRequest,
+    s: str,
+    num: int,
+    order: str,
+) -> HttpResponse:
+    """Reorder experience modifiers in the organizer interface."""
+    # Check permissions and get context
     ctx = check_event_permission(request, s, "orga_px_modifiers")
+
+    # Exchange modifier order
     exchange_order(ctx, ModifierPx, num, order)
+
     return redirect("orga_px_modifiers", s=ctx["run"].get_slug())

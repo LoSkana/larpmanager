@@ -504,8 +504,10 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
     def get_queryset(self):
         return Registration.objects.prefetch_related("run", "run__event").filter(run__event__assoc_id=self.assoc_id)
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: Any) -> str:
+        """Return label for form field instance, appending cancellation status if present."""
         s = str(obj)
+        # Append cancellation indicator if object has been cancelled
         # noinspection PyUnresolvedReferences
         if obj.cancellation_date:
             s += " - CANC"
@@ -621,7 +623,9 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def get_queryset(self):
         return self.event.get_elements(Faction)
 
-    def label_from_instance(self, instance):
+    def label_from_instance(self, instance: Faction) -> str:
+        """Return faction label with type code suffix."""
+        # Map faction types to their single-letter codes
         code = {FactionType.PRIM: "P", FactionType.TRASV: "T", FactionType.SECRET: "S"}
         return f"{instance.name} ({code[instance.typ]})"
 
@@ -658,9 +662,12 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         "user__email__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event and compute allowed member IDs from event roles."""
         self.event = event
+        # Query event roles with prefetched members to avoid N+1 queries
         que = EventRole.objects.filter(event_id=event.id).prefetch_related("members")
+        # Extract flattened list of member IDs who have roles in this event
         self.allowed = que.values_list("members__id", flat=True)
 
     def get_queryset(self):
@@ -754,14 +761,19 @@ def remove_choice(ch, typ):
 
 
 class RedirectForm(forms.Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with dynamic slug choices from provided slugs parameter."""
         slugs = self.params = kwargs.pop("slugs")
         super().__init__(*args, **kwargs)
+
+        # Build enumerated choices from slugs list
         cho = []
         counter = 0
         for el in slugs:
             cho.append((counter, el))
             counter += 1
+
+        # Add dynamic slug field with enumerated choices
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
 
 

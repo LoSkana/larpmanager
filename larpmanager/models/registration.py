@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.db import models
 from django.db.models import Q
@@ -118,8 +119,10 @@ class RegistrationTicket(BaseModel):
             f"({self.price}{self.event.assoc.get_currency_symbol()})"
         )
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None) -> dict[str, Any]:
+        """Return JSON representation of ticket tier with availability and attributes."""
         js = {"max_available": self.max_available}
+        # Update JSON with name, price, and description attributes
         for s in ["name", "price", "description"]:
             self.upd_js_attr(js, s)
         return js

@@ -92,16 +92,22 @@ def orga_registration_tickets_edit(request, s, num):
 
 
 @login_required
-def orga_registration_tickets_order(request, s, num, order):
+def orga_registration_tickets_order(request: HttpRequest, s: str, num: int, order: str) -> HttpResponse:
+    """Reorder registration tickets for an event."""
     ctx = check_event_permission(request, s, "orga_registration_tickets")
     exchange_order(ctx, RegistrationTicket, num, order)
     return redirect("orga_registration_tickets", s=ctx["run"].get_slug())
 
 
 @login_required
-def orga_registration_sections(request, s):
+def orga_registration_sections(request: HttpRequest, s: str) -> HttpResponse:
+    """Display registration sections for an event."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_registration_sections")
+
+    # Retrieve and order registration sections
     ctx["list"] = RegistrationSection.objects.filter(event=ctx["event"]).order_by("order")
+
     return render(request, "larpmanager/orga/registration/sections.html", ctx)
 
 
@@ -111,9 +117,29 @@ def orga_registration_sections_edit(request, s, num):
 
 
 @login_required
-def orga_registration_sections_order(request, s, num, order):
+def orga_registration_sections_order(
+    request: HttpRequest,
+    s: str,
+    num: int,
+    order: str,
+) -> HttpResponse:
+    """Reorder registration sections within an event.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Current position of the section
+        order: Direction to move ('up' or 'down')
+
+    Returns:
+        Redirect to registration sections page
+    """
+    # Verify user has permission to manage registration sections
     ctx = check_event_permission(request, s, "orga_registration_sections")
+
+    # Exchange order of sections and save changes
     exchange_order(ctx, RegistrationSection, num, order)
+
     return redirect("orga_registration_sections", s=ctx["run"].get_slug())
 
 
@@ -216,9 +242,14 @@ def orga_registration_form_edit(request: HttpRequest, s: str, num: int) -> HttpR
 
 
 @login_required
-def orga_registration_form_order(request, s, num, order):
+def orga_registration_form_order(request: HttpRequest, s: str, num: int, order: str) -> HttpResponse:
+    """Reorders registration form questions for an event."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_registration_form")
+
+    # Update question order in database
     exchange_order(ctx, RegistrationQuestion, num, order)
+
     return redirect("orga_registration_form", s=ctx["run"].get_slug())
 
 
@@ -254,7 +285,8 @@ def orga_registration_options_edit(request: HttpRequest, s: str, num: int) -> Ht
 
 
 @login_required
-def orga_registration_options_new(request, s, num):
+def orga_registration_options_new(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Create new registration option for specified question."""
     ctx = check_event_permission(request, s, "orga_registration_form")
     ctx["question_id"] = num
     return registration_option_edit(ctx, 0, request)
@@ -282,16 +314,42 @@ def registration_option_edit(ctx, num, request):
 
 
 @login_required
-def orga_registration_options_order(request, s, num, order):
+def orga_registration_options_order(
+    request: HttpRequest,
+    s: str,
+    num: int,
+    order: str,
+) -> HttpResponse:
+    """Reorder registration options within a form question.
+
+    Args:
+        request: The HTTP request object
+        s: Event/run slug identifier
+        num: Question ID containing the options to reorder
+        order: Direction to move the option ('up' or 'down')
+
+    Returns:
+        Redirect to the registration form edit page
+    """
+    # Check user permissions and get event context
     ctx = check_event_permission(request, s, "orga_registration_form")
+
+    # Exchange the order of registration options
     exchange_order(ctx, RegistrationOption, num, order)
+
+    # Redirect back to the form edit page
     return redirect("orga_registration_form_edit", s=ctx["run"].get_slug(), num=ctx["current"].question_id)
 
 
 @login_required
-def orga_registration_quotas(request, s):
+def orga_registration_quotas(request: HttpRequest, s: str) -> HttpResponse:
+    """Display and manage registration quotas for an event."""
+    # Check event permissions and build context
     ctx = check_event_permission(request, s, "orga_registration_quotas")
+
+    # Retrieve and order quotas by number
     ctx["list"] = RegistrationQuota.objects.filter(event=ctx["event"]).order_by("number")
+
     return render(request, "larpmanager/orga/registration/quotas.html", ctx)
 
 
@@ -301,9 +359,25 @@ def orga_registration_quotas_edit(request, s, num):
 
 
 @login_required
-def orga_registration_installments(request, s):
+def orga_registration_installments(request: HttpRequest, s: str) -> HttpResponse:
+    """Display and manage registration installments for an event.
+
+    Renders a page showing all payment installment options configured for the event,
+    ordered by sequence and amount.
+
+    Args:
+        request: The HTTP request object
+        s: Event slug identifier
+
+    Returns:
+        Rendered installments management page
+    """
+    # Verify user has permission to access registration installment management
     ctx = check_event_permission(request, s, "orga_registration_installments")
+
+    # Retrieve all installments for this event, ordered by sequence and amount
     ctx["list"] = RegistrationInstallment.objects.filter(event=ctx["event"]).order_by("order", "amount")
+
     return render(request, "larpmanager/orga/registration/installments.html", ctx)
 
 
@@ -313,9 +387,14 @@ def orga_registration_installments_edit(request, s, num):
 
 
 @login_required
-def orga_registration_surcharges(request, s):
+def orga_registration_surcharges(request: HttpRequest, s: str) -> HttpResponse:
+    """Display registration surcharges for an event."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_registration_surcharges")
+
+    # Fetch and order surcharges by number
     ctx["list"] = RegistrationSurcharge.objects.filter(event=ctx["event"]).order_by("number")
+
     return render(request, "larpmanager/orga/registration/surcharges.html", ctx)
 
 
