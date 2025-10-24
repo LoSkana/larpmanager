@@ -32,8 +32,8 @@ from larpmanager.utils.pdf import (
 )
 
 
-def check_print_pdf(ctx):
-    if "show_addit" not in ctx or "print_pdf" not in ctx["show_addit"]:
+def check_print_pdf(context):
+    if "show_addit" not in context or "print_pdf" not in context["show_addit"]:
         raise Http404("not ready")
 
 

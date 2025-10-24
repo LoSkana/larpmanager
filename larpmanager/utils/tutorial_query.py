@@ -42,17 +42,17 @@ def _save_index(index_dir: str, schema) -> object:
     return open_dir(index_dir, "MAIN")
 
 
-def get_or_create_index_tutorial(index_dir: str) -> object:
+def get_or_create_index_tutorial(tutorial_index_directory: str) -> object:
     """Get or create a tutorial search index with predefined schema.
 
     Args:
-        index_dir: Directory path where the index will be stored.
+        tutorial_index_directory: Directory path where the index will be stored.
 
     Returns:
         The created or existing search index object.
     """
     # Define schema for tutorial search indexing
-    schema = Schema(
+    tutorial_schema = Schema(
         tutorial_id=ID(stored=True),
         slug=TEXT(stored=True),
         title=TEXT(stored=True),
@@ -60,7 +60,7 @@ def get_or_create_index_tutorial(index_dir: str) -> object:
         content=TEXT(stored=True),
     )
     # Create and return the index using the defined schema
-    return _save_index(index_dir, schema)
+    return _save_index(tutorial_index_directory, tutorial_schema)
 
 
 @background_auto(queue="whoosh")

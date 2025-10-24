@@ -52,16 +52,20 @@ def cache_event_links(request: HttpRequest) -> dict:
         return {}
 
     # Return cached data if available
-    ctx = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
-    if ctx:
-        return ctx
+    navigation_context = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
+    if navigation_context:
+        return navigation_context
 
     # Build navigation context from scratch
-    ctx = _build_navigation_context(request)
+    navigation_context = _build_navigation_context(request)
 
     # Cache for 1 day
-    cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return ctx
+    cache.set(
+        get_cache_event_key(request.user.id, request.assoc["id"]),
+        navigation_context,
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
+    )
+    return navigation_context
 
 
 def _build_navigation_context(request: HttpRequest) -> dict:
@@ -170,23 +174,23 @@ def clear_run_event_links_cache(event: Event) -> None:
         May perform multiple database queries to fetch role memberships.
     """
     # Clear cache for all members with roles in this specific event
-    for er in EventRole.objects.filter(event=event).prefetch_related("members"):
-        for mb in er.members.all():
-            reset_event_links(mb.id, event.assoc_id)
+    for event_role in EventRole.objects.filter(event=event).prefetch_related("members"):
+        for member in event_role.members.all():
+            reset_event_links(member.id, event.assoc_id)
 
     # Clear cache for association executives (role number 1)
     # These users typically have access to all events in the association
     try:
-        ar = AssocRole.objects.prefetch_related("members").get(assoc_id=event.assoc_id, number=1)
-        for mb in ar.members.all():
-            reset_event_links(mb.id, event.assoc_id)
+        assoc_role = AssocRole.objects.prefetch_related("members").get(assoc_id=event.assoc_id, number=1)
+        for member in assoc_role.members.all():
+            reset_event_links(member.id, event.assoc_id)
     except ObjectDoesNotExist:
         pass
 
     # Clear cache for all superusers since they have global access
     superusers = User.objects.filter(is_superuser=True)
-    for user in superusers:
-        reset_event_links(user.member.id, event.assoc_id)
+    for superuser in superusers:
+        reset_event_links(superuser.member.id, event.assoc_id)
 
 
 def on_registration_post_save_reset_event_links(instance: Registration) -> None:
@@ -237,15 +241,15 @@ def reset_event_links(user_id: int, association_id: int) -> None:
     cache.delete(cache_key)
 
 
-def get_cache_event_key(uid: int, aid: int) -> str:
+def get_cache_event_key(user_id: int, association_id: int) -> str:
     """Generate cache key for user event links.
 
     Creates a unique cache key string for storing user-specific event links
     based on user ID and association ID combination.
 
     Args:
-        uid: User ID for cache key generation
-        aid: Association ID for cache key generation
+        user_id: User ID for cache key generation
+        association_id: Association ID for cache key generation
 
     Returns:
         Formatted cache key string for user event links storage
@@ -255,4 +259,4 @@ def get_cache_event_key(uid: int, aid: int) -> str:
         'ctx_event_links_123_456'
     """
     # Generate cache key using user and association IDs
-    return f"ctx_event_links_{uid}_{aid}"
+    return f"ctx_event_links_{user_id}_{association_id}"

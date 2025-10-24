@@ -48,19 +48,19 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.base import def_user_ctx, get_index_permissions
+from larpmanager.utils.base import def_user_context, get_index_permissions
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
 
 
-def get_event(request, slug, number=None):
+def get_event(request, event_slug, run_number=None):
     """Get event context from slug and number.
 
     Args:
         request: Django HTTP request object or None
-        slug (str): Event slug identifier
-        number (int, optional): Run number to append to slug
+        event_slug (str): Event slug identifier
+        run_number (int, optional): Run number to append to slug
 
     Returns:
         dict: Event context with run, event, and features
@@ -69,33 +69,33 @@ def get_event(request, slug, number=None):
         Http404: If event doesn't exist or belongs to wrong association
     """
     if request:
-        ctx = def_user_ctx(request)
+        context = def_user_context(request)
     else:
-        ctx = {}
+        context = {}
 
     try:
-        if number:
-            slug += f"-{number}"
+        if run_number:
+            event_slug += f"-{run_number}"
 
-        get_run(ctx, slug)
+        get_run(context, event_slug)
 
-        if "a_id" in ctx:
-            if ctx["event"].assoc_id != ctx["a_id"]:
+        if "a_id" in context:
+            if context["event"].assoc_id != context["a_id"]:
                 raise Http404("wrong assoc")
         else:
-            ctx["a_id"] = ctx["event"].assoc_id
+            context["a_id"] = context["event"].assoc_id
 
-        ctx["features"] = get_event_features(ctx["event"].id)
+        context["features"] = get_event_features(context["event"].id)
 
         # paste as text tinymce
-        if "paste_text" in ctx["features"]:
+        if "paste_text" in context["features"]:
             conf_settings.TINYMCE_DEFAULT_CONFIG["paste_as_text"] = True
 
-        ctx["show_available_chars"] = _("Show available characters")
+        context["show_available_chars"] = _("Show available characters")
 
-        return ctx
-    except ObjectDoesNotExist as err:
-        raise Http404("Event does not exist") from err
+        return context
+    except ObjectDoesNotExist as error:
+        raise Http404("Event does not exist") from error
 
 
 def get_event_run(
@@ -236,82 +236,82 @@ def get_run(ctx, s):
         raise UnknowRunError() from err
 
 
-def get_character_filter(ch, regs, filters):
+def get_character_filter(character, character_registrations, active_filters):
     """Check if character should be included based on filter criteria.
 
     Args:
-        ch: Character instance to check
-        regs (dict): Mapping of character IDs to registrations
-        filters (list): Filter criteria ('free', 'mirror', etc.)
+        character: Character instance to check
+        character_registrations (dict): Mapping of character IDs to registrations
+        active_filters (list): Filter criteria ('free', 'mirror', etc.)
 
     Returns:
         bool: True if character passes all filters
     """
-    if "free" in filters:
-        if ch.id in regs:
+    if "free" in active_filters:
+        if character.id in character_registrations:
             return False
-    if "mirror" in filters and ch.mirror_id:
-        if ch.mirror_id in regs:
+    if "mirror" in active_filters and character.mirror_id:
+        if character.mirror_id in character_registrations:
             return False
     return True
 
 
-def get_event_filter_characters(ctx, filters):
+def get_event_filter_characters(context, character_filters):
     """Get filtered characters organized by factions for event display.
 
     Args:
-        ctx (dict): Event context to update
-        filters (list): Character filter criteria
+        context (dict): Event context to update
+        character_filters (list): Character filter criteria
 
     Side effects:
-        Updates ctx with filtered factions and characters lists
+        Updates context with filtered factions and characters lists
     """
-    ctx["factions"] = []
+    context["factions"] = []
 
-    regs = {}
-    for el in RegistrationCharacterRel.objects.filter(
-        reg__run=ctx["run"], reg__cancellation_date__isnull=True
+    character_registrations = {}
+    for registration_character_relation in RegistrationCharacterRel.objects.filter(
+        reg__run=context["run"], reg__cancellation_date__isnull=True
     ).select_related("reg", "reg__member"):
-        regs[el.character_id] = el.reg
+        character_registrations[registration_character_relation.character_id] = registration_character_relation.reg
 
-    chars = {}
-    for c in ctx["event"].get_elements(Character).filter(hide=False):
-        if c.id in regs:
-            c.reg = regs[c.id]
-            c.member = regs[c.id].member
-        chars[c.id] = c
+    characters_by_id = {}
+    for character in context["event"].get_elements(Character).filter(hide=False):
+        if character.id in character_registrations:
+            character.reg = character_registrations[character.id]
+            character.member = character_registrations[character.id].member
+        characters_by_id[character.id] = character
 
-    if "faction" in ctx["features"] and ctx["show_faction"]:
-        que = ctx["event"].get_elements(Faction).filter(typ=FactionType.PRIM).order_by("order")
-        prefetch = Prefetch(
+    if "faction" in context["features"] and context["show_faction"]:
+        faction_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM).order_by("order")
+        character_prefetch = Prefetch(
             "characters",
             queryset=Character.objects.filter(hide=False).order_by("number"),
         )
-        for f in que.prefetch_related(prefetch):
-            f.data = f.show_red()
-            f.chars = []
-            for ch in f.characters.all():
-                if ch.hide:
+        for faction in faction_query.prefetch_related(character_prefetch):
+            faction.data = faction.show_red()
+            faction.chars = []
+            for character in faction.characters.all():
+                if character.hide:
                     continue
-                if not get_character_filter(ch, regs, filters):
+                if not get_character_filter(character, character_registrations, character_filters):
                     continue
-                ch.data = ch.show_red()
-                f.chars.append(ch)
-            if len(f.chars) == 0:
+                character.data = character.show_red()
+                faction.chars.append(character)
+            if len(faction.chars) == 0:
                 continue
-            ctx["factions"].append(f)
+            context["factions"].append(faction)
     else:
-        f = Faction()
-        f.number = 0
-        f.name = "all"
-        f.data = f.show_red()
-        f.chars = []
-        for _ch_id, ch in chars.items():
-            if not get_character_filter(ch, regs, filters):
+        default_faction = Faction()
+        default_faction.number = 0
+        default_faction.name = "all"
+        default_faction.data = default_faction.show_red()
+        default_faction.chars = []
+        for _character_id, character in characters_by_id.items():
+            if not get_character_filter(character, character_registrations, character_filters):
                 continue
-            ch.data = ch.show_red()
-            f.chars.append(ch)
-        ctx["factions"].append(f)
+            character.data = character.show_red()
+            default_faction.chars.append(character)
+        context["factions"].append(default_faction)
 
 
 def has_access_character(request, ctx):
@@ -400,30 +400,30 @@ def check_event_permission(request, event_slug: str, required_permission: str | 
     return ctx
 
 
-def get_index_event_permissions(ctx, request, slug, check=True):
+def get_index_event_permissions(context, request, event_slug, enforce_check=True):
     """Load event permissions and roles for management interface.
 
     Args:
-        ctx (dict): Context dictionary to update
+        context (dict): Context dictionary to update
         request: Django HTTP request object
-        slug (str): Event slug
-        check (bool): Whether to enforce permission requirements
+        event_slug (str): Event slug
+        enforce_check (bool): Whether to enforce permission requirements
 
     Side effects:
-        Updates ctx with role names and event permissions
+        Updates context with role names and event permissions
 
     Raises:
-        PermissionError: If check=True and user has no permissions
+        PermissionError: If enforce_check=True and user has no permissions
     """
-    (is_organizer, user_event_permissions, names) = get_event_roles(request, slug)
-    if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
+    (is_organizer, user_event_permissions, role_names) = get_event_roles(request, event_slug)
+    if "assoc_role" in context and 1 in context["assoc_role"]:
         is_organizer = True
-    if check and not names and not is_organizer:
+    if enforce_check and not role_names and not is_organizer:
         raise PermissionError()
-    if names:
-        ctx["role_names"] = names
-    features = get_event_features(ctx["event"].id)
-    ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")
+    if role_names:
+        context["role_names"] = role_names
+    event_features = get_event_features(context["event"].id)
+    context["event_pms"] = get_index_permissions(context, event_features, is_organizer, user_event_permissions, "event")
 
 
 def update_run_plan_on_event_change(instance):
@@ -437,8 +437,8 @@ def update_run_plan_on_event_change(instance):
         Run.objects.filter(pk=instance.pk).update(**updates)
 
 
-def clear_event_button_cache(instance):
-    cache.delete(event_button_key(instance.event_id))
+def clear_event_button_cache(event_instance):
+    cache.delete(event_button_key(event_instance.event_id))
 
 
 def prepare_campaign_event_data(instance):
@@ -594,32 +594,32 @@ def save_event_character_form(features: dict, instance) -> None:
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
-def _init_writing_element(instance, def_tps, applicables):
+def _init_writing_element(instance, default_question_types, question_applicables):
     """Initialize writing questions for specific applicables in an event instance.
 
     Args:
         instance: Event instance to initialize writing elements for
-        def_tps: Dictionary of default question types and their configurations
-        applicables: List of QuestionApplicable types to create questions for
+        default_question_types: Dictionary of default question types and their configurations
+        question_applicables: List of QuestionApplicable types to create questions for
     """
-    for applicable in applicables:
+    for applicable in question_applicables:
         # if there are already questions for this applicable, skip
         if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():
             continue
 
-        objs = [
+        writing_questions = [
             WritingQuestion(
                 event=instance,
-                typ=typ,
-                name=_(cfg[0]),
-                status=cfg[1],
-                visibility=cfg[2],
-                max_length=cfg[3],
+                typ=question_type,
+                name=_(config[0]),
+                status=config[1],
+                visibility=config[2],
+                max_length=config[3],
                 applicable=applicable,
             )
-            for typ, cfg in def_tps.items()
+            for question_type, config in default_question_types.items()
         ]
-        WritingQuestion.objects.bulk_create(objs)
+        WritingQuestion.objects.bulk_create(writing_questions)
 
 
 def _init_character_form_questions(
@@ -781,24 +781,24 @@ def _activate_orga_lang(instance) -> None:
         instance: Event instance to get organizers from.
     """
     # Count language frequency among organizers
-    langs = {}
-    for orga in get_event_organizers(instance):
-        lang = orga.language
+    language_frequency = {}
+    for organizer in get_event_organizers(instance):
+        organizer_language = organizer.language
 
         # Track language occurrence count
-        if lang not in langs:
-            langs[lang] = 1
+        if organizer_language not in language_frequency:
+            language_frequency[organizer_language] = 1
         else:
-            langs[lang] += 1
+            language_frequency[organizer_language] += 1
 
     # Select most common language or default to English
-    if langs:
-        max_lang = max(langs, key=langs.get)
+    if language_frequency:
+        most_common_language = max(language_frequency, key=language_frequency.get)
     else:
-        max_lang = "en"
+        most_common_language = "en"
 
     # Activate the selected language
-    activate(max_lang)
+    activate(most_common_language)
 
 
 def assign_previous_campaign_character(registration) -> None:

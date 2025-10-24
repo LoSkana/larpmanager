@@ -133,16 +133,16 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
             to the login page or success page.
         """
         # Call parent form_valid to handle the actual password reset
-        res = super().form_valid(form)
+        response = super().form_valid(form)
 
         # Find all memberships for this user that have pending password reset tokens
-        for mb in (
+        for membership in (
             Membership.objects.filter(member_id=form.user.member.id)
             .exclude(password_reset__exact="")
             .exclude(password_reset__isnull=True)
         ):
             # Clear the password reset token since password has been successfully reset
-            mb.password_reset = None
-            mb.save()
+            membership.password_reset = None
+            membership.save()
 
-        return res
+        return response

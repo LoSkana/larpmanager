@@ -61,27 +61,27 @@ def file_iterator(
         if start_pos is not None:
             file_object.seek(start_pos)
 
-        bytes_read = 0
+        total_bytes_read = 0
 
         # Main reading loop - continue until EOF or max_length reached
         while True:
             # Calculate appropriate chunk size for this iteration
             if max_length is not None:
-                remaining = max_length - bytes_read
-                if remaining <= 0:
+                remaining_bytes = max_length - total_bytes_read
+                if remaining_bytes <= 0:
                     break
-                current_chunk_size = min(chunk_size, remaining)
+                current_chunk_size = min(chunk_size, remaining_bytes)
             else:
                 current_chunk_size = chunk_size
 
             # Read the next chunk from file
-            chunk = file_object.read(current_chunk_size)
-            if not chunk:  # EOF reached
+            file_chunk = file_object.read(current_chunk_size)
+            if not file_chunk:  # EOF reached
                 break
 
             # Track total bytes read and yield the chunk
-            bytes_read += len(chunk)
-            yield chunk
+            total_bytes_read += len(file_chunk)
+            yield file_chunk
 
     finally:
         # Ensure file is always closed, even on exceptions

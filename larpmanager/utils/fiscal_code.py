@@ -27,23 +27,23 @@ def calculate_fiscal_code(member):
     if member.fiscal_code and member.fiscal_code.lower() == "n/a":
         return {}
 
-    first_ctx = _go(member, True)
+    primary_validation_result = _go(member, True)
 
     # If the first try didn't work, try if the user has to indicate the gender female
-    if not first_ctx["correct_cf"]:
-        second_ctx = _go(member, False)
-        if second_ctx["correct_cf"]:
-            return second_ctx
+    if not primary_validation_result["correct_cf"]:
+        secondary_validation_result = _go(member, False)
+        if secondary_validation_result["correct_cf"]:
+            return secondary_validation_result
 
-    return first_ctx
-
-
-def _calculate_consonants(s):
-    return "".join([c for c in s if c.isalpha() and c not in "AEIOUÀÈÉÌÒÙ"])
+    return primary_validation_result
 
 
-def _calculate_vowels(s):
-    return "".join([c for c in s if c in "AEIOU"])
+def _calculate_consonants(fiscal_code_string):
+    return "".join([c for c in fiscal_code_string if c.isalpha() and c not in "AEIOUÀÈÉÌÒÙ"])
+
+
+def _calculate_vowels(text):
+    return "".join([character for character in text if character in "AEIOU"])
 
 
 def _extract_last_name(last_name: str) -> str:
@@ -130,31 +130,32 @@ def _clean_birth_place(birth_place: str | None) -> str:
     return cleaned_birth_place
 
 
-def _slugify(text):
+def _slugify(input_text):
     """Normalize text for fiscal code generation by removing accents and special characters.
 
     Args:
-        text: Input text to be normalized
+        input_text: Input text to be normalized
 
     Returns:
         str: Normalized text with accents removed, lowercased, and special characters replaced
     """
     # Remove accents
-    for char in ["à", "è", "é", "ì", "ò", "ù"]:
-        text = text.replace(char, "")
+    normalized_text = input_text
+    for accented_char in ["à", "è", "é", "ì", "ò", "ù"]:
+        normalized_text = normalized_text.replace(accented_char, "")
     # Normalize text to remove accents and convert to ASCII
-    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    normalized_text = unicodedata.normalize("NFKD", normalized_text).encode("ascii", "ignore").decode("ascii")
     # Convert text to lowercase
-    text = text.lower()
+    normalized_text = normalized_text.lower()
     # Remove quotes
-    text = text.replace('"', "").replace("'", "")
+    normalized_text = normalized_text.replace('"', "").replace("'", "")
     # Replace any non-alphanumeric character (excluding hyphens) with a space
-    text = re.sub(r"[^a-z0-9\s-]", "", text)
+    normalized_text = re.sub(r"[^a-z0-9\s-]", "", normalized_text)
     # Replace any sequence of whitespace or hyphens with a single hyphen
-    text = re.sub(r"[\s-]+", "-", text)
+    normalized_text = re.sub(r"[\s-]+", "-", normalized_text)
     # Strip leading and trailing hyphens
-    text = text.strip("-")
-    return text
+    normalized_text = normalized_text.strip("-")
+    return normalized_text
 
 
 def _extract_municipality_code(birth_place: str) -> str:
@@ -338,19 +339,19 @@ def _go(member: Member, male: bool = True) -> dict[str, Any]:
             - error_cf (str): Error message if validation fails
             - correct_cf (bool): True if calculated matches supplied code
     """
-    fiscal_code_length = 16
-    name_number = 2
+    expected_fiscal_code_length = 16
+    expected_name_parts_count = 2
 
     # Process legal name by splitting into name and surname components
     if member.legal_name:
-        splitted = member.legal_name.rsplit(" ", 1)
-        if len(splitted) == name_number:
-            member.name, member.surname = splitted
+        name_parts = member.legal_name.rsplit(" ", 1)
+        if len(name_parts) == expected_name_parts_count:
+            member.name, member.surname = name_parts
         else:
-            member.name = splitted[0]
+            member.name = name_parts[0]
 
     # Initialize validation context
-    ctx: dict[str, Any] = {"membership_cf": True}
+    validation_context: dict[str, Any] = {"membership_cf": True}
 
     # Extract fiscal code components using helper functions
     last_name_code = _extract_last_name(member.surname)
@@ -362,40 +363,42 @@ def _go(member: Member, male: bool = True) -> dict[str, Any]:
     municipality_code = _extract_municipality_code(cleaned_birth_place)
 
     # Construct fiscal code without check digit and add check digit
-    cf_without_check_digit = f"{last_name_code}{first_name_code}{birth_date_code}{municipality_code}"
-    check_digit = _calculate_check_digit(cf_without_check_digit)
+    fiscal_code_without_check_digit = f"{last_name_code}{first_name_code}{birth_date_code}{municipality_code}"
+    check_digit = _calculate_check_digit(fiscal_code_without_check_digit)
 
     # Store calculated and supplied fiscal codes in context
-    ctx["calculated_cf"] = cf_without_check_digit + check_digit
+    validation_context["calculated_cf"] = fiscal_code_without_check_digit + check_digit
     if member.fiscal_code:
-        ctx["supplied_cf"] = member.fiscal_code.upper()
+        validation_context["supplied_cf"] = member.fiscal_code.upper()
     else:
-        ctx["supplied_cf"] = ""
+        validation_context["supplied_cf"] = ""
 
     # Check for municipality code validity
     if not municipality_code:
-        ctx["error_cf"] = _("Place of birth not included in the ISTAT list")
+        validation_context["error_cf"] = _("Place of birth not included in the ISTAT list")
 
     # Perform detailed validation checks with specific error messages
-    if almost_equal(ctx["calculated_cf"], ctx["supplied_cf"]):
-        ctx["error_cf"] = _("One character more or less than expected")
-    elif len(ctx["supplied_cf"]) != fiscal_code_length:
-        ctx["error_cf"] = _("Wrong number of characters")
-    elif count_differences(ctx["calculated_cf"], ctx["supplied_cf"]) == 1:
-        ctx["error_cf"] = _("Differing by only one character from the expected one")
+    if almost_equal(validation_context["calculated_cf"], validation_context["supplied_cf"]):
+        validation_context["error_cf"] = _("One character more or less than expected")
+    elif len(validation_context["supplied_cf"]) != expected_fiscal_code_length:
+        validation_context["error_cf"] = _("Wrong number of characters")
+    elif count_differences(validation_context["calculated_cf"], validation_context["supplied_cf"]) == 1:
+        validation_context["error_cf"] = _("Differing by only one character from the expected one")
 
     # Check specific sections of the fiscal code for targeted error messages
-    elif ctx["calculated_cf"][:6] != ctx["supplied_cf"][:6]:
-        ctx["error_cf"] = _(
+    elif validation_context["calculated_cf"][:6] != validation_context["supplied_cf"][:6]:
+        validation_context["error_cf"] = _(
             "First and last name characters do not match (remember to enter the correct first "
             "and last names in legal_name)"
         )
-    elif ctx["calculated_cf"][-6:-1] != ctx["supplied_cf"][-6:-1]:
-        ctx["error_cf"] = _("Characters relating to place of birth do not match (check exact municipality)")
-    elif ctx["calculated_cf"][6:10] != ctx["supplied_cf"][6:10]:
-        ctx["error_cf"] = _("Date of birth characters do not match (check exact date)")
+    elif validation_context["calculated_cf"][-6:-1] != validation_context["supplied_cf"][-6:-1]:
+        validation_context["error_cf"] = _(
+            "Characters relating to place of birth do not match (check exact municipality)"
+        )
+    elif validation_context["calculated_cf"][6:10] != validation_context["supplied_cf"][6:10]:
+        validation_context["error_cf"] = _("Date of birth characters do not match (check exact date)")
 
     # Set final validation result
-    ctx["correct_cf"] = ctx["calculated_cf"] == ctx["supplied_cf"]
+    validation_context["correct_cf"] = validation_context["calculated_cf"] == validation_context["supplied_cf"]
 
-    return ctx
+    return validation_context

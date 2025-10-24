@@ -175,7 +175,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
     assoc_id = member.membership.assoc_id
     regs = member.registrations.filter(run__event__assoc_id=assoc_id, run__start__gte=datetime.now().date())
     membership_fee = False
-    reg_list = []
+    registration_list = []
 
     # Process each registration for payment requirements
     for registration in regs:
@@ -193,15 +193,15 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
         # Build payment link for unpaid registrations
         url = get_url("accounting/pay", member.membership)
         href = f"{url}/{registration.run.get_slug()}"
-        reg_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
+        registration_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
 
     # Add registration payment instructions if needed
-    if reg_list:
+    if registration_list:
         body += (
             "<br /><br />"
             + _("To confirm your event registration, please complete your payment within one week. You can do so here")
             + ": "
-            + ", ".join(reg_list)
+            + ", ".join(registration_list)
         )
 
     # Add membership fee payment instructions if required
@@ -290,19 +290,19 @@ def send_help_question_notification_email(instance):
         my_send_mail(subj, body, mb, instance)
 
 
-def get_help_email(instance):
+def get_help_email(help_question):
     """Generate subject and body for help question notification.
 
     Args:
-        instance: HelpQuestion instance
+        help_question: HelpQuestion instance
 
     Returns:
         tuple: (subject, body) for the notification email
     """
-    subj = hdr(instance) + _("New question by %(user)s") % {"user": instance.member}
-    body = _("A question was asked by: %(user)s") % {"user": instance.member}
-    body += "<br /><br />" + instance.text
-    return subj, body
+    subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
+    email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
+    email_body += "<br /><br />" + help_question.text
+    return subject, email_body
 
 
 def send_chat_message_notification_email(instance):

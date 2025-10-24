@@ -233,14 +233,14 @@ def writing_example(ctx, typ):
     return response
 
 
-def writing_post(request, ctx, typ, nm):
+def writing_post(request, context, writing_element_type, template_name):
     """Handle POST requests for writing operations.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary with event data
-        typ: Writing element type class
-        nm: Template name
+        context: Context dictionary with event data
+        writing_element_type: Writing element type class
+        template_name: Template name
 
     Raises:
         ReturnNowError: When download operation needs to return immediately
@@ -249,13 +249,13 @@ def writing_post(request, ctx, typ, nm):
         return
 
     if request.POST.get("download") == "1":
-        raise ReturnNowError(download(ctx, typ, nm))
+        raise ReturnNowError(download(context, writing_element_type, template_name))
 
     if request.POST.get("example") == "1":
-        raise ReturnNowError(writing_example(ctx, typ))
+        raise ReturnNowError(writing_example(context, writing_element_type))
 
     if request.POST.get("popup") == "1":
-        raise ReturnNowError(writing_popup(request, ctx, typ))
+        raise ReturnNowError(writing_popup(request, context, writing_element_type))
 
 
 def writing_list(
@@ -633,18 +633,18 @@ def char_add_addit(ctx):
     Args:
         ctx: Context dictionary containing character list and event information
     """
-    addits = {}
+    character_configs_by_id = {}
     event = ctx["event"].get_class_parent(Character)
     for config in CharacterConfig.objects.filter(character__event=event):
-        if config.character_id not in addits:
-            addits[config.character_id] = {}
-        addits[config.character_id][config.name] = config.value
+        if config.character_id not in character_configs_by_id:
+            character_configs_by_id[config.character_id] = {}
+        character_configs_by_id[config.character_id][config.name] = config.value
 
-    for el in ctx["list"]:
-        if el.id in addits:
-            el.addit = addits[el.id]
+    for character in ctx["list"]:
+        if character.id in character_configs_by_id:
+            character.addit = character_configs_by_id[character.id]
         else:
-            el.addit = {}
+            character.addit = {}
 
 
 def writing_view(request: HttpRequest, ctx: dict[str, Any], element_type_name: str) -> HttpResponse:

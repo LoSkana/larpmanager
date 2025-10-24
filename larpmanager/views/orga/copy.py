@@ -90,37 +90,39 @@ def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
         m2m_field.set(new_values, clear=True)
 
 
-def correct_rels(e_id, p_id, cls_p, cls, field, rel_field="number"):
+def correct_rels(
+    target_event_id, source_event_id, parent_model_class, child_model_class, relationship_field, matching_field="number"
+):
     """Correct model relationships after copying event elements.
 
     Args:
-        e_id: Target event ID
-        p_id: Source parent event ID
-        cls_p: Parent model class to match
-        cls: Model class to update relationships for
-        field: Relationship field name to correct
-        rel_field: Field to use for matching (default: "number")
+        target_event_id: Target event ID
+        source_event_id: Source parent event ID
+        parent_model_class: Parent model class to match
+        child_model_class: Model class to update relationships for
+        relationship_field: Relationship field name to correct
+        matching_field: Field to use for matching (default: "number")
     """
-    cache_f = {}
-    cache_t = {}
-    field = field + "_id"
+    source_id_to_match_value = {}
+    match_value_to_target_id = {}
+    relationship_field_id = relationship_field + "_id"
 
-    for obj in cls_p.objects.filter(event_id=p_id):
-        rel_value = getattr(obj, rel_field)
-        cache_f[obj.id] = rel_value
+    for parent_obj in parent_model_class.objects.filter(event_id=source_event_id):
+        match_value = getattr(parent_obj, matching_field)
+        source_id_to_match_value[parent_obj.id] = match_value
 
-    for obj in cls_p.objects.filter(event_id=e_id):
-        rel_value = getattr(obj, rel_field)
-        cache_t[rel_value] = obj.id
+    for parent_obj in parent_model_class.objects.filter(event_id=target_event_id):
+        match_value = getattr(parent_obj, matching_field)
+        match_value_to_target_id[match_value] = parent_obj.id
 
-    for obj in cls.objects.filter(event_id=e_id):
-        v = getattr(obj, field)
-        if v not in cache_f:
+    for child_obj in child_model_class.objects.filter(event_id=target_event_id):
+        source_parent_id = getattr(child_obj, relationship_field_id)
+        if source_parent_id not in source_id_to_match_value:
             continue
-        v = cache_f[v]
-        v = cache_t[v]
-        setattr(obj, field, v)
-        obj.save()
+        match_value = source_id_to_match_value[source_parent_id]
+        target_parent_id = match_value_to_target_id[match_value]
+        setattr(child_obj, relationship_field_id, target_parent_id)
+        child_obj.save()
 
 
 def correct_relationship(e_id, p_id):
@@ -295,42 +297,44 @@ def copy_character_config(e_id, p_id):
                     raise
 
 
-def copy(request: HttpRequest, ctx: dict, parent: Event, event: Event, targets: list) -> HttpResponseRedirect | None:
+def copy(
+    request: HttpRequest, context: dict, parent_event: Event, target_event: Event, data_types_to_copy: list
+) -> HttpResponseRedirect | None:
     """Copy event data from a parent event to the current event.
 
     Args:
         request: The HTTP request object
-        ctx: Context dictionary for the operation
-        parent: The source event to copy data from
-        event: The target event to copy data to
-        targets: List of data types to copy
+        context: Context dictionary for the operation
+        parent_event: The source event to copy data from
+        target_event: The target event to copy data to
+        data_types_to_copy: List of data types to copy
 
     Returns:
         HttpResponseRedirect if error occurs, None if successful
     """
     # Validate parent event exists
-    if not parent:
+    if not parent_event:
         return messages.error(request, _("Parent empty"))
 
     # Extract event IDs for copying operations
-    p_id = parent.id
-    e_id = event.id
+    parent_event_id = parent_event.id
+    target_event_id = target_event.id
 
     # Prevent copying from the same event
-    if p_id == e_id:
+    if parent_event_id == target_event_id:
         return messages.error(request, _("Can't copy from same event"))
 
     # Copy event-specific data based on targets
-    copy_event(ctx, e_id, targets, event, p_id, parent)
+    copy_event(context, target_event_id, data_types_to_copy, target_event, parent_event_id, parent_event)
 
     # Copy registration data between events
-    copy_registration(e_id, targets, p_id)
+    copy_registration(target_event_id, data_types_to_copy, parent_event_id)
 
     # Copy writing/story data between events
-    copy_writing(e_id, targets, p_id)
+    copy_writing(target_event_id, data_types_to_copy, parent_event_id)
 
     # Save changes to the target event
-    event.save()
+    target_event.save()
 
     # Notify user of successful completion
     messages.success(request, _("Copy done"))
@@ -550,23 +554,23 @@ def orga_copy(request, s):
     return render(request, "larpmanager/orga/copy.html", ctx)
 
 
-def get_all_fields_from_form(instance, ctx):
+def get_all_fields_from_form(form_class, context):
     """
     Return names of all available fields from given Form instance.
 
-    :arg instance: Form instance
+    :arg form_class: Form instance
     :returns list of field names
     :rtype: list
     """
 
-    fields = list(instance(ctx=ctx).base_fields)
+    fields = list(form_class(ctx=context).base_fields)
 
-    for field in list(instance(ctx=ctx).declared_fields):
-        if field not in fields:
-            fields.append(field)
+    for field_name in list(form_class(ctx=context).declared_fields):
+        if field_name not in fields:
+            fields.append(field_name)
 
-    for s in ["slug"]:
-        if s in fields:
-            fields.remove(s)
+    for excluded_field in ["slug"]:
+        if excluded_field in fields:
+            fields.remove(excluded_field)
 
     return fields

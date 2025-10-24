@@ -35,16 +35,16 @@ def reset_assoc_features(assoc_id):
     cache.delete(cache_assoc_features(assoc_id))
 
 
-def cache_assoc_features(assoc_id):
+def cache_assoc_features(association_id):
     """Generate cache key for association features.
 
     Args:
-        assoc_id (int): Association ID
+        association_id (int): Association ID
 
     Returns:
         str: Cache key for association features
     """
-    return f"assoc_features_{assoc_id}"
+    return f"assoc_features_{association_id}"
 
 
 def get_assoc_features(association_id):
@@ -116,12 +116,12 @@ def update_assoc_features(assoc_id: int) -> dict[str, int]:
     return res
 
 
-def clear_event_features_cache(ev_id):
-    cache.delete(cache_event_features_key(ev_id))
+def clear_event_features_cache(event_id):
+    cache.delete(cache_event_features_key(event_id))
 
 
-def cache_event_features_key(ev_id):
-    return f"event_features_{ev_id}"
+def cache_event_features_key(event_id):
+    return f"event_features_{event_id}"
 
 
 def get_event_features(event_id):

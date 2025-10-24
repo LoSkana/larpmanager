@@ -285,8 +285,8 @@ class ExeAppearanceForm(MyCssForm):
     @staticmethod
     def get_css_path(instance) -> str:
         """Return CSS file path for instance."""
-        p = f"css/{instance.slug}_{instance.css_code}.css"
-        return p
+        css_file_path = f"css/{instance.slug}_{instance.css_code}.css"
+        return css_file_path
 
     @staticmethod
     def get_input_css():

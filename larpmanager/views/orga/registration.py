@@ -35,7 +35,7 @@ from slugify import slugify
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.registration import (
     cancel_reg,
-    check_reg_bkg,
+    check_registration_background,
     get_accounting_refund,
     get_reg_payments,
 )
@@ -218,23 +218,23 @@ def orga_registrations_membership(r, ctx):
     r.membership = member.membership.get_status_display
 
 
-def regs_list_add(ctx, list, name, member):
+def regs_list_add(context_dict, category_list_key, category_name, member):
     """Add member to categorized registration lists.
 
     Args:
-        ctx: Context dictionary containing lists
-        list: List key to add to
-        name: Category name
+        context_dict: Context dictionary containing lists
+        category_list_key: List key to add to
+        category_name: Category name
         member: Member instance to add
     """
-    key = slugify(name)
-    if list not in ctx:
-        ctx[list] = {}
-    if key not in ctx[list]:
-        ctx[list][key] = {"name": name, "emails": [], "players": []}
-    if member.email not in ctx[list][key]["emails"]:
-        ctx[list][key]["emails"].append(member.email)
-        ctx[list][key]["players"].append(member.display_member())
+    slugified_key = slugify(category_name)
+    if category_list_key not in context_dict:
+        context_dict[category_list_key] = {}
+    if slugified_key not in context_dict[category_list_key]:
+        context_dict[category_list_key][slugified_key] = {"name": category_name, "emails": [], "players": []}
+    if member.email not in context_dict[category_list_key][slugified_key]["emails"]:
+        context_dict[category_list_key][slugified_key]["emails"].append(member.email)
+        context_dict[category_list_key][slugified_key]["players"].append(member.display_member())
 
 
 def _orga_registrations_standard(reg, ctx):
@@ -387,27 +387,27 @@ def _get_registration_fields(ctx: dict, member) -> dict:
     Returns:
         Dictionary mapping question IDs to RegistrationQuestion objects that the member can access
     """
-    reg_questions = {}
+    accessible_registration_questions = {}
 
     # Get all registration questions for the event based on available features
-    que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
+    event_questions = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
 
-    for q in que:
+    for question in event_questions:
         # Check if question has access restrictions enabled
-        if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
-            run_id = ctx["run"].id
+        if "reg_que_allowed" in ctx["features"] and question.allowed_map[0]:
+            current_run_id = ctx["run"].id
 
             # Check if user is an organizer for this run
-            organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
+            is_organizer = current_run_id in ctx["all_runs"] and 1 in ctx["all_runs"][current_run_id]
 
             # Skip question if user is not organizer and not in allowed list
-            if not organizer and member.id not in q.allowed_map:
+            if not is_organizer and member.id not in question.allowed_map:
                 continue
 
         # Add accessible question to results
-        reg_questions[q.id] = q
+        accessible_registration_questions[question.id] = question
 
-    return reg_questions
+    return accessible_registration_questions
 
 
 def _orga_registrations_discount(ctx: dict) -> None:
@@ -440,7 +440,7 @@ def _orga_registrations_text_fields(ctx):
         text_fields.append(str(que_id))
 
     gctf = get_cache_reg_field(ctx["run"])
-    for el in ctx["reg_list"]:
+    for el in ctx["registration_list"]:
         if el.id not in gctf:
             continue
         for f in text_fields:
@@ -505,20 +505,20 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
 
     # Query active (non-cancelled) registrations ordered by last update
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).order_by("-updated")
-    ctx["reg_list"] = que.select_related("member")
+    ctx["registration_list"] = que.select_related("member")
 
     # Batch-load membership statuses for all registered members
     ctx["memberships"] = {}
     if "membership" in ctx["features"]:
         members_id = []
-        for r in ctx["reg_list"]:
+        for r in ctx["registration_list"]:
             members_id.append(r.member_id)
         # Create lookup dictionary for efficient membership access
         for el in Membership.objects.filter(assoc_id=ctx["a_id"], member_id__in=members_id):
             ctx["memberships"][el.member_id] = el
 
     # Process each registration to add computed fields
-    for r in ctx["reg_list"]:
+    for r in ctx["registration_list"]:
         # Add standard fields: characters, membership status, age
         _orga_registrations_standard(r, ctx)
 
@@ -829,7 +829,7 @@ def orga_registrations_reload(request: HttpRequest, s: str) -> HttpResponseRedir
         reg_ids.append(str(reg.id))
 
     # Trigger background registration checks
-    check_reg_bkg(reg_ids)
+    check_registration_background(reg_ids)
     # print(f"@@@@ orga_registrations_reload {request} {datetime.now()}")
     return redirect("orga_registrations", s=ctx["run"].get_slug())
 

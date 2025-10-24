@@ -76,37 +76,40 @@ def check_run_deadlines(runs: list) -> list:
 
     # Collect all run and member IDs
     run_ids = [run.id for run in runs]
-    regs_id = []
-    members_id = []
-    members_map = {}
-    all_regs = {}
+    registration_ids = []
+    member_ids = []
+    members_by_run = {}
+    registrations_by_run = {}
     for run in runs:
-        all_regs[run.id] = []
-        members_map[run.id] = []
+        registrations_by_run[run.id] = []
+        members_by_run[run.id] = []
 
     # Query active registrations
-    reg_que = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True)
-    reg_que = reg_que.exclude(ticket__tier=TicketTier.WAITING)
-    for reg in reg_que:
-        regs_id.append(reg.id)
-        members_id.append(reg.member_id)
-        all_regs[reg.run_id].append(reg)
+    registration_query = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True)
+    registration_query = registration_query.exclude(ticket__tier=TicketTier.WAITING)
+    for registration in registration_query:
+        registration_ids.append(registration.id)
+        member_ids.append(registration.member_id)
+        registrations_by_run[registration.run_id].append(registration)
 
     # Get tolerance setting
     tolerance = int(get_assoc_config(runs[0].event.assoc_id, "deadlines_tolerance", "30"))
 
     # Check membership feature
-    assoc_id = runs[0].event.assoc_id
+    association_id = runs[0].event.assoc_id
     now = datetime.now()
-    uses_membership = "membership" in get_assoc_features(assoc_id)
+    uses_membership = "membership" in get_assoc_features(association_id)
 
     # Load memberships and fees
-    memberships = {el.member_id: el for el in Membership.objects.filter(assoc_id=assoc_id, member_id__in=members_id)}
+    memberships = {
+        membership.member_id: membership
+        for membership in Membership.objects.filter(assoc_id=association_id, member_id__in=member_ids)
+    }
     fees = {}
     if uses_membership:
-        fees = get_membership_fee_year(assoc_id)
+        fees = get_membership_fee_year(association_id)
 
-    all_res = []
+    all_results = []
 
     # Check each run
     for run in runs:
@@ -114,33 +117,46 @@ def check_run_deadlines(runs: list) -> list:
             continue
 
         # Initialize collectors for different deadline types
-        collect = {
-            k: [] for k in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del", "profile", "profile_del"]
+        deadline_violations = {
+            category: []
+            for category in [
+                "pay",
+                "pay_del",
+                "casting",
+                "memb",
+                "memb_del",
+                "fee",
+                "fee_del",
+                "profile",
+                "profile_del",
+            ]
         }
         features = get_event_features(run.event_id)
         player_ids = []
 
         # Check each registration
-        for reg in all_regs[run.id]:
-            if reg.ticket and reg.ticket.tier not in [TicketTier.STAFF, TicketTier.NPC]:
-                player_ids.append(reg.member_id)
+        for registration in registrations_by_run[run.id]:
+            if registration.ticket and registration.ticket.tier not in [TicketTier.STAFF, TicketTier.NPC]:
+                player_ids.append(registration.member_id)
 
             # Check membership or profile deadlines
             if uses_membership:
-                deadlines_membership(collect, features, fees, memberships, now, reg, run, tolerance)
+                deadlines_membership(
+                    deadline_violations, features, fees, memberships, now, registration, run, tolerance
+                )
             else:
-                deadlines_profile(collect, features, memberships, now, reg, run, tolerance)
+                deadlines_profile(deadline_violations, features, memberships, now, registration, run, tolerance)
 
             # Check payment deadlines
-            deadlines_payment(collect, features, reg, tolerance)
+            deadlines_payment(deadline_violations, features, registration, tolerance)
 
         # Check casting deadlines
-        deadlines_casting(collect, features, player_ids, run)
-        result = {k: get_users_data(v) for k, v in collect.items()}
+        deadlines_casting(deadline_violations, features, player_ids, run)
+        result = {category: get_users_data(violations) for category, violations in deadline_violations.items()}
         result["run"] = run
-        all_res.append(result)
+        all_results.append(result)
 
-    return all_res
+    return all_results
 
 
 def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):

@@ -127,13 +127,13 @@ class Operations:
     SET_CHAR_STATUS = 17
 
 
-def exec_bulk(request: HttpRequest, ctx: dict, mapping: dict) -> JsonResponse:
+def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> JsonResponse:
     """Execute bulk operations on a collection of objects.
 
     Args:
         request: HTTP request object containing bulk operation parameters
-        ctx: Context dictionary with operation-specific data
-        mapping: Dictionary mapping operation names to their handler functions
+        context: Context dictionary with operation-specific data
+        operation_mapping: Dictionary mapping operation names to their handler functions
 
     Returns:
         JsonResponse: Success response with "ok" status or error response with
@@ -143,15 +143,15 @@ def exec_bulk(request: HttpRequest, ctx: dict, mapping: dict) -> JsonResponse:
         ObjectDoesNotExist: When target objects for the operation are not found
     """
     # Extract bulk operation parameters from request
-    ids, operation, target = _get_bulk_params(request, ctx)
+    object_ids, operation_name, operation_target = _get_bulk_params(request, context)
 
     # Validate that the requested operation is supported
-    if operation not in mapping:
+    if operation_name not in operation_mapping:
         return JsonResponse({"error": "unknow operation"}, status=400)
 
     try:
         # Execute the bulk operation using the mapped handler function
-        mapping[operation](request, ctx, target, ids)
+        operation_mapping[operation_name](request, context, operation_target, object_ids)
     except ObjectDoesNotExist:
         # Handle case where target objects don't exist
         return JsonResponse({"error": "not found"}, status=400)
@@ -160,8 +160,10 @@ def exec_bulk(request: HttpRequest, ctx: dict, mapping: dict) -> JsonResponse:
     return JsonResponse({"res": "ok"})
 
 
-def _get_inv_items(ids, request):
-    return WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).values_list("pk", flat=True)
+def _get_inv_items(warehouse_item_ids, request):
+    return WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=warehouse_item_ids).values_list(
+        "pk", flat=True
+    )
 
 
 def exec_add_item_tag(

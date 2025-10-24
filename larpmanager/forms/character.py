@@ -167,25 +167,25 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         # Initialize registration questions and get counts
         self._init_reg_question(self.instance, event)
-        reg_counts = get_reg_counts(self.params["run"])
+        registration_counts = get_reg_counts(self.params["run"])
 
         # Process each question to create form fields
         for question in self.questions:
-            key = self._init_field(question, reg_counts=reg_counts, orga=self.orga)
-            if not key:
+            field_key = self._init_field(question, registration_counts=registration_counts, is_organizer=self.orga)
+            if not field_key:
                 continue
 
             # Categorize fields based on question type length
             if len(question.typ) == 1:
-                fields_custom.add(key)
+                fields_custom.add(field_key)
             else:
-                fields_default.add(key)
+                fields_default.add(field_key)
 
         # Add organizer-specific fields and configurations
         if self.orga:
-            for key in ["player", "status"]:
-                fields_default.add(key)
-                self.reorder_field(key)
+            for field_key in ["player", "status"]:
+                fields_default.add(field_key)
+                self.reorder_field(field_key)
 
             # Add access token field for external writing access
             if get_event_config(event.id, "writing_external_access", False) and self.instance.pk:
@@ -194,8 +194,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         # Remove unused fields from form
         all_fields = set(self.fields.keys()) - fields_default
-        for lbl in all_fields - fields_custom:
-            del self.fields[lbl]
+        for field_label in all_fields - fields_custom:
+            del self.fields[field_label]
 
         # Add character completion proposal field for user approval workflow
         if not self.orga and get_event_config(event.id, "user_character_approval", False):
@@ -241,8 +241,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not self.instance.pk:
             return
 
-        for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
-            self.initial["factions_list"].append(fc[0])
+        for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
+            self.initial["factions_list"].append(faction_data[0])
 
     def _save_multi(self, s: str, instance) -> None:
         """Save multi-select field data for the given instance.
@@ -527,8 +527,8 @@ class OrgaCharacterForm(CharacterForm):
 
         # Initial factions values
         self.initial["factions_list"] = []
-        for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
-            self.initial["factions_list"].append(fc[0])
+        for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
+            self.initial["factions_list"].append(faction_data[0])
 
     def _save_relationships(self, instance):
         """Save character relationships from form data.
@@ -585,24 +585,24 @@ class OrgaCharacterForm(CharacterForm):
             rel.text = value
             rel.save()
 
-    def _get_rel(self, ch_id: int, instance, rel_type: str) -> Relationship:
+    def _get_rel(self, character_id: int, instance, relationship_type: str) -> Relationship:
         """Get or create a relationship between characters based on type.
 
         Args:
-            ch_id: Character ID for the relationship
-            instance: Source or target instance depending on rel_type
-            rel_type: Either "direct" or reverse relationship type
+            character_id: Character ID for the relationship
+            instance: Source or target instance depending on relationship_type
+            relationship_type: Either "direct" or reverse relationship type
 
         Returns:
             The relationship object
         """
         # Create direct relationship (instance -> character)
-        if rel_type == "direct":
-            (rel, cr) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=ch_id)
+        if relationship_type == "direct":
+            (relationship, created) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=character_id)
         # Create reverse relationship (character -> instance)
         else:
-            (rel, cr) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=ch_id)
-        return rel
+            (relationship, created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
+        return relationship
 
     def save(self, commit: bool = True) -> object:
         """Save the form instance and handle related data.
@@ -717,25 +717,25 @@ class OrgaWritingQuestionForm(MyForm):
             - Sets self.prevent_canc based on instance type length
         """
         # Get writing questions applicable to current writing type
-        que = self.params["event"].get_elements(WritingQuestion)
-        que = que.filter(applicable=self.params["writing_typ"])
+        writing_questions = self.params["event"].get_elements(WritingQuestion)
+        writing_questions = writing_questions.filter(applicable=self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
-        already = list(que.values_list("typ", flat=True).distinct())
+        already_used_types = list(writing_questions.values_list("typ", flat=True).distinct())
 
         # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:
-            already.remove(self.instance.typ)
+            already_used_types.remove(self.instance.typ)
             # Prevent cancellation for multi-character default types
             self.prevent_canc = len(self.instance.typ) > 1
 
         # Build filtered choices list based on features and usage
-        choices = []
+        filtered_choices = []
         for choice in WritingQuestionType.choices:
             # Handle feature-related types (length > 1)
             if len(choice[0]) > 1:
                 # Skip if type already exists
-                if choice[0] in already:
+                if choice[0] in already_used_types:
                     continue
 
                 # Check feature activation for non-default types
@@ -748,10 +748,10 @@ class OrgaWritingQuestionForm(MyForm):
                 continue
 
             # Add valid choice to final list
-            choices.append(choice)
+            filtered_choices.append(choice)
 
         # Apply filtered choices to form field
-        self.fields["typ"].choices = choices
+        self.fields["typ"].choices = filtered_choices
 
     def _init_editable(self):
         if not get_event_config(self.params["event"].id, "user_character_approval", False):

@@ -26,8 +26,8 @@ from larpmanager.models.association import AssocText
 from larpmanager.models.event import EventText
 
 
-def event_text_key(event_id, typ, lang):
-    return f"event_text_{event_id}_{typ}_{lang}"
+def event_text_key(event_id, text_type, language):
+    return f"event_text_{event_id}_{text_type}_{language}"
 
 
 def update_event_text(event_id: int, typ: str, lang: str) -> str:
@@ -76,8 +76,8 @@ def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
     return res
 
 
-def event_text_key_def(event_id, typ):
-    return f"event_text_def_{event_id}_{typ}"
+def event_text_key_def(event_id, text_type):
+    return f"event_text_def_{event_id}_{text_type}"
 
 
 def update_event_text_def(event_id: int, typ: str) -> str:
@@ -194,8 +194,8 @@ def clear_event_text_cache_on_delete(instance: EventText) -> None:
 # Text cache
 
 
-def assoc_text_key(assoc_id, typ, lang):
-    return f"assoc_text_{assoc_id}_{typ}_{lang}"
+def assoc_text_key(association_id, text_type, language):
+    return f"assoc_text_{association_id}_{text_type}_{language}"
 
 
 def update_assoc_text(assoc_id: int, typ: str, lang: str) -> str:
@@ -246,8 +246,8 @@ def get_assoc_text_cache(assoc_id: int, typ: str, lang: str) -> str:
 # default it
 
 
-def assoc_text_key_def(assoc_id, typ):
-    return f"assoc_text_def_{assoc_id}_{typ}"
+def assoc_text_key_def(association_id, text_type):
+    return f"assoc_text_def_{association_id}_{text_type}"
 
 
 def update_assoc_text_def(assoc_id: int, typ: str) -> str:

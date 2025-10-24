@@ -369,10 +369,10 @@ class Event(BaseModel):
     def get_media_filepath(self) -> str:
         """Get the media directory path for this object's PDFs, creating it if needed."""
         # Build path to PDF directory using object slug
-        fp = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
+        pdf_directory_path = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
         # Ensure directory exists
-        os.makedirs(fp, exist_ok=True)
-        return fp
+        os.makedirs(pdf_directory_path, exist_ok=True)
+        return pdf_directory_path
 
     def get_config(self, name, default_value=None, bypass_cache=False):
         return get_element_config(self, name, default_value, bypass_cache)
@@ -637,12 +637,12 @@ class Run(BaseModel):
         """
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
-        fp = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
+        run_media_path = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
 
         # Ensure directory exists
-        os.makedirs(fp, exist_ok=True)
+        os.makedirs(run_media_path, exist_ok=True)
 
-        return fp
+        return run_media_path
 
     def get_gallery_filepath(self):
         return self.get_media_filepath() + "gallery.pdf"

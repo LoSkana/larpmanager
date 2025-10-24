@@ -66,7 +66,7 @@ from larpmanager.models.writing import (
     FactionType,
 )
 from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import HiddenError
@@ -139,7 +139,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         runs = runs.exclude(development=DevelopStatus.START)
 
     # Initialize context with default user context and empty collections
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
 
     # Add language filter to context if specified
@@ -170,7 +170,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_character_rels_dict(my_regs_dict: dict, member) -> dict:
+def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:
     """Get character relations dictionary grouped by registration ID.
 
     Precalculates RegistrationCharacterRel data for all runs to optimize queries
@@ -178,77 +178,78 @@ def get_character_rels_dict(my_regs_dict: dict, member) -> dict:
     them by registration ID.
 
     Args:
-        my_regs_dict: Dictionary of user's registrations
+        registrations_by_run_dict: Dictionary of user's registrations
         member: Member object to filter registrations
 
     Returns:
         Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
     """
     # Initialize empty dictionary to store character relations grouped by registration ID
-    character_rels_dict = {}
+    character_relations_by_registration_dict = {}
 
     # Only proceed if user has registrations
-    if my_regs_dict:
+    if registrations_by_run_dict:
         # Extract all registration IDs from the registrations dictionary
-        reg_ids = [reg.id for reg in my_regs_dict.values()]
+        registration_ids = [registration.id for registration in registrations_by_run_dict.values()]
 
         # Fetch all RegistrationCharacterRel objects for user's registrations in one optimized query
         # Include character data and order by character number for consistent results
-        character_rels = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=reg_ids, reg__member=member)
+        character_relations = (
+            RegistrationCharacterRel.objects.filter(reg_id__in=registration_ids, reg__member=member)
             .select_related("character")
             .order_by("character__number")
         )
 
         # Group character relations by registration ID for efficient lookup
-        for rel in character_rels:
+        for character_relation in character_relations:
             # Initialize list for new registration IDs
-            if rel.reg_id not in character_rels_dict:
-                character_rels_dict[rel.reg_id] = []
+            if character_relation.reg_id not in character_relations_by_registration_dict:
+                character_relations_by_registration_dict[character_relation.reg_id] = []
             # Add character relation to the appropriate registration group
-            character_rels_dict[rel.reg_id].append(rel)
+            character_relations_by_registration_dict[character_relation.reg_id].append(character_relation)
 
-    return character_rels_dict
+    return character_relations_by_registration_dict
 
 
-def get_payment_invoices_dict(my_regs_dict: dict, member) -> dict:
+def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
     """Get payment invoices organized by registration ID for the given member.
 
     Precalculates PaymentInvoice data for all registrations to optimize database queries
     by fetching all relevant invoices in a single query and grouping them by registration ID.
 
     Args:
-        my_regs_dict: Dictionary containing registration objects as values
+        registrations_by_id: Dictionary containing registration objects as values
         member: Member object to filter payment invoices for
 
     Returns:
         Dictionary mapping registration IDs to lists of PaymentInvoice objects
     """
     # Initialize empty dictionary to store grouped payment invoices
-    payment_invoices_dict = {}
+    payment_invoices_by_registration = {}
 
     # Only proceed if we have registrations to process
-    if my_regs_dict:
+    if registrations_by_id:
         # Extract all registration IDs for bulk query optimization
-        reg_ids = [reg.id for reg in my_regs_dict.values()]
+        registration_ids = [registration.id for registration in registrations_by_id.values()]
 
         # Fetch all payment invoices for user's registrations in single optimized query
         # Include method relation to avoid N+1 queries when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
-            reg_id__in=reg_ids, member=member, typ=PaymentType.REGISTRATION
+            reg_id__in=registration_ids, member=member, typ=PaymentType.REGISTRATION
         ).select_related("method")
 
         # Group payment invoices by registration ID using idx field as key
         # This allows quick lookup of all invoices for a specific registration
         for invoice in payment_invoices:
-            if invoice.idx not in payment_invoices_dict:
-                payment_invoices_dict[invoice.idx] = []
-            payment_invoices_dict[invoice.idx].append(invoice)
+            registration_id = invoice.idx
+            if registration_id not in payment_invoices_by_registration:
+                payment_invoices_by_registration[registration_id] = []
+            payment_invoices_by_registration[registration_id].append(invoice)
 
-    return payment_invoices_dict
+    return payment_invoices_by_registration
 
 
-def get_pre_registrations_dict(assoc_id: int, member) -> dict:
+def get_pre_registrations_dict(association_id: int, member) -> dict:
     """Get pre-registrations for a member organized by event ID.
 
     Precalculates PreRegistration data for all events to optimize queries
@@ -256,7 +257,7 @@ def get_pre_registrations_dict(assoc_id: int, member) -> dict:
     and organizing them in a dictionary for fast lookup.
 
     Args:
-        assoc_id: The association ID to filter events by
+        association_id: The association ID to filter events by
         member: The member object to get pre-registrations for
 
     Returns:
@@ -264,22 +265,22 @@ def get_pre_registrations_dict(assoc_id: int, member) -> dict:
         Empty dict if member is None or has no pre-registrations.
     """
     # Initialize empty dictionary for pre-registration lookup
-    pre_registrations_dict = {}
+    event_id_to_pre_registration = {}
 
     # Only proceed if member is provided
     if member:
         # Get all pre-registrations for user's events in one query
         # Filter by association, member, and exclude deleted records
-        pre_registrations = PreRegistration.objects.filter(
-            event__assoc_id=assoc_id, member=member, deleted__isnull=True
+        member_pre_registrations = PreRegistration.objects.filter(
+            event__assoc_id=association_id, member=member, deleted__isnull=True
         ).select_related("event")
 
         # Group pre-registrations by event ID for fast lookup
         # Each event can have only one pre-registration per member
-        for pre_reg in pre_registrations:
-            pre_registrations_dict[pre_reg.event_id] = pre_reg
+        for pre_registration in member_pre_registrations:
+            event_id_to_pre_registration[pre_registration.event_id] = pre_registration
 
-    return pre_registrations_dict
+    return event_id_to_pre_registration
 
 
 def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
@@ -303,12 +304,12 @@ def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
     # Apply date filtering and ordering based on future/past requirement
     if future:
         # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        ref = datetime.now() - timedelta(days=3)
-        runs = runs.filter(end__gte=ref.date()).order_by("end")
+        reference_date = datetime.now() - timedelta(days=3)
+        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
     else:
         # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        ref = datetime.now() + timedelta(days=3)
-        runs = runs.filter(end__lte=ref.date()).order_by("-end")
+        reference_date = datetime.now() + timedelta(days=3)
+        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
 
     return runs
 
@@ -364,7 +365,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
         Only includes events with valid end dates.
     """
     # Initialize context with default user data and empty list
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"list": []})
 
     # Cache to track processed events and set reference date (3 days ago)
@@ -410,7 +411,7 @@ def share(request):
     Returns:
         HttpResponse: Rendered template or redirect to home
     """
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
     if el.status != MembershipStatus.EMPTY:
@@ -432,7 +433,7 @@ def share(request):
 def legal_notice(request: HttpRequest) -> HttpResponse:
     """Render legal notice page with association-specific text."""
     # Build context with user data and legal notice text
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", ctx)
 
@@ -485,8 +486,8 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
                      Template: 'larpmanager/general/past.html'
     """
     # Extract association ID and initialize user context
-    aid = request.assoc["id"]
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
+    aid = ctx["association_id"]
 
     # Get all past runs for this association
     runs = get_coming_runs(aid, future=False)
@@ -539,12 +540,12 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/general/past.html", ctx)
 
 
-def check_gallery_visibility(request, ctx):
+def check_gallery_visibility(request, context):
     """Check if gallery is visible to the current user based on event configuration.
 
     Args:
         request: HTTP request object with user authentication information
-        ctx: Context dictionary containing event and run data
+        context: Context dictionary containing event and run data
 
     Returns:
         bool: True if gallery should be visible, False otherwise
@@ -552,18 +553,18 @@ def check_gallery_visibility(request, ctx):
     if is_lm_admin(request):
         return True
 
-    if "manage" in ctx:
+    if "manage" in context:
         return True
 
-    hide_signup = get_event_config(ctx["event"].id, "gallery_hide_signup", False, ctx)
-    hide_login = get_event_config(ctx["event"].id, "gallery_hide_login", False, ctx)
+    hide_gallery_for_non_signup = get_event_config(context["event"].id, "gallery_hide_signup", False, context)
+    hide_gallery_for_non_login = get_event_config(context["event"].id, "gallery_hide_login", False, context)
 
-    if hide_login and not request.user.is_authenticated:
-        ctx["hide_login"] = True
+    if hide_gallery_for_non_login and not request.user.is_authenticated:
+        context["hide_login"] = True
         return False
 
-    if hide_signup and not ctx["run"].reg:
-        ctx["hide_signup"] = True
+    if hide_gallery_for_non_signup and not context["run"].reg:
+        context["hide_signup"] = True
         return False
 
     return True
@@ -593,7 +594,7 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
         return redirect("event", s=ctx["run"].get_slug())
 
     # Initialize registration list for unassigned members
-    ctx["reg_list"] = []
+    ctx["registration_list"] = []
 
     # Get event features for permission checking
     features = get_event_features(ctx["event"].id)
@@ -634,7 +635,7 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
             # Add non-provisional registered members to the display list
             for reg in que_reg.select_related("member"):
                 if not is_reg_provisional(reg, event=ctx["event"], features=features):
-                    ctx["reg_list"].append(reg.member)
+                    ctx["registration_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", ctx)
 
@@ -743,49 +744,51 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
         visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
 
         # Filter character fields based on visibility settings
-        for _num, char in ctx["chars"].items():
-            fields = char.get("fields")
-            if not fields:
+        for _character_number, character_data in ctx["chars"].items():
+            character_fields = character_data.get("fields")
+            if not character_fields:
                 continue
 
             # Remove fields that shouldn't be shown to current user
-            to_delete = [
-                qid for qid in list(fields) if str(qid) not in ctx.get("show_character", []) and "show_all" not in ctx
+            fields_to_remove = [
+                question_id
+                for question_id in list(character_fields)
+                if str(question_id) not in ctx.get("show_character", []) and "show_all" not in ctx
             ]
-            for qid in to_delete:
-                del fields[qid]
+            for question_id in fields_to_remove:
+                del character_fields[question_id]
 
     # Serialize context data to JSON for frontend consumption
-    for slug in ["chars", "factions", "questions", "options", "searchable"]:
-        if slug not in ctx:
-            ctx[slug] = {}
+    for context_key in ["chars", "factions", "questions", "options", "searchable"]:
+        if context_key not in ctx:
+            ctx[context_key] = {}
         # Create JSON versions of each data structure
-        ctx[f"{slug}_json"] = json.dumps(ctx[slug])
+        ctx[f"{context_key}_json"] = json.dumps(ctx[context_key])
 
     return render(request, "larpmanager/event/search.html", ctx)
 
 
-def get_fact(qs) -> list[dict]:
+def get_fact(factions_queryset) -> list[dict]:
     """Filter queryset to return only factions with characters.
 
     Args:
-        qs: QuerySet of faction objects to filter
+        factions_queryset: QuerySet of faction objects to filter
 
     Returns:
         List of faction dictionaries containing character data
     """
-    ls = []
+    factions_with_characters = []
 
     # Iterate through each faction in the queryset
-    for f in qs:
-        fac = f.show_complete()
+    for faction in factions_queryset:
+        faction_data = faction.show_complete()
 
         # Skip factions that have no characters
-        if len(fac["characters"]) == 0:
+        if len(faction_data["characters"]) == 0:
             continue
 
-        ls.append(fac)
-    return ls
+        factions_with_characters.append(faction_data)
+    return factions_with_characters
 
 
 def get_factions(ctx: dict) -> None:
@@ -797,28 +800,28 @@ def get_factions(ctx: dict) -> None:
     ctx["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
 
 
-def check_visibility(ctx: dict, typ: str, name: str) -> None:
+def check_visibility(context: dict, writing_type: str, writing_name: str) -> None:
     """Check if a writing type is visible and accessible to the current user.
 
     Args:
-        ctx: Context dictionary containing features, staff status, and visibility flags
-        typ: Type of writing content to check
-        name: Name identifier for error reporting
+        context: Context dictionary containing features, staff status, and visibility flags
+        writing_type: Type of writing content to check
+        writing_name: Name identifier for error reporting
 
     Raises:
         Http404: If the writing type is not active in current features
         HiddenError: If user lacks permission to view the content
     """
     # Get the mapping of writing types to features
-    mapping = _get_writing_mapping()
+    writing_type_to_feature_mapping = _get_writing_mapping()
 
     # Check if the writing type feature is active
-    if mapping.get(typ) not in ctx["features"]:
-        raise Http404(typ + " not active")
+    if writing_type_to_feature_mapping.get(writing_type) not in context["features"]:
+        raise Http404(writing_type + " not active")
 
     # Check user permissions - staff can see all, others need specific visibility flag
-    if "staff" not in ctx and not ctx[f"show_{typ}"]:
-        raise HiddenError(ctx["run"].get_slug(), name)
+    if "staff" not in context and not context[f"show_{writing_type}"]:
+        raise HiddenError(context["run"].get_slug(), writing_name)
 
 
 def factions(request: HttpRequest, s: str) -> HttpResponse:

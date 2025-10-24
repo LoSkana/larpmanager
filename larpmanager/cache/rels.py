@@ -66,8 +66,8 @@ def clear_event_relationships_cache(event_id: int) -> None:
     logger.debug(f"Reset cache for event {event_id}")
 
     # Invalidate cache for all child events to maintain consistency
-    for children_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
-        cache_key = get_event_rels_key(children_id)
+    for child_event_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
+        cache_key = get_event_rels_key(child_event_id)
         cache.delete(cache_key)
 
 
@@ -94,20 +94,20 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
     """
     try:
         cache_key = get_event_rels_key(event_id)
-        res = cache.get(cache_key)
+        cached_event_data = cache.get(cache_key)
 
-        if res is None:
+        if cached_event_data is None:
             logger.debug(f"Cache miss during {section_name} update for event {event_id}, reinitializing")
             # We need to get the event to reinitialize
             event = Event.objects.get(id=event_id)
             init_event_rels_all(event)
             return
 
-        if section_name not in res:
-            res[section_name] = {}
+        if section_name not in cached_event_data:
+            cached_event_data[section_name] = {}
 
-        res[section_name][section_id] = data
-        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cached_event_data[section_name][section_id] = data
+        cache.set(cache_key, cached_event_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated {section_name} {section_id} relationships in cache")
 
     except Exception as e:
@@ -125,13 +125,13 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
     """
     try:
         cache_key = get_event_rels_key(event_id)
-        res = cache.get(cache_key)
-        if res and section_name in res and section_id in res[section_name]:
-            del res[section_name][section_id]
-            cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cached_data = cache.get(cache_key)
+        if cached_data and section_name in cached_data and section_id in cached_data[section_name]:
+            del cached_data[section_name][section_id]
+            cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             logger.debug(f"Removed {section_name} {section_id} from cache")
-    except Exception as e:
-        logger.error(f"Error removing {section_name} {section_id} from cache: {e}", exc_info=True)
+    except Exception as error:
+        logger.error(f"Error removing {section_name} {section_id} from cache: {error}", exc_info=True)
         clear_event_relationships_cache(event_id)
 
 
@@ -164,12 +164,12 @@ def refresh_character_related_caches(char: Character) -> None:
         refresh_event_prologue_relationships(prologue)
 
 
-def update_m2m_related_characters(instance, pk_set, action: str, update_func) -> None:
+def update_m2m_related_characters(instance, character_ids, action: str, update_func) -> None:
     """Update character caches for M2M relationship changes.
 
     Args:
         instance: The instance that changed (Plot, Faction, SpeedLarp)
-        pk_set: Set of character primary keys affected
+        character_ids: Set of character primary keys affected
         action: The M2M action type
         update_func: Function to update the instance cache
     """
@@ -185,21 +185,21 @@ def update_m2m_related_characters(instance, pk_set, action: str, update_func) ->
             reset_event_cache_all(run)
 
         # Update cache for all affected characters
-        if pk_set:
-            for char_id in pk_set:
+        if character_ids:
+            for character_id in character_ids:
                 try:
-                    char = Character.objects.get(id=char_id)
-                    refresh_character_relationships(char)
+                    character = Character.objects.get(id=character_id)
+                    refresh_character_relationships(character)
                 except ObjectDoesNotExist:
-                    logger.warning(f"Character {char_id} not found during relationship update")
+                    logger.warning(f"Character {character_id} not found during relationship update")
         elif action == "post_clear":
             # For post_clear, we need to update all characters that were related
             if hasattr(instance, "characters"):
-                for char in instance.characters.all():
-                    refresh_character_relationships(char)
+                for character in instance.characters.all():
+                    refresh_character_relationships(character)
             elif hasattr(instance, "get_plot_characters"):
-                for char_rel in instance.get_plot_characters():
-                    refresh_character_relationships(char_rel.character)
+                for character_relationship in instance.get_plot_characters():
+                    refresh_character_relationships(character_relationship.character)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:
@@ -261,7 +261,7 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
         Exception: Any error during relationship initialization is logged
                   and an empty dict is returned
     """
-    res: dict[str, dict[int, dict[str, Any]]] = {}
+    relationship_cache: dict[str, dict[int, dict[str, Any]]] = {}
 
     try:
         # Get enabled features for this event to determine which relationships to build
@@ -269,7 +269,7 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
 
         # Configuration mapping for each relationship type with their corresponding
         # feature name, cache key, model class, relationship function, and feature flag
-        rel_configs = [
+        relationship_configs = [
             ("character", "characters", Character, get_event_char_rels, True),
             ("faction", "factions", Faction, get_event_faction_rels, False),
             ("plot", "plots", Plot, get_event_plot_rels, False),
@@ -280,36 +280,44 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
         ]
 
         # Process each relationship type if the corresponding feature is enabled
-        for feature_name, cache_key_plural, model_class, get_rels_func, pass_features in rel_configs:
+        for (
+            feature_name,
+            cache_key_plural,
+            model_class,
+            get_relationships_function,
+            should_pass_features,
+        ) in relationship_configs:
             if feature_name not in features:
                 continue
 
             # Initialize the cache section for this relationship type
-            res[cache_key_plural] = {}
+            relationship_cache[cache_key_plural] = {}
 
             # Get all elements of this type associated with the event
             elements = event.get_elements(model_class)
 
             # Build relationships for each element, passing features if required
             for element in elements:
-                if pass_features:
-                    res[cache_key_plural][element.id] = get_rels_func(element, features, event)
+                if should_pass_features:
+                    relationship_cache[cache_key_plural][element.id] = get_relationships_function(
+                        element, features, event
+                    )
                 else:
-                    res[cache_key_plural][element.id] = get_rels_func(element)
+                    relationship_cache[cache_key_plural][element.id] = get_relationships_function(element)
 
             logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
 
         # Cache the complete relationship data structure
         cache_key = get_event_rels_key(event.id)
-        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, relationship_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Cached relationships for event {event.id}")
 
-    except Exception as e:
+    except Exception as exception:
         # Log the error with full traceback and return empty result
-        logger.error(f"Error initializing relationships for event {event.id}: {e}", exc_info=True)
-        res = {}
+        logger.error(f"Error initializing relationships for event {event.id}: {exception}", exc_info=True)
+        relationship_cache = {}
 
-    return res
+    return relationship_cache
 
 
 def refresh_character_relationships(character: Character) -> None:
@@ -835,29 +843,29 @@ def refresh_event_quest_relationships(quest: Quest) -> None:
         None
     """
     # Get the current quest relationship data
-    quest_data = get_event_quest_rels(quest)
+    quest_relationship_data = get_event_quest_rels(quest)
 
     # Update the cache with the new quest data
-    update_cache_section(quest.event_id, "quests", quest.id, quest_data)
+    update_cache_section(quest.event_id, "quests", quest.id, quest_relationship_data)
 
 
-def refresh_event_questtype_relationships(questtype: QuestType) -> None:
+def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
     """Update questtype relationships in cache.
 
     Updates the cached relationship data for a specific questtype.
     If the cache doesn't exist, it will be initialized for the entire event.
 
     Args:
-        questtype (QuestType): The QuestType instance to update relationships for.
+        quest_type (QuestType): The QuestType instance to update relationships for.
 
     Returns:
         None
     """
     # Get the current questtype relationship data from the database
-    questtype_data = get_event_questtype_rels(questtype)
+    quest_type_relationship_data = get_event_questtype_rels(quest_type)
 
     # Update the cache with the refreshed questtype data
-    update_cache_section(questtype.event_id, "questtypes", questtype.id, questtype_data)
+    update_cache_section(quest_type.event_id, "questtypes", quest_type.id, quest_type_relationship_data)
 
 
 def on_faction_characters_m2m_changed(

@@ -58,16 +58,16 @@ def delete_all_in_path(path):
                 shutil.rmtree(item_path)
 
 
-def get_event_cache_all_key(run):
+def get_event_cache_all_key(event_run):
     """Generate cache key for event data.
 
     Args:
-        run: Run instance
+        event_run: Run instance
 
     Returns:
         str: Cache key for event factions and characters
     """
-    return f"event_factions_characters_{run.event.slug}_{run.number}"
+    return f"event_factions_characters_{event_run.event.slug}_{event_run.number}"
 
 
 def init_event_cache_all(ctx: dict) -> dict:
@@ -233,9 +233,9 @@ def get_event_cache_fields(ctx: dict, res: dict, only_visible: bool = True) -> N
         res["chars"][ch_num]["fields"][question] = value
 
 
-def get_character_element_fields(ctx, character_id, only_visible=True):
+def get_character_element_fields(context, character_id, only_visible=True):
     return get_writing_element_fields(
-        ctx, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
+        context, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
     )
 
 
@@ -268,37 +268,37 @@ def get_writing_element_fields(
 
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
-    question_visible = []
+    visible_question_ids = []
     for question_id in ctx["questions"].keys():
-        config = str(question_id)
+        question_config_key = str(question_id)
         # Skip questions not marked as visible unless showing all
-        if "show_all" not in ctx and config not in ctx[f"show_{feature_name}"]:
+        if "show_all" not in ctx and question_config_key not in ctx[f"show_{feature_name}"]:
             continue
-        question_visible.append(question_id)
+        visible_question_ids.append(question_id)
 
     # Retrieve text answers for visible questions
     # Store direct text responses in fields dictionary
-    fields = {}
+    question_id_to_value = {}
 
     # Retrieve text answers for visible questions
     # Query WritingAnswer model for text-based responses
-    que = WritingAnswer.objects.filter(element_id=element_id, question_id__in=question_visible)
-    for el in que.values_list("question_id", "text"):
-        fields[el[0]] = el[1]
+    text_answers_query = WritingAnswer.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
+    for question_id, answer_text in text_answers_query.values_list("question_id", "text"):
+        question_id_to_value[question_id] = answer_text
 
     # Retrieve choice answers for visible questions
     # Group multiple choice options into lists per question
-    que = WritingChoice.objects.filter(element_id=element_id, question_id__in=question_visible)
-    for el in que.values_list("question_id", "option_id"):
+    choice_answers_query = WritingChoice.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
+    for question_id, option_id in choice_answers_query.values_list("question_id", "option_id"):
         # Initialize list if question not yet in fields
-        if el[0] not in fields:
-            fields[el[0]] = []
-        fields[el[0]].append(el[1])
+        if question_id not in question_id_to_value:
+            question_id_to_value[question_id] = []
+        question_id_to_value[question_id].append(option_id)
 
-    return {"questions": ctx["questions"], "options": ctx["options"], "fields": fields}
+    return {"questions": ctx["questions"], "options": ctx["options"], "fields": question_id_to_value}
 
 
-def get_event_cache_factions(ctx: dict, res: dict) -> None:
+def get_event_cache_factions(context: dict, result: dict) -> None:
     """Build cached faction data for events.
 
     Organizes faction information by type and prepares faction selection options,
@@ -306,11 +306,11 @@ def get_event_cache_factions(ctx: dict, res: dict) -> None:
     mappings for the event cache.
 
     Args:
-        ctx: Context dictionary containing event information with 'event' key
-        res: Result dictionary to be populated with faction data, modified in-place
+        context: Context dictionary containing event information with 'event' key
+        result: Result dictionary to be populated with faction data, modified in-place
 
     Returns:
-        None: Function modifies res in-place, adding 'factions' and 'factions_typ' keys
+        None: Function modifies result in-place, adding 'factions' and 'factions_typ' keys
 
     Note:
         - Creates a fake faction (number 0) for characters without primary factions
@@ -318,58 +318,58 @@ def get_event_cache_factions(ctx: dict, res: dict) -> None:
         - Organizes factions by type for easy lookup
     """
     # Initialize faction data structures
-    res["factions"] = {}
-    res["factions_typ"] = {}
+    result["factions"] = {}
+    result["factions_typ"] = {}
 
     # If faction feature is not enabled, create single default faction with all characters
-    if "faction" not in get_event_features(ctx["event"].id):
-        res["factions"][0] = {
+    if "faction" not in get_event_features(context["event"].id):
+        result["factions"][0] = {
             "name": "",
             "number": 0,
             "typ": FactionType.PRIM,
             "teaser": "",
-            "characters": list(res["chars"].keys()),
+            "characters": list(result["chars"].keys()),
         }
-        res["factions_typ"][FactionType.PRIM] = [0]
+        result["factions_typ"][FactionType.PRIM] = [0]
         return
 
     # Find characters without a primary faction (faction 0)
-    void_primary = []
-    for number, ch in res["chars"].items():
-        if "factions" in ch and 0 in ch["factions"]:
-            void_primary.append(number)
+    characters_without_primary_faction = []
+    for character_number, character_data in result["chars"].items():
+        if "factions" in character_data and 0 in character_data["factions"]:
+            characters_without_primary_faction.append(character_number)
 
     # Create fake faction for characters without primary faction
-    if void_primary:
-        res["factions"][0] = {
+    if characters_without_primary_faction:
+        result["factions"][0] = {
             "name": "",
             "number": 0,
             "typ": FactionType.PRIM,
             "teaser": "",
-            "characters": void_primary,
+            "characters": characters_without_primary_faction,
         }
-        res["factions_typ"][FactionType.PRIM] = [0]
+        result["factions_typ"][FactionType.PRIM] = [0]
 
     # Process real factions from the event
-    for f in ctx["event"].get_elements(Faction).order_by("number"):
+    for faction in context["event"].get_elements(Faction).order_by("number"):
         # Get faction display data
-        el = f.show_red()
-        el["characters"] = []
+        faction_data = faction.show_red()
+        faction_data["characters"] = []
 
         # Find characters belonging to this faction
-        for number, ch in res["chars"].items():
-            if el["number"] in ch["factions"]:
-                el["characters"].append(number)
+        for character_number, character_data in result["chars"].items():
+            if faction_data["number"] in character_data["factions"]:
+                faction_data["characters"].append(character_number)
 
         # Skip factions with no characters
-        if not el["characters"]:
+        if not faction_data["characters"]:
             continue
 
         # Add faction to results and organize by type
-        res["factions"][f.number] = el
-        if f.typ not in res["factions_typ"]:
-            res["factions_typ"][f.typ] = []
-        res["factions_typ"][f.typ].append(f.number)
+        result["factions"][faction.number] = faction_data
+        if faction.typ not in result["factions_typ"]:
+            result["factions_typ"][faction.typ] = []
+        result["factions_typ"][faction.typ].append(faction.number)
 
 
 def get_event_cache_traits(ctx: dict, res: dict) -> None:
@@ -597,24 +597,24 @@ def update_event_cache_all_faction(instance, res):
         res["factions"][instance.number] = data
 
 
-def has_different_cache_values(instance: object, prev: object, lst: list) -> bool:
-    """Check if any attributes in lst have different values between instance and prev.
+def has_different_cache_values(instance: object, previous_instance: object, attributes_to_check: list) -> bool:
+    """Check if any attributes in attributes_to_check have different values between instance and previous_instance.
 
     Args:
         instance: Current object instance
-        prev: Previous object instance
-        lst: List of attribute names to compare
+        previous_instance: Previous object instance
+        attributes_to_check: List of attribute names to compare
 
     Returns:
         True if any attribute differs, False otherwise
     """
-    for v in lst:
+    for attribute_name in attributes_to_check:
         # Get attribute values from both instances
-        p_v = getattr(prev, v)
-        c_v = getattr(instance, v)
+        previous_value = getattr(previous_instance, attribute_name)
+        current_value = getattr(instance, attribute_name)
 
         # Return immediately if values differ
-        if p_v != c_v:
+        if previous_value != current_value:
             return True
 
     return False

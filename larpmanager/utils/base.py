@@ -34,7 +34,7 @@ from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
 
-def def_user_ctx(request: HttpRequest) -> dict:
+def def_user_context(request: HttpRequest) -> dict:
     """Build default user context with association data and permissions.
 
     Constructs a comprehensive context dictionary containing user information,
@@ -66,6 +66,7 @@ def def_user_ctx(request: HttpRequest) -> dict:
 
     # Initialize result dictionary with association ID
     context = {"a_id": request.assoc["id"]}
+    context["association_id"] = context["a_id"]
 
     # Copy all association data to context
     for assoc_key in request.assoc:
@@ -114,24 +115,24 @@ def is_shuttle(request: HttpRequest) -> bool:
     return "shuttle" in request.assoc and request.user.member.id in request.assoc["shuttle"]
 
 
-def update_payment_details(request, ctx: dict) -> None:
+def update_payment_details(request, context: dict) -> None:
     """Update context with payment details for the association."""
     payment_details = fetch_payment_details(request.assoc["id"])
-    ctx.update(payment_details)
+    context.update(payment_details)
 
 
-def fetch_payment_details(assoc_id: int) -> dict:
+def fetch_payment_details(association_id: int) -> dict:
     """Retrieve payment configuration details for an association.
 
     Args:
-        assoc_id: Primary key of the association
+        association_id: Primary key of the association
 
     Returns:
         Dictionary containing payment gateway configuration
     """
     # Fetch association with only required fields for efficiency
-    assoc = Association.objects.only("slug", "key").get(pk=assoc_id)
-    return get_payment_details(assoc)
+    association = Association.objects.only("slug", "key").get(pk=association_id)
+    return get_payment_details(association)
 
 
 def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
@@ -159,7 +160,7 @@ def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
         FeatureError: If required feature is not enabled for the association
     """
     # Get base user context and validate permission
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     if not has_assoc_permission(request, ctx, permission_slug):
         raise PermissionError()
 
@@ -189,46 +190,46 @@ def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
     return ctx
 
 
-def get_index_assoc_permissions(ctx: dict, request: HttpRequest, assoc_id: int, check: bool = True) -> None:
+def get_index_assoc_permissions(context: dict, request: HttpRequest, association_id: int, check: bool = True) -> None:
     """Get and set association permissions for index pages.
 
     Retrieves user roles and permissions for an association, then populates
     the context with permission data and UI state information.
 
     Args:
-        ctx: Context dictionary to populate with permission data
+        context: Context dictionary to populate with permission data
         request: HTTP request object containing user and session data
-        assoc_id: ID of the association to get permissions for
+        association_id: ID of the association to get permissions for
         check: Whether to raise PermissionError on access denial
 
     Raises:
         PermissionError: When user lacks permissions and check=True
     """
     # Get user role information and admin status
-    (is_admin, user_assoc_permissions, names) = get_assoc_roles(request)
+    (is_admin, user_association_permissions, role_names) = get_assoc_roles(request)
 
     # Check if user has any roles or admin privileges
-    if not names and not is_admin:
+    if not role_names and not is_admin:
         if check:
             raise PermissionError()
         else:
             return
 
     # Set role names in context for template rendering
-    ctx["role_names"] = names
+    context["role_names"] = role_names
 
     # Retrieve available features for the association
-    features = get_assoc_features(assoc_id)
+    features = get_assoc_features(association_id)
 
     # Generate permission data for index display
-    ctx["assoc_pms"] = get_index_permissions(ctx, features, is_admin, user_assoc_permissions, "assoc")
+    context["assoc_pms"] = get_index_permissions(context, features, is_admin, user_association_permissions, "assoc")
 
     # Set sidebar state from user session
-    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
+    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
 def get_index_permissions(
-    ctx: dict, features: list[str], has_default: bool, permissions: list[str], typ: str
+    context: dict, features: list[str], has_default: bool, permissions: list[str], permission_type: str
 ) -> dict[tuple[str, str], list[dict]]:
     """Build index permissions structure based on user access and features.
 
@@ -237,43 +238,43 @@ def get_index_permissions(
     that the user is allowed to access.
 
     Args:
-        ctx: Context dictionary containing association information
+        context: Context dictionary containing association information
         features: List of available feature slugs for the user
         has_default: Whether user has default permissions (bypasses specific checks)
         permissions: List of specific permission slugs the user has
-        typ: Permission type to filter (e.g., 'association', 'event')
+        permission_type: Permission type to filter (e.g., 'association', 'event')
 
     Returns:
         Dictionary mapping module info tuples (name, icon) to lists of
         permission dictionaries for that module
     """
-    res = {}
+    permissions_by_module = {}
 
     # Get cached permissions for the specified type
-    for ar in get_cache_index_permission(typ):
+    for permission_record in get_cache_index_permission(permission_type):
         # Skip hidden permissions
-        if ar["hidden"]:
+        if permission_record["hidden"]:
             continue
 
         # Check if permission is allowed in current context
-        if not is_allowed_managed(ar, ctx):
+        if not is_allowed_managed(permission_record, context):
             continue
 
         # Check user has specific permission (unless has default access)
-        if not has_default and ar["slug"] not in permissions:
+        if not has_default and permission_record["slug"] not in permissions:
             continue
 
         # Check feature is available (skip placeholder features)
-        if not ar["feature__placeholder"] and ar["feature__slug"] not in features:
+        if not permission_record["feature__placeholder"] and permission_record["feature__slug"] not in features:
             continue
 
         # Group permissions by module
-        mod_name = (_(ar["module__name"]), ar["module__icon"])
-        if mod_name not in res:
-            res[mod_name] = []
-        res[mod_name].append(ar)
+        module_key = (_(permission_record["module__name"]), permission_record["module__icon"])
+        if module_key not in permissions_by_module:
+            permissions_by_module[module_key] = []
+        permissions_by_module[module_key].append(permission_record)
 
-    return res
+    return permissions_by_module
 
 
 def is_allowed_managed(ar: dict, ctx: dict) -> bool:

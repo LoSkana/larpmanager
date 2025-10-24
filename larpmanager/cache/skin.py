@@ -30,8 +30,8 @@ def clear_skin_cache(s):
     cache.delete(key)
 
 
-def cache_skin_key(s):
-    return f"skin_{s}"
+def cache_skin_key(skin_id):
+    return f"skin_{skin_id}"
 
 
 def get_cache_skin(s: str) -> dict | None:

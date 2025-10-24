@@ -88,11 +88,11 @@ class AssocRole(BaseModel):
         ]
 
 
-def get_assoc_executives(assoc: Association) -> QuerySet[Member]:
+def get_assoc_executives(association: Association) -> QuerySet[Member]:
     """Get all executive members of an association.
 
     Args:
-        assoc (Association): The association instance to get executives from.
+        association (Association): The association instance to get executives from.
 
     Returns:
         QuerySet[Member]: A queryset containing all members with executive role
@@ -102,10 +102,10 @@ def get_assoc_executives(assoc: Association) -> QuerySet[Member]:
         AssocRole.DoesNotExist: If no executive role (number=1) exists for the association.
     """
     # Get the executive role (number 1) for the association
-    exe = AssocRole.objects.get(assoc=assoc, number=1)
+    executive_role = AssocRole.objects.get(assoc=association, number=1)
 
     # Return all members assigned to the executive role
-    return exe.members.all()
+    return executive_role.members.all()
 
 
 def get_assoc_inners(assoc: Association) -> list[Member]:
@@ -238,19 +238,19 @@ def get_event_staffers(event: Event) -> list:
     roles = EventRole.objects.filter(event=event).prefetch_related("members")
 
     # Initialize result list and tracking dictionary for unique members
-    lst = []
-    already = {}
+    staff_members = []
+    processed_member_ids = {}
 
     # Iterate through each role in the event
     for role in roles:
         # Process each member assigned to the current role
-        for mb in role.members.all():
+        for member in role.members.all():
             # Skip if member already processed to avoid duplicates
-            if mb.id in already:
+            if member.id in processed_member_ids:
                 continue
 
             # Mark member as processed and add to result list
-            already[mb.id] = 1
-            lst.append(mb)
+            processed_member_ids[member.id] = 1
+            staff_members.append(member)
 
-    return lst
+    return staff_members

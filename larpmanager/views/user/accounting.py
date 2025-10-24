@@ -69,7 +69,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.common import (
     get_assoc,
     get_collection_partecipate,
@@ -106,7 +106,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         Redirects to home page if user has no associated organization (a_id == 0).
     """
     # Initialize base context and check for valid association
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     if ctx["a_id"] == 0:
         return redirect("home")
 
@@ -155,7 +155,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         Only shows non-hidden accounting items for the user's current association.
     """
     # Initialize context with default user data
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Query for tokens given to the user (non-hidden, within current association)
     given_tokens = AccountingItemOther.objects.filter(
@@ -203,7 +203,7 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
             summary with expenses, given credits, used credits, and refunds.
     """
     # Get base user context with member and association info
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Add accounting data to context with filtered queries for current user/association
     ctx.update(
@@ -262,7 +262,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "refund")
 
     # Initialize base context with user and association data
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
@@ -468,7 +468,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     """
     # Check if user has access to membership feature
     check_assoc_feature(request, "membership")
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
 
     # Validate user membership status - must be accepted to pay dues
@@ -530,7 +530,7 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "donate")
 
     # Initialize base context with user data and accounting visibility
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
 
     # Process form submission for donation payment
@@ -571,7 +571,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
         DatabaseError: If the atomic transaction fails during collection creation.
     """
     # Initialize context with user defaults and enable accounting display
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
 
     if request.method == "POST":
@@ -621,7 +621,7 @@ def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
         raise Http404("Collection not yours")
 
     # Initialize base user context and enable accounting display
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
 
     # Add collection data and filtered accounting items to context
@@ -654,7 +654,7 @@ def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
     c = get_collection_partecipate(request, s)
 
     # Initialize base context with user data and accounting flag
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
 
@@ -734,7 +734,7 @@ def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRed
     c = get_collection_redeem(request, s)
 
     # Initialize the context with default user context and accounting flag
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
 
@@ -817,7 +817,7 @@ def acc_cancelled(request: HttpRequest) -> HttpResponse:
     return redirect("accounting")
 
 
-def acc_profile_check(request: HttpRequest, mes: str, inv) -> HttpResponse:
+def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> HttpResponse:
     """Check if user profile is compiled and redirect appropriately.
 
     Validates that the user's membership profile is complete. If not compiled,
@@ -826,26 +826,26 @@ def acc_profile_check(request: HttpRequest, mes: str, inv) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user information
-        mes: Success message string to display to user
-        inv: Invoice object for accounting redirect
+        success_message: Success message string to display to user
+        invoice: Invoice object for accounting redirect
 
     Returns:
         HttpResponse: Redirect to either profile page or accounting page
     """
     # Get current user's member object and membership for this association
     member = request.user.member
-    mb = get_user_membership(member, request.assoc["id"])
+    membership = get_user_membership(member, request.assoc["id"])
 
     # Check if membership profile has been completed
-    if not mb.compiled:
+    if not membership.compiled:
         # Add profile completion prompt to message and redirect to profile
-        mes += " " + _("As a final step, we ask you to complete your profile") + "."
-        messages.success(request, mes)
+        success_message += " " + _("As a final step, we ask you to complete your profile") + "."
+        messages.success(request, success_message)
         return redirect("profile")
 
     # Profile is complete - show success message and proceed to accounting
-    messages.success(request, mes)
-    return acc_redirect(inv)
+    messages.success(request, success_message)
+    return acc_redirect(invoice)
 
 
 def acc_redirect(inv: PaymentInvoice) -> HttpResponseRedirect:

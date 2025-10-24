@@ -49,38 +49,40 @@ def remove_html_tags(text):
     return re.sub(clean, "", text)
 
 
-def get_single_cache_text_field(el_id: str, f: str, v: str | None) -> tuple[str, int]:
+def get_single_cache_text_field(element_id: str, field_name: str, text_value: str | None) -> tuple[str, int]:
     """Get a single cache text field with optional truncation and popup link.
 
     Args:
-        el_id: Element ID for the popup link
-        f: Field name for the popup link
-        v: Text value to process, can be None
+        element_id: Element ID for the popup link
+        field_name: Field name for the popup link
+        text_value: Text value to process, can be None
 
     Returns:
         A tuple containing the processed text and its original length
     """
     # Handle None values by setting to empty string
-    if v is None:
-        v = ""
+    if text_value is None:
+        text_value = ""
 
     # Remove HTML tags from the text value
-    red = remove_html_tags(v)
+    cleaned_text = remove_html_tags(text_value)
 
     # Get the length of the cleaned text
-    ln = len(red)
+    original_length = len(cleaned_text)
 
     # Get the snippet limit from configuration
     limit = conf_settings.FIELD_SNIPPET_LIMIT
 
     # Truncate text if it exceeds the limit and add popup link
-    if ln > limit:
-        red = red[:limit]
-        red += f"... <a href='#' class='post_popup' pop='{el_id}' fie='{f}'><i class='fas fa-eye'></i></a>"
+    if original_length > limit:
+        cleaned_text = cleaned_text[:limit]
+        cleaned_text += (
+            f"... <a href='#' class='post_popup' pop='{element_id}' fie='{field_name}'><i class='fas fa-eye'></i></a>"
+        )
 
     # Return the processed text and original length
-    res = (red, ln)
-    return res
+    result = (cleaned_text, original_length)
+    return result
 
 
 # Writing
@@ -103,62 +105,66 @@ def init_cache_text_field(typ: type, event: Event) -> dict:
     return res
 
 
-def _init_element_cache_text_field(el: BaseModel, res: dict[int, dict[str, Any]], typ: Any) -> None:
+def _init_element_cache_text_field(
+    element: BaseModel,
+    result_cache: dict[int, dict[str, Any]],
+    element_type: Any,
+) -> None:
     """Initialize cache for text fields of a single element.
 
     This function populates the cache dictionary with text field data for a given element,
     including basic text fields (teaser, text) and editor-type writing questions.
 
     Args:
-        el: Element instance to cache text fields for
-        res: Result dictionary to populate with cached text data
-        typ: Element type class for determining applicable questions
+        element: Element instance to cache text fields for
+        result_cache: Result dictionary to populate with cached text data
+        element_type: Element type class for determining applicable questions
 
     Returns:
         None
 
     Side Effects:
-        Populates res[el.id] with cached text field data including teaser, text,
+        Populates result_cache[element.id] with cached text field data including teaser, text,
         and editor questions
     """
     # Initialize element entry in result dictionary if not exists
-    if el.id not in res:
-        res[el.id] = {}
+    if element.id not in result_cache:
+        result_cache[element.id] = {}
 
     # Cache basic text fields (teaser and text)
-    for f in ["teaser", "text"]:
-        v = getattr(el, f)
-        res[el.id][f] = get_single_cache_text_field(el.id, f, v)
+    for field_name in ["teaser", "text"]:
+        field_value = getattr(element, field_name)
+        result_cache[element.id][field_name] = get_single_cache_text_field(element.id, field_name, field_value)
 
     # Get applicable writing questions for this element type
     # noinspection PyProtectedMember
-    applicable = QuestionApplicable.get_applicable(typ._meta.model_name)
-    que = el.event.get_elements(WritingQuestion).filter(applicable=applicable)
+    applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)
+    questions = element.event.get_elements(WritingQuestion).filter(applicable=applicable)
 
     # Process editor-type questions and cache their answers
-    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        els = WritingAnswer.objects.filter(question_id=que_id, element_id=el.id)
-        if els:
+    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
+        answers = WritingAnswer.objects.filter(question_id=question_id, element_id=element.id)
+        if answers:
             # Cache the text content of the first matching answer
-            v = els.first().text
-            field = str(que_id)
-            res[el.id][field] = get_single_cache_text_field(el.id, field, v)
+            answer_text = answers.first().text
+            field_key = str(question_id)
+            result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
 
 
-def get_cache_text_field(typ: str, event: Event) -> str:
+def get_cache_text_field(field_type: str, event: Event) -> str:
     """Get cached text field value for event, initializing if not found."""
     # Generate cache key for the specific type and event
-    key = cache_text_field_key(typ, event)
+    cache_key = cache_text_field_key(field_type, event)
 
     # Try to retrieve cached value
-    res = cache.get(key)
+    cached_value = cache.get(cache_key)
 
     # Initialize and cache if not found
-    if res is None:
-        res = init_cache_text_field(typ, event)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_value is None:
+        cached_value = init_cache_text_field(field_type, event)
+        cache.set(cache_key, cached_value, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_value
 
 
 def update_cache_text_fields(el: object) -> None:
@@ -232,27 +238,29 @@ def init_cache_reg_field(run: Run) -> dict:
     return res
 
 
-def _init_element_cache_reg_field(el: Registration, res: dict[int, dict[str, Any]]) -> None:
+def _init_element_cache_reg_field(registration: Registration, cache_result: dict[int, dict[str, Any]]) -> None:
     """Initialize cache for registration element fields.
 
     Args:
-        el: Registration element to process
-        res: Result dictionary to populate with cached data
+        registration: Registration element to process
+        cache_result: Result dictionary to populate with cached data
     """
     # Initialize element entry in result dictionary if not present
-    if el.id not in res:
-        res[el.id] = {}
+    if registration.id not in cache_result:
+        cache_result[registration.id] = {}
 
     # Get all editor-type questions for the event
     # noinspection PyProtectedMember
-    que = RegistrationQuestion.objects.filter(event_id=el.run.event_id)
+    questions = RegistrationQuestion.objects.filter(event_id=registration.run.event_id)
 
     # Process each editor question and cache the answer text
-    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
+    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         try:
-            v = RegistrationAnswer.objects.get(question_id=que_id, reg_id=el.id).text
-            field = str(que_id)
-            res[el.id][field] = get_single_cache_text_field(el.id, field, v)
+            answer_text = RegistrationAnswer.objects.get(question_id=question_id, reg_id=registration.id).text
+            field_key = str(question_id)
+            cache_result[registration.id][field_key] = get_single_cache_text_field(
+                registration.id, field_key, answer_text
+            )
         except ObjectDoesNotExist:
             pass
 
@@ -267,17 +275,17 @@ def get_cache_reg_field(run: Run) -> dict:
         Dictionary containing cached registration field data.
     """
     # Generate cache key for the run's registration fields
-    key = cache_text_field_key(Registration, run)
+    cache_key = cache_text_field_key(Registration, run)
 
     # Try to retrieve cached result
-    res = cache.get(key)
+    cached_result = cache.get(cache_key)
 
     # If not cached, initialize and cache the result
-    if res is None:
-        res = init_cache_reg_field(run)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_result is None:
+        cached_result = init_cache_reg_field(run)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_result
 
 
 def update_cache_reg_fields(el: Registration) -> None:

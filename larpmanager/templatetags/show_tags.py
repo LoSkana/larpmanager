@@ -103,27 +103,27 @@ def get(value, arg):
     return ""
 
 
-def get_tooltip(context, ch):
+def get_tooltip(context, character):
     """Generate HTML tooltip for character display.
 
     Args:
         context: Template context
-        ch (dict): Character data dictionary
+        character (dict): Character data dictionary
 
     Returns:
         str: HTML string for character tooltip with avatar and details
     """
-    avat = static("larpmanager/assets/blank-avatar.svg")
-    if "player_id" in ch and ch["player_id"] > 0 and ch["player_prof"]:
-        avat = ch["player_prof"]
-    tooltip = f"<img src='{avat}'>"
+    avatar_url = static("larpmanager/assets/blank-avatar.svg")
+    if "player_id" in character and character["player_id"] > 0 and character["player_prof"]:
+        avatar_url = character["player_prof"]
+    tooltip = f"<img src='{avatar_url}'>"
 
-    tooltip = tooltip_fields(ch, tooltip)
+    tooltip = tooltip_fields(character, tooltip)
 
-    tooltip = tooltip_factions(ch, context, tooltip)
+    tooltip = tooltip_factions(character, context, tooltip)
 
-    if ch["teaser"]:
-        tooltip += "<span class='teaser'>" + replace_chars(context, ch["teaser"]) + " (...)</span>"
+    if character["teaser"]:
+        tooltip += "<span class='teaser'>" + replace_chars(context, character["teaser"]) + " (...)</span>"
 
     return tooltip
 
@@ -208,7 +208,15 @@ def replace_chars(context, el, limit=200):
     return el[:limit]
 
 
-def go_character(context: dict, search: str, number: int, tx: str, run, go_tooltip: bool, simple: bool = False) -> str:
+def go_character(
+    context: dict,
+    search_pattern: str,
+    character_number: int,
+    text: str,
+    run,
+    include_tooltip: bool,
+    simple: bool = False,
+) -> str:
     """Replace character reference with formatted link or name.
 
     Processes text containing character references (like '#1', '@1', '^1') and replaces
@@ -217,11 +225,11 @@ def go_character(context: dict, search: str, number: int, tx: str, run, go_toolt
 
     Args:
         context: Template context dictionary containing character data under 'chars' key.
-        search: Pattern to search for in the text (e.g., '#1', '@1', '^1').
-        number: Character number/ID to look up in the context chars dictionary.
-        tx: Input text that may contain the search pattern to be replaced.
+        search_pattern: Pattern to search for in the text (e.g., '#1', '@1', '^1').
+        character_number: Character number/ID to look up in the context chars dictionary.
+        text: Input text that may contain the search pattern to be replaced.
         run: Run instance used for generating character URLs via get_slug() method.
-        go_tooltip: If True, includes hover tooltip with character information.
+        include_tooltip: If True, includes hover tooltip with character information.
         simple: If True, returns character name in bold; if False, returns clickable link.
 
     Returns:
@@ -233,39 +241,43 @@ def go_character(context: dict, search: str, number: int, tx: str, run, go_toolt
         'See character <a class="link_show_char" href="/run/char/1">John Doe</a>'
     """
     # Early return if search pattern not in text
-    if search not in tx:
-        return tx
+    if search_pattern not in text:
+        return text
 
     # Check if character data exists in context
     if "chars" not in context:
-        return tx
+        return text
 
     # Verify specific character number exists
-    if number not in context["chars"]:
-        return tx
+    if character_number not in context["chars"]:
+        return text
 
     # Get character data from context
-    ch = context["chars"][number]
+    character_data = context["chars"][character_number]
 
     # Generate character URL using run slug and character number
-    r = get_url(
-        reverse("character", args=[run.get_slug(), ch["number"]]),
+    character_url = get_url(
+        reverse("character", args=[run.get_slug(), character_data["number"]]),
         context["assoc_slug"],
     ).replace('"', "")
 
     # Create either simple bold name or full link based on simple flag
     if simple:
-        lk = f"<b>{ch['name'].split()[0]}</b>"
+        formatted_link = f"<b>{character_data['name'].split()[0]}</b>"
     else:
-        lk = f"<a class='link_show_char' href='{r}'>{ch['name']}</a>"
+        formatted_link = f"<a class='link_show_char' href='{character_url}'>{character_data['name']}</a>"
 
         # Add tooltip wrapper if tooltips are enabled
-        if go_tooltip:
-            tooltip = get_tooltip(context, ch)
-            lk = "<span class='has_show_char'>" + lk + f"</span><span class='hide show_char'>{tooltip}</span>"
+        if include_tooltip:
+            tooltip_content = get_tooltip(context, character_data)
+            formatted_link = (
+                "<span class='has_show_char'>"
+                + formatted_link
+                + f"</span><span class='hide show_char'>{tooltip_content}</span>"
+            )
 
     # Replace search pattern with generated link/name
-    return tx.replace(search, lk)
+    return text.replace(search_pattern, formatted_link)
 
 
 def _remove_unimportant_prefix(text: str) -> str:
@@ -366,7 +378,9 @@ def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool
     return mark_safe(tx)
 
 
-def go_trait(context: dict, search: str, number: int, tx: str, run, go_tooltip: bool, simple: bool = False) -> str:
+def go_trait(
+    context: dict, search: str, trait_number: int, text: str, run, include_tooltip: bool, simple: bool = False
+) -> str:
     """Replace trait reference with character link.
 
     Searches for a pattern in text and replaces it with either a character name
@@ -375,10 +389,10 @@ def go_trait(context: dict, search: str, number: int, tx: str, run, go_tooltip: 
     Args:
         context: Template context dictionary containing trait and character data
         search: Pattern string to search for in the text
-        number: Trait number identifier to look up the associated character
-        tx: Input text containing the search pattern to be replaced
+        trait_number: Trait number identifier to look up the associated character
+        text: Input text containing the search pattern to be replaced
         run: Run instance used for character lookup operations
-        go_tooltip: Whether to include hover tooltip in the generated link
+        include_tooltip: Whether to include hover tooltip in the generated link
         simple: If True, returns bold character name; if False, returns full HTML link
 
     Returns:
@@ -386,53 +400,53 @@ def go_trait(context: dict, search: str, number: int, tx: str, run, go_tooltip: 
         or original text if pattern not found or character data unavailable
     """
     # Early return if search pattern not found in text
-    if search not in tx:
-        return tx
+    if search not in text:
+        return text
 
     # Initialize traits cache if not present in context
     if "traits" not in context:
         context["traits"] = {}
 
     # Get character number from cached traits or fetch from database
-    if number in context["traits"]:
-        ch_number = context["traits"][number]["char"]
+    if trait_number in context["traits"]:
+        character_number = context["traits"][trait_number]["char"]
     else:
-        char = get_trait_character(run, number)
-        if not char:
-            return tx
-        ch_number = char.number
+        character = get_trait_character(run, trait_number)
+        if not character:
+            return text
+        character_number = character.number
 
     # Verify character exists in context data
-    if ch_number not in context["chars"]:
-        return tx
+    if character_number not in context["chars"]:
+        return text
 
     # Get character data from context
-    ch = context["chars"][ch_number]
+    character_data = context["chars"][character_number]
 
     # Generate appropriate output based on simple flag
     if simple:
         # Simple mode: return bold first name only
-        lk = f"<b>{ch['name'].split()[0]}</b>"
+        link = f"<b>{character_data['name'].split()[0]}</b>"
     else:
         # Full mode: generate clickable link with optional tooltip
         tooltip = ""
-        if go_tooltip:
-            tooltip = get_tooltip(context, ch)
+        if include_tooltip:
+            tooltip = get_tooltip(context, character_data)
 
         # Build character page URL
-        r = get_url(
-            reverse("character", args=[run.get_slug(), ch["number"]]),
+        character_url = get_url(
+            reverse("character", args=[run.get_slug(), character_data["number"]]),
             context["slug"],
         )
 
         # Create HTML link with hover functionality
-        lk = (
-            f"<span class='has_show_char'><a href='{r}'>{ch['name']}</a></span>"
+        link = (
+            f"<span class='has_show_char'><a href='{character_url}'>{character_data['name']}</a></span>"
             f"<span class='hide show_char'>{tooltip}</span>"
         )
 
     # Replace search pattern with generated link/name
-    return tx.replace(search, lk)
+    return text.replace(search, link)
 
 
 @register.simple_tag(takes_context=True)
@@ -706,18 +720,18 @@ def length_lte(value, arg):
 
 
 @register.filter
-def hex_to_rgb(value):
+def hex_to_rgb(hex_color):
     """Template filter to convert hex color to RGB values.
 
     Args:
-        value (str): Hex color string (e.g., '#FF0000')
+        hex_color (str): Hex color string (e.g., '#FF0000')
 
     Returns:
         str: Comma-separated RGB values (e.g., '255,0,0')
     """
-    h = value.lstrip("#")
-    h = [str(int(h[i : i + 2], 16)) for i in (0, 2, 4)]
-    return ",".join(h)
+    hex_without_hash = hex_color.lstrip("#")
+    rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
+    return ",".join(rgb_values)
 
 
 @register.simple_tag
@@ -875,24 +889,24 @@ def get_character_field(value, options):
 
 
 @register.filter
-def format_decimal(value):
+def format_decimal(decimal_value):
     """Template filter to format decimal values for display.
 
     Args:
-        value: Numeric value to format
+        decimal_value: Numeric value to format
 
     Returns:
         str: Formatted decimal string, empty for zero, integer format when possible
     """
     try:
-        rounded = round_to_nearest_cent(float(value))
-        if rounded == 0:
+        rounded_value = round_to_nearest_cent(float(decimal_value))
+        if rounded_value == 0:
             return ""
-        if rounded == int(rounded):
-            return str(int(rounded))
-        return f"{rounded:.2f}".rstrip("0").rstrip(".")
+        if rounded_value == int(rounded_value):
+            return str(int(rounded_value))
+        return f"{rounded_value:.2f}".rstrip("0").rstrip(".")
     except (ValueError, TypeError):
-        return value
+        return decimal_value
 
 
 @register.filter

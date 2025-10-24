@@ -33,12 +33,17 @@ from larpmanager.utils.common import get_recaptcha_secrets
 def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
     """Add reCAPTCHA field to form if secrets are configured."""
     # Get reCAPTCHA public and private keys from settings
-    public, private = get_recaptcha_secrets(request)
-    if not public or not private:
+    recaptcha_public_key, recaptcha_private_key = get_recaptcha_secrets(request)
+    if not recaptcha_public_key or not recaptcha_private_key:
         return
 
     # Add reCAPTCHA v3 field to form
-    form.fields["captcha"] = ReCaptchaField(widget=ReCaptchaV3, label="", public_key=public, private_key=private)
+    form.fields["captcha"] = ReCaptchaField(
+        widget=ReCaptchaV3,
+        label="",
+        public_key=recaptcha_public_key,
+        private_key=recaptcha_private_key,
+    )
 
 
 class LarpManagerCheck(forms.Form):

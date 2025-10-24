@@ -69,7 +69,7 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import my_uuid
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,
@@ -109,7 +109,7 @@ def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
         check_event_feature(request, ctx, "pre_register")
     else:
         # Show all available events for pre-registration
-        ctx = def_user_ctx(request)
+        ctx = def_user_context(request)
         ctx.update({"features": get_assoc_features(request.assoc["id"])})
 
     # Initialize event lists for template
@@ -501,31 +501,31 @@ def register_info(request, ctx, form, reg, dis):
         ctx["membership_amount"] = get_assoc_config(request.assoc["id"], "membership_fee", 0)
 
 
-def init_form_submitted(ctx, form, request, reg=None):
+def init_form_submitted(context, form, request, registration=None):
     """Initialize form submission data in context.
 
     Args:
-        ctx: Context dictionary to update
+        context: Context dictionary to update
         form: Form object containing questions
         request: HTTP request object with POST data
-        reg: Registration object (optional)
+        registration: Registration object (optional)
     """
-    ctx["submitted"] = request.POST.dict()
+    context["submitted"] = request.POST.dict()
     if hasattr(form, "questions"):
         for question in form.questions:
             if question.id in form.singles:
-                ctx["submitted"]["q" + str(question.id)] = form.singles[question.id].option_id
+                context["submitted"]["q" + str(question.id)] = form.singles[question.id].option_id
 
-    if reg:
-        if reg.ticket_id:
-            ctx["submitted"]["ticket"] = reg.ticket_id
-        if reg.quotas:
-            ctx["submitted"]["quotas"] = reg.quotas
-        if reg.additionals:
-            ctx["submitted"]["additionals"] = reg.additionals
+    if registration:
+        if registration.ticket_id:
+            context["submitted"]["ticket"] = registration.ticket_id
+        if registration.quotas:
+            context["submitted"]["quotas"] = registration.quotas
+        if registration.additionals:
+            context["submitted"]["additionals"] = registration.additionals
 
-    if "ticket" in ctx:
-        ctx["submitted"]["ticket"] = ctx["ticket"]
+    if "ticket" in context:
+        context["submitted"]["ticket"] = context["ticket"]
 
 
 @login_required
@@ -693,35 +693,35 @@ def _add_bring_friend_discounts(ctx: dict) -> None:
         ctx[config_name] = get_event_config(ctx["event"].id, config_name, 0, ctx)
 
 
-def _register_prepare(ctx, reg):
+def _register_prepare(context, registration):
     """Prepare registration context with payment information and locks.
 
     Args:
-        ctx: Context dictionary to update
-        reg: Existing registration instance or None for new registration
+        context: Context dictionary to update
+        registration: Existing registration instance or None for new registration
 
     Returns:
         bool: True if this is a new registration, False if updating existing
     """
-    new_reg = True
-    ctx["tot_payed"] = 0
-    if reg:
-        ctx["tot_payed"] = reg.tot_payed
-        new_reg = False
+    is_new_registration = True
+    context["tot_payed"] = 0
+    if registration:
+        context["tot_payed"] = registration.tot_payed
+        is_new_registration = False
 
         # we lock changing values with lower prices if there is already a payment (done or submitted)
-        pending = (
+        has_pending_payment = (
             PaymentInvoice.objects.filter(
-                idx=reg.id,
-                member_id=reg.member_id,
+                idx=registration.id,
+                member_id=registration.member_id,
                 status=PaymentStatus.SUBMITTED,
                 typ=PaymentType.REGISTRATION,
             ).count()
             > 0
         )
-        ctx["payment_lock"] = pending or reg.tot_payed > 0
+        context["payment_lock"] = has_pending_payment or registration.tot_payed > 0
 
-    return new_reg
+    return is_new_registration
 
 
 def register_reduced(request: HttpRequest, s: str) -> JsonResponse:
@@ -744,7 +744,7 @@ def register_conditions(request: HttpRequest, s: str = None) -> HttpResponse:
         Rendered HTML response with terms and conditions
     """
     # Initialize base user context
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Add event-specific context if event slug provided
     if s:
@@ -1082,15 +1082,15 @@ def gift(request: HttpRequest, s: str) -> HttpResponse:
                 reg.pending = el
 
         # Attach additional registration info
-        for el in ctx["reg_list"]:
+        for el in ctx["registration_list"]:
             if reg.id == el.id:
                 reg.info = el
 
     return render(request, "larpmanager/event/gift.html", ctx)
 
 
-def check_registration_open(ctx, request):
-    if not ctx["run"].status["open"]:
+def check_registration_open(context, request):
+    if not context["run"].status["open"]:
         messages.warning(request, _("Registrations not open!"))
         raise RedirectError("home")
 

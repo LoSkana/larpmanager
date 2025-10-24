@@ -123,10 +123,10 @@ class MyForm(forms.ModelForm):
         Returns:
             list: Field names that are automatically set and hidden from user
         """
-        s = ["event", "assoc"]
+        automatic_fields = ["event", "assoc"]
         if hasattr(self, "auto_run"):
-            s.extend(["run"])
-        return s
+            automatic_fields.extend(["run"])
+        return automatic_fields
 
     def allow_run_choice(self) -> None:
         """Configure run selection field based on available runs.
@@ -235,41 +235,41 @@ class MyForm(forms.ModelForm):
             If the value is not unique within the event scope
         """
         # Get the field value and event context parameters
-        value = self.cleaned_data.get(field_name)
+        field_value = self.cleaned_data.get(field_name)
         event = self.params.get("event")
-        typ = self.params.get("elementTyp")
+        element_type = self.params.get("elementTyp")
 
-        if event and typ:
+        if event and element_type:
             # Determine the appropriate event ID based on the element type
-            event_id = event.get_class_parent(typ).id
+            parent_event_id = event.get_class_parent(element_type).id
 
             # Build the base queryset for uniqueness checking
             model = self._meta.model
             if model == Event:
                 # For Event model, filter by association ID
-                qs = model.objects.filter(**{field_name: value}, assoc_id=event.assoc_id)
+                queryset = model.objects.filter(**{field_name: field_value}, assoc_id=event.assoc_id)
             else:
                 # For other models, filter by event ID
-                qs = model.objects.filter(**{field_name: value}, event_id=event_id)
+                queryset = model.objects.filter(**{field_name: field_value}, event_id=parent_event_id)
 
             # Apply additional filters if question context exists
             question = self.cleaned_data.get("question")
             if question:
-                qs = qs.filter(question_id=question.id)
+                queryset = queryset.filter(question_id=question.id)
 
             # Filter by applicability if the check method exists
             if hasattr(self, "check_applicable"):
-                qs = qs.filter(applicable=self.check_applicable)
+                queryset = queryset.filter(applicable=self.check_applicable)
 
             # Exclude current instance from uniqueness check during updates
             if self.instance.pk:
-                qs = qs.exclude(pk=self.instance.pk)
+                queryset = queryset.exclude(pk=self.instance.pk)
 
             # Raise validation error if duplicate exists
-            if qs.exists():
+            if queryset.exists():
                 raise ValidationError(field_name.capitalize() + " " + _("already used"))
 
-        return value
+        return field_value
 
     def save(self, commit: bool = True) -> BaseModel:
         """Save form instance with custom field handling.
@@ -387,29 +387,29 @@ def max_selections_validator(max_choices: int) -> callable:
     return validator
 
 
-def max_length_validator(max_length: int) -> callable:
+def max_length_validator(maximum_allowed_length: int) -> callable:
     """Create a validator that limits text length after stripping HTML tags.
 
     This validator removes HTML tags from the input text before checking length,
     ensuring that HTML markup doesn't count toward the character limit.
 
     Args:
-        max_length: Maximum allowed text length after HTML stripping.
+        maximum_allowed_length: Maximum allowed text length after HTML stripping.
 
     Returns:
-        A validator function that raises ValidationError if text exceeds max_length.
+        A validator function that raises ValidationError if text exceeds maximum_allowed_length.
 
     Raises:
         ValidationError: When stripped text length exceeds the maximum allowed.
     """
 
-    def validator(value: str) -> None:
-        """Validate that plain text length does not exceed max_length."""
+    def validator(html_value: str) -> None:
+        """Validate that plain text length does not exceed maximum_allowed_length."""
         # Strip HTML tags from the input value to get plain text
-        plain_text = strip_tags(value)
+        plain_text = strip_tags(html_value)
 
         # Check if the plain text exceeds the maximum allowed length
-        if len(plain_text) > max_length:
+        if len(plain_text) > maximum_allowed_length:
             raise ValidationError(_("You have exceeded the maximum text length"))
 
     return validator
@@ -458,29 +458,31 @@ class BaseRegistrationForm(MyFormRun):
         # Load existing answers if instance exists and has been saved
         if instance and instance.pk:
             # Populate answers dictionary with existing text/numeric answers
-            for el in self.answer_class.objects.filter(**{self.instance_key: instance.id}):
-                self.answers[el.question_id] = el
+            for answer in self.answer_class.objects.filter(**{self.instance_key: instance.id}):
+                self.answers[answer.question_id] = answer
 
             # Populate choice dictionaries with existing single/multiple choice answers
-            for el in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related("question"):
+            for choice_answer in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related(
+                "question"
+            ):
                 # Handle single choice questions - store the selected choice
-                if el.question.typ == BaseQuestionType.SINGLE:
-                    self.singles[el.question_id] = el
+                if choice_answer.question.typ == BaseQuestionType.SINGLE:
+                    self.singles[choice_answer.question_id] = choice_answer
                 # Handle multiple choice questions - store as a set of selected choices
-                elif el.question.typ == BaseQuestionType.MULTIPLE:
-                    if el.question_id not in self.multiples:
-                        self.multiples[el.question_id] = set()
-                    self.multiples[el.question_id].add(el)
+                elif choice_answer.question.typ == BaseQuestionType.MULTIPLE:
+                    if choice_answer.question_id not in self.multiples:
+                        self.multiples[choice_answer.question_id] = set()
+                    self.multiples[choice_answer.question_id].add(choice_answer)
 
         # Initialize choices dictionary for all available options
         self.choices = {}
 
         # Load all available choice options for this event's questions
-        for r in self.get_options_query(event):
+        for question_option in self.get_options_query(event):
             # Group options by question ID for easy lookup during form rendering
-            if r.question_id not in self.choices:
-                self.choices[r.question_id] = []
-            self.choices[r.question_id].append(r)
+            if question_option.question_id not in self.choices:
+                self.choices[question_option.question_id] = []
+            self.choices[question_option.question_id].append(question_option)
 
         # Finalize question initialization with event context
         self._init_questions(event)
@@ -491,7 +493,9 @@ class BaseRegistrationForm(MyFormRun):
     def get_options_query(self, event):
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
-    def get_choice_options(self, all_options: dict, question, chosen=None, reg_count=None) -> tuple[list[tuple], str]:
+    def get_choice_options(
+        self, all_options: dict, question, chosen_options=None, registration_count=None
+    ) -> tuple[list[tuple], str]:
         """
         Build form choice options for a question with availability and ticket validation.
 
@@ -504,9 +508,9 @@ class BaseRegistrationForm(MyFormRun):
             Dictionary mapping question IDs to their available option lists
         question : Question
             Question instance to retrieve and process options for
-        chosen : optional
+        chosen_options : optional
             Previously selected options for validation checks
-        reg_count : optional
+        registration_count : optional
             Registration count data used for availability verification
 
         Returns
@@ -518,33 +522,35 @@ class BaseRegistrationForm(MyFormRun):
         """
         choices = []
         help_text = question.description
-        run = self.params["run"]
+        event_run = self.params["run"]
 
         # Early return if no options available for this question
         if question.id not in all_options:
             return choices, help_text
 
-        options = all_options[question.id]
+        available_options = all_options[question.id]
 
         # Process each available option for the question
-        for option in options:
+        for option in available_options:
             # Generate display text with pricing information
-            name = option.get_form_text(run, cs=self.params["currency_symbol"])
+            option_display_name = option.get_form_text(event_run, currency_symbol=self.params["currency_symbol"])
 
             # Check availability constraints if registration counts provided
-            if reg_count and option.max_available > 0:
-                name, valid = self.check_option(chosen, name, option, reg_count, run)
-                if not valid:
+            if registration_count and option.max_available > 0:
+                option_display_name, is_valid = self.check_option(
+                    chosen_options, option_display_name, option, registration_count, event_run
+                )
+                if not is_valid:
                     continue
 
             # Validate ticket compatibility if ticket mapping exists
-            if reg_count and hasattr(option, "tickets_map"):
-                tickets_id = [i for i in option.tickets_map if i is not None]
-                if tickets_id and run.reg.ticket_id not in tickets_id:
+            if registration_count and hasattr(option, "tickets_map"):
+                valid_ticket_ids = [ticket_id for ticket_id in option.tickets_map if ticket_id is not None]
+                if valid_ticket_ids and event_run.reg.ticket_id not in valid_ticket_ids:
                     continue
 
             # Add valid option to choices and append description to help text
-            choices.append((option.id, name))
+            choices.append((option.id, option_display_name))
             if option.description:
                 help_text += f'<p id="hp_{option.id}"><b>{option.name}</b> {option.description}</p>'
 
@@ -678,7 +684,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return key
 
-    def init_orga_fields(self, reg_section: str | None = None) -> list[str]:
+    def init_orga_fields(self, registration_section: str | None = None) -> list[str]:
         """
         Initialize form fields for organizer view with registration questions.
 
@@ -687,7 +693,7 @@ class BaseRegistrationForm(MyFormRun):
         It filters questions based on availability and permissions.
 
         Args:
-            reg_section: Optional registration section name to override the
+            registration_section: Optional registration section name to override the
                         question's default section assignment.
 
         Returns:
@@ -698,7 +704,7 @@ class BaseRegistrationForm(MyFormRun):
         self._init_reg_question(self.instance, event)
 
         # Initialize container for field keys that will be created
-        keys = []
+        field_keys = []
 
         # Process each registration question for field creation
         for question in self.questions:
@@ -707,29 +713,29 @@ class BaseRegistrationForm(MyFormRun):
                 continue
 
             # Create form field for this question (organizer context)
-            k = self._init_field(question, reg_counts=None, orga=True)
-            if not k:
+            field_key = self._init_field(question, registration_counts=None, is_organizer=True)
+            if not field_key:
                 continue
 
             # Add the field key to our collection
-            keys.append(k)
+            field_keys.append(field_key)
 
             # Determine section name for field grouping
-            sec_name = reg_section
+            section_name = registration_section
             if hasattr(question, "section") and question.section:
-                sec_name = question.section.name
+                section_name = question.section.name
 
             # Assign field to section if section name is available
-            if sec_name:
-                self.sections["id_" + k] = sec_name
+            if section_name:
+                self.sections["id_" + field_key] = section_name
 
-        return keys
+        return field_keys
 
     def check_editable(self, question):
         return True
 
     def _init_field(
-        self, question: WritingQuestion, reg_counts: Optional[dict[str, Any]] = None, orga: bool = True
+        self, question: WritingQuestion, registration_counts: Optional[dict[str, Any]] = None, is_organizer: bool = True
     ) -> Optional[str]:
         """Initialize form field for a writing question.
 
@@ -738,8 +744,8 @@ class BaseRegistrationForm(MyFormRun):
 
         Args:
             question: WritingQuestion instance to create field for
-            reg_counts: Registration count data for field initialization, defaults to None
-            orga: Whether this is an organizer form, defaults to True
+            registration_counts: Registration count data for field initialization, defaults to None
+            is_organizer: Whether this is an organizer form, defaults to True
 
         Returns:
             Form field key string if field was created, None if question was skipped
@@ -750,14 +756,14 @@ class BaseRegistrationForm(MyFormRun):
             return None
 
         # Generate unique field key based on question ID
-        key = "q" + str(question.id)
+        field_key = "q" + str(question.id)
 
         # Set default field states for organizer context
-        active = True
-        required = False
+        is_field_active = True
+        is_field_required = False
 
         # Apply user-specific field logic when not in organizer mode
-        if not orga:
+        if not is_organizer:
             # Check if question is editable for current user context
             if not self.check_editable(question):
                 return None
@@ -768,35 +774,35 @@ class BaseRegistrationForm(MyFormRun):
 
             # Disable fields for disabled questions or creation-only questions
             if question.status == QuestionStatus.DISABLED:
-                active = False
+                is_field_active = False
             else:
                 # Set field as required based on question status
-                required = question.status == QuestionStatus.MANDATORY
+                is_field_required = question.status == QuestionStatus.MANDATORY
 
         # Initialize field type and apply type-specific configuration
-        key = self.init_type(key, orga, question, reg_counts, required)
-        if not key:
-            return key
+        field_key = self.init_type(field_key, is_organizer, question, registration_counts, is_field_required)
+        if not field_key:
+            return field_key
 
         # Apply user-specific field state (disabled/enabled)
-        if not orga:
-            self.fields[key].disabled = not active
+        if not is_organizer:
+            self.fields[field_key].disabled = not is_field_active
 
         # Configure max length validation for applicable question types
         if question.max_length:
             if question.typ in get_writing_max_length():
-                self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
+                self.max_lengths[f"id_{field_key}"] = (question.max_length, question.typ)
 
         # Mark mandatory fields with visual indicator and track for validation
         if question.status == QuestionStatus.MANDATORY:
-            self.fields[key].label += " (*)"
+            self.fields[field_key].label += " (*)"
             self.has_mandatory = True
-            self.mandatory.append("id_" + key)
+            self.mandatory.append("id_" + field_key)
 
         # Set basic type flag for template rendering logic
         question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
 
-        return key
+        return field_key
 
     def init_type(self, key: str, orga: bool, question: BaseModel, reg_counts: dict, required: bool) -> str:
         """Initialize form field based on question type.
@@ -1246,7 +1252,7 @@ class MyCssForm(MyForm):
         default_storage.save(path, ContentFile(css))
 
     @staticmethod
-    def get_css_path(instance):
+    def get_css_path(association_skin):
         return ""
 
     @staticmethod

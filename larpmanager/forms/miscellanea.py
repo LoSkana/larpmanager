@@ -253,18 +253,18 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-def _delete_optionals_warehouse(form):
+def _delete_optionals_warehouse(warehouse_form):
     """Remove optional warehouse fields not enabled in association configuration.
 
     Args:
-        form: Form instance to modify by removing disabled optional fields
+        warehouse_form: Form instance to modify by removing disabled optional fields
 
     Side effects:
         Deletes form fields for warehouse options not enabled in config
     """
-    for field in WarehouseItem.get_optional_fields():
-        if not get_assoc_config(form.params["a_id"], f"warehouse_{field}", False):
-            form.delete_field(field)
+    for optional_field_name in WarehouseItem.get_optional_fields():
+        if not get_assoc_config(warehouse_form.params["a_id"], f"warehouse_{optional_field_name}", False):
+            warehouse_form.delete_field(optional_field_name)
 
 
 class ExeCompetenceForm(MyForm):
@@ -355,12 +355,12 @@ class OrganizerCastingOptionsForm(forms.Form):
             return self.cleaned_data
 
         # Build dictionary from initial field values
-        dic = {}
-        for key in self.fields:
+        field_data = {}
+        for field_name in self.fields:
             # Convert initial values to list format for consistency
-            dic[key] = list(self.fields[key].initial)
+            field_data[field_name] = list(self.fields[field_name].initial)
 
-        return dic
+        return field_data
 
 
 class ShuttleServiceForm(MyForm):

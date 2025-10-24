@@ -139,9 +139,9 @@ class ExceptionHandlingMiddleware:
         return None
 
     @staticmethod
-    def _redirect_with_message(request, message, viewname, args, level="success"):
-        getattr(messages, level)(request, message)
-        return redirect(reverse(viewname, args=args))
+    def _redirect_with_message(request, message_text, view_name, view_args, message_level="success"):
+        getattr(messages, message_level)(request, message_text)
+        return redirect(reverse(view_name, args=view_args))
 
     @staticmethod
     def _handle_feature_error(request: HttpRequest, ex: FeatureError) -> HttpResponse:

@@ -54,14 +54,14 @@ def generate_id(id_length):
     return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
 
 
-def decimal_to_str(v: Decimal) -> str:
+def decimal_to_str(decimal_value: Decimal) -> str:
     """Convert decimal to string with .00 removed.
 
     Takes a Decimal value and converts it to a string representation,
     removing any trailing ".00" to provide cleaner output for whole numbers.
 
     Args:
-        v (Decimal): The decimal value to convert to string format.
+        decimal_value (Decimal): The decimal value to convert to string format.
 
     Returns:
         str: String representation of the decimal without trailing ".00".
@@ -75,10 +75,10 @@ def decimal_to_str(v: Decimal) -> str:
         '10.50'
     """
     # Convert decimal to string representation
-    s = str(v)
+    string_representation = str(decimal_value)
     # Remove trailing .00 for cleaner display of whole numbers
-    s = s.replace(".00", "")
-    return s
+    string_representation = string_representation.replace(".00", "")
+    return string_representation
 
 
 def slug_url_validator(val):
@@ -133,14 +133,14 @@ def my_uuid_short():
 
 def my_uuid(length: int | None = None) -> str:
     """Generate a UUID hex string, optionally truncated to specified length."""
-    s = uuid4().hex
+    uuid_hex_string = uuid4().hex
     if length is None:
-        return s
-    return s[:length]
+        return uuid_hex_string
+    return uuid_hex_string[:length]
 
 
-def download_d(s):
-    return download(s)
+def download_d(session):
+    return download(session)
 
 
 def download(url: str) -> str:
@@ -178,26 +178,26 @@ def show_thumb(height: int, image_url: str) -> SafeString:
     return mark_safe(html_img_tag)
 
 
-def get_attr(ob: object, nm: str) -> str | None:
+def get_attr(obj: object, attr_name: str) -> str | None:
     """Get attribute value from object, returning None if missing or empty string if falsy.
 
     Args:
-        ob: Object to get attribute from
-        nm: Name of the attribute to retrieve
+        obj: Object to get attribute from
+        attr_name: Name of the attribute to retrieve
 
     Returns:
         Attribute value if truthy, empty string if falsy, None if missing
     """
     # Check if object has the requested attribute
-    if not hasattr(ob, nm):
+    if not hasattr(obj, attr_name):
         return None
 
     # Get the attribute value
-    v = getattr(ob, nm)
+    attr_value = getattr(obj, attr_name)
 
     # Return value if truthy, otherwise empty string
-    if v:
-        return v
+    if attr_value:
+        return attr_value
     return ""
 
 

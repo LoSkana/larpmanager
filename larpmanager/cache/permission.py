@@ -29,16 +29,16 @@ from larpmanager.models.access import AssocPermission, EventPermission
 logger = logging.getLogger(__name__)
 
 
-def assoc_permission_feature_key(slug):
+def assoc_permission_feature_key(permission_slug):
     """Generate cache key for association permission features.
 
     Args:
-        slug (str): Permission slug
+        permission_slug (str): Permission slug
 
     Returns:
         str: Cache key for association permission feature
     """
-    return f"assoc_permission_feature_{slug}"
+    return f"assoc_permission_feature_{permission_slug}"
 
 
 def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
@@ -95,29 +95,29 @@ def get_assoc_permission_feature(slug: str) -> tuple[str, str | None, dict | Non
         return "def", None, None
 
     # Attempt to retrieve from cache first
-    res = cache.get(assoc_permission_feature_key(slug))
+    cached_feature_data = cache.get(assoc_permission_feature_key(slug))
 
     # If cache miss, update cache and return fresh data
-    if res is None:
-        res = update_assoc_permission_feature(slug)
+    if cached_feature_data is None:
+        cached_feature_data = update_assoc_permission_feature(slug)
 
-    return res
-
-
-def clear_association_permission_cache(instance):
-    cache.delete(assoc_permission_feature_key(instance.slug))
+    return cached_feature_data
 
 
-def event_permission_feature_key(slug):
+def clear_association_permission_cache(association):
+    cache.delete(assoc_permission_feature_key(association.slug))
+
+
+def event_permission_feature_key(permission_slug):
     """Generate cache key for event permission features.
 
     Args:
-        slug (str): Permission slug
+        permission_slug (str): Permission slug
 
     Returns:
         str: Cache key for event permission feature
     """
-    return f"event_permission_feature_{slug}"
+    return f"event_permission_feature_{permission_slug}"
 
 
 def update_event_permission_feature(slug: str) -> tuple[str, str, str]:
@@ -172,21 +172,21 @@ def get_event_permission_feature(slug: str | None) -> tuple[str, None, None]:
         return "def", None, None
 
     # Attempt to retrieve from cache first
-    res = cache.get(event_permission_feature_key(slug))
+    cached_feature = cache.get(event_permission_feature_key(slug))
 
     # Update cache if no cached result found
-    if res is None:
-        res = update_event_permission_feature(slug)
+    if cached_feature is None:
+        cached_feature = update_event_permission_feature(slug)
 
-    return res
-
-
-def clear_event_permission_cache(instance):
-    cache.delete(event_permission_feature_key(instance.slug))
+    return cached_feature
 
 
-def index_permission_key(typ):
-    return f"index_permission_key_{typ}"
+def clear_event_permission_cache(event_permission):
+    cache.delete(event_permission_feature_key(event_permission.slug))
+
+
+def index_permission_key(permission_type):
+    return f"index_permission_key_{permission_type}"
 
 
 def update_index_permission(typ: str) -> list[dict]:

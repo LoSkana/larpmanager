@@ -528,65 +528,71 @@ def _relationships_load(row: dict, chars: dict) -> str:
     return f"OK - Relationship {source_char} {target_char}"
 
 
-def _get_questions(que: QuerySet) -> dict[str, dict[str, Union[int, str, dict[str, int]]]]:
+def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, Union[int, str, dict[str, int]]]]:
     """Build a dictionary mapping question names to their metadata.
 
     Args:
-        que: QuerySet of question objects with name, id, typ, and options attributes.
+        questions_queryset: QuerySet of question objects with name, id, typ, and options attributes.
 
     Returns:
         Dictionary with lowercase question names as keys and question metadata as values.
     """
-    questions = {}
-    for question in que:
+    questions_by_name = {}
+    for question in questions_queryset:
         # Extract options as name->id mapping
-        options = {option.name.lower(): option.id for option in question.options.all()}
+        options_by_name = {option.name.lower(): option.id for option in question.options.all()}
 
         # Store question metadata with lowercase name as key
-        questions[question.name.lower()] = {"id": question.id, "typ": question.typ, "options": options}
-    return questions
+        questions_by_name[question.name.lower()] = {"id": question.id, "typ": question.typ, "options": options_by_name}
+    return questions_by_name
 
 
-def _assign_choice_answer(element, field, value, questions, logs, is_registration=False):
+def _assign_choice_answer(
+    target_element, field_name, field_value, available_questions, error_logs, is_registration=False
+):
     """Assign choice answers to form elements during bulk import.
 
     Processes choice field assignments with validation, option matching,
     and proper relationship creation for registration or character forms.
     """
-    field = field.lower()
-    if field not in questions:
-        logs.append(f"ERR - question not found {field}")
+    field_name = field_name.lower()
+    if field_name not in available_questions:
+        error_logs.append(f"ERR - question not found {field_name}")
         return
 
-    question = questions[field]
+    question = available_questions[field_name]
 
     # check if answer
     if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
         if is_registration:
-            answer, _ = RegistrationAnswer.objects.get_or_create(reg_id=element.id, question_id=question["id"])
+            answer, _ = RegistrationAnswer.objects.get_or_create(reg_id=target_element.id, question_id=question["id"])
         else:
-            answer, _ = WritingAnswer.objects.get_or_create(element_id=element.id, question_id=question["id"])
-        answer.text = value
+            answer, _ = WritingAnswer.objects.get_or_create(element_id=target_element.id, question_id=question["id"])
+        answer.text = field_value
         answer.save()
 
     # check if choice
     else:
         if is_registration:
-            RegistrationChoice.objects.filter(reg_id=element.id, question_id=question["id"]).delete()
+            RegistrationChoice.objects.filter(reg_id=target_element.id, question_id=question["id"]).delete()
         else:
-            WritingChoice.objects.filter(element_id=element.id, question_id=question["id"]).delete()
+            WritingChoice.objects.filter(element_id=target_element.id, question_id=question["id"]).delete()
 
-        for input_opt_orig in value.split(","):
-            input_opt = input_opt_orig.lower().strip()
-            option_id = question["options"].get(input_opt)
+        for original_input_option in field_value.split(","):
+            normalized_input_option = original_input_option.lower().strip()
+            option_id = question["options"].get(normalized_input_option)
             if not option_id:
-                logs.append(f"Problem with question {field}: couldn't find option {input_opt}")
+                error_logs.append(f"Problem with question {field_name}: couldn't find option {normalized_input_option}")
                 continue
 
             if is_registration:
-                RegistrationChoice.objects.create(reg_id=element.id, question_id=question["id"], option_id=option_id)
+                RegistrationChoice.objects.create(
+                    reg_id=target_element.id, question_id=question["id"], option_id=option_id
+                )
             else:
-                WritingChoice.objects.create(element_id=element.id, question_id=question["id"], option_id=option_id)
+                WritingChoice.objects.create(
+                    element_id=target_element.id, question_id=question["id"], option_id=option_id
+                )
 
 
 def element_load(request, ctx: dict, row: dict, questions: list) -> str:
@@ -784,46 +790,47 @@ def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[st
         Expects 'first' field to contain questions file and 'second' field
         to contain options file. Files are processed sequentially.
     """
-    logs = []
+    log_messages = []
 
     # Process questions file upload
-    uploaded_file = form.cleaned_data.get("first", None)
-    if uploaded_file:
+    questions_file = form.cleaned_data.get("first", None)
+    if questions_file:
         # Parse uploaded questions file into DataFrame
-        (input_df, logs) = _get_file(ctx, uploaded_file, 0)
-        if input_df is not None:
+        (questions_dataframe, log_messages) = _get_file(ctx, questions_file, 0)
+        if questions_dataframe is not None:
             # Create question objects from each row in the DataFrame
-            for row in input_df.to_dict(orient="records"):
-                logs.append(_questions_load(ctx, row, is_registration))
+            for question_row in questions_dataframe.to_dict(orient="records"):
+                log_messages.append(_questions_load(ctx, question_row, is_registration))
 
     # Process options file upload
-    uploaded_file = form.cleaned_data.get("second", None)
-    if uploaded_file:
+    options_file = form.cleaned_data.get("second", None)
+    if options_file:
         # Parse uploaded options file into DataFrame
-        (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
-        if input_df is not None:
+        (options_dataframe, options_log_messages) = _get_file(ctx, options_file, 1)
+        if options_dataframe is not None:
             # Determine question model class based on registration type
-            question_cls = WritingQuestion
+            question_model_class = WritingQuestion
             if is_registration:
-                question_cls = RegistrationQuestion
+                question_model_class = RegistrationQuestion
 
             # Build lookup dictionary mapping question names to IDs
-            questions = {
-                el["name"].lower(): el["id"] for el in ctx["event"].get_elements(question_cls).values("id", "name")
+            questions_by_name = {
+                question["name"].lower(): question["id"]
+                for question in ctx["event"].get_elements(question_model_class).values("id", "name")
             }
 
             # Create option objects for each row, linking to existing questions
-            for row in input_df.to_dict(orient="records"):
-                new_logs.append(_options_load(ctx, row, questions, is_registration))
+            for option_row in options_dataframe.to_dict(orient="records"):
+                options_log_messages.append(_options_load(ctx, option_row, questions_by_name, is_registration))
 
         # Combine logs from options processing with existing logs
-        logs.extend(new_logs)
+        log_messages.extend(options_log_messages)
 
-    return logs
+    return log_messages
 
 
-def invert_dict(d):
-    return {v.lower().strip(): k for k, v in d.items()}
+def invert_dict(dictionary):
+    return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
 def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
@@ -1308,11 +1315,11 @@ def _assign_prereq(ctx, element, logs, value):
             logs.append(f"Prerequisite not found: {name}")
 
 
-def _assign_requirements(ctx, element, logs, value):
-    for name in value.split(","):
+def _assign_requirements(context, writing_element, error_logs, requirement_names):
+    for requirement_name in requirement_names.split(","):
         try:
-            option = ctx["event"].get_elements(WritingOption).get(name__iexact=name.strip())
-            element.save()  # to be sure
-            element.requirements.add(option)
+            writing_option = context["event"].get_elements(WritingOption).get(name__iexact=requirement_name.strip())
+            writing_element.save()  # to be sure
+            writing_element.requirements.add(writing_option)
         except ObjectDoesNotExist:
-            logs.append(f"requirements not found: {name}")
+            error_logs.append(f"requirements not found: {requirement_name}")

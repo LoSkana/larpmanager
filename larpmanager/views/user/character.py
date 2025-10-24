@@ -101,7 +101,7 @@ def character(request: HttpRequest, s: str, num: int) -> HttpResponse:
     return _character_sheet(request, ctx)
 
 
-def _character_sheet(request: HttpRequest, ctx: dict) -> HttpResponse:
+def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     """Display character sheet with visibility and approval checks.
 
     This function handles the display of character sheets with proper visibility
@@ -110,7 +110,7 @@ def _character_sheet(request: HttpRequest, ctx: dict) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and metadata
-        ctx: Context dictionary containing event, run, character data and permissions
+        context: Context dictionary containing event, run, character data and permissions
 
     Returns:
         HttpResponse: Rendered character sheet template or redirect to gallery
@@ -119,39 +119,39 @@ def _character_sheet(request: HttpRequest, ctx: dict) -> HttpResponse:
         Redirect: When character visibility rules are violated or access is denied
     """
     # Enable screen mode for character sheet display
-    ctx["screen"] = True
+    context["screen"] = True
 
     # Check if characters are visible to regular users (non-staff)
-    if "check" not in ctx and not ctx["show_character"]:
+    if "check" not in context and not context["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
-        return redirect("gallery", s=ctx["run"].get_slug())
+        return redirect("gallery", s=context["run"].get_slug())
 
     # Verify individual character visibility settings
-    if "check" not in ctx and ctx["char"]["hide"]:
+    if "check" not in context and context["char"]["hide"]:
         messages.warning(request, _("Character not visible"))
-        return redirect("gallery", s=ctx["run"].get_slug())
+        return redirect("gallery", s=context["run"].get_slug())
 
     # Determine access level and load appropriate character data
-    show_private = "check" in ctx
-    if show_private:
+    is_staff_view = "check" in context
+    if is_staff_view:
         # Load full character data for staff/admin users
-        get_character_sheet(ctx)
-        get_character_relationships(ctx)
-        ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
-        check_missing_mandatory(ctx)
+        get_character_sheet(context)
+        get_character_relationships(context)
+        context["intro"] = get_event_text(context["event"].id, EventTextType.INTRO)
+        check_missing_mandatory(context)
     else:
         # Load only visible elements for regular users
-        ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
+        context["char"].update(get_character_element_fields(context, context["char"]["id"], only_visible=True))
 
     # Load casting details and preferences if applicable
-    casting_details(ctx, 0)
-    if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
-        ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
+    casting_details(context, 0)
+    if context["casting_show_pref"] and not context["char"]["player_id"]:
+        context["pref"] = get_casting_preferences(context["char"]["id"], context, 0)
 
     # Set character approval configuration for template rendering
-    ctx["approval"] = get_event_config(ctx["event"].id, "user_character_approval", False, ctx)
+    context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
 
-    return render(request, "larpmanager/event/character.html", ctx)
+    return render(request, "larpmanager/event/character.html", context)
 
 
 def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
@@ -201,13 +201,13 @@ def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
     return _character_sheet(request, ctx)
 
 
-def character_your_link(ctx: dict, char, p: str = None) -> str:
+def character_your_link(context: dict, character, path: str = None) -> str:
     """Generate a URL link for a character page.
 
     Args:
-        ctx: Context dictionary containing run information
-        char: Character object with number attribute
-        p: Optional path parameter to append to URL
+        context: Context dictionary containing run information
+        character: Character object with number attribute
+        path: Optional path parameter to append to URL
 
     Returns:
         Complete URL string for the character page
@@ -216,14 +216,14 @@ def character_your_link(ctx: dict, char, p: str = None) -> str:
     url = reverse(
         "character",
         kwargs={
-            "s": ctx["run"].get_slug(),
-            "num": char.number,
+            "s": context["run"].get_slug(),
+            "num": character.number,
         },
     )
 
     # Append optional path parameter if provided
-    if p:
-        url += p
+    if path:
+        url += path
     return url
 
 
@@ -282,8 +282,8 @@ def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
 
 def character_form(
     request: HttpRequest,
-    ctx: dict[str, Any],
-    s: str,
+    context: dict[str, Any],
+    event_slug: str,
     instance: Optional[Union[Character, RegistrationCharacterRel]],
     form_class: type[Form],
 ) -> HttpResponse:
@@ -294,8 +294,8 @@ def character_form(
 
     Args:
         request: The HTTP request object containing form data
-        ctx: Template context dictionary with event and user data
-        s: Event slug identifier
+        context: Template context dictionary with event and user data
+        event_slug: Event slug identifier
         instance: Existing character or registration relation to edit, None for new
         form_class: Django form class to use for character processing
 
@@ -307,53 +307,55 @@ def character_form(
         Handles both character creation and editing workflows.
     """
     # Initialize form dependencies and set element type for template context
-    get_options_dependencies(ctx)
-    ctx["elementTyp"] = Character
+    get_options_dependencies(context)
+    context["elementTyp"] = Character
 
     if request.method == "POST":
         # Process form submission with uploaded files
-        form = form_class(request.POST, request.FILES, instance=instance, ctx=ctx)
+        form = form_class(request.POST, request.FILES, instance=instance, ctx=context)
         if form.is_valid():
             # Set appropriate success message based on operation type
             if instance:
-                mes = _("Informations saved") + "!"
+                success_message = _("Informations saved") + "!"
             else:
-                mes = _("New character created") + "!"
+                success_message = _("New character created") + "!"
 
             # Save character data within atomic transaction
             with transaction.atomic():
-                element = form.save(commit=False)
+                character = form.save(commit=False)
                 # Update character with additional processing and context
-                mes = _update_character(ctx, element, form, mes, request)
-                element.save()
+                success_message = _update_character(context, character, form, success_message, request)
+                character.save()
 
                 # Handle character assignment logic
-                check_assign_character(request, ctx)
+                check_assign_character(request, context)
 
             # Display success message to user
-            if mes:
-                messages.success(request, mes)
+            if success_message:
+                messages.success(request, success_message)
 
             # Determine character number for redirect
-            number = None
-            if isinstance(element, Character):
-                number = element.number
-            elif isinstance(element, RegistrationCharacterRel):
-                number = element.character.number
+            character_number = None
+            if isinstance(character, Character):
+                character_number = character.number
+            elif isinstance(character, RegistrationCharacterRel):
+                character_number = character.character.number
             # Redirect to character detail page
-            return redirect("character", s=s, num=number)
+            return redirect("character", s=event_slug, num=character_number)
     else:
         # Initialize empty form for GET requests
-        form = form_class(instance=instance, ctx=ctx)
+        form = form_class(instance=instance, ctx=context)
 
     # Add form to template context and initialize form state
-    ctx["form"] = form
-    init_form_submitted(ctx, form, request)
+    context["form"] = form
+    init_form_submitted(context, form, request)
 
     # Configure form display options from event settings
-    ctx["hide_unavailable"] = get_event_config(ctx["event"].id, "character_form_hide_unavailable", False, ctx)
+    context["hide_unavailable"] = get_event_config(
+        context["event"].id, "character_form_hide_unavailable", False, context
+    )
 
-    return render(request, "larpmanager/event/character/edit.html", ctx)
+    return render(request, "larpmanager/event/character/edit.html", context)
 
 
 def _update_character(ctx: dict, element: Character, form: Form, mes: str, request: HttpRequest) -> str:
@@ -726,13 +728,13 @@ def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
     return render(request, "larpmanager/event/character/abilities.html", ctx)
 
 
-def check_char_abilities(request: HttpRequest, s: str, num: int) -> dict:
+def check_char_abilities(request: HttpRequest, event_slug: str, character_num: int) -> dict:
     """Check if user can select abilities for a character in an event.
 
     Args:
         request: The HTTP request object
-        s: Event slug identifier
-        num: Character number
+        event_slug: Event slug identifier
+        character_num: Character number
 
     Returns:
         Context dictionary containing event and run information
@@ -741,19 +743,19 @@ def check_char_abilities(request: HttpRequest, s: str, num: int) -> dict:
         Http404: If user is not allowed to select abilities for this event
     """
     # Get event context with signup and status validation
-    ctx = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
 
     # Determine the parent event ID for configuration lookup
-    event_id = ctx["event"].parent_id or ctx["event"].id
+    event_id = context["event"].parent_id or context["event"].id
 
     # Check if user ability selection is enabled for this event
     if not get_event_config(event_id, "px_user", False):
         raise Http404("ehm.")
 
     # Validate character access permissions
-    get_char_check(request, ctx, num, True)
+    get_char_check(request, context, character_num, True)
 
-    return ctx
+    return context
 
 
 @login_required
@@ -830,22 +832,22 @@ def get_undo_abilities(request, ctx, char, new_ability_id=None):
     Returns:
         list: List of ability IDs that can be undone
     """
-    px_undo = int(get_event_config(ctx["event"].id, "px_undo", 0, ctx))
-    config_name = f"added_px_{char.id}"
-    val = char.get_config(config_name, "{}")
-    added_map = ast.literal_eval(val)
-    current_time = int(time.time())
+    undo_window_hours = int(get_event_config(ctx["event"].id, "px_undo", 0, ctx))
+    config_key = f"added_px_{char.id}"
+    stored_config_value = char.get_config(config_key, "{}")
+    ability_timestamp_map = ast.literal_eval(stored_config_value)
+    current_timestamp = int(time.time())
     # clean from abilities out of the undo time windows
-    for key in list(added_map.keys()):
-        if added_map[key] < current_time - px_undo * 3600:
-            del added_map[key]
+    for ability_id_key in list(ability_timestamp_map.keys()):
+        if ability_timestamp_map[ability_id_key] < current_timestamp - undo_window_hours * 3600:
+            del ability_timestamp_map[ability_id_key]
     # add newly acquired ability and save it
-    if px_undo and new_ability_id:
-        added_map[str(new_ability_id)] = current_time
-        save_single_config(char, config_name, json.dumps(added_map))
+    if undo_window_hours and new_ability_id:
+        ability_timestamp_map[str(new_ability_id)] = current_timestamp
+        save_single_config(char, config_key, json.dumps(ability_timestamp_map))
 
     # return map of abilities recently added, with int key
-    return [int(k) for k in added_map.keys()]
+    return [int(ability_id) for ability_id in ability_timestamp_map.keys()]
 
 
 @login_required

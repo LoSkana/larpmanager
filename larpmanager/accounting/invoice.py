@@ -109,17 +109,19 @@ def invoice_verify(ctx: dict, csv_upload: InMemoryUploadedFile) -> int:
     return counter
 
 
-def invoice_received_money(cod: str, gross: float = None, fee: float = None, txn_id: str = None) -> bool:
+def invoice_received_money(
+    invoice_code: str, gross_amount: float = None, processing_fee: float = None, transaction_id: str = None
+) -> bool:
     """Process received payment for a payment invoice.
 
     Updates payment invoice status and financial details when money is received
     from payment processors like PayPal or bank transfers.
 
     Args:
-        cod: Invoice code to identify the payment
-        gross: Optional gross amount received from payment processor
-        fee: Optional processing fee charged by payment processor
-        txn_id: Optional transaction ID from payment processor
+        invoice_code: Invoice code to identify the payment
+        gross_amount: Optional gross amount received from payment processor
+        processing_fee: Optional processing fee charged by payment processor
+        transaction_id: Optional transaction ID from payment processor
 
     Returns:
         True if payment was processed successfully, None if invalid invoice code
@@ -135,25 +137,25 @@ def invoice_received_money(cod: str, gross: float = None, fee: float = None, txn
     """
     # Attempt to retrieve the payment invoice by code
     try:
-        invoice = PaymentInvoice.objects.get(cod=cod)
+        invoice = PaymentInvoice.objects.get(cod=invoice_code)
     except ObjectDoesNotExist:
         # Notify administrators of invalid payment attempt
-        notify_admins("invalid payment", "wrong invoice: " + cod)
+        notify_admins("invalid payment", "wrong invoice: " + invoice_code)
         return
 
     # Process payment updates within atomic transaction
     with transaction.atomic():
         # Update gross amount if provided
-        if gross:
-            invoice.mc_gross = gross
+        if gross_amount:
+            invoice.mc_gross = gross_amount
 
         # Update processing fee if provided
-        if fee:
-            invoice.mc_fee = fee
+        if processing_fee:
+            invoice.mc_fee = processing_fee
 
         # Update transaction ID if provided
-        if txn_id:
-            invoice.txn_id = txn_id
+        if transaction_id:
+            invoice.txn_id = transaction_id
 
         # Skip processing if already checked or confirmed
         if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):

@@ -39,8 +39,8 @@ def check_branch() -> None:
         return
 
     # Get current git branch name
-    branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
+    current_branch_name = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
 
     # Raise error if on main branch
-    if branch == "main":
+    if current_branch_name == "main":
         raise CommandError("This command cannot be executed while on 'main'")

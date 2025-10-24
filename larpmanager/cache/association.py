@@ -34,31 +34,31 @@ def clear_association_cache(s):
     cache.delete(key)
 
 
-def cache_assoc_key(s):
-    return f"assoc_{s}"
+def cache_assoc_key(association_slug):
+    return f"assoc_{association_slug}"
 
 
-def get_cache_assoc(s: str) -> dict | None:
+def get_cache_assoc(association_slug: str) -> dict | None:
     """Get cached association data or initialize if not found.
 
     Args:
-        s: Association identifier string.
+        association_slug: Association identifier string.
 
     Returns:
         Association data dictionary or None if initialization fails.
     """
     # Generate cache key for the association
-    key = cache_assoc_key(s)
-    res = cache.get(key)
+    cache_key = cache_assoc_key(association_slug)
+    cached_data = cache.get(cache_key)
 
     # Initialize cache if not found
-    if res is None:
-        res = init_cache_assoc(s)
-        if not res:
+    if cached_data is None:
+        cached_data = init_cache_assoc(association_slug)
+        if not cached_data:
             return None
         # Cache the result for one day
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return cached_data
 
 
 def init_cache_assoc(a_slug: str) -> dict | None:
@@ -137,7 +137,7 @@ def _init_skin(assoc, el: dict) -> None:
     el["skin_managed"] = assoc.skin.managed
 
 
-def _init_features(assoc: Association, el: dict) -> None:
+def _init_features(assoc: Association, cache_element: dict) -> None:
     """Initialize association features and related configuration in cache element.
 
     Populates the cache element with association features and their corresponding
@@ -146,34 +146,34 @@ def _init_features(assoc: Association, el: dict) -> None:
 
     Args:
         assoc: Association object to get features from
-        el: Cache element dictionary to populate with features and configs
+        cache_element: Cache element dictionary to populate with features and configs
 
     Returns:
-        None: Modifies the el dictionary in-place
+        None: Modifies the cache_element dictionary in-place
     """
     # Get all features for this association
-    el["features"] = get_assoc_features(assoc.id)
+    cache_element["features"] = get_assoc_features(assoc.id)
 
     # Configure custom mail server settings if feature is enabled
-    if "custom_mail" in el["features"]:
-        k = "mail_server_use_tls"
-        el[k] = assoc.get_config(k, False)
+    if "custom_mail" in cache_element["features"]:
+        config_key = "mail_server_use_tls"
+        cache_element[config_key] = assoc.get_config(config_key, False)
 
         # Add mail server connection parameters
-        for s in ["host", "port", "host_user", "host_password"]:
-            k = "mail_server_" + s
-            el[k] = assoc.get_config(k)
+        for setting in ["host", "port", "host_user", "host_password"]:
+            config_key = "mail_server_" + setting
+            cache_element[config_key] = assoc.get_config(config_key)
 
     # Configure token and credit naming if feature is enabled
-    if "token_credit" in el["features"]:
-        for s in ["token_name", "credit_name"]:
-            el[s] = assoc.get_config("token_credit_" + s, None)
+    if "token_credit" in cache_element["features"]:
+        for setting in ["token_name", "credit_name"]:
+            cache_element[setting] = assoc.get_config("token_credit_" + setting, None)
 
     # Configure Centauri probability settings if feature is enabled
-    if "centauri" in el["features"]:
-        prob = assoc.get_config("centauri_prob")
-        if prob:
-            el["centauri_prob"] = prob
+    if "centauri" in cache_element["features"]:
+        probability = assoc.get_config("centauri_prob")
+        if probability:
+            cache_element["centauri_prob"] = probability
 
 
 def _init_member_fields(assoc: Association, el: dict[str, Any]) -> None:

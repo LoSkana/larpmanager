@@ -340,7 +340,7 @@ class Member(BaseModel):
         # noinspection PyUnresolvedReferences
         return self.id
 
-    def show_nick(self) -> str:
+    def show_nickname_or_string(self) -> str:
         """Return nickname if present, otherwise the string representation."""
         if self.nickname:
             return self.nickname
@@ -479,16 +479,16 @@ class Membership(BaseModel):
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
-        except Exception as e:
-            print(e)
+        except Exception as exception:
+            print(exception)
             return ""
 
     def get_document_filepath(self):
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
-        except Exception as e:
-            print(e)
+        except Exception as error:
+            print(error)
             return ""
 
 
