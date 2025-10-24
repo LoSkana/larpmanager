@@ -1215,7 +1215,7 @@ class OrgaRunForm(ConfigForm):
         basic_types = BaseQuestionType.get_basic_types()
         basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
-        for writing_element_key, writing_element_label in writing_elements:
+        for writing_element_key, writing_element_label, _writing_element_type in writing_elements:
             if "writing_fields" not in self.params or writing_element_key not in self.params["writing_fields"]:
                 continue
             if writing_element_key in ["plot", "prologue"]:
