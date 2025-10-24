@@ -71,16 +71,16 @@ def clear_event_relationships_cache(event_id: int) -> None:
         cache.delete(cache_key)
 
 
-def build_relationship_dict(items: list) -> dict[str, Any]:
+def build_relationship_dict(relationship_items: list) -> dict[str, Any]:
     """Build relationship dictionary with list and count.
 
     Args:
-        items: List of (id, name) tuples
+        relationship_items: List of (id, name) tuples
 
     Returns:
         Dict with "list" and "count" keys
     """
-    return {"list": items, "count": len(items)}
+    return {"list": relationship_items, "count": len(relationship_items)}
 
 
 def update_cache_section(event_id: int, section_name: str, section_id: int, data: dict[str, Any]) -> None:
@@ -223,14 +223,14 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
     cache_key = get_event_rels_key(event.id)
 
     # Attempt to retrieve cached relationships
-    res = cache.get(cache_key)
+    cached_relationships = cache.get(cache_key)
 
     # Initialize cache if no data found
-    if res is None:
+    if cached_relationships is None:
         logger.debug(f"Cache miss for event {event.id}, initializing")
-        res = init_event_rels_all(event)
+        cached_relationships = init_event_rels_all(event)
 
-    return res
+    return cached_relationships
 
 
 def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
@@ -312,14 +312,14 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
     return res
 
 
-def refresh_character_relationships(char: Character) -> None:
+def refresh_character_relationships(character: Character) -> None:
     """Refresh character relationships for the character's event and all child events."""
     # Refresh relationships for the character's primary event
-    refresh_event_character_relationships(char, char.event)
+    refresh_event_character_relationships(character, character.event)
 
     # Refresh relationships for all child events if this is a campaign parent
-    for children in Event.objects.filter(parent_id=char.event_id):
-        refresh_event_character_relationships(char, children)
+    for child_event in Event.objects.filter(parent_id=character.event_id):
+        refresh_event_character_relationships(character, child_event)
 
 
 def refresh_event_character_relationships(char: Character, event: Event) -> None:

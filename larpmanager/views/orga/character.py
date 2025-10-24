@@ -501,31 +501,33 @@ def orga_character_form(request, s):
     return redirect("orga_writing_form", s=s, typ="character")
 
 
-def check_writing_form_type(ctx: dict, typ: str) -> None:
+def check_writing_form_type(ctx: dict, form_type: str) -> None:
     """Validates writing form type and updates context with type information.
 
     Args:
         ctx: Context dictionary to update with type information
-        typ: Writing form type to validate
+        form_type: Writing form type to validate
 
     Raises:
         Http404: If the writing form type is not available
     """
-    typ = typ.lower()
-    mapping = _get_writing_mapping()
+    form_type = form_type.lower()
+    writing_type_mapping = _get_writing_mapping()
 
     # Build available types from choices that have corresponding features
-    available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
+    available_types = {
+        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in ctx["features"]
+    }
 
     # Validate the requested type is available
-    if typ not in available:
-        raise Http404(f"unknown writing form type: {typ}")
+    if form_type not in available_types:
+        raise Http404(f"unknown writing form type: {form_type}")
 
     # Update context with type information
-    ctx["typ"] = typ
-    ctx["writing_typ"] = available[typ]
-    ctx["label_typ"] = typ.capitalize()
-    ctx["available_typ"] = {k.capitalize(): v for k, v in available.items()}
+    ctx["typ"] = form_type
+    ctx["writing_typ"] = available_types[form_type]
+    ctx["label_typ"] = form_type.capitalize()
+    ctx["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
 
 
 @login_required

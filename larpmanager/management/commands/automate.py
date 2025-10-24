@@ -241,7 +241,7 @@ class Command(BaseCommand):
                 # Check friend referral achievements
                 self.check_friends_player(reg, cache)
 
-    def add_member_badge(self, cod: str, member: Member, cache: dict) -> None:
+    def add_member_badge(self, badge_code: str, member: Member, badge_cache: dict) -> None:
         """Award a badge to a member if not already possessed.
 
         This method checks if a member already has a specific badge and awards it
@@ -249,19 +249,19 @@ class Command(BaseCommand):
         repeated database queries.
 
         Args:
-            cod: Badge code identifier to award
+            badge_code: Badge code identifier to award
             member: Member instance to award the badge to
-            cache: Badge and player cache dictionary for performance optimization
+            badge_cache: Badge and player cache dictionary for performance optimization
 
         Returns:
             None
         """
         # Check if member already possesses this badge
-        if cod in self.get_cache_badges_player(cache, member):
+        if badge_code in self.get_cache_badges_player(badge_cache, member):
             return
 
         # Retrieve badge object from cache
-        badge = self.get_cache_badge(cache, cod)
+        badge = self.get_cache_badge(badge_cache, badge_code)
         if not badge:
             return
 

@@ -92,12 +92,12 @@ def reprint(fp):
     return mtime < cutoff
 
 
-def return_pdf(fp, fn):
+def return_pdf(file_path, filename):
     """Return PDF file as HTTP response.
 
     Args:
-        fp (str): File path to PDF file
-        fn (str): Filename for download
+        file_path (str): File path to PDF file
+        filename (str): Filename for download
 
     Returns:
         HttpResponse: PDF file response with appropriate headers
@@ -106,10 +106,10 @@ def return_pdf(fp, fn):
         Http404: If PDF file is not found
     """
     try:
-        f = open(fp, "rb")
-        response = HttpResponse(f.read(), content_type="application/pdf")
-        f.close()
-        response["Content-Disposition"] = f"inline;filename={fix_filename(fn)}.pdf"
+        pdf_file = open(file_path, "rb")
+        response = HttpResponse(pdf_file.read(), content_type="application/pdf")
+        pdf_file.close()
+        response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
         return response
     except FileNotFoundError as err:
         raise Http404("File not found") from err
@@ -537,9 +537,9 @@ def cleanup_handout_template_pdfs_after_save(instance):
             safe_remove(el.get_filepath(run))
 
 
-def safe_remove(path):
+def safe_remove(file_path):
     try:
-        os.remove(path)
+        os.remove(file_path)
     except FileNotFoundError:
         pass
 

@@ -4198,7 +4198,7 @@ msgstr ""
 msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 
-msgid "Toggle the sidebar visibility"
+msgid "Show or hide the sidebar containing all the functions"
 msgstr ""
 
 msgid ""

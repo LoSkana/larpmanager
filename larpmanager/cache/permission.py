@@ -250,5 +250,5 @@ def get_cache_index_permission(typ: type) -> list:
     return res
 
 
-def clear_index_permission_cache(typ):
-    cache.delete(index_permission_key(typ))
+def clear_index_permission_cache(permission_type):
+    cache.delete(index_permission_key(permission_type))

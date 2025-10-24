@@ -54,7 +54,14 @@ logger = logging.getLogger(__name__)
 
 
 def get_acc_detail(
-    nm: str, run, descr: str, cls, cho, typ: str | None, filters: dict | None = None, reg: bool = False
+    name: str,
+    run,
+    description: str,
+    model_class,
+    choices,
+    type_field: str | None,
+    filters: dict | None = None,
+    filter_by_registration: bool = False,
 ) -> dict:
     """Get detailed accounting breakdown for a specific accounting item type.
 
@@ -62,57 +69,61 @@ def get_acc_detail(
     for accounting items associated with a specific run or registration.
 
     Args:
-        nm: Display name for the accounting category
+        name: Display name for the accounting category
         run: Run instance to filter accounting items
-        descr: Description of the accounting category
-        cls: Model class for accounting items (e.g., AccountingItemPayment)
-        cho: Choices enumeration for display names
-        typ: Field name to group items by (e.g., 'pay', 'exp'). If None,
+        description: Description of the accounting category
+        model_class: Model class for accounting items (e.g., AccountingItemPayment)
+        choices: Choices enumeration for display names
+        type_field: Field name to group items by (e.g., 'pay', 'exp'). If None,
              no detailed breakdown is generated
         filters: Optional additional filters to apply to the queryset
-        reg: If True, filter by reg__run instead of run directly
+        filter_by_registration: If True, filter by reg__run instead of run directly
 
     Returns:
         dict: Accounting breakdown containing:
             - tot: Total value sum
             - num: Total item count
-            - detail: Dictionary with breakdown by type (if typ provided)
+            - detail: Dictionary with breakdown by type (if type_field provided)
             - name: Display name
             - descr: Description
     """
     # Initialize result dictionary with base structure
-    dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
+    result = {"tot": 0, "num": 0, "detail": {}, "name": name, "descr": description}
 
     # Filter accounting items by run or registration run
-    if reg:
-        lst = cls.objects.filter(reg__run=run)
+    if filter_by_registration:
+        queryset = model_class.objects.filter(reg__run=run)
     else:
-        lst = cls.objects.filter(run=run)
+        queryset = model_class.objects.filter(run=run)
 
     # Apply additional filters if provided
     if filters:
-        lst = lst.filter(**filters)
+        queryset = queryset.filter(**filters)
 
     # Process each accounting item
-    for a in lst:
+    for accounting_item in queryset:
         # Update global counters
-        dc["num"] += 1
-        dc["tot"] += a.value
+        result["num"] += 1
+        result["tot"] += accounting_item.value
 
         # Skip detailed breakdown if no type field specified
-        if typ is None:
+        if type_field is None:
             continue
 
         # Get type value and create detail entry if needed
-        tp = getattr(a, typ)
-        if tp not in dc["detail"]:
-            dc["detail"][tp] = {"tot": 0, "num": 0, "name": get_display_choice(cho, tp)}
+        item_type = getattr(accounting_item, type_field)
+        if item_type not in result["detail"]:
+            result["detail"][item_type] = {
+                "tot": 0,
+                "num": 0,
+                "name": get_display_choice(choices, item_type),
+            }
 
         # Update type-specific counters
-        dc["detail"][tp]["num"] += 1
-        dc["detail"][tp]["tot"] += a.value
+        result["detail"][item_type]["num"] += 1
+        result["detail"][item_type]["tot"] += accounting_item.value
 
-    return dc
+    return result
 
 
 def get_acc_reg_type(el) -> tuple[str, str]:

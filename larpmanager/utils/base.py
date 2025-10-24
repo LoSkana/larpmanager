@@ -60,48 +60,48 @@ def def_user_ctx(request: HttpRequest) -> dict:
     # Check if home page reached without valid association, redirect appropriately
     if request.assoc["id"] == 0:
         if hasattr(request, "user") and hasattr(request.user, "member"):
-            assocs = [el.assoc for el in request.user.member.memberships.all()]
-            raise MembershipError(assocs)
+            user_associations = [membership.assoc for membership in request.user.member.memberships.all()]
+            raise MembershipError(user_associations)
         raise MembershipError()
 
     # Initialize result dictionary with association ID
-    res = {"a_id": request.assoc["id"]}
+    context = {"a_id": request.assoc["id"]}
 
     # Copy all association data to context
-    for s in request.assoc:
-        res[s] = request.assoc[s]
+    for assoc_key in request.assoc:
+        context[assoc_key] = request.assoc[assoc_key]
 
     # Add user-specific data if authenticated member exists
     if hasattr(request, "user") and hasattr(request.user, "member"):
-        res["member"] = request.user.member
-        res["membership"] = get_user_membership(request.user.member, request.assoc["id"])
+        context["member"] = request.user.member
+        context["membership"] = get_user_membership(request.user.member, request.assoc["id"])
 
         # Get association permissions for the user
-        get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
+        get_index_assoc_permissions(context, request, request.assoc["id"], check=False)
 
         # Add user interface preferences and staff status
-        res["interface_collapse_sidebar"] = request.user.member.get_config("interface_collapse_sidebar", False)
-        res["is_staff"] = request.user.is_staff
+        context["interface_collapse_sidebar"] = request.user.member.get_config("interface_collapse_sidebar", False)
+        context["is_staff"] = request.user.is_staff
 
     # Add cached event links to context
-    res.update(cache_event_links(request))
+    context.update(cache_event_links(request))
 
     # Set default names for token/credit system if feature enabled
-    if "token_credit" in res["features"]:
-        if not res["token_name"]:
-            res["token_name"] = _("Tokens")
-        if not res["credit_name"]:
-            res["credit_name"] = _("Credits")
+    if "token_credit" in context["features"]:
+        if not context["token_name"]:
+            context["token_name"] = _("Tokens")
+        if not context["credit_name"]:
+            context["credit_name"] = _("Credits")
 
     # Add TinyMCE editor configuration
-    res["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-    res["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
+    context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+    context["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
 
     # Add current request function name for debugging/analytics
     if request and request.resolver_match:
-        res["request_func_name"] = request.resolver_match.func.__name__
+        context["request_func_name"] = request.resolver_match.func.__name__
 
-    return res
+    return context
 
 
 def is_shuttle(request: HttpRequest) -> bool:
@@ -134,7 +134,7 @@ def fetch_payment_details(assoc_id: int) -> dict:
     return get_payment_details(assoc)
 
 
-def check_assoc_permission(request: HttpRequest, slug: str) -> dict:
+def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
     """Check and validate association permissions for a request.
 
     Validates that the user has the required association permission and that
@@ -143,7 +143,7 @@ def check_assoc_permission(request: HttpRequest, slug: str) -> dict:
 
     Args:
         request: HTTP request object containing user and association data
-        slug: Permission slug identifier to check against user permissions
+        permission_slug: Permission slug identifier to check against user permissions
 
     Returns:
         dict: Context dictionary containing:
@@ -160,15 +160,15 @@ def check_assoc_permission(request: HttpRequest, slug: str) -> dict:
     """
     # Get base user context and validate permission
     ctx = def_user_ctx(request)
-    if not has_assoc_permission(request, ctx, slug):
+    if not has_assoc_permission(request, ctx, permission_slug):
         raise PermissionError()
 
     # Retrieve feature configuration for this permission
-    (feature, tutorial, config) = get_assoc_permission_feature(slug)
+    (required_feature, tutorial_identifier, config_slug) = get_assoc_permission_feature(permission_slug)
 
     # Check if required feature is enabled for this association
-    if feature != "def" and feature not in request.assoc["features"]:
-        raise FeatureError(path=request.path, feature=feature, run=0)
+    if required_feature != "def" and required_feature not in request.assoc["features"]:
+        raise FeatureError(path=request.path, feature=required_feature, run=0)
 
     # Set management context flags
     ctx["manage"] = 1
@@ -180,11 +180,11 @@ def check_assoc_permission(request: HttpRequest, slug: str) -> dict:
 
     # Add tutorial information if not already present
     if "tutorial" not in ctx:
-        ctx["tutorial"] = tutorial
+        ctx["tutorial"] = tutorial_identifier
 
     # Add configuration URL if user has config permissions
-    if config and has_assoc_permission(request, ctx, "exe_config"):
-        ctx["config"] = reverse("exe_config", args=[config])
+    if config_slug and has_assoc_permission(request, ctx, "exe_config"):
+        ctx["config"] = reverse("exe_config", args=[config_slug])
 
     return ctx
 

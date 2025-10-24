@@ -210,9 +210,9 @@ class QuestionApplicable(models.TextChoices):
     def get_applicable(cls, model_name: str) -> str | None:
         """Get the applicable value for a given model name."""
         # Iterate through choices to find matching model name
-        for value, label in cls.choices:
-            if model_name.lower() == label.lower():
-                return value
+        for choice_value, choice_label in cls.choices:
+            if model_name.lower() == choice_label.lower():
+                return choice_value
         return None
 
     @staticmethod

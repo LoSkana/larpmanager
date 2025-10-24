@@ -531,15 +531,15 @@ def join(request):
     if "red" in ctx:
         return redirect(ctx["red"])
 
-    assoc = _join_form(ctx, request)
-    if assoc:
+    joined_association = _join_form(ctx, request)
+    if joined_association:
         # send message
         messages.success(request, _("Welcome to %(name)s!") % {"name": request.assoc["name"]})
         # send email
         if request.assoc["skin_id"] == 1:
-            join_email(assoc)
+            join_email(joined_association)
         # redirect
-        return redirect("after_login", subdomain=assoc.slug, path="manage")
+        return redirect("after_login", subdomain=joined_association.slug, path="manage")
 
     return render(request, "larpmanager/larpmanager/join.html", ctx)
 
@@ -775,20 +775,20 @@ def about_us(request):
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
-def get_lm_contact(request, check=True):
+def get_lm_contact(request, check_main_site=True):
     """Get base context for LarpManager contact pages.
 
     Args:
         request: Django HTTP request object
-        check: Whether to check if user is on main site (default True)
+        check_main_site: Whether to check if user is on main site (default True)
 
     Returns:
         dict: Base context with contact form and platform info
 
     Raises:
-        MainPageError: If check=True and user is on association site
+        MainPageError: If check_main_site=True and user is on association site
     """
-    if check and request.assoc["id"] > 0:
+    if check_main_site and request.assoc["id"] > 0:
         raise MainPageError(request)
     ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx

@@ -458,24 +458,24 @@ def get_event_cache_all(ctx: dict) -> None:
         ctx: Context dictionary containing run information.
     """
     # Get cache key for the current run
-    k = get_event_cache_all_key(ctx["run"])
+    cache_key = get_event_cache_all_key(ctx["run"])
 
     # Try to retrieve cached result
-    res = cache.get(k)
-    if res is None:
+    cached_result = cache.get(cache_key)
+    if cached_result is None:
         # Initialize cache if not found
-        res = init_event_cache_all(ctx)
-        cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cached_result = init_event_cache_all(ctx)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Update context with cached data
-    ctx.update(res)
+    ctx.update(cached_result)
 
 
 def clear_run_cache_and_media(run: Run) -> None:
     """Clear cache and delete all media files for a run."""
     reset_event_cache_all(run)
-    media_path = run.get_media_filepath()
-    delete_all_in_path(media_path)
+    media_directory_path = run.get_media_filepath()
+    delete_all_in_path(media_directory_path)
 
 
 def reset_event_cache_all(run):
@@ -758,20 +758,20 @@ def reset_character_registration_cache(instance) -> None:
 def clear_event_cache_all_runs(event: Event) -> None:
     """Clear cache and media for all runs of event, children, siblings, and parent."""
     # Clear cache for all runs of the current event
-    for r in event.runs.all():
-        clear_run_cache_and_media(r)
+    for run in event.runs.all():
+        clear_run_cache_and_media(run)
 
     # Clear cache for runs of child events
-    for child in Event.objects.filter(parent=event).prefetch_related("runs"):
-        for r in child.runs.all():
-            clear_run_cache_and_media(r)
+    for child_event in Event.objects.filter(parent=event).prefetch_related("runs"):
+        for run in child_event.runs.all():
+            clear_run_cache_and_media(run)
 
     if event.parent:
         # Clear cache for runs of sibling events
-        for child in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
-            for r in child.runs.all():
-                clear_run_cache_and_media(r)
+        for sibling_event in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
+            for run in sibling_event.runs.all():
+                clear_run_cache_and_media(run)
 
         # Clear cache for runs of parent event
-        for r in event.parent.runs.all():
-            clear_run_cache_and_media(r)
+        for run in event.parent.runs.all():
+            clear_run_cache_and_media(run)

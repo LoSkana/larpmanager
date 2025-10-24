@@ -227,9 +227,9 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
             pass
 
     # Define replacement function for regex substitution
-    def replace(match):
-        key = match.group(1)
-        return values.get(key, match.group(0))
+    def replace(pattern_match):
+        placeholder_key = pattern_match.group(1)
+        return values.get(placeholder_key, pattern_match.group(0))
 
     # Apply template substitution and set invoice causal field
     invoice.causal = re.sub(pattern, replace, custom_reason)

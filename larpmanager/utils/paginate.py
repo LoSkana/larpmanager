@@ -35,7 +35,7 @@ from larpmanager.models.member import Membership
 
 
 def paginate(
-    request: HttpRequest, ctx: dict, typ: type[Model], template: str, view: str, exe: bool = True
+    request: HttpRequest, ctx: dict, pagination_type: type[Model], template_name: str, view_name: str, exe: bool = True
 ) -> HttpResponse | JsonResponse:
     """
     Handle pagination for DataTables AJAX requests and initial page rendering.
@@ -47,19 +47,19 @@ def paginate(
     Args:
         request: The HTTP request object containing method and POST data
         ctx: Template context dictionary containing association/run data
-        typ: The Django model class to paginate
-        template: Template path for initial page rendering
-        view: View name used for generating edit URLs
+        pagination_type: The Django model class to paginate
+        template_name: Template path for initial page rendering
+        view_name: View name used for generating edit URLs
         exe: Whether this is an organization-wide view (True) or event-specific (False)
 
     Returns:
         HttpResponse: Rendered template for GET requests
         JsonResponse: DataTables-formatted JSON for POST requests
     """
-    cls = typ.objects
+    cls = pagination_type.objects
     # Extract model name for table identification
     # noinspection PyProtectedMember
-    class_name = typ._meta.model_name
+    class_name = pagination_type._meta.model_name
 
     # Handle initial page load (GET request)
     if request.method != "POST":
@@ -69,22 +69,22 @@ def paginate(
         else:
             ctx["table_name"] = f"{class_name}_{ctx['run'].get_slug()}"
 
-        return render(request, template, ctx)
+        return render(request, template_name, ctx)
 
     # Handle DataTables AJAX request (POST)
     # Extract draw parameter for DataTables synchronization
     draw = int(request.POST.get("draw", 0))
 
     # Get filtered elements and count based on search/filter criteria
-    elements, records_filtered = _get_elements_query(cls, ctx, request, typ, exe)
+    elements, records_filtered = _get_elements_query(cls, ctx, request, pagination_type, exe)
 
     # Get total count of all records (unfiltered)
-    records_total = typ.objects.count()
+    records_total = pagination_type.objects.count()
 
     # Prepare localized edit button text
     edit = _("Edit")
     # Transform elements into DataTables-compatible format
-    data = _prepare_data_json(ctx, elements, view, edit, exe)
+    data = _prepare_data_json(ctx, elements, view_name, edit, exe)
 
     # Return DataTables-expected JSON response
     return JsonResponse(
@@ -453,9 +453,9 @@ def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Mod
     return elements
 
 
-def exe_paginate(request, ctx, typ, template, view):
-    return paginate(request, ctx, typ, template, view, True)
+def exe_paginate(request, ctx, pagination_type, template_name, view_name):
+    return paginate(request, ctx, pagination_type, template_name, view_name, True)
 
 
-def orga_paginate(request, ctx, typ, template, view):
-    return paginate(request, ctx, typ, template, view, False)
+def orga_paginate(request, ctx, pagination_type, template_name, view_name):
+    return paginate(request, ctx, pagination_type, template_name, view_name, False)

@@ -368,7 +368,9 @@ def get_character_sheet_fields(ctx: dict) -> None:
     ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["character"].id, only_visible=False))
 
 
-def get_char_check(request, ctx: dict, num: int, restrict: bool = False, bypass: bool = False) -> None:
+def get_char_check(
+    request, ctx: dict, character_id: int, restrict_non_owners: bool = False, bypass_access_checks: bool = False
+) -> None:
     """Get character with access control checks.
 
     Retrieves a character from the context and performs various access control
@@ -377,9 +379,9 @@ def get_char_check(request, ctx: dict, num: int, restrict: bool = False, bypass:
     Args:
         request: Django HTTP request object containing user and session data
         ctx: Context dictionary containing cached character and event data
-        num: Character number/ID to retrieve from the character cache
-        restrict: Whether to apply strict visibility restrictions for non-owners
-        bypass: Whether to bypass all access checks (admin override)
+        character_id: Character number/ID to retrieve from the character cache
+        restrict_non_owners: Whether to apply strict visibility restrictions for non-owners
+        bypass_access_checks: Whether to bypass all access checks (admin override)
 
     Returns:
         None: Modifies ctx in-place, adding 'char' and potentially 'check' keys
@@ -392,16 +394,16 @@ def get_char_check(request, ctx: dict, num: int, restrict: bool = False, bypass:
     get_event_cache_all(ctx)
 
     # Check if requested character exists in the cached character data
-    if num not in ctx["chars"]:
+    if character_id not in ctx["chars"]:
         raise NotFoundError()
 
     # Set the current character in context for further processing
-    ctx["char"] = ctx["chars"][num]
+    ctx["char"] = ctx["chars"][character_id]
 
     # Allow access if bypassing checks or user has character access permissions
-    if bypass or (request.user.is_authenticated and has_access_character(request, ctx)):
+    if bypass_access_checks or (request.user.is_authenticated and has_access_character(request, ctx)):
         # Load full character data and mark as having elevated access
-        get_char(ctx, num, True)
+        get_char(ctx, character_id, True)
         ctx["check"] = 1
         return
 
@@ -410,7 +412,7 @@ def get_char_check(request, ctx: dict, num: int, restrict: bool = False, bypass:
         raise NotFoundError()
 
     # Apply restriction check - deny access if restrict flag is set
-    if restrict:
+    if restrict_non_owners:
         raise Http404("Not your character")
 
 

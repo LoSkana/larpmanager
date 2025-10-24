@@ -291,24 +291,24 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
     return is_organizer, pms, names
 
 
-def has_event_permission(request: HttpRequest, ctx: dict, slug: str, perm=None) -> bool:
+def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permission_name=None) -> bool:
     """Check if user has permission for a specific event.
 
     Args:
         request: Django HTTP request object containing user information
         ctx: Context dictionary containing association role information
-        slug: Event slug identifier
-        perm: Permission name(s) to check. Can be string, list, or None
+        event_slug: Event slug identifier
+        permission_name: Permission name(s) to check. Can be string, list, or None
 
     Returns:
         bool: True if user has the required event permission, False otherwise
 
     Note:
-        If perm is None, returns True if user has any event role.
-        If perm is a list, returns True if user has any of the permissions.
+        If permission_name is None, returns True if user has any event role.
+        If permission_name is a list, returns True if user has any of the permissions.
     """
     # Early return if request is invalid or user lacks member attribute
-    if not request or not hasattr(request.user, "member") or check_managed(ctx, perm, assoc=False):
+    if not request or not hasattr(request.user, "member") or check_managed(ctx, permission_name, assoc=False):
         return False
 
     # Check if user has admin role in association (role 1)
@@ -316,22 +316,22 @@ def has_event_permission(request: HttpRequest, ctx: dict, slug: str, perm=None) 
         return True
 
     # Get event-specific roles and permissions for the user
-    (organizer, permissions, names) = get_event_roles(request, slug)
+    (is_organizer, user_permissions, role_names) = get_event_roles(request, event_slug)
 
     # Organizer has all permissions
-    if organizer:
+    if is_organizer:
         return True
 
     # If no specific permission requested, check if user has any event role
-    if not perm:
-        return len(names) > 0
+    if not permission_name:
+        return len(role_names) > 0
 
     # Handle multiple permissions (list)
-    if isinstance(perm, list):
-        return any(p in permissions for p in perm)
+    if isinstance(permission_name, list):
+        return any(permission in user_permissions for permission in permission_name)
 
     # Check single permission
-    return perm in permissions
+    return permission_name in user_permissions
 
 
 def check_managed(ctx: dict, perm: str, assoc: bool = True) -> bool:

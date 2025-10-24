@@ -98,7 +98,9 @@ def get_event(request, slug, number=None):
         raise Http404("Event does not exist") from err
 
 
-def get_event_run(request, s: str, signup: bool = False, slug: str | None = None, status: bool = False) -> dict:
+def get_event_run(
+    request, event_slug: str, signup: bool = False, feature_slug: str | None = None, include_status: bool = False
+) -> dict:
     """Get comprehensive event run context with permissions and features.
 
     Retrieves event context and enhances it with user permissions, feature access,
@@ -106,10 +108,10 @@ def get_event_run(request, s: str, signup: bool = False, slug: str | None = None
 
     Args:
         request: Django HTTP request object containing user and session data
-        s: Event slug identifier for the target event
+        event_slug: Event slug identifier for the target event
         signup: Whether to check and validate signup eligibility for the user
-        slug: Optional feature slug to verify user access permissions
-        status: Whether to include detailed registration status information
+        feature_slug: Optional feature slug to verify user access permissions
+        include_status: Whether to include detailed registration status information
 
     Returns:
         Complete event context dictionary containing:
@@ -125,23 +127,23 @@ def get_event_run(request, s: str, signup: bool = False, slug: str | None = None
         PermissionDenied: If user cannot access requested features
     """
     # Get base event context with run information
-    ctx = get_event(request, s)
+    ctx = get_event(request, event_slug)
 
     # Validate user signup eligibility if requested
     if signup:
         check_signup(request, ctx)
 
     # Verify feature access permissions for specific functionality
-    if slug:
-        check_event_feature(request, ctx, slug)
+    if feature_slug:
+        check_event_feature(request, ctx, feature_slug)
 
     # Add registration status details to context
-    if status:
+    if include_status:
         registration_status(ctx["run"], request.user)
 
     # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, ctx, s):
-        get_index_event_permissions(ctx, request, s)
+    if has_event_permission(request, ctx, event_slug):
+        get_index_event_permissions(ctx, request, event_slug)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Set association slug from request or event object
@@ -151,7 +153,7 @@ def get_event_run(request, s: str, signup: bool = False, slug: str | None = None
         ctx["assoc_slug"] = ctx["event"].assoc.slug
 
     # Configure staff permissions for character management access
-    if has_event_permission(request, ctx, s, "orga_characters"):
+    if has_event_permission(request, ctx, event_slug, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
 
@@ -336,7 +338,7 @@ def has_access_character(request, ctx):
     return False
 
 
-def check_event_permission(request, s: str, perm: str | list[str] | None = None) -> dict:
+def check_event_permission(request, event_slug: str, required_permission: str | list[str] | None = None) -> dict:
     """Check event permissions and prepare management context.
 
     Validates user permissions for event management operations and prepares
@@ -344,8 +346,8 @@ def check_event_permission(request, s: str, perm: str | list[str] | None = None)
 
     Args:
         request: Django HTTP request object containing user and session data
-        s: Event slug identifier for the target event
-        perm: Required permission(s). Can be a single permission string or list of permissions.
+        event_slug: Event slug identifier for the target event
+        required_permission: Required permission(s). Can be a single permission string or list of permissions.
             If None, only basic event access is checked.
 
     Returns:
@@ -361,35 +363,35 @@ def check_event_permission(request, s: str, perm: str | list[str] | None = None)
         FeatureError: If required feature is not enabled for the event
     """
     # Get basic event context and run information
-    ctx = get_event_run(request, s)
+    ctx = get_event_run(request, event_slug)
 
     # Verify user has the required permissions for this event
-    if not has_event_permission(request, ctx, s, perm):
+    if not has_event_permission(request, ctx, event_slug, required_permission):
         raise PermissionError()
 
     # Process permission-specific features and configuration
-    if perm:
+    if required_permission:
         # Handle permission lists by taking the first permission
-        if isinstance(perm, list):
-            perm = perm[0]
+        if isinstance(required_permission, list):
+            required_permission = required_permission[0]
 
         # Get feature configuration for this permission
-        (feature, tutorial, config) = get_event_permission_feature(perm)
+        (feature_name, tutorial_key, config_section) = get_event_permission_feature(required_permission)
 
         # Add tutorial information if not already present
         if "tutorial" not in ctx:
-            ctx["tutorial"] = tutorial
+            ctx["tutorial"] = tutorial_key
 
         # Add configuration link if user has config permissions
-        if config and has_event_permission(request, ctx, s, "orga_config"):
-            ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config])
+        if config_section and has_event_permission(request, ctx, event_slug, "orga_config"):
+            ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config_section])
 
         # Verify required feature is enabled for this event
-        if feature != "def" and feature not in ctx["features"]:
-            raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
+        if feature_name != "def" and feature_name not in ctx["features"]:
+            raise FeatureError(path=request.path, feature=feature_name, run=ctx["run"].id)
 
     # Load additional event permissions and management context
-    get_index_event_permissions(ctx, request, s)
+    get_index_event_permissions(ctx, request, event_slug)
 
     # Set management page flags
     ctx["orga_page"] = 1

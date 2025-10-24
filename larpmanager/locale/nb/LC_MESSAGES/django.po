@@ -4327,9 +4327,6 @@ msgstr "De andre feltene er valgfrie"
 msgid "The total registration fee is"
 msgstr "Den totale deltakeravgiften er"
 
-msgid "Toggle the sidebar visibility"
-msgstr "Veksle synligheten til sidefeltet"
-
 msgid "Transportation - gas, highway"
 msgstr "Transport - bensin, motorvei"
 
@@ -6141,6 +6138,9 @@ msgstr "Registreringsavgift %(number)d %(user)s per %(event)s"
 
 msgid "Select which elements to copy, from which other event"
 msgstr "Velg hvilke elementer som skal kopieres fra hvilken annen hendelse"
+
+msgid "Show or hide the sidebar containing all the functions"
+msgstr "Vis eller skjul sidefeltet som inneholder alle funksjonene"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Tegnet har manglende verdier i obligatoriske felt"

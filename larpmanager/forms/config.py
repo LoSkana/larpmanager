@@ -86,41 +86,41 @@ class ConfigForm(MyForm):
     def set_configs(self):
         pass
 
-    def set_section(self, slug, name):
+    def set_section(self, section_slug, section_name):
         """Set the current section for grouping configuration fields.
 
         Args:
-            slug: Section slug identifier
-            name: Display name for the section
+            section_slug: Section slug identifier
+            section_name: Display name for the section
 
         Side effects:
             Sets internal section state and jump_section if matches params
         """
-        self._section = name
-        if self.params.get("jump_section", "") == slug:
-            self.jump_section = name
+        self._section = section_name
+        if self.params.get("jump_section", "") == section_slug:
+            self.jump_section = section_name
 
-    def add_configs(self, key, config_type, label, help_text, extra=None):
+    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None):
         """Add a configuration field to be rendered in the form.
 
         Args:
-            key: Configuration key name
+            configuration_key: Configuration key name
             config_type: Type of configuration field (ConfigType enum)
-            label: Display label for the field
-            help_text: Help text to show with the field
-            extra: Additional data for specific field types
+            field_label: Display label for the field
+            field_help_text: Help text to show with the field
+            extra_data: Additional data for specific field types
 
         Side effects:
             Appends field definition to config_fields list
         """
         self.config_fields.append(
             {
-                "key": key,
+                "key": configuration_key,
                 "type": config_type,
                 "section": self._section,
-                "label": label,
-                "help_text": help_text,
-                "extra": extra,
+                "label": field_label,
+                "help_text": field_help_text,
+                "extra": extra_data,
             }
         )
 

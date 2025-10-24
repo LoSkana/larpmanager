@@ -4327,9 +4327,6 @@ msgstr "Ostatní pole jsou nepovinná"
 msgid "The total registration fee is"
 msgstr "Celková výše vstupního poplatku je"
 
-msgid "Toggle the sidebar visibility"
-msgstr "Přepínání viditelnosti postranního panelu"
-
 msgid "Transportation - gas, highway"
 msgstr "Doprava - benzín, dálnice"
 
@@ -6138,6 +6135,9 @@ msgstr "Registrační poplatek %(number)d %(user)s na %(event)s"
 
 msgid "Select which elements to copy, from which other event"
 msgstr "Vyberte, které prvky se mají zkopírovat z které jiné události"
+
+msgid "Show or hide the sidebar containing all the functions"
+msgstr "Zobrazení nebo skrytí postranního panelu obsahujícího všechny funkce"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Znak má chybějící hodnoty v povinných polích"

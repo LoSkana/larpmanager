@@ -47,21 +47,21 @@ def cache_assoc_features(assoc_id):
     return f"assoc_features_{assoc_id}"
 
 
-def get_assoc_features(assoc_id):
+def get_assoc_features(association_id):
     """Get cached association features, updating cache if needed.
 
     Args:
-        assoc_id (int): Association ID
+        association_id (int): Association ID
 
     Returns:
         dict: Dictionary of enabled features {feature_slug: 1}
     """
-    key = cache_assoc_features(assoc_id)
-    res = cache.get(key)
-    if res is None:
-        res = update_assoc_features(assoc_id)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+    cache_key = cache_assoc_features(association_id)
+    cached_features = cache.get(cache_key)
+    if cached_features is None:
+        cached_features = update_assoc_features(association_id)
+        cache.set(cache_key, cached_features, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return cached_features
 
 
 def update_assoc_features(assoc_id: int) -> dict[str, int]:
@@ -124,21 +124,21 @@ def cache_event_features_key(ev_id):
     return f"event_features_{ev_id}"
 
 
-def get_event_features(ev_id):
+def get_event_features(event_id):
     """Get cached event features, updating cache if needed.
 
     Args:
-        ev_id (int): Event ID
+        event_id (int): Event ID
 
     Returns:
         dict: Dictionary of enabled event features {feature_slug: 1}
     """
-    key = cache_event_features_key(ev_id)
-    res = cache.get(key)
-    if res is None:
-        res = update_event_features(ev_id)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+    cache_key = cache_event_features_key(event_id)
+    cached_features = cache.get(cache_key)
+    if cached_features is None:
+        cached_features = update_event_features(event_id)
+        cache.set(cache_key, cached_features, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return cached_features
 
 
 def update_event_features(ev_id):

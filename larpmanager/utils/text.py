@@ -121,7 +121,7 @@ def get_event_text_cache_def(event_id: int, typ: str) -> str:
     return res
 
 
-def get_event_text(event_id: int, typ: str, lang: str = None) -> str:
+def get_event_text(event_id: int, text_type: str, language_code: str = None) -> str:
     """Get event text for the specified event, type, and language.
 
     Retrieves event text from cache if available, otherwise falls back to
@@ -129,23 +129,23 @@ def get_event_text(event_id: int, typ: str, lang: str = None) -> str:
 
     Args:
         event_id: The ID of the event to get text for
-        typ: The type of text to retrieve
-        lang: Language code for the text. If None, uses current language
+        text_type: The type of text to retrieve
+        language_code: Language code for the text. If None, uses current language
 
     Returns:
         The event text string for the specified parameters
     """
     # Use current language if no language specified
-    if not lang:
-        lang = get_language()
+    if not language_code:
+        language_code = get_language()
 
     # Check if there is an event_text with the requested characteristics
-    res = get_event_text_cache(event_id, typ, lang)
-    if res:
-        return res
+    cached_text = get_event_text_cache(event_id, text_type, language_code)
+    if cached_text:
+        return cached_text
 
     # Fall back to default language cache if no text found
-    return get_event_text_cache_def(event_id, typ)
+    return get_event_text_cache_def(event_id, text_type)
 
 
 # # ASSOC TEXT
@@ -292,28 +292,28 @@ def get_assoc_text_cache_def(assoc_id: int, typ: str) -> str:
     return res
 
 
-def get_assoc_text(assoc_id: int, typ: str, lang: str = None) -> str:
+def get_assoc_text(association_id: int, text_type: str, language_code: str = None) -> str:
     """Get association text for the specified type and language.
 
     Retrieves localized text for an association. Falls back to default
     language if the requested language is not available.
 
     Args:
-        assoc_id: The association ID to get text for.
-        typ: The type of text to retrieve.
-        lang: The language code. If None, uses current language.
+        association_id: The association ID to get text for.
+        text_type: The type of text to retrieve.
+        language_code: The language code. If None, uses current language.
 
     Returns:
         The localized text string, or default language text if not found.
     """
     # Use current language if none specified
-    if not lang:
-        lang = get_language()
+    if not language_code:
+        language_code = get_language()
 
     # Check if there is an assoc_text with the requested characteristics
-    res = get_assoc_text_cache(assoc_id, typ, lang)
-    if res:
-        return res
+    cached_text = get_assoc_text_cache(association_id, text_type, language_code)
+    if cached_text:
+        return cached_text
 
     # Fall back to default language text if requested language not found
-    return get_assoc_text_cache_def(assoc_id, typ)
+    return get_assoc_text_cache_def(association_id, text_type)

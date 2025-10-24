@@ -258,8 +258,8 @@ class Association(BaseModel):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_config(self, name, def_v=None, bypass_cache=False):
-        return get_element_config(self, name, def_v, bypass_cache)
+    def get_config(self, name, default_value=None, bypass_cache=False):
+        return get_element_config(self, name, default_value, bypass_cache)
 
     def promoter_dict(self) -> dict[str, str]:
         """Return a dictionary with promoter information including slug, name, and optional thumbnail URL."""
@@ -358,19 +358,19 @@ class AssocText(BaseModel):
         ]
 
 
-def hdr(obj: Association | Any) -> str:
+def hdr(association_or_related_object: Association | Any) -> str:
     """Return a formatted header string with the association name in brackets."""
     # Check if object is an Association instance directly
-    if isinstance(obj, Association):
-        return f"[{obj.name}] "
+    if isinstance(association_or_related_object, Association):
+        return f"[{association_or_related_object.name}] "
     # Check if object has an associated Association via assoc attribute
-    if obj.assoc:
-        return f"[{obj.assoc.name}] "
+    if association_or_related_object.assoc:
+        return f"[{association_or_related_object.assoc.name}] "
     else:
         return "[LarpManager] "
 
 
-def get_url(s: str, obj: object = None) -> str:
+def get_url(path: str, obj: object = None) -> str:
     """Generate a URL for the given path and object.
 
     Constructs URLs based on the type of object provided. For Association objects,
@@ -379,7 +379,7 @@ def get_url(s: str, obj: object = None) -> str:
     larpmanager.com domain when no object is provided.
 
     Args:
-        s: The path/route to append to the base URL
+        path: The path/route to append to the base URL
         obj: Optional object to determine the base URL. Can be Association,
              an object with 'assoc' attribute, or a string slug
 
@@ -389,16 +389,16 @@ def get_url(s: str, obj: object = None) -> str:
     if obj:
         # Handle Association objects directly
         if isinstance(obj, Association):
-            url = f"https://{obj.slug}.{obj.skin.domain}/{s}"
+            url = f"https://{obj.slug}.{obj.skin.domain}/{path}"
         # Handle objects that belong to an association
         elif hasattr(obj, "assoc"):
-            url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{s}"
+            url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{path}"
         # Handle string slugs or other objects
         else:
-            url = f"https://{obj}.larpmanager.com/{s}"
+            url = f"https://{obj}.larpmanager.com/{path}"
     else:
         # Default to main larpmanager.com domain
-        url = "https://larpmanager.com/" + s
+        url = "https://larpmanager.com/" + path
 
     # Clean up double slashes while preserving protocol
     return url.replace("//", "/").replace(":/", "://")
