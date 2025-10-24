@@ -354,63 +354,65 @@ class ExeConfigForm(ConfigForm):
         self.set_section("calendar", _("Calendar"))
 
         # Configure visibility of past events link in calendar
-        label = _("Past events")
-        help_text = _("If checked: shows a link in the calendar to past events")
-        self.add_configs("calendar_past_events", ConfigType.BOOL, label, help_text)
+        past_events_label = _("Past events")
+        past_events_help_text = _("If checked: shows a link in the calendar to past events")
+        self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
 
         # Configure website link display for each event
-        label = _("Website")
-        help_text = _("If checked: shows the website for each event")
-        self.add_configs("calendar_website", ConfigType.BOOL, label, help_text)
+        website_label = _("Website")
+        website_help_text = _("If checked: shows the website for each event")
+        self.add_configs("calendar_website", ConfigType.BOOL, website_label, website_help_text)
 
         # Configure event location display toggle
-        label = _("Where")
-        help_text = _("If checked: shows the position for each event")
-        self.add_configs("calendar_where", ConfigType.BOOL, label, help_text)
+        location_label = _("Where")
+        location_help_text = _("If checked: shows the position for each event")
+        self.add_configs("calendar_where", ConfigType.BOOL, location_label, location_help_text)
 
         # Configure authors list visibility for events
-        label = _("Authors")
-        help_text = _("If checked: shows the list of authors for each event")
-        self.add_configs("calendar_authors", ConfigType.BOOL, label, help_text)
+        authors_label = _("Authors")
+        authors_help_text = _("If checked: shows the list of authors for each event")
+        self.add_configs("calendar_authors", ConfigType.BOOL, authors_label, authors_help_text)
 
         # Configure event genre display setting
-        label = pgettext("event", "Genre")
-        help_text = pgettext("event", "If checked: shows the genre for each event")
-        self.add_configs("calendar_genre", ConfigType.BOOL, label, help_text)
+        genre_label = pgettext("event", "Genre")
+        genre_help_text = pgettext("event", "If checked: shows the genre for each event")
+        self.add_configs("calendar_genre", ConfigType.BOOL, genre_label, genre_help_text)
 
         # Configure event tagline visibility toggle
-        label = _("Tagline")
-        help_text = _("If checked: shows the tagline for each event")
-        self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
+        tagline_label = _("Tagline")
+        tagline_help_text = _("If checked: shows the tagline for each event")
+        self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
         # EMAIL SECTION - Configure notification preferences
         self.set_section("email", _("Email notifications"))
 
         # Configure carbon copy setting (only if main_mail exists)
         if self.instance.main_mail:
-            label = _("Carbon copy")
-            help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
-            self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
+            carbon_copy_label = _("Carbon copy")
+            carbon_copy_help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
+            self.add_configs("mail_cc", ConfigType.BOOL, carbon_copy_label, carbon_copy_help_text)
 
         # Configure new signup notification toggle
-        label = _("New signup")
-        help_text = _("If checked: Send an email notification to the organisers for new signups")
-        self.add_configs("mail_signup_new", ConfigType.BOOL, label, help_text)
+        new_signup_label = _("New signup")
+        new_signup_help_text = _("If checked: Send an email notification to the organisers for new signups")
+        self.add_configs("mail_signup_new", ConfigType.BOOL, new_signup_label, new_signup_help_text)
 
         # Configure signup update notification setting
-        label = _("Signup update")
-        help_text = _("If checked: Send an email notification to the organisers for updated signups")
-        self.add_configs("mail_signup_update", ConfigType.BOOL, label, help_text)
+        signup_update_label = _("Signup update")
+        signup_update_help_text = _("If checked: Send an email notification to the organisers for updated signups")
+        self.add_configs("mail_signup_update", ConfigType.BOOL, signup_update_label, signup_update_help_text)
 
         # Configure signup cancellation notification option
-        label = _("Signup cancellation")
-        help_text = _("If checked: Send a notification email to the organisers for cancellation of registration")
-        self.add_configs("mail_signup_del", ConfigType.BOOL, label, help_text)
+        signup_cancellation_label = _("Signup cancellation")
+        signup_cancellation_help_text = _(
+            "If checked: Send a notification email to the organisers for cancellation of registration"
+        )
+        self.add_configs("mail_signup_del", ConfigType.BOOL, signup_cancellation_label, signup_cancellation_help_text)
 
         # Configure payment notification toggle
-        label = _("Payments received")
-        help_text = _("If checked: Send an email to the organisers for each payment received")
-        self.add_configs("mail_payment", ConfigType.BOOL, label, help_text)
+        payment_received_label = _("Payments received")
+        payment_received_help_text = _("If checked: Send an email to the organisers for each payment received")
+        self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
 
         # Delegate to specialized configuration methods for other settings
         self.set_config_members()
@@ -611,80 +613,119 @@ class ExeConfigForm(ConfigForm):
             self.set_section("payment", _("Payments"))
 
             # Payment fee configuration - who pays gateway fees
-            label = _("Charge transaction fees to participant")
-            help_text = _(
+            label_charge_fees_to_participant = _("Charge transaction fees to participant")
+            help_text_charge_fees_to_participant = _(
                 "If enabled, the system will automatically add payment gateway fees to the ticket price, so the participant covers them instead of the organization"
             )
-            self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
+            self.add_configs(
+                "payment_fees_user",
+                ConfigType.BOOL,
+                label_charge_fees_to_participant,
+                help_text_charge_fees_to_participant,
+            )
 
             # Payment amount modification controls
-            label = _("Disable amount change")
-            help_text = _(
+            label_disable_amount_change = _("Disable amount change")
+            help_text_disable_amount_change = _(
                 "If checked: Hides the possibility for the participant to change the payment amount for his entries"
             )
-            self.add_configs("payment_hide_amount", ConfigType.BOOL, label, help_text)
+            self.add_configs(
+                "payment_hide_amount", ConfigType.BOOL, label_disable_amount_change, help_text_disable_amount_change
+            )
 
             # Unique payment identification system
-            label = _("Unique code")
-            help_text = _("If checked: Adds a unique code to each payment, which helps in being able to recognize it")
-            self.add_configs("payment_special_code", ConfigType.BOOL, label, help_text)
+            label_unique_payment_code = _("Unique code")
+            help_text_unique_payment_code = _(
+                "If checked: Adds a unique code to each payment, which helps in being able to recognize it"
+            )
+            self.add_configs(
+                "payment_special_code", ConfigType.BOOL, label_unique_payment_code, help_text_unique_payment_code
+            )
 
             # Manual payment receipt requirement
-            label = _("Require receipt for manual payments")
-            help_text = _("If checked: Participants must provide a receipt/invoice for manual payments")
-            self.add_configs("payment_require_receipt", ConfigType.BOOL, label, help_text)
+            label_require_payment_receipt = _("Require receipt for manual payments")
+            help_text_require_payment_receipt = _(
+                "If checked: Participants must provide a receipt/invoice for manual payments"
+            )
+            self.add_configs(
+                "payment_require_receipt",
+                ConfigType.BOOL,
+                label_require_payment_receipt,
+                help_text_require_payment_receipt,
+            )
 
         # Configure VAT calculation settings for different cost components
         if "vat" in self.params["features"]:
             self.set_section("vat", _("VAT"))
 
             # VAT percentage for base ticket cost
-            label = _("Ticket")
-            help_text = _("Percentage of VAT to be calculated on the ticket cost alone")
-            self.add_configs("vat_ticket", ConfigType.INT, label, help_text)
+            label_vat_on_ticket = _("Ticket")
+            help_text_vat_on_ticket = _("Percentage of VAT to be calculated on the ticket cost alone")
+            self.add_configs("vat_ticket", ConfigType.INT, label_vat_on_ticket, help_text_vat_on_ticket)
 
             # VAT percentage for additional registration options
-            label = _("Options")
-            help_text = _("Percentage of VAT to be calculated on the sum of the costs of the registration options")
-            self.add_configs("vat_options", ConfigType.INT, label, help_text)
+            label_vat_on_options = _("Options")
+            help_text_vat_on_options = _(
+                "Percentage of VAT to be calculated on the sum of the costs of the registration options"
+            )
+            self.add_configs("vat_options", ConfigType.INT, label_vat_on_options, help_text_vat_on_options)
 
         # Configure token/credit system naming and display
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))
 
             # Customizable token display name
-            label = _("Token name")
-            help_text = _("Name to be displayed for tokens")
-            self.add_configs("token_credit_token_name", ConfigType.CHAR, label, help_text)
+            label_token_display_name = _("Token name")
+            help_text_token_display_name = _("Name to be displayed for tokens")
+            self.add_configs(
+                "token_credit_token_name", ConfigType.CHAR, label_token_display_name, help_text_token_display_name
+            )
 
             # Customizable credit display name
-            label = _("Name credits")
-            help_text = _("Name to be displayed for credits")
-            self.add_configs("token_credit_credit_name", ConfigType.CHAR, label, help_text)
+            label_credit_display_name = _("Name credits")
+            help_text_credit_display_name = _("Name to be displayed for credits")
+            self.add_configs(
+                "token_credit_credit_name", ConfigType.CHAR, label_credit_display_name, help_text_credit_display_name
+            )
 
         # Configure treasury management and appointee selection
         if "treasurer" in self.params["features"]:
             self.set_section("treasurer", _("Treasury"))
-            label = _("Appointees")
-            help_text = _("Treasury appointees")
-            self.add_configs("treasurer_appointees", ConfigType.MEMBERS, label, help_text, self.instance.id)
+            label_treasury_appointees = _("Appointees")
+            help_text_treasury_appointees = _("Treasury appointees")
+            self.add_configs(
+                "treasurer_appointees",
+                ConfigType.MEMBERS,
+                label_treasury_appointees,
+                help_text_treasury_appointees,
+                self.instance.id,
+            )
 
         # Configure organization infrastructure fee calculation
         if "organization_tax" in self.params["features"]:
             self.set_section("organization_tax", _("Organisation fee"))
-            label = _("Percentage")
-            help_text = _(
+            label_organization_fee_percentage = _("Percentage")
+            help_text_organization_fee_percentage = _(
                 "Percentage of takings calculated as a fee for association infrastructure (in "
                 "whole numbers from 0 to 100)"
             )
-            self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
+            self.add_configs(
+                "organization_tax_perc",
+                ConfigType.INT,
+                label_organization_fee_percentage,
+                help_text_organization_fee_percentage,
+            )
 
         # Configure expense approval workflow settings
         if "expense" in self.params["features"]:
             self.set_section("expense", _("Expenses"))
-            label = _("Disable event approval")
-            help_text = _("If checked, approval of expenses can be performed only from the organization panel")
-            self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
+            label_disable_event_approval = _("Disable event approval")
+            help_text_disable_event_approval = _(
+                "If checked, approval of expenses can be performed only from the organization panel"
+            )
+            self.add_configs(
+                "expense_disable_orga", ConfigType.BOOL, label_disable_event_approval, help_text_disable_event_approval
+            )
 
     def set_config_einvoice(self) -> None:
         """Configure electronic invoice settings for associations.
@@ -895,6 +936,8 @@ class ExePreferencesForm(ConfigForm):
         self.set_section("interface", _("Interface"))
 
         # Add sidebar collapse toggle option
-        label = _("Collapse sidebar")
-        help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
-        self.add_configs("interface_collapse_sidebar", ConfigType.BOOL, label, help_text)
+        sidebar_collapse_label = _("Collapse sidebar")
+        sidebar_collapse_help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
+        self.add_configs(
+            "interface_collapse_sidebar", ConfigType.BOOL, sidebar_collapse_label, sidebar_collapse_help_text
+        )

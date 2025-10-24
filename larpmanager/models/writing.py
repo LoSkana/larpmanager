@@ -338,10 +338,12 @@ class Character(Writing):
         return directory_path
 
     def get_sheet_filepath(self, run):
-        return os.path.join(self.get_character_filepath(run), f"#{self.number}.pdf")
+        character_directory = self.get_character_filepath(run)
+        sheet_filename = f"#{self.number}.pdf"
+        return os.path.join(character_directory, sheet_filename)
 
-    def get_sheet_friendly_filepath(self, run=None):
-        return os.path.join(self.get_character_filepath(run), f"#{self.number}-light.pdf")
+    def get_sheet_friendly_filepath(self, character_run=None):
+        return os.path.join(self.get_character_filepath(character_run), f"#{self.number}-light.pdf")
 
     def get_relationships_filepath(self, run=None):
         return os.path.join(self.get_character_filepath(run), f"#{self.number}-rels.pdf")
@@ -700,34 +702,34 @@ class SpeedLarp(Writing):
         ]
 
 
-def replace_char_names(v: str, chars: dict[str, str]) -> str:
+def replace_char_names(text: str, chars: dict[str, str]) -> str:
     """Replace character names in text with formatted references.
 
     Args:
-        v: The input text to process
+        text: The input text to process
         chars: Dictionary mapping character names to their replacements
 
     Returns:
         The processed text with character names replaced, or empty string if input is falsy
     """
     # Return empty string if input is falsy
-    if not v:
+    if not text:
         return ""
 
     # Iterate through each character name in the dictionary
-    for name, value in chars.items():
-        name_number = 2
+    for character_name, character_id in chars.items():
+        minimum_name_length = 2
 
         # Skip names that are too short (less than 2 characters)
-        if len(name) < name_number:
+        if len(character_name) < minimum_name_length:
             continue
 
         # Replace character name with formatted reference if found in text
-        if name in v:
-            c = f"@{value}"
-            v = v.replace(name, c)
+        if character_name in text:
+            character_reference = f"@{character_id}"
+            text = text.replace(character_name, character_reference)
 
-    return v
+    return text
 
 
 def replace_chars_element(element: Any, character_names: dict[str, str]) -> None:

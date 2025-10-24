@@ -345,10 +345,10 @@ def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> H
             # Reduce available quantity for items assigned to other areas
             item.available -= el.quantity or 0
 
-    def _assigned_updated(it: Any) -> Any:
+    def _assigned_updated(assignment_item: Any) -> Any:
         """Helper function to extract assignment update timestamp for sorting."""
-        if getattr(it, "assigned", None):
-            return it.assigned.get("updated") or getattr(it, "updated", None) or datetime.min
+        if getattr(assignment_item, "assigned", None):
+            return assignment_item.assigned.get("updated") or getattr(assignment_item, "updated", None) or datetime.min
         return datetime.min
 
     # Sort items: assigned items first, then by recent updates, name, and ID

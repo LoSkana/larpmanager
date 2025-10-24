@@ -293,14 +293,14 @@ def get_feature_module(ctx, num):
         raise Http404("FeatureModule does not exist") from err
 
 
-def get_plot(ctx, n):
+def get_plot(context, plot_id):
     try:
-        ctx["plot"] = (
+        context["plot"] = (
             Plot.objects.select_related("event", "progress", "assigned")
             .prefetch_related("characters", "plotcharacterrel_set__character")
-            .get(event=ctx["event"], pk=n)
+            .get(event=context["event"], pk=plot_id)
         )
-        ctx["name"] = ctx["plot"].name
+        context["name"] = context["plot"].name
     except ObjectDoesNotExist as err:
         raise Http404("Plot does not exist") from err
 
@@ -309,8 +309,8 @@ def get_quest_type(context, quest_number):
     get_element(context, quest_number, "quest_type", QuestType)
 
 
-def get_quest(ctx, n):
-    get_element(ctx, n, "quest", Quest)
+def get_quest(context, quest_number):
+    get_element(context, quest_number, "quest", Quest)
 
 
 def get_trait(character_context, trait_name):
@@ -551,13 +551,13 @@ def rmdir(directory: Path) -> None:
     directory = Path(directory)
 
     # Iterate through all items in the directory
-    for item in directory.iterdir():
-        if item.is_dir():
+    for filesystem_entry in directory.iterdir():
+        if filesystem_entry.is_dir():
             # Recursively remove subdirectories
-            rmdir(item)
+            rmdir(filesystem_entry)
         else:
             # Remove files
-            item.unlink()
+            filesystem_entry.unlink()
 
     # Remove the empty directory
     directory.rmdir()
@@ -590,15 +590,15 @@ def pretty_request(request) -> str:
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
 
 
-def remove_choice(lst: list[tuple], trm: str) -> list[tuple]:
+def remove_choice(choices: list[tuple], term_to_remove: str) -> list[tuple]:
     """Remove choice from list where first element matches term."""
-    new = []
+    filtered_choices = []
     # Iterate through each element in the list
-    for el in lst:
-        if el[0] == trm:
+    for choice in choices:
+        if choice[0] == term_to_remove:
             continue
-        new.append(el)
-    return new
+        filtered_choices.append(choice)
+    return filtered_choices
 
 
 def check_field(model_class: type, field_name: str) -> bool:
@@ -632,18 +632,18 @@ def round_to_two_significant_digits(number: float | int) -> int:
         - Numbers with absolute value >= 1000 are rounded to nearest 100 (down)
     """
     # Convert input to Decimal for precise arithmetic
-    d = Decimal(number)
-    threshold = 1000
+    decimal_number = Decimal(number)
+    small_number_threshold = 1000
 
     # Round by 10 for smaller numbers
-    if abs(number) < threshold:
-        rounded = d.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
+    if abs(number) < small_number_threshold:
+        rounded_decimal = decimal_number.quantize(Decimal("1E1"), rounding=ROUND_DOWN)
     # Round by 100 for larger numbers
     else:
-        rounded = d.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
+        rounded_decimal = decimal_number.quantize(Decimal("1E2"), rounding=ROUND_DOWN)
 
     # Convert back to integer and return
-    return int(rounded)
+    return int(rounded_decimal)
 
 
 def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
@@ -936,23 +936,23 @@ def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
         Tuple of (public_key, private_key) or (None, None) if not found
     """
     # Get base configuration values
-    public = conf_settings.RECAPTCHA_PUBLIC_KEY
-    private = conf_settings.RECAPTCHA_PRIVATE_KEY
+    public_key = conf_settings.RECAPTCHA_PUBLIC_KEY
+    private_key = conf_settings.RECAPTCHA_PRIVATE_KEY
 
     # Handle multi-site configuration with comma-separated values
-    if "," in public:
+    if "," in public_key:
         # Extract skin_id from request association data
-        skin_id = request.assoc["skin_id"]
+        current_skin_id = request.assoc["skin_id"]
 
         # Parse public key pairs and find matching skin_id
-        pairs = dict(item.split(":") for item in public.split(",") if ":" in item)
-        public = pairs.get(str(skin_id))
+        public_key_pairs = dict(entry.split(":") for entry in public_key.split(",") if ":" in entry)
+        public_key = public_key_pairs.get(str(current_skin_id))
 
         # Parse private key pairs and find matching skin_id
-        pairs = dict(item.split(":") for item in private.split(",") if ":" in item)
-        private = pairs.get(str(skin_id))
+        private_key_pairs = dict(entry.split(":") for entry in private_key.split(",") if ":" in entry)
+        private_key = private_key_pairs.get(str(current_skin_id))
 
-    return public, private
+    return public_key, private_key
 
 
 def welcome_user(request, user):

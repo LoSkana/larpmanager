@@ -332,7 +332,7 @@ def _remove_unimportant_prefix(text: str) -> str:
 
 
 @register.simple_tag(takes_context=True)
-def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool) -> str:
+def show_char(context: dict, element: Union[dict, str, None], run: Run, tooltip: bool) -> str:
     """Template tag to process text and convert character references to links.
 
     This function processes text content and converts character references (prefixed with
@@ -341,7 +341,7 @@ def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool
 
     Args:
         context: Template context dictionary containing rendering state
-        el: Text element to process - can be a string, dict with 'text' key, or None
+        element: Text element to process - can be a string, dict with 'text' key, or None
         run: Run instance used for character lookup and event context
         tooltip: Whether to include character tooltips in generated links
 
@@ -350,12 +350,12 @@ def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool
         tags removed
     """
     # Extract text content from various input types
-    if isinstance(el, dict) and "text" in el:
-        tx = el["text"] + " "
-    elif el is not None:
-        tx = str(el) + " "
+    if isinstance(element, dict) and "text" in element:
+        text = element["text"] + " "
+    elif element is not None:
+        text = str(element) + " "
     else:
-        tx = ""
+        text = ""
 
     # Cache the maximum character number for this run's event to avoid repeated queries
     if "max_ch_number" not in context:
@@ -367,15 +367,15 @@ def show_char(context: dict, el: Union[dict, str, None], run: Run, tooltip: bool
 
     # Process character references in descending order to avoid partial matches
     # #XX creates relationships, @XX counts as character in faction/plot, ^XX is simple reference
-    for number in range(context["max_ch_number"], 0, -1):
-        tx = go_character(context, f"#{number}", number, tx, run, tooltip)
-        tx = go_character(context, f"@{number}", number, tx, run, tooltip)
-        tx = go_character(context, f"^{number}", number, tx, run, tooltip, simple=True)
+    for character_number in range(context["max_ch_number"], 0, -1):
+        text = go_character(context, f"#{character_number}", character_number, text, run, tooltip)
+        text = go_character(context, f"@{character_number}", character_number, text, run, tooltip)
+        text = go_character(context, f"^{character_number}", character_number, text, run, tooltip, simple=True)
 
     # Clean up unimportant tags by removing $unimportant prefix and empty tags
-    tx = _remove_unimportant_prefix(tx)
+    text = _remove_unimportant_prefix(text)
 
-    return mark_safe(tx)
+    return mark_safe(text)
 
 
 def go_trait(

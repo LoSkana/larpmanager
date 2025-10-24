@@ -398,18 +398,18 @@ def send_mail_batch(request: HttpRequest, assoc_id: int | None = None, run_id: i
         run_id: Optional run ID for context
     """
     # Extract email parameters from POST data
-    players = request.POST["players"]
-    subj = request.POST["subject"]
-    body = request.POST["body"]
-    raw = request.POST["raw"]
-    reply_to = request.POST["reply_to"]
+    player_ids = request.POST["players"]
+    email_subject = request.POST["subject"]
+    email_body = request.POST["body"]
+    raw_html_body = request.POST["raw"]
+    reply_to_address = request.POST["reply_to"]
 
     # Use raw body if provided, otherwise use formatted body
-    if raw:
-        body = raw
+    if raw_html_body:
+        email_body = raw_html_body
 
     # Execute the email sending operation
-    send_mail_exec(players, subj, body, assoc_id, run_id, reply_to)
+    send_mail_exec(player_ids, email_subject, email_body, assoc_id, run_id, reply_to_address)
 
 
 @login_required
@@ -581,11 +581,11 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)
 
 
-def member_field_correct(el: object, member_fields: list[str]) -> None:
+def member_field_correct(member: object, member_fields: list[str]) -> None:
     """Correct and format specific member fields for display purposes.
 
     Args:
-        el: Member object to modify fields on
+        member: Member object to modify fields on
         member_fields: List of field names to process and format
 
     Returns:
@@ -593,19 +593,19 @@ def member_field_correct(el: object, member_fields: list[str]) -> None:
     """
     # Format residence address using the member's get_residence method
     if "residence_address" in member_fields:
-        el.residence_address = el.get_residence()
+        member.residence_address = member.get_residence()
 
     # Convert first aid boolean to checkmark icon or empty string
     if "first_aid" in member_fields:
-        if el.first_aid == FirstAidChoices.YES:
-            el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
+        if member.first_aid == FirstAidChoices.YES:
+            member.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
         else:
-            el.first_aid = ""
+            member.first_aid = ""
 
     # Convert document type enum to human-readable display value
     if "document_type" in member_fields:
-        el.document_type = el.get_document_type_display()
+        member.document_type = member.get_document_type_display()
 
     # Convert gender enum to human-readable display value
     if "gender" in member_fields:
-        el.gender = el.get_gender_display()
+        member.gender = member.get_gender_display()

@@ -178,14 +178,16 @@ class QuickSetupForm(MyForm):
             Sets initial values based on current configuration
         """
         # for each value in self.setup, init a field
-        for key, element in self.setup.items():
-            (is_feature, label, help_text) = element
-            self.fields[key] = forms.BooleanField(required=False, label=label, help_text=help_text + "?")
-            if is_feature:
-                init = key in features
+        for config_key, setup_element in self.setup.items():
+            (is_feature_flag, field_label, field_help_text) = setup_element
+            self.fields[config_key] = forms.BooleanField(
+                required=False, label=field_label, help_text=field_help_text + "?"
+            )
+            if is_feature_flag:
+                initial_value = config_key in features
             else:
-                init = self.instance.get_config(key, False)
-            self.initial[key] = init
+                initial_value = self.instance.get_config(config_key, False)
+            self.initial[config_key] = initial_value
 
     def save(self, commit: bool = True) -> Association:
         """Save form data and update feature assignments and configurations.

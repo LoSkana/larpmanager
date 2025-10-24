@@ -241,21 +241,23 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
         accounting entry contains string-formatted monetary values
     """
     # Get accounting context data (features, tickets, pricing)
-    features, reg_tickets, cache_aip = _get_accounting_context(run)
+    features, registration_tickets, cached_accounting_info_per_registration = _get_accounting_context(run)
 
     # Filter for active registrations only (exclude cancelled ones)
-    regs = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-    res = {}
+    active_registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+    accounting_cache = {}
 
     # Process each registration to calculate accounting data
-    for reg in regs:
+    for registration in active_registrations:
         # Calculate accounting details for this registration
-        dt = _calculate_registration_accounting(reg, reg_tickets, cache_aip, features)
+        accounting_data = _calculate_registration_accounting(
+            registration, registration_tickets, cached_accounting_info_per_registration, features
+        )
 
         # Format monetary values as strings without trailing zeros
-        res[reg.id] = {key: f"{value:g}" for key, value in dt.items()}
+        accounting_cache[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
 
-    return res
+    return accounting_cache
 
 
 def _calculate_registration_accounting(reg, reg_tickets: dict, cache_aip: dict, features: dict) -> dict:

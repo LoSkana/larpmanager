@@ -480,8 +480,8 @@ class InvoiceSubmitForm(forms.Form):
     class Meta:
         abstract = True
 
-    def set_initial(self, k, v):
-        self.fields[k].initial = v
+    def set_initial(self, field_name, initial_value):
+        self.fields[field_name].initial = initial_value
 
 
 class WireInvoiceSubmitForm(InvoiceSubmitForm):
@@ -717,42 +717,42 @@ class ExePaymentSettingsForm(MyForm):
             dict[str, list[str]]: Mapping of payment method slugs to field name lists.
                 Each list contains field names in format: {slug}_{field_type}.
         """
-        res: dict[str, list[str]] = {}
+        payment_method_fields: dict[str, list[str]] = {}
 
         # noinspection PyUnresolvedReferences
-        for el in self.methods:
+        for payment_method in self.methods:
             # Skip methods without slug identifier
-            if not el.slug:
+            if not payment_method.slug:
                 continue
 
             # Initialize with standard payment method fields (description and fee)
-            ls: list[str] = [el.slug + "_descr", el.slug + "_fee"]
+            field_names: list[str] = [payment_method.slug + "_descr", payment_method.slug + "_fee"]
 
             # Parse custom fields from comma-separated string
-            fields = el.fields.replace(" ", "")
-            for field in fields.split(","):
+            normalized_fields = payment_method.fields.replace(" ", "")
+            for custom_field in normalized_fields.split(","):
                 # Add custom field if non-empty, prefixed with payment method slug
-                if field:
-                    ls.append(el.slug + "_" + field)
+                if custom_field:
+                    field_names.append(payment_method.slug + "_" + custom_field)
 
             # Store field list for this payment method
-            res[el.slug] = ls
+            payment_method_fields[payment_method.slug] = field_names
 
-        return res
+        return payment_method_fields
 
     @staticmethod
-    def mask_string(data_string: str) -> str:
+    def mask_string(input_string: str) -> str:
         """Masks the middle portion of a string, preserving first and last 3 characters."""
-        min_length = 6
+        minimum_maskable_length = 6
         # Only mask strings longer than minimum length
-        if len(data_string) > min_length:
-            first_three = data_string[:3]
-            last_three = data_string[-3:]
-            middle_length = len(data_string) - min_length
-            masked_middle = "*" * middle_length
-            return first_three + masked_middle + last_three
+        if len(input_string) > minimum_maskable_length:
+            first_three_chars = input_string[:3]
+            last_three_chars = input_string[-3:]
+            middle_section_length = len(input_string) - minimum_maskable_length
+            masked_middle_section = "*" * middle_section_length
+            return first_three_chars + masked_middle_section + last_three_chars
         else:
-            return data_string
+            return input_string
 
     def clean(self) -> dict[str, any]:
         """Validate and normalize fee field values.

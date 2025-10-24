@@ -37,15 +37,15 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
 @background_auto(queue="acc")
-def update_registration_status_bkg(reg_id):
+def update_registration_status_bkg(registration_id):
     """Background task to update registration status with delay.
 
     Args:
-        reg_id: ID of the registration to update
+        registration_id: ID of the registration to update
     """
     time.sleep(1)
-    instance = Registration.objects.get(pk=reg_id)
-    update_registration_status(instance)
+    registration = Registration.objects.get(pk=registration_id)
+    update_registration_status(registration)
 
 
 def update_registration_status(instance) -> None:

@@ -447,25 +447,25 @@ def writing_list_text_fields(ctx, text_fields, typ):
     retrieve_cache_text_field(ctx, text_fields, typ)
 
 
-def retrieve_cache_text_field(ctx, text_fields, typ):
+def retrieve_cache_text_field(context, text_fields, element_type):
     """
     Retrieve and attach cached text field data to writing elements.
 
     Args:
-        ctx: Context dictionary with list of elements
+        context: Context dictionary with list of elements
         text_fields: List of text field names to cache
-        typ: Writing element model class
+        element_type: Writing element model class
     """
-    gctf = get_cache_text_field(typ, ctx["event"])
-    for el in ctx["list"]:
-        if el.id not in gctf:
+    cached_text_fields = get_cache_text_field(element_type, context["event"])
+    for element in context["list"]:
+        if element.id not in cached_text_fields:
             continue
-        for f in text_fields:
-            if f not in gctf[el.id]:
+        for field_name in text_fields:
+            if field_name not in cached_text_fields[element.id]:
                 continue
-            (red, ln) = gctf[el.id][f]
-            setattr(el, f + "_red", red)
-            setattr(el, f + "_ln", ln)
+            (rendered_text, line_count) = cached_text_fields[element.id][field_name]
+            setattr(element, field_name + "_red", rendered_text)
+            setattr(element, field_name + "_ln", line_count)
 
 
 def _prepare_writing_list(ctx, request):

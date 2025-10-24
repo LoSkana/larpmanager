@@ -290,12 +290,12 @@ class RegistrationForm(BaseRegistrationForm):
             event: Event instance containing quota configurations.
             run: Run instance with status and end date information.
         """
-        quota_chs = []
+        quota_choices = []
 
         # Check if quota feature is enabled and run is not in waiting status
         if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
             # Define labels for different quota options (1-5 quotas)
-            qt_label = [
+            quota_labels = [
                 _("Single payment"),
                 _("Two quotas"),
                 _("Three quotas"),
@@ -304,65 +304,67 @@ class RegistrationForm(BaseRegistrationForm):
             ]
 
             # Calculate days difference between today and run end date
-            dff = get_time_diff_today(run.end)
+            days_until_run_end = get_time_diff_today(run.end)
 
             # Process each available quota option for the event
-            for el in RegistrationQuota.objects.filter(event=event).order_by("quotas"):
+            for registration_quota in RegistrationQuota.objects.filter(event=event).order_by("quotas"):
                 # Include quota if sufficient time remains or if it's the current instance quota
-                if dff > el.days_available or (self.instance and el.quotas == self.instance.quotas):
+                if days_until_run_end > registration_quota.days_available or (
+                    self.instance and registration_quota.quotas == self.instance.quotas
+                ):
                     # Ensure quotas value is within valid range (1-5)
-                    quota_index = int(el.quotas) - 1
-                    if 0 <= quota_index < len(qt_label):
-                        label = qt_label[quota_index]
+                    quota_index = int(registration_quota.quotas) - 1
+                    if 0 <= quota_index < len(quota_labels):
+                        label = quota_labels[quota_index]
 
                         # Add surcharge information to label if applicable
-                        if el.surcharge > 0:
-                            label += f" ({el.surcharge}€)"
-                        quota_chs.append((el.quotas, label))
+                        if registration_quota.surcharge > 0:
+                            label += f" ({registration_quota.surcharge}€)"
+                        quota_choices.append((registration_quota.quotas, label))
 
         # Set default quota option if no valid quotas were found
-        if not quota_chs:
-            quota_chs.append((1, _("Default")))
+        if not quota_choices:
+            quota_choices.append((1, _("Default")))
 
         # Create the quotas form field with available choices
-        self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs)
+        self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_choices)
 
         # Hide field if only one option available and set initial value
-        if len(quota_chs) == 1:
+        if len(quota_choices) == 1:
             self.fields["quotas"].widget = forms.HiddenInput()
-            self.initial["quotas"] = quota_chs[0][0]
+            self.initial["quotas"] = quota_choices[0][0]
 
         # Set initial value for existing instances with quota data
         if self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
 
-    def init_ticket(self, event: Event, reg_counts: dict, run: Run) -> str:
+    def init_ticket(self, event: Event, registration_counts: dict, run: Run) -> str:
         """Initialize ticket selection field with available options.
 
         Args:
             event: Event instance to get tickets for
-            reg_counts: Dictionary containing registration count data
+            registration_counts: Dictionary containing registration count data
             run: Run instance associated with the event
 
         Returns:
             HTML string containing formatted ticket descriptions for help text
         """
         # Get available tickets based on event, registration counts and run
-        tickets = self.get_available_tickets(event, reg_counts, run)
+        available_tickets = self.get_available_tickets(event, registration_counts, run)
 
         # Build ticket choices and collect descriptions for help text
         ticket_choices = []
-        ticket_help = ""
+        ticket_help_html = ""
 
         # Process each available ticket to create form choices and help text
-        for ticket in tickets:
+        for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
-            name = ticket.get_form_text(run, currency_symbol=self.params["currency_symbol"])
-            ticket_choices.append((ticket.id, name))
+            ticket_display_name = ticket.get_form_text(run, currency_symbol=self.params["currency_symbol"])
+            ticket_choices.append((ticket.id, ticket_display_name))
 
             # Add ticket description to help text if available
             if ticket.description:
-                ticket_help += f"<p><b>{ticket.name}</b>: {ticket.description}</p>"
+                ticket_help_html += f"<p><b>{ticket.name}</b>: {ticket.description}</p>"
 
         # Create the ticket selection field with available choices
         self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
@@ -373,7 +375,7 @@ class RegistrationForm(BaseRegistrationForm):
         elif "ticket" in self.params and self.params["ticket"]:
             self.initial["ticket"] = self.params["ticket"]
 
-        return ticket_help
+        return ticket_help_html
 
     def has_ticket(self, ticket_tier):
         """Check if registration has ticket of specified tier.
@@ -712,23 +714,23 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
 
-    def init_additionals(self, reg_section) -> None:
+    def init_additionals(self, registration_section) -> None:
         """Initialize additional tickets section if feature is enabled."""
         # Check if additional tickets feature is available
         if "additional_tickets" not in self.params["features"]:
             return
 
         # Register the additional tickets section
-        self.sections["id_additionals"] = reg_section
+        self.sections["id_additionals"] = registration_section
 
-    def init_pay_what(self, reg_section: int) -> None:
+    def init_pay_what(self, registration_section: int) -> None:
         """Initialize pay-what-you-want donation field configuration."""
         # Skip initialization if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
 
         # Register section and configure field label/help text from event config
-        self.sections["id_pay_what"] = reg_section
+        self.sections["id_pay_what"] = registration_section
         self.fields["pay_what"].label = get_event_config(
             self.params["run"].event_id, "pay_what_you_want_label", _("Free donation")
         )
@@ -736,46 +738,46 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.params["run"].event_id, "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
         )
 
-    def init_ticket(self, reg_section: Any) -> None:
+    def init_ticket(self, registration_section: Any) -> None:
         """Initialize ticket field choices and set default if only one ticket available."""
         # Fetch and format ticket choices ordered by price (highest first)
-        tickets = [
-            (m.id, m.get_form_text(currency_symbol=self.params["currency_symbol"]))
-            for m in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
+        ticket_choices = [
+            (ticket.id, ticket.get_form_text(currency_symbol=self.params["currency_symbol"]))
+            for ticket in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
         ]
-        self.fields["ticket"].choices = tickets
+        self.fields["ticket"].choices = ticket_choices
 
         # Hide ticket selection and set default if only one option exists
-        if len(tickets) == 1:
+        if len(ticket_choices) == 1:
             self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = tickets[0][0]
+            self.initial["ticket"] = ticket_choices[0][0]
 
-        self.sections["id_ticket"] = reg_section
+        self.sections["id_ticket"] = registration_section
 
-    def init_quotas(self, reg_section: int) -> None:
+    def init_quotas(self, registration_section: int) -> None:
         """Initialize quota selection field for payment installments.
 
         Args:
-            reg_section: Section identifier for form organization.
+            registration_section: Section identifier for form organization.
         """
         # Skip if quota feature is not enabled
         if "reg_quotas" not in self.params["features"]:
             return
 
         # Define available payment installment options
-        quota_chs = [(1, "Pagamento unico"), (2, "Due quote"), (3, "Tre quote")]
+        quota_choices = [(1, "Pagamento unico"), (2, "Due quote"), (3, "Tre quote")]
 
         # Create and configure quota choice field
         self.fields["quotas"] = forms.ChoiceField(
             required=True,
-            choices=quota_chs,
+            choices=quota_choices,
             label=_("Quotas"),
             help_text=_("The number of payments to split the fee"),
         )
 
         # Set initial value and section assignment
         self.initial["quotas"] = self.instance.quotas
-        self.sections["id_quotas"] = reg_section
+        self.sections["id_quotas"] = registration_section
 
     def init_character(self, char_section):
         """Initialize character selection fields in registration forms.
@@ -1001,7 +1003,7 @@ class OrgaRegistrationTicketForm(MyForm):
             >>> print(tiers)
             [('standard', 'Standard'), ('reduced', 'Reduced Price')]
         """
-        aux = []
+        available_tiers = []
 
         # Map ticket tiers to their required feature flags
         ticket_features = {
@@ -1022,26 +1024,26 @@ class OrgaRegistrationTicketForm(MyForm):
         }
 
         # Get enabled features for this event
-        ev_features = get_event_features(event.id)
+        event_features = get_event_features(event.id)
 
         # Iterate through all possible ticket tier choices
-        for tp in TicketTier.choices:
-            (value, label) = tp
+        for tier_choice in TicketTier.choices:
+            (tier_value, tier_label) = tier_choice
 
             # Skip ticket tiers that require features not enabled for this event
-            if value in ticket_features:
-                if ticket_features[value] not in ev_features:
+            if tier_value in ticket_features:
+                if ticket_features[tier_value] not in event_features:
                     continue
 
             # Skip ticket tiers that require configuration options not set
-            if value in ticket_configs:
-                if not get_event_config(event.id, f"ticket_{ticket_configs[value]}", False):
+            if tier_value in ticket_configs:
+                if not get_event_config(event.id, f"ticket_{ticket_configs[tier_value]}", False):
                     continue
 
             # Add tier to available options if all checks pass
-            aux.append(tp)
+            available_tiers.append(tier_choice)
 
-        return aux
+        return available_tiers
 
 
 class OrgaRegistrationSectionForm(MyForm):

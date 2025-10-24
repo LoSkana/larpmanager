@@ -1129,33 +1129,37 @@ class WhatWouldYouLikeForm(Form):
         # Create the choice field with populated options and Select2 widget
         self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
 
-    def _add_guides_tutorials(self, choices):
+    def _add_guides_tutorials(self, content_choices):
         # Add guides
-        for guide in get_guides_cache():
-            choices.append((f"guide|{guide['slug']}", f"{guide['title']} [GUIDE] - {guide['content_preview']}"))
+        for guide_data in get_guides_cache():
+            content_choices.append(
+                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}")
+            )
 
     def _add_tutorials_choices(self, choices):
         # Add tutorials (including sections)
         for tutorial in get_tutorials_cache():
-            title = tutorial["title"]
+            tutorial_title = tutorial["title"]
             if tutorial["section_title"] and slugify(tutorial["section_title"]) != slugify(tutorial["title"]):
-                title += " - " + tutorial["section_title"]
-                choice_value = f"{tutorial['slug']}#{tutorial['section_slug']}"
+                tutorial_title += " - " + tutorial["section_title"]
+                tutorial_choice_value = f"{tutorial['slug']}#{tutorial['section_slug']}"
             else:
-                choice_value = tutorial["slug"]
+                tutorial_choice_value = tutorial["slug"]
 
-            choices.append((f"tutorial|{choice_value}", f"{title} [TUTORIAL] - {tutorial['content_preview']}"))
+            choices.append(
+                (f"tutorial|{tutorial_choice_value}", f"{tutorial_title} [TUTORIAL] - {tutorial['content_preview']}")
+            )
 
     def _add_features_choices(self, choices):
         # Add features recap
         for feature in get_features_cache():
-            text = _(feature["name"])
+            display_text = _(feature["name"])
             if feature["module_name"]:
-                text += " - " + _(feature["module_name"])
-            text += " [FEATURE] "
+                display_text += " - " + _(feature["module_name"])
+            display_text += " [FEATURE] "
             if feature["descr"]:
-                text += _(feature["descr"])
-            choices.append((f"feature|{feature['tutorial']}", text))
+                display_text += _(feature["descr"])
+            choices.append((f"feature|{feature['tutorial']}", display_text))
 
     def _add_dashboard_choices(self, choices: list[tuple[str, str]]) -> None:
         """Add dashboard choices for runs and associations accessible by user."""
@@ -1163,8 +1167,8 @@ class WhatWouldYouLikeForm(Form):
         all_runs = {**self.ctx.get("open_runs", {}), **self.ctx.get("past_runs", {})}
 
         # Add run dashboard choices for each accessible run
-        for _rid, run in all_runs.items():
-            choices.append((f"manage_orga|{run['slug']}", run["s"] + " - " + _("Dashboard")))
+        for _run_id, run_data in all_runs.items():
+            choices.append((f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard")))
 
         # Add association dashboard choice if user has association role
         if self.ctx.get("assoc_role", None):
@@ -1185,17 +1189,20 @@ class WhatWouldYouLikeForm(Form):
         regular_choices = []
 
         # Add to choices all links in the current interface
-        for type_pms in ["event_pms", "assoc_pms"]:
-            all_pms = self.ctx.get(type_pms, {})
+        for permission_type in ["event_pms", "assoc_pms"]:
+            all_permissions = self.ctx.get(permission_type, {})
 
             # Iterate through modules and their permission lists
-            for _mod, list in all_pms.items():
-                for pms in list:
+            for _module, permission_list in all_permissions.items():
+                for permission in permission_list:
                     # Create choice tuple with translated name and description
-                    choice_tuple = (f"{type_pms}|{pms['slug']}", _(pms["name"]) + " - " + _(pms["descr"]))
+                    choice_tuple = (
+                        f"{permission_type}|{permission['slug']}",
+                        _(permission["name"]) + " - " + _(permission["descr"]),
+                    )
 
                     # Prioritize permissions with slug starting with "event"
-                    if pms["slug"] in ["exe_events", "orga_event"]:
+                    if permission["slug"] in ["exe_events", "orga_event"]:
                         event_priority_choices.append(choice_tuple)
                     else:
                         regular_choices.append(choice_tuple)
@@ -1205,14 +1212,14 @@ class WhatWouldYouLikeForm(Form):
         choices.extend(regular_choices)
 
 
-def what_would_you_like(ctx: dict, request: HttpRequest) -> None:
+def what_would_you_like(context: dict, request: HttpRequest) -> None:
     """Handle "What would you like to do?" form submission and display.
 
     Processes POST requests to redirect users based on their selected choice,
     or displays the form for GET requests. Uses RedirectError for navigation.
 
     Args:
-        ctx: Template context dictionary to store form data
+        context: Template context dictionary to store form data
         request: HTTP request object containing POST data or GET request
 
     Raises:
@@ -1220,26 +1227,26 @@ def what_would_you_like(ctx: dict, request: HttpRequest) -> None:
     """
     if request.POST:
         # Process form submission with POST data
-        form = WhatWouldYouLikeForm(request.POST, ctx=ctx)
+        form = WhatWouldYouLikeForm(request.POST, ctx=context)
 
         if form.is_valid():
             # Extract user's choice from validated form
-            choice = form.cleaned_data["wwyltd"]
+            user_choice = form.cleaned_data["wwyltd"]
 
             try:
                 # Get redirect URL based on user's choice
-                redirect_url = _get_choice_redirect_url(choice, ctx)
+                redirect_url = _get_choice_redirect_url(user_choice, context)
                 raise RedirectError(redirect_url)
-            except ValueError as err:
+            except ValueError as error:
                 # Handle invalid choice with error message
-                messages.error(request, str(err))
-                raise RedirectError(request.path) from err
+                messages.error(request, str(error))
+                raise RedirectError(request.path) from error
     else:
         # Display empty form for GET requests
-        form = WhatWouldYouLikeForm(ctx=ctx)
+        form = WhatWouldYouLikeForm(ctx=context)
 
     # Add form to template context
-    ctx["form"] = form
+    context["form"] = form
 
 
 def _get_choice_redirect_url(choice, ctx):

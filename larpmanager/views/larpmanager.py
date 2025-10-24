@@ -137,13 +137,13 @@ def contact(request):
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
 
-def go_redirect(request, slug, p, base_domain="larpmanager.com"):
+def go_redirect(request, slug, path, base_domain="larpmanager.com"):
     """Redirect user to association-specific subdomain or main domain.
 
     Args:
         request: Django HTTP request object
         slug: Association slug for subdomain
-        p: Path to append to URL
+        path: Path to append to URL
         base_domain: Base domain name (default: "larpmanager.com")
 
     Returns:
@@ -153,14 +153,14 @@ def go_redirect(request, slug, p, base_domain="larpmanager.com"):
         return redirect("http://127.0.0.1:8000/")
 
     if slug:
-        n_p = f"https://{slug}.{base_domain}/"
+        new_path = f"https://{slug}.{base_domain}/"
     else:
-        n_p = f"https://{base_domain}/"
+        new_path = f"https://{base_domain}/"
 
-    if p:
-        n_p += p
+    if path:
+        new_path += path
 
-    return redirect(n_p)
+    return redirect(new_path)
 
 
 def choose_assoc(request, p, slugs):
@@ -195,18 +195,18 @@ def choose_assoc(request, p, slugs):
         )
 
 
-def go_redirect_run(run, p):
+def go_redirect_run(run, path):
     """Redirect to a specific run's URL on its association's domain.
 
     Args:
         run: Run object to redirect to
-        p: URL path to append after the run slug
+        path: URL path to append after the run slug
 
     Returns:
         HttpResponseRedirect: Redirect to the run's URL
     """
-    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.get_slug()}/{p}"
-    return redirect(n_p)
+    full_url = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.get_slug()}/{path}"
+    return redirect(full_url)
 
 
 def choose_run(request, p, event_ids):

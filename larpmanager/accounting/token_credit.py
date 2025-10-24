@@ -181,16 +181,16 @@ def get_regs_paying_incomplete(assoc: Association = None) -> QuerySet[Registrati
         >>> assoc_incomplete = get_regs_paying_incomplete(my_association)
     """
     # Get base registration queryset, optionally filtered by association
-    reg_que = get_regs(assoc)
+    registration_queryset = get_regs(assoc)
 
     # Calculate payment difference: total_paid - total_registration_amount
-    reg_que = reg_que.annotate(diff=F("tot_payed") - F("tot_iscr"))
+    registration_queryset = registration_queryset.annotate(diff=F("tot_payed") - F("tot_iscr"))
 
     # Filter for significant payment differences (> 0.05 absolute value)
     # Excludes small differences that might be due to rounding or minor errors
-    reg_que = reg_que.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
+    registration_queryset = registration_queryset.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
 
-    return reg_que
+    return registration_queryset
 
 
 def get_regs(assoc: Association) -> QuerySet[Registration]:
@@ -212,16 +212,18 @@ def get_regs(assoc: Association) -> QuerySet[Registration]:
         >>> all_active_regs = get_regs(None)
     """
     # Start with all non-cancelled registrations
-    reg_que = Registration.objects.filter(cancellation_date__isnull=True)
+    registrations_queryset = Registration.objects.filter(cancellation_date__isnull=True)
 
     # Exclude registrations from cancelled or completed events
-    reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE])
+    registrations_queryset = registrations_queryset.exclude(
+        run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE]
+    )
 
     # Filter by association if provided
     if assoc:
-        reg_que = reg_que.filter(run__event__assoc=assoc)
+        registrations_queryset = registrations_queryset.filter(run__event__assoc=assoc)
 
-    return reg_que
+    return registrations_queryset
 
 
 def update_token_credit_on_payment_save(instance, created):

@@ -93,8 +93,8 @@ def get_cache_assoc_role(ar_id: int) -> dict:
     return res
 
 
-def remove_association_role_cache(ar_id):
-    key = cache_assoc_role_key(ar_id)
+def remove_association_role_cache(association_role_id):
+    key = cache_assoc_role_key(association_role_id)
     cache.delete(key)
 
 
@@ -238,8 +238,8 @@ def get_cache_event_role(ev_id: int) -> dict:
     return res
 
 
-def remove_event_role_cache(ar_id):
-    key = cache_event_role_key(ar_id)
+def remove_event_role_cache(assignment_role_id):
+    key = cache_event_role_key(assignment_role_id)
     cache.delete(key)
 
 

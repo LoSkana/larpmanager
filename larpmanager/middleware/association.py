@@ -154,7 +154,7 @@ class AssociationIdentifyMiddleware:
         return render(request, "exception/assoc.html", {})
 
     @staticmethod
-    def load_assoc(request: HttpRequest, assoc: dict) -> None:
+    def load_assoc(request: HttpRequest, association_data: dict) -> None:
         """Load association data into request context.
 
         This function enriches the request object with association data and
@@ -162,7 +162,7 @@ class AssociationIdentifyMiddleware:
 
         Args:
             request: Django HTTP request object to be modified
-            assoc: Association data dictionary containing at minimum an 'id' key
+            association_data: Association data dictionary containing at minimum an 'id' key
 
         Returns:
             None
@@ -172,10 +172,10 @@ class AssociationIdentifyMiddleware:
             - Adds localized footer text to request.assoc["footer"]
         """
         # Attach association data to request for template access
-        request.assoc = assoc
+        request.assoc = association_data
 
         # Get current language for localization
-        lang = get_language()
+        current_language = get_language()
 
         # Load and attach localized footer text for the association
-        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
+        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, current_language)

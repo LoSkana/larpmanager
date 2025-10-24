@@ -135,32 +135,32 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
         clear_event_relationships_cache(event_id)
 
 
-def refresh_character_related_caches(char: Character) -> None:
+def refresh_character_related_caches(character: Character) -> None:
     """Update all caches that are related to a character.
 
     This function refreshes caches for all entities that have relationships
     with the given character, including plots, factions, speedlarps, and prologues.
 
     Args:
-        char (Character): The Character instance whose related caches need to be refreshed.
+        character (Character): The Character instance whose related caches need to be refreshed.
 
     Returns:
         None
     """
     # Update plots that this character is part of
-    for plot_rel in char.get_plot_characters():
-        refresh_event_plot_relationships(plot_rel.plot)
+    for plot_character_relationship in character.get_plot_characters():
+        refresh_event_plot_relationships(plot_character_relationship.plot)
 
     # Update factions that this character is part of
-    for faction in char.factions_list.all():
+    for faction in character.factions_list.all():
         refresh_event_faction_relationships(faction)
 
     # Update speedlarps that this character is part of
-    for speedlarp in char.speedlarps_list.all():
+    for speedlarp in character.speedlarps_list.all():
         refresh_event_speedlarp_relationships(speedlarp)
 
     # Update prologues that this character is part of
-    for prologue in char.prologues_list.all():
+    for prologue in character.prologues_list.all():
         refresh_event_prologue_relationships(prologue)
 
 
@@ -346,24 +346,24 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
     try:
         # Get the cache key for this event's relationships
         cache_key = get_event_rels_key(event.id)
-        res = cache.get(cache_key)
+        cached_relationships = cache.get(cache_key)
 
         # If cache doesn't exist, initialize it for the entire event
-        if res is None:
+        if cached_relationships is None:
             logger.debug(f"Cache miss during character update for event {event}, reinitializing")
             init_event_rels_all(event)
             return
 
         # Ensure characters dictionary exists in cache structure
-        if "characters" not in res:
-            res["characters"] = {}
+        if "characters" not in cached_relationships:
+            cached_relationships["characters"] = {}
 
         # Get event features and update character relationships
-        features = get_event_features(event.id)
-        res["characters"][char.id] = get_event_char_rels(char, features, event)
+        event_features = get_event_features(event.id)
+        cached_relationships["characters"][char.id] = get_event_char_rels(char, event_features, event)
 
         # Save updated cache with 1-day timeout
-        cache.set(cache_key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug(f"Updated character {char.id} relationships in cache")
 
     except Exception as e:
@@ -755,10 +755,10 @@ def refresh_event_faction_relationships(faction: Faction) -> None:
         None
     """
     # Get the current faction relationship data from the event
-    faction_data = get_event_faction_rels(faction)
+    faction_relationship_data = get_event_faction_rels(faction)
 
     # Update the cache with the faction's relationship data
-    update_cache_section(faction.event_id, "factions", faction.id, faction_data)
+    update_cache_section(faction.event_id, "factions", faction.id, faction_relationship_data)
 
 
 def refresh_event_plot_relationships(plot: Plot) -> None:
@@ -779,11 +779,11 @@ def refresh_event_plot_relationships(plot: Plot) -> None:
         plot-specific relationship data.
     """
     # Retrieve the current plot relationship data from the event
-    plot_data = get_event_plot_rels(plot)
+    plot_relationship_data = get_event_plot_rels(plot)
 
     # Update the cache with the new plot relationship data
-    # Cache structure: event_id -> "plots" -> plot.id -> plot_data
-    update_cache_section(plot.event_id, "plots", plot.id, plot_data)
+    # Cache structure: event_id -> "plots" -> plot.id -> plot_relationship_data
+    update_cache_section(plot.event_id, "plots", plot.id, plot_relationship_data)
 
 
 def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
@@ -805,10 +805,10 @@ def refresh_event_speedlarp_relationships(speedlarp: SpeedLarp) -> None:
         being available in the current scope.
     """
     # Retrieve fresh speedlarp relationship data from the database
-    speedlarp_data = get_event_speedlarp_rels(speedlarp)
+    speedlarp_relationships_data = get_event_speedlarp_rels(speedlarp)
 
     # Update the cache with the new speedlarp relationship data
-    update_cache_section(speedlarp.event_id, "speedlarps", speedlarp.id, speedlarp_data)
+    update_cache_section(speedlarp.event_id, "speedlarps", speedlarp.id, speedlarp_relationships_data)
 
 
 def refresh_event_prologue_relationships(prologue: Prologue) -> None:
@@ -824,10 +824,10 @@ def refresh_event_prologue_relationships(prologue: Prologue) -> None:
         None
     """
     # Get the prologue relationship data for caching
-    prologue_data = get_event_prologue_rels(prologue)
+    prologue_relationship_data = get_event_prologue_rels(prologue)
 
     # Update the cache section with the prologue data
-    update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_data)
+    update_cache_section(prologue.event_id, "prologues", prologue.id, prologue_relationship_data)
 
 
 def refresh_event_quest_relationships(quest: Quest) -> None:

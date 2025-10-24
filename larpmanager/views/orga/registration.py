@@ -1038,30 +1038,30 @@ def get_pre_registration(event) -> dict[str, list | dict[int, int]]:
         - Additional keys with preference counts
     """
     # Initialize result dictionary with empty lists
-    dc = {"list": [], "pred": []}
+    result_data = {"list": [], "pred": []}
 
     # Get set of member IDs who have already registered for this event
-    signed = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
+    signed_member_ids = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
 
     # Get all pre-registrations ordered by preference and creation date
-    que = PreRegistration.objects.filter(event=event).order_by("pref", "created")
+    pre_registrations = PreRegistration.objects.filter(event=event).order_by("pref", "created")
 
     # Process each pre-registration
-    for p in que.select_related("member"):
+    for pre_registration in pre_registrations.select_related("member"):
         # Check if member hasn't signed up yet
-        if p.member_id not in signed:
-            dc["pred"].append(p)
+        if pre_registration.member_id not in signed_member_ids:
+            result_data["pred"].append(pre_registration)
         else:
             # Mark as already signed up
-            p.signed = True
+            pre_registration.signed = True
 
         # Add to main list and count preferences
-        dc["list"].append(p)
-        if p.pref not in dc:
-            dc[p.pref] = 0
-        dc[p.pref] += 1
+        result_data["list"].append(pre_registration)
+        if pre_registration.pref not in result_data:
+            result_data[pre_registration.pref] = 0
+        result_data[pre_registration.pref] += 1
 
-    return dc
+    return result_data
 
 
 @login_required
@@ -1114,29 +1114,29 @@ def orga_reload_cache(request: HttpRequest, s: str) -> HttpResponse:
     return redirect("manage", s=ctx["run"].get_slug())
 
 
-def lottery_info(request, ctx: dict) -> None:
+def lottery_info(request, context: dict) -> None:
     """Add lottery-related information to the context dictionary.
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary to update with lottery info
+        context: Context dictionary to update with lottery info
     """
     # Get number of lottery draws from event configuration
-    ctx["num_draws"] = int(get_event_config(ctx["event"].id, "lottery_num_draws", 0, ctx))
+    context["num_draws"] = int(get_event_config(context["event"].id, "lottery_num_draws", 0, context))
 
     # Get lottery ticket configuration
-    ctx["ticket"] = get_event_config(ctx["event"].id, "lottery_ticket", "", ctx)
+    context["ticket"] = get_event_config(context["event"].id, "lottery_ticket", "", context)
 
     # Count active lottery registrations
-    ctx["num_lottery"] = Registration.objects.filter(
-        run=ctx["run"],
+    context["num_lottery"] = Registration.objects.filter(
+        run=context["run"],
         ticket__tier=TicketTier.LOTTERY,
         cancellation_date__isnull=True,
     ).count()
 
     # Count definitive (confirmed) registrations excluding special tiers
-    ctx["num_def"] = (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    context["num_def"] = (
+        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.LOTTERY, TicketTier.STAFF, TicketTier.NPC, TicketTier.WAITING])
         .count()
     )

@@ -103,8 +103,8 @@ def almost_equal(s1: str, s2: str) -> bool:
     return False
 
 
-def leaderboard_key(a_id):
-    return f"leaderboard_{a_id}"
+def leaderboard_key(association_id):
+    return f"leaderboard_{association_id}"
 
 
 def update_leaderboard(a_id: int) -> list[dict]:
@@ -172,13 +172,13 @@ def assign_badge(member, badge_code):
         print(e)
 
 
-def get_mail(request: HttpRequest, ctx: dict, nm: int) -> Email:
+def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     """Retrieve an email object with proper authorization checks.
 
     Args:
         request: HTTP request object containing association information
-        ctx: Context dictionary that may contain run information
-        nm: Primary key of the email to retrieve
+        context: Context dictionary that may contain run information
+        email_id: Primary key of the email to retrieve
 
     Returns:
         Email: The requested email object if authorized
@@ -189,7 +189,7 @@ def get_mail(request: HttpRequest, ctx: dict, nm: int) -> Email:
     """
     # Attempt to retrieve the email by primary key
     try:
-        email = Email.objects.get(pk=nm)
+        email = Email.objects.get(pk=email_id)
     except ObjectDoesNotExist as err:
         raise Http404("not found") from err
 
@@ -198,7 +198,7 @@ def get_mail(request: HttpRequest, ctx: dict, nm: int) -> Email:
         raise Http404("not your assoc")
 
     # Check run-specific authorization if run context is provided
-    run = ctx.get("run")
+    run = context.get("run")
     if run and email.run_id != run.id:
         raise Http404("not your run")
 

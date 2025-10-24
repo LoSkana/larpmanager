@@ -73,35 +73,40 @@ def registration_available(run: Run, features: dict, ctx: dict | None = None) ->
         return
 
     # Get registration counts if not provided
-    reg_counts = ctx.get("reg_counts")
-    if reg_counts is None:
-        reg_counts = get_reg_counts(run)
+    registration_counts = ctx.get("reg_counts")
+    if registration_counts is None:
+        registration_counts = get_reg_counts(run)
 
     # Calculate remaining primary tickets
-    remaining_pri = run.event.max_pg - reg_counts.get("count_player", 0)
+    remaining_primary_tickets = run.event.max_pg - registration_counts.get("count_player", 0)
 
     # Get event features if not provided
     if not features:
         features = get_event_features(run.event_id)
 
     # Check if primary tickets are available
-    if remaining_pri > 0:
+    if remaining_primary_tickets > 0:
         run.status["primary"] = True
 
         # Show urgency warning when tickets are running low
-        perc_signed = 0.3
-        max_signed = 10
-        if remaining_pri < max_signed or remaining_pri * 1.0 / run.event.max_pg < perc_signed:
-            run.status["count"] = remaining_pri
-            run.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_pri} + "."
+        percentage_threshold_for_urgency = 0.3
+        absolute_threshold_for_urgency = 10
+        if (
+            remaining_primary_tickets < absolute_threshold_for_urgency
+            or remaining_primary_tickets * 1.0 / run.event.max_pg < percentage_threshold_for_urgency
+        ):
+            run.status["count"] = remaining_primary_tickets
+            run.status["additional"] = (
+                _(" Hurry: only %(num)d tickets available") % {"num": remaining_primary_tickets} + "."
+            )
         return
 
     # Check if filler tickets are available (fallback option)
-    if "filler" in features and _available_filler(run, reg_counts):
+    if "filler" in features and _available_filler(run, registration_counts):
         return
 
     # Check if waiting list is available (last resort option)
-    if "waiting" in features and _available_waiting(run, reg_counts):
+    if "waiting" in features and _available_waiting(run, registration_counts):
         return
 
     # No registration options available - mark as closed
@@ -109,71 +114,75 @@ def registration_available(run: Run, features: dict, ctx: dict | None = None) ->
     return
 
 
-def _available_waiting(r: Registration, reg_counts: dict) -> bool:
+def _available_waiting(registration: Registration, registration_counts: dict) -> bool:
     """Check if waiting list spots are available for a registration.
 
     Args:
-        r: Registration object with event and status attributes
-        reg_counts: Dictionary containing registration counts including 'count_wait'
+        registration: Registration object with event and status attributes
+        registration_counts: Dictionary containing registration counts including 'count_wait'
 
     Returns:
         bool: True if waiting list spots are available, False otherwise
 
     Side Effects:
-        Modifies r.status dictionary with waiting availability information
+        Modifies registration.status dictionary with waiting availability information
     """
     # Handle infinite waiting list capacity
-    if r.event.max_waiting == 0:
-        r.status["waiting"] = True
-        r.status["count"] = None  # Infinite
+    if registration.event.max_waiting == 0:
+        registration.status["waiting"] = True
+        registration.status["count"] = None  # Infinite
         return True
 
     # Check if limited waiting list has available spots
-    if r.event.max_waiting > 0:
+    if registration.event.max_waiting > 0:
         # Calculate remaining waiting list capacity
-        remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
+        remaining_waiting_spots = registration.event.max_waiting - registration_counts["count_wait"]
 
         # Set status if spots are available
-        if remaining_waiting > 0:
-            r.status["waiting"] = True
-            r.status["count"] = remaining_waiting
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting} + "."
+        if remaining_waiting_spots > 0:
+            registration.status["waiting"] = True
+            registration.status["count"] = remaining_waiting_spots
+            registration.status["additional"] = (
+                _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting_spots} + "."
+            )
             return True
 
     # No waiting list spots available
     return False
 
 
-def _available_filler(r, reg_counts) -> bool:
+def _available_filler(registration, registration_counts) -> bool:
     """Check if filler tickets are available for the given registration.
 
     Args:
-        r: Registration object with event and status attributes
-        reg_counts: Dictionary containing registration counts including 'count_fill'
+        registration: Registration object with event and status attributes
+        registration_counts: Dictionary containing registration counts including 'count_fill'
 
     Returns:
         bool: True if filler tickets are available, False otherwise
 
     Side Effects:
-        Modifies r.status dictionary with filler availability information
+        Modifies registration.status dictionary with filler availability information
     """
     # Handle infinite filler tickets case
-    if r.event.max_filler == 0:
-        r.status["filler"] = True
-        r.status["count"] = None  # Infinite
+    if registration.event.max_filler == 0:
+        registration.status["filler"] = True
+        registration.status["count"] = None  # Infinite
         return True
 
     # Handle limited filler tickets case
-    if r.event.max_filler > 0:
+    if registration.event.max_filler > 0:
         # Calculate remaining filler tickets
-        remaining_filler = r.event.max_filler - reg_counts["count_fill"]
+        remaining_filler = registration.event.max_filler - registration_counts["count_fill"]
 
         # Check if any filler tickets are still available
         if remaining_filler > 0:
-            r.status["filler"] = True
-            r.status["count"] = remaining_filler
+            registration.status["filler"] = True
+            registration.status["count"] = remaining_filler
             # Add urgency message for limited availability
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
+            registration.status["additional"] = (
+                _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
+            )
             return True
 
     # No filler tickets available
@@ -557,15 +566,17 @@ def registration_find(run: Run, user: User, ctx: dict | None = None):
         return
 
     # Use pre-fetched registrations if provided
-    my_regs = ctx.get("my_regs")
-    if my_regs is not None:
-        run.reg = my_regs.get(run.id)
+    cached_registrations = ctx.get("my_regs")
+    if cached_registrations is not None:
+        run.reg = cached_registrations.get(run.id)
         return
 
     # Query database for active registration (non-cancelled, non-redeemed)
     try:
-        que = Registration.objects.select_related("ticket")
-        run.reg = que.get(run=run, member=user.member, redeem_code__isnull=True, cancellation_date__isnull=True)
+        registration_queryset = Registration.objects.select_related("ticket")
+        run.reg = registration_queryset.get(
+            run=run, member=user.member, redeem_code__isnull=True, cancellation_date__isnull=True
+        )
     except ObjectDoesNotExist:
         # No active registration found for this user and run
         run.reg = None
@@ -754,14 +765,16 @@ def get_player_characters(member, event):
     return event.get_elements(Character).filter(player=member).order_by("-updated")
 
 
-def get_player_signup(request: HttpRequest, ctx: dict) -> Registration | None:
+def get_player_signup(request: HttpRequest, context: dict) -> Registration | None:
     """Get active registration for current user in the given run context."""
     # Filter registrations for current run and user, excluding cancelled ones
-    regs = Registration.objects.filter(run=ctx["run"], member=request.user.member, cancellation_date__isnull=True)
+    active_registrations = Registration.objects.filter(
+        run=context["run"], member=request.user.member, cancellation_date__isnull=True
+    )
 
     # Return first registration if exists
-    if regs:
-        return regs[0]
+    if active_registrations:
+        return active_registrations[0]
 
     return None
 
@@ -828,15 +841,21 @@ def get_reduced_available_count(run) -> int:
         Number of reduced tickets still available
     """
     # Get the ratio for reduced tickets per patron registrations
-    ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
+    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
 
     # Count current reduced and patron registrations (excluding cancelled)
-    red = Registration.objects.filter(run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True).count()
-    pat = Registration.objects.filter(run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True).count()
+    reduced_registrations_count = Registration.objects.filter(
+        run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True
+    ).count()
+    patron_registrations_count = Registration.objects.filter(
+        run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True
+    ).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
 
     # Calculate available reduced slots: floor(patron_count * ratio / 10) - used_reduced
-    return math.floor(pat * ratio / 10.0) - red
+    return (
+        math.floor(patron_registrations_count * reduced_tickets_per_patron_ratio / 10.0) - reduced_registrations_count
+    )
 
 
 def process_registration_event_change(registration: Registration) -> None:
