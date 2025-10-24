@@ -308,7 +308,7 @@ def get_run_accounting(run: Run, ctx: dict, perform_update: bool = True) -> dict
             AccountingItemPayment,
             PaymentChoices.choices,
             "pay",
-            reg=True,
+            filter_by_registration=True,
         )
         s_payments = dc["pay"]["tot"]
 
@@ -320,7 +320,7 @@ def get_run_accounting(run: Run, ctx: dict, perform_update: bool = True) -> dict
         AccountingItemTransaction,
         None,
         None,
-        reg=True,
+        filter_by_registration=True,
     )
     s_fees = dc["trs"]["tot"]
 
