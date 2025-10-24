@@ -50,7 +50,7 @@ class BaseQuestionType(models.TextChoices):
     EDITOR = "e", _("Advanced text editor")
 
     @staticmethod
-    def get_text_based_answer_types():
+    def get_answer_types():
         """Get question types that use text answers.
 
         Returns:

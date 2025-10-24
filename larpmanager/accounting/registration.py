@@ -639,6 +639,9 @@ def check_registration_background(registration_ids: Union[int, str, Iterable[int
         - If a string is provided, splits it by commas and processes each ID.
         - If an iterable is provided, iterates through and processes each ID.
     """
+    if not registration_ids:
+        return
+
     # Single integer case
     if isinstance(registration_ids, int):
         trigger_registration_accounting(registration_ids)
