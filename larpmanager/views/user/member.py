@@ -976,4 +976,4 @@ def registrations(request: HttpRequest) -> HttpResponse:
         nt.append(reg)
 
     # Render template with processed registration list
-    return render(request, "larpmanager/member/registrations.html", {"reg_list": nt})
+    return render(request, "larpmanager/member/registrations.html", {"registration_list": nt})

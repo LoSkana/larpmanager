@@ -1082,7 +1082,7 @@ def gift(request: HttpRequest, s: str) -> HttpResponse:
                 reg.pending = el
 
         # Attach additional registration info
-        for el in ctx["reg_list"]:
+        for el in ctx["registration_list"]:
             if reg.id == el.id:
                 reg.info = el
 

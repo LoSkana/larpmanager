@@ -175,7 +175,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
     assoc_id = member.membership.assoc_id
     regs = member.registrations.filter(run__event__assoc_id=assoc_id, run__start__gte=datetime.now().date())
     membership_fee = False
-    reg_list = []
+    registration_list = []
 
     # Process each registration for payment requirements
     for registration in regs:
@@ -193,15 +193,15 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
         # Build payment link for unpaid registrations
         url = get_url("accounting/pay", member.membership)
         href = f"{url}/{registration.run.get_slug()}"
-        reg_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
+        registration_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
 
     # Add registration payment instructions if needed
-    if reg_list:
+    if registration_list:
         body += (
             "<br /><br />"
             + _("To confirm your event registration, please complete your payment within one week. You can do so here")
             + ": "
-            + ", ".join(reg_list)
+            + ", ".join(registration_list)
         )
 
     # Add membership fee payment instructions if required

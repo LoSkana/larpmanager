@@ -440,7 +440,7 @@ def _orga_registrations_text_fields(ctx):
         text_fields.append(str(que_id))
 
     gctf = get_cache_reg_field(ctx["run"])
-    for el in ctx["reg_list"]:
+    for el in ctx["registration_list"]:
         if el.id not in gctf:
             continue
         for f in text_fields:
@@ -505,20 +505,20 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
 
     # Query active (non-cancelled) registrations ordered by last update
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).order_by("-updated")
-    ctx["reg_list"] = que.select_related("member")
+    ctx["registration_list"] = que.select_related("member")
 
     # Batch-load membership statuses for all registered members
     ctx["memberships"] = {}
     if "membership" in ctx["features"]:
         members_id = []
-        for r in ctx["reg_list"]:
+        for r in ctx["registration_list"]:
             members_id.append(r.member_id)
         # Create lookup dictionary for efficient membership access
         for el in Membership.objects.filter(assoc_id=ctx["a_id"], member_id__in=members_id):
             ctx["memberships"][el.member_id] = el
 
     # Process each registration to add computed fields
-    for r in ctx["reg_list"]:
+    for r in ctx["registration_list"]:
         # Add standard fields: characters, membership status, age
         _orga_registrations_standard(r, ctx)
 

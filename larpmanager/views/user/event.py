@@ -594,7 +594,7 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
         return redirect("event", s=ctx["run"].get_slug())
 
     # Initialize registration list for unassigned members
-    ctx["reg_list"] = []
+    ctx["registration_list"] = []
 
     # Get event features for permission checking
     features = get_event_features(ctx["event"].id)
@@ -635,7 +635,7 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
             # Add non-provisional registered members to the display list
             for reg in que_reg.select_related("member"):
                 if not is_reg_provisional(reg, event=ctx["event"], features=features):
-                    ctx["reg_list"].append(reg.member)
+                    ctx["registration_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", ctx)
 

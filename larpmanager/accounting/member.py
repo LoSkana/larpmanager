@@ -128,7 +128,7 @@ def _init_regs(choices, ctx, pending, reg):
     if reg.id not in choices:
         choices[reg.id] = {}
     reg.opts = choices[reg.id]
-    ctx["reg_list"].append(reg)
+    ctx["registration_list"].append(reg)
 
     # check if there is a pending payment
     if reg.id in pending:
@@ -139,7 +139,7 @@ def _init_regs(choices, ctx, pending, reg):
     if reg.run.start:
         if reg.run.start < datetime.now().date():
             return
-        ctx["reg_years"][reg.run.start.year] = 1
+        ctx["registration_years"][reg.run.start.year] = 1
 
 
 def _init_pending(member):

@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{ el }}</td>
                     <td>
-                        {% for reg in el.ctx.reg_list %}
+                        {% for reg in el.ctx.registration_list %}
                             {{ reg.run }}
                             {% if reg.ticket %}
                                 (
