@@ -109,11 +109,7 @@ class ExceptionHandlingMiddleware:
             (
                 HiddenError,
                 lambda ex: self._redirect_with_message(
-                    request,
-                    ex.name + " " + _("not visible at this time"),
-                    "gallery",
-                    [ex.slug],
-                    level="warning",
+                    request, ex.name + " " + _("not visible at this time"), "gallery", [ex.slug]
                 ),
             ),
             # Flow control exceptions - handle redirects and early returns
