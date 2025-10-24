@@ -551,7 +551,7 @@ def character_list(request, s):
     Returns:
         HttpResponse: Rendered character list template
     """
-    ctx = get_event_run(request, s, include_status=True, signup=True, slug="user_character")
+    ctx = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
 
     ctx["list"] = get_player_characters(request.user.member, ctx["event"])
     # add character configs
@@ -581,7 +581,7 @@ def character_create(request, s):
     Returns:
         HttpResponse: Character creation form or redirect
     """
-    ctx = get_event_run(request, s, include_status=True, signup=True, slug="user_character")
+    ctx = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
 
     check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
     if check:
