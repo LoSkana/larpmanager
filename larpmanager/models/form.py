@@ -409,7 +409,7 @@ class WritingOption(BaseModel):
     def __str__(self):
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run=None, character_sheet=None):
+    def get_form_text(self, run=None, currency_symbol=None):
         show_data = self.show(run)
         return show_data["name"]
 

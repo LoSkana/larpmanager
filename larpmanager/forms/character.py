@@ -171,7 +171,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         # Process each question to create form fields
         for question in self.questions:
-            field_key = self._init_field(question, reg_counts=registration_counts, orga=self.orga)
+            field_key = self._init_field(question, registration_counts=registration_counts, is_organizer=self.orga)
             if not field_key:
                 continue
 

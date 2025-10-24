@@ -226,7 +226,7 @@ class RegistrationForm(BaseRegistrationForm):
         if question.skip(self.instance, self.params["features"]):
             return
 
-        k = self._init_field(question, registration_counts, is_organizer=False)
+        k = self._init_field(question, registration_counts=registration_counts, is_organizer=False)
         if not k:
             return
 
