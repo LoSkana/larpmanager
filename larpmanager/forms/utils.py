@@ -305,8 +305,8 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def set_exclude(self, exclude_value):
         self.excl = exclude_value
@@ -314,7 +314,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
     def get_queryset(self) -> QuerySet[Event]:
         """Get non-template events for the association, optionally excluding a specific event."""
         # Filter non-template events for the association
-        queryset = Event.objects.filter(assoc_id=self.aid, template=False)
+        queryset = Event.objects.filter(assoc_id=self.association_id, template=False)
 
         # Exclude specific event if excl attribute is set
         if hasattr(self, "excl"):
@@ -331,8 +331,8 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
     def label_from_instance(self, obj):
         return str(obj)
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def set_exclude(self, exclude):
         self.exclude = exclude
@@ -340,7 +340,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
     def get_queryset(self) -> QuerySet[Event]:
         """Return events excluding templates and child events."""
         # Filter for parent events only, excluding templates
-        queryset = Event.objects.filter(parent_id__isnull=True, assoc_id=self.aid, template=False)
+        queryset = Event.objects.filter(parent_id__isnull=True, assoc_id=self.association_id, template=False)
 
         # Exclude specific event if specified
         if hasattr(self, "excl"):
@@ -354,8 +354,8 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return Event.objects.filter(assoc_id=self.association_id, template=True)
@@ -369,8 +369,8 @@ class AssocMS2:
         "user__email__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return get_members_queryset(self.association_id)
@@ -523,8 +523,8 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return Run.objects.filter(event__assoc_id=self.association_id)
@@ -684,8 +684,8 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return WarehouseContainer.objects.filter(assoc_id=self.association_id)
@@ -710,8 +710,8 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return WarehouseItem.objects.filter(assoc_id=self.association_id)
@@ -731,8 +731,8 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return WarehouseTag.objects.filter(assoc_id=self.association_id)
