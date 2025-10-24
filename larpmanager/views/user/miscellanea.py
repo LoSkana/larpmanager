@@ -238,7 +238,8 @@ def album(request, s):
 
 
 @login_required
-def album_sub(request, s, num):
+def album_sub(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """View handler for displaying a specific photo album within an event run."""
     ctx = get_event_run(request, s)
     get_album(ctx, num)
     return album_aux(request, ctx, ctx["album"])

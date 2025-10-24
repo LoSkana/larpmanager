@@ -510,37 +510,52 @@ def writing_list_plot(ctx):
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
-def writing_list_faction(ctx):
+def writing_list_faction(ctx: dict) -> None:
+    """Enriches faction objects with their character relationships from event cache."""
+    # Retrieve cached faction relationships for the event
     rels = get_event_rels_cache(ctx["event"]).get("factions", {})
 
+    # Attach character relationships to each faction in the list
     for el in ctx["list"]:
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
-def writing_list_speedlarp(ctx):
+def writing_list_speedlarp(ctx: dict) -> None:
+    """Enriches speedlarp list items with their character relationships from event cache."""
+    # Retrieve speedlarp relationships from cached event data
     rels = get_event_rels_cache(ctx["event"]).get("speedlarps", {})
 
+    # Attach character relationships to each speedlarp item
     for el in ctx["list"]:
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
-def writing_list_prologue(ctx):
+def writing_list_prologue(ctx: dict) -> None:
+    """Enrich prologue list items with character relationships from cache."""
+    # Retrieve cached prologue relationships for the event
     rels = get_event_rels_cache(ctx["event"]).get("prologues", {})
 
+    # Attach character relationships to each prologue in the list
     for el in ctx["list"]:
         el.character_rels = rels.get(el.id, {}).get("character_rels", [])
 
 
-def writing_list_quest(ctx):
+def writing_list_quest(ctx: dict) -> None:
+    """Enrich quest list with trait relationships from cache."""
+    # Retrieve cached quest relationships for the event
     rels = get_event_rels_cache(ctx["event"]).get("quests", {})
 
+    # Attach trait relationships to each quest in the list
     for el in ctx["list"]:
         el.trait_rels = rels.get(el.id, {}).get("trait_rels", [])
 
 
-def writing_list_questtype(ctx):
+def writing_list_questtype(ctx: dict) -> None:
+    """Add quest relationships to each quest type in the context list."""
+    # Retrieve cached quest type relationships for the event
     rels = get_event_rels_cache(ctx["event"]).get("questtypes", {})
 
+    # Attach quest relationships to each quest type element
     for el in ctx["list"]:
         el.quest_rels = rels.get(el.id, {}).get("quest_rels", [])
 

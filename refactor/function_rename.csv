@@ -1,4 +1,4 @@
-name,path,invocation_count,function_number
+name,path,invocation_count,number
 check_event_permission,larpmanager/utils/event.py,174,1
 get_elements,larpmanager/models/event.py,169,1
 add_configs,larpmanager/forms/config.py,145,1

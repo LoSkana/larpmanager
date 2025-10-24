@@ -25,7 +25,7 @@ from typing import Union
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
 from django.utils import formats
 from django.utils.translation import gettext_lazy as _
@@ -230,8 +230,19 @@ class Event(BaseModel):
     def __str__(self):
         return self.name
 
-    def get_elements(self, typ):
+    def get_elements(self, typ: type) -> QuerySet:
+        """Get ordered elements of specified type for the parent event.
+
+        Args:
+            typ: Model class to query elements from
+
+        Returns:
+            Ordered queryset of elements
+        """
+        # Get all elements for the parent event
         queryset = typ.objects.filter(event=self.get_class_parent(typ))
+
+        # Order by number if the model has that field
         if hasattr(typ, "number"):
             queryset = queryset.order_by("number")
         return queryset
@@ -355,8 +366,11 @@ class Event(BaseModel):
         # noinspection PyUnresolvedReferences
         return download(self.sheet_template.path)
 
-    def get_media_filepath(self):
+    def get_media_filepath(self) -> str:
+        """Get the media directory path for this object's PDFs, creating it if needed."""
+        # Build path to PDF directory using object slug
         fp = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
+        # Ensure directory exists
         os.makedirs(fp, exist_ok=True)
         return fp
 
@@ -560,13 +574,15 @@ class Run(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the run with event name and optional number."""
         s = self.event.name
         if self.number and self.number != 1:
             s = f"{s} #{self.number}"
         return s
 
-    def get_slug(self):
+    def get_slug(self) -> str:
+        """Return the slug for this run, appending the run number if greater than 1."""
         slug = self.event.slug
         if self.number > 1:
             slug += f"-{self.number}"
@@ -613,10 +629,19 @@ class Run(BaseModel):
         # noinspection PyUnresolvedReferences
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
-    def get_media_filepath(self):
+    def get_media_filepath(self) -> str:
+        """Returns the media file path for this run, creating the directory if needed.
+
+        Returns:
+            The absolute path to the run's media directory.
+        """
+        # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
         fp = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
+
+        # Ensure directory exists
         os.makedirs(fp, exist_ok=True)
+
         return fp
 
     def get_gallery_filepath(self):

@@ -490,9 +490,23 @@ def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_read_mail(request, s, nm):
+def orga_read_mail(request: HttpRequest, s: str, nm: str) -> HttpResponse:
+    """Display a specific email from the archive for organization staff.
+
+    Args:
+        request: The HTTP request object.
+        s: The event slug identifier.
+        nm: The email name/identifier.
+
+    Returns:
+        Rendered template with email content.
+    """
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_archive_email")
+
+    # Retrieve the specific email for display
     ctx["email"] = get_mail(request, ctx, nm)
+
     return render(request, "larpmanager/exe/users/read_mail.html", ctx)
 
 

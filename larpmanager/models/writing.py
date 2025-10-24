@@ -31,7 +31,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
+from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
@@ -111,7 +111,8 @@ class Writing(BaseConceptModel):
 
         return js
 
-    def show_complete(self):
+    def show_complete(self) -> dict:
+        """Get complete JSON representation with updated text attribute."""
         js = self.show()
         self.upd_js_attr(js, "text")
         return js
@@ -321,8 +322,18 @@ class Character(Writing):
             js["factions"].append(0)
 
     @staticmethod
-    def get_character_filepath(run):
+    def get_character_filepath(run: Run) -> str:
+        """Get the directory path for storing character files for a given run.
+
+        Args:
+            run: The run instance for which to get the character filepath.
+
+        Returns:
+            The absolute path to the character files directory.
+        """
+        # Build the path to the characters directory for this run
         fp = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
+        # Ensure the directory exists
         os.makedirs(fp, exist_ok=True)
         return fp
 
@@ -347,9 +358,19 @@ class Character(Writing):
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
-    def get_example_csv(cls, features):
+    def get_example_csv(cls, features: list) -> list[list[str]]:
+        """Extend Writing CSV example with player assignment column.
+
+        Args:
+            features: List of enabled features for the organization.
+
+        Returns:
+            List of CSV rows with headers and examples including player column.
+        """
+        # Get base CSV structure from parent Writing class
         rows = Writing.get_example_csv(features)
 
+        # Add player assignment column header and description
         rows[0].extend(["player"])
         rows[1].extend(["optional - the email of the player to whom you want to assign this character"])
 
@@ -492,10 +513,14 @@ class Faction(Writing):
         help_text=_("Indicates whether it can be selected by participants"),
     )
 
-    def show_red(self):
+    def show_red(self) -> dict:
+        """Update JavaScript response with 'typ' and 'teaser' attributes."""
         js = super().show_red()
+
+        # Update JS attributes for typ and teaser fields
         for s in ["typ", "teaser"]:
             self.upd_js_attr(js, s)
+
         return js
 
     def __str__(self):
@@ -598,9 +623,20 @@ class Handout(Writing):
     def __str__(self):
         return f"H{self.number} {self.name}"
 
-    def get_filepath(self, run):
+    def get_filepath(self, run: Run) -> str:
+        """Build the file path for this handout's PDF within the event's media directory.
+
+        Args:
+            run: The Run instance to determine the event directory.
+
+        Returns:
+            Absolute path to the handout PDF file.
+        """
+        # Build handouts directory path within event media
         fp = os.path.join(run.event.get_media_filepath(), "handouts")
         os.makedirs(fp, exist_ok=True)
+
+        # Generate PDF filename using handout number
         return os.path.join(fp, f"H{self.number}.pdf")
 
 
@@ -643,10 +679,15 @@ class SpeedLarp(Writing):
 
     characters = models.ManyToManyField(Character, related_name="speedlarps_list", blank=True)
 
-    def show_red(self):
+    def show_red(self) -> dict:
+        """Override parent method to include additional type and station data."""
+        # Call parent method to get base JSON data
         js = super().show_red()
+
+        # Add type-specific fields
         js["typ"] = self.typ
         js["station"] = self.station
+
         return js
 
     def __str__(self):
@@ -689,7 +730,8 @@ def replace_char_names(v: str, chars: dict[str, str]) -> str:
     return v
 
 
-def replace_chars_el(el, chars):
+def replace_chars_el(el: Any, chars: dict[str, str]) -> None:
+    """Replace character names in element text and teaser attributes."""
     if hasattr(el, "text"):
         el.text = replace_char_names(el.text, chars)
     if hasattr(el, "teaser"):

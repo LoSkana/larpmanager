@@ -712,16 +712,22 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
 
-    def init_additionals(self, reg_section):
+    def init_additionals(self, reg_section) -> None:
+        """Initialize additional tickets section if feature is enabled."""
+        # Check if additional tickets feature is available
         if "additional_tickets" not in self.params["features"]:
             return
 
+        # Register the additional tickets section
         self.sections["id_additionals"] = reg_section
 
-    def init_pay_what(self, reg_section):
+    def init_pay_what(self, reg_section: int) -> None:
+        """Initialize pay-what-you-want donation field configuration."""
+        # Skip initialization if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
 
+        # Register section and configure field label/help text from event config
         self.sections["id_pay_what"] = reg_section
         self.fields["pay_what"].label = get_event_config(
             self.params["run"].event_id, "pay_what_you_want_label", _("Free donation")
@@ -730,28 +736,44 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.params["run"].event_id, "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
         )
 
-    def init_ticket(self, reg_section):
+    def init_ticket(self, reg_section: Any) -> None:
+        """Initialize ticket field choices and set default if only one ticket available."""
+        # Fetch and format ticket choices ordered by price (highest first)
         tickets = [
             (m.id, m.get_form_text(cs=self.params["currency_symbol"]))
             for m in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
         ]
         self.fields["ticket"].choices = tickets
+
+        # Hide ticket selection and set default if only one option exists
         if len(tickets) == 1:
             self.fields["ticket"].widget = forms.HiddenInput()
             self.initial["ticket"] = tickets[0][0]
+
         self.sections["id_ticket"] = reg_section
 
-    def init_quotas(self, reg_section):
+    def init_quotas(self, reg_section: int) -> None:
+        """Initialize quota selection field for payment installments.
+
+        Args:
+            reg_section: Section identifier for form organization.
+        """
+        # Skip if quota feature is not enabled
         if "reg_quotas" not in self.params["features"]:
             return
 
+        # Define available payment installment options
         quota_chs = [(1, "Pagamento unico"), (2, "Due quote"), (3, "Tre quote")]
+
+        # Create and configure quota choice field
         self.fields["quotas"] = forms.ChoiceField(
             required=True,
             choices=quota_chs,
             label=_("Quotas"),
             help_text=_("The number of payments to split the fee"),
         )
+
+        # Set initial value and section assignment
         self.initial["quotas"] = self.instance.quotas
         self.sections["id_quotas"] = reg_section
 
@@ -840,7 +862,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         return data
 
-    def get_init_multi_character(self):
+    def get_init_multi_character(self) -> list[int]:
+        """Get initial character IDs for multi-character registration."""
         que = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return que.values_list("character_id", flat=True)
 
@@ -899,18 +922,27 @@ class RegistrationCharacterRelForm(MyForm):
         model = RegistrationCharacterRel
         exclude = ("reg", "character")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with dynamic field configuration based on event settings.
+
+        Removes custom character fields that are disabled in event config and sets
+        default custom_name from character instance if not already provided.
+        """
         super().__init__(*args, **kwargs)
 
+        # List of fields to delete, starting with profile
         dl = ["profile"]
 
+        # Check event config for each custom character field and mark for deletion if disabled
         for s in ["name", "pronoun", "song", "public", "private"]:
             if not get_event_config(self.params["event"].id, "custom_character_" + s, False):
                 dl.append(s)
 
+        # Set default custom_name from character if not already in initial data
         if "custom_name" not in self.initial or not self.initial["custom_name"]:
             self.initial["custom_name"] = self.instance.character.name
 
+        # Remove all fields marked for deletion
         for m in dl:
             self.delete_field("custom_" + m)
 
@@ -928,17 +960,22 @@ class OrgaRegistrationTicketForm(MyForm):
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with tier choices and conditional field removal based on features."""
         super().__init__(*args, **kwargs)
+
+        # Configure tier field based on available tiers for the event
         tiers = self.get_tier_available(self.params["run"].event)
         if len(tiers) > 1:
             self.fields["tier"].choices = tiers
         else:
             del self.fields["tier"]
 
+        # Remove casting priority field if casting feature is disabled
         if "casting" not in self.params["features"]:
             self.delete_field("casting_priority")
 
+        # Remove giftable field if gift feature is disabled
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")
 
@@ -1128,9 +1165,11 @@ class OrgaRegistrationOptionForm(MyForm):
         exclude = ["order"]
         widgets = {"question": forms.HiddenInput()}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and set question field from params if provided."""
         super().__init__(*args, **kwargs)
 
+        # Set initial question value from params if question_id is present
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
 
@@ -1159,13 +1198,16 @@ class OrgaRegistrationInstallmentForm(MyForm):
             "tickets": TicketS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure event-specific ticket widget."""
         super().__init__(*args, **kwargs)
         self.fields["tickets"].widget.set_event(self.params["event"])
 
-    def clean(self):
+    def clean(self) -> dict[str, any]:
+        """Validates that only one deadline type (date or days) is specified."""
         cleaned_data = super().clean()
 
+        # Check if both deadline types are specified
         date_deadline = cleaned_data.get("date_deadline")
         days_deadline = cleaned_data.get("days_deadline")
         if days_deadline and date_deadline:

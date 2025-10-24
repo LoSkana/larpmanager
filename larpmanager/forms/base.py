@@ -182,7 +182,9 @@ class MyForm(forms.ModelForm):
             # noinspection PyUnresolvedReferences
             del self.auto_run
 
-    def clean_run(self):
+    def clean_run(self) -> Run:
+        """Return the appropriate Run instance based on form configuration."""
+        # Use params if auto_run is set, otherwise use cleaned form data
         if hasattr(self, "auto_run"):
             return self.params["run"]
         return self.cleaned_data["run"]
@@ -345,7 +347,8 @@ class MyFormRun(MyForm):
     Sets auto_run to True by default for run-related forms.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with auto_run flag enabled."""
         self.auto_run = True
         super().__init__(*args, **kwargs)
 
@@ -1047,8 +1050,9 @@ class BaseRegistrationForm(MyFormRun):
             init = list([el.option_id for el in self.multiples[question.id]])
             self.initial[key] = init
 
-    def reorder_field(self, key):
-        # reorder the field, adding it now in the ordering
+    def reorder_field(self, key: str) -> None:
+        """Move field to end of fields dictionary."""
+        # Remove field from current position and re-add at the end
         field = self.fields.pop(key)
         self.fields[key] = field
 
@@ -1176,10 +1180,22 @@ class MyCssForm(MyForm):
                 css = css.split(css_delimeter)[0]
             self.initial[self.get_input_css()] = css
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save form instance with generated CSS code and custom CSS file.
+
+        Args:
+            commit: Whether to save the instance to the database.
+
+        Returns:
+            The saved model instance.
+        """
+        # Generate unique CSS identifier
         self.instance.css_code = generate_id(32)
+
+        # Save instance and write CSS file
         instance = super(MyForm, self).save()
         self.save_css(instance)
+
         return instance
 
     def save_css(self, instance: Event | Association) -> None:
@@ -1245,13 +1261,22 @@ class BaseAccForm(forms.Form):
     for association-specific accounting operations.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with payment methods from context.
+
+        Args:
+            *args: Variable positional arguments passed to parent class.
+            **kwargs: Variable keyword arguments including required 'ctx' key.
+        """
         self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
+
+        # Build choices list from available payment methods
         self.methods = self.ctx["methods"]
         cho = []
         for s in self.methods:
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
+        # Load payment fees configuration for the association
         self.ctx["user_fees"] = get_assoc_config(self.ctx["a_id"], "payment_fees_user", False, self.ctx)

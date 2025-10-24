@@ -21,9 +21,11 @@
 import os
 import random
 import secrets
+from typing import Any
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
+from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -153,13 +155,15 @@ class Util(BaseModel):
     def __str__(self):
         return f"U{self.number} {self.name}"
 
-    def download(self):
+    def download(self) -> HttpResponse:
+        """Download the utility file."""
         # noinspection PyUnresolvedReferences
         s = self.util.url
         # s = s.replace("media/", "", 1)
         return download(s)
 
-    def file_name(self):
+    def file_name(self) -> str:
+        """Return the base filename from the util URL or empty string if no util."""
         if not self.util:
             return ""
         # noinspection PyUnresolvedReferences
@@ -266,9 +270,11 @@ class AlbumImage(BaseModel):
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
 
-    def original_url(self):
+    def original_url(self) -> str:
+        """Extract the original media URL path from the full URL."""
         # noinspection PyUnresolvedReferences
         s = self.original.url
+        # Split by /media/ and take the third part (after two splits)
         return "/media/" + s.split("/media/")[2]
 
 
@@ -320,7 +326,8 @@ class WorkshopModule(BaseModel):
     def __str__(self):
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, Any]:
+        """Return dictionary representation of instance for display."""
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
         self.upd_js_attr(js, "name")
@@ -385,10 +392,19 @@ class WorkshopOption(BaseModel):
     def __str__(self):
         return f"{self.question} {self.name} ({self.is_correct})"
 
-    def show(self):
+    def show(self) -> dict[str, Any]:
+        """Return JSON-serializable dict with answer option data.
+
+        Returns:
+            Dictionary with id, correctness flag, and name if present.
+        """
         # noinspection PyUnresolvedReferences
+        # Build base dict with id and correctness status
         js = {"id": self.id, "is_correct": self.is_correct}
+
+        # Add name attribute if available
         self.upd_js_attr(js, "name")
+
         return js
 
 

@@ -120,11 +120,15 @@ class OrgaRulePxForm(MyForm):
         exclude = ("number", "order")
         widgets = {"abilities": AbilityS2WidgetMulti}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form, configure fields for abilities and writing questions."""
         super().__init__(*args, **kwargs)
         self.delete_field("name")
 
+        # Configure abilities widget with event context
         self.fields["abilities"].widget.set_event(self.params["event"])
+
+        # Filter writing questions to computed type only
         qs = WritingQuestion.objects.filter(event=self.params["event"], typ=WritingQuestionType.COMPUTED)
         self.fields["field"].queryset = qs
 
@@ -146,16 +150,22 @@ class OrgaModifierPxForm(MyForm):
             "requirements": EventWritingOptionS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure event-related fields."""
         super().__init__(*args, **kwargs)
         self.delete_field("name")
 
+        # Configure event-specific widgets for trait-related fields
         for field in ["abilities", "prerequisites", "requirements"]:
             self.fields[field].widget.set_event(self.params["event"])
 
 
 class SelectNewAbility(forms.Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with dynamic choice field from context."""
+        # Extract context parameters from kwargs
         ctx = self.params = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
+
+        # Add selection field with choices from context
         self.fields["sel"] = forms.ChoiceField(choices=ctx["list"])

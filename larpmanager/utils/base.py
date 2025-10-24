@@ -104,18 +104,32 @@ def def_user_ctx(request: HttpRequest) -> dict:
     return res
 
 
-def is_shuttle(request):
+def is_shuttle(request: HttpRequest) -> bool:
+    """Check if the requesting user is a shuttle operator for the association."""
+    # Check if user has an associated member profile
     if not hasattr(request.user, "member"):
         return False
+
+    # Verify user is in association's shuttle operators list
     return "shuttle" in request.assoc and request.user.member.id in request.assoc["shuttle"]
 
 
-def update_payment_details(request, ctx):
+def update_payment_details(request, ctx: dict) -> None:
+    """Update context with payment details for the association."""
     payment_details = fetch_payment_details(request.assoc["id"])
     ctx.update(payment_details)
 
 
-def fetch_payment_details(assoc_id):
+def fetch_payment_details(assoc_id: int) -> dict:
+    """Retrieve payment configuration details for an association.
+
+    Args:
+        assoc_id: Primary key of the association
+
+    Returns:
+        Dictionary containing payment gateway configuration
+    """
+    # Fetch association with only required fields for efficiency
     assoc = Association.objects.only("slug", "key").get(pk=assoc_id)
     return get_payment_details(assoc)
 

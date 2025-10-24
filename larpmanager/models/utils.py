@@ -33,7 +33,7 @@ from uuid import uuid4
 from cryptography.fernet import Fernet
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
-from django.db.models import Sum
+from django.db.models import QuerySet, Sum
 from django.utils.deconstruct import deconstructible
 from django.utils.safestring import SafeString, mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -131,7 +131,8 @@ def my_uuid_short():
     return my_uuid(12)
 
 
-def my_uuid(length=None):
+def my_uuid(length: int | None = None) -> str:
+    """Generate a UUID hex string, optionally truncated to specified length."""
     s = uuid4().hex
     if length is None:
         return s
@@ -200,8 +201,10 @@ def get_attr(ob: object, nm: str) -> str | None:
     return ""
 
 
-def get_sum(queryset):
+def get_sum(queryset: QuerySet) -> Decimal | int:
+    """Sum the 'value' field from a queryset, returning 0 if empty or None."""
     res = queryset.aggregate(Sum("value"))
+    # Return 0 if result is None, missing key, or has None value
     if not res or "value__sum" not in res or not res["value__sum"]:
         return 0
     return res["value__sum"]

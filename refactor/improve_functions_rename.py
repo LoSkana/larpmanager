@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script to automatically improve functions using Claude Code CLI.
-Can accept a specific function as input or process from function_pydocs.csv.
+Can accept a specific function as input or process from function_rename.csv.
 Processes each function: adds type hints, improves docstrings, adds comments.
 """
 
@@ -68,14 +68,14 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
 
 
 def improve_function_with_claude_code(
-    function_name: str, file_path: Path, function_source: str = None, function_number: int = 1
+    function_name: str, file_path: Path, function_source: str = None
 ) -> tuple[bool, str | None]:
     """
     Call Claude Code CLI to improve the function.
     Returns (success, improved_function_source).
     """
     if function_source is None:
-        function_source = extract_function_from_file(file_path, function_name, function_number)
+        function_source = extract_function_from_file(file_path, function_name)
         if function_source is None:
             return False, None
 
@@ -86,11 +86,17 @@ def improve_function_with_claude_code(
 {function_source}
 ```
 
-1. Aggiungi type hints alla definizione della funzione (parametri e return type), non usare single o double quote per le classi
-2. Migliora il docstring seguendo lo stile Google/NumPy. Se la funzione è più corta di 10 linee, tieni un docstring molto conciso. Se la funzione è più corta di 2 righe, non mettere pydocs, solo un commento
-3. Aggiungi commenti inline ogni 4-5 linee o per ogni blocco logico
+Analizza il codice fornito e identifica tutte le variabili, parametri e funzioni con nomi poco comprensibili o poco descrittivi.
+
+1) Identifica variabili/parametri con nomi Troppo brevi o criptici (es: x, tmp, val, arr1), Non descrittivi (es: data, info, item), Con abbreviazioni poco chiare (es: usrCnt, prdLst), Con nomi generici che non spiegano lo scopo
+
+
+2) Individua nomi alternativi che siano: Descrittivi e auto-esplicativi, Conformi alle convenzioni di naming del linguaggio (camel_case), Chiari nel contesto specifico del codice
+
+Fornisci il codice refactorizzato con i nuovi nomi applicati
 
 IMPORTANTE:
+- Eccezione per ctx: mantienilo così per uniformità
 - Restituisci SOLO il codice della funzione migliorata, senza spiegazioni aggiuntive
 - NON aggiungere MAI import statements
 - MANTIENI esattamente la stessa indentazione della funzione originale
@@ -343,7 +349,7 @@ def improve_single_function(file_path: str, function_name: str) -> bool:
 
 def process_csv_batch():
     """Process functions from CSV file in batch mode."""
-    csv_path = Path.cwd() / "refactor/function_pydocs.csv"
+    csv_path = Path.cwd() / "refactor/function_rename.csv"
 
     while True:
         # Read all rows from CSV
@@ -384,7 +390,7 @@ def process_csv_batch():
                 # Call Claude Code to improve
                 print("  🤖 Calling Claude Code...")
                 original_function = extract_function_from_file(file_path, function_name, function_number)
-                success, improved_code = improve_function_with_claude_code(function_name, file_path, original_function, function_number)
+                success, improved_code = improve_function_with_claude_code(function_name, file_path)
                 if success and improved_code and original_function:
                     if replace_function_in_file(file_path, function_name, improved_code, original_function, function_number):
                         print(f"  ✅ Successfully processed {function_name} #{function_number}")

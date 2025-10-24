@@ -313,8 +313,11 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
 
 
 def refresh_character_relationships(char: Character) -> None:
+    """Refresh character relationships for the character's event and all child events."""
+    # Refresh relationships for the character's primary event
     refresh_event_character_relationships(char, char.event)
-    # update char also for children events (if parent of campaign)
+
+    # Refresh relationships for all child events if this is a campaign parent
     for children in Event.objects.filter(parent_id=char.event_id):
         refresh_event_character_relationships(char, children)
 

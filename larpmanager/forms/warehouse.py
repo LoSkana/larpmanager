@@ -166,8 +166,11 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
             "item": WarehouseItemS2Widget,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure event/association-specific widget settings."""
         super().__init__(*args, **kwargs)
+
+        # Configure widget event and association contexts
         self.fields["area"].widget.set_event(self.params["event"])
         self.fields["item"].widget.set_assoc(self.params["a_id"])
 

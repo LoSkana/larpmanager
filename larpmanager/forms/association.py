@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+from typing import Any
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -242,12 +243,16 @@ class ExeAssocRoleForm(MyForm):
         fields = ("name", "members", "assoc")
         widgets = {"members": AssocMemberS2WidgetMulti}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
+        # Configure member widget with association context
         self.fields["members"].widget.set_assoc(self.params["a_id"])
+        # Prepare role-based permissions for association
         prepare_permissions_role(self, AssocPermission)
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Any:
+        """Save form instance and update related role permissions."""
         instance = super().save(commit=commit)
         save_permissions_role(instance, self)
         return instance
@@ -271,13 +276,15 @@ class ExeAppearanceForm(MyCssForm):
         ),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize form with cancel prevention and CSS link visibility."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
         self.show_link = ["id_assoc_css"]
 
     @staticmethod
-    def get_css_path(instance):
+    def get_css_path(instance) -> str:
+        """Return CSS file path for instance."""
         p = f"css/{instance.slug}_{instance.css_code}.css"
         return p
 
@@ -299,7 +306,8 @@ class ExeFeatureForm(FeatureForm):
         model = Association
         fields = []
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and its features configuration."""
         super().__init__(*args, **kwargs)
         self._init_features(True)
 
@@ -330,7 +338,8 @@ class ExeConfigForm(ConfigForm):
         model = Association
         fields = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Initialize parent class and prevent cancellation
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
@@ -872,13 +881,20 @@ class ExePreferencesForm(ConfigForm):
         model = Member
         fields = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with default settings."""
         super().__init__(*args, **kwargs)
+
+        # Configure form behavior flags
         self.prevent_canc = True
         self.show_sections = True
 
-    def set_configs(self):
+    def set_configs(self) -> None:
+        """Add interface configuration options to the form."""
+        # Define interface configuration section
         self.set_section("interface", _("Interface"))
+
+        # Add sidebar collapse toggle option
         label = _("Collapse sidebar")
         help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
         self.add_configs("interface_collapse_sidebar", ConfigType.BOOL, label, help_text)

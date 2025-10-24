@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django import forms
 from django.db.models import Q
@@ -30,7 +31,9 @@ from larpmanager.models.base import Feature, FeatureModule
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with optional feature help text."""
+        # Extract and store feature help text from kwargs
         self.feature_help = kwargs.pop("help_text", {})
         super().__init__(*args, **kwargs)
 
@@ -84,7 +87,8 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class FeatureForm(MyForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Initialize parent class and set cancellation prevention flag
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
@@ -154,7 +158,8 @@ class FeatureForm(MyForm):
 class QuickSetupForm(MyForm):
     setup = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        # Initialize parent class and prevent cancellation
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 

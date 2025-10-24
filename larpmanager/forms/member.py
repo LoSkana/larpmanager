@@ -22,6 +22,7 @@ import logging
 import os
 import re
 from collections import OrderedDict
+from collections.abc import Generator
 from datetime import datetime
 from typing import Any
 
@@ -48,7 +49,7 @@ from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
-from larpmanager.models.base import FeatureNationality
+from larpmanager.models.base import BaseModel, FeatureNationality
 from larpmanager.models.member import (
     Badge,
     Member,
@@ -239,7 +240,8 @@ class MyPasswordResetForm(PasswordResetForm):
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
-    def get_users(self, email):
+    def get_users(self, email: str) -> Generator:
+        """Returns active users matching the given email (case-insensitive)."""
         # noinspection PyProtectedMember
         active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)
         return (u for u in active_users)
@@ -322,7 +324,8 @@ class LanguageForm(forms.Form):
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with current language pre-selected."""
         current_lang = kwargs.pop("current_language")
         super().__init__(*args, **kwargs)
         self.fields["language"].initial = current_lang
@@ -377,7 +380,8 @@ class ResidenceWidget(forms.MultiWidget):
 
         super().__init__(widgets, attrs)
 
-    def decompress(self, value):
+    def decompress(self, value: str | None) -> list[str | None]:
+        """Split value by '|' or return list of 6 None values."""
         if value:
             return value.split("|")
         return [None] * 6
@@ -663,19 +667,25 @@ class ProfileForm(BaseProfileForm):
 
         return data
 
-    def clean(self):
+    def clean(self) -> dict[str, any]:
+        """Validate profile photo requirements based on form configuration."""
         cleaned_data = super().clean()
 
+        # Check if profile photo is both allowed and mandatory, then validate presence
         if "profile" in self.allowed and "profile" in self.mandatory:
             if not self.instance.profile:
                 self.add_error(None, _("Please upload your profile photo") + "!")
 
         return cleaned_data
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> BaseModel:
+        """Save form instance with residence address if provided."""
         instance = super().save(commit=False)
+
+        # Update residence address if present in cleaned data
         if "residence_address" in self.cleaned_data:
             instance.residence_address = self.cleaned_data["residence_address"]
+
         if commit:
             instance.save()
         return instance
@@ -732,7 +742,8 @@ class ExeVolunteerRegistryForm(MyForm):
             "end": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association ID."""
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
@@ -762,7 +773,8 @@ class ExeMemberForm(BaseProfileForm):
             "birth_date": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and make profile field optional if present."""
         super().__init__(*args, **kwargs)
         if "profile" in self.fields:
             self.fields["profile"].required = False
@@ -805,13 +817,23 @@ class ExeMembershipFeeForm(forms.Form):
         label=_("Invoice"),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with association context and configure member/payment fields.
+
+        Args:
+            *args: Positional arguments passed to parent form class.
+            **kwargs: Keyword arguments including 'ctx' dict with association context.
+        """
+        # Extract association context and initialize parent form
         self.params = kwargs.pop("ctx", {})
         super().__init__(*args, **kwargs)
         assoc_id = self.params.get("a_id", None)
+
+        # Configure member field widget and queryset for the association
         self.fields["member"].widget.set_assoc(assoc_id)
         self.fields["member"].queryset = get_members_queryset(assoc_id)
 
+        # Build payment method choices from association's available methods
         assoc = Association.objects.get(pk=assoc_id)
         choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
         self.fields["method"] = forms.ChoiceField(
@@ -863,13 +885,22 @@ class ExeMembershipDocumentForm(forms.Form):
 
     date = forms.DateField(widget=DatePickerInput(), label=_("Date of membership approval"))
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with association context and set member field constraints.
+
+        Configures member widget and queryset for the specified association,
+        and auto-increments card number based on existing memberships.
+        """
+        # Extract association context and initialize parent form
         self.params = kwargs.pop("ctx", {})
         super().__init__(*args, **kwargs)
         self.assoc_id = self.params.get("a_id", None)
+
+        # Configure member field with association-specific queryset and widget
         self.fields["member"].widget.set_assoc(self.assoc_id)
         self.fields["member"].queryset = get_members_queryset(self.assoc_id)
 
+        # Calculate next available card number for the association
         number = Membership.objects.filter(assoc_id=self.assoc_id).aggregate(Max("card_number"))["card_number__max"]
         if not number:
             number = 1
@@ -877,9 +908,16 @@ class ExeMembershipDocumentForm(forms.Form):
             number += 1
         self.initial["card_number"] = number
 
-    def clean_member(self):
+    def clean_member(self) -> Member:
+        """Validate that the member can join the organization.
+
+        Raises:
+            ValidationError: If member already has an active membership.
+        """
         member = self.cleaned_data["member"]
         membership = Membership.objects.get(member=member, assoc_id=self.assoc_id)
+
+        # Check if membership status allows joining
         if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             self.add_error("member", _("User is already a member"))
 
@@ -909,7 +947,8 @@ class ExeBadgeForm(MyForm):
             "members": AssocMemberS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         self.fields["members"].widget.set_assoc(self.params["a_id"])
 

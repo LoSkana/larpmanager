@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from babel.numbers import get_currency_symbol
 from colorfield.fields import ColorField
@@ -357,9 +358,12 @@ class AssocText(BaseModel):
         ]
 
 
-def hdr(obj):
+def hdr(obj: Association | Any) -> str:
+    """Return a formatted header string with the association name in brackets."""
+    # Check if object is an Association instance directly
     if isinstance(obj, Association):
         return f"[{obj.name}] "
+    # Check if object has an associated Association via assoc attribute
     if obj.assoc:
         return f"[{obj.assoc.name}] "
     else:

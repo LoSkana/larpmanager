@@ -212,9 +212,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
                     widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
                 )
 
-    def _init_character(self):
+    def _init_character(self) -> None:
+        """Initialize character-specific form data."""
         self._init_factions()
-
         self._init_custom_fields()
 
     def _init_factions(self):
@@ -326,18 +326,23 @@ class OrgaCharacterForm(CharacterForm):
 
     orga = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with event-specific writing configuration and conditional setup."""
         super().__init__(*args, **kwargs)
 
+        # Load relationship field max length from event configuration
         self.relationship_max_length = int(
             get_event_config(self.params["event"].id, "writing_relationship_length", 10000)
         )
 
+        # Skip additional initialization for new instances
         if not self.instance.pk:
             return
 
+        # Initialize experience points configuration
         self._init_px()
 
+        # Initialize plot-related fields
         self._init_plots()
 
     def _init_character(self):

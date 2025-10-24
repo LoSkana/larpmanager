@@ -287,7 +287,8 @@ class AccountingItem(BaseModel):
     class Meta:
         abstract = True
 
-    def short_descr(self):
+    def short_descr(self) -> str:
+        """Return first 100 characters of description if available, empty string otherwise."""
         if not hasattr(self, "descr"):
             return ""
         # noinspection PyUnresolvedReferences
@@ -419,7 +420,8 @@ class AccountingItemFlow(AccountingItem):
         help_text=_("Indicate the exact date in which the payment has been performed"),
     )
 
-    def download(self):
+    def download(self) -> str:
+        """Return download helper for invoice URL or empty string if no invoice exists."""
         if not self.invoice:
             return ""
         # noinspection PyUnresolvedReferences
@@ -529,15 +531,19 @@ class Discount(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with name, type, value and optional currency symbol."""
         # noinspection PyUnresolvedReferences
         s = f"{self.name} ({self.get_typ_display()}) {self.value}"
+
+        # Append currency symbol if associated with an event
         if self.event:
             # noinspection PyUnresolvedReferences
             s += self.event.assoc.get_currency_symbol()
         return s
 
-    def show(self, run=None):
+    def show(self, run=None) -> dict:
+        """Return dictionary representation with value, max_redeem, and name attributes."""
         js = {"value": self.value, "max_redeem": self.max_redeem}
         for s in ["name"]:
             self.upd_js_attr(js, s)
@@ -618,7 +624,9 @@ class Collection(BaseModel):
         else:
             return f"Colletta per {self.name}"
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Return member's display name if exists, otherwise return name."""
+        # Return member's display name if member exists
         if self.member:
             # noinspection PyUnresolvedReferences
             return self.member.display_member()

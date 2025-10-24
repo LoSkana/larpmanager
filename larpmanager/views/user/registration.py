@@ -683,9 +683,12 @@ def _check_redirect_registration(request, ctx: dict, event, secret_code: str | N
     return None
 
 
-def _add_bring_friend_discounts(ctx):
+def _add_bring_friend_discounts(ctx: dict) -> None:
+    """Add bring-a-friend discount configuration to context if feature is enabled."""
     if "bring_friend" not in ctx["features"]:
         return
+
+    # Retrieve discount configuration for both directions (to/from)
     for config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
         ctx[config_name] = get_event_config(ctx["event"].id, config_name, 0, ctx)
 
@@ -900,9 +903,16 @@ def _check_discount(disc, member, run, event):
     return None
 
 
-def _is_discount_invalid_for_registration(disc, member, run):
+def _is_discount_invalid_for_registration(disc: Discount, member: Member, run: Run) -> bool:
+    """Check if discount is invalid due to existing registration.
+
+    Returns True if discount is registration-only and member already registered.
+    """
+    # Discount not limited to registration-only
     if not disc.only_reg:
         return False
+
+    # Check if member has active registration for this run
     return Registration.objects.filter(member=member, run=run, cancellation_date__isnull=True).exists()
 
 

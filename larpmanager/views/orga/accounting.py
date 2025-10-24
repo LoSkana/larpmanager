@@ -54,9 +54,14 @@ from larpmanager.utils.paginate import orga_paginate
 
 
 @login_required
-def orga_discounts(request, s):
+def orga_discounts(request: HttpRequest, s: str) -> HttpResponse:
+    """Display and manage discounts for an event."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_discounts")
+
+    # Get all discounts for the event ordered by number
     ctx["list"] = Discount.objects.filter(event=ctx["event"]).order_by("number")
+
     return render(request, "larpmanager/orga/accounting/discounts.html", ctx)
 
 
@@ -66,7 +71,8 @@ def orga_discounts_edit(request, s, num):
 
 
 @login_required
-def orga_expenses_my(request, s):
+def orga_expenses_my(request: HttpRequest, s: str) -> HttpResponse:
+    """Display user's personal expenses for an event run."""
     ctx = check_event_permission(request, s, "orga_expenses_my")
     ctx["list"] = AccountingItemExpense.objects.filter(run=ctx["run"], member=request.user.member).order_by("-created")
     return render(request, "larpmanager/orga/accounting/expenses_my.html", ctx)
@@ -215,9 +221,14 @@ def orga_invoices_confirm(request: HttpRequest, s: str, num: int) -> HttpRespons
 
 
 @login_required
-def orga_accounting(request, s):
+def orga_accounting(request: HttpRequest, s: str) -> HttpResponse:
+    """Display accounting overview for an event run."""
+    # Check permissions and retrieve event context
     ctx = check_event_permission(request, s, "orga_accounting")
+
+    # Get accounting data for the run
     ctx["dc"] = get_run_accounting(ctx["run"], ctx)
+
     return render(request, "larpmanager/orga/accounting/accounting.html", ctx)
 
 

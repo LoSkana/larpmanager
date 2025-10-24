@@ -123,7 +123,7 @@ def apply_skin_features_to_association(instance: Association) -> None:
         return
 
     # Define the feature update operation to run after transaction commit
-    def update_features():
+    def update_features() -> None:
         # Replace all current features with the skin's default features
         instance.features.set(instance.skin.default_features.all())
 

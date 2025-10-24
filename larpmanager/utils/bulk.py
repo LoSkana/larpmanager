@@ -20,6 +20,7 @@
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -163,18 +164,34 @@ def _get_inv_items(ids, request):
     return WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).values_list("pk", flat=True)
 
 
-def exec_add_item_tag(request, ctx, target, ids):
+def exec_add_item_tag(
+    request,
+    ctx,
+    target: int,
+    ids: list[int],
+) -> None:
+    """Add items to a warehouse tag."""
     tag = WarehouseTag.objects.get(assoc_id=request.assoc["id"], pk=target)
     tag.items.add(*_get_inv_items(ids, request))
 
 
-def exec_del_item_tag(request, ctx, target, ids):
+def exec_del_item_tag(request: HttpRequest, ctx: dict[str, Any], target: int, ids: str) -> None:
+    """Remove items from a warehouse tag."""
     tag = WarehouseTag.objects.get(assoc_id=request.assoc["id"], pk=target)
     tag.items.remove(*_get_inv_items(ids, request))
 
 
-def exec_move_item_box(request, ctx, target, ids):
+def exec_move_item_box(
+    request,
+    ctx,
+    target: int,
+    ids: list[int],
+) -> None:
+    """Move warehouse items to a target container."""
+    # Retrieve the target container for the association
     container = WarehouseContainer.objects.get(assoc_id=request.assoc["id"], pk=target)
+
+    # Update all specified items to the new container
     WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).update(container=container)
 
 
@@ -220,52 +237,77 @@ def _get_chars(ctx, ids):
     return ctx["event"].get_elements(Character).filter(pk__in=ids).values_list("pk", flat=True)
 
 
-def exec_add_char_fact(request, ctx, target, ids):
+def exec_add_char_fact(request, ctx, target, ids) -> None:
+    """Add characters to a faction."""
     fact = ctx["event"].get_elements(Faction).get(pk=target)
     fact.characters.add(*_get_chars(ctx, ids))
 
 
-def exec_del_char_fact(request, ctx, target, ids):
+def exec_del_char_fact(request, ctx: dict, target: int, ids: list[int]) -> None:
+    """Remove characters from a faction."""
     fact = ctx["event"].get_elements(Faction).get(pk=target)
     fact.characters.remove(*_get_chars(ctx, ids))
 
 
-def exec_add_char_plot(request, ctx, target, ids):
+def exec_add_char_plot(request: HttpRequest, ctx: dict, target: int, ids: list[int]) -> None:
+    """Add characters to a plot element."""
     plot = ctx["event"].get_elements(Plot).get(pk=target)
     plot.characters.add(*_get_chars(ctx, ids))
 
 
-def exec_del_char_plot(request, ctx, target, ids):
+def exec_del_char_plot(request, ctx: dict, target: int, ids: list[int]) -> None:
+    """Remove characters from a plot element."""
     plot = ctx["event"].get_elements(Plot).get(pk=target)
     plot.characters.remove(*_get_chars(ctx, ids))
 
 
-def exec_add_char_delivery(request, ctx, target, ids):
+def exec_add_char_delivery(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    target: int | str,
+    ids: list[int] | str,
+) -> None:
+    """Add characters to a delivery."""
     delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
     delivery.characters.add(*_get_chars(ctx, ids))
 
 
-def exec_del_char_delivery(request, ctx, target, ids):
+def exec_del_char_delivery(request, ctx: dict, target: int, ids: list[int]) -> None:
+    """Remove characters from delivery."""
     delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
     delivery.characters.remove(*_get_chars(ctx, ids))
 
 
-def exec_add_char_prologue(request, ctx, target, ids):
+def exec_add_char_prologue(request: HttpRequest, ctx: dict[str, Any], target: int, ids: list[int]) -> None:
+    """Add characters to a prologue."""
     prologue = ctx["event"].get_elements(Prologue).get(pk=target)
     prologue.characters.add(*_get_chars(ctx, ids))
 
 
-def exec_del_char_prologue(request, ctx, target, ids):
+def exec_del_char_prologue(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    target: int,
+    ids: list[int],
+) -> None:
+    """Remove characters from a prologue."""
     prologue = ctx["event"].get_elements(Prologue).get(pk=target)
     prologue.characters.remove(*_get_chars(ctx, ids))
 
 
-def exec_set_char_progress(request, ctx, target, ids):
+def exec_set_char_progress(
+    request,
+    ctx: dict,
+    target: int,
+    ids: list[int],
+) -> None:
+    """Update progress step for specified characters."""
     progress_step = ctx["event"].get_elements(ProgressStep).get(pk=target)
     ctx["event"].get_elements(Character).filter(pk__in=ids).update(progress=progress_step)
 
 
-def exec_set_char_assigned(request, ctx, target, ids):
+def exec_set_char_assigned(request: HttpRequest, ctx: dict[str, Any], target: str, ids: list[int]) -> None:
+    """Assign characters to a member."""
     member = Member.objects.get(pk=target)
     ctx["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
@@ -377,7 +419,13 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
         )
 
 
-def exec_set_quest_type(request, ctx, target, ids):
+def exec_set_quest_type(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    target: int,
+    ids: list[int],
+) -> None:
+    """Set quest type for multiple quests."""
     quest_type = ctx["event"].get_elements(QuestType).get(pk=target)
     ctx["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
 
@@ -402,8 +450,16 @@ def handle_bulk_quest(request, ctx) -> None:
     ]
 
 
-def exec_set_quest(request, ctx, target, ids):
+def exec_set_quest(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    target: int,
+    ids: list[int],
+) -> None:
+    """Assign a quest to multiple traits."""
+    # Retrieve the target quest from the event
     quest = ctx["event"].get_elements(Quest).get(pk=target)
+    # Update all specified traits to use this quest
     ctx["event"].get_elements(Trait).filter(pk__in=ids).update(quest=quest)
 
 
@@ -422,8 +478,16 @@ def handle_bulk_trait(request: HttpRequest, ctx: dict) -> None:
     ]
 
 
-def exec_set_ability_type(request, ctx, target, ids):
+def exec_set_ability_type(
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    target: str | int,
+    ids: list[int] | QuerySet,
+) -> None:
+    """Updates ability type for selected abilities in bulk."""
+    # Get target ability type from event elements
     typ = ctx["event"].get_elements(AbilityTypePx).get(pk=target)
+    # Update all selected abilities with new type
     ctx["event"].get_elements(AbilityPx).filter(pk__in=ids).update(typ=typ)
 
 

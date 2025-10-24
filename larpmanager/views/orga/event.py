@@ -201,7 +201,8 @@ def orga_run(request, s):
 
 
 @login_required
-def orga_texts(request, s):
+def orga_texts(request: HttpRequest, s: str) -> HttpResponse:
+    """Render event texts management page with texts ordered by type, default flag, and language."""
     ctx = check_event_permission(request, s, "orga_texts")
     ctx["list"] = EventText.objects.filter(event_id=ctx["event"].id).order_by("typ", "default", "language")
     return render(request, "larpmanager/orga/texts.html", ctx)
@@ -213,7 +214,8 @@ def orga_texts_edit(request, s, num):
 
 
 @login_required
-def orga_buttons(request, s):
+def orga_buttons(request: HttpRequest, s: str) -> HttpResponse:
+    """Display event buttons management page for organizers."""
     ctx = check_event_permission(request, s, "orga_buttons")
     ctx["list"] = EventButton.objects.filter(event_id=ctx["event"].id).order_by("number")
     return render(request, "larpmanager/orga/buttons.html", ctx)
@@ -225,9 +227,17 @@ def orga_buttons_edit(request, s, num):
 
 
 @login_required
-def orga_config(request, s, section=None):
+def orga_config(
+    request: HttpRequest,
+    s: str,
+    section: str | None = None,
+) -> HttpResponse:
+    """Configure organization settings with optional section navigation."""
+    # Prepare context with optional section jump
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
+
+    # Delegate to orga_edit with config form
     return orga_edit(request, s, "orga_config", OrgaConfigForm, None, "manage", add_ctx=add_ctx)
 
 
@@ -339,23 +349,39 @@ def _orga_feature_after_link(feature: Feature, s: str) -> str:
 
 
 @login_required
-def orga_features_on(request, s, slug):
+def orga_features_on(
+    request: HttpRequest,
+    s: str,
+    slug: str,
+) -> HttpResponseRedirect:
+    """Toggle feature on for an event."""
+    # Check user has permission to manage features
     ctx = check_event_permission(request, s, "orga_features")
+
+    # Enable the feature
     feature = orga_features_go(request, ctx, slug, on=True)
+
+    # Redirect to appropriate page
     return redirect(_orga_feature_after_link(feature, s))
 
 
 @login_required
-def orga_features_off(request, s, slug):
+def orga_features_off(request: HttpRequest, s: str, slug: str) -> HttpResponse:
+    """Disable a feature for an event."""
     ctx = check_event_permission(request, s, "orga_features")
     orga_features_go(request, ctx, slug, on=False)
     return redirect("manage", s=s)
 
 
 @login_required
-def orga_deadlines(request, s):
+def orga_deadlines(request: HttpRequest, s: str) -> HttpResponse:
+    """Display deadlines for a specific run."""
+    # Check permissions and get event context
     ctx = check_event_permission(request, s, "orga_deadlines")
+
+    # Get deadline status for the run
     ctx["res"] = check_run_deadlines([ctx["run"]])[0]
+
     return render(request, "larpmanager/orga/deadlines.html", ctx)
 
 
@@ -371,9 +397,12 @@ def orga_preferences(request, s):
 
 
 @login_required
-def orga_backup(request, s):
+def orga_backup(request: HttpRequest, s: str) -> HttpResponse:
+    """Prepare event backup for download."""
+    # Check user has event access
     ctx = check_event_permission(request, s, "orga_event")
 
+    # Generate and return backup response
     return _prepare_backup(ctx)
 
 

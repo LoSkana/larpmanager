@@ -151,14 +151,19 @@ def get_event_text(event_id: int, typ: str, lang: str = None) -> str:
 # # ASSOC TEXT
 
 
-def update_association_text_cache_on_save(instance):
+def update_association_text_cache_on_save(instance: AssocText) -> None:
+    """Update association text cache and default cache if needed."""
     update_assoc_text(instance.assoc_id, instance.typ, instance.language)
     if instance.default:
         update_assoc_text_def(instance.assoc_id, instance.typ)
 
 
-def clear_association_text_cache_on_delete(instance):
+def clear_association_text_cache_on_delete(instance: AssocText) -> None:
+    """Clear association text cache entries when an instance is deleted."""
+    # Clear language-specific cache entry
     cache.delete(assoc_text_key(instance.assoc_id, instance.typ, instance.language))
+
+    # Clear default language cache if this was the default text
     if instance.default:
         cache.delete(assoc_text_key_def(instance.assoc_id, instance.typ))
 
@@ -166,14 +171,22 @@ def clear_association_text_cache_on_delete(instance):
 # ## EVENT TEXT
 
 
-def update_event_text_cache_on_save(instance):
+def update_event_text_cache_on_save(instance: EventText) -> None:
+    """Update event text cache when EventText instance is saved."""
+    # Update cache for specific language
     update_event_text(instance.event_id, instance.typ, instance.language)
+
+    # Update default cache if this is the default language
     if instance.default:
         update_event_text_def(instance.event_id, instance.typ)
 
 
-def clear_event_text_cache_on_delete(instance):
+def clear_event_text_cache_on_delete(instance: EventText) -> None:
+    """Clear event text cache entries when an EventText instance is deleted."""
+    # Clear cache for specific language variant
     cache.delete(event_text_key(instance.event_id, instance.typ, instance.language))
+
+    # Clear default cache entry if this was the default text
     if instance.default:
         cache.delete(event_text_key_def(instance.event_id, instance.typ))
 

@@ -43,9 +43,14 @@ from larpmanager.utils.miscellanea import get_warehouse_optionals
 
 
 @login_required
-def exe_urlshortner(request):
+def exe_urlshortner(request: HttpRequest) -> HttpResponse:
+    """Render URL shortener management page for association executives."""
+    # Check user has permission to access URL shortener management
     ctx = check_assoc_permission(request, "exe_urlshortner")
+
+    # Get all URL shorteners for the current association
     ctx["list"] = UrlShortner.objects.filter(assoc_id=request.assoc["id"])
+
     return render(request, "larpmanager/exe/url_shortner.html", ctx)
 
 
@@ -55,9 +60,14 @@ def exe_urlshortner_edit(request, num):
 
 
 @login_required
-def exe_warehouse_containers(request):
+def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
+    """Display list of warehouse containers for the current association."""
+    # Check user permissions for warehouse container management
     ctx = check_assoc_permission(request, "exe_warehouse_containers")
+
+    # Fetch all containers belonging to the current association
     ctx["list"] = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"])
+
     return render(request, "larpmanager/exe/warehouse/containers.html", ctx)
 
 
@@ -67,9 +77,14 @@ def exe_warehouse_containers_edit(request, num):
 
 
 @login_required
-def exe_warehouse_tags(request):
+def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
+    """Display warehouse tags for the current organization."""
+    # Check user has permission to view warehouse tags
     ctx = check_assoc_permission(request, "exe_warehouse_tags")
+
+    # Fetch all tags for the organization with related items
     ctx["list"] = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("items")
+
     return render(request, "larpmanager/exe/warehouse/tags.html", ctx)
 
 

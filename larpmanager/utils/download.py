@@ -590,7 +590,8 @@ def _writing_field(ctx: dict, k: str, key: list, v: any, val: list) -> None:
     key.append(k)
 
 
-def _clean(new_val):
+def _clean(new_val: str | None) -> str:
+    """Strip HTML tags and normalize whitespace."""
     soup = BeautifulSoup(str(new_val), features="lxml")
     clean = soup.get_text("\n").replace("\n", " ")
     return clean

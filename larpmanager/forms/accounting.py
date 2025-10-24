@@ -54,6 +54,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
+from larpmanager.models.member import Member
 from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.validators import FileTypeValidator
 
@@ -153,9 +154,12 @@ class OrgaCreditForm(MyFormRun):
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
         widgets = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize credit form with page title and run-specific member field."""
         super().__init__(*args, **kwargs)
+        # Set page title from credit name parameter
         self.page_title = self.params["credit_name"]
+        # Configure form for credit transaction type
         self.initial["oth"] = OtherChoices.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
 
@@ -195,17 +199,24 @@ class ExeOutflowForm(MyForm):
 
         widgets = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with association-specific run widget, default payment date, and conditional fields."""
         super().__init__(*args, **kwargs)
+
+        # Configure run widget with association context if not auto-populated
         if not hasattr(self, "auto_run"):
             self.fields["run"].widget.set_assoc(self.params["a_id"])
+
+        # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
             self.initial["payment_date"] = datetime.now().date().isoformat()
             # ~ else:
             # ~ self.initial['payment_date'] = self.instance.payment_date.isoformat()
 
+        # Mark invoice field as required
         self.fields["invoice"].required = True
 
+        # Remove balance field if Italian balance feature is disabled
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
@@ -228,18 +239,25 @@ class ExeInflowForm(MyForm):
 
         widgets = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with auto-populated run and payment date fields."""
         super().__init__(*args, **kwargs)
+
+        # Set association for run field if not auto-run mode
         if not hasattr(self, "auto_run"):
             self.fields["run"].widget.set_assoc(self.params["a_id"])
+
+        # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
             self.initial["payment_date"] = datetime.now().date().isoformat()
 
+        # Invoice field is always required
         self.fields["invoice"].required = True
 
 
 class OrgaInflowForm(ExeInflowForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with automatic run flag enabled."""
         self.auto_run = True
         super().__init__(*args, **kwargs)
 
@@ -252,7 +270,8 @@ class ExeDonationForm(MyForm):
         exclude = ("inv", "hide")
         widgets = {"member": AssocMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
@@ -267,9 +286,14 @@ class ExePaymentForm(MyForm):
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
         widgets = {"reg": AssocRegS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with association-specific field configuration."""
         super().__init__(*args, **kwargs)
+
+        # Configure registration field widget with association context
         self.fields["reg"].widget.set_assoc(self.params["a_id"])
+
+        # Remove VAT field if feature is not enabled
         if "vat" not in self.params["features"]:
             del self.fields["vat"]
 
@@ -349,12 +373,16 @@ class ExeExpenseForm(MyForm):
         exclude = ("inv", "hide")
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with run choices and association-specific widget configuration."""
         super().__init__(*args, **kwargs)
+
+        # Configure run choices and set association context for widgets
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
 
+        # Remove balance field if feature not enabled
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
@@ -371,9 +399,13 @@ class CollectionForm(BaseAccForm):
 class PaymentForm(BaseAccForm):
     amount = forms.DecimalField()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+        """Initialize form with registration-specific amount field."""
+        # Extract registration instance from kwargs
         self.reg = kwargs.pop("reg")
         super().__init__(*args, **kwargs)
+
+        # Configure amount field with dynamic validation based on registration balance
         self.fields["amount"] = forms.DecimalField(
             min_value=0.01,
             max_value=self.reg.tot_iscr - self.reg.tot_payed,
@@ -417,10 +449,18 @@ class OrgaDiscountForm(MyForm):
         fields = "__all__"
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with dynamically generated run selection field.
+
+        Creates a multiple choice field with checkboxes for all runs in the same event
+        as the provided run parameter. Pre-selects runs associated with the instance.
+        """
         super().__init__(*args, **kwargs)
+
+        # Build choices from all runs in the same event
         choices = [(m.id, str(m)) for m in Run.objects.filter(event=self.params["run"].event)]
 
+        # Create multiple choice field with checkbox widgets
         widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
         self.fields["runs"] = forms.MultipleChoiceField(
             choices=choices,
@@ -429,6 +469,7 @@ class OrgaDiscountForm(MyForm):
             help_text=_("Indicates the sessions for which the discount is available"),
         )
 
+        # Pre-populate field with existing runs if editing an instance
         if self.instance and self.instance.pk:
             self.initial["runs"] = [r.id for r in self.instance.runs.all()]
 
@@ -470,11 +511,13 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
         help_text=_("I confirm that I have made the payment"),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form, optionally removing invoice field based on receipt requirement."""
         require_receipt = kwargs.pop("require_receipt", True)
         super().__init__(*args, **kwargs)
+
+        # Remove invoice field when receipt is not required
         if not require_receipt:
-            # Remove invoice field completely when receipt not required
             if "invoice" in self.fields:
                 del self.fields["invoice"]
 
@@ -498,9 +541,19 @@ class RefundRequestForm(MyForm):
         model = RefundRequest
         fields = ("details", "value")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, member: Member, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with member-specific credit validation.
+
+        Args:
+            member: Member instance to extract credit limit from
+            *args: Variable length argument list passed to parent
+            **kwargs: Arbitrary keyword arguments passed to parent
+        """
+        # Extract member from kwargs and initialize parent form
         self.member = kwargs.pop("member")
         super().__init__(*args, **kwargs)
+
+        # Set value field with max value constraint from member's credit
         self.fields["value"] = forms.DecimalField(max_value=self.member.membership.credit, decimal_places=2)
 
 
@@ -512,7 +565,8 @@ class ExeRefundRequestForm(MyForm):
         exclude = ("status", "hide")
         widgets = {"member": AssocMemberS2Widget}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
@@ -687,8 +741,10 @@ class ExePaymentSettingsForm(MyForm):
         return res
 
     @staticmethod
-    def mask_string(data_string):
+    def mask_string(data_string: str) -> str:
+        """Masks the middle portion of a string, preserving first and last 3 characters."""
         min_length = 6
+        # Only mask strings longer than minimum length
         if len(data_string) > min_length:
             first_three = data_string[:3]
             last_three = data_string[-3:]

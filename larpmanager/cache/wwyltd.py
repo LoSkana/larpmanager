@@ -172,7 +172,7 @@ def _build_features_cache() -> list[dict]:
     features = []
 
     for feature in (
-        Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False)
+        Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False, module__order=0)
         .exclude(tutorial__exact="")
         .select_related("module")
     ):

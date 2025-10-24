@@ -101,18 +101,38 @@ def _build_px_context(char) -> tuple[set[int], set[int], dict[int, list[tuple[in
     return current_char_abilities, current_char_choices, mods_by_ability
 
 
-def _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices):
-    # look only inf modifiers for that ability
+def _apply_modifier_cost(
+    ability,
+    mods_by_ability: dict[int, list[tuple]],
+    current_char_abilities: set[int],
+    current_char_choices: set[int],
+) -> None:
+    """Apply the first matching modifier cost to an ability.
+
+    Iterates through modifiers for the given ability and applies the cost from
+    the first modifier whose prerequisites and requirements are satisfied.
+
+    Args:
+        ability: Ability object to modify.
+        mods_by_ability: Mapping of ability IDs to lists of (cost, prereq_ids, req_ids) tuples.
+        current_char_abilities: Set of ability IDs the character currently has.
+        current_char_choices: Set of choice IDs the character currently has.
+    """
+    # Look only at modifiers for this specific ability
     for cost, prereq_ids, req_ids in mods_by_ability.get(ability.id, ()):
+        # Check if ability prerequisites are met
         if prereq_ids and not prereq_ids.issubset(current_char_abilities):
             continue
+        # Check if choice requirements are met
         if req_ids and not req_ids.issubset(current_char_choices):
             continue
+        # Apply the cost from the first valid modifier
         ability.cost = cost
-        break  # first valid wins
+        break  # First valid wins
 
 
-def get_free_abilities(char):
+def get_free_abilities(char: Character) -> list:
+    """Return the list of free abilities for a character."""
     config_name = _free_abilities_idx()
     val = char.get_config(config_name, "[]")
     return ast.literal_eval(val)
@@ -122,7 +142,8 @@ def _free_abilities_idx():
     return "free_abilities"
 
 
-def set_free_abilities(char, frees):
+def set_free_abilities(char: Character, frees: list[int]) -> None:
+    """Save free abilities for a character."""
     config_name = _free_abilities_idx()
     save_single_config(char, config_name, json.dumps(frees))
 
@@ -211,9 +232,24 @@ def get_current_ability_px(char: Character) -> list[AbilityPx]:
     return abilities
 
 
-def check_available_ability_px(ability, current_char_abilities, current_char_choices):
+def check_available_ability_px(ability, current_char_abilities, current_char_choices) -> bool:
+    """Check if an ability is available based on prerequisites and requirements.
+
+    Args:
+        ability: Ability to check availability for
+        current_char_abilities: Set of current character abilities
+        current_char_choices: Set of current character choices
+
+    Returns:
+        True if all prerequisites and requirements are met, False otherwise
+    """
+    # Extract prerequisite IDs from the ability
     prereq_ids = {a.id for a in ability.prerequisites.all()}
+
+    # Extract requirement IDs from the ability
     requirements_ids = {o.id for o in ability.requirements.all()}
+
+    # Check if all prerequisites and requirements are satisfied
     return prereq_ids.issubset(current_char_abilities) and requirements_ids.issubset(current_char_choices)
 
 
@@ -441,13 +477,18 @@ def refresh_delivery_characters(instance):
         char.save()
 
 
-def update_characters_experience_on_rule_change(instance):
+def update_characters_experience_on_rule_change(instance: RulePx) -> None:
+    """Updates experience points for all characters when experience rules change."""
+    # Get the event containing the rule
     event = instance.event.get_class_parent(RulePx)
+
+    # Recalculate experience for all characters in the event
     for char in event.get_elements(Character).all():
         calculate_character_experience_points(char)
 
 
-def update_characters_experience_on_modifier_change(instance):
+def update_characters_experience_on_modifier_change(instance: ModifierPx) -> None:
+    """Update experience points for all characters when a modifier changes."""
     event = instance.event.get_class_parent(ModifierPx)
     for char in event.get_elements(Character).all():
         calculate_character_experience_points(char)

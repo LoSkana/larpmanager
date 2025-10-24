@@ -207,16 +207,21 @@ class QuestionApplicable(models.TextChoices):
     PROLOGUE = "r", "prologue"
 
     @classmethod
-    def get_applicable(cls, model_name):
+    def get_applicable(cls, model_name: str) -> str | None:
+        """Get the applicable value for a given model name."""
+        # Iterate through choices to find matching model name
         for value, label in cls.choices:
             if model_name.lower() == label.lower():
                 return value
         return None
 
     @staticmethod
-    def get_applicable_inverse(typ):
+    def get_applicable_inverse(typ: int) -> type:
+        """Get the Django model class for a QuestionApplicable type."""
         # noinspection PyUnresolvedReferences
+        # Get the lowercase label from QuestionApplicable enum
         model_name = QuestionApplicable(typ).label.lower()
+        # Retrieve and return the corresponding Django model
         return apps.get_model("larpmanager", model_name)
 
     @classmethod
@@ -299,8 +304,14 @@ class WritingQuestion(BaseModel):
     def __str__(self):
         return f"{self.event} - {self.name[:30]}"
 
-    def show(self):
+    def show(self) -> dict[str, Any]:
+        """Return JSON-serializable dictionary of object attributes.
+
+        Returns:
+            Dictionary containing description and name fields.
+        """
         js = {}
+        # Update JSON dict with description and name attributes
         for s in ["description", "name"]:
             self.upd_js_attr(js, s)
         return js
@@ -397,10 +408,22 @@ class WritingOption(BaseModel):
         s = self.show(run)
         return s["name"]
 
-    def show(self, run=None):
+    def show(self, run=None) -> dict[str, Any]:
+        """Return JSON representation with available fields and attributes.
+
+        Args:
+            run: Optional run instance for context (unused).
+
+        Returns:
+            Dictionary containing max_available and updated attributes.
+        """
+        # Initialize response with max available count
         js = {"max_available": self.max_available}
+
+        # Update with name and description attributes
         for s in ["name", "description"]:
             self.upd_js_attr(js, s)
+
         return js
 
 
@@ -547,7 +570,8 @@ class RegistrationQuestion(BaseModel):
     def __str__(self):
         return f"{self.event} - {self.name[:30]}"
 
-    def show(self):
+    def show(self) -> dict[str, Any]:
+        """Return JSON-serializable dict with description and name attributes."""
         js = {}
         for s in ["description", "name"]:
             self.upd_js_attr(js, s)

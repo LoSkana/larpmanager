@@ -209,10 +209,14 @@ def profile(request):
     return render(request, "larpmanager/member/profile.html", ctx)
 
 
-def load_profile(request, img, ext):
+def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:
+    """Save uploaded profile image and return thumbnail URL."""
+    # Generate unique filename and save to member profile
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
     request.user.member.profile = n_path
     request.user.member.save()
+
+    # Return success response with thumbnail URL
     return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
 
 
@@ -476,14 +480,16 @@ def membership(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def membership_request(request):
+def membership_request(request: HttpRequest) -> HttpResponse:
+    """Handle membership request display for the current user."""
     ctx = def_user_ctx(request)
     ctx["member"] = request.user.member
     return get_membership_request(ctx)
 
 
 @login_required
-def membership_request_test(request):
+def membership_request_test(request: HttpRequest) -> HttpResponse:
+    """Render membership request test PDF template."""
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member})
     return render(request, "pdf/membership/request.html", ctx)

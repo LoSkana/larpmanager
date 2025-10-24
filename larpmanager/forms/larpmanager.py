@@ -42,7 +42,9 @@ def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
 
 
 class LarpManagerCheck(forms.Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure CAPTCHA if needed."""
+        # Extract request from kwargs for CAPTCHA configuration
         self.request = kwargs.pop("request", None)
         super().__init__(*args, **kwargs)
         _get_captcha(self, self.request)

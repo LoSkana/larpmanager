@@ -88,10 +88,27 @@ def character_pdf_sheet_friendly(request: HttpRequest, s: str, num: int) -> Http
 
 
 @login_required
-def character_pdf_relationships(request, s, num):
+def character_pdf_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
+    """Generate PDF with character relationships for a specific character.
+
+    Args:
+        request: HTTP request object
+        s: Event slug identifier
+        num: Character number
+
+    Returns:
+        PDF response with character relationships
+    """
+    # Get event/run context with signup validation
     ctx = get_event_run(request, s, signup=True)
+
+    # Verify PDF printing permissions
     check_print_pdf(ctx)
+
+    # Validate character access and retrieve character data
     get_char_check(request, ctx, num, True)
+
+    # Generate and return the relationships PDF
     return print_character_rel(ctx)
 
 
