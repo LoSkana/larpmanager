@@ -399,17 +399,17 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set allowed attribute to None."""
         super().__init__(*args, **kwargs)
-        self.allowed = None
+        self.allowed_member_ids = None
 
     def set_run(self, run: Run) -> None:
         """Set allowed members for a run based on registrations and event roles."""
         # Get registered members for this run (non-cancelled)
         registration_queryset = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-        self.allowed = set(registration_queryset.values_list("member_id", flat=True))
+        self.allowed_member_ids = set(registration_queryset.values_list("member_id", flat=True))
 
         # Add members with event roles
         event_role_queryset = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
-        self.allowed.update(event_role_queryset.values_list("members__id", flat=True))
+        self.allowed_member_ids.update(event_role_queryset.values_list("members__id", flat=True))
 
         # Set required attribute
         # noinspection PyUnresolvedReferences
@@ -672,7 +672,7 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         # Query event roles with prefetched members to avoid N+1 queries
         que = EventRole.objects.filter(event_id=event.id).prefetch_related("members")
         # Extract flattened list of member IDs who have roles in this event
-        self.allowed = que.values_list("members__id", flat=True)
+        self.allowed_member_ids = que.values_list("members__id", flat=True)
 
     def get_queryset(self):
         return Member.objects.filter(pk__in=self.allowed_member_ids)
