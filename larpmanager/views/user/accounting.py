@@ -322,7 +322,7 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
     check_assoc_feature(request, "payment")
 
     # Get event context and validate user registration status
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
 
     # Verify user has valid registration for this event
     if not ctx["run"].reg:

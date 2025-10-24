@@ -54,7 +54,9 @@ from larpmanager.views.orga.event import prepare_roles_list
 
 @login_required
 def exe_association(request):
-    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage", add_ctx={"add_another": False})
+    return exe_edit(
+        request, ExeAssociationForm, None, "exe_association", "manage", additional_context={"add_another": False}
+    )
 
 
 @login_required
@@ -92,12 +94,12 @@ def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
 
-    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_ctx=add_ctx)
+    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", additional_context=add_ctx)
 
 
 @login_required
 def exe_profile(request):
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", add_ctx={"add_another": False})
+    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"add_another": False})
 
 
 @login_required
@@ -119,12 +121,16 @@ def exe_texts_edit(request, num):
 
 @login_required
 def exe_methods(request):
-    return exe_edit(request, ExePaymentSettingsForm, None, "exe_methods", "manage", add_ctx={"add_another": False})
+    return exe_edit(
+        request, ExePaymentSettingsForm, None, "exe_methods", "manage", additional_context={"add_another": False}
+    )
 
 
 @login_required
 def exe_appearance(request):
-    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage", add_ctx={"add_another": False})
+    return exe_edit(
+        request, ExeAppearanceForm, None, "exe_appearance", "manage", additional_context={"add_another": False}
+    )
 
 
 def f_k_exe(f_id, r_id):
@@ -151,7 +157,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     ctx["add_another"] = False
 
     # Process form submission and handle feature activation
-    if backend_edit(request, ctx, ExeFeatureForm, None, afield=None, assoc=True):
+    if backend_edit(request, ctx, ExeFeatureForm, None, additional_field=None, is_association_based=True):
         # Get newly activated features that have after-links
         ctx["new_features"] = Feature.objects.filter(pk__in=ctx["form"].added_features, after_link__isnull=False)
 
@@ -360,9 +366,11 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 
 @login_required
 def exe_quick(request):
-    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", add_ctx={"add_another": False})
+    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"add_another": False})
 
 
 @login_required
 def exe_preferences(request):
-    return exe_edit(request, ExePreferencesForm, request.user.member.id, None, "manage", add_ctx={"add_another": False})
+    return exe_edit(
+        request, ExePreferencesForm, request.user.member.id, None, "manage", additional_context={"add_another": False}
+    )

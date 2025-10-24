@@ -203,7 +203,7 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         PermissionDenied: If user lacks required casting feature permissions
     """
     # Get event context and validate user access permissions
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     check_event_feature(request, ctx, "casting")
 
     # Verify user has completed event registration
@@ -570,7 +570,7 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
                 when the user is not properly registered for the event
     """
     # Get event context and verify user signup status
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     casting_details(ctx, typ)
 
     # Check if casting preferences are enabled for this event
@@ -757,7 +757,7 @@ def casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         Http404: If user is not registered for the event and not staff
     """
     # Get event context and verify user signup status
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     casting_details(ctx, typ)
 
     # Check if casting history feature is enabled for this event

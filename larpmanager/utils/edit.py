@@ -433,7 +433,7 @@ def orga_edit(
 
     # Process the edit operation using backend edit handler
     # Returns True if edit was successful and should redirect
-    if backend_edit(request, ctx, form_type, entity_id, afield=None, assoc=False):
+    if backend_edit(request, ctx, form_type, entity_id, additional_field=None, is_association_based=False):
         # Set suggestion context for successful edit
         set_suggestion(ctx, permission)
 
@@ -457,7 +457,7 @@ def exe_edit(
     form_type: str,
     entity_id: int,
     permission: str,
-    redirect_target: str = None,
+    redirect_view: str = None,
     additional_field: str = None,
     additional_context: dict = None,
 ) -> HttpResponse:
@@ -472,7 +472,7 @@ def exe_edit(
         form_type: Type of form/entity being edited (e.g., 'member', 'event')
         entity_id: Entity ID for the object being edited
         permission: Permission string required to access this edit functionality
-        redirect_target: Optional redirect target after successful edit (defaults to permission)
+        redirect_view: Optional redirect target after successful edit (defaults to permission)
         additional_field: Optional additional field parameter for the backend edit
         additional_context: Optional additional context dictionary to merge with base context
 
@@ -487,7 +487,7 @@ def exe_edit(
         ctx.update(additional_context)
 
     # Process the edit operation through backend handler
-    if backend_edit(request, ctx, form_type, entity_id, afield=additional_field, assoc=True):
+    if backend_edit(request, ctx, form_type, entity_id, additional_field=additional_field, is_association_based=True):
         # Set permission suggestion for UI feedback
         set_suggestion(ctx, permission)
 
@@ -496,9 +496,9 @@ def exe_edit(
             return redirect(request.resolver_match.view_name, num=0)
 
         # Determine redirect target and perform redirect
-        if not redirect_target:
-            redirect_target = permission
-        return redirect(redirect_target)
+        if not redirect_view:
+            redirect_view = permission
+        return redirect(redirect_view)
 
     # Render edit template if edit operation was not successful
     return render(request, "larpmanager/exe/edit.html", ctx)

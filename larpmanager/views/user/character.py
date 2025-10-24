@@ -93,7 +93,7 @@ def character(request: HttpRequest, s: str, num: int) -> HttpResponse:
         Rendered character sheet response
     """
     # Get event run context and verify status
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
 
     # Validate character access permissions
     get_char_check(request, ctx, num)
@@ -248,7 +248,7 @@ def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
         Redirect: To home page if user has no assigned characters for the event
     """
     # Get event and run context with signup and status validation
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
 
     # Retrieve all registration character relationships for this run
     # Use select_related to optimize database queries for character data
@@ -406,7 +406,7 @@ def character_customize(request, s, num):
     Raises:
         Http404: If character doesn't belong to user
     """
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
 
     get_char_check(request, ctx, num, True)
 
@@ -502,7 +502,7 @@ def character_profile_rotate(request: HttpRequest, s: str, num: int, r: int) -> 
         ObjectDoesNotExist: When character registration relationship not found
     """
     # Get event context and validate character access permissions
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     get_char_check(request, ctx, num, True)
 
     # Retrieve character registration relationship with related objects
@@ -551,7 +551,7 @@ def character_list(request, s):
     Returns:
         HttpResponse: Rendered character list template
     """
-    ctx = get_event_run(request, s, status=True, signup=True, slug="user_character")
+    ctx = get_event_run(request, s, include_status=True, signup=True, slug="user_character")
 
     ctx["list"] = get_player_characters(request.user.member, ctx["event"])
     # add character configs
@@ -581,7 +581,7 @@ def character_create(request, s):
     Returns:
         HttpResponse: Character creation form or redirect
     """
-    ctx = get_event_run(request, s, status=True, signup=True, slug="user_character")
+    ctx = get_event_run(request, s, include_status=True, signup=True, slug="user_character")
 
     check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
     if check:
@@ -605,7 +605,7 @@ def character_edit(request, s, num):
     Returns:
         HttpResponse: Character editing form
     """
-    ctx = get_event_run(request, s, status=True, signup=True)
+    ctx = get_event_run(request, s, include_status=True, signup=True)
     get_char_check(request, ctx, num, True)
     return character_form(request, ctx, s, ctx["character"], CharacterForm)
 
@@ -654,7 +654,7 @@ def character_assign(request, s, num):
     Returns:
         HttpResponse: Redirect to character list
     """
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     get_char_check(request, ctx, num, True)
     if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
@@ -741,7 +741,7 @@ def check_char_abilities(request: HttpRequest, s: str, num: int) -> dict:
         Http404: If user is not allowed to select abilities for this event
     """
     # Get event context with signup and status validation
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
 
     # Determine the parent event ID for configuration lookup
     event_id = ctx["event"].parent_id or ctx["event"].id
@@ -871,7 +871,7 @@ def character_relationships(request: HttpRequest, s: str, num: int) -> HttpRespo
         PermissionDenied: If user lacks permission to view character
     """
     # Get event context and validate user access to event and character
-    ctx = get_event_run(request, s, status=True, signup=True)
+    ctx = get_event_run(request, s, include_status=True, signup=True)
     get_char_check(request, ctx, num, True)
 
     # Load all cached event data for performance
@@ -922,7 +922,7 @@ def character_relationships_edit(request, s, num, oth):
     Returns:
         HttpResponse: Relationship edit form or redirect
     """
-    ctx = get_event_run(request, s, status=True, signup=True)
+    ctx = get_event_run(request, s, include_status=True, signup=True)
     get_char_check(request, ctx, num, True)
 
     ctx["relationship"] = None

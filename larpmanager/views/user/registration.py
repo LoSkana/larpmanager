@@ -549,7 +549,7 @@ def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int 
         RewokedMembershipError: When user membership has been revoked
     """
     # Get event and run context with status validation
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
     run = ctx["run"]
     event = ctx["event"]
 
@@ -1017,7 +1017,7 @@ def unregister(request, s):
     Returns:
         HttpResponse: Confirmation form or redirect to accounting page after cancellation
     """
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
 
     # check if user is actually registered
     try:
@@ -1058,7 +1058,7 @@ def gift(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If registration is not open or user lacks permissions
     """
     # Get event context and verify registration access
-    ctx = get_event_run(request, s, signup=False, slug="gift", status=True)
+    ctx = get_event_run(request, s, signup=False, slug="gift", include_status=True)
     check_registration_open(ctx, request)
 
     # Filter registrations for current user with redeem codes (gift registrations)
@@ -1117,7 +1117,7 @@ def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
         PermissionDenied: If user lacks permission to edit gift registrations
     """
     # Get event context and verify user has gift management permissions
-    ctx = get_event_run(request, s, False, "gift", status=True)
+    ctx = get_event_run(request, s, False, "gift", include_status=True)
     check_registration_open(ctx, request)
 
     # Retrieve the specific gift registration and prepare form context
@@ -1213,7 +1213,7 @@ def gift_redeem(request: HttpRequest, s: str, code: str) -> HttpResponse:
                 and association constraints
     """
     # Get event context and validate user permissions for gift redemption
-    ctx = get_event_run(request, s, False, "gift", status=True)
+    ctx = get_event_run(request, s, False, "gift", include_status=True)
 
     # Check if user is already registered for this event
     if ctx["run"].reg:

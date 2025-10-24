@@ -615,7 +615,7 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
     check_writing_form_type(ctx, typ)
 
     # Process form submission using backend edit utility
-    if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaWritingQuestionForm, num, is_association_based=False):
         # Set permission suggestion for future operations
         set_suggestion(ctx, perm)
 
@@ -729,7 +729,7 @@ def orga_writing_options_new(request: HttpRequest, s: str, typ: str, num: int) -
 def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> HttpResponse:
     """Edit a writing option and handle form submission with redirect logic."""
     # Process form submission and save changes
-    if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaWritingOptionForm, num, is_association_based=False):
         redirect_target = "orga_writing_form_edit"
 
         # Check if user wants to continue adding more options
