@@ -42,16 +42,16 @@ if TYPE_CHECKING:
     from larpmanager.models.association import Association
 
 
-def generate_id(length):
+def generate_id(id_length):
     """Generate random alphanumeric ID string.
 
     Args:
-        length (int): Length of ID to generate
+        id_length (int): Length of ID to generate
 
     Returns:
         str: Random lowercase alphanumeric string of specified length
     """
-    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length))
+    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
 
 
 def decimal_to_str(v: Decimal) -> str:
@@ -154,7 +154,7 @@ def download(url: str) -> str:
     return url
 
 
-def show_thumb(height: int, text: str) -> SafeString:
+def show_thumb(height: int, image_url: str) -> SafeString:
     """Generate HTML img tag for thumbnail display.
 
     Creates an HTML image element with specified height and source URL.
@@ -162,7 +162,7 @@ def show_thumb(height: int, text: str) -> SafeString:
 
     Args:
         height: Height in pixels for the image display
-        text: URL or file path to the image source
+        image_url: URL or file path to the image source
 
     Returns:
         HTML img tag as a SafeString with specified height and source
@@ -172,10 +172,10 @@ def show_thumb(height: int, text: str) -> SafeString:
         '<img style="height:100px" src="/media/image.jpg" />'
     """
     # Generate HTML img tag with inline height styling
-    s = f'<img style="height:{height}px" src="{text}" />'
+    html_img_tag = f'<img style="height:{height}px" src="{image_url}" />'
 
     # Return as SafeString to prevent HTML escaping in templates
-    return mark_safe(s)
+    return mark_safe(html_img_tag)
 
 
 def get_attr(ob: object, nm: str) -> str | None:
@@ -203,11 +203,11 @@ def get_attr(ob: object, nm: str) -> str | None:
 
 def get_sum(queryset: QuerySet) -> Decimal | int:
     """Sum the 'value' field from a queryset, returning 0 if empty or None."""
-    res = queryset.aggregate(Sum("value"))
+    aggregation_result = queryset.aggregate(Sum("value"))
     # Return 0 if result is None, missing key, or has None value
-    if not res or "value__sum" not in res or not res["value__sum"]:
+    if not aggregation_result or "value__sum" not in aggregation_result or not aggregation_result["value__sum"]:
         return 0
-    return res["value__sum"]
+    return aggregation_result["value__sum"]
 
 
 @deconstructible
@@ -374,11 +374,11 @@ def strip_tags(html: str | None) -> str:
         return ""
 
     # Create MLStripper instance and process HTML
-    s = MLStripper()
-    s.feed(html)
+    html_stripper = MLStripper()
+    html_stripper.feed(html)
 
     # Return the stripped text content
-    return s.get_data()
+    return html_stripper.get_data()
 
 
 class MLStripper(HTMLParser):

@@ -66,7 +66,7 @@ class TestAccDetailFunctions(BaseTestCase):
         )
 
         result = get_acc_detail(
-            "Test Payments", run, "Test description", AccountingItemPayment, PaymentChoices.choices, "pay", reg=True
+            "Test Payments", run, "Test description", AccountingItemPayment, PaymentChoices.choices, "pay", filter_by_registration=True
         )
 
         self.assertEqual(result["name"], "Test Payments")
@@ -131,7 +131,7 @@ class TestAccDetailFunctions(BaseTestCase):
         run = self.get_run()
 
         result = get_acc_detail(
-            "Empty", run, "No items", AccountingItemPayment, PaymentChoices.choices, "pay", reg=True
+            "Empty", run, "No items", AccountingItemPayment, PaymentChoices.choices, "pay", filter_by_registration=True
         )
 
         self.assertEqual(result["num"], 0)

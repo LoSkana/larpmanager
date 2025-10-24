@@ -4327,9 +4327,6 @@ msgstr "Les autres champs sont facultatifs"
 msgid "The total registration fee is"
 msgstr "Le montant total des droits d'inscription est de"
 
-msgid "Toggle the sidebar visibility"
-msgstr "Afficher ou masquer la barre latérale"
-
 msgid "Transportation - gas, highway"
 msgstr "Transport - essence, autoroute"
 
@@ -6166,6 +6163,9 @@ msgstr "Frais d'inscription %(number)d de %(user)s par %(event)s"
 
 msgid "Select which elements to copy, from which other event"
 msgstr "Sélectionnez les éléments à copier, à partir de quel autre événement"
+
+msgid "Show or hide the sidebar containing all the functions"
+msgstr "Afficher ou masquer la barre latérale contenant toutes les fonctions"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Le caractère a des valeurs manquantes dans les champs obligatoires"

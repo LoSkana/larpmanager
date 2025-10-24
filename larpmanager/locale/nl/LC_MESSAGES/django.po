@@ -4327,9 +4327,6 @@ msgstr "De andere velden zijn optioneel"
 msgid "The total registration fee is"
 msgstr "Het totale inschrijfgeld is"
 
-msgid "Toggle the sidebar visibility"
-msgstr "De zichtbaarheid van de zijbalk inschakelen"
-
 msgid "Transportation - gas, highway"
 msgstr "Vervoer - benzine, snelweg"
 
@@ -6146,6 +6143,9 @@ msgstr "Registratiekosten %(number)d van %(user)s per %(event)s"
 msgid "Select which elements to copy, from which other event"
 msgstr ""
 "Selecteer welke elementen je wilt kopiëren van welke andere gebeurtenis"
+
+msgid "Show or hide the sidebar containing all the functions"
+msgstr "De zijbalk met alle functies weergeven of verbergen"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Het teken heeft ontbrekende waarden in verplichte velden"

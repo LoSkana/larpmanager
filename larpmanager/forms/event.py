@@ -1215,7 +1215,7 @@ class OrgaRunForm(ConfigForm):
 
                 extra.append((typ, field["name"]))
 
-            self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+            self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra_data=extra)
 
         shows = []
 
@@ -1234,7 +1234,7 @@ class OrgaRunForm(ConfigForm):
                 extra.append((key, display))
         if extra:
             help_text = _("Selected elements will be shown to participants")
-            self.add_configs("show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra=extra)
+            self.add_configs("show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra_data=extra)
 
         self.set_section("visibility", _("Visibility"))
         for s in shows:
@@ -1565,7 +1565,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Create the final configuration with all collected fields
         self.add_configs(
-            f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
+            f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra_data=extra
         )
 
     def add_writing_configs(self, basics: dict, event_id: int, help_text: str, s: tuple) -> None:
@@ -1643,7 +1643,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         extra.append(("stats", "Stats"))
 
         # Add the compiled configuration to the form
-        self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+        self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra_data=extra)
 
     def _compile_configs(self, basics, extra, fields):
         """Compile configuration options from field definitions.

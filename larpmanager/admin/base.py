@@ -35,7 +35,7 @@ class DefModelAdmin(ImportExportModelAdmin):
     ordering = ["-updated"]
 
 
-def reduced(v: str | None) -> str:
+def reduced(value: str | None) -> str:
     """Truncate string to maximum length with ellipsis.
 
     Truncates the input string to a maximum of 50 characters. If the string
@@ -43,7 +43,7 @@ def reduced(v: str | None) -> str:
     truncation.
 
     Args:
-        v: String to potentially truncate. Can be None or empty.
+        value: String to potentially truncate. Can be None or empty.
 
     Returns:
         Original string if under 50 chars, otherwise truncated with [...] suffix.
@@ -61,11 +61,11 @@ def reduced(v: str | None) -> str:
     max_length = 50
 
     # Return early if string is None, empty, or under limit
-    if not v or len(v) < max_length:
-        return v
+    if not value or len(value) < max_length:
+        return value
 
     # Truncate and append ellipsis indicator
-    return v[:max_length] + "[...]"
+    return value[:max_length] + "[...]"
 
 
 class AssocFilter(AutocompleteFilter):

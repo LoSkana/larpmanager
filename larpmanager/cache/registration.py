@@ -39,48 +39,48 @@ def cache_reg_counts_key(run_id):
     return f"reg_counts{run_id}"
 
 
-def get_reg_counts(run: Run, reset: bool = False) -> dict:
+def get_reg_counts(run: Run, reset_cache: bool = False) -> dict:
     """Get registration counts for a run, with caching support.
 
     Args:
         run: The run instance to get counts for
-        reset: If True, force cache refresh
+        reset_cache: If True, force cache refresh
 
     Returns:
         Dictionary containing registration count data
     """
     # Generate cache key for this run
-    key = cache_reg_counts_key(run.id)
+    cache_key = cache_reg_counts_key(run.id)
 
     # Check if we should bypass cache
-    if reset:
-        res = None
+    if reset_cache:
+        cached_counts = None
     else:
-        res = cache.get(key)
+        cached_counts = cache.get(cache_key)
 
     # Update and cache if not found
-    if res is None:
-        res = update_reg_counts(run)
-        cache.set(key, res, timeout=60 * 5)
+    if cached_counts is None:
+        cached_counts = update_reg_counts(run)
+        cache.set(cache_key, cached_counts, timeout=60 * 5)
 
-    return res
+    return cached_counts
 
 
-def add_count(s: dict, param: str, v: int = 1) -> None:
+def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1) -> None:
     """Add or increment a counter value in a dictionary.
 
     Args:
-        s: Dictionary to modify
-        param: Key to add or increment
-        v: Value to add (default: 1)
+        counter_dict: Dictionary to modify
+        parameter_name: Key to add or increment
+        increment_value: Value to add (default: 1)
     """
     # Initialize parameter if not present
-    if param not in s:
-        s[param] = v
+    if parameter_name not in counter_dict:
+        counter_dict[parameter_name] = increment_value
         return
 
     # Increment existing value
-    s[param] += v
+    counter_dict[parameter_name] += increment_value
 
 
 def update_reg_counts(run) -> dict[str, int]:

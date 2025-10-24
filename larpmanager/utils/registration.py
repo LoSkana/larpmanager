@@ -417,8 +417,8 @@ def registration_status(
     register_url = reverse("register", args=[run.get_slug()])
 
     if user.is_authenticated:
-        mb = get_user_membership(user.member, run.event.assoc_id)
-        if mb.status in [MembershipStatus.REWOKED]:
+        membership = get_user_membership(user.member, run.event.assoc_id)
+        if membership.status in [MembershipStatus.REWOKED]:
             return
 
         if run.reg:
@@ -432,14 +432,14 @@ def registration_status(
     if get_event_config(run.event_id, "pre_register_active", False, ctx=ctx):
         _status_preregister(run, user, ctx)
 
-    dt = datetime.today()
+    current_datetime = datetime.today()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             return
-        elif run.registration_open > dt:
+        elif run.registration_open > current_datetime:
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             run.status["details"] = _("Opening at: %(date)s") % {
@@ -456,14 +456,16 @@ def registration_status(
     }
 
     # pick the first matching message (or None)
-    mes = next((msg for key, msg in messages.items() if key in status), None)
+    selected_message = next((msg for key, msg in messages.items() if key in status), None)
 
     # if it's a primary/filler, copy over the additional details
-    if mes and any(key in status for key in ("primary", "filler")):
+    if selected_message and any(key in status for key in ("primary", "filler")):
         status["details"] = status["additional"]
 
     # wrap in a link if we have a message, otherwise show closed
-    status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed") + "."
+    status["text"] = (
+        f"<a href='{register_url}'>{selected_message}</a>" if selected_message else _("Registration closed") + "."
+    )
 
 
 def _status_preregister(run, user, ctx: dict | None = None) -> None:

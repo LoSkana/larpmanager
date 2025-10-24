@@ -106,7 +106,7 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
     """
     # Initialize context based on whether this is event-specific or general help
     if s:
-        ctx = get_event_run(request, s, status=True)
+        ctx = get_event_run(request, s, include_status=True)
     else:
         ctx = def_user_ctx(request)
         ctx["a_id"] = request.assoc["id"]
@@ -258,7 +258,7 @@ def workshops(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered template with workshop list and completion status
     """
     # Get event context with signup and status validation
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
 
     # Initialize workshop list for template context
     ctx["list"] = []
@@ -334,7 +334,7 @@ def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
         PermissionDenied: If user doesn't have access to the workshop
     """
     # Get event context and validate user access to workshop signup
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     get_workshop(ctx, m)
 
     # Check if user has already completed this workshop module

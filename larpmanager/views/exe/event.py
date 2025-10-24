@@ -137,12 +137,12 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 @login_required
 def exe_runs_edit(request, num):
-    return exe_edit(request, OrgaRunForm, num, "exe_events", afield="event")
+    return exe_edit(request, OrgaRunForm, num, "exe_events", additional_field="event")
 
 
 @login_required
 def exe_events_appearance(request, num):
-    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", add_ctx={"add_another": False})
+    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", additional_context={"add_another": False})
 
 
 @login_required
@@ -183,7 +183,7 @@ def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
     add_ctx["add_another"] = False
 
-    return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx)
+    return exe_edit(request, OrgaConfigForm, num, "exe_templates", additional_context=add_ctx)
 
 
 @login_required
@@ -191,7 +191,7 @@ def exe_templates_roles(request: HttpRequest, eid: int, num: int | None) -> Http
     """Edit or create template roles for an event."""
     add_ctx = def_user_ctx(request)
     get_event_template(add_ctx, eid)
-    return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", add_ctx=add_ctx)
+    return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", additional_context=add_ctx)
 
 
 @login_required

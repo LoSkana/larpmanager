@@ -233,8 +233,8 @@ def handle_bulk_items(request: HttpRequest, ctx: dict) -> None:
     ]
 
 
-def _get_chars(ctx, ids):
-    return ctx["event"].get_elements(Character).filter(pk__in=ids).values_list("pk", flat=True)
+def _get_chars(ctx, character_ids):
+    return ctx["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
 def exec_add_char_fact(request, ctx, target, ids) -> None:

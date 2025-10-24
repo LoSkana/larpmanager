@@ -22,9 +22,9 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 
 
-def clear_config_cache(element):
+def clear_config_cache(config_element):
     # noinspection PyProtectedMember
-    cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
+    cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))
 
 
 def reset_element_configs(element):
@@ -275,12 +275,12 @@ def _get_cached_config(element_id, element_type, name, def_value=None, ctx=None,
     return evaluate_config(configs, name, def_value)
 
 
-def get_assoc_config(assoc_id, name, def_value=None, ctx=None, bypass_cache=False):
-    return _get_cached_config(assoc_id, "association", name, def_value, ctx, bypass_cache)
+def get_assoc_config(association_id, config_name, default_value=None, ctx=None, bypass_cache=False):
+    return _get_cached_config(association_id, "association", config_name, default_value, ctx, bypass_cache)
 
 
-def get_event_config(event_id, name, def_value=None, ctx=None, bypass_cache=False):
-    return _get_cached_config(event_id, "event", name, def_value, ctx, bypass_cache)
+def get_event_config(event_id, config_name, default_value=None, ctx=None, bypass_cache=False):
+    return _get_cached_config(event_id, "event", config_name, default_value, ctx, bypass_cache)
 
 
 def evaluate_config(configs: dict, name: str, def_value: any) -> any:

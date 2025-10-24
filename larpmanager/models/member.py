@@ -327,7 +327,7 @@ class Member(BaseModel):
             return self.email
 
         # Final fallback to primary key
-        return self.pk
+        return str(self.pk)
 
     def display_real(self):
         return f"{self.name} {self.surname}"
@@ -364,11 +364,11 @@ class Member(BaseModel):
     def get_request_filepath(self):
         return os.path.join(self.get_member_filepath(), "request.pdf")
 
-    def join(self, assoc):
-        mmb = get_user_membership(self, assoc.id)  # type: ignore
-        if mmb.status == MembershipStatus.EMPTY:
-            mmb.status = MembershipStatus.JOINED
-            mmb.save()
+    def join(self, association):
+        membership = get_user_membership(self, association.id)  # type: ignore
+        if membership.status == MembershipStatus.EMPTY:
+            membership.status = MembershipStatus.JOINED
+            membership.save()
 
     def get_residence(self) -> str:
         """Return formatted residence address string or empty string if no address."""
@@ -382,8 +382,8 @@ class Member(BaseModel):
         # Format: street number, city (province), country_code (country)
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
-    def get_config(self, name, def_v=None, bypass_cache=False):
-        return get_element_config(self, name, def_v, bypass_cache)
+    def get_config(self, name, default_value=None, bypass_cache=False):
+        return get_element_config(self, name, default_value, bypass_cache)
 
 
 class MemberConfig(BaseModel):
@@ -626,7 +626,7 @@ class Vote(BaseModel):
         return f"V{self.number} {self.member} ({self.assoc} - {self.year})"
 
 
-def get_user_membership(user: Member, assoc: Union[Association, int]) -> Membership:
+def get_user_membership(user: Member, association: Union[Association, int]) -> Membership:
     """Get or create a membership for a user in an association.
 
     This function first checks if the user already has a cached membership
@@ -635,7 +635,7 @@ def get_user_membership(user: Member, assoc: Union[Association, int]) -> Members
 
     Args:
         user: The member object for whom to get the membership
-        assoc: Either an Association instance or an association ID (int)
+        association: Either an Association instance or an association ID (int)
 
     Returns:
         The membership object for the user in the association
@@ -649,14 +649,14 @@ def get_user_membership(user: Member, assoc: Union[Association, int]) -> Members
 
     # Extract association ID from either Association object or integer
     # noinspection PyUnresolvedReferences
-    assoc_id = assoc.id if isinstance(assoc, Association) else assoc
+    association_id = association.id if isinstance(association, Association) else association
 
     # Validate that we have a valid association ID
-    if not assoc_id:
+    if not association_id:
         raise Http404("Association not found")
 
     # Get existing membership or create a new one for this user/association pair
-    membership, _ = Membership.objects.get_or_create(member=user, assoc_id=assoc_id)
+    membership, _ = Membership.objects.get_or_create(member=user, assoc_id=association_id)
 
     # Cache the membership on the user object for future access
     user.membership = membership

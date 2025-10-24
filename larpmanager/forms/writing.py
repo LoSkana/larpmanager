@@ -71,23 +71,26 @@ class WritingForm(MyForm):
 
         Configures cover, assigned, and progress fields based on writing question types.
         """
-        types = set()
-        for que in self.questions:
-            types.add(que.typ)
+        question_types = set()
+        for question in self.questions:
+            question_types.add(question.typ)
 
-        if WritingQuestionType.COVER not in types:
+        if WritingQuestionType.COVER not in question_types:
             if "cover" in self.fields:
                 del self.fields["cover"]
 
-        if WritingQuestionType.ASSIGNED in types:
-            choices = [(m.id, m.show_nick()) for m in get_event_staffers(self.params["run"].event)]
-            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
+        if WritingQuestionType.ASSIGNED in question_types:
+            staffer_choices = [
+                (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
+            ]
+            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + staffer_choices
         else:
             self.delete_field("assigned")
 
-        if WritingQuestionType.PROGRESS in types:
+        if WritingQuestionType.PROGRESS in question_types:
             self.fields["progress"].choices = [
-                (el.id, str(el)) for el in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
+                (step.id, str(step))
+                for step in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
         else:
             self.delete_field("progress")

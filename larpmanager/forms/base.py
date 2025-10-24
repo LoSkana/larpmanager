@@ -335,9 +335,9 @@ class MyForm(forms.ModelForm):
         for ch in new - old:
             attr.add(ch)
 
-    def delete_field(self, key):
-        if key in self.fields:
-            del self.fields[key]
+    def delete_field(self, field_key):
+        if field_key in self.fields:
+            del self.fields[field_key]
 
 
 class MyFormRun(MyForm):
@@ -1050,11 +1050,11 @@ class BaseRegistrationForm(MyFormRun):
             init = list([el.option_id for el in self.multiples[question.id]])
             self.initial[key] = init
 
-    def reorder_field(self, key: str) -> None:
+    def reorder_field(self, field_name: str) -> None:
         """Move field to end of fields dictionary."""
         # Remove field from current position and re-add at the end
-        field = self.fields.pop(key)
-        self.fields[key] = field
+        field = self.fields.pop(field_name)
+        self.fields[field_name] = field
 
     def save_reg_questions(self, instance, orga=True):
         """Save registration question answers to database.

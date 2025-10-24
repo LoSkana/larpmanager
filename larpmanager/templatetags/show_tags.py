@@ -59,18 +59,18 @@ def modulo(num, val):
 
 
 @register.filter
-def basename(value):
+def basename(file_path):
     """Template filter to extract basename from file path.
 
     Args:
-        value (str): File path
+        file_path (str): File path
 
     Returns:
         str: Basename of the file path (filename without directory)
     """
-    if not value:
+    if not file_path:
         return ""
-    return os.path.basename(value)
+    return os.path.basename(file_path)
 
 
 @register.filter
@@ -489,18 +489,18 @@ def key(d, key_name, s_key_name=None):
 
 
 @register.simple_tag
-def get_field(form, name):
+def get_field(form, field_name):
     """Template tag to safely get form field by name.
 
     Args:
         form: Django form instance
-        name (str): Field name to retrieve
+        field_name (str): Field name to retrieve
 
     Returns:
         Field: Form field or empty string if not found
     """
-    if name in form:
-        return form[name]
+    if field_name in form:
+        return form[field_name]
     return ""
 
 

@@ -138,7 +138,7 @@ def casting_quest_traits(ctx: dict, typ: str) -> None:
     ctx["choices"] = json.dumps(choices)
 
 
-def casting_details(ctx: dict, typ: int) -> dict:
+def casting_details(ctx: dict, casting_type: int) -> dict:
     """Prepare casting context with configuration details and labels.
 
     Configures the template context for casting operations by setting up
@@ -146,22 +146,22 @@ def casting_details(ctx: dict, typ: int) -> dict:
 
     Args:
         ctx: Template context dictionary to update with casting configuration
-        typ: Quest type identifier - positive values for quests, 0 for characters
+        casting_type: Quest type identifier - positive values for quests, 0 for characters
 
     Returns:
         Updated context dictionary with casting-specific configuration and labels
 
     Note:
-        For typ > 0: Configures quest-related labels and data
-        For typ = 0: Configures character-related labels
+        For casting_type > 0: Configures quest-related labels and data
+        For casting_type = 0: Configures character-related labels
     """
     # Load event cache data into context
     get_event_cache_all(ctx)
 
     # Configure labels based on casting type (quest vs character)
-    if typ > 0:
-        data = ctx["quest_types"][typ]
-        ctx["gl_name"] = data["name"]
+    if casting_type > 0:
+        quest_type_data = ctx["quest_types"][casting_type]
+        ctx["gl_name"] = quest_type_data["name"]
         ctx["cl_name"] = _("Quest")
         ctx["el_name"] = _("Trait")
     else:
@@ -170,13 +170,15 @@ def casting_details(ctx: dict, typ: int) -> dict:
         ctx["el_name"] = _("Character")
 
     # Set type identifier and numeric casting configuration
-    ctx["typ"] = typ
-    for key, default in (("add", 0), ("min", 5), ("max", 5)):
-        ctx[f"casting_{key}"] = int(get_event_config(ctx["event"].id, f"casting_{key}", default, ctx))
+    ctx["typ"] = casting_type
+    for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
+        ctx[f"casting_{config_key}"] = int(
+            get_event_config(ctx["event"].id, f"casting_{config_key}", default_value, ctx)
+        )
 
     # Set boolean casting preferences from event configuration
-    for s in ["show_pref", "history", "avoid"]:
-        ctx["casting_" + s] = get_event_config(ctx["event"].id, "casting_" + s, False, ctx)
+    for preference_name in ["show_pref", "history", "avoid"]:
+        ctx["casting_" + preference_name] = get_event_config(ctx["event"].id, "casting_" + preference_name, False, ctx)
 
     return ctx
 
@@ -201,7 +203,7 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         PermissionDenied: If user lacks required casting feature permissions
     """
     # Get event context and validate user access permissions
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     check_event_feature(request, ctx, "casting")
 
     # Verify user has completed event registration
@@ -568,7 +570,7 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
                 when the user is not properly registered for the event
     """
     # Get event context and verify user signup status
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     casting_details(ctx, typ)
 
     # Check if casting preferences are enabled for this event
@@ -755,7 +757,7 @@ def casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         Http404: If user is not registered for the event and not staff
     """
     # Get event context and verify user signup status
-    ctx = get_event_run(request, s, signup=True, status=True)
+    ctx = get_event_run(request, s, signup=True, include_status=True)
     casting_details(ctx, typ)
 
     # Check if casting history feature is enabled for this event

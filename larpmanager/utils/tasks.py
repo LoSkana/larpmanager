@@ -57,35 +57,35 @@ def background_auto(schedule=0, **background_kwargs):
         function: Decorator function
     """
 
-    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
+    def decorator(original_function: Callable[..., Any]) -> Callable[..., Any]:
         """Decorator that conditionally executes a function as a background task.
 
         Args:
-            func: The function to be decorated for potential background execution.
+            original_function: The function to be decorated for potential background execution.
 
         Returns:
             A wrapper function that either executes the original function directly
             or schedules it as a background task based on configuration.
         """
         # Create background task from the original function
-        task = background(schedule=schedule, **background_kwargs)(func)
+        background_task = background(schedule=schedule, **background_kwargs)(original_function)
 
-        @wraps(func)
+        @wraps(original_function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Execute function directly or schedule as background task based on settings."""
             # Check if auto background tasks are enabled in settings
             if getattr(conf_settings, "AUTO_BACKGROUND_TASKS", False):
                 # Filter out internal kwargs that shouldn't be passed to the function
-                clean_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
+                filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
-                return func(*args, **clean_kwargs)
+                return original_function(*args, **filtered_kwargs)
             else:
                 # Schedule function as background task
-                return task(*args, **kwargs)
+                return background_task(*args, **kwargs)
 
         # Attach task references to wrapper for external access
-        wrapper.task = task
-        wrapper.task_function = func
+        wrapper.task = background_task
+        wrapper.task_function = original_function
         return wrapper
 
     return decorator
@@ -376,10 +376,10 @@ def add_unsubscribe_body(assoc):
 
 
 def my_send_mail(
-    subj: str,
+    subject: str,
     body: str,
     recipient: Union[str, Member],
-    obj: Optional[Union[Run, Event, Association, Any]] = None,
+    context_object: Optional[Union[Run, Event, Association, Any]] = None,
     reply_to: Optional[str] = None,
     schedule: int = 0,
 ) -> None:
@@ -389,10 +389,10 @@ def my_send_mail(
     and queues email for background delivery.
 
     Args:
-        subj: Email subject line
+        subject: Email subject line
         body: Email body content (HTML or plain text)
         recipient: Email recipient address or Member instance
-        obj: Context object for extracting association/run information.
+        context_object: Context object for extracting association/run information.
              Supports Run, Event, Association, or objects with run_id/assoc_id/event_id
         reply_to: Custom reply-to email address
         schedule: Delay in seconds before sending email
@@ -406,70 +406,75 @@ def my_send_mail(
         - Modifies body with signature and unsubscribe link
     """
     # Clean up duplicate spaces in subject line
-    subj = subj.replace("  ", " ")
+    subject = subject.replace("  ", " ")
 
     # Initialize context variables for database relationships
     run_id = None
-    assoc_id = None
+    association_id = None
 
     # Extract context information from the provided object
-    if obj:
+    if context_object:
         # Handle direct model instances
-        if isinstance(obj, Run):
-            run_id = obj.id  # type: ignore[attr-defined]
-            assoc_id = obj.event.assoc_id  # type: ignore[attr-defined]
-        elif isinstance(obj, Event):
-            assoc_id = obj.assoc_id  # type: ignore[attr-defined]
-        elif isinstance(obj, Association):
-            assoc_id = obj.id  # type: ignore[attr-defined]
+        if isinstance(context_object, Run):
+            run_id = context_object.id  # type: ignore[attr-defined]
+            association_id = context_object.event.assoc_id  # type: ignore[attr-defined]
+        elif isinstance(context_object, Event):
+            association_id = context_object.assoc_id  # type: ignore[attr-defined]
+        elif isinstance(context_object, Association):
+            association_id = context_object.id  # type: ignore[attr-defined]
         # Handle objects with foreign key relationships
-        elif hasattr(obj, "run_id") and obj.run_id:
-            run_id = obj.run_id
-            assoc_id = obj.run.event.assoc_id
-        elif hasattr(obj, "assoc_id") and obj.assoc_id:
-            assoc_id = obj.assoc_id
-        elif hasattr(obj, "event_id") and obj.event_id:
-            assoc_id = obj.event.assoc_id
+        elif hasattr(context_object, "run_id") and context_object.run_id:
+            run_id = context_object.run_id
+            association_id = context_object.run.event.assoc_id
+        elif hasattr(context_object, "assoc_id") and context_object.assoc_id:
+            association_id = context_object.assoc_id
+        elif hasattr(context_object, "event_id") and context_object.event_id:
+            association_id = context_object.event.assoc_id
 
         # Add organization signature if available
-        if assoc_id:
-            sign = get_assoc_text(assoc_id, AssocTextType.SIGNATURE)
-            if sign:
-                body += sign
+        if association_id:
+            signature = get_assoc_text(association_id, AssocTextType.SIGNATURE)
+            if signature:
+                body += signature
 
     # Append unsubscribe footer based on context
-    body += add_unsubscribe_body(obj)
+    body += add_unsubscribe_body(context_object)
 
     # Convert Member instance to email string if needed
     if isinstance(recipient, Member):
         recipient = recipient.email
 
     # Ensure string types for database storage
-    subj_str = str(subj)
-    body_str = str(body)
+    subject_string = str(subject)
+    body_string = str(body)
 
     # Create email record for tracking and delivery
     email = Email.objects.create(
-        assoc_id=assoc_id, run_id=run_id, recipient=recipient, subj=subj_str, body=body_str, reply_to=reply_to
+        assoc_id=association_id,
+        run_id=run_id,
+        recipient=recipient,
+        subj=subject_string,
+        body=body_string,
+        reply_to=reply_to,
     )
 
     # Queue email for background processing
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subj, text, exception=None):
+def notify_admins(subject, message_text, exception=None):
     """Send notification email to system administrators.
 
     Args:
-        subj (str): Notification subject
-        text (str): Notification message
+        subject (str): Notification subject
+        message_text (str): Notification message
         exception (Exception, optional): Exception to include in notification
 
     Side effects:
         Sends notification emails to all configured ADMINS
     """
     if exception:
-        tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
-        text += "\n" + tb
+        traceback_text = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
+        message_text += "\n" + traceback_text
     for _name, email in conf_settings.ADMINS:
-        my_send_mail(subj, text, email)
+        my_send_mail(subject, message_text, email)

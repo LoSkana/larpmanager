@@ -179,33 +179,33 @@ def _get_file(ctx: dict, file, column_id: str = None) -> tuple[any, list[str]]:
     """
     # Get available column names from context
     _get_column_names(ctx)
-    allowed = []
+    allowed_column_names = []
 
     # Add columns from specific column_id if provided
     if column_id is not None:
-        allowed.extend(list(ctx["columns"][column_id].keys()))
+        allowed_column_names.extend(list(ctx["columns"][column_id].keys()))
 
     # Add fields from context if available
     if "fields" in ctx:
-        allowed.extend(ctx["fields"].keys())
+        allowed_column_names.extend(ctx["fields"].keys())
 
     # Convert all allowed column names to lowercase for comparison
-    allowed = [a.lower() for a in allowed]
+    allowed_column_names = [column_name.lower() for column_name in allowed_column_names]
 
     # Read and parse the uploaded CSV file
-    input_df = _read_uploaded_csv(file)
-    if input_df is None:
+    input_dataframe = _read_uploaded_csv(file)
+    if input_dataframe is None:
         return None, ["ERR - Could not read input csv"]
 
     # Normalize column names to lowercase for validation
-    input_df.columns = [c.lower() for c in input_df.columns]
+    input_dataframe.columns = [column.lower() for column in input_dataframe.columns]
 
     # Validate that all columns are recognized
-    for col in input_df.columns:
-        if col.lower() not in allowed:
-            return None, [f"ERR - column not recognized: {col}"]
+    for column in input_dataframe.columns:
+        if column.lower() not in allowed_column_names:
+            return None, [f"ERR - column not recognized: {column}"]
 
-    return input_df, []
+    return input_dataframe, []
 
 
 def registrations_load(request, ctx, form):

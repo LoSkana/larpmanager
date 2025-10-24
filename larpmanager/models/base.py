@@ -49,15 +49,15 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         abstract = True
         ordering = ["-updated"]
 
-    def upd_js_attr(self, js: dict, nm: str) -> dict:
+    def upd_js_attr(self, javascript_object: dict, attribute_name: str) -> dict:
         """Update JavaScript object with model attribute value.
 
         Retrieves the value of the specified attribute from the model instance
         and adds it to the provided JavaScript object dictionary.
 
         Args:
-            js: JavaScript object dictionary to update
-            nm: Name of the model attribute to retrieve and add
+            javascript_object: JavaScript object dictionary to update
+            attribute_name: Name of the model attribute to retrieve and add
 
         Returns:
             Updated JavaScript object dictionary with the new attribute
@@ -67,8 +67,8 @@ class BaseModel(CloneMixin, SafeDeleteModel):
             {'existing': 'value', 'name': 'John'}
         """
         # Get attribute value from model instance and add to JS object
-        js[nm] = get_attr(self, nm)
-        return js
+        javascript_object[attribute_name] = get_attr(self, attribute_name)
+        return javascript_object
 
     def __str__(self) -> str:
         """Return string representation of the model.
@@ -133,29 +133,29 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         """
         # Get model metadata for field introspection
         # noinspection PyUnresolvedReferences
-        opts = self._meta
-        data = {}
+        model_options = self._meta
+        serialized_data = {}
 
         # Process concrete and private fields (standard model fields)
         # Extract field values using Django's field value accessor
-        for f in chain(opts.concrete_fields, opts.private_fields):
-            v = f.value_from_object(self)
+        for field in chain(model_options.concrete_fields, model_options.private_fields):
+            field_value = field.value_from_object(self)
             # Only include fields with truthy values to keep dict clean
-            if v:
-                data[f.name] = v
+            if field_value:
+                serialized_data[field.name] = field_value
 
         # Process many-to-many relationships if requested
         if many_to_many:
             # Iterate through all many-to-many field definitions
-            for f in opts.many_to_many:
+            for m2m_field in model_options.many_to_many:
                 # Extract IDs from related objects for serialization
                 # Convert queryset to list of primary key values
-                d = [i.id for i in f.value_from_object(self)]
+                related_ids = [related_obj.id for related_obj in m2m_field.value_from_object(self)]
                 # Only include non-empty relationship lists
-                if len(d) > 0:
-                    data[f.name] = d
+                if len(related_ids) > 0:
+                    serialized_data[m2m_field.name] = related_ids
 
-        return data
+        return serialized_data
 
 
 class FeatureNationality(models.TextChoices):

@@ -21,9 +21,6 @@ from typing import Any
 
 from django.http import HttpRequest
 
-from larpmanager.models.base import Feature
-from larpmanager.models.event import Run
-
 
 class FeatureError(Exception):
     """Exception raised when a required feature is not enabled.
@@ -34,7 +31,7 @@ class FeatureError(Exception):
         path (str): Request path where the error occurred
     """
 
-    def __init__(self, feature: Feature, run: Run, path: str) -> None:
+    def __init__(self, feature: str, run: int, path: str) -> None:
         """Initialize the object with feature, run, and path parameters.
 
         Args:
@@ -135,7 +132,7 @@ class MembershipError(Exception):
         self.assocs = assocs
 
 
-def check_assoc_feature(request: HttpRequest, s: str) -> None:
+def check_assoc_feature(request: HttpRequest, feature_slug: str) -> None:
     """Check if association has required feature enabled.
 
     Validates that the specified feature is enabled for the association
@@ -146,7 +143,7 @@ def check_assoc_feature(request: HttpRequest, s: str) -> None:
     Args:
         request: Django HTTP request object containing association context
             with 'assoc' attribute that includes 'features' dictionary
-        s: Feature slug identifier to validate against enabled features
+        feature_slug: Feature slug identifier to validate against enabled features
 
     Raises:
         FeatureError: If the specified feature is not enabled for the
@@ -156,12 +153,12 @@ def check_assoc_feature(request: HttpRequest, s: str) -> None:
         check_assoc_feature(request, 'advanced_registration')
     """
     # Check if the requested feature slug exists in the association's enabled features
-    if s not in request.assoc["features"]:
+    if feature_slug not in request.assoc["features"]:
         # Raise error with feature slug, error code 0, and current request path
-        raise FeatureError(s, 0, request.path)
+        raise FeatureError(feature_slug, 0, request.path)
 
 
-def check_event_feature(request: HttpRequest, ctx: dict, s: str) -> None:
+def check_event_feature(request: HttpRequest, ctx: dict, feature_slug: str) -> None:
     """Check if event has required feature enabled.
 
     Validates that a specific feature is enabled for the current event context.
@@ -171,7 +168,7 @@ def check_event_feature(request: HttpRequest, ctx: dict, s: str) -> None:
     Args:
         request: Django HTTP request object containing user and session data
         ctx: Event context dictionary containing features and run information
-        s: Feature slug string identifier to check for availability
+        feature_slug: Feature slug string identifier to check for availability
 
     Raises:
         FeatureError: If the specified feature is not enabled for the event,
@@ -182,9 +179,9 @@ def check_event_feature(request: HttpRequest, ctx: dict, s: str) -> None:
         # Raises FeatureError if 'character_creation' feature is disabled
     """
     # Check if the requested feature slug exists in the event's enabled features
-    if s not in ctx["features"]:
+    if feature_slug not in ctx["features"]:
         # Raise detailed error with context information for debugging
-        raise FeatureError(s, ctx["run"].id, request.path)
+        raise FeatureError(feature_slug, ctx["run"].id, request.path)
 
 
 class MainPageError(Exception):

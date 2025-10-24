@@ -68,14 +68,14 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
 
 
 def improve_function_with_claude_code(
-    function_name: str, file_path: Path, function_source: str = None
+    function_name: str, file_path: Path, function_source: str = None, function_number: int = 1
 ) -> tuple[bool, str | None]:
     """
     Call Claude Code CLI to improve the function.
     Returns (success, improved_function_source).
     """
     if function_source is None:
-        function_source = extract_function_from_file(file_path, function_name)
+        function_source = extract_function_from_file(file_path, function_name, function_number)
         if function_source is None:
             return False, None
 
@@ -95,8 +95,8 @@ Analizza il codice fornito e identifica tutte le variabili, parametri e funzioni
 
 Fornisci il codice refactorizzato con i nuovi nomi applicati
 
+
 IMPORTANTE:
-- Eccezione per ctx: mantienilo così per uniformità
 - Restituisci SOLO il codice della funzione migliorata, senza spiegazioni aggiuntive
 - NON aggiungere MAI import statements
 - MANTIENI esattamente la stessa indentazione della funzione originale
@@ -390,7 +390,7 @@ def process_csv_batch():
                 # Call Claude Code to improve
                 print("  🤖 Calling Claude Code...")
                 original_function = extract_function_from_file(file_path, function_name, function_number)
-                success, improved_code = improve_function_with_claude_code(function_name, file_path)
+                success, improved_code = improve_function_with_claude_code(function_name, file_path, original_function, function_number)
                 if success and improved_code and original_function:
                     if replace_function_in_file(file_path, function_name, improved_code, original_function, function_number):
                         print(f"  ✅ Successfully processed {function_name} #{function_number}")

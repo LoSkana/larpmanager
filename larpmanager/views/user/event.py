@@ -588,7 +588,7 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If event or run not found (handled by get_event_run)
     """
     # Get event context and check if character feature is enabled
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
     if "character" not in ctx["features"]:
         return redirect("event", s=ctx["run"].get_slug())
 
@@ -657,7 +657,7 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
         - Sets no_robots flag based on development status and timing
     """
     # Get base context with event and run information
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
     ctx["coming"] = []
     ctx["past"] = []
 
@@ -729,7 +729,7 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
         and event configuration settings.
     """
     # Get event context and validate user access
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
 
     # Check if gallery is visible and character display is enabled
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
@@ -824,7 +824,7 @@ def check_visibility(ctx: dict, typ: str, name: str) -> None:
 def factions(request: HttpRequest, s: str) -> HttpResponse:
     """Render factions page for an event run."""
     # Get event run context and validate status
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
 
     # Verify user has permission to view factions
     check_visibility(ctx, "faction", _("Factions"))
@@ -846,7 +846,7 @@ def faction(request, s, g):
     Returns:
         HttpResponse: Rendered faction detail page
     """
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
     check_visibility(ctx, "faction", _("Factions"))
 
     get_event_cache_all(ctx)
@@ -878,7 +878,7 @@ def quests(request: HttpRequest, s: str, g: str | None = None) -> HttpResponse:
         HttpResponse: Rendered template with quest types or specific quests
     """
     # Get event context and verify user can view quests
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
@@ -908,7 +908,7 @@ def quest(request, s, g):
     Returns:
         HttpResponse: Rendered quest template
     """
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
     check_visibility(ctx, "quest", _("Quest"))
 
     get_element(ctx, g, "quest", Quest, by_number=True)
@@ -943,7 +943,7 @@ def limitations(request: HttpRequest, s: str) -> HttpResponse:
         discounts, and registration options with their current usage counts.
     """
     # Get event and run context with status validation
-    ctx = get_event_run(request, s, status=True)
+    ctx = get_event_run(request, s, include_status=True)
 
     # Retrieve current registration counts for tickets and options
     counts = get_reg_counts(ctx["run"])

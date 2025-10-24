@@ -148,34 +148,36 @@ def set_free_abilities(char: Character, frees: list[int]) -> None:
     save_single_config(char, config_name, json.dumps(frees))
 
 
-def calculate_character_experience_points(char):
+def calculate_character_experience_points(character):
     """
     Update character experience points and apply ability calculations.
 
     Args:
-        char: Character instance to update
+        character: Character instance to update
     """
-    if "px" not in get_event_features(char.event_id):
+    if "px" not in get_event_features(character.event_id):
         return
 
-    start = get_event_config(char.event_id, "px_start", 0)
+    starting_experience_points = get_event_config(character.event_id, "px_start", 0)
 
-    _handle_free_abilities(char)
+    _handle_free_abilities(character)
 
-    abilities = get_current_ability_px(char)
+    current_abilities = get_current_ability_px(character)
 
-    px_tot = int(start) + (char.px_delivery_list.aggregate(t=Coalesce(Sum("amount"), 0))["t"] or 0)
-    px_used = sum(a.cost for a in abilities)
+    total_experience_points = int(starting_experience_points) + (
+        character.px_delivery_list.aggregate(total=Coalesce(Sum("amount"), 0))["total"] or 0
+    )
+    used_experience_points = sum(ability.cost for ability in current_abilities)
 
-    addit = {
-        "px_tot": px_tot,
-        "px_used": px_used,
-        "px_avail": px_tot - px_used,
+    experience_data = {
+        "px_tot": total_experience_points,
+        "px_used": used_experience_points,
+        "px_avail": total_experience_points - used_experience_points,
     }
 
-    save_all_element_configs(char, addit)
+    save_all_element_configs(character, experience_data)
 
-    apply_rules_computed(char)
+    apply_rules_computed(character)
 
 
 def _handle_free_abilities(char):

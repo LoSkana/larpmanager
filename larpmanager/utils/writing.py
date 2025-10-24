@@ -258,7 +258,9 @@ def writing_post(request, ctx, typ, nm):
         raise ReturnNowError(writing_popup(request, ctx, typ))
 
 
-def writing_list(request: HttpRequest, ctx: dict[str, Any], typ: type[Model], nm: str) -> HttpResponse:
+def writing_list(
+    request: HttpRequest, ctx: dict[str, Any], writing_type: type[Model], template_name: str
+) -> HttpResponse:
     """Handle writing list display with POST processing and bulk operations.
 
     Manages writing element lists with form submission processing,
@@ -267,8 +269,8 @@ def writing_list(request: HttpRequest, ctx: dict[str, Any], typ: type[Model], nm
     Args:
         request: The HTTP request object containing user data and parameters
         ctx: Context dictionary containing event data and other shared state
-        typ: Model class type for the writing element (Character, Plot, etc.)
-        nm: Name string used for template and URL routing
+        writing_type: Model class type for the writing element (Character, Plot, etc.)
+        template_name: Name string used for template and URL routing
 
     Returns:
         HttpResponse: Rendered template response for the writing list page
@@ -278,68 +280,68 @@ def writing_list(request: HttpRequest, ctx: dict[str, Any], typ: type[Model], nm
         writing types through conditional logic and specialized helper functions.
     """
     # Process any POST data for writing operations
-    writing_post(request, ctx, typ, nm)
+    writing_post(request, ctx, writing_type, template_name)
 
     # Handle bulk operations on writing elements
-    writing_bulk(ctx, request, typ)
+    writing_bulk(ctx, request, writing_type)
 
     # Extract event from context for query operations
-    ev = ctx["event"]
-    ctx["nm"] = nm
+    event = ctx["event"]
+    ctx["nm"] = template_name
 
     # Get text fields configuration and writing query results
-    text_fields, writing = writing_list_query(ctx, ev, typ)
+    text_fields, writing = writing_list_query(ctx, event, writing_type)
 
     # Apply type-specific context modifications based on model type
-    if issubclass(typ, Character):
+    if issubclass(writing_type, Character):
         writing_list_char(ctx)
 
-    if issubclass(typ, Plot):
+    if issubclass(writing_type, Plot):
         writing_list_plot(ctx)
 
-    if issubclass(typ, Faction):
+    if issubclass(writing_type, Faction):
         writing_list_faction(ctx)
 
     # Handle speed LARP specific context setup
-    if issubclass(typ, SpeedLarp):
+    if issubclass(writing_type, SpeedLarp):
         writing_list_speedlarp(ctx)
 
-    if issubclass(typ, Prologue):
+    if issubclass(writing_type, Prologue):
         writing_list_prologue(ctx)
 
     # Configure quest and quest type specific contexts
-    if issubclass(typ, Quest):
+    if issubclass(writing_type, Quest):
         writing_list_quest(ctx)
 
-    if issubclass(typ, QuestType):
+    if issubclass(writing_type, QuestType):
         writing_list_questtype(ctx)
 
     # Add prerequisites prefetching for ability experience types
-    if issubclass(typ, AbilityPx):
+    if issubclass(writing_type, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
     # Setup writing-specific context if writing elements exist
     if writing:
         # noinspection PyProtectedMember, PyUnresolvedReferences
-        ctx["label_typ"] = typ._meta.model_name
+        ctx["label_typ"] = writing_type._meta.model_name
         ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
 
         # Configure upload/download paths if writing type is applicable
         if ctx["writing_typ"]:
-            ctx["upload"] = f"{nm}s"
-            ctx["download"] = f"{nm}s"
+            ctx["upload"] = f"{template_name}s"
+            ctx["download"] = f"{template_name}s"
 
         # Setup progress assignment and text field handling
-        orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
-        writing_list_text_fields(ctx, text_fields, typ)
+        orga_list_progress_assign(ctx, writing_type)  # pyright: ignore[reportArgumentType]
+        writing_list_text_fields(ctx, text_fields, writing_type)
 
         # Prepare final context elements for rendering
         _prepare_writing_list(ctx, request)
-        _setup_char_finder(ctx, typ)
+        _setup_char_finder(ctx, writing_type)
         _get_custom_form(ctx)
 
     # Render the appropriate template based on the name parameter
-    return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
+    return render(request, "larpmanager/orga/writing/" + template_name + "s.html", ctx)
 
 
 def writing_bulk(ctx, request, typ):
@@ -645,14 +647,14 @@ def char_add_addit(ctx):
             el.addit = {}
 
 
-def writing_view(request: HttpRequest, ctx: dict[str, Any], nm: str) -> HttpResponse:
+def writing_view(request: HttpRequest, ctx: dict[str, Any], element_type_name: str) -> HttpResponse:
     """
     Display writing element view with character data and relationships.
 
     Args:
         request: HTTP request object containing user session and request data
         ctx: Context dictionary containing element data and cached information
-        nm: Name of the writing element type (e.g., 'character', 'plot')
+        element_type_name: Name of the writing element type (e.g., 'character', 'plot')
 
     Returns:
         HttpResponse: Rendered writing view template with populated context data
@@ -663,15 +665,15 @@ def writing_view(request: HttpRequest, ctx: dict[str, Any], nm: str) -> HttpResp
         and plot elements.
     """
     # Set up base element data and context
-    ctx["el"] = ctx[nm]
+    ctx["el"] = ctx[element_type_name]
     ctx["el"].data = ctx["el"].show_complete()
-    ctx["nm"] = nm
+    ctx["nm"] = element_type_name
 
     # Load event cache data for all related elements
     get_event_cache_all(ctx)
 
     # Handle character-specific data and relationships
-    if nm == "character":
+    if element_type_name == "character":
         if ctx["el"].number in ctx["chars"]:
             ctx["char"] = ctx["chars"][ctx["el"].number]
         ctx["character"] = ctx["el"]
@@ -681,13 +683,15 @@ def writing_view(request: HttpRequest, ctx: dict[str, Any], nm: str) -> HttpResp
         get_character_relationships(ctx)
     else:
         # Handle non-character writing elements with applicable questions
-        applicable = QuestionApplicable.get_applicable(nm)
-        if applicable:
-            ctx["element"] = get_writing_element_fields(ctx, nm, applicable, ctx["el"].id, only_visible=False)
+        applicable_questions = QuestionApplicable.get_applicable(element_type_name)
+        if applicable_questions:
+            ctx["element"] = get_writing_element_fields(
+                ctx, element_type_name, applicable_questions, ctx["el"].id, only_visible=False
+            )
         ctx["sheet_char"] = ctx["el"].show_complete()
 
     # Add plot-specific character relationships
-    if nm == "plot":
+    if element_type_name == "plot":
         ctx["sheet_plots"] = (
             PlotCharacterRel.objects.filter(plot=ctx["el"]).order_by("character__number").select_related("character")
         )
@@ -695,28 +699,32 @@ def writing_view(request: HttpRequest, ctx: dict[str, Any], nm: str) -> HttpResp
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 
-def writing_versions(request, ctx, nm, tp):
+def writing_versions(request, ctx, element_name, version_type):
     """Display text versions with diff comparison for writing elements.
 
     Args:
         request: HTTP request object
         ctx: Context dictionary with writing element data
-        nm: Name of the writing element
-        tp: Type identifier for text versions
+        element_name: Name of the writing element
+        version_type: Type identifier for text versions
 
     Returns:
         HttpResponse: Rendered versions template with diff data
     """
-    ctx["versions"] = TextVersion.objects.filter(tp=tp, eid=ctx[nm].id).order_by("version").select_related("member")
-    last = None
-    for v in ctx["versions"]:
-        if last is not None:
-            compute_diff(v, last)
+    ctx["versions"] = (
+        TextVersion.objects.filter(tp=version_type, eid=ctx[element_name].id)
+        .order_by("version")
+        .select_related("member")
+    )
+    previous_version = None
+    for current_version in ctx["versions"]:
+        if previous_version is not None:
+            compute_diff(current_version, previous_version)
         else:
-            v.diff = v.text.replace("\n", "<br />")
-        last = v
-    ctx["element"] = ctx[nm]
-    ctx["typ"] = nm
+            current_version.diff = current_version.text.replace("\n", "<br />")
+        previous_version = current_version
+    ctx["element"] = ctx[element_name]
+    ctx["typ"] = element_name
     return render(request, "larpmanager/orga/writing/versions.html", ctx)
 
 

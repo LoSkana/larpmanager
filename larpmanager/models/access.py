@@ -213,10 +213,10 @@ def get_event_organizers(event: Event) -> QuerySet[Member]:
         so it may create a new EventRole if none exists for this event.
     """
     # Get or create the event organizer role (role number 1)
-    (orga, cr) = EventRole.objects.get_or_create(event=event, number=1)
+    (organizer_role, was_created) = EventRole.objects.get_or_create(event=event, number=1)
 
     # Return all members assigned to the organizer role
-    return orga.members.all()
+    return organizer_role.members.all()
 
 
 def get_event_staffers(event: Event) -> list:

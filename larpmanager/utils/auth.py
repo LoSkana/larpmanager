@@ -189,7 +189,7 @@ def check_lm_admin(request: HttpRequest) -> dict[str, int]:
 
     Returns:
         A dictionary containing:
-            - a_id (int): The association ID from the request
+            - association_id (int): The association ID from the request
             - lm_admin (int): Admin flag set to 1 indicating LM admin status
 
     Raises:
@@ -198,14 +198,14 @@ def check_lm_admin(request: HttpRequest) -> dict[str, int]:
     Example:
         >>> context = check_lm_admin(request)
         >>> print(context)
-        {'a_id': 123, 'lm_admin': 1}
+        {'association_id': 123, 'lm_admin': 1}
     """
     # Check if the current user has LM administrator privileges
     if not is_lm_admin(request):
         raise Http404("Not lm admin")
 
     # Return admin context with association ID and admin flag
-    return {"a_id": request.assoc["id"], "lm_admin": 1}
+    return {"association_id": request.assoc["id"], "lm_admin": 1}
 
 
 def get_allowed_managed() -> list[str]:

@@ -230,31 +230,31 @@ class Event(BaseModel):
     def __str__(self):
         return self.name
 
-    def get_elements(self, typ: type) -> QuerySet:
+    def get_elements(self, element_model_class: type) -> QuerySet:
         """Get ordered elements of specified type for the parent event.
 
         Args:
-            typ: Model class to query elements from
+            element_model_class: Model class to query elements from
 
         Returns:
             Ordered queryset of elements
         """
         # Get all elements for the parent event
-        queryset = typ.objects.filter(event=self.get_class_parent(typ))
+        queryset = element_model_class.objects.filter(event=self.get_class_parent(element_model_class))
 
         # Order by number if the model has that field
-        if hasattr(typ, "number"):
+        if hasattr(element_model_class, "number"):
             queryset = queryset.order_by("number")
         return queryset
 
-    def get_class_parent(self, nm: Union[type[BaseModel], str]):
+    def get_class_parent(self, model_class: Union[type[BaseModel], str]):
         """Get the parent event for inheriting elements of a specific model class.
 
         This method determines whether to use the parent event's elements or the current
         event's elements based on inheritance settings and model class type.
 
         Args:
-            nm: Model class (subclass of BaseModel) or class name string to check
+            model_class: Model class (subclass of BaseModel) or class name string to check
                 inheritance for. If a class is provided, it will be converted to
                 lowercase string format.
 
@@ -268,11 +268,11 @@ class Event(BaseModel):
             configuration settings.
         """
         # Convert class objects to lowercase string representation
-        if inspect.isclass(nm) and issubclass(nm, BaseModel):
-            nm = nm.__name__.lower()
+        if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
+            model_class = model_class.__name__.lower()
 
         # Define which model elements can be inherited from parent events
-        elements = [
+        inheritable_elements = [
             "character",
             "faction",
             "abilitypx",
@@ -283,10 +283,10 @@ class Event(BaseModel):
         ]
 
         # Check if inheritance conditions are met
-        if self.parent and nm in elements:
+        if self.parent and model_class in inheritable_elements:
             # Verify that campaign independence is not enabled for this element type
             # If independence is disabled (False), use parent's elements
-            if not self.get_config(f"campaign_{nm}_indep", False):
+            if not self.get_config(f"campaign_{model_class}_indep", False):
                 return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled
@@ -374,8 +374,8 @@ class Event(BaseModel):
         os.makedirs(fp, exist_ok=True)
         return fp
 
-    def get_config(self, name, def_v=None, bypass_cache=False):
-        return get_element_config(self, name, def_v, bypass_cache)
+    def get_config(self, name, default_value=None, bypass_cache=False):
+        return get_element_config(self, name, default_value, bypass_cache)
 
 
 class EventConfig(BaseModel):
@@ -583,10 +583,10 @@ class Run(BaseModel):
 
     def get_slug(self) -> str:
         """Return the slug for this run, appending the run number if greater than 1."""
-        slug = self.event.slug
+        run_slug = self.event.slug
         if self.number > 1:
-            slug += f"-{self.number}"
-        return slug
+            run_slug += f"-{self.number}"
+        return run_slug
 
     def get_where(self):
         # noinspection PyUnresolvedReferences
@@ -650,8 +650,8 @@ class Run(BaseModel):
     def get_profiles_filepath(self):
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, name, def_v=None, bypass_cache=False):
-        return get_element_config(self, name, def_v, bypass_cache)
+    def get_config(self, config_key, default_value=None, bypass_cache=False):
+        return get_element_config(self, config_key, default_value, bypass_cache)
 
 
 class RunConfig(BaseModel):

@@ -213,15 +213,15 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
     reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
 
 
-def reset_event_links(uid: int, aid: int) -> None:
+def reset_event_links(user_id: int, association_id: int) -> None:
     """Clear event link cache for a specific user and association.
 
     This function removes cached event links from the cache system to ensure
     fresh data is loaded on the next request.
 
     Args:
-        uid: User ID to clear cache for
-        aid: Association ID to clear cache for
+        user_id: User ID to clear cache for
+        association_id: Association ID to clear cache for
 
     Returns:
         None
@@ -231,7 +231,7 @@ def reset_event_links(uid: int, aid: int) -> None:
         cache key for the specified user and association combination.
     """
     # Generate cache key for the specific user-association combination
-    cache_key = get_cache_event_key(uid, aid)
+    cache_key = get_cache_event_key(user_id, association_id)
 
     # Remove the cached event links from cache
     cache.delete(cache_key)

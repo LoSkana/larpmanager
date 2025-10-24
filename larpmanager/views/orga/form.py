@@ -208,7 +208,7 @@ def orga_registration_form_edit(request: HttpRequest, s: str, num: int) -> HttpR
     ctx = check_event_permission(request, s, perm)
 
     # Process form submission using backend edit helper
-    if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, is_association_based=False):
         # Set suggestion flag for the current permission
         set_suggestion(ctx, perm)
 
@@ -304,7 +304,7 @@ def registration_option_edit(ctx, num, request):
     Returns:
         HttpResponse: Redirect to next step or rendered edit form
     """
-    if backend_edit(request, ctx, OrgaRegistrationOptionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaRegistrationOptionForm, num, is_association_based=False):
         redirect_target = "orga_registration_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_registration_options_new"

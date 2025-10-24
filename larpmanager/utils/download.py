@@ -85,10 +85,10 @@ def zip_exports(ctx, exports, filename):
     """
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        for name, key, vals in exports:
-            if not key or not vals:
+        for export_name, csv_headers, csv_rows in exports:
+            if not csv_headers or not csv_rows:
                 continue
-            zip_file.writestr(f"{name}.csv", _temp_csv_file(key, vals))
+            zip_file.writestr(f"{export_name}.csv", _temp_csv_file(csv_headers, csv_rows))
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer.read(), content_type="application/zip")
     response["Content-Disposition"] = f"attachment; filename={str(ctx['run'])} - {filename}.zip"
@@ -110,7 +110,7 @@ def download(ctx, typ, nm):
     return zip_exports(ctx, exports, nm.capitalize())
 
 
-def export_data(ctx: dict, typ: type, member_cover: bool = False) -> list[tuple[str, list, list]]:
+def export_data(ctx: dict, model_type: type, member_cover: bool = False) -> list[tuple[str, list, list]]:
     """Export model data to structured format with questions and answers.
 
     Processes data export for various model types with question handling,
@@ -118,47 +118,47 @@ def export_data(ctx: dict, typ: type, member_cover: bool = False) -> list[tuple[
 
     Args:
         ctx: Context dictionary containing export configuration and features
-        typ: Model class to export data from
+        model_type: Model class to export data from
         member_cover: Whether to include member cover images in export
 
     Returns:
         List of tuples containing (model_name, headers, data_rows) for export
     """
     # Initialize query and prepare basic export data
-    query = typ.objects.all()
+    queryset = model_type.objects.all()
     get_event_cache_all(ctx)
-    model = typ.__name__.lower()
+    model_name = model_type.__name__.lower()
 
     # Apply filters and prepare query based on model type
-    query = _download_prepare(ctx, model, query, typ)
-    _prepare_export(ctx, model, query)
+    queryset = _download_prepare(ctx, model_name, queryset, model_type)
+    _prepare_export(ctx, model_name, queryset)
 
     # Process each record to extract data rows
-    key = None
-    vals = []
-    for el in query:
+    headers = None
+    data_rows = []
+    for record in queryset:
         # Handle applicable records or registration-specific processing
-        if ctx["applicable"] or model == "registration":
-            val, key = _get_applicable_row(ctx, el, model, member_cover)
+        if ctx["applicable"] or model_name == "registration":
+            row_data, headers = _get_applicable_row(ctx, record, model_name, member_cover)
         else:
-            val, key = _get_standard_row(ctx, el)
-        vals.append(val)
+            row_data, headers = _get_standard_row(ctx, record)
+        data_rows.append(row_data)
 
     # Sort data by appropriate column (adjust for member cover offset)
-    order_column = 0
+    sort_column_index = 0
     if member_cover:
-        order_column = 1
-    vals = sorted(vals, key=lambda x: x[order_column])
+        sort_column_index = 1
+    data_rows = sorted(data_rows, key=lambda x: x[sort_column_index])
 
     # Build base export structure
-    exports = [(model, key, vals)]
+    exports = [(model_name, headers, data_rows)]
 
     # Add plot relationships if exporting plot data
-    if model == "plot":
+    if model_name == "plot":
         exports.extend(export_plot_rels(ctx))
 
     # Add character relationships if feature is enabled
-    if model == "character":
+    if model_name == "character":
         if "relationships" in ctx["features"]:
             exports.extend(export_relationships(ctx))
 

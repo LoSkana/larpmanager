@@ -39,8 +39,8 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
 
 
-def cache_text_field_key(typ, element):
-    return f"cache_text_fields_{typ.__name__}_{element.id}"
+def cache_text_field_key(model_type, model_instance):
+    return f"cache_text_fields_{model_type.__name__}_{model_instance.id}"
 
 
 def remove_html_tags(text):

@@ -899,28 +899,28 @@ def _add_item(ctx, list_name, text, perm, link):
     ctx[list_name].append((text, perm, link))
 
 
-def _add_priority(ctx, text, perm, link=None):
+def _add_priority(ctx, priority_text, permission_key, custom_link=None):
     """Add priority item to management dashboard.
 
     Args:
         ctx: Context dictionary to modify
-        text: Priority message text
-        perm: Permission key for the action
-        link: Optional custom link
+        priority_text: Priority message text
+        permission_key: Permission key for the action
+        custom_link: Optional custom link
     """
-    _add_item(ctx, "priorities_list", text, perm, link)
+    _add_item(ctx, "priorities_list", priority_text, permission_key, custom_link)
 
 
-def _add_action(ctx, text, perm, link=None):
+def _add_action(ctx, action_text, permission_key, custom_link=None):
     """Add action item to management dashboard.
 
     Args:
         ctx: Context dictionary to modify
-        text: Action message text
-        perm: Permission key for the action
-        link: Optional custom link
+        action_text: Action message text
+        permission_key: Permission key for the action
+        custom_link: Optional custom link
     """
-    _add_item(ctx, "actions_list", text, perm, link)
+    _add_item(ctx, "actions_list", action_text, permission_key, custom_link)
 
 
 def _add_suggestion(ctx, text, perm, link=None):

@@ -315,9 +315,9 @@ def backend_edit(
     request: HttpRequest,
     ctx: dict[str, Any],
     form_type: type[ModelForm],
-    eid: Optional[int],
-    afield: Optional[str] = None,
-    assoc: bool = False,
+    element_id: Optional[int],
+    additional_field: Optional[str] = None,
+    is_association_based: bool = False,
     quiet: bool = False,
 ) -> bool:
     """Handle backend editing operations for various content types.
@@ -330,37 +330,37 @@ def backend_edit(
         request: Django HTTP request object containing user and POST data
         ctx: Context dictionary for template rendering and data sharing
         form_type: Django ModelForm class for handling the specific model
-        eid: Element ID for editing existing objects, None for new objects
-        afield: Optional additional field parameter for specialized handling
-        assoc: Flag indicating association-based vs event-based operation
+        element_id: Element ID for editing existing objects, None for new objects
+        additional_field: Optional additional field parameter for specialized handling
+        is_association_based: Flag indicating association-based vs event-based operation
         quiet: Flag to suppress success messages when True
 
     Returns:
         bool: True if form was successfully processed and saved, False otherwise
     """
     # Extract model type and set up basic context variables
-    typ = form_type.Meta.model
-    ctx["elementTyp"] = typ
+    model_type = form_type.Meta.model
+    ctx["elementTyp"] = model_type
     ctx["request"] = request
 
     # Handle association-based operations vs event-based operations
-    if assoc:
+    if is_association_based:
         ctx["exe"] = True
-        if eid is None:
-            eid = request.assoc["id"]
+        if element_id is None:
+            element_id = request.assoc["id"]
             ctx["nonum"] = True
-    elif eid is None:
-        eid = ctx["event"].id
+    elif element_id is None:
+        element_id = ctx["event"].id
         ctx["nonum"] = True
 
     # Load existing element or set as None for new objects
-    if eid != 0:
-        backend_get(ctx, typ, eid, afield)
+    if element_id != 0:
+        backend_get(ctx, model_type, element_id, additional_field)
     else:
         ctx["el"] = None
 
     # Set up context for template rendering
-    ctx["num"] = eid
+    ctx["num"] = element_id
     ctx["type"] = ctx["elementTyp"].__name__.lower()
 
     # Process POST request - form submission and validation
@@ -369,25 +369,25 @@ def backend_edit(
 
         if ctx["form"].is_valid():
             # Save the form and show success message if not in quiet mode
-            p = ctx["form"].save()
+            saved_object = ctx["form"].save()
             if not quiet:
                 messages.success(request, _("Operation completed") + "!")
 
             # Handle deletion if delete flag is set in POST data
-            dl = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(request.user.member, form_type, p, dl)
-            if dl:
-                p.delete()
+            should_delete = "delete" in request.POST and request.POST["delete"] == "1"
+            save_log(request.user.member, form_type, saved_object, should_delete)
+            if should_delete:
+                saved_object.delete()
 
             # Store saved object in context and return success
-            ctx["saved"] = p
+            ctx["saved"] = saved_object
             return True
     else:
         # GET request - initialize form with existing instance
         ctx["form"] = form_type(instance=ctx["el"], ctx=ctx)
 
     # Set display name for existing objects
-    if eid != 0:
+    if element_id != 0:
         ctx["name"] = str(ctx["el"])
 
     # Handle "add another" functionality for continuous adding
@@ -400,12 +400,12 @@ def backend_edit(
 
 def orga_edit(
     request: HttpRequest,
-    s: str,
-    perm: str,
+    event_slug: str,
+    permission: str,
     form_type: str,
-    eid: int,
-    red: str | None = None,
-    add_ctx: dict | None = None,
+    entity_id: int,
+    redirect_view: str | None = None,
+    additional_context: dict | None = None,
 ) -> HttpResponse:
     """Edit organization event objects through a unified interface.
 
@@ -414,46 +414,52 @@ def orga_edit(
 
     Args:
         request: The HTTP request object
-        s: Event slug identifier
-        perm: Permission string to check for access control
+        event_slug: Event slug identifier
+        permission: Permission string to check for access control
         form_type: Type of form/object to edit
-        eid: Entity ID to edit
-        red: Optional redirect view name after successful edit
-        add_ctx: Optional additional context to merge into template context
+        entity_id: Entity ID to edit
+        redirect_view: Optional redirect view name after successful edit
+        additional_context: Optional additional context to merge into template context
 
     Returns:
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context for the event
-    ctx = check_event_permission(request, s, perm)
+    ctx = check_event_permission(request, event_slug, permission)
 
     # Merge any additional context provided by caller
-    if add_ctx:
-        ctx.update(add_ctx)
+    if additional_context:
+        ctx.update(additional_context)
 
     # Process the edit operation using backend edit handler
     # Returns True if edit was successful and should redirect
-    if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+    if backend_edit(request, ctx, form_type, entity_id, additional_field=None, is_association_based=False):
         # Set suggestion context for successful edit
-        set_suggestion(ctx, perm)
+        set_suggestion(ctx, permission)
 
         # Handle "continue editing" workflow - redirect to new object form
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
 
         # Determine redirect target - use provided or default to permission name
-        if not red:
-            red = perm
+        if not redirect_view:
+            redirect_view = permission
 
         # Redirect to success page with event slug
-        return redirect(red, s=ctx["run"].get_slug())
+        return redirect(redirect_view, s=ctx["run"].get_slug())
 
     # Edit operation failed or is initial load - render edit form
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
 def exe_edit(
-    request: HttpRequest, form_type: str, eid: int, perm: str, red: str = None, afield: str = None, add_ctx: dict = None
+    request: HttpRequest,
+    form_type: str,
+    entity_id: int,
+    permission: str,
+    redirect_view: str = None,
+    additional_field: str = None,
+    additional_context: dict = None,
 ) -> HttpResponse:
     """
     Handle editing operations for organization-level entities.
@@ -464,35 +470,35 @@ def exe_edit(
     Args:
         request: HTTP request object containing form data and user information
         form_type: Type of form/entity being edited (e.g., 'member', 'event')
-        eid: Entity ID for the object being edited
-        perm: Permission string required to access this edit functionality
-        red: Optional redirect target after successful edit (defaults to perm)
-        afield: Optional additional field parameter for the backend edit
-        add_ctx: Optional additional context dictionary to merge with base context
+        entity_id: Entity ID for the object being edited
+        permission: Permission string required to access this edit functionality
+        redirect_view: Optional redirect target after successful edit (defaults to permission)
+        additional_field: Optional additional field parameter for the backend edit
+        additional_context: Optional additional context dictionary to merge with base context
 
     Returns:
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context
-    ctx = check_assoc_permission(request, perm)
+    ctx = check_assoc_permission(request, permission)
 
     # Merge additional context if provided
-    if add_ctx:
-        ctx.update(add_ctx)
+    if additional_context:
+        ctx.update(additional_context)
 
     # Process the edit operation through backend handler
-    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
+    if backend_edit(request, ctx, form_type, entity_id, additional_field=additional_field, is_association_based=True):
         # Set permission suggestion for UI feedback
-        set_suggestion(ctx, perm)
+        set_suggestion(ctx, permission)
 
         # Handle "continue editing" workflow
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, num=0)
 
         # Determine redirect target and perform redirect
-        if not red:
-            red = perm
-        return redirect(red)
+        if not redirect_view:
+            redirect_view = permission
+        return redirect(redirect_view)
 
     # Render edit template if edit operation was not successful
     return render(request, "larpmanager/exe/edit.html", ctx)
@@ -536,7 +542,12 @@ def set_suggestion(ctx: dict, perm: str) -> None:
 
 
 def writing_edit(
-    request: HttpRequest, ctx: dict[str, Any], form_type: type[forms.Form], nm: str, tp: str, redr: Optional[str] = None
+    request: HttpRequest,
+    ctx: dict[str, Any],
+    form_type: type[forms.Form],
+    element_name: str,
+    element_type: str,
+    redirect_url: Optional[str] = None,
 ) -> Optional[HttpResponse]:
     """
     Handle editing of writing elements with form processing.
@@ -549,9 +560,9 @@ def writing_edit(
         request: The HTTP request object containing method and form data
         ctx: Context dictionary containing element data and template variables
         form_type: Django form class to instantiate for editing the element
-        nm: Name key of the element in the context dictionary
-        tp: Type identifier for the writing element being edited
-        redr: Optional redirect URL to use after successful form save
+        element_name: Name key of the element in the context dictionary
+        element_type: Type identifier for the writing element being edited
+        redirect_url: Optional redirect URL to use after successful form save
 
     Returns:
         HttpResponse object for redirect after successful save, None otherwise
@@ -564,11 +575,11 @@ def writing_edit(
     ctx["elementTyp"] = form_type.Meta.model
 
     # Configure element identification and naming
-    if nm in ctx:
-        ctx["eid"] = ctx[nm].id
-        ctx["name"] = str(ctx[nm])
+    if element_name in ctx:
+        ctx["eid"] = ctx[element_name].id
+        ctx["name"] = str(ctx[element_name])
     else:
-        ctx[nm] = None
+        ctx[element_name] = None
 
     # Set type information for template display
     ctx["type"] = ctx["elementTyp"].__name__.lower()
@@ -576,17 +587,17 @@ def writing_edit(
 
     # Handle form submission (POST request)
     if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
+        form = form_type(request.POST, request.FILES, instance=ctx[element_name], ctx=ctx)
 
         # Process valid form data and potentially redirect
         if form.is_valid():
-            return _writing_save(ctx, form, form_type, nm, redr, request, tp)
+            return _writing_save(ctx, form, form_type, element_name, redirect_url, request, element_type)
     else:
         # Initialize form for GET request
-        form = form_type(instance=ctx[nm], ctx=ctx)
+        form = form_type(instance=ctx[element_name], ctx=ctx)
 
     # Configure template context for form rendering
-    ctx["nm"] = nm
+    ctx["nm"] = element_name
     ctx["form"] = form
     ctx["add_another"] = True
     ctx["continue_add"] = "continue" in request.POST

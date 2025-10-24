@@ -501,31 +501,33 @@ def orga_character_form(request, s):
     return redirect("orga_writing_form", s=s, typ="character")
 
 
-def check_writing_form_type(ctx: dict, typ: str) -> None:
+def check_writing_form_type(ctx: dict, form_type: str) -> None:
     """Validates writing form type and updates context with type information.
 
     Args:
         ctx: Context dictionary to update with type information
-        typ: Writing form type to validate
+        form_type: Writing form type to validate
 
     Raises:
         Http404: If the writing form type is not available
     """
-    typ = typ.lower()
-    mapping = _get_writing_mapping()
+    form_type = form_type.lower()
+    writing_type_mapping = _get_writing_mapping()
 
     # Build available types from choices that have corresponding features
-    available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
+    available_types = {
+        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in ctx["features"]
+    }
 
     # Validate the requested type is available
-    if typ not in available:
-        raise Http404(f"unknown writing form type: {typ}")
+    if form_type not in available_types:
+        raise Http404(f"unknown writing form type: {form_type}")
 
     # Update context with type information
-    ctx["typ"] = typ
-    ctx["writing_typ"] = available[typ]
-    ctx["label_typ"] = typ.capitalize()
-    ctx["available_typ"] = {k.capitalize(): v for k, v in available.items()}
+    ctx["typ"] = form_type
+    ctx["writing_typ"] = available_types[form_type]
+    ctx["label_typ"] = form_type.capitalize()
+    ctx["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
 
 
 @login_required
@@ -613,7 +615,7 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
     check_writing_form_type(ctx, typ)
 
     # Process form submission using backend edit utility
-    if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaWritingQuestionForm, num, is_association_based=False):
         # Set permission suggestion for future operations
         set_suggestion(ctx, perm)
 
@@ -727,7 +729,7 @@ def orga_writing_options_new(request: HttpRequest, s: str, typ: str, num: int) -
 def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> HttpResponse:
     """Edit a writing option and handle form submission with redirect logic."""
     # Process form submission and save changes
-    if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaWritingOptionForm, num, is_association_based=False):
         redirect_target = "orga_writing_form_edit"
 
         # Check if user wants to continue adding more options

@@ -27,6 +27,7 @@ import unicodedata
 from datetime import date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
+from typing import Any, Union
 
 import pytz
 from background_task.models import Task
@@ -42,7 +43,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
-from larpmanager.models.base import Feature, FeatureModule
+from larpmanager.models.base import BaseModel, Feature, FeatureModule
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event
 from larpmanager.models.member import Badge, Member
@@ -415,16 +416,62 @@ def get_workshop_option(ctx: dict, m: int) -> None:
         raise Http404("wrong event")
 
 
-def get_element(ctx, n, name, typ, by_number=False):
+def get_element(
+    ctx: dict[str, Any],
+    primary_key: Union[int, str],
+    context_key_name: str,
+    model_class: type[BaseModel],
+    by_number: bool = False,
+) -> None:
+    """
+    Retrieve a model instance and add it to the context dictionary.
+
+    This function fetches a model instance related to a parent event and stores it
+    in the provided context dictionary. The lookup can be performed either by the
+    model's primary key or by a 'number' field.
+
+    Args:
+        ctx: Context dictionary that must contain an 'event' key with a model instance
+            that has a `get_class_parent()` method. The retrieved object will be added
+            to this dictionary under the key specified by `context_key_name`.
+        primary_key: The identifier used to look up the model instance. Either a primary
+            key (int/str) or a number field value depending on `by_number` parameter.
+        context_key_name: The key name under which the retrieved object will be stored
+            in the context dictionary. Also used in error messages.
+        model_class: The Django model class to query. Must have a foreign key relationship
+            to an 'event' and optionally a 'number' field if `by_number=True`.
+        by_number: If True, lookup by 'number' field instead of primary key. Defaults to False.
+
+    Returns:
+        None. Modifies the `ctx` dictionary in place by adding:
+            - ctx[context_key_name]: The retrieved model instance
+            - ctx["class_name"]: Set to the value of `context_key_name`
+
+    Raises:
+        Http404: If the requested object does not exist in the database.
+
+    Example:
+        >>> ctx = {"event": some_event_instance}
+        >>> get_element(ctx, 42, "ticket", Ticket, by_number=True)
+        >>> # ctx now contains: {"event": ..., "ticket": <Ticket>, "class_name": "ticket"}
+    """
     try:
-        ev = ctx["event"].get_class_parent(typ)
+        # Get the parent event associated with the current event in context
+        parent_event = ctx["event"].get_class_parent(model_class)
+
         if by_number:
-            ctx[name] = typ.objects.get(event=ev, number=n)
+            # Lookup by 'number' field (e.g., ticket number, order number)
+            ctx[context_key_name] = model_class.objects.get(event=parent_event, number=primary_key)
         else:
-            ctx[name] = typ.objects.get(event=ev, pk=n)
-        ctx["class_name"] = name
+            # Lookup by primary key (default behavior)
+            ctx[context_key_name] = model_class.objects.get(event=parent_event, pk=primary_key)
+
+        # Store the context key name for potential later reference
+        ctx["class_name"] = context_key_name
+
     except ObjectDoesNotExist as err:
-        raise Http404(name + " does not exist") from err
+        # Raise a user-friendly 404 error if the object doesn't exist
+        raise Http404(f"{context_key_name} does not exist") from err
 
 
 def get_relationship(ctx: dict, num: int) -> None:
@@ -450,23 +497,23 @@ def get_time_diff(dt1, dt2):
     return (dt1 - dt2).days
 
 
-def get_time_diff_today(dt1: datetime | date | None) -> int:
+def get_time_diff_today(target_date: datetime | date | None) -> int:
     """Calculate time difference between given date and today.
 
     Args:
-        dt1: Date to compare with today
+        target_date: Date to compare with today
 
     Returns:
-        Time difference in days, or -1 if dt1 is None
+        Time difference in days, or -1 if target_date is None
     """
-    if not dt1:
+    if not target_date:
         return -1
 
     # Convert datetime to date if necessary
-    if isinstance(dt1, datetime):
-        dt1 = dt1.date()
+    if isinstance(target_date, datetime):
+        target_date = target_date.date()
 
-    return get_time_diff(dt1, datetime.today().date())
+    return get_time_diff(target_date, datetime.today().date())
 
 
 def generate_number(length):
@@ -599,7 +646,7 @@ def round_to_two_significant_digits(number: float | int) -> int:
     return int(rounded)
 
 
-def exchange_order(ctx: dict, cls: type, num: int, order: bool, elements=None) -> None:
+def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
     """
     Exchange ordering positions between two elements in a sequence.
 
@@ -609,9 +656,9 @@ def exchange_order(ctx: dict, cls: type, num: int, order: bool, elements=None) -
 
     Args:
         ctx: Context dictionary to store the current element after operation.
-        cls: Model class of elements to reorder.
-        num: Primary key of the element to move.
-        order: Direction to move - True for up (increase order), False for down (decrease order).
+        model_class: Model class of elements to reorder.
+        element_id: Primary key of the element to move.
+        move_up: Direction to move - True for up (increase order), False for down (decrease order).
         elements: Optional queryset of elements. Defaults to event elements if None.
 
     Returns:
@@ -622,40 +669,44 @@ def exchange_order(ctx: dict, cls: type, num: int, order: bool, elements=None) -
         by adjusting one of them to maintain proper ordering.
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or ctx["event"].get_elements(cls)
-    current = elements.get(pk=num)
+    elements = elements or ctx["event"].get_elements(model_class)
+    current_element = elements.get(pk=element_id)
 
-    # Determine direction: order=True means move up (increase order), False means down
-    qs = elements.filter(order__gt=current.order) if order else elements.filter(order__lt=current.order)
-    qs = qs.order_by("order" if order else "-order")
+    # Determine direction: move_up=True means move up (increase order), False means down
+    queryset = (
+        elements.filter(order__gt=current_element.order)
+        if move_up
+        else elements.filter(order__lt=current_element.order)
+    )
+    queryset = queryset.order_by("order" if move_up else "-order")
 
     # Apply additional filters based on current element's attributes
     # This ensures we only swap within the same logical group
-    for attr in ("question", "section", "applicable"):
-        if hasattr(current, attr):
-            qs = qs.filter(**{attr: getattr(current, attr)})
+    for attribute_name in ("question", "section", "applicable"):
+        if hasattr(current_element, attribute_name):
+            queryset = queryset.filter(**{attribute_name: getattr(current_element, attribute_name)})
 
     # Get the next element in the desired direction
-    other = qs.first()
+    adjacent_element = queryset.first()
 
     # If no adjacent element found, just increment/decrement order
-    if not other:
-        current.order += 1 if order else -1
-        current.save()
-        ctx["current"] = current
+    if not adjacent_element:
+        current_element.order += 1 if move_up else -1
+        current_element.save()
+        ctx["current"] = current_element
         return
 
     # Exchange ordering values between current and adjacent element
-    current.order, other.order = other.order, current.order
+    current_element.order, adjacent_element.order = adjacent_element.order, current_element.order
 
     # Handle edge case where both elements have same order (data inconsistency)
-    if current.order == other.order:
-        other.order += -1 if order else 1
+    if current_element.order == adjacent_element.order:
+        adjacent_element.order += -1 if move_up else 1
 
     # Save both elements and update context
-    current.save()
-    other.save()
-    ctx["current"] = current
+    current_element.save()
+    adjacent_element.save()
+    ctx["current"] = current_element
 
 
 def normalize_string(value: str) -> str:
@@ -679,41 +730,41 @@ def normalize_string(value: str) -> str:
     return value
 
 
-def copy_class(target_id, source_id, cls):
+def copy_class(target_event_id, source_event_id, model_class):
     """
     Copy all objects of a given class from source event to target event.
 
     Args:
-        target_id: Target event ID to copy objects to
-        source_id: Source event ID to copy objects from
-        cls: Django model class to copy instances of
+        target_event_id: Target event ID to copy objects to
+        source_event_id: Source event ID to copy objects from
+        model_class: Django model class to copy instances of
     """
-    cls.objects.filter(event_id=target_id).delete()
+    model_class.objects.filter(event_id=target_event_id).delete()
 
-    for obj in cls.objects.filter(event_id=source_id):
+    for source_object in model_class.objects.filter(event_id=source_event_id):
         try:
             # save a copy of m2m relations
-            m2m_data = {}
+            many_to_many_data = {}
 
             # noinspection PyProtectedMember
-            for field in obj._meta.many_to_many:
-                m2m_data[field.name] = list(getattr(obj, field.name).all())
+            for field in source_object._meta.many_to_many:
+                many_to_many_data[field.name] = list(getattr(source_object, field.name).all())
 
-            obj.pk = None
-            obj.event_id = target_id
+            source_object.pk = None
+            source_object.event_id = target_event_id
             # noinspection PyProtectedMember
-            obj._state.adding = True
-            for field_name, func in {"access_token": my_uuid_short}.items():
-                if not hasattr(obj, field_name):
+            source_object._state.adding = True
+            for field_name, generation_function in {"access_token": my_uuid_short}.items():
+                if not hasattr(source_object, field_name):
                     continue
-                setattr(obj, field_name, func())
-            obj.save()
+                setattr(source_object, field_name, generation_function())
+            source_object.save()
 
             # copy m2m relations
-            for field_name, values in m2m_data.items():
-                getattr(obj, field_name).set(values)
-        except Exception as err:
-            logging.warning(f"found exp: {err}")
+            for field_name, related_values in many_to_many_data.items():
+                getattr(source_object, field_name).set(related_values)
+        except Exception as error:
+            logging.warning(f"found exp: {error}")
 
 
 def get_payment_methods_ids(ctx):

@@ -4327,9 +4327,6 @@ msgstr "Die anderen Felder sind optional"
 msgid "The total registration fee is"
 msgstr "Die gesamte Teilnahmegebühr beträgt"
 
-msgid "Toggle the sidebar visibility"
-msgstr "Sichtbarkeit der Seitenleiste ein- und ausschalten"
-
 msgid "Transportation - gas, highway"
 msgstr "Verkehr - Benzin, Autobahn"
 
@@ -6183,6 +6180,9 @@ msgid "Select which elements to copy, from which other event"
 msgstr ""
 "Wählen Sie aus, welche Elemente aus welcher anderen Veranstaltung kopiert "
 "werden sollen"
+
+msgid "Show or hide the sidebar containing all the functions"
+msgstr "Ein- oder Ausblenden der Seitenleiste mit allen Funktionen"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Das Zeichen hat fehlende Werte in Pflichtfeldern"
