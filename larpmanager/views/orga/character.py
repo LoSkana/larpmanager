@@ -1081,7 +1081,7 @@ def orga_writing_excel_submit(request, s, typ):
         JsonResponse: Success status, element updates, or validation errors
     """
     try:
-        ctx = _get_excel_form(request, s, typ, submit=True)
+        ctx = _get_excel_form(request, s, typ, is_submit=True)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 

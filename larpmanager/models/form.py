@@ -341,7 +341,7 @@ class WritingQuestion(BaseModel):
         # Default behavior: never skip processing
         return False
 
-    def get_editable_fields(self):
+    def get_editable(self):
         return self.editable.split(",") if self.editable else []
 
     def set_editable(self, editable_list):

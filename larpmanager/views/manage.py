@@ -984,7 +984,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request, context, ctx):
+def _compile(request, context):
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
