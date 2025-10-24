@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Door"
 
-msgid "Go"
-msgstr "Ga naar"
-
 msgid "Hi"
 msgstr "Hoi"
 
@@ -1268,9 +1265,6 @@ msgstr "Uitgevoerd exemplaar"
 
 msgid "Customize"
 msgstr "aanpassen"
-
-msgid "Dashboard"
-msgstr "Dashboard"
 
 msgid "Deadlines"
 msgstr "Deadlines"
@@ -3396,9 +3390,6 @@ msgstr "Rendement percentage"
 msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
-msgid "Set character status"
-msgstr "Tekenstatus instellen"
-
 msgid "Set up ability types"
 msgstr "Typen vaardigheden instellen"
 
@@ -3410,9 +3401,6 @@ msgstr "Algemene voorwaarden"
 
 msgid "Terms and conditions"
 msgstr "Algemene voorwaarden"
-
-msgid "The collection grows"
-msgstr "De collectie groeit"
 
 msgid "The tax code matches"
 msgstr "De belastingcode komt overeen"
@@ -3474,9 +3462,6 @@ msgstr "Ga naar casting voor"
 
 msgid "If absent, indicate 0"
 msgstr "Indien afwezig, geef 0 aan"
-
-msgid "Invalid choice format"
-msgstr "Ongeldig keuzeformaat"
 
 msgid "Manage URL shorteners"
 msgstr "URL-verkorters beheren"
@@ -4034,11 +4019,11 @@ msgstr "Gebruik van activa van derden"
 msgid "We're sorry to see you go"
 msgstr "We vinden het jammer dat je weggaat"
 
+msgid "What would you like to do"
+msgstr "Wat zou je willen doen"
+
 msgid "cancel your registrations"
 msgstr "annuleer je registratie"
-
-msgid "choice value not provided"
-msgstr "keuzewaarde niet opgegeven"
 
 msgid "Access character creation!"
 msgstr "Toegang tot het maken van personages!"
@@ -4144,9 +4129,6 @@ msgstr "Voer een geldige numerieke waarde in"
 msgid "Enter your preferences here"
 msgstr "Geef hier je voorkeuren aan"
 
-msgid "Event context not available"
-msgstr "Gebeurteniscontext niet beschikbaar"
-
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
 
@@ -4185,9 +4167,6 @@ msgstr "Herinnering lidmaatschapsverzoek"
 
 msgid "Set up dynamic installments"
 msgstr "Dynamische afbetalingen instellen"
-
-msgid "Thank you for participating"
-msgstr "Bedankt voor uw deelname"
 
 msgid "Ticket name (keep it short)"
 msgstr "Ticketnaam (houd het kort)"
@@ -4327,15 +4306,14 @@ msgstr "De andere velden zijn optioneel"
 msgid "The total registration fee is"
 msgstr "Het totale inschrijfgeld is"
 
+msgid "Toggle the sidebar visibility"
+msgstr "De zichtbaarheid van de zijbalk inschakelen"
+
 msgid "Transportation - gas, highway"
 msgstr "Vervoer - benzine, snelweg"
 
 msgid "Unconverted pre-registrations"
 msgstr "Niet omgezette voorregistraties"
-
-#, python-format
-msgid "Unknown choice type: %(type)s"
-msgstr "Type keuze onbekend: %(type)s"
 
 msgid "You don't have any events yet"
 msgstr "Je hebt nog geen evenementen"
@@ -6143,9 +6121,6 @@ msgstr "Registratiekosten %(number)d van %(user)s per %(event)s"
 msgid "Select which elements to copy, from which other event"
 msgstr ""
 "Selecteer welke elementen je wilt kopiëren van welke andere gebeurtenis"
-
-msgid "Show or hide the sidebar containing all the functions"
-msgstr "De zijbalk met alle functies weergeven of verbergen"
 
 msgid "The character have missing values in mandatory fields"
 msgstr "Het teken heeft ontbrekende waarden in verplichte velden"
@@ -7966,6 +7941,13 @@ msgstr ""
 "betalen: %(amount)s"
 
 msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Typ een trefwoord in de zoekbalk om een referentie te vinden - schrijf "
+"a.u.b. in het Engels"
+
+msgid ""
 "You have activated the following features, for each here's the links to "
 "follow"
 msgstr ""
@@ -7999,13 +7981,6 @@ msgid ""
 msgstr ""
 "Om deel te nemen aan dit evenement moet je de jaarlijkse "
 "lidmaatschapsbijdrage van"
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Evenementen maken en beheren door namen, data, status en registratiedetails "
-"in te stellen"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "
@@ -8691,6 +8666,14 @@ msgstr ""
 "Je kunt nieuwe gedelegeerde accounts aanmaken of ermee inloggen door op de "
 "betreffende knop te drukken"
 
+#, python-format
+msgid ""
+"Do you want to unsubscribe from our communication lists? <a "
+"href='%(url)s'>Unsubscribe</a>"
+msgstr ""
+"Wilt u zich uitschrijven van onze communicatielijsten? <a "
+"href='%(url)s'>Uitschrijven</a>"
+
 msgid ""
 "Enter the date and time when registrations open - leave blank to keep "
 "registrations closed"
@@ -8944,7 +8927,7 @@ msgid ""
 "bottom to open it)"
 msgstr ""
 "De zijbalk voor snelle toegang bevindt zich aan de linkerkant (tik op mobiel"
-" op 'Snelkoppelingen' onderaan om deze te openen)"
+" op \"Snelkoppelingen\" onderaan om deze te openen)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
@@ -9138,6 +9121,13 @@ msgstr ""
 "speciaal voor dit evenement!"
 
 msgid ""
+"The collection grows: we have no doubt, the fortunate will live soon an "
+"unprecedented experience"
+msgstr ""
+"De collectie groeit: we twijfelen er niet aan dat de gelukkige binnenkort "
+"iets ongekends zal beleven"
+
+msgid ""
 "This is the overall amount that should be held in the organization’s bank "
 "and financial accounts"
 msgstr ""
@@ -9241,6 +9231,13 @@ msgid ""
 msgstr ""
 "We vragen slechts een momentje van je tijd om de documenten die je hebt "
 "geüpload te controleren, het duurt niet lang"
+
+msgid ""
+"We thank you for participating in the collection: we are sure they will live"
+" a terrific experience"
+msgstr ""
+"We danken je voor je deelname aan de collectie: je gaf een ongekende "
+"ervaring"
 
 msgid ""
 "You will be notified when a new session is organized, and you will have "
@@ -10089,8 +10086,9 @@ msgid ""
 "Enter the “bring a friend” code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Voer de 'bring a friend' code in van een geregistreerde deelnemer om een "
-"%(amount)d korting op je inschrijfgeld te ontvangen"
+"Voer hier de 'bring a friend' code in die je hebt gekregen van een reeds "
+"geregistreerde deelnemer, en je kunt een korting krijgen op je lidmaatschap "
+"van %(amount)d"
 
 msgid ""
 "Indicate the special discount code, to be communicated to the participants, "

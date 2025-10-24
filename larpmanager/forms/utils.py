@@ -344,7 +344,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
 
         # Exclude specific event if specified
         if hasattr(self, "excl"):
-            queryset = queryset.exclude(pk=self.excl)
+            queryset = queryset.exclude(pk=self.fexcl)
 
         return queryset
 
@@ -500,8 +500,8 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_assoc(self, assoc_id):
-        self.assoc_id = assoc_id
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
         return Registration.objects.prefetch_related("run", "run__event").filter(

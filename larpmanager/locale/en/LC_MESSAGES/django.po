@@ -2143,14 +2143,18 @@ msgstr ""
 msgid "Collection participation for: %(recipient)s"
 msgstr ""
 
-msgid "Thank you for participating"
+msgid ""
+"We thank you for participating in the collection: we are sure they will live "
+"a terrific experience"
 msgstr ""
 
 #, python-format
 msgid "New participation in the collection for %(recipient)s by %(user)s"
 msgstr ""
 
-msgid "The collection grows"
+msgid ""
+"The collection grows: we have no doubt, the fortunate will live soon an "
+"unprecedented experience"
 msgstr ""
 
 #, python-format
@@ -4198,7 +4202,7 @@ msgstr ""
 msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 
-msgid "Show or hide the sidebar containing all the functions"
+msgid "Toggle the sidebar visibility"
 msgstr ""
 
 msgid ""
@@ -5704,7 +5708,12 @@ msgstr ""
 msgid "Launch guided interface tour"
 msgstr ""
 
-msgid "Go"
+msgid "What would you like to do"
+msgstr ""
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
 msgstr ""
 
 msgid "Dates"
@@ -8159,11 +8168,6 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-
 msgid "Pre-Registrations"
 msgstr ""
 
@@ -8546,9 +8550,6 @@ msgstr ""
 msgid "Set assigned staff member"
 msgstr ""
 
-msgid "Set character status"
-msgstr ""
-
 msgid "Set quest type"
 msgstr ""
 
@@ -8795,6 +8796,12 @@ msgid "Access character creation!"
 msgstr ""
 
 msgid "Select your character!"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you want to unsubscribe from our communication lists? <a "
+"href='%(url)s'>Unsubscribe</a>"
 msgstr ""
 
 #, python-format
@@ -9151,22 +9158,6 @@ msgid "Activate new features and enhance the functionality of the event"
 msgstr ""
 
 msgid "Set specific values for configuration of features of the event"
-msgstr ""
-
-msgid "Dashboard"
-msgstr ""
-
-msgid "Invalid choice format"
-msgstr ""
-
-msgid "choice value not provided"
-msgstr ""
-
-#, python-format
-msgid "Unknown choice type: %(type)s"
-msgstr ""
-
-msgid "Event context not available"
 msgstr ""
 
 msgid "Reimbursement request item added"
