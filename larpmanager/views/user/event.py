@@ -711,7 +711,7 @@ def event_redirect(request, s):
     return redirect("event", s=s)
 
 
-def search(request: HttpRequest, event_slug: str) -> HttpResponse:
+def search(request: HttpRequest, s: str) -> HttpResponse:
     """Display event search page with character gallery and search functionality.
 
     This view handles the character search functionality for events, including
@@ -719,7 +719,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and data
-        event_slug: Event slug string used to identify the specific event
+        s: Event slug string used to identify the specific event
 
     Returns:
         HttpResponse: Rendered search.html template with searchable character data
@@ -730,7 +730,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         and event configuration settings.
     """
     # Get event context and validate user access
-    ctx = get_event_run(request, event_slug, include_status=True)
+    ctx = get_event_run(request, s, include_status=True)
 
     # Check if gallery is visible and character display is enabled
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
