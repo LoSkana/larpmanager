@@ -224,7 +224,7 @@ def _info_collections(ctx, member, request):
     Side effects:
         Updates ctx with collections and collection_gifts if feature enabled
     """
-    if "collection" not in request.assoc["features"]:
+    if "collection" not in ctx["features"]:
         return
 
     ctx["collections"] = Collection.objects.filter(organizer=member, assoc_id=ctx["a_id"])
@@ -242,7 +242,7 @@ def _info_donations(ctx, member, request):
     Side effects:
         Updates ctx with donations list if feature enabled
     """
-    if "donate" not in request.assoc["features"]:
+    if "donate" not in ctx["features"]:
         return
 
     que = AccountingItemDonation.objects.filter(member=member, assoc_id=ctx["a_id"])

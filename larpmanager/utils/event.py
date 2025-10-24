@@ -48,7 +48,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.base import def_user_ctx, get_index_permissions
+from larpmanager.utils.base import def_user_context, get_index_permissions
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
@@ -69,7 +69,7 @@ def get_event(request, event_slug, run_number=None):
         Http404: If event doesn't exist or belongs to wrong association
     """
     if request:
-        context = def_user_ctx(request)
+        context = def_user_context(request)
     else:
         context = {}
 

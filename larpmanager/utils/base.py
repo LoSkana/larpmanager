@@ -34,7 +34,7 @@ from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
 
-def def_user_ctx(request: HttpRequest) -> dict:
+def def_user_context(request: HttpRequest) -> dict:
     """Build default user context with association data and permissions.
 
     Constructs a comprehensive context dictionary containing user information,
@@ -66,6 +66,7 @@ def def_user_ctx(request: HttpRequest) -> dict:
 
     # Initialize result dictionary with association ID
     context = {"a_id": request.assoc["id"]}
+    context["association_id"] = context["a_id"]
 
     # Copy all association data to context
     for assoc_key in request.assoc:
@@ -159,7 +160,7 @@ def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
         FeatureError: If required feature is not enabled for the association
     """
     # Get base user context and validate permission
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     if not has_assoc_permission(request, ctx, permission_slug):
         raise PermissionError()
 

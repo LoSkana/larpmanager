@@ -70,7 +70,7 @@ from larpmanager.utils.upload import go_upload
 @login_required
 def orga_event(request, s):
     ctx = check_event_permission(request, s, "orga_event")
-    return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
+    return full_event_edit(ctx, request, ctx["event"], ctx["run"], is_executive=False)
 
 
 def full_event_edit(

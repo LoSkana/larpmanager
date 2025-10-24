@@ -308,7 +308,7 @@ def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permi
         If permission_name is a list, returns True if user has any of the permissions.
     """
     # Early return if request is invalid or user lacks member attribute
-    if not request or not hasattr(request.user, "member") or check_managed(ctx, permission_name, assoc=False):
+    if not request or not hasattr(request.user, "member") or check_managed(ctx, permission_name, is_association=False):
         return False
 
     # Check if user has admin role in association (role 1)

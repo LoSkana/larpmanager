@@ -69,7 +69,7 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import my_uuid
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     RedirectError,
@@ -109,7 +109,7 @@ def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
         check_event_feature(request, ctx, "pre_register")
     else:
         # Show all available events for pre-registration
-        ctx = def_user_ctx(request)
+        ctx = def_user_context(request)
         ctx.update({"features": get_assoc_features(request.assoc["id"])})
 
     # Initialize event lists for template
@@ -744,7 +744,7 @@ def register_conditions(request: HttpRequest, s: str = None) -> HttpResponse:
         Rendered HTML response with terms and conditions
     """
     # Initialize base user context
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Add event-specific context if event slug provided
     if s:

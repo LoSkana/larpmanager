@@ -48,7 +48,7 @@ from larpmanager.models.miscellanea import (
     WorkshopModule,
 )
 from larpmanager.models.writing import Handout
-from larpmanager.utils.base import def_user_ctx, is_shuttle
+from larpmanager.utils.base import def_user_context, is_shuttle
 from larpmanager.utils.common import get_album, get_workshop
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import check_assoc_feature
@@ -76,8 +76,7 @@ def util(request, cod):
 def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
     """Redirect to help page for a specific run."""
     # Set up context with user data and association ID
-    ctx = def_user_ctx(request)
-    ctx.update({"a_id": request.assoc["id"]})
+    ctx = def_user_context(request)
 
     # Get the run object or raise 404 if not found
     try:
@@ -108,7 +107,7 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
     if s:
         ctx = get_event_run(request, s, include_status=True)
     else:
-        ctx = def_user_ctx(request)
+        ctx = def_user_context(request)
         ctx["a_id"] = request.assoc["id"]
 
     # Handle form submission for new help questions
@@ -163,7 +162,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         Http404: If HelpQuestion doesn't exist or user lacks permissions
     """
     # Get default user context with permissions
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Attempt to retrieve the help question by primary key
     try:
@@ -396,7 +395,7 @@ def shuttle(request):
     check_assoc_feature(request, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
@@ -424,8 +423,8 @@ def shuttle_new(request):
         Redirect to shuttle list on success or form template on GET/invalid POST
     """
     check_assoc_feature(request, "shuttle")
-    ctx = def_user_ctx(request)
-    ctx.update({"a_id": request.assoc["id"]})
+    ctx = def_user_context(request)
+
     if request.method == "POST":
         form = ShuttleServiceForm(request.POST, request=request, ctx=ctx)
         if form.is_valid():
@@ -454,9 +453,8 @@ def shuttle_edit(request, n):
         HttpResponse: Rendered edit form or redirect after successful update
     """
     check_assoc_feature(request, "shuttle")
-    ctx = def_user_ctx(request)
-    ctx.update({"a_id": request.assoc["id"]})
-    # check_shuttle(request)
+    ctx = def_user_context(request)
+
     shuttle = ShuttleService.objects.get(pk=n)
     if request.method == "POST":
         form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, ctx=ctx)

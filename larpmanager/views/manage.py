@@ -33,7 +33,7 @@ from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, Writ
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_index_assoc_permissions
+from larpmanager.utils.base import check_assoc_permission, def_user_context, get_index_assoc_permissions
 from larpmanager.utils.common import _get_help_questions, format_datetime
 from larpmanager.utils.edit import set_suggestion
 from larpmanager.utils.event import check_event_permission, get_event_run, get_index_event_permissions
@@ -174,7 +174,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         - To quick setup if not completed
     """
     # Initialize context and permissions for the current user and association
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
     ctx["manage"] = 1

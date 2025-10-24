@@ -216,30 +216,30 @@ class RegistrationForm(BaseRegistrationForm):
             self.init_question(q, reg_counts)
         self.tickets_map = json.dumps(self.tickets_map)
 
-    def init_question(self, q, reg_counts):
+    def init_question(self, question, registration_counts):
         """Initialize a single registration question field.
 
         Args:
-            q: Registration question instance
-            reg_counts: Registration count data
+            question: Registration question instance
+            registration_counts: Registration count data
         """
-        if q.skip(self.instance, self.params["features"]):
+        if question.skip(self.instance, self.params["features"]):
             return
 
-        k = self._init_field(q, reg_counts, orga=False)
+        k = self._init_field(question, registration_counts, is_organizer=False)
         if not k:
             return
 
-        if q.profile:
-            self.profiles["id_" + k] = q.profile_thumb.url
+        if question.profile:
+            self.profiles["id_" + k] = question.profile_thumb.url
 
-        if q.section:
-            self.sections["id_" + k] = q.section.name
-            if q.section.description:
-                self.section_descriptions[q.section.name] = q.section.description
+        if question.section:
+            self.sections["id_" + k] = question.section.name
+            if question.section.description:
+                self.section_descriptions[question.section.name] = question.section.description
 
         if "reg_que_tickets" in self.params["features"]:
-            tm = [i for i in q.tickets_map if i is not None]
+            tm = [i for i in question.tickets_map if i is not None]
             if tm:
                 self.tickets_map[k] = tm
 
@@ -355,14 +355,14 @@ class RegistrationForm(BaseRegistrationForm):
         ticket_help = ""
 
         # Process each available ticket to create form choices and help text
-        for r in tickets:
+        for ticket in tickets:
             # Generate formatted ticket name with pricing information
-            name = r.get_form_text(run, cs=self.params["currency_symbol"])
-            ticket_choices.append((r.id, name))
+            name = ticket.get_form_text(run, currency_symbol=self.params["currency_symbol"])
+            ticket_choices.append((ticket.id, name))
 
             # Add ticket description to help text if available
-            if r.description:
-                ticket_help += f"<p><b>{r.name}</b>: {r.description}</p>"
+            if ticket.description:
+                ticket_help += f"<p><b>{ticket.name}</b>: {ticket.description}</p>"
 
         # Create the ticket selection field with available choices
         self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
@@ -740,7 +740,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """Initialize ticket field choices and set default if only one ticket available."""
         # Fetch and format ticket choices ordered by price (highest first)
         tickets = [
-            (m.id, m.get_form_text(cs=self.params["currency_symbol"]))
+            (m.id, m.get_form_text(currency_symbol=self.params["currency_symbol"]))
             for m in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
         ]
         self.fields["ticket"].choices = tickets

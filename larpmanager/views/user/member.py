@@ -65,7 +65,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.common import get_badge, get_channel, get_contact, get_member
 from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
@@ -146,7 +146,7 @@ def profile(request):
     if request.assoc["id"] == 0:
         return HttpResponseRedirect("/")
 
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     member = request.user.member
     assoc_features = request.assoc["features"]
     members_fields = request.assoc["members_fields"]
@@ -327,7 +327,7 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered privacy template with user context and memberships.
     """
     # Get default user context for the request
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Add member-specific data to context
     ctx.update(
@@ -363,7 +363,7 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
         Http404: When association or membership is not found, or other errors occur
     """
     # Initialize context with default user data
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"member": request.user.member})
 
     try:
@@ -404,7 +404,7 @@ def membership(request: HttpRequest) -> HttpResponse:
         Http404: If membership status is invalid for the requested operation.
     """
     # Initialize context with default user context
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Get user's membership record for current association
     el = get_user_membership(request.user.member, request.assoc["id"])
@@ -482,7 +482,7 @@ def membership(request: HttpRequest) -> HttpResponse:
 @login_required
 def membership_request(request: HttpRequest) -> HttpResponse:
     """Handle membership request display for the current user."""
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx["member"] = request.user.member
     return get_membership_request(ctx)
 
@@ -490,7 +490,7 @@ def membership_request(request: HttpRequest) -> HttpResponse:
 @login_required
 def membership_request_test(request: HttpRequest) -> HttpResponse:
     """Render membership request test PDF template."""
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"member": request.user.member})
     return render(request, "pdf/membership/request.html", ctx)
 
@@ -514,7 +514,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
         Http404: If member has no membership in the current association
     """
     # Initialize context with user data and fetch member information
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update(get_member(n))
 
     # Verify member has membership in current association
@@ -574,7 +574,7 @@ def chats(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "chat")
 
     # Build base context for the user
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Add user's contacts ordered by last message timestamp
     ctx.update(
@@ -645,7 +645,7 @@ def chat(request, n):
 def badges(request: HttpRequest) -> HttpResponse:
     """Display list of badges for the current association."""
     # Initialize context with user data and empty badges list
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"badges": []})
 
     # Verify user has permission to view badges feature
@@ -667,7 +667,7 @@ def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
     badge = get_badge(n, request)
 
     # Initialize context with badge data
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
 
     # Collect all badge members
@@ -714,7 +714,7 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     p = min(p, num_pages)
 
     # Build context with pagination data
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update(
         {
             "pages": member_list[(p - 1) * num_el : p * num_el],
@@ -741,7 +741,7 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
         Redirect response to home page
     """
     # Build context with user and association information
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
     # Get user membership and update newsletter preference
@@ -773,7 +773,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     """
     # Verify user has access to voting feature
     check_assoc_feature(request, "vote")
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
     # Set current year for membership and voting validation
@@ -860,7 +860,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     """
     # Ensure delegated members feature is enabled
     check_assoc_feature(request, "delegated_members")
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     # Disable last login update to avoid tracking when switching accounts
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")

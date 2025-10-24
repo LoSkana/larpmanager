@@ -41,7 +41,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.utils.base import check_assoc_permission, def_user_ctx
+from larpmanager.utils.base import check_assoc_permission, def_user_context
 from larpmanager.utils.common import get_event_template
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
@@ -96,7 +96,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
         # Retrieve the run object and set it in context
         backend_get(ctx, Run, num, "event")
         # Delegate to full event edit with executive flag enabled
-        return full_event_edit(ctx, request, ctx["el"].event, ctx["el"], exe=True)
+        return full_event_edit(ctx, request, ctx["el"].event, ctx["el"], is_executive=True)
 
     # Handle creation of new event
     # Set executive context flag for form rendering
@@ -176,7 +176,7 @@ def exe_templates_edit(request, num):
 def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
     """Configure templates for organization events."""
     # Initialize user context and get event template
-    add_ctx = def_user_ctx(request)
+    add_ctx = def_user_context(request)
     get_event_template(add_ctx, num)
 
     # Update context with event features and configuration
@@ -189,7 +189,7 @@ def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
 @login_required
 def exe_templates_roles(request: HttpRequest, eid: int, num: int | None) -> HttpResponse:
     """Edit or create template roles for an event."""
-    add_ctx = def_user_ctx(request)
+    add_ctx = def_user_context(request)
     get_event_template(add_ctx, eid)
     return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", additional_context=add_ctx)
 

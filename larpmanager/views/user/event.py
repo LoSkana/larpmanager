@@ -66,7 +66,7 @@ from larpmanager.models.writing import (
     FactionType,
 )
 from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import HiddenError
@@ -139,7 +139,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         runs = runs.exclude(development=DevelopStatus.START)
 
     # Initialize context with default user context and empty collections
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
 
     # Add language filter to context if specified
@@ -365,7 +365,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
         Only includes events with valid end dates.
     """
     # Initialize context with default user data and empty list
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"list": []})
 
     # Cache to track processed events and set reference date (3 days ago)
@@ -411,7 +411,7 @@ def share(request):
     Returns:
         HttpResponse: Rendered template or redirect to home
     """
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
     if el.status != MembershipStatus.EMPTY:
@@ -433,7 +433,7 @@ def share(request):
 def legal_notice(request: HttpRequest) -> HttpResponse:
     """Render legal notice page with association-specific text."""
     # Build context with user data and legal notice text
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", ctx)
 
@@ -486,8 +486,8 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
                      Template: 'larpmanager/general/past.html'
     """
     # Extract association ID and initialize user context
-    aid = request.assoc["id"]
-    ctx = def_user_ctx(request)
+    ctx = def_user_context(request)
+    aid = ctx["association_id"]
 
     # Get all past runs for this association
     runs = get_coming_runs(aid, future=False)
