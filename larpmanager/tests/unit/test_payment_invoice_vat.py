@@ -132,7 +132,7 @@ class TestInvoiceFunctions(BaseTestCase):
         mock_invoice.status = PaymentStatus.SUBMITTED
         mock_get.return_value = mock_invoice
 
-        result = invoice_received_money("TEST123", gross=100.0, fee=2.5)
+        result = invoice_received_money("TEST123", gross_amount=100.0, processing_fee=2.5)
 
         self.assertTrue(result)
         mock_invoice.save.assert_called_once()
@@ -147,7 +147,7 @@ class TestInvoiceFunctions(BaseTestCase):
         mock_invoice.status = PaymentStatus.SUBMITTED
         mock_get.return_value = mock_invoice
 
-        result = invoice_received_money("TEST123", gross=100.0, txn_id="TXN789")
+        result = invoice_received_money("TEST123", gross_amount=100.0, txn_id="TXN789")
 
         self.assertTrue(result)
         self.assertEqual(mock_invoice.txn_id, "TXN789")
@@ -170,7 +170,7 @@ class TestInvoiceFunctions(BaseTestCase):
         mock_invoice.status = PaymentStatus.CONFIRMED
         mock_get.return_value = mock_invoice
 
-        result = invoice_received_money("TEST123", gross=100.0)
+        result = invoice_received_money("TEST123", gross_amount=100.0)
 
         # Should return True but not update
         self.assertTrue(result)
