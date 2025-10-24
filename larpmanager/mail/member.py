@@ -290,19 +290,19 @@ def send_help_question_notification_email(instance):
         my_send_mail(subj, body, mb, instance)
 
 
-def get_help_email(instance):
+def get_help_email(help_question):
     """Generate subject and body for help question notification.
 
     Args:
-        instance: HelpQuestion instance
+        help_question: HelpQuestion instance
 
     Returns:
         tuple: (subject, body) for the notification email
     """
-    subj = hdr(instance) + _("New question by %(user)s") % {"user": instance.member}
-    body = _("A question was asked by: %(user)s") % {"user": instance.member}
-    body += "<br /><br />" + instance.text
-    return subj, body
+    subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
+    email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
+    email_body += "<br /><br />" + help_question.text
+    return subject, email_body
 
 
 def send_chat_message_notification_email(instance):

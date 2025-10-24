@@ -375,16 +375,16 @@ class RegistrationForm(BaseRegistrationForm):
 
         return ticket_help
 
-    def has_ticket(self, tier):
+    def has_ticket(self, ticket_tier):
         """Check if registration has ticket of specified tier.
 
         Args:
-            tier: TicketTier to check
+            ticket_tier: TicketTier to check
 
         Returns:
             bool: True if registration has ticket of given tier
         """
-        return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == tier
+        return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == ticket_tier
 
     def has_ticket_primary(self):
         """Check if registration has a primary (non-waiting/filler) ticket.
@@ -647,12 +647,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     def get_automatic_field(self) -> set[str]:
         """Get automatic field names, excluding 'run' from parent's set."""
         # Get automatic fields from parent class
-        s = super().get_automatic_field()
+        automatic_fields = super().get_automatic_field()
 
         # Remove 'run' field (determined during initialization)
-        s.remove("run")
+        automatic_fields.remove("run")
 
-        return s
+        return automatic_fields
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with run and event specific configuration.
@@ -864,8 +864,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""
-        que = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
-        return que.values_list("character_id", flat=True)
+        character_registrations = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
+        return character_registrations.values_list("character_id", flat=True)
 
     def _save_multi(self, s: str, instance) -> None:
         """Save multi-character relationships for registration.
@@ -1130,20 +1130,20 @@ class OrgaRegistrationQuestionForm(MyForm):
         Filters question types based on existing usage and prevents duplicates.
         """
         # Add type of registration question to the available types
-        que = self.params["event"].get_elements(RegistrationQuestion)
-        already = list(que.values_list("typ", flat=True).distinct())
+        registration_questions = self.params["event"].get_elements(RegistrationQuestion)
+        already_used_types = list(registration_questions.values_list("typ", flat=True).distinct())
 
         if self.instance.pk and self.instance.typ:
-            already.remove(self.instance.typ)
+            already_used_types.remove(self.instance.typ)
             # prevent cancellation if one of the default types
             self.prevent_canc = len(self.instance.typ) > 1
 
-        choices = []
+        available_choices = []
         for choice in RegistrationQuestionType.choices:
             # if it is related to a feature
             if len(choice[0]) > 1:
                 # check it is not already present
-                if choice[0] in already:
+                if choice[0] in already_used_types:
                     continue
 
                 # check the feature is active
@@ -1151,8 +1151,8 @@ class OrgaRegistrationQuestionForm(MyForm):
                     if choice[0] not in self.params["features"]:
                         continue
 
-            choices.append(choice)
-        self.fields["typ"].choices = choices
+            available_choices.append(choice)
+        self.fields["typ"].choices = available_choices
 
 
 class OrgaRegistrationOptionForm(MyForm):

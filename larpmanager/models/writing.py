@@ -118,17 +118,17 @@ class Writing(BaseConceptModel):
         return js
 
     @classmethod
-    def get_example_csv(cls, features: set[str]) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: set[str]) -> list[list[str]]:
         """Generate example CSV structure for writing element imports.
 
         Args:
-            features: Set of enabled feature names to include in the CSV template.
+            enabled_features: Set of enabled feature names to include in the CSV template.
 
         Returns:
             List of CSV rows: first row contains headers, second row contains example data.
         """
         # Initialize base CSV structure with mandatory columns
-        rows = [
+        csv_rows = [
             ["number", "name", "presentation", "text"],
             [
                 "put a number, from 1 onward",
@@ -139,7 +139,7 @@ class Writing(BaseConceptModel):
         ]
 
         # Define optional feature columns with their descriptions
-        optional_features = [
+        optional_feature_columns = [
             # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
@@ -148,14 +148,14 @@ class Writing(BaseConceptModel):
         ]
 
         # Add enabled feature columns to the CSV structure
-        for feature_name, description in optional_features:
-            if feature_name in features:
+        for feature_column_name, feature_description in optional_feature_columns:
+            if feature_column_name in enabled_features:
                 # Append feature column to header row
-                rows[0].append(feature_name)
+                csv_rows[0].append(feature_column_name)
                 # Append description to example data row
-                rows[1].append(description)
+                csv_rows[1].append(feature_description)
 
-        return rows
+        return csv_rows
 
 
 class CharacterStatus(models.TextChoices):
@@ -332,10 +332,10 @@ class Character(Writing):
             The absolute path to the character files directory.
         """
         # Build the path to the characters directory for this run
-        fp = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
+        directory_path = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
         # Ensure the directory exists
-        os.makedirs(fp, exist_ok=True)
-        return fp
+        os.makedirs(directory_path, exist_ok=True)
+        return directory_path
 
     def get_sheet_filepath(self, run):
         return os.path.join(self.get_character_filepath(run), f"#{self.number}.pdf")
@@ -358,23 +358,23 @@ class Character(Writing):
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
-    def get_example_csv(cls, features: list) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: list) -> list[list[str]]:
         """Extend Writing CSV example with player assignment column.
 
         Args:
-            features: List of enabled features for the organization.
+            enabled_features: List of enabled features for the organization.
 
         Returns:
             List of CSV rows with headers and examples including player column.
         """
         # Get base CSV structure from parent Writing class
-        rows = Writing.get_example_csv(features)
+        csv_rows = Writing.get_example_csv(enabled_features)
 
         # Add player assignment column header and description
-        rows[0].extend(["player"])
-        rows[1].extend(["optional - the email of the player to whom you want to assign this character"])
+        csv_rows[0].extend(["player"])
+        csv_rows[1].extend(["optional - the email of the player to whom you want to assign this character"])
 
-        return rows
+        return csv_rows
 
     class Meta:
         constraints = [
@@ -633,11 +633,11 @@ class Handout(Writing):
             Absolute path to the handout PDF file.
         """
         # Build handouts directory path within event media
-        fp = os.path.join(run.event.get_media_filepath(), "handouts")
-        os.makedirs(fp, exist_ok=True)
+        handouts_directory = os.path.join(run.event.get_media_filepath(), "handouts")
+        os.makedirs(handouts_directory, exist_ok=True)
 
         # Generate PDF filename using handout number
-        return os.path.join(fp, f"H{self.number}.pdf")
+        return os.path.join(handouts_directory, f"H{self.number}.pdf")
 
 
 class TextVersionChoices(models.TextChoices):
@@ -730,12 +730,12 @@ def replace_char_names(v: str, chars: dict[str, str]) -> str:
     return v
 
 
-def replace_chars_el(el: Any, chars: dict[str, str]) -> None:
+def replace_chars_element(element: Any, character_names: dict[str, str]) -> None:
     """Replace character names in element text and teaser attributes."""
-    if hasattr(el, "text"):
-        el.text = replace_char_names(el.text, chars)
-    if hasattr(el, "teaser"):
-        el.teaser = replace_char_names(el.teaser, chars)
+    if hasattr(element, "text"):
+        element.text = replace_char_names(element.text, character_names)
+    if hasattr(element, "teaser"):
+        element.teaser = replace_char_names(element.teaser, character_names)
 
 
 def replace_character_names_in_writing(instance) -> None:
@@ -769,28 +769,28 @@ def replace_character_names_in_writing(instance) -> None:
         return
 
     # Build character name to number mapping for replacement
-    chars = {}
-    for c in instance.event.get_elements(Character):
-        chars[c.name] = c.number
+    character_name_to_number_mapping = {}
+    for character in instance.event.get_elements(Character):
+        character_name_to_number_mapping[character.name] = character.number
 
     # Sort names by length (longest first) to avoid partial replacements
-    names = list(chars.keys())
-    names.sort(key=len, reverse=True)
+    character_names = list(character_name_to_number_mapping.keys())
+    character_names.sort(key=len, reverse=True)
 
     # Perform character name replacement on the main instance
-    replace_chars_el(instance, chars)
+    replace_chars_element(instance, character_name_to_number_mapping)
 
     # Handle Character instance: process related plot character relationships
     if isinstance(instance, Character):
-        for el in PlotCharacterRel.objects.filter(character=instance):
-            replace_chars_el(el, chars)
-            el.save()
+        for plot_character_relationship in PlotCharacterRel.objects.filter(character=instance):
+            replace_chars_element(plot_character_relationship, character_name_to_number_mapping)
+            plot_character_relationship.save()
 
     # Handle Plot instance: process related plot character relationships
     if isinstance(instance, Plot):
-        for el in PlotCharacterRel.objects.filter(plot=instance):
-            replace_chars_el(el, chars)
-            el.save()
+        for plot_character_relationship in PlotCharacterRel.objects.filter(plot=instance):
+            replace_chars_element(plot_character_relationship, character_name_to_number_mapping)
+            plot_character_relationship.save()
 
 
 class Relationship(BaseModel):

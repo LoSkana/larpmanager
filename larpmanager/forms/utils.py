@@ -402,12 +402,12 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     def set_run(self, run: Run) -> None:
         """Set allowed members for a run based on registrations and event roles."""
         # Get registered members for this run (non-cancelled)
-        que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-        self.allowed = set(que.values_list("member_id", flat=True))
+        registration_queryset = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+        self.allowed = set(registration_queryset.values_list("member_id", flat=True))
 
         # Add members with event roles
-        que = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
-        self.allowed.update(que.values_list("members__id", flat=True))
+        event_role_queryset = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
+        self.allowed.update(event_role_queryset.values_list("members__id", flat=True))
 
         # Set required attribute
         # noinspection PyUnresolvedReferences
@@ -457,18 +457,18 @@ def get_run_choices(self, past=False):
         Creates or updates 'run' field in form with run choices
         Sets initial value if run is in params
     """
-    cho = [("", "-----")]
+    choices = [("", "-----")]
     runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
     if past:
-        ref = datetime.now() - timedelta(days=30)
-        runs = runs.filter(end__gte=ref.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    for r in runs:
-        cho.append((r.id, str(r)))
+        reference_date = datetime.now() - timedelta(days=30)
+        runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
+    for run in runs:
+        choices.append((run.id, str(run)))
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
-    self.fields["run"].choices = cho
+    self.fields["run"].choices = choices
     if "run" in self.params:
         self.initial["run"] = self.params["run"].id
 
@@ -777,19 +777,19 @@ class RedirectForm(forms.Form):
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
 
 
-def get_members_queryset(aid):
+def get_members_queryset(association_id):
     """Get queryset of members for an association with accepted status.
 
     Args:
-        aid: Association ID to filter members for
+        association_id: Association ID to filter members for
 
     Returns:
         QuerySet: Members with accepted, submitted, or joined membership status
     """
-    allwd = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
-    qs = Member.objects.prefetch_related("memberships")
-    qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
-    return qs
+    allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
+    queryset = Member.objects.prefetch_related("memberships")
+    queryset = queryset.filter(memberships__assoc_id=association_id, memberships__status__in=allowed_statuses)
+    return queryset
 
 
 class WritingTinyMCE(TinyMCE):

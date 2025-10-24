@@ -92,41 +92,45 @@ class FeatureForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, overall):
+    def _init_features(self, is_association_level):
         """Initialize feature selection fields organized by modules.
 
         Args:
-            overall: If True, initialize association-level features;
-                    if False, initialize event-level features
+            is_association_level: If True, initialize association-level features;
+                                 if False, initialize event-level features
 
         Side effects:
             Adds feature selection fields to the form organized by modules
             Sets initial values based on current feature assignments
         """
-        init_features = None
+        selected_feature_ids = None
         if self.instance.pk:
-            init_features = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
+            selected_feature_ids = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
 
-        modules = FeatureModule.objects.exclude(order=0).order_by("order")
-        if overall:
-            modules = modules.filter(Q(nationality__isnull=True) | Q(nationality=self.instance.nationality))
-        for module in modules:
-            features = module.features.filter(overall=overall, placeholder=False, hidden=False).order_by("order")
-            choices = [(str(f.id), _(f.name)) for f in features]
-            help_text = {str(f.id): _(f.descr) for f in features}
-            if not choices:
+        feature_modules = FeatureModule.objects.exclude(order=0).order_by("order")
+        if is_association_level:
+            feature_modules = feature_modules.filter(
+                Q(nationality__isnull=True) | Q(nationality=self.instance.nationality)
+            )
+        for feature_module in feature_modules:
+            module_features = feature_module.features.filter(
+                overall=is_association_level, placeholder=False, hidden=False
+            ).order_by("order")
+            feature_choices = [(str(feature.id), _(feature.name)) for feature in module_features]
+            feature_help_texts = {str(feature.id): _(feature.descr) for feature in module_features}
+            if not feature_choices:
                 continue
-            label = _(module.name)
-            if module.icon:
-                label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
-            self.fields[f"mod_{module.id}"] = forms.MultipleChoiceField(
-                choices=choices,
-                widget=FeatureCheckboxWidget(help_text=help_text),
-                label=label,
+            field_label = _(feature_module.name)
+            if feature_module.icon:
+                field_label = f"<i class='fa-solid fa-{feature_module.icon}'></i> {field_label}"
+            self.fields[f"mod_{feature_module.id}"] = forms.MultipleChoiceField(
+                choices=feature_choices,
+                widget=FeatureCheckboxWidget(help_text=feature_help_texts),
+                label=field_label,
                 required=False,
             )
-            if init_features:
-                self.initial[f"mod_{module.id}"] = init_features
+            if selected_feature_ids:
+                self.initial[f"mod_{feature_module.id}"] = selected_feature_ids
 
     def _save_features(self, instance):
         """Save selected features to the instance.

@@ -51,15 +51,15 @@ def check_holiday() -> bool:
               False otherwise.
     """
     # Get current date
-    td = datetime.now().date()
+    today = datetime.now().date()
 
     # Check holidays in major countries
-    for s in ["US", "IT", "CN", "UK"]:
+    for country_code in ["US", "IT", "CN", "UK"]:
         # Check yesterday, today, and tomorrow
-        for md in [-1, 0, 1]:
-            tdd = td + timedelta(days=md)
+        for day_offset in [-1, 0, 1]:
+            date_to_check = today + timedelta(days=day_offset)
             # Check if the date is a holiday in the current country
-            if tdd in holidays.country_holidays(s):
+            if date_to_check in holidays.country_holidays(country_code):
                 return True
     return False
 
@@ -476,7 +476,9 @@ def send_character_status_update_email(instance: Character) -> None:
             my_send_mail(subj, body, instance.player, instance.event)
 
 
-def notify_organization_exe(func: callable, assoc: Association, instance: object) -> None:
+def notify_organization_exe(
+    notification_generator: callable, association: Association, context_instance: object
+) -> None:
     """Send notification to association executives.
 
     Sends notification emails to either the association's main email address
@@ -485,10 +487,10 @@ def notify_organization_exe(func: callable, assoc: Association, instance: object
     and sending the notification.
 
     Args:
-        func: Callable that generates (subject, body) tuple for the notification.
-              Should accept instance as parameter and return (str, str).
-        assoc: Association instance containing executive information and settings.
-        instance: Context instance passed to func for generating notification content.
+        notification_generator: Callable that generates (subject, body) tuple for the notification.
+              Should accept context_instance as parameter and return (str, str).
+        association: Association instance containing executive information and settings.
+        context_instance: Context instance passed to notification_generator for generating notification content.
 
     Returns:
         None
@@ -499,27 +501,27 @@ def notify_organization_exe(func: callable, assoc: Association, instance: object
         - May send to main_mail or individual executive emails
     """
     # Check if association has a main email configured
-    if assoc.main_mail:
+    if association.main_mail:
         # Use executive language for main email notifications
-        activate(get_exec_language(assoc))
+        activate(get_exec_language(association))
 
         # Generate subject and body using provided function
-        (subj, body) = func(instance)
+        (subject, body) = notification_generator(context_instance)
 
         # Send notification to main email address
-        my_send_mail(subj, body, assoc.main_mail, instance)
+        my_send_mail(subject, body, association.main_mail, context_instance)
         return
 
     # Send individual notifications to each executive
-    for orga in get_assoc_executives(assoc):
+    for executive in get_assoc_executives(association):
         # Activate recipient's preferred language
-        activate(orga.language)
+        activate(executive.language)
 
         # Generate localized subject and body for this recipient
-        (subj, body) = func(instance)
+        (subject, body) = notification_generator(context_instance)
 
         # Send personalized notification to executive
-        my_send_mail(subj, body, orga.email, instance)
+        my_send_mail(subject, body, executive.email, context_instance)
 
 
 def get_exec_language(assoc: Association) -> str:

@@ -89,35 +89,35 @@ def _get_registration_status_code(run):
         return "preregister", None
 
     # Check registration opening time
-    dt = datetime.today()
+    current_datetime = datetime.today()
     if "registration_open" in features:
         if not run.registration_open:
             return "not_set", None
-        if run.registration_open > dt:
+        if run.registration_open > current_datetime:
             return "future", run.registration_open
 
     # Check registration availability
     run.status = {}
     registration_available(run, features)
-    status = run.status
+    registration_status = run.status
 
     # Determine status based on availability
     status_priority = ["primary", "filler", "waiting"]
     for status_type in status_priority:
-        if status_type in status:
-            return status_type, status.get("count")
+        if status_type in registration_status:
+            return status_type, registration_status.get("count")
 
     return "closed", None
 
 
-def _get_registration_status(run) -> str:
+def _get_registration_status(run_instance) -> str:
     """Get human-readable registration status for a run.
 
     This function retrieves the registration status code and returns a localized,
     user-friendly message describing the current registration state for the given run.
 
     Args:
-        run: Run instance to check status for. Expected to have registration-related
+        run_instance: Run instance to check status for. Expected to have registration-related
              attributes that can be processed by _get_registration_status_code().
 
     Returns:
@@ -130,7 +130,7 @@ def _get_registration_status(run) -> str:
         any additional values (like datetime for future registrations).
     """
     # Get the current status code and any additional data from the run
-    status_code, additional_value = _get_registration_status_code(run)
+    status_code, opening_datetime = _get_registration_status_code(run_instance)
 
     # Define mapping of status codes to localized human-readable messages
     status_messages = {
@@ -146,9 +146,9 @@ def _get_registration_status(run) -> str:
     # Special handling for future registrations with datetime formatting
     if status_code == "future":
         # Check if we have a valid datetime to format
-        if additional_value:
-            formatted_date = additional_value.strftime(format_datetime)
-            return _("Registrations opening at: %(date)s") % {"date": formatted_date}
+        if opening_datetime:
+            formatted_opening_date = opening_datetime.strftime(format_datetime)
+            return _("Registrations opening at: %(date)s") % {"date": formatted_opening_date}
         else:
             # Fallback when datetime is not available
             return _("Registrations opening not set")
@@ -267,7 +267,7 @@ def _exe_suggestions(ctx):
         _add_suggestion(ctx, text, perm)
 
 
-def _exe_actions(request, ctx: dict, features: dict = None) -> None:
+def _exe_actions(request, context: dict, association_features: dict = None) -> None:
     """Determine available executive actions based on association features.
 
     Adds action items to the management dashboard based on user permissions
@@ -275,73 +275,81 @@ def _exe_actions(request, ctx: dict, features: dict = None) -> None:
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary containing association ID and other data
-        features: Dictionary of association features, defaults to None
+        context: Context dictionary containing association ID and other data
+        association_features: Dictionary of association features, defaults to None
 
     Returns:
-        None: Modifies ctx in place by adding action items
+        None: Modifies context in place by adding action items
     """
     # Get association features if not provided
-    if not features:
-        features = get_assoc_features(ctx["a_id"])
+    if not association_features:
+        association_features = get_assoc_features(context["a_id"])
 
     # Check for runs that should be concluded
-    runs_conclude = Run.objects.filter(
-        event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW], end__lt=datetime.today()
+    runs_to_conclude = Run.objects.filter(
+        event__assoc_id=context["a_id"],
+        development__in=[DevelopStatus.START, DevelopStatus.SHOW],
+        end__lt=datetime.today(),
     ).values_list("search", flat=True)
 
     # Add action for past runs still open
-    if runs_conclude:
+    if runs_to_conclude:
         _add_action(
-            ctx,
+            context,
             _(
                 "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
             )
-            % {"list": ", ".join(runs_conclude)},
+            % {"list": ", ".join(runs_to_conclude)},
             "exe_events",
         )
 
     # Check for pending expense approvals
-    expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
-    if expenses_approve:
+    pending_expenses_count = AccountingItemExpense.objects.filter(
+        run__event__assoc_id=context["a_id"], is_approved=False
+    ).count()
+    if pending_expenses_count:
         _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
+            context,
+            _("There are <b>%(number)s</b> expenses to approve") % {"number": pending_expenses_count},
             "exe_expenses",
         )
 
     # Check for pending payment approvals
-    payments_approve = PaymentInvoice.objects.filter(assoc_id=ctx["a_id"], status=PaymentStatus.SUBMITTED).count()
-    if payments_approve:
+    pending_payments_count = PaymentInvoice.objects.filter(
+        assoc_id=context["a_id"], status=PaymentStatus.SUBMITTED
+    ).count()
+    if pending_payments_count:
         _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": payments_approve},
+            context,
+            _("There are <b>%(number)s</b> payments to approve") % {"number": pending_payments_count},
             "exe_invoices",
         )
 
     # Check for pending refund approvals
-    refund_approve = RefundRequest.objects.filter(assoc_id=ctx["a_id"], status=RefundStatus.REQUEST).count()
-    if refund_approve:
+    pending_refunds_count = RefundRequest.objects.filter(assoc_id=context["a_id"], status=RefundStatus.REQUEST).count()
+    if pending_refunds_count:
         _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> refunds to deliver") % {"number": refund_approve},
+            context,
+            _("There are <b>%(number)s</b> refunds to deliver") % {"number": pending_refunds_count},
             "exe_refunds",
         )
 
     # Check for pending member approvals
-    members_approve = Membership.objects.filter(assoc_id=ctx["a_id"], status=MembershipStatus.SUBMITTED).count()
-    if members_approve:
+    pending_members_count = Membership.objects.filter(
+        assoc_id=context["a_id"], status=MembershipStatus.SUBMITTED
+    ).count()
+    if pending_members_count:
         _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> members to approve") % {"number": members_approve},
+            context,
+            _("There are <b>%(number)s</b> members to approve") % {"number": pending_members_count},
             "exe_membership",
         )
 
     # Process accounting-specific actions
-    _exe_accounting_actions(request, ctx, features)
+    _exe_accounting_actions(request, context, association_features)
 
     # Process user-specific actions
-    _exe_users_actions(request, ctx, features)
+    _exe_users_actions(request, context, association_features)
 
 
 def _exe_users_actions(request, ctx, features):
@@ -883,20 +891,20 @@ def _orga_suggestions(ctx):
         _add_suggestion(ctx, text, perm)
 
 
-def _add_item(ctx, list_name, text, perm, link):
+def _add_item(context, list_name, message_text, permission_key, custom_link):
     """Add item to specific list in management context.
 
     Args:
-        ctx: Context dictionary to modify
+        context: Context dictionary to modify
         list_name: Name of list to add item to
-        text: Item message text
-        perm: Permission key
-        link: Optional custom link
+        message_text: Item message text
+        permission_key: Permission key
+        custom_link: Optional custom link
     """
-    if list_name not in ctx:
-        ctx[list_name] = []
+    if list_name not in context:
+        context[list_name] = []
 
-    ctx[list_name].append((text, perm, link))
+    context[list_name].append((message_text, permission_key, custom_link))
 
 
 def _add_priority(ctx, priority_text, permission_key, custom_link=None):
@@ -923,16 +931,16 @@ def _add_action(ctx, action_text, permission_key, custom_link=None):
     _add_item(ctx, "actions_list", action_text, permission_key, custom_link)
 
 
-def _add_suggestion(ctx, text, perm, link=None):
+def _add_suggestion(context, suggestion_text, permission_key, custom_link=None):
     """Add suggestion item to management dashboard.
 
     Args:
-        ctx: Context dictionary to modify
-        text: Suggestion message text
-        perm: Permission key for the action
-        link: Optional custom link
+        context: Context dictionary to modify
+        suggestion_text: Suggestion message text
+        permission_key: Permission key for the action
+        custom_link: Optional custom link
     """
-    _add_item(ctx, "suggestions_list", text, perm, link)
+    _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
 
 def _has_permission(request, ctx, perm):
@@ -969,53 +977,57 @@ def _get_href(ctx, perm, name, custom_link):
     return _(name), _get_perm_link(ctx, perm, perm)
 
 
-def _get_perm_link(ctx: dict, perm: str, view: str) -> str:
+def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     """Generate permission link URL based on permission type."""
-    if perm.startswith("exe"):
-        return reverse(view)
-    return reverse(view, args=[ctx["run"].get_slug()])
+    if permission.startswith("exe"):
+        return reverse(view_name)
+    return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request, ctx):
+def _compile(request, context, ctx):
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
     and providing appropriate user messaging.
     """
-    section_list = ["suggestions", "actions", "priorities"]
-    empty = True
-    for section in section_list:
-        ctx[section] = []
-        if f"{section}_list" in ctx:
-            empty = False
+    section_names = ["suggestions", "actions", "priorities"]
+    all_sections_empty = True
+    for section_name in section_names:
+        context[section_name] = []
+        if f"{section_name}_list" in context:
+            all_sections_empty = False
 
-    if empty:
+    if all_sections_empty:
         return
 
-    cache = {}
-    perm_list = []
-    for section in section_list:
-        if f"{section}_list" not in ctx:
+    permission_cache = {}
+    permission_slug_list = []
+    for section_name in section_names:
+        if f"{section_name}_list" not in context:
             continue
 
-        perm_list.extend([slug for _n, slug, _u in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
+        permission_slug_list.extend(
+            [slug for _name, slug, _url in context[f"{section_name}_list"] if _has_permission(request, context, slug)]
+        )
 
-    for model in (EventPermission, AssocPermission):
-        queryset = model.objects.filter(slug__in=perm_list).select_related("feature")
-        for slug, name, tutorial in queryset.values_list("slug", "name", "feature__tutorial"):
-            cache[slug] = (name, tutorial)
+    for permission_model in (EventPermission, AssocPermission):
+        permission_queryset = permission_model.objects.filter(slug__in=permission_slug_list).select_related("feature")
+        for slug, permission_name, tutorial in permission_queryset.values_list("slug", "name", "feature__tutorial"):
+            permission_cache[slug] = (permission_name, tutorial)
 
-    for section in section_list:
-        if f"{section}_list" not in ctx:
+    for section_name in section_names:
+        if f"{section_name}_list" not in context:
             continue
 
-        for text, slug, custom_link in ctx[f"{section}_list"]:
-            if slug not in cache:
+        for text, slug, custom_link in context[f"{section_name}_list"]:
+            if slug not in permission_cache:
                 continue
 
-            (name, tutorial) = cache[slug]
-            link_name, link_url = _get_href(ctx, slug, name, custom_link)
-            ctx[section].append({"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug})
+            (permission_name, tutorial) = permission_cache[slug]
+            link_name, link_url = _get_href(context, slug, permission_name, custom_link)
+            context[section_name].append(
+                {"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug}
+            )
 
 
 def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirect:
@@ -1036,17 +1048,17 @@ def orga_close_suggestion(request: HttpRequest, s: str, perm: EventPermission) -
     return redirect("manage", s=s)
 
 
-def _check_intro_driver(request: HttpRequest, ctx: dict) -> None:
+def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     """Check if intro driver should be shown and update context."""
     member = request.user.member
-    config_name = "intro_driver"
+    config_key = "intro_driver"
 
     # Skip if user has already seen the intro driver
-    if member.get_config(config_name, False):
+    if member.get_config(config_key, False):
         return
 
     # Enable intro driver in template context
-    ctx["intro_driver"] = True
+    context["intro_driver"] = True
 
 
 def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
@@ -1280,15 +1292,15 @@ def _handle_event_pms_redirect(choice_value, ctx):
     return reverse(choice_value, args=[ctx["run"].get_slug()])
 
 
-def _handle_tutorial_redirect(choice_value):
+def _handle_tutorial_redirect(tutorial_choice_value):
     """Handle tutorial redirect with optional section anchor."""
-    if "#" in choice_value:
-        tutorial_slug, section_slug = choice_value.split("#", 1)
+    if "#" in tutorial_choice_value:
+        tutorial_slug, section_slug = tutorial_choice_value.split("#", 1)
         # Remove forward slashes from both parts
         tutorial_slug = tutorial_slug.replace("/", "")
         section_slug = section_slug.replace("/", "")
         return reverse("tutorials", args=[tutorial_slug]) + f"#{section_slug}"
 
-    # Remove forward slashes from choice_value
-    choice_value = choice_value.replace("/", "")
-    return reverse("tutorials", args=[choice_value])
+    # Remove forward slashes from tutorial_choice_value
+    sanitized_tutorial_slug = tutorial_choice_value.replace("/", "")
+    return reverse("tutorials", args=[sanitized_tutorial_slug])

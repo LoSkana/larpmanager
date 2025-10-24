@@ -266,8 +266,8 @@ def _get_ordering(ctx: dict, order: list) -> list[str]:
 
 def _get_field_map() -> dict[str, list[str]]:
     """Return field mapping for member-related queries."""
-    field_map = {"member": ["member__surname", "member__name"]}
-    return field_map
+    member_field_map = {"member": ["member__surname", "member__name"]}
+    return member_field_map
 
 
 def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[str, str]]:

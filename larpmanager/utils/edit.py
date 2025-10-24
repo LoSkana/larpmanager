@@ -148,23 +148,23 @@ def _get_field_value(el: Any, que: Any) -> str | None:
     return None
 
 
-def _get_values_mapping(el) -> dict[str, callable]:
+def _get_values_mapping(element) -> dict[str, callable]:
     """Returns a mapping of field names to their value extraction functions.
 
     Args:
-        el: The element object to extract values from.
+        element: The element object to extract values from.
 
     Returns:
         Dictionary mapping field names to lambda functions that extract values.
     """
     # Basic text and content fields
     mapping = {
-        "text": lambda: el.text,
-        "teaser": lambda: el.teaser,
-        "name": lambda: el.name,
-        "title": lambda: el.title,
+        "text": lambda: element.text,
+        "teaser": lambda: element.teaser,
+        "name": lambda: element.name,
+        "title": lambda: element.title,
         # Related faction names joined by comma
-        "faction": lambda: ", ".join([fac.name for fac in el.factions_list.all()]),
+        "faction": lambda: ", ".join([faction.name for faction in element.factions_list.all()]),
     }
     return mapping
 
@@ -284,31 +284,31 @@ def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: in
     return False
 
 
-def backend_get(ctx: dict, typ: type, eid: int, afield: str = None) -> None:
+def backend_get(context: dict, model_type: type, entity_id: int, association_field: str = None) -> None:
     """Retrieve an object by ID and perform security checks.
 
     Args:
-        ctx: Context dictionary to store the retrieved object
-        typ: Model class to query
-        eid: Primary key of the object to retrieve
-        afield: Optional field name for additional checks
+        context: Context dictionary to store the retrieved object
+        model_type: Model class to query
+        entity_id: Primary key of the object to retrieve
+        association_field: Optional field name for additional checks
 
     Raises:
         NotFoundError: If object with given ID doesn't exist
     """
     # Retrieve object by primary key, handle any database exceptions
     try:
-        el = typ.objects.get(pk=eid)
+        element = model_type.objects.get(pk=entity_id)
     except Exception as err:
         raise NotFoundError() from err
 
     # Store object in context and perform security validations
-    ctx["el"] = el
-    check_run(el, ctx, afield)
-    check_assoc(el, ctx, afield)
+    context["el"] = element
+    check_run(element, context, association_field)
+    check_assoc(element, context, association_field)
 
     # Set display name for the object
-    ctx["name"] = str(el)
+    context["name"] = str(element)
 
 
 def backend_edit(
@@ -504,7 +504,7 @@ def exe_edit(
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def set_suggestion(ctx: dict, perm: str) -> None:
+def set_suggestion(context: dict, permission: str) -> None:
     """Set a suggestion flag for a given permission in the configuration.
 
     This function sets a boolean flag in the configuration to indicate that
@@ -512,29 +512,31 @@ def set_suggestion(ctx: dict, perm: str) -> None:
     event and association contexts.
 
     Args:
-        ctx: Context dictionary containing either 'event' key with event object
-             or 'a_id' key with association ID
-        perm: Permission name to create suggestion flag for
+        context: Context dictionary containing either 'event' key with event object
+                 or 'a_id' key with association ID
+        permission: Permission name to create suggestion flag for
     """
     # Determine the target object based on context
-    if "event" in ctx:
-        obj = ctx["event"]
+    if "event" in context:
+        target_object = context["event"]
     else:
-        obj = Association.objects.get(pk=ctx["a_id"])
+        target_object = Association.objects.get(pk=context["a_id"])
 
     # Build the configuration key for this permission's suggestion
-    key = f"{perm}_suggestion"
-    suggestion = obj.get_config(key, False)
+    config_key = f"{permission}_suggestion"
+    existing_suggestion = target_object.get_config(config_key, False)
 
     # Exit early if suggestion already exists
-    if suggestion:
+    if existing_suggestion:
         return
 
     # Get the foreign key field name for the config model
-    fk_field = _get_fkey_config(obj)
+    foreign_key_field = _get_fkey_config(target_object)
 
     # Create or retrieve the configuration entry
-    (config, created) = obj.configs.model.objects.get_or_create(**{fk_field: obj, "name": key})
+    (config, created) = target_object.configs.model.objects.get_or_create(
+        **{foreign_key_field: target_object, "name": config_key}
+    )
 
     # Set the suggestion flag to True and save
     config.value = True
@@ -612,7 +614,7 @@ def writing_edit(
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 
 
-def _setup_char_finder(ctx: dict, typ: type) -> None:
+def _setup_char_finder(context: dict, model_type: type) -> None:
     """Set up character finder widget for the given context and type.
 
     Configures a character finder widget based on the event configuration and
@@ -620,30 +622,30 @@ def _setup_char_finder(ctx: dict, typ: type) -> None:
     function returns early without setting up the widget.
 
     Args:
-        ctx: Context dictionary containing event and other template variables
-        typ: Model class type (either Trait or Character) to determine widget type
+        context: Context dictionary containing event and other template variables
+        model_type: Model class type (either Trait or Character) to determine widget type
 
     Returns:
         None: Modifies the context dictionary in place
     """
     # Check if character finder is disabled for this event
-    if get_event_config(ctx["event"].id, "writing_disable_char_finder", False, ctx):
+    if get_event_config(context["event"].id, "writing_disable_char_finder", False, context):
         return
 
     # Select appropriate widget class based on type
-    if typ == Trait:
+    if model_type == Trait:
         widget_class = EventTraitS2Widget
     else:
         widget_class = EventCharacterS2Widget
 
     # Initialize widget with event configuration
     widget = widget_class(attrs={"id": "char_finder"})
-    widget.set_event(ctx["event"])
+    widget.set_event(context["event"])
 
     # Set up context variables for template rendering
-    ctx["finder_typ"] = typ._meta.model_name
-    ctx["char_finder"] = widget.render(name="char_finder", value="")
-    ctx["char_finder_media"] = widget.media
+    context["finder_typ"] = model_type._meta.model_name
+    context["char_finder"] = widget.render(name="char_finder", value="")
+    context["char_finder_media"] = widget.media
 
 
 def _writing_save(
@@ -762,7 +764,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, ctx: dict) -> "Json
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
+def writing_edit_working_ticket(request, element_type: str, element_id: int, user_token: str) -> str:
     """
     Manage working tickets to prevent concurrent editing conflicts.
 
@@ -772,9 +774,9 @@ def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
 
     Args:
         request: HTTP request object containing user information
-        tp: Type of element being edited (e.g., 'plot', 'character')
-        eid: Element ID being edited
-        token: User's unique editing token for session identification
+        element_type: Type of element being edited (e.g., 'plot', 'character')
+        element_id: Element ID being edited
+        user_token: User's unique editing token for session identification
 
     Returns:
         Warning message if editing conflicts exist, empty string if safe to edit
@@ -789,44 +791,44 @@ def writing_edit_working_ticket(request, tp: str, eid: int, token: str) -> str:
 
     # Handle plot objects by recursively checking all related characters
     # This prevents conflicts when editing plots that affect multiple characters
-    if tp == "plot":
-        char_ids = Plot.objects.filter(pk=eid).values_list("characters__pk", flat=True)
-        for char_id in char_ids:
-            if char_id is None:  # Skip if plot has no characters
+    if element_type == "plot":
+        character_ids = Plot.objects.filter(pk=element_id).values_list("characters__pk", flat=True)
+        for character_id in character_ids:
+            if character_id is None:  # Skip if plot has no characters
                 continue
-            msg = writing_edit_working_ticket(request, "character", char_id, token)
-            if msg:
-                return msg
+            warning_message = writing_edit_working_ticket(request, "character", character_id, user_token)
+            if warning_message:
+                return warning_message
 
     # Get current timestamp and retrieve existing ticket from cache
-    now = int(time.time())
-    key = writing_edit_cache_key(eid, tp)
-    ticket = cache.get(key)
-    if not ticket:
-        ticket = {}
+    current_timestamp = int(time.time())
+    cache_key = writing_edit_cache_key(element_id, element_type)
+    active_tickets = cache.get(cache_key)
+    if not active_tickets:
+        active_tickets = {}
 
     # Check for other active editors within the timeout window
-    others = []
-    ticket_time = 5  # 5 second timeout for editing conflicts
-    for idx, el in ticket.items():
-        (name, tm) = el
+    other_editors = []
+    ticket_timeout_seconds = 5  # 5 second timeout for editing conflicts
+    for token_id, editor_info in active_tickets.items():
+        (editor_name, last_edit_timestamp) = editor_info
         # Only consider other users' tokens within the timeout period
-        if idx != token and now - tm < ticket_time:
-            others.append(name)
+        if token_id != user_token and current_timestamp - last_edit_timestamp < ticket_timeout_seconds:
+            other_editors.append(editor_name)
 
     # Generate warning message if other users are currently editing
-    msg = ""
-    if len(others) > 0:
-        msg = _("Warning! Other users are editing this item") + "."
-        msg += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
-        msg += " " + _("List of other users") + ": " + ", ".join(others)
+    warning_message = ""
+    if len(other_editors) > 0:
+        warning_message = _("Warning! Other users are editing this item") + "."
+        warning_message += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
+        warning_message += " " + _("List of other users") + ": " + ", ".join(other_editors)
 
     # Update ticket with current user's information and timestamp
-    ticket[token] = (str(request.user.member), now)
+    active_tickets[user_token] = (str(request.user.member), current_timestamp)
     # Cache the updated ticket with appropriate timeout
-    cache.set(key, ticket, min(ticket_time, conf_settings.CACHE_TIMEOUT_1_DAY))
+    cache.set(cache_key, active_tickets, min(ticket_timeout_seconds, conf_settings.CACHE_TIMEOUT_1_DAY))
 
-    return msg
+    return warning_message
 
 
 @require_POST

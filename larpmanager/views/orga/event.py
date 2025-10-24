@@ -73,7 +73,9 @@ def orga_event(request, s):
     return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
 
 
-def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe: bool = False) -> HttpResponse:
+def full_event_edit(
+    context: dict, request: HttpRequest, event: Event, run: Run, is_executive: bool = False
+) -> HttpResponse:
     """Comprehensive event editing with validation.
 
     Handles both GET requests for displaying edit forms and POST requests for
@@ -81,48 +83,48 @@ def full_event_edit(ctx: dict, request: HttpRequest, event: Event, run: Run, exe
     when submitted.
 
     Args:
-        ctx: Context dictionary for template rendering
+        context: Context dictionary for template rendering
         request: HTTP request object containing form data
         event: Event instance to edit
         run: Run instance associated with the event
-        exe: Whether this is an executive-level edit, defaults to False
+        is_executive: Whether this is an executive-level edit, defaults to False
 
     Returns:
         HttpResponse: Either the edit form template for GET requests or a
         redirect response after successful form submission
     """
     # Disable numbering in the template context
-    ctx["nonum"] = 1
+    context["nonum"] = 1
 
     if request.method == "POST":
         # Create form instances with POST data and file uploads
-        form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
-        form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
+        event_form = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=context, prefix="form1")
+        run_form = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=context, prefix="form2")
 
         # Validate both forms before saving
-        if form_event.is_valid() and form_run.is_valid():
+        if event_form.is_valid() and run_form.is_valid():
             # Save both forms to database
-            form_event.save()
-            form_run.save()
+            event_form.save()
+            run_form.save()
 
             # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
-            if exe:
+            if is_executive:
                 return redirect("manage")
             else:
                 return redirect("manage", s=run.get_slug())
     else:
         # Create empty forms for GET requests
-        form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
-        form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
+        event_form = OrgaEventForm(instance=event, ctx=context, prefix="form1")
+        run_form = OrgaRunForm(instance=run, ctx=context, prefix="form2")
 
     # Add forms and metadata to template context
-    ctx["form1"] = form_event
-    ctx["form2"] = form_run
-    ctx["num"] = event.id
-    ctx["type"] = "event"
+    context["form1"] = event_form
+    context["form2"] = run_form
+    context["num"] = event.id
+    context["type"] = "event"
 
-    return render(request, "larpmanager/orga/edit_multi.html", ctx)
+    return render(request, "larpmanager/orga/edit_multi.html", context)
 
 
 @login_required
@@ -330,12 +332,12 @@ def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True
     return ctx["feature"]
 
 
-def _orga_feature_after_link(feature: Feature, s: str) -> str:
+def _orga_feature_after_link(feature: Feature, event_slug: str) -> str:
     """Build redirect URL after feature interaction.
 
     Args:
         feature: Feature object with after_link attribute
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         Full URL path for redirect
@@ -344,10 +346,10 @@ def _orga_feature_after_link(feature: Feature, s: str) -> str:
 
     # Use reverse if after_link is a named URL pattern starting with "orga"
     if after_link and after_link.startswith("orga"):
-        return reverse(after_link, kwargs={"s": s})
+        return reverse(after_link, kwargs={"s": event_slug})
 
     # Otherwise append after_link as fragment to manage URL
-    return reverse("manage", kwargs={"s": s}) + (after_link or "")
+    return reverse("manage", kwargs={"s": event_slug}) + (after_link or "")
 
 
 @login_required
@@ -410,7 +412,7 @@ def orga_backup(request: HttpRequest, s: str) -> HttpResponse:
     return _prepare_backup(ctx)
 
 
-def _prepare_backup(ctx: dict) -> HttpResponse:
+def _prepare_backup(context: dict) -> HttpResponse:
     """
     Prepare comprehensive event data backup by exporting various components.
 
@@ -419,7 +421,7 @@ def _prepare_backup(ctx: dict) -> HttpResponse:
     on enabled features.
 
     Args:
-        ctx: Context dictionary containing:
+        context: Context dictionary containing:
             - event: Event object to backup
             - features: Dict of enabled feature flags
             - Other context data required by export functions
@@ -431,41 +433,41 @@ def _prepare_backup(ctx: dict) -> HttpResponse:
         KeyError: If required context keys are missing
         Exception: If export or ZIP creation fails
     """
-    exports = []
+    export_files = []
 
     # Export core event data
-    exports.extend(export_event(ctx))
+    export_files.extend(export_event(context))
 
     # Export registration-related data
-    exports.extend(export_data(ctx, Registration))
-    exports.extend(export_registration_form(ctx))
-    exports.extend(export_tickets(ctx))
+    export_files.extend(export_data(context, Registration))
+    export_files.extend(export_registration_form(context))
+    export_files.extend(export_tickets(context))
 
     # Export character data if feature is enabled
-    if "character" in ctx["features"]:
-        exports.extend(export_data(ctx, Character))
-        exports.extend(export_character_form(ctx))
+    if "character" in context["features"]:
+        export_files.extend(export_data(context, Character))
+        export_files.extend(export_character_form(context))
 
     # Export faction data if feature is enabled
-    if "faction" in ctx["features"]:
-        exports.extend(export_data(ctx, Faction))
+    if "faction" in context["features"]:
+        export_files.extend(export_data(context, Faction))
 
     # Export plot data if feature is enabled
-    if "plot" in ctx["features"]:
-        exports.extend(export_data(ctx, Plot))
+    if "plot" in context["features"]:
+        export_files.extend(export_data(context, Plot))
 
     # Export experience/abilities data if feature is enabled
-    if "px" in ctx["features"]:
-        exports.extend(export_abilities(ctx))
+    if "px" in context["features"]:
+        export_files.extend(export_abilities(context))
 
     # Export quest builder data if feature is enabled
-    if "questbuilder" in ctx["features"]:
-        exports.extend(export_data(ctx, QuestType))
-        exports.extend(export_data(ctx, Quest))
-        exports.extend(export_data(ctx, Trait))
+    if "questbuilder" in context["features"]:
+        export_files.extend(export_data(context, QuestType))
+        export_files.extend(export_data(context, Quest))
+        export_files.extend(export_data(context, Trait))
 
     # Create and return ZIP file with all exports
-    return zip_exports(ctx, exports, "backup")
+    return zip_exports(context, export_files, "backup")
 
 
 @login_required

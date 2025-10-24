@@ -288,24 +288,24 @@ def _go_centauri(request):
     return True
 
 
-def get_warehouse_optionals(ctx, def_cols):
+def get_warehouse_optionals(context, default_columns):
     """Get warehouse optional field configuration for display.
 
     Args:
-        ctx (dict): Context dictionary to update
-        def_cols (list): Default column configuration
+        context (dict): Context dictionary to update
+        default_columns (list): Default column configuration
 
     Side effects:
-        Updates ctx with optionals configuration and header column settings
+        Updates context with optionals configuration and header column settings
     """
     optionals = {}
-    active = 0
+    has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_assoc_config(ctx["a_id"], f"warehouse_{field}", False, ctx)
+        optionals[field] = get_assoc_config(context["a_id"], f"warehouse_{field}", False, context)
         if optionals[field]:
-            active = 1
-    ctx["optionals"] = optionals
-    ctx["no_header_cols"] = json.dumps([el + active for el in def_cols])
+            has_active_optional = 1
+    context["optionals"] = optionals
+    context["no_header_cols"] = json.dumps([column + has_active_optional for column in default_columns])
 
 
 def auto_rotate_vertical_photos(instance: object, sender: type) -> None:

@@ -31,29 +31,29 @@ from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
 
 
-def reset_cache_run(a, s):
-    key = cache_run_key(a, s)
+def reset_cache_run(association, slug):
+    key = cache_run_key(association, slug)
     cache.delete(key)
 
 
-def cache_run_key(a, s):
-    return f"run_{a}_{s}"
+def cache_run_key(association_id, slug):
+    return f"run_{association_id}_{slug}"
 
 
-def get_cache_run(a: Association, s: str) -> dict:
+def get_cache_run(association: Association, slug: str) -> dict:
     """Get cached run data for association and slug."""
     # Generate cache key for the association and slug
-    key = cache_run_key(a, s)
+    cache_key = cache_run_key(association, slug)
 
     # Try to retrieve cached result
-    res = cache.get(key)
+    cached_result = cache.get(cache_key)
 
     # If not cached, initialize and cache the result
-    if res is None:
-        res = init_cache_run(a, s)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_result is None:
+        cached_result = init_cache_run(association, slug)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_result
 
 
 def init_cache_run(a, s):
@@ -96,8 +96,8 @@ def reset_cache_config_run(run):
     cache.delete(key)
 
 
-def cache_config_run_key(run):
-    return f"run_config_{run.id}"
+def cache_config_run_key(run_instance):
+    return f"run_config_{run_instance.id}"
 
 
 def get_cache_config_run(run: Run) -> dict:

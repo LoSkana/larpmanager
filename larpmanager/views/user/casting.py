@@ -387,7 +387,7 @@ def _casting_update(ctx: dict, prefs: dict[str, int], request, typ: int) -> None
 
 
 def get_casting_preferences(
-    number: int, ctx: dict, typ: int = 0, casts: Optional[QuerySet] = None
+    element_number: int, ctx: dict, casting_type: int = 0, casting_queryset: Optional[QuerySet] = None
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 
@@ -396,61 +396,61 @@ def get_casting_preferences(
     distribution across preference levels.
 
     Args:
-        number: Character/element number to calculate preferences for
+        element_number: Character/element number to calculate preferences for
         ctx: Context dictionary containing 'run' and 'casting_max' keys,
              optionally 'staff' for filtering
-        typ: Casting type identifier (default: 0)
-        casts: Optional pre-filtered casting queryset. If None, will query
-               based on element, run, and typ parameters
+        casting_type: Casting type identifier (default: 0)
+        casting_queryset: Optional pre-filtered casting queryset. If None, will query
+               based on element, run, and casting_type parameters
 
     Returns:
         A tuple containing:
         - total_preferences (int): Total number of casting preferences found
         - average_preference (str): Average preference value formatted to 2 decimals,
                                    or "-" if no preferences exist
-        - distribution_dict (dict): Mapping of preference values to their counts
+        - preference_distribution (dict): Mapping of preference values to their counts
     """
-    tot_pref = 0
-    sum_pref = 0
+    total_preferences = 0
+    preference_sum = 0
 
     # Initialize distribution dictionary with all possible preference values
-    distr = {}
-    for v in range(0, ctx["casting_max"] + 1):
-        distr[v] = 0
+    preference_distribution = {}
+    for preference_value in range(0, ctx["casting_max"] + 1):
+        preference_distribution[preference_value] = 0
 
     # Get casting queryset if not provided
-    if casts is None:
-        casts = Casting.objects.filter(element=number, run=ctx["run"], typ=typ)
+    if casting_queryset is None:
+        casting_queryset = Casting.objects.filter(element=element_number, run=ctx["run"], typ=casting_type)
         # Filter active casts unless staff context is present
         if "staff" not in ctx:
-            casts = casts.filter(active=True)
+            casting_queryset = casting_queryset.filter(active=True)
 
     # Process each casting preference
-    for cs in casts:
-        v = int(cs.pref + 1)  # Convert preference to 1-based index
-        tot_pref += 1
-        sum_pref += v
+    for casting in casting_queryset:
+        preference_value = int(casting.pref + 1)  # Convert preference to 1-based index
+        total_preferences += 1
+        preference_sum += preference_value
         # Update distribution count if preference value is valid
-        if v in distr:
-            distr[v] += 1
+        if preference_value in preference_distribution:
+            preference_distribution[preference_value] += 1
 
     # Calculate average preference or return placeholder
-    if tot_pref == 0:
-        avg_pref = "-"
+    if total_preferences == 0:
+        average_preference = "-"
     else:
-        avg_pref = "%.2f" % (sum_pref * 1.0 / tot_pref)
+        average_preference = "%.2f" % (preference_sum * 1.0 / total_preferences)
 
-    return tot_pref, avg_pref, distr
+    return total_preferences, average_preference, preference_distribution
 
 
-def casting_preferences_characters(ctx: dict) -> None:
+def casting_preferences_characters(context: dict) -> None:
     """Process character casting preferences with filtering.
 
     Filters characters based on PNG status and staff permissions, then processes
     casting preferences for each character within their factions.
 
     Args:
-        ctx: Context dictionary containing:
+        context: Context dictionary containing:
             - run: Event run object
             - casting data and filtering parameters
             - factions: List of faction objects with character data
@@ -459,48 +459,48 @@ def casting_preferences_characters(ctx: dict) -> None:
         None
 
     Side Effects:
-        Updates ctx with:
+        Updates context with:
         - Filtered character list based on PNG/staff/free/mirror status
         - 'list': List of dictionaries containing character casting preferences
     """
     # Set up base filters for character selection
     filters = {"png": True}
-    if not "staff" not in ctx:
+    if not "staff" not in context:
         filters["free"] = True
         filters["mirror"] = True
 
     # Apply character filtering based on event criteria
-    get_event_filter_characters(ctx, filters)
-    ctx["list"] = []
+    get_event_filter_characters(context, filters)
+    context["list"] = []
 
     # Build casting preferences dictionary indexed by character ID
-    casts = {}
-    for c in Casting.objects.filter(run=ctx["run"], typ=0, active=True):
-        if c.element not in casts:
-            casts[c.element] = []
-        casts[c.element].append(c)
+    castings_by_character = {}
+    for casting in Casting.objects.filter(run=context["run"], typ=0, active=True):
+        if casting.element not in castings_by_character:
+            castings_by_character[casting.element] = []
+        castings_by_character[casting.element].append(casting)
 
     # Process each faction and its characters
-    for fac in ctx["factions"]:
-        for ch in fac.chars:
+    for faction in context["factions"]:
+        for character in faction.chars:
             # Get casting preferences for current character
-            cc = []
-            if ch.id in casts:
-                cc = casts[ch.id]
+            character_castings = []
+            if character.id in castings_by_character:
+                character_castings = castings_by_character[character.id]
 
             # Log character processing for debugging
-            logger.debug(f"Character {ch.id} casting preferences: {len(cc)} entries")
+            logger.debug(f"Character {character.id} casting preferences: {len(character_castings)} entries")
 
             # Build character entry with faction, name, and preferences
-            el = {
-                "group_dis": fac.data["name"],
-                "name_dis": ch.data["name"],
-                "pref": get_casting_preferences(ch.id, ctx, 0, cc),
+            character_entry = {
+                "group_dis": faction.data["name"],
+                "name_dis": character.data["name"],
+                "pref": get_casting_preferences(character.id, context, 0, character_castings),
             }
-            ctx["list"].append(el)
+            context["list"].append(character_entry)
 
 
-def casting_preferences_traits(ctx: dict, typ: int) -> None:
+def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
     """Load casting preferences data for traits.
 
     Populates the context dictionary with trait preference data filtered by quest type.
@@ -508,44 +508,44 @@ def casting_preferences_traits(ctx: dict, typ: int) -> None:
     that already have assignments in the current run.
 
     Args:
-        ctx: Context dictionary containing 'event', 'run', and optionally 'staff' keys.
+        context: Context dictionary containing 'event', 'run', and optionally 'staff' keys.
              Will be populated with trait preference data in 'list' key.
-        typ: Quest type number used to filter traits by their associated quest type.
+        quest_type_number: Quest type number used to filter traits by their associated quest type.
 
     Raises:
         Http404: If the quest type doesn't exist for the event.
 
     Note:
-        This function has side effects - it modifies the ctx dictionary by adding
+        This function has side effects - it modifies the context dictionary by adding
         a 'list' key containing trait preference data.
     """
     # Get the quest type for the given event and type number
     try:
-        qtyp = QuestType.objects.get(event=ctx["event"], number=typ)
+        quest_type = QuestType.objects.get(event=context["event"], number=quest_type_number)
     except ObjectDoesNotExist as err:
         raise Http404() from err
 
     # Initialize the list to store trait preference data
-    ctx["list"] = []
+    context["list"] = []
 
     # Iterate through all visible quests of the specified type
-    for quest in Quest.objects.filter(event=ctx["event"], typ=qtyp, hide=False).order_by("number"):
+    for quest in Quest.objects.filter(event=context["event"], typ=quest_type, hide=False).order_by("number"):
         # Get the quest group name for display
-        gr = quest.show()["name"]
+        quest_group_name = quest.show()["name"]
 
         # Process each visible trait within the current quest
         for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
             # Skip traits that already have assignments (unless in staff context)
-            if "staff" not in ctx and AssignmentTrait.objects.filter(trait=trait, run=ctx["run"]).count() > 0:
+            if "staff" not in context and AssignmentTrait.objects.filter(trait=trait, run=context["run"]).count() > 0:
                 continue
 
             # Build trait preference data structure
-            el = {
-                "group_dis": gr,
+            trait_data = {
+                "group_dis": quest_group_name,
                 "name_dis": trait.show()["name"],
-                "pref": get_casting_preferences(trait.id, ctx, qtyp.number),
+                "pref": get_casting_preferences(trait.id, context, quest_type.number),
             }
-            ctx["list"].append(el)
+            context["list"].append(trait_data)
 
 
 @login_required
@@ -597,7 +597,7 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
     return render(request, "larpmanager/event/casting/preferences.html", ctx)
 
 
-def casting_history_characters(ctx: dict) -> None:
+def casting_history_characters(context: dict) -> None:
     """Build casting history list showing character preferences by registration.
 
     Creates a comprehensive view of all registrations with their character
@@ -606,73 +606,73 @@ def casting_history_characters(ctx: dict) -> None:
     associated character preferences.
 
     Args:
-        ctx: Context dictionary containing 'event' and 'run' keys. Will be
+        context: Context dictionary containing 'event' and 'run' keys. Will be
              modified to include 'list' and 'cache' keys with registration
              data and character cache respectively.
 
     Returns:
-        None: Function modifies the ctx dictionary in place.
+        None: Function modifies the context dictionary in place.
 
     Note:
         Mirror characters are currently skipped (TODO: implement proper handling).
         Only considers non-cancelled registrations excluding STAFF and NPC tiers.
     """
     # Initialize context with empty list and character cache
-    ctx["list"] = []
-    ctx["cache"] = {}
+    context["list"] = []
+    context["cache"] = {}
 
     # Build character cache for quick lookup, excluding hidden characters
-    for ch in ctx["event"].get_elements(Character).filter(hide=False).select_related("mirror"):
-        ctx["cache"][ch.id] = ch
+    for character in context["event"].get_elements(Character).filter(hide=False).select_related("mirror"):
+        context["cache"][character.id] = character
 
     # Group casting preferences by member ID for efficient processing
-    casts = {}
-    for c in Casting.objects.filter(run=ctx["run"], typ=0).order_by("pref"):
-        if c.member_id not in casts:
-            casts[c.member_id] = []
-        casts[c.member_id].append(c)
+    casting_preferences_by_member = {}
+    for casting in Casting.objects.filter(run=context["run"], typ=0).order_by("pref"):
+        if casting.member_id not in casting_preferences_by_member:
+            casting_preferences_by_member[casting.member_id] = []
+        casting_preferences_by_member[casting.member_id].append(casting)
 
     # Query all valid registrations (non-cancelled, non-staff/NPC)
-    query = (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    registration_query = (
+        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     )
 
     # Process each registration and build preference data
-    for reg in query:
-        reg.prefs = {}
+    for registration in registration_query:
+        registration.prefs = {}
 
         # Skip registrations without casting preferences
-        if reg.member_id not in casts:
+        if registration.member_id not in casting_preferences_by_member:
             continue
 
         # Process each casting preference for this member
-        for c in casts[reg.member_id]:
+        for casting in casting_preferences_by_member[registration.member_id]:
             # Skip if character not in cache (deleted/invalid)
-            if c.element not in ctx["cache"]:
+            if casting.element not in context["cache"]:
                 continue
 
-            ch = ctx["cache"][c.element]
+            character = context["cache"][casting.element]
 
             # Skip mirror characters (TODO: implement proper handling)
-            if ch.mirror:
+            if character.mirror:
                 continue
 
             # Format character display string with number and name
-            if ch:
-                v = f"#{ch.number} {ch.name}"
+            if character:
+                character_display = f"#{character.number} {character.name}"
             else:
-                v = "-----"
+                character_display = "-----"
 
             # Store preference with 1-based indexing
-            reg.prefs[c.pref + 1] = v
+            registration.prefs[casting.pref + 1] = character_display
 
         # Add processed registration to final list
-        ctx["list"].append(reg)
+        context["list"].append(registration)
 
 
-def casting_history_traits(ctx: dict) -> None:
+def casting_history_traits(context: dict) -> None:
     """
     Process casting history and character traits for display in the casting interface.
 
@@ -684,54 +684,54 @@ def casting_history_traits(ctx: dict) -> None:
     and trait information for a specific run and casting type.
 
     Args:
-        ctx: Context dictionary containing 'run', 'typ', and 'event' keys.
+        context: Context dictionary containing 'run', 'typ', and 'event' keys.
              Will be populated with 'list' (registrations) and 'cache' (trait names).
 
     Returns:
-        None: Function modifies the ctx dictionary in place.
+        None: Function modifies the context dictionary in place.
     """
     # Initialize context containers for casting data
-    ctx["list"] = []
-    ctx["cache"] = {}
+    context["list"] = []
+    context["cache"] = {}
 
     # Group casting preferences by member ID
-    casts = {}
-    for c in Casting.objects.filter(run=ctx["run"], typ=ctx["typ"]).order_by("pref"):
-        if c.member_id not in casts:
-            casts[c.member_id] = []
-        casts[c.member_id].append(c)
+    casting_preferences_by_member = {}
+    for casting in Casting.objects.filter(run=context["run"], typ=context["typ"]).order_by("pref"):
+        if casting.member_id not in casting_preferences_by_member:
+            casting_preferences_by_member[casting.member_id] = []
+        casting_preferences_by_member[casting.member_id].append(casting)
 
     # Build trait cache with formatted names including quest information
-    que = Trait.objects.filter(event=ctx["event"], hide=False)
-    for el in que.select_related("quest"):
-        nm = f"#{el.number} {el.name}"
+    traits_query = Trait.objects.filter(event=context["event"], hide=False)
+    for trait in traits_query.select_related("quest"):
+        trait_name = f"#{trait.number} {trait.name}"
         # Append quest name if trait belongs to a quest
-        if el.quest:
-            nm = f"{nm} ({el.quest.name})"
-        ctx["cache"][el.id] = nm
+        if trait.quest:
+            trait_name = f"{trait_name} ({trait.quest.name})"
+        context["cache"][trait.id] = trait_name
 
     # Process registrations and attach casting preferences
-    for reg in (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    for registration in (
+        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     ):
-        reg.prefs = {}
+        registration.prefs = {}
         # Skip members without casting preferences
-        if reg.member_id not in casts:
+        if registration.member_id not in casting_preferences_by_member:
             continue
 
         # Map casting preferences to trait names from cache
-        for c in casts[reg.member_id]:
-            if c.element not in ctx["cache"]:
+        for casting in casting_preferences_by_member[registration.member_id]:
+            if casting.element not in context["cache"]:
                 continue
             # Convert 0-based preference to 1-based for display
-            reg.prefs[c.pref + 1] = ctx["cache"][c.element]
-        ctx["list"].append(reg)
+            registration.prefs[casting.pref + 1] = context["cache"][casting.element]
+        context["list"].append(registration)
 
     # Log processing statistics for debugging
     logger.debug(
-        f"Casting history context for typ {ctx.get('typ', 0)}: {len(ctx.get('list', []))} registrations processed"
+        f"Casting history context for typ {context.get('typ', 0)}: {len(context.get('list', []))} registrations processed"
     )
 
 

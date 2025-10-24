@@ -226,7 +226,7 @@ def get_allowed_managed() -> list[str]:
         >>> 'exe_events' in permissions
         True
     """
-    allowed = [
+    management_permission_keys = [
         # Executive-level permissions for organization-wide features
         "exe_events",
         "exe_accounting",
@@ -243,7 +243,7 @@ def get_allowed_managed() -> list[str]:
         "orga_sensitive",
         "orga_preferences",
     ]
-    return allowed
+    return management_permission_keys
 
 
 def auto_assign_event_permission_number(event_permission):

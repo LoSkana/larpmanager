@@ -339,29 +339,31 @@ class Command(BaseCommand):
             return None
 
     @staticmethod
-    def get_count(nm: str, cache: dict[str, dict[int, int]], m, v: int = 1) -> int:
+    def get_count(
+        counter_name: str, activity_cache: dict[str, dict[int, int]], member, increment_value: int = 1
+    ) -> int:
         """Track and increment member activity counters.
 
         Args:
-            nm: Counter name (e.g., 'play', 'staff', 'orga')
-            cache: Activity cache mapping counter names to member ID counters
-            m: Member instance
-            v: Value to add to counter (default: 1)
+            counter_name: Counter name (e.g., 'play', 'staff', 'orga')
+            activity_cache: Activity cache mapping counter names to member ID counters
+            member: Member instance
+            increment_value: Value to add to counter (default: 1)
 
         Returns:
             Updated counter value for the member
         """
         # Initialize counter type if not exists
-        if nm not in cache:
-            cache[nm] = {}
+        if counter_name not in activity_cache:
+            activity_cache[counter_name] = {}
 
         # Initialize member counter if not exists
-        if m.id not in cache[nm]:
-            cache[nm][m.id] = 0
+        if member.id not in activity_cache[counter_name]:
+            activity_cache[counter_name][member.id] = 0
 
         # Increment counter and return new value
-        cache[nm][m.id] += v
-        return cache[nm][m.id]
+        activity_cache[counter_name][member.id] += increment_value
+        return activity_cache[counter_name][member.id]
 
     def check_friends_player(self, reg: Registration, cache: dict) -> None:
         """Check and award friend referral badges based on friend count.

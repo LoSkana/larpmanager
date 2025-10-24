@@ -136,7 +136,7 @@ def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visib
               'options', and 'searchable' keys.
     """
     # Get the label key for the applicable question type
-    key = QuestionApplicable(applicable).label
+    applicable_type_key = QuestionApplicable(applicable).label
 
     # Initialize result containers in context
     ctx["questions"] = {}
@@ -144,37 +144,40 @@ def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visib
     ctx["searchable"] = {}
 
     # Early return if no writing fields or key not found
-    if "writing_fields" not in ctx or key not in ctx["writing_fields"]:
+    if "writing_fields" not in ctx or applicable_type_key not in ctx["writing_fields"]:
         return
 
     # Get the relevant writing fields data
-    res = ctx["writing_fields"][key]
+    writing_fields_data = ctx["writing_fields"][applicable_type_key]
 
     # Initialize tracking lists for question and searchable IDs
-    question_ids = []
-    searcheable_ids = []
+    visible_question_ids = []
+    searchable_question_ids = []
 
     # Process questions if they exist in the data
-    if "questions" in res:
-        for id, el in res["questions"].items():
+    if "questions" in writing_fields_data:
+        for question_id, question_data in writing_fields_data["questions"].items():
             # Filter based on visibility settings
-            if not only_visible or el["visibility"] in [QuestionVisibility.PUBLIC, QuestionVisibility.SEARCHABLE]:
-                ctx["questions"][id] = el
-                question_ids.append(el["id"])
+            if not only_visible or question_data["visibility"] in [
+                QuestionVisibility.PUBLIC,
+                QuestionVisibility.SEARCHABLE,
+            ]:
+                ctx["questions"][question_id] = question_data
+                visible_question_ids.append(question_data["id"])
 
             # Track searchable questions separately
-            if el["visibility"] == QuestionVisibility.SEARCHABLE:
-                searcheable_ids.append(el["id"])
+            if question_data["visibility"] == QuestionVisibility.SEARCHABLE:
+                searchable_question_ids.append(question_data["id"])
 
     # Process options if they exist, linking them to visible questions
-    if "options" in res:
-        for id, el in res["options"].items():
+    if "options" in writing_fields_data:
+        for option_id, option_data in writing_fields_data["options"].items():
             # Include options for visible questions
-            if el["question_id"] in question_ids:
-                ctx["options"][id] = el
+            if option_data["question_id"] in visible_question_ids:
+                ctx["options"][option_id] = option_data
 
             # Build searchable options mapping by question ID
-            if el["question_id"] in searcheable_ids:
-                if el["question_id"] not in ctx["searchable"]:
-                    ctx["searchable"][el["question_id"]] = []
-                ctx["searchable"][el["question_id"]].append(el["id"])
+            if option_data["question_id"] in searchable_question_ids:
+                if option_data["question_id"] not in ctx["searchable"]:
+                    ctx["searchable"][option_data["question_id"]] = []
+                ctx["searchable"][option_data["question_id"]].append(option_data["id"])

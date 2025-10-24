@@ -129,8 +129,8 @@ def reset_tutorials_cache():
 
 def reset_features_cache():
     """Reset the features cache."""
-    cache_key = get_features_cache_key()
-    cache.delete(cache_key)
+    features_cache_key = get_features_cache_key()
+    cache.delete(features_cache_key)
 
 
 def _build_guides_cache() -> list[dict]:
@@ -172,8 +172,8 @@ def _build_features_cache() -> list[dict]:
     features = []
 
     for feature in (
-        Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False, module__order=0)
-        .exclude(tutorial__exact="")
+        Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False)
+        .exclude(tutorial__exact="", module__order=0)
         .select_related("module")
     ):
         features.append(
@@ -213,30 +213,30 @@ def _extract_h2_sections(content: str) -> list[tuple]:
     return sections
 
 
-def _get_content_preview(content: str, max_length: int = 200) -> str:
+def _get_content_preview(html_content: str, maximum_preview_length: int = 200) -> str:
     """Get text preview from HTML content.
 
     Args:
-        content: HTML content string
-        max_length: Maximum length of preview text
+        html_content: HTML content string
+        maximum_preview_length: Maximum length of preview text
 
     Returns:
         Clean text preview
     """
-    if not content:
+    if not html_content:
         return ""
 
     # Remove HTML tags
-    clean_text = re.sub(r"<[^>]+>", " ", content)
+    plain_text = re.sub(r"<[^>]+>", " ", html_content)
 
     # Convert HTML entities to text (e.g., &nbsp; to space, &amp; to &)
-    clean_text = html.unescape(clean_text)
+    plain_text = html.unescape(plain_text)
 
     # Clean up whitespace (including converted non-breaking spaces)
-    clean_text = re.sub(r"\s+", " ", clean_text).strip()
+    plain_text = re.sub(r"\s+", " ", plain_text).strip()
 
     # Truncate to max length
-    if len(clean_text) > max_length:
-        clean_text = clean_text[:max_length].rsplit(" ", 1)[0] + "..."
+    if len(plain_text) > maximum_preview_length:
+        plain_text = plain_text[:maximum_preview_length].rsplit(" ", 1)[0] + "..."
 
-    return clean_text
+    return plain_text

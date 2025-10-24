@@ -139,7 +139,7 @@ def satispay_check(request, ctx):
         satispay_verify(request, invoice.cod)
 
 
-def satispay_verify(request, cod: str) -> None:
+def satispay_verify(request, payment_code: str) -> None:
     """Verify Satispay payment status and process if accepted.
 
     This function verifies a Satispay payment by checking the payment status
@@ -147,7 +147,7 @@ def satispay_verify(request, cod: str) -> None:
 
     Args:
         request: Django HTTP request object containing the current request context
-        cod: Payment code/identifier to verify against Satispay API
+        payment_code: Payment code/identifier to verify against Satispay API
 
     Returns:
         None: Function performs side effects but returns nothing
@@ -157,28 +157,28 @@ def satispay_verify(request, cod: str) -> None:
         Only processes payments with status "ACCEPTED" from Satispay.
     """
     # Initialize context and update payment details from request
-    ctx = {}
-    update_payment_details(request, ctx)
+    context = {}
+    update_payment_details(request, context)
 
     # Retrieve invoice by payment code, log and return if not found
     try:
-        invoice = PaymentInvoice.objects.get(cod=cod)
+        invoice = PaymentInvoice.objects.get(cod=payment_code)
     except ObjectDoesNotExist:
-        logger.warning(f"Not found - invoice {cod}")
+        logger.warning(f"Not found - invoice {payment_code}")
         return
 
     # Validate that invoice uses Satispay payment method
     if invoice.method.slug != "satispay":
-        logger.warning(f"Wrong slug method - invoice {cod}")
+        logger.warning(f"Wrong slug method - invoice {payment_code}")
         return
 
     # Check if payment is still in created status (not already processed)
     if invoice.status != PaymentStatus.CREATED:
-        logger.warning(f"Already confirmed - invoice {cod}")
+        logger.warning(f"Already confirmed - invoice {payment_code}")
         return
 
     # Load Satispay API credentials and private key for authentication
-    key_id = ctx["satispay_key_id"]
+    key_id = context["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
     # Make API call to Satispay to get current payment status
@@ -186,17 +186,17 @@ def satispay_verify(request, cod: str) -> None:
     # logger.debug(f"Response: {response}")
 
     # Validate API response status code
-    correct_response_code = 200
-    if response.status_code != correct_response_code:
+    expected_success_code = 200
+    if response.status_code != expected_success_code:
         return
 
     # Parse response and extract payment details
-    aux = json.loads(response.content)
-    mc_gross = int(aux["amount_unit"]) / 100.0
+    payment_data = json.loads(response.content)
+    payment_amount = int(payment_data["amount_unit"]) / 100.0
 
     # Process payment if Satispay marked it as accepted
-    if aux["status"] == "ACCEPTED":
-        invoice_received_money(invoice.cod, mc_gross)
+    if payment_data["status"] == "ACCEPTED":
+        invoice_received_money(invoice.cod, payment_amount)
 
 
 def satispay_webhook(request):
@@ -764,8 +764,11 @@ class RedSysClient:
         :return  order_encrypted: The encrypted order
         """
         assert isinstance(order, str)
-        cipher = DES3.new(base64.b64decode(self.secret_key), DES3.MODE_CBC, IV=b"\0\0\0\0\0\0\0\0")
-        return cipher.encrypt(order.encode().ljust(16, b"\0"))
+        initialization_vector = b"\0\0\0\0\0\0\0\0"
+        decoded_secret_key = base64.b64decode(self.secret_key)
+        triple_des_cipher = DES3.new(decoded_secret_key, DES3.MODE_CBC, IV=initialization_vector)
+        padded_order = order.encode().ljust(16, b"\0")
+        return triple_des_cipher.encrypt(padded_order)
 
     @staticmethod
     def sign_hmac256(encrypted_order, merchant_parameters):

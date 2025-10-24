@@ -423,18 +423,18 @@ def _row_header(ctx: dict, el: object, key: list, member_cover: bool, model: str
         _header_regs(ctx, el, key, val)
 
 
-def _expand_val(val: list, el: object, field: str) -> None:
+def _expand_val(values: list, element: object, field_name: str) -> None:
     """Append field value from element to list, or empty string if not found."""
     # Check if element has the specified field attribute
-    if hasattr(el, field):
-        value = getattr(el, field)
+    if hasattr(element, field_name):
+        value = getattr(element, field_name)
         # Append value if it exists (truthy)
         if value:
-            val.append(value)
+            values.append(value)
             return
 
     # Append empty string if field doesn't exist or value is falsy
-    val.append("")
+    values.append("")
 
 
 def _header_regs(ctx: dict, el: object, key: list, val: list) -> None:
@@ -673,14 +673,14 @@ def orga_registration_form_download(ctx):
     return zip_exports(ctx, export_registration_form(ctx), "Registration form")
 
 
-def export_registration_form(ctx: dict) -> list[tuple[str, list, list]]:
+def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
     """Export registration data to Excel format.
 
     Extracts registration questions and options from the event context and formats
     them for Excel export with proper column mappings and ordered data.
 
     Args:
-        ctx: Context dictionary containing event and form data. Must include
+        context: Context dictionary containing event and form data. Must include
             'event' key with an Event object that has get_elements method.
 
     Returns:
@@ -696,69 +696,69 @@ def export_registration_form(ctx: dict) -> list[tuple[str, list, list]]:
     }
 
     # Set export type and extract column names from context
-    ctx["typ"] = "registration_form"
-    _get_column_names(ctx)
+    context["typ"] = "registration_form"
+    _get_column_names(context)
 
     # Extract registration questions data
-    key = ctx["columns"][0].keys()
-    que = get_ordered_registration_questions(ctx)
-    vals = _extract_values(key, que, mappings)
+    column_headers = context["columns"][0].keys()
+    questions = get_ordered_registration_questions(context)
+    question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
-    exports = [("registration_questions", key, vals)]
+    excel_exports = [("registration_questions", column_headers, question_values)]
 
     # Prepare registration options data with modified key for relation
-    key = list(ctx["columns"][1].keys())
-    new_key = key.copy()
-    new_key[0] = f"{new_key[0]}__name"
+    option_headers = list(context["columns"][1].keys())
+    modified_option_headers = option_headers.copy()
+    modified_option_headers[0] = f"{modified_option_headers[0]}__name"
 
     # Query registration options ordered by question order and option order
-    que = ctx["event"].get_elements(RegistrationOption).select_related("question")
-    que = que.order_by(F("question__order"), "order")
-    vals = _extract_values(new_key, que, mappings)
+    options_queryset = context["event"].get_elements(RegistrationOption).select_related("question")
+    options_queryset = options_queryset.order_by(F("question__order"), "order")
+    option_values = _extract_values(modified_option_headers, options_queryset, mappings)
 
     # Add registration options sheet to exports
-    exports.append(("registration_options", key, vals))
-    return exports
+    excel_exports.append(("registration_options", option_headers, option_values))
+    return excel_exports
 
 
-def _extract_values(key: list, que: object, mappings: dict) -> list[list]:
+def _extract_values(field_names: list, queryset: object, field_mappings: dict) -> list[list]:
     """Extract and transform values from queryset based on field mappings.
 
     Args:
-        key: List of field names to extract from queryset
-        que: Django queryset object to extract values from
-        mappings: Dictionary mapping field names to value transformation dictionaries
+        field_names: List of field names to extract from queryset
+        queryset: Django queryset object to extract values from
+        field_mappings: Dictionary mapping field names to value transformation dictionaries
 
     Returns:
         List of lists containing extracted and transformed values for each row
     """
-    all_vals = []
+    all_values = []
 
     # Iterate through each row in the queryset values
-    for row in que.values(*key):
-        vals = []
+    for row in queryset.values(*field_names):
+        row_values = []
 
         # Process each field-value pair in the current row
-        for field, value in row.items():
+        for field_name, field_value in row.items():
             # Apply mapping transformation if field and value exist in mappings
-            if field in mappings and value in mappings[field]:
-                new_value = mappings[field][value]
+            if field_name in field_mappings and field_value in field_mappings[field_name]:
+                transformed_value = field_mappings[field_name][field_value]
             else:
-                new_value = value
-            vals.append(new_value)
+                transformed_value = field_value
+            row_values.append(transformed_value)
 
         # Add processed row to results
-        all_vals.append(vals)
+        all_values.append(row_values)
 
-    return all_vals
+    return all_values
 
 
 def orga_character_form_download(ctx):
     return zip_exports(ctx, export_character_form(ctx), "Character form")
 
 
-def export_character_form(ctx: dict) -> list[tuple[str, list, list]]:
+def export_character_form(context: dict) -> list[tuple[str, list, list]]:
     """
     Export character form questions and options to CSV format.
 
@@ -767,7 +767,7 @@ def export_character_form(ctx: dict) -> list[tuple[str, list, list]]:
     applicability, visibility) and organizes the data into exportable tuples.
 
     Args:
-        ctx: Context dictionary containing:
+        context: Context dictionary containing:
             - event: Event object with writing questions and options
             - columns: Column configuration for export formatting
 
@@ -783,7 +783,7 @@ def export_character_form(ctx: dict) -> list[tuple[str, list, list]]:
         2. Writing options linked to their parent questions
     """
     # Define mappings for enum fields to human-readable values
-    mappings = {
+    field_mappings = {
         "typ": BaseQuestionType.get_mapping(),
         "status": QuestionStatus.get_mapping(),
         "applicable": QuestionApplicable.get_mapping(),
@@ -791,54 +791,54 @@ def export_character_form(ctx: dict) -> list[tuple[str, list, list]]:
     }
 
     # Set context type and prepare column configuration
-    ctx["typ"] = "character_form"
-    _get_column_names(ctx)
+    context["typ"] = "character_form"
+    _get_column_names(context)
 
     # Extract and export writing questions
-    key = ctx["columns"][0].keys()
-    que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
-    vals = _extract_values(key, que, mappings)
+    column_headers = context["columns"][0].keys()
+    questions_queryset = context["event"].get_elements(WritingQuestion).order_by("applicable", "order")
+    question_values = _extract_values(column_headers, questions_queryset, field_mappings)
 
     # Initialize exports list with writing questions data
-    exports = [("writing_questions", key, vals)]
+    exports = [("writing_questions", column_headers, question_values)]
 
     # Prepare column configuration for writing options
-    key = list(ctx["columns"][1].keys())
-    new_key = key.copy()
+    option_headers = list(context["columns"][1].keys())
+    modified_option_headers = option_headers.copy()
     # Modify first column to include question name relationship
-    new_key[0] = f"{new_key[0]}__name"
+    modified_option_headers[0] = f"{modified_option_headers[0]}__name"
 
     # Extract and export writing options with related question data
-    que = ctx["event"].get_elements(WritingOption).select_related("question")
-    que = que.order_by(F("question__order"), "order")
-    vals = _extract_values(new_key, que, mappings)
+    options_queryset = context["event"].get_elements(WritingOption).select_related("question")
+    options_queryset = options_queryset.order_by(F("question__order"), "order")
+    option_values = _extract_values(modified_option_headers, options_queryset, field_mappings)
 
     # Add writing options data to exports
-    exports.append(("writing_options", key, vals))
+    exports.append(("writing_options", option_headers, option_values))
     return exports
 
 
-def _orga_registrations_acc(ctx, regs=None):
+def _orga_registrations_acc(context, registrations=None):
     """
     Process registration accounting data for organizer reports.
 
     Args:
-        ctx: Context dictionary with event and feature information
-        regs: Optional list of registrations to process (defaults to all active registrations)
+        context: Context dictionary with event and feature information
+        registrations: Optional list of registrations to process (defaults to all active registrations)
 
     Returns:
         dict: Processed accounting data keyed by registration ID
     """
     # Use cached accounting data for efficiency
-    cached_data = get_registration_accounting_cache(ctx["run"])
+    cached_data = get_registration_accounting_cache(context["run"])
 
     # If specific registrations are requested, filter the cached data
-    if regs:
-        res = {}
-        for r in regs:
-            if r.id in cached_data:
-                res[r.id] = cached_data[r.id]
-        return res
+    if registrations:
+        result = {}
+        for registration in registrations:
+            if registration.id in cached_data:
+                result[registration.id] = cached_data[registration.id]
+        return result
 
     return cached_data
 
@@ -907,7 +907,7 @@ def _orga_registrations_acc_reg(reg, ctx: dict, cache_aip: dict) -> dict:
     return dt
 
 
-def _get_column_names(ctx: dict) -> None:
+def _get_column_names(context: dict) -> None:
     """Define column mappings and field types for different export contexts.
 
     Sets up comprehensive dictionaries mapping form fields to export columns
@@ -916,21 +916,21 @@ def _get_column_names(ctx: dict) -> None:
     used in bulk upload/download operations.
 
     Args:
-        ctx: Context dictionary containing export configuration including:
+        context: Context dictionary containing export configuration including:
             - typ: Export type ('registration', 'registration_ticket', 'px_abilitie',
                    'registration_form', 'character_form', or writing element types)
             - features: Set of available features for the export context
             - event: Event instance for question lookups (for registration types)
 
     Side effects:
-        Modifies ctx in-place, adding:
+        Modifies context in-place, adding:
         - columns: List of dicts with column names and descriptions
         - fields: Dict mapping field names to types (for registration type)
         - name: Name of the export type (for px_abilitie type)
     """
     # Handle registration data export with participant, ticket, and question columns
-    if ctx["typ"] == "registration":
-        ctx["columns"] = [
+    if context["typ"] == "registration":
+        context["columns"] = [
             {
                 "email": _("The participant's email"),
                 "ticket": _("The name of the ticket")
@@ -942,16 +942,16 @@ def _get_column_names(ctx: dict) -> None:
             }
         ]
         # Build field type mapping from registration questions for validation
-        que = get_ordered_registration_questions(ctx).values("name", "typ")
-        ctx["fields"] = {el["name"]: el["typ"] for el in que}
+        questions = get_ordered_registration_questions(context).values("name", "typ")
+        context["fields"] = {question["name"]: question["typ"] for question in questions}
 
         # Remove donation column if pay-what-you-want feature is disabled
-        if "pay_what_you_want" not in ctx["features"]:
-            del ctx["columns"][0]["donation"]
+        if "pay_what_you_want" not in context["features"]:
+            del context["columns"][0]["donation"]
 
     # Handle ticket tier definition export
-    elif ctx["typ"] == "registration_ticket":
-        ctx["columns"] = [
+    elif context["typ"] == "registration_ticket":
+        context["columns"] = [
             {
                 "name": _("The ticket's name"),
                 "tier": _("The tier of the ticket"),
@@ -962,8 +962,8 @@ def _get_column_names(ctx: dict) -> None:
         ]
 
     # Handle ability/experience system export
-    elif ctx["typ"] == "px_abilitie":
-        ctx["columns"] = [
+    elif context["typ"] == "px_abilitie":
+        context["columns"] = [
             {
                 "name": _("The name ability"),
                 "cost": _("Cost of the ability"),
@@ -973,13 +973,13 @@ def _get_column_names(ctx: dict) -> None:
                 "requirements": _("(Optional) Character options as requirements, comma-separated"),
             }
         ]
-        ctx["name"] = "Ability"
+        context["name"] = "Ability"
 
     # Handle registration form (questions + options) export
-    elif ctx["typ"] == "registration_form":
+    elif context["typ"] == "registration_form":
         # First dict: Question definitions with name, type, status
         # Second dict: Option definitions linked to questions
-        ctx["columns"] = [
+        context["columns"] = [
             {
                 "name": _("The question name"),
                 "typ": _("The question type, allowed values are")
@@ -1006,9 +1006,9 @@ def _get_column_names(ctx: dict) -> None:
         ]
 
     # Handle character/writing form (questions + options) export
-    elif ctx["typ"] == "character_form":
+    elif context["typ"] == "character_form":
         # Similar to registration form but with additional fields for writing elements
-        ctx["columns"] = [
+        context["columns"] = [
             {
                 "name": _("The question name"),
                 "typ": _("The question type, allowed values are")
@@ -1036,12 +1036,12 @@ def _get_column_names(ctx: dict) -> None:
         ]
 
         # Add requirements column if the feature is enabled
-        if "wri_que_requirements" in ctx["features"]:
-            ctx["columns"][1]["requirements"] = _("Optional - Other options as requirements, comma-separated")
+        if "wri_que_requirements" in context["features"]:
+            context["columns"][1]["requirements"] = _("Optional - Other options as requirements, comma-separated")
 
     # Handle writing element types (character, plot, faction, quest, trait)
     else:
-        _get_writing_names(ctx)
+        _get_writing_names(context)
 
 
 def _get_writing_names(ctx: dict) -> None:
@@ -1120,11 +1120,11 @@ def orga_tickets_download(ctx):
     return zip_exports(ctx, export_tickets(ctx), "Tickets")
 
 
-def export_tickets(ctx: dict) -> list[tuple[str, list[str], list]]:
+def export_tickets(context: dict) -> list[tuple[str, list[str], list]]:
     """Export ticket data for the given event context.
 
     Args:
-        ctx: Event context dictionary containing the event object.
+        context: Event context dictionary containing the event object.
 
     Returns:
         List containing tuple of (table_name, headers, data_rows).
@@ -1135,15 +1135,15 @@ def export_tickets(ctx: dict) -> list[tuple[str, list[str], list]]:
     }
 
     # Specify fields to extract from ticket objects
-    keys = ["name", "tier", "description", "price", "max_available"]
+    field_keys = ["name", "tier", "description", "price", "max_available"]
 
     # Get all registration tickets for the event, ordered by number
-    que = ctx["event"].get_elements(RegistrationTicket).order_by("number")
+    tickets_queryset = context["event"].get_elements(RegistrationTicket).order_by("number")
 
     # Extract and transform values using the defined mappings
-    vals = _extract_values(keys, que, mappings)
+    extracted_values = _extract_values(field_keys, tickets_queryset, mappings)
 
-    return [("tickets", keys, vals)]
+    return [("tickets", field_keys, extracted_values)]
 
 
 def export_event(ctx):
@@ -1173,30 +1173,30 @@ def export_event(ctx):
     return exports
 
 
-def export_abilities(ctx):
+def export_abilities(context):
     """Export abilities data for an event.
 
     Args:
-        ctx: Context dictionary containing event information
+        context: Context dictionary containing event information
 
     Returns:
         list: Single-item list containing tuple of ("abilities", keys, values)
               where keys are column headers and values are ability data rows
     """
-    keys = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
+    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
 
-    que = (
-        ctx["event"]
+    ability_queryset = (
+        context["event"]
         .get_elements(AbilityPx)
         .order_by("number")
         .select_related("typ")
         .prefetch_related("requirements", "prerequisites")
     )
-    vals = []
-    for el in que:
-        val = [el.name, el.cost, el.typ.name, el.descr]
-        val.append(", ".join([prereq.name for prereq in el.prerequisites.all()]))
-        val.append(", ".join([req.name for req in el.requirements.all()]))
-        vals.append(val)
+    ability_rows = []
+    for ability in ability_queryset:
+        row_data = [ability.name, ability.cost, ability.typ.name, ability.descr]
+        row_data.append(", ".join([prereq.name for prereq in ability.prerequisites.all()]))
+        row_data.append(", ".join([req.name for req in ability.requirements.all()]))
+        ability_rows.append(row_data)
 
-    return [("abilities", keys, vals)]
+    return [("abilities", column_headers, ability_rows)]

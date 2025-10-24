@@ -286,60 +286,62 @@ def update_token_credit(instance, token: bool = True) -> None:
         - Updates membership.tokens or membership.credit
         - Triggers accounting updates on affected registrations
     """
-    assoc_id = instance.assoc_id
+    association_id = instance.assoc_id
 
     # Skip processing if token_credit feature is not active for this association
-    if "token_credit" not in get_assoc_features(assoc_id):
+    if "token_credit" not in get_assoc_features(association_id):
         return
 
     # Get the user's membership for this association
-    membership = get_user_membership(instance.member, assoc_id)
+    membership = get_user_membership(instance.member, association_id)
 
     # Handle token balance calculation
     if token:
         # Get all tokens given to the member
-        tk_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.TOKEN, assoc_id=assoc_id
+        tokens_given = AccountingItemOther.objects.filter(
+            member_id=instance.member_id, oth=OtherChoices.TOKEN, assoc_id=association_id
         )
 
         # Get all tokens used by the member
-        tk_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
+        tokens_used = AccountingItemPayment.objects.filter(
+            member_id=instance.member_id, pay=PaymentChoices.TOKEN, assoc_id=association_id
         )
 
         # Calculate and save new token balance
-        membership.tokens = get_sum(tk_given) - get_sum(tk_used)
+        membership.tokens = get_sum(tokens_given) - get_sum(tokens_used)
         membership.save()
 
     # Handle credit balance calculation
     else:
         # Get all approved expenses for the member
-        cr_expenses = AccountingItemExpense.objects.filter(
-            member_id=instance.member_id, is_approved=True, assoc_id=assoc_id
+        credit_expenses = AccountingItemExpense.objects.filter(
+            member_id=instance.member_id, is_approved=True, assoc_id=association_id
         )
 
         # Get all credits given to the member
-        cr_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.CREDIT, assoc_id=assoc_id
+        credits_given = AccountingItemOther.objects.filter(
+            member_id=instance.member_id, oth=OtherChoices.CREDIT, assoc_id=association_id
         )
 
         # Get all credits used by the member
-        cr_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
+        credits_used = AccountingItemPayment.objects.filter(
+            member_id=instance.member_id, pay=PaymentChoices.CREDIT, assoc_id=association_id
         )
 
         # Get all refunds given to the member
-        cr_refunded = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.REFUND, assoc_id=assoc_id
+        credits_refunded = AccountingItemOther.objects.filter(
+            member_id=instance.member_id, oth=OtherChoices.REFUND, assoc_id=association_id
         )
 
         # Calculate and save new credit balance (expenses + credits - used - refunds)
-        membership.credit = get_sum(cr_expenses) + get_sum(cr_given) - (get_sum(cr_used) + get_sum(cr_refunded))
+        membership.credit = (
+            get_sum(credit_expenses) + get_sum(credits_given) - (get_sum(credits_used) + get_sum(credits_refunded))
+        )
         membership.save()
 
     # Trigger accounting updates on registrations with incomplete payments
-    for reg in get_regs_paying_incomplete(instance.assoc).filter(member_id=instance.member_id):
-        reg.save()
+    for registration in get_regs_paying_incomplete(instance.assoc).filter(member_id=instance.member_id):
+        registration.save()
 
 
 def handle_tokes_credits(

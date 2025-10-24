@@ -473,17 +473,17 @@ def ticket(request, s=""):
     return render(request, "larpmanager/member/ticket.html", ctx)
 
 
-def is_suspicious_user_agent(user_agent):
+def is_suspicious_user_agent(user_agent_string):
     """Check if a user agent string appears to be from a bot.
 
     Args:
-        user_agent (str): User agent string to check
+        user_agent_string (str): User agent string to check
 
     Returns:
         bool: True if user agent appears to be from a bot, False otherwise
     """
-    known_bots = ["bot", "crawler", "spider", "http", "archive", "wget", "curl"]
-    return any(bot in user_agent.lower() for bot in known_bots)
+    known_bot_identifiers = ["bot", "crawler", "spider", "http", "archive", "wget", "curl"]
+    return any(bot_identifier in user_agent_string.lower() for bot_identifier in known_bot_identifiers)
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
@@ -877,28 +877,28 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/larpmanager/payments.html", ctx)
 
 
-def get_run_lm_payment(el):
+def get_run_lm_payment(run):
     """Calculate payment details for a run.
 
     Calculates features count, active registrations, and total payment
     based on association plan.
 
     Args:
-        el: Run object to calculate payment for
+        run: Run object to calculate payment for
 
     Side effects:
-        Modifies el object with features, active_registrations, and total attributes
+        Modifies run object with features, active_registrations, and total attributes
     """
-    el.features = len(get_assoc_features(el.event.assoc_id)) + len(get_event_features(el.event_id))
-    el.active_registrations = (
-        Registration.objects.filter(run__id=el.id, cancellation_date__isnull=True)
+    run.features = len(get_assoc_features(run.event.assoc_id)) + len(get_event_features(run.event_id))
+    run.active_registrations = (
+        Registration.objects.filter(run__id=run.id, cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
         .count()
     )
-    if el.plan == AssociationPlan.FREE:
-        el.total = 0
-    elif el.plan == AssociationPlan.SUPPORT:
-        el.total = el.active_registrations
+    if run.plan == AssociationPlan.FREE:
+        run.total = 0
+    elif run.plan == AssociationPlan.SUPPORT:
+        run.total = run.active_registrations
 
 
 @login_required

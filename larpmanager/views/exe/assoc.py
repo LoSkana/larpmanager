@@ -201,41 +201,41 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
         Http404: If the feature is not an overall feature
     """
     # Check user permissions and retrieve feature context
-    ctx = check_assoc_permission(request, "exe_features")
-    get_feature(ctx, slug)
+    context = check_assoc_permission(request, "exe_features")
+    get_feature(context, slug)
 
     # Ensure this is an overall feature (organization-wide)
-    if not ctx["feature"].overall:
+    if not context["feature"].overall:
         raise Http404("not overall feature!")
 
     # Get feature ID and association object
-    f_id = ctx["feature"].id
-    assoc = Association.objects.get(pk=request.assoc["id"])
+    feature_id = context["feature"].id
+    association = Association.objects.get(pk=request.assoc["id"])
 
     # Handle feature activation
     if on:
         if slug not in request.assoc["features"]:
-            assoc.features.add(f_id)
-            msg = _("Feature %(name)s activated") + "!"
+            association.features.add(feature_id)
+            message = _("Feature %(name)s activated") + "!"
         else:
-            msg = _("Feature %(name)s already activated") + "!"
+            message = _("Feature %(name)s already activated") + "!"
     # Handle feature deactivation
     elif slug not in request.assoc["features"]:
-        msg = _("Feature %(name)s already deactivated") + "!"
+        message = _("Feature %(name)s already deactivated") + "!"
     else:
-        assoc.features.remove(f_id)
-        msg = _("Feature %(name)s deactivated") + "!"
+        association.features.remove(feature_id)
+        message = _("Feature %(name)s deactivated") + "!"
 
     # Save changes to association
-    assoc.save()
+    association.save()
 
     # Format success message with feature name
-    msg = msg % {"name": _(ctx["feature"].name)}
-    if ctx["feature"].after_text:
-        msg += " " + ctx["feature"].after_text
-    messages.success(request, msg)
+    message = message % {"name": _(context["feature"].name)}
+    if context["feature"].after_text:
+        message += " " + context["feature"].after_text
+    messages.success(request, message)
 
-    return ctx["feature"]
+    return context["feature"]
 
 
 def _exe_feature_after_link(feature: Feature) -> str:
@@ -247,14 +247,14 @@ def _exe_feature_after_link(feature: Feature) -> str:
     Returns:
         Full URL path for redirection
     """
-    after_link = feature.after_link
+    redirect_url_or_fragment = feature.after_link
 
-    # Check if after_link is a named URL pattern starting with "exe"
-    if after_link and after_link.startswith("exe"):
-        return reverse(after_link)
+    # Check if redirect_url_or_fragment is a named URL pattern starting with "exe"
+    if redirect_url_or_fragment and redirect_url_or_fragment.startswith("exe"):
+        return reverse(redirect_url_or_fragment)
 
-    # Otherwise append after_link as a URL fragment to manage page
-    return reverse("manage") + after_link
+    # Otherwise append redirect_url_or_fragment as a URL fragment to manage page
+    return reverse("manage") + redirect_url_or_fragment
 
 
 @login_required

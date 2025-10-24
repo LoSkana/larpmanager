@@ -66,68 +66,76 @@ def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
         - Updates ctx['rel'] with sorted list of relationship data
         - Updates ctx['pr'] with player relationship objects
     """
-    cache = {}
-    data = {}
+    relationship_text_by_character_id = {}
+    character_data_by_id = {}
 
     # Process system-defined relationships from the database
-    for tg_num, text in Relationship.objects.values_list("target__number", "text").filter(source=ctx["character"]):
+    for target_character_number, relationship_text in Relationship.objects.values_list("target__number", "text").filter(
+        source=ctx["character"]
+    ):
         # Check if character data is already cached in context
-        if "chars" in ctx and tg_num in ctx["chars"]:
-            show = ctx["chars"][tg_num]
+        if "chars" in ctx and target_character_number in ctx["chars"]:
+            character_display_data = ctx["chars"][target_character_number]
         else:
             # Fetch character data from database if not cached
             try:
-                ch = Character.objects.select_related("event", "player").get(event=ctx["event"], number=tg_num)
-                show = ch.show(ctx["run"])
+                target_character = Character.objects.select_related("event", "player").get(
+                    event=ctx["event"], number=target_character_number
+                )
+                character_display_data = target_character.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue
 
         # Build faction list for display purposes
-        show["factions_list"] = []
-        for fac_num in show["factions"]:
-            if not fac_num or fac_num not in ctx["factions"]:
+        character_display_data["factions_list"] = []
+        for faction_number in character_display_data["factions"]:
+            if not faction_number or faction_number not in ctx["factions"]:
                 continue
-            fac = ctx["factions"][fac_num]
+            faction_data = ctx["factions"][faction_number]
             # Skip empty names or secret factions
-            if not fac["name"] or fac["typ"] == FactionType.SECRET:
+            if not faction_data["name"] or faction_data["typ"] == FactionType.SECRET:
                 continue
-            show["factions_list"].append(fac["name"])
+            character_display_data["factions_list"].append(faction_data["name"])
 
         # Join faction names and store character data
-        show["factions_list"] = ", ".join(show["factions_list"])
-        data[show["id"]] = show
-        cache[show["id"]] = text
+        character_display_data["factions_list"] = ", ".join(character_display_data["factions_list"])
+        character_data_by_id[character_display_data["id"]] = character_display_data
+        relationship_text_by_character_id[character_display_data["id"]] = relationship_text
 
-    pr = {}
+    player_relationships_by_target_id = {}
     # Update with player-inputted relationship data
     if "player_id" in ctx["char"]:
-        for el in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
+        for player_relationship in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
             reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
         ):
-            pr[el.target_id] = el
+            player_relationships_by_target_id[player_relationship.target_id] = player_relationship
             # Player input overrides system relationships
-            cache[el.target_id] = el.text
+            relationship_text_by_character_id[player_relationship.target_id] = player_relationship.text
 
     # Build final relationship list sorted by text length
     ctx["rel"] = []
-    for idx in sorted(cache, key=lambda k: len(cache[k]), reverse=True):
+    for character_id in sorted(
+        relationship_text_by_character_id, key=lambda k: len(relationship_text_by_character_id[k]), reverse=True
+    ):
         # Skip if character data not found
-        if idx not in data:
-            logger.debug(f"Character index {idx} not found in data keys: {list(data.keys())[:5]}...")
+        if character_id not in character_data_by_id:
+            logger.debug(
+                f"Character index {character_id} not found in data keys: {list(character_data_by_id.keys())[:5]}..."
+            )
             continue
 
-        el = data[idx]
+        relationship_entry = character_data_by_id[character_id]
         # Filter empty relationships if restrict is enabled
-        if restrict and len(cache[idx]) == 0:
+        if restrict and len(relationship_text_by_character_id[character_id]) == 0:
             continue
 
         # Add relationship text and calculate font size based on content length
-        el["text"] = cache[idx]
-        el["font_size"] = int(100 - ((len(el["text"]) / 50) * 4))
-        ctx["rel"].append(el)
+        relationship_entry["text"] = relationship_text_by_character_id[character_id]
+        relationship_entry["font_size"] = int(100 - ((len(relationship_entry["text"]) / 50) * 4))
+        ctx["rel"].append(relationship_entry)
 
     # Store player relationships for additional processing
-    ctx["pr"] = pr
+    ctx["pr"] = player_relationships_by_target_id
 
 
 def get_character_sheet(ctx):
@@ -416,7 +424,7 @@ def get_char_check(
         raise Http404("Not your character")
 
 
-def get_chars_relations(text: str, chs_numbers: list[int]) -> tuple[list[int], list[int]]:
+def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[int], list[int]]:
     """Retrieve character relationship data from text content.
 
     Searches for character references in the format '#number' within the provided text
@@ -425,49 +433,49 @@ def get_chars_relations(text: str, chs_numbers: list[int]) -> tuple[list[int], l
 
     Args:
         text (str): Text content to search for character references in format '#number'
-        chs_numbers (list[int]): List of valid/active character numbers
+        character_numbers (list[int]): List of valid/active character numbers
 
     Returns:
         tuple[list[int], list[int]]: A tuple containing:
-            - active_characters: List of character numbers found in text that exist in chs_numbers
-            - extinct_characters: List of character numbers found in text that don't exist in chs_numbers
+            - active_characters: List of character numbers found in text that exist in character_numbers
+            - extinct_characters: List of character numbers found in text that don't exist in character_numbers
 
     Note:
         The function searches from the highest possible number (max + 100) down to 1
         to ensure longer numbers are matched first, preventing partial matches.
     """
-    chs = []
-    extinct = []
+    active_characters = []
+    extinct_characters = []
 
     # Early return if no valid character numbers provided
-    if not chs_numbers:
-        return chs, extinct
+    if not character_numbers:
+        return active_characters, extinct_characters
 
     # Strip HTML tags from text for clean processing
-    tx = strip_tags(text)
+    cleaned_text = strip_tags(text)
 
     # Start search from maximum character number plus buffer to catch any high numbers
-    max_number = chs_numbers[0]
+    max_character_number = character_numbers[0]
 
     # Search from high to low numbers to avoid partial matching issues
     # (e.g., matching #1 when #10 exists)
-    for number in range(max_number + 100, 0, -1):
-        k = f"#{number}"
+    for number in range(max_character_number + 100, 0, -1):
+        character_reference = f"#{number}"
 
         # Skip if this character reference isn't in the text
-        if k not in tx:
+        if character_reference not in cleaned_text:
             continue
 
         # Remove found reference to prevent duplicate matches
-        tx = tx.replace(k, "")
+        cleaned_text = cleaned_text.replace(character_reference, "")
 
         # Categorize as active or extinct based on validity
-        if number in chs_numbers:
-            chs.append(number)
+        if number in character_numbers:
+            active_characters.append(number)
         else:
-            extinct.append(number)
+            extinct_characters.append(number)
 
-    return chs, extinct
+    return active_characters, extinct_characters
 
 
 def check_missing_mandatory(ctx):

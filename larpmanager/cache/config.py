@@ -31,13 +31,13 @@ def reset_element_configs(element):
     cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
 
 
-def cache_configs_key(element_id, model_name):
-    return f"configs_{model_name}_{element_id}"
+def cache_configs_key(config_owner_id, config_model_name):
+    return f"configs_{config_model_name}_{config_owner_id}"
 
 
-def get_configs(element):
+def get_configs(model_instance):
     # noinspection PyProtectedMember
-    return get_element_configs(element.id, element._meta.model_name.lower())
+    return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())
 
 
 def get_element_configs(element_id: int, model_name: str) -> dict:
@@ -51,15 +51,15 @@ def get_element_configs(element_id: int, model_name: str) -> dict:
         Dictionary containing the element configurations
     """
     # Generate cache key for the element and model combination
-    key = cache_configs_key(element_id, model_name)
+    cache_key = cache_configs_key(element_id, model_name)
 
     # Try to get cached result first
-    res = cache.get(key)
-    if res is None:
+    cached_configs = cache.get(cache_key)
+    if cached_configs is None:
         # Cache miss: update configs from database and cache the result
-        res = update_configs(element_id, model_name)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+        cached_configs = update_configs(element_id, model_name)
+        cache.set(cache_key, cached_configs, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return cached_configs
 
 
 def update_configs(element_id: int, model_name: str) -> dict[str, str]:
@@ -95,16 +95,16 @@ def update_configs(element_id: int, model_name: str) -> dict[str, str]:
         return {}
 
     # Extract the config model class name and foreign key field name
-    config_model, fk_field = model_map[model_name]
+    config_model_name, foreign_key_field = model_map[model_name]
 
     # Get the actual Django model class using apps registry
-    cls = apps.get_model("larpmanager", config_model)
+    config_model_class = apps.get_model("larpmanager", config_model_name)
 
     # Query for all config entries matching the element ID
-    que = cls.objects.filter(**{fk_field: element_id})
+    config_queryset = config_model_class.objects.filter(**{foreign_key_field: element_id})
 
     # Build and return dictionary of config name-value pairs
-    return {c.name: c.value for c in que}
+    return {config.name: config.value for config in config_queryset}
 
 
 def save_all_element_configs(obj, dct: dict[str, str]) -> None:
@@ -182,14 +182,14 @@ def save_single_config(obj: object, name: str, value: any) -> None:
     obj.configs.model.objects.update_or_create(defaults={"value": value}, **{fk_field: obj, "name": name})
 
 
-def _get_fkey_config(obj: object) -> str | None:
+def _get_fkey_config(model_instance: object) -> str | None:
     """Get foreign key field name for configuration model.
 
     This function maps Django model class names to their corresponding
     foreign key field names used in configuration models.
 
     Args:
-        obj: Model instance to determine foreign key for. Expected to be
+        model_instance: Model instance to determine foreign key for. Expected to be
             one of Event, Run, Association, Character, or Member instances.
 
     Returns:
@@ -202,7 +202,7 @@ def _get_fkey_config(obj: object) -> str | None:
         'event'
     """
     # Map model class names to their configuration foreign key field names
-    fk_field_map = {
+    foreign_key_field_map = {
         "Event": "event",
         "Run": "run",
         "Association": "assoc",
@@ -211,14 +211,14 @@ def _get_fkey_config(obj: object) -> str | None:
     }
 
     # Extract the model class name from the instance
-    model_name = obj.__class__.__name__
+    model_class_name = model_instance.__class__.__name__
 
     # Return the corresponding foreign key field name
-    fk_field = fk_field_map.get(model_name)
-    return fk_field
+    foreign_key_field_name = foreign_key_field_map.get(model_class_name)
+    return foreign_key_field_name
 
 
-def get_element_config(element, name: str, def_value, bypass_cache: bool = False):
+def get_element_config(element, config_name: str, default_value, bypass_cache: bool = False):
     """Get configuration value with type conversion and default fallback.
 
     Retrieves a configuration value from an element's aux_configs, handling
@@ -227,14 +227,14 @@ def get_element_config(element, name: str, def_value, bypass_cache: bool = False
     Args:
         element: Model instance to get configuration from. Must have aux_configs
             attribute or be compatible with get_configs/update_configs functions.
-        name: Configuration parameter name to retrieve.
-        def_value: Default value to return if config not found. Also serves as
+        config_name: Configuration parameter name to retrieve.
+        default_value: Default value to return if config not found. Also serves as
             type indicator for conversion of the retrieved value.
         bypass_cache: Whether to bypass cache and fetch directly from database.
             Useful for background processes where cache might be stale.
 
     Returns:
-        Configuration value converted to the same type as def_value, or def_value
+        Configuration value converted to the same type as default_value, or default_value
         if the configuration parameter is not found.
 
     Note:
@@ -251,28 +251,28 @@ def get_element_config(element, name: str, def_value, bypass_cache: bool = False
             element.aux_configs = get_configs(element)
 
     # Evaluate and return the configuration value with type conversion
-    return evaluate_config(element.aux_configs, name, def_value)
+    return evaluate_config(element.aux_configs, config_name, default_value)
 
 
-def _get_cached_config(element_id, element_type, name, def_value=None, ctx=None, bypass_cache=False):
+def _get_cached_config(element_id, element_type, config_name, default_value=None, context=None, bypass_cache=False):
     """Helper function to get cached configuration for any element type."""
     cache_key = f"{element_type}_configs"
 
-    if ctx is None:
-        ctx = {}
-    if cache_key not in ctx:
-        ctx[cache_key] = {}
+    if context is None:
+        context = {}
+    if cache_key not in context:
+        context[cache_key] = {}
 
-    configs = ctx[cache_key].get(element_id, None)
-    if configs is None:
+    element_configs = context[cache_key].get(element_id, None)
+    if element_configs is None:
         if bypass_cache:
             # do not trust cache for background processes
-            configs = update_configs(element_id, element_type)
+            element_configs = update_configs(element_id, element_type)
         else:
-            configs = get_element_configs(element_id, element_type)
-        ctx[cache_key][element_id] = configs
+            element_configs = get_element_configs(element_id, element_type)
+        context[cache_key][element_id] = element_configs
 
-    return evaluate_config(configs, name, def_value)
+    return evaluate_config(element_configs, config_name, default_value)
 
 
 def get_assoc_config(association_id, config_name, default_value=None, ctx=None, bypass_cache=False):
@@ -283,31 +283,31 @@ def get_event_config(event_id, config_name, default_value=None, ctx=None, bypass
     return _get_cached_config(event_id, "event", config_name, default_value, ctx, bypass_cache)
 
 
-def evaluate_config(configs: dict, name: str, def_value: any) -> any:
+def evaluate_config(configurations: dict, configuration_name: str, default_value: any) -> any:
     """Evaluate configuration value from element's aux_configs with type conversion.
 
     Args:
-        configs: dict with all the configs
-        name: Configuration key to lookup in aux_configs
-        def_value: Default value to return if key not found or value is empty
+        configurations: dict with all the configs
+        configuration_name: Configuration key to lookup in aux_configs
+        default_value: Default value to return if key not found or value is empty
 
     Returns:
         Configuration value with appropriate type conversion, or default value
     """
     # Return default if configuration key doesn't exist
-    if name not in configs:
-        return def_value
+    if configuration_name not in configurations:
+        return default_value
 
     # Get the raw configuration value
-    value = configs[name]
+    configuration_value = configurations[configuration_name]
 
     # Handle boolean type conversion for string "True"/"False"
-    if isinstance(def_value, bool):
-        return value == "True"
+    if isinstance(default_value, bool):
+        return configuration_value == "True"
 
     # Return default for empty or "None" string values
-    if not value or value == "None":
-        return def_value
+    if not configuration_value or configuration_value == "None":
+        return default_value
 
     # Return the raw value for all other cases
-    return value
+    return configuration_value

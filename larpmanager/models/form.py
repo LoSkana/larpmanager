@@ -50,7 +50,7 @@ class BaseQuestionType(models.TextChoices):
     EDITOR = "e", _("Advanced text editor")
 
     @staticmethod
-    def get_answer_types():
+    def get_text_based_answer_types():
         """Get question types that use text answers.
 
         Returns:
@@ -216,11 +216,11 @@ class QuestionApplicable(models.TextChoices):
         return None
 
     @staticmethod
-    def get_applicable_inverse(typ: int) -> type:
+    def get_applicable_inverse(question_applicable_type: int) -> type:
         """Get the Django model class for a QuestionApplicable type."""
         # noinspection PyUnresolvedReferences
         # Get the lowercase label from QuestionApplicable enum
-        model_name = QuestionApplicable(typ).label.lower()
+        model_name = QuestionApplicable(question_applicable_type).label.lower()
         # Retrieve and return the corresponding Django model
         return apps.get_model("larpmanager", model_name)
 
@@ -317,18 +317,23 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event, features):
-        return event.get_elements(WritingQuestion).order_by("order")
+    def get_instance_questions(event_instance, enabled_features):
+        return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(instance: Any, features: dict[str, Any], params: dict[str, Any], orga: Any) -> bool:
+    def skip(
+        instance: Any,
+        available_features: dict[str, Any],
+        processing_parameters: dict[str, Any],
+        organization: Any,
+    ) -> bool:
         """Determines whether to skip processing for the given instance.
 
         Args:
             instance: The object instance to check for skipping
-            features: Dictionary containing available features and their settings
-            params: Dictionary of parameters for processing configuration
-            orga: Organization object containing context information
+            available_features: Dictionary containing available features and their settings
+            processing_parameters: Dictionary of parameters for processing configuration
+            organization: Organization object containing context information
 
         Returns:
             bool: Always returns False, indicating no skipping should occur
@@ -336,7 +341,7 @@ class WritingQuestion(BaseModel):
         # Default behavior: never skip processing
         return False
 
-    def get_editable(self):
+    def get_editable_fields(self):
         return self.editable.split(",") if self.editable else []
 
     def set_editable(self, editable_list):
@@ -404,9 +409,9 @@ class WritingOption(BaseModel):
     def __str__(self):
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run=None, cs=None):
-        s = self.show(run)
-        return s["name"]
+    def get_form_text(self, run=None, character_sheet=None):
+        show_data = self.show(run)
+        return show_data["name"]
 
     def show(self, run=None) -> dict[str, Any]:
         """Return JSON representation with available fields and attributes.
@@ -589,56 +594,56 @@ class RegistrationQuestion(BaseModel):
             QuerySet of RegistrationQuestion objects ordered by section and question order
         """
         # Get all questions for the event, ordered by section first, then by question order
-        que = RegistrationQuestion.objects.filter(event=event).order_by(
+        questions = RegistrationQuestion.objects.filter(event=event).order_by(
             F("section__order").asc(nulls_first=True), "order"
         )
 
         # Conditionally add annotations based on enabled features
         if "reg_que_tickets" in features:
-            que = que.annotate(tickets_map=ArrayAgg("tickets"))
+            questions = questions.annotate(tickets_map=ArrayAgg("tickets"))
         if "reg_que_faction" in features:
-            que = que.annotate(factions_map=ArrayAgg("factions"))
+            questions = questions.annotate(factions_map=ArrayAgg("factions"))
         if "reg_que_allowed" in features:
-            que = que.annotate(allowed_map=ArrayAgg("allowed"))
+            questions = questions.annotate(allowed_map=ArrayAgg("allowed"))
 
-        return que
+        return questions
 
-    def skip(self, reg, features, params=None, orga=False):
+    def skip(self, registration, features, params=None, is_organizer=False):
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
         faction filtering, and organizer permissions to decide if question should be shown.
         """
-        if self.status == QuestionStatus.HIDDEN and not orga:
+        if self.status == QuestionStatus.HIDDEN and not is_organizer:
             return True
 
-        if "reg_que_tickets" in features and reg and reg.pk:
+        if "reg_que_tickets" in features and registration and registration.pk:
             # noinspection PyUnresolvedReferences
-            tickets_id = [i for i in self.tickets_map if i is not None]
-            if len(tickets_id) > 0:
-                if not reg or not reg.ticket:
+            allowed_ticket_ids = [ticket_id for ticket_id in self.tickets_map if ticket_id is not None]
+            if len(allowed_ticket_ids) > 0:
+                if not registration or not registration.ticket:
                     return True
 
-                if reg.ticket_id not in tickets_id:
+                if registration.ticket_id not in allowed_ticket_ids:
                     return True
 
-        if "reg_que_faction" in features and reg and reg.pk:
+        if "reg_que_faction" in features and registration and registration.pk:
             # noinspection PyUnresolvedReferences
-            factions_id = [i for i in self.factions_map if i is not None]
-            if len(factions_id) > 0:
-                reg_factions = []
-                for el in RegistrationCharacterRel.objects.filter(reg=reg):
-                    factions = el.character.factions_list.values_list("id", flat=True)
-                    reg_factions.extend(factions)
+            allowed_faction_ids = [faction_id for faction_id in self.factions_map if faction_id is not None]
+            if len(allowed_faction_ids) > 0:
+                registration_faction_ids = []
+                for character_relation in RegistrationCharacterRel.objects.filter(reg=registration):
+                    character_factions = character_relation.character.factions_list.values_list("id", flat=True)
+                    registration_faction_ids.extend(character_factions)
 
-                if len(set(factions_id).intersection(set(reg_factions))) == 0:
+                if len(set(allowed_faction_ids).intersection(set(registration_faction_ids))) == 0:
                     return True
 
-        if "reg_que_allowed" in features and reg and reg.pk and orga and params:
+        if "reg_que_allowed" in features and registration and registration.pk and is_organizer and params:
             run_id = params["run"].id
-            organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
+            is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
             # noinspection PyUnresolvedReferences
-            if not organizer and self.allowed_map[0]:
+            if not is_run_organizer and self.allowed_map[0]:
                 # noinspection PyUnresolvedReferences
                 if params["member"].id not in self.allowed_map:
                     return True
@@ -695,20 +700,20 @@ class RegistrationOption(BaseModel):
     def get_price(self):
         return self.price
 
-    def get_form_text(self, run: Run | None = None, cs: str | None = None) -> str:
+    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
         """Return formatted text with name and optional price."""
         # Get display data for the current instance
-        s = self.show(run)
-        tx = s["name"]
+        display_data = self.show(run)
+        formatted_text = display_data["name"]
 
         # Append formatted price with currency symbol if applicable
-        if s["price"] and int(s["price"]) > 0:
-            if not cs:
+        if display_data["price"] and int(display_data["price"]) > 0:
+            if not currency_symbol:
                 # noinspection PyUnresolvedReferences
-                cs = self.event.assoc.get_currency_symbol()
-            tx += f" ({decimal_to_str(s['price'])}{cs})"
+                currency_symbol = self.event.assoc.get_currency_symbol()
+            formatted_text += f" ({decimal_to_str(display_data['price'])}{currency_symbol})"
 
-        return tx
+        return formatted_text
 
     def show(self, run: Run | None = None) -> dict[str, Any]:
         """Return ticket tier display data as dictionary.
@@ -775,15 +780,15 @@ class RegistrationAnswer(BaseModel):
         ]
 
 
-def get_ordered_registration_questions(ctx):
-    que = ctx["event"].get_elements(RegistrationQuestion)
-    return que.order_by(F("section__order").asc(nulls_first=True), "order")
+def get_ordered_registration_questions(context):
+    questions = context["event"].get_elements(RegistrationQuestion)
+    return questions.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
 def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
     """Return list of writing elements with their display names and applicable types."""
     # Define available writing elements with their identifiers, translated names, and applicable types
-    shows = [
+    writing_elements = [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
         ("plot", _("Plots"), QuestionApplicable.PLOT),
@@ -791,7 +796,7 @@ def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
         ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
-    return shows
+    return writing_elements
 
 
 def _get_writing_mapping() -> dict[str, str]:
@@ -801,7 +806,7 @@ def _get_writing_mapping() -> dict[str, str]:
         Dictionary mapping writing types to module names.
     """
     # Core writing type mappings
-    mapping = {
+    writing_type_to_module_mapping = {
         "character": "character",
         "faction": "faction",
         "plot": "plot",
@@ -809,4 +814,4 @@ def _get_writing_mapping() -> dict[str, str]:
         "trait": "questbuilder",
         "prologue": "prologue",
     }
-    return mapping
+    return writing_type_to_module_mapping

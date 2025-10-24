@@ -33,10 +33,10 @@ from larpmanager.utils.common import round_to_two_significant_digits
 
 
 def clear_larpmanager_home_cache():
-    cache.delete(cache_cache_lm_home_key())
+    cache.delete(cache_larpmanager_home_key())
 
 
-def cache_cache_lm_home_key():
+def cache_larpmanager_home_key():
     return "cache_lm_home"
 
 
@@ -47,7 +47,7 @@ def get_cache_lm_home() -> dict:
         Cached or freshly computed home data.
     """
     # Get cache key and attempt to retrieve cached data
-    key = cache_cache_lm_home_key()
+    key = cache_larpmanager_home_key()
     res = cache.get(key)
 
     # If cache miss, compute fresh data and cache it

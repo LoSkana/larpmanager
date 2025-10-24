@@ -409,13 +409,13 @@ class ResidenceField(forms.MultiValueField):
         widget = ResidenceWidget(attrs=None)
         super().__init__(*args, fields=fields, widget=widget, **kwargs)
 
-    def compress(self, values: list[str | None]) -> str:
+    def compress(self, values_list: list[str | None]) -> str:
         """Join list values into pipe-separated string, replacing None with empty string."""
-        if not values:
+        if not values_list:
             return ""
         # Replace None values with empty strings
-        values = [v if v is not None else "" for v in values]
-        return "|".join(values)
+        sanitized_values = [value if value is not None else "" for value in values_list]
+        return "|".join(sanitized_values)
 
     def clean(self, value: list | None) -> list:
         """Clean and validate field values, handling empty values appropriately.

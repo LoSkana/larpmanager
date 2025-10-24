@@ -31,7 +31,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration, RegistrationTicket
 
 
-def round_to_nearest_cent(number: float) -> float:
+def round_to_nearest_cent(amount: float) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
 
     This function rounds the input number to the nearest 0.1 (cent) and returns
@@ -40,7 +40,7 @@ def round_to_nearest_cent(number: float) -> float:
     number unchanged.
 
     Args:
-        number: The number to round to the nearest cent.
+        amount: The number to round to the nearest cent.
 
     Returns:
         The rounded number if within tolerance, otherwise the original number.
@@ -52,17 +52,17 @@ def round_to_nearest_cent(number: float) -> float:
         1.26789
     """
     # Round to nearest 0.1 (cent) by multiplying by 10, rounding, then dividing
-    rounded = round(number * 10) / 10
+    rounded_amount = round(amount * 10) / 10
 
     # Set maximum acceptable difference between original and rounded values
-    max_rounding = 0.03
+    max_allowed_rounding_difference = 0.03
 
     # Check if the rounding difference is within acceptable tolerance
-    if abs(float(number) - rounded) <= max_rounding:
-        return rounded
+    if abs(float(amount) - rounded_amount) <= max_allowed_rounding_difference:
+        return rounded_amount
 
     # Return original number if rounding difference exceeds tolerance
-    return float(number)
+    return float(amount)
 
 
 def get_registration_accounting_cache_key(run_id):
@@ -74,7 +74,7 @@ def get_registration_accounting_cache_key(run_id):
     Returns:
         str: Cache key for registration accounting data
     """
-    return f"reg_accounting_{run_id}"
+    return f"registration_accounting_{run_id}"
 
 
 def clear_registration_accounting_cache(run_id):
@@ -83,7 +83,8 @@ def clear_registration_accounting_cache(run_id):
     Args:
         run_id: id of Run instance to reset cache for
     """
-    cache.delete(get_registration_accounting_cache_key(run_id))
+    cache_key = get_registration_accounting_cache_key(run_id)
+    cache.delete(cache_key)
 
 
 def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, dict]:
@@ -100,8 +101,8 @@ def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, d
     Returns:
         tuple: A 3-tuple containing:
             - features (dict): Event features configuration
-            - reg_tickets (dict): Registration tickets indexed by ticket ID
-            - cache_aip (dict): Aggregated payment data by member ID
+            - registration_tickets_by_id (dict): Registration tickets indexed by ticket ID
+            - payment_cache_by_member (dict): Aggregated payment data by member ID
     """
     # Retrieve event features and ensure it's a dictionary
     features = get_event_features(run.event_id)
@@ -109,38 +110,40 @@ def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, d
         features = {}
 
     # Get all registration tickets for this event, ordered by price (highest first)
-    reg_tickets = {}
-    for t in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
-        reg_tickets[t.id] = t
+    registration_tickets_by_id = {}
+    for ticket in RegistrationTicket.objects.filter(event_id=run.event_id).order_by("-price"):
+        registration_tickets_by_id[ticket.id] = ticket
 
     # Build cache for token/credit payments if feature is enabled
-    cache_aip = {}
+    payment_cache_by_member = {}
 
     # Build cache only if token_credit feature is enabled
     if "token_credit" in features:
         # Query accounting item payments for this run
-        que = AccountingItemPayment.objects.filter(reg__run=run)
+        payments_query = AccountingItemPayment.objects.filter(reg__run=run)
 
         # Apply member filter if specified
         if member_filter:
-            que = que.filter(member_id=member_filter)
+            payments_query = payments_query.filter(member_id=member_filter)
 
         # Filter for token and credit payments only
-        que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+        payments_query = payments_query.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
 
         # Aggregate payment data by member and payment type
-        for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
+        for member_id, payment_value, payment_type in payments_query.exclude(hide=True).values_list(
+            "member_id", "value", "pay"
+        ):
             # Initialize member entry if not exists
-            if el[0] not in cache_aip:
-                cache_aip[el[0]] = {"total": 0}
+            if member_id not in payment_cache_by_member:
+                payment_cache_by_member[member_id] = {"total": 0}
 
             # Add to total and payment type specific amounts
-            cache_aip[el[0]]["total"] += el[1]
-            if el[2] not in cache_aip[el[0]]:
-                cache_aip[el[0]][el[2]] = 0
-            cache_aip[el[0]][el[2]] += el[1]
+            payment_cache_by_member[member_id]["total"] += payment_value
+            if payment_type not in payment_cache_by_member[member_id]:
+                payment_cache_by_member[member_id][payment_type] = 0
+            payment_cache_by_member[member_id][payment_type] += payment_value
 
-    return features, reg_tickets, cache_aip
+    return features, registration_tickets_by_id, payment_cache_by_member
 
 
 def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
@@ -158,41 +161,43 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
         None
     """
     # Get the cache key and retrieve existing cached data
-    key = get_registration_accounting_cache_key(run.id)
-    cached_data = cache.get(key)
+    cache_key = get_registration_accounting_cache_key(run.id)
+    cached_accounting_data = cache.get(cache_key)
 
     # If no cache exists, rebuild the entire cache and return early
-    if not cached_data:
+    if not cached_accounting_data:
         update_registration_accounting_cache(run)
         return
 
     # Fetch all active registrations for this member in the current run
-    member_regs = Registration.objects.filter(run=run, member_id=member_id, cancellation_date__isnull=True)
+    member_registrations = Registration.objects.filter(run=run, member_id=member_id, cancellation_date__isnull=True)
 
     # Handle case where member has no active registrations
-    if not member_regs.exists():
+    if not member_registrations.exists():
         # Clean up any stale cache entries for this member's old registrations
-        for reg_id in list(cached_data.keys()):
+        for registration_id in list(cached_accounting_data.keys()):
             try:
-                reg = Registration.objects.get(id=reg_id, member_id=member_id)
+                registration = Registration.objects.get(id=registration_id, member_id=member_id)
                 # Remove cache entry if it belongs to this run and member
-                if reg.run_id == run.id:
-                    cached_data.pop(reg_id, None)
+                if registration.run_id == run.id:
+                    cached_accounting_data.pop(registration_id, None)
             except ObjectDoesNotExist:
                 # Skip if registration no longer exists
                 pass
     else:
         # Recalculate accounting data for member's active registrations
-        features, reg_tickets, cache_aip = _get_accounting_context(run, member_id)
+        features, registration_tickets, cached_already_invoiced_payments = _get_accounting_context(run, member_id)
 
         # Update cache with fresh accounting data for each registration
-        for reg in member_regs:
-            dt = _calculate_registration_accounting(reg, reg_tickets, cache_aip, features)
+        for registration in member_registrations:
+            accounting_data = _calculate_registration_accounting(
+                registration, registration_tickets, cached_already_invoiced_payments, features
+            )
             # Store calculated values as formatted strings in cache
-            cached_data[reg.id] = {key: f"{value:g}" for key, value in dt.items()}
+            cached_accounting_data[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
 
     # Persist the updated cache data with 1-day timeout
-    cache.set(key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(cache_key, cached_accounting_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def get_registration_accounting_cache(run: Run) -> dict:
@@ -267,45 +272,47 @@ def _calculate_registration_accounting(reg, reg_tickets: dict, cache_aip: dict, 
 
     Returns:
         dict: Registration accounting data containing:
-            - Basic financial fields (tot_payed, tot_iscr, quota, etc.)
-            - Payment breakdown by type (pay_a, pay_b, pay_c)
+            - Basic financial fields (total_paid, total_registration_cost, quota, etc.)
+            - Payment breakdown by type (cash_payment, credit_payment, token_payment)
             - Remaining balance and ticket pricing information
     """
-    dt = {}
+    accounting_data = {}
     max_rounding = 0.05
 
     # Extract and round basic registration financial fields
-    for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
+    for field_name in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
+        accounting_data[field_name] = round_to_nearest_cent(getattr(reg, field_name, 0))
 
     # Process token/credit payments if the feature is enabled
     if isinstance(features, dict) and "token_credit" in features:
         if reg.member_id in cache_aip:
             # Extract credit (b) and token (c) payments from cache
-            for pay in ["b", "c"]:  # b=CREDIT, c=TOKEN
-                v = 0
-                if pay in cache_aip[reg.member_id]:
-                    v = cache_aip[reg.member_id][pay]
-                dt["pay_" + pay] = float(v)
+            for payment_type in ["b", "c"]:  # b=CREDIT, c=TOKEN
+                payment_value = 0
+                if payment_type in cache_aip[reg.member_id]:
+                    payment_value = cache_aip[reg.member_id][payment_type]
+                accounting_data["pay_" + payment_type] = float(payment_value)
             # Calculate cash payment (a) as remainder
-            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
+            accounting_data["pay_a"] = accounting_data["tot_payed"] - (
+                accounting_data["pay_b"] + accounting_data["pay_c"]
+            )
         else:
             # No cached payments, all payment is cash
-            dt["pay_a"] = dt["tot_payed"]
+            accounting_data["pay_a"] = accounting_data["tot_payed"]
 
     # Calculate remaining balance and apply rounding threshold
-    dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < max_rounding:
-        dt["remaining"] = 0
+    accounting_data["remaining"] = accounting_data["tot_iscr"] - accounting_data["tot_payed"]
+    if abs(accounting_data["remaining"]) < max_rounding:
+        accounting_data["remaining"] = 0
 
     # Add ticket pricing breakdown if ticket exists
     if reg.ticket_id in reg_tickets:
-        t = reg_tickets[reg.ticket_id]
-        dt["ticket_price"] = t.price
+        ticket = reg_tickets[reg.ticket_id]
+        accounting_data["ticket_price"] = ticket.price
         # Add custom payment amount to base ticket price
         if reg.pay_what:
-            dt["ticket_price"] += reg.pay_what
+            accounting_data["ticket_price"] += reg.pay_what
         # Calculate additional options cost
-        dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
+        accounting_data["options_price"] = reg.tot_iscr - accounting_data["ticket_price"]
 
-    return dt
+    return accounting_data

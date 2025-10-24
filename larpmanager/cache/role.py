@@ -30,8 +30,8 @@ from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import PermissionError
 
 
-def cache_assoc_role_key(ar_id):
-    return f"assoc_role_{ar_id}"
+def cache_assoc_role_key(assoc_role_id):
+    return f"assoc_role_{assoc_role_id}"
 
 
 def get_assoc_role(ar: AssocRole) -> tuple[str, list[str]]:
@@ -110,41 +110,41 @@ def get_assoc_roles(request: HttpRequest) -> tuple[bool, dict[str, int], list[st
             - dict: Mapping of permission slugs to integer values (1 for granted)
             - list: List of role names assigned to the user
     """
-    pms = {}
+    permissions = {}
 
     # Superusers have all permissions automatically
     if request.user.is_superuser:
         return True, [], ["superuser"]
 
     # Get cached event context and role information
-    ctx = cache_event_links(request)
+    cached_context = cache_event_links(request)
     is_admin = False
-    names = []
+    role_names = []
 
     # Process each association role assigned to the user
-    for num, el in ctx["assoc_role"].items():
+    for role_number, role_data in cached_context["assoc_role"].items():
         # Role number 1 indicates admin privileges
-        if num == 1:
+        if role_number == 1:
             is_admin = True
 
         # Extract role name and associated permission slugs
-        (name, slugs) = get_cache_assoc_role(el)
-        names.append(name)
+        (role_name, permission_slugs) = get_cache_assoc_role(role_data)
+        role_names.append(role_name)
 
         # Grant all permissions associated with this role
-        for slug in slugs:
-            pms[slug] = 1
+        for permission_slug in permission_slugs:
+            permissions[permission_slug] = 1
 
-    return is_admin, pms, names
+    return is_admin, permissions, role_names
 
 
-def has_assoc_permission(request: HttpRequest, ctx: dict, perm: str) -> bool:
+def has_assoc_permission(request: HttpRequest, context: dict, permission: str) -> bool:
     """Check if the user has the specified association permission.
 
     Args:
         request: The HTTP request object containing user information
-        ctx: Context dictionary containing association and permission data
-        perm: The permission string to check for
+        context: Context dictionary containing association and permission data
+        permission: The permission string to check for
 
     Returns:
         bool: True if user has the permission, False otherwise
@@ -158,26 +158,26 @@ def has_assoc_permission(request: HttpRequest, ctx: dict, perm: str) -> bool:
         return False
 
     # Check if the permission is managed (restricted)
-    if check_managed(ctx, perm):
+    if check_managed(context, permission):
         return False
 
     # Get user's association roles and permissions
-    (admin, permissions, names) = get_assoc_roles(request)
+    (is_admin, user_permissions, role_names) = get_assoc_roles(request)
 
     # Admin users have all permissions
-    if admin:
+    if is_admin:
         return True
 
     # If no specific permission required, allow access
-    if not perm:
+    if not permission:
         return True
 
     # Check if user has the specific permission
-    return perm in permissions
+    return permission in user_permissions
 
 
-def cache_event_role_key(ar_id):
-    return f"event_role_{ar_id}"
+def cache_event_role_key(assignment_role_id):
+    return f"event_role_{assignment_role_id}"
 
 
 def get_event_role(ar) -> tuple[str, list[str]]:
@@ -256,7 +256,7 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
             - permissions_dict (dict[str, int]): Dictionary mapping permission slugs to values
             - role_names_list (list[str]): List of role names the user has for this event
     """
-    pms = {}
+    permission_slugs = {}
 
     # Extract base slug by splitting on hyphen and taking first part
     slug = slug.split("-", 1)[0]
@@ -266,29 +266,29 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
         return True, [], ["superuser"]
 
     # Get cached event context and check if user has roles for this event
-    ctx = cache_event_links(request)
-    if slug not in ctx["event_role"]:
+    event_context = cache_event_links(request)
+    if slug not in event_context["event_role"]:
         return False, [], []
 
     # Initialize tracking variables for user's roles in this event
     is_organizer = False
-    names = []
+    role_names = []
 
     # Process each role the user has for this event
-    for num, el in ctx["event_role"][slug].items():
+    for role_number, role_element in event_context["event_role"][slug].items():
         # Role number 1 indicates organizer status
-        if num == 1:
+        if role_number == 1:
             is_organizer = True
 
         # Extract role name and permission slugs from cached role data
-        (name, slugs) = get_cache_event_role(el)
-        names.append(name)
+        (role_name, permission_slug_list) = get_cache_event_role(role_element)
+        role_names.append(role_name)
 
         # Add all permission slugs for this role to permissions dictionary
-        for pm_slug in slugs:
-            pms[pm_slug] = 1
+        for permission_slug in permission_slug_list:
+            permission_slugs[permission_slug] = 1
 
-    return is_organizer, pms, names
+    return is_organizer, permission_slugs, role_names
 
 
 def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permission_name=None) -> bool:
@@ -334,16 +334,16 @@ def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permi
     return permission_name in user_permissions
 
 
-def check_managed(ctx: dict, perm: str, assoc: bool = True) -> bool:
+def check_managed(context: dict, permission: str, is_association: bool = True) -> bool:
     """Check if permission is restricted for managed association skins.
 
     This function determines whether a permission should be restricted based on
     whether the association skin is managed and the user's staff status.
 
     Args:
-        ctx: Context dictionary containing skin_managed and is_staff flags
-        perm: Permission string to check for restrictions
-        assoc: Whether to check association permissions (True) or event
+        context: Context dictionary containing skin_managed and is_staff flags
+        permission: Permission string to check for restrictions
+        is_association: Whether to check association permissions (True) or event
                permissions (False). Defaults to True.
 
     Returns:
@@ -355,20 +355,20 @@ def check_managed(ctx: dict, perm: str, assoc: bool = True) -> bool:
     """
     # Check if the association skin is managed and the user is not staff
     # If skin is not managed or user is staff, no restrictions apply
-    if not ctx.get("skin_managed", False) or ctx.get("is_staff", False):
+    if not context.get("skin_managed", False) or context.get("is_staff", False):
         return False
 
     # Check if this permission is explicitly allowed for managed skins
     # Some permissions may bypass managed skin restrictions
-    if perm in get_allowed_managed():
+    if permission in get_allowed_managed():
         return False
 
     # Get permission feature information based on association or event context
     # This determines the permission's configuration and restrictions
-    if assoc:
-        placeholder, _, _ = get_assoc_permission_feature(perm)
+    if is_association:
+        placeholder, _, _ = get_assoc_permission_feature(permission)
     else:
-        placeholder, _, _ = get_event_permission_feature(perm)
+        placeholder, _, _ = get_event_permission_feature(permission)
 
     # Only restrict permissions with "def" placeholder
     # Other placeholder types may have different restriction rules

@@ -183,25 +183,25 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     my_send_mail(subj, body, expense_item.member, expense_item.run)
 
 
-def get_token_credit_name(assoc_id: int) -> tuple[str, str]:
+def get_token_credit_name(association_id: int) -> tuple[str, str]:
     """Get token and credit names from association configuration.
 
     Retrieves custom token and credit names from the association's configuration,
     falling back to default translated names if not configured.
 
     Args:
-        assoc_id: ID of the Association to get configuration from.
+        association_id: ID of the Association to get configuration from.
 
     Returns:
         A tuple containing (token_name, credit_name) as strings. Returns
         default translated values if custom names are not configured.
     """
     # Create configuration holder for caching retrieved values
-    config_holder = {}
+    association_config_cache = {}
 
     # Retrieve custom token and credit names from association config
-    token_name = get_assoc_config(assoc_id, "token_credit_token_name", None, config_holder)
-    credit_name = get_assoc_config(assoc_id, "token_credit_credit_name", None, config_holder)
+    token_name = get_assoc_config(association_id, "token_credit_token_name", None, association_config_cache)
+    credit_name = get_assoc_config(association_id, "token_credit_credit_name", None, association_config_cache)
 
     # Apply default translated names if custom names not configured
     if not token_name:
@@ -607,13 +607,13 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
             - body: Formatted email body with credit amount, type, and reason
     """
     # Build the base subject line with header and credit assignment text
-    subj = hdr(instance) + _("Assignment %(elements)s") % {
+    subject = hdr(instance) + _("Assignment %(elements)s") % {
         "elements": credit_name,
     }
 
     # Append run information to subject if available
     if instance.run:
-        subj += " " + _("for") + " " + str(instance.run)
+        subject += " " + _("for") + " " + str(instance.run)
 
     # Create formatted body message with credit details
     body = (
@@ -626,7 +626,7 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
         + "."
     )
 
-    return subj, body
+    return subject, body
 
 
 def notify_token(instance, token_name: str) -> None:

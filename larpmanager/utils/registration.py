@@ -582,13 +582,13 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
         Tuple of (has_reached_limit, max_allowed_characters)
     """
     # Count current characters for this member in the event
-    current_chars = event.get_elements(Character).filter(player=member).count()
+    current_character_count = event.get_elements(Character).filter(player=member).count()
 
     # Get the maximum allowed characters from event configuration
-    max_chars = int(get_event_config(event.id, "user_character_max", 0))
+    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", 0))
 
     # Return whether limit is reached and the maximum allowed
-    return current_chars >= max_chars, max_chars
+    return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
 
 
 def registration_status_characters(run: Run, features: dict, ctx: dict | None = None) -> None:
@@ -787,7 +787,7 @@ def check_signup(request: HttpRequest, ctx: dict) -> None:
         raise WaitingError(ctx["run"].get_slug())
 
 
-def check_assign_character(request: HttpRequest, ctx: dict) -> None:
+def check_assign_character(request: HttpRequest, context: dict) -> None:
     """Check and assign a character to player signup if conditions are met.
 
     Automatically assigns the first available character to a player's signup
@@ -795,27 +795,27 @@ def check_assign_character(request: HttpRequest, ctx: dict) -> None:
 
     Args:
         request: HTTP request object containing user information
-        ctx: Context dictionary containing event data
+        context: Context dictionary containing event data
 
     Returns:
         None: Function performs side effects only
     """
     # Get the player's registration for this event
-    reg = get_player_signup(request, ctx)
-    if not reg:
+    registration = get_player_signup(request, context)
+    if not registration:
         return
 
     # Skip if player already has character assignments
-    if reg.rcrs.exists():
+    if registration.rcrs.exists():
         return
 
     # Get all characters belonging to this player for the event
-    chars = get_player_characters(request.user.member, ctx["event"])
-    if not chars:
+    characters = get_player_characters(request.user.member, context["event"])
+    if not characters:
         return
 
     # Auto-assign the first character to the registration
-    RegistrationCharacterRel.objects.create(character_id=chars[0].id, reg=reg)
+    RegistrationCharacterRel.objects.create(character_id=characters[0].id, reg=registration)
 
 
 def get_reduced_available_count(run) -> int:
@@ -912,33 +912,33 @@ def process_registration_event_change(registration: Registration) -> None:
             answer.question = None
 
 
-def check_character_ticket_options(reg: Registration, char: Character) -> None:
+def check_character_ticket_options(registration: Registration, character: Character) -> None:
     """Remove writing choices incompatible with registration ticket.
 
     Removes writing choices for a character that are not available
     for the specific ticket type of the registration.
 
     Args:
-        reg: Registration object containing ticket information
-        char: Character object to check writing choices for
+        registration: Registration object containing ticket information
+        character: Character object to check writing choices for
     """
     # Get the ticket ID from the registration
-    ticket_id = reg.ticket.id
+    registration_ticket_id = registration.ticket.id
 
     # Track choice IDs that need to be deleted
-    to_delete = []
+    incompatible_choice_ids = []
 
     # Iterate through all writing choices for this character
-    for choice in WritingChoice.objects.filter(element_id=char.id):
+    for writing_choice in WritingChoice.objects.filter(element_id=character.id):
         # Get list of ticket IDs that allow this writing option
-        tickets_map = choice.option.tickets.values_list("pk", flat=True)
+        allowed_ticket_ids = writing_choice.option.tickets.values_list("pk", flat=True)
 
         # If option has ticket restrictions and current ticket not allowed
-        if tickets_map and ticket_id not in tickets_map:
-            to_delete.append(choice.id)
+        if allowed_ticket_ids and registration_ticket_id not in allowed_ticket_ids:
+            incompatible_choice_ids.append(writing_choice.id)
 
     # Remove all incompatible choices in a single query
-    WritingChoice.objects.filter(pk__in=to_delete).delete()
+    WritingChoice.objects.filter(pk__in=incompatible_choice_ids).delete()
 
 
 def process_character_ticket_options(instance: Registration) -> None:

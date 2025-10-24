@@ -44,7 +44,7 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 
 
-def info_accounting(request: HttpRequest, ctx: dict[str, Any]) -> None:
+def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
     """Gather comprehensive accounting information for a member.
 
     Collects registration history, payment status, membership fees, donations,
@@ -52,62 +52,64 @@ def info_accounting(request: HttpRequest, ctx: dict[str, Any]) -> None:
 
     Args:
         request: Django HTTP request object containing user session and metadata
-        ctx: Context dictionary containing member object and association ID (a_id).
+        context: Context dictionary containing member object and association ID (association_id).
              Modified in-place to include accounting data.
 
     Returns:
-        None: Function modifies ctx dictionary in-place
+        None: Function modifies context dictionary in-place
 
     Side Effects:
-        Populates ctx with the following keys:
-        - reg_list: List of registration records
+        Populates context with the following keys:
+        - registration_list: List of registration records
         - payments_todo: Outstanding payments requiring action
         - payments_pending: Payments awaiting processing
         - refunds: Active refund requests
-        - reg_years: Registration data grouped by year
+        - registration_years: Registration data grouped by year
         - Various balance and membership information
     """
-    member = ctx["member"]
+    member = context["member"]
     # Initialize user membership data for the given association
-    get_user_membership(member, ctx["a_id"])
-    ctx["reg_list"] = []
+    get_user_membership(member, context["association_id"])
+    context["registration_list"] = []
 
     # Gather membership fee information and status
-    _info_membership(ctx, member, request)
+    _info_membership(context, member, request)
 
     # Collect donation history and outstanding donations
-    _info_donations(ctx, member, request)
+    _info_donations(context, member, request)
 
     # Process collection records and payment collections
-    _info_collections(ctx, member, request)
+    _info_collections(context, member, request)
 
     # Initialize registration years tracking dictionary
-    ctx["reg_years"] = {}
+    context["registration_years"] = {}
 
     # Set up pending payments tracking for the member
-    pending = _init_pending(member)
+    pending_payments = _init_pending(member)
 
     # Initialize payment choices and options
-    choices = _init_choices(member)
+    payment_choices = _init_choices(member)
 
     # Initialize payment status lists for todo and pending items
-    for s in ["payments_todo", "payments_pending"]:
-        ctx[s] = []
+    for status in ["payments_todo", "payments_pending"]:
+        context[status] = []
 
     # Query all registrations for this member in the current association
     # Exclude cancelled events from the development status
-    reg_que = Registration.objects.filter(member=member, run__event__assoc_id=ctx["a_id"])
-    reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC])
+    registration_query = Registration.objects.filter(member=member, run__event__assoc_id=context["association_id"])
+    registration_query = registration_query.exclude(run__development__in=[DevelopStatus.CANC])
 
     # Process each registration to populate payment and status information
-    for reg in reg_que.select_related("run", "run__event", "ticket"):
-        _init_regs(choices, ctx, pending, reg)
+    for registration in registration_query.select_related("run", "run__event", "ticket"):
+        _init_regs(payment_choices, context, pending_payments, registration)
 
     # Retrieve open refund requests for this member and association
-    ctx["refunds"] = ctx["member"].refund_requests.filter(status=RefundStatus.REQUEST, assoc_id=ctx["a_id"])
+    context["refunds"] = context["member"].refund_requests.filter(
+        status=RefundStatus.REQUEST, assoc_id=context["association_id"]
+    )
 
     # Calculate and add token/credit balance information
-    _info_token_credit(ctx, member)
+    _info_token_credit(context, member)
 
 
 def _init_regs(choices, ctx, pending, reg):

@@ -72,11 +72,11 @@ def fix_filename(s):
 
 
 # reprint if file not exists, older than 1 day, or debug
-def reprint(fp):
+def reprint(file_path):
     """Determine if PDF file should be regenerated.
 
     Args:
-        fp (str): File path to check
+        file_path (str): File path to check
 
     Returns:
         bool: True if file should be regenerated (debug mode, missing, or older than 1 day)
@@ -84,12 +84,12 @@ def reprint(fp):
     if conf_settings.DEBUG:
         return True
 
-    if not os.path.isfile(fp):
+    if not os.path.isfile(file_path):
         return True
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=1)
-    mtime = datetime.fromtimestamp(os.path.getmtime(fp), timezone.utc)
-    return mtime < cutoff
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=1)
+    modification_time = datetime.fromtimestamp(os.path.getmtime(file_path), timezone.utc)
+    return modification_time < cutoff_date
 
 
 def return_pdf(file_path, filename):
@@ -175,39 +175,39 @@ def add_pdf_instructions(ctx: dict) -> None:
         - Replaces utility codes with URLs
     """
     # Extract PDF configuration from event settings
-    for instr in ["page_css", "header_content", "footer_content"]:
-        ctx[instr] = get_event_config(ctx["event"].id, instr, "", ctx, bypass_cache=True)
+    for instruction_key in ["page_css", "header_content", "footer_content"]:
+        ctx[instruction_key] = get_event_config(ctx["event"].id, instruction_key, "", ctx, bypass_cache=True)
 
     # Build replacement codes dictionary with event and character data
-    codes = {
+    replacement_codes = {
         "<pdf:organization>": ctx["event"].assoc.name,
         "<pdf:event>": ctx["event"].name,
     }
 
     # Add character-specific replacement codes
-    for m in ["number", "name", "title"]:
-        codes[f"<pdf:{m}>"] = str(ctx["sheet_char"][m])
+    for character_field in ["number", "name", "title"]:
+        replacement_codes[f"<pdf:{character_field}>"] = str(ctx["sheet_char"][character_field])
 
     # Replace character info placeholders in header and footer content
-    for s in ["header_content", "footer_content"]:
-        if s not in ctx:
+    for section_key in ["header_content", "footer_content"]:
+        if section_key not in ctx:
             continue
         # Apply all code replacements to current section
-        for el, value in codes.items():
-            if el not in ctx[s]:
+        for placeholder, value in replacement_codes.items():
+            if placeholder not in ctx[section_key]:
                 continue
-            ctx[s] = ctx[s].replace(el, value)
+            ctx[section_key] = ctx[section_key].replace(placeholder, value)
 
     # Replace utility codes with actual URLs in all PDF sections
-    for s in ["header_content", "footer_content", "page_css"]:
-        if s not in ctx:
+    for section_key in ["header_content", "footer_content", "page_css"]:
+        if section_key not in ctx:
             continue
         # Find all utility codes in format #code# and replace with URLs
-        for x in re.findall(r"(#[\w-]+#)", ctx[s]):
-            cod = x.replace("#", "")
-            util = get_object_or_404(Util, cod=cod)
-            ctx[s] = ctx[s].replace(x, util.util.url)
-        logger.debug(f"Processed PDF context for key '{s}': {len(ctx[s])} characters")
+        for utility_code_match in re.findall(r"(#[\w-]+#)", ctx[section_key]):
+            utility_code = utility_code_match.replace("#", "")
+            util = get_object_or_404(Util, cod=utility_code)
+            ctx[section_key] = ctx[section_key].replace(utility_code_match, util.util.url)
+        logger.debug(f"Processed PDF context for key '{section_key}': {len(ctx[section_key])} characters")
 
 
 def xhtml_pdf(context, template_path, output_filename):
@@ -223,26 +223,26 @@ def xhtml_pdf(context, template_path, output_filename):
     """
     template = get_template(template_path)
 
-    html = template.render(context)
+    rendered_html = template.render(context)
 
-    with open(output_filename, "wb") as result_file:
+    with open(output_filename, "wb") as pdf_file:
         # create a pdf
-        result = pisa.CreatePDF(html, dest=result_file, link_callback=link_callback)
+        pdf_result = pisa.CreatePDF(rendered_html, dest=pdf_file, link_callback=link_callback)
 
         # check result
-        if result.err:
-            raise Http404("We had some errors <pre>" + html + "</pre>")
+        if pdf_result.err:
+            raise Http404("We had some errors <pre>" + rendered_html + "</pre>")
 
 
-def pdf_template(ctx: dict, tmp: str, out: str, small: bool = False, html: bool = False) -> None:
+def pdf_template(context: dict, template_path: str, output_path: str, small: bool = False, html: bool = False) -> None:
     """Generate PDF from template using pdfkit with configurable options.
 
     Args:
-        ctx: Template context dictionary containing variables for rendering.
-        tmp: Template path or HTML string depending on html parameter.
-        out: Output PDF file path where the generated PDF will be saved.
+        context: Template context dictionary containing variables for rendering.
+        template_path: Template path or HTML string depending on html parameter.
+        output_path: Output PDF file path where the generated PDF will be saved.
         small: Use minimal margins for compact layout. Defaults to False.
-        html: If True, treat tmp as HTML string; if False, as template path.
+        html: If True, treat template_path as HTML string; if False, as template path.
               Defaults to False.
 
     Raises:
@@ -282,20 +282,20 @@ def pdf_template(ctx: dict, tmp: str, out: str, small: bool = False, html: bool 
     try:
         # Render HTML content based on input type
         if html:
-            # Treat tmp as HTML string and render with context
-            t = Template(tmp)
-            c = Context(ctx)
-            html = t.render(c)
+            # Treat template_path as HTML string and render with context
+            template = Template(template_path)
+            django_context = Context(context)
+            html_content = template.render(django_context)
         else:
-            # Treat tmp as template path and load template
-            template = get_template(tmp)
-            html = template.render(ctx)
-            logger.debug(f"Generated HTML for PDF: {len(html)} characters")
+            # Treat template_path as template path and load template
+            template = get_template(template_path)
+            html_content = template.render(context)
+            logger.debug(f"Generated HTML for PDF: {len(html_content)} characters")
 
         # Generate PDF from rendered HTML string
-        # html = html.replace(conf_settings.STATIC_URL, request.build_absolute_uri(conf_settings.STATIC_URL))
-        # html = html.replace(conf_settings.MEDIA_URL, request.build_absolute_uri(conf_settings.MEDIA_URL))
-        pdfkit.from_string(html, out, options)
+        # html_content = html_content.replace(conf_settings.STATIC_URL, request.build_absolute_uri(conf_settings.STATIC_URL))
+        # html_content = html_content.replace(conf_settings.MEDIA_URL, request.build_absolute_uri(conf_settings.MEDIA_URL))
+        pdfkit.from_string(html_content, output_path, options)
     except Exception as e:
         # Log PDF generation errors without re-raising
         logger.error(f"PDF generation error: {e}")
@@ -320,77 +320,77 @@ def get_membership_request(ctx: dict) -> HttpResponse:
     return return_pdf(fp, _("Membership registration of %(user)s") % {"user": ctx["member"]})
 
 
-def print_character(ctx: dict, force: bool = False) -> dict:
+def print_character(context: dict, force: bool = False) -> dict:
     """Generate character sheet PDF with optional force regeneration.
 
     Args:
-        ctx: Context dictionary containing character and run data
+        context: Context dictionary containing character and run data
         force: Whether to force PDF regeneration regardless of existing file
 
     Returns:
         PDF response dictionary for character sheet
     """
     # Get the file path for the character sheet PDF
-    fp = ctx["character"].get_sheet_filepath(ctx["run"])
-    ctx["pdf"] = True
+    file_path = context["character"].get_sheet_filepath(context["run"])
+    context["pdf"] = True
 
     # Generate PDF if forced or if reprint is needed
-    if force or reprint(fp):
-        get_character_sheet(ctx)
-        add_pdf_instructions(ctx)
-        xhtml_pdf(ctx, "pdf/sheets/auxiliary.html", fp)
+    if force or reprint(file_path):
+        get_character_sheet(context)
+        add_pdf_instructions(context)
+        xhtml_pdf(context, "pdf/sheets/auxiliary.html", file_path)
 
     # Return the PDF response
-    return return_pdf(fp, f"{ctx['character']}")
+    return return_pdf(file_path, f"{context['character']}")
 
 
-def print_character_friendly(ctx: dict, force: bool = False) -> HttpResponse:
+def print_character_friendly(context: dict, force: bool = False) -> HttpResponse:
     """Generate and return a lightweight character sheet PDF.
 
     Args:
-        ctx: Context dictionary containing character and run data
+        context: Context dictionary containing character and run data
         force: Whether to force regeneration of the PDF file
 
     Returns:
         HTTP response containing the PDF file
     """
     # Get the file path for the friendly character sheet
-    fp = ctx["character"].get_sheet_friendly_filepath(ctx["run"])
-    ctx["pdf"] = True
+    file_path = context["character"].get_sheet_friendly_filepath(context["run"])
+    context["pdf"] = True
 
     # Generate PDF if forced or if file needs reprinting
-    if force or reprint(fp):
-        get_character_sheet(ctx)
-        pdf_template(ctx, "pdf/sheets/friendly.html", fp, True)
+    if force or reprint(file_path):
+        get_character_sheet(context)
+        pdf_template(context, "pdf/sheets/friendly.html", file_path, True)
 
     # Return the PDF file as HTTP response
-    return return_pdf(fp, f"{ctx['character']} - " + _("Lightweight"))
+    return return_pdf(file_path, f"{context['character']} - " + _("Lightweight"))
 
 
-def print_character_rel(ctx: dict, force: bool = False) -> HttpResponse:
+def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
     """Generate and return character relationships PDF.
 
     Args:
-        ctx: Context dictionary containing character and run data
+        context: Context dictionary containing character and run data
         force: Whether to force regeneration of the PDF
 
     Returns:
         HTTP response with the relationships PDF
     """
     # Get the filepath for the character relationships PDF
-    fp = ctx["character"].get_relationships_filepath(ctx["run"])
+    filepath = context["character"].get_relationships_filepath(context["run"])
 
     # Generate PDF if forced or if reprint is needed
-    if force or reprint(fp):
-        get_event_cache_all(ctx)
-        get_character_relationships(ctx)
-        pdf_template(ctx, "pdf/sheets/relationships.html", fp, True)
+    if force or reprint(filepath):
+        get_event_cache_all(context)
+        get_character_relationships(context)
+        pdf_template(context, "pdf/sheets/relationships.html", filepath, True)
 
     # Return the PDF response with localized filename
-    return return_pdf(fp, f"{ctx['character']} - " + _("Relationships"))
+    return return_pdf(filepath, f"{context['character']} - " + _("Relationships"))
 
 
-def print_gallery(ctx: dict, force: bool = False) -> object:
+def print_gallery(context: dict, force: bool = False) -> object:
     """
     Generate and return a PDF gallery of character portraits.
 
@@ -400,7 +400,7 @@ def print_gallery(ctx: dict, force: bool = False) -> object:
 
     Parameters
     ----------
-    ctx : dict
+    context : dict
         Context dictionary containing run information and character data
     force : bool, default False
         Whether to force regeneration of the PDF even if cache is valid
@@ -411,75 +411,75 @@ def print_gallery(ctx: dict, force: bool = False) -> object:
         PDF response object for download/display
     """
     # Get the filepath where the gallery PDF should be stored
-    fp = ctx["run"].get_gallery_filepath()
+    filepath = context["run"].get_gallery_filepath()
 
     # Check if we need to regenerate the PDF (forced or cache outdated)
-    if force or reprint(fp):
+    if force or reprint(filepath):
         # Load all event cache data into context
-        get_event_cache_all(ctx)
+        get_event_cache_all(context)
 
         # Initialize list to store characters with first aid capability
-        ctx["first_aid"] = []
+        context["first_aid"] = []
 
         # Iterate through all characters to find those with first aid
-        for _num, el in ctx["chars"].items():
-            if "first_aid" in el and el["first_aid"] == "y":
-                ctx["first_aid"].append(el)
+        for _character_number, character_element in context["chars"].items():
+            if "first_aid" in character_element and character_element["first_aid"] == "y":
+                context["first_aid"].append(character_element)
 
         # Re-get filepath (in case it changed during cache loading)
-        fp = ctx["run"].get_gallery_filepath()
+        filepath = context["run"].get_gallery_filepath()
 
         # Generate the PDF from the gallery template
-        xhtml_pdf(ctx, "pdf/sheets/gallery.html", fp)
+        xhtml_pdf(context, "pdf/sheets/gallery.html", filepath)
 
     # Return the PDF file as a downloadable response
-    return return_pdf(fp, str(ctx["run"]) + " - " + _("Portraits"))
+    return return_pdf(filepath, str(context["run"]) + " - " + _("Portraits"))
 
 
-def print_profiles(ctx: dict, force: bool = False) -> tuple:
+def print_profiles(context: dict, force: bool = False) -> tuple:
     """Generate and return PDF profiles for the event run.
 
     Args:
-        ctx: Context dictionary containing run and event data
+        context: Context dictionary containing run and event data
         force: If True, regenerate PDF even if it exists
 
     Returns:
         Tuple containing PDF response and filename
     """
     # Get the filepath for the profiles PDF
-    fp = ctx["run"].get_profiles_filepath()
+    filepath = context["run"].get_profiles_filepath()
 
     # Check if we need to regenerate the PDF
-    if force or reprint(fp):
+    if force or reprint(filepath):
         # Load all event cache data
-        get_event_cache_all(ctx)
+        get_event_cache_all(context)
         # Generate PDF from HTML template
-        xhtml_pdf(ctx, "pdf/sheets/profiles.html", fp)
+        xhtml_pdf(context, "pdf/sheets/profiles.html", filepath)
 
     # Return the PDF file with appropriate filename
-    return return_pdf(fp, str(ctx["run"]) + " - " + _("Profiles"))
+    return return_pdf(filepath, str(context["run"]) + " - " + _("Profiles"))
 
 
-def print_handout(ctx: dict, force: bool = True) -> Any:
+def print_handout(context: dict, force: bool = True) -> Any:
     """Generate and return a PDF handout for the given context.
 
     Args:
-        ctx: Context dictionary containing handout and run information
+        context: Context dictionary containing handout and run information
         force: Whether to force regeneration of the PDF
 
     Returns:
         PDF response for the handout
     """
     # Get the file path for the handout PDF
-    fp = ctx["handout"].get_filepath(ctx["run"])
+    file_path = context["handout"].get_filepath(context["run"])
 
     # Generate PDF if forced or if reprint is needed
-    if force or reprint(fp):
-        ctx["handout"].data = ctx["handout"].show_complete()
-        xhtml_pdf(ctx, "pdf/sheets/handout.html", fp)
+    if force or reprint(file_path):
+        context["handout"].data = context["handout"].show_complete()
+        xhtml_pdf(context, "pdf/sheets/handout.html", file_path)
 
     # Return the PDF file response
-    return return_pdf(fp, f"{ctx['handout'].data['name']}")
+    return return_pdf(file_path, f"{context['handout'].data['name']}")
 
 
 def print_volunteer_registry(ctx: dict) -> str:
@@ -632,17 +632,17 @@ def cleanup_faction_pdfs_on_save(instance):
         delete_character_pdf_files(char, runs=runs)
 
 
-def deactivate_castings_and_remove_pdfs(instance: Any) -> None:
+def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
     """Deactivate castings and remove PDF files for a trait instance."""
     # Deactivate all matching castings for this member, run, and type
-    for casting in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
+    for casting in Casting.objects.filter(member=trait_instance.member, run=trait_instance.run, typ=trait_instance.typ):
         casting.active = False
         casting.save()
 
     # Get character associated with this trait and remove PDF files
-    char = get_trait_character(instance.run, instance.trait.number)
-    if char:
-        delete_character_pdf_files(char, instance.run)
+    character = get_trait_character(trait_instance.run, trait_instance.trait.number)
+    if character:
+        delete_character_pdf_files(character, trait_instance.run)
 
 
 def cleanup_pdfs_on_trait_assignment(instance, created):
@@ -667,18 +667,18 @@ def print_handout_go(ctx: HttpRequest, c: Character) -> HttpResponse:
     return print_handout(ctx)
 
 
-def get_fake_request(assoc_slug: str) -> HttpRequest:
+def get_fake_request(association_slug: str) -> HttpRequest:
     """Create a fake HTTP request with association and anonymous user.
 
     Args:
-        assoc_slug: The association slug to attach to the request.
+        association_slug: The association slug to attach to the request.
 
     Returns:
         HttpRequest object with assoc and user attributes set.
     """
     request = HttpRequest()
     # Attach association from cache
-    request.assoc = get_cache_assoc(assoc_slug)
+    request.assoc = get_cache_assoc(association_slug)
     # Set anonymous user for the request
     request.user = AnonymousUser()
     return request
@@ -928,9 +928,9 @@ def clean_tag(tag):
     Returns:
         str: Cleaned tag without namespace prefix
     """
-    i = tag.find("}")
-    if i >= 0:
-        tag = tag[i + 1 :]
+    closing_brace_index = tag.find("}")
+    if closing_brace_index >= 0:
+        tag = tag[closing_brace_index + 1 :]
     return tag
 
 

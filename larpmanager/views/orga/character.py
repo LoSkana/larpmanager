@@ -1106,7 +1106,9 @@ def orga_writing_excel_submit(request, s, typ):
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
 
 
-def _get_excel_form(request: HttpRequest, s: str, typ: str, submit: bool = False) -> dict[str, Any]:
+def _get_excel_form(
+    request: HttpRequest, event_slug: str, element_type: str, is_submit: bool = False
+) -> dict[str, Any]:
     """Prepare Excel form context for bulk editing operations.
 
     Sets up form data and validation for spreadsheet-based content editing,
@@ -1115,9 +1117,9 @@ def _get_excel_form(request: HttpRequest, s: str, typ: str, submit: bool = False
 
     Args:
         request: HTTP request object containing POST data with question and element IDs
-        s: Event slug for permission checking and context setup
-        typ: Type of element being edited (character, faction, plot, trait, quest)
-        submit: Whether this is a form submission (True) or initial load (False)
+        event_slug: Event slug for permission checking and context setup
+        element_type: Type of element being edited (character, faction, plot, trait, quest)
+        is_submit: Whether this is a form submission (True) or initial load (False)
 
     Returns:
         Dict containing form context with filtered fields, question data, and element instance
@@ -1127,28 +1129,28 @@ def _get_excel_form(request: HttpRequest, s: str, typ: str, submit: bool = False
         PermissionDenied: If user lacks required permissions for the operation
     """
     # Check user permissions and setup base context
-    ctx = check_event_permission(request, s, f"orga_{typ}s")
-    if not submit:
-        get_event_cache_all(ctx)
+    context = check_event_permission(request, event_slug, f"orga_{element_type}s")
+    if not is_submit:
+        get_event_cache_all(context)
 
     # Validate writing form type and extract request parameters
-    check_writing_form_type(ctx, typ)
+    check_writing_form_type(context, element_type)
     question_id = int(request.POST.get("qid"))
     element_id = int(request.POST.get("eid"))
 
     # Fetch the writing question with proper filtering
     question = (
-        ctx["event"]
+        context["event"]
         .get_elements(WritingQuestion)
         .select_related("event")
-        .filter(applicable=ctx["writing_typ"])
+        .filter(applicable=context["writing_typ"])
         .get(pk=question_id)
     )
 
     # Setup applicable type context and fetch target element
-    ctx["applicable"] = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
-    element = ctx["event"].get_elements(ctx["applicable"]).select_related("event").get(pk=element_id)
-    ctx["elementTyp"] = ctx["applicable"]
+    context["applicable"] = QuestionApplicable.get_applicable_inverse(context["writing_typ"])
+    element = context["event"].get_elements(context["applicable"]).select_related("event").get(pk=element_id)
+    context["elementTyp"] = context["applicable"]
 
     # Map element types to their corresponding form classes
     form_mapping = {
@@ -1160,30 +1162,30 @@ def _get_excel_form(request: HttpRequest, s: str, typ: str, submit: bool = False
     }
 
     # Initialize form based on submission state
-    form_class = form_mapping.get(typ, OrgaCharacterForm)
-    if submit:
-        form = form_class(request.POST, request.FILES, ctx=ctx, instance=element)
+    form_class = form_mapping.get(element_type, OrgaCharacterForm)
+    if is_submit:
+        form = form_class(request.POST, request.FILES, ctx=context, instance=element)
     else:
-        form = form_class(ctx=ctx, instance=element)
+        form = form_class(ctx=context, instance=element)
 
     # Determine field key based on question type
-    keep_key = f"q{question_id}"
+    field_key = f"q{question_id}"
     if question.typ not in BaseQuestionType.get_basic_types():
-        keep_key = question.typ
+        field_key = question.typ
 
     # Filter form to show only the relevant question field
-    if keep_key in form.fields:
-        form.fields = {keep_key: form.fields[keep_key]}
+    if field_key in form.fields:
+        form.fields = {field_key: form.fields[field_key]}
     else:
         form.fields = {}
 
     # Finalize context with form and related objects
-    ctx["form"] = form
-    ctx["question"] = question
-    ctx["element"] = element
-    ctx["field_key"] = keep_key
+    context["form"] = form
+    context["question"] = question
+    context["element"] = element
+    context["field_key"] = field_key
 
-    return ctx
+    return context
 
 
 def _get_question_update(ctx: dict, el) -> str:

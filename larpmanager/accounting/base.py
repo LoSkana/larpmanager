@@ -70,7 +70,7 @@ def is_reg_provisional(
     return False
 
 
-def get_payment_details(assoc: Association) -> dict:
+def get_payment_details(association: Association) -> dict:
     """
     Decrypt and retrieve payment details for association.
 
@@ -79,7 +79,7 @@ def get_payment_details(assoc: Association) -> dict:
     file doesn't exist, returns empty dictionary.
 
     Args:
-        assoc: Association instance containing encryption key for decryption
+        association: Association instance containing encryption key for decryption
 
     Returns:
         dict: Decrypted payment details dictionary, empty dict if file missing
@@ -89,30 +89,30 @@ def get_payment_details(assoc: Association) -> dict:
         None: All exceptions are caught and handled internally
     """
     # Initialize cipher with association's encryption key
-    cipher = Fernet(assoc.key)
+    cipher = Fernet(association.key)
 
     # Get the path to encrypted payment details file
-    encrypted_file_path = get_payment_details_path(assoc)
+    encrypted_file_path = get_payment_details_path(association)
 
     # Return empty dict if encrypted file doesn't exist
     if not os.path.exists(encrypted_file_path):
         return {}
 
     # Read encrypted data from file
-    with open(encrypted_file_path, "rb") as f:
-        encrypted_data = f.read()
+    with open(encrypted_file_path, "rb") as encrypted_file:
+        encrypted_data = encrypted_file.read()
 
     # Attempt to decrypt and parse the data
     try:
         # Decrypt the binary data using Fernet cipher
-        data_bytes = cipher.decrypt(encrypted_data)
+        decrypted_bytes = cipher.decrypt(encrypted_data)
 
         # Convert decrypted bytes to JSON dictionary
-        decrypted_data = json.loads(data_bytes.decode("utf-8"))
-        return decrypted_data
-    except InvalidToken as err:
+        decrypted_payment_details = json.loads(decrypted_bytes.decode("utf-8"))
+        return decrypted_payment_details
+    except InvalidToken as invalid_token_error:
         # Notify administrators of decryption failure and return empty dict
-        notify_admins(f"invalid token for {assoc.slug}", f"{err}")
+        notify_admins(f"invalid token for {association.slug}", f"{invalid_token_error}")
         return {}
 
 

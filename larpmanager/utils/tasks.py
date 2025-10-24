@@ -207,20 +207,20 @@ def my_send_mail_bkg(email_pk):
     email.save()
 
 
-def clean_sender(name):
+def clean_sender(sender_name):
     """Clean sender name for email headers by removing special characters.
 
     Args:
-        name (str): Original sender name
+        sender_name (str): Original sender name
 
     Returns:
         str: Sanitized sender name safe for email headers
     """
-    name = name.replace(":", " ")
-    name = name.split(",")[0]
-    name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", name)
-    name = re.sub(r"\s+", " ", name).strip()
-    return name
+    sender_name = sender_name.replace(":", " ")
+    sender_name = sender_name.split(",")[0]
+    sender_name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", sender_name)
+    sender_name = re.sub(r"\s+", " ", sender_name).strip()
+    return sender_name
 
 
 def my_send_simple_mail(

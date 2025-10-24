@@ -164,10 +164,10 @@ def get_leaderboard(a_id: int) -> dict:
     return res
 
 
-def assign_badge(member, cod):
+def assign_badge(member, badge_code):
     try:
-        b = Badge.objects.get(cod=cod)
-        b.members.add(member)
+        badge = Badge.objects.get(cod=badge_code)
+        badge.members.add(member)
     except Exception as e:
         print(e)
 

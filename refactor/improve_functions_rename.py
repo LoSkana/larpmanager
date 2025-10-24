@@ -98,6 +98,7 @@ Fornisci il codice refactorizzato con i nuovi nomi applicati
 
 IMPORTANTE:
 - Restituisci SOLO il codice della funzione migliorata, senza spiegazioni aggiuntive
+- NON cambiare nome della funzione
 - NON aggiungere MAI import statements
 - MANTIENI esattamente la stessa indentazione della funzione originale
 - Non modificare l'indentazione esistente del codice

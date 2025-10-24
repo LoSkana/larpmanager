@@ -955,16 +955,16 @@ class OrgaAppearanceForm(MyCssForm):
         return "event_css"
 
     @staticmethod
-    def get_css_path(instance):
+    def get_css_path(event_instance):
         """Generate CSS file path for event styling.
 
         Args:
-            instance: Event instance
+            event_instance: Event instance
 
         Returns:
             str: Path to CSS file
         """
-        return f"css/{instance.assoc.slug}_{instance.slug}_{instance.css_code}.css"
+        return f"css/{event_instance.assoc.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
 
 class OrgaEventTextForm(MyForm):
@@ -1664,14 +1664,18 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
             extra.append((tog, field["name"]))
 
-    def add_feature_extra(self, extra, feature_fields):
+    def add_feature_extra(self, extra_fields, feature_field_definitions):
         """Add feature-specific extra fields to configuration.
 
         Args:
-            extra: List to append extra field configurations
-            feature_fields: List of feature field tuples (feature, field_id, label)
+            extra_fields: List to append extra field configurations
+            feature_field_definitions: List of feature field tuples (feature, field_id, label)
         """
-        for field in feature_fields:
-            if field[0] and field[0] not in self.params["features"]:
+        for feature_field_definition in feature_field_definitions:
+            feature = feature_field_definition[0]
+            field_id = feature_field_definition[1]
+            field_label = feature_field_definition[2]
+
+            if feature and feature not in self.params["features"]:
                 continue
-            extra.append((field[1], field[2]))
+            extra_fields.append((field_id, field_label))

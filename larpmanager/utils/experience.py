@@ -41,14 +41,14 @@ from larpmanager.models.form import (
 from larpmanager.models.writing import Character, CharacterConfig
 
 
-def _build_px_context(char) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
+def _build_px_context(character) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
     """Build context for character experience point calculations.
 
     Gathers character abilities, choices, and modifiers with optimized queries
     to create the foundation for PX cost and availability calculations.
 
     Args:
-        char: Character instance for which to build the PX context.
+        character: Character instance for which to build the PX context.
 
     Returns:
         A tuple containing:
@@ -58,20 +58,20 @@ def _build_px_context(char) -> tuple[set[int], set[int], dict[int, list[tuple[in
     """
     # Get all abilities already learned by the character
     # This creates a set of primary keys for efficient lookup operations
-    current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
+    current_character_abilities = set(character.px_ability_list.values_list("pk", flat=True))
 
     # Get the options selected for the character from writing choices
     # Filter by character ID and applicable question type for accuracy
-    current_char_choices = set(
-        WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER).values_list(
-            "option_id", flat=True
-        )
+    current_character_choices = set(
+        WritingChoice.objects.filter(
+            element_id=character.id, question__applicable=QuestionApplicable.CHARACTER
+        ).values_list("option_id", flat=True)
     )
 
     # Get all modifiers with optimized prefetch for related objects
     # Use only() to limit fields and prefetch_related to avoid N+1 queries
     all_modifiers = (
-        char.event.get_elements(ModifierPx)
+        character.event.get_elements(ModifierPx)
         .only("id", "order", "cost")
         .order_by("order")
         .prefetch_related(
@@ -83,29 +83,29 @@ def _build_px_context(char) -> tuple[set[int], set[int], dict[int, list[tuple[in
 
     # Build mapping for cost, prerequisites, and requirements by ability
     # This creates an efficient lookup structure for modifier calculations
-    mods_by_ability = defaultdict(list)
-    for m in all_modifiers:
+    modifiers_by_ability = defaultdict(list)
+    for modifier in all_modifiers:
         # Extract IDs from prefetched objects to avoid additional queries
         # Use list comprehension and set comprehension for performance
-        ability_ids = [a.id for a in m.abilities.all()]
-        prereq_ids = {a.id for a in m.prerequisites.all()}
-        req_ids = {o.id for o in m.requirements.all()}
+        ability_ids = [ability.id for ability in modifier.abilities.all()]
+        prerequisite_ids = {ability.id for ability in modifier.prerequisites.all()}
+        requirement_ids = {option.id for option in modifier.requirements.all()}
 
         # Create payload tuple with modifier data for easy access
-        payload = (m.cost, prereq_ids, req_ids)
+        payload = (modifier.cost, prerequisite_ids, requirement_ids)
 
         # Map each ability to its applicable modifiers
-        for aid in ability_ids:
-            mods_by_ability[aid].append(payload)
+        for ability_id in ability_ids:
+            modifiers_by_ability[ability_id].append(payload)
 
-    return current_char_abilities, current_char_choices, mods_by_ability
+    return current_character_abilities, current_character_choices, modifiers_by_ability
 
 
 def _apply_modifier_cost(
     ability,
-    mods_by_ability: dict[int, list[tuple]],
-    current_char_abilities: set[int],
-    current_char_choices: set[int],
+    modifiers_by_ability_id: dict[int, list[tuple]],
+    character_ability_ids: set[int],
+    character_choice_ids: set[int],
 ) -> None:
     """Apply the first matching modifier cost to an ability.
 
@@ -114,17 +114,17 @@ def _apply_modifier_cost(
 
     Args:
         ability: Ability object to modify.
-        mods_by_ability: Mapping of ability IDs to lists of (cost, prereq_ids, req_ids) tuples.
-        current_char_abilities: Set of ability IDs the character currently has.
-        current_char_choices: Set of choice IDs the character currently has.
+        modifiers_by_ability_id: Mapping of ability IDs to lists of (cost, prereq_ids, req_ids) tuples.
+        character_ability_ids: Set of ability IDs the character currently has.
+        character_choice_ids: Set of choice IDs the character currently has.
     """
     # Look only at modifiers for this specific ability
-    for cost, prereq_ids, req_ids in mods_by_ability.get(ability.id, ()):
+    for cost, prerequisite_ability_ids, required_choice_ids in modifiers_by_ability_id.get(ability.id, ()):
         # Check if ability prerequisites are met
-        if prereq_ids and not prereq_ids.issubset(current_char_abilities):
+        if prerequisite_ability_ids and not prerequisite_ability_ids.issubset(character_ability_ids):
             continue
         # Check if choice requirements are met
-        if req_ids and not req_ids.issubset(current_char_choices):
+        if required_choice_ids and not required_choice_ids.issubset(character_choice_ids):
             continue
         # Apply the cost from the first valid modifier
         ability.cost = cost
@@ -133,18 +133,18 @@ def _apply_modifier_cost(
 
 def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
-    config_name = _free_abilities_idx()
+    config_name = _free_abilities_cache_key()
     val = char.get_config(config_name, "[]")
     return ast.literal_eval(val)
 
 
-def _free_abilities_idx():
+def _free_abilities_cache_key():
     return "free_abilities"
 
 
 def set_free_abilities(char: Character, frees: list[int]) -> None:
     """Save free abilities for a character."""
-    config_name = _free_abilities_idx()
+    config_name = _free_abilities_cache_key()
     save_single_config(char, config_name, json.dumps(frees))
 
 
@@ -206,7 +206,7 @@ def _handle_free_abilities(char):
     set_free_abilities(char, free_abilities)
 
 
-def get_current_ability_px(char: Character) -> list[AbilityPx]:
+def get_current_ability_px(character: Character) -> list[AbilityPx]:
     """
     Get current abilities with modified costs for a character.
 
@@ -214,24 +214,24 @@ def get_current_ability_px(char: Character) -> list[AbilityPx]:
     character context including current abilities, choices, and modifiers.
 
     Args:
-        char: The character to get abilities for
+        character: The character to get abilities for
 
     Returns:
         List of abilities with modified costs applied
     """
     # Build the context for PX calculations including current abilities and modifiers
-    current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
+    current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(character)
 
     # Get character abilities ordered by name, only fetching needed fields for performance
-    abilities_qs = char.px_ability_list.only("id", "cost").order_by("name")
+    abilities_queryset = character.px_ability_list.only("id", "cost").order_by("name")
 
     # Process each ability and apply cost modifications
-    abilities = []
-    for ability in abilities_qs:
+    abilities_with_modified_costs = []
+    for ability in abilities_queryset:
         # Apply modifier-based cost adjustments based on character context
-        _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
-        abilities.append(ability)
-    return abilities
+        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
+        abilities_with_modified_costs.append(ability)
+    return abilities_with_modified_costs
 
 
 def check_available_ability_px(ability, current_char_abilities, current_char_choices) -> bool:
@@ -272,7 +272,7 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
         current PX and that meet all prerequisites and requirements
     """
     # Build context with current character abilities, choices, and modifiers
-    current_char_abilities, current_char_choices, mods_by_ability = _build_px_context(char)
+    current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(char)
 
     # Calculate available PX if not provided
     if px_avail is None:
@@ -283,7 +283,7 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
     all_abilities = (
         char.event.get_elements(AbilityPx)
         .filter(visible=True)
-        .exclude(pk__in=current_char_abilities)
+        .exclude(pk__in=current_character_abilities)
         .select_related("typ")
         .order_by("name")
         .prefetch_related(
@@ -292,22 +292,22 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
         )
     )
 
-    abilities = []
+    available_abilities = []
     for ability in all_abilities:
         # Check if character meets prerequisites and requirements
-        if not check_available_ability_px(ability, current_char_abilities, current_char_choices):
+        if not check_available_ability_px(ability, current_character_abilities, current_character_choices):
             continue
 
         # Apply cost modifiers based on character's current state
-        _apply_modifier_cost(ability, mods_by_ability, current_char_abilities, current_char_choices)
+        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
 
         # Filter out abilities that cost more than available PX
         if ability.cost > px_avail:
             continue
 
-        abilities.append(ability)
+        available_abilities.append(ability)
 
-    return abilities
+    return available_abilities
 
 
 def on_experience_characters_m2m_changed(
@@ -426,21 +426,21 @@ def apply_rules_computed(char) -> None:
         qa.save()
 
 
-def add_char_addit(char):
+def add_char_addit(character):
     """
     Add additional configuration data to character object.
 
     Args:
-        char: Character instance to add additional data to
+        character: Character instance to add additional data to
     """
-    char.addit = {}
-    configs = CharacterConfig.objects.filter(character__id=char.id)
-    if not configs.count():
-        calculate_character_experience_points(char)
-        configs = CharacterConfig.objects.filter(character__id=char.id)
+    character.addit = {}
+    character_configs = CharacterConfig.objects.filter(character__id=character.id)
+    if not character_configs.count():
+        calculate_character_experience_points(character)
+        character_configs = CharacterConfig.objects.filter(character__id=character.id)
 
-    for config in configs:
-        char.addit[config.name] = config.value
+    for character_config in character_configs:
+        character.addit[character_config.name] = character_config.value
 
 
 def remove_char_ability(char, ability_id):

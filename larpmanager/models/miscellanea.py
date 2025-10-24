@@ -645,26 +645,26 @@ class Problem(BaseModel):
 
     comments = models.TextField(blank=True)
 
-    def get_small_text(self, s: str) -> str:
+    def get_small_text(self, attribute_name: str) -> str:
         """Get truncated text value from object attribute.
 
         Args:
-            s: Attribute name to retrieve and truncate.
+            attribute_name: Attribute name to retrieve and truncate.
 
         Returns:
             Truncated string (max 100 chars) or original string if attribute doesn't exist.
         """
         # Check if attribute exists on object
-        if not hasattr(self, s):
-            return s
+        if not hasattr(self, attribute_name):
+            return attribute_name
 
         # Get attribute value
-        v = getattr(self, s)
-        if not v:
-            return s
+        attribute_value = getattr(self, attribute_name)
+        if not attribute_value:
+            return attribute_name
 
         # Return truncated value (max 100 characters)
-        return v[:100]
+        return attribute_value[:100]
 
     def where_l(self):
         return self.get_small_text("where")

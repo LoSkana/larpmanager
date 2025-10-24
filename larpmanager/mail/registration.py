@@ -126,7 +126,7 @@ def update_registration_status(instance) -> None:
             my_send_mail(subj, body, orga, instance.run)
 
 
-def registration_options(instance) -> str:
+def registration_options(registration_instance) -> str:
     """Generate email content for registration options.
 
     Creates formatted text showing selected tickets and registration choices,
@@ -134,62 +134,62 @@ def registration_options(instance) -> str:
     for email notifications.
 
     Args:
-        instance: Registration instance containing ticket, member, and payment data
+        registration_instance: Registration instance containing ticket, member, and payment data
 
     Returns:
         str: HTML formatted string with registration details for email content
     """
-    body = ""
+    email_body = ""
 
     # Add ticket information if selected
-    if instance.ticket:
-        body += "<br /><br />" + _("Ticket selected") + f": <b>{instance.ticket.name}</b>"
-        if instance.ticket.description:
-            body += f" - {instance.ticket.description}"
+    if registration_instance.ticket:
+        email_body += "<br /><br />" + _("Ticket selected") + f": <b>{registration_instance.ticket.name}</b>"
+        if registration_instance.ticket.description:
+            email_body += f" - {registration_instance.ticket.description}"
 
     # Get user membership and event features for permission checks
-    get_user_membership(instance.member, instance.run.event.assoc_id)
-    features = get_event_features(instance.run.event_id)
+    get_user_membership(registration_instance.member, registration_instance.run.event.assoc_id)
+    event_features = get_event_features(registration_instance.run.event_id)
 
     # Get currency symbol for formatting monetary amounts
-    currency = instance.run.event.assoc.get_currency_symbol()
+    currency_symbol = registration_instance.run.event.assoc.get_currency_symbol()
 
     # Display total registration fee if greater than zero
-    if instance.tot_iscr > 0:
-        body += (
+    if registration_instance.tot_iscr > 0:
+        email_body += (
             "<br /><br />"
             + _("Total of your signup fee: <b>%(amount).2f %(currency)s</b>")
             % {
-                "amount": instance.tot_iscr,
-                "currency": currency,
+                "amount": registration_instance.tot_iscr,
+                "currency": currency_symbol,
             }
             + "."
         )
 
     # Display payments already received if any
-    if instance.tot_payed > 0:
-        body += (
+    if registration_instance.tot_payed > 0:
+        email_body += (
             "<br /><br />"
             + _("Payments already received: <b>%(amount).2f %(currency)s</b>")
             % {
-                "amount": instance.tot_payed,
-                "currency": currency,
+                "amount": registration_instance.tot_payed,
+                "currency": currency_symbol,
             }
             + "."
         )
 
     # Add payment information if payment feature enabled and quota/alert conditions met
-    if "payment" in features and instance.quota > 0 and instance.alert:
-        body += registration_payments(instance, currency)
+    if "payment" in event_features and registration_instance.quota > 0 and registration_instance.alert:
+        email_body += registration_payments(registration_instance, currency_symbol)
 
     # Add selected registration options if any exist
-    res = get_registration_options(instance)
-    if res:
-        body += "<br /><br />" + _("Selected options") + ":"
-        for el in res:
-            body += f"<br />{el[0]} - {el[1]}"
+    selected_options = get_registration_options(registration_instance)
+    if selected_options:
+        email_body += "<br /><br />" + _("Selected options") + ":"
+        for option_name, option_value in selected_options:
+            email_body += f"<br />{option_name} - {option_value}"
 
-    return body
+    return email_body
 
 
 def registration_payments(instance: Registration, currency: str) -> str:

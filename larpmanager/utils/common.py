@@ -94,35 +94,35 @@ def check_already(nm, params):
     return q.exists()
 
 
-def get_channel(a, b):
+def get_channel(first_entity_id, second_entity_id):
     """Generate unique channel ID for two entities.
 
     Args:
-        a (int): First entity ID
-        b (int): Second entity ID
+        first_entity_id (int): First entity ID
+        second_entity_id (int): Second entity ID
 
     Returns:
         int: Unique channel ID using Cantor pairing
     """
-    a = int(a)
-    b = int(b)
-    if a > b:
-        return int(cantor(a, b))
+    first_entity_id = int(first_entity_id)
+    second_entity_id = int(second_entity_id)
+    if first_entity_id > second_entity_id:
+        return int(cantor(first_entity_id, second_entity_id))
     else:
-        return int(cantor(b, a))
+        return int(cantor(second_entity_id, first_entity_id))
 
 
-def cantor(k1, k2):
+def cantor(first_integer, second_integer):
     """Cantor pairing function to map two integers to a unique integer.
 
     Args:
-        k1 (int): First integer
-        k2 (int): Second integer
+        first_integer (int): First integer
+        second_integer (int): Second integer
 
     Returns:
         float: Unique pairing result
     """
-    return ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
+    return ((first_integer + second_integer) * (first_integer + second_integer + 1) / 2) + second_integer
 
 
 def compute_diff(self, other):
@@ -164,11 +164,11 @@ def get_assoc(request):
     return get_object_or_404(Association, pk=request.assoc["id"])
 
 
-def get_member(n):
+def get_member(member_id):
     """Get member by ID with proper error handling.
 
     Args:
-        n: Member ID
+        member_id: Member ID
 
     Returns:
         dict: Dictionary containing member instance
@@ -177,64 +177,64 @@ def get_member(n):
         Http404: If member does not exist
     """
     try:
-        return {"member": Member.objects.get(pk=n)}
+        return {"member": Member.objects.get(pk=member_id)}
     except ObjectDoesNotExist as err:
         raise Http404("Member does not exist") from err
 
 
-def get_contact(mid, yid):
+def get_contact(member_id, other_member_id):
     """Get contact relationship between two members.
 
     Args:
-        mid: ID of first member
-        yid: ID of second member
+        member_id: ID of first member
+        other_member_id: ID of second member
 
     Returns:
         Contact: Contact instance or None if not found
     """
     try:
-        return Contact.objects.get(me_id=mid, you_id=yid)
+        return Contact.objects.get(me_id=member_id, you_id=other_member_id)
     except ObjectDoesNotExist:
         return None
 
 
-def get_event_template(ctx, n):
+def get_event_template(context, template_id):
     """Get event template by ID and add to context.
 
     Args:
-        ctx: Template context dictionary
-        n: Event template ID
+        context: Template context dictionary
+        template_id: Event template ID
     """
     try:
-        ctx["event"] = Event.objects.get(pk=n, template=True, assoc_id=ctx["a_id"])
+        context["event"] = Event.objects.get(pk=template_id, template=True, assoc_id=context["a_id"])
     except ObjectDoesNotExist as err:
         raise NotFoundError() from err
 
 
-def get_char(ctx, n, by_number=False):
+def get_char(ctx, character_identifier, by_number=False):
     """Get character by ID or number and add to context.
 
     Args:
         ctx: Template context dictionary
-        n: Character ID or number
+        character_identifier: Character ID or number
         by_number: Whether to search by number instead of ID
     """
-    get_element(ctx, n, "character", Character, by_number)
+    get_element(ctx, character_identifier, "character", Character, by_number)
 
 
-def get_registration(ctx, n):
+def get_registration(context, registration_id):
     """Get registration by ID and add to context.
 
     Args:
-        ctx: Template context dictionary
-        n: Registration ID
+        context: Template context dictionary
+        registration_id: Registration ID
 
     Raises:
         Http404: If registration does not exist
     """
     try:
-        ctx["registration"] = Registration.objects.get(run=ctx["run"], pk=n)
-        ctx["name"] = str(ctx["registration"])
+        context["registration"] = Registration.objects.get(run=context["run"], pk=registration_id)
+        context["name"] = str(context["registration"])
     except ObjectDoesNotExist as err:
         raise Http404("Registration does not exist") from err
 
@@ -279,9 +279,9 @@ def get_album_cod(ctx, s):
         raise Http404("Album does not exist") from err
 
 
-def get_feature(ctx, slug):
+def get_feature(context, feature_slug):
     try:
-        ctx["feature"] = Feature.objects.get(slug=slug)
+        context["feature"] = Feature.objects.get(slug=feature_slug)
     except ObjectDoesNotExist as err:
         raise Http404("Feature does not exist") from err
 
@@ -305,23 +305,23 @@ def get_plot(ctx, n):
         raise Http404("Plot does not exist") from err
 
 
-def get_quest_type(ctx, n):
-    get_element(ctx, n, "quest_type", QuestType)
+def get_quest_type(context, quest_number):
+    get_element(context, quest_number, "quest_type", QuestType)
 
 
 def get_quest(ctx, n):
     get_element(ctx, n, "quest", Quest)
 
 
-def get_trait(ctx, n):
-    get_element(ctx, n, "trait", Trait)
+def get_trait(character_context, trait_name):
+    get_element(character_context, trait_name, "trait", Trait)
 
 
-def get_handout(ctx, n):
+def get_handout(context, handout_id):
     try:
-        ctx["handout"] = Handout.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = ctx["handout"].name
-        ctx["handout"].data = ctx["handout"].show()
+        context["handout"] = Handout.objects.get(event=context["event"], pk=handout_id)
+        context["name"] = context["handout"].name
+        context["handout"].data = context["handout"].show()
     except ObjectDoesNotExist as err:
         raise Http404("handout does not exist") from err
 
@@ -334,8 +334,8 @@ def get_handout_template(ctx, n):
         raise Http404("handout_template does not exist") from err
 
 
-def get_prologue(ctx, n):
-    get_element(ctx, n, "prologue", Prologue)
+def get_prologue(context, prologue_number):
+    get_element(context, prologue_number, "prologue", Prologue)
 
 
 def get_prologue_type(ctx, n):
@@ -346,10 +346,10 @@ def get_prologue_type(ctx, n):
         raise Http404("prologue_type does not exist") from err
 
 
-def get_speedlarp(ctx, n):
+def get_speedlarp(context, speedlarp_id):
     try:
-        ctx["speedlarp"] = SpeedLarp.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = str(ctx["speedlarp"])
+        context["speedlarp"] = SpeedLarp.objects.get(event=context["event"], pk=speedlarp_id)
+        context["name"] = str(context["speedlarp"])
     except ObjectDoesNotExist as err:
         raise Http404("speedlarp does not exist") from err
 
@@ -367,9 +367,9 @@ def get_badge(n, request):
         raise Http404("Badge does not exist") from err
 
 
-def get_collection_partecipate(request, cod):
+def get_collection_partecipate(request, contribution_code):
     try:
-        return Collection.objects.get(contribute_code=cod, assoc_id=request.assoc["id"])
+        return Collection.objects.get(contribute_code=contribution_code, assoc_id=request.assoc["id"])
     except ObjectDoesNotExist as err:
         raise Http404("Collection does not exist") from err
 
@@ -493,8 +493,8 @@ def get_player_relationship(ctx, oth):
         raise Http404("relationship does not exist") from err
 
 
-def get_time_diff(dt1, dt2):
-    return (dt1 - dt2).days
+def get_time_diff(start_datetime, end_datetime):
+    return (start_datetime - end_datetime).days
 
 
 def get_time_diff_today(target_date: datetime | date | None) -> int:
@@ -520,22 +520,22 @@ def generate_number(length):
     return "".join(random.choice(string.digits) for idx in range(length))
 
 
-def html_clean(tx: str | None) -> str:
+def html_clean(text: str | None) -> str:
     """Clean HTML tags and unescape HTML entities from text.
 
     Args:
-        tx: Input text that may contain HTML tags and entities.
+        text: Input text that may contain HTML tags and entities.
 
     Returns:
         Cleaned text with HTML tags removed and entities unescaped.
     """
-    if not tx:
+    if not text:
         return ""
     # Remove all HTML tags from the text
-    tx = strip_tags(tx)
+    text = strip_tags(text)
     # Unescape HTML entities (e.g., &amp; -> &, &lt; -> <)
-    tx = html.unescape(tx)
-    return tx
+    text = html.unescape(text)
+    return text
 
 
 def dump(obj: object) -> str:
@@ -601,19 +601,19 @@ def remove_choice(lst: list[tuple], trm: str) -> list[tuple]:
     return new
 
 
-def check_field(cls: type, check: str) -> bool:
+def check_field(model_class: type, field_name: str) -> bool:
     """Check if a field exists in the Django model class.
 
     Args:
-        cls: The Django model class to check
-        check: The name of the field to look for
+        model_class: The Django model class to check
+        field_name: The name of the field to look for
 
     Returns:
         True if field exists, False otherwise
     """
     # Iterate through all fields including hidden ones
-    for field in cls._meta.get_fields(include_hidden=True):
-        if field.name == check:
+    for field in model_class._meta.get_fields(include_hidden=True):
+        if field.name == field_name:
             return True
     return False
 
@@ -709,25 +709,27 @@ def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool,
     ctx["current"] = current_element
 
 
-def normalize_string(value: str) -> str:
+def normalize_string(input_string: str) -> str:
     """Normalize a string by converting to lowercase, removing spaces and accents.
 
     Args:
-        value: Input string to normalize.
+        input_string: Input string to normalize.
 
     Returns:
         Normalized string with lowercase, no spaces, and no accented characters.
     """
     # Convert to lowercase
-    value = value.lower()
+    normalized_string = input_string.lower()
 
     # Remove spaces
-    value = value.replace(" ", "")
+    normalized_string = normalized_string.replace(" ", "")
 
     # Remove accented characters using Unicode normalization
-    value = "".join(c for c in unicodedata.normalize("NFD", value) if unicodedata.category(c) != "Mn")
+    normalized_string = "".join(
+        char for char in unicodedata.normalize("NFD", normalized_string) if unicodedata.category(char) != "Mn"
+    )
 
-    return value
+    return normalized_string
 
 
 def copy_class(target_event_id, source_event_id, model_class):
@@ -871,14 +873,14 @@ def clear_messages(request):
         request._messages._queued_messages.clear()
 
 
-def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
+def _get_help_questions(context: dict, request) -> tuple[list, list]:
     """Retrieve and categorize help questions for the current association/run.
 
     Fetches help questions filtered by association and optionally by run, then
     categorizes them into open and closed questions based on their status and origin.
 
     Args:
-        ctx: Context dictionary containing association/run information.
+        context: Context dictionary containing association/run information.
              Must include 'a_id' key, optionally includes 'run' key.
         request: HTTP request object used to determine filtering behavior.
 
@@ -888,33 +890,37 @@ def _get_help_questions(ctx: dict, request) -> tuple[list, list]:
         - open_questions: List of open user-originated questions
     """
     # Filter questions by association ID
-    base_qs = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
+    base_queryset = HelpQuestion.objects.filter(assoc_id=context["a_id"])
 
     # Add run filter if run context exists
-    if "run" in ctx:
-        base_qs = base_qs.filter(run=ctx["run"])
+    if "run" in context:
+        base_queryset = base_queryset.filter(run=context["run"])
 
     # For non-POST requests, limit to questions from last 90 days
     if request.method != "POST":
-        base_qs = base_qs.filter(created__gte=datetime.now() - timedelta(days=90))
+        base_queryset = base_queryset.filter(created__gte=datetime.now() - timedelta(days=90))
 
     # Find the latest creation timestamp for each member
-    latest = base_qs.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
+    latest_created_per_member = (
+        base_queryset.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
+    )
 
     # Get the most recent question for each member with related data
-    que = base_qs.filter(created__in=Subquery(latest)).select_related("member", "run", "run__event")
+    questions = base_queryset.filter(created__in=Subquery(latest_created_per_member)).select_related(
+        "member", "run", "run__event"
+    )
 
     # Categorize questions into open and closed lists
-    open_q = []
-    closed_q = []
-    for cq in que:
+    open_questions = []
+    closed_questions = []
+    for current_question in questions:
         # Open questions are user-originated and not closed
-        if cq.is_user and not cq.closed:
-            open_q.append(cq)
+        if current_question.is_user and not current_question.closed:
+            open_questions.append(current_question)
         else:
-            closed_q.append(cq)
+            closed_questions.append(current_question)
 
-    return closed_q, open_q
+    return closed_questions, open_questions
 
 
 def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:

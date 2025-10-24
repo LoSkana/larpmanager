@@ -43,14 +43,14 @@ class MyLoginView(LoginView):
     template_name = "registration/login.html"
     authentication_form = MyAuthForm
 
-    def form_valid(self, form: Form) -> HttpResponse:
+    def form_valid(self, authentication_form: Form) -> HttpResponse:
         """Handle valid login form submission.
 
         Processes a successfully validated authentication form by welcoming the user
         and delegating to the parent class for standard login handling.
 
         Args:
-            form (AuthenticationForm): Valid authentication form containing user credentials
+            authentication_form (AuthenticationForm): Valid authentication form containing user credentials
                 and authentication state.
 
         Returns:
@@ -62,10 +62,10 @@ class MyLoginView(LoginView):
             function handles user greeting logic and session setup.
         """
         # Welcome the authenticated user and set up session state
-        welcome_user(self.request, form.get_user())
+        welcome_user(self.request, authentication_form.get_user())
 
         # Delegate to parent class for standard login flow completion
-        return super().form_valid(form)
+        return super().form_valid(authentication_form)
 
 
 def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:

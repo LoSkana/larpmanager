@@ -817,7 +817,7 @@ def acc_cancelled(request: HttpRequest) -> HttpResponse:
     return redirect("accounting")
 
 
-def acc_profile_check(request: HttpRequest, mes: str, inv) -> HttpResponse:
+def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> HttpResponse:
     """Check if user profile is compiled and redirect appropriately.
 
     Validates that the user's membership profile is complete. If not compiled,
@@ -826,26 +826,26 @@ def acc_profile_check(request: HttpRequest, mes: str, inv) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user information
-        mes: Success message string to display to user
-        inv: Invoice object for accounting redirect
+        success_message: Success message string to display to user
+        invoice: Invoice object for accounting redirect
 
     Returns:
         HttpResponse: Redirect to either profile page or accounting page
     """
     # Get current user's member object and membership for this association
     member = request.user.member
-    mb = get_user_membership(member, request.assoc["id"])
+    membership = get_user_membership(member, request.assoc["id"])
 
     # Check if membership profile has been completed
-    if not mb.compiled:
+    if not membership.compiled:
         # Add profile completion prompt to message and redirect to profile
-        mes += " " + _("As a final step, we ask you to complete your profile") + "."
-        messages.success(request, mes)
+        success_message += " " + _("As a final step, we ask you to complete your profile") + "."
+        messages.success(request, success_message)
         return redirect("profile")
 
     # Profile is complete - show success message and proceed to accounting
-    messages.success(request, mes)
-    return acc_redirect(inv)
+    messages.success(request, success_message)
+    return acc_redirect(invoice)
 
 
 def acc_redirect(inv: PaymentInvoice) -> HttpResponseRedirect:

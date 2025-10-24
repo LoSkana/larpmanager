@@ -32,11 +32,11 @@ from larpmanager.utils.common import _search_char_reg
 
 
 def clear_registration_counts_cache(run_id):
-    cache.delete(cache_reg_counts_key(run_id))
+    cache.delete(cache_registration_counts_key(run_id))
 
 
-def cache_reg_counts_key(run_id):
-    return f"reg_counts{run_id}"
+def cache_registration_counts_key(run_id):
+    return f"registration_counts_{run_id}"
 
 
 def get_reg_counts(run: Run, reset_cache: bool = False) -> dict:
@@ -50,7 +50,7 @@ def get_reg_counts(run: Run, reset_cache: bool = False) -> dict:
         Dictionary containing registration count data
     """
     # Generate cache key for this run
-    cache_key = cache_reg_counts_key(run.id)
+    cache_key = cache_registration_counts_key(run.id)
 
     # Check if we should bypass cache
     if reset_cache:
@@ -169,7 +169,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
             rcr.reg.save()
 
 
-def search_player(char, js: dict, ctx: dict) -> None:
+def search_player(character, json_output: dict, context: dict) -> None:
     """
     Search for players in registration cache and populate results.
 
@@ -178,44 +178,44 @@ def search_player(char, js: dict, ctx: dict) -> None:
     It populates the character object with registration and member information.
 
     Args:
-        char: Character instance with player data to be populated
-        js (dict): JSON object to populate with search results
-        ctx (dict): Context dictionary containing search parameters, assignments cache,
+        character: Character instance with player data to be populated
+        json_output (dict): JSON object to populate with search results
+        context (dict): Context dictionary containing search parameters, assignments cache,
                    and run information
 
     Returns:
-        None: Function modifies char and js objects in place
+        None: Function modifies character and json_output objects in place
     """
     # Check if assignments are pre-loaded in context (cache hit)
-    if "assignments" in ctx:
-        if char.number in ctx["assignments"]:
+    if "assignments" in context:
+        if character.number in context["assignments"]:
             # Populate character with cached registration data
-            char.rcr = ctx["assignments"][char.number]
-            char.reg = char.rcr.reg
-            char.member = char.reg.member
+            character.rcr = context["assignments"][character.number]
+            character.reg = character.rcr.reg
+            character.member = character.reg.member
         else:
             # Character not found in assignments cache
-            char.rcr = None
-            char.reg = None
-            char.member = None
+            character.rcr = None
+            character.reg = None
+            character.member = None
     else:
         # No cache available, query database directly
         try:
             # Fetch registration character relationship with related objects
-            char.rcr = RegistrationCharacterRel.objects.select_related("reg", "reg__member").get(
-                reg__run_id=ctx["run"].id, character=char
+            character.rcr = RegistrationCharacterRel.objects.select_related("reg", "reg__member").get(
+                reg__run_id=context["run"].id, character=character
             )
-            char.reg = char.rcr.reg
-            char.member = char.reg.member
+            character.reg = character.rcr.reg
+            character.member = character.reg.member
         except Exception:
             # Registration not found or database error
-            char.rcr = None
-            char.reg = None
-            char.member = None
+            character.rcr = None
+            character.reg = None
+            character.member = None
 
     # Process character registration data if available
-    if char.reg:
-        _search_char_reg(ctx, char, js)
+    if character.reg:
+        _search_char_reg(context, character, json_output)
     else:
         # No registration found, set default player ID
-        js["player_id"] = 0
+        json_output["player_id"] = 0

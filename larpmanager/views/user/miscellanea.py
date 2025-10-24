@@ -199,36 +199,38 @@ def handout_ext(request: HttpRequest, s: str, cod: str) -> HttpResponse:
     return return_pdf(fp, str(ctx["handout"]))
 
 
-def album_aux(request, ctx, parent):
+def album_aux(request, context, parent_album):
     """Prepare album context with sub-albums and paginated uploads.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary to update
-        parent: Parent album instance or None for root level
+        context: Context dictionary to update
+        parent_album: Parent album instance or None for root level
 
     Returns:
         Rendered album page with sub-albums and uploads
     """
-    ctx["subs"] = Album.objects.filter(run=ctx["run"], parent=parent, is_visible=True).order_by("-created")
-    if parent is not None:
-        lst = AlbumUpload.objects.filter(album=ctx["album"]).order_by("-created")
-        paginator = Paginator(lst, 20)
-        page = request.GET.get("page")
+    context["subs"] = Album.objects.filter(run=context["run"], parent=parent_album, is_visible=True).order_by(
+        "-created"
+    )
+    if parent_album is not None:
+        upload_list = AlbumUpload.objects.filter(album=context["album"]).order_by("-created")
+        paginator = Paginator(upload_list, 20)
+        page_number = request.GET.get("page")
         try:
-            lst = paginator.page(page)
+            upload_list = paginator.page(page_number)
         except PageNotAnInteger:
-            lst = paginator.page(1)  # If page is not an integer, deliver first
+            upload_list = paginator.page(1)  # If page is not an integer, deliver first
         except EmptyPage:
-            lst = paginator.page(
+            upload_list = paginator.page(
                 paginator.num_pages
             )  # If page is out of range (e.g.  9999), deliver last page of results.
-        ctx["page"] = lst
-        ctx["name"] = f"{ctx['album']} - {str(ctx['run'])}"
+        context["page"] = upload_list
+        context["name"] = f"{context['album']} - {str(context['run'])}"
     else:
-        ctx["name"] = f"Album - {str(ctx['run'])}"
-    ctx["parent"] = parent
-    return render(request, "larpmanager/event/album.html", ctx)
+        context["name"] = f"Album - {str(context['run'])}"
+    context["parent"] = parent_album
+    return render(request, "larpmanager/event/album.html", context)
 
 
 @login_required

@@ -20,8 +20,10 @@
 
 import logging
 import math
+from collections.abc import Iterable
 from datetime import datetime
 from decimal import Decimal
+from typing import Union
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
@@ -108,34 +110,34 @@ def get_reg_iscr(instance) -> int:
     return tot_iscr
 
 
-def get_reg_payments(reg, acc_payments=None):
+def get_reg_payments(registration, accounting_payments=None):
     """Calculate total payments made for a registration.
 
     Args:
-        reg: Registration instance
-        acc_payments: Optional queryset of payments, will query if None
+        registration: Registration instance
+        accounting_payments: Optional queryset of payments, will query if None
 
     Returns:
         int: Total amount paid
 
     Side effects:
-        Sets reg.payments dictionary with payment breakdown
+        Sets registration.payments dictionary with payment breakdown
     """
-    if acc_payments is None:
-        acc_payments = AccountingItemPayment.objects.filter(
-            reg=reg,
+    if accounting_payments is None:
+        accounting_payments = AccountingItemPayment.objects.filter(
+            reg=registration,
         ).exclude(hide=True)
 
-    tot_payed = 0
-    reg.payments = {}
+    total_paid = 0
+    registration.payments = {}
 
-    for aip in acc_payments:
-        if aip.pay not in reg.payments:
-            reg.payments[aip.pay] = 0
-        reg.payments[aip.pay] += aip.value
-        tot_payed += aip.value
+    for accounting_item_payment in accounting_payments:
+        if accounting_item_payment.pay not in registration.payments:
+            registration.payments[accounting_item_payment.pay] = 0
+        registration.payments[accounting_item_payment.pay] += accounting_item_payment.value
+        total_paid += accounting_item_payment.value
 
-    return tot_payed
+    return total_paid
 
 
 def get_reg_transactions(reg):
@@ -419,65 +421,65 @@ def cancel_run(instance):
         r.save()
 
 
-def cancel_reg(reg):
+def cancel_reg(registration):
     """Cancel a specific registration and clean up related data.
 
     Args:
-        reg: Registration instance to cancel
+        registration: Registration instance to cancel
 
     Side effects:
         Sets cancellation date, deletes characters, traits, discounts,
         bonus items, and resets event links
     """
-    reg.cancellation_date = datetime.now()
-    reg.save()
+    registration.cancellation_date = datetime.now()
+    registration.save()
 
     # delete characters related
-    RegistrationCharacterRel.objects.filter(reg=reg).delete()
+    RegistrationCharacterRel.objects.filter(reg=registration).delete()
 
     # delete trait assignments
-    AssignmentTrait.objects.filter(run_id=reg.run_id, member_id=reg.member_id).delete()
+    AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
 
     # delete discounts
-    AccountingItemDiscount.objects.filter(run_id=reg.run_id, member_id=reg.member_id).delete()
+    AccountingItemDiscount.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
 
     # delete bonus credits / tokens
-    AccountingItemOther.objects.filter(ref_addit=reg.id).delete()
+    AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
 
     # Reset event links
-    reset_event_links(reg.member_id, reg.run.event.assoc_id)
+    reset_event_links(registration.member_id, registration.run.event.assoc_id)
 
 
-def get_display_choice(choices, k):
+def get_display_choice(choices, key):
     """Get display name for a choice field value.
 
     Args:
         choices: List of (key, display_name) tuples
-        k: Key to look up display name for
+        key: Key to look up display name for
 
     Returns:
         str: Display name for the key, empty string if not found
     """
-    for key, d in choices:
-        if key == k:
-            return d
+    for choice_key, display_name in choices:
+        if choice_key == key:
+            return display_name
     return ""
 
 
-def round_to_nearest_cent(number):
+def round_to_nearest_cent(amount):
     """Round a number to the nearest cent with tolerance for small differences.
 
     Args:
-        number: Number to round
+        amount: Number to round
 
     Returns:
         float: Rounded number, original if difference exceeds tolerance
     """
-    rounded = round(number * 10) / 10
-    max_rounding = 0.03
-    if abs(float(number) - rounded) <= max_rounding:
-        return rounded
-    return float(number)
+    rounded_amount = round(amount * 10) / 10
+    rounding_tolerance = 0.03
+    if abs(float(amount) - rounded_amount) <= rounding_tolerance:
+        return rounded_amount
+    return float(amount)
 
 
 def process_registration_pre_save(registration):
@@ -490,34 +492,34 @@ def process_registration_pre_save(registration):
     registration.member.join(registration.run.event.assoc)
 
 
-def get_date_surcharge(reg, event):
+def get_date_surcharge(registration, event):
     """Calculate date-based surcharge for a registration.
 
     Args:
-        reg: Registration instance (None for current date)
+        registration: Registration instance (None for current date)
         event: Event instance to get surcharges for
 
     Returns:
         int: Total surcharge amount based on registration date
     """
-    if reg and reg.ticket:
-        t = reg.ticket.tier
-        if t in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
+    if registration and registration.ticket:
+        ticket_tier = registration.ticket.tier
+        if ticket_tier in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
-    dt = datetime.now().date()
-    if reg and reg.created:
-        dt = reg.created
+    reference_date = datetime.now().date()
+    if registration and registration.created:
+        reference_date = registration.created
 
-    surs = RegistrationSurcharge.objects.filter(event=event, date__lt=dt)
-    if not surs:
+    applicable_surcharges = RegistrationSurcharge.objects.filter(event=event, date__lt=reference_date)
+    if not applicable_surcharges:
         return 0
 
-    tot = 0
-    for s in surs:
-        tot += s.amount
+    total_surcharge = 0
+    for surcharge in applicable_surcharges:
+        total_surcharge += surcharge.amount
 
-    return tot
+    return total_surcharge
 
 
 def handle_registration_accounting_updates(registration: Registration) -> None:
@@ -614,39 +616,59 @@ def check_reg_events(event):
     Side effects:
         Queues background task to update accounting for all registrations
     """
-    regs = []
+    registration_ids = []
     for run in event.runs.all():
-        for reg_id in run.registrations.values_list("id", flat=True):
-            regs.append(str(reg_id))
-    check_reg_bkg(",".join(regs))
+        for registration_id in run.registrations.values_list("id", flat=True):
+            registration_ids.append(str(registration_id))
+    check_registration_background(",".join(registration_ids))
 
 
 @background_auto(queue="acc")
-def check_reg_bkg(reg_ids):
-    if isinstance(reg_ids, int):
-        check_reg_bkg_go(reg_ids)
-    elif isinstance(reg_ids, str):
-        for reg_id in reg_ids.split(","):
-            check_reg_bkg_go(reg_id)
-    else:
-        for reg_id in reg_ids:
-            check_reg_bkg_go(reg_id)
+def check_registration_background(registration_ids: Union[int, str, Iterable[int]]) -> None:
+    """
+    Process one or more registration IDs by invoking `check_reg_bkg_go` for each.
+
+    Args:
+        registration_ids (Union[int, str, Iterable[int]]):
+            - int: a single registration ID
+            - str: a comma-separated list of registration IDs
+            - Iterable[int]: a collection (e.g. list, tuple) of registration IDs
+
+    Behavior:
+        - If an int is provided, calls `check_reg_bkg_go` once.
+        - If a string is provided, splits it by commas and processes each ID.
+        - If an iterable is provided, iterates through and processes each ID.
+    """
+    # Single integer case
+    if isinstance(registration_ids, int):
+        trigger_registration_accounting(registration_ids)
+        return
+
+    # Comma-separated string case
+    if isinstance(registration_ids, str):
+        for registration_id in registration_ids.split(","):
+            trigger_registration_accounting(int(registration_id.strip()))
+        return
+
+    # Iterable of IDs case
+    for registration_id in registration_ids:
+        trigger_registration_accounting(registration_id)
 
 
-def check_reg_bkg_go(reg_id):
+def trigger_registration_accounting(registration_id):
     """Update accounting for a single registration in background task.
 
     Args:
-        reg_id: Registration ID to update
+        registration_id: Registration ID to update
 
     Side effects:
         Triggers registration save to update accounting if registration exists
     """
-    if not reg_id:
+    if not registration_id:
         return
     try:
-        instance = Registration.objects.get(pk=reg_id)
-        instance.save()
+        registration = Registration.objects.get(pk=registration_id)
+        registration.save()
     except ObjectDoesNotExist:
         return
 
