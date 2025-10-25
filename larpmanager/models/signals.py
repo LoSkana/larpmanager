@@ -177,7 +177,7 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
-    replace_character_names_in_writing,
+    replace_character_names,
 )
 from larpmanager.utils.association import (
     apply_skin_features_to_association,
@@ -742,7 +742,7 @@ def post_save_event_text(sender, instance, created, **kwargs):
 # Faction signals
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender, instance, *args, **kwargs):
-    replace_character_names_in_writing(instance)
+    replace_character_names(instance)
     on_faction_pre_save_update_cache(instance)
 
 
@@ -948,7 +948,7 @@ def post_save_player_relationship(sender, instance, **kwargs):
 # Plot signals
 @receiver(pre_save, sender=Plot)
 def pre_save_plot(sender, instance, *args, **kwargs):
-    replace_character_names_in_writing(instance)
+    replace_character_names(instance)
 
 
 @receiver(post_save, sender=Plot)
@@ -982,7 +982,7 @@ def pre_save_pre_registration(sender, instance, **kwargs):
 # Prologue signals
 @receiver(pre_save, sender=Prologue)
 def pre_save_prologue(sender, instance, *args, **kwargs):
-    replace_character_names_in_writing(instance)
+    replace_character_names(instance)
 
 
 @receiver(post_save, sender=Prologue)
@@ -1282,7 +1282,7 @@ def post_delete_reset_run_config(sender, instance, **kwargs):
 # SpeedLarp signals
 @receiver(pre_save, sender=SpeedLarp)
 def pre_save_speed_larp(sender, instance, *args, **kwargs):
-    replace_character_names_in_writing(instance)
+    replace_character_names(instance)
 
 
 @receiver(post_save, sender=SpeedLarp)

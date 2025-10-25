@@ -55,7 +55,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersion,
     Writing,
-    replace_character_names_in_writing,
+    replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
@@ -742,4 +742,4 @@ def replace_character_names_before_save(instance):
     if not instance.pk:
         return
 
-    replace_character_names_in_writing(instance)
+    replace_character_names(instance)

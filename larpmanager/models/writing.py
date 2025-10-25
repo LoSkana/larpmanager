@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+import re
 from typing import Any, Optional
 
 from django.db import models
@@ -716,6 +717,21 @@ def replace_char_names(text: str, chars: dict[str, str]) -> str:
     if not text:
         return ""
 
+    # First pass: temporarily replace all existing @<number> references with placeholders
+    # to protect them from being modified
+    placeholder_map = {}
+    placeholder_counter = 0
+
+    def create_placeholder(match):
+        nonlocal placeholder_counter
+        placeholder = f"___CHAR_REF_{placeholder_counter}___"
+        placeholder_map[placeholder] = match.group(0)
+        placeholder_counter += 1
+        return placeholder
+
+    # Protect existing character references (@ followed by digits)
+    text = re.sub(r"@\d+", create_placeholder, text)
+
     # Iterate through each character name in the dictionary
     for character_name, character_id in chars.items():
         minimum_name_length = 2
@@ -727,7 +743,15 @@ def replace_char_names(text: str, chars: dict[str, str]) -> str:
         # Replace character name with formatted reference if found in text
         if character_name in text:
             character_reference = f"@{character_id}"
-            text = text.replace(character_name, character_reference)
+            # Escape special regex characters in character_name
+            escaped_name = re.escape(character_name)
+            # Use word boundaries to match only complete words
+            pattern = rf"\b{escaped_name}\b"
+            text = re.sub(pattern, character_reference, text)
+
+    # Restore all protected character references
+    for placeholder, original in placeholder_map.items():
+        text = text.replace(placeholder, original)
 
     return text
 
@@ -740,7 +764,7 @@ def replace_chars_element(element: Any, character_names: dict[str, str]) -> None
         element.teaser = replace_char_names(element.teaser, character_names)
 
 
-def replace_character_names_in_writing(instance) -> None:
+def replace_character_names(instance) -> None:
     """Replace character names in writing content with character numbers.
 
     This function substitutes character names with their corresponding numbers
