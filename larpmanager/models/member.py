@@ -340,7 +340,7 @@ class Member(BaseModel):
         # noinspection PyUnresolvedReferences
         return self.id
 
-    def show_nickname_or_string(self) -> str:
+    def show_nick(self) -> str:
         """Return nickname if present, otherwise the string representation."""
         if self.nickname:
             return self.nickname
