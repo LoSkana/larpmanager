@@ -104,76 +104,76 @@ def paginate(
     )
 
 
-def _get_elements_query(cls, ctx: dict, request, typ, exe: bool = True) -> tuple[any, int]:
+def _get_elements_query(cls, context: dict, request, model_type, is_executive: bool = True) -> tuple[any, int]:
     """
     Get filtered and paginated query elements based on context and request parameters.
 
     Args:
         cls: The model class to query
-        ctx: Context dictionary containing association ID, run, event, and other filters
+        context: Context dictionary containing association ID, run, event, and other filters
         request: HTTP request object containing query parameters
-        typ: Model type for field inspection
-        exe: Whether this is an executive (organization-wide) view or event-specific view
+        model_type: Model type for field inspection
+        is_executive: Whether this is an executive (organization-wide) view or event-specific view
 
     Returns:
         tuple: (filtered_elements_queryset, total_filtered_count)
     """
     # Extract pagination and filtering parameters from request
-    start, length, order, filters = _get_query_params(request)
+    start_index, page_length, order_params, filter_params = _get_query_params(request)
 
     # Start with base queryset filtered by association
-    elements = cls.filter(assoc_id=ctx["a_id"])
+    query_elements = cls.filter(assoc_id=context["a_id"])
 
     # Apply event-specific filtering for non-executive views
-    if not exe and "run" in ctx:
+    if not is_executive and "run" in context:
         # Check which relation field exists on the model to filter by run/event
         # noinspection PyProtectedMember
-        field_names = [f.name for f in typ._meta.get_fields()]
+        field_names = [f.name for f in model_type._meta.get_fields()]
         if "run" in field_names:
-            elements = elements.filter(run=ctx["run"])
+            query_elements = query_elements.filter(run=context["run"])
         elif "reg" in field_names:
-            elements = elements.filter(reg__run=ctx["run"])
+            query_elements = query_elements.filter(reg__run=context["run"])
         elif "event" in field_names:
-            elements = elements.filter(event=ctx["event"])
+            query_elements = query_elements.filter(event=context["event"])
 
     # Filter out hidden elements if the model supports it
     # noinspection PyProtectedMember
-    if "hide" in [f.name for f in typ._meta.get_fields()]:
-        elements = elements.filter(hide=False)
+    if "hide" in [f.name for f in model_type._meta.get_fields()]:
+        query_elements = query_elements.filter(hide=False)
 
     # Apply select_related optimization if specified in context
-    selrel = ctx.get("selrel")
-    if selrel:
-        for e in selrel:
-            elements = elements.select_related(e)
+    select_related_fields = context.get("selrel")
+    if select_related_fields:
+        for field in select_related_fields:
+            query_elements = query_elements.select_related(field)
 
     # Apply any custom query modifications defined in context
-    elements = _apply_custom_queries(ctx, elements, typ)
+    query_elements = _apply_custom_queries(context, query_elements, model_type)
 
     # Apply user-defined filters from the request
-    elements = _set_filtering(ctx, elements, filters)
+    query_elements = _set_filtering(context, query_elements, filter_params)
 
     # Count filtered records before applying pagination
-    records_filtered = elements.count()
+    filtered_records_count = query_elements.count()
 
     # Apply ordering if specified in context
-    ordering = _get_ordering(ctx, order)
+    ordering = _get_ordering(context, order_params)
     if ordering:
-        elements = elements.order_by(*ordering)
+        query_elements = query_elements.order_by(*ordering)
 
     # Apply pagination using slice notation
-    elements = elements[start : start + length]
+    query_elements = query_elements[start_index : start_index + page_length]
 
-    return elements, records_filtered
+    return query_elements, filtered_records_count
 
 
-def _set_filtering(ctx: dict, elements, filters: dict):
+def _set_filtering(context: dict, queryset, column_filters: dict):
     """Apply filtering to queryset elements based on provided filters.
 
     Args:
-        ctx: Context dictionary containing fields and optional callbacks/afield
-        elements: Django queryset to filter
-        filters: Dictionary mapping column indices to filter values
+        context: Context dictionary containing fields and optional callbacks/afield
+        queryset: Django queryset to filter
+        column_filters: Dictionary mapping column indices to filter values
 
     Returns:
         Filtered queryset with applied search conditions
@@ -182,93 +182,93 @@ def _set_filtering(ctx: dict, elements, filters: dict):
     field_map = _get_field_map()
 
     # Process each filter condition from the request
-    for column, value in filters.items():
-        column_ix = int(column)
+    for index, filter_value in column_filters.items():
+        column_index = int(index)
 
         # Validate column index is within bounds
-        if column_ix >= len(ctx["fields"]):
-            print(f"this shouldn't happen! _get_ordering {filters} {ctx['fields']}")
+        if column_index >= len(context["fields"]):
+            print(f"this shouldn't happen! _get_ordering {column_filters} {context['fields']}")
 
         # Extract field and name from context fields
-        field, name = ctx["fields"][column_ix - 1]
+        field_name, display_name = context["fields"][column_index - 1]
 
         # Handle special case for run field with search capability
-        if field == "run":
-            field = "run__search"
-            afield = ctx.get("afield")
-            if afield:
-                field = f"{afield}__{field}"
+        if field_name == "run":
+            field_name = "run__search"
+            additional_field = context.get("afield")
+            if additional_field:
+                field_name = f"{additional_field}__{field_name}"
         # Skip fields that have custom callback handlers
-        elif field in ctx.get("callbacks", {}):
+        elif field_name in context.get("callbacks", {}):
             continue
 
         # Map field to search fields using field_map or use as single field
-        if field in field_map:
-            field = field_map[field]
+        if field_name in field_map:
+            search_fields = field_map[field_name]
         else:
-            field = [field]
+            search_fields = [field_name]
 
         # Build OR query for all mapped fields with case-insensitive search
         q_filter = Q()
-        for el in field:
-            q_filter |= Q(**{f"{el}__icontains": value})
+        for search_field in search_fields:
+            q_filter |= Q(**{f"{search_field}__icontains": filter_value})
 
         # Apply the filter to the queryset
-        elements = elements.filter(q_filter)
+        queryset = queryset.filter(q_filter)
 
-    return elements
+    return queryset
 
 
-def _get_ordering(ctx: dict, order: list) -> list[str]:
+def _get_ordering(context: dict, column_order: list) -> list[str]:
     """Get database ordering fields from DataTables column order specification.
 
     Args:
-        ctx: Context dictionary containing 'fields' list and optional 'callbacks' dict
-        order: List of column indices as strings, negative values indicate descending order
+        context: Context dictionary containing 'fields' list and optional 'callbacks' dict
+        column_order: List of column indices as strings, negative values indicate descending order
 
     Returns:
         List of Django ORM ordering field names with '-' prefix for descending order
     """
-    ordering = []
+    ordering_fields = []
 
     # Get field mapping for any field name transformations
     field_map = _get_field_map()
 
-    for column in order:
+    for column_index in column_order:
         # Convert column index to integer, skip if invalid
-        column_ix = int(column)
-        if not column_ix:
+        column_index_int = int(column_index)
+        if not column_index_int:
             continue
 
         # Determine sort direction from sign of column index
-        asc = True
-        if column_ix < 0:
-            asc = False
-            column_ix = -column_ix
+        is_ascending = True
+        if column_index_int < 0:
+            is_ascending = False
+            column_index_int = -column_index_int
 
         # Validate column index is within bounds
-        if column_ix >= len(ctx["fields"]):
-            print(f"this shouldn't happen! _get_ordering {order} {ctx['fields']}")
-        field, name = ctx["fields"][column_ix - 1]
+        if column_index_int >= len(context["fields"]):
+            print(f"this shouldn't happen! _get_ordering {column_order} {context['fields']}")
+        field_name, display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering
-        if field in ctx.get("callbacks", {}):
+        if field_name in context.get("callbacks", {}):
             continue
 
         # Map field name if transformation exists, otherwise use as-is
-        if field in field_map:
-            field = field_map[field]
+        if field_name in field_map:
+            mapped_fields = field_map[field_name]
         else:
-            field = [field]
+            mapped_fields = [field_name]
 
         # Add ordering fields with proper direction prefix
-        for el in field:
-            if asc:
-                ordering.append(el)
+        for mapped_field in mapped_fields:
+            if is_ascending:
+                ordering_fields.append(mapped_field)
             else:
-                ordering.append(f"-{el}")
+                ordering_fields.append(f"-{mapped_field}")
 
-    return ordering
+    return ordering_fields
 
 
 def _get_field_map() -> dict[str, list[str]]:
@@ -296,28 +296,28 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
 
     # Build ordering list from DataTables order parameters
     order = []
-    for i in range(len(request.POST.getlist("order[0][column]"))):
-        col_idx = request.POST.get(f"order[{i}][column]")
-        col_dir = request.POST.get(f"order[{i}][dir]")
-        col_name = request.POST.get(f"columns[{col_idx}][data]")
+    for order_index in range(len(request.POST.getlist("order[0][column]"))):
+        column_index = request.POST.get(f"order[{order_index}][column]")
+        column_direction = request.POST.get(f"order[{order_index}][dir]")
+        column_name = request.POST.get(f"columns[{column_index}][data]")
 
         # Add descending prefix if needed
-        prefix = "" if col_dir == "asc" else "-"
-        order.append(prefix + col_name)
+        direction_prefix = "" if column_direction == "asc" else "-"
+        order.append(direction_prefix + column_name)
 
     # Extract column-specific search filters
     filters = {}
-    i = 0
+    column_index = 0
     while True:
-        col_name = request.POST.get(f"columns[{i}][data]")
-        if col_name is None:
+        column_name = request.POST.get(f"columns[{column_index}][data]")
+        if column_name is None:
             break
 
         # Get fixed search term for this column
-        search_value = request.POST.get(f"columns[{i}][search][fixed][0][term]")
+        search_value = request.POST.get(f"columns[{column_index}][search][fixed][0][term]")
         if search_value and not search_value.startswith("function"):
-            filters[col_name] = search_value
-        i += 1
+            filters[column_name] = search_value
+        column_index += 1
 
     return start, length, order, filters
 
@@ -336,47 +336,51 @@ def _prepare_data_json(ctx: dict, elements: list, view: str, edit: str, exe: boo
         List of dictionaries where each dict represents a row with string keys
         corresponding to column indices and HTML/text values
     """
-    data = []
+    table_rows_data = []
 
     # Map field names to lambda functions for data extraction and formatting
-    field_map = {
-        "created": lambda obj: obj.created.strftime("%d/%m/%Y"),
-        "payment_date": lambda obj: obj.created.strftime("%d/%m/%Y"),
-        "member": lambda obj: str(obj.member),
-        "run": lambda obj: str(obj.run) if obj.run else "",
-        "descr": lambda obj: str(obj.descr),
+    field_to_formatter = {
+        "created": lambda model_object: model_object.created.strftime("%d/%m/%Y"),
+        "payment_date": lambda model_object: model_object.created.strftime("%d/%m/%Y"),
+        "member": lambda model_object: str(model_object.member),
+        "run": lambda model_object: str(model_object.run) if model_object.run else "",
+        "descr": lambda model_object: str(model_object.descr),
         # Convert decimal values to int if they're whole numbers, otherwise keep as string
-        "value": lambda obj: int(obj.value) if obj.value == obj.value.to_integral() else str(obj.value),
-        "details": lambda obj: str(obj.details),
-        "credits": lambda obj: int(obj.credits) if obj.credits == obj.credits.to_integral() else str(obj.credits),
-        "info": lambda obj: str(obj.info) if obj.info else "",
-        "vat_ticket": lambda obj: round(float(obj.vat_ticket), 2),
-        "vat_options": lambda obj: round(float(obj.vat_options), 2),
+        "value": lambda model_object: int(model_object.value)
+        if model_object.value == model_object.value.to_integral()
+        else str(model_object.value),
+        "details": lambda model_object: str(model_object.details),
+        "credits": lambda model_object: int(model_object.credits)
+        if model_object.credits == model_object.credits.to_integral()
+        else str(model_object.credits),
+        "info": lambda model_object: str(model_object.info) if model_object.info else "",
+        "vat_ticket": lambda model_object: round(float(model_object.vat_ticket), 2),
+        "vat_options": lambda model_object: round(float(model_object.vat_options), 2),
     }
 
     # Allow custom field callbacks to override default mappings
     if "callbacks" in ctx:
-        field_map.update(ctx["callbacks"])
+        field_to_formatter.update(ctx["callbacks"])
 
     # Process each element and build row data
-    for row in elements:
+    for model_object in elements:
         # Generate appropriate URL based on view type (exe vs orga)
         if exe:
-            url = reverse(view, args=[row.id])
+            edit_url = reverse(view, args=[model_object.id])
         else:
             # For orga views, we need both slug and ID
-            url = reverse(view, args=[ctx["run"].get_slug(), row.id])
+            edit_url = reverse(view, args=[ctx["run"].get_slug(), model_object.id])
 
         # Start each row with edit link in column 0
-        res = {"0": f'<a href="{url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
+        row_data = {"0": f'<a href="{edit_url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
 
         # Add data for each configured field, starting from column 1
-        for idx, (field, _name) in enumerate(ctx["fields"], start=1):
-            res[str(idx)] = field_map.get(field, lambda r: "")(row)
+        for column_index, (field_name, _field_label) in enumerate(ctx["fields"], start=1):
+            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda model_object: "")(model_object)
 
-        data.append(res)
+        table_rows_data.append(row_data)
 
-    return data
+    return table_rows_data
 
 
 def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Model]) -> QuerySet:

@@ -57,9 +57,9 @@ def _get_bulk_params(request, ctx) -> tuple[list[int], int, int]:
     -------
     tuple[list[int], int, int]
         A tuple containing:
-        - ids: List of validated integer IDs for bulk operation
-        - operation: Integer operation code (defaults to 0 if invalid)
-        - target: Integer target code (defaults to 0 if invalid)
+        - entity_ids: List of validated integer IDs for bulk operation
+        - operation_code: Integer operation code (defaults to 0 if invalid)
+        - target_code: Integer target code (defaults to 0 if invalid)
 
     Raises
     ------
@@ -68,43 +68,43 @@ def _get_bulk_params(request, ctx) -> tuple[list[int], int, int]:
     """
     # Extract and validate operation parameter, default to 0 for invalid values
     try:
-        operation = int(request.POST.get("operation", "0"))
+        operation_code = int(request.POST.get("operation", "0"))
     except (ValueError, TypeError):
-        operation = 0
+        operation_code = 0
 
     # Extract and validate target parameter, default to 0 for invalid values
     try:
-        target = int(request.POST.get("target", "0"))
+        target_code = int(request.POST.get("target", "0"))
     except (ValueError, TypeError):
-        target = 0
+        target_code = 0
 
     # Process list of IDs, filtering out invalid entries
-    ids = []
-    for x in request.POST.getlist("ids[]", []):
+    entity_ids = []
+    for raw_id in request.POST.getlist("ids[]", []):
         try:
-            ids.append(int(x))
+            entity_ids.append(int(raw_id))
         except (ValueError, TypeError):
             # Skip invalid ID values and continue processing
             continue
 
     # Validate that at least one valid ID was provided
-    if not ids:
+    if not entity_ids:
         raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))
 
     # Determine entity ID for logging (use run ID if available, otherwise association ID)
-    eid = ctx["a_id"]
+    entity_id_for_log = ctx["a_id"]
     if "run" in ctx:
-        eid = ctx["run"].id
+        entity_id_for_log = ctx["run"].id
 
     # Log the bulk operation attempt with all relevant parameters
     Log.objects.create(
         member=request.user.member,
-        cls=f"bulk {operation} {target}",
-        eid=eid,
-        dct={"operation": operation, "target": target, "ids": ids},
+        cls=f"bulk {operation_code} {target_code}",
+        eid=entity_id_for_log,
+        dct={"operation": operation_code, "target": target_code, "ids": entity_ids},
     )
 
-    return ids, operation, target
+    return entity_ids, operation_code, target_code
 
 
 class Operations:

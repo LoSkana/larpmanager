@@ -99,20 +99,20 @@ def _get_reviews() -> list[dict]:
     Returns:
         List of review dictionaries.
     """
-    res = []
+    reviews = []
     # Convert each review object to dictionary representation
-    for element in LarpManagerReview.objects.all():
-        res.append(element.as_dict())
-    return res
+    for review in LarpManagerReview.objects.all():
+        reviews.append(review.as_dict())
+    return reviews
 
 
 def _get_showcases() -> list[dict]:
     """Return all showcases as a list of dictionaries ordered by number."""
-    res = []
+    showcases = []
     # Iterate through showcases ordered by number and convert to dict
-    for element in LarpManagerShowcase.objects.order_by("number"):
-        res.append(element.as_dict())
-    return res
+    for showcase in LarpManagerShowcase.objects.order_by("number"):
+        showcases.append(showcase.as_dict())
+    return showcases
 
 
 def _get_promoters() -> list[dict]:
@@ -122,11 +122,11 @@ def _get_promoters() -> list[dict]:
         List of promoter dictionaries from associations with valid promoter data.
     """
     # Filter associations that have promoter data
-    que = Association.objects.exclude(promoter__isnull=True)
-    que = que.exclude(promoter__exact="")
+    associations_queryset = Association.objects.exclude(promoter__isnull=True)
+    associations_queryset = associations_queryset.exclude(promoter__exact="")
 
     # Convert each association's promoter to dictionary format
-    res = []
-    for element in que:
-        res.append(element.promoter_dict())
-    return res
+    promoters_list = []
+    for association in associations_queryset:
+        promoters_list.append(association.promoter_dict())
+    return promoters_list

@@ -470,8 +470,8 @@ def copy_parent_event_to_campaign(event):
             copy_class(event.pk, event.parent_id, EventConfig)
             copy_class(event.pk, event.parent_id, EventText)
             copy_class(event.pk, event.parent_id, EventRole)
-            for fn in event.parent.features.all():
-                event.features.add(fn)
+            for feature in event.parent.features.all():
+                event.features.add(feature)
 
             # Use flag to prevent recursion instead of disconnecting signal
             event._skip_campaign_setup = True
@@ -491,13 +491,13 @@ def create_default_event_setup(event):
     if not event.runs.exists():
         Run.objects.create(event=event, number=1)
 
-    features = get_event_features(event.id)
+    event_features = get_event_features(event.id)
 
-    save_event_tickets(features, event)
+    save_event_tickets(event_features, event)
 
-    save_event_registration_form(features, event)
+    save_event_registration_form(event_features, event)
 
-    save_event_character_form(features, event)
+    save_event_character_form(event_features, event)
 
     clear_event_features_cache(event.id)
 
@@ -623,8 +623,8 @@ def _init_writing_element(instance, default_question_types, question_applicables
 
 
 def _init_character_form_questions(
-    custom_tps: set,
-    def_tps: dict,
+    custom_types: set,
+    default_types: dict,
     features: set,
     instance,
 ) -> None:
@@ -635,8 +635,8 @@ def _init_character_form_questions(
     existing question configurations.
 
     Args:
-        custom_tps: Set of custom question types to exclude from processing
-        def_tps: Dictionary mapping default question types to their configuration
+        custom_types: Set of custom question types to exclude from processing
+        default_types: Dictionary mapping default question types to their configuration
                 (name, status, visibility, max_length)
         features: Set of enabled feature names
         instance: Event instance to create questions for
@@ -645,49 +645,49 @@ def _init_character_form_questions(
         None
     """
     # Get existing character questions and their types
-    que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
-    types = set(que.values_list("typ", flat=True).distinct())
+    existing_questions = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
+    existing_types = set(existing_questions.values_list("typ", flat=True).distinct())
 
     # Get all available question types, excluding custom ones
     choices = dict(WritingQuestionType.choices)
-    all_types = choices.keys()
-    all_types -= custom_tps
+    available_types = choices.keys()
+    available_types -= custom_types
 
     # Create default question types if no questions exist yet
-    if not types:
-        for el, add in def_tps.items():
+    if not existing_types:
+        for question_type, config in default_types.items():
             WritingQuestion.objects.create(
                 event=instance,
-                typ=el,
-                name=_(add[0]),
-                status=add[1],
-                visibility=add[2],
-                max_length=add[3],
+                typ=question_type,
+                name=_(config[0]),
+                status=config[1],
+                visibility=config[2],
+                max_length=config[3],
                 applicable=QuestionApplicable.CHARACTER,
             )
 
     # Determine which types should not be removed (defaults + px feature)
-    not_to_remove = set(def_tps.keys())
+    protected_types = set(default_types.keys())
     if "px" in features:
-        not_to_remove.add(WritingQuestionType.COMPUTED)
-    all_types -= not_to_remove
+        protected_types.add(WritingQuestionType.COMPUTED)
+    available_types -= protected_types
 
     # Process each remaining question type based on feature availability
-    for el in sorted(list(all_types)):
+    for question_type in sorted(list(available_types)):
         # Create question if feature is enabled but question doesn't exist
-        if el in features and el not in types:
+        if question_type in features and question_type not in existing_types:
             WritingQuestion.objects.create(
                 event=instance,
-                typ=el,
-                name=_(el.capitalize()),
+                typ=question_type,
+                name=_(question_type.capitalize()),
                 status=QuestionStatus.HIDDEN,
                 visibility=QuestionVisibility.HIDDEN,
                 max_length=1000,
                 applicable=QuestionApplicable.CHARACTER,
             )
         # Remove question if feature is disabled but question exists
-        if el not in features and el in types:
-            WritingQuestion.objects.filter(event=instance, typ=el).delete()
+        if question_type not in features and question_type in existing_types:
+            WritingQuestion.objects.filter(event=instance, typ=question_type).delete()
 
 
 def save_event_registration_form(features: dict, instance) -> None:
@@ -839,7 +839,7 @@ def assign_previous_campaign_character(registration) -> None:
         return
 
     # Find the most recent run from the same campaign series
-    last = (
+    previous_campaign_run = (
         Run.objects.filter(
             Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
         )
@@ -847,17 +847,21 @@ def assign_previous_campaign_character(registration) -> None:
         .order_by("-end")
         .first()
     )
-    if not last:
+    if not previous_campaign_run:
         return
 
     # Get character relationship from previous run and create new one
-    old_rcr = RegistrationCharacterRel.objects.filter(reg__member=registration.member, reg__run=last).first()
-    if old_rcr:
-        rcr = RegistrationCharacterRel.objects.create(reg=registration, character=old_rcr.character)
+    previous_character_relation = RegistrationCharacterRel.objects.filter(
+        reg__member=registration.member, reg__run=previous_campaign_run
+    ).first()
+    if previous_character_relation:
+        new_character_relation = RegistrationCharacterRel.objects.create(
+            reg=registration, character=previous_character_relation.character
+        )
 
         # Copy custom character attributes from previous run
-        for s in ["name", "pronoun", "song", "public", "private"]:
-            if hasattr(old_rcr, "custom_" + s):
-                value = getattr(old_rcr, "custom_" + s)
-                setattr(rcr, "custom_" + s, value)
-        rcr.save()
+        for custom_attribute_name in ["name", "pronoun", "song", "public", "private"]:
+            if hasattr(previous_character_relation, "custom_" + custom_attribute_name):
+                attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
+                setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
+        new_character_relation.save()

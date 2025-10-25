@@ -26,14 +26,14 @@ from larpmanager.models.access import AssocPermission
 from larpmanager.models.association import Association
 
 
-def generate_association_encryption_key(instance):
+def generate_association_encryption_key(association):
     """Generate Fernet encryption key for new associations.
 
     Args:
-        instance: Association instance being saved
+        association: Association instance being saved
     """
-    if not instance.key:
-        instance.key = Fernet.generate_key()
+    if not association.key:
+        association.key = Fernet.generate_key()
 
 
 def auto_assign_association_permission_number(assoc_permission):
@@ -43,12 +43,12 @@ def auto_assign_association_permission_number(assoc_permission):
         assoc_permission: AssocPermission instance to assign number to
     """
     if not assoc_permission.number:
-        n = AssocPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(Max("number"))[
-            "number__max"
-        ]
-        if not n:
-            n = 1
-        assoc_permission.number = n + 10
+        max_number = AssocPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(
+            Max("number")
+        )["number__max"]
+        if not max_number:
+            max_number = 1
+        assoc_permission.number = max_number + 10
 
 
 def prepare_association_skin_features(instance: Association) -> None:
@@ -102,14 +102,14 @@ def prepare_association_skin_features(instance: Association) -> None:
         instance.mandatory_fields = skin.default_mandatory_fields
 
 
-def apply_skin_features_to_association(instance: Association) -> None:
+def apply_skin_features_to_association(association: Association) -> None:
     """Handle association skin feature setup after saving.
 
     This function updates an association's features to match its skin's default
     features when the association has been modified to use a new skin.
 
     Args:
-        instance: Association instance that was saved. Must have a skin attribute
+        association: Association instance that was saved. Must have a skin attribute
                  with default_features and a features manager.
 
     Note:
@@ -118,14 +118,14 @@ def apply_skin_features_to_association(instance: Association) -> None:
         The actual feature update is deferred until after the current database
         transaction commits to ensure data consistency.
     """
-    # Check if the instance is marked for skin feature updates
-    if not hasattr(instance, "_update_skin_features"):
+    # Check if the association is marked for skin feature updates
+    if not hasattr(association, "_update_skin_features"):
         return
 
     # Define the feature update operation to run after transaction commit
     def update_features() -> None:
         # Replace all current features with the skin's default features
-        instance.features.set(instance.skin.default_features.all())
+        association.features.set(association.skin.default_features.all())
 
     # Schedule the feature update to run after the current transaction commits
     transaction.on_commit(update_features)

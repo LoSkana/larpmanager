@@ -187,53 +187,55 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
     invoice.reg = ctx["reg"]
 
     # Get custom reason template from event configuration
-    custom_reason = get_event_config(ctx["reg"].run.event_id, "payment_custom_reason")
-    if not custom_reason:
+    custom_reason_template = get_event_config(ctx["reg"].run.event_id, "payment_custom_reason")
+    if not custom_reason_template:
         return
 
     # Extract all placeholder variables from template using regex
-    pattern = r"\{([^}]+)\}"
-    keys = re.findall(pattern, custom_reason)
+    placeholder_pattern = r"\{([^}]+)\}"
+    placeholder_keys = re.findall(placeholder_pattern, custom_reason_template)
 
     # Initialize values dictionary for template replacement
-    values = {}
+    placeholder_values = {}
 
     # Handle special case for player_name placeholder
-    name = "player_name"
-    if name in keys:
-        values[name] = member_real
-        keys.remove(name)
+    player_name_key = "player_name"
+    if player_name_key in placeholder_keys:
+        placeholder_values[player_name_key] = member_real
+        placeholder_keys.remove(player_name_key)
 
     # Process each remaining placeholder key
-    for key in keys:
+    for question_name in placeholder_keys:
         # Look for a registration question with matching name
         try:
-            question = RegistrationQuestion.objects.get(event=ctx["reg"].run.event, name__iexact=key)
+            registration_question = RegistrationQuestion.objects.get(
+                event=ctx["reg"].run.event, name__iexact=question_name
+            )
 
             # Handle single/multiple choice questions
-            if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-                aux = []
-                que = RegistrationChoice.objects.filter(question=question, reg_id=ctx["reg"].id)
+            if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
+                selected_option_names = []
+                user_choices = RegistrationChoice.objects.filter(question=registration_question, reg_id=ctx["reg"].id)
 
                 # Collect all selected option names
-                for choice in que.select_related("option"):
-                    aux.append(choice.option.name)
-                value = ",".join(aux)
+                for choice in user_choices.select_related("option"):
+                    selected_option_names.append(choice.option.name)
+                answer_value = ",".join(selected_option_names)
             else:
                 # Handle text-based questions
-                value = RegistrationAnswer.objects.get(question=question, reg_id=ctx["reg"].id).text
-            values[key] = value
+                answer_value = RegistrationAnswer.objects.get(question=registration_question, reg_id=ctx["reg"].id).text
+            placeholder_values[question_name] = answer_value
         except ObjectDoesNotExist:
             # Skip missing questions/answers
             pass
 
     # Define replacement function for regex substitution
-    def replace(pattern_match):
+    def replace_placeholder(pattern_match):
         placeholder_key = pattern_match.group(1)
-        return values.get(placeholder_key, pattern_match.group(0))
+        return placeholder_values.get(placeholder_key, pattern_match.group(0))
 
     # Apply template substitution and set invoice causal field
-    invoice.causal = re.sub(pattern, replace, custom_reason)
+    invoice.causal = re.sub(placeholder_pattern, replace_placeholder, custom_reason_template)
 
 
 def round_up_to_two_decimals(value_to_round):
@@ -403,13 +405,13 @@ def payment_received(invoice):
 
 def _process_collection(features, invoice):
     if not AccountingItemCollection.objects.filter(inv=invoice).exists():
-        acc = AccountingItemCollection()
-        acc.member_id = invoice.member_id
-        acc.inv = invoice
-        acc.value = invoice.mc_gross
-        acc.assoc_id = invoice.assoc_id
-        acc.collection_id = invoice.idx
-        acc.save()
+        collection_item = AccountingItemCollection()
+        collection_item.member_id = invoice.member_id
+        collection_item.inv = invoice
+        collection_item.value = invoice.mc_gross
+        collection_item.assoc_id = invoice.assoc_id
+        collection_item.collection_id = invoice.idx
+        collection_item.save()
 
         if "badge" in features:
             assign_badge(invoice.member, "gifter")
@@ -417,14 +419,14 @@ def _process_collection(features, invoice):
 
 def _process_donate(features, invoice):
     if not AccountingItemDonation.objects.filter(inv=invoice).exists():
-        acc = AccountingItemDonation()
-        acc.member_id = invoice.member_id
-        acc.inv = invoice
-        acc.value = invoice.mc_gross
-        acc.assoc_id = invoice.assoc_id
-        acc.inv = invoice
-        acc.descr = invoice.causal
-        acc.save()
+        accounting_item = AccountingItemDonation()
+        accounting_item.member_id = invoice.member_id
+        accounting_item.inv = invoice
+        accounting_item.value = invoice.mc_gross
+        accounting_item.assoc_id = invoice.assoc_id
+        accounting_item.inv = invoice
+        accounting_item.descr = invoice.causal
+        accounting_item.save()
 
         if "badge" in features:
             assign_badge(invoice.member, "donor")
@@ -432,13 +434,13 @@ def _process_donate(features, invoice):
 
 def _process_membership(invoice):
     if not AccountingItemMembership.objects.filter(inv=invoice).exists():
-        acc = AccountingItemMembership()
-        acc.year = datetime.now().year
-        acc.member_id = invoice.member_id
-        acc.inv = invoice
-        acc.value = invoice.mc_gross
-        acc.assoc_id = invoice.assoc_id
-        acc.save()
+        accounting_item = AccountingItemMembership()
+        accounting_item.year = datetime.now().year
+        accounting_item.member_id = invoice.member_id
+        accounting_item.inv = invoice
+        accounting_item.value = invoice.mc_gross
+        accounting_item.assoc_id = invoice.assoc_id
+        accounting_item.save()
 
 
 def _process_payment(invoice):
@@ -448,26 +450,26 @@ def _process_payment(invoice):
         invoice: Invoice object to process payment for
     """
     if not AccountingItemPayment.objects.filter(inv=invoice).exists():
-        reg = Registration.objects.get(pk=invoice.idx)
+        registration = Registration.objects.get(pk=invoice.idx)
 
-        acc = AccountingItemPayment()
-        acc.pay = PaymentChoices.MONEY
-        acc.member_id = invoice.member_id
-        acc.reg = reg
-        acc.inv = invoice
-        acc.value = invoice.mc_gross
-        acc.assoc_id = invoice.assoc_id
-        acc.save()
+        accounting_item = AccountingItemPayment()
+        accounting_item.pay = PaymentChoices.MONEY
+        accounting_item.member_id = invoice.member_id
+        accounting_item.reg = registration
+        accounting_item.inv = invoice
+        accounting_item.value = invoice.mc_gross
+        accounting_item.assoc_id = invoice.assoc_id
+        accounting_item.save()
 
-        Registration.objects.filter(pk=reg.pk).update(num_payments=F("num_payments") + 1)
-        reg.refresh_from_db()
+        Registration.objects.filter(pk=registration.pk).update(num_payments=F("num_payments") + 1)
+        registration.refresh_from_db()
 
         # e-invoice emission
         if "e-invoice" in get_assoc_features(invoice.assoc_id):
             process_payment(invoice.id)
 
 
-def _process_fee(features, fee: float, invoice) -> None:
+def _process_fee(features, fee_percentage: float, invoice) -> None:
     """Process payment processing fee for an invoice.
 
     Creates an accounting transaction to track payment processing fees
@@ -476,29 +478,29 @@ def _process_fee(features, fee: float, invoice) -> None:
 
     Args:
         features: Feature configuration object
-        fee: Fee percentage to apply to the invoice gross amount
+        fee_percentage: Fee percentage to apply to the invoice gross amount
         invoice: Invoice object containing payment details
     """
     # Create new accounting transaction for the processing fee
-    trans = AccountingItemTransaction()
-    trans.member_id = invoice.member_id
-    trans.inv = invoice
-    # trans.value = invoice.mc_fee
+    accounting_transaction = AccountingItemTransaction()
+    accounting_transaction.member_id = invoice.member_id
+    accounting_transaction.inv = invoice
+    # accounting_transaction.value = invoice.mc_fee
 
     # Calculate fee amount as percentage of gross invoice value
-    trans.value = (float(invoice.mc_gross) * fee) / 100
-    trans.assoc_id = invoice.assoc_id
+    accounting_transaction.value = (float(invoice.mc_gross) * fee_percentage) / 100
+    accounting_transaction.assoc_id = invoice.assoc_id
 
     # Check if payment fees should be charged to user instead of organization
     if get_assoc_config(invoice.assoc_id, "payment_fees_user", False):
-        trans.user_burden = True
-    trans.save()
+        accounting_transaction.user_burden = True
+    accounting_transaction.save()
 
     # For registration payments, link the transaction to the registration
     if invoice.typ == PaymentType.REGISTRATION:
-        reg = Registration.objects.get(pk=invoice.idx)
-        trans.reg = reg
-        trans.save()
+        registration = Registration.objects.get(pk=invoice.idx)
+        accounting_transaction.reg = registration
+        accounting_transaction.save()
 
 
 def process_payment_invoice_status_change(invoice):

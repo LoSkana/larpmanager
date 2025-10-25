@@ -486,17 +486,17 @@ def check_missing_mandatory(ctx):
               Updates ctx with 'missing_fields' list.
     """
     ctx["missing_fields"] = []
-    aux = []
+    missing_question_names = []
 
-    models = {
-        **{t: WritingAnswer for t in BaseQuestionType.get_answer_types()},
-        **{t: WritingChoice for t in BaseQuestionType.get_choice_types()},
+    question_type_to_model = {
+        **{question_type: WritingAnswer for question_type in BaseQuestionType.get_answer_types()},
+        **{question_type: WritingChoice for question_type in BaseQuestionType.get_choice_types()},
     }
 
     questions = ctx["event"].get_elements(WritingQuestion)
-    for que in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
-        model = models.get(que.typ)
-        if model and not model.objects.filter(element_id=ctx["char"]["id"], question=que).exists():
-            aux.append(que.name)
+    for question in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
+        model = question_type_to_model.get(question.typ)
+        if model and not model.objects.filter(element_id=ctx["char"]["id"], question=question).exists():
+            missing_question_names.append(question.name)
 
-    ctx["missing_fields"] = ", ".join(aux)
+    ctx["missing_fields"] = ", ".join(missing_question_names)

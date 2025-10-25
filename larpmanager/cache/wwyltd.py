@@ -205,11 +205,11 @@ def _extract_h2_sections(content: str) -> list[tuple]:
 
     # Find all H2 headings and their content
     h2_pattern = r"<h2[^>]*>(.*?)</h2>(.*?)(?=<h2|$)"
-    matches = re.finditer(h2_pattern, content, re.DOTALL | re.IGNORECASE)
+    h2_matches = re.finditer(h2_pattern, content, re.DOTALL | re.IGNORECASE)
 
-    for match in matches:
-        section_title = re.sub(r"<[^>]+>", "", match.group(1)).strip()
-        section_content = match.group(2).strip()
+    for h2_match in h2_matches:
+        section_title = re.sub(r"<[^>]+>", "", h2_match.group(1)).strip()
+        section_content = h2_match.group(2).strip()
 
         if section_title and section_content:
             sections.append((section_title, section_content))

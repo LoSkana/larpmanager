@@ -155,10 +155,10 @@ class Command(BaseCommand):
         Cleans up abandoned payment attempts to prevent database bloat.
         """
         # delete old payment invoice
-        ref = datetime.now() - timedelta(days=60)
-        que = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
-        for pi in que.filter(created__lte=ref.date()):
-            pi.delete()
+        reference_date = datetime.now() - timedelta(days=60)
+        payment_invoices_query = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
+        for payment_invoice in payment_invoices_query.filter(created__lte=reference_date.date()):
+            payment_invoice.delete()
 
     @staticmethod
     def check_payment_not_approved():
@@ -168,13 +168,13 @@ class Command(BaseCommand):
         orphaned invoices that reference non-existent objects.
         """
         # Notify payment invoices not approved
-        for p in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
+        for payment_invoice in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
-                notify_invoice_check(p)
+                notify_invoice_check(payment_invoice)
             except ObjectDoesNotExist:
-                p.delete()
-            except Exception as e:
-                notify_admins("notify_invoice_check fail", p.idx, e)
+                payment_invoice.delete()
+            except Exception as exception:
+                notify_admins("notify_invoice_check fail", payment_invoice.idx, exception)
 
     @staticmethod
     def check_password_reset():
@@ -184,11 +184,11 @@ class Command(BaseCommand):
         and clearing the reset flags from membership records.
         """
         # check password reset
-        que = Membership.objects.exclude(password_reset__exact="")
-        for mb in que.exclude(password_reset__isnull=True):
-            send_password_reset_remainder(mb)
-            mb.password_reset = ""
-            mb.save()
+        pending_reset_memberships = Membership.objects.exclude(password_reset__exact="")
+        for membership in pending_reset_memberships.exclude(password_reset__isnull=True):
+            send_password_reset_remainder(membership)
+            membership.password_reset = ""
+            membership.save()
 
     @staticmethod
     def clean_db():
@@ -198,9 +198,9 @@ class Command(BaseCommand):
         database performance and remove stale data.
         """
         # PaymentInvoice.objects.filter(txn_id__isnull=True).delete()
-        with connection.cursor() as cursor:
-            for sql in conf_settings.CLEAN_DB:
-                cursor.execute(sql)
+        with connection.cursor() as database_cursor:
+            for cleanup_sql_query in conf_settings.CLEAN_DB:
+                database_cursor.execute(cleanup_sql_query)
 
     def check_achievements(self, assoc: Association) -> None:
         """Process badge achievements for association members.
@@ -218,28 +218,30 @@ class Command(BaseCommand):
         """
         # Initialize cache for badges and player data
         cache = {"badges": {}, "players": {}}
-        ev = {}
+        events_by_id = {}
 
         # Process past events for participation badges
         for run in Run.objects.filter(end__lt=datetime.today(), event__assoc=assoc):
             # Get all non-cancelled registrations
-            que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+            registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
 
             # Process registrations excluding waiting list, staff, and NPCs
-            for reg in que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC]):
-                self.check_ach_player(reg, cache)
+            for registration in registrations.exclude(
+                ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC]
+            ):
+                self.check_ach_player(registration, cache)
 
             # Cache event data for reference
-            ev[run.event_id] = run.event
+            events_by_id[run.event_id] = run.event
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=datetime.today()):
             # Get confirmed registrations (excluding waiting list)
-            for reg in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
+            for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
                 ticket__tier=TicketTier.WAITING
             ):
                 # Check friend referral achievements
-                self.check_friends_player(reg, cache)
+                self.check_friends_player(registration, cache)
 
     def add_member_badge(self, badge_code: str, member: Member, badge_cache: dict) -> None:
         """Award a badge to a member if not already possessed.
@@ -381,24 +383,24 @@ class Command(BaseCommand):
             None
         """
         # Count total friend referral discounts associated with this registration
-        c = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
+        friend_discount_count = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
 
         # Get current friend count from cache or calculate if not cached
-        count = self.get_count("friend", cache, reg.member, c)
+        current_friend_count = self.get_count("friend", cache, reg.member, friend_discount_count)
 
         # Define badge tiers and their corresponding friend count thresholds
-        tp = ["bronze", "silver", "gold", "platinum"]
-        lm = [1, 4, 8, 12]  # Minimum friends required for each tier
+        badge_tiers = ["bronze", "silver", "gold", "platinum"]
+        tier_thresholds = [1, 4, 8, 12]  # Minimum friends required for each tier
 
         # Iterate through each tier and award badges if threshold is met
-        for i in range(0, len(tp)):
+        for tier_index in range(0, len(badge_tiers)):
             # Skip tier if friend count doesn't meet minimum requirement
-            if count < lm[i]:
+            if current_friend_count < tier_thresholds[tier_index]:
                 continue
 
             # Generate badge key and award to member
-            k = f"friends-{tp[i]}"
-            self.add_member_badge(k, reg.member, cache)
+            badge_key = f"friends-{badge_tiers[tier_index]}"
+            self.add_member_badge(badge_key, reg.member, cache)
 
     def check_ach_player(self, reg: Registration, cache: dict) -> None:
         """Check and award player participation badges based on play count.
@@ -414,20 +416,20 @@ class Command(BaseCommand):
             None
         """
         # Count total registrations/plays for this member
-        count = self.get_count("play", cache, reg.member)
+        play_count = self.get_count("play", cache, reg.member)
 
         # Define badge tiers and their required play count thresholds
-        tp = ["bronze", "silver", "gold", "platinum"]
-        lm = [1, 5, 10, 15]
+        badge_types = ["bronze", "silver", "gold", "platinum"]
+        play_count_limits = [1, 5, 10, 15]
 
         # Iterate through each badge tier and award if threshold is met
-        for i in range(0, len(tp)):
-            if count < lm[i]:
+        for badge_index in range(0, len(badge_types)):
+            if play_count < play_count_limits[badge_index]:
                 continue
 
             # Generate badge key and award to member
-            k = f"player-{tp[i]}"
-            self.add_member_badge(k, reg.member, cache)
+            badge_key = f"player-{badge_types[badge_index]}"
+            self.add_member_badge(badge_key, reg.member, cache)
 
     def check_badge_help(self, m: Member, cache: dict) -> None:
         """Check and award help/support badges based on member activity.
@@ -573,27 +575,29 @@ class Command(BaseCommand):
             or have already started, and only processes events with valid start dates.
         """
         # Check if reminders should be sent during holidays
-        holidays = assoc.get_config("remind_holidays", True)
+        send_reminders_during_holidays = assoc.get_config("remind_holidays", True)
 
         # Skip processing if it's a holiday and holiday reminders are disabled
-        if not holidays and check_holiday():
+        if not send_reminders_during_holidays and check_holiday():
             return
 
         # Get the number of days before event to send reminders
-        remind_days = int(assoc.get_config("remind_days", 5))
+        reminder_days_before_event = int(assoc.get_config("remind_days", 5))
 
         # Get all registrations for this association
-        reg_que = get_regs(assoc)
+        registrations_queryset = get_regs(assoc)
 
         # Calculate reference date (3 days from now) to filter out immediate events
-        ref = datetime.now() + timedelta(days=3)
+        minimum_start_date = datetime.now() + timedelta(days=3)
 
         # Filter registrations to exclude events without start dates or starting too soon
-        reg_que = reg_que.exclude(run__start__isnull=True).exclude(run__start__lte=ref.date())
+        registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
+            run__start__lte=minimum_start_date.date()
+        )
 
         # Process each qualifying registration for reminder emails
-        for reg in reg_que.select_related("run", "ticket"):
-            self.remind_reg(reg, assoc, remind_days)
+        for registration in registrations_queryset.select_related("run", "ticket"):
+            self.remind_reg(registration, assoc, reminder_days_before_event)
 
     def remind_reg(self, reg: Registration, assoc: Association, remind_days: int) -> None:
         """Process reminder logic for a specific registration.
@@ -644,7 +648,7 @@ class Command(BaseCommand):
             self.check_payment(reg)
 
     @staticmethod
-    def check_membership_fee(reg: Registration) -> None:
+    def check_membership_fee(registration: Registration) -> None:
         """Check if membership fee reminder should be sent.
 
         This function determines whether a membership fee reminder should be sent
@@ -652,7 +656,7 @@ class Command(BaseCommand):
         pending invoices for the current year.
 
         Args:
-            reg: Registration instance to check membership fee for
+            registration: Registration instance to check membership fee for
 
         Returns:
             None: Function performs side effects (sending reminders) but returns nothing
@@ -662,28 +666,30 @@ class Command(BaseCommand):
             only if no membership fee has been paid and no payment is pending.
         """
         # Get current year for membership fee validation
-        year = datetime.today().year
+        current_year = datetime.today().year
 
         # Skip if registration is not for current year
-        if year != reg.run.end.year:
+        if current_year != registration.run.end.year:
             return
 
         # Check if membership fee has already been paid for this year
-        membership_payed = AccountingItemMembership.objects.filter(year=reg.run.end.year, member=reg.member).count()
-        if membership_payed > 0:
+        membership_fee_already_paid = AccountingItemMembership.objects.filter(
+            year=registration.run.end.year, member=registration.member
+        ).count()
+        if membership_fee_already_paid > 0:
             return
 
         # Check if there are pending membership payments
-        membership_pending = PaymentInvoice.objects.filter(
-            member=reg.member,
+        membership_payment_pending = PaymentInvoice.objects.filter(
+            member=registration.member,
             status=PaymentStatus.SUBMITTED,
             typ=PaymentType.REGISTRATION,
         ).count()
-        if membership_pending > 0:
+        if membership_payment_pending > 0:
             return
 
         # Send membership fee reminder if no payment exists and none pending
-        remember_membership_fee(reg)
+        remember_membership_fee(registration)
 
     @staticmethod
     def check_payment(reg: Registration) -> None:
@@ -709,7 +715,7 @@ class Command(BaseCommand):
 
         # Query for any existing submitted payment invoices for this registration
         # to avoid sending duplicate payment reminders
-        pending_que = PaymentInvoice.objects.filter(
+        pending_payment_invoices = PaymentInvoice.objects.filter(
             member_id=reg.member_id,
             status=PaymentStatus.SUBMITTED,
             typ=PaymentType.REGISTRATION,
@@ -717,7 +723,7 @@ class Command(BaseCommand):
         )
 
         # If there are pending payments, skip sending reminder
-        if pending_que.count() > 0:
+        if pending_payment_invoices.count() > 0:
             return
 
         # Send payment reminder if all conditions are met
@@ -741,18 +747,18 @@ class Command(BaseCommand):
             return
 
         # Calculate reference date (7 days ago) and skip if run is too old or has no start date
-        ref = datetime.now() - timedelta(days=7)
-        if not run.start or run.start < ref.date():
+        reference_date = datetime.now() - timedelta(days=7)
+        if not run.start or run.start < reference_date.date():
             return
 
         # Get deadline interval configuration for the association
-        deadline_days = int(get_assoc_config(run.event.assoc_id, "deadline_days", 0))
-        if not deadline_days:
+        deadline_interval_days = int(get_assoc_config(run.event.assoc_id, "deadline_days", 0))
+        if not deadline_interval_days:
             return
 
         # Check if today matches the deadline notification schedule
         # Only notify when days until run start modulo deadline_days equals 1
-        if get_time_diff_today(run.start) % deadline_days != 1:
+        if get_time_diff_today(run.start) % deadline_interval_days != 1:
             return
 
         # Send deadline notifications for this run

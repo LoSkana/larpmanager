@@ -116,16 +116,18 @@ class FileTypeValidator:
         Validate and transforms given allowed types
         e.g; wildcard character specification will be normalized as text/* -> text
         """
-        allowed_mimes = []
-        for allowed_type_orig in allowed_types:
-            allowed_type = allowed_type_orig.decode() if type(allowed_type_orig) is bytes else allowed_type_orig
-            parts = allowed_type.split("/")
-            max_parts = 2
-            if len(parts) == max_parts:
-                if parts[1] == "*":
-                    allowed_mimes.append(parts[0])
+        allowed_mime_types = []
+        for allowed_type_original in allowed_types:
+            allowed_type = (
+                allowed_type_original.decode() if type(allowed_type_original) is bytes else allowed_type_original
+            )
+            mime_parts = allowed_type.split("/")
+            expected_parts_count = 2
+            if len(mime_parts) == expected_parts_count:
+                if mime_parts[1] == "*":
+                    allowed_mime_types.append(mime_parts[0])
                 else:
-                    allowed_mimes.append(allowed_type)
+                    allowed_mime_types.append(allowed_type)
             else:
                 raise ValidationError(
                     message=self.invalid_message,
@@ -133,7 +135,7 @@ class FileTypeValidator:
                     code="invalid_input",
                 )
 
-        return allowed_mimes
+        return allowed_mime_types
 
     @staticmethod
     def _check_word_or_excel(file_object, detected_mime_type: str, file_extension: str) -> str:

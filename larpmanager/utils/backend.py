@@ -71,19 +71,19 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # The username field allows '@' characters so email addresses could
         # potentially exist in either field, even for different users
         # noinspection PyProtectedMember
-        users = user_model._default_manager.filter(
+        matching_users = user_model._default_manager.filter(
             Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username)
         )
 
         # Test password against each matching user record
         # Return the first user with valid credentials
-        for user in users:
-            if user.check_password(password):
-                return user
+        for candidate_user in matching_users:
+            if candidate_user.check_password(password):
+                return candidate_user
 
         # Timing attack protection: run password hasher even when no users found
         # This ensures consistent response time regardless of username existence
-        if not users:
+        if not matching_users:
             # Run the default password hasher once to reduce the timing
             # difference between an existing and a non-existing user (see
             # https://code.djangoproject.com/ticket/20760)

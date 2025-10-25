@@ -71,23 +71,23 @@ def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
     Side effects:
         Updates many-to-many relationships for all objects of cls in the event
     """
-    cache_t = {}
+    old_id_to_new_id = {}
 
-    for obj in cls_p.objects.filter(event_id=e_id):
-        rel_value = getattr(obj, rel_field)
-        cache_t[rel_value] = obj.id
+    for parent_obj in cls_p.objects.filter(event_id=e_id):
+        relation_value = getattr(parent_obj, rel_field)
+        old_id_to_new_id[relation_value] = parent_obj.id
 
-    for obj in cls.objects.filter(event_id=e_id):
-        m2m_field = getattr(obj, field)
-        m2m_data = list(m2m_field.all())
-        new_values = []
+    for target_obj in cls.objects.filter(event_id=e_id):
+        many_to_many_field = getattr(target_obj, field)
+        current_relations = list(many_to_many_field.all())
+        new_relation_ids = []
 
-        for old_rel in m2m_data:
-            v = getattr(old_rel, rel_field)
-            new_rel = cache_t[v]
-            new_values.append(new_rel)
+        for old_relation in current_relations:
+            relation_value = getattr(old_relation, rel_field)
+            new_relation_id = old_id_to_new_id[relation_value]
+            new_relation_ids.append(new_relation_id)
 
-        m2m_field.set(new_values, clear=True)
+        many_to_many_field.set(new_relation_ids, clear=True)
 
 
 def correct_rels(
@@ -132,53 +132,53 @@ def correct_relationship(e_id, p_id):
         e_id: Target event ID with copied characters
         p_id: Source parent event ID with original characters
     """
-    cache_f = {}
-    cache_t = {}
-    for obj in Character.objects.filter(event_id=p_id):
-        cache_f[obj.id] = obj.number
-    for obj in Character.objects.filter(event_id=e_id):
-        cache_t[obj.number] = obj.id
+    source_character_id_to_number = {}
+    target_character_number_to_id = {}
+    for character in Character.objects.filter(event_id=p_id):
+        source_character_id_to_number[character.id] = character.number
+    for character in Character.objects.filter(event_id=e_id):
+        target_character_number_to_id[character.number] = character.id
     # ~ field = 'character_id'
     # ~ for obj in Registration.objects.filter(run_id=ctx['run'].id):
     # ~ v = getattr(obj, field)
-    # ~ if v not in cache_f:
+    # ~ if v not in source_character_id_to_number:
     # ~ continue
-    # ~ v = cache_f[v]
-    # ~ v = cache_t[v]
+    # ~ v = source_character_id_to_number[v]
+    # ~ v = target_character_number_to_id[v]
     # ~ setattr(obj, field, v)
     # ~ obj.save()
 
     # copy complicated
     # Relationship
-    # print(cache_f)
-    # print(cache_t)
-    for rel in Relationship.objects.filter(source__event_id=p_id):
-        # print(rel)
+    # print(source_character_id_to_number)
+    # print(target_character_number_to_id)
+    for relationship in Relationship.objects.filter(source__event_id=p_id):
+        # print(relationship)
 
-        v = rel.source_id
-        # print(rel.source_id)
-        if v not in cache_f:
+        new_source_id = relationship.source_id
+        # print(relationship.source_id)
+        if new_source_id not in source_character_id_to_number:
             continue
-        v = cache_f[v]
-        if v not in cache_t:
+        new_source_id = source_character_id_to_number[new_source_id]
+        if new_source_id not in target_character_number_to_id:
             continue
-        v = cache_t[v]
-        rel.source_id = v
+        new_source_id = target_character_number_to_id[new_source_id]
+        relationship.source_id = new_source_id
 
-        v = rel.target_id
-        if v not in cache_f:
+        new_target_id = relationship.target_id
+        if new_target_id not in source_character_id_to_number:
             continue
-        v = cache_f[v]
-        if v not in cache_t:
+        new_target_id = source_character_id_to_number[new_target_id]
+        if new_target_id not in target_character_number_to_id:
             continue
-        v = cache_t[v]
-        rel.target_id = v
+        new_target_id = target_character_number_to_id[new_target_id]
+        relationship.target_id = new_target_id
 
-        if Relationship.objects.filter(source_id=rel.source_id, target_id=rel.target_id).count() > 0:
+        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).count() > 0:
             continue
 
-        rel.pk = None
-        rel.save()
+        relationship.pk = None
+        relationship.save()
 
 
 def correct_workshop(e_id: int, p_id: int) -> None:
@@ -196,48 +196,48 @@ def correct_workshop(e_id: int, p_id: int) -> None:
         None
     """
     # Build mapping cache from source event workshop modules (ID -> number)
-    cache_f = {}
-    cache_t = {}
-    for obj in WorkshopModule.objects.filter(event_id=p_id):
-        cache_f[obj.id] = obj.number
+    source_module_id_to_number = {}
+    target_module_number_to_id = {}
+    for module in WorkshopModule.objects.filter(event_id=p_id):
+        source_module_id_to_number[module.id] = module.number
 
     # Build mapping cache from target event workshop modules (number -> ID)
-    for obj in WorkshopModule.objects.filter(event_id=e_id):
-        cache_t[obj.number] = obj.id
+    for module in WorkshopModule.objects.filter(event_id=e_id):
+        target_module_number_to_id[module.number] = module.id
 
     # Copy workshop questions from source to target event
     # Update module references using the mapping caches
-    for el in WorkshopQuestion.objects.filter(module__event_id=p_id):
-        v = el.module_id
-        v = cache_f[v]  # Get source module number
-        v = cache_t[v]  # Get target module ID
-        el.module_id = v
+    for question in WorkshopQuestion.objects.filter(module__event_id=p_id):
+        module_id = question.module_id
+        module_number = source_module_id_to_number[module_id]  # Get source module number
+        target_module_id = target_module_number_to_id[module_number]  # Get target module ID
+        question.module_id = target_module_id
 
         # Create new question object in target event
-        el.pk = None
-        el.save()
+        question.pk = None
+        question.save()
 
     # Rebuild caches for workshop questions mapping
-    cache_f = {}
-    cache_t = {}
-    for obj in WorkshopQuestion.objects.filter(module__event_id=p_id):
-        cache_f[obj.id] = obj.number
+    source_question_id_to_number = {}
+    target_question_number_to_id = {}
+    for question in WorkshopQuestion.objects.filter(module__event_id=p_id):
+        source_question_id_to_number[question.id] = question.number
 
     # Build mapping from target event questions (number -> ID)
-    for obj in WorkshopQuestion.objects.filter(module__event_id=e_id):
-        cache_t[obj.number] = obj.id
+    for question in WorkshopQuestion.objects.filter(module__event_id=e_id):
+        target_question_number_to_id[question.number] = question.id
 
     # Copy workshop options from source to target event
     # Update question references using the mapping caches
-    for el in WorkshopOption.objects.filter(question__module__event_id=p_id):
-        v = el.question_id
-        v = cache_f[v]  # Get source question number
-        v = cache_t[v]  # Get target question ID
-        el.question_id = v
+    for option in WorkshopOption.objects.filter(question__module__event_id=p_id):
+        question_id = option.question_id
+        question_number = source_question_id_to_number[question_id]  # Get source question number
+        target_question_id = target_question_number_to_id[question_number]  # Get target question ID
+        option.question_id = target_question_id
 
         # Create new option object in target event
-        el.pk = None
-        el.save()
+        option.pk = None
+        option.save()
 
 
 def correct_plot_character(e_id, p_id):
@@ -247,26 +247,26 @@ def correct_plot_character(e_id, p_id):
         e_id: Target event ID with copied elements
         p_id: Source parent event ID with original elements
     """
-    cache_c = {}
-    for obj in Character.objects.values_list("id", "number").filter(event_id=p_id):
-        n_obj = Character.objects.values_list("id").get(event_id=e_id, number=obj[1])[0]
-        cache_c[obj[0]] = n_obj
+    character_id_mapping = {}
+    for old_character in Character.objects.values_list("id", "number").filter(event_id=p_id):
+        new_character_id = Character.objects.values_list("id").get(event_id=e_id, number=old_character[1])[0]
+        character_id_mapping[old_character[0]] = new_character_id
 
-    cache_p = {}
-    for obj in Plot.objects.values_list("id", "number").filter(event_id=p_id):
-        n_obj = Plot.objects.values_list("id").get(event_id=e_id, number=obj[1])[0]
-        cache_p[obj[0]] = n_obj
+    plot_id_mapping = {}
+    for old_plot in Plot.objects.values_list("id", "number").filter(event_id=p_id):
+        new_plot_id = Plot.objects.values_list("id").get(event_id=e_id, number=old_plot[1])[0]
+        plot_id_mapping[old_plot[0]] = new_plot_id
 
-    for el in PlotCharacterRel.objects.filter(character__event_id=p_id):
-        n_c = cache_c[el.character_id]
-        n_p = cache_p[el.plot_id]
-        if PlotCharacterRel.objects.filter(character_id=n_c, plot_id=n_p).count() > 0:
+    for relationship in PlotCharacterRel.objects.filter(character__event_id=p_id):
+        new_character_id = character_id_mapping[relationship.character_id]
+        new_plot_id = plot_id_mapping[relationship.plot_id]
+        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).count() > 0:
             continue
 
-        el.character_id = n_c
-        el.plot_id = n_p
-        el.pk = None
-        el.save()
+        relationship.character_id = new_character_id
+        relationship.plot_id = new_plot_id
+        relationship.pk = None
+        relationship.save()
 
 
 def copy_character_config(e_id, p_id):
@@ -277,22 +277,22 @@ def copy_character_config(e_id, p_id):
         p_id: Parent event ID to copy configurations from
     """
     CharacterConfig.objects.filter(character__event_id=e_id).delete()
-    cache = {}
-    for obj in Character.objects.filter(event_id=e_id):
-        cache[obj.number] = obj.id
+    character_id_by_number = {}
+    for character in Character.objects.filter(event_id=e_id):
+        character_id_by_number[character.number] = character.id
 
-    for obj in Character.objects.filter(event_id=p_id):
-        new_id = cache[obj.number]
-        for el in CharacterConfig.objects.filter(character=obj):
-            for _idx in range(2):
+    for parent_character in Character.objects.filter(event_id=p_id):
+        target_character_id = character_id_by_number[parent_character.number]
+        for config in CharacterConfig.objects.filter(character=parent_character):
+            for retry_attempt in range(2):
                 try:
                     with transaction.atomic():
-                        cg, created = CharacterConfig.objects.update_or_create(
-                            character_id=new_id, name=el.name, defaults={"value": el.value}
+                        character_config, created = CharacterConfig.objects.update_or_create(
+                            character_id=target_character_id, name=config.name, defaults={"value": config.value}
                         )
                     break
                 except IntegrityError:
-                    if _idx == 0:
+                    if retry_attempt == 0:
                         continue
                     raise
 
@@ -340,100 +340,100 @@ def copy(
     messages.success(request, _("Copy done"))
 
 
-def copy_event(ctx, e_id, targets, event, p_id, parent):
+def copy_event(context, target_event_id, elements_to_copy, target_event, source_event_id, source_event):
     """
     Copy event data and related objects from parent to new event.
 
     Args:
-        ctx: Context dictionary with form information
-        e_id: Target event ID
-        targets: List of elements to copy
-        event: Target event instance
-        p_id: Source parent event ID
-        parent: Source parent event instance
+        context: Context dictionary with form information
+        target_event_id: Target event ID
+        elements_to_copy: List of elements to copy
+        target_event: Target event instance
+        source_event_id: Source parent event ID
+        source_event: Source parent event instance
     """
     # Define copy actions for each target type
     copy_actions = {
-        "event": lambda: _copy_event_fields(ctx, event, parent),
-        "config": lambda: copy_class(e_id, p_id, EventConfig),
-        "appearance": lambda: _copy_appearance_fields(ctx, event, parent),
-        "text": lambda: copy_class(e_id, p_id, EventText),
-        "role": lambda: copy_class(e_id, p_id, EventRole),
-        "features": lambda: _copy_features(event, parent),
-        "navigation": lambda: copy_class(e_id, p_id, EventButton),
+        "event": lambda: _copy_event_fields(context, target_event, source_event),
+        "config": lambda: copy_class(target_event_id, source_event_id, EventConfig),
+        "appearance": lambda: _copy_appearance_fields(context, target_event, source_event),
+        "text": lambda: copy_class(target_event_id, source_event_id, EventText),
+        "role": lambda: copy_class(target_event_id, source_event_id, EventRole),
+        "features": lambda: _copy_features(target_event, source_event),
+        "navigation": lambda: copy_class(target_event_id, source_event_id, EventButton),
     }
 
     # Execute copy actions for each target in the list
-    for target in targets:
-        if target in copy_actions:
-            copy_actions[target]()
+    for element_type in elements_to_copy:
+        if element_type in copy_actions:
+            copy_actions[element_type]()
 
 
-def _copy_event_fields(ctx, event, parent):
+def _copy_event_fields(context, event, parent_event):
     """Copy basic event fields from parent to child event."""
-    for s in get_all_fields_from_form(OrgaEventForm, ctx):
-        if s == "slug":
+    for field_name in get_all_fields_from_form(OrgaEventForm, context):
+        if field_name == "slug":
             continue
-        v = getattr(parent, s)
-        setattr(event, s, v)
+        field_value = getattr(parent_event, field_name)
+        setattr(event, field_name, field_value)
     event.name = "copy - " + event.name
 
 
-def _copy_appearance_fields(ctx, event, parent):
+def _copy_appearance_fields(context, child_event, parent_event):
     """Copy appearance fields from parent to child event."""
-    for s in get_all_fields_from_form(OrgaAppearanceForm, ctx):
-        if s == "event_css":
-            copy_css(ctx, event, parent)
+    for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
+        if field_name == "event_css":
+            copy_css(context, child_event, parent_event)
         else:
-            v = getattr(parent, s)
-            setattr(event, s, v)
+            field_value = getattr(parent_event, field_name)
+            setattr(child_event, field_name, field_value)
 
 
 def _copy_features(event, parent):
     """Copy features from parent to child event."""
-    for fn in parent.features.all():
-        event.features.add(fn)
+    for feature in parent.features.all():
+        event.features.add(feature)
     event.save()
 
 
-def copy_registration(e_id: int, targets: list[str], p_id: int) -> None:
+def copy_registration(source_event_id: int, targets: list[str], target_event_id: int) -> None:
     """Copy registration components from one event to another based on specified targets.
 
     Args:
-        e_id: Source event ID to copy from
+        source_event_id: Source event ID to copy from
         targets: List of registration component types to copy ('ticket', 'question',
                 'discount', 'quota', 'installment', 'surcharge')
-        p_id: Target event ID to copy to
+        target_event_id: Target event ID to copy to
     """
     # Copy registration tickets if requested
     if "ticket" in targets:
-        copy_class(e_id, p_id, RegistrationTicket)
+        copy_class(source_event_id, target_event_id, RegistrationTicket)
 
     # Copy registration questions and their options, then fix relationships
     if "question" in targets:
-        copy_class(e_id, p_id, RegistrationQuestion)
-        copy_class(e_id, p_id, RegistrationOption)
-        correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "name")
+        copy_class(source_event_id, target_event_id, RegistrationQuestion)
+        copy_class(source_event_id, target_event_id, RegistrationOption)
+        correct_rels(source_event_id, target_event_id, RegistrationQuestion, RegistrationOption, "question", "name")
 
     # Copy discount configurations
     if "discount" in targets:
-        copy_class(e_id, p_id, Discount)
+        copy_class(source_event_id, target_event_id, Discount)
 
     # Copy registration quotas
     if "quota" in targets:
-        copy_class(e_id, p_id, RegistrationQuota)
+        copy_class(source_event_id, target_event_id, RegistrationQuota)
 
     # Copy installment plans and link them to tickets
     if "installment" in targets:
-        copy_class(e_id, p_id, RegistrationInstallment)
-        correct_rels_many(e_id, RegistrationTicket, RegistrationInstallment, "tickets", "name")
+        copy_class(source_event_id, target_event_id, RegistrationInstallment)
+        correct_rels_many(source_event_id, RegistrationTicket, RegistrationInstallment, "tickets", "name")
 
     # Copy surcharge configurations
     if "surcharge" in targets:
-        copy_class(e_id, p_id, RegistrationSurcharge)
+        copy_class(source_event_id, target_event_id, RegistrationSurcharge)
 
 
-def copy_writing(e_id: int, targets: list[str], p_id: int) -> None:
+def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int) -> None:
     """Copy writing elements from parent to child event.
 
     This function copies various writing-related elements (characters, factions,
@@ -441,62 +441,62 @@ def copy_writing(e_id: int, targets: list[str], p_id: int) -> None:
     target types.
 
     Args:
-        e_id: Target event ID where elements will be copied to
+        target_event_id: Target event ID where elements will be copied to
         targets: List of element types to copy. Valid values include:
             'character', 'faction', 'quest', 'prologue', 'speedlarp',
             'plot', 'handout', 'workshop'
-        p_id: Parent event ID to copy elements from
+        parent_event_id: Parent event ID to copy elements from
 
     Returns:
         None
     """
     # Copy character-related elements and fix relationships
     if "character" in targets:
-        copy_class(e_id, p_id, Character)
+        copy_class(target_event_id, parent_event_id, Character)
         # correct relationship
-        correct_relationship(e_id, p_id)
+        correct_relationship(target_event_id, parent_event_id)
         # character fields
-        copy_class(e_id, p_id, WritingQuestion)
-        copy_class(e_id, p_id, WritingOption)
-        copy_character_config(e_id, p_id)
-        correct_rels(e_id, p_id, WritingQuestion, WritingOption, "question", "name")
+        copy_class(target_event_id, parent_event_id, WritingQuestion)
+        copy_class(target_event_id, parent_event_id, WritingOption)
+        copy_character_config(target_event_id, parent_event_id)
+        correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
 
     # Copy faction elements
     if "faction" in targets:
-        copy_class(e_id, p_id, Faction)
+        copy_class(target_event_id, parent_event_id, Faction)
 
     # Copy quest-related elements and fix relationships
     if "quest" in targets:
-        copy_class(e_id, p_id, QuestType)
-        copy_class(e_id, p_id, Quest)
-        copy_class(e_id, p_id, Trait)
-        correct_rels(e_id, p_id, QuestType, Quest, "typ")
-        correct_rels(e_id, p_id, Quest, Trait, "quest")
+        copy_class(target_event_id, parent_event_id, QuestType)
+        copy_class(target_event_id, parent_event_id, Quest)
+        copy_class(target_event_id, parent_event_id, Trait)
+        correct_rels(target_event_id, parent_event_id, QuestType, Quest, "typ")
+        correct_rels(target_event_id, parent_event_id, Quest, Trait, "quest")
 
     # Copy prologue elements
     if "prologue" in targets:
-        copy_class(e_id, p_id, Prologue)
+        copy_class(target_event_id, parent_event_id, Prologue)
 
     # Copy speedlarp elements
     if "speedlarp" in targets:
-        copy_class(e_id, p_id, SpeedLarp)
+        copy_class(target_event_id, parent_event_id, SpeedLarp)
 
     # Copy plot elements and fix character relationships
     if "plot" in targets:
-        copy_class(e_id, p_id, Plot)
+        copy_class(target_event_id, parent_event_id, Plot)
         # correct plotcharacterrels
-        correct_plot_character(e_id, p_id)
+        correct_plot_character(target_event_id, parent_event_id)
 
     # Copy handout and template elements
     if "handout" in targets:
-        copy_class(e_id, p_id, Handout)
-        copy_class(e_id, p_id, HandoutTemplate)
+        copy_class(target_event_id, parent_event_id, Handout)
+        copy_class(target_event_id, parent_event_id, HandoutTemplate)
 
     # Copy workshop elements and fix relationships
     if "workshop" in targets:
-        copy_class(e_id, p_id, WorkshopModule)
+        copy_class(target_event_id, parent_event_id, WorkshopModule)
         # correct workshop
-        correct_workshop(e_id, p_id)
+        correct_workshop(target_event_id, parent_event_id)
 
 
 def copy_css(ctx, event, parent) -> None:
@@ -508,20 +508,20 @@ def copy_css(ctx, event, parent) -> None:
         parent: Source event to copy CSS from
     """
     # Initialize appearance form and get source CSS path
-    app_form = OrgaAppearanceForm(ctx=ctx)
-    path = app_form.get_css_path(parent)
+    appearance_form = OrgaAppearanceForm(ctx=ctx)
+    source_css_path = appearance_form.get_css_path(parent)
 
     # Exit early if source CSS file doesn't exist
-    if not default_storage.exists(path):
+    if not default_storage.exists(source_css_path):
         return
 
     # Read CSS content from source file
-    value = default_storage.open(path).read().decode("utf-8")
+    css_content = default_storage.open(source_css_path).read().decode("utf-8")
 
     # Generate new CSS ID and save to target event
     event.css_code = generate_id(32)
-    npath = app_form.get_css_path(event)
-    default_storage.save(npath, ContentFile(value))
+    target_css_path = appearance_form.get_css_path(event)
+    default_storage.save(target_css_path, ContentFile(css_content))
 
 
 @login_required

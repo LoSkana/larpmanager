@@ -153,29 +153,29 @@ class ConfigForm(MyForm):
 
         return instance
 
-    def _get_custom_field(self, el, res):
+    def _get_custom_field(self, field_definition, result_dict):
         """Extract and format configuration field value from form data.
 
         Args:
-            el: Configuration field definition
-            res: Dictionary to store extracted values
+            field_definition: Configuration field definition
+            result_dict: Dictionary to store extracted values
 
         Side effects:
-            Updates res dictionary with formatted field value
+            Updates result_dict dictionary with formatted field value
         """
-        k = el["key"]
+        field_key = field_definition["key"]
 
-        val = self.cleaned_data[k]
-        if val is None:
+        field_value = self.cleaned_data[field_key]
+        if field_value is None:
             return
 
-        if el["type"] == ConfigType.MEMBERS:
-            val = ",".join([str(el.id) for el in val])
+        if field_definition["type"] == ConfigType.MEMBERS:
+            field_value = ",".join([str(member.id) for member in field_value])
         else:
-            val = str(val)
-            val = val.replace(r"//", r"/")
+            field_value = str(field_value)
+            field_value = field_value.replace(r"//", r"/")
 
-        res[k] = val
+        result_dict[field_key] = field_value
 
     @staticmethod
     def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra=None) -> forms.Field | None:
@@ -203,7 +203,7 @@ class ConfigForm(MyForm):
         The MEMBERS type requires extra parameter to contain association data for queryset filtering.
         """
         # Map each configuration type to its corresponding Django form field factory
-        field_map = {
+        field_type_to_form_field = {
             # Basic text input field for short strings
             ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
             # Checkbox field with custom styling for boolean values
@@ -245,9 +245,9 @@ class ConfigForm(MyForm):
         }
 
         # Get the factory function for the specified field type
-        factory = field_map.get(ConfigType(field_type))
+        field_factory_function = field_type_to_form_field.get(ConfigType(field_type))
         # Create and return the form field instance, or None if type is unsupported
-        return factory() if factory else None
+        return field_factory_function() if field_factory_function else None
 
     def _add_custom_field(self, config: dict, configuration_values: dict) -> None:
         """Add a custom configuration field to the form.
@@ -303,8 +303,8 @@ class ConfigForm(MyForm):
         Returns:
             dict: Mapping of configuration names to their current values
         """
-        res = {}
+        config_mapping = {}
         if self.instance.pk:
             for config in self.instance.configs.all():
-                res[config.name] = config.value
-        return res
+                config_mapping[config.name] = config.value
+        return config_mapping

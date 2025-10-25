@@ -59,25 +59,25 @@ def _render_sitemap(urls: list[str]) -> StringIO:
         StringIO object containing the generated XML sitemap
     """
     # Initialize XML stream and generator
-    stream = StringIO()
-    xml = SimplerXMLGenerator(stream, "utf-8")
+    xml_stream = StringIO()
+    xml_generator = SimplerXMLGenerator(xml_stream, "utf-8")
 
     # Start XML document and root urlset element
-    xml.startDocument()
-    xml.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
+    xml_generator.startDocument()
+    xml_generator.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
 
     # Generate URL entries for each location
-    for loc in urls:
-        xml.startElement("url", {})
-        xml.startElement("loc", {})
-        xml.characters(loc)
-        xml.endElement("loc")
-        xml.endElement("url")
+    for location_url in urls:
+        xml_generator.startElement("url", {})
+        xml_generator.startElement("loc", {})
+        xml_generator.characters(location_url)
+        xml_generator.endElement("loc")
+        xml_generator.endElement("url")
 
     # Close root element and document
-    xml.endElement("urlset")
-    xml.endDocument()
-    return stream
+    xml_generator.endElement("urlset")
+    xml_generator.endDocument()
+    return xml_stream
 
 
 def _organization_sitemap(request) -> list[str]:
@@ -95,17 +95,17 @@ def _organization_sitemap(request) -> list[str]:
         and have end dates in the future.
     """
     # Get organization and check if it's a demo instance
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    cache = get_cache_assoc(assoc.slug)
-    if cache.get("demo", False):
+    organization = Association.objects.get(pk=request.assoc["id"])
+    organization_cache = get_cache_assoc(organization.slug)
+    if organization_cache.get("demo", False):
         return []
 
     # Build base organization URL
-    domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-    urls = [f"https://{assoc.slug}.{domain}/"]
+    domain = organization.skin.domain if organization.skin else "larpmanager.com"
+    urls = [f"https://{organization.slug}.{domain}/"]
 
     # Track processed events to avoid duplicates
-    cache_ev = {}
+    processed_event_ids = {}
 
     # Query active runs for future events
     runs = (
@@ -117,16 +117,16 @@ def _organization_sitemap(request) -> list[str]:
     )
 
     # Generate URLs for each unique event
-    for el in runs:
+    for run in runs:
         # Skip if event already processed
-        if el.event_id in cache_ev:
+        if run.event_id in processed_event_ids:
             continue
-        cache_ev[el.event_id] = 1
+        processed_event_ids[run.event_id] = 1
 
         # Build event-specific URL
-        assoc = el.event.assoc
-        domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-        urls.append(f"https://{assoc.slug}.{domain}/{el.get_slug()}/event/")
+        event_organization = run.event.assoc
+        domain = event_organization.skin.domain if event_organization.skin else "larpmanager.com"
+        urls.append(f"https://{event_organization.slug}.{domain}/{run.get_slug()}/event/")
 
     return urls
 

@@ -124,18 +124,19 @@ class CharacterForm(WritingForm, BaseWritingForm):
             True if question is editable, False otherwise
         """
         # If character approval is disabled, all questions are editable
-        if not get_event_config(self.params["event"].id, "user_character_approval", False):
+        character_approval_enabled = get_event_config(self.params["event"].id, "user_character_approval", False)
+        if not character_approval_enabled:
             return True
 
         # Get allowed statuses for editing this question
-        statuses = question.get_editable()
+        allowed_editable_statuses = question.get_editable()
 
         # If no status restrictions, question is always editable
-        if not statuses:
+        if not allowed_editable_statuses:
             return True
 
         # Check if current instance status allows editing
-        return self.instance.status in question.get_editable()
+        return self.instance.status in allowed_editable_statuses
 
     def _init_custom_fields(self) -> None:
         """Initialize custom form fields for character creation.
@@ -364,9 +365,9 @@ class OrgaCharacterForm(CharacterForm):
             self.delete_field("status")
 
         if "mirror" in self.fields:
-            que = self.params["run"].event.get_elements(Character).all()
-            choices = [(m.id, m.name) for m in que]
-            self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
+            characters_query = self.params["run"].event.get_elements(Character).all()
+            character_choices = [(character.id, character.name) for character in characters_query]
+            self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + character_choices
 
         self._init_special_fields()
 
@@ -388,44 +389,45 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["plots"].widget.set_event(self.params["event"])
 
         self.plots = self.instance.get_plot_characters()
-        self.initial["plots"] = [el.plot_id for el in self.plots]
+        self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
         self.ordering_up = {}
         self.ordering_down = {}
         self.field_link = {}
 
-        count = len(self.plots)
-        for i, el in enumerate(self.plots):
-            plot = el.plot.name
-            field = f"pl_{el.plot_id}"
-            id_field = f"id_{field}"
-            self.fields[field] = forms.CharField(
+        total_plots = len(self.plots)
+        for index, plot_character in enumerate(self.plots):
+            plot_name = plot_character.plot.name
+            plot_field_name = f"pl_{plot_character.plot_id}"
+            plot_field_id = f"id_{plot_field_name}"
+            self.fields[plot_field_name] = forms.CharField(
                 widget=WritingTinyMCE(),
-                label=plot,
-                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
+                label=plot_name,
+                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s")
+                % {"name": plot_name},
                 required=False,
             )
-            if el.text:
-                self.initial[field] = el.text
+            if plot_character.text:
+                self.initial[plot_field_name] = plot_character.text
 
-            if el.plot.text:
-                self.details[id_field] = el.plot.text
-            self.show_link.append(id_field)
-            self.add_char_finder.append(id_field)
+            if plot_character.plot.text:
+                self.details[plot_field_id] = plot_character.plot.text
+            self.show_link.append(plot_field_id)
+            self.add_char_finder.append(plot_field_id)
 
-            reverse_args = [self.params["run"].get_slug(), el.plot_id]
-            self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
+            reverse_args = [self.params["run"].get_slug(), plot_character.plot_id]
+            self.field_link[plot_field_id] = reverse("orga_plots_edit", args=reverse_args)
 
             # if not first, add to ordering up
-            if not i == 0:
-                reverse_args = [self.params["run"].get_slug(), el.id, "0"]
-                self.ordering_up[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
+            if not index == 0:
+                reverse_args = [self.params["run"].get_slug(), plot_character.id, "0"]
+                self.ordering_up[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
             # if not last, add to ordering down
-            if not i == count - 1:
-                reverse_args = [self.params["run"].get_slug(), el.id, "1"]
-                self.ordering_down[id_field] = reverse("orga_plots_rels_order", args=reverse_args)
+            if not index == total_plots - 1:
+                reverse_args = [self.params["run"].get_slug(), plot_character.id, "1"]
+                self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
     def _save_plot(self, instance):
         """Save plot associations for a character.
@@ -774,7 +776,7 @@ class OrgaWritingQuestionForm(MyForm):
 
         # Hide applicable field and set default value for new instances
         self.fields["applicable"].widget = forms.HiddenInput()
-        self.initial["applicable"] = self.params["writing_typ"]
+        self.initial["applicable"] = self.params["writing_type"]
 
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])

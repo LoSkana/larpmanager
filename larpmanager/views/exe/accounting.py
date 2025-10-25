@@ -787,7 +787,7 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/exe/accounting/accounting_rec.html", ctx)
 
 
-def check_year(request: HttpRequest, ctx: dict) -> int:
+def check_year(request: HttpRequest, context: dict) -> int:
     """Check and validate the year parameter from request data.
 
     Retrieves the association from context, generates a list of valid years
@@ -796,7 +796,7 @@ def check_year(request: HttpRequest, ctx: dict) -> int:
 
     Args:
         request: The HTTP request object containing POST data
-        ctx: Context dictionary containing association ID and other data
+        context: Context dictionary containing association ID and other data
 
     Returns:
         int: The validated year value, defaults to current year if invalid
@@ -805,22 +805,22 @@ def check_year(request: HttpRequest, ctx: dict) -> int:
         Association.DoesNotExist: If association with given ID doesn't exist
     """
     # Get association and generate valid years range
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    ctx["years"] = list(range(datetime.today().year, assoc.created.year - 1, -1))
+    association = Association.objects.get(pk=context["a_id"])
+    context["years"] = list(range(datetime.today().year, association.created.year - 1, -1))
 
     # Process POST data if present
     if request.POST:
         try:
             # Attempt to parse year from POST data
-            ctx["year"] = int(request.POST.get("year"))
+            context["year"] = int(request.POST.get("year"))
         except (ValueError, TypeError):
             # Fall back to current year if parsing fails
-            ctx["year"] = ctx["years"][0]
+            context["year"] = context["years"][0]
     else:
         # Default to current year if no POST data
-        ctx["year"] = ctx["years"][0]
+        context["year"] = context["years"][0]
 
-    return ctx["year"]
+    return context["year"]
 
 
 @login_required

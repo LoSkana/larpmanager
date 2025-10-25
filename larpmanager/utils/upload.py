@@ -146,14 +146,14 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
             uploaded_file.seek(0)
 
             # Decode file content with current encoding
-            decoded = uploaded_file.read().decode(encoding)
-            text_io = io.StringIO(decoded)
+            decoded_content = uploaded_file.read().decode(encoding)
+            string_buffer = io.StringIO(decoded_content)
 
             # Parse CSV with automatic delimiter detection
-            return pd.read_csv(text_io, encoding=encoding, sep=None, engine="python", dtype=str)
-        except Exception as err:
+            return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+        except Exception as parsing_error:
             # Log error and continue to next encoding
-            print(err)
+            print(parsing_error)
             continue
 
     # Return None if all encodings failed
@@ -230,7 +230,7 @@ def registrations_load(request, ctx, form):
     return logs
 
 
-def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
+def _reg_load(request, context: dict, csv_row: dict, registration_questions: list) -> str:
     """Load registration data from CSV row for bulk import.
 
     Creates or updates registrations with field validation, membership checks,
@@ -238,9 +238,9 @@ def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
 
     Args:
         request: HTTP request object containing user information
-        ctx: Context dictionary containing event and run information
-        row: Dictionary representing a CSV row with registration data
-        questions: List of registration questions for the event
+        context: Context dictionary containing event and run information
+        csv_row: Dictionary representing a CSV row with registration data
+        registration_questions: List of registration questions for the event
 
     Returns:
         str: Status message indicating success/failure and details
@@ -249,12 +249,12 @@ def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
         ObjectDoesNotExist: When user email or membership is not found
     """
     # Validate required email column exists
-    if "email" not in row:
+    if "email" not in csv_row:
         return "ERR - There is no email column"
 
     # Find user by email (case-insensitive)
     try:
-        user = User.objects.get(email__iexact=row["email"].strip())
+        user = User.objects.get(email__iexact=csv_row["email"].strip())
     except ObjectDoesNotExist:
         return "ERR - Email not found"
 
@@ -262,7 +262,7 @@ def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
 
     # Check if user has valid membership for this association
     try:
-        membership = Membership.objects.get(member=member, assoc_id=ctx["event"].assoc_id)
+        membership = Membership.objects.get(member=member, assoc_id=context["event"].assoc_id)
     except ObjectDoesNotExist:
         return "ERR - Sharing data not found"
 
@@ -271,54 +271,58 @@ def _reg_load(request, ctx: dict, row: dict, questions: list) -> str:
         return "ERR - User has not approved sharing of data"
 
     # Get or create registration for this run and member
-    (reg, cr) = Registration.objects.get_or_create(run=ctx["run"], member=member, cancellation_date__isnull=True)
+    (registration, was_created) = Registration.objects.get_or_create(
+        run=context["run"], member=member, cancellation_date__isnull=True
+    )
 
-    logs = []
+    error_logs = []
 
     # Process each field in the CSV row
-    for field, value in row.items():
-        _reg_field_load(ctx, reg, field, value, questions, logs)
+    for field_name, field_value in csv_row.items():
+        _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs)
 
     # Save registration and log the action
-    reg.save()
-    save_log(request.user.member, Registration, reg)
+    registration.save()
+    save_log(request.user.member, Registration, registration)
 
     # Generate appropriate status message
-    if logs:
-        msg = "KO - " + ",".join(logs)
-    elif cr:
-        msg = f"OK - Created {member}"
+    if error_logs:
+        status_message = "KO - " + ",".join(error_logs)
+    elif was_created:
+        status_message = f"OK - Created {member}"
     else:
-        msg = f"OK - Updated {member}"
+        status_message = f"OK - Updated {member}"
 
-    return msg
+    return status_message
 
 
-def _reg_field_load(ctx, reg, field, value, questions, logs):
+def _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs):
     """Load individual registration field from CSV data.
 
     Args:
-        ctx: Context dictionary with event data
-        reg: Registration instance to update
-        field: Field name from CSV
-        value: Field value from CSV
-        questions: Dictionary of registration questions
-        logs: List to append error messages to
+        context: Context dictionary with event data
+        registration: Registration instance to update
+        field_name: Field name from CSV
+        field_value: Field value from CSV
+        registration_questions: Dictionary of registration questions
+        error_logs: List to append error messages to
     """
-    if field == "email":
+    if field_name == "email":
         return
 
-    if not value or pd.isna(value):
+    if not field_value or pd.isna(field_value):
         return
 
-    if field == "ticket":
-        _assign_elem(ctx, reg, field, value, RegistrationTicket, logs)
-    elif field == "characters":
-        _reg_assign_characters(ctx, reg, value, logs)
-    elif field == "pwyw":
-        reg.pay_what = Decimal(value)
+    if field_name == "ticket":
+        _assign_elem(context, registration, field_name, field_value, RegistrationTicket, error_logs)
+    elif field_name == "characters":
+        _reg_assign_characters(context, registration, field_value, error_logs)
+    elif field_name == "pwyw":
+        registration.pay_what = Decimal(field_value)
     else:
-        _assign_choice_answer(reg, field, value, questions, logs, is_registration=True)
+        _assign_choice_answer(
+            registration, field_name, field_value, registration_questions, error_logs, is_registration=True
+        )
 
 
 def _assign_elem(
@@ -354,44 +358,46 @@ def _assign_elem(
     target_object.__setattr__(field_name, element)
 
 
-def _reg_assign_characters(ctx: dict, reg: Registration, value: str, logs: list[str]) -> None:
+def _reg_assign_characters(
+    context: dict, registration: Registration, character_names_string: str, error_logs: list[str]
+) -> None:
     """Assign characters to a registration based on comma-separated character names.
 
     Args:
-        ctx: Context dictionary containing event and run information
-        reg: Registration object to assign characters to
-        value: Comma-separated string of character names
-        logs: List to append error messages to
+        context: Context dictionary containing event and run information
+        registration: Registration object to assign characters to
+        character_names_string: Comma-separated string of character names
+        error_logs: List to append error messages to
     """
     # Clear existing character assignments for this registration
-    RegistrationCharacterRel.objects.filter(reg=reg).delete()
+    RegistrationCharacterRel.objects.filter(reg=registration).delete()
 
     # Handle multiple characters separated by commas
-    character_names = [name.strip() for name in value.split(",")]
+    character_names = [name.strip() for name in character_names_string.split(",")]
 
-    for char_name in character_names:
-        if not char_name:
+    for character_name in character_names:
+        if not character_name:
             continue
 
         # Find character by name in the current event
         try:
-            char = Character.objects.get(event=ctx["event"], name__iexact=char_name)
+            character = Character.objects.get(event=context["event"], name__iexact=character_name)
         except ObjectDoesNotExist:
-            logs.append(f"ERR - Character not found: {char_name}")
+            error_logs.append(f"ERR - Character not found: {character_name}")
             continue
 
         # Check if character is already assigned to another active registration
-        que = RegistrationCharacterRel.objects.filter(
-            reg__run=ctx["run"],
+        existing_assignments = RegistrationCharacterRel.objects.filter(
+            reg__run=context["run"],
             reg__cancellation_date__isnull=True,
-            character=char,
+            character=character,
         )
-        if que.exclude(reg_id=reg.id).exists():
-            logs.append(f"ERR - character already assigned: {char_name}")
+        if existing_assignments.exclude(reg_id=registration.id).exists():
+            error_logs.append(f"ERR - character already assigned: {character_name}")
             continue
 
         # Create the character assignment relationship
-        RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
+        RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
 def writing_load(request, ctx: dict, form) -> list[str]:
@@ -477,24 +483,24 @@ def _plot_rels_load(row: dict, chars: dict[str, int], plots: dict[str, int]) -> 
         Status message indicating success or failure with details
     """
     # Extract and normalize character name from row data
-    char = row.get("character", "").lower()
-    if char not in chars:
-        return f"ERR - source not found {char}"
-    char_id = chars[char]
+    character_name = row.get("character", "").lower()
+    if character_name not in chars:
+        return f"ERR - source not found {character_name}"
+    character_id = chars[character_name]
 
     # Extract and normalize plot name from row data
-    plot = row.get("plot", "").lower()
-    if plot not in plots:
-        return f"ERR - target not found {plot}"
-    plot_id = plots[plot]
+    plot_name = row.get("plot", "").lower()
+    if plot_name not in plots:
+        return f"ERR - target not found {plot_name}"
+    plot_id = plots[plot_name]
 
     # Create or retrieve existing plot-character relationship
-    rel, _ = PlotCharacterRel.objects.get_or_create(character_id=char_id, plot_id=plot_id)
+    plot_character_relationship, _ = PlotCharacterRel.objects.get_or_create(character_id=character_id, plot_id=plot_id)
 
     # Update relationship text and save to database
-    rel.text = row.get("text")
-    rel.save()
-    return f"OK - Plot role {char} {plot}"
+    plot_character_relationship.text = row.get("text")
+    plot_character_relationship.save()
+    return f"OK - Plot role {character_name} {plot_name}"
 
 
 def _relationships_load(row: dict, chars: dict) -> str:
@@ -512,22 +518,22 @@ def _relationships_load(row: dict, chars: dict) -> str:
         Status message indicating success or error with details
     """
     # Get source character name and validate it exists
-    source_char = row.get("source", "").lower()
-    if source_char not in chars:
-        return f"ERR - source not found {source_char}"
-    source_id = chars[source_char]
+    source_character_name = row.get("source", "").lower()
+    if source_character_name not in chars:
+        return f"ERR - source not found {source_character_name}"
+    source_character_id = chars[source_character_name]
 
     # Get target character name and validate it exists
-    target_char = row.get("target", "").lower()
-    if target_char not in chars:
-        return f"ERR - target not found {target_char}"
-    target_id = chars[target_char]
+    target_character_name = row.get("target", "").lower()
+    if target_character_name not in chars:
+        return f"ERR - target not found {target_character_name}"
+    target_character_id = chars[target_character_name]
 
     # Create or retrieve relationship and update text
-    relation, _ = Relationship.objects.get_or_create(source_id=source_id, target_id=target_id)
-    relation.text = row.get("text")
-    relation.save()
-    return f"OK - Relationship {source_char} {target_char}"
+    relationship, _ = Relationship.objects.get_or_create(source_id=source_character_id, target_id=target_character_id)
+    relationship.text = row.get("text")
+    relationship.save()
+    return f"OK - Relationship {source_character_name} {target_character_name}"
 
 
 def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, Union[int, str, dict[str, int]]]]:
@@ -597,7 +603,7 @@ def _assign_choice_answer(
                 )
 
 
-def element_load(request, ctx: dict, row: dict, questions: list) -> str:
+def element_load(request, context: dict, csv_row: dict, element_questions: list) -> str:
     """Load generic element data from CSV row for bulk import.
 
     Processes element creation or updates with field validation,
@@ -605,53 +611,53 @@ def element_load(request, ctx: dict, row: dict, questions: list) -> str:
 
     Args:
         request: HTTP request object containing user information
-        ctx: Context dictionary with field_name, typ, event, and fields
-        row: CSV row data as dictionary with field names and values
-        questions: List of questions for element processing
+        context: Context dictionary with field_name, typ, event, and fields
+        csv_row: CSV row data as dictionary with field names and values
+        element_questions: List of questions for element processing
 
     Returns:
         Status message string indicating success/failure and operation details
     """
     # Validate that the required field name exists in the CSV row
-    field_name = ctx["field_name"].lower()
-    if field_name not in row:
+    primary_field_name = context["field_name"].lower()
+    if primary_field_name not in csv_row:
         return "ERR - There is no name in fields"
 
     # Extract element name and determine the appropriate model class
-    name = row[field_name]
-    typ = QuestionApplicable.get_applicable(ctx["typ"])
-    writing_cls = QuestionApplicable.get_applicable_inverse(typ)
+    element_name = csv_row[primary_field_name]
+    question_applicable_type = QuestionApplicable.get_applicable(context["typ"])
+    writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
     # Try to find existing element or create new one
-    created = False
+    is_newly_created = False
     try:
-        element = writing_cls.objects.get(event=ctx["event"], name__iexact=name)
+        element = writing_model_class.objects.get(event=context["event"], name__iexact=element_name)
     except ObjectDoesNotExist:
-        element = writing_cls.objects.create(event=ctx["event"], name=name)
-        created = True
+        element = writing_model_class.objects.create(event=context["event"], name=element_name)
+        is_newly_created = True
 
     # Initialize logging for field processing errors
-    logs = []
+    error_logs = []
 
     # Normalize field names to lowercase for consistent processing
-    ctx["fields"] = {key.lower(): content for key, content in ctx["fields"].items()}
+    context["fields"] = {key.lower(): content for key, content in context["fields"].items()}
 
     # Process each field in the CSV row and update element
-    for field, value in row.items():
-        _writing_load_field(ctx, element, field, value, questions, logs)
+    for field_name, field_value in csv_row.items():
+        _writing_load_field(context, element, field_name, field_value, element_questions, error_logs)
 
     # Save the element and log the operation
     element.save()
-    save_log(request.user.member, writing_cls, element)
+    save_log(request.user.member, writing_model_class, element)
 
     # Return appropriate status message based on processing results
-    if logs:
-        return "KO - " + ",".join(logs)
+    if error_logs:
+        return "KO - " + ",".join(error_logs)
 
-    if created:
-        return f"OK - Created {name}"
+    if is_newly_created:
+        return f"OK - Created {element_name}"
     else:
-        return f"OK - Updated {name}"
+        return f"OK - Updated {element_name}"
 
 
 def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
@@ -710,54 +716,56 @@ def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, q
         return
 
     # Convert multiline text to HTML break tags and strip whitespace
-    value = "<br />".join(str(value).strip().split("\n"))
-    if not value:
+    html_formatted_value = "<br />".join(str(value).strip().split("\n"))
+    if not html_formatted_value:
         return
 
     # Delegate to question loading for all other field types
-    _writing_question_load(ctx, element, field, field_type, logs, questions, value)
+    _writing_question_load(ctx, element, field, field_type, logs, questions, html_formatted_value)
 
 
-def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
+def _writing_question_load(
+    context, writing_element, question_field, question_type, processing_logs, questions_dict, field_value
+):
     """Process and load writing question values into element fields.
 
     Args:
-        ctx: Context dictionary
-        element: Target writing element to update
-        field: Field identifier
-        field_type: WritingQuestionType enum value
-        logs: List to collect processing logs
-        questions: Dictionary of questions
-        value: Value to assign to the field
+        context: Context dictionary
+        writing_element: Target writing element to update
+        question_field: Field identifier
+        question_type: WritingQuestionType enum value
+        processing_logs: List to collect processing logs
+        questions_dict: Dictionary of questions
+        field_value: Value to assign to the field
     """
-    if field_type == WritingQuestionType.MIRROR:
-        _get_mirror_instance(ctx, element, value, logs)
-    elif field_type == WritingQuestionType.HIDE:
-        element.hide = value.lower() == "true"
-    elif field_type == WritingQuestionType.FACTIONS:
-        _assign_faction(ctx, element, value, logs)
-    elif field_type == WritingQuestionType.TEASER:
-        element.teaser = value
-    elif field_type == WritingQuestionType.SHEET:
-        element.text = value
-    elif field_type == WritingQuestionType.TITLE:
-        element.title = value
+    if question_type == WritingQuestionType.MIRROR:
+        _get_mirror_instance(context, writing_element, field_value, processing_logs)
+    elif question_type == WritingQuestionType.HIDE:
+        writing_element.hide = field_value.lower() == "true"
+    elif question_type == WritingQuestionType.FACTIONS:
+        _assign_faction(context, writing_element, field_value, processing_logs)
+    elif question_type == WritingQuestionType.TEASER:
+        writing_element.teaser = field_value
+    elif question_type == WritingQuestionType.SHEET:
+        writing_element.text = field_value
+    elif question_type == WritingQuestionType.TITLE:
+        writing_element.title = field_value
     # TODO implement
-    # elif field_type == QuestionType.COVER:
-    #     element.cover = value
-    # elif field_type == QuestionType.PROGRESS:
-    #     element.cover = value
-    # elif field_type == QuestionType.ASSIGNED:
-    #     element.cover = value
+    # elif question_type == QuestionType.COVER:
+    #     writing_element.cover = field_value
+    # elif question_type == QuestionType.PROGRESS:
+    #     writing_element.cover = field_value
+    # elif question_type == QuestionType.ASSIGNED:
+    #     writing_element.cover = field_value
     else:
-        _assign_choice_answer(element, field, value, questions, logs)
+        _assign_choice_answer(writing_element, question_field, field_value, questions_dict, processing_logs)
 
 
-def _get_mirror_instance(ctx, element, value, logs):
+def _get_mirror_instance(context, character_element, mirror_character_name, error_logs):
     try:
-        element.mirror = ctx["event"].get_elements(Character).get(name__iexact=value)
+        character_element.mirror = context["event"].get_elements(Character).get(name__iexact=mirror_character_name)
     except ObjectDoesNotExist:
-        logs.append(f"ERR - mirror not found: {value}")
+        error_logs.append(f"ERR - mirror not found: {mirror_character_name}")
 
 
 def _assign_faction(ctx, element, value, logs):
@@ -835,7 +843,7 @@ def invert_dict(dictionary):
     return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
-def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
+def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str:
     """Load and validate question data from upload files.
 
     Processes question configurations for registration or character forms,
@@ -843,74 +851,74 @@ def _questions_load(ctx: dict, row: dict, is_registration: bool) -> str:
     based on the row data and validation mappings.
 
     Args:
-        ctx: Context dictionary containing event and processing information
-        row: Data row from upload file containing question configuration
+        context: Context dictionary containing event and processing information
+        row_data: Data row from upload file containing question configuration
         is_registration: True for registration questions, False for writing questions
 
     Returns:
         Status message indicating success or error details
     """
     # Extract and validate the required name field
-    name = row.get("name")
-    if not name:
+    question_name = row_data.get("name")
+    if not question_name:
         return "ERR - name not found"
 
     # Get field validation mappings for the question type
-    mappings = _get_mappings(is_registration)
+    field_mappings = _get_mappings(is_registration)
 
     if is_registration:
         # Create or get registration question instance
-        instance, created = RegistrationQuestion.objects.get_or_create(
-            event=ctx["event"],
-            name__iexact=name,
-            defaults={"name": name},
+        question_instance, was_created = RegistrationQuestion.objects.get_or_create(
+            event=context["event"],
+            name__iexact=question_name,
+            defaults={"name": question_name},
         )
     else:
         # Writing questions require additional 'applicable' field validation
-        if "applicable" not in row:
+        if "applicable" not in row_data:
             return "ERR - missing applicable column"
-        applicable = row["applicable"]
-        if applicable not in mappings["applicable"]:
+        applicable_value = row_data["applicable"]
+        if applicable_value not in field_mappings["applicable"]:
             return "ERR - unknown applicable"
 
         # Create or get writing question instance with applicable field
-        instance, created = WritingQuestion.objects.get_or_create(
-            event=ctx["event"],
-            name__iexact=name,
-            applicable=mappings["applicable"][applicable],
-            defaults={"name": name},
+        question_instance, was_created = WritingQuestion.objects.get_or_create(
+            event=context["event"],
+            name__iexact=question_name,
+            applicable=field_mappings["applicable"][applicable_value],
+            defaults={"name": question_name},
         )
 
     # Process and validate each field in the row data
-    for field, value in row.items():
+    for field_name, field_value in row_data.items():
         # Skip empty values and already processed fields
-        if not value or pd.isna(value) or field in ["applicable", "name"]:
+        if not field_value or pd.isna(field_value) or field_name in ["applicable", "name"]:
             continue
 
-        new_value = value
+        validated_value = field_value
         # Apply mapping validation if field has defined mappings
-        if field in mappings:
-            new_value = new_value.lower().strip()
-            if new_value not in mappings[field]:
-                return f"ERR - unknow value {value} for field {field}"
-            new_value = mappings[field][new_value]
+        if field_name in field_mappings:
+            validated_value = validated_value.lower().strip()
+            if validated_value not in field_mappings[field_name]:
+                return f"ERR - unknow value {field_value} for field {field_name}"
+            validated_value = field_mappings[field_name][validated_value]
 
         # Handle special case for max_length field conversion
-        if field == "max_length":
-            new_value = int(value)
+        if field_name == "max_length":
+            validated_value = int(field_value)
 
         # Set the validated value on the instance
-        setattr(instance, field, new_value)
+        setattr(question_instance, field_name, validated_value)
 
     # Save the configured instance to database
-    instance.save()
+    question_instance.save()
 
     # Return appropriate success message based on operation
-    if created:
-        msg = f"OK - Created {name}"
+    if was_created:
+        status_message = f"OK - Created {question_name}"
     else:
-        msg = f"OK - Updated {name}"
-    return msg
+        status_message = f"OK - Updated {question_name}"
+    return status_message
 
 
 def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
@@ -936,27 +944,27 @@ def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
     # Add registration-specific question types if needed
     if is_registration:
         # update typ with new types
-        typ_mapping = mappings["typ"]
+        question_type_mapping = mappings["typ"]
 
         # Iterate through writing question type choices
-        for key, _ in WritingQuestionType.choices:
+        for question_type_key, _ in WritingQuestionType.choices:
             # Add missing keys to maintain consistency
-            if key not in typ_mapping:
-                typ_mapping[key] = key
+            if question_type_key not in question_type_mapping:
+                question_type_mapping[question_type_key] = question_type_key
 
     return mappings
 
 
-def _options_load(ctx: dict, row: dict, questions: dict, is_registration: bool) -> str:
+def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, is_registration: bool) -> str:
     """Load question options from CSV row for bulk import.
 
     Creates or updates question options with proper validation,
     ordering, and association with the correct question type.
 
     Args:
-        ctx: Context dictionary containing import configuration
-        row: CSV row data as dictionary with column headers as keys
-        questions: Dictionary mapping question names to question IDs
+        import_context: Context dictionary containing import configuration
+        csv_row: CSV row data as dictionary with column headers as keys
+        question_name_to_id_map: Dictionary mapping question names to question IDs
         is_registration: Boolean flag indicating if this is for registration
 
     Returns:
@@ -965,83 +973,83 @@ def _options_load(ctx: dict, row: dict, questions: dict, is_registration: bool) 
     """
     # Validate required fields are present in the CSV row
     for field in ["name", "question"]:
-        if field not in row:
+        if field not in csv_row:
             return f"ERR - column {field} missing"
 
     # Extract and validate the option name
-    name = row["name"]
-    if not name:
+    option_name = csv_row["name"]
+    if not option_name:
         return "ERR - empty name"
 
     # Find the associated question by name (case-insensitive)
-    question = row["question"].lower()
-    if question not in questions:
+    question_name_lower = csv_row["question"].lower()
+    if question_name_lower not in question_name_to_id_map:
         return "ERR - question not found"
-    question_id = questions[question]
+    question_id = question_name_to_id_map[question_name_lower]
 
     # Get or create the option instance
-    created, instance = _get_option(ctx, is_registration, name, question_id)
+    was_created, option_instance = _get_option(import_context, is_registration, option_name, question_id)
 
     # Process each field in the CSV row
-    for field, value in row.items():
+    for field_name, field_value in csv_row.items():
         # Skip empty or NaN values
-        if not value or pd.isna(value):
+        if not field_value or pd.isna(field_value):
             continue
-        new_value = value
+        processed_value = field_value
 
         # Skip fields that are already processed
-        if field in ["question", "name"]:
+        if field_name in ["question", "name"]:
             continue
 
         # Convert numeric fields to appropriate types
-        if field in ["max_available", "price"]:
-            new_value = int(new_value)
+        if field_name in ["max_available", "price"]:
+            processed_value = int(processed_value)
 
         # Handle requirements field with special processing
-        if field == "requirements":
-            _assign_requirements(ctx, instance, [], value)
+        if field_name == "requirements":
+            _assign_requirements(import_context, option_instance, [], field_value)
             continue
 
         # Set the field value on the instance
-        setattr(instance, field, new_value)
+        setattr(option_instance, field_name, processed_value)
 
     # Save the instance to database
-    instance.save()
+    option_instance.save()
 
     # Return appropriate success message
-    if created:
-        return f"OK - Created {name}"
+    if was_created:
+        return f"OK - Created {option_name}"
     else:
-        return f"OK - Updated {name}"
+        return f"OK - Updated {option_name}"
 
 
-def _get_option(ctx, is_registration, name, question_id):
+def _get_option(context, is_registration, option_name, parent_question_id):
     """Get or create a question option for registration or writing forms.
 
     Args:
-        ctx: Context dictionary containing event data
+        context: Context dictionary containing event data
         is_registration: Boolean indicating if this is for registration (True) or writing (False)
-        name: Name of the option
-        question_id: ID of the parent question
+        option_name: Name of the option
+        parent_question_id: ID of the parent question
 
     Returns:
         tuple: (created, instance) where created is bool and instance is the option object
     """
     if is_registration:
-        instance, created = RegistrationOption.objects.get_or_create(
-            event=ctx["event"],
-            question_id=question_id,
-            name__iexact=name,
-            defaults={"name": name},
+        option_instance, was_created = RegistrationOption.objects.get_or_create(
+            event=context["event"],
+            question_id=parent_question_id,
+            name__iexact=option_name,
+            defaults={"name": option_name},
         )
     else:
-        instance, created = WritingOption.objects.get_or_create(
-            event=ctx["event"],
-            name__iexact=name,
-            question_id=question_id,
-            defaults={"name": name},
+        option_instance, was_created = WritingOption.objects.get_or_create(
+            event=context["event"],
+            name__iexact=option_name,
+            question_id=parent_question_id,
+            defaults={"name": option_name},
         )
-    return created, instance
+    return was_created, option_instance
 
 
 def get_csv_upload_tmp(csv_upload, run) -> str:
@@ -1137,7 +1145,7 @@ def tickets_load(request: HttpRequest, ctx: dict, form: Form) -> list[str]:
     return logs
 
 
-def _ticket_load(request, ctx: dict, row: dict) -> str:
+def _ticket_load(request, context: dict, csv_row: dict) -> str:
     """Load ticket data from CSV row for bulk import.
 
     Creates or updates RegistrationTicket objects with proper validation,
@@ -1145,8 +1153,8 @@ def _ticket_load(request, ctx: dict, row: dict) -> str:
 
     Args:
         request: HTTP request object containing user context
-        ctx: Context dictionary containing event and other bulk import data
-        row: Dictionary representing a single CSV row with ticket data
+        context: Context dictionary containing event and other bulk import data
+        csv_row: Dictionary representing a single CSV row with ticket data
 
     Returns:
         str: Status message indicating success ("OK - Created/Updated") or error ("ERR - ...")
@@ -1155,74 +1163,74 @@ def _ticket_load(request, ctx: dict, row: dict) -> str:
         ValueError: When numeric conversion fails for max_available or price fields
     """
     # Validate required name column exists
-    if "name" not in row:
+    if "name" not in csv_row:
         return "ERR - There is no name column"
 
     # Get or create ticket object for the event
-    (ticket, cr) = RegistrationTicket.objects.get_or_create(event=ctx["event"], name=row["name"])
+    (ticket, was_created) = RegistrationTicket.objects.get_or_create(event=context["event"], name=csv_row["name"])
 
     # Define field mappings for enumeration values
-    mappings = {
+    field_value_mappings = {
         "tier": invert_dict(TicketTier.get_mapping()),
     }
 
     # Process each field in the CSV row
-    for field, value in row.items():
+    for field_name, field_value in csv_row.items():
         # Skip empty values, NaN values, and the name field (already processed)
-        if not value or pd.isna(value) or field in ["name"]:
+        if not field_value or pd.isna(field_value) or field_name in ["name"]:
             continue
 
-        new_value = value
+        processed_value = field_value
 
         # Handle mapped enumeration fields
-        if field in mappings:
-            new_value = new_value.lower().strip()
-            if new_value not in mappings[field]:
-                return f"ERR - unknow value {value} for field {field}"
-            new_value = mappings[field][new_value]
+        if field_name in field_value_mappings:
+            processed_value = processed_value.lower().strip()
+            if processed_value not in field_value_mappings[field_name]:
+                return f"ERR - unknow value {field_value} for field {field_name}"
+            processed_value = field_value_mappings[field_name][processed_value]
 
         # Convert numeric fields to appropriate types
-        if field == "max_available":
-            new_value = int(value)
-        if field == "price":
-            new_value = float(value)
+        if field_name == "max_available":
+            processed_value = int(field_value)
+        if field_name == "price":
+            processed_value = float(field_value)
 
         # Set the field value on the ticket object
-        setattr(ticket, field, new_value)
+        setattr(ticket, field_name, processed_value)
 
     # Save the ticket and log the operation
     ticket.save()
     save_log(request.user.member, RegistrationTicket, ticket)
 
     # Return appropriate success message
-    if cr:
-        msg = f"OK - Created {ticket}"
+    if was_created:
+        status_message = f"OK - Created {ticket}"
     else:
-        msg = f"OK - Updated {ticket}"
+        status_message = f"OK - Updated {ticket}"
 
-    return msg
+    return status_message
 
 
-def abilities_load(request, ctx: dict, form) -> list:
+def abilities_load(request, context: dict, form) -> list:
     """Load abilities from uploaded file and process each row.
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary containing processing state
+        context: Context dictionary containing processing state
         form: Form object with cleaned data containing file reference
 
     Returns:
         List of processing logs from ability loading operations
     """
     # Extract and validate input file data
-    (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
 
     # Process each row if valid dataframe exists
-    if input_df is not None:
-        for row in input_df.to_dict(orient="records"):
+    if input_dataframe is not None:
+        for ability_row in input_dataframe.to_dict(orient="records"):
             # Load individual ability and collect processing logs
-            logs.append(_ability_load(request, ctx, row))
-    return logs
+            processing_logs.append(_ability_load(request, context, ability_row))
+    return processing_logs
 
 
 def _ability_load(request, context: dict, csv_row: dict) -> str:

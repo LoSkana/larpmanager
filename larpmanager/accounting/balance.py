@@ -126,7 +126,7 @@ def get_acc_detail(
     return result
 
 
-def get_acc_reg_type(el) -> tuple[str, str]:
+def get_acc_reg_type(registration) -> tuple[str, str]:
     """Determine registration type for accounting categorization.
 
     Analyzes a registration instance to categorize it for accounting purposes.
@@ -134,7 +134,7 @@ def get_acc_reg_type(el) -> tuple[str, str]:
     and ticket tier information.
 
     Args:
-        el: Registration instance to categorize. Must have cancellation_date
+        registration: Registration instance to categorize. Must have cancellation_date
             and ticket attributes.
 
     Returns:
@@ -143,17 +143,17 @@ def get_acc_reg_type(el) -> tuple[str, str]:
             - display_name: Human-readable name for the registration type
     """
     # Check if registration has been cancelled
-    if el.cancellation_date:
+    if registration.cancellation_date:
         return "can", "Disdetta"
 
     # Return empty values if no ticket is associated
-    if not el.ticket:
+    if not registration.ticket:
         return "", ""
 
     # Extract tier information from ticket and get display name
     return (
-        el.ticket.tier,
-        get_display_choice(TicketTier.choices, el.ticket.tier),
+        registration.ticket.tier,
+        get_display_choice(TicketTier.choices, registration.ticket.tier),
     )
 
 
@@ -177,29 +177,29 @@ def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
             - descr: Description passed as parameter
     """
     # Initialize result dictionary with base structure
-    dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
+    accounting_data = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
 
     # Query all non-cancelled registrations for the run with ticket data
     registrations = Registration.objects.filter(run=run).select_related("ticket").filter(cancellation_date__isnull=True)
 
     # Process each registration to build breakdown by ticket type
-    for reg in registrations:
+    for registration in registrations:
         # Get ticket type and description for this registration
-        (tp, descr) = get_acc_reg_type(reg)
+        (ticket_type, ticket_description) = get_acc_reg_type(registration)
 
         # Initialize ticket type entry if not exists
-        if tp not in dc["detail"]:
-            dc["detail"][tp] = {"tot": 0, "num": 0, "name": descr}
+        if ticket_type not in accounting_data["detail"]:
+            accounting_data["detail"][ticket_type] = {"tot": 0, "num": 0, "name": ticket_description}
 
         # Update ticket type counters
-        dc["detail"][tp]["num"] += 1
-        dc["detail"][tp]["tot"] += reg.tot_iscr
+        accounting_data["detail"][ticket_type]["num"] += 1
+        accounting_data["detail"][ticket_type]["tot"] += registration.tot_iscr
 
         # Update overall counters
-        dc["num"] += 1
-        dc["tot"] += reg.tot_iscr
+        accounting_data["num"] += 1
+        accounting_data["tot"] += registration.tot_iscr
 
-    return dc
+    return accounting_data
 
 
 def get_token_details(nm: str, run) -> dict:

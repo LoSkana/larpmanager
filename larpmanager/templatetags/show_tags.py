@@ -314,18 +314,20 @@ def _remove_unimportant_prefix(text: str) -> str:
         # Iteratively remove empty HTML tags and whitespace from the beginning
         while True:
             # Remove leading whitespace before checking for empty tags
-            stripped = text.lstrip()
+            text_without_leading_whitespace = text.lstrip()
 
             # Match empty HTML tags like <p></p>, <div></div>, <span></span>, etc.
             # Also match \r, \n, &nbsp; and other whitespace characters inside tags
-            match = re.match(r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>", stripped)
+            empty_tag_match = re.match(
+                r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>", text_without_leading_whitespace
+            )
 
             # If empty tag found, remove it and continue loop
-            if match:
-                text = stripped[match.end() :]
+            if empty_tag_match:
+                text = text_without_leading_whitespace[empty_tag_match.end() :]
             else:
                 # No more empty tags found, use stripped text and exit loop
-                text = stripped
+                text = text_without_leading_whitespace
                 break
 
     return text

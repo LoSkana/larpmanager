@@ -29,8 +29,8 @@ from larpmanager.models.association import Association
 from larpmanager.models.registration import Registration
 
 
-def clear_association_cache(s):
-    key = cache_assoc_key(s)
+def clear_association_cache(association_slug):
+    key = cache_assoc_key(association_slug)
     cache.delete(key)
 
 
@@ -125,16 +125,16 @@ def init_cache_assoc(a_slug: str) -> dict | None:
     return assoc_dict
 
 
-def _init_skin(assoc, el: dict) -> None:
+def _init_skin(assoc, element_context: dict) -> None:
     """Initialize skin-related properties in the element dictionary."""
     # Set CSS and domain configuration from association skin
-    el["skin_css"] = assoc.skin.default_css
-    el["main_domain"] = assoc.skin.domain
-    el["platform"] = assoc.skin.name
+    element_context["skin_css"] = assoc.skin.default_css
+    element_context["main_domain"] = assoc.skin.domain
+    element_context["platform"] = assoc.skin.name
 
     # Set skin identification and management status
-    el["skin_id"] = assoc.skin.id
-    el["skin_managed"] = assoc.skin.managed
+    element_context["skin_id"] = assoc.skin.id
+    element_context["skin_managed"] = assoc.skin.managed
 
 
 def _init_features(assoc: Association, cache_element: dict) -> None:
@@ -180,32 +180,32 @@ def _init_member_fields(assoc: Association, el: dict[str, Any]) -> None:
     """Initialize member fields set from association's mandatory and optional fields."""
     el["members_fields"] = set()
     # Collect mandatory fields
-    for fl in assoc.mandatory_fields.split(","):
-        el["members_fields"].add(fl)
+    for field in assoc.mandatory_fields.split(","):
+        el["members_fields"].add(field)
     # Collect optional fields
-    for fl in assoc.optional_fields.split(","):
-        el["members_fields"].add(fl)
+    for field in assoc.optional_fields.split(","):
+        el["members_fields"].add(field)
 
 
-def _init_payments(assoc, el: dict) -> None:
+def _init_payments(assoc, payment_info: dict) -> None:
     """Initialize payment information for the given association element.
 
     Args:
         assoc: Association object containing payment configuration
-        el: Dictionary to populate with payment information
+        payment_info: Dictionary to populate with payment information
     """
     # Set currency display information
-    el["payment_currency"] = assoc.get_payment_currency_display()
-    el["currency_symbol"] = assoc.get_currency_symbol()
-    el["methods"] = {}
+    payment_info["payment_currency"] = assoc.get_payment_currency_display()
+    payment_info["currency_symbol"] = assoc.get_currency_symbol()
+    payment_info["methods"] = {}
 
     # Get payment details configuration
     payment_details = get_payment_details(assoc)
 
     # Process each payment method for the association
-    for m in assoc.payment_methods.all():
-        mel = m.as_dict()
+    for payment_method in assoc.payment_methods.all():
+        method_element = payment_method.as_dict()
         # Add fee and description from payment details
-        for s in ["fee", "descr"]:
-            mel[s] = payment_details.get(f"{m.slug}_{s}")
-        el["methods"][m.slug] = mel
+        for setting_key in ["fee", "descr"]:
+            method_element[setting_key] = payment_details.get(f"{payment_method.slug}_{setting_key}")
+        payment_info["methods"][payment_method.slug] = method_element

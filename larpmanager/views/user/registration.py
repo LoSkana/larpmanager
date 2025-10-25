@@ -903,33 +903,33 @@ def _check_discount(discount, member, run, event):
     return None
 
 
-def _is_discount_invalid_for_registration(disc: Discount, member: Member, run: Run) -> bool:
+def _is_discount_invalid_for_registration(discount: Discount, member: Member, run: Run) -> bool:
     """Check if discount is invalid due to existing registration.
 
     Returns True if discount is registration-only and member already registered.
     """
     # Discount not limited to registration-only
-    if not disc.only_reg:
+    if not discount.only_reg:
         return False
 
     # Check if member has active registration for this run
     return Registration.objects.filter(member=member, run=run, cancellation_date__isnull=True).exists()
 
 
-def _is_discount_already_used(disc, member, run):
-    return AccountingItemDiscount.objects.filter(disc=disc, member=member, run=run).exists()
+def _is_discount_already_used(discount, member, run):
+    return AccountingItemDiscount.objects.filter(disc=discount, member=member, run=run).exists()
 
 
-def _is_type_already_used(disc_type, member, run):
-    return AccountingItemDiscount.objects.filter(disc__typ=disc_type, member=member, run=run).exists()
+def _is_type_already_used(discount_type, member, run):
+    return AccountingItemDiscount.objects.filter(disc__typ=discount_type, member=member, run=run).exists()
 
 
-def _is_discount_maxed(disc, run):
-    count = AccountingItemDiscount.objects.filter(disc=disc, run=run).count()
-    return count > disc.max_redeem
+def _is_discount_maxed(discount, run):
+    redemption_count = AccountingItemDiscount.objects.filter(disc=discount, run=run).count()
+    return redemption_count > discount.max_redeem
 
 
-def _validate_exclusive_logic(disc: Discount, member: Member, run: Run, event: Event) -> bool:
+def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, event: Event) -> bool:
     """
     Validate exclusive discount logic for member registrations.
 
@@ -937,7 +937,7 @@ def _validate_exclusive_logic(disc: Discount, member: Member, run: Run, event: E
     and validates eligibility requirements.
 
     Args:
-        disc: The discount to validate
+        discount: The discount to validate
         member: The member applying for the discount
         run: The specific run for this registration
         event: The event containing multiple runs
@@ -946,7 +946,7 @@ def _validate_exclusive_logic(disc: Discount, member: Member, run: Run, event: E
         True if the discount can be applied, False otherwise
     """
     # For PLAYAGAIN discount: no other discounts and has another registration
-    if disc.typ == Discount.PLAYAGAIN:
+    if discount.typ == Discount.PLAYAGAIN:
         # Check if member already has any discount for this run
         if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
             return False
@@ -956,7 +956,7 @@ def _validate_exclusive_logic(disc: Discount, member: Member, run: Run, event: E
             return False
 
     # If PLAYAGAIN discount was already applied, no other allowed
-    elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=Discount.PLAYAGAIN).exists():
+    elif AccountingItemDiscount.objects.filter(member=member, run=run, discount__typ=Discount.PLAYAGAIN).exists():
         return False
 
     return True

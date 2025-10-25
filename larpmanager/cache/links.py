@@ -98,23 +98,23 @@ def _build_navigation_context(request: HttpRequest) -> dict:
 
 def _get_assoc_roles(member, assoc_id: int, request: HttpRequest) -> dict:
     """Get association-level roles for the member."""
-    assoc_roles = {}
-    for ar in member.assoc_roles.filter(assoc_id=assoc_id):
-        assoc_roles[ar.number] = ar.id
+    association_roles = {}
+    for association_role in member.assoc_roles.filter(assoc_id=assoc_id):
+        association_roles[association_role.number] = association_role.id
 
     # Grant admin role to LarpManager admins
     if is_lm_admin(request):
-        assoc_roles[1] = 1
+        association_roles[1] = 1
 
-    return assoc_roles
+    return association_roles
 
 
 def _get_event_roles(member, assoc_id: int) -> dict:
     """Get event-level roles for the member."""
     event_roles = {}
-    for er in member.event_roles.filter(event__assoc_id=assoc_id).select_related("event"):
-        event_slug = er.event.slug
-        event_roles.setdefault(event_slug, {})[er.number] = er.id
+    for event_role in member.event_roles.filter(event__assoc_id=assoc_id).select_related("event"):
+        event_slug = event_role.event.slug
+        event_roles.setdefault(event_slug, {})[event_role.number] = event_role.id
     return event_roles
 
 
@@ -122,20 +122,20 @@ def _get_accessible_runs(assoc_id: int, assoc_roles: dict, event_roles: dict) ->
     """Get runs accessible to the user based on their roles."""
     result = {"all_runs": {}, "open_runs": {}, "past_runs": {}}
     all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
-    admin = 1 in assoc_roles
+    is_admin = 1 in assoc_roles
 
     for run in all_runs:
         if run.event.deleted:
             continue
 
-        roles = _determine_run_roles(run, admin, event_roles)
+        roles = _determine_run_roles(run, is_admin, event_roles)
         if not roles:
             continue
 
         result["all_runs"][run.id] = roles
 
         # Create run element for display
-        elm = {
+        run_element = {
             "slug": run.get_slug(),
             "e": run.event.slug,
             "r": run.number,
@@ -145,16 +145,16 @@ def _get_accessible_runs(assoc_id: int, assoc_roles: dict, event_roles: dict) ->
 
         # Categorize as open or past run
         target_dict = "open_runs" if run.development not in (DevelopStatus.DONE, DevelopStatus.CANC) else "past_runs"
-        result[target_dict][run.id] = elm
+        result[target_dict][run.id] = run_element
 
     return result
 
 
-def _determine_run_roles(run, admin: bool, event_roles: dict) -> list:
+def _determine_run_roles(run, is_admin: bool, event_roles_by_slug: dict) -> list:
     """Determine user roles for a specific run."""
-    if admin:
+    if is_admin:
         return [1]
-    return list(event_roles.get(run.event.slug, {}).keys()) or None
+    return list(event_roles_by_slug.get(run.event.slug, {}).keys()) or None
 
 
 def clear_run_event_links_cache(event: Event) -> None:

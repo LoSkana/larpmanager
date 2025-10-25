@@ -129,131 +129,139 @@ def _einvoice_header(
     header = ET.SubElement(root, "FatturaElettronicaHeader")
 
     # Build transmission data section with sender and destination identifiers
-    dati_trasmissione = ET.SubElement(header, "DatiTrasmissione")
-    id_trasmittente = ET.SubElement(dati_trasmissione, "IdTrasmittente")
+    transmission_data = ET.SubElement(header, "DatiTrasmissione")
+    transmitter_id = ET.SubElement(transmission_data, "IdTrasmittente")
     # Set Italy as default country code for electronic invoicing
-    ET.SubElement(id_trasmittente, "IdPaese").text = "IT"
-    ET.SubElement(id_trasmittente, "IdCodice").text = get_assoc_config(
+    ET.SubElement(transmitter_id, "IdPaese").text = "IT"
+    ET.SubElement(transmitter_id, "IdCodice").text = get_assoc_config(
         inv.assoc_id, "einvoice_idcodice", None, config_holder
     )
     # Progressive invoice number padded to 10 digits
-    ET.SubElement(dati_trasmissione, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
+    ET.SubElement(transmission_data, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     # Standard format for private entities
-    ET.SubElement(dati_trasmissione, "FormatoTrasmissione").text = "FPR12"
-    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = get_assoc_config(
+    ET.SubElement(transmission_data, "FormatoTrasmissione").text = "FPR12"
+    ET.SubElement(transmission_data, "CodiceDestinatario").text = get_assoc_config(
         inv.assoc_id, "einvoice_codicedestinatario", None, config_holder
     )
 
     # Build supplier section - association information as service provider
-    cedente_prestatore = ET.SubElement(header, "CedentePrestatore")
-    dati_anagrafici = ET.SubElement(cedente_prestatore, "DatiAnagrafici")
+    supplier_provider = ET.SubElement(header, "CedentePrestatore")
+    supplier_registry_data = ET.SubElement(supplier_provider, "DatiAnagrafici")
     # Add VAT identification details
-    id_fiscale_iva = ET.SubElement(dati_anagrafici, "IdFiscaleIVA")
-    ET.SubElement(id_fiscale_iva, "IdPaese").text = "IT"
-    ET.SubElement(id_fiscale_iva, "IdCodice").text = get_assoc_config(
+    vat_fiscal_id = ET.SubElement(supplier_registry_data, "IdFiscaleIVA")
+    ET.SubElement(vat_fiscal_id, "IdPaese").text = "IT"
+    ET.SubElement(vat_fiscal_id, "IdCodice").text = get_assoc_config(
         inv.assoc_id, "einvoice_partitaiva", None, config_holder
     )
     # Add association name and tax regime
-    anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
-    ET.SubElement(anagrafica, "Denominazione").text = get_assoc_config(
+    supplier_registry = ET.SubElement(supplier_registry_data, "Anagrafica")
+    ET.SubElement(supplier_registry, "Denominazione").text = get_assoc_config(
         inv.assoc_id, "einvoice_denominazione", None, config_holder
     )
-    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = get_assoc_config(
+    ET.SubElement(supplier_registry_data, "RegimeFiscale").text = get_assoc_config(
         inv.assoc_id, "einvoice_regimefiscale", None, config_holder
     )
     # Add association registered address
-    sede = ET.SubElement(cedente_prestatore, "Sede")
-    ET.SubElement(sede, "Indirizzo").text = get_assoc_config(inv.assoc_id, "einvoice_indirizzo", None, config_holder)
-    ET.SubElement(sede, "NumeroCivico").text = get_assoc_config(
+    supplier_address = ET.SubElement(supplier_provider, "Sede")
+    ET.SubElement(supplier_address, "Indirizzo").text = get_assoc_config(
+        inv.assoc_id, "einvoice_indirizzo", None, config_holder
+    )
+    ET.SubElement(supplier_address, "NumeroCivico").text = get_assoc_config(
         inv.assoc_id, "einvoice_numerocivico", None, config_holder
     )
-    ET.SubElement(sede, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap", None, config_holder)
-    ET.SubElement(sede, "Comune").text = get_assoc_config(inv.assoc_id, "einvoice_comune", None, config_holder)
-    ET.SubElement(sede, "Provincia").text = get_assoc_config(inv.assoc_id, "einvoice_provincia", None, config_holder)
-    ET.SubElement(sede, "Nazione").text = get_assoc_config(inv.assoc_id, "einvoice_nazione", None, config_holder)
+    ET.SubElement(supplier_address, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap", None, config_holder)
+    ET.SubElement(supplier_address, "Comune").text = get_assoc_config(
+        inv.assoc_id, "einvoice_comune", None, config_holder
+    )
+    ET.SubElement(supplier_address, "Provincia").text = get_assoc_config(
+        inv.assoc_id, "einvoice_provincia", None, config_holder
+    )
+    ET.SubElement(supplier_address, "Nazione").text = get_assoc_config(
+        inv.assoc_id, "einvoice_nazione", None, config_holder
+    )
 
     # Build customer section - member receiving the invoice
-    cessionario_committente = ET.SubElement(header, "CessionarioCommittente")
-    dati_anagrafici = ET.SubElement(cessionario_committente, "DatiAnagrafici")
-    ET.SubElement(dati_anagrafici, "CodiceFiscale").text = member.fiscal_code
+    customer_recipient = ET.SubElement(header, "CessionarioCommittente")
+    customer_registry_data = ET.SubElement(customer_recipient, "DatiAnagrafici")
+    ET.SubElement(customer_registry_data, "CodiceFiscale").text = member.fiscal_code
     # Parse member name from legal name if available
-    anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
+    customer_registry = ET.SubElement(customer_registry_data, "Anagrafica")
     if member.legal_name:
-        splitted = member.legal_name.rsplit(" ", 1)
+        name_parts = member.legal_name.rsplit(" ", 1)
         # Split into first and last name if exactly 2 parts
-        if len(splitted) == name_number:
-            member.name, member.surname = splitted
+        if len(name_parts) == name_number:
+            member.name, member.surname = name_parts
         else:
-            member.name = splitted[0]
-    ET.SubElement(anagrafica, "Nome").text = member.name
-    ET.SubElement(anagrafica, "Cognome").text = member.surname
+            member.name = name_parts[0]
+    ET.SubElement(customer_registry, "Nome").text = member.name
+    ET.SubElement(customer_registry, "Cognome").text = member.surname
     # Parse residence address from pipe-separated format: Country|Province|City|ZIP|Street|Number
-    aux = member.residence_address.split("|")
+    address_components = member.residence_address.split("|")
     # Handle Italian vs foreign addresses differently
-    if aux[0] == "IT":
-        aux[1] = aux[1].replace("IT-", "")
+    if address_components[0] == "IT":
+        address_components[1] = address_components[1].replace("IT-", "")
     else:
         # Foreign addresses use special province code
-        aux[1] = "ESTERO"
+        address_components[1] = "ESTERO"
     # Add customer address details
-    sede = ET.SubElement(cessionario_committente, "Sede")
-    ET.SubElement(sede, "Indirizzo").text = aux[4]
-    ET.SubElement(sede, "NumeroCivico").text = aux[5]
-    ET.SubElement(sede, "CAP").text = aux[3]
-    ET.SubElement(sede, "Comune").text = aux[2]
-    ET.SubElement(sede, "Provincia").text = aux[1]
-    ET.SubElement(sede, "Nazione").text = aux[0]
+    customer_address = ET.SubElement(customer_recipient, "Sede")
+    ET.SubElement(customer_address, "Indirizzo").text = address_components[4]
+    ET.SubElement(customer_address, "NumeroCivico").text = address_components[5]
+    ET.SubElement(customer_address, "CAP").text = address_components[3]
+    ET.SubElement(customer_address, "Comune").text = address_components[2]
+    ET.SubElement(customer_address, "Provincia").text = address_components[1]
+    ET.SubElement(customer_address, "Nazione").text = address_components[0]
 
 
-def _einvoice_body(einvoice, inv, root) -> None:
+def _einvoice_body(einvoice, invoice, xml_root) -> None:
     """
     Build the body section of electronic invoice XML structure.
 
     Args:
         einvoice: Electronic invoice instance containing creation date and number
-        inv: Invoice data object with causal, mc_gross, and assoc_id attributes
-        root: XML root element to append body to
+        invoice: Invoice data object with causal, mc_gross, and assoc_id attributes
+        xml_root: XML root element to append body to
 
     Returns:
-        None: Modifies root element in place by adding FatturaElettronicaBody
+        None: Modifies xml_root element in place by adding FatturaElettronicaBody
     """
     # Create main body element and general data section
-    body = ET.SubElement(root, "FatturaElettronicaBody")
-    dati_generali = ET.SubElement(body, "DatiGenerali")
-    dati_generali_documento = ET.SubElement(dati_generali, "DatiGeneraliDocumento")
+    invoice_body = ET.SubElement(xml_root, "FatturaElettronicaBody")
+    general_data = ET.SubElement(invoice_body, "DatiGenerali")
+    general_document_data = ET.SubElement(general_data, "DatiGeneraliDocumento")
 
     # Set document metadata: type, currency, date, and invoice number
-    ET.SubElement(dati_generali_documento, "TipoDocumento").text = "TD01"
-    ET.SubElement(dati_generali_documento, "Divisa").text = "EUR"
-    ET.SubElement(dati_generali_documento, "Data").text = einvoice.created.strftime("%Y-%m-%d")
-    ET.SubElement(dati_generali_documento, "Numero").text = "F" + str(einvoice.number).zfill(8)
+    ET.SubElement(general_document_data, "TipoDocumento").text = "TD01"
+    ET.SubElement(general_document_data, "Divisa").text = "EUR"
+    ET.SubElement(general_document_data, "Data").text = einvoice.created.strftime("%Y-%m-%d")
+    ET.SubElement(general_document_data, "Numero").text = "F" + str(einvoice.number).zfill(8)
 
     # Create goods/services section and line item details
-    beni_servizi = ET.SubElement(body, "DatiBeniServizi")
-    dettaglio_linee = ET.SubElement(beni_servizi, "DettaglioLinee")
-    ET.SubElement(dettaglio_linee, "NumeroLinea").text = "1"
+    goods_services = ET.SubElement(invoice_body, "DatiBeniServizi")
+    line_details = ET.SubElement(goods_services, "DettaglioLinee")
+    ET.SubElement(line_details, "NumeroLinea").text = "1"
 
     # Set line item data: description, quantity, unit price, and total
-    ET.SubElement(dettaglio_linee, "Descrizione").text = inv.causal
-    ET.SubElement(dettaglio_linee, "Quantita").text = "1"
-    ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
-    ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
+    ET.SubElement(line_details, "Descrizione").text = invoice.causal
+    ET.SubElement(line_details, "Quantita").text = "1"
+    ET.SubElement(line_details, "PrezzoUnitario").text = f"{invoice.mc_gross:.2f}"
+    ET.SubElement(line_details, "PrezzoTotale").text = f"{invoice.mc_gross:.2f}"
 
     config_holder = {}
 
     # Get VAT rate and nature configuration from association settings
-    aliquotaiva = get_assoc_config(inv.assoc_id, "einvoice_aliquotaiva", "", config_holder)
-    ET.SubElement(dettaglio_linee, "AliquotaIVA").text = aliquotaiva
-    natura = get_assoc_config(inv.assoc_id, "einvoice_natura", "", config_holder)
-    if natura:
-        ET.SubElement(dettaglio_linee, "Natura").text = natura
+    vat_rate = get_assoc_config(invoice.assoc_id, "einvoice_aliquotaiva", "", config_holder)
+    ET.SubElement(line_details, "AliquotaIVA").text = vat_rate
+    vat_nature = get_assoc_config(invoice.assoc_id, "einvoice_natura", "", config_holder)
+    if vat_nature:
+        ET.SubElement(line_details, "Natura").text = vat_nature
 
     # Create summary data section with VAT calculations
-    dati_riepilogo = ET.SubElement(beni_servizi, "DatiRiepilogo")
-    ET.SubElement(dati_riepilogo, "AliquotaIVA").text = aliquotaiva
-    ET.SubElement(dati_riepilogo, "ImponibileImporto").text = f"{inv.mc_gross:.2f}"
+    summary_data = ET.SubElement(goods_services, "DatiRiepilogo")
+    ET.SubElement(summary_data, "AliquotaIVA").text = vat_rate
+    ET.SubElement(summary_data, "ImponibileImporto").text = f"{invoice.mc_gross:.2f}"
 
     # Calculate and set VAT amount based on rate and gross amount
-    ET.SubElement(dati_riepilogo, "Imposta").text = f"{int(aliquotaiva) * float(inv.mc_gross) / 100.0:.2f}"
-    if natura:
-        ET.SubElement(dati_riepilogo, "Natura").text = natura
+    ET.SubElement(summary_data, "Imposta").text = f"{int(vat_rate) * float(invoice.mc_gross) / 100.0:.2f}"
+    if vat_nature:
+        ET.SubElement(summary_data, "Natura").text = vat_nature

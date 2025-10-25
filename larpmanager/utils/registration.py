@@ -328,17 +328,19 @@ def _status_payment(register_text: str, run: Run, ctx: dict | None = None) -> bo
         invoices = payment_invoices_dict.get(run.reg.id, [])
         # Filter for pending payments
         pending_invoices = [
-            inv for inv in invoices if inv.status == PaymentStatus.SUBMITTED and inv.typ == PaymentType.REGISTRATION
+            invoice
+            for invoice in invoices
+            if invoice.status == PaymentStatus.SUBMITTED and invoice.typ == PaymentType.REGISTRATION
         ]
         # Filter for wire transfer payments
         wire_created_invoices = [
-            inv
-            for inv in invoices
-            if inv.status == PaymentStatus.CREATED
-            and inv.typ == PaymentType.REGISTRATION
-            and hasattr(inv, "method")
-            and inv.method
-            and inv.method.slug == "wire"
+            invoice
+            for invoice in invoices
+            if invoice.status == PaymentStatus.CREATED
+            and invoice.typ == PaymentType.REGISTRATION
+            and hasattr(invoice, "method")
+            and invoice.method
+            and invoice.method.slug == "wire"
         ]
     else:
         # Fallback to database queries if no precalculated data available
@@ -369,17 +371,17 @@ def _status_payment(register_text: str, run: Run, ctx: dict | None = None) -> bo
     if run.reg.alert:
         # Handle wire transfer specific messaging
         if wire_created_invoices:
-            pay_url = reverse("acc_reg", args=[run.reg.id])
-            mes = _("to confirm it proceed with payment") + "."
-            text_url = f", <a href='{pay_url}'>{mes}</a>"
+            payment_url = reverse("acc_reg", args=[run.reg.id])
+            message = _("to confirm it proceed with payment") + "."
+            text_url = f", <a href='{payment_url}'>{message}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
             run.status["text"] = f"{register_text}{text_url} ({note})"
             return True
 
         # Handle general payment alert with deadline warning
-        pay_url = reverse("acc_reg", args=[run.reg.id])
-        mes = _("to confirm it proceed with payment") + "."
-        text_url = f", <a href='{pay_url}'>{mes}</a>"
+        payment_url = reverse("acc_reg", args=[run.reg.id])
+        message = _("to confirm it proceed with payment") + "."
+        text_url = f", <a href='{payment_url}'>{message}</a>"
 
         # Add cancellation warning if deadline passed
         if run.reg.deadline < 0:
@@ -510,35 +512,35 @@ def _status_preregister(run, user, ctx: dict | None = None) -> None:
 
     # Set status message based on pre-registration state
     if has_pre_registration:
-        mes = _("Pre-registration confirmed") + "!"
-        run.status["text"] = mes
+        status_message = _("Pre-registration confirmed") + "!"
+        run.status["text"] = status_message
     else:
         # Create pre-registration link for unauthenticated or non-pre-registered users
-        mes = _("Pre-register to the event") + "!"
+        status_message = _("Pre-register to the event") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
-        run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
+        run.status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
 
 
-def _get_features_map(run: Run, ctx: dict):
+def _get_features_map(run: Run, context: dict):
     """Get features map from context or create it if not available.
 
     Args:
         run: Run object to get features for
-        ctx: Context dictionary that may contain 'features_map'
+        context: Context dictionary that may contain 'features_map'
 
     Returns:
         dict: Features dictionary for the run's event
     """
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
-    features_map = ctx.get("features_map")
+    features_map = context.get("features_map")
     if features_map is None:
         features_map = {}
     if run.event_id not in features_map:
         features_map[run.event_id] = get_event_features(run.event_id)
-    features = features_map[run.event_id]
-    return features
+    event_features = features_map[run.event_id]
+    return event_features
 
 
 def registration_find(run: Run, user: User, ctx: dict | None = None):
@@ -660,7 +662,7 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
     _status_approval(aux, features, run)
 
 
-def _status_approval(aux: bool, features: dict, run: Any) -> None:
+def _status_approval(is_character_assigned: bool, features: dict, run: Any) -> None:
     """Add character creation/selection links to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
@@ -668,7 +670,7 @@ def _status_approval(aux: bool, features: dict, run: Any) -> None:
     links to the run status details.
 
     Args:
-        aux: Boolean indicating if character is already assigned
+        is_character_assigned: Boolean indicating if character is already assigned
         features: Dictionary of enabled features for the event
         run: Run object containing registration and event information
 
@@ -684,23 +686,23 @@ def _status_approval(aux: bool, features: dict, run: Any) -> None:
         return
 
     # Get character creation limits for this user and event
-    check, max_chars = check_character_maximum(run.event, run.reg.member)
+    can_create_character, maximum_characters = check_character_maximum(run.event, run.reg.member)
 
     # Show character creation link if user can create more characters
-    if not check:
+    if not can_create_character:
         url = reverse("character_create", args=[run.get_slug()])
         if run.status["details"]:
             run.status["details"] += " - "
-        mes = _("Access character creation!")
-        run.status["details"] += f"<a href='{url}'>{mes}</a>"
+        message = _("Access character creation!")
+        run.status["details"] += f"<a href='{url}'>{message}</a>"
 
     # Show character selection link if no characters assigned but max chars available
-    elif not aux and max_chars:
+    elif not is_character_assigned and maximum_characters:
         url = reverse("character_list", args=[run.get_slug()])
         if run.status["details"]:
             run.status["details"] += " - "
-        mes = _("Select your character!")
-        run.status["details"] += f"<a href='{url}'>{mes}</a>"
+        message = _("Select your character!")
+        run.status["details"] += f"<a href='{url}'>{message}</a>"
 
 
 def get_registration_options(instance) -> list[tuple[str, str]]:
@@ -779,25 +781,25 @@ def get_player_signup(request: HttpRequest, context: dict) -> Registration | Non
     return None
 
 
-def check_signup(request: HttpRequest, ctx: dict) -> None:
+def check_signup(request: HttpRequest, context: dict) -> None:
     """Check if player signup is valid and not in waiting status.
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary containing run information
+        context: Context dictionary containing run information
 
     Raises:
         SignupError: If no valid signup found
         WaitingError: If signup ticket is in waiting tier
     """
     # Get player registration for current run
-    reg = get_player_signup(request, ctx)
-    if not reg:
-        raise SignupError(ctx["run"].get_slug())
+    registration = get_player_signup(request, context)
+    if not registration:
+        raise SignupError(context["run"].get_slug())
 
     # Check if registration is in waiting list
-    if reg.ticket and reg.ticket.tier == TicketTier.WAITING:
-        raise WaitingError(ctx["run"].get_slug())
+    if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
+        raise WaitingError(context["run"].get_slug())
 
 
 def check_assign_character(request: HttpRequest, context: dict) -> None:

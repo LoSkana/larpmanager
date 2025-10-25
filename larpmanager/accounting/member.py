@@ -112,34 +112,34 @@ def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
     _info_token_credit(context, member)
 
 
-def _init_regs(choices, ctx, pending, reg):
+def _init_regs(registration_choices, context, pending_invoices, registration):
     """Initialize registration options and payment status tracking.
 
     Args:
-        choices: Dictionary mapping registration IDs to their selected options
-        ctx: Context dictionary to update with payment status
-        pending: Dictionary of pending payment invoices
-        reg: Registration instance to process
+        registration_choices: Dictionary mapping registration IDs to their selected options
+        context: Context dictionary to update with payment status
+        pending_invoices: Dictionary of pending payment invoices
+        registration: Registration instance to process
 
     Side effects:
-        Updates ctx with payments_pending and payments_todo lists
-        Sets reg.opts and reg.pending attributes
+        Updates context with payments_pending and payments_todo lists
+        Sets registration.opts and registration.pending attributes
     """
-    if reg.id not in choices:
-        choices[reg.id] = {}
-    reg.opts = choices[reg.id]
-    ctx["registration_list"].append(reg)
+    if registration.id not in registration_choices:
+        registration_choices[registration.id] = {}
+    registration.opts = registration_choices[registration.id]
+    context["registration_list"].append(registration)
 
     # check if there is a pending payment
-    if reg.id in pending:
-        reg.pending = True
-        ctx["payments_pending"].append(reg)
-    elif reg.quota > 0:
-        ctx["payments_todo"].append(reg)
-    if reg.run.start:
-        if reg.run.start < datetime.now().date():
+    if registration.id in pending_invoices:
+        registration.pending = True
+        context["payments_pending"].append(registration)
+    elif registration.quota > 0:
+        context["payments_todo"].append(registration)
+    if registration.run.start:
+        if registration.run.start < datetime.now().date():
             return
-        ctx["registration_years"][reg.run.start.year] = 1
+        context["registration_years"][registration.run.start.year] = 1
 
 
 def _init_pending(member):
@@ -151,17 +151,17 @@ def _init_pending(member):
     Returns:
         dict: Mapping of registration IDs to lists of pending payment invoices
     """
-    pending = {}
-    pending_que = PaymentInvoice.objects.filter(
+    pending_payments_by_registration = {}
+    pending_payment_invoices = PaymentInvoice.objects.filter(
         member_id=member.id,
         status=PaymentStatus.SUBMITTED,
         typ=PaymentType.REGISTRATION,
     )
-    for el in pending_que:
-        if el.idx not in pending:
-            pending[el.idx] = []
-        pending[el.idx].append(el)
-    return pending
+    for payment_invoice in pending_payment_invoices:
+        if payment_invoice.idx not in pending_payments_by_registration:
+            pending_payments_by_registration[payment_invoice.idx] = []
+        pending_payments_by_registration[payment_invoice.idx].append(payment_invoice)
+    return pending_payments_by_registration
 
 
 def _init_choices(member):
@@ -174,14 +174,19 @@ def _init_choices(member):
         dict: Nested mapping of registration and question IDs to selected options
     """
     choices = {}
-    choice_que = RegistrationChoice.objects.filter(reg__member_id=member.id)
-    choice_que = choice_que.select_related("option", "question").order_by("question__order")
-    for el in choice_que:
-        if el.reg_id not in choices:
-            choices[el.reg_id] = {}
-        if el.question_id not in choices[el.reg_id]:
-            choices[el.reg_id][el.question_id] = {"q": el.question, "l": []}
-        choices[el.reg_id][el.question_id]["l"].append(el.option)
+    choice_queryset = RegistrationChoice.objects.filter(reg__member_id=member.id)
+    choice_queryset = choice_queryset.select_related("option", "question").order_by("question__order")
+    for registration_choice in choice_queryset:
+        if registration_choice.reg_id not in choices:
+            choices[registration_choice.reg_id] = {}
+        if registration_choice.question_id not in choices[registration_choice.reg_id]:
+            choices[registration_choice.reg_id][registration_choice.question_id] = {
+                "question": registration_choice.question,
+                "selected_options": [],
+            }
+        choices[registration_choice.reg_id][registration_choice.question_id]["selected_options"].append(
+            registration_choice.option
+        )
     return choices
 
 
@@ -196,60 +201,62 @@ def _info_token_credit(ctx, member):
         Updates ctx with acc_tokens and acc_credits counts
     """
     # check if it had any token
-    que = AccountingItemOther.objects.filter(
+    token_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.TOKEN,
         assoc_id=ctx["a_id"],
     )
-    ctx["acc_tokens"] = que.count()
+    ctx["acc_tokens"] = token_queryset.count()
 
     # check if it had any credits
-    que_exp = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=ctx["a_id"])
-    que_cre = AccountingItemOther.objects.filter(
+    expense_queryset = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=ctx["a_id"])
+    credit_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.CREDIT,
         assoc_id=ctx["a_id"],
     )
-    ctx["acc_credits"] = que_exp.count() + que_cre.count()
+    ctx["acc_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
-def _info_collections(ctx, member, request):
+def _info_collections(context, member, request):
     """Get collection information if collections feature is enabled.
 
     Args:
-        ctx: Context dictionary with association ID to update
+        context: Context dictionary with association ID to update
         member: Member instance to get collections for
         request: Django request with association features
 
     Side effects:
-        Updates ctx with collections and collection_gifts if feature enabled
+        Updates context with collections and collection_gifts if feature enabled
     """
-    if "collection" not in ctx["features"]:
+    if "collection" not in context["features"]:
         return
 
-    ctx["collections"] = Collection.objects.filter(organizer=member, assoc_id=ctx["a_id"])
-    ctx["collection_gifts"] = AccountingItemCollection.objects.filter(member=member, collection__assoc_id=ctx["a_id"])
+    context["collections"] = Collection.objects.filter(organizer=member, assoc_id=context["a_id"])
+    context["collection_gifts"] = AccountingItemCollection.objects.filter(
+        member=member, collection__assoc_id=context["a_id"]
+    )
 
 
-def _info_donations(ctx, member, request):
+def _info_donations(context, member, request):
     """Get donation history if donations feature is enabled.
 
     Args:
-        ctx: Context dictionary with association ID to update
+        context: Context dictionary with association ID to update
         member: Member instance to get donations for
         request: Django request with association features
 
     Side effects:
-        Updates ctx with donations list if feature enabled
+        Updates context with donations list if feature enabled
     """
-    if "donate" not in ctx["features"]:
+    if "donate" not in context["features"]:
         return
 
-    que = AccountingItemDonation.objects.filter(member=member, assoc_id=ctx["a_id"])
-    ctx["donations"] = que.order_by("-created")
+    donation_queryset = AccountingItemDonation.objects.filter(member=member, assoc_id=context["a_id"])
+    context["donations"] = donation_queryset.order_by("-created")
 
 
-def _info_membership(ctx: dict, member, request) -> None:
+def _info_membership(context: dict, member, request) -> None:
     """Get membership fee information if membership feature is enabled.
 
     Retrieves and adds membership-related information to the context dictionary,
@@ -257,16 +264,16 @@ def _info_membership(ctx: dict, member, request) -> None:
     calculations. Only processes if the membership feature is enabled for the association.
 
     Args:
-        ctx: Context dictionary containing association ID, will be updated with
+        context: Context dictionary containing association ID, will be updated with
              membership information including fee history and status flags
         member: Member instance to retrieve membership information for
         request: Django request object containing association features configuration
 
     Returns:
-        None: Function modifies ctx dictionary in-place
+        None: Function modifies context dictionary in-place
 
     Side Effects:
-        Updates ctx with the following keys if membership feature is enabled:
+        Updates context with the following keys if membership feature is enabled:
         - membership_fee: List of years with membership fees
         - year_membership_fee: Boolean indicating if current year fee exists
         - year_membership_pending: Boolean indicating pending membership payments
@@ -278,40 +285,42 @@ def _info_membership(ctx: dict, member, request) -> None:
         return
 
     # Get current year for membership calculations
-    year = datetime.now().year
+    current_year = datetime.now().year
 
     # Retrieve all membership fee years for this member and association
-    ctx["membership_fee"] = []
-    for el in AccountingItemMembership.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("year"):
-        ctx["membership_fee"].append(el.year)
+    context["membership_fee"] = []
+    for membership_item in AccountingItemMembership.objects.filter(member=member, assoc_id=context["a_id"]).order_by(
+        "year"
+    ):
+        context["membership_fee"].append(membership_item.year)
 
     # Check if current year membership fee exists
-    ctx["year_membership_fee"] = year in ctx["membership_fee"]
+    context["year_membership_fee"] = current_year in context["membership_fee"]
 
     # Check for pending membership payment invoices
-    pending_que = PaymentInvoice.objects.filter(
+    pending_invoices_query = PaymentInvoice.objects.filter(
         member=member,
         status=PaymentStatus.SUBMITTED,
         typ=PaymentType.MEMBERSHIP,
     )
-    if pending_que.count() > 0:
-        ctx["year_membership_pending"] = True
+    if pending_invoices_query.count() > 0:
+        context["year_membership_pending"] = True
 
     # Store current year in context
-    ctx["year"] = year
+    context["year"] = current_year
 
     # Get membership day configuration (default: January 1st)
-    m_day = get_assoc_config(ctx["a_id"], "membership_day", "01-01", ctx)
-    if m_day:
+    membership_day = get_assoc_config(context["a_id"], "membership_day", "01-01", context)
+    if membership_day:
         # Get grace period in months (default: 0 months)
-        m_grazing = int(get_assoc_config(ctx["a_id"], "membership_grazing", "0", ctx))
+        membership_grace_period_months = int(get_assoc_config(context["a_id"], "membership_grazing", "0", context))
 
         # Build full date string with current year
-        m_day += f"-{year}"
-        dt = datetime.strptime(m_day, "%d-%m-%Y")
+        membership_day += f"-{current_year}"
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y")
 
         # Add grace period months to membership date
-        dt += relativedelta(months=m_grazing)
+        membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        ctx["grazing"] = datetime.now() < dt
+        context["grazing"] = datetime.now() < membership_deadline_date

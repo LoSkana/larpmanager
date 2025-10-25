@@ -59,16 +59,16 @@ from larpmanager.utils.text import get_assoc_text
 logger = logging.getLogger(__name__)
 
 
-def fix_filename(s):
+def fix_filename(filename):
     """Remove special characters from filename for safe PDF generation.
 
     Args:
-        s (str): Original filename string
+        filename (str): Original filename string
 
     Returns:
         str: Sanitized filename with only alphanumeric characters and spaces
     """
-    return re.sub(r"[^A-Za-z0-9 ]+", "", s)
+    return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
 
 
 # reprint if file not exists, older than 1 day, or debug
@@ -496,14 +496,14 @@ def print_volunteer_registry(ctx: dict) -> str:
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def cleanup_handout_pdfs_before_delete(instance):
+def cleanup_handout_pdfs_before_delete(handout):
     """Handle handout pre-delete PDF cleanup.
 
     Args:
-        instance: Handout instance being deleted
+        handout: Handout instance being deleted
     """
-    for run in instance.event.runs.all():
-        safe_remove(instance.get_filepath(run))
+    for event_run in handout.event.runs.all():
+        safe_remove(handout.get_filepath(event_run))
 
 
 def cleanup_handout_pdfs_after_save(instance):
@@ -516,14 +516,14 @@ def cleanup_handout_pdfs_after_save(instance):
         safe_remove(instance.get_filepath(run))
 
 
-def cleanup_handout_template_pdfs_before_delete(instance):
+def cleanup_handout_template_pdfs_before_delete(handout_template):
     """Handle handout template pre-delete PDF cleanup.
 
     Args:
-        instance: HandoutTemplate instance being deleted
+        handout_template: HandoutTemplate instance being deleted
     """
-    for run in instance.event.runs.all():
-        safe_remove(instance.get_filepath(run))
+    for event_run in handout_template.event.runs.all():
+        safe_remove(handout_template.get_filepath(event_run))
 
 
 def cleanup_handout_template_pdfs_after_save(instance):
@@ -571,14 +571,14 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def cleanup_character_pdfs_before_delete(instance):
+def cleanup_character_pdfs_before_delete(character):
     """Handle character pre-delete PDF cleanup.
 
     Args:
-        instance: Character instance being deleted
+        character: Character instance being deleted
     """
-    remove_run_pdf(instance.event)
-    delete_character_pdf_files(instance)
+    remove_run_pdf(character.event)
+    delete_character_pdf_files(character)
 
 
 def cleanup_character_pdfs_on_save(instance):
@@ -597,8 +597,8 @@ def cleanup_relationship_pdfs_before_delete(instance):
     Args:
         instance: PlayerRelationship instance being deleted
     """
-    for el in instance.reg.rcrs.all():
-        delete_character_pdf_files(el.character, instance.reg.run)
+    for relationship_character_run in instance.reg.rcrs.all():
+        delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
 
 
 def cleanup_relationship_pdfs_after_save(instance):
@@ -617,8 +617,8 @@ def cleanup_faction_pdfs_before_delete(instance):
     Args:
         instance: Faction instance being deleted
     """
-    for char in instance.event.character_set.all():
-        delete_character_pdf_files(char)
+    for character in instance.event.character_set.all():
+        delete_character_pdf_files(character)
 
 
 def cleanup_faction_pdfs_on_save(instance):
@@ -645,17 +645,17 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
         delete_character_pdf_files(character, trait_instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(instance, created):
+def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created):
     """Handle assignment trait post-save PDF cleanup.
 
     Args:
-        instance: AssignmentTrait instance that was saved
-        created: Boolean indicating if instance was created
+        assignment_trait_instance: AssignmentTrait instance that was saved
+        is_newly_created: Boolean indicating if instance was created
     """
-    if not instance.member or not created:
+    if not assignment_trait_instance.member or not is_newly_created:
         return
 
-    deactivate_castings_and_remove_pdfs(instance)
+    deactivate_castings_and_remove_pdfs(assignment_trait_instance)
 
 
 # ## TASKS
@@ -789,13 +789,15 @@ def odt_template(ctx: dict, char: object, fp: str, template: str, aux_template: 
     logger.error(f"ERROR IN odt_template: {excepts}")
 
 
-def exec_odt_template(ctx: dict, char: dict, fp: str, template: object, aux_template: object) -> None:
+def exec_odt_template(
+    context: dict, character: dict, output_file_path: str, template: object, aux_template: object
+) -> None:
     """Process ODT template to generate PDF for character data.
 
     Args:
-        ctx: Context dictionary containing template rendering data
-        char: Character data dictionary with character information
-        fp: Output file path where the generated PDF will be saved
+        context: Context dictionary containing template rendering data
+        character: Character data dictionary with character information
+        output_file_path: Output file path where the generated PDF will be saved
         template: ODT template file object with path attribute
         aux_template: Auxiliary template object for content processing
 
@@ -803,13 +805,13 @@ def exec_odt_template(ctx: dict, char: dict, fp: str, template: object, aux_temp
         None: Function writes PDF file to specified path
     """
     # Set up working directory based on character number
-    working_dir = os.path.dirname(fp)
-    working_dir = os.path.join(working_dir, str(char["number"]))
+    working_dir = os.path.dirname(output_file_path)
+    working_dir = os.path.join(working_dir, str(character["number"]))
     logger.debug(f"Character PDF working directory: {working_dir}")
 
     # Clean up existing output file if present
-    if os.path.exists(fp):
-        os.remove(fp)
+    if os.path.exists(output_file_path):
+        os.remove(output_file_path)
 
     # Set up temporary working directory for processing
     working_dir += "-work"
@@ -819,18 +821,18 @@ def exec_odt_template(ctx: dict, char: dict, fp: str, template: object, aux_temp
     os.makedirs(working_dir)
 
     # Create subdirectory for unzipped template content
-    zip_dir = os.path.join(working_dir, "zipdd")
-    os.makedirs(zip_dir)
+    unzipped_template_dir = os.path.join(working_dir, "zipdd")
+    os.makedirs(unzipped_template_dir)
 
     # Extract ODT template to working directory
-    os.chdir(zip_dir)
+    os.chdir(unzipped_template_dir)
     os.system(f"unzip -q {template.path}")
 
     # Process template content with character data
-    update_content(ctx, working_dir, zip_dir, char, aux_template)
+    update_content(context, working_dir, unzipped_template_dir, character, aux_template)
 
     # Repackage modified content back into ODT format
-    os.chdir(zip_dir)
+    os.chdir(unzipped_template_dir)
     os.system("zip -q -r ../out.odt *")
 
     # Convert ODT to PDF using unoconv
@@ -838,7 +840,7 @@ def exec_odt_template(ctx: dict, char: dict, fp: str, template: object, aux_temp
     os.system("/usr/bin/unoconv -f pdf out.odt")
 
     # Move generated PDF to final destination
-    os.rename("out.pdf", fp)
+    os.rename("out.pdf", output_file_path)
     # ## TODO shutil.rmtree(working_dir)
     # if os.path.exists(working_dir):
     # shutil.rmtree(working_dir)

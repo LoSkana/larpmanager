@@ -25,8 +25,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.models.association import AssociationSkin
 
 
-def clear_skin_cache(s):
-    key = cache_skin_key(s)
+def clear_skin_cache(skin):
+    key = cache_skin_key(skin)
     cache.delete(key)
 
 

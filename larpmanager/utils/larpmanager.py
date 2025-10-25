@@ -23,14 +23,14 @@ from slugify import slugify
 from larpmanager.models.larpmanager import LarpManagerFaq
 
 
-def generate_tutorial_url_slug(instance):
+def generate_tutorial_url_slug(tutorial):
     """Generate slug for tutorial if not already set.
 
     Args:
-        instance: LarpManagerTutorial instance being saved
+        tutorial: LarpManagerTutorial instance being saved
     """
-    if not instance.slug:
-        instance.slug = slugify(instance.name)
+    if not tutorial.slug:
+        tutorial.slug = slugify(tutorial.name)
 
 
 def auto_assign_faq_sequential_number(faq: LarpManagerFaq) -> None:
@@ -56,15 +56,15 @@ def auto_assign_faq_sequential_number(faq: LarpManagerFaq) -> None:
         return
 
     # Get the highest number for FAQs of the same type
-    n = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
+    max_number = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
 
     # Handle first FAQ of this type (no existing numbers)
-    if not n:
-        n = 1
+    if not max_number:
+        next_number = 1
     else:
         # Calculate next number in sequence (increments of 10)
         # Example: if max is 25, next will be 30
-        n = ((n // 10) + 1) * 10
+        next_number = ((max_number // 10) + 1) * 10
 
     # Assign the calculated number to the FAQ
-    faq.number = n
+    faq.number = next_number

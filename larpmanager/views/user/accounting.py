@@ -848,12 +848,12 @@ def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> Ht
     return acc_redirect(invoice)
 
 
-def acc_redirect(inv: PaymentInvoice) -> HttpResponseRedirect:
+def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
     """Redirect to appropriate page after payment based on invoice type."""
     # Redirect to run gallery if invoice is for registration
-    if inv.typ == PaymentType.REGISTRATION:
-        reg = Registration.objects.get(id=inv.idx)
-        return redirect("gallery", s=reg.run.get_slug())
+    if invoice.typ == PaymentType.REGISTRATION:
+        registration = Registration.objects.get(id=invoice.idx)
+        return redirect("gallery", s=registration.run.get_slug())
 
     # Default redirect to accounting page
     return redirect("accounting")

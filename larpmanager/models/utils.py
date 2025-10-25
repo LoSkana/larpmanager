@@ -282,8 +282,8 @@ class UploadToPathAndRename:
 
 
 def _key_id(fernet_key):
-    raw = base64.urlsafe_b64decode(fernet_key)
-    return hashlib.sha256(raw).hexdigest()[:12]
+    decoded_key = base64.urlsafe_b64decode(fernet_key)
+    return hashlib.sha256(decoded_key).hexdigest()[:12]
 
 
 def get_payment_details_path(assoc: "Association") -> str:

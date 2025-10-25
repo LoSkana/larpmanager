@@ -245,19 +245,19 @@ def check_centauri(request) -> Optional[HttpResponse]:
         return
 
     # Build template context with association-specific Centauri content
-    ctx = {}
-    for s in ["centauri_descr", "centauri_content"]:
-        ctx[s] = get_assoc_config(request.assoc["id"], s, None, ctx)
+    template_context = {}
+    for config_key in ["centauri_descr", "centauri_content"]:
+        template_context[config_key] = get_assoc_config(request.assoc["id"], config_key, None, template_context)
 
     # Award badge to user if configured for this association
-    badge = get_assoc_config(request.assoc["id"], "centauri_badge", None, ctx)
-    if badge:
-        bdg = Badge.objects.get(cod=badge)
-        bdg.members.add(request.user.member)
-        bdg.save()
+    badge_code = get_assoc_config(request.assoc["id"], "centauri_badge", None, template_context)
+    if badge_code:
+        badge = Badge.objects.get(cod=badge_code)
+        badge.members.add(request.user.member)
+        badge.save()
 
     # Render and return the Centauri easter egg page
-    return render(request, "larpmanager/general/centauri.html", ctx)
+    return render(request, "larpmanager/general/centauri.html", template_context)
 
 
 def _go_centauri(request):
@@ -278,11 +278,12 @@ def _go_centauri(request):
     if "centauri_prob" not in request.assoc:
         return False
 
-    prob = int(request.assoc["centauri_prob"])
-    if not prob:
+    centauri_probability = int(request.assoc["centauri_prob"])
+    if not centauri_probability:
         return False
 
-    if random.randint(0, 1000) > prob:
+    random_value = random.randint(0, 1000)
+    if random_value > centauri_probability:
         return False
 
     return True
@@ -332,91 +333,91 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     # Validate that the instance has a photo ImageField
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
-        field = instance._meta.get_field("photo")
-        if not isinstance(field, models.ImageField):
+        photo_field = instance._meta.get_field("photo")
+        if not isinstance(photo_field, models.ImageField):
             return
     except Exception:
         return
 
     # Get the photo file object from the instance
-    f = getattr(instance, "photo", None)
-    if not f:
+    photo_file = getattr(instance, "photo", None)
+    if not photo_file:
         return
 
     # Check if this is a new file that needs processing
-    if _check_new(f, instance, sender):
+    if _check_new(photo_file, instance, sender):
         return
 
     # Open and load the image from the file object
-    fileobj = getattr(f, "file", None) or f
+    file_object = getattr(photo_file, "file", None) or photo_file
     try:
-        fileobj.seek(0)
-        img = PILImage.open(fileobj)
+        file_object.seek(0)
+        image = PILImage.open(file_object)
     except Exception:
         return
 
     # Apply EXIF orientation and get image dimensions
-    img = ImageOps.exif_transpose(img)
-    w, h = img.size
+    image = ImageOps.exif_transpose(image)
+    width, height = image.size
 
     # Skip rotation if image is already landscape or square
-    if h <= w:
+    if height <= width:
         return
 
     # Rotate the image 90 degrees clockwise to make it landscape
-    img = img.rotate(90, expand=True)
+    image = image.rotate(90, expand=True)
 
     # Determine the appropriate file format for saving
-    fmt = _get_extension(f, img)
+    file_format = _get_extension(photo_file, image)
 
     # Convert incompatible color modes for JPEG format
-    if fmt == "JPEG" and img.mode in ("RGBA", "LA", "P"):
-        img = img.convert("RGB")
+    if file_format == "JPEG" and image.mode in ("RGBA", "LA", "P"):
+        image = image.convert("RGB")
 
     # Save the rotated image to a BytesIO buffer with optimization
-    out = BytesIO()
+    output_buffer = BytesIO()
     save_kwargs = {"optimize": True}
-    if fmt == "JPEG":
+    if file_format == "JPEG":
         save_kwargs["quality"] = 88
-    img.save(out, format=fmt, **save_kwargs)
-    out.seek(0)
+    image.save(output_buffer, format=file_format, **save_kwargs)
+    output_buffer.seek(0)
 
     # Replace the original photo with the rotated version
-    basename = os.path.basename(f.name) or f.name
-    instance.photo = ContentFile(out.read(), name=basename)
+    original_filename = os.path.basename(photo_file.name) or photo_file.name
+    instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 
-def _get_extension(f, img) -> str:
+def _get_extension(uploaded_file, image) -> str:
     """Get the appropriate image format extension.
 
     Determines the correct image format based on the file extension and image format.
     Falls back to JPEG if format cannot be determined.
 
     Args:
-        f: File object with a name attribute
-        img: Image object with a format attribute
+        uploaded_file: File object with a name attribute
+        image: Image object with a format attribute
 
     Returns:
         str: Image format string (e.g., 'JPEG', 'PNG', 'WEBP')
     """
     # Extract file extension and normalize to lowercase
-    ext = os.path.splitext(f.name)[1].lower()
+    file_extension = os.path.splitext(uploaded_file.name)[1].lower()
 
     # Get image format, defaulting to empty string if None
-    fmt = (img.format or "").upper()
+    image_format = (image.format or "").upper()
 
     # If no format detected from image, determine from file extension
-    if not fmt:
-        if ext in (".jpg", ".jpeg"):
-            fmt = "JPEG"
-        elif ext == ".png":
-            fmt = "PNG"
-        elif ext == ".webp":
-            fmt = "WEBP"
+    if not image_format:
+        if file_extension in (".jpg", ".jpeg"):
+            image_format = "JPEG"
+        elif file_extension == ".png":
+            image_format = "PNG"
+        elif file_extension == ".webp":
+            image_format = "WEBP"
         else:
             # Default fallback format
-            fmt = "JPEG"
-    return fmt
+            image_format = "JPEG"
+    return image_format
 
 
 def _check_new(file_field, instance, sender) -> bool:

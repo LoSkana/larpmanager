@@ -280,21 +280,21 @@ def auto_assign_sequential_numbers(instance):
     Args:
         instance: Model instance to populate fields for
     """
-    for field in ["number", "order"]:
-        if hasattr(instance, field) and not getattr(instance, field):
-            que = None
+    for field_name in ["number", "order"]:
+        if hasattr(instance, field_name) and not getattr(instance, field_name):
+            queryset = None
             if hasattr(instance, "event") and instance.event:
-                que = instance.__class__.objects.filter(event=instance.event)
+                queryset = instance.__class__.objects.filter(event=instance.event)
             if hasattr(instance, "assoc") and instance.assoc:
-                que = instance.__class__.objects.filter(assoc=instance.assoc)
+                queryset = instance.__class__.objects.filter(assoc=instance.assoc)
             if hasattr(instance, "character") and instance.character:
-                que = instance.__class__.objects.filter(character=instance.character)
-            if que is not None:
-                n = que.aggregate(Max(field))[f"{field}__max"]
-                if not n:
-                    setattr(instance, field, 1)
+                queryset = instance.__class__.objects.filter(character=instance.character)
+            if queryset is not None:
+                max_value = queryset.aggregate(Max(field_name))[f"{field_name}__max"]
+                if not max_value:
+                    setattr(instance, field_name, 1)
                 else:
-                    setattr(instance, field, n + 1)
+                    setattr(instance, field_name, max_value + 1)
 
 
 def update_model_search_field(instance):

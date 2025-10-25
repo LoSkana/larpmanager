@@ -56,11 +56,11 @@ def _extract_last_name(last_name: str) -> str:
         3-character string code.
     """
     # Convert to uppercase for consistent processing
-    last_name = last_name.upper()
+    normalized_last_name = last_name.upper()
 
     # Extract consonants and vowels from the name
-    consonants = _calculate_consonants(last_name)
-    vowels = _calculate_vowels(last_name)
+    consonants = _calculate_consonants(normalized_last_name)
+    vowels = _calculate_vowels(normalized_last_name)
 
     # Combine and pad with 'X' if needed, then take first 3 characters
     return (consonants + vowels + "XXX")[:3]
@@ -75,16 +75,16 @@ def _extract_first_name(first_name: str) -> str:
     Returns:
         A 3-character string extracted from the first name.
     """
-    first_name = first_name.upper()
+    normalized_name = first_name.upper()
 
     # Calculate consonants and limit to first 4
-    consonants = _calculate_consonants(first_name)
-    max_consonants = 4
-    if len(consonants) >= max_consonants:
+    consonants = _calculate_consonants(normalized_name)
+    maximum_consonants = 4
+    if len(consonants) >= maximum_consonants:
         consonants = consonants[0] + consonants[2] + consonants[3]
 
     # Add vowels and pad with X if needed
-    vowels = _calculate_vowels(first_name)
+    vowels = _calculate_vowels(normalized_name)
     return (consonants + vowels + "XXX")[:3]
 
 
@@ -103,15 +103,15 @@ def _extract_birth_date(birth_date: date | None, male: bool) -> str:
         return ""
 
     # Extract last two digits of year
-    year = str(birth_date.year)[-2:]
+    year_two_digits = str(birth_date.year)[-2:]
 
     # Get month code from lookup table
-    month = month_codes[birth_date.month - 1]
+    month_code = month_codes[birth_date.month - 1]
 
     # Add 40 to day for females, keep original for males
-    day = birth_date.day + (40 if not male else 0)
+    day_with_gender_offset = birth_date.day + (40 if not male else 0)
 
-    return f"{year}{month}{str(day).zfill(2)}"
+    return f"{year_two_digits}{month_code}{str(day_with_gender_offset).zfill(2)}"
 
 
 def _clean_birth_place(birth_place: str | None) -> str:
@@ -126,8 +126,8 @@ def _clean_birth_place(birth_place: str | None) -> str:
     if not birth_place:
         return ""
     # Remove everything in parenthesis
-    cleaned_birth_place = re.sub(r"\(.*?\)", "", birth_place)
-    return cleaned_birth_place
+    birth_place_without_parentheses = re.sub(r"\(.*?\)", "", birth_place)
+    return birth_place_without_parentheses
 
 
 def _slugify(input_text):
@@ -176,31 +176,31 @@ def _extract_municipality_code(birth_place: str) -> str:
         exact and partial matching strategies.
     """
     # Convert birth place to slugified format for consistent matching
-    slug = _slugify(birth_place)
+    slugified_birth_place = _slugify(birth_place)
 
     # First search: Look for exact matches in nations data
-    file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
-    with open(file_path) as file:
-        reader = csv.reader(file)
+    nations_file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
+    with open(nations_file_path) as nations_file:
+        nations_reader = csv.reader(nations_file)
         # Search for exact nation name matches
-        for row in reader:
-            if slug == _slugify(row[0]):
-                return row[1]
+        for nation_row in nations_reader:
+            if slugified_birth_place == _slugify(nation_row[0]):
+                return nation_row[1]
 
     # Second search: Look in municipality codes file
-    file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
-    with open(file_path) as file:
-        reader = csv.reader(file)
+    municipalities_file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
+    with open(municipalities_file_path) as municipalities_file:
+        municipalities_reader = csv.reader(municipalities_file)
         # First pass: Search for exact matches in split municipality names
-        for row in reader:
-            for el in row[0].split("/"):
-                if slug == _slugify(el):
-                    return row[1]
+        for municipality_row in municipalities_reader:
+            for municipality_name_variant in municipality_row[0].split("/"):
+                if slugified_birth_place == _slugify(municipality_name_variant):
+                    return municipality_row[1]
 
         # Second pass: Search for partial matches in municipality names
-        for row in reader:
-            if slug in _slugify(row[0]):
-                return row[1]
+        for municipality_row in municipalities_reader:
+            if slugified_birth_place in _slugify(municipality_row[0]):
+                return municipality_row[1]
 
     # Return empty string if no match found in any dataset
     return ""

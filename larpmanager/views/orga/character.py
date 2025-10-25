@@ -840,78 +840,86 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", ctx)
 
 
-def check_relations(cache, checks, chs_numbers, ctx, number_map):
+def check_relations(character_cache, validation_checks, character_numbers, context, number_to_id_map):
     """Check character relationships for missing and extinct references.
 
     Args:
-        cache: Dictionary to store relationship data for each character
-        checks: Dictionary to accumulate validation errors
-        chs_numbers: Set of valid character numbers in the event
-        ctx: Context dictionary containing character data
-        number_map: Mapping from character IDs to numbers
+        character_cache: Dictionary to store relationship data for each character
+        validation_checks: Dictionary to accumulate validation errors
+        character_numbers: Set of valid character numbers in the event
+        context: Context dictionary containing character data
+        number_to_id_map: Mapping from character IDs to numbers
 
     Side effects:
-        Updates checks with relat_missing and relat_extinct validation errors
-        Populates cache with character relationship data
+        Updates validation_checks with relat_missing and relat_extinct validation errors
+        Populates character_cache with character relationship data
     """
-    checks["relat_missing"] = []
-    checks["relat_extinct"] = []
-    for c in ctx["chars"]:
-        ch = ctx["chars"][c]
-        (from_text, extinct) = get_chars_relations(ch.get("text", ""), chs_numbers)
-        name = f"#{ch['number']} {ch['name']}"
-        for e in extinct:
-            checks["relat_extinct"].append((name, e))
-        cache[c] = (name, from_text)
-    for c, content in cache.items():
-        (first, first_rel) = content
-        for oth in first_rel:
-            (second, second_rel) = cache[oth]
-            if c not in second_rel:
-                checks["relat_missing"].append(
-                    {"f_id": number_map[c], "f_name": first, "s_id": number_map[oth], "s_name": second}
+    validation_checks["relat_missing"] = []
+    validation_checks["relat_extinct"] = []
+    for character_id in context["chars"]:
+        character = context["chars"][character_id]
+        (referenced_characters, extinct_references) = get_chars_relations(character.get("text", ""), character_numbers)
+        character_name = f"#{character['number']} {character['name']}"
+        for extinct_reference in extinct_references:
+            validation_checks["relat_extinct"].append((character_name, extinct_reference))
+        character_cache[character_id] = (character_name, referenced_characters)
+    for character_id, cached_data in character_cache.items():
+        (first_character_name, first_character_relations) = cached_data
+        for other_character_id in first_character_relations:
+            (second_character_name, second_character_relations) = character_cache[other_character_id]
+            if character_id not in second_character_relations:
+                validation_checks["relat_missing"].append(
+                    {
+                        "f_id": number_to_id_map[character_id],
+                        "f_name": first_character_name,
+                        "s_id": number_to_id_map[other_character_id],
+                        "s_name": second_character_name,
+                    }
                 )
 
 
-def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
+def check_writings(cache, checks, character_numbers, ctx, character_id_to_number_map):
     """Validate writing submissions and requirements for different element types.
 
     Args:
         cache: Dictionary to store validation results
         checks: Dictionary to store validation issues found
-        chs_numbers: Set of valid character numbers
+        character_numbers: Set of valid character numbers
         ctx: Context with event and features data
-        id_number_map: Mapping from character IDs to numbers
+        character_id_to_number_map: Mapping from character IDs to numbers
 
     Side effects:
         Updates checks with extinct, missing, and interloper character issues
     """
-    for el in [Faction, Plot, Prologue, SpeedLarp]:
-        nm = str(el.__name__).lower()
-        if nm not in ctx["features"]:
+    for element_type in [Faction, Plot, Prologue, SpeedLarp]:
+        element_name = str(element_type.__name__).lower()
+        if element_name not in ctx["features"]:
             continue
-        checks[nm + "_extinct"] = []
-        checks[nm + "_missing"] = []
-        checks[nm + "_interloper"] = []
-        cache[nm] = {}
+        checks[element_name + "_extinct"] = []
+        checks[element_name + "_missing"] = []
+        checks[element_name + "_interloper"] = []
+        cache[element_name] = {}
         # check s: all characters currently listed has
-        for f in (
-            ctx["event"].get_elements(el).annotate(characters_map=ArrayAgg("characters")).prefetch_related("characters")
+        for element in (
+            ctx["event"]
+            .get_elements(element_type)
+            .annotate(characters_map=ArrayAgg("characters"))
+            .prefetch_related("characters")
         ):
-            (from_text, extinct) = get_chars_relations(f.text, chs_numbers)
-            for e in extinct:
-                checks[nm + "_extinct"].append((f, e))
+            (characters_from_text, extinct_characters) = get_chars_relations(element.text, character_numbers)
+            for extinct_character in extinct_characters:
+                checks[element_name + "_extinct"].append((element, extinct_character))
 
-            from_rels = set()
-            for ch_id in f.characters_map:
-                if ch_id not in id_number_map:
+            characters_from_relations = set()
+            for character_id in element.characters_map:
+                if character_id not in character_id_to_number_map:
                     continue
-                from_rels.add(id_number_map[ch_id])
+                characters_from_relations.add(character_id_to_number_map[character_id])
 
-            for e in list(set(from_text) - set(from_rels)):
-                checks[nm + "_missing"].append((f, e))
-            for e in list(set(from_rels) - set(from_text)):
-                checks[nm + "_interloper"].append((f, e))
+            for missing_character in list(set(characters_from_text) - set(characters_from_relations)):
+                checks[element_name + "_missing"].append((element, missing_character))
+            for interloper_character in list(set(characters_from_relations) - set(characters_from_text)):
+                checks[element_name + "_interloper"].append((element, interloper_character))
                 # cache[nm][f.number] = (str(f), from_text)
 
 
@@ -931,39 +939,41 @@ def check_speedlarp(checks, ctx, id_number_map):
 
     checks["speed_larps_double"] = []
     checks["speed_larps_missing"] = []
-    max_typ = ctx["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
-    if not max_typ or max_typ == 0:
+    max_speedlarp_type = ctx["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
+    if not max_speedlarp_type or max_speedlarp_type == 0:
         return
 
-    speeds = {}
-    for el in ctx["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
-        check_speedlarp_prepare(el, id_number_map, speeds)
-    for chnum, c in ctx["chars"].items():
-        if chnum not in speeds:
+    speedlarp_assignments = {}
+    for speedlarp_element in ctx["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
+        check_speedlarp_prepare(speedlarp_element, id_number_map, speedlarp_assignments)
+    for character_number, character in ctx["chars"].items():
+        if character_number not in speedlarp_assignments:
             continue
-        for typ in range(1, max_typ + 1):
-            if typ not in speeds[chnum]:
-                checks["speed_larps_missing"].append((typ, c))
-            if len(speeds[chnum][typ]) > 1:
-                checks["speed_larps_double"].append((typ, c))
+        for speedlarp_type in range(1, max_speedlarp_type + 1):
+            if speedlarp_type not in speedlarp_assignments[character_number]:
+                checks["speed_larps_missing"].append((speedlarp_type, character))
+            if len(speedlarp_assignments[character_number][speedlarp_type]) > 1:
+                checks["speed_larps_double"].append((speedlarp_type, character))
 
 
-def check_speedlarp_prepare(el, id_number_map: dict[int, int], speeds: dict[int, dict[str, list[str]]]) -> None:
+def check_speedlarp_prepare(
+    element, character_id_to_number_map: dict[int, int], character_speeds: dict[int, dict[str, list[str]]]
+) -> None:
     """Prepare speed LARP data by mapping character relationships to speeds structure."""
     # Extract character numbers from element's character map
-    from_rels = set()
-    for ch_id in el.characters_map:
-        if ch_id not in id_number_map:
+    character_numbers_from_relationships = set()
+    for character_id in element.characters_map:
+        if character_id not in character_id_to_number_map:
             continue
-        from_rels.add(id_number_map[ch_id])
+        character_numbers_from_relationships.add(character_id_to_number_map[character_id])
 
     # Update speeds structure for each character
-    for ch in from_rels:
-        if ch not in speeds:
-            speeds[ch] = {}
-        if el.typ not in speeds[ch]:
-            speeds[ch][el.typ] = []
-        speeds[ch][el.typ].append(str(el))
+    for character_number in character_numbers_from_relationships:
+        if character_number not in character_speeds:
+            character_speeds[character_number] = {}
+        if element.typ not in character_speeds[character_number]:
+            character_speeds[character_number][element.typ] = []
+        character_speeds[character_number][element.typ].append(str(element))
 
 
 @require_POST
@@ -1189,7 +1199,7 @@ def _get_excel_form(
     return context
 
 
-def _get_question_update(ctx: dict, el) -> str:
+def _get_question_update(ctx: dict, element) -> str:
     """Generate question update HTML for different question types.
 
     Creates appropriate HTML content for updating questions based on their type,
@@ -1197,7 +1207,7 @@ def _get_question_update(ctx: dict, el) -> str:
 
     Args:
         ctx: Context dictionary containing question, form, event, and element data
-        el: Element object with thumb attribute for cover questions
+        element: Element object with thumb attribute for cover questions
 
     Returns:
         HTML string for the question update content
@@ -1205,8 +1215,8 @@ def _get_question_update(ctx: dict, el) -> str:
     # Handle cover question type - return image thumbnail HTML
     if ctx["question"].typ in [WritingQuestionType.COVER]:
         return f"""
-                <a href="{el.thumb.url}">
-                    <img src="{el.thumb.url}"
+                <a href="{element.thumb.url}">
+                    <img src="{element.thumb.url}"
                          class="character-cover"
                          alt="character cover" />
                 </a>
@@ -1220,29 +1230,29 @@ def _get_question_update(ctx: dict, el) -> str:
         question_slug = ctx["question"].typ
 
     # Extract value from form cleaned data
-    value = ctx["form"].cleaned_data[question_key]
+    display_value = ctx["form"].cleaned_data[question_key]
 
     # Strip HTML tags for editor and text-based question types
     if ctx["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
-        value = strip_tags(str(value))
+        display_value = strip_tags(str(display_value))
 
     # Handle multiple choice and single choice questions
     if ctx["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
-        option_ids = [int(val) for val in value]
+        option_ids = [int(option_value) for option_value in display_value]
         query = ctx["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
-        value = ", ".join([display for display in query.values_list("name", flat=True)])
+        display_value = ", ".join([display for display in query.values_list("name", flat=True)])
     else:
         # check if it is over the character limit
-        value = str(value)
-        limit = conf_settings.FIELD_SNIPPET_LIMIT
+        display_value = str(display_value)
+        character_limit = conf_settings.FIELD_SNIPPET_LIMIT
 
         # Truncate long values and add expand link
-        if len(value) > limit:
-            value = value[:limit]
-            value += f"... <a href='#' class='post_popup' pop='{ctx['element'].id}' fie='{question_slug}'><i class='fas fa-eye'></i></a>"
+        if len(display_value) > character_limit:
+            display_value = display_value[:character_limit]
+            display_value += f"... <a href='#' class='post_popup' pop='{ctx['element'].id}' fie='{question_slug}'><i class='fas fa-eye'></i></a>"
 
-    return value
+    return display_value
 
 
 def _check_working_ticket(request, context: dict, working_ticket_token: str) -> str | None:

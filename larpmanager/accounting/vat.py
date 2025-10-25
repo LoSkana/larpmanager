@@ -58,40 +58,40 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     # Calculate total amount already paid by this member for this run
     # This includes previous payments minus any refund transactions
-    previous_pays = get_previous_sum(instance, AccountingItemPayment)
-    previous_trans = get_previous_sum(instance, AccountingItemTransaction)
-    previous_paid = previous_pays - previous_trans
+    previous_payments_sum = get_previous_sum(instance, AccountingItemPayment)
+    previous_transactions_sum = get_previous_sum(instance, AccountingItemTransaction)
+    total_previously_paid = previous_payments_sum - previous_transactions_sum
 
     # Retrieve VAT rates from association configuration
     # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
-    ctx = {}
-    _vat_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, ctx=ctx)) / 100.0
-    _vat_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, ctx=ctx)) / 100.0
+    config_context = {}
+    _vat_rate_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, ctx=config_context)) / 100.0
+    _vat_rate_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, ctx=config_context)) / 100.0
 
     # Calculate total ticket cost including both base price and custom amounts
-    ticket_total = 0
+    ticket_total_cost = 0
     if instance.reg.pay_what is not None:
-        ticket_total += instance.reg.pay_what
+        ticket_total_cost += instance.reg.pay_what
     if instance.reg.ticket:
-        ticket_total += instance.reg.ticket.price
+        ticket_total_cost += instance.reg.ticket.price
 
     # Determine net payment amount after accounting for refund transactions
-    paid = instance.value
-    que = AccountingItemTransaction.objects.filter(inv=instance.inv)
-    for trans in que:
-        paid -= trans.value
+    current_payment_amount = instance.value
+    transactions_query = AccountingItemTransaction.objects.filter(inv=instance.inv)
+    for transaction in transactions_query:
+        current_payment_amount -= transaction.value
 
     # Calculate how much of the ticket portion remains unpaid
     # This determines how to split the current payment
-    remaining_ticket = max(0, ticket_total - previous_paid)
+    remaining_ticket_amount = max(0, ticket_total_cost - total_previously_paid)
 
     # Split current payment between ticket portion and options portion
     # Ticket portion is paid first, remainder goes to options
-    quota_ticket = float(min(paid, remaining_ticket))
-    quota_options = float(paid) - float(quota_ticket)
+    payment_allocated_to_ticket = float(min(current_payment_amount, remaining_ticket_amount))
+    payment_allocated_to_options = float(current_payment_amount) - float(payment_allocated_to_ticket)
 
     # Update database with calculated VAT amounts for each portion
-    updates = {"vat_ticket": quota_ticket, "vat_options": quota_options}
+    updates = {"vat_ticket": payment_allocated_to_ticket, "vat_options": payment_allocated_to_options}
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 

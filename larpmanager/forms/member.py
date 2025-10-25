@@ -454,33 +454,33 @@ class ResidenceField(forms.MultiValueField):
 class BaseProfileForm(MyForm):
     def _get_cached_assoc(self, request):
         """Get cached association object to avoid redundant database queries."""
-        assoc_id = request.assoc["id"]
-        if hasattr(request, "_cached_assoc") and request._cached_assoc.id == assoc_id:
+        association_id = request.assoc["id"]
+        if hasattr(request, "_cached_assoc") and request._cached_assoc.id == association_id:
             return request._cached_assoc
 
-        assoc = Association.objects.get(pk=assoc_id)
-        request._cached_assoc = assoc
-        return assoc
+        association = Association.objects.get(pk=association_id)
+        request._cached_assoc = association
+        return association
 
-    def _get_cached_features(self, request, assoc_id=None):
+    def _get_cached_features(self, request, association_id=None):
         """Get cached association features to avoid redundant function calls."""
         if hasattr(request, "_cached_features"):
             return request._cached_features
 
-        if assoc_id is None:
-            assoc_id = request.assoc["id"]
+        if association_id is None:
+            association_id = request.assoc["id"]
 
-        features = get_assoc_features(assoc_id)
+        features = get_assoc_features(association_id)
         request._cached_features = features
         return features
 
-    def _get_cached_membership(self, instance, assoc_id):
+    def _get_cached_membership(self, member_instance, association_id):
         """Get cached membership object to avoid redundant queries."""
-        if hasattr(instance, "_cached_membership"):
-            return instance._cached_membership
+        if hasattr(member_instance, "_cached_membership"):
+            return member_instance._cached_membership
 
-        membership = get_user_membership(instance, assoc_id)
-        instance._cached_membership = membership
+        membership = get_user_membership(member_instance, association_id)
+        member_instance._cached_membership = membership
         return membership
 
     def __init__(self, *args, **kwargs):

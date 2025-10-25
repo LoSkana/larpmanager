@@ -71,24 +71,24 @@ def casting_characters(ctx: dict, reg: Registration) -> None:
     get_event_filter_characters(ctx, filters)
 
     # Initialize data structures for organizing characters by faction
-    choices = {}
-    facts = []
-    num = 0
+    character_choices_by_faction = {}
+    faction_names = []
+    total_characters = 0
 
     # Process each faction and organize characters within it
-    for fac in ctx["factions"]:
-        k = fac.data["name"]
-        choices[k] = {}
-        facts.append(k)
+    for faction in ctx["factions"]:
+        faction_name = faction.data["name"]
+        character_choices_by_faction[faction_name] = {}
+        faction_names.append(faction_name)
 
         # Add each character from the faction to choices with display info
-        for char in fac.chars:
-            choices[k][char.id] = char.show(ctx["run"])
-            num += 1
+        for character in faction.chars:
+            character_choices_by_faction[faction_name][character.id] = character.show(ctx["run"])
+            total_characters += 1
 
     # Convert faction and character data to JSON for frontend consumption
-    ctx["factions"] = json.dumps(facts)
-    ctx["choices"] = json.dumps(choices)
+    ctx["factions"] = json.dumps(faction_names)
+    ctx["choices"] = json.dumps(character_choices_by_faction)
 
     # Add faction filter for transversal faction types
     ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
@@ -108,34 +108,34 @@ def casting_quest_traits(ctx: dict, typ: str) -> None:
     Returns:
         None: Function modifies ctx dictionary in-place
     """
-    choices = {}
-    factions = []
-    num = 0
+    trait_choices = {}
+    faction_names = []
+    total_traits = 0
 
     # Iterate through quests filtered by event, type, and visibility
     for quest in Quest.objects.filter(event=ctx["event"], typ=typ, hide=False).order_by("number"):
-        gr = quest.show()["name"]
-        dc = {}
+        faction_name = quest.show()["name"]
+        available_traits = {}
 
         # Collect traits for this quest that aren't already assigned
         for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
             # Skip traits that are already assigned to the current run
             if AssignmentTrait.objects.filter(trait=trait, run=ctx["run"]).count() > 0:
                 continue
-            dc[trait.id] = trait.show()
-            num += 1
+            available_traits[trait.id] = trait.show()
+            total_traits += 1
 
         # Only include quests that have available traits
-        if len(dc.keys()) == 0:
+        if len(available_traits.keys()) == 0:
             continue
 
         # Add quest and its traits to choices, track faction name
-        choices[gr] = dc
-        factions.append(gr)
+        trait_choices[faction_name] = available_traits
+        faction_names.append(faction_name)
 
     # Serialize data as JSON for frontend consumption
-    ctx["factions"] = json.dumps(list(factions))
-    ctx["choices"] = json.dumps(choices)
+    ctx["factions"] = json.dumps(list(faction_names))
+    ctx["choices"] = json.dumps(trait_choices)
 
 
 def casting_details(ctx: dict, casting_type: int) -> dict:
@@ -281,12 +281,13 @@ def _get_previous(ctx: dict, request: HttpRequest, typ: int) -> None:
     """
     # Retrieve all previous casting choices for this member, run, and type
     # ordered by preference to maintain selection order
-    already = [
-        c.element for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref")
+    previous_choices = [
+        casting.element
+        for casting in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref")
     ]
 
     # Serialize casting choices as JSON for frontend consumption
-    ctx["already"] = json.dumps(already)
+    ctx["already"] = json.dumps(previous_choices)
 
     # Handle different casting types with appropriate data population
     if typ == 0:
@@ -300,8 +301,8 @@ def _get_previous(ctx: dict, request: HttpRequest, typ: int) -> None:
 
     # Attempt to retrieve avoidance preferences for this casting type
     try:
-        ca = CastingAvoid.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
-        ctx["avoid"] = ca.text
+        casting_avoidance = CastingAvoid.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
+        ctx["avoid"] = casting_avoidance.text
     except ObjectDoesNotExist:
         # No avoidance preferences found, continue without setting avoid context
         pass

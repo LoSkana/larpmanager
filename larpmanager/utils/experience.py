@@ -180,30 +180,30 @@ def calculate_character_experience_points(character):
     apply_rules_computed(character)
 
 
-def _handle_free_abilities(char):
+def _handle_free_abilities(character):
     """
     Handle free abilities that characters should automatically receive.
 
     Args:
-        char: Character instance to process
+        character: Character instance to process
     """
-    free_abilities = get_free_abilities(char)
+    free_ability_ids = get_free_abilities(character)
 
     # look for available ability with cost 0, and not already in the free list: get them!
-    for ability in get_available_ability_px(char, 0):
+    for ability in get_available_ability_px(character, 0):
         if ability.visible and ability.cost == 0:
-            if ability.id not in free_abilities:
-                char.px_ability_list.add(ability)
-                free_abilities.append(ability.id)
+            if ability.id not in free_ability_ids:
+                character.px_ability_list.add(ability)
+                free_ability_ids.append(ability.id)
 
     # look for current abilities with cost non 0, yet got in the past as free: remove them!
-    for ability in get_current_ability_px(char):
+    for ability in get_current_ability_px(character):
         if ability.visible and ability.cost > 0:
-            if ability.id in free_abilities:
-                removed_ids = remove_char_ability(char, ability.id)
-                free_abilities = list(set(free_abilities) - set(removed_ids))
+            if ability.id in free_ability_ids:
+                removed_ability_ids = remove_char_ability(character, ability.id)
+                free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
 
-    set_free_abilities(char, free_abilities)
+    set_free_abilities(character, free_ability_ids)
 
 
 def get_current_ability_px(character: Character) -> list[AbilityPx]:
@@ -246,13 +246,13 @@ def check_available_ability_px(ability, current_char_abilities, current_char_cho
         True if all prerequisites and requirements are met, False otherwise
     """
     # Extract prerequisite IDs from the ability
-    prereq_ids = {a.id for a in ability.prerequisites.all()}
+    prerequisite_ids = {ability.id for ability in ability.prerequisites.all()}
 
     # Extract requirement IDs from the ability
-    requirements_ids = {o.id for o in ability.requirements.all()}
+    requirement_ids = {option.id for option in ability.requirements.all()}
 
     # Check if all prerequisites and requirements are satisfied
-    return prereq_ids.issubset(current_char_abilities) and requirements_ids.issubset(current_char_choices)
+    return prerequisite_ids.issubset(current_char_abilities) and requirement_ids.issubset(current_char_choices)
 
 
 def get_available_ability_px(char, px_avail: int | None = None) -> list:
@@ -391,39 +391,43 @@ def apply_rules_computed(char) -> None:
     """
     # Get the character's event and initialize computed question values
     event = char.event
-    computed_ques = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
-    values = {question.id: Decimal(0) for question in computed_ques}
+    computed_questions = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+    computed_field_values = {question.id: Decimal(0) for question in computed_questions}
 
     # Retrieve character's ability IDs for rule filtering
-    ability_ids = char.px_ability_list.values_list("pk", flat=True)
+    character_ability_ids = char.px_ability_list.values_list("pk", flat=True)
 
     # Get applicable rules: either global rules or rules matching character's abilities
-    rules = (
+    applicable_rules = (
         event.get_elements(RulePx)
-        .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
+        .filter(Q(abilities__isnull=True) | Q(abilities__in=character_ability_ids))
         .distinct()
         .order_by("order")
     )
 
     # Define mathematical operations with division-by-zero protection
-    ops = {
-        Operation.ADDITION: lambda x, y: x + y,
-        Operation.SUBTRACTION: lambda x, y: x - y,
-        Operation.MULTIPLICATION: lambda x, y: x * y,
-        Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
+    operations = {
+        Operation.ADDITION: lambda current_value, rule_amount: current_value + rule_amount,
+        Operation.SUBTRACTION: lambda current_value, rule_amount: current_value - rule_amount,
+        Operation.MULTIPLICATION: lambda current_value, rule_amount: current_value * rule_amount,
+        Operation.DIVISION: lambda current_value, rule_amount: current_value / rule_amount
+        if rule_amount != 0
+        else current_value,
     }
 
     # Apply each rule to update the corresponding computed field value
-    for rule in rules:
-        f_id = rule.field.id
-        values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
+    for rule in applicable_rules:
+        field_id = rule.field.id
+        computed_field_values[field_id] = operations.get(
+            rule.operation, lambda current_value, rule_amount: current_value
+        )(computed_field_values[field_id], rule.amount)
 
     # Save computed values as WritingAnswer objects with clean formatting
-    for question_id, value in values.items():
-        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+    for question_id, computed_value in computed_field_values.items():
+        (writing_answer, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
         # Format decimal value and remove trailing zeros/decimal point
-        qa.text = format(value, "f").rstrip("0").rstrip(".")
-        qa.save()
+        writing_answer.text = format(computed_value, "f").rstrip("0").rstrip(".")
+        writing_answer.save()
 
 
 def add_char_addit(character):
