@@ -222,7 +222,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
     """
     # Lookup table for characters in even positions (0-indexed: 1, 3, 5, etc.)
     # Maps each alphanumeric character to its numeric value for checksum calculation
-    even_values = {
+    even_position_values = {
         "0": 0,
         "1": 1,
         "2": 2,
@@ -263,7 +263,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
 
     # Lookup table for characters in odd positions (0-indexed: 0, 2, 4, etc.)
     # Uses different values than even positions as per fiscal code specification
-    odd_values = {
+    odd_position_values = {
         "0": 1,
         "1": 0,
         "2": 5,
@@ -303,17 +303,17 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
     }
 
     # Calculate weighted sum of all characters
-    total = 0
-    for i, char in enumerate(cf_without_check_digit):
-        # Even positions (1, 3, 5, ...) use even_values table
-        if i % 2 == 1 and char in even_values:
-            total += even_values[char]
-        # Odd positions (0, 2, 4, ...) use odd_values table
-        elif char in odd_values:
-            total += odd_values[char]
+    weighted_sum = 0
+    for position_index, character in enumerate(cf_without_check_digit):
+        # Even positions (1, 3, 5, ...) use even_position_values table
+        if position_index % 2 == 1 and character in even_position_values:
+            weighted_sum += even_position_values[character]
+        # Odd positions (0, 2, 4, ...) use odd_position_values table
+        elif character in odd_position_values:
+            weighted_sum += odd_position_values[character]
 
     # Convert the modulo 26 result to a letter (A=0, B=1, ..., Z=25)
-    check_digit = chr((total % 26) + ord("A"))
+    check_digit = chr((weighted_sum % 26) + ord("A"))
     return check_digit
 
 

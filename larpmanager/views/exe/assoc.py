@@ -306,28 +306,28 @@ def _add_in_iframe_param(url: str) -> str:
         "https://example.com/page?foo=bar&in_iframe=1"
     """
     # Parse the URL into its components
-    parsed = urlparse(url)
+    parsed_url = urlparse(url)
 
     # Extract existing query parameters and add iframe parameter
-    query_params = parse_qs(parsed.query)
-    query_params["in_iframe"] = ["1"]
+    existing_query_params = parse_qs(parsed_url.query)
+    existing_query_params["in_iframe"] = ["1"]
 
     # Rebuild the query string with all parameters
-    new_query = urlencode(query_params, doseq=True)
+    updated_query_string = urlencode(existing_query_params, doseq=True)
 
     # Reconstruct the complete URL with the modified query string
-    new_url = urlunparse(
+    modified_url = urlunparse(
         (
-            parsed.scheme,
-            parsed.netloc,
-            parsed.path,
-            parsed.params,
-            new_query,
-            parsed.fragment,
+            parsed_url.scheme,
+            parsed_url.netloc,
+            parsed_url.path,
+            parsed_url.params,
+            updated_query_string,
+            parsed_url.fragment,
         )
     )
 
-    return new_url
+    return modified_url
 
 
 @require_POST

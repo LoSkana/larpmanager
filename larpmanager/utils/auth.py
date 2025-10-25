@@ -56,16 +56,16 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Saves the member instance to persist changes
         """
         # Extract extra data from social login account
-        data = sociallogin.account.extra_data
-        # print(data)
+        social_provider_data = sociallogin.account.extra_data
+        # print(social_provider_data)
 
         # Update name field if it's empty and given_name is available
-        if "given_name" in data and len(user.member.name) == 0:
-            user.member.name = data["given_name"]
+        if "given_name" in social_provider_data and len(user.member.name) == 0:
+            user.member.name = social_provider_data["given_name"]
 
         # Update surname field if it's empty and family_name is available
-        if "family_name" in data and len(user.member.surname) == 0:
-            user.member.surname = data["family_name"]
+        if "family_name" in social_provider_data and len(user.member.surname) == 0:
+            user.member.surname = social_provider_data["family_name"]
 
         # Persist changes to database
         user.member.save()

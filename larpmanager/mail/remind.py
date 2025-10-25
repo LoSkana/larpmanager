@@ -29,24 +29,26 @@ from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.text import get_assoc_text
 
 
-def remember_membership(reg):
+def remember_membership(registration):
     """Send membership reminder email to registered user.
 
     Args:
-        reg: Registration instance needing membership confirmation
+        registration: Registration instance needing membership confirmation
 
     Side effects:
         Sends email reminder about membership requirement
     """
-    activate(reg.member.language)
+    activate(registration.member.language)
 
-    subj = hdr(reg.run.event) + _("Confirmation of registration for %(event)s") % {"event": reg.run}
+    subject = hdr(registration.run.event) + _("Confirmation of registration for %(event)s") % {
+        "event": registration.run
+    }
 
-    body = get_assoc_text(reg.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP) or get_remember_membership_body(
-        reg
-    )
+    body = get_assoc_text(
+        registration.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP
+    ) or get_remember_membership_body(registration)
 
-    my_send_mail(subj, body, reg.member, reg.run)
+    my_send_mail(subject, body, registration.member, registration.run)
 
 
 def get_remember_membership_body(reg) -> str:
@@ -101,30 +103,30 @@ def get_remember_membership_body(reg) -> str:
     return body
 
 
-def remember_pay(reg):
+def remember_pay(registration):
     """Send payment reminder email to registered user.
 
     Args:
-        reg: Registration instance with pending payment
+        registration: Registration instance with pending payment
 
     Side effects:
         Sends email reminder about payment requirement
     """
-    activate(reg.member.language)
+    activate(registration.member.language)
 
-    provisional = is_reg_provisional(reg)
-    context = {"event": reg.run}
+    is_provisional_registration = is_reg_provisional(registration)
+    email_context = {"event": registration.run}
 
-    if provisional:
-        subj = hdr(reg.run.event) + _("Confirm registration to %(event)s") % context
+    if is_provisional_registration:
+        email_subject = hdr(registration.run.event) + _("Confirm registration to %(event)s") % email_context
     else:
-        subj = hdr(reg.run.event) + _("Complete payment for %(event)s") % context
+        email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
 
-    body = get_assoc_text(reg.run.event.assoc_id, AssocTextType.REMINDER_PAY) or get_remember_pay_body(
-        context, provisional, reg
+    email_body = get_assoc_text(registration.run.event.assoc_id, AssocTextType.REMINDER_PAY) or get_remember_pay_body(
+        email_context, is_provisional_registration, registration
     )
 
-    my_send_mail(subj, body, reg.member, reg.run)
+    my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 
 def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
@@ -195,23 +197,25 @@ def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
     return body
 
 
-def remember_profile(reg):
+def remember_profile(registration):
     """Send profile completion reminder email to registered user.
 
     Args:
-        reg: Registration instance with incomplete profile
+        registration: Registration instance with incomplete profile
 
     Side effects:
         Sends email reminder about profile completion requirement
     """
-    activate(reg.member.language)
-    context = {"event": reg.run, "url": get_url("profile", reg.run.event)}
+    activate(registration.member.language)
+    context = {"event": registration.run, "url": get_url("profile", registration.run.event)}
 
-    subj = hdr(reg.run.event) + _("Profile compilation reminder for %(event)s") % context
+    subject = hdr(registration.run.event) + _("Profile compilation reminder for %(event)s") % context
 
-    body = get_assoc_text(reg.run.event.assoc_id, AssocTextType.REMINDER_PROFILE) or get_remember_profile_body(context)
+    body = get_assoc_text(registration.run.event.assoc_id, AssocTextType.REMINDER_PROFILE) or get_remember_profile_body(
+        context
+    )
 
-    my_send_mail(subj, body, reg.member, reg.run)
+    my_send_mail(subject, body, registration.member, registration.run)
 
 
 def get_remember_profile_body(context):
@@ -231,25 +235,25 @@ def get_remember_profile_body(context):
     )
 
 
-def remember_membership_fee(reg):
+def remember_membership_fee(registration):
     """Send membership fee reminder email to registered user.
 
     Args:
-        reg: Registration instance needing membership fee payment
+        registration: Registration instance needing membership fee payment
 
     Side effects:
         Sends email reminder about annual membership fee requirement
     """
-    activate(reg.member.language)
-    context = {"event": reg.run}
+    activate(registration.member.language)
+    context = {"event": registration.run}
 
-    subj = hdr(reg.run.event) + _("Reminder payment of membership fees for %(event)s") % context
+    subject = hdr(registration.run.event) + _("Reminder payment of membership fees for %(event)s") % context
 
     body = get_assoc_text(
-        reg.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP_FEE
-    ) or get_remember_membership_fee_body(context, reg)
+        registration.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP_FEE
+    ) or get_remember_membership_fee_body(context, registration)
 
-    my_send_mail(subj, body, reg.member, reg.run)
+    my_send_mail(subject, body, registration.member, registration.run)
 
 
 def get_remember_membership_fee_body(context: dict, reg) -> str:

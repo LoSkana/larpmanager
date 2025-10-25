@@ -292,25 +292,25 @@ def orga_registration_options_new(request: HttpRequest, s: str, num: int) -> Htt
     return registration_option_edit(ctx, 0, request)
 
 
-def registration_option_edit(ctx, num, request):
+def registration_option_edit(context, option_number, request):
     """
     Handle editing of registration option with form processing and redirect logic.
 
     Args:
-        ctx: Context dictionary with event and form data
-        num: Option number/ID being edited
+        context: Context dictionary with event and form data
+        option_number: Option number/ID being edited
         request: HTTP request object
 
     Returns:
         HttpResponse: Redirect to next step or rendered edit form
     """
-    if backend_edit(request, ctx, OrgaRegistrationOptionForm, num, is_association_based=False):
+    if backend_edit(request, context, OrgaRegistrationOptionForm, option_number, is_association_based=False):
         redirect_target = "orga_registration_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_registration_options_new"
-        return redirect(redirect_target, s=ctx["run"].get_slug(), num=ctx["saved"].question_id)
+        return redirect(redirect_target, s=context["run"].get_slug(), num=context["saved"].question_id)
 
-    return render(request, "larpmanager/orga/edit.html", ctx)
+    return render(request, "larpmanager/orga/edit.html", context)
 
 
 @login_required

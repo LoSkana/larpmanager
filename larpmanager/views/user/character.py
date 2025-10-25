@@ -937,7 +937,7 @@ def character_relationships_edit(request, s, num, oth):
 
 
 @require_POST
-def show_char(request: HttpRequest, s: str) -> JsonResponse:
+def show_char(request: HttpRequest, event_run_slug: str) -> JsonResponse:
     """Show character information in a tooltip format.
 
     Retrieves character data based on a search parameter and returns
@@ -945,7 +945,7 @@ def show_char(request: HttpRequest, s: str) -> JsonResponse:
 
     Args:
         request: The HTTP request object containing POST data
-        s: String identifier for the event/run context
+        event_run_slug: String identifier for the event/run context
 
     Returns:
         JsonResponse containing character tooltip HTML content
@@ -954,24 +954,24 @@ def show_char(request: HttpRequest, s: str) -> JsonResponse:
         Http404: If search parameter is malformed, invalid, or character not found
     """
     # Get event context and populate character cache
-    ctx = get_event_run(request, s)
-    get_event_cache_all(ctx)
+    context = get_event_run(request, event_run_slug)
+    get_event_cache_all(context)
 
     # Extract and validate search parameter from POST data
-    search = request.POST.get("text", "").strip()
-    if not search.startswith(("#", "@", "^")):
-        raise Http404(f"malformed request {search}")
+    search_text = request.POST.get("text", "").strip()
+    if not search_text.startswith(("#", "@", "^")):
+        raise Http404(f"malformed request {search_text}")
 
     # Parse numeric character ID from search string
-    search = int(search[1:])
-    if not search:
-        raise Http404(f"not valid search {search}")
+    character_id = int(search_text[1:])
+    if not character_id:
+        raise Http404(f"not valid search {character_id}")
 
     # Verify character exists in context
-    if search not in ctx["chars"]:
-        raise Http404(f"not present char number {search}")
+    if character_id not in context["chars"]:
+        raise Http404(f"not present char number {character_id}")
 
     # Generate tooltip content and return JSON response
-    ch = ctx["chars"][search]
-    tooltip = get_tooltip(ctx, ch)
-    return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})
+    character = context["chars"][character_id]
+    tooltip_content = get_tooltip(context, character)
+    return JsonResponse({"content": f"<div class='show_char'>{tooltip_content}</div>"})

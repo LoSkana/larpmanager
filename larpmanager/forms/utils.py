@@ -217,33 +217,33 @@ def prepare_permissions_role(form, typ) -> None:
     form.modules = []
 
     # Extract enabled features from form parameters
-    features = set(form.params.get("features", []))
+    enabled_features = set(form.params.get("features", []))
 
     # Get currently selected permission IDs for existing instances
-    selected_ids = set()
+    selected_permission_ids = set()
     if getattr(form.instance, "pk", None):
-        selected_ids = set(form.instance.permissions.values_list("pk", flat=True))
+        selected_permission_ids = set(form.instance.permissions.values_list("pk", flat=True))
 
     # Build base queryset for permissions - filter by enabled features and visibility
-    base_qs = (
+    base_queryset = (
         typ.objects.filter(hidden=False)
         .select_related("feature", "module")
-        .filter(Q(feature__placeholder=True) | Q(feature__slug__in=features))
+        .filter(Q(feature__placeholder=True) | Q(feature__slug__in=enabled_features))
         .order_by("module__order", "number", "pk")
     )
 
     # Group permissions by module for organized display
-    by_module = defaultdict(list)
-    for p in base_qs:
-        by_module[p.module_id].append(p)
+    permissions_by_module = defaultdict(list)
+    for permission in base_queryset:
+        permissions_by_module[permission.module_id].append(permission)
 
     # Ensure modules attribute exists on form
     form.modules = getattr(form, "modules", [])
 
     # Create form fields for each module that has permissions
     for module in PermissionModule.objects.order_by("order"):
-        perms = by_module.get(module.id, [])
-        if not perms:
+        module_permissions = permissions_by_module.get(module.id, [])
+        if not module_permissions:
             continue
 
         # Generate unique field name for this module
@@ -254,19 +254,21 @@ def prepare_permissions_role(form, typ) -> None:
         label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
 
         # Determine which permissions should be initially selected
-        module_ids = [p.pk for p in perms]
-        initial_vals = [pid for pid in selected_ids if pid in module_ids]
+        module_permission_ids = [permission.pk for permission in module_permissions]
+        initial_values = [
+            permission_id for permission_id in selected_permission_ids if permission_id in module_permission_ids
+        ]
 
         # Create the multiple choice field with custom widget
         form.fields[field_name] = TranslatedModelMultipleChoiceField(
             required=False,
-            queryset=typ.objects.filter(pk__in=module_ids).order_by("number", "pk"),
+            queryset=typ.objects.filter(pk__in=module_permission_ids).order_by("number", "pk"),
             widget=RoleCheckboxWidget(
-                help_text={p.pk: p.descr for p in perms},
-                feature_map={p.pk: p.feature_id for p in perms},
+                help_text={permission.pk: permission.descr for permission in module_permissions},
+                feature_map={permission.pk: permission.feature_id for permission in module_permissions},
             ),
             label=label,
-            initial=initial_vals,
+            initial=initial_values,
         )
 
         # Track field name for template rendering
@@ -303,22 +305,22 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
-    def set_exclude(self, excl):
-        self.excl = excl
+    def set_exclude(self, exclude_value):
+        self.excl = exclude_value
 
     def get_queryset(self) -> QuerySet[Event]:
         """Get non-template events for the association, optionally excluding a specific event."""
         # Filter non-template events for the association
-        que = Event.objects.filter(assoc_id=self.aid, template=False)
+        queryset = Event.objects.filter(assoc_id=self.association_id, template=False)
 
         # Exclude specific event if excl attribute is set
         if hasattr(self, "excl"):
-            que = que.exclude(pk=self.excl)
+            queryset = queryset.exclude(pk=self.excl)
 
-        return que
+        return queryset
 
 
 class CampaignS2Widget(s2forms.ModelSelect2Widget):
@@ -329,22 +331,22 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
     def label_from_instance(self, obj):
         return str(obj)
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
-    def set_exclude(self, excl):
-        self.excl = excl
+    def set_exclude(self, exclude):
+        self.exclude = exclude
 
     def get_queryset(self) -> QuerySet[Event]:
         """Return events excluding templates and child events."""
         # Filter for parent events only, excluding templates
-        que = Event.objects.filter(parent_id__isnull=True, assoc_id=self.aid, template=False)
+        queryset = Event.objects.filter(parent_id__isnull=True, assoc_id=self.association_id, template=False)
 
         # Exclude specific event if specified
         if hasattr(self, "excl"):
-            que = que.exclude(pk=self.excl)
+            queryset = queryset.exclude(pk=self.fexcl)
 
-        return que
+        return queryset
 
 
 class TemplateS2Widget(s2forms.ModelSelect2Widget):
@@ -352,11 +354,11 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return Event.objects.filter(assoc_id=self.aid, template=True)
+        return Event.objects.filter(assoc_id=self.association_id, template=True)
 
 
 class AssocMS2:
@@ -367,11 +369,11 @@ class AssocMS2:
         "user__email__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return get_members_queryset(self.aid)
+        return get_members_queryset(self.association_id)
 
     @staticmethod
     def label_from_instance(obj):
@@ -397,24 +399,24 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set allowed attribute to None."""
         super().__init__(*args, **kwargs)
-        self.allowed = None
+        self.allowed_member_ids = None
 
     def set_run(self, run: Run) -> None:
         """Set allowed members for a run based on registrations and event roles."""
         # Get registered members for this run (non-cancelled)
         registration_queryset = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-        self.allowed = set(registration_queryset.values_list("member_id", flat=True))
+        self.allowed_member_ids = set(registration_queryset.values_list("member_id", flat=True))
 
         # Add members with event roles
         event_role_queryset = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
-        self.allowed.update(event_role_queryset.values_list("members__id", flat=True))
+        self.allowed_member_ids.update(event_role_queryset.values_list("members__id", flat=True))
 
         # Set required attribute
         # noinspection PyUnresolvedReferences
         self.attrs["required"] = "required"
 
     def get_queryset(self):
-        return Member.objects.filter(pk__in=self.allowed)
+        return Member.objects.filter(pk__in=self.allowed_member_ids)
 
     def label_from_instance(self, obj: Any) -> str:
         """Generate label combining object display name and email.
@@ -498,11 +500,13 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_assoc(self, assoc_id):
-        self.assoc_id = assoc_id
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return Registration.objects.prefetch_related("run", "run__event").filter(run__event__assoc_id=self.assoc_id)
+        return Registration.objects.prefetch_related("run", "run__event").filter(
+            run__event__assoc_id=self.association_id
+        )
 
     def label_from_instance(self, obj: Any) -> str:
         """Return label for form field instance, appending cancellation status if present."""
@@ -519,11 +523,11 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return Run.objects.filter(event__assoc_id=self.aid)
+        return Run.objects.filter(event__assoc_id=self.association_id)
 
 
 class EventCharacterS2:
@@ -668,10 +672,10 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         # Query event roles with prefetched members to avoid N+1 queries
         que = EventRole.objects.filter(event_id=event.id).prefetch_related("members")
         # Extract flattened list of member IDs who have roles in this event
-        self.allowed = que.values_list("members__id", flat=True)
+        self.allowed_member_ids = que.values_list("members__id", flat=True)
 
     def get_queryset(self):
-        return Member.objects.filter(pk__in=self.allowed)
+        return Member.objects.filter(pk__in=self.allowed_member_ids)
 
 
 class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
@@ -680,11 +684,11 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return WarehouseContainer.objects.filter(assoc_id=self.aid)
+        return WarehouseContainer.objects.filter(assoc_id=self.association_id)
 
 
 class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
@@ -706,11 +710,11 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return WarehouseItem.objects.filter(assoc_id=self.aid)
+        return WarehouseItem.objects.filter(assoc_id=self.association_id)
 
 
 class WarehouseItemS2WidgetMulti(WarehouseItemS2, s2forms.ModelSelect2MultipleWidget):
@@ -727,11 +731,11 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, aid):
-        self.aid = aid
+    def set_assoc(self, association_id):
+        self.association_id = association_id
 
     def get_queryset(self):
-        return WarehouseTag.objects.filter(assoc_id=self.aid)
+        return WarehouseTag.objects.filter(assoc_id=self.association_id)
 
 
 class WarehouseTagS2WidgetMulti(WarehouseTagS2, s2forms.ModelSelect2MultipleWidget):
@@ -742,22 +746,22 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
     pass
 
 
-def remove_choice(ch, typ):
+def remove_choice(choices, type_to_remove):
     """Remove a specific choice from a list of choices.
 
     Args:
-        ch: List of (key, value) choice tuples
-        typ: Choice key to remove
+        choices: List of (key, value) choice tuples
+        type_to_remove: Choice key to remove
 
     Returns:
         list: New choice list without the specified type
     """
-    new = []
-    for k, v in ch:
-        if k == typ:
+    filtered_choices = []
+    for key, value in choices:
+        if key == type_to_remove:
             continue
-        new.append((k, v))
-    return new
+        filtered_choices.append((key, value))
+    return filtered_choices
 
 
 class RedirectForm(forms.Form):

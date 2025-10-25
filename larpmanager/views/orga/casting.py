@@ -438,28 +438,28 @@ def _casting_prepare(ctx: dict, request, typ: str) -> tuple[int, dict[int, str],
 
     Returns:
         tuple: A tuple containing:
-            - cache_aim: Membership fee year for the association
-            - cache_membs: Dictionary mapping member IDs to their membership status
-            - castings: Dictionary mapping member IDs to their list of casting objects
+            - membership_fee_year: Membership fee year for the association
+            - member_id_to_status: Dictionary mapping member IDs to their membership status
+            - member_id_to_castings: Dictionary mapping member IDs to their list of casting objects
     """
     # Get the membership fee year for the current association
-    cache_aim = get_membership_fee_year(request.assoc["id"])
+    membership_fee_year = get_membership_fee_year(request.assoc["id"])
 
     # Build cache of member statuses for the association
-    cache_membs = {}
-    memb_que = Membership.objects.filter(assoc_id=request.assoc["id"])
-    for el in memb_que.values("member_id", "status"):
-        cache_membs[el["member_id"]] = el["status"]
+    member_id_to_status = {}
+    membership_query = Membership.objects.filter(assoc_id=request.assoc["id"])
+    for membership in membership_query.values("member_id", "status"):
+        member_id_to_status[membership["member_id"]] = membership["status"]
 
     # Group casting objects by member ID for the specified run and type
-    castings = {}
-    for el in Casting.objects.filter(run=ctx["run"], typ=typ).order_by("pref"):
+    member_id_to_castings = {}
+    for casting in Casting.objects.filter(run=ctx["run"], typ=typ).order_by("pref"):
         # Initialize member's casting list if not exists
-        if el.member_id not in castings:
-            castings[el.member_id] = []
-        castings[el.member_id].append(el)
+        if casting.member_id not in member_id_to_castings:
+            member_id_to_castings[casting.member_id] = []
+        member_id_to_castings[casting.member_id].append(casting)
 
-    return cache_aim, cache_membs, castings
+    return membership_fee_year, member_id_to_status, member_id_to_castings
 
 
 def _get_player_info(players: dict, reg: Registration) -> None:

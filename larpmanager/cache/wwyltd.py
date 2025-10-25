@@ -117,14 +117,14 @@ def get_features_cache() -> list[dict]:
 
 def reset_guides_cache():
     """Reset the guides cache."""
-    cache_key = get_guides_cache_key()
-    cache.delete(cache_key)
+    guides_cache_key = get_guides_cache_key()
+    cache.delete(guides_cache_key)
 
 
 def reset_tutorials_cache():
     """Reset the tutorials cache."""
-    cache_key = get_tutorials_cache_key()
-    cache.delete(cache_key)
+    tutorials_cache_key = get_tutorials_cache_key()
+    cache.delete(tutorials_cache_key)
 
 
 def reset_features_cache():
@@ -135,14 +135,18 @@ def reset_features_cache():
 
 def _build_guides_cache() -> list[dict]:
     """Build cache data for guides."""
-    guides = []
+    published_guides = []
 
-    for guide in LarpManagerGuide.objects.filter(published=True).order_by("number"):
-        guides.append(
-            {"slug": guide.slug, "title": guide.title, "content_preview": _get_content_preview(guide.text, 100)}
+    for published_guide in LarpManagerGuide.objects.filter(published=True).order_by("number"):
+        published_guides.append(
+            {
+                "slug": published_guide.slug,
+                "title": published_guide.title,
+                "content_preview": _get_content_preview(published_guide.text, 100),
+            }
         )
 
-    return guides
+    return published_guides
 
 
 def _build_tutorials_cache() -> list[dict]:
@@ -151,8 +155,8 @@ def _build_tutorials_cache() -> list[dict]:
 
     for tutorial in LarpManagerTutorial.objects.order_by("order"):
         # Extract H2 sections from content
-        sections = _extract_h2_sections(tutorial.descr)
-        for section_title, section_content in sections:
+        h2_sections = _extract_h2_sections(tutorial.descr)
+        for section_title, section_content in h2_sections:
             section_slug = slugify(section_title)
             tutorials.append(
                 {
@@ -169,14 +173,14 @@ def _build_tutorials_cache() -> list[dict]:
 
 def _build_features_cache() -> list[dict]:
     """Build cache data for features with tutorials."""
-    features = []
+    feature_list = []
 
     for feature in (
         Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False)
         .exclude(tutorial__exact="", module__order=0)
         .select_related("module")
     ):
-        features.append(
+        feature_list.append(
             {
                 "tutorial": feature.tutorial,
                 "name": feature.name,
@@ -185,7 +189,7 @@ def _build_features_cache() -> list[dict]:
             }
         )
 
-    return features
+    return feature_list
 
 
 def _extract_h2_sections(content: str) -> list[tuple]:

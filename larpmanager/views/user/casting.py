@@ -307,19 +307,23 @@ def _get_previous(ctx: dict, request: HttpRequest, typ: int) -> None:
         pass
 
 
-def _check_already_done(ctx, request, typ):
+def _check_already_done(context, request, assignment_type):
     # check already done
-    if typ == 0:
-        casting_chars = int(get_event_config(ctx["run"].event_id, "casting_characters", 1))
-        if ctx["run"].reg.rcrs.count() >= casting_chars:
-            chars = []
-            for el in ctx["run"].reg.rcrs.values_list("character__number", flat=True):
-                chars.append(ctx["chars"][el]["name"])
-            ctx["assigned"] = ", ".join(chars)
+    if assignment_type == 0:
+        casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", 1))
+        if context["run"].reg.rcrs.count() >= casting_chars:
+            character_names = []
+            for character_number in context["run"].reg.rcrs.values_list("character__number", flat=True):
+                character_names.append(context["chars"][character_number]["name"])
+            context["assigned"] = ", ".join(character_names)
     else:
         try:
-            at = AssignmentTrait.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
-            ctx["assigned"] = f"{at.trait.quest.show()['name']} - {at.trait.show()['name']}"
+            assignment_trait = AssignmentTrait.objects.get(
+                run=context["run"], member=request.user.member, typ=assignment_type
+            )
+            context["assigned"] = (
+                f"{assignment_trait.trait.quest.show()['name']} - {assignment_trait.trait.show()['name']}"
+            )
         except ObjectDoesNotExist:
             pass
 
@@ -347,43 +351,47 @@ def _casting_update(ctx: dict, prefs: dict[str, int], request, typ: int) -> None
     Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
 
     # Create new casting preferences based on submitted data
-    for i, pref in prefs.items():
-        Casting.objects.create(run=ctx["run"], member=request.user.member, typ=typ, element=pref, pref=i)
+    for preference_order, element_id in prefs.items():
+        Casting.objects.create(
+            run=ctx["run"], member=request.user.member, typ=typ, element=element_id, pref=preference_order
+        )
 
     # Handle casting avoidance preferences if feature is enabled
-    avoid = None
+    avoidance_text = None
     if "casting_avoid" in ctx and ctx["casting_avoid"]:
         # Clear existing avoidance preferences
         CastingAvoid.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
 
         # Process new avoidance text from form submission
-        avoid = ""
+        avoidance_text = ""
 
         # Get avoidance text from POST data if provided
         if "avoid" in request.POST:
-            avoid = request.POST["avoid"]
+            avoidance_text = request.POST["avoid"]
 
         # Create new avoidance record if text was provided
-        if avoid and len(avoid) > 0:
-            CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoid)
+        if avoidance_text and len(avoidance_text) > 0:
+            CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoidance_text)
 
     # Show success message to user
     messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
-    lst = []
-    for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
+    preference_names_list = []
+    for casting_preference in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by(
+        "pref"
+    ):
         if typ == 0:
             # Character casting: get character name
-            lst.append(Character.objects.get(pk=c.element).show(ctx["run"])["name"])
+            preference_names_list.append(Character.objects.get(pk=casting_preference.element).show(ctx["run"])["name"])
         else:
             # Trait casting: get quest and trait names
-            trait = Trait.objects.get(pk=c.element)
-            lst.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
+            trait = Trait.objects.get(pk=casting_preference.element)
+            preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
 
     # Send confirmation email with updated preferences
-    # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], lst)
-    mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], lst, avoid)
+    # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], preference_names_list)
+    mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], preference_names_list, avoidance_text)
 
 
 def get_casting_preferences(

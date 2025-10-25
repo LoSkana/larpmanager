@@ -313,7 +313,7 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
         >>> print(subject)  # "Payment: Credit usage for Summer Event 2023"
     """
     # Generate localized subject line with event and token information
-    subj = hdr(instance) + _("Utilisation %(tokens)s per %(event)s") % {
+    subject = hdr(instance) + _("Utilisation %(tokens)s per %(event)s") % {
         "tokens": token_name,
         "event": run,
     }
@@ -328,7 +328,7 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
         + "!"
     )
 
-    return subj, body
+    return subject, body
 
 
 def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member: Member, run: Run) -> None:
@@ -380,13 +380,13 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
             - body: Email body text describing the credit usage
     """
     # Generate email subject with event header and credit usage message
-    subj = hdr(instance) + _("Utilisation %(credits)s per %(event)s") % {
+    email_subject = hdr(instance) + _("Utilisation %(credits)s per %(event)s") % {
         "credits": credit_name,
         "event": run,
     }
 
     # Create email body describing the credit transaction amount
-    body = (
+    email_body = (
         _("%(amount)d %(credits)s were used to participate in this event")
         % {
             "amount": int(instance.value),
@@ -396,7 +396,7 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
     )
 
     # Return both subject and body as tuple
-    return subj, body
+    return email_subject, email_body
 
 
 def notify_pay_money(curr_sym: str, instance: AccountingItemPayment, member: Member, run: Run) -> None:
@@ -453,7 +453,7 @@ def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run
         >>> print(body)    # "A payment of 50.00 € was received for this event!"
     """
     # Generate email subject with event information
-    subj = hdr(instance) + _("Payment for %(event)s") % {"event": run}
+    subject = hdr(instance) + _("Payment for %(event)s") % {"event": run}
 
     # Create email body with payment amount and currency details
     body = (
@@ -466,7 +466,7 @@ def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run
     )
 
     # Return subject and body as tuple for email composition
-    return subj, body
+    return subject, body
 
 
 def send_token_credit_notification_email(instance: AccountingItemOther) -> None:
@@ -665,16 +665,16 @@ def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str
         "Assignment Credits for Event Run 2024"
     """
     # Generate base subject with header and token assignment message
-    subj = hdr(instance) + _("Assignment %(elements)s") % {
+    email_subject = hdr(instance) + _("Assignment %(elements)s") % {
         "elements": token_name,
     }
 
     # Append run information to subject if available
     if instance.run:
-        subj += " " + _("for") + " " + str(instance.run)
+        email_subject += " " + _("for") + " " + str(instance.run)
 
     # Create detailed body message with amount, token type, and reason
-    body = (
+    email_body = (
         _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
         % {
             "amount": int(instance.value),
@@ -684,7 +684,7 @@ def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str
         + "."
     )
 
-    return subj, body
+    return email_subject, email_body
 
 
 def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
@@ -812,23 +812,23 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
         treasurer_list = get_assoc_config(inv.assoc_id, "treasurer_appointees", "").split(", ")
-        for mb in treasurer_list:
-            idx = int(mb)
-            orga = Member.objects.get(pk=idx)
+        for treasurer_member_id in treasurer_list:
+            member_id = int(treasurer_member_id)
+            organizer = Member.objects.get(pk=member_id)
 
             # Set language context and prepare email content
-            activate(orga.language)
-            subj, body = get_invoice_email(inv)
-            my_send_mail(subj, body, orga, inv)
+            activate(organizer.language)
+            email_subject, email_body = get_invoice_email(inv)
+            my_send_mail(email_subject, email_body, organizer, inv)
 
     # For registration invoices, notify event organizers when no treasurer feature
     elif inv.typ == PaymentType.REGISTRATION and inv.reg:
         # Get all organizers for the event associated with this registration
-        for orga in get_event_organizers(inv.reg.run.event):
+        for organizer in get_event_organizers(inv.reg.run.event):
             # Set language context and prepare email content
-            activate(orga.language)
-            subj, body = get_invoice_email(inv)
-            my_send_mail(subj, body, orga, inv)
+            activate(organizer.language)
+            email_subject, email_body = get_invoice_email(inv)
+            my_send_mail(email_subject, email_body, organizer, inv)
 
     # Fallback: send to main organization email for all other cases
     else:
@@ -860,11 +860,11 @@ def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
     return subj, body
 
 
-def get_invoice_email(inv) -> tuple[str, str]:
+def get_invoice_email(invoice) -> tuple[str, str]:
     """Generate email subject and body for invoice payment verification.
 
     Args:
-        inv: Invoice object containing payment details and metadata
+        invoice: Invoice object containing payment details and metadata
 
     Returns:
         tuple[str, str]: A tuple containing (subject, body) strings for the
@@ -875,27 +875,27 @@ def get_invoice_email(inv) -> tuple[str, str]:
     body = _("Verify that the data are correct") + ":"
 
     # Add payment reason and amount details
-    body += "<br /><br />" + _("Reason for payment") + f": <b>{inv.causal}</b>"
-    body += "<br /><br />" + _("Amount") + f": <b>{inv.mc_gross:.2f}</b>"
+    body += "<br /><br />" + _("Reason for payment") + f": <b>{invoice.causal}</b>"
+    body += "<br /><br />" + _("Amount") + f": <b>{invoice.mc_gross:.2f}</b>"
 
     # Include download link if invoice document exists
-    if inv.invoice:
-        url = get_url(inv.download(), inv)
-        body += f"<br /><br /><a href='{url}'>" + _("Download document") + "</a>"
+    if invoice.invoice:
+        download_url = get_url(invoice.download(), invoice)
+        body += f"<br /><br /><a href='{download_url}'>" + _("Download document") + "</a>"
     # Show additional text for 'any' payment method
-    elif inv.method and inv.method.slug == "any":
-        body += f"<br /><br /><i>{inv.text}</i>"
+    elif invoice.method and invoice.method.slug == "any":
+        body += f"<br /><br /><i>{invoice.text}</i>"
 
     # Add confirmation prompt and link
     body += "<br /><br />" + _("Did you check and is it correct") + "?"
-    url = get_url("accounting/confirm", inv)
-    body += f" <a href='{url}/{inv.cod}'>" + _("Payment confirmation") + "</a>"
+    confirmation_url = get_url("accounting/confirm", invoice)
+    body += f" <a href='{confirmation_url}/{invoice.cod}'>" + _("Payment confirmation") + "</a>"
 
     # Process causal for subject line (remove prefix if hyphen present)
-    causal = inv.causal
-    if "-" in causal:
-        causal = causal.split("-", 1)[1].strip()
+    subject_causal = invoice.causal
+    if "-" in subject_causal:
+        subject_causal = subject_causal.split("-", 1)[1].strip()
 
     # Generate final subject with header and payment description
-    subj = hdr(inv) + _("Payment to check") + ": " + causal
-    return subj, body
+    subject = hdr(invoice) + _("Payment to check") + ": " + subject_causal
+    return subject, body

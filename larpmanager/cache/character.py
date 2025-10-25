@@ -479,8 +479,8 @@ def clear_run_cache_and_media(run: Run) -> None:
 
 
 def reset_event_cache_all(run):
-    k = get_event_cache_all_key(run)
-    cache.delete(k)
+    cache_key = get_event_cache_all_key(run)
+    cache.delete(cache_key)
 
 
 def update_character_fields(instance, data: dict) -> None:
@@ -515,28 +515,28 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
         None
     """
     # Get the cache key for the event and retrieve cached data
-    k = get_event_cache_all_key(run)
-    res = cache.get(k)
+    cache_key = get_event_cache_all_key(run)
+    cached_result = cache.get(cache_key)
 
     # Exit early if no cached data exists
-    if res is None:
+    if cached_result is None:
         return
 
     # Update cache based on instance type - Faction updates
     if isinstance(instance, Faction):
-        update_event_cache_all_faction(instance, res)
+        update_event_cache_all_faction(instance, cached_result)
 
     # Character updates include both character data and faction refresh
     if isinstance(instance, Character):
-        update_event_cache_all_character(instance, res, run)
-        get_event_cache_factions({"event": run.event}, res)
+        update_event_cache_all_character(instance, cached_result, run)
+        get_event_cache_factions({"event": run.event}, cached_result)
 
     # Registration-character relationship updates
     if isinstance(instance, RegistrationCharacterRel):
-        update_event_cache_all_character_reg(instance, res, run)
+        update_event_cache_all_character_reg(instance, cached_result, run)
 
     # Save the updated cache data with 1-day timeout
-    cache.set(k, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def update_event_cache_all_character_reg(instance, res: dict, run) -> None:
@@ -742,17 +742,17 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
 
 
 def update_event_cache_all_runs(event, instance):
-    for r in event.runs.all():
-        update_event_cache_all(r, instance)
+    for run in event.runs.all():
+        update_event_cache_all(run, instance)
 
 
-def reset_character_registration_cache(instance) -> None:
+def reset_character_registration_cache(character) -> None:
     """Reset cache for character's registration and run."""
     # Save registration to trigger cache invalidation
-    if instance.reg:
-        instance.reg.save()
+    if character.reg:
+        character.reg.save()
     # Clear run-level cache and media
-    clear_run_cache_and_media(instance.reg.run)
+    clear_run_cache_and_media(character.reg.run)
 
 
 def clear_event_cache_all_runs(event: Event) -> None:

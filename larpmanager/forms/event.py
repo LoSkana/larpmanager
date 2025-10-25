@@ -323,23 +323,27 @@ class OrgaConfigForm(ConfigForm):
         visualization options, and event-specific settings.
         """
         self.set_section("email", _("Email notifications"))
-        label = _("Disable assignment")
-        help_text = _("If checked: Does not send communication to the participant when the character is assigned")
-        self.add_configs("mail_character", ConfigType.BOOL, label, help_text)
+        disable_assignment_label = _("Disable assignment")
+        disable_assignment_help_text = _(
+            "If checked: Does not send communication to the participant when the character is assigned"
+        )
+        self.add_configs("mail_character", ConfigType.BOOL, disable_assignment_label, disable_assignment_help_text)
 
         self.set_section("visualisation", _("Visualisation"))
 
-        label = _("Show shortcuts")
-        help_text = _("If checked: when first accessing the manage page, automatically show shortcuts on mobile")
-        self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, label, help_text)
+        show_shortcuts_label = _("Show shortcuts")
+        show_shortcuts_help_text = _(
+            "If checked: when first accessing the manage page, automatically show shortcuts on mobile"
+        )
+        self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, show_shortcuts_label, show_shortcuts_help_text)
 
-        label = _("Export")
-        help_text = _("If checked: allow to export characters and registration in a easily readable page")
-        self.add_configs("show_export", ConfigType.BOOL, label, help_text)
+        export_label = _("Export")
+        export_help_text = _("If checked: allow to export characters and registration in a easily readable page")
+        self.add_configs("show_export", ConfigType.BOOL, export_label, export_help_text)
 
-        label = _("Limitations")
-        help_text = _("If checked: Show summary page with number of tickets/options used")
-        self.add_configs("show_limitations", ConfigType.BOOL, label, help_text)
+        limitations_label = _("Limitations")
+        limitations_help_text = _("If checked: Show summary page with number of tickets/options used")
+        self.add_configs("show_limitations", ConfigType.BOOL, limitations_label, limitations_help_text)
 
         self.set_config_reg_form()
 
@@ -760,62 +764,72 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("payment", _("Payments"))
 
             # Payment alert configuration - days before deadline to notify users
-            label = _("Alert")
-            help_text = _(
+            payment_alert_label = _("Alert")
+            payment_alert_help_text = _(
                 "Given a payment deadline, indicates the number of days under which it notifies "
                 "the participant to proceed with the payment. Default 30."
             )
-            self.add_configs("payment_alert", ConfigType.INT, label, help_text)
+            self.add_configs("payment_alert", ConfigType.INT, payment_alert_label, payment_alert_help_text)
 
             # Custom payment reason configuration with dynamic field substitution
-            label = _("Causal")
-            help_text = _(
+            payment_reason_label = _("Causal")
+            payment_reason_help_text = _(
                 "If present, it indicates the reason for the payment that the participant must put on the payments they make."
             )
-            help_text += (
+            payment_reason_help_text += (
                 " "
                 + _("You can use the following fields, they will be filled in automatically")
                 + ":"
                 + "{player_name}, {question_name}"
             )
-            self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)
+            self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
 
             # Option to disable provisional registrations - auto-confirm all registrations
-            label = _("Disable provisional")
-            help_text = _("If checked, all registrations are confirmed even if no payment has been received")
-            self.add_configs("payment_no_provisional", ConfigType.BOOL, label, help_text)
+            disable_provisional_label = _("Disable provisional")
+            disable_provisional_help_text = _(
+                "If checked, all registrations are confirmed even if no payment has been received"
+            )
+            self.add_configs(
+                "payment_no_provisional", ConfigType.BOOL, disable_provisional_label, disable_provisional_help_text
+            )
 
         # Configure token and credit system controls
         if "token_credit" in self.params["features"]:
             self.set_section("token_credit", _("Tokens / Credits"))
 
             # Token disabling option for this specific event
-            label = _("Disable Tokens")
-            help_text = _("If checked, no tokens will be used in the entries of this event")
-            self.add_configs("token_credit_disable_t", ConfigType.BOOL, label, help_text)
+            disable_tokens_label = _("Disable Tokens")
+            disable_tokens_help_text = _("If checked, no tokens will be used in the entries of this event")
+            self.add_configs("token_credit_disable_t", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
 
             # Credit disabling option for this specific event
-            label = _("Disable credits")
-            help_text = _("If checked, no credits will be used in the entries for this event")
-            self.add_configs("token_credit_disable_c", ConfigType.BOOL, label, help_text)
+            disable_credits_label = _("Disable credits")
+            disable_credits_help_text = _("If checked, no credits will be used in the entries for this event")
+            self.add_configs(
+                "token_credit_disable_c", ConfigType.BOOL, disable_credits_label, disable_credits_help_text
+            )
 
         # Configure bring-a-friend referral discount system
         if "bring_friend" in self.params["features"]:
             self.set_section("bring_friend", _("Bring a friend"))
 
             # Discount amount for the referring participant
-            label = _("Forward discount")
-            help_text = _(
+            referrer_discount_label = _("Forward discount")
+            referrer_discount_help_text = _(
                 "Value of the discount for the registered participant who gives the code to a friend who signs up"
             )
-            self.add_configs("bring_friend_discount_to", ConfigType.INT, label, help_text)
+            self.add_configs(
+                "bring_friend_discount_to", ConfigType.INT, referrer_discount_label, referrer_discount_help_text
+            )
 
             # Discount amount for the referred friend
-            label = _("Discount back")
-            help_text = _(
+            referred_discount_label = _("Discount back")
+            referred_discount_help_text = _(
                 "Value of the discount for the friend who signs up using the code of a registered participant"
             )
-            self.add_configs("bring_friend_discount_from", ConfigType.INT, label, help_text)
+            self.add_configs(
+                "bring_friend_discount_from", ConfigType.INT, referred_discount_label, referred_discount_help_text
+            )
 
     def set_config_registration(self) -> None:
         """Configure event registration settings.
@@ -1183,10 +1197,10 @@ class OrgaRunForm(ConfigForm):
         Sets up various event features and their configuration options
         based on enabled features for character management.
         """
-        ls = []
+        config_list = []
 
         if "character" not in self.params["features"]:
-            return ls
+            return config_list
 
         if not get_event_config(self.params["event"].id, "writing_field_visibility", False):
             return
@@ -1196,30 +1210,36 @@ class OrgaRunForm(ConfigForm):
             "private fields visible only to assigned participants"
         )
 
-        shows = _get_writing_elements()
+        writing_elements = _get_writing_elements()
 
-        basics = BaseQuestionType.get_basic_types()
-        basics.add(WritingQuestionType.COMPUTED)
+        basic_types = BaseQuestionType.get_basic_types()
+        basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
-        for s in shows:
-            if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
+        for writing_element_key, writing_element_label, _writing_element_type in writing_elements:
+            if "writing_fields" not in self.params or writing_element_key not in self.params["writing_fields"]:
                 continue
-            if s[0] in ["plot", "prologue"]:
+            if writing_element_key in ["plot", "prologue"]:
                 continue
-            fields = self.params["writing_fields"][s[0]]["questions"]
-            extra = []
-            for _id, field in fields.items():
-                typ = field["typ"]
-                if typ in basics:
-                    typ = str(field["id"])
+            questions = self.params["writing_fields"][writing_element_key]["questions"]
+            field_choices = []
+            for _question_id, question_field in questions.items():
+                question_type = question_field["typ"]
+                if question_type in basic_types:
+                    question_type = str(question_field["id"])
 
-                extra.append((typ, field["name"]))
+                field_choices.append((question_type, question_field["name"]))
 
-            self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra_data=extra)
+            self.add_configs(
+                f"show_{writing_element_key}",
+                ConfigType.MULTI_BOOL,
+                writing_element_label,
+                help_text,
+                extra_data=field_choices,
+            )
 
-        shows = []
+        writing_elements = []
 
-        addit_show = {
+        additional_elements_display = {
             "plot": _("Plots"),
             "relationships": _("Relationships"),
             "speedlarp": _("Speedlarp"),
@@ -1228,19 +1248,23 @@ class OrgaRunForm(ConfigForm):
             "print_pdf": _("PDF"),
         }
 
-        extra = []
-        for key, display in addit_show.items():
-            if self.instance.pk and key in self.params["features"]:
-                extra.append((key, display))
-        if extra:
+        additional_choices = []
+        for element_key, element_display_name in additional_elements_display.items():
+            if self.instance.pk and element_key in self.params["features"]:
+                additional_choices.append((element_key, element_display_name))
+        if additional_choices:
             help_text = _("Selected elements will be shown to participants")
-            self.add_configs("show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra_data=extra)
+            self.add_configs(
+                "show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra_data=additional_choices
+            )
 
         self.set_section("visibility", _("Visibility"))
-        for s in shows:
-            self.add_configs(f"show_{s[0]}", ConfigType.BOOL, s[1], s[2])
+        for writing_element_key, writing_element_label in writing_elements:
+            self.add_configs(
+                f"show_{writing_element_key}", ConfigType.BOOL, writing_element_label, writing_element_label
+            )
 
-        return ls
+        return config_list
 
     def clean(self) -> dict[str, any]:
         """Validate that end date is defined and not before start date.
@@ -1491,7 +1515,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         """
         super().set_configs()
 
-        basics = BaseQuestionType.get_basic_types()
+        basic_question_types = BaseQuestionType.get_basic_types()
         event_id = self.params["event"].id
 
         self.set_section("open", "Default fields")
@@ -1501,9 +1525,9 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self._add_reg_configs(event_id, help_text)
 
         # Add writings fields
-        shows = _get_writing_elements()
-        for s in shows:
-            self.add_writing_configs(basics, event_id, help_text, s)
+        writing_elements = _get_writing_elements()
+        for writing_element in writing_elements:
+            self.add_writing_configs(basic_question_types, event_id, help_text, writing_element)
 
     def _add_reg_configs(self, event_id: int, help_text: str) -> None:
         """Add registration-related configuration fields to the form.
@@ -1527,7 +1551,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             return
 
         # Initialize list for additional configuration fields
-        extra = []
+        extra_config_fields = []
 
         # Define standard registration feature fields with their identifiers and labels
         feature_fields = [
@@ -1545,27 +1569,33 @@ class OrgaPreferencesForm(ExePreferencesForm):
         ]
 
         # Add feature-based fields to the extra configuration options
-        self.add_feature_extra(extra, feature_fields)
+        self.add_feature_extra(extra_config_fields, feature_fields)
 
         # Retrieve dynamic registration fields for current user and event
-        fields = _get_registration_fields(self.params, self.params["request"].user.member)
-        max_length = 20
+        registration_fields = _get_registration_fields(self.params, self.params["request"].user.member)
+        field_name_max_length = 20
 
         # Add dynamic fields with truncated names if they exist
-        if fields:
-            extra.extend(
+        if registration_fields:
+            extra_config_fields.extend(
                 [
                     (
                         f".lq_{field_id}",
-                        field.name if len(field.name) <= max_length else field.name[: max_length - 5] + " [...]",
+                        registration_field.name
+                        if len(registration_field.name) <= field_name_max_length
+                        else registration_field.name[: field_name_max_length - 5] + " [...]",
                     )
-                    for field_id, field in fields.items()
+                    for field_id, registration_field in registration_fields.items()
                 ]
             )
 
         # Create the final configuration with all collected fields
         self.add_configs(
-            f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra_data=extra
+            f"open_registration_{event_id}",
+            ConfigType.MULTI_BOOL,
+            _("Registrations"),
+            help_text,
+            extra_data=extra_config_fields,
         )
 
     def add_writing_configs(self, basics: dict, event_id: int, help_text: str, s: tuple) -> None:

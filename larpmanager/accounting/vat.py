@@ -115,7 +115,7 @@ def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
         >>> print(f"Previous payments total: {previous_total}")
     """
     # Filter items by same member and run, created before reference item
-    queryset = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
+    previous_items = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
 
     # Aggregate the sum of values and return 0 if no items found
-    return queryset.aggregate(total=Sum("value"))["total"] or 0
+    return previous_items.aggregate(total=Sum("value"))["total"] or 0

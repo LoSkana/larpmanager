@@ -172,25 +172,25 @@ def prepare_run(ctx):
     Side effects:
         Updates ctx with run configuration, visibility settings, and writing fields
     """
-    config_run = get_cache_config_run(ctx["run"])
+    run_configuration = get_cache_config_run(ctx["run"])
 
     if "staff" in ctx or not get_event_config(ctx["event"].id, "writing_field_visibility", False, ctx):
         ctx["show_all"] = "1"
 
-        for el in ["character", "faction", "quest", "trait"]:
-            config_name = f"show_{el}"
-            if config_name not in config_run:
-                config_run[config_name] = {}
-            config_run[config_name].update({"name": 1, "teaser": 1, "text": 1})
+        for writing_element in ["character", "faction", "quest", "trait"]:
+            visibility_config_name = f"show_{writing_element}"
+            if visibility_config_name not in run_configuration:
+                run_configuration[visibility_config_name] = {}
+            run_configuration[visibility_config_name].update({"name": 1, "teaser": 1, "text": 1})
 
-        for el in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
-            config_name = "show_addit"
-            if config_name not in config_run:
-                config_run[config_name] = {}
-            if el in ctx["features"]:
-                config_run[config_name][el] = True
+        for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
+            additional_config_name = "show_addit"
+            if additional_config_name not in run_configuration:
+                run_configuration[additional_config_name] = {}
+            if additional_feature in ctx["features"]:
+                run_configuration[additional_config_name][additional_feature] = True
 
-    ctx.update(config_run)
+    ctx.update(run_configuration)
 
     ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
 

@@ -35,7 +35,12 @@ from larpmanager.models.member import Membership
 
 
 def paginate(
-    request: HttpRequest, ctx: dict, pagination_type: type[Model], template_name: str, view_name: str, exe: bool = True
+    request: HttpRequest,
+    context: dict,
+    pagination_model: type[Model],
+    template_name: str,
+    view_name: str,
+    exe: bool = True,
 ) -> HttpResponse | JsonResponse:
     """
     Handle pagination for DataTables AJAX requests and initial page rendering.
@@ -46,8 +51,8 @@ def paginate(
 
     Args:
         request: The HTTP request object containing method and POST data
-        ctx: Template context dictionary containing association/run data
-        pagination_type: The Django model class to paginate
+        context: Template context dictionary containing association/run data
+        pagination_model: The Django model class to paginate
         template_name: Template path for initial page rendering
         view_name: View name used for generating edit URLs
         exe: Whether this is an organization-wide view (True) or event-specific (False)
@@ -56,43 +61,45 @@ def paginate(
         HttpResponse: Rendered template for GET requests
         JsonResponse: DataTables-formatted JSON for POST requests
     """
-    cls = pagination_type.objects
+    model_queryset = pagination_model.objects
     # Extract model name for table identification
     # noinspection PyProtectedMember
-    class_name = pagination_type._meta.model_name
+    model_name = pagination_model._meta.model_name
 
     # Handle initial page load (GET request)
     if request.method != "POST":
         # Generate unique table name based on context
         if exe:
-            ctx["table_name"] = f"{class_name}_{ctx['a_id']}"
+            context["table_name"] = f"{model_name}_{context['a_id']}"
         else:
-            ctx["table_name"] = f"{class_name}_{ctx['run'].get_slug()}"
+            context["table_name"] = f"{model_name}_{context['run'].get_slug()}"
 
-        return render(request, template_name, ctx)
+        return render(request, template_name, context)
 
     # Handle DataTables AJAX request (POST)
     # Extract draw parameter for DataTables synchronization
-    draw = int(request.POST.get("draw", 0))
+    datatables_draw = int(request.POST.get("draw", 0))
 
     # Get filtered elements and count based on search/filter criteria
-    elements, records_filtered = _get_elements_query(cls, ctx, request, pagination_type, exe)
+    filtered_elements, filtered_records_count = _get_elements_query(
+        model_queryset, context, request, pagination_model, exe
+    )
 
     # Get total count of all records (unfiltered)
-    records_total = pagination_type.objects.count()
+    total_records_count = pagination_model.objects.count()
 
     # Prepare localized edit button text
-    edit = _("Edit")
+    edit_label = _("Edit")
     # Transform elements into DataTables-compatible format
-    data = _prepare_data_json(ctx, elements, view_name, edit, exe)
+    datatables_rows = _prepare_data_json(context, filtered_elements, view_name, edit_label, exe)
 
     # Return DataTables-expected JSON response
     return JsonResponse(
         {
-            "draw": draw,
-            "recordsTotal": records_total,
-            "recordsFiltered": records_filtered,
-            "data": data,
+            "draw": datatables_draw,
+            "recordsTotal": total_records_count,
+            "recordsFiltered": filtered_records_count,
+            "data": datatables_rows,
         }
     )
 
@@ -409,35 +416,35 @@ def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Mod
         elements = elements.order_by("-status", "-updated")
 
         # Subquery to get the latest membership credit for each member
-        memberships = Membership.objects.filter(member_id=OuterRef("member_id"), assoc_id=ctx["a_id"]).order_by("id")[
-            :1
-        ]
-        elements = elements.annotate(credits=Subquery(memberships.values("credit")))
+        latest_membership_subquery = Membership.objects.filter(
+            member_id=OuterRef("member_id"), assoc_id=ctx["a_id"]
+        ).order_by("id")[:1]
+        elements = elements.annotate(credits=Subquery(latest_membership_subquery.values("credit")))
 
     # Handle AccountingItemPayment with transaction calculations
     elif issubclass(typ, AccountingItemPayment):
         # Get field definition for proper decimal handling
         # noinspection PyUnresolvedReferences, PyProtectedMember
-        val_field = AccountingItemPayment._meta.get_field("value")
-        dec = DecimalField(max_digits=val_field.max_digits, decimal_places=val_field.decimal_places)
+        value_field = AccountingItemPayment._meta.get_field("value")
+        decimal_field = DecimalField(max_digits=value_field.max_digits, decimal_places=value_field.decimal_places)
 
         # Define zero value with proper decimal field type
-        zero = Value(Decimal("0"), output_field=dec)
+        zero_value = Value(Decimal("0"), output_field=decimal_field)
 
         # Subquery to calculate total transaction value per invoice
-        subq_base = (
+        transaction_total_subquery = (
             AccountingItemTransaction.objects.filter(inv_id=OuterRef("inv_id"))
             .values("inv_id")
-            .annotate(total=Coalesce(Cast(F("value"), output_field=dec), zero))
+            .annotate(total=Coalesce(Cast(F("value"), output_field=decimal_field), zero_value))
             .values("total")[:1]
         )
 
-        subq = Subquery(subq_base, output_field=dec)
+        transaction_total = Subquery(transaction_total_subquery, output_field=decimal_field)
 
         # Annotate with transaction totals and net calculations
         elements = elements.annotate(
-            trans=Coalesce(subq, zero),
-            net=ExpressionWrapper(F("value") - Coalesce(subq, zero), output_field=dec),
+            trans=Coalesce(transaction_total, zero_value),
+            net=ExpressionWrapper(F("value") - Coalesce(transaction_total, zero_value), output_field=decimal_field),
         )
     # Default ordering for other model types
     else:

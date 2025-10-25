@@ -136,51 +136,51 @@ class FileTypeValidator:
         return allowed_mimes
 
     @staticmethod
-    def _check_word_or_excel(fileobj, detected_type: str, extension: str) -> str:
+    def _check_word_or_excel(file_object, detected_mime_type: str, file_extension: str) -> str:
         """
         Returns proper mimetype in case of word or excel files.
 
         Args:
-            fileobj: File object to analyze
-            detected_type: Initially detected MIME type
-            extension: File extension (e.g., '.doc', '.xlsx')
+            file_object: File object to analyze
+            detected_mime_type: Initially detected MIME type
+            file_extension: File extension (e.g., '.doc', '.xlsx')
 
         Returns:
             str: Corrected MIME type for Microsoft Office files
         """
         # Define known Microsoft Office file type identifiers
-        word_strings = [
+        word_identifier_strings = [
             "Microsoft Word",
             "Microsoft Office Word",
             "Microsoft Macintosh Word",
         ]
-        excel_strings = [
+        excel_identifier_strings = [
             "Microsoft Excel",
             "Microsoft Office Excel",
             "Microsoft Macintosh Excel",
         ]
-        office_strings = ["Microsoft OOXML"]
+        office_identifier_strings = ["Microsoft OOXML"]
 
         # Read file content to analyze file type details
-        file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
+        file_type_details = magic.from_buffer(file_object.read(READ_SIZE))
 
         # Reset file pointer to beginning
-        fileobj.seek(0)
+        file_object.seek(0)
 
         # Check for Word documents based on magic string detection
-        if any(string in file_type_details for string in word_strings):
-            detected_type = "application/msword"
+        if any(identifier_string in file_type_details for identifier_string in word_identifier_strings):
+            detected_mime_type = "application/msword"
         # Check for Excel documents based on magic string detection
-        elif any(string in file_type_details for string in excel_strings):
-            detected_type = "application/vnd.ms-excel"
+        elif any(identifier_string in file_type_details for identifier_string in excel_identifier_strings):
+            detected_mime_type = "application/vnd.ms-excel"
         # Handle generic Office files or OOXML format - use extension for disambiguation
-        elif any(string in file_type_details for string in office_strings) or (
-            detected_type == "application/vnd.ms-office"
+        elif any(identifier_string in file_type_details for identifier_string in office_identifier_strings) or (
+            detected_mime_type == "application/vnd.ms-office"
         ):
             # Determine specific type based on file extension
-            if extension in (".doc", ".docx"):
-                detected_type = "application/msword"
-            if extension in (".xls", ".xlsx"):
-                detected_type = "application/vnd.ms-excel"
+            if file_extension in (".doc", ".docx"):
+                detected_mime_type = "application/msword"
+            if file_extension in (".xls", ".xlsx"):
+                detected_mime_type = "application/vnd.ms-excel"
 
-        return detected_type
+        return detected_mime_type

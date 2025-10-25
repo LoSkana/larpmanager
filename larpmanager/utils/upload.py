@@ -321,35 +321,37 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
         _assign_choice_answer(reg, field, value, questions, logs, is_registration=True)
 
 
-def _assign_elem(ctx: dict, obj: object, field: str, value: str, typ: type, logs: list) -> None:
+def _assign_elem(
+    context: dict, target_object: object, field_name: str, lookup_value: str, model_type: type, error_logs: list
+) -> None:
     """Assign an element to an object field based on value lookup.
 
     Attempts to find an element by number (if value is digit) or by name (case-insensitive).
     If the element is not found, logs an error and returns without assignment.
 
     Args:
-        ctx: Context dictionary containing event information
-        obj: Target object to assign the element to
-        field: Field name on the target object
-        value: Value to search for (number or name)
-        typ: Model type to query for the element
-        logs: List to append error messages to
+        context: Context dictionary containing event information
+        target_object: Target object to assign the element to
+        field_name: Field name on the target object
+        lookup_value: Value to search for (number or name)
+        model_type: Model type to query for the element
+        error_logs: List to append error messages to
     """
     try:
         # Check if value is a digit to determine lookup method
-        if value.isdigit():
+        if lookup_value.isdigit():
             # Look up element by number for the given event
-            el = typ.objects.get(event=ctx["event"], number=int(value))
+            element = model_type.objects.get(event=context["event"], number=int(lookup_value))
         else:
             # Look up element by name (case-insensitive) for the given event
-            el = typ.objects.get(event=ctx["event"], name__iexact=value)
+            element = model_type.objects.get(event=context["event"], name__iexact=lookup_value)
     except ObjectDoesNotExist:
         # Log error if element not found and return without assignment
-        logs.append(f"ERR - element {field} not found")
+        error_logs.append(f"ERR - element {field_name} not found")
         return
 
     # Assign the found element to the object field
-    obj.__setattr__(field, el)
+    target_object.__setattr__(field_name, element)
 
 
 def _reg_assign_characters(ctx: dict, reg: Registration, value: str, logs: list[str]) -> None:
@@ -759,14 +761,14 @@ def _get_mirror_instance(ctx, element, value, logs):
 
 
 def _assign_faction(ctx, element, value, logs):
-    for fac_name in value.split(","):
+    for faction_name in value.split(","):
         try:
-            fac = Faction.objects.get(name__iexact=fac_name.strip(), event=ctx["event"])
+            faction = Faction.objects.get(name__iexact=faction_name.strip(), event=ctx["event"])
             element.save()  # to be sure
-            fac.characters.add(element)
-            fac.save()
+            faction.characters.add(element)
+            faction.save()
         except ObjectDoesNotExist:
-            logs.append(f"Faction not found: {fac_name}")
+            logs.append(f"Faction not found: {faction_name}")
 
 
 def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[str]:
@@ -1223,7 +1225,7 @@ def abilities_load(request, ctx: dict, form) -> list:
     return logs
 
 
-def _ability_load(request, ctx: dict, row: dict) -> str:
+def _ability_load(request, context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
     Creates or updates ability objects with comprehensive field validation,
@@ -1231,88 +1233,90 @@ def _ability_load(request, ctx: dict, row: dict) -> str:
 
     Args:
         request: HTTP request object containing user information
-        ctx: Context dictionary containing event and related data
-        row: Dictionary representing a CSV row with ability data
+        context: Context dictionary containing event and related data
+        csv_row: Dictionary representing a CSV row with ability data
 
     Returns:
         str: Status message indicating success/failure of the operation
 
     Raises:
-        ValueError: When required 'name' column is missing from row
+        ValueError: When required 'name' column is missing from csv_row
         AttributeError: When accessing invalid model fields
     """
     # Validate required name column exists
-    if "name" not in row:
+    if "name" not in csv_row:
         return "ERR - There is no name column"
 
     # Get or create ability object using event's class parent
-    (element, cr) = AbilityPx.objects.get_or_create(event=ctx["event"].get_class_parent(AbilityPx), name=row["name"])
+    (ability_element, was_created) = AbilityPx.objects.get_or_create(
+        event=context["event"].get_class_parent(AbilityPx), name=csv_row["name"]
+    )
 
     logs = []
 
     # Process each field in the CSV row
-    for field, value in row.items():
+    for field_name, field_value in csv_row.items():
         # Skip empty, NaN values, or the name field (already processed)
-        if not value or pd.isna(value) or field in ["name"]:
+        if not field_value or pd.isna(field_value) or field_name in ["name"]:
             continue
-        new_value = value
+        processed_value = field_value
 
         # Handle type field assignment
-        if field == "typ":
-            _assign_type(ctx, element, logs, value)
+        if field_name == "typ":
+            _assign_type(context, ability_element, logs, field_value)
             continue
 
         # Convert cost field to integer
-        if field == "cost":
-            new_value = int(value)
+        if field_name == "cost":
+            processed_value = int(field_value)
 
         # Handle prerequisites field parsing
-        if field == "prerequisites":
-            _assign_prereq(ctx, element, logs, value)
+        if field_name == "prerequisites":
+            _assign_prereq(context, ability_element, logs, field_value)
             continue
 
         # Handle requirements field processing
-        if field == "requirements":
-            _assign_requirements(ctx, element, logs, value)
+        if field_name == "requirements":
+            _assign_requirements(context, ability_element, logs, field_value)
             continue
 
         # Convert visible field to boolean
-        if field == "visible":
-            new_value = value.lower().strip() == "true"
+        if field_name == "visible":
+            processed_value = field_value.lower().strip() == "true"
 
         # Set the attribute on the element
-        setattr(element, field, new_value)
+        setattr(ability_element, field_name, processed_value)
 
     # Save the element to database
-    element.save()
+    ability_element.save()
 
     # Log the operation for audit trail
-    save_log(request.user.member, AbilityPx, element)
+    save_log(request.user.member, AbilityPx, ability_element)
 
     # Return appropriate success message
-    if cr:
-        msg = f"OK - Created {element}"
+    if was_created:
+        message = f"OK - Created {ability_element}"
     else:
-        msg = f"OK - Updated {element}"
+        message = f"OK - Updated {ability_element}"
 
-    return msg
+    return message
 
 
-def _assign_type(ctx, element, logs, value):
+def _assign_type(context, ability_element, error_logs, ability_type_name):
     try:
-        element.typ = ctx["event"].get_elements(AbilityTypePx).get(name__iexact=value)
+        ability_element.typ = context["event"].get_elements(AbilityTypePx).get(name__iexact=ability_type_name)
     except ObjectDoesNotExist:
-        logs.append(f"ERR - quest type not found: {value}")
+        error_logs.append(f"ERR - quest type not found: {ability_type_name}")
 
 
 def _assign_prereq(ctx, element, logs, value):
-    for name in value.split(","):
+    for prerequisite_name in value.split(","):
         try:
-            prereq = ctx["event"].get_elements(AbilityPx).get(name__iexact=name.strip())
+            prerequisite_element = ctx["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
             element.save()  # to be sure
-            element.prerequisites.add(prereq)
+            element.prerequisites.add(prerequisite_element)
         except ObjectDoesNotExist:
-            logs.append(f"Prerequisite not found: {name}")
+            logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
 def _assign_requirements(context, writing_element, error_logs, requirement_names):

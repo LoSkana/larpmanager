@@ -132,24 +132,24 @@ def remove_tutorial_from_search_index(tutorial_id: int) -> None:
     writer.commit()
 
 
-def get_or_create_index_guide(index_dir: str) -> object:
+def get_or_create_index_guide(index_directory_path: str) -> object:
     """Get or create a search index for guide documents.
 
     Args:
-        index_dir: Directory path where the index will be stored.
+        index_directory_path: Directory path where the index will be stored.
 
     Returns:
         The created or existing search index object.
     """
     # Define schema for guide documents with searchable fields
-    schema = Schema(
+    guide_schema = Schema(
         guide_id=ID(stored=True),
         slug=TEXT(stored=True),
         title=TEXT(stored=True),
         content=TEXT(stored=True),
     )
     # Create or open the index using the defined schema
-    return _save_index(index_dir, schema)
+    return _save_index(index_directory_path, guide_schema)
 
 
 @background_auto(queue="whoosh")
@@ -214,7 +214,7 @@ def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
     )
 
     # Sort by similarity to query string, most similar first
-    return sorted(permissions, key=lambda p: similarity(p["name"], query), reverse=True)
+    return sorted(permissions, key=lambda permission: similarity(permission["name"], query), reverse=True)
 
 
 def query_index(request: HttpRequest) -> JsonResponse:

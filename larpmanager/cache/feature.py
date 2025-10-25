@@ -26,13 +26,13 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 
 
-def reset_assoc_features(assoc_id):
+def reset_assoc_features(association_id):
     """Clear cached association features.
 
     Args:
-        assoc_id (int): Association ID to clear cache for
+        association_id (int): Association ID to clear cache for
     """
-    cache.delete(cache_assoc_features(assoc_id))
+    cache.delete(cache_assoc_features(association_id))
 
 
 def cache_assoc_features(association_id):

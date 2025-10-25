@@ -92,8 +92,8 @@ def on_event_pre_save_invalidate_cache(instance):
 
 
 def reset_cache_config_run(run):
-    key = cache_config_run_key(run)
-    cache.delete(key)
+    cache_key = cache_config_run_key(run)
+    cache.delete(cache_key)
 
 
 def cache_config_run_key(run_instance):

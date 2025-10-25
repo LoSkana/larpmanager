@@ -226,9 +226,9 @@ class BaseWritingForm(BaseRegistrationForm):
     def get_options_query(self, event: Event) -> Any:
         """Get annotated queryset of options with ticket mappings."""
         # Get base options query from parent class
-        query = super().get_options_query(event)
+        options_queryset = super().get_options_query(event)
         # Annotate with array-aggregated tickets for each option
-        return query.annotate(tickets_map=ArrayAgg("tickets"))
+        return options_queryset.annotate(tickets_map=ArrayAgg("tickets"))
 
     def get_option_key_count(self, option) -> str:
         """Return cache key for tracking option character count."""

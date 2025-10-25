@@ -419,11 +419,11 @@ def _get_extension(f, img) -> str:
     return fmt
 
 
-def _check_new(f, instance, sender) -> bool:
+def _check_new(file_field, instance, sender) -> bool:
     """Check if the file field represents a new file upload.
 
     Args:
-        f: The file field to check
+        file_field: The file field to check
         instance: The model instance being saved
         sender: The model class that sent the signal
 
@@ -435,14 +435,14 @@ def _check_new(f, instance, sender) -> bool:
     if instance.pk:
         try:
             # Retrieve existing instance with only photo field for efficiency
-            old = sender.objects.filter(pk=instance.pk).only("photo").first()
+            existing_instance = sender.objects.filter(pk=instance.pk).only("photo").first()
 
-            if old:
+            if existing_instance:
                 # Get the old file name, defaulting to empty string if no photo
-                old_name = old.photo.name if old.photo else ""
+                existing_file_name = existing_instance.photo.name if existing_instance.photo else ""
 
                 # Compare file names and check if no new file data is present
-                if f.name == old_name and not getattr(f, "file", None):
+                if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
         except Exception:
             # Silently handle any database or attribute errors

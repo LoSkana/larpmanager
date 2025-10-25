@@ -48,7 +48,7 @@ def log_api_access(api_key, request, response_status, events_count=0):
     """Log API access using the existing Log model."""
     try:
         # Use a system member or create a placeholder for API access
-        member, created = Member.objects.get_or_create(
+        system_member, created = Member.objects.get_or_create(
             username="api_system", defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"}
         )
 
@@ -63,7 +63,7 @@ def log_api_access(api_key, request, response_status, events_count=0):
             "timestamp": timezone.now().isoformat(),
         }
 
-        Log.objects.create(member=member, eid=api_key.id, cls="PublisherAPI", dct=json.dumps(log_data), dl=False)
+        Log.objects.create(member=system_member, eid=api_key.id, cls="PublisherAPI", dct=json.dumps(log_data), dl=False)
 
         # Update API key usage
         api_key.last_used = timezone.now()

@@ -304,20 +304,20 @@ def pdf_template(context: dict, template_path: str, output_path: str, small: boo
 # ##print
 
 
-def get_membership_request(ctx: dict) -> HttpResponse:
+def get_membership_request(context: dict) -> HttpResponse:
     """Generate and return a PDF membership registration document."""
     # Get the file path for the member's request document
-    fp = ctx["member"].get_request_filepath()
+    file_path = context["member"].get_request_filepath()
 
     # Prepare template context with member data
-    temp_ctx = {"member": ctx["member"]}
+    template_context = {"member": context["member"]}
 
     # Retrieve association-specific membership template text
-    template = get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP)
+    template = get_assoc_text(context["a_id"], AssocTextType.MEMBERSHIP)
 
     # Generate PDF from template and return as HTTP response
-    pdf_template(temp_ctx, template, fp, html=True)
-    return return_pdf(fp, _("Membership registration of %(user)s") % {"user": ctx["member"]})
+    pdf_template(template_context, template, file_path, html=True)
+    return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": context["member"]})
 
 
 def print_character(context: dict, force: bool = False) -> dict:
@@ -545,9 +545,9 @@ def safe_remove(file_path):
 
 
 def remove_run_pdf(event):
-    for run in event.runs.all():
-        safe_remove(run.get_profiles_filepath())
-        safe_remove(run.get_gallery_filepath())
+    for event_run in event.runs.all():
+        safe_remove(event_run.get_profiles_filepath())
+        safe_remove(event_run.get_gallery_filepath())
 
 
 def delete_character_pdf_files(instance, single=None, runs=None) -> None:
@@ -661,9 +661,9 @@ def cleanup_pdfs_on_trait_assignment(instance, created):
 # ## TASKS
 
 
-def print_handout_go(ctx: HttpRequest, c: Character) -> HttpResponse:
+def print_handout_go(ctx: HttpRequest, character: Character) -> HttpResponse:
     """Retrieve character handout and generate printable version."""
-    get_handout(ctx, c)
+    get_handout(ctx, character)
     return print_handout(ctx)
 
 
@@ -692,12 +692,12 @@ def print_handout_bkg(a: Association, s: str, c: Character) -> None:
     print_handout_go(ctx, c)
 
 
-def print_character_go(ctx, c):
+def print_character_go(context, character):
     try:
-        get_char_check(None, ctx, c, False, True)
-        print_character(ctx, True)
-        print_character_friendly(ctx, True)
-        print_character_rel(ctx, True)
+        get_char_check(None, context, character, False, True)
+        print_character(context, True)
+        print_character_friendly(context, True)
+        print_character_rel(context, True)
     except Http404:
         pass
     except NotFoundError:
@@ -934,25 +934,25 @@ def clean_tag(tag):
     return tag
 
 
-def replace_data(path, char):
+def replace_data(template_path, character_data):
     """
     Replace character data placeholders in template file.
 
     Args:
-        path: Path to template file
-        char: Character data dictionary with replacement values
+        template_path: Path to template file
+        character_data: Character data dictionary with replacement values
     """
-    with open(path) as file:
-        filedata = file.read()
+    with open(template_path) as template_file:
+        file_content = template_file.read()
 
-    for s in ["number", "name", "title"]:
-        if s not in char:
+    for placeholder_key in ["number", "name", "title"]:
+        if placeholder_key not in character_data:
             continue
-        filedata = filedata.replace(f"#{s}#", str(char[s]))
+        file_content = file_content.replace(f"#{placeholder_key}#", str(character_data[placeholder_key]))
 
     # Write the file out again
-    with open(path, "w") as file:
-        file.write(filedata)
+    with open(template_path, "w") as template_file:
+        template_file.write(file_content)
 
 
 def update_content(ctx: Any, working_dir: str, zip_dir: str, char: Any, aux_template: str) -> None:
@@ -1048,11 +1048,13 @@ def update_content(ctx: Any, working_dir: str, zip_dir: str, char: Any, aux_temp
 
 def get_trait_character(run, number):
     try:
-        tr = Trait.objects.get(event_id=run.event_id, number=number)
-        mb = AssignmentTrait.objects.get(run=run, trait=tr).member
-        rcrs = RegistrationCharacterRel.objects.filter(reg__run=run, reg__member=mb).select_related("character")
-        if not rcrs.exists():
+        trait = Trait.objects.get(event_id=run.event_id, number=number)
+        member = AssignmentTrait.objects.get(run=run, trait=trait).member
+        registration_character_rels = RegistrationCharacterRel.objects.filter(
+            reg__run=run, reg__member=member
+        ).select_related("character")
+        if not registration_character_rels.exists():
             return None
-        return rcrs.first().character
+        return registration_character_rels.first().character
     except ObjectDoesNotExist:
         return None

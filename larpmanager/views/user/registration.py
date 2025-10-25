@@ -600,32 +600,32 @@ def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int 
     return render(request, "larpmanager/event/register.html", ctx)
 
 
-def _apply_ticket(ctx: dict, tk: int | None) -> None:
+def _apply_ticket(context: dict, ticket_id: int | None) -> None:
     """Apply ticket information to context if ticket exists.
 
     Args:
-        ctx: Context dictionary to update with ticket data
-        tk: Ticket ID to retrieve, or None
+        context: Context dictionary to update with ticket data
+        ticket_id: Ticket ID to retrieve, or None
     """
-    if not tk:
+    if not ticket_id:
         return
 
     try:
         # Retrieve ticket and set tier in context
-        tick = RegistrationTicket.objects.get(pk=tk)
-        ctx["tier"] = tick.tier
+        ticket = RegistrationTicket.objects.get(pk=ticket_id)
+        context["tier"] = ticket.tier
 
         # Remove closed status for staff/NPC tickets
-        if tick.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in ctx["run"].status:
-            del ctx["run"].status["closed"]
+        if ticket.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in context["run"].status:
+            del context["run"].status["closed"]
 
         # Store ticket ID in context
-        ctx["ticket"] = tk
+        context["ticket"] = ticket_id
     except ObjectDoesNotExist:
         pass
 
 
-def _check_redirect_registration(request, ctx: dict, event, secret_code: str | None) -> HttpResponse | None:
+def _check_redirect_registration(request, context: dict, event, secret_code: str | None) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -636,7 +636,7 @@ def _check_redirect_registration(request, ctx: dict, event, secret_code: str | N
     ----------
     request : HttpRequest
         Django HTTP request object containing user and session data
-    ctx : dict
+    context : dict
         Context dictionary containing event, run data, features, and tier info
     event : Event
         Event model instance being registered for
@@ -656,41 +656,41 @@ def _check_redirect_registration(request, ctx: dict, event, secret_code: str | N
         registration is enabled
     """
     # Check if event registration is closed
-    if "closed" in ctx["run"].status:
-        return render(request, "larpmanager/event/closed.html", ctx)
+    if "closed" in context["run"].status:
+        return render(request, "larpmanager/event/closed.html", context)
 
     # Validate secret code if secret registration is enabled
-    if "registration_secret" in ctx["features"] and secret_code:
-        if ctx["run"].registration_secret != secret_code:
+    if "registration_secret" in context["features"] and secret_code:
+        if context["run"].registration_secret != secret_code:
             raise Http404("wrong registration code")
         return None
 
     # Redirect to external registration link if configured
     # Skip redirect for staff and NPC tiers who register internally
-    if "register_link" in ctx["features"] and event.register_link:
-        if "tier" not in ctx or ctx["tier"] not in [TicketTier.STAFF, TicketTier.NPC]:
+    if "register_link" in context["features"] and event.register_link:
+        if "tier" not in context or context["tier"] not in [TicketTier.STAFF, TicketTier.NPC]:
             return redirect(event.register_link)
 
     # Check registration timing and pre-registration options
-    if "registration_open" in ctx["features"]:
-        if not ctx["run"].registration_open or ctx["run"].registration_open > timezone_now():
+    if "registration_open" in context["features"]:
+        if not context["run"].registration_open or context["run"].registration_open > timezone_now():
             # Redirect to pre-registration if available and active
-            if "pre_register" in ctx["features"] and get_event_config(event.id, "pre_register_active", False):
-                return redirect("pre_register", s=ctx["event"].slug)
+            if "pre_register" in context["features"] and get_event_config(event.id, "pre_register_active", False):
+                return redirect("pre_register", s=context["event"].slug)
             else:
-                return render(request, "larpmanager/event/not_open.html", ctx)
+                return render(request, "larpmanager/event/not_open.html", context)
 
     return None
 
 
-def _add_bring_friend_discounts(ctx: dict) -> None:
+def _add_bring_friend_discounts(context: dict) -> None:
     """Add bring-a-friend discount configuration to context if feature is enabled."""
-    if "bring_friend" not in ctx["features"]:
+    if "bring_friend" not in context["features"]:
         return
 
     # Retrieve discount configuration for both directions (to/from)
-    for config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-        ctx[config_name] = get_event_config(ctx["event"].id, config_name, 0, ctx)
+    for discount_config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
+        context[discount_config_name] = get_event_config(context["event"].id, discount_config_name, 0, context)
 
 
 def _register_prepare(context, registration):
@@ -873,11 +873,11 @@ def discount(request: HttpRequest, s: str) -> JsonResponse:
     )
 
 
-def _check_discount(disc, member, run, event):
+def _check_discount(discount, member, run, event):
     """Validate if a discount can be applied to a member's registration.
 
     Args:
-        disc: Discount object to validate
+        discount: Discount object to validate
         member: Member attempting to use discount
         run: Event run instance
         event: Event instance
@@ -885,19 +885,19 @@ def _check_discount(disc, member, run, event):
     Returns:
         str or None: Error message if invalid, None if valid
     """
-    if _is_discount_invalid_for_registration(disc, member, run):
+    if _is_discount_invalid_for_registration(discount, member, run):
         return _("Discounts only applicable with new registrations")
 
-    if _is_discount_already_used(disc, member, run):
+    if _is_discount_already_used(discount, member, run):
         return _("Code already used")
 
-    if _is_type_already_used(disc.typ, member, run):
+    if _is_type_already_used(discount.typ, member, run):
         return _("Non-cumulative code")
 
-    if disc.max_redeem > 0 and _is_discount_maxed(disc, run):
+    if discount.max_redeem > 0 and _is_discount_maxed(discount, run):
         return _("Sorry, this facilitation code has already been used the maximum number allowed")
 
-    if not _validate_exclusive_logic(disc, member, run, event):
+    if not _validate_exclusive_logic(discount, member, run, event):
         return _("Discount not combinable with other benefits") + "."
 
     return None

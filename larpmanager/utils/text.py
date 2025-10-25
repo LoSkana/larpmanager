@@ -30,29 +30,29 @@ def event_text_key(event_id, text_type, language):
     return f"event_text_{event_id}_{text_type}_{language}"
 
 
-def update_event_text(event_id: int, typ: str, lang: str) -> str:
+def update_event_text(event_id: int, text_type: str, language: str) -> str:
     """Updates and caches event text for given event, type and language.
 
     Args:
         event_id: The event identifier
-        typ: The text type
-        lang: The language code
+        text_type: The text type
+        language: The language code
 
     Returns:
         The event text or empty string if not found
     """
-    res = ""
+    event_text = ""
 
     # Try to get event text from database
     try:
-        res = EventText.objects.get(event_id=event_id, typ=typ, language=lang).text
+        event_text = EventText.objects.get(event_id=event_id, typ=text_type, language=language).text
     except Exception:
         pass
 
     # Cache the result for 1 day
-    cache.set(event_text_key(event_id, typ, lang), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(event_text_key(event_id, text_type, language), event_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return event_text
 
 
 def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
@@ -90,17 +90,17 @@ def update_event_text_def(event_id: int, typ: str) -> str:
     Returns:
         Default event text content or empty string if not found
     """
-    res = ""
+    default_text = ""
     try:
         # Get default event text for the specified event and type
-        res = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
+        default_text = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
     except Exception:
         # Return empty string if no default text found or any error occurs
         pass
 
     # Cache the result for one day
-    cache.set(event_text_key_def(event_id, typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+    cache.set(event_text_key_def(event_id, typ), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return default_text
 
 
 def get_event_text_cache_def(event_id: int, typ: str) -> str:
@@ -209,17 +209,17 @@ def update_assoc_text(assoc_id: int, typ: str, lang: str) -> str:
     Returns:
         Text content or empty string if not found
     """
-    res = ""
+    text_content = ""
     try:
         # Retrieve association text from database
-        res = AssocText.objects.get(assoc_id=assoc_id, typ=typ, language=lang).text
+        text_content = AssocText.objects.get(assoc_id=assoc_id, typ=typ, language=lang).text
     except Exception:
         # Return empty string if text not found
         pass
 
     # Cache the result for one day
-    cache.set(assoc_text_key(assoc_id, typ, lang), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+    cache.set(assoc_text_key(assoc_id, typ, lang), text_content, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return text_content
 
 
 def get_assoc_text_cache(assoc_id: int, typ: str, lang: str) -> str:
@@ -250,26 +250,26 @@ def assoc_text_key_def(association_id, text_type):
     return f"assoc_text_def_{association_id}_{text_type}"
 
 
-def update_assoc_text_def(assoc_id: int, typ: str) -> str:
+def update_assoc_text_def(association_id: int, text_type: str) -> str:
     """Updates and caches the default association text for given type.
 
     Args:
-        assoc_id: The association ID
-        typ: The text type to retrieve
+        association_id: The association ID
+        text_type: The text type to retrieve
 
     Returns:
         The default text content or empty string if not found
     """
-    res = ""
+    default_text = ""
     try:
         # Get the default association text for the specified type
-        res = AssocText.objects.filter(assoc_id=assoc_id, typ=typ, default=True).first().text
+        default_text = AssocText.objects.filter(assoc_id=association_id, typ=text_type, default=True).first().text
     except Exception:
         pass
 
     # Cache the result for one day
-    cache.set(assoc_text_key_def(assoc_id, typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+    cache.set(assoc_text_key_def(association_id, text_type), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return default_text
 
 
 def get_assoc_text_cache_def(assoc_id: int, typ: str) -> str:

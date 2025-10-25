@@ -197,28 +197,29 @@ def _characters_relationships(ctx):
     ctx["new_rel"] = widget.render(name="new_rel_select", value="")
 
     if "character" in ctx:
-        rels = {}
+        relationships_by_character_id = {}
 
-        direct_rels = Relationship.objects.filter(source=ctx["character"]).select_related("target")
+        direct_relationships = Relationship.objects.filter(source=ctx["character"]).select_related("target")
 
-        for rel in direct_rels:
-            if rel.target.id not in rels:
-                rels[rel.target.id] = {"char": rel.target}
-            rels[rel.target.id]["direct"] = rel.text
+        for relationship in direct_relationships:
+            if relationship.target.id not in relationships_by_character_id:
+                relationships_by_character_id[relationship.target.id] = {"char": relationship.target}
+            relationships_by_character_id[relationship.target.id]["direct"] = relationship.text
 
-        inverse_rels = Relationship.objects.filter(target=ctx["character"]).select_related("source")
+        inverse_relationships = Relationship.objects.filter(target=ctx["character"]).select_related("source")
 
-        for rel in inverse_rels:
-            if rel.source.id not in rels:
-                rels[rel.source.id] = {"char": rel.source}
-            rels[rel.source.id]["inverse"] = rel.text
+        for relationship in inverse_relationships:
+            if relationship.source.id not in relationships_by_character_id:
+                relationships_by_character_id[relationship.source.id] = {"char": relationship.source}
+            relationships_by_character_id[relationship.source.id]["inverse"] = relationship.text
 
-        sorted_rels = sorted(
-            rels.items(),
-            key=lambda item: len(item[1].get("direct", "")) + len(item[1].get("inverse", "")),
+        sorted_relationships = sorted(
+            relationships_by_character_id.items(),
+            key=lambda character_entry: len(character_entry[1].get("direct", ""))
+            + len(character_entry[1].get("inverse", "")),
             reverse=True,
         )
-        ctx["relationships"] = dict(sorted_rels)
+        ctx["relationships"] = dict(sorted_relationships)
 
 
 def update_relationship(request, ctx, nm, fl):
@@ -726,10 +727,10 @@ def orga_writing_options_new(request: HttpRequest, s: str, typ: str, num: int) -
     return writing_option_edit(ctx, 0, request, typ)
 
 
-def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> HttpResponse:
+def writing_option_edit(context: dict, option_number: int, request: HttpRequest, option_type: str) -> HttpResponse:
     """Edit a writing option and handle form submission with redirect logic."""
     # Process form submission and save changes
-    if backend_edit(request, ctx, OrgaWritingOptionForm, num, is_association_based=False):
+    if backend_edit(request, context, OrgaWritingOptionForm, option_number, is_association_based=False):
         redirect_target = "orga_writing_form_edit"
 
         # Check if user wants to continue adding more options
@@ -737,10 +738,10 @@ def writing_option_edit(ctx: dict, num: int, request: HttpRequest, typ: str) -> 
             redirect_target = "orga_writing_options_new"
 
         # Redirect to appropriate target with context parameters
-        return redirect(redirect_target, s=ctx["run"].get_slug(), typ=typ, num=ctx["saved"].question_id)
+        return redirect(redirect_target, s=context["run"].get_slug(), typ=option_type, num=context["saved"].question_id)
 
     # Render edit form if no successful submission
-    return render(request, "larpmanager/orga/edit.html", ctx)
+    return render(request, "larpmanager/orga/edit.html", context)
 
 
 @login_required
@@ -1244,22 +1245,24 @@ def _get_question_update(ctx: dict, el) -> str:
     return value
 
 
-def _check_working_ticket(request, ctx: dict, token: str) -> str | None:
+def _check_working_ticket(request, context: dict, working_ticket_token: str) -> str | None:
     """Check if ticket is being edited by another user.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary containing 'typ', 'element', and 'question'
-        token: Working ticket token
+        context: Context dictionary containing 'typ', 'element', and 'question'
+        working_ticket_token: Working ticket token
 
     Returns:
         Error message if ticket is locked, None otherwise
     """
     # Check if somebody else has opened the character to edit it
-    msg = writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, token)
+    error_message = writing_edit_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)
 
     # Check if somebody has opened the same field to edit it
-    if not msg:
-        msg = writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", token)
+    if not error_message:
+        error_message = writing_edit_working_ticket(
+            request, context["typ"], f"{context['element'].id}_{context['question'].id}", working_ticket_token
+        )
 
-    return msg
+    return error_message

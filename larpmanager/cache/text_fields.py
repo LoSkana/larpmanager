@@ -45,8 +45,8 @@ def cache_text_field_key(model_type, model_instance):
 
 def remove_html_tags(text):
     """Remove html tags from a string"""
-    clean = re.compile("<.*?>")
-    return re.sub(clean, "", text)
+    html_tag_pattern = re.compile("<.*?>")
+    return re.sub(html_tag_pattern, "", text)
 
 
 def get_single_cache_text_field(element_id: str, field_name: str, text_value: str | None) -> tuple[str, int]:
@@ -335,7 +335,7 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
     cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_text_fields_cache(instance: object) -> None:
+def update_text_fields_cache(model_instance: object) -> None:
     """Update text fields cache for various model instances.
 
     This function determines the type of the given instance and calls the
@@ -343,24 +343,24 @@ def update_text_fields_cache(instance: object) -> None:
     Supports Writing, WritingAnswer, Registration, and RegistrationAnswer models.
 
     Args:
-        instance: Model instance to update cache for. Can be Writing, WritingAnswer,
+        model_instance: Model instance to update cache for. Can be Writing, WritingAnswer,
                  Registration, or RegistrationAnswer type.
 
     Returns:
         None
     """
     # Update cache for Writing model instances
-    if issubclass(instance.__class__, Writing):
-        update_cache_text_fields(instance)
+    if issubclass(model_instance.__class__, Writing):
+        update_cache_text_fields(model_instance)
 
     # Update cache for WritingAnswer model instances
-    if issubclass(instance.__class__, WritingAnswer):
-        update_cache_text_fields_answer(instance)
+    if issubclass(model_instance.__class__, WritingAnswer):
+        update_cache_text_fields_answer(model_instance)
 
     # Update cache for Registration model instances
-    if issubclass(instance.__class__, Registration):
-        update_cache_reg_fields(instance)
+    if issubclass(model_instance.__class__, Registration):
+        update_cache_reg_fields(model_instance)
 
     # Update cache for RegistrationAnswer model instances
-    if issubclass(instance.__class__, RegistrationAnswer):
-        update_cache_reg_fields_answer(instance)
+    if issubclass(model_instance.__class__, RegistrationAnswer):
+        update_cache_reg_fields_answer(model_instance)

@@ -1011,7 +1011,7 @@ class ExeProfileForm(MyForm):
         """
         # Define fields to exclude from configuration options
         # These are system fields or sensitive data that shouldn't be user-configurable
-        skip = [
+        excluded_field_names = [
             "id",
             "deleted",
             "created",
@@ -1028,23 +1028,23 @@ class ExeProfileForm(MyForm):
             "legal_gender",
         ]
 
-        choices: list[tuple[str, str, str]] = []
+        available_fields: list[tuple[str, str, str]] = []
 
         # Iterate through all fields in the Member model
         # noinspection PyUnresolvedReferences,PyProtectedMember
-        for f in Member._meta.get_fields():
+        for field in Member._meta.get_fields():
             # Filter only fields that belong to the Member model
-            if not str(f).startswith("larpmanager.Member."):
+            if not str(field).startswith("larpmanager.Member."):
                 continue
 
             # Skip fields that are in the exclusion list
-            if f.name in skip:
+            if field.name in excluded_field_names:
                 continue
 
             # Add field information as tuple (name, verbose_name, help_text)
-            choices.append((f.name, f.verbose_name, f.help_text))
+            available_fields.append((field.name, field.verbose_name, field.help_text))
 
-        return choices
+        return available_fields
 
     def save(self, commit=True):
         """Save form data and update member field configurations.

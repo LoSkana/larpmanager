@@ -45,12 +45,12 @@ class Command(BaseCommand):
         # Display final usage statistics
         self.stdout.write(str(self.translator.get_usage()))
 
-    def translate_entry(self, entry, tgt: str) -> None:
+    def translate_entry(self, entry, target_language: str) -> None:
         """Translate a single entry using DeepL API.
 
         Args:
             entry: The POFile entry to translate
-            tgt (str): Target language code (e.g., 'EN', 'PT')
+            target_language (str): Target language code (e.g., 'EN', 'PT')
 
         Raises:
             Exception: When DeepL API usage limit is exceeded
@@ -66,20 +66,22 @@ class Command(BaseCommand):
             self.stdout.write(entry.msgid)
 
             # Normalize target language code and apply any mappings
-            tgt = tgt.upper()
-            if tgt in self.target:
-                tgt = self.target[tgt]
+            target_language = target_language.upper()
+            if target_language in self.target:
+                target_language = self.target[target_language]
 
             # Perform the actual translation using DeepL API
-            result = self.translator.translate_text(entry.msgid, source_lang="EN", target_lang=tgt)
-            entry.msgstr = str(result)
+            translation_result = self.translator.translate_text(
+                entry.msgid, source_lang="EN", target_lang=target_language
+            )
+            entry.msgstr = str(translation_result)
 
             # Display the translated result and add delay for API rate limiting
             self.stdout.write(f"-> {entry.msgstr}\n")
             time.sleep(1)
-        except deepl.exceptions.DeepLException as e:
+        except deepl.exceptions.DeepLException as exception:
             # Handle DeepL-specific exceptions and log the error
-            self.stdout.write(e)
+            self.stdout.write(exception)
             self.stdout.write(entry.msgid)
 
     def go_polib(self):

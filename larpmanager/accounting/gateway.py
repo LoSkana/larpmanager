@@ -781,8 +781,8 @@ class RedSysClient:
         """
         assert isinstance(encrypted_order, bytes)
         assert isinstance(merchant_parameters, bytes)
-        digest = hmac.new(encrypted_order, merchant_parameters, hashlib.sha256).digest()
-        return base64.b64encode(digest)
+        hmac_signature = hmac.new(encrypted_order, merchant_parameters, hashlib.sha256).digest()
+        return base64.b64encode(hmac_signature)
 
     def redsys_generate_request(self, params):
         """

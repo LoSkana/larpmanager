@@ -451,46 +451,46 @@ def remove_char_ability(char, ability_id):
         char: Character instance
         ability_id: ID of ability to remove
     """
-    to_remove_ids = {ability_id}
+    ability_ids_to_remove = {ability_id}
 
     while True:
-        dependents_qs = (
-            char.px_ability_list.filter(prerequisites__in=to_remove_ids).values_list("id", flat=True).distinct()
+        dependent_abilities_queryset = (
+            char.px_ability_list.filter(prerequisites__in=ability_ids_to_remove).values_list("id", flat=True).distinct()
         )
-        new_ids = set(dependents_qs) - to_remove_ids
-        if not new_ids:
+        newly_found_dependent_ids = set(dependent_abilities_queryset) - ability_ids_to_remove
+        if not newly_found_dependent_ids:
             break
-        to_remove_ids |= new_ids
+        ability_ids_to_remove |= newly_found_dependent_ids
 
     # atomic removal
     with transaction.atomic():
-        char.px_ability_list.remove(*to_remove_ids)
+        char.px_ability_list.remove(*ability_ids_to_remove)
 
-    return to_remove_ids
+    return ability_ids_to_remove
 
 
 def update_characters_experience_on_ability_change(instance):
-    for char in instance.characters.all():
-        calculate_character_experience_points(char)
+    for character in instance.characters.all():
+        calculate_character_experience_points(character)
 
 
 def refresh_delivery_characters(instance):
-    for char in instance.characters.all():
-        char.save()
+    for character in instance.characters.all():
+        character.save()
 
 
 def update_characters_experience_on_rule_change(instance: RulePx) -> None:
     """Updates experience points for all characters when experience rules change."""
     # Get the event containing the rule
-    event = instance.event.get_class_parent(RulePx)
+    parent_event = instance.event.get_class_parent(RulePx)
 
     # Recalculate experience for all characters in the event
-    for char in event.get_elements(Character).all():
-        calculate_character_experience_points(char)
+    for character in parent_event.get_elements(Character).all():
+        calculate_character_experience_points(character)
 
 
 def update_characters_experience_on_modifier_change(instance: ModifierPx) -> None:
     """Update experience points for all characters when a modifier changes."""
-    event = instance.event.get_class_parent(ModifierPx)
-    for char in event.get_elements(Character).all():
-        calculate_character_experience_points(char)
+    parent_event = instance.event.get_class_parent(ModifierPx)
+    for character in parent_event.get_elements(Character).all():
+        calculate_character_experience_points(character)

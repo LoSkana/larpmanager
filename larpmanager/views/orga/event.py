@@ -143,47 +143,49 @@ def orga_roles(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/roles.html", ctx)
 
 
-def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
+def prepare_roles_list(context, permission_type, role_queryset, default_callback):
     """Prepare role list with permissions organized by module for display.
 
     Builds a formatted list of roles with their members and grouped permissions,
     handling special formatting for administrator roles and module organization.
     """
-    qs_perm = permission_typ.objects.select_related("feature", "feature__module").order_by(
+    permissions_queryset = permission_type.objects.select_related("feature", "feature__module").order_by(
         F("feature__module__order").asc(nulls_last=True),
         F("feature__order").asc(nulls_last=True),
         "feature__name",
         "name",
     )
-    roles = role_query.order_by("number").prefetch_related(Prefetch("permissions", queryset=qs_perm))
-    ctx["list"] = []
+    roles = role_queryset.order_by("number").prefetch_related(Prefetch("permissions", queryset=permissions_queryset))
+    context["list"] = []
     if not roles:
-        ctx["list"].append(def_callback(ctx))
+        context["list"].append(default_callback(context))
     for role in roles:
-        role.members_list = ", ".join([str(mb) for mb in role.members.all()])
+        role.members_list = ", ".join([str(member) for member in role.members.all()])
         if role.number == "1":
             role.perms_list = "All"
         else:
-            buckets = defaultdict(list)
-            for p in role.permissions.all():
-                buckets[p.feature.module].append(p)
+            permissions_by_module = defaultdict(list)
+            for permission in role.permissions.all():
+                permissions_by_module[permission.feature.module].append(permission)
 
-            modules = sorted(
-                buckets.keys(),
-                key=lambda m: (
-                    float("inf") if m is None else (m.order if m.order is not None else float("inf")),
-                    "" if m is None else m.name,
+            sorted_modules = sorted(
+                permissions_by_module.keys(),
+                key=lambda module: (
+                    float("inf") if module is None else (module.order if module.order is not None else float("inf")),
+                    "" if module is None else module.name,
                 ),
             )
 
-            aux = []
-            for module in modules:
-                perms_sorted = sorted(buckets[module], key=lambda p: p.number)
-                perms = ", ".join([str(_(ep.name)) for ep in perms_sorted])
-                aux.append(f"<b>{module}</b> ({perms})")
-            role.perms_list = ", ".join(aux)
+            formatted_permissions = []
+            for module in sorted_modules:
+                permissions_sorted = sorted(permissions_by_module[module], key=lambda permission: permission.number)
+                permissions_names = ", ".join(
+                    [str(_(event_permission.name)) for event_permission in permissions_sorted]
+                )
+                formatted_permissions.append(f"<b>{module}</b> ({permissions_names})")
+            role.perms_list = ", ".join(formatted_permissions)
 
-        ctx["list"].append(role)
+        context["list"].append(role)
 
 
 @login_required
@@ -299,35 +301,35 @@ def orga_features_go(request: HttpRequest, ctx: dict, slug: str, on: bool = True
         raise Http404("overall feature!")
 
     # Get current event features and target feature ID
-    feat_id = list(ctx["event"].features.values_list("id", flat=True))
-    f_id = ctx["feature"].id
+    current_event_feature_ids = list(ctx["event"].features.values_list("id", flat=True))
+    target_feature_id = ctx["feature"].id
 
     # Clear cache and media for the current run
     clear_run_cache_and_media(ctx["run"])
 
     # Handle feature activation/deactivation logic
     if on:
-        if f_id not in feat_id:
-            ctx["event"].features.add(f_id)
-            msg = _("Feature %(name)s activated") + "!"
+        if target_feature_id not in current_event_feature_ids:
+            ctx["event"].features.add(target_feature_id)
+            message = _("Feature %(name)s activated") + "!"
         else:
-            msg = _("Feature %(name)s already activated") + "!"
-    elif f_id not in feat_id:
-        msg = _("Feature %(name)s already deactivated") + "!"
+            message = _("Feature %(name)s already activated") + "!"
+    elif target_feature_id not in current_event_feature_ids:
+        message = _("Feature %(name)s already deactivated") + "!"
     else:
-        ctx["event"].features.remove(f_id)
-        msg = _("Feature %(name)s deactivated") + "!"
+        ctx["event"].features.remove(target_feature_id)
+        message = _("Feature %(name)s deactivated") + "!"
 
     # Save the event and update cached features for child events
     ctx["event"].save()
-    for ev in Event.objects.filter(parent=ctx["event"]):
-        ev.save()
+    for child_event in Event.objects.filter(parent=ctx["event"]):
+        child_event.save()
 
     # Format and display the success message
-    msg = msg % {"name": _(ctx["feature"].name)}
+    message = message % {"name": _(ctx["feature"].name)}
     if ctx["feature"].after_text:
-        msg += " " + ctx["feature"].after_text
-    messages.success(request, msg)
+        message += " " + ctx["feature"].after_text
+    messages.success(request, message)
 
     return ctx["feature"]
 
@@ -609,8 +611,8 @@ def _ability_template(ctx):
     Returns:
         list: Export data containing ability template with example values
     """
-    exports = []
-    defs = {
+    export_data = []
+    field_example_values = {
         "name": "Ability name",
         "cost": "Ability cost",
         "typ": "Ability type",
@@ -618,14 +620,14 @@ def _ability_template(ctx):
         "prerequisites": "Ability prerequisite, comma-separated",
         "requirements": "Character options, comma-separated",
     }
-    keys = list(ctx["columns"][0].keys())
-    vals = []
-    for field, value in defs.items():
-        if field not in keys:
+    column_names = list(ctx["columns"][0].keys())
+    example_row_values = []
+    for field_name, example_value in field_example_values.items():
+        if field_name not in column_names:
             continue
-        vals.append(value)
-    exports.append(("abilities", keys, [vals]))
-    return exports
+        example_row_values.append(example_value)
+    export_data.append(("abilities", column_names, [example_row_values]))
+    return export_data
 
 
 def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:

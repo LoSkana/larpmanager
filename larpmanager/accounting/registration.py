@@ -347,23 +347,23 @@ def _get_deadline_installment(assoc_id, i, reg):
     return deadline
 
 
-def get_payment_deadline(reg, i, assoc_id):
+def get_payment_deadline(registration, days_to_add, association_id):
     """Calculate payment deadline based on registration and membership dates.
 
     Args:
-        reg: Registration instance
-        i: Number of days to add to base date
-        assoc_id: Association ID for membership lookup
+        registration: Registration instance
+        days_to_add: Number of days to add to base date
+        association_id: Association ID for membership lookup
 
     Returns:
         int: Days until payment deadline
     """
-    dd = get_time_diff_today(reg.created.date())
-    if not hasattr(reg, "membership"):
-        reg.membership = get_user_membership(reg.member, assoc_id)
-    if reg.membership.date:
-        dd = max(dd, get_time_diff_today(reg.membership.date))
-    return dd + i
+    days_since_registration = get_time_diff_today(registration.created.date())
+    if not hasattr(registration, "membership"):
+        registration.membership = get_user_membership(registration.member, association_id)
+    if registration.membership.date:
+        days_since_registration = max(days_since_registration, get_time_diff_today(registration.membership.date))
+    return days_since_registration + days_to_add
 
 
 def registration_payments_status(reg):

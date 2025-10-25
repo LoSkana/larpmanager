@@ -83,11 +83,11 @@ def get_payment_fee(assoc_id, slug):
         float: Payment fee amount, 0.0 if not configured
     """
     payment_details = fetch_payment_details(assoc_id)
-    k = slug + "_fee"
-    if k not in payment_details or not payment_details[k]:
+    fee_key = slug + "_fee"
+    if fee_key not in payment_details or not payment_details[fee_key]:
         return 0.0
 
-    return float(payment_details[k].replace(",", "."))
+    return float(payment_details[fee_key].replace(",", "."))
 
 
 def unique_invoice_cod(length=16):
@@ -102,10 +102,11 @@ def unique_invoice_cod(length=16):
     Raises:
         Exception: If unable to generate unique code after 5 attempts
     """
-    for _idx in range(5):
-        cod = generate_id(length)
-        if not PaymentInvoice.objects.filter(cod=cod).exists():
-            return cod
+    max_attempts = 5
+    for _attempt_number in range(max_attempts):
+        invoice_code = generate_id(length)
+        if not PaymentInvoice.objects.filter(cod=invoice_code).exists():
+            return invoice_code
     raise ValueError("Too many attempts to generate the code")
 
 
@@ -235,16 +236,16 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
     invoice.causal = re.sub(pattern, replace, custom_reason)
 
 
-def round_up_to_two_decimals(number):
+def round_up_to_two_decimals(value_to_round):
     """Round number up to two decimal places.
 
     Args:
-        number (float): Number to round
+        value_to_round (float): Number to round
 
     Returns:
         float: Number rounded up to 2 decimal places
     """
-    return math.ceil(number * 100) / 100
+    return math.ceil(value_to_round * 100) / 100
 
 
 def update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method):
