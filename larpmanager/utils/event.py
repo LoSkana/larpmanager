@@ -195,7 +195,7 @@ def prepare_run(context):
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
 
-def get_run(context, s):
+def get_run(context, event_slug):
     """Load run and event data from cache and database.
 
     Args:
@@ -209,7 +209,7 @@ def get_run(context, s):
         UnknowRunError: If run cannot be found
     """
     try:
-        res = get_cache_run(context["a_id"], s)
+        res = get_cache_run(context["a_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
             "search",

@@ -443,17 +443,17 @@ def legal_notice(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def event_register(request, s):
+def event_register(request, event_slug):
     """Display event registration options for future runs.
 
     Args:
         request: Django HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         Redirect to single run registration or list of available runs
     """
-    context = get_event(request, s)
+    context = get_event(request, event_slug)
     # check future runs
     runs = (
         Run.objects.filter(event=context["event"], end__gte=datetime.now())
@@ -462,10 +462,10 @@ def event_register(request, s):
         .order_by("end")
     )
     if len(runs) == 0 and "pre_register" in request.assoc["features"]:
-        return redirect("pre_register", s=s)
+        return redirect("pre_register", event_slug=event_slug)
     elif len(runs) == 1:
         run = runs.first()
-        return redirect("register", s=run.get_slug())
+        return redirect("register", event_slug=run.get_slug())
     context["list"] = []
     ctx_reg = {"features_map": {context["event"].id: context["features"]}}
     for r in runs:
@@ -574,7 +574,7 @@ def check_gallery_visibility(request, context):
     return True
 
 
-def gallery(request: HttpRequest, s: str) -> HttpResponse:
+def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Event gallery display with permissions and character filtering.
 
     Displays the event gallery page showing characters and registrations based on
@@ -583,7 +583,7 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The event slug identifier used to retrieve the specific event
+        event_slug: Event identifier string used to retrieve the specific event
 
     Returns:
         HttpResponse: Rendered gallery template with character and registration
@@ -593,9 +593,9 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If event or run not found (handled by get_event_run)
     """
     # Get event context and check if character feature is enabled
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
     if "character" not in context["features"]:
-        return redirect("event", s=context["run"].get_slug())
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Initialize registration list for unassigned members
     context["registration_list"] = []
@@ -646,13 +646,13 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/event/gallery.html", context)
 
 
-def event(request: HttpRequest, s: str) -> HttpResponse:
+def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display main event page with runs, registration status, and event details.
 
     Args:
         request: HTTP request object containing user authentication and session data
-        s: Event slug used to identify the specific event
+        event_slug: Event slug used to identify the specific event
 
     Returns:
         HttpResponse: Rendered event template with context containing event details,
@@ -664,7 +664,7 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
         - Sets no_robots flag based on development status and timing
     """
     # Get base context with event and run information
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
     context["coming"] = []
     context["past"] = []
 
@@ -713,11 +713,11 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/event/event.html", context)
 
 
-def event_redirect(request, s):
-    return redirect("event", s=s)
+def event_redirect(request, event_slug):
+    return redirect("event", event_slug=event_slug)
 
 
-def search(request: HttpRequest, s: str) -> HttpResponse:
+def search(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display event search page with character gallery and search functionality.
 
     This view handles the character search functionality for events, including
@@ -725,7 +725,7 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and data
-        s: Event slug string used to identify the specific event
+        event_slug: Event slug string used to identify the specific event
 
     Returns:
         HttpResponse: Rendered search.html template with searchable character data
@@ -736,7 +736,7 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
         and event configuration settings.
     """
     # Get event context and validate user access
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
 
     # Check if gallery is visible and character display is enabled
     if check_gallery_visibility(request, context) and context["show_character"]:
@@ -830,10 +830,10 @@ def check_visibility(context: dict, writing_type: str, writing_name: str) -> Non
         raise HiddenError(context["run"].get_slug(), writing_name)
 
 
-def factions(request: HttpRequest, s: str) -> HttpResponse:
+def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render factions page for an event run."""
     # Get event run context and validate status
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
 
     # Verify user has permission to view factions
     check_visibility(context, "faction", _("Factions"))
@@ -844,18 +844,18 @@ def factions(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request, s, g):
+def faction(request, event_slug, g):
     """Display detailed information for a specific faction.
 
     Args:
         request: HTTP request object
-        s: Event slug string
+        event_slug: Event slug string
         g: Faction identifier string
 
     Returns:
         HttpResponse: Rendered faction detail page
     """
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
     check_visibility(context, "faction", _("Factions"))
 
     get_event_cache_all(context)
@@ -875,19 +875,19 @@ def faction(request, s, g):
     return render(request, "larpmanager/event/faction.html", context)
 
 
-def quests(request: HttpRequest, s: str, g: str | None = None) -> HttpResponse:
+def quests(request: HttpRequest, event_slug: str, g: str | None = None) -> HttpResponse:
     """Display quest types or quests for a specific type in an event.
 
     Args:
         request: The HTTP request object
-        s: The event slug identifier
+        event_slug: Event identifier string
         g: Optional quest type number. If None, shows all quest types
 
     Returns:
         HttpResponse: Rendered template with quest types or specific quests
     """
     # Get event context and verify user can view quests
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
@@ -906,18 +906,18 @@ def quests(request: HttpRequest, s: str, g: str | None = None) -> HttpResponse:
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request, s, g):
+def quest(request, event_slug, g):
     """Display individual quest details and associated traits.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         g: Quest number
 
     Returns:
         HttpResponse: Rendered quest template
     """
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
     get_element(context, g, "quest", Quest, by_number=True)
@@ -935,7 +935,7 @@ def quest(request, s, g):
     return render(request, "larpmanager/event/quest.html", context)
 
 
-def limitations(request: HttpRequest, s: str) -> HttpResponse:
+def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display event limitations including ticket availability and discounts.
 
@@ -945,14 +945,14 @@ def limitations(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session and request data.
-        s: The event slug used to identify the specific event.
+        event_slug: Event slug identifier.
 
     Returns:
         HttpResponse: Rendered template showing limitations, ticket availability,
         discounts, and registration options with their current usage counts.
     """
     # Get event and run context with status validation
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
     counts = get_reg_counts(context["run"])
@@ -986,18 +986,18 @@ def limitations(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/event/limitations.html", context)
 
 
-def export(request, s, t):
+def export(request, event_slug, t):
     """Export event elements as JSON for external consumption.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         t: Type of elements to export ('char', 'faction', 'quest', 'trait')
 
     Returns:
         JsonResponse: Exported elements data
     """
-    context = get_event(request, s)
+    context = get_event(request, event_slug)
     if t == "char":
         lst = context["event"].get_elements(Character).order_by("number")
     elif t == "faction":

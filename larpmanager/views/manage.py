@@ -43,7 +43,7 @@ from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
-def manage(request, s=None):
+def manage(request, event_slug=None):
     """Main management dashboard routing.
 
     Routes to either executive management or organizer management
@@ -51,7 +51,7 @@ def manage(request, s=None):
 
     Args:
         request: Django HTTP request object (must be authenticated)
-        s: Optional event slug for organizer management
+        event_slug: Optional event slug for organizer management
 
     Returns:
         HttpResponse: Redirect to home or appropriate management view
@@ -59,8 +59,8 @@ def manage(request, s=None):
     if request.assoc["id"] == 0:
         return redirect("home")
 
-    if s:
-        return _orga_manage(request, s)
+    if event_slug:
+        return _orga_manage(request, event_slug)
     else:
         return _exe_manage(request)
 
@@ -450,7 +450,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     if not context["run"].start or not context["run"].end:
         message = _("Last step, please complete the event setup by adding the start and end dates")
         messages.success(request, message)
-        return redirect("orga_run", s=event_slug)
+        return redirect("orga_run", event_slug=event_slug)
 
     # Ensure quick setup is complete
     if not get_event_config(context["event"].id, "orga_quick_suggestion", False, context=context):
@@ -459,7 +459,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
             "the features most useful for your event"
         )
         messages.success(request, message)
-        return redirect("orga_quick", s=event_slug)
+        return redirect("orga_quick", event_slug=event_slug)
 
     # Load permissions and navigation
     get_index_event_permissions(context, request, event_slug)
@@ -1054,15 +1054,15 @@ def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirec
     return redirect("manage")
 
 
-def orga_close_suggestion(request: HttpRequest, s: str, perm: EventPermission) -> HttpResponseRedirect:
+def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPermission) -> HttpResponseRedirect:
     """Close a suggestion by setting its status and redirect to manage page."""
     # Check user has permission to access this event
-    context = check_event_permission(request, s, perm)
+    context = check_event_permission(request, event_slug, perm)
 
     # Update suggestion status to closed
     set_suggestion(context, perm)
 
-    return redirect("manage", s=s)
+    return redirect("manage", event_slug=event_slug)
 
 
 def _check_intro_driver(request: HttpRequest, context: dict) -> None:
@@ -1078,7 +1078,7 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     context["intro_driver"] = True
 
 
-def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
+def orga_redirect(request, event_slug: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
     """
     Optimized redirect from /slug/number/path to /slug-number/path format.
 
@@ -1087,7 +1087,7 @@ def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermane
 
     Args:
         request: Django HTTP request object (not used in redirect logic)
-        s: Event slug identifier
+        event_slug: Event slug identifier
         n: Run number for the event
         p: Additional path components, defaults to None
 
@@ -1095,7 +1095,7 @@ def orga_redirect(request, s: str, n: int, p: str = None) -> HttpResponsePermane
         HttpResponsePermanentRedirect: 301 redirect to normalized URL format
     """
     # Initialize path components list with base slug
-    path_parts = [s]
+    path_parts = [event_slug]
 
     # Only add suffix for run numbers > 1 to keep URLs clean
     if n > 1:

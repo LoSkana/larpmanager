@@ -119,18 +119,18 @@ def get_character_optimized(context, num):
 
 
 @login_required
-def orga_characters(request: HttpRequest, s: str) -> HttpResponse:
+def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Return character list view for event organizers.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         Rendered character list template
     """
     # Check user permissions for character management
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
 
     # Load event data and configuration settings
     get_event_cache_all(context)
@@ -145,19 +145,19 @@ def orga_characters(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_characters_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Edit character information in organization context.
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The organization/event slug identifier
+        event_slug: The organization/event slug identifier
         num: The character ID to edit (0 for new character)
 
     Returns:
         HttpResponse: Rendered character edit form page
     """
     # Check user permissions for character organization features
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
 
     # Load full event cache only when specific features require relationship data
     # This optimization avoids expensive cache operations for basic character editing
@@ -235,7 +235,7 @@ def update_relationship(request, context, nm, fl):
 
 
 @login_required
-def orga_characters_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_characters_relationships(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display character relationships for organization view.
 
     Shows both direct relationships (where character is source) and inverse
@@ -244,14 +244,14 @@ def orga_characters_relationships(request: HttpRequest, s: str, num: int) -> Htt
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         num: Character number identifier
 
     Returns:
         Rendered HTML response with character relationships
     """
     # Check user permissions for character management
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
 
     # Load character data into context
     get_char(context, num)
@@ -277,19 +277,19 @@ def orga_characters_relationships(request: HttpRequest, s: str, num: int) -> Htt
 
 
 @login_required
-def orga_characters_view(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display character view for event organizers.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         num: Character number/ID
 
     Returns:
         Rendered writing view for character
     """
     # Check permissions and initialize context
-    context = check_event_permission(request, s, ["orga_reading", "orga_characters"])
+    context = check_event_permission(request, event_slug, ["orga_reading", "orga_characters"])
 
     # Load character and event cache data
     get_char(context, num)
@@ -299,10 +299,10 @@ def orga_characters_view(request: HttpRequest, s: str, num: int) -> HttpResponse
 
 
 @login_required
-def orga_characters_versions(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_characters_versions(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display version history for a character's writing content."""
     # Check event permission and get context
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
 
     # Retrieve the character and render version history
     get_char(context, num)
@@ -310,19 +310,19 @@ def orga_characters_versions(request: HttpRequest, s: str, num: int) -> HttpResp
 
 
 @login_required
-def orga_characters_summary(request: HttpRequest, s: str, num: str) -> HttpResponse:
+def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> HttpResponse:
     """Display character summary page for organization staff.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         num: Character identifier
 
     Returns:
         Rendered HTML response with character summary
     """
     # Check permissions and get base context
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
 
     # Retrieve character data and add to context
     get_char(context, num)
@@ -346,7 +346,7 @@ def orga_characters_summary(request: HttpRequest, s: str, num: str) -> HttpRespo
 
 
 @login_required
-def orga_writing_form_list(request: HttpRequest, s: str, typ: str) -> JsonResponse:
+def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
     """Generate form list data for writing questions in JSON format.
 
     Processes writing questions and their answers for display in organizer interface,
@@ -354,7 +354,7 @@ def orga_writing_form_list(request: HttpRequest, s: str, typ: str) -> JsonRespon
 
     Args:
         request: HTTP request object containing POST data with question ID
-        s: Event slug identifier
+        event_slug: Event slug identifier
         typ: Question type identifier for filtering applicable questions
 
     Returns:
@@ -366,7 +366,7 @@ def orga_writing_form_list(request: HttpRequest, s: str, typ: str) -> JsonRespon
         Http404: If question or event not found
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
     check_writing_form_type(context, typ)
     event = context["event"]
 
@@ -421,7 +421,7 @@ def orga_writing_form_list(request: HttpRequest, s: str, typ: str) -> JsonRespon
 
 
 @login_required
-def orga_writing_form_email(request: HttpRequest, s: str, typ: str) -> JsonResponse:
+def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
     """Generate email data for writing form options by character choices.
 
     This function processes writing form questions and returns email data
@@ -429,7 +429,7 @@ def orga_writing_form_email(request: HttpRequest, s: str, typ: str) -> JsonRespo
 
     Args:
         request: The HTTP request object containing POST data
-        s: Event or run identifier string
+        event_slug: Event identifier string
         typ: Writing form type identifier
 
     Returns:
@@ -441,7 +441,7 @@ def orga_writing_form_email(request: HttpRequest, s: str, typ: str) -> JsonRespo
         Http404: If event permission check fails or writing form type is invalid
     """
     # Check event permissions and validate writing form type
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
     check_writing_form_type(context, typ)
 
     # Get the parent event if this is a child event
@@ -498,8 +498,8 @@ def orga_writing_form_email(request: HttpRequest, s: str, typ: str) -> JsonRespo
 
 
 @login_required
-def orga_character_form(request, s):
-    return redirect("orga_writing_form", s=s, typ="character")
+def orga_character_form(request, event_slug):
+    return redirect("orga_writing_form", event_slug=event_slug, typ="character")
 
 
 def check_writing_form_type(context: dict, form_type: str) -> None:
@@ -532,7 +532,7 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
 
 
 @login_required
-def orga_writing_form(request: HttpRequest, s: str, typ: str) -> HttpResponse:
+def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse:
     """Display and manage writing form questions for character creation.
 
     This view handles both GET requests to display the writing form configuration
@@ -541,7 +541,7 @@ def orga_writing_form(request: HttpRequest, s: str, typ: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session and form data
-        s: The event slug identifier used to locate the specific event
+        event_slug: Event identifier string used to locate the specific event
         typ: The writing form type identifier (e.g., 'character', 'background')
 
     Returns:
@@ -553,7 +553,7 @@ def orga_writing_form(request: HttpRequest, s: str, typ: str) -> HttpResponse:
         Http404: If the writing form type is invalid or event not found
     """
     # Verify user has permission to access character form organization features
-    context = check_event_permission(request, s, "orga_character_form")
+    context = check_event_permission(request, event_slug, "orga_character_form")
 
     # Validate the writing form type parameter and add to context
     check_writing_form_type(context, typ)
@@ -587,7 +587,7 @@ def orga_writing_form(request: HttpRequest, s: str, typ: str) -> HttpResponse:
 
 
 @login_required
-def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> HttpResponse:
+def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num: int) -> HttpResponse:
     """Edit writing form questions with validation and option handling.
 
     Handles the editing of writing form questions for LARP events, including
@@ -596,7 +596,7 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
 
     Args:
         request: The HTTP request object containing form data and user info
-        s: Event slug identifier for the current event
+        event_slug: Event slug identifier for the current event
         typ: Writing form type identifier (e.g., 'character', 'background')
         num: Question number/ID to edit, or 0 for new question
 
@@ -610,7 +610,7 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
     """
     # Check user permissions for editing character forms
     perm = "orga_character_form"
-    context = check_event_permission(request, s, perm)
+    context = check_event_permission(request, event_slug, perm)
 
     # Validate the writing form type exists for this event
     check_writing_form_type(context, typ)
@@ -622,7 +622,7 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=context["run"].get_slug(), typ=typ, num=0)
+            return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), typ=typ, num=0)
 
         # Determine if we need to redirect to option editing
         edit_option = False
@@ -641,8 +641,10 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
 
         # Redirect to option editing if needed, otherwise back to form list
         if edit_option:
-            return redirect(orga_writing_options_new, s=context["run"].get_slug(), typ=typ, num=context["saved"].id)
-        return redirect("orga_writing_form", s=context["run"].get_slug(), typ=typ)
+            return redirect(
+                orga_writing_options_new, event_slug=context["run"].get_slug(), typ=typ, num=context["saved"].id
+            )
+        return redirect("orga_writing_form", event_slug=context["run"].get_slug(), typ=typ)
 
     # Load existing options for the question being edited
     context["list"] = WritingOption.objects.filter(
@@ -656,7 +658,7 @@ def orga_writing_form_edit(request: HttpRequest, s: str, typ: str, num: int) -> 
 @login_required
 def orga_writing_form_order(
     request: HttpRequest,
-    s: str,
+    event_slug: str,
     typ: str,
     num: int,
     order: str,
@@ -665,7 +667,7 @@ def orga_writing_form_order(
 
     Args:
         request: The HTTP request object.
-        s: The run slug identifier.
+        event_slug: Event slug identifier.
         typ: The writing form type to reorder questions for.
         num: The question number to move.
         order: The direction to move ('up' or 'down').
@@ -674,7 +676,7 @@ def orga_writing_form_order(
         Redirect to the writing form page.
     """
     # Verify user has permission to modify character forms
-    context = check_event_permission(request, s, "orga_character_form")
+    context = check_event_permission(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists
     check_writing_form_type(context, typ)
@@ -683,16 +685,16 @@ def orga_writing_form_order(
     exchange_order(context, WritingQuestion, num, order)
 
     # Redirect back to the writing form page
-    return redirect("orga_writing_form", s=context["run"].get_slug(), typ=typ)
+    return redirect("orga_writing_form", event_slug=context["run"].get_slug(), typ=typ)
 
 
 @login_required
-def orga_writing_options_edit(request: HttpRequest, s: str, typ: str, num: int) -> HttpResponse:
+def orga_writing_options_edit(request: HttpRequest, event_slug: str, typ: str, num: int) -> HttpResponse:
     """Edit writing form option for event organizers.
 
     Args:
         request: The HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         typ: Writing form type (background, origin, etc.)
         num: Option number to edit
 
@@ -700,7 +702,7 @@ def orga_writing_options_edit(request: HttpRequest, s: str, typ: str, num: int) 
         HTTP response with the option edit form
     """
     # Verify user has character form permissions and get event context
-    context = check_event_permission(request, s, "orga_character_form")
+    context = check_event_permission(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists and is allowed
     check_writing_form_type(context, typ)
@@ -710,14 +712,14 @@ def orga_writing_options_edit(request: HttpRequest, s: str, typ: str, num: int) 
 
 
 @login_required
-def orga_writing_options_new(request: HttpRequest, s: str, typ: str, num: int) -> HttpResponse:
+def orga_writing_options_new(request: HttpRequest, event_slug: str, typ: str, num: int) -> HttpResponse:
     """Create new writing option for character form question.
 
     Validates permissions and creates a new writing option for the specified
     question type and number.
     """
     # Validate user has permission to edit character forms
-    context = check_event_permission(request, s, "orga_character_form")
+    context = check_event_permission(request, event_slug, "orga_character_form")
 
     # Ensure the writing form type is valid
     check_writing_form_type(context, typ)
@@ -738,19 +740,23 @@ def writing_option_edit(context: dict, option_number: int, request: HttpRequest,
             redirect_target = "orga_writing_options_new"
 
         # Redirect to appropriate target with context parameters
-        return redirect(redirect_target, s=context["run"].get_slug(), typ=option_type, num=context["saved"].question_id)
+        return redirect(
+            redirect_target, event_slug=context["run"].get_slug(), typ=option_type, num=context["saved"].question_id
+        )
 
     # Render edit form if no successful submission
     return render(request, "larpmanager/orga/edit.html", context)
 
 
 @login_required
-def orga_writing_options_order(request: HttpRequest, s: str, typ: str, num: int, order: int) -> HttpResponseRedirect:
+def orga_writing_options_order(
+    request: HttpRequest, event_slug: str, typ: str, num: int, order: int
+) -> HttpResponseRedirect:
     """Reorder writing options within a writing form question.
 
     Args:
         request: HTTP request object
-        s: Run slug identifier
+        event_slug: Event slug identifier
         typ: Writing form type identifier
         num: Question ID number
         order: New order position for the option
@@ -759,7 +765,7 @@ def orga_writing_options_order(request: HttpRequest, s: str, typ: str, num: int,
         Redirect to the writing form edit page
     """
     # Check event permission and initialize context
-    context = check_event_permission(request, s, "orga_character_form")
+    context = check_event_permission(request, event_slug, "orga_character_form")
 
     # Validate writing form type exists in context
     check_writing_form_type(context, typ)
@@ -768,11 +774,13 @@ def orga_writing_options_order(request: HttpRequest, s: str, typ: str, num: int,
     exchange_order(context, WritingOption, num, order)
 
     # Redirect back to writing form edit view
-    return redirect("orga_writing_form_edit", s=context["run"].get_slug(), typ=typ, num=context["current"].question_id)
+    return redirect(
+        "orga_writing_form_edit", event_slug=context["run"].get_slug(), typ=typ, num=context["current"].question_id
+    )
 
 
 @login_required
-def orga_check(request: HttpRequest, s: str) -> HttpResponse:
+def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Perform comprehensive character and writing consistency checks.
 
     Validates character relationships, writing completeness, speedlarp constraints,
@@ -780,7 +788,7 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session and data
-        s: The event slug identifier for accessing the specific event
+        event_slug: Event identifier string for accessing the specific event
 
     Returns:
         HttpResponse: Rendered template with check results and context data
@@ -791,7 +799,7 @@ def orga_check(request: HttpRequest, s: str) -> HttpResponse:
         event setup integrity.
     """
     # Initialize context and validate user permissions for the event
-    context = check_event_permission(request, s)
+    context = check_event_permission(request, event_slug)
 
     # Initialize data structures for check results and caching
     checks = {}
@@ -977,18 +985,18 @@ def check_speedlarp_prepare(
 
 
 @require_POST
-def orga_character_get_number(request: HttpRequest, s: str) -> JsonResponse:
+def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Get the number attribute for a Trait or Character element.
 
     Args:
         request: The HTTP request containing idx and type in POST data.
-        s: The event slug identifier.
+        event_slug: Event identifier string.
 
     Returns:
         JsonResponse with element number or error status.
     """
     # Check user permissions for the event
-    context = check_event_permission(request, s, "orga_characters")
+    context = check_event_permission(request, event_slug, "orga_characters")
     idx = request.POST.get("idx")
     type = request.POST.get("type")
 
@@ -1006,7 +1014,7 @@ def orga_character_get_number(request: HttpRequest, s: str) -> JsonResponse:
 
 
 @require_POST
-def orga_writing_excel_edit(request: HttpRequest, s: str, typ: str) -> JsonResponse:
+def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
     """Handle Excel-based editing of writing elements.
 
     Manages bulk editing of character stories and writing content through
@@ -1015,7 +1023,7 @@ def orga_writing_excel_edit(request: HttpRequest, s: str, typ: str) -> JsonRespo
 
     Args:
         request: HTTP request object containing user session and form data
-        s: String identifier for the specific writing element or character
+        event_slug: Event slug for permission checking and context setup
         typ: Type identifier specifying the kind of writing question/element
 
     Returns:
@@ -1027,7 +1035,7 @@ def orga_writing_excel_edit(request: HttpRequest, s: str, typ: str) -> JsonRespo
     """
     # Attempt to retrieve the Excel form context for the specified element
     try:
-        context = _get_excel_form(request, s, typ)
+        context = _get_excel_form(request, event_slug, typ)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -1082,19 +1090,19 @@ def orga_writing_excel_edit(request: HttpRequest, s: str, typ: str) -> JsonRespo
 
 
 @require_POST
-def orga_writing_excel_submit(request, s, typ):
+def orga_writing_excel_submit(request, event_slug, typ):
     """Handle Excel submission for writing data with validation.
 
     Args:
         request: HTTP request with form data
-        s: Event slug
+        event_slug: Event slug for permission checking and context setup
         typ: Writing type identifier
 
     Returns:
         JsonResponse: Success status, element updates, or validation errors
     """
     try:
-        context = _get_excel_form(request, s, typ, is_submit=True)
+        context = _get_excel_form(request, event_slug, typ, is_submit=True)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 

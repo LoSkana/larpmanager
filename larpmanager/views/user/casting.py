@@ -186,7 +186,7 @@ def casting_details(context: dict, casting_type: int) -> dict:
 
 
 @login_required
-def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
     """Handle user casting preferences for LARP events.
 
     This view manages the casting preference selection process for registered users,
@@ -194,7 +194,7 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and POST data
-        s: Event slug identifier used to retrieve the specific event run
+        event_slug: Event slug identifier used to retrieve the specific event run
         typ: Casting type identifier for different casting categories (default: 0)
 
     Returns:
@@ -205,13 +205,13 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         PermissionDenied: If user lacks required casting feature permissions
     """
     # Get event context and validate user access permissions
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
     check_event_feature(request, context, "casting")
 
     # Verify user has completed event registration
     if context["run"].reg is None:
         messages.success(request, _("You must signed up in order to select your preferences") + "!")
-        return redirect("gallery", s=context["run"].get_slug())
+        return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
     if context["run"].reg and context["run"].reg.ticket and context["run"].reg.ticket.tier == TicketTier.WAITING:
@@ -222,7 +222,7 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
                 "able to select your preferences!"
             ),
         )
-        return redirect("gallery", s=context["run"].get_slug())
+        return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Load casting details and options for the specified type
     casting_details(context, typ)
@@ -256,7 +256,7 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
             # Validate no duplicate preferences selected
             if pref in prefs.values():
                 messages.warning(request, _("You have indicated several preferences towards the same element!"))
-                return redirect("casting", s=context["run"].get_slug(), typ=typ)
+                return redirect("casting", event_slug=context["run"].get_slug(), typ=typ)
             prefs[i] = pref
 
         # Save preferences and redirect to refresh page
@@ -562,7 +562,7 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
 
 
 @login_required
-def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
     """Display casting preferences interface for characters or traits.
 
     Provides a web interface for users to set their casting preferences during
@@ -571,7 +571,7 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
 
     Args:
         request: Django HTTP request object containing user session and data
-        s: Event slug identifier used to locate the specific event
+        event_slug: Event slug identifier used to locate the specific event
         typ: Preference type selector - 0 for character preferences,
              any other value for trait-based preferences
 
@@ -583,7 +583,7 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
                 when the user is not properly registered for the event
     """
     # Get event context and verify user signup status
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
     casting_details(context, typ)
 
     # Check if casting preferences are enabled for this event
@@ -749,7 +749,7 @@ def casting_history_traits(context: dict) -> None:
 
 
 @login_required
-def casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+def casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
     """Display casting history for characters or traits.
 
     This view provides access to casting history data for events, allowing users
@@ -758,7 +758,7 @@ def casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        s: Event slug identifier used to locate the specific event
+        event_slug: Event slug identifier used to locate the specific event
         typ: History type selector - 0 for character history, 1 for trait history.
              Defaults to 0 (character history)
 
@@ -770,7 +770,7 @@ def casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         Http404: If user is not registered for the event and not staff
     """
     # Get event context and verify user signup status
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
     casting_details(context, typ)
 
     # Check if casting history feature is enabled for this event

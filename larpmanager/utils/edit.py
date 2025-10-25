@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config, get_event_config
+from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
@@ -405,9 +406,9 @@ def backend_edit(
 def orga_edit(
     request: HttpRequest,
     event_slug: str,
-    permission: str,
-    form_type: str,
-    entity_id: int,
+    permission: str | None,
+    form_type: type[MyForm],
+    entity_id: int | None = None,
     redirect_view: str | None = None,
     additional_context: dict | None = None,
 ) -> HttpResponse:
@@ -443,14 +444,14 @@ def orga_edit(
 
         # Handle "continue editing" workflow - redirect to new object form
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=context["run"].get_slug(), num=0)
+            return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
 
         # Determine redirect target - use provided or default to permission name
         if not redirect_view:
             redirect_view = permission
 
         # Redirect to success page with event slug
-        return redirect(redirect_view, s=context["run"].get_slug())
+        return redirect(redirect_view, event_slug=context["run"].get_slug())
 
     # Edit operation failed or is initial load - render edit form
     return render(request, "larpmanager/orga/edit.html", context)
@@ -714,7 +715,7 @@ def _writing_save(
 
     # Handle continue editing request
     if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name, s=context["run"].get_slug(), num=0)
+        return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
 
     # Handle custom redirect function if provided
     if redr:
@@ -722,7 +723,7 @@ def _writing_save(
         return redr(context)
 
     # Default redirect to list view
-    return redirect("orga_" + nm + "s", s=context["run"].get_slug())
+    return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
 def writing_edit_cache_key(eid, typ):

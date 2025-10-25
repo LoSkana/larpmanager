@@ -54,10 +54,10 @@ from larpmanager.utils.paginate import orga_paginate
 
 
 @login_required
-def orga_discounts(request: HttpRequest, s: str) -> HttpResponse:
+def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage discounts for an event."""
     # Check permissions and get event context
-    context = check_event_permission(request, s, "orga_discounts")
+    context = check_event_permission(request, event_slug, "orga_discounts")
 
     # Get all discounts for the event ordered by number
     context["list"] = Discount.objects.filter(event=context["event"]).order_by("number")
@@ -66,14 +66,14 @@ def orga_discounts(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_discounts_edit(request, s, num):
-    return orga_edit(request, s, "orga_discounts", OrgaDiscountForm, num)
+def orga_discounts_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, num)
 
 
 @login_required
-def orga_expenses_my(request: HttpRequest, s: str) -> HttpResponse:
+def orga_expenses_my(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display user's personal expenses for an event run."""
-    context = check_event_permission(request, s, "orga_expenses_my")
+    context = check_event_permission(request, event_slug, "orga_expenses_my")
     context["list"] = AccountingItemExpense.objects.filter(run=context["run"], member=request.user.member).order_by(
         "-created"
     )
@@ -81,7 +81,7 @@ def orga_expenses_my(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
+def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new personal expense reimbursement request.
 
     This view handles both GET and POST requests for creating new personal
@@ -90,7 +90,7 @@ def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user data and form submission
-        s: Event slug identifier used to identify the specific event/run
+        event_slug: Event slug identifier used to identify the specific event/run
 
     Returns:
         HttpResponse: Rendered form template for GET requests or redirect response
@@ -101,7 +101,7 @@ def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If user lacks required permissions for the event
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s, "orga_expenses_my")
+    context = check_event_permission(request, event_slug, "orga_expenses_my")
 
     if request.method == "POST":
         # Process form submission with uploaded files
@@ -122,8 +122,8 @@ def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
 
             # Redirect based on user's choice to continue or finish
             if "continue" in request.POST:
-                return redirect("orga_expenses_my_new", s=context["run"].get_slug())
-            return redirect("orga_expenses_my", s=context["run"].get_slug())
+                return redirect("orga_expenses_my_new", event_slug=context["run"].get_slug())
+            return redirect("orga_expenses_my", event_slug=context["run"].get_slug())
     else:
         # Create empty form for GET request
         form = OrgaPersonalExpenseForm(context=context)
@@ -134,7 +134,7 @@ def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_invoices(request: HttpRequest, s: str) -> HttpResponse:
+def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display payment invoices awaiting confirmation for event organizers.
 
@@ -144,7 +144,7 @@ def orga_invoices(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and data
-        s: Event slug identifier used to determine the current event context
+        event_slug: Event slug identifier used to determine the current event context
 
     Returns:
         HttpResponse: Rendered template with paginated invoice list and context data
@@ -154,7 +154,7 @@ def orga_invoices(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If event with given slug does not exist
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s, "orga_invoices")
+    context = check_event_permission(request, event_slug, "orga_invoices")
 
     # Build optimized query with select_related to prevent N+1 queries
     que = (
@@ -176,7 +176,7 @@ def orga_invoices(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_invoices_confirm(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Confirm a payment invoice for an organization event.
 
     This function allows organizers to confirm payment invoices that are in
@@ -185,7 +185,7 @@ def orga_invoices_confirm(request: HttpRequest, s: str, num: int) -> HttpRespons
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The event slug identifier for URL routing
+        event_slug: Event identifier string for URL routing
         num: The invoice number/ID to confirm
 
     Returns:
@@ -196,7 +196,7 @@ def orga_invoices_confirm(request: HttpRequest, s: str, num: int) -> HttpRespons
         PermissionDenied: If user lacks orga_invoices permission (via check_event_permission)
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s, "orga_invoices")
+    context = check_event_permission(request, event_slug, "orga_invoices")
 
     # Retrieve the payment invoice by number
     backend_get(context, PaymentInvoice, num)
@@ -212,21 +212,21 @@ def orga_invoices_confirm(request: HttpRequest, s: str, num: int) -> HttpRespons
     else:
         # Invoice already processed - show warning and redirect
         messages.warning(request, _("Receipt already confirmed") + ".")
-        return redirect("orga_invoices", s=context["run"].get_slug())
+        return redirect("orga_invoices", event_slug=context["run"].get_slug())
 
     # Save the updated invoice status
     context["el"].save()
 
     # Show success message and redirect to invoices list
     messages.success(request, _("Element approved") + "!")
-    return redirect("orga_invoices", s=context["run"].get_slug())
+    return redirect("orga_invoices", event_slug=context["run"].get_slug())
 
 
 @login_required
-def orga_accounting(request: HttpRequest, s: str) -> HttpResponse:
+def orga_accounting(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display accounting overview for an event run."""
     # Check permissions and retrieve event context
-    context = check_event_permission(request, s, "orga_accounting")
+    context = check_event_permission(request, event_slug, "orga_accounting")
 
     # Get accounting data for the run
     context["dc"] = get_run_accounting(context["run"], context)
@@ -235,7 +235,7 @@ def orga_accounting(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_tokens(request: HttpRequest, s) -> dict:
+def orga_tokens(request: HttpRequest, event_slug) -> dict:
     """
     Display and manage accounting tokens for an organization's events.
 
@@ -244,7 +244,7 @@ def orga_tokens(request: HttpRequest, s) -> dict:
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The organization slug identifier for context resolution
+        event_slug: The event slug identifier for context resolution
 
     Returns:
         dict: Rendered response containing the tokens page with pagination
@@ -253,7 +253,7 @@ def orga_tokens(request: HttpRequest, s) -> dict:
         PermissionDenied: If user lacks 'orga_tokens' permission for the event
     """
     # Check user permissions for token management in the specified event
-    context = check_event_permission(request, s, "orga_tokens")
+    context = check_event_permission(request, event_slug, "orga_tokens")
 
     # Configure context with relationship selectors and display metadata
     # 'selrel' defines the database relationships to follow for data retrieval
@@ -281,23 +281,23 @@ def orga_tokens(request: HttpRequest, s) -> dict:
 
 
 @login_required
-def orga_tokens_edit(request, s, num):
-    return orga_edit(request, s, "orga_tokens", OrgaTokenForm, num)
+def orga_tokens_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, num)
 
 
 @login_required
-def orga_credits(request: HttpRequest, s: str) -> HttpResponse:
+def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
     """View for displaying and managing organization credits.
 
     Args:
         request: The HTTP request object containing user information and parameters
-        s: The organization slug identifier for permission checking
+        event_slug: The event slug identifier for permission checking
 
     Returns:
         HttpResponse: Rendered paginated credits page with accounting items
     """
     # Check user permissions for accessing organization credits functionality
-    context = check_event_permission(request, s, "orga_credits")
+    context = check_event_permission(request, event_slug, "orga_credits")
 
     # Configure context with relationship selectors and field definitions
     context.update(
@@ -322,24 +322,24 @@ def orga_credits(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_credits_edit(request, s, num):
-    return orga_edit(request, s, "orga_credits", OrgaCreditForm, num)
+def orga_credits_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, num)
 
 
 @login_required
-def orga_payments(request: HttpRequest, s: str) -> HttpResponse:
+def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display organization payments page with filterable payment data.
 
     Args:
         request: HTTP request object containing user session and form data
-        s: Event slug identifier for permission checking and context
+        event_slug: Event slug identifier for permission checking and context
 
     Returns:
         HttpResponse: Rendered payments page with paginated payment data
     """
     # Check user permissions for accessing organization payments
-    context = check_event_permission(request, s, "orga_payments")
+    context = check_event_permission(request, event_slug, "orga_payments")
 
     # Define base table fields for payment display
     fields = [
@@ -383,18 +383,18 @@ def orga_payments(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_payments_edit(request, s, num):
-    return orga_edit(request, s, "orga_payments", OrgaPaymentForm, num)
+def orga_payments_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, num)
 
 
 @login_required
-def orga_outflows(request: HttpRequest, s: str) -> HttpResponse:
+def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display paginated outflow accounting items for event organizers.
 
     Args:
         request: HTTP request object containing user authentication and parameters
-        s: Event slug identifier for permission checking and data filtering
+        event_slug: Event slug identifier for permission checking and data filtering
 
     Returns:
         HTTP response with rendered outflows template and pagination context
@@ -403,7 +403,7 @@ def orga_outflows(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If user lacks 'orga_outflows' permission for the event
     """
     # Check user permissions for accessing outflow data in the specified event
-    context = check_event_permission(request, s, "orga_outflows")
+    context = check_event_permission(request, event_slug, "orga_outflows")
 
     # Configure context with table display settings and field definitions
     context.update(
@@ -436,12 +436,12 @@ def orga_outflows(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_outflows_edit(request, s, num):
-    return orga_edit(request, s, "orga_outflows", OrgaOutflowForm, num)
+def orga_outflows_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, num)
 
 
 @login_required
-def orga_inflows(request: HttpRequest, s: str) -> dict:
+def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
     """Display paginated list of accounting inflows for organization event management.
 
     This function handles the organization view for accounting inflows, providing
@@ -449,13 +449,13 @@ def orga_inflows(request: HttpRequest, s: str) -> dict:
 
     Args:
         request: Django HTTP request object containing user session and data
-        s: String identifier for the event slug used for permission checking
+        event_slug: event slug identifier used for permission checking
 
     Returns:
         dict: Rendered HTTP response with paginated inflows table and context data
     """
     # Check user permissions for accessing organization inflow data
-    context = check_event_permission(request, s, "orga_inflows")
+    context = check_event_permission(request, event_slug, "orga_inflows")
 
     # Configure context with table display settings and field definitions
     context.update(
@@ -484,12 +484,12 @@ def orga_inflows(request: HttpRequest, s: str) -> dict:
 
 
 @login_required
-def orga_inflows_edit(request, s, num):
-    return orga_edit(request, s, "orga_inflows", OrgaInflowForm, num)
+def orga_inflows_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, num)
 
 
 @login_required
-def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
+def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display and manage organization expenses for a specific event.
 
@@ -498,13 +498,13 @@ def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The event slug identifier used for URL routing and permission checks
+        event_slug: Event identifier string used for URL routing and permission checks
 
     Returns:
         HttpResponse: Rendered template with expense data and pagination controls
     """
     # Check user permissions for expense management and initialize context
-    context = check_event_permission(request, s, "orga_expenses")
+    context = check_event_permission(request, event_slug, "orga_expenses")
 
     # Determine if approval functionality should be disabled for this organization
     context["disable_approval"] = get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, context)
@@ -548,12 +548,12 @@ def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_expenses_edit(request, s, num):
-    return orga_edit(request, s, "orga_expenses", OrgaExpenseForm, num)
+def orga_expenses_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, num)
 
 
 @login_required
-def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpResponseRedirect:
+def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> HttpResponseRedirect:
     """Approve an expense request for an event.
 
     This function handles the approval of expense requests by organization
@@ -562,7 +562,7 @@ def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpRespons
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The event slug identifier used for URL routing
+        event_slug: Event identifier string used for URL routing
         num: The primary key ID of the expense to be approved
 
     Returns:
@@ -573,7 +573,7 @@ def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpRespons
                 lacks permission for the event
     """
     # Check user permissions for expense management on this event
-    context = check_event_permission(request, s, "orga_expenses")
+    context = check_event_permission(request, event_slug, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
     if get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False):
@@ -595,4 +595,4 @@ def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpRespons
 
     # Display success message and redirect to expenses list
     messages.success(request, _("Request approved"))
-    return redirect("orga_expenses", s=context["run"].get_slug())
+    return redirect("orga_expenses", event_slug=context["run"].get_slug())

@@ -53,10 +53,10 @@ from larpmanager.views.user.casting import (
 
 
 @login_required
-def orga_casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+def orga_casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
     """Handle casting preferences for characters or traits based on type."""
     # Check user permissions for casting preferences
-    context = check_event_permission(request, s, "orga_casting_preferences")
+    context = check_event_permission(request, event_slug, "orga_casting_preferences")
 
     # Get base casting details
     casting_details(context, typ)
@@ -71,19 +71,19 @@ def orga_casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> Http
 
 
 @login_required
-def orga_casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
+def orga_casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
     """Render casting history page with characters or traits based on type.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         typ: History type (0 for characters, 1 for traits)
 
     Returns:
         Rendered casting history template
     """
     # Check user permissions for casting history access
-    context = check_event_permission(request, s, "orga_casting_history")
+    context = check_event_permission(request, event_slug, "orga_casting_history")
 
     # Add casting details to context
     casting_details(context, typ)
@@ -601,7 +601,7 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
 
 
 @login_required
-def orga_casting(request: HttpRequest, s: str, typ: Optional[int] = None, tick: str = "") -> HttpResponse:
+def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = None, tick: str = "") -> HttpResponse:
     """Handle organizational casting assignments for LARP events.
 
     Manages the casting assignment process for event organizers, allowing them to
@@ -609,7 +609,7 @@ def orga_casting(request: HttpRequest, s: str, typ: Optional[int] = None, tick: 
 
     Args:
         request: The HTTP request object containing user data and POST parameters
-        s: Event slug identifier used to identify the specific event
+        event_slug: Event slug identifier used to identify the specific event
         typ: Casting type identifier. If None, redirects to default type 0
         tick: Ticket identifier string for specific participant casting
 
@@ -621,11 +621,11 @@ def orga_casting(request: HttpRequest, s: str, typ: Optional[int] = None, tick: 
         Http404: When the submitted form is not valid
     """
     # Check user permissions for accessing casting functionality
-    context = check_event_permission(request, s, "orga_casting")
+    context = check_event_permission(request, event_slug, "orga_casting")
 
     # Redirect to default casting type if none specified
     if typ is None:
-        return redirect("orga_casting", s=context["run"].get_slug(), typ=0)
+        return redirect("orga_casting", event_slug=context["run"].get_slug(), typ=0)
 
     # Set context variables for template rendering
     context["typ"] = typ
@@ -659,8 +659,8 @@ def orga_casting(request: HttpRequest, s: str, typ: Optional[int] = None, tick: 
 
 
 @login_required
-def orga_casting_toggle(request, s, typ):
-    context = check_event_permission(request, s, "orga_casting")
+def orga_casting_toggle(request, event_slug, typ):
+    context = check_event_permission(request, event_slug, "orga_casting")
     try:
         pid = request.POST["pid"]
         oid = request.POST["oid"]

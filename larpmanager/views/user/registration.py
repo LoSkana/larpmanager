@@ -83,7 +83,7 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
+def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     """Handle pre-registration for events before full registration opens.
 
     Allows users to express interest in events and set preference order,
@@ -92,7 +92,7 @@ def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
 
     Args:
         request: HTTP request object with authenticated user
-        s: Optional event slug to pre-register for specific event, empty shows all
+        event_slug: Optional event slug to pre-register for specific event, empty shows all
 
     Returns:
         HttpResponse: Pre-registration form page or redirect after successful save
@@ -102,9 +102,9 @@ def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
         - Saves preference order and additional info
     """
     # Handle specific event pre-registration vs all events listing
-    if s:
+    if event_slug:
         # Get context for specific event and verify pre-register feature is active
-        context = get_event(request, s)
+        context = get_event(request, event_slug)
         context["sel"] = context["event"].id
         check_event_feature(request, context, "pre_register")
     else:
@@ -164,17 +164,17 @@ def pre_register(request: HttpRequest, s: str = "") -> HttpResponse:
 
 
 @login_required
-def pre_register_remove(request, s):
+def pre_register_remove(request, event_slug):
     """Remove user's pre-registration for an event.
 
     Args:
         request: Django HTTP request object (must be authenticated)
-        s: Event slug to remove pre-registration from
+        event_slug: Event slug to remove pre-registration from
 
     Returns:
         HttpResponse: Redirect to pre-registration list
     """
-    context = get_event(request, s)
+    context = get_event(request, event_slug)
     element = PreRegistration.objects.get(member=request.user.member, event=context["event"])
     element.delete()
     messages.success(request, _("Pre-registration cancelled!"))
@@ -182,19 +182,19 @@ def pre_register_remove(request, s):
 
 
 @login_required
-def register_exclusive(request, s, sc="", dis=""):
+def register_exclusive(request, event_slug, sc="", dis=""):
     """Handle exclusive event registration (delegates to main register function).
 
     Args:
         request: Django HTTP request object
-        s: Event slug
+        event_slug: Event slug
         sc: Secret code (optional)
         dis: Discount code (optional)
 
     Returns:
         HttpResponse: Result from register function
     """
-    return register(request, s, sc, dis)
+    return register(request, event_slug, sc, dis)
 
 
 def save_registration(
@@ -389,7 +389,7 @@ def registration_redirect(request: HttpRequest, reg: Registration, new_reg: bool
         mes = _("Registration updated to %(event)s!") % context
 
     messages.success(request, mes)
-    return redirect("gallery", s=reg.run.get_slug())
+    return redirect("gallery", event_slug=reg.run.get_slug())
 
 
 def save_registration_bring_friend(context: dict, form, reg: Registration, request) -> None:
@@ -529,7 +529,7 @@ def init_form_submitted(context, form, request, registration=None):
 
 
 @login_required
-def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int = 0) -> HttpResponse:
+def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "", tk: int = 0) -> HttpResponse:
     """Handle event registration form display and submission.
 
     Manages the complete registration process including ticket selection,
@@ -537,7 +537,7 @@ def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int 
 
     Args:
         request: Django HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         sc: Optional scenario code for registration context
         dis: Optional discount code to apply
         tk: Ticket ID to pre-select (default: 0)
@@ -549,7 +549,7 @@ def register(request: HttpRequest, s: str, sc: str = "", dis: str = "", tk: int 
         RewokedMembershipError: When user membership has been revoked
     """
     # Get event and run context with status validation
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
     run = context["run"]
     event = context["event"]
 
@@ -676,7 +676,7 @@ def _check_redirect_registration(request, context: dict, event, secret_code: str
         if not context["run"].registration_open or context["run"].registration_open > timezone_now():
             # Redirect to pre-registration if available and active
             if "pre_register" in context["features"] and get_event_config(event.id, "pre_register_active", False):
-                return redirect("pre_register", s=context["event"].slug)
+                return redirect("pre_register", event_slug=context["event"].slug)
             else:
                 return render(request, "larpmanager/event/not_open.html", context)
 
@@ -724,21 +724,21 @@ def _register_prepare(context, registration):
     return is_new_registration
 
 
-def register_reduced(request: HttpRequest, s: str) -> JsonResponse:
+def register_reduced(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return count of available reduced-price tickets for an event run."""
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     # Count reduced tickets still available for this run
     ct = get_reduced_available_count(context["run"])
     return JsonResponse({"res": ct})
 
 
 @login_required
-def register_conditions(request: HttpRequest, s: str = None) -> HttpResponse:
+def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpResponse:
     """Render registration conditions page with event and association terms.
 
     Args:
         request: HTTP request object
-        s: Optional event slug for event-specific conditions
+        event_slug: Optional event slug for event-specific conditions
 
     Returns:
         Rendered HTML response with terms and conditions
@@ -747,8 +747,8 @@ def register_conditions(request: HttpRequest, s: str = None) -> HttpResponse:
     context = def_user_context(request)
 
     # Add event-specific context if event slug provided
-    if s:
-        context["event"] = get_event(request, s)["event"]
+    if event_slug:
+        context["event"] = get_event(request, event_slug)["event"]
         context["event_text"] = get_event_text(context["event"].id, EventTextType.TOC)
 
     # Add association terms and conditions
@@ -802,7 +802,7 @@ def register_conditions(request: HttpRequest, s: str = None) -> HttpResponse:
 
 @login_required
 @require_POST
-def discount(request: HttpRequest, s: str) -> JsonResponse:
+def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Handle discount code application for user registration.
 
     This function validates and applies discount codes for event registrations,
@@ -810,7 +810,7 @@ def discount(request: HttpRequest, s: str) -> JsonResponse:
 
     Args:
         request: Django HTTP request object containing POST data with discount code
-        s: Event slug identifier used to retrieve the event context
+        event_slug: Event slug identifier used to retrieve the event context
 
     Returns:
         JsonResponse: JSON response containing either success message with
@@ -824,7 +824,7 @@ def discount(request: HttpRequest, s: str) -> JsonResponse:
         return JsonResponse({"res": "ko", "msg": msg})
 
     # Get event context and validate discount feature availability
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
 
     if "discount" not in context["features"]:
         return error(_("Not available, kiddo"))
@@ -963,7 +963,7 @@ def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, even
 
 
 @login_required
-def discount_list(request: HttpRequest, s: str) -> JsonResponse:
+def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Get list of valid discount items for the current user and event run.
 
     This function retrieves all non-expired discount items for the authenticated user
@@ -971,13 +971,13 @@ def discount_list(request: HttpRequest, s: str) -> JsonResponse:
 
     Args:
         request: The HTTP request object containing user authentication
-        s: String identifier for the event run
+        event_slug: Event slug identifier
 
     Returns:
         JsonResponse containing a list of discount items with name, value, and expiration
     """
     # Get the event run context from the request and identifier
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     now = timezone_now()
 
     # Bulk delete expired discount items for this user and run
@@ -1007,17 +1007,17 @@ def discount_list(request: HttpRequest, s: str) -> JsonResponse:
 
 
 @login_required
-def unregister(request, s):
+def unregister(request, event_slug):
     """Handle user self-unregistration from an event.
 
     Args:
         request: HTTP request object from authenticated user
-        s: Event slug string
+        event_slug: Event slug string
 
     Returns:
         HttpResponse: Confirmation form or redirect to accounting page after cancellation
     """
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
 
     # check if user is actually registered
     try:
@@ -1038,7 +1038,7 @@ def unregister(request, s):
 
 
 @login_required
-def gift(request: HttpRequest, s: str) -> HttpResponse:
+def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display gift registrations and their payment status for the current user.
 
     This view shows all gift registrations (registrations with redeem codes) for the
@@ -1047,7 +1047,7 @@ def gift(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        s: The event slug string used to identify the specific event
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponse: Rendered gift.html template containing the registration list
@@ -1058,7 +1058,7 @@ def gift(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If registration is not open or user lacks permissions
     """
     # Get event context and verify registration access
-    context = get_event_run(request, s, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_run(request, event_slug, signup=False, feature_slug="gift", include_status=True)
     check_registration_open(context, request)
 
     # Filter registrations for current user with redeem codes (gift registrations)
@@ -1096,7 +1096,7 @@ def check_registration_open(context, request):
 
 
 @login_required
-def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
+def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
     """Handle gift registration modifications.
 
     This function manages the editing of gift registrations, allowing users to
@@ -1105,7 +1105,7 @@ def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user data and form submission
-        s: The event slug identifier used to locate the specific event
+        event_slug: Event identifier string used to locate the specific event
         r: The registration ID for the gift card being edited
 
     Returns:
@@ -1117,7 +1117,7 @@ def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
         PermissionDenied: If user lacks permission to edit gift registrations
     """
     # Get event context and verify user has gift management permissions
-    context = get_event_run(request, s, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_run(request, event_slug, signup=False, feature_slug="gift", include_status=True)
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
@@ -1140,7 +1140,7 @@ def gift_edit(request: HttpRequest, s: str, r: int) -> HttpResponse:
                 messages.success(request, _("Operation completed") + "!")
 
             # Redirect back to gift list after successful operation
-            return redirect("gift", s=s)
+            return redirect("gift", event_slug=event_slug)
     else:
         # Handle GET requests by creating a new form with existing data
         form = RegistrationGiftForm(context=context, instance=reg)
@@ -1190,7 +1190,7 @@ def get_registration_gift(context: dict, r: int | None, request) -> Registration
 
 
 @login_required
-def gift_redeem(request: HttpRequest, s: str, code: str) -> HttpResponse:
+def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
     """
     Handle gift code redemption for event registrations.
 
@@ -1213,12 +1213,12 @@ def gift_redeem(request: HttpRequest, s: str, code: str) -> HttpResponse:
                 and association constraints
     """
     # Get event context and validate user permissions for gift redemption
-    context = get_event_run(request, s, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_run(request, event_slug, signup=False, feature_slug="gift", include_status=True)
 
     # Check if user is already registered for this event
     if context["run"].reg:
         messages.success(request, _("You cannot redeem a membership, you are already a member!"))
-        return redirect("gallery", s=context["run"].get_slug())
+        return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Attempt to find valid registration with the provided redemption code
     try:
@@ -1240,7 +1240,7 @@ def gift_redeem(request: HttpRequest, s: str, code: str) -> HttpResponse:
 
         # Notify user of successful redemption and redirect to event gallery
         messages.success(request, _("Your gifted registration has been redeemed!"))
-        return redirect("gallery", s=context["run"].get_slug())
+        return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Add registration object to context for template rendering
     context["reg"] = reg

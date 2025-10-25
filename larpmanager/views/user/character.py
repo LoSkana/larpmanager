@@ -81,19 +81,19 @@ from larpmanager.views.user.casting import casting_details, get_casting_preferen
 from larpmanager.views.user.registration import init_form_submitted
 
 
-def character(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def character(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Return character sheet for specified character in event run.
 
     Args:
         request: HTTP request object
-        s: Event run slug identifier
+        event_slug: Event run slug identifier
         num: Character number/ID
 
     Returns:
         Rendered character sheet response
     """
     # Get event run context and verify status
-    context = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, event_slug, include_status=True)
 
     # Validate character access permissions
     get_char_check(request, context, num)
@@ -124,12 +124,12 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     # Check if characters are visible to regular users (non-staff)
     if "check" not in context and not context["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
-        return redirect("gallery", s=context["run"].get_slug())
+        return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Verify individual character visibility settings
     if "check" not in context and context["char"]["hide"]:
         messages.warning(request, _("Character not visible"))
-        return redirect("gallery", s=context["run"].get_slug())
+        return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Determine access level and load appropriate character data
     is_staff_view = "check" in context
@@ -154,7 +154,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     return render(request, "larpmanager/event/character.html", context)
 
 
-def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
+def character_external(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
     """Display character sheet via external access token.
 
     This function provides external access to character sheets when enabled for an event.
@@ -162,7 +162,7 @@ def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user session and metadata
-        s: Event slug identifier used to locate the specific event
+        event_slug: Event slug identifier used to locate the specific event
         code: External access token for character authentication
 
     Returns:
@@ -173,7 +173,7 @@ def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
                 access token is invalid or doesn't match any character
     """
     # Get event and run context from the provided slug
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
 
     # Check if external access feature is enabled for this event
     if not get_event_config(context["event"].id, "writing_external_access", False, context):
@@ -228,7 +228,7 @@ def character_your_link(context: dict, character, path: str = None) -> str:
 
 
 @login_required
-def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
+def character_your(request: HttpRequest, event_slug: str, p: str = None) -> HttpResponse:
     """Display user's character information.
 
     Shows the character information page for the authenticated user. If the user has
@@ -237,7 +237,7 @@ def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
 
     Args:
         request: HTTP request object containing user authentication and session data
-        s: Event slug identifier for the specific event
+        event_slug: Event slug identifier for the specific event
         p: Optional character parameter for additional filtering or display options
 
     Returns:
@@ -248,7 +248,7 @@ def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
         Redirect: To home page if user has no assigned characters for the event
     """
     # Get event and run context with signup and status validation
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
 
     # Retrieve all registration character relationships for this run
     # Use select_related to optimize database queries for character data
@@ -341,7 +341,7 @@ def character_form(
             elif isinstance(character, RegistrationCharacterRel):
                 character_number = character.character.number
             # Redirect to character detail page
-            return redirect("character", s=event_slug, num=character_number)
+            return redirect("character", event_slug=event_slug, num=character_number)
     else:
         # Initialize empty form for GET requests
         form = form_class(instance=instance, context=context)
@@ -393,13 +393,13 @@ def _update_character(context: dict, character: Character, form: Form, message: 
 
 
 @login_required
-def character_customize(request, s, num):
+def character_customize(request, event_slug, num):
     """
     Handle character customization form with profile and custom fields.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         num: Character number
 
     Returns:
@@ -408,7 +408,7 @@ def character_customize(request, s, num):
     Raises:
         Http404: If character doesn't belong to user
     """
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
 
     get_char_check(request, context, num, True)
 
@@ -422,13 +422,13 @@ def character_customize(request, s, num):
         if get_event_config(context["event"].id, "custom_character_profile", False, context):
             context["avatar_form"] = AvatarForm()
 
-        return character_form(request, context, s, rgr, RegistrationCharacterRelForm)
+        return character_form(request, context, event_slug, rgr, RegistrationCharacterRelForm)
     except ObjectDoesNotExist as err:
         raise Http404("not your char!") from err
 
 
 @login_required
-def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResponse:
+def character_profile_upload(request: HttpRequest, event_slug: str, num: int) -> JsonResponse:
     """
     Handle character profile image upload via AJAX.
 
@@ -437,7 +437,7 @@ def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResp
 
     Args:
         request: HTTP request object containing the uploaded file in POST data
-        s: Event slug identifier for the target event
+        event_slug: Event slug identifier for the target event
         num: Character number within the event registration
 
     Returns:
@@ -458,7 +458,7 @@ def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResp
         return JsonResponse({"res": "ko"})
 
     # Get event context and validate user permissions
-    context = get_event_run(request, s, signup=True)
+    context = get_event_run(request, event_slug, signup=True)
     registration_find(context["run"], request.user, None)
     get_char_check(request, context, num, True)
 
@@ -487,7 +487,7 @@ def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResp
 
 
 @login_required
-def character_profile_rotate(request: HttpRequest, s: str, num: int, r: int) -> JsonResponse:
+def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, r: int) -> JsonResponse:
     """
     Rotate character profile image by specified degrees.
 
@@ -504,7 +504,7 @@ def character_profile_rotate(request: HttpRequest, s: str, num: int, r: int) -> 
         ObjectDoesNotExist: When character registration relationship not found
     """
     # Get event context and validate character access permissions
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, num, True)
 
     # Retrieve character registration relationship with related objects
@@ -542,18 +542,18 @@ def character_profile_rotate(request: HttpRequest, s: str, num: int, r: int) -> 
 
 
 @login_required
-def character_list(request, s):
+def character_list(request, event_slug):
     """
     Display list of player's characters for an event with customization fields.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
 
     Returns:
         HttpResponse: Rendered character list template
     """
-    context = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_run(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
     context["list"] = get_player_characters(request.user.member, context["event"])
     # add character configs
@@ -572,44 +572,44 @@ def character_list(request, s):
 
 
 @login_required
-def character_create(request, s):
+def character_create(request, event_slug):
     """
     Handle character creation with maximum character validation.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
 
     Returns:
         HttpResponse: Character creation form or redirect
     """
-    context = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_run(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
     check, _max_chars = check_character_maximum(context["event"], request.user.member)
     if check:
         messages.success(request, _("You have reached the maximum number of characters that can be created"))
-        return redirect("character_list", s=s)
+        return redirect("character_list", event_slug=event_slug)
 
     context["class_name"] = "character"
-    return character_form(request, context, s, None, CharacterForm)
+    return character_form(request, context, event_slug, None, CharacterForm)
 
 
 @login_required
-def character_edit(request, s, num):
+def character_edit(request, event_slug, num):
     """
     Handle character editing form for specific character.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         num: Character number
 
     Returns:
         HttpResponse: Character editing form
     """
-    context = get_event_run(request, s, include_status=True, signup=True)
+    context = get_event_run(request, event_slug, include_status=True, signup=True)
     get_char_check(request, context, num, True)
-    return character_form(request, context, s, context["character"], CharacterForm)
+    return character_form(request, context, event_slug, context["character"], CharacterForm)
 
 
 def get_options_dependencies(context: dict) -> None:
@@ -644,19 +644,19 @@ def get_options_dependencies(context: dict) -> None:
 
 
 @login_required
-def character_assign(request, s, num):
+def character_assign(request, event_slug, num):
     """
     Assign character to user's registration if not already assigned.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         num: Character number
 
     Returns:
         HttpResponse: Redirect to character list
     """
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, num, True)
     if RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
@@ -664,11 +664,11 @@ def character_assign(request, s, num):
         RegistrationCharacterRel.objects.create(reg_id=context["run"].reg.id, character_id=context["character"].id)
         messages.success(request, _("Assigned character!"))
 
-    return redirect("character_list", s=s)
+    return redirect("character_list", event_slug=event_slug)
 
 
 @login_required
-def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def character_abilities(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """
     Display character abilities with available and current abilities organized by type.
 
@@ -678,7 +678,7 @@ def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user data and method info
-        s: The event slug identifier for the current event
+        event_slug: Event identifier string for the current event
         num: The character number/ID to display abilities for
 
     Returns:
@@ -690,7 +690,7 @@ def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
         PermissionDenied: If user lacks permission to view character abilities
     """
     # Initialize context with character and permission checks
-    context = check_char_abilities(request, s, num)
+    context = check_char_abilities(request, event_slug, num)
 
     # Build available abilities dictionary organized by ability type
     context["available"] = {}
@@ -759,13 +759,13 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_num: i
 
 
 @login_required
-def character_abilities_del(request, s, num, id_del):
+def character_abilities_del(request, event_slug, num, id_del):
     """
     Remove character ability with validation and dependency handling.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         num: Character number
         id_del: Ability ID to delete
 
@@ -775,7 +775,7 @@ def character_abilities_del(request, s, num, id_del):
     Raises:
         Http404: If ability is outside undo window
     """
-    context = check_char_abilities(request, s, num)
+    context = check_char_abilities(request, event_slug, num)
     undo_abilities = get_undo_abilities(request, context, context["character"])
     if id_del not in undo_abilities:
         raise Http404("ability out of undo window")
@@ -785,7 +785,7 @@ def character_abilities_del(request, s, num, id_del):
         context["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
-    return redirect("character_abilities", s=context["run"].get_slug(), num=context["character"].number)
+    return redirect("character_abilities", event_slug=context["run"].get_slug(), num=context["character"].number)
 
 
 def _save_character_abilities(context, request):
@@ -851,7 +851,7 @@ def get_undo_abilities(request, context, char, new_ability_id=None):
 
 
 @login_required
-def character_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def character_relationships(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """
     Display character relationships with other characters in the event.
 
@@ -861,7 +861,7 @@ def character_relationships(request: HttpRequest, s: str, num: int) -> HttpRespo
 
     Args:
         request: HTTP request object containing user session and data
-        s: Event slug identifier for URL routing
+        event_slug: Event slug identifier for URL routing
         num: Character number to display relationships for
 
     Returns:
@@ -873,7 +873,7 @@ def character_relationships(request: HttpRequest, s: str, num: int) -> HttpRespo
         PermissionDenied: If user lacks permission to view character
     """
     # Get event context and validate user access to event and character
-    context = get_event_run(request, s, include_status=True, signup=True)
+    context = get_event_run(request, event_slug, include_status=True, signup=True)
     get_char_check(request, context, num, True)
 
     # Load all cached event data for performance
@@ -911,20 +911,20 @@ def character_relationships(request: HttpRequest, s: str, num: int) -> HttpRespo
 
 
 @login_required
-def character_relationships_edit(request, s, num, oth):
+def character_relationships_edit(request, event_slug, num, oth):
     """
     Handle editing of character relationship with another character.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         num: Character number
         oth: Other character number for relationship
 
     Returns:
         HttpResponse: Relationship edit form or redirect
     """
-    context = get_event_run(request, s, include_status=True, signup=True)
+    context = get_event_run(request, event_slug, include_status=True, signup=True)
     get_char_check(request, context, num, True)
 
     context["relationship"] = None
@@ -932,7 +932,7 @@ def character_relationships_edit(request, s, num, oth):
         get_player_relationship(context, oth)
 
     if user_edit(request, context, PlayerRelationshipForm, "relationship", oth):
-        return redirect("character_relationships", s=context["run"].get_slug(), num=context["char"]["number"])
+        return redirect("character_relationships", event_slug=context["run"].get_slug(), num=context["char"]["number"])
     return render(request, "larpmanager/orga/edit.html", context)
 
 

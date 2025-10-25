@@ -119,12 +119,12 @@ urlpatterns = [
         name="activate_feature_assoc",
     ),
     path(
-        "<slug:s>/activate/<slug:cod>/next/<path:p>",
+        "<slug:event_slug>/activate/<slug:cod>/next/<path:p>",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
     path(
-        "<slug:s>/activate/<slug:cod>/",
+        "<slug:event_slug>/activate/<slug:cod>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
@@ -149,7 +149,7 @@ urlpatterns = [
         name="ticket",
     ),
     path(
-        "ticket/<slug:s>/",
+        "ticket/<slug:reason>/",
         views_lm.ticket,
         name="ticket",
     ),
@@ -164,7 +164,7 @@ urlpatterns = [
         name="debug_slug",
     ),
     path(
-        "debug/<slug:s>/",
+        "debug/<slug:assoc_slug>/",
         views_lm.debug_slug,
         name="debug_slug",
     ),
