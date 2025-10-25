@@ -211,15 +211,15 @@ def get_event_template(context, template_id):
         raise NotFoundError() from err
 
 
-def get_char(ctx, character_identifier, by_number=False):
+def get_char(context, character_identifier, by_number=False):
     """Get character by ID or number and add to context.
 
     Args:
-        ctx: Template context dictionary
+        context: Template context dictionary
         character_identifier: Character ID or number
         by_number: Whether to search by number instead of ID
     """
-    get_element(ctx, character_identifier, "character", Character, by_number)
+    get_element(context, character_identifier, "character", Character, by_number)
 
 
 def get_registration(context, registration_id):
@@ -239,19 +239,19 @@ def get_registration(context, registration_id):
         raise Http404("Registration does not exist") from err
 
 
-def get_discount(ctx, n):
+def get_discount(context, n):
     """Get discount by ID and add to context.
 
     Args:
-        ctx: Template context dictionary
+        context: Template context dictionary
         n: Discount ID
 
     Raises:
         Http404: If discount does not exist
     """
     try:
-        ctx["discount"] = Discount.objects.get(pk=n)
-        ctx["name"] = str(ctx["discount"])
+        context["discount"] = Discount.objects.get(pk=n)
+        context["name"] = str(context["discount"])
     except ObjectDoesNotExist as err:
         raise Http404("Discount does not exist") from err
 
@@ -286,9 +286,9 @@ def get_feature(context, feature_slug):
         raise Http404("Feature does not exist") from err
 
 
-def get_feature_module(ctx, num):
+def get_feature_module(context, num):
     try:
-        ctx["feature_module"] = FeatureModule.objects.get(pk=num)
+        context["feature_module"] = FeatureModule.objects.get(pk=num)
     except ObjectDoesNotExist as err:
         raise Http404("FeatureModule does not exist") from err
 
@@ -326,10 +326,10 @@ def get_handout(context, handout_id):
         raise Http404("handout does not exist") from err
 
 
-def get_handout_template(ctx, n):
+def get_handout_template(context, n):
     try:
-        ctx["handout_template"] = HandoutTemplate.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = ctx["handout_template"].name
+        context["handout_template"] = HandoutTemplate.objects.get(event=context["event"], pk=n)
+        context["name"] = context["handout_template"].name
     except ObjectDoesNotExist as err:
         raise Http404("handout_template does not exist") from err
 
@@ -338,10 +338,10 @@ def get_prologue(context, prologue_number):
     get_element(context, prologue_number, "prologue", Prologue)
 
 
-def get_prologue_type(ctx, n):
+def get_prologue_type(context, n):
     try:
-        ctx["prologue_type"] = PrologueType.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = str(ctx["prologue_type"])
+        context["prologue_type"] = PrologueType.objects.get(event=context["event"], pk=n)
+        context["name"] = str(context["prologue_type"])
     except ObjectDoesNotExist as err:
         raise Http404("prologue_type does not exist") from err
 
@@ -381,25 +381,27 @@ def get_collection_redeem(request, cod):
         raise Http404("Collection does not exist") from err
 
 
-def get_workshop(ctx, n):
+def get_workshop(context, n):
     try:
-        ctx["workshop"] = WorkshopModule.objects.get(event=ctx["event"], pk=n)
+        context["workshop"] = WorkshopModule.objects.get(event=context["event"], pk=n)
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopModule does not exist") from err
 
 
-def get_workshop_question(ctx, n, mod):
+def get_workshop_question(context, n, mod):
     try:
-        ctx["workshop_question"] = WorkshopQuestion.objects.get(module__event=ctx["event"], pk=n, module__pk=mod)
+        context["workshop_question"] = WorkshopQuestion.objects.get(
+            module__event=context["event"], pk=n, module__pk=mod
+        )
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopQuestion does not exist") from err
 
 
-def get_workshop_option(ctx: dict, m: int) -> None:
+def get_workshop_option(context: dict, m: int) -> None:
     """Get workshop option by ID and validate it belongs to the current event.
 
     Args:
-        ctx: Context dictionary to store the workshop option
+        context: Context dictionary to store the workshop option
         m: Workshop option primary key
 
     Raises:
@@ -407,17 +409,17 @@ def get_workshop_option(ctx: dict, m: int) -> None:
     """
     try:
         # Retrieve workshop option by primary key
-        ctx["workshop_option"] = WorkshopOption.objects.get(pk=m)
+        context["workshop_option"] = WorkshopOption.objects.get(pk=m)
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopOption does not exist") from err
 
     # Validate workshop option belongs to current event
-    if ctx["workshop_option"].question.module.event != ctx["event"]:
+    if context["workshop_option"].question.module.event != context["event"]:
         raise Http404("wrong event")
 
 
 def get_element(
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     primary_key: Union[int, str],
     context_key_name: str,
     model_class: type[BaseModel],
@@ -431,7 +433,7 @@ def get_element(
     model's primary key or by a 'number' field.
 
     Args:
-        ctx: Context dictionary that must contain an 'event' key with a model instance
+        context: Context dictionary that must contain an 'event' key with a model instance
             that has a `get_class_parent()` method. The retrieved object will be added
             to this dictionary under the key specified by `context_key_name`.
         primary_key: The identifier used to look up the model instance. Either a primary
@@ -443,52 +445,52 @@ def get_element(
         by_number: If True, lookup by 'number' field instead of primary key. Defaults to False.
 
     Returns:
-        None. Modifies the `ctx` dictionary in place by adding:
-            - ctx[context_key_name]: The retrieved model instance
-            - ctx["class_name"]: Set to the value of `context_key_name`
+        None. Modifies the `context` dictionary in place by adding:
+            - context[context_key_name]: The retrieved model instance
+            - context["class_name"]: Set to the value of `context_key_name`
 
     Raises:
         Http404: If the requested object does not exist in the database.
 
     Example:
-        >>> ctx = {"event": some_event_instance}
-        >>> get_element(ctx, 42, "ticket", Ticket, by_number=True)
-        >>> # ctx now contains: {"event": ..., "ticket": <Ticket>, "class_name": "ticket"}
+        >>> context = {"event": some_event_instance}
+        >>> get_element(context, 42, "ticket", Ticket, by_number=True)
+        >>> # context now contains: {"event": ..., "ticket": <Ticket>, "class_name": "ticket"}
     """
     try:
         # Get the parent event associated with the current event in context
-        parent_event = ctx["event"].get_class_parent(model_class)
+        parent_event = context["event"].get_class_parent(model_class)
 
         if by_number:
             # Lookup by 'number' field (e.g., ticket number, order number)
-            ctx[context_key_name] = model_class.objects.get(event=parent_event, number=primary_key)
+            context[context_key_name] = model_class.objects.get(event=parent_event, number=primary_key)
         else:
             # Lookup by primary key (default behavior)
-            ctx[context_key_name] = model_class.objects.get(event=parent_event, pk=primary_key)
+            context[context_key_name] = model_class.objects.get(event=parent_event, pk=primary_key)
 
         # Store the context key name for potential later reference
-        ctx["class_name"] = context_key_name
+        context["class_name"] = context_key_name
 
     except ObjectDoesNotExist as err:
         # Raise a user-friendly 404 error if the object doesn't exist
         raise Http404(f"{context_key_name} does not exist") from err
 
 
-def get_relationship(ctx: dict, num: int) -> None:
+def get_relationship(context: dict, num: int) -> None:
     """Retrieves a relationship by ID and validates it belongs to the event."""
     try:
-        ctx["relationship"] = Relationship.objects.get(pk=num)
+        context["relationship"] = Relationship.objects.get(pk=num)
     except ObjectDoesNotExist as err:
         raise Http404("relationship does not exist") from err
 
     # Validate relationship belongs to the current event
-    if ctx["relationship"].source.event_id != ctx["event"].id:
+    if context["relationship"].source.event_id != context["event"].id:
         raise Http404("wrong event")
 
 
-def get_player_relationship(ctx, oth):
+def get_player_relationship(context, oth):
     try:
-        ctx["relationship"] = PlayerRelationship.objects.get(reg=ctx["run"].reg, target__number=oth)
+        context["relationship"] = PlayerRelationship.objects.get(reg=context["run"].reg, target__number=oth)
     except ObjectDoesNotExist as err:
         raise Http404("relationship does not exist") from err
 
@@ -646,7 +648,7 @@ def round_to_two_significant_digits(number: float | int) -> int:
     return int(rounded_decimal)
 
 
-def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
+def exchange_order(context: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
     """
     Exchange ordering positions between two elements in a sequence.
 
@@ -655,21 +657,21 @@ def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool,
     it simply increments or decrements the order value.
 
     Args:
-        ctx: Context dictionary to store the current element after operation.
+        context: Context dictionary to store the current element after operation.
         model_class: Model class of elements to reorder.
         element_id: Primary key of the element to move.
         move_up: Direction to move - True for up (increase order), False for down (decrease order).
         elements: Optional queryset of elements. Defaults to event elements if None.
 
     Returns:
-        None: Function modifies elements in-place and updates ctx['current'].
+        None: Function modifies elements in-place and updates context['current'].
 
     Note:
         The function handles edge cases where elements have the same order value
         by adjusting one of them to maintain proper ordering.
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or ctx["event"].get_elements(model_class)
+    elements = elements or context["event"].get_elements(model_class)
     current_element = elements.get(pk=element_id)
 
     # Determine direction: move_up=True means move up (increase order), False means down
@@ -693,7 +695,7 @@ def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool,
     if not adjacent_element:
         current_element.order += 1 if move_up else -1
         current_element.save()
-        ctx["current"] = current_element
+        context["current"] = current_element
         return
 
     # Exchange ordering values between current and adjacent element
@@ -706,7 +708,7 @@ def exchange_order(ctx: dict, model_class: type, element_id: int, move_up: bool,
     # Save both elements and update context
     current_element.save()
     adjacent_element.save()
-    ctx["current"] = current_element
+    context["current"] = current_element
 
 
 def normalize_string(input_string: str) -> str:
@@ -769,17 +771,17 @@ def copy_class(target_event_id, source_event_id, model_class):
             logging.warning(f"found exp: {error}")
 
 
-def get_payment_methods_ids(ctx):
+def get_payment_methods_ids(context):
     """
     Get set of payment method IDs for an association.
 
     Args:
-        ctx: Context dictionary containing association ID
+        context: Context dictionary containing association ID
 
     Returns:
         set: Set of payment method primary keys
     """
-    return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
+    return set(Association.objects.get(pk=context["a_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):

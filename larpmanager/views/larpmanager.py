@@ -76,32 +76,32 @@ def lm_home(request):
     Returns:
         HttpResponse: Rendered home page template with context data
     """
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
+    context = get_lm_contact(request)
+    context["index"] = True
 
     if request.assoc["base_domain"] == "ludomanager.it":
-        return ludomanager(ctx, request)
+        return ludomanager(context, request)
 
-    ctx.update(get_cache_lm_home())
-    random.shuffle(ctx["promoters"])
-    random.shuffle(ctx["reviews"])
+    context.update(get_cache_lm_home())
+    random.shuffle(context["promoters"])
+    random.shuffle(context["reviews"])
 
-    return render(request, "larpmanager/larpmanager/home.html", ctx)
+    return render(request, "larpmanager/larpmanager/home.html", context)
 
 
-def ludomanager(ctx, request):
+def ludomanager(context, request):
     """Render the LudoManager skin version of the home page.
 
     Args:
-        ctx: Context dictionary to update
+        context: Context dictionary to update
         request: Django HTTP request object
 
     Returns:
         HttpResponse: Rendered LudoManager template
     """
-    ctx["assoc_skin"] = "LudoManager"
-    ctx["platform"] = "LudoManager"
-    return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
+    context["assoc_skin"] = "LudoManager"
+    context["platform"] = "LudoManager"
+    return render(request, "larpmanager/larpmanager/skin/ludomanager.html", context)
 
 
 @csrf_exempt
@@ -117,7 +117,7 @@ def contact(request):
     Returns:
         HttpResponse: Rendered contact template with form or success state
     """
-    ctx = {}
+    context = {}
     done = False
     if request.POST:
         form = LarpManagerContact(request.POST, request=request)
@@ -132,9 +132,9 @@ def contact(request):
         form = LarpManagerContact(request=request)
 
     if not done:
-        ctx["form"] = form
+        context["form"] = form
 
-    return render(request, "larpmanager/larpmanager/contact.html", ctx)
+    return render(request, "larpmanager/larpmanager/contact.html", context)
 
 
 def go_redirect(request, slug, path, base_domain="larpmanager.com"):
@@ -354,13 +354,13 @@ def activate_feature_event(request: HttpRequest, s: str, cod: str, p: str = None
         raise Http404("feature overall")
 
     # Get event context and verify user has permission to manage features
-    ctx = get_event_run(request, s)
-    if not has_event_permission(request, {}, ctx["event"].slug, "orga_features"):
+    context = get_event_run(request, s)
+    if not has_event_permission(request, {}, context["event"].slug, "orga_features"):
         raise PermissionError()
 
     # Add the feature to the event's feature set and persist changes
-    ctx["event"].features.add(feature)
-    ctx["event"].save()
+    context["event"].features.add(feature)
+    context["event"].save()
 
     # Display success message to user with feature name
     messages.success(request, _("Feature activated") + ":" + feature.name)
@@ -454,9 +454,9 @@ def ticket(request, s=""):
     Returns:
         HttpResponse: Rendered ticket form or redirect after successful submission
     """
-    ctx = {"reason": s}
+    context = {"reason": s}
     if request.POST:
-        form = LarpManagerTicketForm(request.POST, request.FILES, request=request, ctx=ctx)
+        form = LarpManagerTicketForm(request.POST, request.FILES, request=request, context=context)
         if form.is_valid():
             lm_ticket = form.save(commit=False)
             lm_ticket.assoc_id = request.assoc["id"]
@@ -468,9 +468,9 @@ def ticket(request, s=""):
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
-        form = LarpManagerTicketForm(request=request, ctx=ctx)
-    ctx["form"] = form
-    return render(request, "larpmanager/member/ticket.html", ctx)
+        form = LarpManagerTicketForm(request=request, context=context)
+    context["form"] = form
+    return render(request, "larpmanager/member/ticket.html", context)
 
 
 def is_suspicious_user_agent(user_agent_string):
@@ -510,8 +510,8 @@ def discord(request):
             return redirect("https://discord.gg/C4KuyQbuft")
     else:
         form = LarpManagerCheck(request=request)
-    ctx = {"form": form}
-    return render(request, "larpmanager/larpmanager/discord.html", ctx)
+    context = {"form": form}
+    return render(request, "larpmanager/larpmanager/discord.html", context)
 
 
 @login_required
@@ -527,11 +527,11 @@ def join(request):
     Returns:
         HttpResponse: Rendered join form or redirect after successful joining
     """
-    ctx = get_lm_contact(request)
-    if "red" in ctx:
-        return redirect(ctx["red"])
+    context = get_lm_contact(request)
+    if "red" in context:
+        return redirect(context["red"])
 
-    joined_association = _join_form(ctx, request)
+    joined_association = _join_form(context, request)
     if joined_association:
         # send message
         messages.success(request, _("Welcome to %(name)s!") % {"name": request.assoc["name"]})
@@ -541,17 +541,17 @@ def join(request):
         # redirect
         return redirect("after_login", subdomain=joined_association.slug, path="manage")
 
-    return render(request, "larpmanager/larpmanager/join.html", ctx)
+    return render(request, "larpmanager/larpmanager/join.html", context)
 
 
-def _join_form(ctx: dict, request) -> Association | None:
+def _join_form(context: dict, request) -> Association | None:
     """Process association creation form for new users.
 
     Handles form validation, association creation, user role assignment,
     and admin notifications for new organizations.
 
     Args:
-        ctx: Context dictionary to update with form data.
+        context: Context dictionary to update with form data.
         request: Django HTTP request object containing POST data and user info.
 
     Returns:
@@ -559,7 +559,7 @@ def _join_form(ctx: dict, request) -> Association | None:
         None if GET request or form validation fails.
 
     Note:
-        Updates ctx dictionary with form instance for template rendering.
+        Updates context dictionary with form instance for template rendering.
         Sends email notifications to all configured admins upon successful creation.
     """
     if request.method == "POST":
@@ -599,7 +599,7 @@ def _join_form(ctx: dict, request) -> Association | None:
         form = FirstAssociationForm()
 
     # Add form to context for template rendering
-    ctx["form"] = form
+    context["form"] = form
     return None
 
 
@@ -616,10 +616,10 @@ def discover(request):
     Returns:
         HttpResponse: Rendered discover page template
     """
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
-    ctx["discover"] = LarpManagerDiscover.objects.order_by("order")
-    return render(request, "larpmanager/larpmanager/discover.html", ctx)
+    context = get_lm_contact(request)
+    context["index"] = True
+    context["discover"] = LarpManagerDiscover.objects.order_by("order")
+    return render(request, "larpmanager/larpmanager/discover.html", context)
 
 
 @override("en")
@@ -640,8 +640,8 @@ def tutorials(request: HttpRequest, slug: Optional[str] = None) -> HttpResponse:
         Http404: If tutorial with specified slug doesn't exist.
     """
     # Initialize base context with contact information
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
+    context = get_lm_contact(request)
+    context["index"] = True
 
     try:
         # Get tutorial by slug or fetch first tutorial by order
@@ -649,35 +649,35 @@ def tutorials(request: HttpRequest, slug: Optional[str] = None) -> HttpResponse:
             tutorial = LarpManagerTutorial.objects.get(slug=slug)
         else:
             tutorial = LarpManagerTutorial.objects.order_by("order").first()
-            ctx["intro"] = True
+            context["intro"] = True
     except ObjectDoesNotExist as err:
         raise Http404("tutorial not found") from err
 
     if tutorial:
         # Set current tutorial order for navigation
         order = tutorial.order
-        ctx["seq"] = order
+        context["seq"] = order
 
         # Get all tutorials ordered by sequence for navigation
         que = LarpManagerTutorial.objects.order_by("order")
-        ctx["list"] = que.values_list("name", "order", "slug")
+        context["list"] = que.values_list("name", "order", "slug")
 
         # Initialize navigation links
-        ctx["next"] = None
-        ctx["prev"] = None
+        context["next"] = None
+        context["prev"] = None
 
         # Find previous and next tutorials based on order
-        for el in ctx["list"]:
+        for el in context["list"]:
             if el[1] < order:
-                ctx["prev"] = el
-            if el[1] > order and not ctx["next"]:
-                ctx["next"] = el
+                context["prev"] = el
+            if el[1] > order and not context["next"]:
+                context["next"] = el
 
     # Check if page should be displayed in iframe
-    ctx["iframe"] = request.GET.get("in_iframe") == "1"
-    ctx["opened"] = tutorial
+    context["iframe"] = request.GET.get("in_iframe") == "1"
+    context["opened"] = tutorial
 
-    return render(request, "larpmanager/larpmanager/tutorials.html", ctx)
+    return render(request, "larpmanager/larpmanager/tutorials.html", context)
 
 
 @cache_page(60 * 15)
@@ -690,10 +690,10 @@ def guides(request):
     Returns:
         HttpResponse: Rendered guides template with list of published guides
     """
-    ctx = get_lm_contact(request)
-    ctx["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
-    ctx["index"] = True
-    return render(request, "larpmanager/larpmanager/guides.html", ctx)
+    context = get_lm_contact(request)
+    context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    context["index"] = True
+    return render(request, "larpmanager/larpmanager/guides.html", context)
 
 
 def guide(request, slug):
@@ -709,19 +709,19 @@ def guide(request, slug):
     Raises:
         Http404: If guide with given slug is not found or not published
     """
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
+    context = get_lm_contact(request)
+    context["index"] = True
 
     try:
-        ctx["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
+        context["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
     except ObjectDoesNotExist as err:
         raise Http404("guide not found") from err
 
-    ctx["og_image"] = ctx["guide"].thumb.url
-    ctx["og_title"] = f"{ctx['guide'].title} - LarpManager"
-    ctx["og_description"] = f"{ctx['guide'].description} - LarpManager"
+    context["og_image"] = context["guide"].thumb.url
+    context["og_title"] = f"{context['guide'].title} - LarpManager"
+    context["og_description"] = f"{context['guide'].description} - LarpManager"
 
-    return render(request, "larpmanager/larpmanager/guide.html", ctx)
+    return render(request, "larpmanager/larpmanager/guide.html", context)
 
 
 @cache_page(60 * 15)
@@ -736,9 +736,9 @@ def privacy(request):
     Returns:
         HttpResponse: Rendered privacy policy page
     """
-    ctx = get_lm_contact(request)
-    ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
-    return render(request, "larpmanager/larpmanager/privacy.html", ctx)
+    context = get_lm_contact(request)
+    context.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
+    return render(request, "larpmanager/larpmanager/privacy.html", context)
 
 
 @cache_page(60 * 15)
@@ -753,9 +753,9 @@ def usage(request):
     Returns:
         HttpResponse: Rendered usage page
     """
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
-    return render(request, "larpmanager/larpmanager/usage.html", ctx)
+    context = get_lm_contact(request)
+    context["index"] = True
+    return render(request, "larpmanager/larpmanager/usage.html", context)
 
 
 @cache_page(60 * 15)
@@ -770,9 +770,9 @@ def about_us(request):
     Returns:
         HttpResponse: Rendered about us page
     """
-    ctx = get_lm_contact(request)
-    ctx["index"] = True
-    return render(request, "larpmanager/larpmanager/about_us.html", ctx)
+    context = get_lm_contact(request)
+    context["index"] = True
+    return render(request, "larpmanager/larpmanager/about_us.html", context)
 
 
 def get_lm_contact(request, check_main_site=True):
@@ -790,8 +790,8 @@ def get_lm_contact(request, check_main_site=True):
     """
     if check_main_site and request.assoc["id"] > 0:
         raise MainPageError(request)
-    ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
-    return ctx
+    context = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
+    return context
 
 
 @login_required
@@ -807,13 +807,13 @@ def lm_list(request):
     Returns:
         HttpResponse: Rendered association list page
     """
-    ctx = check_lm_admin(request)
+    context = check_lm_admin(request)
 
-    ctx["list"] = Association.objects.annotate(total_registrations=Count("events__runs__registrations")).order_by(
+    context["list"] = Association.objects.annotate(total_registrations=Count("events__runs__registrations")).order_by(
         "-total_registrations"
     )
 
-    return render(request, "larpmanager/larpmanager/list.html", ctx)
+    return render(request, "larpmanager/larpmanager/list.html", context)
 
 
 @login_required
@@ -834,15 +834,15 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks admin permissions (handled by check_lm_admin).
     """
     # Verify admin permissions and get base context
-    ctx = check_lm_admin(request)
+    context = check_lm_admin(request)
     min_registrations = 5
 
     # Get all unpaid runs ordered by start date
     que = Run.objects.filter(paid__isnull=True).order_by("start")
 
     # Initialize lists and totals for unpaid runs
-    ctx["list"] = []
-    ctx["total"] = 0
+    context["list"] = []
+    context["total"] = 0
 
     # Process each unpaid run
     for el in que:
@@ -858,12 +858,12 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
             continue
 
         # Add qualifying run to list and update total
-        ctx["list"].append(el)
-        ctx["total"] += el.total
+        context["list"].append(el)
+        context["total"] += el.total
 
     # Get the oldest run date to determine year range
     que = Run.objects.aggregate(oldest_date=Min("start"))
-    ctx["totals"] = {}
+    context["totals"] = {}
 
     # Calculate yearly payment totals from current year to oldest
     for year in list(range(datetime.today().year, que["oldest_date"].year - 1, -1)):
@@ -872,9 +872,9 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
 
         # Sum all paid amounts for runs in this year
         total_paid = Run.objects.filter(start__range=(start_of_year, end_of_year)).aggregate(total=Sum("paid"))["total"]
-        ctx["totals"][year] = total_paid
+        context["totals"][year] = total_paid
 
-    return render(request, "larpmanager/larpmanager/payments.html", ctx)
+    return render(request, "larpmanager/larpmanager/payments.html", context)
 
 
 def get_run_lm_payment(run):
@@ -936,7 +936,7 @@ def lm_send(request):
     Returns:
         HttpResponse: Rendered email form or redirect after sending
     """
-    ctx = check_lm_admin(request)
+    context = check_lm_admin(request)
     if request.method == "POST":
         form = SendMailForm(request.POST)
         if form.is_valid():
@@ -948,8 +948,8 @@ def lm_send(request):
             return redirect(request.path_info)
     else:
         form = SendMailForm()
-    ctx["form"] = form
-    return render(request, "larpmanager/exe/users/send_mail.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/exe/users/send_mail.html", context)
 
 
 @login_required
@@ -971,14 +971,14 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
         entries by total duration.
     """
     # Check admin permissions and get base context
-    ctx = check_lm_admin(request)
+    context = check_lm_admin(request)
 
     # Set time threshold to 7 days ago (168 hours)
     st = datetime.now() - timedelta(hours=168)
 
     # Aggregate data from individual executions by domain and view_func_name
     # Calculate average duration and total calls directly from execution records
-    ctx["res"] = (
+    context["res"] = (
         LarpManagerProfiler.objects.filter(created__gte=st)
         .values("domain", "view_func_name")
         .annotate(
@@ -994,7 +994,7 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
     )
 
     # Render the profiling template with aggregated performance data
-    return render(request, "larpmanager/larpmanager/profile.html", ctx)
+    return render(request, "larpmanager/larpmanager/profile.html", context)
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
@@ -1021,8 +1021,8 @@ def donate(request):
             return redirect("https://www.paypal.com/paypalme/mscanagatta")
     else:
         form = LarpManagerCheck(request=request)
-    ctx = {"form": form}
-    return render(request, "larpmanager/larpmanager/donate.html", ctx)
+    context = {"form": form}
+    return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
 def debug_user(request, mid):
@@ -1067,8 +1067,8 @@ def demo(request):
             return _create_demo(request)
     else:
         form = LarpManagerCheck(request=request)
-    ctx = {"form": form}
-    return render(request, "larpmanager/larpmanager/demo.html", ctx)
+    context = {"form": form}
+    return render(request, "larpmanager/larpmanager/demo.html", context)
 
 
 def _create_demo(request: HttpRequest) -> HttpResponseRedirect:

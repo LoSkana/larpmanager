@@ -127,55 +127,55 @@ def get_event_run(
         PermissionDenied: If user cannot access requested features
     """
     # Get base event context with run information
-    ctx = get_event(request, event_slug)
+    context = get_event(request, event_slug)
 
     # Validate user signup eligibility if requested
     if signup:
-        check_signup(request, ctx)
+        check_signup(request, context)
 
     # Verify feature access permissions for specific functionality
     if feature_slug:
-        check_event_feature(request, ctx, feature_slug)
+        check_event_feature(request, context, feature_slug)
 
     # Add registration status details to context
     if include_status:
-        registration_status(ctx["run"], request.user)
+        registration_status(context["run"], request.user)
 
     # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, ctx, event_slug):
-        get_index_event_permissions(ctx, request, event_slug)
-        ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
+    if has_event_permission(request, context, event_slug):
+        get_index_event_permissions(context, request, event_slug)
+        context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Set association slug from request or event object
     if hasattr(request, "assoc"):
-        ctx["assoc_slug"] = request.assoc["slug"]
+        context["assoc_slug"] = request.assoc["slug"]
     else:
-        ctx["assoc_slug"] = ctx["event"].assoc.slug
+        context["assoc_slug"] = context["event"].assoc.slug
 
     # Configure staff permissions for character management access
-    if has_event_permission(request, ctx, event_slug, "orga_characters"):
-        ctx["staff"] = "1"
-        ctx["skip"] = "1"
+    if has_event_permission(request, context, event_slug, "orga_characters"):
+        context["staff"] = "1"
+        context["skip"] = "1"
 
     # Finalize run context preparation and return complete context
-    prepare_run(ctx)
+    prepare_run(context)
 
-    return ctx
+    return context
 
 
-def prepare_run(ctx):
+def prepare_run(context):
     """Prepare run context with visibility and field configurations.
 
     Args:
-        ctx (dict): Event context to update
+        context (dict): Event context to update
 
     Side effects:
-        Updates ctx with run configuration, visibility settings, and writing fields
+        Updates context with run configuration, visibility settings, and writing fields
     """
-    run_configuration = get_cache_config_run(ctx["run"])
+    run_configuration = get_cache_config_run(context["run"])
 
-    if "staff" in ctx or not get_event_config(ctx["event"].id, "writing_field_visibility", False, ctx):
-        ctx["show_all"] = "1"
+    if "staff" in context or not get_event_config(context["event"].id, "writing_field_visibility", False, context):
+        context["show_all"] = "1"
 
         for writing_element in ["character", "faction", "quest", "trait"]:
             visibility_config_name = f"show_{writing_element}"
@@ -187,29 +187,29 @@ def prepare_run(ctx):
             additional_config_name = "show_addit"
             if additional_config_name not in run_configuration:
                 run_configuration[additional_config_name] = {}
-            if additional_feature in ctx["features"]:
+            if additional_feature in context["features"]:
                 run_configuration[additional_config_name][additional_feature] = True
 
-    ctx.update(run_configuration)
+    context.update(run_configuration)
 
-    ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
+    context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
 
-def get_run(ctx, s):
+def get_run(context, s):
     """Load run and event data from cache and database.
 
     Args:
-        ctx (dict): Context dictionary to update
+        context (dict): Context dictionary to update
         s (str): Run slug identifier
 
     Side effects:
-        Updates ctx with run and event objects
+        Updates context with run and event objects
 
     Raises:
         UnknowRunError: If run cannot be found
     """
     try:
-        res = get_cache_run(ctx["a_id"], s)
+        res = get_cache_run(context["a_id"], s)
         que = Run.objects.select_related("event")
         fields = [
             "search",
@@ -230,8 +230,8 @@ def get_run(ctx, s):
             "event__ter_rgb",
         ]
         que = que.defer(*fields)
-        ctx["run"] = que.get(pk=res)
-        ctx["event"] = ctx["run"].event
+        context["run"] = que.get(pk=res)
+        context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError() from err
 
@@ -314,25 +314,25 @@ def get_event_filter_characters(context, character_filters):
         context["factions"].append(default_faction)
 
 
-def has_access_character(request, ctx):
+def has_access_character(request, context):
     """Check if user has access to view/edit a specific character.
 
     Args:
         request: Django HTTP request object
-        ctx (dict): Context with character information
+        context (dict): Context with character information
 
     Returns:
         bool: True if user has access (organizer, owner, or player)
     """
-    if has_event_permission(request, ctx, ctx["event"].slug, "orga_characters"):
+    if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
     member_id = request.user.member.id
 
-    if "owner_id" in ctx["char"] and ctx["char"]["owner_id"] == member_id:
+    if "owner_id" in context["char"] and context["char"]["owner_id"] == member_id:
         return True
 
-    if "player_id" in ctx["char"] and ctx["char"]["player_id"] == member_id:
+    if "player_id" in context["char"] and context["char"]["player_id"] == member_id:
         return True
 
     return False
@@ -363,10 +363,10 @@ def check_event_permission(request, event_slug: str, required_permission: str | 
         FeatureError: If required feature is not enabled for the event
     """
     # Get basic event context and run information
-    ctx = get_event_run(request, event_slug)
+    context = get_event_run(request, event_slug)
 
     # Verify user has the required permissions for this event
-    if not has_event_permission(request, ctx, event_slug, required_permission):
+    if not has_event_permission(request, context, event_slug, required_permission):
         raise PermissionError()
 
     # Process permission-specific features and configuration
@@ -379,25 +379,25 @@ def check_event_permission(request, event_slug: str, required_permission: str | 
         (feature_name, tutorial_key, config_section) = get_event_permission_feature(required_permission)
 
         # Add tutorial information if not already present
-        if "tutorial" not in ctx:
-            ctx["tutorial"] = tutorial_key
+        if "tutorial" not in context:
+            context["tutorial"] = tutorial_key
 
         # Add configuration link if user has config permissions
-        if config_section and has_event_permission(request, ctx, event_slug, "orga_config"):
-            ctx["config"] = reverse("orga_config", args=[ctx["run"].get_slug(), config_section])
+        if config_section and has_event_permission(request, context, event_slug, "orga_config"):
+            context["config"] = reverse("orga_config", args=[context["run"].get_slug(), config_section])
 
         # Verify required feature is enabled for this event
-        if feature_name != "def" and feature_name not in ctx["features"]:
-            raise FeatureError(path=request.path, feature=feature_name, run=ctx["run"].id)
+        if feature_name != "def" and feature_name not in context["features"]:
+            raise FeatureError(path=request.path, feature=feature_name, run=context["run"].id)
 
     # Load additional event permissions and management context
-    get_index_event_permissions(ctx, request, event_slug)
+    get_index_event_permissions(context, request, event_slug)
 
     # Set management page flags
-    ctx["orga_page"] = 1
-    ctx["manage"] = 1
+    context["orga_page"] = 1
+    context["manage"] = 1
 
-    return ctx
+    return context
 
 
 def get_index_event_permissions(context, request, event_slug, enforce_check=True):

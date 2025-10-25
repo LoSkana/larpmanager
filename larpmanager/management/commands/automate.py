@@ -300,18 +300,18 @@ class Command(BaseCommand):
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
             # Build list of badge codes from member's badges
-            ch = []
-            for b in member.badges.all():
-                ch.append(b.cod)
+            badge_codes = []
+            for badge in member.badges.all():
+                badge_codes.append(badge.cod)
 
             # Cache the badge codes for this member
-            cache["players"][member.id] = ch
+            cache["players"][member.id] = badge_codes
 
         # Return cached badge codes
         return cache["players"][member.id]
 
     @staticmethod
-    def get_cache_badge(cache: dict, cod: str) -> Badge | None:
+    def get_cache_badge(badge_cache: dict, badge_code: str) -> Badge | None:
         """Get badge instance from cache or database.
 
         Retrieves a badge by code from the provided cache dictionary. If the badge
@@ -319,8 +319,8 @@ class Command(BaseCommand):
         it in the cache for future use.
 
         Args:
-            cache: Dictionary containing cached badge instances under 'badges' key
-            cod: Badge code string used to identify and retrieve the badge
+            badge_cache: Dictionary containing cached badge instances under 'badges' key
+            badge_code: Badge code string used to identify and retrieve the badge
 
         Returns:
             Badge instance if found in cache or database, None if not found or on error
@@ -330,12 +330,12 @@ class Command(BaseCommand):
         """
         try:
             # Check if badge code is not already cached
-            if cod not in cache["badges"]:
+            if badge_code not in badge_cache["badges"]:
                 # Fetch badge from database and store in cache
-                cache["badges"][cod] = Badge.objects.get(cod=cod)
+                badge_cache["badges"][badge_code] = Badge.objects.get(cod=badge_code)
 
             # Return cached badge instance
-            return cache["badges"][cod]
+            return badge_cache["badges"][badge_code]
         except Exception:
             # Return None on any error (badge not found, cache issues, etc.)
             return None

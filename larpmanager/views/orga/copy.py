@@ -139,7 +139,7 @@ def correct_relationship(e_id, p_id):
     for character in Character.objects.filter(event_id=e_id):
         target_character_number_to_id[character.number] = character.id
     # ~ field = 'character_id'
-    # ~ for obj in Registration.objects.filter(run_id=ctx['run'].id):
+    # ~ for obj in Registration.objects.filter(run_id=context['run'].id):
     # ~ v = getattr(obj, field)
     # ~ if v not in source_character_id_to_number:
     # ~ continue
@@ -499,16 +499,16 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         correct_workshop(target_event_id, parent_event_id)
 
 
-def copy_css(ctx, event, parent) -> None:
+def copy_css(context, event, parent) -> None:
     """Copy CSS file from parent event to current event.
 
     Args:
-        ctx: Context object
+        context: Context object
         event: Target event to copy CSS to
         parent: Source event to copy CSS from
     """
     # Initialize appearance form and get source CSS path
-    appearance_form = OrgaAppearanceForm(ctx=ctx)
+    appearance_form = OrgaAppearanceForm(context=context)
     source_css_path = appearance_form.get_css_path(parent)
 
     # Exit early if source CSS file doesn't exist
@@ -535,23 +535,23 @@ def orga_copy(request, s):
     Returns:
         HttpResponse: Rendered copy form template or redirect after successful copy
     """
-    ctx = check_event_permission(request, s, "orga_copy")
+    context = check_event_permission(request, s, "orga_copy")
 
     if request.method == "POST":
-        form = OrgaCopyForm(request.POST, request.FILES, ctx=ctx)
+        form = OrgaCopyForm(request.POST, request.FILES, context=context)
         if form.is_valid():
             pt = form.cleaned_data["parent"]
             targets = form.cleaned_data["target"]
-            parent = Event.objects.get(pk=pt, assoc_id=ctx["a_id"])
-            event = ctx["event"]
-            copy(request, ctx, parent, event, targets)
+            parent = Event.objects.get(pk=pt, assoc_id=context["a_id"])
+            event = context["event"]
+            copy(request, context, parent, event, targets)
 
     else:
-        form = OrgaCopyForm(ctx=ctx)
+        form = OrgaCopyForm(context=context)
 
-    ctx["form"] = form
+    context["form"] = form
 
-    return render(request, "larpmanager/orga/copy.html", ctx)
+    return render(request, "larpmanager/orga/copy.html", context)
 
 
 def get_all_fields_from_form(form_class, context):
@@ -563,9 +563,9 @@ def get_all_fields_from_form(form_class, context):
     :rtype: list
     """
 
-    fields = list(form_class(ctx=context).base_fields)
+    fields = list(form_class(context=context).base_fields)
 
-    for field_name in list(form_class(ctx=context).declared_fields):
+    for field_name in list(form_class(context=context).declared_fields):
         if field_name not in fields:
             fields.append(field_name)
 

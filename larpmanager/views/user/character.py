@@ -93,12 +93,12 @@ def character(request: HttpRequest, s: str, num: int) -> HttpResponse:
         Rendered character sheet response
     """
     # Get event run context and verify status
-    ctx = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, s, include_status=True)
 
     # Validate character access permissions
-    get_char_check(request, ctx, num)
+    get_char_check(request, context, num)
 
-    return _character_sheet(request, ctx)
+    return _character_sheet(request, context)
 
 
 def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
@@ -173,32 +173,32 @@ def character_external(request: HttpRequest, s: str, code: str) -> HttpResponse:
                 access token is invalid or doesn't match any character
     """
     # Get event and run context from the provided slug
-    ctx = get_event_run(request, s)
+    context = get_event_run(request, s)
 
     # Check if external access feature is enabled for this event
-    if not get_event_config(ctx["event"].id, "writing_external_access", False, ctx):
+    if not get_event_config(context["event"].id, "writing_external_access", False, context):
         raise Http404("external access not active")
 
     # Attempt to retrieve character using the provided access token
     try:
-        char = ctx["event"].get_elements(Character).get(access_token=code)
+        char = context["event"].get_elements(Character).get(access_token=code)
     except ObjectDoesNotExist as err:
         raise Http404("invalid code") from err
 
     # Load all cached event data including characters
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     # Verify character exists in the cached character list
-    if char.number not in ctx["chars"]:
+    if char.number not in context["chars"]:
         messages.warning(request, _("Character not found"))
         return redirect("/")
 
     # Populate context with character data for template rendering
-    ctx["char"] = ctx["chars"][char.number]
-    ctx["character"] = char
-    ctx["check"] = 1
+    context["char"] = context["chars"][char.number]
+    context["character"] = char
+    context["check"] = 1
 
-    return _character_sheet(request, ctx)
+    return _character_sheet(request, context)
 
 
 def character_your_link(context: dict, character, path: str = None) -> str:
@@ -248,11 +248,11 @@ def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
         Redirect: To home page if user has no assigned characters for the event
     """
     # Get event and run context with signup and status validation
-    ctx = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, s, signup=True, include_status=True)
 
     # Retrieve all registration character relationships for this run
     # Use select_related to optimize database queries for character data
-    rcrs = list(ctx["run"].reg.rcrs.select_related("character").all())
+    rcrs = list(context["run"].reg.rcrs.select_related("character").all())
 
     # Handle case where user has no characters assigned to this event
     if not rcrs:
@@ -262,22 +262,22 @@ def character_your(request: HttpRequest, s: str, p: str = None) -> HttpResponse:
     # If user has exactly one character, redirect directly to character page
     if len(rcrs) == 1:
         char = rcrs[0].character
-        url = character_your_link(ctx, char, p)
+        url = character_your_link(context, char, p)
         return HttpResponseRedirect(url)
 
     # Build character selection list for multiple characters
     # Create URLs and display names for each character option
-    ctx["urls"] = []
+    context["urls"] = []
     for el in rcrs:
-        url = character_your_link(ctx, el.character, p)
+        url = character_your_link(context, el.character, p)
         # Use custom name if available, otherwise use character's default name
         char = el.character.name
         if el.custom_name:
             char = el.custom_name
-        ctx["urls"].append((char, url))
+        context["urls"].append((char, url))
 
     # Render character selection template with context data
-    return render(request, "larpmanager/event/character/your.html", ctx)
+    return render(request, "larpmanager/event/character/your.html", context)
 
 
 def character_form(
@@ -312,7 +312,7 @@ def character_form(
 
     if request.method == "POST":
         # Process form submission with uploaded files
-        form = form_class(request.POST, request.FILES, instance=instance, ctx=context)
+        form = form_class(request.POST, request.FILES, instance=instance, context=context)
         if form.is_valid():
             # Set appropriate success message based on operation type
             if instance:
@@ -344,7 +344,7 @@ def character_form(
             return redirect("character", s=event_slug, num=character_number)
     else:
         # Initialize empty form for GET requests
-        form = form_class(instance=instance, ctx=context)
+        form = form_class(instance=instance, context=context)
 
     # Add form to template context and initialize form state
     context["form"] = form
@@ -408,21 +408,21 @@ def character_customize(request, s, num):
     Raises:
         Http404: If character doesn't belong to user
     """
-    ctx = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, s, signup=True, include_status=True)
 
-    get_char_check(request, ctx, num, True)
+    get_char_check(request, context, num, True)
 
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=ctx["run"].reg, character__number=num
+            reg=context["run"].reg, character__number=num
         )
         if rgr.custom_profile:
-            ctx["custom_profile"] = rgr.profile_thumb.url
+            context["custom_profile"] = rgr.profile_thumb.url
 
-        if get_event_config(ctx["event"].id, "custom_character_profile", False, ctx):
-            ctx["avatar_form"] = AvatarForm()
+        if get_event_config(context["event"].id, "custom_character_profile", False, context):
+            context["avatar_form"] = AvatarForm()
 
-        return character_form(request, ctx, s, rgr, RegistrationCharacterRelForm)
+        return character_form(request, context, s, rgr, RegistrationCharacterRelForm)
     except ObjectDoesNotExist as err:
         raise Http404("not your char!") from err
 
@@ -458,14 +458,14 @@ def character_profile_upload(request: HttpRequest, s: str, num: int) -> JsonResp
         return JsonResponse({"res": "ko"})
 
     # Get event context and validate user permissions
-    ctx = get_event_run(request, s, signup=True)
-    registration_find(ctx["run"], request.user, None)
-    get_char_check(request, ctx, num, True)
+    context = get_event_run(request, s, signup=True)
+    registration_find(context["run"], request.user, None)
+    get_char_check(request, context, num, True)
 
     # Retrieve character registration relationship
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=ctx["run"].reg, character__number=num
+            reg=context["run"].reg, character__number=num
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
@@ -504,13 +504,13 @@ def character_profile_rotate(request: HttpRequest, s: str, num: int, r: int) -> 
         ObjectDoesNotExist: When character registration relationship not found
     """
     # Get event context and validate character access permissions
-    ctx = get_event_run(request, s, signup=True, include_status=True)
-    get_char_check(request, ctx, num, True)
+    context = get_event_run(request, s, signup=True, include_status=True)
+    get_char_check(request, context, num, True)
 
     # Retrieve character registration relationship with related objects
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=ctx["run"].reg, character__number=num
+            reg=context["run"].reg, character__number=num
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
@@ -553,22 +553,22 @@ def character_list(request, s):
     Returns:
         HttpResponse: Rendered character list template
     """
-    ctx = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
 
-    ctx["list"] = get_player_characters(request.user.member, ctx["event"])
+    context["list"] = get_player_characters(request.user.member, context["event"])
     # add character configs
-    char_add_addit(ctx)
-    for el in ctx["list"]:
-        if "character" in ctx["features"]:
-            res = get_character_element_fields(ctx, el.id, only_visible=True)
+    char_add_addit(context)
+    for el in context["list"]:
+        if "character" in context["features"]:
+            res = get_character_element_fields(context, el.id, only_visible=True)
             el.fields = res["fields"]
-            ctx.update(res)
+            context.update(res)
 
-    check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
-    ctx["char_maximum"] = check
-    ctx["approval"] = get_event_config(ctx["event"].id, "user_character_approval", False, ctx)
-    ctx["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count()
-    return render(request, "larpmanager/event/character/list.html", ctx)
+    check, _max_chars = check_character_maximum(context["event"], request.user.member)
+    context["char_maximum"] = check
+    context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
+    context["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).count()
+    return render(request, "larpmanager/event/character/list.html", context)
 
 
 @login_required
@@ -583,15 +583,15 @@ def character_create(request, s):
     Returns:
         HttpResponse: Character creation form or redirect
     """
-    ctx = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_run(request, s, include_status=True, signup=True, feature_slug="user_character")
 
-    check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
+    check, _max_chars = check_character_maximum(context["event"], request.user.member)
     if check:
         messages.success(request, _("You have reached the maximum number of characters that can be created"))
         return redirect("character_list", s=s)
 
-    ctx["class_name"] = "character"
-    return character_form(request, ctx, s, None, CharacterForm)
+    context["class_name"] = "character"
+    return character_form(request, context, s, None, CharacterForm)
 
 
 @login_required
@@ -607,12 +607,12 @@ def character_edit(request, s, num):
     Returns:
         HttpResponse: Character editing form
     """
-    ctx = get_event_run(request, s, include_status=True, signup=True)
-    get_char_check(request, ctx, num, True)
-    return character_form(request, ctx, s, ctx["character"], CharacterForm)
+    context = get_event_run(request, s, include_status=True, signup=True)
+    get_char_check(request, context, num, True)
+    return character_form(request, context, s, context["character"], CharacterForm)
 
 
-def get_options_dependencies(ctx: dict) -> None:
+def get_options_dependencies(context: dict) -> None:
     """Populate context with writing option dependencies for character creation.
 
     Analyzes writing questions and options for the current event to build a
@@ -620,27 +620,27 @@ def get_options_dependencies(ctx: dict) -> None:
     to be selected first during character creation.
 
     Args:
-        ctx: Context dictionary containing event, features, and other data.
+        context: Context dictionary containing event, features, and other data.
              Will be modified to include 'dependencies' key with option mappings.
     """
     # Initialize empty dependencies dictionary in context
-    ctx["dependencies"] = {}
+    context["dependencies"] = {}
 
     # Early return if character feature is not enabled for this event
-    if "character" not in ctx["features"]:
+    if "character" not in context["features"]:
         return
 
     # Get all character-applicable writing questions ordered by their sequence
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = context["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=QuestionApplicable.CHARACTER)
     question_idxs = que.values_list("id", flat=True)
 
     # Find all writing options belonging to character questions
-    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
+    que = context["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
 
     # Build dependency mapping for options that have requirements
     for el in que.filter(requirements__isnull=False).distinct():
-        ctx["dependencies"][el.id] = list(el.requirements.values_list("id", flat=True))
+        context["dependencies"][el.id] = list(el.requirements.values_list("id", flat=True))
 
 
 @login_required
@@ -656,12 +656,12 @@ def character_assign(request, s, num):
     Returns:
         HttpResponse: Redirect to character list
     """
-    ctx = get_event_run(request, s, signup=True, include_status=True)
-    get_char_check(request, ctx, num, True)
-    if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).exists():
+    context = get_event_run(request, s, signup=True, include_status=True)
+    get_char_check(request, context, num, True)
+    if RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
     else:
-        RegistrationCharacterRel.objects.create(reg_id=ctx["run"].reg.id, character_id=ctx["character"].id)
+        RegistrationCharacterRel.objects.create(reg_id=context["run"].reg.id, character_id=context["character"].id)
         messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", s=s)
@@ -690,42 +690,42 @@ def character_abilities(request: HttpRequest, s: str, num: int) -> HttpResponse:
         PermissionDenied: If user lacks permission to view character abilities
     """
     # Initialize context with character and permission checks
-    ctx = check_char_abilities(request, s, num)
+    context = check_char_abilities(request, s, num)
 
     # Build available abilities dictionary organized by ability type
-    ctx["available"] = {}
-    for ability in get_available_ability_px(ctx["character"]):
+    context["available"] = {}
+    for ability in get_available_ability_px(context["character"]):
         # Create type entry if it doesn't exist
-        if ability.typ_id not in ctx["available"]:
-            ctx["available"][ability.typ_id] = {"name": ability.typ.name, "order": ability.typ.id, "list": {}}
+        if ability.typ_id not in context["available"]:
+            context["available"][ability.typ_id] = {"name": ability.typ.name, "order": ability.typ.id, "list": {}}
         # Add ability with name and cost to the type's list
-        ctx["available"][ability.typ_id]["list"][ability.id] = f"{ability.name} - {ability.cost}"
+        context["available"][ability.typ_id]["list"][ability.id] = f"{ability.name} - {ability.cost}"
 
     # Build current character abilities organized by type name
-    ctx["sheet_abilities"] = {}
-    for el in get_current_ability_px(ctx["character"]):
+    context["sheet_abilities"] = {}
+    for el in get_current_ability_px(context["character"]):
         # Create type list if it doesn't exist
-        if el.typ.name not in ctx["sheet_abilities"]:
-            ctx["sheet_abilities"][el.typ.name] = []
+        if el.typ.name not in context["sheet_abilities"]:
+            context["sheet_abilities"][el.typ.name] = []
         # Add ability to the type's list
-        ctx["sheet_abilities"][el.typ.name].append(el)
+        context["sheet_abilities"][el.typ.name].append(el)
 
     # Handle POST request for saving ability changes
     if request.method == "POST":
-        _save_character_abilities(ctx, request)
+        _save_character_abilities(context, request)
         # Redirect to prevent duplicate submissions
         return redirect(request.path_info)
 
     # Create ordered list of available types for template rendering
-    ctx["type_available"] = {
-        typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
+    context["type_available"] = {
+        typ_id: data["name"] for typ_id, data in sorted(context["available"].items(), key=lambda x: x[1]["order"])
     }
 
     # Add undo functionality for recent ability changes
-    ctx["undo_abilities"] = get_undo_abilities(request, ctx, ctx["character"])
+    context["undo_abilities"] = get_undo_abilities(request, context, context["character"])
 
     # Render the abilities template with all context data
-    return render(request, "larpmanager/event/character/abilities.html", ctx)
+    return render(request, "larpmanager/event/character/abilities.html", context)
 
 
 def check_char_abilities(request: HttpRequest, event_slug: str, character_num: int) -> dict:
@@ -775,25 +775,25 @@ def character_abilities_del(request, s, num, id_del):
     Raises:
         Http404: If ability is outside undo window
     """
-    ctx = check_char_abilities(request, s, num)
-    undo_abilities = get_undo_abilities(request, ctx, ctx["character"])
+    context = check_char_abilities(request, s, num)
+    undo_abilities = get_undo_abilities(request, context, context["character"])
     if id_del not in undo_abilities:
         raise Http404("ability out of undo window")
 
     with transaction.atomic():
-        remove_char_ability(ctx["character"], id_del)
-        ctx["character"].save()
+        remove_char_ability(context["character"], id_del)
+        context["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
-    return redirect("character_abilities", s=ctx["run"].get_slug(), num=ctx["character"].number)
+    return redirect("character_abilities", s=context["run"].get_slug(), num=context["character"].number)
 
 
-def _save_character_abilities(ctx, request):
+def _save_character_abilities(context, request):
     """
     Process character ability selection and save to character.
 
     Args:
-        ctx: Context dictionary with character and available abilities
+        context: Context dictionary with character and available abilities
         request: HTTP request object with POST data
     """
     selected_type = request.POST.get("ability_type")
@@ -808,31 +808,31 @@ def _save_character_abilities(ctx, request):
         return
 
     selected_id = int(selected_id)
-    if selected_type not in ctx["available"] or selected_id not in ctx["available"][selected_type]["list"]:
+    if selected_type not in context["available"] or selected_id not in context["available"][selected_type]["list"]:
         messages.error(request, _("Selezione non valida"))
         return
 
     with transaction.atomic():
-        ctx["character"].px_ability_list.add(selected_id)
-        ctx["character"].save()
+        context["character"].px_ability_list.add(selected_id)
+        context["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
-    get_undo_abilities(request, ctx, ctx["character"], selected_id)
+    get_undo_abilities(request, context, context["character"], selected_id)
 
 
-def get_undo_abilities(request, ctx, char, new_ability_id=None):
+def get_undo_abilities(request, context, char, new_ability_id=None):
     """Get list of recently acquired abilities that can be undone.
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary containing event data
+        context: Context dictionary containing event data
         char: Character object
         new_ability_id: ID of newly acquired ability to track (optional)
 
     Returns:
         list: List of ability IDs that can be undone
     """
-    undo_window_hours = int(get_event_config(ctx["event"].id, "px_undo", 0, ctx))
+    undo_window_hours = int(get_event_config(context["event"].id, "px_undo", 0, context))
     config_key = f"added_px_{char.id}"
     stored_config_value = char.get_config(config_key, "{}")
     ability_timestamp_map = ast.literal_eval(stored_config_value)
@@ -873,30 +873,30 @@ def character_relationships(request: HttpRequest, s: str, num: int) -> HttpRespo
         PermissionDenied: If user lacks permission to view character
     """
     # Get event context and validate user access to event and character
-    ctx = get_event_run(request, s, include_status=True, signup=True)
-    get_char_check(request, ctx, num, True)
+    context = get_event_run(request, s, include_status=True, signup=True)
+    get_char_check(request, context, num, True)
 
     # Load all cached event data for performance
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     # Initialize relationships list in context
-    ctx["rel"] = []
+    context["rel"] = []
 
     # Query player relationships for the current character's player in this run
     que = PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-        reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
+        reg__member_id=context["char"]["player_id"], reg__run=context["run"]
     )
 
     # Process each relationship and build display data
     for tg_num, text in que.values_list("target__number", "text"):
         # Try to get character data from cache first for performance
-        if "chars" in ctx and tg_num in ctx["chars"]:
-            show = ctx["chars"][tg_num]
+        if "chars" in context and tg_num in context["chars"]:
+            show = context["chars"][tg_num]
         else:
             # Fallback to database query if not in cache
             try:
-                ch = Character.objects.select_related("event", "player").get(event=ctx["event"], number=tg_num)
-                show = ch.show(ctx["run"])
+                ch = Character.objects.select_related("event", "player").get(event=context["event"], number=tg_num)
+                show = ch.show(context["run"])
             except ObjectDoesNotExist:
                 # Skip relationships to non-existent characters
                 continue
@@ -905,9 +905,9 @@ def character_relationships(request: HttpRequest, s: str, num: int) -> HttpRespo
         show["text"] = text
         # Font size decreases as text length increases (min ~80%, max 100%)
         show["font_size"] = int(100 - ((len(text) / 50) * 4))
-        ctx["rel"].append(show)
+        context["rel"].append(show)
 
-    return render(request, "larpmanager/event/character/relationships.html", ctx)
+    return render(request, "larpmanager/event/character/relationships.html", context)
 
 
 @login_required
@@ -924,16 +924,16 @@ def character_relationships_edit(request, s, num, oth):
     Returns:
         HttpResponse: Relationship edit form or redirect
     """
-    ctx = get_event_run(request, s, include_status=True, signup=True)
-    get_char_check(request, ctx, num, True)
+    context = get_event_run(request, s, include_status=True, signup=True)
+    get_char_check(request, context, num, True)
 
-    ctx["relationship"] = None
+    context["relationship"] = None
     if oth != 0:
-        get_player_relationship(ctx, oth)
+        get_player_relationship(context, oth)
 
-    if user_edit(request, ctx, PlayerRelationshipForm, "relationship", oth):
-        return redirect("character_relationships", s=ctx["run"].get_slug(), num=ctx["char"]["number"])
-    return render(request, "larpmanager/orga/edit.html", ctx)
+    if user_edit(request, context, PlayerRelationshipForm, "relationship", oth):
+        return redirect("character_relationships", s=context["run"].get_slug(), num=context["char"]["number"])
+    return render(request, "larpmanager/orga/edit.html", context)
 
 
 @require_POST

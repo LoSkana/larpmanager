@@ -70,12 +70,12 @@ from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
 
 
-def go_upload(request, ctx, form):
+def go_upload(request, context, form):
     """Route uploaded files to appropriate processing functions.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary with upload type and settings
+        context: Context dictionary with upload type and settings
         form: Uploaded file form data
 
     Returns:
@@ -86,22 +86,22 @@ def go_upload(request, ctx, form):
     #     # check extension
     #     if zipfile.is_zipfile(form[0]):
     #         with zipfile.ZipFile(form[0]) as z_obj:
-    #             cover_load(ctx, z_obj)
+    #             cover_load(context, z_obj)
     #         z_obj.close()
     #         return ""
 
-    if ctx["typ"] == "registration_form":
-        return form_load(request, ctx, form, is_registration=True)
-    elif ctx["typ"] == "character_form":
-        return form_load(request, ctx, form, is_registration=False)
-    elif ctx["typ"] == "registration":
-        return registrations_load(request, ctx, form)
-    elif ctx["typ"] == "px_abilitie":
-        return abilities_load(request, ctx, form)
-    elif ctx["typ"] == "registration_ticket":
-        return tickets_load(request, ctx, form)
+    if context["typ"] == "registration_form":
+        return form_load(request, context, form, is_registration=True)
+    elif context["typ"] == "character_form":
+        return form_load(request, context, form, is_registration=False)
+    elif context["typ"] == "registration":
+        return registrations_load(request, context, form)
+    elif context["typ"] == "px_abilitie":
+        return abilities_load(request, context, form)
+    elif context["typ"] == "registration_ticket":
+        return tickets_load(request, context, form)
     else:
-        return writing_load(request, ctx, form)
+        return writing_load(request, context, form)
 
 
 def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
@@ -160,11 +160,11 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
     return None
 
 
-def _get_file(ctx: dict, file, column_id: str = None) -> tuple[any, list[str]]:
+def _get_file(context: dict, file, column_id: str = None) -> tuple[any, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:
-        ctx: Context dictionary containing event information and column definitions.
+        context: Context dictionary containing event information and column definitions.
         file: Uploaded file object to be processed.
         column_id: Optional column identifier for file naming. Defaults to None.
 
@@ -178,16 +178,16 @@ def _get_file(ctx: dict, file, column_id: str = None) -> tuple[any, list[str]]:
         based on the context configuration.
     """
     # Get available column names from context
-    _get_column_names(ctx)
+    _get_column_names(context)
     allowed_column_names = []
 
     # Add columns from specific column_id if provided
     if column_id is not None:
-        allowed_column_names.extend(list(ctx["columns"][column_id].keys()))
+        allowed_column_names.extend(list(context["columns"][column_id].keys()))
 
     # Add fields from context if available
-    if "fields" in ctx:
-        allowed_column_names.extend(ctx["fields"].keys())
+    if "fields" in context:
+        allowed_column_names.extend(context["fields"].keys())
 
     # Convert all allowed column names to lowercase for comparison
     allowed_column_names = [column_name.lower() for column_name in allowed_column_names]
@@ -208,25 +208,25 @@ def _get_file(ctx: dict, file, column_id: str = None) -> tuple[any, list[str]]:
     return input_dataframe, []
 
 
-def registrations_load(request, ctx, form):
+def registrations_load(request, context, form):
     """Load registration data from uploaded CSV file.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary with event and form settings
+        context: Context dictionary with event and form settings
         form: Form data containing uploaded CSV file
 
     Returns:
         str: HTML formatted result message with processing statistics
     """
-    (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
+    (input_df, logs) = _get_file(context, form.cleaned_data["first"], 0)
 
-    que = ctx["event"].get_elements(RegistrationQuestion).prefetch_related("options")
+    que = context["event"].get_elements(RegistrationQuestion).prefetch_related("options")
     questions = _get_questions(que)
 
     if input_df is not None:
         for row in input_df.to_dict(orient="records"):
-            logs.append(_reg_load(request, ctx, row, questions))
+            logs.append(_reg_load(request, context, row, questions))
     return logs
 
 
@@ -400,7 +400,7 @@ def _reg_assign_characters(
         RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
-def writing_load(request, ctx: dict, form) -> list[str]:
+def writing_load(request, context: dict, form) -> list[str]:
     """Load writing data from uploaded files and process relationships.
 
     Processes uploaded files containing writing elements and their relationships.
@@ -408,7 +408,7 @@ def writing_load(request, ctx: dict, form) -> list[str]:
 
     Args:
         request: HTTP request object containing user and session data
-        ctx: Context dictionary containing event, writing_typ, and typ keys
+        context: Context dictionary containing event, writing_typ, and typ keys
         form: Django form object with cleaned_data containing uploaded files
 
     Returns:
@@ -423,26 +423,31 @@ def writing_load(request, ctx: dict, form) -> list[str]:
     # Process main writing data file
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:
-        (input_df, logs) = _get_file(ctx, uploaded_file, 0)
+        (input_df, logs) = _get_file(context, uploaded_file, 0)
 
         # Get questions for the writing type with their options
         que = (
-            ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).prefetch_related("options")
+            context["event"]
+            .get_elements(WritingQuestion)
+            .filter(applicable=context["writing_typ"])
+            .prefetch_related("options")
         )
         questions = _get_questions(que)
 
         # Process each row of writing data
         if input_df is not None:
             for row in input_df.to_dict(orient="records"):
-                logs.append(element_load(request, ctx, row, questions))
+                logs.append(element_load(request, context, row, questions))
 
     # Process character relationships if type is character
-    if ctx["typ"] == "character":
+    if context["typ"] == "character":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
             # Load relationships file and get character mapping
-            (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
-            chars = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Character).values("id", "name")}
+            (input_df, new_logs) = _get_file(context, uploaded_file, 1)
+            chars = {
+                el["name"].lower(): el["id"] for el in context["event"].get_elements(Character).values("id", "name")
+            }
 
             # Process each relationship row
             if input_df is not None:
@@ -451,13 +456,15 @@ def writing_load(request, ctx: dict, form) -> list[str]:
             logs.extend(new_logs)
 
     # Process plot relationships if type is plot
-    if ctx["typ"] == "plot":
+    if context["typ"] == "plot":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
             # Load plot relationships file and get character/plot mappings
-            (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
-            chars = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Character).values("id", "name")}
-            plots = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Plot).values("id", "name")}
+            (input_df, new_logs) = _get_file(context, uploaded_file, 1)
+            chars = {
+                el["name"].lower(): el["id"] for el in context["event"].get_elements(Character).values("id", "name")
+            }
+            plots = {el["name"].lower(): el["id"] for el in context["event"].get_elements(Plot).values("id", "name")}
 
             # Process each plot relationship row
             if input_df is not None:
@@ -660,7 +667,7 @@ def element_load(request, context: dict, csv_row: dict, element_questions: list)
         return f"OK - Updated {element_name}"
 
 
-def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
+def _writing_load_field(context: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
     """
     Load writing field data during upload processing.
 
@@ -670,7 +677,7 @@ def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, q
 
     Parameters
     ----------
-    ctx : dict
+    context : dict
         Context dictionary containing event and field information
     element : WritingElement
         Writing element instance to update with field data
@@ -695,7 +702,7 @@ def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, q
     # Handle quest type field with case-insensitive lookup
     if field == "typ":
         try:
-            element.typ = ctx["event"].get_elements(QuestType).get(name__iexact=value)
+            element.typ = context["event"].get_elements(QuestType).get(name__iexact=value)
         except ObjectDoesNotExist:
             logs.append(f"ERR - quest type not found: {value}")
         return
@@ -703,13 +710,13 @@ def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, q
     # Handle quest field with case-insensitive lookup
     if field == "quest":
         try:
-            element.quest = ctx["event"].get_elements(Quest).get(name__iexact=value)
+            element.quest = context["event"].get_elements(Quest).get(name__iexact=value)
         except ObjectDoesNotExist:
             logs.append(f"ERR - quest not found: {value}")
         return
 
     # Get field type from context configuration
-    field_type = ctx["fields"][field]
+    field_type = context["fields"][field]
 
     # Skip processing for name fields and explicitly skipped fields
     if field_type in [WritingQuestionType.NAME, "skip"]:
@@ -721,7 +728,7 @@ def _writing_load_field(ctx: dict, element: BaseModel, field: str, value: any, q
         return
 
     # Delegate to question loading for all other field types
-    _writing_question_load(ctx, element, field, field_type, logs, questions, html_formatted_value)
+    _writing_question_load(context, element, field, field_type, logs, questions, html_formatted_value)
 
 
 def _writing_question_load(
@@ -768,10 +775,10 @@ def _get_mirror_instance(context, character_element, mirror_character_name, erro
         error_logs.append(f"ERR - mirror not found: {mirror_character_name}")
 
 
-def _assign_faction(ctx, element, value, logs):
+def _assign_faction(context, element, value, logs):
     for faction_name in value.split(","):
         try:
-            faction = Faction.objects.get(name__iexact=faction_name.strip(), event=ctx["event"])
+            faction = Faction.objects.get(name__iexact=faction_name.strip(), event=context["event"])
             element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
@@ -779,7 +786,7 @@ def _assign_faction(ctx, element, value, logs):
             logs.append(f"Faction not found: {faction_name}")
 
 
-def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[str]:
+def form_load(request, context: dict, form, is_registration: bool = True) -> list[str]:
     """Load form questions and options from uploaded files.
 
     Processes uploaded CSV/Excel files to create form questions and their
@@ -787,7 +794,7 @@ def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[st
 
     Args:
         request: HTTP request object containing the upload request
-        ctx: Context dictionary containing event data and configuration
+        context: Context dictionary containing event data and configuration
         form: Upload form instance with cleaned file data
         is_registration: Flag indicating whether to load registration questions
             (True) or writing questions (False). Defaults to True.
@@ -806,17 +813,17 @@ def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[st
     questions_file = form.cleaned_data.get("first", None)
     if questions_file:
         # Parse uploaded questions file into DataFrame
-        (questions_dataframe, log_messages) = _get_file(ctx, questions_file, 0)
+        (questions_dataframe, log_messages) = _get_file(context, questions_file, 0)
         if questions_dataframe is not None:
             # Create question objects from each row in the DataFrame
             for question_row in questions_dataframe.to_dict(orient="records"):
-                log_messages.append(_questions_load(ctx, question_row, is_registration))
+                log_messages.append(_questions_load(context, question_row, is_registration))
 
     # Process options file upload
     options_file = form.cleaned_data.get("second", None)
     if options_file:
         # Parse uploaded options file into DataFrame
-        (options_dataframe, options_log_messages) = _get_file(ctx, options_file, 1)
+        (options_dataframe, options_log_messages) = _get_file(context, options_file, 1)
         if options_dataframe is not None:
             # Determine question model class based on registration type
             question_model_class = WritingQuestion
@@ -826,12 +833,12 @@ def form_load(request, ctx: dict, form, is_registration: bool = True) -> list[st
             # Build lookup dictionary mapping question names to IDs
             questions_by_name = {
                 question["name"].lower(): question["id"]
-                for question in ctx["event"].get_elements(question_model_class).values("id", "name")
+                for question in context["event"].get_elements(question_model_class).values("id", "name")
             }
 
             # Create option objects for each row, linking to existing questions
             for option_row in options_dataframe.to_dict(orient="records"):
-                options_log_messages.append(_options_load(ctx, option_row, questions_by_name, is_registration))
+                options_log_messages.append(_options_load(context, option_row, questions_by_name, is_registration))
 
         # Combine logs from options processing with existing logs
         log_messages.extend(options_log_messages)
@@ -1086,11 +1093,11 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
     return tmp_file
 
 
-def cover_load(ctx, z_obj):
+def cover_load(context, z_obj):
     """Handle cover image upload and processing from ZIP archive.
 
     Args:
-        ctx: Context dictionary containing run and event information
+        context: Context dictionary containing run and event information
         z_obj: ZIP file object containing character cover images
 
     Side effects:
@@ -1099,8 +1106,8 @@ def cover_load(ctx, z_obj):
     """
     # extract images
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
-    fpath = os.path.join(fpath, ctx["run"].event.slug)
-    fpath = os.path.join(fpath, str(ctx["run"].number))
+    fpath = os.path.join(fpath, context["run"].event.slug)
+    fpath = os.path.join(fpath, str(context["run"].number))
     if os.path.exists(fpath):
         shutil.rmtree(fpath)
     z_obj.extractall(path=fpath)
@@ -1113,7 +1120,7 @@ def cover_load(ctx, z_obj):
     print(covers)
     upload_to = UploadToPathAndRename("character/cover/")
     # cicle characters
-    for c in ctx["run"].event.get_elements(Character):
+    for c in context["run"].event.get_elements(Character):
         num = str(c.number)
         if num not in covers:
             continue
@@ -1123,25 +1130,25 @@ def cover_load(ctx, z_obj):
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
 
 
-def tickets_load(request: HttpRequest, ctx: dict, form: Form) -> list[str]:
+def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:
     """Load tickets from uploaded file data.
 
     Args:
         request: The HTTP request object
-        ctx: Context dictionary containing processing state
+        context: Context dictionary containing processing state
         form: Form containing cleaned file data
 
     Returns:
         List of log messages from the loading process
     """
     # Extract and validate file data from form
-    (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
+    (input_df, logs) = _get_file(context, form.cleaned_data["first"], 0)
 
     # Process each row if data frame is valid
     if input_df is not None:
         # Convert dataframe to dictionary records and process each ticket
         for row in input_df.to_dict(orient="records"):
-            logs.append(_ticket_load(request, ctx, row))
+            logs.append(_ticket_load(request, context, row))
     return logs
 
 
@@ -1317,10 +1324,10 @@ def _assign_type(context, ability_element, error_logs, ability_type_name):
         error_logs.append(f"ERR - quest type not found: {ability_type_name}")
 
 
-def _assign_prereq(ctx, element, logs, value):
+def _assign_prereq(context, element, logs, value):
     for prerequisite_name in value.split(","):
         try:
-            prerequisite_element = ctx["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
+            prerequisite_element = context["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
             element.save()  # to be sure
             element.prerequisites.add(prerequisite_element)
         except ObjectDoesNotExist:

@@ -237,7 +237,7 @@ def go_character(
         unchanged text if search pattern not found or character data unavailable.
 
     Example:
-        >>> go_character(ctx, '#1', 1, 'See character #1', run_obj, True, False)
+        >>> go_character(context, '#1', 1, 'See character #1', run_obj, True, False)
         'See character <a class="link_show_char" href="/run/char/1">John Doe</a>'
     """
     # Early return if search pattern not in text

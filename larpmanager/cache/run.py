@@ -110,17 +110,17 @@ def get_cache_config_run(run: Run) -> dict:
         Dictionary containing the run configuration data.
     """
     # Generate cache key for this specific run
-    key = cache_config_run_key(run)
+    cache_key = cache_config_run_key(run)
 
     # Attempt to retrieve from cache
-    res = cache.get(key)
+    cached_config = cache.get(cache_key)
 
     # Initialize and cache if not found
-    if res is None:
-        res = init_cache_config_run(run)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_config is None:
+        cached_config = init_cache_config_run(run)
+        cache.set(cache_key, cached_config, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_config
 
 
 def init_cache_config_run(run) -> dict:
@@ -148,17 +148,17 @@ def init_cache_config_run(run) -> dict:
     ev_features = get_event_features(run.event_id)
 
     # Initialize base context with buttons and core display settings
-    ctx = {
+    context = {
         "buttons": get_event_button_cache(run.event_id),
     }
-    ctx["limitations"] = get_event_config(run.event_id, "show_limitations", False, ctx)
-    ctx["user_character_max"] = get_event_config(run.event_id, "user_character_max", 0, ctx)
-    ctx["cover_orig"] = get_event_config(run.event_id, "cover_orig", False, ctx)
-    ctx["px_user"] = get_event_config(run.event_id, "px_user", False, ctx)
+    context["limitations"] = get_event_config(run.event_id, "show_limitations", False, context)
+    context["user_character_max"] = get_event_config(run.event_id, "user_character_max", 0, context)
+    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", False, context)
+    context["px_user"] = get_event_config(run.event_id, "px_user", False, context)
 
     # Handle parent event inheritance for px_user setting
     if run.event.parent:
-        ctx["px_user"] = get_event_config(run.event.parent.id, "px_user", False, ctx)
+        context["px_user"] = get_event_config(run.event.parent.id, "px_user", False, context)
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
@@ -172,16 +172,16 @@ def init_cache_config_run(run) -> dict:
         val = run.get_config("show_" + config_name, "[]")
         for el in ast.literal_eval(val):
             res[el] = 1
-        ctx["show_" + config_name] = res
+        context["show_" + config_name] = res
 
     # Process additional display configurations
     res = {}
     val = run.get_config("show_addit", "[]")
     for el in ast.literal_eval(val):
         res[el] = 1
-    ctx["show_addit"] = res
+    context["show_addit"] = res
 
-    return ctx
+    return context
 
 
 def on_run_post_save_reset_config_cache(instance):

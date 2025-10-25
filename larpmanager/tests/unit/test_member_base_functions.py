@@ -95,34 +95,34 @@ class TestMemberAccountingFunctions(BaseTestCase):
         """Test _info_token_credit with no tokens or credits"""
         member = self.get_member()
         assoc = self.get_association()
-        ctx = {"a_id": assoc.id}
+        context = {"a_id": assoc.id}
 
-        _info_token_credit(ctx, member)
+        _info_token_credit(context, member)
 
-        self.assertEqual(ctx["acc_tokens"], 0)
-        self.assertEqual(ctx["acc_credits"], 0)
+        self.assertEqual(context["acc_tokens"], 0)
+        self.assertEqual(context["acc_credits"], 0)
 
     def test_info_token_credit_with_tokens(self):
         """Test _info_token_credit with tokens"""
         member = self.get_member()
         assoc = self.get_association()
-        ctx = {"a_id": assoc.id}
+        context = {"a_id": assoc.id}
 
         # Create token items
         AccountingItemOther.objects.create(
             member=member, assoc=assoc, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test token"
         )
 
-        _info_token_credit(ctx, member)
+        _info_token_credit(context, member)
 
-        self.assertEqual(ctx["acc_tokens"], 1)
+        self.assertEqual(context["acc_tokens"], 1)
 
     def test_info_token_credit_with_credits(self):
         """Test _info_token_credit with credits"""
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        ctx = {"a_id": assoc.id}
+        context = {"a_id": assoc.id}
 
         # Create credit items
         AccountingItemOther.objects.create(
@@ -132,16 +132,16 @@ class TestMemberAccountingFunctions(BaseTestCase):
             member=member, assoc=assoc, run=run, value=Decimal("20.00"), is_approved=True
         )
 
-        _info_token_credit(ctx, member)
+        _info_token_credit(context, member)
 
-        self.assertEqual(ctx["acc_credits"], 2)
+        self.assertEqual(context["acc_credits"], 2)
 
     def test_info_token_credit_with_both(self):
         """Test _info_token_credit with both tokens and credits"""
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        ctx = {"a_id": assoc.id}
+        context = {"a_id": assoc.id}
 
         # Create both tokens and credits
         AccountingItemOther.objects.create(
@@ -151,10 +151,10 @@ class TestMemberAccountingFunctions(BaseTestCase):
             member=member, assoc=assoc, oth=OtherChoices.CREDIT, value=Decimal("30.00"), descr="Test credit"
         )
 
-        _info_token_credit(ctx, member)
+        _info_token_credit(context, member)
 
-        self.assertEqual(ctx["acc_tokens"], 1)
-        self.assertEqual(ctx["acc_credits"], 1)
+        self.assertEqual(context["acc_tokens"], 1)
+        self.assertEqual(context["acc_credits"], 1)
 
 
 class TestBaseUtilityFunctions(BaseTestCase):

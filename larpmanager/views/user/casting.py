@@ -44,19 +44,19 @@ from larpmanager.utils.registration import registration_status
 logger = logging.getLogger(__name__)
 
 
-def casting_characters(ctx: dict, reg: Registration) -> None:
+def casting_characters(context: dict, reg: Registration) -> None:
     """Populate context with character choices available for casting based on registration.
 
     This function filters available characters based on registration ticket tier,
     organizes them by faction, and prepares JSON data for frontend consumption.
 
     Args:
-        ctx (dict): Context dictionary to be populated with character choices and factions.
+        context (dict): Context dictionary to be populated with character choices and factions.
                    Will be modified in-place with 'factions', 'choices', and 'faction_filter' keys.
         reg: Registration object containing ticket tier information used for filtering.
 
     Returns:
-        None: Function modifies the ctx dictionary in-place.
+        None: Function modifies the context dictionary in-place.
 
     Note:
         - Filters out filler characters for non-filler ticket tiers
@@ -68,7 +68,7 @@ def casting_characters(ctx: dict, reg: Registration) -> None:
 
     # Set up character filters based on registration type
     filters = {"png": True, "free": True, "mirror": True, "filler": filter_filler, "nonfiller": not filter_filler}
-    get_event_filter_characters(ctx, filters)
+    get_event_filter_characters(context, filters)
 
     # Initialize data structures for organizing characters by faction
     character_choices_by_faction = {}
@@ -76,25 +76,25 @@ def casting_characters(ctx: dict, reg: Registration) -> None:
     total_characters = 0
 
     # Process each faction and organize characters within it
-    for faction in ctx["factions"]:
+    for faction in context["factions"]:
         faction_name = faction.data["name"]
         character_choices_by_faction[faction_name] = {}
         faction_names.append(faction_name)
 
         # Add each character from the faction to choices with display info
         for character in faction.chars:
-            character_choices_by_faction[faction_name][character.id] = character.show(ctx["run"])
+            character_choices_by_faction[faction_name][character.id] = character.show(context["run"])
             total_characters += 1
 
     # Convert faction and character data to JSON for frontend consumption
-    ctx["factions"] = json.dumps(faction_names)
-    ctx["choices"] = json.dumps(character_choices_by_faction)
+    context["factions"] = json.dumps(faction_names)
+    context["choices"] = json.dumps(character_choices_by_faction)
 
     # Add faction filter for transversal faction types
-    ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
+    context["faction_filter"] = context["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
 
 
-def casting_quest_traits(ctx: dict, typ: str) -> None:
+def casting_quest_traits(context: dict, typ: str) -> None:
     """Populate context with available quest traits for casting.
 
     Filters quests by event and type, then collects unassigned traits
@@ -102,25 +102,25 @@ def casting_quest_traits(ctx: dict, typ: str) -> None:
     choices formatted as JSON strings for frontend consumption.
 
     Args:
-        ctx: Template context dictionary to update with faction and choice data
+        context: Template context dictionary to update with faction and choice data
         typ: Quest type identifier to filter quests
 
     Returns:
-        None: Function modifies ctx dictionary in-place
+        None: Function modifies context dictionary in-place
     """
     trait_choices = {}
     faction_names = []
     total_traits = 0
 
     # Iterate through quests filtered by event, type, and visibility
-    for quest in Quest.objects.filter(event=ctx["event"], typ=typ, hide=False).order_by("number"):
+    for quest in Quest.objects.filter(event=context["event"], typ=typ, hide=False).order_by("number"):
         faction_name = quest.show()["name"]
         available_traits = {}
 
         # Collect traits for this quest that aren't already assigned
         for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
             # Skip traits that are already assigned to the current run
-            if AssignmentTrait.objects.filter(trait=trait, run=ctx["run"]).count() > 0:
+            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).count() > 0:
                 continue
             available_traits[trait.id] = trait.show()
             total_traits += 1
@@ -134,18 +134,18 @@ def casting_quest_traits(ctx: dict, typ: str) -> None:
         faction_names.append(faction_name)
 
     # Serialize data as JSON for frontend consumption
-    ctx["factions"] = json.dumps(list(faction_names))
-    ctx["choices"] = json.dumps(trait_choices)
+    context["factions"] = json.dumps(list(faction_names))
+    context["choices"] = json.dumps(trait_choices)
 
 
-def casting_details(ctx: dict, casting_type: int) -> dict:
+def casting_details(context: dict, casting_type: int) -> dict:
     """Prepare casting context with configuration details and labels.
 
     Configures the template context for casting operations by setting up
     appropriate labels and configuration values based on the casting type.
 
     Args:
-        ctx: Template context dictionary to update with casting configuration
+        context: Template context dictionary to update with casting configuration
         casting_type: Quest type identifier - positive values for quests, 0 for characters
 
     Returns:
@@ -156,31 +156,33 @@ def casting_details(ctx: dict, casting_type: int) -> dict:
         For casting_type = 0: Configures character-related labels
     """
     # Load event cache data into context
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     # Configure labels based on casting type (quest vs character)
     if casting_type > 0:
-        quest_type_data = ctx["quest_types"][casting_type]
-        ctx["gl_name"] = quest_type_data["name"]
-        ctx["cl_name"] = _("Quest")
-        ctx["el_name"] = _("Trait")
+        quest_type_data = context["quest_types"][casting_type]
+        context["gl_name"] = quest_type_data["name"]
+        context["cl_name"] = _("Quest")
+        context["el_name"] = _("Trait")
     else:
-        ctx["gl_name"] = _("Characters")
-        ctx["cl_name"] = _("Faction")
-        ctx["el_name"] = _("Character")
+        context["gl_name"] = _("Characters")
+        context["cl_name"] = _("Faction")
+        context["el_name"] = _("Character")
 
     # Set type identifier and numeric casting configuration
-    ctx["typ"] = casting_type
+    context["typ"] = casting_type
     for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
-        ctx[f"casting_{config_key}"] = int(
-            get_event_config(ctx["event"].id, f"casting_{config_key}", default_value, ctx)
+        context[f"casting_{config_key}"] = int(
+            get_event_config(context["event"].id, f"casting_{config_key}", default_value, context)
         )
 
     # Set boolean casting preferences from event configuration
     for preference_name in ["show_pref", "history", "avoid"]:
-        ctx["casting_" + preference_name] = get_event_config(ctx["event"].id, "casting_" + preference_name, False, ctx)
+        context["casting_" + preference_name] = get_event_config(
+            context["event"].id, "casting_" + preference_name, False, context
+        )
 
-    return ctx
+    return context
 
 
 @login_required
@@ -203,16 +205,16 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         PermissionDenied: If user lacks required casting feature permissions
     """
     # Get event context and validate user access permissions
-    ctx = get_event_run(request, s, signup=True, include_status=True)
-    check_event_feature(request, ctx, "casting")
+    context = get_event_run(request, s, signup=True, include_status=True)
+    check_event_feature(request, context, "casting")
 
     # Verify user has completed event registration
-    if ctx["run"].reg is None:
+    if context["run"].reg is None:
         messages.success(request, _("You must signed up in order to select your preferences") + "!")
-        return redirect("gallery", s=ctx["run"].get_slug())
+        return redirect("gallery", s=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
-    if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == TicketTier.WAITING:
+    if context["run"].reg and context["run"].reg.ticket and context["run"].reg.ticket.tier == TicketTier.WAITING:
         messages.success(
             request,
             _(
@@ -220,32 +222,32 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
                 "able to select your preferences!"
             ),
         )
-        return redirect("gallery", s=ctx["run"].get_slug())
+        return redirect("gallery", s=context["run"].get_slug())
 
     # Load casting details and options for the specified type
-    casting_details(ctx, typ)
+    casting_details(context, typ)
     logger.debug(
-        f"Casting context for typ {typ}: {ctx.get('gl_name', 'Unknown')}, features: {list(ctx.get('features', {}).keys())}"
+        f"Casting context for typ {typ}: {context.get('gl_name', 'Unknown')}, features: {list(context.get('features', {}).keys())}"
     )
 
     # Set template path for rendering
     red = "larpmanager/event/casting/casting.html"
 
     # Check if user has already completed casting assignments
-    _check_already_done(ctx, request, typ)
+    _check_already_done(context, request, typ)
 
     # If assignments are already done, render read-only view
-    if "assigned" in ctx:
-        return render(request, red, ctx)
+    if "assigned" in context:
+        return render(request, red, context)
 
     # Load any previously saved preferences for this casting type
-    _get_previous(ctx, request, typ)
+    _get_previous(context, request, typ)
 
     # Process POST request with new casting preferences
     if request.method == "POST":
         prefs = {}
         # Extract preference choices from form data
-        for i in range(0, ctx["casting_max"]):
+        for i in range(0, context["casting_max"]):
             k = f"choice{i}"
             if k not in request.POST:
                 continue
@@ -254,55 +256,55 @@ def casting(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
             # Validate no duplicate preferences selected
             if pref in prefs.values():
                 messages.warning(request, _("You have indicated several preferences towards the same element!"))
-                return redirect("casting", s=ctx["run"].get_slug(), typ=typ)
+                return redirect("casting", s=context["run"].get_slug(), typ=typ)
             prefs[i] = pref
 
         # Save preferences and redirect to refresh page
-        _casting_update(ctx, prefs, request, typ)
+        _casting_update(context, prefs, request, typ)
         return redirect(request.path_info)
 
     # Render casting form for GET requests
-    return render(request, red, ctx)
+    return render(request, red, context)
 
 
-def _get_previous(ctx: dict, request: HttpRequest, typ: int) -> None:
+def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
     """Retrieve previous casting choices and avoidance preferences.
 
     Fetches existing casting choices for a member and populates the context
     with serialized data. Also retrieves casting avoidance preferences if they exist.
 
     Args:
-        ctx: Context dictionary to update with casting data
+        context: Context dictionary to update with casting data
         request: HTTP request object containing user information
         typ: Casting type identifier (0 for characters, other values for quest types)
 
     Returns:
-        None: Function modifies ctx dictionary in place
+        None: Function modifies context dictionary in place
     """
     # Retrieve all previous casting choices for this member, run, and type
     # ordered by preference to maintain selection order
     previous_choices = [
         casting.element
-        for casting in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref")
+        for casting in Casting.objects.filter(run=context["run"], member=request.user.member, typ=typ).order_by("pref")
     ]
 
     # Serialize casting choices as JSON for frontend consumption
-    ctx["already"] = json.dumps(previous_choices)
+    context["already"] = json.dumps(previous_choices)
 
     # Handle different casting types with appropriate data population
     if typ == 0:
         # For character casting, populate available characters
-        casting_characters(ctx, ctx["run"].reg)
+        casting_characters(context, context["run"].reg)
     else:
         # For quest casting, verify permissions and populate quest data
-        check_event_feature(request, ctx, "questbuilder")
-        get_element(ctx, typ, "quest_type", QuestType, by_number=True)
-        casting_quest_traits(ctx, ctx["quest_type"])
+        check_event_feature(request, context, "questbuilder")
+        get_element(context, typ, "quest_type", QuestType, by_number=True)
+        casting_quest_traits(context, context["quest_type"])
 
     # Attempt to retrieve avoidance preferences for this casting type
     try:
-        casting_avoidance = CastingAvoid.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
-        ctx["avoid"] = casting_avoidance.text
+        casting_avoidance = CastingAvoid.objects.get(run=context["run"], member=request.user.member, typ=typ)
+        context["avoid"] = casting_avoidance.text
     except ObjectDoesNotExist:
         # No avoidance preferences found, continue without setting avoid context
         pass
@@ -329,7 +331,7 @@ def _check_already_done(context, request, assignment_type):
             pass
 
 
-def _casting_update(ctx: dict, prefs: dict[str, int], request, typ: int) -> None:
+def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> None:
     """Update casting preferences for a member and send confirmation email.
 
     This function handles the complete casting preference workflow: clearing existing
@@ -337,7 +339,7 @@ def _casting_update(ctx: dict, prefs: dict[str, int], request, typ: int) -> None
     confirmation emails to the user.
 
     Args:
-        ctx: Context dictionary containing run data and other casting configuration.
+        context: Context dictionary containing run data and other casting configuration.
             Must include 'run' key with Run instance.
         prefs: Dictionary mapping preference items to their priority rankings.
             Keys are item IDs, values are preference order numbers.
@@ -349,19 +351,19 @@ def _casting_update(ctx: dict, prefs: dict[str, int], request, typ: int) -> None
         None: Function performs database operations and sends messages/emails.
     """
     # Clear all existing casting preferences for this user, run, and type
-    Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
+    Casting.objects.filter(run=context["run"], member=request.user.member, typ=typ).delete()
 
     # Create new casting preferences based on submitted data
     for preference_order, element_id in prefs.items():
         Casting.objects.create(
-            run=ctx["run"], member=request.user.member, typ=typ, element=element_id, pref=preference_order
+            run=context["run"], member=request.user.member, typ=typ, element=element_id, pref=preference_order
         )
 
     # Handle casting avoidance preferences if feature is enabled
     avoidance_text = None
-    if "casting_avoid" in ctx and ctx["casting_avoid"]:
+    if "casting_avoid" in context and context["casting_avoid"]:
         # Clear existing avoidance preferences
-        CastingAvoid.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
+        CastingAvoid.objects.filter(run=context["run"], member=request.user.member, typ=typ).delete()
 
         # Process new avoidance text from form submission
         avoidance_text = ""
@@ -372,31 +374,33 @@ def _casting_update(ctx: dict, prefs: dict[str, int], request, typ: int) -> None
 
         # Create new avoidance record if text was provided
         if avoidance_text and len(avoidance_text) > 0:
-            CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoidance_text)
+            CastingAvoid.objects.create(run=context["run"], member=request.user.member, typ=typ, text=avoidance_text)
 
     # Show success message to user
     messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
     preference_names_list = []
-    for casting_preference in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by(
+    for casting_preference in Casting.objects.filter(run=context["run"], member=request.user.member, typ=typ).order_by(
         "pref"
     ):
         if typ == 0:
             # Character casting: get character name
-            preference_names_list.append(Character.objects.get(pk=casting_preference.element).show(ctx["run"])["name"])
+            preference_names_list.append(
+                Character.objects.get(pk=casting_preference.element).show(context["run"])["name"]
+            )
         else:
             # Trait casting: get quest and trait names
             trait = Trait.objects.get(pk=casting_preference.element)
             preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
 
     # Send confirmation email with updated preferences
-    # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], preference_names_list)
-    mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], preference_names_list, avoidance_text)
+    # mail_confirm_casting_bkg(request.user.member.id, context['run'].id, context['gl_name'], preference_names_list)
+    mail_confirm_casting(request.user.member, context["run"], context["gl_name"], preference_names_list, avoidance_text)
 
 
 def get_casting_preferences(
-    element_number: int, ctx: dict, casting_type: int = 0, casting_queryset: Optional[QuerySet] = None
+    element_number: int, context: dict, casting_type: int = 0, casting_queryset: Optional[QuerySet] = None
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 
@@ -406,7 +410,7 @@ def get_casting_preferences(
 
     Args:
         element_number: Character/element number to calculate preferences for
-        ctx: Context dictionary containing 'run' and 'casting_max' keys,
+        context: Context dictionary containing 'run' and 'casting_max' keys,
              optionally 'staff' for filtering
         casting_type: Casting type identifier (default: 0)
         casting_queryset: Optional pre-filtered casting queryset. If None, will query
@@ -424,14 +428,14 @@ def get_casting_preferences(
 
     # Initialize distribution dictionary with all possible preference values
     preference_distribution = {}
-    for preference_value in range(0, ctx["casting_max"] + 1):
+    for preference_value in range(0, context["casting_max"] + 1):
         preference_distribution[preference_value] = 0
 
     # Get casting queryset if not provided
     if casting_queryset is None:
-        casting_queryset = Casting.objects.filter(element=element_number, run=ctx["run"], typ=casting_type)
+        casting_queryset = Casting.objects.filter(element=element_number, run=context["run"], typ=casting_type)
         # Filter active casts unless staff context is present
-        if "staff" not in ctx:
+        if "staff" not in context:
             casting_queryset = casting_queryset.filter(active=True)
 
     # Process each casting preference
@@ -579,31 +583,31 @@ def casting_preferences(request: HttpRequest, s: str, typ: int = 0) -> HttpRespo
                 when the user is not properly registered for the event
     """
     # Get event context and verify user signup status
-    ctx = get_event_run(request, s, signup=True, include_status=True)
-    casting_details(ctx, typ)
+    context = get_event_run(request, s, signup=True, include_status=True)
+    casting_details(context, typ)
 
     # Check if casting preferences are enabled for this event
-    if not ctx["casting_show_pref"]:
+    if not context["casting_show_pref"]:
         raise Http404("Not cool, bro!")
 
     # Build features map and check registration status
-    ctx_reg = {"features_map": {ctx["event"].id: ctx["features"]}}
-    registration_status(ctx["run"], request.user, ctx_reg)
+    ctx_reg = {"features_map": {context["event"].id: context["features"]}}
+    registration_status(context["run"], request.user, ctx_reg)
 
     # Verify user has valid registration for this event
-    if ctx["run"].reg is None:
+    if context["run"].reg is None:
         raise Http404("not registered")
 
     # Route to appropriate preference handler based on type
     if typ == 0:
         # Handle character-based casting preferences
-        casting_preferences_characters(ctx)
+        casting_preferences_characters(context)
     else:
         # Handle trait-based preferences (requires questbuilder feature)
-        check_event_feature(request, ctx, "questbuilder")
-        casting_preferences_traits(ctx, typ)
+        check_event_feature(request, context, "questbuilder")
+        casting_preferences_traits(context, typ)
 
-    return render(request, "larpmanager/event/casting/preferences.html", ctx)
+    return render(request, "larpmanager/event/casting/preferences.html", context)
 
 
 def casting_history_characters(context: dict) -> None:
@@ -766,28 +770,28 @@ def casting_history(request: HttpRequest, s: str, typ: int = 0) -> HttpResponse:
         Http404: If user is not registered for the event and not staff
     """
     # Get event context and verify user signup status
-    ctx = get_event_run(request, s, signup=True, include_status=True)
-    casting_details(ctx, typ)
+    context = get_event_run(request, s, signup=True, include_status=True)
+    casting_details(context, typ)
 
     # Check if casting history feature is enabled for this event
-    if not ctx["casting_history"]:
+    if not context["casting_history"]:
         raise Http404("Not cool, bro!")
 
     # Verify user registration or staff access
-    if ctx["run"].reg is None and "staff" not in ctx:
+    if context["run"].reg is None and "staff" not in context:
         raise Http404("not registered")
 
     # Populate casting details for the specified type
-    casting_details(ctx, typ)
+    casting_details(context, typ)
 
     # Handle different history types
     if typ == 0:
         # Load character casting history
-        casting_history_characters(ctx)
+        casting_history_characters(context)
     else:
         # For trait history, verify questbuilder feature access
-        check_event_feature(request, ctx, "questbuilder")
-        casting_history_traits(ctx)
+        check_event_feature(request, context, "questbuilder")
+        casting_history_traits(context)
 
     # Render the casting history template with populated context
-    return render(request, "larpmanager/event/casting/history.html", ctx)
+    return render(request, "larpmanager/event/casting/history.html", context)

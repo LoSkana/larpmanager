@@ -57,12 +57,12 @@ from larpmanager.utils.paginate import orga_paginate
 def orga_discounts(request: HttpRequest, s: str) -> HttpResponse:
     """Display and manage discounts for an event."""
     # Check permissions and get event context
-    ctx = check_event_permission(request, s, "orga_discounts")
+    context = check_event_permission(request, s, "orga_discounts")
 
     # Get all discounts for the event ordered by number
-    ctx["list"] = Discount.objects.filter(event=ctx["event"]).order_by("number")
+    context["list"] = Discount.objects.filter(event=context["event"]).order_by("number")
 
-    return render(request, "larpmanager/orga/accounting/discounts.html", ctx)
+    return render(request, "larpmanager/orga/accounting/discounts.html", context)
 
 
 @login_required
@@ -73,9 +73,11 @@ def orga_discounts_edit(request, s, num):
 @login_required
 def orga_expenses_my(request: HttpRequest, s: str) -> HttpResponse:
     """Display user's personal expenses for an event run."""
-    ctx = check_event_permission(request, s, "orga_expenses_my")
-    ctx["list"] = AccountingItemExpense.objects.filter(run=ctx["run"], member=request.user.member).order_by("-created")
-    return render(request, "larpmanager/orga/accounting/expenses_my.html", ctx)
+    context = check_event_permission(request, s, "orga_expenses_my")
+    context["list"] = AccountingItemExpense.objects.filter(run=context["run"], member=request.user.member).order_by(
+        "-created"
+    )
+    return render(request, "larpmanager/orga/accounting/expenses_my.html", context)
 
 
 @login_required
@@ -99,18 +101,18 @@ def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If user lacks required permissions for the event
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_expenses_my")
+    context = check_event_permission(request, s, "orga_expenses_my")
 
     if request.method == "POST":
         # Process form submission with uploaded files
-        form = OrgaPersonalExpenseForm(request.POST, request.FILES, ctx=ctx)
+        form = OrgaPersonalExpenseForm(request.POST, request.FILES, context=context)
 
         if form.is_valid():
             # Save expense without committing to add additional fields
             exp = form.save(commit=False)
 
             # Set required relationship fields from context and user
-            exp.run = ctx["run"]
+            exp.run = context["run"]
             exp.member = request.user.member
             exp.assoc_id = request.assoc["id"]
             exp.save()
@@ -120,15 +122,15 @@ def orga_expenses_my_new(request: HttpRequest, s: str) -> HttpResponse:
 
             # Redirect based on user's choice to continue or finish
             if "continue" in request.POST:
-                return redirect("orga_expenses_my_new", s=ctx["run"].get_slug())
-            return redirect("orga_expenses_my", s=ctx["run"].get_slug())
+                return redirect("orga_expenses_my_new", s=context["run"].get_slug())
+            return redirect("orga_expenses_my", s=context["run"].get_slug())
     else:
         # Create empty form for GET request
-        form = OrgaPersonalExpenseForm(ctx=ctx)
+        form = OrgaPersonalExpenseForm(context=context)
 
     # Add form to context and render template
-    ctx["form"] = form
-    return render(request, "larpmanager/orga/accounting/expenses_my_new.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/orga/accounting/expenses_my_new.html", context)
 
 
 @login_required
@@ -152,11 +154,11 @@ def orga_invoices(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If event with given slug does not exist
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_invoices")
+    context = check_event_permission(request, s, "orga_invoices")
 
     # Build optimized query with select_related to prevent N+1 queries
     que = (
-        PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
+        PaymentInvoice.objects.filter(reg__run=context["run"], status=PaymentStatus.SUBMITTED)
         .select_related(
             "member",  # For {{ el.member }} in template
             "method",  # For {{ el.method }} in template
@@ -167,10 +169,10 @@ def orga_invoices(request: HttpRequest, s: str) -> HttpResponse:
     )
 
     # Add invoice list to template context
-    ctx["list"] = que
+    context["list"] = que
 
     # Render template with invoice data
-    return render(request, "larpmanager/orga/accounting/invoices.html", ctx)
+    return render(request, "larpmanager/orga/accounting/invoices.html", context)
 
 
 @login_required
@@ -194,42 +196,42 @@ def orga_invoices_confirm(request: HttpRequest, s: str, num: int) -> HttpRespons
         PermissionDenied: If user lacks orga_invoices permission (via check_event_permission)
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_invoices")
+    context = check_event_permission(request, s, "orga_invoices")
 
     # Retrieve the payment invoice by number
-    backend_get(ctx, PaymentInvoice, num)
+    backend_get(context, PaymentInvoice, num)
 
     # Verify invoice belongs to the current event run
-    if ctx["el"].reg.run != ctx["run"]:
+    if context["el"].reg.run != context["run"]:
         raise Http404("i'm sorry, what?")
 
     # Check if invoice can be confirmed (must be CREATED or SUBMITTED)
-    if ctx["el"].status == PaymentStatus.CREATED or ctx["el"].status == PaymentStatus.SUBMITTED:
+    if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
         # Update status to confirmed and save
-        ctx["el"].status = PaymentStatus.CONFIRMED
+        context["el"].status = PaymentStatus.CONFIRMED
     else:
         # Invoice already processed - show warning and redirect
         messages.warning(request, _("Receipt already confirmed") + ".")
-        return redirect("orga_invoices", s=ctx["run"].get_slug())
+        return redirect("orga_invoices", s=context["run"].get_slug())
 
     # Save the updated invoice status
-    ctx["el"].save()
+    context["el"].save()
 
     # Show success message and redirect to invoices list
     messages.success(request, _("Element approved") + "!")
-    return redirect("orga_invoices", s=ctx["run"].get_slug())
+    return redirect("orga_invoices", s=context["run"].get_slug())
 
 
 @login_required
 def orga_accounting(request: HttpRequest, s: str) -> HttpResponse:
     """Display accounting overview for an event run."""
     # Check permissions and retrieve event context
-    ctx = check_event_permission(request, s, "orga_accounting")
+    context = check_event_permission(request, s, "orga_accounting")
 
     # Get accounting data for the run
-    ctx["dc"] = get_run_accounting(ctx["run"], ctx)
+    context["dc"] = get_run_accounting(context["run"], context)
 
-    return render(request, "larpmanager/orga/accounting/accounting.html", ctx)
+    return render(request, "larpmanager/orga/accounting/accounting.html", context)
 
 
 @login_required
@@ -251,12 +253,12 @@ def orga_tokens(request: HttpRequest, s) -> dict:
         PermissionDenied: If user lacks 'orga_tokens' permission for the event
     """
     # Check user permissions for token management in the specified event
-    ctx = check_event_permission(request, s, "orga_tokens")
+    context = check_event_permission(request, s, "orga_tokens")
 
     # Configure context with relationship selectors and display metadata
     # 'selrel' defines the database relationships to follow for data retrieval
     # 'subtype' categorizes this view as a token management interface
-    ctx.update(
+    context.update(
         {
             "selrel": ("run", "run__event"),  # Follow run -> event relationships
             "subtype": "tokens",  # Mark as token management subtype
@@ -274,7 +276,7 @@ def orga_tokens(request: HttpRequest, s) -> dict:
     # Return paginated view of AccountingItemOther objects (tokens)
     # Uses the organization accounting tokens template and edit route
     return orga_paginate(
-        request, ctx, AccountingItemOther, "larpmanager/orga/accounting/tokens.html", "orga_tokens_edit"
+        request, context, AccountingItemOther, "larpmanager/orga/accounting/tokens.html", "orga_tokens_edit"
     )
 
 
@@ -295,10 +297,10 @@ def orga_credits(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered paginated credits page with accounting items
     """
     # Check user permissions for accessing organization credits functionality
-    ctx = check_event_permission(request, s, "orga_credits")
+    context = check_event_permission(request, s, "orga_credits")
 
     # Configure context with relationship selectors and field definitions
-    ctx.update(
+    context.update(
         {
             "selrel": ("run", "run__event"),  # Database relationship path for filtering
             "subtype": "credits",  # Accounting item subtype identifier
@@ -315,7 +317,7 @@ def orga_credits(request: HttpRequest, s: str) -> HttpResponse:
 
     # Return paginated view of accounting items using the configured context
     return orga_paginate(
-        request, ctx, AccountingItemOther, "larpmanager/orga/accounting/credits.html", "orga_credits_edit"
+        request, context, AccountingItemOther, "larpmanager/orga/accounting/credits.html", "orga_credits_edit"
     )
 
 
@@ -337,7 +339,7 @@ def orga_payments(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered payments page with paginated payment data
     """
     # Check user permissions for accessing organization payments
-    ctx = check_event_permission(request, s, "orga_payments")
+    context = check_event_permission(request, s, "orga_payments")
 
     # Define base table fields for payment display
     fields = [
@@ -351,12 +353,12 @@ def orga_payments(request: HttpRequest, s: str) -> HttpResponse:
     ]
 
     # Add VAT fields if VAT feature is enabled
-    if "vat" in ctx["features"]:
+    if "vat" in context["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
     # Configure context with database relations and field callbacks
-    ctx.update(
+    context.update(
         {
             # Define select_related fields for efficient database queries
             "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
@@ -376,7 +378,7 @@ def orga_payments(request: HttpRequest, s: str) -> HttpResponse:
 
     # Return paginated payment data with configured template
     return orga_paginate(
-        request, ctx, AccountingItemPayment, "larpmanager/orga/accounting/payments.html", "orga_payments_edit"
+        request, context, AccountingItemPayment, "larpmanager/orga/accounting/payments.html", "orga_payments_edit"
     )
 
 
@@ -401,10 +403,10 @@ def orga_outflows(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If user lacks 'orga_outflows' permission for the event
     """
     # Check user permissions for accessing outflow data in the specified event
-    ctx = check_event_permission(request, s, "orga_outflows")
+    context = check_event_permission(request, s, "orga_outflows")
 
     # Configure context with table display settings and field definitions
-    ctx.update(
+    context.update(
         {
             # Define related fields for database query optimization
             "selrel": ("run", "run__event"),
@@ -429,7 +431,7 @@ def orga_outflows(request: HttpRequest, s: str) -> HttpResponse:
 
     # Render paginated table with outflow data and edit functionality
     return orga_paginate(
-        request, ctx, AccountingItemOutflow, "larpmanager/orga/accounting/outflows.html", "orga_outflows_edit"
+        request, context, AccountingItemOutflow, "larpmanager/orga/accounting/outflows.html", "orga_outflows_edit"
     )
 
 
@@ -453,10 +455,10 @@ def orga_inflows(request: HttpRequest, s: str) -> dict:
         dict: Rendered HTTP response with paginated inflows table and context data
     """
     # Check user permissions for accessing organization inflow data
-    ctx = check_event_permission(request, s, "orga_inflows")
+    context = check_event_permission(request, s, "orga_inflows")
 
     # Configure context with table display settings and field definitions
-    ctx.update(
+    context.update(
         {
             # Define related model relationships for efficient database queries
             "selrel": ("run", "run__event"),
@@ -477,7 +479,7 @@ def orga_inflows(request: HttpRequest, s: str) -> dict:
 
     # Return paginated view with configured context and template rendering
     return orga_paginate(
-        request, ctx, AccountingItemInflow, "larpmanager/orga/accounting/inflows.html", "orga_inflows_edit"
+        request, context, AccountingItemInflow, "larpmanager/orga/accounting/inflows.html", "orga_inflows_edit"
     )
 
 
@@ -502,17 +504,17 @@ def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered template with expense data and pagination controls
     """
     # Check user permissions for expense management and initialize context
-    ctx = check_event_permission(request, s, "orga_expenses")
+    context = check_event_permission(request, s, "orga_expenses")
 
     # Determine if approval functionality should be disabled for this organization
-    ctx["disable_approval"] = get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False, ctx)
+    context["disable_approval"] = get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, context)
 
     # Cache the translated approval text for callback usage
     approve = _("Approve")
 
     # Configure table display settings including related field prefetching
     # and column definitions with their respective labels
-    ctx.update(
+    context.update(
         {
             "selrel": ("run", "run__event"),
             "fields": [
@@ -530,8 +532,8 @@ def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
                 # Generate download link for expense statement documents
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
-                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[ctx['run'].get_slug(), el.id])}'>{approve}</a>"
-                if not el.is_approved and not ctx["disable_approval"]
+                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.id])}'>{approve}</a>"
+                if not el.is_approved and not context["disable_approval"]
                 else "",
                 # Display human-readable expense type from model choices
                 "type": lambda el: el.get_exp_display(),
@@ -541,7 +543,7 @@ def orga_expenses(request: HttpRequest, s: str) -> HttpResponse:
 
     # Render paginated expense list using the organization template
     return orga_paginate(
-        request, ctx, AccountingItemExpense, "larpmanager/orga/accounting/expenses.html", "orga_expenses_edit"
+        request, context, AccountingItemExpense, "larpmanager/orga/accounting/expenses.html", "orga_expenses_edit"
     )
 
 
@@ -571,10 +573,10 @@ def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpRespons
                 lacks permission for the event
     """
     # Check user permissions for expense management on this event
-    ctx = check_event_permission(request, s, "orga_expenses")
+    context = check_event_permission(request, s, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
-    if get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False):
+    if get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False):
         raise Http404("eh no caro mio")
 
     # Retrieve the expense object or raise 404 if not found
@@ -584,7 +586,7 @@ def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpRespons
         raise Http404("no id expense") from err
 
     # Ensure the expense belongs to the current event
-    if exp.run.event != ctx["event"]:
+    if exp.run.event != context["event"]:
         raise Http404("not your orga")
 
     # Update expense approval status and save to database
@@ -593,4 +595,4 @@ def orga_expenses_approve(request: HttpRequest, s: str, num: int) -> HttpRespons
 
     # Display success message and redirect to expenses list
     messages.success(request, _("Request approved"))
-    return redirect("orga_expenses", s=ctx["run"].get_slug())
+    return redirect("orga_expenses", s=context["run"].get_slug())

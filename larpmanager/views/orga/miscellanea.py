@@ -70,9 +70,9 @@ from larpmanager.utils.writing import writing_post
 @login_required
 def orga_albums(request: HttpRequest, s: str) -> HttpResponse:
     """Display albums for an event run in the organizer dashboard."""
-    ctx = check_event_permission(request, s, "orga_albums")
-    ctx["list"] = Album.objects.filter(run=ctx["run"]).order_by("-created")
-    return render(request, "larpmanager/orga/albums.html", ctx)
+    context = check_event_permission(request, s, "orga_albums")
+    context["list"] = Album.objects.filter(run=context["run"]).order_by("-created")
+    return render(request, "larpmanager/orga/albums.html", context)
 
 
 @login_required
@@ -96,10 +96,10 @@ def orga_albums_upload(request: HttpRequest, s: Event, a: str) -> HttpResponse:
         PermissionDenied: If user lacks orga_albums permission for the event
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_albums")
+    context = check_event_permission(request, s, "orga_albums")
 
     # Retrieve and validate the album using the provided code
-    get_album_cod(ctx, a)
+    get_album_cod(context, a)
 
     # Handle POST request for file upload
     if request.method == "POST":
@@ -109,7 +109,7 @@ def orga_albums_upload(request: HttpRequest, s: Event, a: str) -> HttpResponse:
         # Validate form data and process upload
         if form.is_valid():
             # Upload files to the specified album
-            upload_albums(ctx["album"], request.FILES["elem"])
+            upload_albums(context["album"], request.FILES["elem"])
 
             # Show success message and redirect to same page
             messages.success(request, s, _("Photos and videos successfully uploaded") + "!")
@@ -119,16 +119,16 @@ def orga_albums_upload(request: HttpRequest, s: Event, a: str) -> HttpResponse:
         form = UploadAlbumsForm()
 
     # Add form to context and render upload template
-    ctx["form"] = form
-    return render(request, "larpmanager/orga/albums_upload.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/orga/albums_upload.html", context)
 
 
 @login_required
 def orga_utils(request: HttpRequest, s: str) -> HttpResponse:
     """Render utility items management page for event organizers."""
-    ctx = check_event_permission(request, s, "orga_utils")
-    ctx["list"] = Util.objects.filter(event=ctx["event"]).order_by("number")
-    return render(request, "larpmanager/orga/utils.html", ctx)
+    context = check_event_permission(request, s, "orga_utils")
+    context["list"] = Util.objects.filter(event=context["event"]).order_by("number")
+    return render(request, "larpmanager/orga/utils.html", context)
 
 
 @login_required
@@ -153,20 +153,20 @@ def orga_workshops(request: HttpRequest, s: str) -> HttpResponse:
             with context containing workshop data and member completion info
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_workshops")
+    context = check_event_permission(request, s, "orga_workshops")
 
     # Get all workshops for this event
-    workshops = ctx["event"].workshops.all()
+    workshops = context["event"].workshops.all()
 
     # Set time limit for workshop completion (365 days ago)
     limit = datetime.now() - timedelta(days=365)
 
     # Initialize context lists for template rendering
-    ctx["pinocchio"] = []  # Members who haven't completed all workshops
-    ctx["list"] = []  # All registered members with completion counts
+    context["pinocchio"] = []  # Members who haven't completed all workshops
+    context["list"] = []  # All registered members with completion counts
 
     # Process each active registration for the event run
-    for reg in Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True):
+    for reg in Registration.objects.filter(run=context["run"], cancellation_date__isnull=True):
         # Count completed workshops for this member
         reg.num = 0
         for w in workshops:
@@ -176,12 +176,12 @@ def orga_workshops(request: HttpRequest, s: str) -> HttpResponse:
 
         # Add member to pinocchio list if they haven't completed all workshops
         if reg.num != len(workshops):
-            ctx["pinocchio"].append(reg.member)
+            context["pinocchio"].append(reg.member)
 
         # Add registration to main list with completion count
-        ctx["list"].append(reg)
+        context["list"].append(reg)
 
-    return render(request, "larpmanager/orga/workshop/workshops.html", ctx)
+    return render(request, "larpmanager/orga/workshop/workshops.html", context)
 
 
 @login_required
@@ -196,12 +196,12 @@ def orga_workshop_modules(request: HttpRequest, s: str) -> HttpResponse:
         Rendered workshop modules page
     """
     # Check permissions and get event context
-    ctx = check_event_permission(request, s, "orga_workshop_modules")
+    context = check_event_permission(request, s, "orga_workshop_modules")
 
     # Retrieve and order workshop modules
-    ctx["list"] = WorkshopModule.objects.filter(event=ctx["event"]).order_by("number")
+    context["list"] = WorkshopModule.objects.filter(event=context["event"]).order_by("number")
 
-    return render(request, "larpmanager/orga/workshop/modules.html", ctx)
+    return render(request, "larpmanager/orga/workshop/modules.html", context)
 
 
 @login_required
@@ -213,16 +213,18 @@ def orga_workshop_modules_edit(request, s, num):
 def orga_workshop_questions(request: HttpRequest, s: str) -> HttpResponse:
     """Handle workshop questions management for organizers."""
     # Check user permissions for workshop questions management
-    ctx = check_event_permission(request, s, "orga_workshop_questions")
+    context = check_event_permission(request, s, "orga_workshop_questions")
 
     # Process POST requests for creating/updating questions
     if request.method == "POST":
-        return writing_post(request, ctx, WorkshopQuestion, "workshop_question")
+        return writing_post(request, context, WorkshopQuestion, "workshop_question")
 
     # Retrieve and order workshop questions by module and question number
-    ctx["list"] = WorkshopQuestion.objects.filter(module__event=ctx["event"]).order_by("module__number", "number")
+    context["list"] = WorkshopQuestion.objects.filter(module__event=context["event"]).order_by(
+        "module__number", "number"
+    )
 
-    return render(request, "larpmanager/orga/workshop/questions.html", ctx)
+    return render(request, "larpmanager/orga/workshop/questions.html", context)
 
 
 @login_required
@@ -242,19 +244,19 @@ def orga_workshop_options(request: HttpRequest, s: str) -> HttpResponse:
         Rendered template response or POST redirect
     """
     # Check user permissions for workshop options management
-    ctx = check_event_permission(request, s, "orga_workshop_options")
+    context = check_event_permission(request, s, "orga_workshop_options")
 
     # Handle POST requests for creating/updating workshop options
     if request.method == "POST":
-        return writing_post(request, ctx, WorkshopOption, "workshop_option")
+        return writing_post(request, context, WorkshopOption, "workshop_option")
 
     # Fetch and order workshop options for the event
-    ctx["list"] = WorkshopOption.objects.filter(question__module__event=ctx["event"]).order_by(
+    context["list"] = WorkshopOption.objects.filter(question__module__event=context["event"]).order_by(
         "question__module__number", "question__number", "is_correct"
     )
 
     # Render the workshop options template
-    return render(request, "larpmanager/orga/workshop/options.html", ctx)
+    return render(request, "larpmanager/orga/workshop/options.html", context)
 
 
 @login_required
@@ -266,12 +268,12 @@ def orga_workshop_options_edit(request, s, num):
 def orga_problems(request: HttpRequest, s: str) -> HttpResponse:
     """Display filterable list of reported problems for an event."""
     # Check event access permissions
-    ctx = check_event_permission(request, s, "orga_problems")
+    context = check_event_permission(request, s, "orga_problems")
 
     # Fetch problems ordered by status and severity
-    ctx["list"] = Problem.objects.filter(event=ctx["event"]).order_by("status", "-severity")
+    context["list"] = Problem.objects.filter(event=context["event"]).order_by("status", "-severity")
 
-    return render(request, "larpmanager/orga/problems.html", ctx)
+    return render(request, "larpmanager/orga/problems.html", context)
 
 
 @login_required
@@ -283,12 +285,12 @@ def orga_problems_edit(request, s, num):
 def orga_warehouse_area(request: HttpRequest, s: str) -> HttpResponse:
     """Render warehouse area management page for event organizers."""
     # Check organizer permissions and get event context
-    ctx = check_event_permission(request, s, "orga_warehouse_area")
+    context = check_event_permission(request, s, "orga_warehouse_area")
 
     # Retrieve all warehouse areas for the event
-    ctx["list"] = ctx["event"].get_elements(WarehouseArea)
+    context["list"] = context["event"].get_elements(WarehouseArea)
 
-    return render(request, "larpmanager/orga/warehouse/area.html", ctx)
+    return render(request, "larpmanager/orga/warehouse/area.html", context)
 
 
 @login_required
@@ -319,27 +321,29 @@ def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> H
         Http404: If warehouse area with specified ID does not exist
     """
     # Check user permissions and get base context with event and area data
-    ctx = check_event_permission(request, s, "orga_warehouse_area")
-    get_element(ctx, num, "area", WarehouseArea)
+    context = check_event_permission(request, s, "orga_warehouse_area")
+    get_element(context, num, "area", WarehouseArea)
 
     # Configure optional warehouse display settings for quantity columns
-    get_warehouse_optionals(ctx, [6, 7])
-    if ctx["optionals"]["quantity"]:
-        ctx["no_header_cols"] = [8, 9]
+    get_warehouse_optionals(context, [6, 7])
+    if context["optionals"]["quantity"]:
+        context["no_header_cols"] = [8, 9]
 
     # Retrieve all warehouse items for the association with prefetched tags
     item_all: dict[int, Any] = {}
-    for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags").select_related("container"):
+    for item in (
+        WarehouseItem.objects.filter(assoc_id=context["a_id"]).prefetch_related("tags").select_related("container")
+    ):
         # Set initial availability to item's total quantity
         item.available = item.quantity or 0
         item_all[item.id] = item
 
     # Process existing warehouse item assignments to calculate availability
-    for el in ctx["event"].get_elements(WarehouseItemAssignment).filter(event=ctx["event"]):
+    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"]):
         item = item_all[el.item_id]
 
         # Mark items assigned to current area and track assignment details
-        if el.area_id == ctx["area"].pk:
+        if el.area_id == context["area"].pk:
             item.assigned = {"quantity": el.quantity, "notes": el.notes}
         else:
             # Reduce available quantity for items assigned to other areas
@@ -364,8 +368,8 @@ def orga_warehouse_area_assignments(request: HttpRequest, s: str, num: int) -> H
     )
 
     # Rebuild dictionary preserving sorted order for template rendering
-    ctx["item_all"] = {it.id: it for it in ordered_items}
-    return render(request, "larpmanager/orga/warehouse/assignments.html", ctx)
+    context["item_all"] = {it.id: it for it in ordered_items}
+    return render(request, "larpmanager/orga/warehouse/assignments.html", context)
 
 
 @login_required
@@ -381,28 +385,28 @@ def orga_warehouse_checks(request, s: str) -> HttpResponse:
         HttpResponse: Rendered template with warehouse items and their assignments
     """
     # Check user permissions for warehouse management in this event
-    ctx = check_event_permission(request, s, "orga_warehouse_checks")
+    context = check_event_permission(request, s, "orga_warehouse_checks")
 
     # Initialize items dictionary to store warehouse items with assignments
-    ctx["items"] = {}
+    context["items"] = {}
 
     # Iterate through all warehouse item assignments for this event
-    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
+    for el in context["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
         # Check if item is already in our items dictionary
-        if el.item_id not in ctx["items"]:
+        if el.item_id not in context["items"]:
             # First time seeing this item, initialize it with empty assignment list
             item = el.item
             item.assignment_list = []
-            ctx["items"][el.item_id] = item
+            context["items"][el.item_id] = item
 
         # Add this assignment to the item's assignment list
-        ctx["items"][el.item_id].assignment_list.append(el)
+        context["items"][el.item_id].assignment_list.append(el)
 
     # Add warehouse optional configurations to context
-    get_warehouse_optionals(ctx, [])
+    get_warehouse_optionals(context, [])
 
     # Render the warehouse checks template with populated context
-    return render(request, "larpmanager/orga/warehouse/checks.html", ctx)
+    return render(request, "larpmanager/orga/warehouse/checks.html", context)
 
 
 @login_required
@@ -425,28 +429,28 @@ def orga_warehouse_manifest(request: HttpRequest, s: str) -> HttpResponse:
         PermissionDenied: If user lacks orga_warehouse_manifest permission
     """
     # Check user permissions and get base context for the event
-    ctx = check_event_permission(request, s, "orga_warehouse_manifest")
+    context = check_event_permission(request, s, "orga_warehouse_manifest")
 
     # Initialize empty area list and get warehouse optional configurations
-    ctx["area_list"] = {}
-    get_warehouse_optionals(ctx, [])
+    context["area_list"] = {}
+    get_warehouse_optionals(context, [])
 
     # Iterate through warehouse item assignments for this event
     # Group items by their assigned areas for manifest organization
-    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
+    for el in context["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
         # Create area entry if it doesn't exist in the area list
-        if el.area_id not in ctx["area_list"]:
-            ctx["area_list"][el.area_id] = el.area
+        if el.area_id not in context["area_list"]:
+            context["area_list"][el.area_id] = el.area
 
         # Initialize items list for the area if not already present
-        if not hasattr(ctx["area_list"][el.area_id], "items"):
-            ctx["area_list"][el.area_id].items = []
+        if not hasattr(context["area_list"][el.area_id], "items"):
+            context["area_list"][el.area_id].items = []
 
         # Add the warehouse item assignment to the area's items list
-        ctx["area_list"][el.area_id].items.append(el)
+        context["area_list"][el.area_id].items.append(el)
 
     # Render the warehouse manifest template with organized data
-    return render(request, "larpmanager/orga/warehouse/manifest.html", ctx)
+    return render(request, "larpmanager/orga/warehouse/manifest.html", context)
 
 
 @login_required
@@ -478,7 +482,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, s: str) -> JsonResp
         ObjectDoesNotExist: When assignment with given idx doesn't exist
     """
     # Check user permissions for warehouse manifest access
-    ctx = check_event_permission(request, s, "orga_warehouse_manifest")
+    context = check_event_permission(request, s, "orga_warehouse_manifest")
 
     # Extract and validate POST parameters
     idx = request.POST.get("idx")
@@ -492,7 +496,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, s: str) -> JsonResp
         return JsonResponse({"error": "not found"}, status=400)
 
     # Verify assignment belongs to the current event
-    if assign.event_id != ctx["event"].id:
+    if assign.event_id != context["event"].id:
         return JsonResponse({"error": "not your event"}, status=400)
 
     # Map request type to model field and update
@@ -523,8 +527,8 @@ def orga_warehouse_assignment_area(request: HttpRequest, s: str, num: str) -> Js
         ValidationError: If required permissions are not met or area doesn't exist
     """
     # Check event permissions and retrieve the warehouse area
-    ctx = check_event_permission(request, s, "orga_warehouse_manifest")
-    get_element(ctx, num, "area", WarehouseArea)
+    context = check_event_permission(request, s, "orga_warehouse_manifest")
+    get_element(context, num, "area", WarehouseArea)
 
     # Extract assignment parameters from POST data
     idx = request.POST.get("idx")
@@ -534,11 +538,13 @@ def orga_warehouse_assignment_area(request: HttpRequest, s: str, num: str) -> Js
 
     # Handle item deselection - remove existing assignment
     if not selected:
-        WarehouseItemAssignment.objects.filter(item_id=idx, area=ctx["area"]).delete()
+        WarehouseItemAssignment.objects.filter(item_id=idx, area=context["area"]).delete()
         return JsonResponse({"ok": True})
 
     # Handle item selection - create or update assignment
-    (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(item_id=idx, area=ctx["area"], event=ctx["event"])
+    (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(
+        item_id=idx, area=context["area"], event=context["event"]
+    )
     assign.quantity = quantity
     assign.notes = notes
     assign.save()
@@ -549,9 +555,9 @@ def orga_warehouse_assignment_area(request: HttpRequest, s: str, num: str) -> Js
 @login_required
 def orga_onetimes(request, s):
     """List all one-time contents for an event."""
-    ctx = check_event_permission(request, s, "orga_onetimes")
-    ctx["list"] = OneTimeContent.objects.filter(event=ctx["event"]).order_by("-created")
-    return render(request, "larpmanager/orga/onetimes.html", ctx)
+    context = check_event_permission(request, s, "orga_onetimes")
+    context["list"] = OneTimeContent.objects.filter(event=context["event"]).order_by("-created")
+    return render(request, "larpmanager/orga/onetimes.html", context)
 
 
 @login_required
@@ -572,12 +578,12 @@ def orga_onetimes_tokens(request: HttpRequest, s: str) -> HttpResponse:
         Rendered template with token list
     """
     # Check user has permission to view one-time tokens for this event
-    ctx = check_event_permission(request, s, "orga_onetimes")
+    context = check_event_permission(request, s, "orga_onetimes")
 
     # Fetch all tokens for the event, ordered by creation date
-    ctx["list"] = OneTimeAccessToken.objects.filter(content__event=ctx["event"]).order_by("-created")
+    context["list"] = OneTimeAccessToken.objects.filter(content__event=context["event"]).order_by("-created")
 
-    return render(request, "larpmanager/orga/onetimes_tokens.html", ctx)
+    return render(request, "larpmanager/orga/onetimes_tokens.html", context)
 
 
 @login_required

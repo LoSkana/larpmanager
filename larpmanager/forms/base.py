@@ -63,7 +63,7 @@ class MyForm(forms.ModelForm):
         Args:
             *args: Positional arguments passed to parent ModelForm.
             **kwargs: Keyword arguments that may include:
-                - ctx: Context data dictionary
+                - context: Context data dictionary
                 - run: Run instance for form context
                 - request: HTTP request object
 
@@ -74,8 +74,8 @@ class MyForm(forms.ModelForm):
         """
         # Initialize parent class and extract context parameters
         super().__init__()
-        if "ctx" in kwargs:
-            self.params = kwargs.pop("ctx")
+        if "context" in kwargs:
+            self.params = kwargs.pop("context")
         else:
             self.params = {}
 
@@ -1276,17 +1276,17 @@ class BaseAccForm(forms.Form):
 
         Args:
             *args: Variable positional arguments passed to parent class.
-            **kwargs: Variable keyword arguments including required 'ctx' key.
+            **kwargs: Variable keyword arguments including required 'context' key.
         """
-        self.ctx = kwargs.pop("ctx")
+        self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
         # Build choices list from available payment methods
-        self.methods = self.ctx["methods"]
+        self.methods = self.context["methods"]
         cho = []
         for s in self.methods:
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
         # Load payment fees configuration for the association
-        self.ctx["user_fees"] = get_assoc_config(self.ctx["a_id"], "payment_fees_user", False, self.ctx)
+        self.context["user_fees"] = get_assoc_config(self.context["a_id"], "payment_fees_user", False, self.context)

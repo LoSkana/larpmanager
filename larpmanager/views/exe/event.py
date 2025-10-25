@@ -55,17 +55,17 @@ from larpmanager.views.user.event import get_coming_runs
 def exe_events(request: HttpRequest) -> HttpResponse:
     """Display events for the current association with registration status and counts."""
     # Check permissions and get association context
-    ctx = check_assoc_permission(request, "exe_events")
+    context = check_assoc_permission(request, "exe_events")
 
     # Get all runs for the association, ordered by end date
-    ctx["list"] = Run.objects.filter(event__assoc_id=ctx["a_id"]).select_related("event").order_by("end")
+    context["list"] = Run.objects.filter(event__assoc_id=context["a_id"]).select_related("event").order_by("end")
 
     # Add registration status and counts to each run
-    for run in ctx["list"]:
+    for run in context["list"]:
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
 
-    return render(request, "larpmanager/exe/events.html", ctx)
+    return render(request, "larpmanager/exe/events.html", context)
 
 
 @login_required
@@ -89,26 +89,26 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If specified event number doesn't exist
     """
     # Check user has executive events permission for the association
-    ctx = check_assoc_permission(request, "exe_events")
+    context = check_assoc_permission(request, "exe_events")
 
     if num:
         # Handle editing of existing event or run
         # Retrieve the run object and set it in context
-        backend_get(ctx, Run, num, "event")
+        backend_get(context, Run, num, "event")
         # Delegate to full event edit with executive flag enabled
-        return full_event_edit(ctx, request, ctx["el"].event, ctx["el"], is_executive=True)
+        return full_event_edit(context, request, context["el"].event, context["el"], is_executive=True)
 
     # Handle creation of new event
     # Set executive context flag for form rendering
-    ctx["exe"] = True
+    context["exe"] = True
 
     # Process form submission and handle creation logic
-    if backend_edit(request, ctx, ExeEventForm, num, quiet=True):
+    if backend_edit(request, context, ExeEventForm, num, quiet=True):
         # Check if event was successfully created (saved context and new event)
-        if "saved" in ctx and num == 0:
+        if "saved" in context and num == 0:
             # Automatically add requesting user as event organizer
             # Get or create organizer role (number=1 is standard organizer role)
-            (er, created) = EventRole.objects.get_or_create(event=ctx["saved"], number=1)
+            (er, created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
             if not er.name:
                 er.name = "Organizer"
             # Add current user's member profile to organizer role
@@ -116,7 +116,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
             er.save()
 
             # Refresh cached event links for user navigation
-            reset_event_links(request.user.id, ctx["a_id"])
+            reset_event_links(request.user.id, context["a_id"])
 
             # Prepare success message encouraging quick setup completion
             msg = (
@@ -126,13 +126,13 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
             )
             messages.success(request, msg)
             # Redirect to quick setup page for new event
-            return redirect("orga_quick", s=ctx["saved"].slug)
+            return redirect("orga_quick", s=context["saved"].slug)
         # Redirect back to events list after successful edit
         return redirect("exe_events")
 
     # Configure form context and render edit template
-    ctx["add_another"] = False
-    return render(request, "larpmanager/exe/edit.html", ctx)
+    context["add_another"] = False
+    return render(request, "larpmanager/exe/edit.html", context)
 
 
 @login_required
@@ -153,18 +153,18 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
     creating default organizer role if none exist.
     """
     # Check user permissions for template management
-    ctx = check_assoc_permission(request, "exe_templates")
+    context = check_assoc_permission(request, "exe_templates")
 
     # Get all template events for the organization, ordered by last update
-    ctx["list"] = Event.objects.filter(assoc_id=ctx["a_id"], template=True).order_by("-updated")
+    context["list"] = Event.objects.filter(assoc_id=context["a_id"], template=True).order_by("-updated")
 
     # Ensure each template has at least one role (organizer by default)
-    for el in ctx["list"]:
+    for el in context["list"]:
         el.roles = EventRole.objects.filter(event=el).order_by("number")
         if not el.roles:
             el.roles = [EventRole.objects.create(event=el, number=1, name="Organizer")]
 
-    return render(request, "larpmanager/exe/templates.html", ctx)
+    return render(request, "larpmanager/exe/templates.html", context)
 
 
 @login_required
@@ -210,13 +210,13 @@ def exe_pre_registrations(request) -> HttpResponse:
             with counts organized by preference level or total counts
     """
     # Check user permissions and initialize context
-    ctx = check_assoc_permission(request, "exe_pre_registrations")
-    ctx["list"] = []
-    ctx["pr"] = []
-    ctx["seen"] = []
+    context = check_assoc_permission(request, "exe_pre_registrations")
+    context["list"] = []
+    context["pr"] = []
+    context["seen"] = []
 
     # Get preference configuration for the association
-    ctx["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
+    context["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
 
     # Iterate through all non-template events for this association
     for event in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
@@ -227,7 +227,7 @@ def exe_pre_registrations(request) -> HttpResponse:
         # Get pre-registration data for current event
         pr = get_pre_registration(event)
 
-        if ctx["preferences"]:
+        if context["preferences"]:
             # Process preference-based registration counts (1-5 scale)
             event.count = {}
             for idx in range(1, 6):
@@ -240,19 +240,19 @@ def exe_pre_registrations(request) -> HttpResponse:
             event.total = len(pr["list"])
 
         # Add processed event to results list
-        ctx["list"].append(event)
+        context["list"].append(event)
 
-    return render(request, "larpmanager/exe/pre_registrations.html", ctx)
+    return render(request, "larpmanager/exe/pre_registrations.html", context)
 
 
 @login_required
 def exe_deadlines(request: HttpRequest) -> HttpResponse:
     """Display upcoming run deadlines for the association."""
     # Check user has permission to view deadlines
-    ctx = check_assoc_permission(request, "exe_deadlines")
+    context = check_assoc_permission(request, "exe_deadlines")
 
     # Get upcoming runs and check their deadlines
     runs = get_coming_runs(request.assoc["id"])
-    ctx["list"] = check_run_deadlines(runs)
+    context["list"] = check_run_deadlines(runs)
 
-    return render(request, "larpmanager/exe/deadlines.html", ctx)
+    return render(request, "larpmanager/exe/deadlines.html", context)

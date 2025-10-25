@@ -47,15 +47,15 @@ def get_cache_lm_home() -> dict:
         Cached or freshly computed home data.
     """
     # Get cache key and attempt to retrieve cached data
-    key = cache_larpmanager_home_key()
-    res = cache.get(key)
+    cache_key = cache_larpmanager_home_key()
+    cached_data = cache.get(cache_key)
 
     # If cache miss, compute fresh data and cache it
-    if res is None:
-        res = update_cache_lm_home()
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_data is None:
+        cached_data = update_cache_lm_home()
+        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_data
 
 
 def update_cache_lm_home() -> dict[str, int | list]:
@@ -73,24 +73,24 @@ def update_cache_lm_home() -> dict[str, int | list]:
             - showcase: List of showcase items
             - reviews: List of review data
     """
-    ctx = {}
+    context = {}
 
     # Count objects for main models and round to two significant digits
     for el in [Event, Character, Registration, Member, PaymentInvoice]:
         nm = str(el.__name__).lower()
         cnt = el.objects.count()
-        ctx[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
+        context[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
 
     # Count runs that have more than 5 registrations
     que_run = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
-    ctx["cnt_run"] = int(round_to_two_significant_digits(que_run.count()))
+    context["cnt_run"] = int(round_to_two_significant_digits(que_run.count()))
 
     # Gather additional display data
-    ctx["promoters"] = _get_promoters()
-    ctx["showcase"] = _get_showcases()
-    ctx["reviews"] = _get_reviews()
+    context["promoters"] = _get_promoters()
+    context["showcase"] = _get_showcases()
+    context["reviews"] = _get_reviews()
 
-    return ctx
+    return context
 
 
 def _get_reviews() -> list[dict]:

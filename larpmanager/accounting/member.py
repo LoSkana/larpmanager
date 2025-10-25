@@ -190,32 +190,32 @@ def _init_choices(member):
     return choices
 
 
-def _info_token_credit(ctx, member):
+def _info_token_credit(context, member):
     """Get token and credit balance information for a member.
 
     Args:
-        ctx: Context dictionary with association ID to update
+        context: Context dictionary with association ID to update
         member: Member instance to check balances for
 
     Side effects:
-        Updates ctx with acc_tokens and acc_credits counts
+        Updates context with acc_tokens and acc_credits counts
     """
     # check if it had any token
     token_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.TOKEN,
-        assoc_id=ctx["a_id"],
+        assoc_id=context["a_id"],
     )
-    ctx["acc_tokens"] = token_queryset.count()
+    context["acc_tokens"] = token_queryset.count()
 
     # check if it had any credits
-    expense_queryset = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=ctx["a_id"])
+    expense_queryset = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=context["a_id"])
     credit_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.CREDIT,
-        assoc_id=ctx["a_id"],
+        assoc_id=context["a_id"],
     )
-    ctx["acc_credits"] = expense_queryset.count() + credit_queryset.count()
+    context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
 def _info_collections(context, member, request):

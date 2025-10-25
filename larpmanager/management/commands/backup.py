@@ -60,11 +60,11 @@ class Command(BaseCommand):
         # Process all runs that are not done or cancelled
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             # Prepare context with run, event, and feature information
-            ctx = {"run": run, "event": run.event, "features": get_event_features(run.event_id)}
-            prepare_run(ctx)
+            context = {"run": run, "event": run.event, "features": get_event_features(run.event_id)}
+            prepare_run(context)
 
             # Generate the backup content
-            resp = _prepare_backup(ctx)
+            resp = _prepare_backup(context)
 
             # Build hierarchical path: base_path/event_id/year/month/day/run_name.zip
             path = os.path.join(

@@ -70,14 +70,14 @@ def get_event_cache_all_key(event_run):
     return f"event_factions_characters_{event_run.event.slug}_{event_run.number}"
 
 
-def init_event_cache_all(ctx: dict) -> dict:
+def init_event_cache_all(context: dict) -> dict:
     """Initialize complete event cache with characters, factions, and traits.
 
     Builds a comprehensive cache for event data by sequentially loading
     characters, factions, and conditionally traits based on available features.
 
     Args:
-        ctx: Context dictionary containing event and feature data.
+        context: Context dictionary containing event and feature data.
              Must include 'features' key for feature availability checks.
 
     Returns:
@@ -88,19 +88,19 @@ def init_event_cache_all(ctx: dict) -> dict:
     res = {}
 
     # Load character data into cache
-    get_event_cache_characters(ctx, res)
+    get_event_cache_characters(context, res)
 
     # Load faction data into cache
-    get_event_cache_factions(ctx, res)
+    get_event_cache_factions(context, res)
 
     # Conditionally load traits if questbuilder feature is available
-    if "questbuilder" in ctx["features"]:
-        get_event_cache_traits(ctx, res)
+    if "questbuilder" in context["features"]:
+        get_event_cache_traits(context, res)
 
     return res
 
 
-def get_event_cache_characters(ctx: dict, res: dict) -> dict:
+def get_event_cache_characters(context: dict, res: dict) -> dict:
     """Cache character data for an event including assignments and registrations.
 
     This function populates the results dictionary with character data for caching purposes.
@@ -108,7 +108,7 @@ def get_event_cache_characters(ctx: dict, res: dict) -> dict:
     event configuration and mirror functionality.
 
     Args:
-        ctx: Context dictionary containing event data, features, run information, and event config.
+        context: Context dictionary containing event data, features, run information, and event config.
         res: Results dictionary to populate with character data and metadata.
 
     Returns:
@@ -117,31 +117,33 @@ def get_event_cache_characters(ctx: dict, res: dict) -> dict:
     res["chars"] = {}
 
     # Check if mirror feature is enabled for character filtering
-    mirror = "mirror" in ctx["features"]
+    mirror = "mirror" in context["features"]
 
     # Build assignments mapping from character number to registration relation
-    ctx["assignments"] = {}
-    reg_que = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"])
+    context["assignments"] = {}
+    reg_que = RegistrationCharacterRel.objects.filter(reg__run=context["run"])
     for el in reg_que.select_related("character", "reg", "reg__member"):
-        ctx["assignments"][el.character.number] = el
+        context["assignments"][el.character.number] = el
 
     # Get event configuration for hiding uncasted characters
-    hide_uncasted_characters = get_event_config(ctx["event"].id, "gallery_hide_uncasted_characters", False, ctx)
+    hide_uncasted_characters = get_event_config(context["event"].id, "gallery_hide_uncasted_characters", False, context)
 
     # Get list of assigned character IDs for mirror filtering
-    assigned_chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
+    assigned_chars = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
+        "character_id", flat=True
+    )
 
     # Process each character for the event cache
-    que = ctx["event"].get_elements(Character).filter(hide=False).order_by("number")
+    que = context["event"].get_elements(Character).filter(hide=False).order_by("number")
     for ch in que.prefetch_related("factions_list"):
         # Skip mirror characters that are already assigned
         if mirror and ch.mirror_id in assigned_chars:
             continue
 
         # Build character data and search for player information
-        data = ch.show(ctx["run"])
+        data = ch.show(context["run"])
         data["fields"] = {}
-        search_player(ch, data, ctx)
+        search_player(ch, data, context)
 
         # Hide uncasted characters if configuration is enabled
         if hide_uncasted_characters and data["player_id"] == 0:
@@ -150,7 +152,7 @@ def get_event_cache_characters(ctx: dict, res: dict) -> dict:
         res["chars"][int(data["number"])] = data
 
     # Add field data to the cache
-    get_event_cache_fields(ctx, res)
+    get_event_cache_fields(context, res)
 
     # Set the maximum character number for reference
     if res["chars"]:
@@ -161,7 +163,7 @@ def get_event_cache_characters(ctx: dict, res: dict) -> dict:
     return res
 
 
-def get_event_cache_fields(ctx: dict, res: dict, only_visible: bool = True) -> None:
+def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) -> None:
     """
     Retrieve and cache writing fields for characters in an event.
 
@@ -169,7 +171,7 @@ def get_event_cache_fields(ctx: dict, res: dict, only_visible: bool = True) -> N
     responses, including both multiple choice selections and text answers.
 
     Args:
-        ctx: Context dictionary containing features and questions data
+        context: Context dictionary containing features and questions data
         res: Result dictionary with character data under 'chars' key
         only_visible: Whether to include only visible fields. Defaults to True.
 
@@ -181,16 +183,16 @@ def get_event_cache_fields(ctx: dict, res: dict, only_visible: bool = True) -> N
         no questions are available in the context.
     """
     # Early return if character feature is not enabled
-    if "character" not in ctx["features"]:
+    if "character" not in context["features"]:
         return
 
-    # Retrieve visible question IDs and populate ctx with questions
-    visible_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
-    if "questions" not in ctx:
+    # Retrieve visible question IDs and populate context with questions
+    visible_writing_fields(context, QuestionApplicable.CHARACTER, only_visible=only_visible)
+    if "questions" not in context:
         return
 
     # Extract question IDs from context for database filtering
-    question_idxs = ctx["questions"].keys()
+    question_idxs = context["questions"].keys()
 
     # Create mapping from character IDs to their position numbers in results
     mapping = {}
@@ -240,7 +242,7 @@ def get_character_element_fields(context, character_id, only_visible=True):
 
 
 def get_writing_element_fields(
-    ctx: dict, feature_name: str, applicable, element_id: int, only_visible: bool = True
+    context: dict, feature_name: str, applicable, element_id: int, only_visible: bool = True
 ) -> dict:
     """
     Get writing fields for a specific element with visibility filtering.
@@ -249,7 +251,7 @@ def get_writing_element_fields(
     applying visibility filters based on context configuration.
 
     Args:
-        ctx: Context dictionary containing event and configuration data including
+        context: Context dictionary containing event and configuration data including
              'questions', 'options', and visibility settings
         feature_name: Name of the feature (e.g., 'character', 'faction') used
                      for determining visibility key
@@ -264,15 +266,15 @@ def get_writing_element_fields(
             - fields: Mapping of question_id to field values (text or list of option_ids)
     """
     # Apply visibility filtering to populate context with visible fields
-    visible_writing_fields(ctx, applicable, only_visible=only_visible)
+    visible_writing_fields(context, applicable, only_visible=only_visible)
 
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
     visible_question_ids = []
-    for question_id in ctx["questions"].keys():
+    for question_id in context["questions"].keys():
         question_config_key = str(question_id)
         # Skip questions not marked as visible unless showing all
-        if "show_all" not in ctx and question_config_key not in ctx[f"show_{feature_name}"]:
+        if "show_all" not in context and question_config_key not in context[f"show_{feature_name}"]:
             continue
         visible_question_ids.append(question_id)
 
@@ -295,7 +297,7 @@ def get_writing_element_fields(
             question_id_to_value[question_id] = []
         question_id_to_value[question_id].append(option_id)
 
-    return {"questions": ctx["questions"], "options": ctx["options"], "fields": question_id_to_value}
+    return {"questions": context["questions"], "options": context["options"], "fields": question_id_to_value}
 
 
 def get_event_cache_factions(context: dict, result: dict) -> None:
@@ -372,7 +374,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         result["factions_typ"][faction.typ].append(faction.number)
 
 
-def get_event_cache_traits(ctx: dict, res: dict) -> None:
+def get_event_cache_traits(context: dict, res: dict) -> None:
     """Build cached trait and quest data for events.
 
     Organizes character traits, quest types, and related game mechanics data,
@@ -380,7 +382,7 @@ def get_event_cache_traits(ctx: dict, res: dict) -> None:
     mappings for efficient event cache operations.
 
     Args:
-        ctx: Context dictionary containing event information with 'event' and 'run' keys
+        context: Context dictionary containing event information with 'event' and 'run' keys
         res: Result dictionary to be populated with trait and quest data, must contain 'chars' key
 
     Returns:
@@ -395,17 +397,17 @@ def get_event_cache_traits(ctx: dict, res: dict) -> None:
     """
     # Build quest types mapping ordered by number
     res["quest_types"] = {}
-    for qt in QuestType.objects.filter(event=ctx["event"]).order_by("number"):
+    for qt in QuestType.objects.filter(event=context["event"]).order_by("number"):
         res["quest_types"][qt.number] = qt.show()
 
     # Build quests mapping with type relationships
     res["quests"] = {}
-    for qt in Quest.objects.filter(event=ctx["event"]).order_by("number").select_related("typ"):
+    for qt in Quest.objects.filter(event=context["event"]).order_by("number").select_related("typ"):
         res["quests"][qt.number] = qt.show()
 
     # Build trait relationships mapping (traits that reference other traits)
     aux = {}
-    for t in Trait.objects.filter(event=ctx["event"]).prefetch_related("traits"):
+    for t in Trait.objects.filter(event=context["event"]).prefetch_related("traits"):
         aux[t.number] = []
         # Add related trait numbers, excluding self-references
         for at in t.traits.all():
@@ -415,7 +417,7 @@ def get_event_cache_traits(ctx: dict, res: dict) -> None:
 
     # Build main traits mapping with character assignments
     res["traits"] = {}
-    que = AssignmentTrait.objects.filter(run=ctx["run"]).order_by("typ")
+    que = AssignmentTrait.objects.filter(run=context["run"]).order_by("typ")
 
     # Process each assigned trait and link to character
     for at in que.select_related("trait", "trait__quest", "trait__quest__typ"):
@@ -451,24 +453,24 @@ def get_event_cache_traits(ctx: dict, res: dict) -> None:
         res["max_tr_number"] = 0
 
 
-def get_event_cache_all(ctx: dict) -> None:
+def get_event_cache_all(context: dict) -> None:
     """Get and update event cache data for the given context.
 
     Args:
-        ctx: Context dictionary containing run information.
+        context: Context dictionary containing run information.
     """
     # Get cache key for the current run
-    cache_key = get_event_cache_all_key(ctx["run"])
+    cache_key = get_event_cache_all_key(context["run"])
 
     # Try to retrieve cached result
     cached_result = cache.get(cache_key)
     if cached_result is None:
         # Initialize cache if not found
-        cached_result = init_event_cache_all(ctx)
+        cached_result = init_event_cache_all(context)
         cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Update context with cached data
-    ctx.update(cached_result)
+    context.update(cached_result)
 
 
 def clear_run_cache_and_media(run: Run) -> None:
@@ -496,8 +498,8 @@ def update_character_fields(instance, data: dict) -> None:
         return
 
     # Build context and update data with character element fields
-    ctx = {"features": features, "event": instance.event}
-    data.update(get_character_element_fields(ctx, instance.pk, only_visible=False))
+    context = {"features": features, "event": instance.event}
+    data.update(get_character_element_fields(context, instance.pk, only_visible=False))
 
 
 def update_event_cache_all(run: Run, instance: BaseModel) -> None:

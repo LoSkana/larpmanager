@@ -107,18 +107,18 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with membership data and statistics.
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_membership")
+    context = check_assoc_permission(request, "exe_membership")
 
     # Get set of member IDs who have paid membership fees for current year
     fees = set(
-        AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=datetime.now().year).values_list(
+        AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=datetime.now().year).values_list(
             "member_id", flat=True
         )
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__assoc_id=ctx["a_id"], end__gt=datetime.today()).values_list("pk", "search")
+        Run.objects.filter(event__assoc_id=context["a_id"], end__gt=datetime.today()).values_list("pk", "search")
     )
 
     # Get registrations for upcoming runs and group by member
@@ -131,7 +131,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
     # Query memberships excluding certain statuses, with priority sorting
     que = (
-        Membership.objects.filter(assoc_id=ctx["a_id"])
+        Membership.objects.filter(assoc_id=context["a_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED])
         .annotate(
@@ -146,8 +146,8 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
     # Define fields to extract from membership query
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
-    ctx["list"] = []
-    ctx["sum"] = {}
+    context["list"] = []
+    context["sum"] = {}
 
     # Process each membership record
     for el in que.values(*values):
@@ -161,18 +161,18 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
             el["status_display"] = MembershipStatus(el["status"]).label
 
         # Count memberships by status for summary statistics
-        if el["status"] not in ctx["sum"]:
-            ctx["sum"][el["status"]] = 0
-        ctx["sum"][el["status"]] += 1
+        if el["status"] not in context["sum"]:
+            context["sum"][el["status"]] = 0
+        context["sum"][el["status"]] += 1
 
         # Add upcoming run names for members with registrations
         if el["member__id"] in next_regs:
             el["run_names"] = ", ".join(
                 [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs]
             )
-        ctx["list"].append(el)
+        context["list"].append(el)
 
-    return render(request, "larpmanager/exe/users/membership.html", ctx)
+    return render(request, "larpmanager/exe/users/membership.html", context)
 
 
 @login_required
@@ -191,11 +191,11 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
         HttpResponse: Rendered template with membership evaluation form
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_membership")
+    context = check_assoc_permission(request, "exe_membership")
 
     # Get member and their membership status
     member = Member.objects.get(pk=num)
-    get_user_membership(member, ctx["a_id"])
+    get_user_membership(member, context["a_id"])
 
     if request.method == "POST":
         # Process membership evaluation form submission
@@ -224,45 +224,45 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
         form = MembershipResponseForm()
 
     # Add member and form to context
-    ctx["member"] = member
-    ctx["form"] = form
+    context["member"] = member
+    context["form"] = form
 
     # Add document path if document exists
     if member.membership.document:
-        ctx["doc_path"] = member.membership.get_document_filepath().lower()
+        context["doc_path"] = member.membership.get_document_filepath().lower()
 
     # Add request path if request exists
     if member.membership.request:
-        ctx["req_path"] = member.membership.get_request_filepath().lower()
+        context["req_path"] = member.membership.get_request_filepath().lower()
 
     # Normalize member name and surname for duplicate checking
     normalized_name = normalize_string(member.name)
     normalized_surname = normalize_string(member.surname)
 
     # Check for existing members with same normalized name/surname
-    ctx["member_exists"] = False
-    que = Membership.objects.select_related("member").filter(assoc_id=ctx["a_id"])
+    context["member_exists"] = False
+    que = Membership.objects.select_related("member").filter(assoc_id=context["a_id"])
     que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).exclude(member_id=member.id)
 
     # Compare normalized names to detect potential duplicates
     for other in que.values_list("member__surname", "member__name"):
         if normalize_string(other[1]) == normalized_name:
             if normalize_string(other[0]) == normalized_surname:
-                ctx["member_exists"] = True
+                context["member_exists"] = True
 
     # Add fiscal code validation if feature is enabled
-    if "fiscal_code_check" in ctx["features"]:
-        ctx.update(calculate_fiscal_code(member))
+    if "fiscal_code_check" in context["features"]:
+        context.update(calculate_fiscal_code(member))
 
-    return render(request, "larpmanager/exe/users/membership_evaluation.html", ctx)
+    return render(request, "larpmanager/exe/users/membership_evaluation.html", context)
 
 
 @login_required
 def exe_membership_request(request: HttpRequest, num: int) -> HttpResponse:
     """Handle membership request display for organization executives."""
-    ctx = check_assoc_permission(request, "exe_membership")
-    ctx.update(get_member(num))
-    return get_membership_request(ctx)
+    context = check_assoc_permission(request, "exe_membership")
+    context.update(get_member(num))
+    return get_membership_request(context)
 
 
 @login_required
@@ -279,19 +279,19 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with membership check report data.
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_membership_check")
+    context = check_assoc_permission(request, "exe_membership_check")
 
     # Get all members with active memberships (excluding empty/joined status)
     member_ids = set(
-        Membership.objects.filter(assoc_id=ctx["a_id"])
+        Membership.objects.filter(assoc_id=context["a_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED])
         .values_list("member_id", flat=True)
     )
 
     # Perform fiscal code validation if feature is enabled
-    if "fiscal_code_check" in ctx["features"]:
-        ctx["cf"] = []
+    if "fiscal_code_check" in context["features"]:
+        context["cf"] = []
 
         # Check each member's fiscal code for correctness
         for mb in Member.objects.filter(pk__in=member_ids):
@@ -304,10 +304,10 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
                 check["member"] = str(mb)
                 check["member_id"] = mb.id
                 check["email"] = mb.email
-                check["membership"] = get_user_membership(mb, ctx["a_id"])
-                ctx["cf"].append(check)
+                check["membership"] = get_user_membership(mb, context["a_id"])
+                context["cf"].append(check)
 
-    return render(request, "larpmanager/exe/users/membership_check.html", ctx)
+    return render(request, "larpmanager/exe/users/membership_check.html", context)
 
 
 @login_required
@@ -329,88 +329,88 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If member with given ID doesn't exist or user lacks permissions
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_membership")
-    ctx.update(get_member(num))
+    context = check_assoc_permission(request, "exe_membership")
+    context.update(get_member(num))
 
     # Handle form submission for member profile updates
     if request.method == "POST":
-        form = ExeMemberForm(request.POST, request.FILES, instance=ctx["member"], request=request)
+        form = ExeMemberForm(request.POST, request.FILES, instance=context["member"], request=request)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
         # Initialize empty form for GET requests
-        form = ExeMemberForm(instance=ctx["member"], request=request)
-    ctx["form"] = form
+        form = ExeMemberForm(instance=context["member"], request=request)
+    context["form"] = form
 
     # Get member registrations for current association events
-    ctx["regs"] = Registration.objects.filter(
-        member=ctx["member"], run__event__assoc=request.assoc["id"]
+    context["regs"] = Registration.objects.filter(
+        member=context["member"], run__event__assoc=request.assoc["id"]
     ).select_related("run")
 
     # Add accounting payment items to context
-    member_add_accountingitempayment(ctx, request)
+    member_add_accountingitempayment(context, request)
 
     # Add other accounting items to context
-    member_add_accountingitemother(ctx, request)
+    member_add_accountingitemother(context, request)
 
     # Get member discounts for current association
-    ctx["discounts"] = AccountingItemDiscount.objects.filter(
-        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    context["discounts"] = AccountingItemDiscount.objects.filter(
+        member=context["member"], hide=False, assoc_id=request.assoc["id"]
     )
 
     # Process membership data and document paths
-    member = ctx["member"]
-    get_user_membership(member, ctx["a_id"])
+    member = context["member"]
+    get_user_membership(member, context["a_id"])
 
     # Set document file paths if they exist
     if member.membership.document:
-        ctx["doc_path"] = member.membership.get_document_filepath().lower()
+        context["doc_path"] = member.membership.get_document_filepath().lower()
 
     if member.membership.request:
-        ctx["req_path"] = member.membership.get_request_filepath().lower()
+        context["req_path"] = member.membership.get_request_filepath().lower()
 
     # Add fiscal code validation if feature is enabled
-    if "fiscal_code_check" in ctx["features"]:
-        ctx.update(calculate_fiscal_code(ctx["member"]))
+    if "fiscal_code_check" in context["features"]:
+        context.update(calculate_fiscal_code(context["member"]))
 
-    return render(request, "larpmanager/exe/users/member.html", ctx)
+    return render(request, "larpmanager/exe/users/member.html", context)
 
 
-def member_add_accountingitempayment(ctx: dict, request: HttpRequest) -> dict:
+def member_add_accountingitempayment(context: dict, request: HttpRequest) -> dict:
     """Add accounting item payment information to context for a member.
 
     Retrieves non-hidden payments for the member and sets display type based on payment method.
     """
     # Fetch visible payments for the member in the current association
-    ctx["pays"] = AccountingItemPayment.objects.filter(
-        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    context["pays"] = AccountingItemPayment.objects.filter(
+        member=context["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("reg")
 
     # Set display type based on payment method
-    for el in ctx["pays"]:
+    for el in context["pays"]:
         if el.pay == PaymentChoices.TOKEN:
-            el.typ = ctx.get("token_name", _("Credits"))
+            el.typ = context.get("token_name", _("Credits"))
         elif el.pay == PaymentChoices.CREDIT:
-            el.typ = ctx.get("credit_name", _("Credits"))
+            el.typ = context.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_pay_display()
 
 
-def member_add_accountingitemother(ctx: dict, request: HttpRequest) -> None:
+def member_add_accountingitemother(context: dict, request: HttpRequest) -> None:
     """Add accounting other items to member context with localized type labels."""
     # Query non-hidden accounting items for the member in current association
-    ctx["others"] = AccountingItemOther.objects.filter(
-        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    context["others"] = AccountingItemOther.objects.filter(
+        member=context["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("run")
 
     # Set localized type labels based on item category
-    for el in ctx["others"]:
+    for el in context["others"]:
         if el.oth == OtherChoices.TOKEN:
-            el.typ = ctx.get("token_name", _("Credits"))
+            el.typ = context.get("token_name", _("Credits"))
         elif el.oth == OtherChoices.CREDIT:
-            el.typ = ctx.get("credit_name", _("Credits"))
+            el.typ = context.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_oth_display()
 
@@ -426,25 +426,25 @@ def exe_membership_status(request, num):
     Returns:
         Rendered membership editing form or redirect after successful update
     """
-    ctx = check_assoc_permission(request, "exe_membership")
-    ctx.update(get_member(num))
-    ctx["membership"] = get_object_or_404(Membership, member_id=ctx["member"].id, assoc_id=request.assoc["id"])
+    context = check_assoc_permission(request, "exe_membership")
+    context.update(get_member(num))
+    context["membership"] = get_object_or_404(Membership, member_id=context["member"].id, assoc_id=request.assoc["id"])
 
     if request.method == "POST":
-        form = ExeMembershipForm(request.POST, request.FILES, instance=ctx["membership"], request=request)
+        form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership"], request=request)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
-        form = ExeMembershipForm(instance=ctx["membership"], request=request)
-    ctx["form"] = form
+        form = ExeMembershipForm(instance=context["membership"], request=request)
+    context["form"] = form
 
-    ctx["num"] = num
+    context["num"] = num
 
-    ctx["form"].page_title = str(ctx["member"]) + " - " + _("Membership")
+    context["form"].page_title = str(context["member"]) + " - " + _("Membership")
 
-    return render(request, "larpmanager/exe/edit.html", ctx)
+    return render(request, "larpmanager/exe/edit.html", context)
 
 
 @login_required
@@ -462,14 +462,14 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
         containing members with card numbers, ordered by card number
     """
     # Check user permissions for accessing membership registry
-    ctx = check_assoc_permission(request, "exe_membership_registry")
+    context = check_assoc_permission(request, "exe_membership_registry")
     split_two_names = 2
 
     # Initialize empty list for processed members
-    ctx["list"] = []
+    context["list"] = []
 
     # Query memberships with card numbers for current association
-    que = Membership.objects.filter(assoc_id=ctx["a_id"], card_number__isnull=False)
+    que = Membership.objects.filter(assoc_id=context["a_id"], card_number__isnull=False)
 
     # Process each membership and format member data
     for mb in que.select_related("member").order_by("card_number"):
@@ -489,10 +489,10 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
         member.surname = member.surname.capitalize()
 
         # Add processed member to context list
-        ctx["list"].append(member)
+        context["list"].append(member)
 
     # Render template with processed member data
-    return render(request, "larpmanager/exe/users/registry.html", ctx)
+    return render(request, "larpmanager/exe/users/registry.html", context)
 
 
 @login_required
@@ -517,16 +517,16 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks 'exe_membership' permission (handled by decorator).
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_membership")
+    context = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
         # Initialize form with POST data and context
-        form = ExeMembershipFeeForm(request.POST, request.FILES, ctx=ctx)
+        form = ExeMembershipFeeForm(request.POST, request.FILES, context=context)
 
         if form.is_valid():
             # Extract validated form data
             member = form.cleaned_data["member"]
-            assoc_id = ctx["a_id"]
+            assoc_id = context["a_id"]
 
             # Get membership fee amount from association configuration
             fee = get_assoc_config(assoc_id, "membership_fee", "0")
@@ -552,11 +552,11 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             return redirect("exe_membership")
     else:
         # Initialize empty form for GET requests
-        form = ExeMembershipFeeForm(ctx=ctx)
+        form = ExeMembershipFeeForm(context=context)
 
     # Add form to context and render the edit template
-    ctx["form"] = form
-    return render(request, "larpmanager/exe/edit.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/exe/edit.html", context)
 
 
 @login_required
@@ -569,13 +569,13 @@ def exe_membership_document(request):
     Returns:
         Rendered form for document upload or redirect to membership list
     """
-    ctx = check_assoc_permission(request, "exe_membership")
+    context = check_assoc_permission(request, "exe_membership")
 
     if request.method == "POST":
-        form = ExeMembershipDocumentForm(request.POST, request.FILES, ctx=ctx)
+        form = ExeMembershipDocumentForm(request.POST, request.FILES, context=context)
         if form.is_valid():
             member = form.cleaned_data["member"]
-            membership = Membership.objects.get(assoc_id=ctx["a_id"], member=member)
+            membership = Membership.objects.get(assoc_id=context["a_id"], member=member)
             membership.document = form.cleaned_data["document"]
             membership.request = form.cleaned_data["request"]
             membership.card_number = form.cleaned_data["card_number"]
@@ -585,10 +585,10 @@ def exe_membership_document(request):
             messages.success(request, _("Operation completed") + "!")
             return redirect("exe_membership")
     else:
-        form = ExeMembershipDocumentForm(ctx=ctx)
-    ctx["form"] = form
+        form = ExeMembershipDocumentForm(context=context)
+    context["form"] = form
 
-    return render(request, "larpmanager/exe/edit.html", ctx)
+    return render(request, "larpmanager/exe/edit.html", context)
 
 
 @login_required
@@ -611,23 +611,23 @@ def exe_enrolment(request) -> HttpResponse:
               and formatted names
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_enrolment")
+    context = check_assoc_permission(request, "exe_enrolment")
     split_two_names = 2
 
     # Set current year and calculate year start date
-    ctx["year"] = datetime.today().year
-    start = datetime(ctx["year"], 1, 1)
+    context["year"] = datetime.today().year
+    start = datetime(context["year"], 1, 1)
 
     # Build cache of member enrollment dates from accounting items
     cache = {}
-    for el in AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"]).values_list(
+    for el in AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=context["year"]).values_list(
         "member_id", "created"
     ):
         cache[el[0]] = el[1]
 
     # Query memberships with card numbers for enrolled members
-    ctx["list"] = []
-    que = Membership.objects.filter(member_id__in=cache.keys(), assoc_id=ctx["a_id"], card_number__isnull=False)
+    context["list"] = []
+    que = Membership.objects.filter(member_id__in=cache.keys(), assoc_id=context["a_id"], card_number__isnull=False)
     que = que.select_related("member").order_by("card_number")
 
     # Process each membership and prepare member data
@@ -651,9 +651,9 @@ def exe_enrolment(request) -> HttpResponse:
         member.name = member.name.capitalize()
         member.surname = member.surname.capitalize()
 
-        ctx["list"].append(member)
+        context["list"].append(member)
 
-    return render(request, "larpmanager/exe/users/enrolment.html", ctx)
+    return render(request, "larpmanager/exe/users/enrolment.html", context)
 
 
 @login_required
@@ -667,16 +667,16 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
         Rendered volunteer registry template
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_volunteer_registry")
+    context = check_assoc_permission(request, "exe_volunteer_registry")
 
     # Fetch volunteer registries with member info, ordered by start date and surname
-    ctx["list"] = (
-        VolunteerRegistry.objects.filter(assoc_id=ctx["a_id"])
+    context["list"] = (
+        VolunteerRegistry.objects.filter(assoc_id=context["a_id"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
 
-    return render(request, "larpmanager/exe/users/volunteer_registry.html", ctx)
+    return render(request, "larpmanager/exe/users/volunteer_registry.html", context)
 
 
 @login_required
@@ -699,26 +699,26 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
         Association.DoesNotExist: If association not found.
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_volunteer_registry")
+    context = check_assoc_permission(request, "exe_volunteer_registry")
 
     # Retrieve the association object for the current context
-    ctx["assoc"] = Association.objects.get(pk=ctx["a_id"])
+    context["assoc"] = Association.objects.get(pk=context["a_id"])
 
     # Query volunteer registry entries with member data, ordered by start date and surname
-    ctx["list"] = (
-        VolunteerRegistry.objects.filter(assoc=ctx["assoc"])
+    context["list"] = (
+        VolunteerRegistry.objects.filter(assoc=context["assoc"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
 
     # Generate current date string for filename
-    ctx["date"] = datetime.today().strftime("%Y-%m-%d")
+    context["date"] = datetime.today().strftime("%Y-%m-%d")
 
     # Generate the PDF file using the context data
-    fp = print_volunteer_registry(ctx)
+    fp = print_volunteer_registry(context)
 
     # Return the PDF as an HTTP response with descriptive filename
-    return return_pdf(fp, f"Registro_Volontari_{ctx['assoc'].name}_{ctx['date']}")
+    return return_pdf(fp, f"Registro_Volontari_{context['assoc'].name}_{context['date']}")
 
 
 @login_required
@@ -740,9 +740,9 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
         Candidates are configured via 'vote_candidates' association config.
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_vote")
-    ctx["year"] = datetime.today().year
-    assoc_id = ctx["a_id"]
+    context = check_assoc_permission(request, "exe_vote")
+    context["year"] = datetime.today().year
+    assoc_id = context["a_id"]
 
     # Parse candidate IDs from association configuration
     idxs = []
@@ -751,39 +751,41 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
             idxs.append(el.strip())
 
     # Fetch candidate member objects and build candidates dictionary
-    ctx["candidates"] = {}
+    context["candidates"] = {}
     for mb in Member.objects.filter(pk__in=idxs):
-        ctx["candidates"][mb.id] = mb
+        context["candidates"][mb.id] = mb
 
     # Query vote counts grouped by candidate for current year and association
     votes = (
-        Vote.objects.filter(year=ctx["year"], assoc_id=ctx["a_id"])
+        Vote.objects.filter(year=context["year"], assoc_id=context["a_id"])
         .values("candidate_id")
         .annotate(total=Count("candidate_id"))
     )
 
     # Attach vote counts to candidate objects
     for el in votes:
-        if el["candidate_id"] not in ctx["candidates"]:
+        if el["candidate_id"] not in context["candidates"]:
             continue
-        ctx["candidates"][el["candidate_id"]].votes = el["total"]
+        context["candidates"][el["candidate_id"]].votes = el["total"]
 
     # Get list of members who have already voted this year
-    ctx["voters"] = Member.objects.filter(votes_given__year=ctx["year"], votes_given__assoc_id=ctx["a_id"]).distinct()
+    context["voters"] = Member.objects.filter(
+        votes_given__year=context["year"], votes_given__assoc_id=context["a_id"]
+    ).distinct()
 
-    return render(request, "larpmanager/exe/users/vote.html", ctx)
+    return render(request, "larpmanager/exe/users/vote.html", context)
 
 
 @login_required
 def exe_badges(request: HttpRequest) -> HttpResponse:
     """Display and manage association badges."""
     # Check user permissions for badge management
-    ctx = check_assoc_permission(request, "exe_badges")
+    context = check_assoc_permission(request, "exe_badges")
 
     # Load all badges for the association with member relationships
-    ctx["list"] = Badge.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("members")
+    context["list"] = Badge.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("members")
 
-    return render(request, "larpmanager/exe/users/badges.html", ctx)
+    return render(request, "larpmanager/exe/users/badges.html", context)
 
 
 @login_required
@@ -806,7 +808,7 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with form or redirect after successful submission.
     """
     # Check if user has permission to send mail for this association
-    ctx = check_assoc_permission(request, "exe_send_mail")
+    context = check_assoc_permission(request, "exe_send_mail")
 
     if request.method == "POST":
         # Process form submission for mail sending
@@ -821,8 +823,8 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         form = SendMailForm()
 
     # Add form to context and render template
-    ctx["form"] = form
-    return render(request, "larpmanager/exe/users/send_mail.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/exe/users/send_mail.html", context)
 
 
 @login_required
@@ -840,11 +842,11 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with paginated email archive
     """
     # Check user permissions for accessing email archive
-    ctx = check_assoc_permission(request, "exe_archive_email")
-    ctx["exe"] = True
+    context = check_assoc_permission(request, "exe_archive_email")
+    context["exe"] = True
 
     # Define table columns for the email archive display
-    ctx.update(
+    context.update(
         {
             "fields": [
                 ("run", _("Run")),
@@ -865,20 +867,20 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
     )
 
     # Return paginated view of Email objects
-    return exe_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
+    return exe_paginate(request, context, Email, "larpmanager/exe/users/archive_mail.html", "exe_read_mail")
 
 
 @login_required
 def exe_read_mail(request: HttpRequest, nm: str) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
-    ctx = check_assoc_permission(request, "exe_archive_email")
-    ctx["exe"] = True
+    context = check_assoc_permission(request, "exe_archive_email")
+    context["exe"] = True
 
     # Retrieve and add email data to context
-    ctx["email"] = get_mail(request, ctx, nm)
+    context["email"] = get_mail(request, context, nm)
 
-    return render(request, "larpmanager/exe/users/read_mail.html", ctx)
+    return render(request, "larpmanager/exe/users/read_mail.html", context)
 
 
 @login_required
@@ -895,10 +897,10 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
         Rendered template response with question lists and context data.
     """
     # Check user permissions for accessing executive questions feature
-    ctx = check_assoc_permission(request, "exe_questions")
+    context = check_assoc_permission(request, "exe_questions")
 
     # Retrieve categorized help questions for the organization
-    closed_q, open_q = _get_help_questions(ctx, request)
+    closed_q, open_q = _get_help_questions(context, request)
 
     # Handle POST request to reopen all closed questions
     if request.method == "POST":
@@ -908,10 +910,10 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
 
     # Sort questions by creation date for display
     # Open questions: oldest first, closed questions: newest first
-    ctx["open"] = sorted(open_q, key=lambda x: x.created)
-    ctx["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
+    context["open"] = sorted(open_q, key=lambda x: x.created)
+    context["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
 
-    return render(request, "larpmanager/exe/users/questions.html", ctx)
+    return render(request, "larpmanager/exe/users/questions.html", context)
 
 
 @login_required
@@ -934,15 +936,15 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
         Member.DoesNotExist: If the member with the given ID doesn't exist
     """
     # Check executive permissions for question management
-    ctx = check_assoc_permission(request, "exe_questions")
+    context = check_assoc_permission(request, "exe_questions")
 
     # Retrieve the member and their question history
     member = Member.objects.get(pk=r)
-    ctx["member"] = member
-    ctx["list"] = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created")
+    context["member"] = member
+    context["list"] = HelpQuestion.objects.filter(member=member, assoc_id=context["a_id"]).order_by("-created")
 
     # Get the most recent question from this member
-    last = ctx["list"].first()
+    last = context["list"].first()
 
     # Handle form submission for new answers
     if request.method == "POST":
@@ -958,7 +960,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
             # Set answer metadata and save to database
             hp.member = member
             hp.is_user = False
-            hp.assoc_id = ctx["a_id"]
+            hp.assoc_id = context["a_id"]
             hp.save()
 
             # Notify user of successful submission and redirect
@@ -969,19 +971,19 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
         form = OrgaHelpQuestionForm()
 
     # Add form to context for template rendering
-    ctx["form"] = form
+    context["form"] = form
 
-    return render(request, "larpmanager/exe/users/questions_answer.html", ctx)
+    return render(request, "larpmanager/exe/users/questions_answer.html", context)
 
 
 @login_required
 def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
     """Close a help question for a member."""
-    ctx = check_assoc_permission(request, "exe_questions")
+    context = check_assoc_permission(request, "exe_questions")
 
     # Get the member and their most recent help question
     member = Member.objects.get(pk=r)
-    h = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created").first()
+    h = HelpQuestion.objects.filter(member=member, assoc_id=context["a_id"]).order_by("-created").first()
 
     # Mark the question as closed and save
     h.closed = True
@@ -1000,23 +1002,23 @@ def exe_newsletter(request):
     Returns:
         HttpResponse: Rendered newsletter management page with subscriber lists by language
     """
-    ctx = check_assoc_permission(request, "exe_newsletter")
+    context = check_assoc_permission(request, "exe_newsletter")
 
-    ctx["lst"] = {}
+    context["lst"] = {}
     for el in (
-        Membership.objects.filter(assoc_id=ctx["a_id"])
+        Membership.objects.filter(assoc_id=context["a_id"])
         .select_related("member")
         .values_list("member__email", "member__language", "newsletter")
     ):
         m = el[0]
         language = el[1]
-        if language not in ctx["lst"]:
-            ctx["lst"][language] = {}
+        if language not in context["lst"]:
+            context["lst"][language] = {}
         newsletter = el[2]
-        if newsletter not in ctx["lst"][language]:
-            ctx["lst"][language][newsletter] = []
-        ctx["lst"][language][newsletter].append(m)
-    return render(request, "larpmanager/exe/users/newsletter.html", ctx)
+        if newsletter not in context["lst"][language]:
+            context["lst"][language][newsletter] = []
+        context["lst"][language][newsletter].append(m)
+    return render(request, "larpmanager/exe/users/newsletter.html", context)
 
 
 @login_required
@@ -1038,7 +1040,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
         PermissionDenied: If user lacks exe_newsletter permission for the association
     """
     # Check user permissions for newsletter export functionality
-    ctx = check_assoc_permission(request, "exe_newsletter")
+    context = check_assoc_permission(request, "exe_newsletter")
 
     # Set up CSV response with appropriate headers for file download
     response = HttpResponse(
@@ -1047,7 +1049,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
     writer = csv.writer(response)
 
     # Iterate through all memberships for the current association
-    for el in Membership.objects.filter(assoc_id=ctx["a_id"]):
+    for el in Membership.objects.filter(assoc_id=context["a_id"]):
         m = el.member
 
         # Skip members who don't match the requested language

@@ -50,7 +50,7 @@
         <p>{% trans "These are delegated account registrations for which you have to make a payment" %}.</p>
         <p>
             {% for del in delegated %}
-                {% for reg in del.ctx.payments_todo %}
+                {% for reg in del.context.payments_todo %}
                     {% include "elements/comma.html" %}
                     <b>{{ reg.run }}</b> ({{ del }}) - {{ reg.quota|format_decimal }}{{ currency_symbol }}
                     {% trans "by" %} {{ reg.deadline }} {% trans "days" %}

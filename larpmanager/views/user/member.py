@@ -146,7 +146,7 @@ def profile(request):
     if request.assoc["id"] == 0:
         return HttpResponseRedirect("/")
 
-    ctx = def_user_context(request)
+    context = def_user_context(request)
     member = request.user.member
     assoc_features = request.assoc["features"]
     members_fields = request.assoc["members_fields"]
@@ -158,7 +158,7 @@ def profile(request):
             prof = form.save()
 
             # Update membership status
-            membership = ctx["membership"]
+            membership = context["membership"]
             membership.compiled = True
             if membership.status == MembershipStatus.EMPTY:
                 membership.status = MembershipStatus.JOINED
@@ -184,7 +184,7 @@ def profile(request):
     else:
         form = ProfileForm(instance=member, request=request)
 
-    ctx.update(
+    context.update(
         {
             "form": form,
             "member": member,
@@ -192,21 +192,21 @@ def profile(request):
         }
     )
 
-    ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.PROFILE)
+    context["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.PROFILE)
 
     # Add avatar form only if profile upload is enabled
     if "profile" in members_fields:
-        ctx["avatar_form"] = AvatarForm()
+        context["avatar_form"] = AvatarForm()
 
     # Add profile URL only if profile image exists
     if member.profile_thumb:
-        ctx["profile"] = member.profile_thumb.url
+        context["profile"] = member.profile_thumb.url
 
     # Add vote configuration only if voting is enabled
     if "vote" in assoc_features:
-        ctx["vote_open"] = get_assoc_config(ctx["membership"].assoc_id, "vote_open", False, ctx)
+        context["vote_open"] = get_assoc_config(context["membership"].assoc_id, "vote_open", False, context)
 
-    return render(request, "larpmanager/member/profile.html", ctx)
+    return render(request, "larpmanager/member/profile.html", context)
 
 
 def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:
@@ -327,10 +327,10 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered privacy template with user context and memberships.
     """
     # Get default user context for the request
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Add member-specific data to context
-    ctx.update(
+    context.update(
         {
             "member": request.user.member,
             # Get active memberships, excluding empty and revoked ones
@@ -341,7 +341,7 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
     )
 
     # Render and return the privacy template with context
-    return render(request, "larpmanager/member/privacy.html", ctx)
+    return render(request, "larpmanager/member/privacy.html", context)
 
 
 @login_required
@@ -363,8 +363,8 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
         Http404: When association or membership is not found, or other errors occur
     """
     # Initialize context with default user data
-    ctx = def_user_context(request)
-    ctx.update({"member": request.user.member})
+    context = def_user_context(request)
+    context.update({"member": request.user.member})
 
     try:
         # Retrieve the association by slug
@@ -404,7 +404,7 @@ def membership(request: HttpRequest) -> HttpResponse:
         Http404: If membership status is invalid for the requested operation.
     """
     # Initialize context with default user context
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Get user's membership record for current association
     el = get_user_membership(request.user.member, request.assoc["id"])
@@ -443,8 +443,8 @@ def membership(request: HttpRequest) -> HttpResponse:
 
                 # Prepare confirmation form and file paths for template
                 form = MembershipConfirmForm()
-                ctx["doc_path"] = el.get_document_filepath().lower()
-                ctx["req_path"] = el.get_request_filepath().lower()
+                context["doc_path"] = el.get_document_filepath().lower()
+                context["req_path"] = el.get_request_filepath().lower()
 
     else:
         # Reset status if returning from uploaded state
@@ -456,14 +456,14 @@ def membership(request: HttpRequest) -> HttpResponse:
         form = MembershipRequestForm(instance=el)
 
     # Add core membership data to context
-    ctx.update({"member": request.user.member, "membership": el, "form": form})
+    context.update({"member": request.user.member, "membership": el, "form": form})
 
     # Add fiscal code calculation if feature is enabled
-    if "fiscal_code_check" in ctx["features"]:
-        ctx.update(calculate_fiscal_code(ctx["member"]))
+    if "fiscal_code_check" in context["features"]:
+        context.update(calculate_fiscal_code(context["member"]))
 
     # Check if membership fee has been paid for current year
-    ctx["fee_payed"] = AccountingItemMembership.objects.filter(
+    context["fee_payed"] = AccountingItemMembership.objects.filter(
         assoc_id=request.assoc["id"],
         year=datetime.now().year,
         member_id=request.user.member.id,
@@ -471,28 +471,28 @@ def membership(request: HttpRequest) -> HttpResponse:
 
     # Add statute text for accepted memberships
     if el.status == MembershipStatus.ACCEPTED:
-        ctx["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
+        context["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
 
     # Disable join functionality for this view
-    ctx["disable_join"] = True
+    context["disable_join"] = True
 
-    return render(request, "larpmanager/member/membership.html", ctx)
+    return render(request, "larpmanager/member/membership.html", context)
 
 
 @login_required
 def membership_request(request: HttpRequest) -> HttpResponse:
     """Handle membership request display for the current user."""
-    ctx = def_user_context(request)
-    ctx["member"] = request.user.member
-    return get_membership_request(ctx)
+    context = def_user_context(request)
+    context["member"] = request.user.member
+    return get_membership_request(context)
 
 
 @login_required
 def membership_request_test(request: HttpRequest) -> HttpResponse:
     """Render membership request test PDF template."""
-    ctx = def_user_context(request)
-    ctx.update({"member": request.user.member})
-    return render(request, "pdf/membership/request.html", ctx)
+    context = def_user_context(request)
+    context.update({"member": request.user.member})
+    return render(request, "pdf/membership/request.html", context)
 
 
 @login_required
@@ -514,27 +514,27 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
         Http404: If member has no membership in the current association
     """
     # Initialize context with user data and fetch member information
-    ctx = def_user_context(request)
-    ctx.update(get_member(n))
+    context = def_user_context(request)
+    context.update(get_member(n))
 
     # Verify member has membership in current association
-    if not Membership.objects.filter(member=ctx["member"], assoc_id=request.assoc["id"]).exists():
+    if not Membership.objects.filter(member=context["member"], assoc_id=request.assoc["id"]).exists():
         raise Http404("no membership")
 
     # Add badges if badge feature is enabled for association
     if "badge" in request.assoc["features"]:
-        ctx["badges"] = []
-        for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
-            ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
+        context["badges"] = []
+        for badge in context["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
+            context["badges"].append(badge.show(request.LANGUAGE_CODE))
 
     # Add LARP history if enabled in association configuration
-    assoc_id = ctx["a_id"]
+    assoc_id = context["a_id"]
     if get_assoc_config(assoc_id, "player_larp_history", False):
         # Fetch registrations with related run and event data
-        ctx["regs"] = (
+        context["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
-                member=ctx["member"],
+                member=context["member"],
                 run__event__assoc_id=request.assoc["id"],
             )
             .order_by("-run__end")
@@ -543,7 +543,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
         )
 
         # Process character information for each registration
-        for el in ctx["regs"]:
+        for el in context["regs"]:
             el.chars = {}
 
             for rcr in el.rcrs.select_related("character").all():
@@ -557,14 +557,14 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 
     # Validate and mark social contact as URL if valid
     validate = URLValidator()
-    if ctx["member"].social_contact:
+    if context["member"].social_contact:
         try:
-            validate(ctx["member"].social_contact)
-            ctx["member"].contact_url = True
+            validate(context["member"].social_contact)
+            context["member"].contact_url = True
         except Exception:
             pass
 
-    return render(request, "larpmanager/member/public.html", ctx)
+    return render(request, "larpmanager/member/public.html", context)
 
 
 @login_required
@@ -574,14 +574,14 @@ def chats(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "chat")
 
     # Build base context for the user
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Add user's contacts ordered by last message timestamp
-    ctx.update(
+    context.update(
         {"list": Contact.objects.filter(me=request.user.member, assoc_id=request.assoc["id"]).order_by("-last_message")}
     )
 
-    return render(request, "larpmanager/member/chats.html", ctx)
+    return render(request, "larpmanager/member/chats.html", context)
 
 
 @login_required
@@ -596,8 +596,8 @@ def chat(request, n):
     if n == mid:
         messages.success(request, _("You can't send messages to yourself") + "!")
         return redirect("home")
-    ctx = get_member(n)
-    yid = ctx["member"].id
+    context = get_member(n)
+    yid = context["member"].id
     channel = get_channel(yid, mid)
     if request.method == "POST":
         tx = request.POST["text"]
@@ -637,27 +637,27 @@ def chat(request, n):
     if mine_contact:
         mine_contact.num_unread = 0
         mine_contact.save()
-    ctx["list"] = ChatMessage.objects.filter(channel=channel, assoc_id=request.assoc["id"]).order_by("-created")
-    return render(request, "larpmanager/member/chat.html", ctx)
+    context["list"] = ChatMessage.objects.filter(channel=channel, assoc_id=request.assoc["id"]).order_by("-created")
+    return render(request, "larpmanager/member/chat.html", context)
 
 
 @login_required
 def badges(request: HttpRequest) -> HttpResponse:
     """Display list of badges for the current association."""
     # Initialize context with user data and empty badges list
-    ctx = def_user_context(request)
-    ctx.update({"badges": []})
+    context = def_user_context(request)
+    context.update({"badges": []})
 
     # Verify user has permission to view badges feature
     check_assoc_feature(request, "badge")
 
     # Fetch and add badges to context, ordered by number
     for badge in Badge.objects.filter(assoc_id=request.assoc["id"]).order_by("number"):
-        ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
+        context["badges"].append(badge.show(request.LANGUAGE_CODE))
 
     # Set page identifier and render template
-    ctx["page"] = "badges"
-    return render(request, "larpmanager/general/badges.html", ctx)
+    context["page"] = "badges"
+    return render(request, "larpmanager/general/badges.html", context)
 
 
 @login_required
@@ -667,18 +667,18 @@ def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
     badge = get_badge(n, request)
 
     # Initialize context with badge data
-    ctx = def_user_context(request)
-    ctx.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+    context = def_user_context(request)
+    context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
 
     # Collect all badge members
     for el in badge.members.all():
-        ctx["list"].append(el)
+        context["list"].append(el)
 
     # Shuffle members using deterministic daily seed
     v = datetime.today().date() - date(1970, 1, 1)
-    random.Random(v.days).shuffle(ctx["list"])
+    random.Random(v.days).shuffle(context["list"])
 
-    return render(request, "larpmanager/general/badge.html", ctx)
+    return render(request, "larpmanager/general/badge.html", context)
 
 
 @login_required
@@ -714,8 +714,8 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     p = min(p, num_pages)
 
     # Build context with pagination data
-    ctx = def_user_context(request)
-    ctx.update(
+    context = def_user_context(request)
+    context.update(
         {
             "pages": member_list[(p - 1) * num_el : p * num_el],
             "num_pages": num_pages,
@@ -726,8 +726,8 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     )
 
     # Set page identifier for template
-    ctx["page"] = "leaderboard"
-    return render(request, "larpmanager/general/leaderboard.html", ctx)
+    context["page"] = "leaderboard"
+    return render(request, "larpmanager/general/leaderboard.html", context)
 
 
 @login_required
@@ -741,11 +741,11 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
         Redirect response to home page
     """
     # Build context with user and association information
-    ctx = def_user_context(request)
-    ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
+    context = def_user_context(request)
+    context.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
     # Get user membership and update newsletter preference
-    mb = get_user_membership(ctx["member"], ctx["a_id"])
+    mb = get_user_membership(context["member"], context["a_id"])
     mb.newsletter = NewsletterChoices.NO
     mb.save()
 
@@ -773,66 +773,66 @@ def vote(request: HttpRequest) -> HttpResponse:
     """
     # Verify user has access to voting feature
     check_assoc_feature(request, "vote")
-    ctx = def_user_context(request)
-    ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
+    context = def_user_context(request)
+    context.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
     # Set current year for membership and voting validation
-    ctx["year"] = datetime.now().year
+    context["year"] = datetime.now().year
 
     # Check if membership payment is required and completed
     if "membership" in request.assoc["features"]:
-        que = AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"])
-        if not que.filter(member_id=ctx["member"].id).exists():
+        que = AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=context["year"])
+        if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
             return redirect("acc_membership")
 
     # Check if user has already voted this year
-    que = Vote.objects.filter(member=ctx["member"], assoc_id=ctx["a_id"], year=ctx["year"])
+    que = Vote.objects.filter(member=context["member"], assoc_id=context["a_id"], year=context["year"])
     if que.count() > 0:
-        ctx["done"] = True
-        return render(request, "larpmanager/member/vote.html", ctx)
+        context["done"] = True
+        return render(request, "larpmanager/member/vote.html", context)
 
     # Retrieve voting configuration from association settings
-    assoc_id = ctx["a_id"]
+    assoc_id = context["a_id"]
 
-    ctx["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, ctx)
-    ctx["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", ctx).split(",")
-    ctx["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", ctx)
-    ctx["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", ctx)
+    context["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, context)
+    context["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", context).split(",")
+    context["vote_min"] = get_assoc_config(assoc_id, "vote_min", "1", context)
+    context["vote_max"] = get_assoc_config(assoc_id, "vote_max", "1", context)
 
     # Process vote submission if POST request
     if request.method == "POST":
         cnt = 0
         # Iterate through candidate IDs and record votes
-        for m_id in ctx["vote_cands"]:
+        for m_id in context["vote_cands"]:
             v = request.POST.get(f"vote_{m_id}")
             if not v:
                 continue
             cnt += 1
             # Create vote record for each selected candidate
             Vote.objects.create(
-                member=ctx["member"],
-                assoc_id=ctx["a_id"],
-                year=ctx["year"],
+                member=context["member"],
+                assoc_id=context["a_id"],
+                year=context["year"],
                 number=cnt,
                 candidate_id=m_id,
             )
         return redirect(request.path_info)
 
     # Build list of candidate objects for display
-    ctx["candidates"] = []
-    for mb in ctx["vote_cands"]:
+    context["candidates"] = []
+    for mb in context["vote_cands"]:
         try:
             idx = int(mb)
-            ctx["candidates"].append(Member.objects.get(pk=idx))
+            context["candidates"].append(Member.objects.get(pk=idx))
         except Exception:
             # Skip invalid candidate IDs
             pass
 
     # Randomize candidate order to prevent position bias
-    random.shuffle(ctx["candidates"])
+    random.shuffle(context["candidates"])
 
-    return render(request, "larpmanager/member/vote.html", ctx)
+    return render(request, "larpmanager/member/vote.html", context)
 
 
 # ## DELEGATED ###
@@ -860,7 +860,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     """
     # Ensure delegated members feature is enabled
     check_assoc_feature(request, "delegated_members")
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Disable last login update to avoid tracking when switching accounts
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
@@ -876,12 +876,12 @@ def delegated(request: HttpRequest) -> HttpResponse:
             )
             return redirect("home")
         # Show option to return to parent account
-        return render(request, "larpmanager/member/delegated.html", ctx)
+        return render(request, "larpmanager/member/delegated.html", context)
 
     # Handle parent account managing delegated accounts
     # Retrieve all delegated child accounts for this parent
-    ctx["list"] = Member.objects.filter(parent=request.user.member)
-    del_dict = {el.id: el for el in ctx["list"]}
+    context["list"] = Member.objects.filter(parent=request.user.member)
+    del_dict = {el.id: el for el in context["list"]}
 
     # Process POST requests for account switching or creation
     if request.method == "POST":
@@ -925,14 +925,14 @@ def delegated(request: HttpRequest) -> HttpResponse:
         # Display form for creating new delegated account
         form = ProfileForm(request=request)
 
-    ctx["form"] = form
+    context["form"] = form
 
     # Add accounting information for each delegated account
-    for el in ctx["list"]:
-        del_ctx = {"member": el, "a_id": ctx["a_id"]}
+    for el in context["list"]:
+        del_ctx = {"member": el, "a_id": context["a_id"]}
         info_accounting(request, del_ctx)
-        el.ctx = del_ctx
-    return render(request, "larpmanager/member/delegated.html", ctx)
+        el.context = del_ctx
+    return render(request, "larpmanager/member/delegated.html", context)
 
 
 def get_user_backend():

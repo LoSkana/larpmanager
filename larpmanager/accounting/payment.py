@@ -110,7 +110,7 @@ def unique_invoice_cod(length=16):
     raise ValueError("Too many attempts to generate the code")
 
 
-def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, form: Form, assoc_id: int) -> None:
+def set_data_invoice(request: HttpRequest, context: dict, invoice: PaymentInvoice, form: Form, assoc_id: int) -> None:
     """Set invoice data from form submission.
 
     Updates the invoice object with appropriate causal text based on payment type
@@ -118,7 +118,7 @@ def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, f
 
     Args:
         request: Django HTTP request object containing user information
-        ctx: Context dictionary with registration, year, or collection data
+        context: Context dictionary with registration, year, or collection data
         invoice: PaymentInvoice instance to update with causal information
         form: Form containing cleaned invoice data (used for donations)
         assoc_id: Association instance ID for configuration lookup
@@ -133,17 +133,17 @@ def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, f
     if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
             "user": member_real,
-            "event": str(ctx["reg"].run),
-            "number": ctx["reg"].num_payments,
+            "event": str(context["reg"].run),
+            "number": context["reg"].num_payments,
         }
         # Apply custom registration reason if applicable
-        _custom_reason_reg(ctx, invoice, member_real)
+        _custom_reason_reg(context, invoice, member_real)
 
     # Handle membership payment type
     elif invoice.typ == PaymentType.MEMBERSHIP:
         invoice.causal = _("Membership fee of %(user)s for %(year)s") % {
             "user": member_real,
-            "year": ctx["year"],
+            "year": context["year"],
         }
 
     # Handle donation payment type
@@ -156,10 +156,10 @@ def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, f
 
     # Handle collection payment type
     elif invoice.typ == PaymentType.COLLECTION:
-        invoice.idx = ctx["coll"].id
+        invoice.idx = context["coll"].id
         invoice.causal = _("Collected contribution of %(user)s for %(recipient)s") % {
             "user": member_real,
-            "recipient": ctx["coll"].display_member(),
+            "recipient": context["coll"].display_member(),
         }
 
     # Apply special code prefix if configured for this association
@@ -167,7 +167,7 @@ def set_data_invoice(request: HttpRequest, ctx: dict, invoice: PaymentInvoice, f
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
-def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) -> None:
+def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Member) -> None:
     """Generate custom invoice reason text for registrations.
 
     This function processes a custom reason template from event configuration,
@@ -175,7 +175,7 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
     player names and registration question answers.
 
     Args:
-        ctx: Context dictionary containing registration data with 'reg' key
+        context: Context dictionary containing registration data with 'reg' key
         invoice: PaymentInvoice instance to update with custom reason text
         member_real: Real member instance for the registration
 
@@ -183,11 +183,11 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
         None: Function modifies the invoice object in place
     """
     # Set invoice registration references
-    invoice.idx = ctx["reg"].id
-    invoice.reg = ctx["reg"]
+    invoice.idx = context["reg"].id
+    invoice.reg = context["reg"]
 
     # Get custom reason template from event configuration
-    custom_reason_template = get_event_config(ctx["reg"].run.event_id, "payment_custom_reason")
+    custom_reason_template = get_event_config(context["reg"].run.event_id, "payment_custom_reason")
     if not custom_reason_template:
         return
 
@@ -209,13 +209,15 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=ctx["reg"].run.event, name__iexact=question_name
+                event=context["reg"].run.event, name__iexact=question_name
             )
 
             # Handle single/multiple choice questions
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 selected_option_names = []
-                user_choices = RegistrationChoice.objects.filter(question=registration_question, reg_id=ctx["reg"].id)
+                user_choices = RegistrationChoice.objects.filter(
+                    question=registration_question, reg_id=context["reg"].id
+                )
 
                 # Collect all selected option names
                 for choice in user_choices.select_related("option"):
@@ -223,7 +225,9 @@ def _custom_reason_reg(ctx: dict, invoice: PaymentInvoice, member_real: Member) 
                 answer_value = ",".join(selected_option_names)
             else:
                 # Handle text-based questions
-                answer_value = RegistrationAnswer.objects.get(question=registration_question, reg_id=ctx["reg"].id).text
+                answer_value = RegistrationAnswer.objects.get(
+                    question=registration_question, reg_id=context["reg"].id
+                ).text
             placeholder_values[question_name] = answer_value
         except ObjectDoesNotExist:
             # Skip missing questions/answers
