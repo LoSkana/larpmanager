@@ -104,36 +104,36 @@ def check_time(times, step, start=None):
     return now
 
 
-def _orga_registrations_traits(r, ctx):
+def _orga_registrations_traits(registration, context):
     """Process and organize character traits for registration display.
 
     Args:
-        r: Registration instance to process
-        ctx: Context dictionary with traits and quest data
+        registration: Registration instance to process
+        context: Context dictionary with traits and quest data
     """
-    if "questbuilder" not in ctx["features"]:
+    if "questbuilder" not in context["features"]:
         return
 
-    r.traits = {}
-    if not hasattr(r, "chars"):
+    registration.traits = {}
+    if not hasattr(registration, "chars"):
         return
-    for char in r.chars:
-        if "traits" not in char:
+    for character in registration.chars:
+        if "traits" not in character:
             continue
-        for tr_num in char["traits"]:
-            trait = ctx["traits"][tr_num]
-            quest = ctx["quests"][trait["quest"]]
-            typ = ctx["quest_types"][quest["typ"]]
-            typ_num = typ["number"]
-            if typ_num not in r.traits:
-                r.traits[typ_num] = []
-            r.traits[typ_num].append(f"{quest['name']} - {trait['name']}")
+        for trait_number in character["traits"]:
+            trait = context["traits"][trait_number]
+            quest = context["quests"][trait["quest"]]
+            quest_type = context["quest_types"][quest["typ"]]
+            quest_type_number = quest_type["number"]
+            if quest_type_number not in registration.traits:
+                registration.traits[quest_type_number] = []
+            registration.traits[quest_type_number].append(f"{quest['name']} - {trait['name']}")
 
-    for typ in r.traits:
-        r.traits[typ] = ",".join(r.traits[typ])
+    for quest_type_number in registration.traits:
+        registration.traits[quest_type_number] = ",".join(registration.traits[quest_type_number])
 
 
-def _orga_registrations_tickets(reg, ctx: dict) -> None:
+def _orga_registrations_tickets(registration, context: dict) -> None:
     """Process registration ticket information and categorize by type.
 
     Analyzes a registration's ticket information and categorizes it based on ticket tier.
@@ -141,8 +141,8 @@ def _orga_registrations_tickets(reg, ctx: dict) -> None:
     Handles cases where tickets are missing or invalid, and respects grouping preferences.
 
     Args:
-        reg: Registration instance to process, must have ticket_id and member attributes
-        ctx: Context dictionary containing:
+        registration: Registration instance to process, must have ticket_id and member attributes
+        context: Context dictionary containing:
             - reg_tickets: Dictionary mapping ticket IDs to ticket objects
             - event: Event instance for provisional registration checks
             - features: Feature flags for registration validation
@@ -151,10 +151,10 @@ def _orga_registrations_tickets(reg, ctx: dict) -> None:
             - list_tickets: Dictionary for ticket name tracking
 
     Returns:
-        None: Modifies ctx dictionary in-place
+        None: Modifies context dictionary in-place
     """
     # Define default ticket type for participants
-    default_typ = ("1", _("Participant"))
+    default_ticket_type = ("1", _("Participant"))
 
     # Map ticket tiers to their display types and sort order
     ticket_types = {
@@ -168,37 +168,37 @@ def _orga_registrations_tickets(reg, ctx: dict) -> None:
     }
 
     # Start with default type, will be overridden if specific ticket found
-    typ = default_typ
+    registration_type = default_ticket_type
 
     # Handle missing or invalid ticket references
-    if not reg.ticket_id or reg.ticket_id not in ctx["reg_tickets"]:
-        regs_list_add(ctx, "list_tickets", "e", reg.member)
+    if not registration.ticket_id or registration.ticket_id not in context["reg_tickets"]:
+        regs_list_add(context, "list_tickets", "e", registration.member)
     else:
         # Process valid ticket and determine registration type
-        ticket = ctx["reg_tickets"][reg.ticket_id]
-        regs_list_add(ctx, "list_tickets", ticket.name, reg.member)
-        reg.ticket_show = ticket.name
+        ticket = context["reg_tickets"][registration.ticket_id]
+        regs_list_add(context, "list_tickets", ticket.name, registration.member)
+        registration.ticket_show = ticket.name
 
         # Check for provisional status first, then map ticket tier to type
-        if is_reg_provisional(reg, event=ctx["event"], features=ctx["features"]):
-            typ = ("0", _("Provisional"))
+        if is_reg_provisional(registration, event=context["event"], features=context["features"]):
+            registration_type = ("0", _("Provisional"))
         elif ticket.tier in ticket_types:
-            typ = ticket_types[ticket.tier]
+            registration_type = ticket_types[ticket.tier]
 
     # Ensure both default and current type categories exist in context
-    for key in [default_typ, typ]:
-        if key[0] not in ctx["reg_all"]:
-            ctx["reg_all"][key[0]] = {"count": 0, "type": key[1], "list": []}
+    for type_key in [default_ticket_type, registration_type]:
+        if type_key[0] not in context["reg_all"]:
+            context["reg_all"][type_key[0]] = {"count": 0, "type": type_key[1], "list": []}
 
     # Increment count for the determined registration type
-    ctx["reg_all"][typ[0]]["count"] += 1
+    context["reg_all"][registration_type[0]]["count"] += 1
 
     # Override grouping if disabled - all registrations go to default type
-    if ctx["no_grouping"]:
-        typ = default_typ
+    if context["no_grouping"]:
+        registration_type = default_ticket_type
 
     # Add registration to the appropriate category list
-    ctx["reg_all"][typ[0]]["list"].append(reg)
+    context["reg_all"][registration_type[0]]["list"].append(registration)
 
 
 def orga_registrations_membership(r, ctx):
@@ -237,58 +237,60 @@ def regs_list_add(context_dict, category_list_key, category_name, member):
         context_dict[category_list_key][slugified_key]["players"].append(member.display_member())
 
 
-def _orga_registrations_standard(reg, ctx):
+def _orga_registrations_standard(registration, context):
     """Process standard registration data including characters and membership.
 
     Args:
-        reg: Registration instance to process
-        ctx: Context dictionary with event data
+        registration: Registration instance to process
+        context: Context dictionary with event data
     """
     # skip if it is gift
-    if reg.redeem_code:
+    if registration.redeem_code:
         return
 
-    regs_list_add(ctx, "list_all", "all", reg.member)
+    regs_list_add(context, "list_all", "all", registration.member)
 
-    _orga_registration_character(ctx, reg)
+    _orga_registration_character(context, registration)
 
     # membership status
-    if "membership" in ctx["features"]:
-        orga_registrations_membership(reg, ctx)
+    if "membership" in context["features"]:
+        orga_registrations_membership(registration, context)
 
     # age at run
-    if ctx["registration_reg_que_age"]:
-        if reg.member.birth_date and ctx["run"].start:
-            reg.age = calculate_age(reg.member.birth_date, ctx["run"].start)
+    if context["registration_reg_que_age"]:
+        if registration.member.birth_date and context["run"].start:
+            registration.age = calculate_age(registration.member.birth_date, context["run"].start)
 
 
-def _orga_registration_character(ctx, reg):
+def _orga_registration_character(context, registration):
     """Process character data for registration including factions and customizations.
 
     Args:
-        ctx: Context dictionary with character data
-        reg: Registration instance to update
+        context: Context dictionary with character data
+        registration: Registration instance to update
     """
-    if reg.member_id not in ctx["reg_chars"]:
+    if registration.member_id not in context["reg_chars"]:
         return
 
-    reg.factions = []
-    reg.chars = ctx["reg_chars"][reg.member_id]
-    for char in reg.chars:
-        if "factions" in char:
-            reg.factions.extend(char["factions"])
-            for fnum in char["factions"]:
-                if fnum in ctx["factions"]:
-                    regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], reg.member)
+    registration.factions = []
+    registration.chars = context["reg_chars"][registration.member_id]
+    for character in registration.chars:
+        if "factions" in character:
+            registration.factions.extend(character["factions"])
+            for faction_number in character["factions"]:
+                if faction_number in context["factions"]:
+                    regs_list_add(
+                        context, "list_factions", context["factions"][faction_number]["name"], registration.member
+                    )
 
-        if "custom_character" in ctx["features"]:
-            orga_registrations_custom(reg, ctx, char)
+        if "custom_character" in context["features"]:
+            orga_registrations_custom(registration, context, character)
 
-    if "custom_character" in ctx["features"] and reg.custom:
-        for s in ctx["custom_info"]:
-            if not reg.custom[s]:
+    if "custom_character" in context["features"] and registration.custom:
+        for section in context["custom_info"]:
+            if not registration.custom[section]:
                 continue
-            reg.custom[s] = ", ".join(reg.custom[s])
+            registration.custom[section] = ", ".join(registration.custom[section])
 
 
 def orga_registrations_custom(r, ctx, char):
@@ -337,20 +339,20 @@ def registrations_popup(request, ctx):
         return JsonResponse({"k": 0})
 
 
-def _orga_registrations_custom_character(ctx):
+def _orga_registrations_custom_character(context):
     """
     Prepare custom character information for registration display.
 
     Args:
-        ctx: Context dictionary to populate with custom character info
+        context: Context dictionary to populate with custom character info
     """
-    if "custom_character" not in ctx["features"]:
+    if "custom_character" not in context["features"]:
         return
-    ctx["custom_info"] = []
-    for field in ["pronoun", "song", "public", "private", "profile"]:
-        if not get_event_config(ctx["event"].id, "custom_character_" + field, False, ctx):
+    context["custom_info"] = []
+    for field_name in ["pronoun", "song", "public", "private", "profile"]:
+        if not get_event_config(context["event"].id, "custom_character_" + field_name, False, context):
             continue
-        ctx["custom_info"].append(field)
+        context["custom_info"].append(field_name)
 
 
 def _orga_registrations_prepare(ctx, request):
@@ -362,16 +364,16 @@ def _orga_registrations_prepare(ctx, request):
         request: HTTP request object
     """
     ctx["reg_chars"] = {}
-    for _chnum, char in ctx["chars"].items():
-        if "player_id" not in char:
+    for _character_number, character in ctx["chars"].items():
+        if "player_id" not in character:
             continue
-        if char["player_id"] not in ctx["reg_chars"]:
-            ctx["reg_chars"][char["player_id"]] = []
-        ctx["reg_chars"][char["player_id"]].append(char)
+        if character["player_id"] not in ctx["reg_chars"]:
+            ctx["reg_chars"][character["player_id"]] = []
+        ctx["reg_chars"][character["player_id"]].append(character)
     ctx["reg_tickets"] = {}
-    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
-        t.emails = []
-        ctx["reg_tickets"][t.id] = t
+    for ticket in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
+        ticket.emails = []
+        ctx["reg_tickets"][ticket.id] = ticket
     ctx["reg_questions"] = _get_registration_fields(ctx, request.user.member)
 
     ctx["no_grouping"] = get_event_config(ctx["event"].id, "registration_no_grouping", False, ctx)
@@ -417,14 +419,14 @@ def _orga_registrations_discount(ctx: dict) -> None:
 
     # Initialize discount tracking structures
     ctx["reg_discounts"] = {}
-    que = AccountingItemDiscount.objects.filter(run=ctx["run"])
+    discount_items_query = AccountingItemDiscount.objects.filter(run=ctx["run"])
 
     # Process each discount item and organize by member
-    for aid in que.select_related("member", "disc").exclude(hide=True):
-        regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
-        if aid.member_id not in ctx["reg_discounts"]:
-            ctx["reg_discounts"][aid.member_id] = []
-        ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
+    for accounting_item_discount in discount_items_query.select_related("member", "disc").exclude(hide=True):
+        regs_list_add(ctx, "list_discount", accounting_item_discount.disc.name, accounting_item_discount.member)
+        if accounting_item_discount.member_id not in ctx["reg_discounts"]:
+            ctx["reg_discounts"][accounting_item_discount.member_id] = []
+        ctx["reg_discounts"][accounting_item_discount.member_id].append(accounting_item_discount.disc.name)
 
 
 def _orga_registrations_text_fields(ctx):
@@ -434,21 +436,21 @@ def _orga_registrations_text_fields(ctx):
         ctx: Context dictionary containing event and registration data
     """
     # add editor type questions
-    text_fields = []
-    que = RegistrationQuestion.objects.filter(event=ctx["event"])
-    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        text_fields.append(str(que_id))
+    text_field_ids = []
+    questions = RegistrationQuestion.objects.filter(event=ctx["event"])
+    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
+        text_field_ids.append(str(question_id))
 
-    gctf = get_cache_reg_field(ctx["run"])
-    for el in ctx["registration_list"]:
-        if el.id not in gctf:
+    cached_registration_fields = get_cache_reg_field(ctx["run"])
+    for registration in ctx["registration_list"]:
+        if registration.id not in cached_registration_fields:
             continue
-        for f in text_fields:
-            if f not in gctf[el.id]:
+        for field_id in text_field_ids:
+            if field_id not in cached_registration_fields[registration.id]:
                 continue
-            (red, ln) = gctf[el.id][f]
-            setattr(el, f + "_red", red)
-            setattr(el, f + "_ln", ln)
+            (is_redacted, line_number) = cached_registration_fields[registration.id][field_id]
+            setattr(registration, field_id + "_red", is_redacted)
+            setattr(registration, field_id + "_ln", line_number)
 
 
 @login_required
@@ -1199,8 +1201,12 @@ def orga_lottery(request: HttpRequest, s: str) -> HttpResponse:
     return render(request, "larpmanager/orga/registration/lottery.html", ctx)
 
 
-def calculate_age(born, today):
-    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+def calculate_age(date_of_birth, reference_date):
+    return (
+        reference_date.year
+        - date_of_birth.year
+        - ((reference_date.month, reference_date.day) < (date_of_birth.month, date_of_birth.day))
+    )
 
 
 @require_POST

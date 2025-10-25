@@ -274,13 +274,13 @@ def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
     activate(reg.member.language)
 
     # Build email subject with event header and localized message
-    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
+    email_subject = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
 
     # Start email body with the user's personal discount code
-    body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
+    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
 
     # Add instructions for sharing the code and friend's discount amount
-    body += (
+    email_body += (
         "<br /><br />"
         + _("Copy this code and share it with friends!")
         + " "
@@ -303,7 +303,7 @@ def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
     )
 
     # Add link to check remaining discount availability
-    body += (
+    email_body += (
         "<br /><br />"
         + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
         % {"url": f"{reg.run.get_slug()}/limitations/"}
@@ -311,8 +311,8 @@ def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
     )
 
     # Add closing message and send the email
-    body += "<br /><br />" + _("See you soon") + "!"
-    my_send_mail(subj, body, reg.member, reg.run)
+    email_body += "<br /><br />" + _("See you soon") + "!"
+    my_send_mail(email_subject, email_body, reg.member, reg.run)
 
 
 def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> None:

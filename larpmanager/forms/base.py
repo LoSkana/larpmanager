@@ -142,34 +142,36 @@ class MyForm(forms.ModelForm):
             - Orders runs by end date
         """
         # Get base runs for the current event
-        runs = Run.objects.filter(event=self.params["event"])
+        available_runs = Run.objects.filter(event=self.params["event"])
 
         # If campaign switch is active, expand to include related events
         if get_assoc_config(self.params["event"].assoc_id, "campaign_switch", False):
             # Start with current event ID
-            event_ids = {self.params["event"].id}
+            related_event_ids = {self.params["event"].id}
 
             # Add child events
-            child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
-            event_ids.update(child)
+            child_event_ids = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
+            related_event_ids.update(child_event_ids)
 
             # Add parent and sibling events if current event has a parent
             if self.params["event"].parent_id:
-                event_ids.add(self.params["event"].parent_id)
-                siblings = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list("pk", flat=True)
-                event_ids.update(siblings)
+                related_event_ids.add(self.params["event"].parent_id)
+                sibling_event_ids = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list(
+                    "pk", flat=True
+                )
+                related_event_ids.update(sibling_event_ids)
 
             # Filter runs by all related event IDs
-            runs = Run.objects.filter(event_id__in=event_ids)
+            available_runs = Run.objects.filter(event_id__in=related_event_ids)
 
         # Optimize query and order by end date
-        runs = runs.select_related("event").order_by("end")
+        available_runs = available_runs.select_related("event").order_by("end")
 
         # Set initial value to current run
         self.initial["run"] = self.params["run"].id
 
         # Handle field visibility based on number of available runs
-        if len(runs) <= 1:
+        if len(available_runs) <= 1:
             if self.instance.pk:
                 # For existing instances, remove field entirely
                 self.delete_field("run")
@@ -178,7 +180,7 @@ class MyForm(forms.ModelForm):
                 self.fields["run"].widget = forms.HiddenInput()
         else:
             # Multiple runs available, populate choices
-            self.fields["run"].choices = [(r.id, str(r)) for r in runs]
+            self.fields["run"].choices = [(run.id, str(run)) for run in available_runs]
             # noinspection PyUnresolvedReferences
             del self.auto_run
 
@@ -556,7 +558,9 @@ class BaseRegistrationForm(MyFormRun):
 
         return choices, help_text
 
-    def check_option(self, chosen: list, name: str, option, reg_count: dict, run) -> tuple[str, bool]:
+    def check_option(
+        self, previously_chosen_options: list, display_name: str, option, registration_count_by_option: dict, run
+    ) -> tuple[str, bool]:
         """
         Check option availability and update display name with availability info.
 
@@ -564,10 +568,10 @@ class BaseRegistrationForm(MyFormRun):
         and maximum capacity. Updates the display name to show availability count.
 
         Args:
-            chosen: List of previously chosen options for the current registration
-            name: Display name for the option to be potentially modified
+            previously_chosen_options: List of previously chosen options for the current registration
+            display_name: Display name for the option to be potentially modified
             option: Option instance to check for availability
-            reg_count: Dictionary containing registration count data by option key
+            registration_count_by_option: Dictionary containing registration count data by option key
             run: Run instance for the current event
 
         Returns:
@@ -576,35 +580,35 @@ class BaseRegistrationForm(MyFormRun):
                 - is_valid: Boolean indicating if the option is valid/available
         """
         # Check if this option was already chosen by the user
-        found = False
-        valid = True
+        option_already_chosen = False
+        is_valid = True
 
-        if chosen:
-            for choice in chosen:
+        if previously_chosen_options:
+            for choice in previously_chosen_options:
                 if choice.option_id == option.id:
-                    found = True
+                    option_already_chosen = True
 
         # If option wasn't previously chosen, check availability
-        if not found:
+        if not option_already_chosen:
             # Get the registration count key for this option
-            key = self.get_option_key_count(option)
-            avail = option.max_available
+            option_key = self.get_option_key_count(option)
+            remaining_availability = option.max_available
 
             # Calculate remaining availability based on current registrations
-            if key in reg_count:
-                avail -= reg_count[key]
+            if option_key in registration_count_by_option:
+                remaining_availability -= registration_count_by_option[option_key]
 
             # Handle unavailable options or add availability info to name
-            if avail <= 0:
+            if remaining_availability <= 0:
                 # Track unavailable options by question ID
                 if option.question_id not in self.unavail:
                     self.unavail[option.question_id] = []
                 self.unavail[option.question_id].append(option.id)
             else:
                 # Append availability count to the display name
-                name += " - (" + _("Available") + f" {avail})"
+                display_name += " - (" + _("Available") + f" {remaining_availability})"
 
-        return name, valid
+        return display_name, is_valid
 
     def clean(self) -> dict:
         """Validate form data and check registration constraints.
@@ -731,7 +735,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_keys
 
-    def check_editable(self, question):
+    def check_editable(self, registration_question):
         return True
 
     def _init_field(

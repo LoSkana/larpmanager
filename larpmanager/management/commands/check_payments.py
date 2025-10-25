@@ -65,33 +65,35 @@ class Command(BaseCommand):
             None: Outputs results to stdout and logs any errors.
         """
         # Query all pending Satispay payment invoices
-        pending_payments = PaymentInvoice.objects.filter(
+        pending_satispay_invoices = PaymentInvoice.objects.filter(
             method__slug="satispay",
             status=PaymentStatus.CREATED,
         )
 
         # Early return if no pending payments found
-        if not pending_payments.exists():
+        if not pending_satispay_invoices.exists():
             self.stdout.write("No pending Satispay payments found.")
             return
 
         # Initialize counter for successfully checked payments
-        checked_count = 0
+        successfully_verified_count = 0
 
         # Iterate through each pending payment invoice
-        for invoice in pending_payments:
+        for payment_invoice in pending_satispay_invoices:
             try:
                 # Create mock request object for satispay_verify function
                 # The function only uses request.assoc_id for logging context
-                mock_request = type("MockRequest", (), {"assoc": {"id": invoice.assoc_id}})()
+                mock_request = type("MockRequest", (), {"assoc": {"id": payment_invoice.assoc_id}})()
 
                 # Verify payment status with Satispay API
-                satispay_verify(mock_request, invoice.cod)
-                checked_count += 1
+                satispay_verify(mock_request, payment_invoice.cod)
+                successfully_verified_count += 1
 
-            except Exception as e:
+            except Exception as verification_error:
                 # Log verification failures but continue processing other payments
-                logger.warning(f"Failed to verify Satispay payment {invoice.cod}: {e}")
+                logger.warning(f"Failed to verify Satispay payment {payment_invoice.cod}: {verification_error}")
 
         # Report successful completion with count of checked payments
-        self.stdout.write(self.style.SUCCESS(f"Successfully checked {checked_count} pending Satispay payments."))
+        self.stdout.write(
+            self.style.SUCCESS(f"Successfully checked {successfully_verified_count} pending Satispay payments.")
+        )

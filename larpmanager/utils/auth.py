@@ -253,9 +253,9 @@ def auto_assign_event_permission_number(event_permission):
         event_permission: EventPermission instance to assign number to
     """
     if not event_permission.number:
-        n = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(Max("number"))[
-            "number__max"
-        ]
-        if not n:
-            n = 1
-        event_permission.number = n + 10
+        max_number = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(
+            Max("number")
+        )["number__max"]
+        if not max_number:
+            max_number = 1
+        event_permission.number = max_number + 10

@@ -1598,7 +1598,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_fields,
         )
 
-    def add_writing_configs(self, basics: dict, event_id: int, help_text: str, s: tuple) -> None:
+    def add_writing_configs(self, basics: dict, event_id: int, help_text: str, writing_section: tuple) -> None:
         """Add writing-related configuration fields to the event form.
 
         This method adds configuration fields for writing elements (characters, factions,
@@ -1609,40 +1609,42 @@ class OrgaPreferencesForm(ExePreferencesForm):
             basics: Basic configuration settings dictionary
             event_id: Unique identifier for the event
             help_text: Descriptive text to help users understand the configuration
-            s: Writing section configuration tuple containing (section_name, display_name)
+            writing_section: Writing section configuration tuple containing (section_name, display_name)
 
         Returns:
             None: Method modifies the form in place
         """
         # Get the writing feature mapping and check if feature is available
-        mapping = _get_writing_mapping()
-        if mapping.get(s[0]) not in self.params["features"]:
+        feature_mapping = _get_writing_mapping()
+        if feature_mapping.get(writing_section[0]) not in self.params["features"]:
             return
 
         # Verify writing fields exist for this section
-        if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
+        if "writing_fields" not in self.params or writing_section[0] not in self.params["writing_fields"]:
             return
 
         # Check user permissions for this writing section
-        if not has_event_permission(self.params["request"], self.params, self.params["event"].slug, f"orga_{s[0]}s"):
+        if not has_event_permission(
+            self.params["request"], self.params, self.params["event"].slug, f"orga_{writing_section[0]}s"
+        ):
             return
 
         # Extract field configurations and prepare extra options
-        fields = self.params["writing_fields"][s[0]]["questions"]
-        extra = []
+        section_fields = self.params["writing_fields"][writing_section[0]]["questions"]
+        extra_config_options = []
 
         # Compile basic field configurations
-        self._compile_configs(basics, extra, fields)
+        self._compile_configs(basics, extra_config_options, section_fields)
 
         # Add character-specific configuration options
-        if s[0] == "character":
+        if writing_section[0] == "character":
             # Add player field if character limit is set
             if get_event_config(self.params["event"].id, "user_character_max", 0):
-                extra.append(("player", _("Player")))
+                extra_config_options.append(("player", _("Player")))
 
             # Add status field if character approval is enabled
             if get_event_config(self.params["event"].id, "user_character_approval", False):
-                extra.append(("status", _("Status")))
+                extra_config_options.append(("status", _("Status")))
 
             # Define character feature fields with their config keys and labels
             feature_fields = [
@@ -1655,44 +1657,52 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
             # Add faction field if faction feature is enabled
             if "faction" in self.params["features"]:
-                questions = self.params["event"].get_elements(WritingQuestion)
-                que = questions.get(applicable=QuestionApplicable.CHARACTER, typ=WritingQuestionType.FACTIONS)
-                feature_fields.insert(0, ("faction", f"q_{que.id}", _("Factions")))
+                available_questions = self.params["event"].get_elements(WritingQuestion)
+                faction_question = available_questions.get(
+                    applicable=QuestionApplicable.CHARACTER, typ=WritingQuestionType.FACTIONS
+                )
+                feature_fields.insert(0, ("faction", f"q_{faction_question.id}", _("Factions")))
 
-            self.add_feature_extra(extra, feature_fields)
+            self.add_feature_extra(extra_config_options, feature_fields)
 
         # Add characters field for faction and plot sections
-        elif s[0] in ["faction", "plot"]:
-            extra.append(("characters", _("Characters")))
+        elif writing_section[0] in ["faction", "plot"]:
+            extra_config_options.append(("characters", _("Characters")))
 
         # Add traits field for quest and trait sections
-        elif s[0] in ["quest", "trait"]:
-            extra.append(("traits", _("Traits")))
+        elif writing_section[0] in ["quest", "trait"]:
+            extra_config_options.append(("traits", _("Traits")))
 
         # Add stats field for all writing sections
-        extra.append(("stats", "Stats"))
+        extra_config_options.append(("stats", "Stats"))
 
         # Add the compiled configuration to the form
-        self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra_data=extra)
+        self.add_configs(
+            f"open_{writing_section[0]}_{event_id}",
+            ConfigType.MULTI_BOOL,
+            writing_section[1],
+            help_text,
+            extra_data=extra_config_options,
+        )
 
-    def _compile_configs(self, basics, extra, fields):
+    def _compile_configs(self, basic_question_types, compiled_options, field_definitions):
         """Compile configuration options from field definitions.
 
         Args:
-            basics: Set of basic question types
-            extra: List to append compiled configurations
-            fields: Dictionary of field definitions
+            basic_question_types: Set of basic question types
+            compiled_options: List to append compiled configurations
+            field_definitions: Dictionary of field definitions
         """
-        for _id, field in fields.items():
+        for _field_id, field in field_definitions.items():
             if field["typ"] == "name":
                 continue
 
-            if field["typ"] in basics:
-                tog = f".lq_{field['id']}"
+            if field["typ"] in basic_question_types:
+                toggle_key = f".lq_{field['id']}"
             else:
-                tog = f"q_{field['id']}"
+                toggle_key = f"q_{field['id']}"
 
-            extra.append((tog, field["name"]))
+            compiled_options.append((toggle_key, field["name"]))
 
     def add_feature_extra(self, extra_fields, feature_field_definitions):
         """Add feature-specific extra fields to configuration.

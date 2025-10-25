@@ -397,27 +397,29 @@ class RegistrationForm(BaseRegistrationForm):
         not_primary_tiers = [TicketTier.WAITING, TicketTier.FILLER]
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in not_primary_tiers
 
-    def check_ticket_visibility(self, ticket):
+    def check_ticket_visibility(self, registration_ticket):
         """Check if ticket should be visible to current user.
 
         Args:
-            ticket: RegistrationTicket instance
+            registration_ticket: RegistrationTicket instance
 
         Returns:
             bool: True if ticket should be visible
         """
-        if ticket.visible:
+        if registration_ticket.visible:
             return True
 
-        if "ticket" in self.params and self.params["ticket"] == ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == registration_ticket.id:
             return True
 
-        if self.instance.pk and self.instance.ticket == ticket:
+        if self.instance.pk and self.instance.ticket == registration_ticket:
             return True
 
         return False
 
-    def get_available_tickets(self, event: Event, reg_counts: dict, run: Run) -> list["RegistrationTicket"] | list:
+    def get_available_tickets(
+        self, event: Event, registration_counts: dict, run: Run
+    ) -> list["RegistrationTicket"] | list:
         """Get list of available tickets for registration.
 
         Returns tickets available for the current user based on their status,
@@ -425,7 +427,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Args:
             event: Event instance to get tickets for
-            reg_counts: Dictionary containing registration count data by ticket type
+            registration_counts: Dictionary containing registration count data by ticket type
             run: Run instance associated with the event
 
         Returns:
@@ -443,15 +445,15 @@ class RegistrationForm(BaseRegistrationForm):
             return []
 
         # Build list of available player tickets
-        tickets = []
-        que_tickets = RegistrationTicket.objects.filter(event=event).order_by("order")
+        available_tickets = []
+        queried_tickets = RegistrationTicket.objects.filter(event=event).order_by("order")
 
         # Filter to giftable tickets only if this is a gift registration
         if self.gift:
-            que_tickets = que_tickets.filter(giftable=True)
+            queried_tickets = queried_tickets.filter(giftable=True)
 
         # Evaluate each ticket for availability based on various constraints
-        for ticket in que_tickets:
+        for ticket in queried_tickets:
             # Skip tickets not visible to current user
             if not self.check_ticket_visibility(ticket):
                 continue
@@ -461,16 +463,16 @@ class RegistrationForm(BaseRegistrationForm):
                 continue
 
             # Skip tickets that have reached maximum capacity
-            if self.skip_ticket_max(reg_counts, ticket):
+            if self.skip_ticket_max(registration_counts, ticket):
                 continue
 
             # Skip reduced-price tickets based on run configuration
             if self.skip_ticket_reduced(run, ticket):
                 continue
 
-            tickets.append(ticket)
+            available_tickets.append(ticket)
 
-        return tickets
+        return available_tickets
 
     def skip_ticket_reduced(self, run, ticket):
         """Check if reduced ticket should be skipped due to availability.

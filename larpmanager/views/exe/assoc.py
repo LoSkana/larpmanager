@@ -72,9 +72,9 @@ def exe_roles(request) -> HttpResponse:
     # Check user permissions for role management
     ctx = check_assoc_permission(request, "exe_roles")
 
-    def def_callback(ctx):
+    def def_callback(context):
         # Create default admin role for association
-        return AssocRole.objects.create(assoc_id=ctx["a_id"], number=1, name="Admin")
+        return AssocRole.objects.create(assoc_id=context["a_id"], number=1, name="Admin")
 
     # Prepare roles list with existing association roles
     prepare_roles_list(ctx, AssocPermission, AssocRole.objects.filter(assoc_id=request.assoc["id"]), def_callback)

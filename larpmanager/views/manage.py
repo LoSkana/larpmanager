@@ -174,23 +174,23 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         - To quick setup if not completed
     """
     # Initialize context and permissions for the current user and association
-    ctx = def_user_context(request)
-    get_index_assoc_permissions(ctx, request, request.assoc["id"])
-    ctx["exe_page"] = 1
-    ctx["manage"] = 1
+    context = def_user_context(request)
+    get_index_assoc_permissions(context, request, request.assoc["id"])
+    context["exe_page"] = 1
+    context["manage"] = 1
 
     # Check what would you like form
-    what_would_you_like(ctx, request)
+    what_would_you_like(context, request)
 
     # Get available features for this association
-    features = get_assoc_features(ctx["a_id"])
+    features = get_assoc_features(context["a_id"])
 
     # Check if association has any events
-    ctx["event_counts"] = Event.objects.filter(assoc_id=ctx["a_id"]).count()
+    context["event_counts"] = Event.objects.filter(assoc_id=context["a_id"]).count()
 
     # Redirect to event creation if no events exist and feature is available
-    if not ctx["event_counts"] and "exe_events" in features:
-        msg = (
+    if not context["event_counts"] and "exe_events" in features:
+        welcome_message = (
             _("Welcome")
             + "! "
             + _("You don't have any events yet")
@@ -198,55 +198,57 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
             + _("Please create your first event to get started")
             + "!"
         )
-        messages.success(request, msg)
+        messages.success(request, welcome_message)
         return redirect("exe_events_edit", num=0)
 
     # Redirect to quick setup if not completed
-    if not get_assoc_config(ctx["a_id"], "exe_quick_suggestion", False, ctx=ctx):
-        msg = _(
+    if not get_assoc_config(context["a_id"], "exe_quick_suggestion", False, ctx=context):
+        setup_message = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization"
         )
-        messages.success(request, msg)
+        messages.success(request, setup_message)
         return redirect("exe_quick")
 
     # Get ongoing runs (events in START or SHOW development status)
-    que = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW])
-    ctx["ongoing_runs"] = que.select_related("event").order_by("end")
+    ongoing_runs_queryset = Run.objects.filter(
+        event__assoc_id=context["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW]
+    )
+    context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("end")
 
     # Add registration status and counts for each ongoing run
-    for run in ctx["ongoing_runs"]:
+    for run in context["ongoing_runs"]:
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
 
     # Add accounting information if user has permission
-    if has_assoc_permission(request, ctx, "exe_accounting"):
-        assoc_accounting(ctx)
+    if has_assoc_permission(request, context, "exe_accounting"):
+        assoc_accounting(context)
 
     # Suggest creating an event if no runs are active
-    if not ctx["ongoing_runs"]:
+    if not context["ongoing_runs"]:
         _add_priority(
-            ctx,
+            context,
             _("No events are present, create one"),
             "exe_events",
         )
 
     # Add dashboard actions and suggestions
-    _exe_actions(request, ctx, features)
-    _exe_suggestions(ctx)
+    _exe_actions(request, context, features)
+    _exe_suggestions(context)
 
     # Compile final context and check for intro driver
-    _compile(request, ctx)
-    _check_intro_driver(request, ctx)
+    _compile(request, context)
+    _check_intro_driver(request, context)
 
-    return render(request, "larpmanager/manage/exe.html", ctx)
+    return render(request, "larpmanager/manage/exe.html", context)
 
 
-def _exe_suggestions(ctx):
+def _exe_suggestions(context):
     """Add priority tasks and suggestions to the executive management context.
 
     Args:
-        ctx: Context dictionary containing association ID and other data
+        context: Context dictionary containing association ID and other data
     """
     suggestions = {
         "exe_methods": _("Set up the payment methods available to participants"),
@@ -261,10 +263,10 @@ def _exe_suggestions(ctx):
         "exe_config": _("Set up specific values for the interface configuration or features"),
     }
 
-    for perm, text in suggestions.items():
-        if get_assoc_config(ctx["a_id"], f"{perm}_suggestion", ctx=ctx):
+    for permission_key, suggestion_text in suggestions.items():
+        if get_assoc_config(context["a_id"], f"{permission_key}_suggestion", ctx=context):
             continue
-        _add_suggestion(ctx, text, perm)
+        _add_suggestion(context, suggestion_text, permission_key)
 
 
 def _exe_actions(request, context: dict, association_features: dict = None) -> None:
@@ -352,409 +354,422 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
     _exe_users_actions(request, context, association_features)
 
 
-def _exe_users_actions(request, ctx, features):
+def _exe_users_actions(request, context, enabled_features):
     """
     Process user management actions and setup tasks for executives.
 
     Args:
         request: HTTP request object
         assoc: Association instance
-        ctx: Context dictionary to populate with actions
-        features: Set of enabled features
+        context: Context dictionary to populate with actions
+        enabled_features: Set of enabled features
     """
-    if "membership" in features:
-        if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
-            _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
+    if "membership" in enabled_features:
+        if not get_assoc_text(context["a_id"], AssocTextType.MEMBERSHIP):
+            _add_priority(context, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", ctx=ctx)) == 0:
-            _add_priority(ctx, _("Set up the membership configuration"), "exe_membership", "config/membership")
+        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", ctx=context)) == 0:
+            _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
-    if "vote" in features:
-        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", ctx=ctx):
+    if "vote" in enabled_features:
+        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", ctx=context):
             _add_priority(
-                ctx,
+                context,
                 _("Set up the voting configuration"),
                 "exe_config",
             )
 
-    if "help" in features:
-        _closed_q, open_q = _get_help_questions(ctx, request)
-        if open_q:
+    if "help" in enabled_features:
+        closed_questions, open_questions = _get_help_questions(context, request)
+        if open_questions:
             _add_action(
-                ctx,
-                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_q)},
+                context,
+                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_questions)},
                 "exe_questions",
             )
 
 
-def _exe_accounting_actions(request, ctx, features):
+def _exe_accounting_actions(request, context, enabled_features):
     """
     Process accounting-related setup actions for executives.
 
     Args:
         request: request instance
-        ctx: Context dictionary to populate with priority actions
-        features: Set of enabled features for the association
+        context: Context dictionary to populate with priority actions
+        enabled_features: Set of enabled features for the association
     """
-    if "payment" in features:
+    if "payment" in enabled_features:
         if not request.assoc.get("methods", ""):
             _add_priority(
-                ctx,
+                context,
                 _("Set up payment methods"),
                 "exe_methods",
             )
 
-    if "organization_tax" in features:
-        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", ctx=ctx):
+    if "organization_tax" in enabled_features:
+        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", ctx=context):
             _add_priority(
-                ctx,
+                context,
                 _("Set up the organization tax configuration"),
                 "exe_accounting",
                 "config/organization_tax",
             )
 
-    if "vat" in features:
-        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", ctx=ctx)
-        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", ctx=ctx)
+    if "vat" in enabled_features:
+        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", ctx=context)
+        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", ctx=context)
         if not vat_ticket or not vat_options:
             _add_priority(
-                ctx,
+                context,
                 _("Set up the taxes configuration"),
                 "exe_accounting",
                 "config/vat",
             )
 
 
-def _orga_manage(request: HttpRequest, s: str) -> HttpResponse:
+def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Event organizer management dashboard view.
 
     Args:
         request: HTTP request
-        s: Event slug
+        event_slug: Event slug
 
     Returns:
         Rendered dashboard
     """
 
     # Set page context
-    ctx = get_event_run(request, s)
-    ctx["orga_page"] = 1
-    ctx["manage"] = 1
+    context = get_event_run(request, event_slug)
+    context["orga_page"] = 1
+    context["manage"] = 1
 
     # Check what would you like form
-    what_would_you_like(ctx, request)
+    what_would_you_like(context, request)
 
     # Ensure run dates are set
-    if not ctx["run"].start or not ctx["run"].end:
-        msg = _("Last step, please complete the event setup by adding the start and end dates")
-        messages.success(request, msg)
-        return redirect("orga_run", s=s)
+    if not context["run"].start or not context["run"].end:
+        message = _("Last step, please complete the event setup by adding the start and end dates")
+        messages.success(request, message)
+        return redirect("orga_run", s=event_slug)
 
     # Ensure quick setup is complete
-    if not get_event_config(ctx["event"].id, "orga_quick_suggestion", False, ctx=ctx):
-        msg = _(
+    if not get_event_config(context["event"].id, "orga_quick_suggestion", False, ctx=context):
+        message = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
             "the features most useful for your event"
         )
-        messages.success(request, msg)
-        return redirect("orga_quick", s=s)
+        messages.success(request, message)
+        return redirect("orga_quick", s=event_slug)
 
     # Load permissions and navigation
-    get_index_event_permissions(ctx, request, s)
-    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, ctx=ctx):
-        get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
+    get_index_event_permissions(context, request, event_slug)
+    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, ctx=context):
+        get_index_assoc_permissions(context, request, request.assoc["id"], check=False)
 
     # Load registration status
-    ctx["registration_status"] = _get_registration_status(ctx["run"])
+    context["registration_status"] = _get_registration_status(context["run"])
 
     # Load registration counts if permitted
-    if has_event_permission(request, ctx, s, "orga_registrations"):
-        ctx["counts"] = get_reg_counts(ctx["run"])
-        ctx["reg_counts"] = {}
+    if has_event_permission(request, context, event_slug, "orga_registrations"):
+        context["counts"] = get_reg_counts(context["run"])
+        context["reg_counts"] = {}
         for tier in ["player", "staff", "wait", "fill", "seller", "npc", "collaborator"]:
-            key = f"count_{tier}"
-            if key in ctx["counts"]:
-                ctx["reg_counts"][_(tier.capitalize())] = ctx["counts"][key]
+            count_key = f"count_{tier}"
+            if count_key in context["counts"]:
+                context["reg_counts"][_(tier.capitalize())] = context["counts"][count_key]
 
     # Load accounting if permitted
-    if has_event_permission(request, ctx, s, "orga_accounting"):
-        ctx["dc"] = get_run_accounting(ctx["run"], ctx, perform_update=False)
+    if has_event_permission(request, context, event_slug, "orga_accounting"):
+        context["dc"] = get_run_accounting(context["run"], context, perform_update=False)
 
     # Build action lists
-    _exe_actions(request, ctx)
-    if "actions_list" in ctx:
-        del ctx["actions_list"]
+    _exe_actions(request, context)
+    if "actions_list" in context:
+        del context["actions_list"]
 
-    _orga_actions_priorities(request, ctx)
-    _orga_suggestions(ctx)
-    _compile(request, ctx)
+    _orga_actions_priorities(request, context)
+    _orga_suggestions(context)
+    _compile(request, context)
 
     # Mobile shortcuts handling
-    if get_event_config(ctx["event"].id, "show_shortcuts_mobile", False, ctx=ctx):
+    if get_event_config(context["event"].id, "show_shortcuts_mobile", False, ctx=context):
         origin_id = request.GET.get("origin", "")
-        should_open = False
+        should_open_shortcuts = False
         if origin_id:
-            should_open = str(ctx["run"].id) != origin_id
-        ctx["open_shortcuts"] = should_open
+            should_open_shortcuts = str(context["run"].id) != origin_id
+        context["open_shortcuts"] = should_open_shortcuts
 
-    _check_intro_driver(request, ctx)
+    _check_intro_driver(request, context)
 
-    return render(request, "larpmanager/manage/orga.html", ctx)
+    return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_actions_priorities(request: HttpRequest, ctx: dict) -> None:
+def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
     event setup workflow, checking for missing required configurations.
-    Populates ctx with priority actions and regular actions for the organizer dashboard.
+    Populates context with priority actions and regular actions for the organizer dashboard.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary containing 'event' and 'run' keys. Will be updated
+        context: Context dictionary containing 'event' and 'run' keys. Will be updated
              with priority and action lists
 
     Side effects:
-        Modifies ctx by calling _add_priority() and _add_action() which populate
+        Modifies context by calling _add_priority() and _add_action() which populate
         action lists for the organizer dashboard
     """
     # Load feature flags to determine which checks to perform
-    features = get_event_features(ctx["event"].id)
+    enabled_features = get_event_features(context["event"].id)
 
     # Check if character feature is properly configured
-    if "character" in features:
+    if "character" in enabled_features:
         # Prompt to create first character if none exist
-        if not Character.objects.filter(event=ctx["event"]).count():
+        if not Character.objects.filter(event=context["event"]).count():
             _add_priority(
-                ctx,
+                context,
                 _("Create the first character of the event"),
                 "orga_characters",
             )
     # Check for feature dependencies on character feature
-    elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
+    elif set(enabled_features) & {
+        "faction",
+        "plot",
+        "casting",
+        "user_character",
+        "px",
+        "custom_character",
+        "questbuilder",
+    }:
         _add_priority(
-            ctx,
+            context,
             _("Some activated features need the 'Character' feature, but it isn't active"),
             "orga_features",
         )
 
     # Check if user_character feature needs configuration
-    if "user_character" in features and get_event_config(ctx["event"].id, "user_character_max", "", ctx=ctx) == "":
+    if (
+        "user_character" in enabled_features
+        and get_event_config(context["event"].id, "user_character_max", "", ctx=context) == ""
+    ):
         _add_priority(
-            ctx,
+            context,
             _("Set up the configuration for the creation or editing of characters by the participants"),
             "orga_character",
             "config/user_character",
         )
 
     # Check for features that depend on token_credit
-    if "token_credit" not in features and set(features) & {"expense", "refund", "collection"}:
+    if "token_credit" not in enabled_features and set(enabled_features) & {"expense", "refund", "collection"}:
         _add_priority(
-            ctx,
+            context,
             _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
             "orga_features",
         )
 
     # Check for pending character approvals
-    char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
-    if char_proposed:
+    proposed_characters_count = context["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
+    if proposed_characters_count:
         _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> characters to approve") % {"number": char_proposed},
+            context,
+            _("There are <b>%(number)s</b> characters to approve") % {"number": proposed_characters_count},
             "orga_characters",
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_assoc_config(ctx["event"].assoc_id, "expense_disable_orga", False, ctx=ctx):
-        expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
-        if expenses_approve:
+    if not get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, ctx=context):
+        pending_expenses_count = AccountingItemExpense.objects.filter(run=context["run"], is_approved=False).count()
+        if pending_expenses_count:
             _add_action(
-                ctx,
-                _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
+                context,
+                _("There are <b>%(number)s</b> expenses to approve") % {"number": pending_expenses_count},
                 "orga_expenses",
             )
 
     # Check for pending payment approvals
-    payments_approve = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED).count()
-    if payments_approve:
+    pending_payments_count = PaymentInvoice.objects.filter(
+        reg__run=context["run"], status=PaymentStatus.SUBMITTED
+    ).count()
+    if pending_payments_count:
         _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> payments to approve") % {"number": payments_approve},
+            context,
+            _("There are <b>%(number)s</b> payments to approve") % {"number": pending_payments_count},
             "orga_invoices",
         )
 
     # Check for incomplete registration form questions (missing options)
-    empty_reg_questions = (
-        ctx["event"]
+    registration_questions_without_options = (
+        context["event"]
         .get_elements(RegistrationQuestion)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
-    if empty_reg_questions.count():
+    if registration_questions_without_options.count():
         _add_priority(
-            ctx,
+            context,
             _("There are registration questions without options: %(list)s")
-            % {"list": ", ".join([obj.name for obj in empty_reg_questions])},
+            % {"list": ", ".join([question.name for question in registration_questions_without_options])},
             "orga_registration_form",
         )
 
     # Check for incomplete writing form questions (missing options)
-    empty_char_questions = (
-        ctx["event"]
+    writing_questions_without_options = (
+        context["event"]
         .get_elements(WritingQuestion)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
-    if empty_char_questions.count():
+    if writing_questions_without_options.count():
         _add_priority(
-            ctx,
+            context,
             _("There are writing fields without options: %(list)s")
-            % {"list": ", ".join([obj.name for obj in empty_char_questions])},
+            % {"list": ", ".join([question.name for question in writing_questions_without_options])},
             "orga_character_form",
         )
 
     # Delegate to sub-functions for additional action checks
-    _orga_user_actions(ctx, features, request)
+    _orga_user_actions(context, enabled_features, request)
 
-    _orga_reg_acc_actions(ctx, features)
+    _orga_reg_acc_actions(context, enabled_features)
 
-    _orga_reg_actions(ctx, features)
+    _orga_reg_actions(context, enabled_features)
 
-    _orga_px_actions(ctx, features)
+    _orga_px_actions(context, enabled_features)
 
-    _orga_casting_actions(ctx, features)
+    _orga_casting_actions(context, enabled_features)
 
 
-def _orga_user_actions(ctx, features, request):
+def _orga_user_actions(context, features, request):
     if "help" in features:
-        _closed_q, open_q = _get_help_questions(ctx, request)
-        if open_q:
+        _closed_questions, open_questions = _get_help_questions(context, request)
+        if open_questions:
             _add_action(
-                ctx,
-                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_q)},
+                context,
+                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_questions)},
                 "exe_questions",
             )
 
 
-def _orga_casting_actions(ctx, features):
+def _orga_casting_actions(context, enabled_features):
     """Add priority actions related to casting and quest builder setup.
 
     Checks for missing casting configurations and quest/trait relationships,
     adding appropriate priority suggestions for event organizers.
     """
-    if "casting" in features:
-        if not get_event_config(ctx["event"].id, "casting_min", 0, ctx=ctx):
+    if "casting" in enabled_features:
+        if not get_event_config(context["event"].id, "casting_min", 0, ctx=context):
             _add_priority(
-                ctx,
+                context,
                 _("Set the casting options in the configuration panel"),
                 "orga_casting",
                 "config/casting",
             )
 
-    if "questbuilder" in features:
-        if not ctx["event"].get_elements(QuestType).count():
+    if "questbuilder" in enabled_features:
+        if not context["event"].get_elements(QuestType).count():
             _add_priority(
-                ctx,
+                context,
                 _("Set up quest types"),
                 "orga_quest_types",
             )
 
         unused_quest_types = (
-            ctx["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
+            context["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
         )
         if unused_quest_types.count():
             _add_priority(
-                ctx,
+                context,
                 _("There are quest types without quests: %(list)s")
-                % {"list": ", ".join([obj.name for obj in unused_quest_types])},
+                % {"list": ", ".join([quest_type.name for quest_type in unused_quest_types])},
                 "orga_quests",
             )
 
-        unused_quests = ctx["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
+        unused_quests = context["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
         if unused_quests.count():
             _add_priority(
-                ctx,
+                context,
                 _("There are quests without traits: %(list)s")
-                % {"list": ", ".join([obj.name for obj in unused_quests])},
+                % {"list": ", ".join([quest.name for quest in unused_quests])},
                 "orga_traits",
             )
 
 
-def _orga_px_actions(ctx: dict, features: dict) -> None:
+def _orga_px_actions(context: dict, enabled_features: dict) -> None:
     """Add priority actions for experience points system setup.
 
     Checks for missing PX configurations, ability types, and deliveries,
     adding appropriate priority suggestions for event organizers.
 
     Args:
-        ctx: Context dictionary containing event and other relevant data
-        features: Dictionary of enabled features for the current context
+        context: Context dictionary containing event and other relevant data
+        enabled_features: Dictionary of enabled features for the current context
 
     Returns:
-        None: Function modifies ctx in place by adding priority suggestions
+        None: Function modifies context in place by adding priority suggestions
     """
     # Early return if PX feature is not enabled
-    if "px" not in features:
+    if "px" not in enabled_features:
         return
 
     # Check if experience points configuration is missing
-    if not get_event_config(ctx["event"].id, "px_start", 0, ctx=ctx):
+    if not get_event_config(context["event"].id, "px_start", 0, ctx=context):
         _add_priority(
-            ctx,
+            context,
             _("Set the experience points configuration"),
             "orga_px_abilities",
             "config/px",
         )
 
     # Verify that ability types have been set up
-    if not ctx["event"].get_elements(AbilityTypePx).count():
+    if not context["event"].get_elements(AbilityTypePx).count():
         _add_priority(
-            ctx,
+            context,
             _("Set up ability types"),
             "orga_px_ability_types",
         )
 
     # Find ability types that don't have any associated abilities
-    unused_ability_types = (
-        ctx["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
+    ability_types_without_abilities = (
+        context["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
     # Add priority if there are unused ability types
-    if unused_ability_types.count():
+    if ability_types_without_abilities.count():
         _add_priority(
-            ctx,
+            context,
             _("There are ability types without abilities: %(list)s")
-            % {"list": ", ".join([ability.name for ability in unused_ability_types])},
+            % {"list": ", ".join([ability_type.name for ability_type in ability_types_without_abilities])},
             "orga_px_abilities",
         )
 
     # Check if delivery methods for experience points are configured
-    if not ctx["event"].get_elements(DeliveryPx).count():
+    if not context["event"].get_elements(DeliveryPx).count():
         _add_priority(
-            ctx,
+            context,
             _("Set up delivery for experience points"),
             "orga_px_deliveries",
         )
 
 
-def _orga_reg_acc_actions(ctx: dict, features: list[str]) -> None:
+def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,
     such as installments, quotas, and accounting systems for events.
 
     Args:
-        ctx: Context dictionary containing event and other data
-        features: List of enabled feature names
+        context: Context dictionary containing event and other data
+        enabled_features: List of enabled feature names
 
     Returns:
-        None: Modifies ctx in place by adding priority actions
+        None: Modifies context in place by adding priority actions
     """
     # Check for conflicting installment features
-    if "reg_installments" in features and "reg_quotas" in features:
+    if "reg_installments" in enabled_features and "reg_quotas" in enabled_features:
         _add_priority(
-            ctx,
+            context,
             _(
                 "You have activated both fixed and dynamic installments; they are not meant to be used together, "
                 "deactivate one of the two in the features management panel"
@@ -763,117 +778,119 @@ def _orga_reg_acc_actions(ctx: dict, features: list[str]) -> None:
         )
 
     # Handle dynamic installments (quotas) setup
-    if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
+    if "reg_quotas" in enabled_features and not context["event"].get_elements(RegistrationQuota).count():
         _add_priority(
-            ctx,
+            context,
             _("Set up dynamic installments"),
             "orga_registration_quotas",
         )
 
     # Handle fixed installments feature
-    if "reg_installments" in features:
+    if "reg_installments" in enabled_features:
         # Check if installments are configured
-        if not ctx["event"].get_elements(RegistrationInstallment).count():
+        if not context["event"].get_elements(RegistrationInstallment).count():
             _add_priority(
-                ctx,
+                context,
                 _("Set up fixed installments"),
                 "orga_registration_installments",
             )
         else:
             # Validate installment configuration - check for conflicting deadline settings
-            both_set = (
-                ctx["event"]
+            installments_with_both_deadlines = (
+                context["event"]
                 .get_elements(RegistrationInstallment)
                 .filter(date_deadline__isnull=False, days_deadline__isnull=False)
             )
-            if both_set:
+            if installments_with_both_deadlines:
                 _add_priority(
-                    ctx,
+                    context,
                     _(
                         "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s"
                     )
-                    % {"list": ", ".join([str(obj) for obj in both_set])},
+                    % {"list": ", ".join([str(installment) for installment in installments_with_both_deadlines])},
                     "orga_registration_installments",
                 )
 
             # Check for missing final installments (amount = 0)
-            missing_final = ctx["event"].get_elements(RegistrationTicket).exclude(installments__amount=0)
-            if missing_final:
+            tickets_missing_final_installment = (
+                context["event"].get_elements(RegistrationTicket).exclude(installments__amount=0)
+            )
+            if tickets_missing_final_installment:
                 _add_priority(
-                    ctx,
+                    context,
                     _("You have some tickets without a final installment (with 0 amount): %(list)s")
-                    % {"list": ", ".join([obj.name for obj in missing_final])},
+                    % {"list": ", ".join([ticket.name for ticket in tickets_missing_final_installment])},
                     "orga_registration_installments",
                 )
 
     # Handle reduced tickets feature configuration
-    if "reduced" in features:
-        if not get_event_config(ctx["event"].id, "reduced_ratio", 0, ctx=ctx):
+    if "reduced" in enabled_features:
+        if not get_event_config(context["event"].id, "reduced_ratio", 0, ctx=context):
             _add_priority(
-                ctx,
+                context,
                 _("Set up configuration for Patron and Reduced tickets"),
                 "orga_registration_tickets",
                 "config/reduced",
             )
 
 
-def _orga_reg_actions(ctx, features):
+def _orga_reg_actions(context, enabled_features):
     """Add priority actions for registration management setup.
 
     Checks registration status, required tickets, and registration features
     to provide guidance for event organizers.
     """
-    if "registration_open" in features and not ctx["run"].registration_open:
+    if "registration_open" in enabled_features and not context["run"].registration_open:
         _add_priority(
-            ctx,
+            context,
             _("Set up a value for registration opening date"),
             "orga_event",
         )
 
-    if "registration_secret" in features and not ctx["run"].registration_secret:
+    if "registration_secret" in enabled_features and not context["run"].registration_secret:
         _add_priority(
-            ctx,
+            context,
             _("Set up a value for registration secret link"),
             "orga_event",
         )
 
-    if "register_link" in features and not ctx["event"].register_link:
+    if "register_link" in enabled_features and not context["event"].register_link:
         _add_priority(
-            ctx,
+            context,
             _("Set up a value for registration external link"),
             "orga_event",
         )
 
-    if "custom_character" in features:
-        configured = False
-        for field in ["pronoun", "song", "public", "private", "profile"]:
-            if get_event_config(ctx["event"].id, "custom_character_" + field, False, ctx=ctx):
-                configured = True
+    if "custom_character" in enabled_features:
+        is_configured = False
+        for field_name in ["pronoun", "song", "public", "private", "profile"]:
+            if get_event_config(context["event"].id, "custom_character_" + field_name, False, ctx=context):
+                is_configured = True
 
-        if not configured:
+        if not is_configured:
             _add_priority(
-                ctx,
+                context,
                 _("Set up character customization configuration"),
                 "orga_characters",
                 "config/custom_character",
             )
 
 
-def _orga_suggestions(ctx):
+def _orga_suggestions(context):
     """Add priority suggestions for event organization.
 
     Args:
-        ctx: Context dictionary to add suggestions to
+        context: Context dictionary to add suggestions to
     """
     priorities = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
     }
 
-    for perm, text in priorities.items():
-        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx=ctx):
+    for permission_slug, suggestion_text in priorities.items():
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, ctx=context):
             continue
-        _add_priority(ctx, text, perm)
+        _add_priority(context, suggestion_text, permission_slug)
 
     suggestions = {
         "orga_registration_form": _(
@@ -885,10 +902,10 @@ def _orga_suggestions(ctx):
         "orga_config": _("Set specific values for configuration of features of the event"),
     }
 
-    for perm, text in suggestions.items():
-        if get_event_config(ctx["event"].id, f"{perm}_suggestion", False, ctx=ctx):
+    for permission_slug, suggestion_text in suggestions.items():
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, ctx=context):
             continue
-        _add_suggestion(ctx, text, perm)
+        _add_suggestion(context, suggestion_text, permission_slug)
 
 
 def _add_item(context, list_name, message_text, permission_key, custom_link):
@@ -943,38 +960,38 @@ def _add_suggestion(context, suggestion_text, permission_key, custom_link=None):
     _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
 
-def _has_permission(request, ctx, perm):
+def _has_permission(request, context, permission):
     """Check if user has required permission for action.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary
-        perm: Permission string to check
+        context: Context dictionary
+        permission: Permission string to check
 
     Returns:
         bool: True if user has permission
     """
-    if perm.startswith("exe"):
-        return has_assoc_permission(request, ctx, perm)
-    return has_event_permission(request, ctx, ctx["event"].slug, perm)
+    if permission.startswith("exe"):
+        return has_assoc_permission(request, context, permission)
+    return has_event_permission(request, context, context["event"].slug, permission)
 
 
-def _get_href(ctx, perm, name, custom_link):
+def _get_href(context, permission, display_name, custom_link_suffix):
     """Generate href and title for management dashboard links.
 
     Args:
-        ctx: Context dictionary
-        perm: Permission string
-        name: Display name
-        custom_link: Optional custom link suffix
+        context: Context dictionary
+        permission: Permission string
+        display_name: Display name
+        custom_link_suffix: Optional custom link suffix
 
     Returns:
         tuple: (title, href) for dashboard link
     """
-    if custom_link:
-        return _("Configuration"), _get_perm_link(ctx, perm, "manage") + custom_link
+    if custom_link_suffix:
+        return _("Configuration"), _get_perm_link(context, permission, "manage") + custom_link_suffix
 
-    return _(name), _get_perm_link(ctx, perm, perm)
+    return _(display_name), _get_perm_link(context, permission, permission)
 
 
 def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
@@ -1285,11 +1302,11 @@ def _get_choice_redirect_url(choice, ctx):
         "feature": lambda: _handle_tutorial_redirect(choice_value),
     }
 
-    handler = redirect_handlers.get(choice_type)
-    if not handler:
+    redirect_handler = redirect_handlers.get(choice_type)
+    if not redirect_handler:
         raise ValueError(_("Unknown choice type: %(type)s") % {"type": choice_type})
 
-    return handler()
+    return redirect_handler()
 
 
 def _handle_event_pms_redirect(choice_value, ctx):

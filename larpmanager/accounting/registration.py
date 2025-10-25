@@ -159,29 +159,29 @@ def get_reg_transactions(reg):
     return tot_trans
 
 
-def get_accounting_refund(reg):
+def get_accounting_refund(registration):
     """Get refund information for a registration.
 
     Args:
-        reg: Registration instance to get refunds for
+        registration: Registration instance to get refunds for
 
     Side effects:
-        Sets reg.refunds dictionary with refund amounts by type
+        Sets registration.refunds dictionary with refund amounts by type
     """
-    reg.refunds = {}
+    registration.refunds = {}
 
-    if not hasattr(reg, "acc_refunds"):
-        reg.acc_refunds = AccountingItemOther.objects.filter(
-            run_id=reg.run_id, member_id=reg.member_id, cancellation=True
+    if not hasattr(registration, "acc_refunds"):
+        registration.acc_refunds = AccountingItemOther.objects.filter(
+            run_id=registration.run_id, member_id=registration.member_id, cancellation=True
         )
 
-    if not reg.acc_refunds:
+    if not registration.acc_refunds:
         return
 
-    for aio in reg.acc_refunds:
-        if aio.oth not in reg.refunds:
-            reg.refunds[aio.oth] = 0
-        reg.refunds[aio.oth] += aio.value
+    for accounting_item_other in registration.acc_refunds:
+        if accounting_item_other.oth not in registration.refunds:
+            registration.refunds[accounting_item_other.oth] = 0
+        registration.refunds[accounting_item_other.oth] += accounting_item_other.value
 
 
 def quota_check(reg, start, alert, assoc_id):
@@ -327,21 +327,21 @@ def installment_check(reg: "Registration", alert: int, assoc_id: int) -> None:
         reg.quota = reg.tot_iscr - reg.tot_payed
 
 
-def _get_deadline_installment(assoc_id, i, reg):
+def _get_deadline_installment(association_id, installment, registration):
     """Calculate deadline for a specific installment.
 
     Args:
-        assoc_id: Association ID for payment deadline calculation
-        i: RegistrationInstallment instance
-        reg: Registration instance
+        association_id: Association ID for payment deadline calculation
+        installment: RegistrationInstallment instance
+        registration: Registration instance
 
     Returns:
         int or None: Days until deadline, None if no deadline configured
     """
-    if i.days_deadline:
-        deadline = get_payment_deadline(reg, i.days_deadline, assoc_id)
-    elif i.date_deadline:
-        deadline = get_time_diff_today(i.date_deadline)
+    if installment.days_deadline:
+        deadline = get_payment_deadline(registration, installment.days_deadline, association_id)
+    elif installment.date_deadline:
+        deadline = get_time_diff_today(installment.date_deadline)
     else:
         deadline = None
     return deadline

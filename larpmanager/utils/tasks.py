@@ -378,9 +378,9 @@ def add_unsubscribe_body(assoc):
     Returns:
         str: HTML footer with unsubscribe link
     """
-    txt = "<br /><br />-<br />"
-    txt += f"<a href='{get_url('unsubscribe', assoc)}'>Unsubscribe</a>"
-    return txt
+    html_footer = "<br /><br />-<br />"
+    html_footer += f"<a href='{get_url('unsubscribe', assoc)}'>Unsubscribe</a>"
+    return html_footer
 
 
 def my_send_mail(

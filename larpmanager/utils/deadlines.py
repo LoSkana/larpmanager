@@ -159,43 +159,45 @@ def check_run_deadlines(runs: list) -> list:
     return all_results
 
 
-def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):
+def deadlines_profile(
+    deadline_violations, features, memberships, current_datetime, registration, event_run, tolerance_days
+):
     """Check profile completion deadlines for registration.
 
     Args:
-        collect (dict): Dictionary to collect deadline violations
+        deadline_violations (dict): Dictionary to collect deadline violations
         features (dict): Event features
         memberships (dict): Member ID to membership mapping
-        now (datetime): Current datetime
-        reg: Registration instance
-        run: Run instance
-        tolerance (int): Tolerance days for deadlines
+        current_datetime (datetime): Current datetime
+        registration: Registration instance
+        event_run: Run instance
+        tolerance_days (int): Tolerance days for deadlines
 
     Side effects:
-        Updates collect with profile deadline violations
+        Updates deadline_violations with profile deadline violations
     """
-    membership = memberships.get(reg.member_id)
+    membership = memberships.get(registration.member_id)
     if not membership:
         return
 
     if membership.compiled:
         return
 
-    if now.date() + timedelta(days=tolerance) > run.start:
-        collect["profile_del"].append(reg.member_id)
+    if current_datetime.date() + timedelta(days=tolerance_days) > event_run.start:
+        deadline_violations["profile_del"].append(registration.member_id)
     else:
-        collect["profile"].append(reg.member_id)
+        deadline_violations["profile"].append(registration.member_id)
 
 
 def deadlines_membership(
-    collect: dict[str, list[int]],
-    features: dict[str, any],
-    fees: set[int],
-    memberships: dict[int, any],
-    now: datetime,
-    reg: any,
-    run: any,
-    tolerance: int,
+    violations_by_type: dict[str, list[int]],
+    event_features: dict[str, any],
+    members_with_paid_fees: set[int],
+    memberships_by_member_id: dict[int, any],
+    current_datetime: datetime,
+    registration: any,
+    event_run: any,
+    tolerance_days: int,
 ) -> None:
     """Check membership and fee deadlines for registration.
 
@@ -203,31 +205,31 @@ def deadlines_membership(
     updating the collect dictionary with any violations found based on tolerance periods.
 
     Args:
-        collect: Dictionary to collect deadline violations, organized by violation type
-        features: Event features configuration dictionary
-        fees: Set of member IDs who have paid their membership fee
-        memberships: Mapping from member ID to membership instance
-        now: Current datetime for deadline calculations
-        reg: Registration instance being evaluated
-        run: Run instance containing event start date
-        tolerance: Number of days tolerance allowed for deadlines
+        violations_by_type: Dictionary to collect deadline violations, organized by violation type
+        event_features: Event features configuration dictionary
+        members_with_paid_fees: Set of member IDs who have paid their membership fee
+        memberships_by_member_id: Mapping from member ID to membership instance
+        current_datetime: Current datetime for deadline calculations
+        registration: Registration instance being evaluated
+        event_run: Run instance containing event start date
+        tolerance_days: Number of days tolerance allowed for deadlines
 
     Side Effects:
-        Updates collect dictionary with membership and fee deadline violations
+        Updates violations_by_type dictionary with membership and fee deadline violations
         under keys: 'memb', 'memb_del', 'fee', 'fee_del'
     """
     # Get membership for the registered member
-    membership = memberships.get(reg.member_id)
+    membership = memberships_by_member_id.get(registration.member_id)
     if not membership:
         return
 
     # Check if membership is in incomplete states (empty, joined, uploaded)
     if membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
         # Calculate days elapsed since registration creation
-        elapsed = now.date() - reg.created.date()
+        days_elapsed = current_datetime.date() - registration.created.date()
         # Classify as delayed if beyond tolerance, otherwise normal violation
-        key = "memb_del" if elapsed.days > tolerance else "memb"
-        collect[key].append(reg.member_id)
+        violation_type = "memb_del" if days_elapsed.days > tolerance_days else "memb"
+        violations_by_type[violation_type].append(registration.member_id)
         return
 
     # Skip further checks if membership is submitted (in review)
@@ -235,37 +237,37 @@ def deadlines_membership(
         return
 
     # Determine if fee checking is required (not LAOG event and current year)
-    check_fee = "laog" not in features and run.start.year == now.year
-    if check_fee and reg.member_id not in fees:
+    should_check_fee = "laog" not in event_features and event_run.start.year == current_datetime.year
+    if should_check_fee and registration.member_id not in members_with_paid_fees:
         # Check if we're within tolerance days of the event start
-        if now.date() + timedelta(days=tolerance) > run.start:
+        if current_datetime.date() + timedelta(days=tolerance_days) > event_run.start:
             # Event is imminent - mark as delayed fee violation
-            collect["fee_del"].append(reg.member_id)
+            violations_by_type["fee_del"].append(registration.member_id)
         else:
             # Event is still far enough - mark as regular fee violation
-            collect["fee"].append(reg.member_id)
+            violations_by_type["fee"].append(registration.member_id)
 
 
-def deadlines_payment(collect, features, reg, tolerance):
+def deadlines_payment(deadline_violations, event_features, registration, tolerance_days):
     """Check payment deadlines for registration.
 
     Args:
-        collect (dict): Dictionary to collect deadline violations
-        features (dict): Event features
-        reg: Registration instance with deadline attribute
-        tolerance (int): Tolerance days for deadlines
+        deadline_violations (dict): Dictionary to collect deadline violations
+        event_features (dict): Event features
+        registration: Registration instance with deadline attribute
+        tolerance_days (int): Tolerance days for deadlines
 
     Side effects:
-        Updates collect with payment deadline violations
+        Updates deadline_violations with payment deadline violations
     """
     # check payments
-    if "payment" not in features:
+    if "payment" not in event_features:
         return
 
-    if reg.deadline < -tolerance:
-        collect["pay_del"].append(reg.member_id)
-    elif reg.deadline < 0:
-        collect["pay"].append(reg.member_id)
+    if registration.deadline < -tolerance_days:
+        deadline_violations["pay_del"].append(registration.member_id)
+    elif registration.deadline < 0:
+        deadline_violations["pay"].append(registration.member_id)
 
 
 def deadlines_casting(collect, features, player_ids, run):
@@ -284,16 +286,16 @@ def deadlines_casting(collect, features, player_ids, run):
     if "casting" not in features:
         return
 
-    casting_chars = get_event_config(run.event_id, "casting_characters", 1)
+    casting_characters_required = get_event_config(run.event_id, "casting_characters", 1)
     # members that already have a character
-    casted = (
+    members_with_characters = (
         Registration.objects.filter(run=run)
-        .annotate(chars=Count("rcrs"))
-        .filter(chars__gte=casting_chars)
+        .annotate(character_count=Count("rcrs"))
+        .filter(character_count__gte=casting_characters_required)
         .values_list("member_id", flat=True)
     )
 
     # members that sent casting preferences
-    prefs = Casting.objects.filter(run=run).values_list("member_id", flat=True)
+    members_with_preferences = Casting.objects.filter(run=run).values_list("member_id", flat=True)
 
-    collect["cast"] = set(player_ids) - (set(casted) | set(prefs))
+    collect["cast"] = set(player_ids) - (set(members_with_characters) | set(members_with_preferences))

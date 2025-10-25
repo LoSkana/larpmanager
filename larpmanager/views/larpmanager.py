@@ -163,31 +163,31 @@ def go_redirect(request, slug, path, base_domain="larpmanager.com"):
     return redirect(new_path)
 
 
-def choose_assoc(request, p, slugs):
+def choose_assoc(request, redirect_path, association_slugs):
     """Handle association selection when multiple associations are available.
 
     Args:
         request: Django HTTP request object
-        p: URL path to redirect to after selection
-        slugs: List of association slugs to choose from
+        redirect_path: URL path to redirect to after selection
+        association_slugs: List of association slugs to choose from
 
     Returns:
         HttpResponse: Redirect to selected association or selection form
     """
-    if len(slugs) == 0:
+    if len(association_slugs) == 0:
         return render(request, "larpmanager/larpmanager/na_assoc.html")
-    elif len(slugs) == 1:
-        return go_redirect(request, slugs[0], p)
+    elif len(association_slugs) == 1:
+        return go_redirect(request, association_slugs[0], redirect_path)
     else:
         # show page to choose them
         if request.POST:
-            form = RedirectForm(request.POST, slugs=slugs)
+            form = RedirectForm(request.POST, slugs=association_slugs)
             if form.is_valid():
-                counter = int(form.cleaned_data["slug"])
-                if counter < len(slugs):
-                    return go_redirect(request, slugs[counter], p)
+                selected_index = int(form.cleaned_data["slug"])
+                if selected_index < len(association_slugs):
+                    return go_redirect(request, association_slugs[selected_index], redirect_path)
         else:
-            form = RedirectForm(slugs=slugs)
+            form = RedirectForm(slugs=association_slugs)
         return render(
             request,
             "larpmanager/larpmanager/redirect.html",
@@ -209,39 +209,39 @@ def go_redirect_run(run, path):
     return redirect(full_url)
 
 
-def choose_run(request, p, event_ids):
+def choose_run(request, redirect_path, event_ids):
     """Handle run selection when multiple runs are available.
 
     Args:
         request: Django HTTP request object
-        p: URL path to redirect to after selection
+        redirect_path: URL path to redirect to after selection
         event_ids: List of event IDs to get runs from
 
     Returns:
         HttpResponse: Redirect to selected run or selection form
     """
-    runs = []
-    slugs = []
+    available_runs = []
+    run_display_names = []
 
-    for r in Run.objects.filter(event_id__in=event_ids, end__gte=datetime.now()):
-        runs.append(r)
-        slugs.append(f"{r.search} - {r.event.assoc.slug}")
+    for run in Run.objects.filter(event_id__in=event_ids, end__gte=datetime.now()):
+        available_runs.append(run)
+        run_display_names.append(f"{run.search} - {run.event.assoc.slug}")
 
-    if len(slugs) == 0:
+    if len(run_display_names) == 0:
         return render(request, "larpmanager/larpmanager/na_event.html")
-    elif len(slugs) == 1:
-        return go_redirect_run(runs[0], p)
+    elif len(run_display_names) == 1:
+        return go_redirect_run(available_runs[0], redirect_path)
 
     else:
         # show page to choose them
         if request.POST:
-            form = RedirectForm(request.POST, slugs=slugs)
+            form = RedirectForm(request.POST, slugs=run_display_names)
             if form.is_valid():
-                counter = int(form.cleaned_data["slug"])
-                if counter < len(slugs):
-                    return go_redirect_run(runs[counter], p)
+                selected_index = int(form.cleaned_data["slug"])
+                if selected_index < len(run_display_names):
+                    return go_redirect_run(available_runs[selected_index], redirect_path)
         else:
-            form = RedirectForm(slugs=slugs)
+            form = RedirectForm(slugs=run_display_names)
         return render(
             request,
             "larpmanager/larpmanager/redirect.html",
@@ -567,33 +567,33 @@ def _join_form(ctx: dict, request) -> Association | None:
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
             # Create association with inherited skin from request context
-            assoc = form.save(commit=False)
-            assoc.skin_id = request.assoc["skin_id"]
-            assoc.save()
+            new_association = form.save(commit=False)
+            new_association.skin_id = request.assoc["skin_id"]
+            new_association.save()
 
             # Create admin role for the new association and assign creator
-            (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
-            ar.members.add(request.user.member)
-            ar.save()
+            (admin_role, created) = AssocRole.objects.get_or_create(assoc=new_association, number=1, name="Admin")
+            admin_role.members.add(request.user.member)
+            admin_role.save()
 
             # Update membership status to joined for the creator
-            el = get_user_membership(request.user.member, assoc.id)
-            el.status = MembershipStatus.JOINED
-            el.save()
+            membership = get_user_membership(request.user.member, new_association.id)
+            membership.status = MembershipStatus.JOINED
+            membership.save()
 
             # Send notification emails to all configured administrators
-            for _name, email in conf_settings.ADMINS:
-                subj = _("New organization created")
+            for _admin_name, admin_email in conf_settings.ADMINS:
+                subject = _("New organization created")
                 body = _("Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s") % {
-                    "name": assoc.name,
-                    "slug": assoc.slug,
+                    "name": new_association.name,
+                    "slug": new_association.slug,
                     "user": request.user.member,
                     "email": request.user.member.email,
                 }
-                my_send_mail(subj, body, email)
+                my_send_mail(subject, body, admin_email)
 
-            # return redirect('first', assoc=assoc.slug)
-            return assoc
+            # return redirect('first', assoc=new_association.slug)
+            return new_association
     else:
         # Initialize empty form for GET requests
         form = FirstAssociationForm()
@@ -1092,36 +1092,38 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
         the current request's association context.
     """
     # Generate unique primary key for new association
-    new_pk = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
-    new_pk += 1
+    new_primary_key = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
+    new_primary_key += 1
 
     # Create demo association with unique slug and inherited skin
-    assoc = Association.objects.create(
-        slug=f"test{new_pk}", name="Demo Organization", skin_id=request.assoc["skin_id"], demo=True
+    demo_association = Association.objects.create(
+        slug=f"test{new_primary_key}", name="Demo Organization", skin_id=request.assoc["skin_id"], demo=True
     )
 
     # Create test admin user with demo credentials
-    (user, cr) = User.objects.get_or_create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}")
-    user.password = "pippo"
-    user.save()
+    (demo_user, created) = User.objects.get_or_create(
+        email=f"test{new_primary_key}@demo.it", username=f"test{new_primary_key}"
+    )
+    demo_user.password = "pippo"
+    demo_user.save()
 
     # Configure member profile with demo information
-    member = user.member
-    member.name = "Demo"
-    member.surname = "Admin"
-    member.save()
+    demo_member = demo_user.member
+    demo_member.name = "Demo"
+    demo_member.surname = "Admin"
+    demo_member.save()
 
     # Create admin role and assign member with full permissions
-    (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
-    ar.members.add(member)
-    ar.save()
+    (admin_role, created) = AssocRole.objects.get_or_create(assoc=demo_association, number=1, name="Admin")
+    admin_role.members.add(demo_member)
+    admin_role.save()
 
     # Set membership status to active/joined
-    el = get_user_membership(member, assoc.id)
-    el.status = MembershipStatus.JOINED
-    el.save()
+    membership_element = get_user_membership(demo_member, demo_association.id)
+    membership_element.status = MembershipStatus.JOINED
+    membership_element.save()
 
     # Authenticate and log in the demo user
-    login(request, user, backend=get_user_backend())
+    login(request, demo_user, backend=get_user_backend())
 
-    return redirect("after_login", subdomain=assoc.slug, path="manage")
+    return redirect("after_login", subdomain=demo_association.slug, path="manage")

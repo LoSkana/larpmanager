@@ -117,33 +117,35 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
     tv.save()
 
 
-def _get_field_value(el: Any, que: Any) -> str | None:
+def _get_field_value(element: Any, question: Any) -> str | None:
     """Get the field value for a given element and question.
 
     Args:
-        el: The element object to get the value for
-        que: The question object containing type and configuration
+        element: The element object to get the value for
+        question: The question object containing type and configuration
 
     Returns:
         The field value as a string, or None if no value found
     """
     # Get the mapping of question types to their value extraction functions
-    mapping = _get_values_mapping(el)
+    mapping = _get_values_mapping(element)
 
     # Check if question type has a direct mapping function
-    if que.typ in mapping:
-        return mapping[que.typ]()
+    if question.typ in mapping:
+        return mapping[question.typ]()
 
     # Handle text-based question types (paragraph, text, email)
-    if que.typ in {"p", "t", "e"}:
-        answers = WritingAnswer.objects.filter(question=que, element_id=el.id)
+    if question.typ in {"p", "t", "e"}:
+        answers = WritingAnswer.objects.filter(question=question, element_id=element.id)
         if answers:
             return answers.first().text
         return ""
 
     # Handle selection-based question types (single, multiple choice)
-    if que.typ in {"s", "m"}:
-        return ", ".join(c.option.name for c in WritingChoice.objects.filter(question=que, element_id=el.id))
+    if question.typ in {"s", "m"}:
+        return ", ".join(
+            choice.option.name for choice in WritingChoice.objects.filter(question=question, element_id=element.id)
+        )
 
     return None
 
@@ -169,56 +171,58 @@ def _get_values_mapping(element) -> dict[str, callable]:
     return mapping
 
 
-def check_run(el, ctx, afield=None):
+def check_run(element, context, accessor_field=None):
     """Validate that element belongs to the correct run and event.
 
     Args:
-        el: Model instance to validate
-        ctx: Context dictionary containing run and event information
-        afield: Optional field name to access nested element
+        element: Model instance to validate
+        context: Context dictionary containing run and event information
+        accessor_field: Optional field name to access nested element
 
     Raises:
         Http404: If element doesn't belong to the expected run or event
     """
-    if "run" not in ctx:
+    if "run" not in context:
         return
 
-    if afield:
-        el = getattr(el, afield)
+    if accessor_field:
+        element = getattr(element, accessor_field)
 
-    if hasattr(el, "run") and el.run != ctx["run"]:
+    if hasattr(element, "run") and element.run != context["run"]:
         raise Http404("not your run")
 
-    if hasattr(el, "event"):
-        is_child = ctx["event"].parent_id is not None
-        event_matches = el.event_id == ctx["event"].id
-        parent_matches = el.event_id == ctx["event"].parent_id
+    if hasattr(element, "event"):
+        is_child_event = context["event"].parent_id is not None
+        event_matches = element.event_id == context["event"].id
+        parent_event_matches = element.event_id == context["event"].parent_id
 
-        if (not is_child and not event_matches) or (is_child and not event_matches and not parent_matches):
+        if (not is_child_event and not event_matches) or (
+            is_child_event and not event_matches and not parent_event_matches
+        ):
             raise Http404("not your event")
 
 
-def check_assoc(el: object, ctx: dict, afield: str = None) -> None:
+def check_assoc(element: object, context: dict, attribute_field: str = None) -> None:
     """Check if object belongs to the correct association.
 
     Args:
-        el: Object to check or container object
-        ctx: Context dict containing association ID as 'a_id'
-        afield: Optional field name to extract from el
+        element: Object to check or container object
+        context: Context dict containing association ID as 'a_id'
+        attribute_field: Optional field name to extract from element
 
     Raises:
         Http404: If object doesn't belong to the association
     """
     # Extract specific field if requested
-    if afield:
-        el = getattr(el, afield)
+    if attribute_field:
+        element = getattr(element, attribute_field)
 
     # Skip check if object has no association
-    if not hasattr(el, "assoc"):
+    if not hasattr(element, "assoc"):
         return
 
     # Verify object belongs to current association
-    if el.assoc_id != ctx["a_id"]:
+    if element.assoc_id != context["a_id"]:
         raise Http404("not your association")
 
 

@@ -234,13 +234,13 @@ def get_assoc_text_cache(assoc_id: int, typ: str, lang: str) -> str:
         Cached or freshly updated association text
     """
     # Try to get cached text
-    res = cache.get(assoc_text_key(assoc_id, typ, lang))
+    cached_text = cache.get(assoc_text_key(assoc_id, typ, lang))
 
     # Update cache if not found
-    if res is None:
-        res = update_assoc_text(assoc_id, typ, lang)
+    if cached_text is None:
+        cached_text = update_assoc_text(assoc_id, typ, lang)
 
-    return res
+    return cached_text
 
 
 # default it
@@ -283,13 +283,13 @@ def get_assoc_text_cache_def(assoc_id: int, typ: str) -> str:
         Association text content
     """
     # Try to retrieve from cache first
-    res = cache.get(assoc_text_key_def(assoc_id, typ))
+    cached_text = cache.get(assoc_text_key_def(assoc_id, typ))
 
     # Update cache if not found
-    if res is None:
-        res = update_assoc_text_def(assoc_id, typ)
+    if cached_text is None:
+        cached_text = update_assoc_text_def(assoc_id, typ)
 
-    return res
+    return cached_text
 
 
 def get_assoc_text(association_id: int, text_type: str, language_code: str = None) -> str:

@@ -30,12 +30,12 @@ from larpmanager.models.member import Badge, Member, Membership, MembershipStatu
 from larpmanager.models.miscellanea import Email
 
 
-def count_differences(s1: str, s2: str) -> int | bool:
+def count_differences(first_string: str, second_string: str) -> int | bool:
     """Count the number of character differences between two strings.
 
     Args:
-        s1: First string to compare
-        s2: Second string to compare
+        first_string: First string to compare
+        second_string: Second string to compare
 
     Returns:
         False if strings have different lengths, otherwise the number of
@@ -48,13 +48,13 @@ def count_differences(s1: str, s2: str) -> int | bool:
         False
     """
     # If the lengths of the strings are different, they can't be almost identical
-    if len(s1) != len(s2):
+    if len(first_string) != len(second_string):
         return False
 
     # Count the number of differences between the two strings
     differences = 0
-    for c1, c2 in zip(s1, s2):
-        if c1 != c2:
+    for first_char, second_char in zip(first_string, second_string):
+        if first_char != second_char:
             differences += 1
 
     return differences
@@ -87,16 +87,16 @@ def almost_equal(s1: str, s2: str) -> bool:
 
     # Identify which string is longer and which is shorter
     if len(s1) > len(s2):
-        longer, shorter = s1, s2
+        longer_string, shorter_string = s1, s2
     else:
-        longer, shorter = s2, s1
+        longer_string, shorter_string = s2, s1
 
     # Try to find the single extra character by removing each character from longer string
-    for i in range(len(longer)):
-        # Create a new string by removing the character at index i
-        modified = longer[:i] + longer[i + 1 :]
+    for char_index in range(len(longer_string)):
+        # Create a new string by removing the character at index char_index
+        string_with_char_removed = longer_string[:char_index] + longer_string[char_index + 1 :]
         # Check if the modified string matches the shorter string
-        if modified == shorter:
+        if string_with_char_removed == shorter_string:
             return True
 
     # No single character removal made the strings equal
@@ -205,7 +205,7 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     return email
 
 
-def create_member_profile_for_user(user: User, created: bool) -> None:
+def create_member_profile_for_user(user: User, is_newly_created: bool) -> None:
     """Create member profile and sync email when user is saved.
 
     This function handles the creation of a Member profile for newly created users
@@ -213,13 +213,13 @@ def create_member_profile_for_user(user: User, created: bool) -> None:
 
     Args:
         user: User instance that was saved
-        created: Whether this is a new user (True for new users, False for updates)
+        is_newly_created: Whether this is a new user (True for new users, False for updates)
 
     Returns:
         None
     """
     # Create new Member profile for newly registered users
-    if created:
+    if is_newly_created:
         Member.objects.create(user=user)
 
     # Sync email address from User model to Member profile

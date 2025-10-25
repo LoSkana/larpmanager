@@ -99,75 +99,79 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         Anonymous users cannot see START status runs at all.
     """
     # Extract association ID from request context
-    aid = request.assoc["id"]
+    association_id = request.assoc["id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
-    runs = get_coming_runs(aid)
+    runs = get_coming_runs(association_id)
 
     # Initialize user registration tracking
-    my_regs_dict = {}
-    character_rels_dict = {}
-    payment_invoices_dict = {}
-    pre_registrations_dict = {}
+    user_registrations_by_run_id = {}
+    character_relations_by_registration_id = {}
+    payment_invoices_by_registration_id = {}
+    pre_registrations_by_event_id = {}
 
     if request.user.is_authenticated:
         # Define cutoff date (3 days ago) for filtering relevant registrations
-        ref = datetime.now() - timedelta(days=3)
+        cutoff_date = datetime.now() - timedelta(days=3)
 
         # Fetch user's active registrations for upcoming runs
-        my_regs = Registration.objects.filter(
-            run__event__assoc_id=aid,
+        user_registrations = Registration.objects.filter(
+            run__event__assoc_id=association_id,
             cancellation_date__isnull=True,  # Exclude cancelled registrations
             redeem_code__isnull=True,  # Exclude redeemed registrations
             member=request.user.member,
-            run__end__gte=ref.date(),  # Only future/recent runs
+            run__end__gte=cutoff_date.date(),  # Only future/recent runs
         ).select_related("ticket", "run")
 
         # Create lookup dictionary for O(1) access to user registrations
-        my_regs_dict = {reg.run_id: reg for reg in my_regs}
-        my_runs_list = list(my_regs_dict.keys())
+        user_registrations_by_run_id = {registration.run_id: registration for registration in user_registrations}
+        user_registered_run_ids = list(user_registrations_by_run_id.keys())
 
         # Filter runs: authenticated users can see START development runs they're registered for
-        runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
+        runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=user_registered_run_ids))
 
         # Precompute character rels, payment invoices, and pre-registrations objects
-        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
-        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
-        pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
+        character_relations_by_registration_id = get_character_rels_dict(
+            user_registrations_by_run_id, request.user.member
+        )
+        payment_invoices_by_registration_id = get_payment_invoices_dict(
+            user_registrations_by_run_id, request.user.member
+        )
+        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, request.user.member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
 
     # Initialize context with default user context and empty collections
-    ctx = def_user_context(request)
-    ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
+    context = def_user_context(request)
+    context.update({"open": [], "future": [], "langs": [], "page": "calendar"})
 
     # Add language filter to context if specified
     if lang:
-        ctx["lang"] = lang
+        context["lang"] = lang
 
-    ctx_reg = {
-        "my_regs": my_regs_dict,
-        "character_rels_dict": character_rels_dict,
-        "payment_invoices_dict": payment_invoices_dict,
-        "pre_registrations_dict": pre_registrations_dict,
+    registration_context = {
+        "my_regs": user_registrations_by_run_id,
+        "character_rels_dict": character_relations_by_registration_id,
+        "payment_invoices_dict": payment_invoices_by_registration_id,
+        "pre_registrations_dict": pre_registrations_by_event_id,
     }
 
     # Process each run to determine registration status and categorize
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, request.user, ctx_reg)
+        registration_status(run, request.user, registration_context)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
-            ctx["open"].append(run)  # Available for registration
+            context["open"].append(run)  # Available for registration
         elif "already" not in run.status:
-            ctx["future"].append(run)  # Future runs (not yet open, not already registered)
+            context["future"].append(run)  # Future runs (not yet open, not already registered)
 
     # Add association-specific homepage text to context
-    ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
+    context["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 
-    return render(request, "larpmanager/general/calendar.html", ctx)
+    return render(request, "larpmanager/general/calendar.html", context)
 
 
 def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:

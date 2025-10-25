@@ -358,38 +358,38 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _update_character(ctx: dict, element: Character, form: Form, mes: str, request: HttpRequest) -> str:
+def _update_character(context: dict, character: Character, form: Form, message: str, request: HttpRequest) -> str:
     """Update character status based on form data and event configuration.
 
     Args:
-        ctx: Context dictionary containing event information
-        element: Character instance to update
+        context: Context dictionary containing event information
+        character: Character instance to update
         form: Form instance with cleaned data
-        mes: Initial message string
+        message: Initial message string
         request: HTTP request object containing user information
 
     Returns:
         Updated message string or original message if no changes
     """
-    # Early return if element is not a Character instance
-    if not isinstance(element, Character):
-        return mes
+    # Early return if character is not a Character instance
+    if not isinstance(character, Character):
+        return message
 
     # Assign player if not already set
-    if not element.player:
-        element.player = request.user.member
+    if not character.player:
+        character.player = request.user.member
 
     # Check if character approval is enabled for this event
-    if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
+    if get_event_config(context["event"].id, "user_character_approval", False, context):
         # Update status to proposed if character is in creation/review and user clicked propose
-        if element.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
-            element.status = CharacterStatus.PROPOSED
-            mes = _(
+        if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
+            character.status = CharacterStatus.PROPOSED
+            message = _(
                 "The character has been proposed to the staff, who will examine it and approve it "
                 "or request changes if necessary."
             )
 
-    return mes
+    return message
 
 
 @login_required

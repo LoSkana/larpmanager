@@ -135,21 +135,21 @@ def compute_diff(self, other):
     check_diff(self, other.text, self.text)
 
 
-def check_diff(self, tx1, tx2):
+def check_diff(self, old_text, new_text):
     """Generate HTML diff between two text strings.
 
     Args:
         self: Instance to store diff result
-        tx1: First text string
-        tx2: Second text string
+        old_text: First text string
+        new_text: Second text string
     """
-    if tx1 == tx2:
+    if old_text == new_text:
         self.diff = None
         return
-    dmp = diff_match_patch()
-    self.diff = dmp.diff_main(tx1, tx2)
-    dmp.diff_cleanupEfficiency(self.diff)
-    self.diff = dmp.diff_prettyHtml(self.diff)
+    diff_engine = diff_match_patch()
+    self.diff = diff_engine.diff_main(old_text, new_text)
+    diff_engine.diff_cleanupEfficiency(self.diff)
+    self.diff = diff_engine.diff_prettyHtml(self.diff)
 
 
 def get_assoc(request):
@@ -256,25 +256,25 @@ def get_discount(ctx, n):
         raise Http404("Discount does not exist") from err
 
 
-def get_album(ctx, n):
+def get_album(context, album_id):
     """Get album by ID and add to context.
 
     Args:
-        ctx: Template context dictionary
-        n: Album ID
+        context: Template context dictionary
+        album_id: Album ID
 
     Raises:
         Http404: If album does not exist
     """
     try:
-        ctx["album"] = Album.objects.get(pk=n)
+        context["album"] = Album.objects.get(pk=album_id)
     except ObjectDoesNotExist as err:
         raise Http404("Album does not exist") from err
 
 
-def get_album_cod(ctx, s):
+def get_album_cod(context, album_code):
     try:
-        ctx["album"] = Album.objects.get(cod=s)
+        context["album"] = Album.objects.get(cod=album_code)
     except ObjectDoesNotExist as err:
         raise Http404("Album does not exist") from err
 
@@ -360,9 +360,9 @@ def get_speedlarp(context, speedlarp_id):
     # ~ return ("UNASSIGNED", None)
 
 
-def get_badge(n, request):
+def get_badge(badge_id, request):
     try:
-        return Badge.objects.get(pk=n, assoc_id=request.assoc["id"])
+        return Badge.objects.get(pk=badge_id, assoc_id=request.assoc["id"])
     except ObjectDoesNotExist as err:
         raise Http404("Badge does not exist") from err
 
@@ -517,7 +517,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
 
 
 def generate_number(length):
-    return "".join(random.choice(string.digits) for idx in range(length))
+    return "".join(random.choice(string.digits) for _ in range(length))
 
 
 def html_clean(text: str | None) -> str:
@@ -540,10 +540,10 @@ def html_clean(text: str | None) -> str:
 
 def dump(obj: object) -> str:
     """Return a string representation of all object attributes and their values."""
-    s = ""
-    for attr in dir(obj):
-        s += f"obj.{attr} = {repr(getattr(obj, attr))}\n"
-    return s
+    output_string = ""
+    for attribute_name in dir(obj):
+        output_string += f"obj.{attribute_name} = {repr(getattr(obj, attribute_name))}\n"
+    return output_string
 
 
 def rmdir(directory: Path) -> None:
@@ -795,10 +795,10 @@ def detect_delimiter(content):
     Raises:
         Exception: If no delimiter is found
     """
-    header = content.split("\n")[0]
-    for d in ["\t", ";", ","]:
-        if d in header:
-            return d
+    header_line = content.split("\n")[0]
+    for delimiter in ["\t", ";", ","]:
+        if delimiter in header_line:
+            return delimiter
     raise Exception("no delimiter")
 
 
@@ -820,7 +820,7 @@ def clean(s):
     return s
 
 
-def _search_char_reg(ctx: dict, char, js: dict) -> None:
+def _search_char_reg(context: dict, character, search_result: dict) -> None:
     """
     Populate character search result with registration and player data.
 
@@ -828,44 +828,44 @@ def _search_char_reg(ctx: dict, char, js: dict) -> None:
     and populates a JSON object for search results display.
 
     Args:
-        ctx : dict
+        context : dict
             Context dictionary containing run information and event data
-        char : Character
+        character : Character
             Character instance with associated registration data
-        js : dict
+        search_result : dict
             JSON object to populate with search results data
 
-    Returns: None -Modifies the js dictionary in place
+    Returns: None -Modifies the search_result dictionary in place
     """
     # Set character name, prioritizing custom name if available
-    js["name"] = char.name
-    if char.rcr and char.rcr.custom_name:
-        js["name"] = char.rcr.custom_name
+    search_result["name"] = character.name
+    if character.rcr and character.rcr.custom_name:
+        search_result["name"] = character.rcr.custom_name
 
     # Extract player information from registration
-    js["player"] = char.reg.display_member()
-    js["player_full"] = str(char.reg.member)
-    js["player_id"] = char.reg.member_id
-    js["first_aid"] = char.reg.member.first_aid
+    search_result["player"] = character.reg.display_member()
+    search_result["player_full"] = str(character.reg.member)
+    search_result["player_id"] = character.reg.member_id
+    search_result["first_aid"] = character.reg.member.first_aid
 
     # Set profile image with fallback hierarchy: character custom -> member -> None
-    if char.rcr.profile_thumb:
-        js["player_prof"] = char.rcr.profile_thumb.url
-        js["profile"] = char.rcr.profile_thumb.url
-    elif char.reg.member.profile_thumb:
-        js["player_prof"] = char.reg.member.profile_thumb.url
+    if character.rcr.profile_thumb:
+        search_result["player_prof"] = character.rcr.profile_thumb.url
+        search_result["profile"] = character.rcr.profile_thumb.url
+    elif character.reg.member.profile_thumb:
+        search_result["player_prof"] = character.reg.member.profile_thumb.url
     else:
-        js["player_prof"] = None
+        search_result["player_prof"] = None
 
     # Extract custom character attributes (pronoun, song, public, private notes)
-    for s in ["pronoun", "song", "public", "private"]:
-        if hasattr(char.rcr, "custom_" + s):
-            js[s] = getattr(char.rcr, "custom_" + s)
+    for attribute_suffix in ["pronoun", "song", "public", "private"]:
+        if hasattr(character.rcr, "custom_" + attribute_suffix):
+            search_result[attribute_suffix] = getattr(character.rcr, "custom_" + attribute_suffix)
 
     # Override profile with character cover if event supports both cover and user characters
-    if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
-        if char.cover:
-            js["player_prof"] = char.thumb.url
+    if {"cover", "user_character"}.issubset(get_event_features(context["run"].event_id)):
+        if character.cover:
+            search_result["player_prof"] = character.thumb.url
 
 
 def clear_messages(request):

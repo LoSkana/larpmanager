@@ -361,30 +361,30 @@ def writing_bulk(ctx, request, typ):
         bulks[typ](request, ctx)
 
 
-def _get_custom_form(ctx):
+def _get_custom_form(context):
     """Setup custom form questions and field names for writing elements.
 
     Args:
-        ctx: Context dictionary to populate with form data
+        context: Context dictionary to populate with form data
 
     Side effects:
-        Updates ctx with form_questions and fields_name dictionaries
+        Updates context with form_questions and fields_name dictionaries
     """
-    if not ctx["writing_typ"]:
+    if not context["writing_typ"]:
         return
 
     # default name for fields
-    ctx["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
+    context["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=ctx["writing_typ"])
-    ctx["form_questions"] = {}
-    for q in que:
-        q.basic_typ = q.typ in BaseQuestionType.get_basic_types()
-        if q.typ in ctx["fields_name"].keys():
-            ctx["fields_name"][q.typ] = q.name
+    questions = context["event"].get_elements(WritingQuestion).order_by("order")
+    questions = questions.filter(applicable=context["writing_typ"])
+    context["form_questions"] = {}
+    for question in questions:
+        question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
+        if question.typ in context["fields_name"].keys():
+            context["fields_name"][question.typ] = question.name
         else:
-            ctx["form_questions"][q.id] = q
+            context["form_questions"][question.id] = question
 
 
 def writing_list_query(ctx: dict, ev, typ) -> tuple[list[str], bool]:
@@ -468,33 +468,35 @@ def retrieve_cache_text_field(context, text_fields, element_type):
             setattr(element, field_name + "_ln", line_count)
 
 
-def _prepare_writing_list(ctx, request):
+def _prepare_writing_list(context, request):
     """Prepare context data for writing list display and configuration.
 
     Args:
-        ctx: Template context dictionary to update
+        context: Template context dictionary to update
         request: HTTP request object with user information
     """
     try:
-        name_que = (
-            ctx["event"]
+        name_question = (
+            context["event"]
             .get_elements(WritingQuestion)
-            .filter(applicable=ctx["writing_typ"], typ=WritingQuestionType.NAME)
+            .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
         )
-        ctx["name_que_id"] = name_que.values_list("id", flat=True)[0]
+        context["name_que_id"] = name_question.values_list("id", flat=True)[0]
     except Exception:
         pass
 
-    model_name = ctx["label_typ"].lower()
-    ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "[]")
-    if ctx["default_fields"] == "[]":
-        if model_name in ctx["writing_fields"]:
-            lst = [f"q_{el}" for name, el in ctx["writing_fields"][model_name]["ids"].items()]
-            ctx["default_fields"] = json.dumps(lst)
+    model_name = context["label_typ"].lower()
+    context["default_fields"] = request.user.member.get_config(f"open_{model_name}_{context['event'].id}", "[]")
+    if context["default_fields"] == "[]":
+        if model_name in context["writing_fields"]:
+            question_field_list = [
+                f"q_{question_id}" for name, question_id in context["writing_fields"][model_name]["ids"].items()
+            ]
+            context["default_fields"] = json.dumps(question_field_list)
 
-    ctx["auto_save"] = not get_event_config(ctx["event"].id, "writing_disable_auto", False, ctx)
+    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", False, context)
 
-    ctx["writing_unimportant"] = get_event_config(ctx["event"].id, "writing_unimportant", False, ctx)
+    context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", False, context)
 
 
 def writing_list_plot(ctx):

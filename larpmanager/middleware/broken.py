@@ -87,18 +87,18 @@ class BrokenLinkEmailsMiddleware:
             return
 
         # Filter out bot traffic to reduce noise
-        ua = request.META.get("HTTP_USER_AGENT", "<none>")
-        for s in ["bot", "facebookexternalhit"]:
-            if s in str(ua):
+        user_agent = request.META.get("HTTP_USER_AGENT", "<none>")
+        for bot_identifier in ["bot", "facebookexternalhit"]:
+            if bot_identifier in str(user_agent):
                 return
 
         # Handle domain redirection for larpmanager.com with $ separator
         # print(domain)
         # print(path)
         if domain == "larpmanager.com" and "$" in path:
-            aux = path.split("$")
+            path_parts = path.split("$")
             # print (at)
-            url = "https://" + aux[1] + ".larpmanager.com/" + aux[0]
+            url = "https://" + path_parts[1] + ".larpmanager.com/" + path_parts[0]
             return HttpResponseRedirect(url)
 
         # Skip ignorable 404 paths (common crawlers, assets, etc.)
@@ -110,21 +110,21 @@ class BrokenLinkEmailsMiddleware:
             return
 
         # Extract exception information from response HTML
-        html = response.content.decode("utf-8")
-        exception = re.search('<span class="exception-404">(.*)</span>', html, re.IGNORECASE)
+        html_content = response.content.decode("utf-8")
+        exception = re.search('<span class="exception-404">(.*)</span>', html_content, re.IGNORECASE)
         if exception:
             exception = exception.group(1)
 
         # Send detailed error report to administrators
-        ip = request.META.get("REMOTE_ADDR", "<none>")
+        ip_address = request.META.get("REMOTE_ADDR", "<none>")
         mail_managers(
             f"Broken link on {domain}",
             f"Requested URL: {path}\n"
             f"Exception: {exception}\n"
             f"User: {str(request.user)}\n"
             f"Referrer: {referer}\n"
-            f"User agent: {ua}\n"
-            f"IP address: {ip}\n\n"
+            f"User agent: {user_agent}\n"
+            f"IP address: {ip_address}\n\n"
             f"{vars(request)}",
             fail_silently=True,
         )

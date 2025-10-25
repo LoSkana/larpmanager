@@ -72,8 +72,8 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         self.assertIn(registration.id, result)
         self.assertIn(question.id, result[registration.id])
-        self.assertEqual(result[registration.id][question.id]["q"], question)
-        self.assertIn(option1, result[registration.id][question.id]["l"])
+        self.assertEqual(result[registration.id][question.id]["question"], question)
+        self.assertIn(option1, result[registration.id][question.id]["selected_options"])
 
     def test_init_choices_multiple_options(self):
         """Test _init_choices with multiple options selected"""
@@ -89,7 +89,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         result = _init_choices(member)
 
-        self.assertEqual(len(result[registration.id][question.id]["l"]), 2)
+        self.assertEqual(len(result[registration.id][question.id]["selected_options"]), 2)
 
     def test_info_token_credit_no_items(self):
         """Test _info_token_credit with no tokens or credits"""
@@ -212,4 +212,3 @@ class TestBaseUtilityFunctions(BaseTestCase):
 
         # Partial payment means not provisional (tot_payed > 0)
         self.assertFalse(result)
-

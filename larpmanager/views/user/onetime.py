@@ -278,13 +278,13 @@ def _onetime_prepare(token: str) -> tuple[Any, Any]:
         Http404: If token is invalid, expired, not initialized, or file unavailable
     """
     # Set maximum token usage time window (1 hour)
-    max_time_use = 3600  # 3600 seconds = 1 hour
+    max_time_use_seconds = 3600  # 3600 seconds = 1 hour
 
     # Validate and retrieve the access token with related content
     try:
         access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
-    except ObjectDoesNotExist as err:
-        raise Http404(_("Invalid token")) from err
+    except ObjectDoesNotExist as exception:
+        raise Http404(_("Invalid token")) from exception
 
     # Verify token has been properly initialized
     if not access_token.used:
@@ -292,8 +292,8 @@ def _onetime_prepare(token: str) -> tuple[Any, Any]:
 
     # Verify token was used within the last hour
     if access_token.used_at:
-        time_since_used = timezone.now() - access_token.used_at
-        if time_since_used.total_seconds() > max_time_use:
+        time_elapsed_since_used = timezone.now() - access_token.used_at
+        if time_elapsed_since_used.total_seconds() > max_time_use_seconds:
             raise Http404(_("Token expired"))
 
     # Ensure the content is still active and available
@@ -305,8 +305,8 @@ def _onetime_prepare(token: str) -> tuple[Any, Any]:
 
     # Open the file in binary read mode for streaming
     try:
-        file = content.file.open("rb")
-    except Exception as err:
-        raise Http404(_("File not found")) from err
+        opened_file = content.file.open("rb")
+    except Exception as exception:
+        raise Http404(_("File not found")) from exception
 
-    return content, file
+    return content, opened_file

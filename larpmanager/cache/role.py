@@ -43,16 +43,18 @@ def get_assoc_role(ar: AssocRole) -> tuple[str, list[str]]:
     Returns:
         Tuple containing role name and list of permission slugs
     """
-    ls = []
+    permission_slugs = []
     features = get_assoc_features(ar.assoc_id)
 
     # Filter permissions based on feature availability and placeholders
-    for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
-        if not el[2] and el[1] not in features:
+    for permission_slug, feature_slug, is_placeholder in ar.permissions.values_list(
+        "slug", "feature__slug", "feature__placeholder"
+    ):
+        if not is_placeholder and feature_slug not in features:
             continue
-        ls.append(el[0])
+        permission_slugs.append(permission_slug)
 
-    return ar.name, ls
+    return ar.name, permission_slugs
 
 
 def get_cache_assoc_role(ar_id: int) -> dict:

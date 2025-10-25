@@ -73,14 +73,14 @@ class AssociationIdentifyMiddleware:
             No exceptions are raised directly by this method
         """
         # Extract host components for domain analysis
-        host = request.get_host().split(":")[0]
-        domain = host.split(".")[0]
-        base_domain = ".".join(host.split(".")[-2:])
+        request_host = request.get_host().split(":")[0]
+        subdomain = request_host.split(".")[0]
+        base_domain = ".".join(request_host.split(".")[-2:])
 
         # Determine environment based on host characteristics
         if os.getenv("env") == "prod":
             request.enviro = "prod"
-        elif "xyz" in host:
+        elif "xyz" in request_host:
             request.enviro = "staging"
         else:
             # Handle dev/test environment detection
@@ -93,19 +93,21 @@ class AssociationIdentifyMiddleware:
             base_domain = "larpmanager.com"
 
         # Resolve association slug from multiple sources
-        conf_slug = getattr(conf_settings, "SLUG_ASSOC", None)
-        assoc_slug = request.session.get("debug_slug") if "debug_slug" in request.session else conf_slug or domain
+        configured_slug = getattr(conf_settings, "SLUG_ASSOC", None)
+        association_slug = (
+            request.session.get("debug_slug") if "debug_slug" in request.session else configured_slug or subdomain
+        )
 
         # Attempt to load association data from cache
-        assoc = get_cache_assoc(assoc_slug)
-        if assoc:
+        association_data = get_cache_assoc(association_slug)
+        if association_data:
             # Check for domain mismatch requiring redirect
-            if "main_domain" in assoc and assoc["main_domain"] != base_domain:
-                if request.enviro == "prod" and not conf_slug:
-                    slug = assoc["slug"]
-                    domain = assoc["main_domain"]
-                    return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
-            return cls.load_assoc(request, assoc)
+            if "main_domain" in association_data and association_data["main_domain"] != base_domain:
+                if request.enviro == "prod" and not configured_slug:
+                    association_slug = association_data["slug"]
+                    association_domain = association_data["main_domain"]
+                    return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
+            return cls.load_assoc(request, association_data)
 
         # Fallback to main domain handling
         return cls.get_main_info(request, base_domain)

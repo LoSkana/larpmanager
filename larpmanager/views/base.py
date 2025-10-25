@@ -171,12 +171,12 @@ def get_base_domain(request: HttpRequest) -> str:
         Base domain (e.g., 'example.com' from 'subdomain.example.com').
     """
     host = request.get_host()
-    parts = host.split(".")
+    host_parts = host.split(".")
 
     # Use last 2 parts for base domain (domain.tld)
-    domain_parts = 2
-    if len(parts) >= domain_parts:
-        return ".".join(parts[-2:])
+    minimum_parts_for_base_domain = 2
+    if len(host_parts) >= minimum_parts_for_base_domain:
+        return ".".join(host_parts[-2:])
     return host
 
 

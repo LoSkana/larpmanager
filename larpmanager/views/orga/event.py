@@ -133,9 +133,9 @@ def orga_roles(request: HttpRequest, s: str) -> HttpResponse:
     # Check if user has permission to manage roles for this event
     ctx = check_event_permission(request, s, "orga_roles")
 
-    def def_callback(ctx):
+    def def_callback(event_context):
         # Create default "Organizer" role if none exist
-        return EventRole.objects.create(event=ctx["event"], number=1, name="Organizer")
+        return EventRole.objects.create(event=event_context["event"], number=1, name="Organizer")
 
     # Prepare the roles list with permissions and existing roles
     prepare_roles_list(ctx, EventPermission, EventRole.objects.filter(event=ctx["event"]), def_callback)
@@ -630,7 +630,7 @@ def _ability_template(ctx):
     return export_data
 
 
-def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
+def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate template files for form questions and options upload.
 
     Creates sample data templates for both questions and options that can be used
@@ -638,7 +638,7 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     serve as examples for users.
 
     Args:
-        ctx: Context dictionary containing column definitions with the structure:
+        context: Context dictionary containing column definitions with the structure:
             - columns[0]: Dictionary with question field definitions
             - columns[1]: Dictionary with option field definitions
 
@@ -648,10 +648,10 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
             - list[str]: Column headers/keys
             - list[list[str]]: Sample data rows
     """
-    exports = []
+    template_exports = []
 
     # Define sample data for questions template
-    defs = {
+    sample_question_data = {
         "name": "Question Name",
         "typ": "multi-choice",
         "description": "Question Description",
@@ -662,20 +662,20 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     }
 
     # Extract available question fields from context
-    keys = list(ctx["columns"][0].keys())
-    vals = []
+    question_column_keys = list(context["columns"][0].keys())
+    question_sample_values = []
 
     # Build values list matching available fields
-    for field, value in defs.items():
-        if field not in keys:
+    for field_name, sample_value in sample_question_data.items():
+        if field_name not in question_column_keys:
             continue
-        vals.append(value)
+        question_sample_values.append(sample_value)
 
     # Add questions template to exports
-    exports.append(("questions", keys, [vals]))
+    template_exports.append(("questions", question_column_keys, [question_sample_values]))
 
     # Define sample data for options template
-    defs = {
+    sample_option_data = {
         "question": "Question Name",
         "name": "Option Name",
         "description": "Option description",
@@ -684,22 +684,22 @@ def _form_template(ctx: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     }
 
     # Extract available option fields from context
-    keys = list(ctx["columns"][1].keys())
-    vals = []
+    option_column_keys = list(context["columns"][1].keys())
+    option_sample_values = []
 
     # Build values list matching available fields
-    for field, value in defs.items():
-        if field not in keys:
+    for field_name, sample_value in sample_option_data.items():
+        if field_name not in option_column_keys:
             continue
-        vals.append(value)
+        option_sample_values.append(sample_value)
 
     # Add options template to exports
-    exports.append(("options", keys, [vals]))
+    template_exports.append(("options", option_column_keys, [option_sample_values]))
 
-    return exports
+    return template_exports
 
 
-def _reg_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[str, list[str], list[list[str]]]]:
+def _reg_template(ctx: dict, template_type: str, value_mapping: dict) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate registration template data for export.
 
     Creates a template with predefined default values and dynamic fields
@@ -707,50 +707,52 @@ def _reg_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[str, l
 
     Args:
         ctx: Context dictionary containing columns and fields information
-        typ: Template type identifier for naming
+        template_type: Template type identifier for naming
         value_mapping: Mapping of field types to their default values
 
     Returns:
         List of tuples containing template name, column keys, and row values
     """
     # Extract existing column keys from context
-    keys = list(ctx["columns"][0].keys())
-    vals = []
+    column_keys = list(ctx["columns"][0].keys())
+    row_values = []
 
     # Define default values for common registration fields
-    defs = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
+    default_values = {"email": "user@test.it", "ticket": "Standard", "characters": "Test Character", "donation": "5"}
 
     # Add default values for existing fields only
-    for field, value in defs.items():
-        if field not in keys:
+    for field_name, default_value in default_values.items():
+        if field_name not in column_keys:
             continue
-        vals.append(value)
+        row_values.append(default_value)
 
     # Extend keys with additional context fields
-    keys.extend(ctx["fields"])
+    column_keys.extend(ctx["fields"])
 
     # Add values for dynamic fields based on field type mapping
-    for _field, field_typ in ctx["fields"].items():
-        vals.append(value_mapping[field_typ])
+    for _field_name, field_type in ctx["fields"].items():
+        row_values.append(value_mapping[field_type])
 
     # Create export tuple with template name, keys, and values
-    exports = [(f"{typ} - template", keys, [vals])]
+    exports = [(f"{template_type} - template", column_keys, [row_values])]
     return exports
 
 
-def _writing_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[str, list[str], list[list[str]]]]:
+def _writing_template(
+    context: dict, type_prefix: str, value_mapping: dict
+) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate template data for writing export with field mappings.
 
     Creates export templates for different writing types including base templates
     and conditional templates for relationships and roles based on features.
 
     Args:
-        ctx: Context dictionary containing:
+        context: Context dictionary containing:
             - fields: Dict mapping field names to field types
             - writing_typ: QuestionApplicable enum value for writing type
             - features: Set of enabled feature names
             - columns: Dict containing column definitions (when applicable)
-        typ: Type string used as prefix for the template name
+        type_prefix: Type string used as prefix for the template name
         value_mapping: Dictionary mapping field types to their example values
 
     Returns:
@@ -758,37 +760,39 @@ def _writing_template(ctx: dict, typ: str, value_mapping: dict) -> list[tuple[st
         (template_name, column_keys, row_values_list)
     """
     # Extract non-skipped fields and their corresponding example values
-    keys = [k for k, v in ctx["fields"].items() if v != "skip"]
-    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items() if field_typ != "skip"]
+    column_keys = [key for key, field_type in context["fields"].items() if field_type != "skip"]
+    example_values = [
+        value_mapping[field_type] for _field, field_type in context["fields"].items() if field_type != "skip"
+    ]
 
     # Add type-specific prefix fields based on writing type
-    if ctx["writing_typ"] == QuestionApplicable.QUEST:
-        keys.insert(0, "typ")
-        vals.insert(0, "name of quest type")
-    elif ctx["writing_typ"] == QuestionApplicable.TRAIT:
-        keys.insert(0, "quest")
-        vals.insert(0, "name of quest")
+    if context["writing_typ"] == QuestionApplicable.QUEST:
+        column_keys.insert(0, "typ")
+        example_values.insert(0, "name of quest type")
+    elif context["writing_typ"] == QuestionApplicable.TRAIT:
+        column_keys.insert(0, "quest")
+        example_values.insert(0, "name of quest")
 
     # Create base template export
-    exports = [(f"{typ} - template", keys, [vals])]
+    template_exports = [(f"{type_prefix} - template", column_keys, [example_values])]
 
     # Add relationships template for character writing when feature is enabled
-    if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
-        exports.append(
+    if context["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in context["features"]:
+        template_exports.append(
             (
                 "relationships - template",
-                list(ctx["columns"][1].keys()),
+                list(context["columns"][1].keys()),
                 [["Test Character", "Another Character", "Super pals"]],
             )
         )
 
     # Add roles template for plot writing
-    if ctx["writing_typ"] == QuestionApplicable.PLOT:
-        exports.append(
+    if context["writing_typ"] == QuestionApplicable.PLOT:
+        template_exports.append(
             (
                 "roles - template",
-                list(ctx["columns"][1].keys()),
+                list(context["columns"][1].keys()),
                 [["Test Plot", "Test Character", "Gonna be a super star"]],
             )
         )
-    return exports
+    return template_exports
