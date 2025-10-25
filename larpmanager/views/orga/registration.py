@@ -456,7 +456,7 @@ def _orga_registrations_text_fields(context):
 
 
 @login_required
-def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
+def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage comprehensive event registration list for organizers.
 
     Provides detailed registration management interface with filtering, grouping,
@@ -465,7 +465,7 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: HTTP request object with user authentication
-        s: Event/run slug identifier
+        event_slug: Event/run slug identifier
 
     Returns:
         HttpResponse: Rendered registrations table template
@@ -477,7 +477,7 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
         - Calculates accounting totals and payment status
     """
     # Verify user has permission to view registrations
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
 
     # Handle AJAX and download POST requests
     if request.method == "POST":
@@ -559,25 +559,25 @@ def orga_registrations(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_registrations_accounting(request: HttpRequest, s: str) -> JsonResponse:
+def orga_registrations_accounting(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Retrieve accounting data for event registrations."""
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
     res = _orga_registrations_acc(context)
     return JsonResponse(res)
 
 
 @login_required
-def orga_registration_form_list(request, s):
+def orga_registration_form_list(request, event_slug):
     """Handle registration form list management for event organizers.
 
     Args:
         request: Django HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         JsonResponse: Registration form data for organizer interface
     """
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
 
     eid = request.POST.get("num")
 
@@ -621,7 +621,7 @@ def orga_registration_form_list(request, s):
 
 
 @login_required
-def orga_registration_form_email(request: HttpRequest, s: str) -> JsonResponse:
+def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Generate email lists for registration question choices in JSON format.
 
     Returns email addresses and names of registrants grouped by their
@@ -629,7 +629,7 @@ def orga_registration_form_email(request: HttpRequest, s: str) -> JsonResponse:
 
     Args:
         request: HTTP request object containing POST data with question ID
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         JsonResponse: Dictionary mapping choice names to lists of emails and names.
@@ -638,7 +638,7 @@ def orga_registration_form_email(request: HttpRequest, s: str) -> JsonResponse:
                      or if user lacks permission.
     """
     # Check user permissions for accessing registration data
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
 
     # Extract question ID from POST request
     eid = request.POST.get("num")
@@ -686,7 +686,7 @@ def orga_registration_form_email(request: HttpRequest, s: str) -> JsonResponse:
 
 
 @login_required
-def orga_registrations_edit(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_registrations_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Edit or create a registration for an event.
 
     This function handles both creating new registrations (when num=0) and editing
@@ -695,7 +695,7 @@ def orga_registrations_edit(request: HttpRequest, s: str, num: int) -> HttpRespo
 
     Args:
         request: The HTTP request object containing user data and form submission
-        s: Event/run identifier used to locate the specific event
+        event_slug: Event/run identifier used to locate the specific event
         num: Registration ID - use 0 for creating new registration,
              positive integer for editing existing registration
 
@@ -708,7 +708,7 @@ def orga_registrations_edit(request: HttpRequest, s: str, num: int) -> HttpRespo
         PermissionDenied: If user lacks required event permissions
     """
     # Check user permissions and initialize context with event data
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
     get_event_cache_all(context)
 
     # Set additional context flags for template rendering
@@ -737,7 +737,7 @@ def orga_registrations_edit(request: HttpRequest, s: str, num: int) -> HttpRespo
             if "delete" in request.POST and request.POST["delete"] == "1":
                 cancel_reg(reg)
                 messages.success(request, _("Registration cancelled"))
-                return redirect("orga_registrations", s=context["run"].get_slug())
+                return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
             # Save registration-specific questions and answers
             form.save_reg_questions(reg)
@@ -748,9 +748,9 @@ def orga_registrations_edit(request: HttpRequest, s: str, num: int) -> HttpRespo
 
             # Redirect based on user choice: continue adding or return to list
             if context["continue_add"]:
-                return redirect("orga_registrations_edit", s=context["run"].get_slug(), num=0)
+                return redirect("orga_registrations_edit", event_slug=context["run"].get_slug(), num=0)
 
-            return redirect("orga_registrations", s=context["run"].get_slug())
+            return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
     # Handle GET request: initialize form for display
     elif num != 0:
@@ -794,18 +794,18 @@ def _save_questbuilder(context, form, reg):
 
 
 @login_required
-def orga_registrations_customization(request, s, num):
+def orga_registrations_customization(request, event_slug, num):
     """Handle organization customization of player registration character relationships.
 
     Args:
         request: HTTP request object
-        s: Event slug string
+        event_slug: Event slug string
         num: Character number identifier
 
     Returns:
         HttpResponse: Rendered edit form or redirect to registrations page
     """
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
     get_event_cache_all(context)
     get_char(context, num)
     rcr = RegistrationCharacterRel.objects.get(
@@ -817,7 +817,7 @@ def orga_registrations_customization(request, s, num):
         if form.is_valid():
             form.save()
             messages.success(request, _("Player customisation updated") + "!")
-            return redirect("orga_registrations", s=context["run"].get_slug())
+            return redirect("orga_registrations", event_slug=context["run"].get_slug())
     else:
         form = RegistrationCharacterRelForm(instance=rcr, context=context)
 
@@ -826,10 +826,10 @@ def orga_registrations_customization(request, s, num):
 
 
 @login_required
-def orga_registrations_reload(request: HttpRequest, s: str) -> HttpResponseRedirect:
+def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
     """Reload registrations for an event run by triggering background checks."""
     # Check user permissions for the event
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
 
     # Collect all registration IDs for the current run
     reg_ids = []
@@ -839,13 +839,13 @@ def orga_registrations_reload(request: HttpRequest, s: str) -> HttpResponseRedir
     # Trigger background registration checks
     check_registration_background(reg_ids)
     # print(f"@@@@ orga_registrations_reload {request} {datetime.now()}")
-    return redirect("orga_registrations", s=context["run"].get_slug())
+    return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 
 @login_required
-def orga_registration_discounts(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def orga_registration_discounts(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Handle registration discounts management for organizers."""
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
     get_registration(context, num)
 
     # Get active discounts for this registration's member
@@ -858,19 +858,19 @@ def orga_registration_discounts(request: HttpRequest, s: str, num: int) -> HttpR
 
 
 @login_required
-def orga_registration_discount_add(request, s, num, dis):
+def orga_registration_discount_add(request, event_slug, num, dis):
     """Add a discount to a member's registration.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
         num: Registration ID
         dis: Discount ID
 
     Returns:
         HttpResponseRedirect: Redirect to registration discounts page
     """
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
     get_registration(context, num)
     get_discount(context, dis)
     AccountingItemDiscount.objects.create(
@@ -889,10 +889,10 @@ def orga_registration_discount_add(request, s, num, dis):
 
 
 @login_required
-def orga_registration_discount_del(request: HttpRequest, s: str, num: int, dis: int) -> HttpResponse:
+def orga_registration_discount_del(request: HttpRequest, event_slug: str, num: int, dis: int) -> HttpResponse:
     """Delete a discount from a registration and redirect to discounts page."""
     # Check event permissions and get context
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
 
     # Get the registration object
     get_registration(context, num)
@@ -910,17 +910,17 @@ def orga_registration_discount_del(request: HttpRequest, s: str, num: int, dis: 
 
 
 @login_required
-def orga_cancellations(request, s):
+def orga_cancellations(request, event_slug):
     """Display cancelled registrations for event organizers.
 
     Args:
         request: Django HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponse: Rendered cancellations page with cancelled registration list
     """
-    context = check_event_permission(request, s, "orga_cancellations")
+    context = check_event_permission(request, event_slug, "orga_cancellations")
     context["list"] = (
         Registration.objects.filter(run=context["run"])
         .exclude(cancellation_date__isnull=True)
@@ -964,7 +964,7 @@ def orga_cancellations(request, s):
 
 
 @login_required
-def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
+def orga_cancellation_refund(request, event_slug: str, num: str) -> HttpResponse:
     """Handle cancellation refunds for tokens and credits.
 
     Processes refund requests for cancelled registrations, creating accounting
@@ -972,7 +972,7 @@ def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user data and POST parameters
-        s: The event slug identifier for the run
+        event_slug: Event identifier string for the run
         num: The registration number to process refund for
 
     Returns:
@@ -984,7 +984,7 @@ def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
         when amounts are greater than zero, then marks registration as refunded.
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s, "orga_cancellations")
+    context = check_event_permission(request, event_slug, "orga_cancellations")
 
     # Retrieve and validate the registration
     get_registration(context, num)
@@ -1024,7 +1024,7 @@ def orga_cancellation_refund(request, s: str, num: str) -> HttpResponse:
         context["registration"].save()
 
         # Redirect back to cancellations overview
-        return redirect("orga_cancellations", s=context["run"].get_slug())
+        return redirect("orga_cancellations", event_slug=context["run"].get_slug())
 
     # Get payment history for display in template
     get_reg_payments(context["registration"])
@@ -1073,10 +1073,10 @@ def get_pre_registration(event) -> dict[str, list | dict[int, int]]:
 
 
 @login_required
-def orga_pre_registrations(request: HttpRequest, s: str) -> HttpResponse:
+def orga_pre_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle pre-registrations view for organization users."""
     # Check user permissions and get event context
-    context = check_event_permission(request, s, "orga_pre_registrations")
+    context = check_event_permission(request, event_slug, "orga_pre_registrations")
 
     # Get pre-registration data for the event
     context["dc"] = get_pre_registration(context["event"])
@@ -1088,7 +1088,7 @@ def orga_pre_registrations(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_reload_cache(request: HttpRequest, s: str) -> HttpResponse:
+def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Reset all cache entries for the specified event run.
 
     Clears multiple cache layers including run media, event features,
@@ -1096,13 +1096,13 @@ def orga_reload_cache(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        s: String identifier for the event run slug
+        event_slug: String identifier for the event run slug
 
     Returns:
         HttpResponse: Redirect to the manage page for the event run
     """
     # Verify user permissions and get event context
-    context = check_event_permission(request, s)
+    context = check_event_permission(request, event_slug)
 
     # Clear run-specific cache and associated media files
     clear_run_cache_and_media(context["run"])
@@ -1119,7 +1119,7 @@ def orga_reload_cache(request: HttpRequest, s: str) -> HttpResponse:
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
-    return redirect("manage", s=context["run"].get_slug())
+    return redirect("manage", event_slug=context["run"].get_slug())
 
 
 def lottery_info(request, context: dict) -> None:
@@ -1151,7 +1151,7 @@ def lottery_info(request, context: dict) -> None:
 
 
 @login_required
-def orga_lottery(request: HttpRequest, s: str) -> HttpResponse:
+def orga_lottery(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Manage registration lottery system for event organizers.
 
     This function handles the lottery process for event registrations, allowing organizers
@@ -1160,7 +1160,7 @@ def orga_lottery(request: HttpRequest, s: str) -> HttpResponse:
 
     Args:
         request: HTTP request object containing POST data for lottery execution
-        s: Event slug identifier for the specific event
+        event_slug: Event slug identifier for the specific event
 
     Returns:
         HttpResponse: Rendered lottery template with either the lottery form or
@@ -1170,7 +1170,7 @@ def orga_lottery(request: HttpRequest, s: str) -> HttpResponse:
         Http404: When lottery is already filled (no more spots available for upgrade)
     """
     # Check user permissions for lottery management
-    context = check_event_permission(request, s, "orga_lottery")
+    context = check_event_permission(request, event_slug, "orga_lottery")
 
     # Handle lottery execution when form is submitted
     if request.method == "POST" and request.POST.get("submit"):
@@ -1216,7 +1216,7 @@ def calculate_age(date_of_birth, reference_date):
 
 
 @require_POST
-def orga_registration_member(request: HttpRequest, s: str) -> JsonResponse:
+def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Handle member registration actions from organizer interface.
 
     Processes member assignment to events and manages registration status
@@ -1224,7 +1224,7 @@ def orga_registration_member(request: HttpRequest, s: str) -> JsonResponse:
 
     Args:
         request: The HTTP request object containing POST data with member ID
-        s: The event slug identifier
+        event_slug: Event identifier string
 
     Returns:
         JsonResponse: Contains success status and member details HTML if successful,
@@ -1234,7 +1234,7 @@ def orga_registration_member(request: HttpRequest, s: str) -> JsonResponse:
         ObjectDoesNotExist: When member or registration cannot be found
     """
     # Check organizer permissions for registration management
-    context = check_event_permission(request, s, "orga_registrations")
+    context = check_event_permission(request, event_slug, "orga_registrations")
     member_id = request.POST.get("mid")
 
     # Validate member existence
@@ -1263,7 +1263,7 @@ def orga_registration_member(request: HttpRequest, s: str) -> JsonResponse:
     exclude = ["profile", "newsletter", "language", "presentation"]
 
     # Add sensitive data to exclusion list if user lacks permission
-    if not has_event_permission(request, context, s, "orga_sensitive"):
+    if not has_event_permission(request, context, event_slug, "orga_sensitive"):
         exclude.extend(
             [
                 "diet",

@@ -38,19 +38,19 @@ def check_print_pdf(context):
 
 
 @login_required
-def character_pdf_sheet(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def character_pdf_sheet(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Generate PDF character sheet for an event run.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         num: Character number
 
     Returns:
         HTTP response containing the PDF character sheet
     """
     # Get event run context with signup verification
-    context = get_event_run(request, s, signup=True)
+    context = get_event_run(request, event_slug, signup=True)
 
     # Verify PDF printing permissions
     check_print_pdf(context)
@@ -63,19 +63,19 @@ def character_pdf_sheet(request: HttpRequest, s: str, num: int) -> HttpResponse:
 
 
 @login_required
-def character_pdf_sheet_friendly(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Generate a printer-friendly character sheet PDF.
 
     Args:
         request: The HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         num: Character number
 
     Returns:
         HttpResponse containing the printer-friendly character PDF
     """
     # Get event run context and validate signup access
-    context = get_event_run(request, s, signup=True)
+    context = get_event_run(request, event_slug, signup=True)
 
     # Verify PDF printing permissions
     check_print_pdf(context)
@@ -88,19 +88,19 @@ def character_pdf_sheet_friendly(request: HttpRequest, s: str, num: int) -> Http
 
 
 @login_required
-def character_pdf_relationships(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Generate PDF with character relationships for a specific character.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         num: Character number
 
     Returns:
         PDF response with character relationships
     """
     # Get event/run context with signup validation
-    context = get_event_run(request, s, signup=True)
+    context = get_event_run(request, event_slug, signup=True)
 
     # Verify PDF printing permissions
     check_print_pdf(context)
@@ -113,12 +113,12 @@ def character_pdf_relationships(request: HttpRequest, s: str, num: int) -> HttpR
 
 
 @login_required
-def portraits(request, s):
-    context = get_event_run(request, s, signup=True)
+def portraits(request, event_slug):
+    context = get_event_run(request, event_slug, signup=True)
     return print_gallery(context)
 
 
 @login_required
-def profiles(request, s):
-    context = get_event_run(request, s, signup=True)
+def profiles(request, event_slug):
+    context = get_event_run(request, event_slug, signup=True)
     return print_profiles(context)

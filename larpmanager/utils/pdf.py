@@ -687,10 +687,10 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 
 
 @background_auto(queue="pdf")
-def print_handout_bkg(a: Association, s: str, c: Character) -> None:
+def print_handout_bkg(a: Association, event_slug: str, c: Character) -> None:
     """Prints character handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(a)
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     print_handout_go(context, c)
 
 
@@ -707,27 +707,27 @@ def print_character_go(context, character):
 
 
 @background_auto(queue="pdf")
-def print_character_bkg(a: Association, s: str, c: Character) -> None:
+def print_character_bkg(a: Association, event_slug: str, c: Character) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(a)
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     print_character_go(context, c)
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(a: Association, s: str) -> None:
+def print_run_bkg(a: Association, event_slug: str) -> None:
     """Print all background materials for a run including gallery, profiles, characters, and handouts.
 
     Args:
         a: The association object containing event data
-        s: String identifier for the specific run
+        event_slug: String identifier for the specific run
 
     Returns:
         None
     """
     # Create fake request context and get event run data
     request = get_fake_request(a)
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
 
     # Print gallery and character profiles
     print_gallery(context)

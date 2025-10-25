@@ -60,14 +60,14 @@ from larpmanager.utils.pdf import (
 logger = logging.getLogger(__name__)
 
 
-def url_short(request, s):
-    el = get_object_or_404(UrlShortner, cod=s)
+def url_short(request, url_cod):
+    el = get_object_or_404(UrlShortner, cod=url_cod)
     return redirect(el.url)
 
 
-def util(request, cod):
+def util(request, util_cod):
     try:
-        u = Util.objects.get(cod=cod)
+        u = Util.objects.get(cod=util_cod)
         return HttpResponseRedirect(u.download())
     except Exception as err:
         raise Http404("not found") from err
@@ -85,17 +85,17 @@ def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
         raise Http404("Run does not exist") from err
 
     # Redirect to help page with run slug
-    return redirect("help", s=context["run"].get_slug())
+    return redirect("help", event_slug=context["run"].get_slug())
 
 
 @login_required
-def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
+def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse:
     """
     Display help page with question submission form and user's previous questions.
 
     Args:
         request: HTTP request object containing user session and form data
-        s: Optional event slug for event-specific help context
+        event_slug: Optional event slug for event-specific help context
 
     Returns:
         HttpResponse: Rendered help template with form and question list
@@ -104,8 +104,8 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
         Http404: When event slug is provided but event/run not found
     """
     # Initialize context based on whether this is event-specific or general help
-    if s:
-        context = get_event_run(request, s, include_status=True)
+    if event_slug:
+        context = get_event_run(request, event_slug, include_status=True)
     else:
         context = def_user_context(request)
         context["a_id"] = request.assoc["id"]
@@ -178,19 +178,19 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
     return redirect(hp.attachment.url)
 
 
-def handout_ext(request: HttpRequest, s: str, cod: str) -> HttpResponse:
+def handout_ext(request: HttpRequest, event_slug: str, cod: str) -> HttpResponse:
     """Generate and return a PDF for a specific event handout.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
         cod: Handout code identifier
 
     Returns:
         PDF file response with the handout content
     """
     # Retrieve event/run context and fetch handout by code
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     context["handout"] = get_object_or_404(Handout, event=context["event"], cod=cod)
 
     # Generate PDF and return as downloadable response
@@ -233,33 +233,33 @@ def album_aux(request, context, parent_album):
 
 
 @login_required
-def album(request, s):
-    context = get_event_run(request, s)
+def album(request, event_slug):
+    context = get_event_run(request, event_slug)
     return album_aux(request, context, None)
 
 
 @login_required
-def album_sub(request: HttpRequest, s: str, num: int) -> HttpResponse:
+def album_sub(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View handler for displaying a specific photo album within an event run."""
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     get_album(context, num)
     return album_aux(request, context, context["album"])
 
 
 @login_required
-def workshops(request: HttpRequest, s: str) -> HttpResponse:
+def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Display workshops for a specific event with completion status for the current user.
 
     Args:
         request: The HTTP request object containing user information
-        s: The event slug identifier
+        event_slug: Event identifier string
 
     Returns:
         HttpResponse: Rendered template with workshop list and completion status
     """
     # Get event context with signup and status validation
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
 
     # Initialize workshop list for template context
     context["list"] = []
@@ -314,7 +314,7 @@ def valid_workshop_answer(request, context):
 
 
 @login_required
-def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
+def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpResponse:
     """
     Handle workshop answer submission and validation.
 
@@ -335,14 +335,14 @@ def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
         PermissionDenied: If user doesn't have access to the workshop
     """
     # Get event context and validate user access to workshop signup
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
     get_workshop(context, m)
 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in request.user.member.workshops.select_related().all()]
     if context["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
-        return redirect("workshops", s=context["run"].get_slug())
+        return redirect("workshops", event_slug=context["run"].get_slug())
 
     # Build list of questions for the current workshop module
     context["list"] = []
@@ -376,7 +376,7 @@ def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
 
         # All modules completed - redirect to workshops overview
         messages.success(request, _("Well done, you've completed all modules!"))
-        return redirect("workshops", s=context["run"].get_slug())
+        return redirect("workshops", event_slug=context["run"].get_slug())
 
     # Invalid answers - show failure page
     return render(request, "larpmanager/event/workshops/failed.html", context)

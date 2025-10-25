@@ -299,7 +299,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpResponse:
+def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None) -> HttpResponse:
     """Handle payment redirection for event registration.
 
     Validates user permissions and registration status before redirecting to
@@ -308,7 +308,7 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
 
     Args:
         request: Django HTTP request object containing user session and data
-        s: Event slug string identifier for the specific event
+        event_slug: Event slug string identifier for the specific event
         method: Optional payment method identifier (e.g., 'paypal', 'stripe')
 
     Returns:
@@ -322,7 +322,7 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
     check_assoc_feature(request, "payment")
 
     # Get event context and validate user registration status
-    context = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, event_slug, signup=True, include_status=True)
 
     # Verify user has valid registration for this event
     if not context["run"].reg:
@@ -394,7 +394,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     # Check if registration is already fully paid
     if reg.tot_iscr == reg.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("gallery", s=reg.run.get_slug())
+        return redirect("gallery", event_slug=reg.run.get_slug())
 
     # Check for pending payment verification
     pending = (
@@ -408,13 +408,13 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     )
     if pending:
         messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("gallery", s=reg.run.get_slug())
+        return redirect("gallery", event_slug=reg.run.get_slug())
 
     # Verify membership approval if membership feature is enabled
     if "membership" in context["features"] and not reg.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
-        return redirect("gallery", s=reg.run.get_slug())
+        return redirect("gallery", event_slug=reg.run.get_slug())
 
     # Add registration to context
     context["reg"] = reg
@@ -588,7 +588,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
             # Show success message and redirect to collection management
             messages.success(request, _("The collection has been activated!"))
-            return redirect("acc_collection_manage", s=p.contribute_code)
+            return redirect("acc_collection_manage", event_slug=p.contribute_code)
     else:
         # Initialize empty form for GET request
         form = CollectionNewForm()
@@ -599,13 +599,13 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
+def acc_collection_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     Manage accounting collection for the authenticated user.
 
     Args:
         request: HTTP request object containing user and association data
-        s: Collection identifier string
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponse: Rendered template with collection management interface
@@ -614,7 +614,7 @@ def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If the collection doesn't belong to the requesting user
     """
     # Retrieve the collection the user participates in
-    c = get_collection_partecipate(request, s)
+    c = get_collection_partecipate(request, event_slug)
 
     # Verify user ownership of the collection
     if request.user.member != c.organizer:
@@ -637,12 +637,12 @@ def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
+def acc_collection_participate(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle user participation in a collection payment process.
 
     Args:
         request: The HTTP request object containing user session and POST data
-        s: String identifier for the collection to participate in
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponse: Rendered template with collection participation form
@@ -651,7 +651,7 @@ def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
         Http404: When the collection is not in OPEN status
     """
     # Get the collection object and verify user permissions
-    c = get_collection_partecipate(request, s)
+    c = get_collection_partecipate(request, event_slug)
 
     # Initialize base context with user data and accounting flag
     context = def_user_context(request)
@@ -678,12 +678,12 @@ def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def acc_collection_close(request: HttpRequest, s: str) -> HttpResponse:
+def acc_collection_close(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Close an open collection by changing its status to DONE.
 
     Args:
         request: The HTTP request object containing user information
-        s: The collection identifier/slug
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponse: Redirect to the collection management page
@@ -692,7 +692,7 @@ def acc_collection_close(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If collection doesn't belong to user or isn't open
     """
     # Get the collection the user participates in
-    c = get_collection_partecipate(request, s)
+    c = get_collection_partecipate(request, event_slug)
 
     # Verify the current user is the organizer of this collection
     if request.user.member != c.organizer:
@@ -709,11 +709,11 @@ def acc_collection_close(request: HttpRequest, s: str) -> HttpResponse:
 
     # Notify user of successful closure and redirect to management page
     messages.success(request, _("Collection closed"))
-    return redirect("acc_collection_manage", s=s)
+    return redirect("acc_collection_manage", event_slug=event_slug)
 
 
 @login_required
-def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRedirect, HttpResponse]:
+def acc_collection_redeem(request: HttpRequest, event_slug: str) -> Union[HttpResponseRedirect, HttpResponse]:
     """Handle redemption of completed accounting collections.
 
     This function allows users to redeem completed accounting collections by changing
@@ -721,7 +721,7 @@ def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRed
 
     Args:
         request: The HTTP request object containing user and method information
-        s: The collection slug identifier used to retrieve the specific collection
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponseRedirect: Redirects to home page after successful POST redemption
@@ -731,7 +731,7 @@ def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRed
         Http404: If the collection is not found or status is not DONE
     """
     # Get the collection using the provided slug and validate access
-    c = get_collection_redeem(request, s)
+    c = get_collection_redeem(request, event_slug)
 
     # Initialize the context with default user context and accounting flag
     context = def_user_context(request)
@@ -853,7 +853,7 @@ def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
     # Redirect to run gallery if invoice is for registration
     if invoice.typ == PaymentType.REGISTRATION:
         registration = Registration.objects.get(id=invoice.idx)
-        return redirect("gallery", s=registration.run.get_slug())
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Default redirect to accounting page
     return redirect("accounting")

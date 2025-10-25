@@ -54,7 +54,7 @@ urlpatterns = (
             name="api_published_events",
         ),
         path(
-            "<slug:s>/",
+            "<slug:event_slug>/",
             views_ue.event_redirect,
             name="event_redirect",
         ),

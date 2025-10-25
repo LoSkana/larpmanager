@@ -525,17 +525,17 @@ def copy_css(context, event, parent) -> None:
 
 
 @login_required
-def orga_copy(request, s):
+def orga_copy(request, event_slug):
     """Handle event copying functionality for organizers.
 
     Args:
         request: HTTP request object
-        s: Event slug identifier
+        event_slug: Event slug identifier
 
     Returns:
         HttpResponse: Rendered copy form template or redirect after successful copy
     """
-    context = check_event_permission(request, s, "orga_copy")
+    context = check_event_permission(request, event_slug, "orga_copy")
 
     if request.method == "POST":
         form = OrgaCopyForm(request.POST, request.FILES, context=context)

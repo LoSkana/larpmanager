@@ -129,7 +129,7 @@ urlpatterns = [
         name="pre_register",
     ),
     path(
-        "pre_register/<slug:s>/remove",
+        "pre_register/<slug:event_slug>/remove",
         views_ur.pre_register_remove,
         name="pre_register_remove",
     ),
@@ -214,12 +214,12 @@ urlpatterns = [
         name="accounting",
     ),
     path(
-        "accounting/pay/<slug:s>/",
+        "accounting/pay/<slug:event_slug>/",
         views_ua.acc_pay,
         name="acc_pay",
     ),
     path(
-        "accounting/pay/<slug:s>/<slug:method>/",
+        "accounting/pay/<slug:event_slug>/<slug:method>/",
         views_ua.acc_pay,
         name="acc_pay",
     ),
@@ -274,7 +274,7 @@ urlpatterns = [
         name="acc_webhook_paypal",
     ),
     path(
-        "accounting/webhook/paypal/<slug:s>/",
+        "accounting/webhook/paypal/<slug:event_slug>/",
         views_ua.acc_webhook_paypal,
         name="acc_webhook_paypal",
     ),
@@ -324,27 +324,27 @@ urlpatterns = [
         name="acc_collection",
     ),
     path(
-        "accounting/collection/<slug:s>/",
+        "accounting/collection/<slug:event_slug>/",
         views_ua.acc_collection_manage,
         name="acc_collection_manage",
     ),
     path(
-        "accounting/collection/<slug:s>/participate/",
+        "accounting/collection/<slug:event_slug>/participate/",
         views_ua.acc_collection_participate,
         name="acc_collection_participate",
     ),
     path(
-        "accounting/collection/<slug:s>/close/",
+        "accounting/collection/<slug:event_slug>/close/",
         views_ua.acc_collection_close,
         name="acc_collection_close",
     ),
     path(
-        "accounting/collection/<slug:s>/redeem/",
+        "accounting/collection/<slug:event_slug>/redeem/",
         views_ua.acc_collection_redeem,
         name="acc_collection_redeem",
     ),
     path(
-        "accounting/submit/<slug:s>/<path:p>/",
+        "accounting/submit/<slug:event_slug>/<path:p>/",
         views_ua.acc_submit,
         name="acc_submit",
     ),
@@ -378,12 +378,12 @@ urlpatterns = [
         name="register_conditions",
     ),
     path(
-        "at/<slug:s>/",
+        "at/<slug:url_cod>/",
         views_ums.url_short,
         name="url_short",
     ),
     path(
-        "util/<slug:cod>/",
+        "util/<slug:util_cod>/",
         views_ums.util,
         name="util",
     ),
