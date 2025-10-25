@@ -35,7 +35,7 @@
                         {% for k, el in reg.info.opts.items %}
                             {% include "elements/comma.html" %}
                             <b>{{ el.q.name }}</b> -
-                            {% for opt in el.l %}
+                            {% for opt in el.selected_options %}
                                 {{ opt.name }}
                                 {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
                             {% endfor %}
