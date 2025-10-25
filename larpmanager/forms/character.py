@@ -776,7 +776,7 @@ class OrgaWritingQuestionForm(MyForm):
 
         # Hide applicable field and set default value for new instances
         self.fields["applicable"].widget = forms.HiddenInput()
-        self.initial["applicable"] = self.params["writing_type"]
+        self.initial["applicable"] = self.params["writing_typ"]
 
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])

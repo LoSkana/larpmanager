@@ -956,7 +956,7 @@ def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, even
             return False
 
     # If PLAYAGAIN discount was already applied, no other allowed
-    elif AccountingItemDiscount.objects.filter(member=member, run=run, discount__typ=Discount.PLAYAGAIN).exists():
+    elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=Discount.PLAYAGAIN).exists():
         return False
 
     return True
