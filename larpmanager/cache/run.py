@@ -110,17 +110,17 @@ def get_cache_config_run(run: Run) -> dict:
         Dictionary containing the run configuration data.
     """
     # Generate cache key for this specific run
-    key = cache_config_run_key(run)
+    cache_key = cache_config_run_key(run)
 
     # Attempt to retrieve from cache
-    res = cache.get(key)
+    cached_config = cache.get(cache_key)
 
     # Initialize and cache if not found
-    if res is None:
-        res = init_cache_config_run(run)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_config is None:
+        cached_config = init_cache_config_run(run)
+        cache.set(cache_key, cached_config, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_config
 
 
 def init_cache_config_run(run) -> dict:

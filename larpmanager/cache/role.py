@@ -73,26 +73,26 @@ def get_cache_assoc_role(ar_id: int) -> dict:
         PermissionError: If the association role cannot be found or accessed.
     """
     # Generate cache key for this association role
-    key = cache_assoc_role_key(ar_id)
+    cache_key = cache_assoc_role_key(ar_id)
 
     # Try to get cached result first
-    res = cache.get(key)
+    cached_result = cache.get(cache_key)
 
-    if res is None:
+    if cached_result is None:
         # Cache miss - fetch from database
         try:
-            ar = AssocRole.objects.get(pk=ar_id)
+            assoc_role = AssocRole.objects.get(pk=ar_id)
         except Exception as err:
             # Convert any database error to permission error
             raise PermissionError() from err
 
         # Process the association role data
-        res = get_assoc_role(ar)
+        cached_result = get_assoc_role(assoc_role)
 
         # Cache the result for future requests
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_result
 
 
 def remove_association_role_cache(association_role_id):
@@ -219,25 +219,25 @@ def get_cache_event_role(ev_id: int) -> dict:
         PermissionError: If the event role cannot be found or accessed.
     """
     # Generate cache key for this specific event role
-    key = cache_event_role_key(ev_id)
-    res = cache.get(key)
+    cache_key = cache_event_role_key(ev_id)
+    cached_result = cache.get(cache_key)
 
     # If not in cache, fetch from database
-    if res is None:
+    if cached_result is None:
         try:
             # Retrieve EventRole object from database
-            ar = EventRole.objects.get(pk=ev_id)
-        except Exception as err:
+            event_role = EventRole.objects.get(pk=ev_id)
+        except Exception as error:
             # Convert any database error to PermissionError
-            raise PermissionError() from err
+            raise PermissionError() from error
 
         # Process the event role data
-        res = get_event_role(ar)
+        cached_result = get_event_role(event_role)
 
         # Cache the result for future requests
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_result
 
 
 def remove_event_role_cache(assignment_role_id):

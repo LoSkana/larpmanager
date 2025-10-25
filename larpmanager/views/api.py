@@ -36,12 +36,12 @@ from larpmanager.views.manage import _get_registration_status_code
 
 def get_client_ip(request):
     """Get client IP address from request."""
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0]
+    x_forwarded_for_header = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for_header:
+        client_ip = x_forwarded_for_header.split(",")[0]
     else:
-        ip = request.META.get("REMOTE_ADDR")
-    return ip
+        client_ip = request.META.get("REMOTE_ADDR")
+    return client_ip
 
 
 def log_api_access(api_key, request, response_status, events_count=0):

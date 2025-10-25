@@ -85,34 +85,34 @@ def get_character_optimized(ctx, num):
         Http404: If character does not exist
     """
     try:
-        ev = ctx["event"].get_class_parent(Character)
-        features = ctx.get("features", [])
+        parent_event = ctx["event"].get_class_parent(Character)
+        enabled_features = ctx.get("features", [])
 
         select_related_fields = ["event"]
 
         # Add other select_related fields based on features
-        if "user_character" in features:
+        if "user_character" in enabled_features:
             select_related_fields.append("player")
-        if "progress" in features:
+        if "progress" in enabled_features:
             select_related_fields.append("progress")
-        if "assigned" in features:
+        if "assigned" in enabled_features:
             select_related_fields.append("assigned")
-        if "mirror" in features:
+        if "mirror" in enabled_features:
             select_related_fields.append("mirror")
 
-        query = Character.objects.select_related(*select_related_fields)
+        character_query = Character.objects.select_related(*select_related_fields)
 
         # Only prefetch factions and plots if their features are enabled
         prefetch_fields = []
-        if "faction" in features:
+        if "faction" in enabled_features:
             prefetch_fields.append("factions_list")
-        if "plot" in features:
+        if "plot" in enabled_features:
             prefetch_fields.append("plots")
 
         if prefetch_fields:
-            query = query.prefetch_related(*prefetch_fields)
+            character_query = character_query.prefetch_related(*prefetch_fields)
 
-        ctx["character"] = query.get(event=ev, pk=num)
+        ctx["character"] = character_query.get(event=parent_event, pk=num)
         ctx["class_name"] = "character"
     except ObjectDoesNotExist as err:
         raise Http404("character does not exist") from err

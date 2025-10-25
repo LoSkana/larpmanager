@@ -47,15 +47,15 @@ def get_cache_lm_home() -> dict:
         Cached or freshly computed home data.
     """
     # Get cache key and attempt to retrieve cached data
-    key = cache_larpmanager_home_key()
-    res = cache.get(key)
+    cache_key = cache_larpmanager_home_key()
+    cached_data = cache.get(cache_key)
 
     # If cache miss, compute fresh data and cache it
-    if res is None:
-        res = update_cache_lm_home()
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_data is None:
+        cached_data = update_cache_lm_home()
+        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_data
 
 
 def update_cache_lm_home() -> dict[str, int | list]:
