@@ -275,12 +275,12 @@ def _get_cached_config(element_id, element_type, config_name, default_value=None
     return evaluate_config(element_configs, config_name, default_value)
 
 
-def get_assoc_config(association_id, config_name, default_value=None, ctx=None, bypass_cache=False):
-    return _get_cached_config(association_id, "association", config_name, default_value, ctx, bypass_cache)
+def get_assoc_config(association_id, config_name, default_value=None, context=None, bypass_cache=False):
+    return _get_cached_config(association_id, "association", config_name, default_value, context, bypass_cache)
 
 
-def get_event_config(event_id, config_name, default_value=None, ctx=None, bypass_cache=False):
-    return _get_cached_config(event_id, "event", config_name, default_value, ctx, bypass_cache)
+def get_event_config(event_id, config_name, default_value=None, context=None, bypass_cache=False):
+    return _get_cached_config(event_id, "event", config_name, default_value, context, bypass_cache)
 
 
 def evaluate_config(configurations: dict, configuration_name: str, default_value: any) -> any:

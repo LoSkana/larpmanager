@@ -65,8 +65,8 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     # Retrieve VAT rates from association configuration
     # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
     config_context = {}
-    _vat_rate_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, ctx=config_context)) / 100.0
-    _vat_rate_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, ctx=config_context)) / 100.0
+    _vat_rate_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, context=config_context)) / 100.0
+    _vat_rate_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, context=config_context)) / 100.0
 
     # Calculate total ticket cost including both base price and custom amounts
     ticket_total_cost = 0

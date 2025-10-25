@@ -158,7 +158,7 @@ def check_assoc_feature(request: HttpRequest, feature_slug: str) -> None:
         raise FeatureError(feature_slug, 0, request.path)
 
 
-def check_event_feature(request: HttpRequest, ctx: dict, feature_slug: str) -> None:
+def check_event_feature(request: HttpRequest, context: dict, feature_slug: str) -> None:
     """Check if event has required feature enabled.
 
     Validates that a specific feature is enabled for the current event context.
@@ -167,7 +167,7 @@ def check_event_feature(request: HttpRequest, ctx: dict, feature_slug: str) -> N
 
     Args:
         request: Django HTTP request object containing user and session data
-        ctx: Event context dictionary containing features and run information
+        context: Event context dictionary containing features and run information
         feature_slug: Feature slug string identifier to check for availability
 
     Raises:
@@ -179,9 +179,9 @@ def check_event_feature(request: HttpRequest, ctx: dict, feature_slug: str) -> N
         # Raises FeatureError if 'character_creation' feature is disabled
     """
     # Check if the requested feature slug exists in the event's enabled features
-    if feature_slug not in ctx["features"]:
+    if feature_slug not in context["features"]:
         # Raise detailed error with context information for debugging
-        raise FeatureError(feature_slug, ctx["run"].id, request.path)
+        raise FeatureError(feature_slug, context["run"].id, request.path)
 
 
 class MainPageError(Exception):

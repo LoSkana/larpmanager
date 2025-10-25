@@ -54,16 +54,16 @@ def orga_newsletter(request: HttpRequest, s: str) -> HttpResponse:
         Rendered newsletter template with recipient list
     """
     # Check user permissions for newsletter feature
-    ctx = check_event_permission(request, s, "orga_newsletter")
+    context = check_event_permission(request, s, "orga_newsletter")
 
     # Get active registrations (non-cancelled, non-waiting)
-    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    que = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
     que = que.exclude(ticket__tier=TicketTier.WAITING).select_related("member")
 
     # Extract member details for newsletter recipients
-    ctx["list"] = que.values_list("member__id", "member__email", "member__name", "member__surname")
+    context["list"] = que.values_list("member__id", "member__email", "member__name", "member__surname")
 
-    return render(request, "larpmanager/orga/users/newsletter.html", ctx)
+    return render(request, "larpmanager/orga/users/newsletter.html", context)
 
 
 @login_required
@@ -87,13 +87,13 @@ def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
         and excludes cancelled registrations.
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_safety")
-    get_event_cache_all(ctx)
+    context = check_event_permission(request, s, "orga_safety")
+    get_event_cache_all(context)
     min_length = 3
 
     # Build mapping of member IDs to their character list
     member_chars = {}
-    for _num, el in ctx["chars"].items():
+    for _num, el in context["chars"].items():
         if "player_id" not in el:
             continue
         # Initialize member's character list if not exists
@@ -103,8 +103,8 @@ def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     # Query registered members with safety information
-    ctx["list"] = []
-    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    context["list"] = []
+    que = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
     # Exclude members without safety data and optimize with select_related
     que = que.exclude(member__safety__isnull=True).select_related("member")
 
@@ -114,12 +114,12 @@ def orga_safety(request: HttpRequest, s: str) -> HttpResponse:
             # Attach character list to member if available
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
-            ctx["list"].append(el.member)
+            context["list"].append(el.member)
 
     # Sort members alphabetically by display name
-    ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
+    context["list"] = sorted(context["list"], key=lambda x: x.display_member())
 
-    return render(request, "larpmanager/orga/users/safety.html", ctx)
+    return render(request, "larpmanager/orga/users/safety.html", context)
 
 
 @login_required
@@ -142,13 +142,13 @@ def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
         characters and excludes cancelled registrations.
     """
     # Check user permissions and get event context
-    ctx = check_event_permission(request, s, "orga_diet")
-    get_event_cache_all(ctx)
+    context = check_event_permission(request, s, "orga_diet")
+    get_event_cache_all(context)
     min_length = 3
 
     # Build mapping of member IDs to their character names and numbers
     member_chars = {}
-    for _num, el in ctx["chars"].items():
+    for _num, el in context["chars"].items():
         if "player_id" not in el:
             continue
         if el["player_id"] not in member_chars:
@@ -156,8 +156,8 @@ def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     # Query all non-cancelled registrations with dietary preferences
-    ctx["list"] = []
-    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    context["list"] = []
+    que = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
     que = que.exclude(member__diet__isnull=True).select_related("member")
 
     # Filter members with substantial dietary info and attach character data
@@ -165,12 +165,12 @@ def orga_diet(request: HttpRequest, s: str) -> HttpResponse:
         if len(el.member.diet) > min_length:
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
-            ctx["list"].append(el.member)
+            context["list"].append(el.member)
 
     # Sort members alphabetically by display name
-    ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
+    context["list"] = sorted(context["list"], key=lambda x: x.display_member())
 
-    return render(request, "larpmanager/orga/users/diet.html", ctx)
+    return render(request, "larpmanager/orga/users/diet.html", context)
 
 
 @login_required
@@ -190,20 +190,20 @@ def orga_spam(request: HttpRequest, s: str) -> HttpResponse:
         containing email lists grouped by member language preferences
     """
     # Check user permissions for spam management feature
-    ctx = check_event_permission(request, s, "orga_spam")
+    context = check_event_permission(request, s, "orga_spam")
 
     # Get members already registered for current or future runs
     already = list(
-        Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
             "member_id", flat=True
         )
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"])])
 
     # Get all active association members (exclude empty memberships)
-    members = Membership.objects.filter(assoc_id=ctx["a_id"])
+    members = Membership.objects.filter(assoc_id=context["a_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     # Build language-grouped email lists for newsletter subscribers
@@ -220,8 +220,8 @@ def orga_spam(request: HttpRequest, s: str) -> HttpResponse:
         lst[language].append(m[1])
 
     # Add grouped email lists to template context
-    ctx["lst"] = lst
-    return render(request, "larpmanager/orga/users/spam.html", ctx)
+    context["lst"] = lst
+    return render(request, "larpmanager/orga/users/spam.html", context)
 
 
 @login_required
@@ -239,20 +239,20 @@ def orga_persuade(request, s: str) -> HttpResponse:
         HttpResponse: Rendered template with member persuasion data
     """
     # Check permissions and get event context
-    ctx = check_event_permission(request, s, "orga_persuade")
+    context = check_event_permission(request, s, "orga_persuade")
 
     # Get list of members already registered for current/future runs
     already = list(
-        Registration.objects.filter(run__event=ctx["event"], run__end__gte=date.today()).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
             "member_id", flat=True
         )
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"])])
 
     # Get active association members
-    members = Membership.objects.filter(assoc_id=ctx["a_id"])
+    members = Membership.objects.filter(assoc_id=context["a_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     # Filter out already registered/staff members
@@ -260,7 +260,7 @@ def orga_persuade(request, s: str) -> HttpResponse:
     que = que.exclude(id__in=already)
 
     # Get pre-registration status for all members
-    pre_regs = set(PreRegistration.objects.filter(event=ctx["event"]).values_list("member_id", flat=True))
+    pre_regs = set(PreRegistration.objects.filter(event=context["event"]).values_list("member_id", flat=True))
 
     # Calculate registration counts for each member
     reg_counts = {}
@@ -273,31 +273,31 @@ def orga_persuade(request, s: str) -> HttpResponse:
         reg_counts[el["member_id"]] = el["member_id__count"]
 
     # Build final member list with pre-registration and count data
-    ctx["lst"] = []
+    context["lst"] = []
     for m in que.values_list("id", "name", "surname", "nickname"):
         pre_reg = m[0] in pre_regs
         reg_count = 0
         if m[0] in reg_counts:
             reg_count = reg_counts[m[0]]
-        ctx["lst"].append((m[0], m[1], m[2], m[3], pre_reg, reg_count))
+        context["lst"].append((m[0], m[1], m[2], m[3], pre_reg, reg_count))
 
-    return render(request, "larpmanager/orga/users/persuade.html", ctx)
+    return render(request, "larpmanager/orga/users/persuade.html", context)
 
 
 @login_required
 def orga_questions(request: HttpRequest, s: str) -> HttpResponse:
     """Render questions page for event organizers with open and closed questions sorted by creation date."""
-    ctx = check_event_permission(request, s, "orga_questions")
+    context = check_event_permission(request, s, "orga_questions")
 
     # Get help questions separated by status
-    ctx["closed"], ctx["open"] = _get_help_questions(ctx, request)
+    context["closed"], context["open"] = _get_help_questions(context, request)
 
     # Sort open questions by creation date (oldest first)
-    ctx["open"].sort(key=lambda x: x.created)
+    context["open"].sort(key=lambda x: x.created)
     # Sort closed questions by creation date (newest first)
-    ctx["closed"].sort(key=lambda x: x.created, reverse=True)
+    context["closed"].sort(key=lambda x: x.created, reverse=True)
 
-    return render(request, "larpmanager/orga/users/questions.html", ctx)
+    return render(request, "larpmanager/orga/users/questions.html", context)
 
 
 @login_required
@@ -322,7 +322,7 @@ def orga_questions_answer(request: HttpRequest, s: str, r: int) -> HttpResponse:
         PermissionDenied: If user lacks required event permissions
     """
     # Check organizer permissions for this event and get context
-    ctx = check_event_permission(request, s, "orga_questions")
+    context = check_event_permission(request, s, "orga_questions")
 
     # Get the member who submitted the question
     member = Member.objects.get(pk=r)
@@ -335,8 +335,8 @@ def orga_questions_answer(request: HttpRequest, s: str, r: int) -> HttpResponse:
             hp = form.save(commit=False)
             hp.member = member
             hp.is_user = False  # Mark as organizer response
-            hp.assoc_id = ctx["a_id"]
-            hp.run = ctx["run"]
+            hp.assoc_id = context["a_id"]
+            hp.run = context["run"]
             hp.save()
 
             # Show success message and redirect back to questions list
@@ -347,40 +347,46 @@ def orga_questions_answer(request: HttpRequest, s: str, r: int) -> HttpResponse:
         form = OrgaHelpQuestionForm()
 
     # Add form and member to template context
-    ctx["form"] = form
-    ctx["member"] = member
+    context["form"] = form
+    context["member"] = member
 
     # Get cached event data (characters, factions, etc.)
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     # Find characters and factions associated with this member
-    ctx["reg_characters"] = []
-    ctx["reg_factions"] = []
-    for _num, char in ctx["chars"].items():
+    context["reg_characters"] = []
+    context["reg_factions"] = []
+    for _num, char in context["chars"].items():
         # Skip characters without assigned players
         if "player_id" not in char:
             continue
 
         # Add character if it belongs to the current member
         if char["player_id"] == member.id:
-            ctx["reg_characters"].append(char)
+            context["reg_characters"].append(char)
             # Collect all factions for this member's characters
             for fnum in char["factions"]:
-                ctx["reg_factions"].append(ctx["factions"][fnum])
+                context["reg_factions"].append(context["factions"][fnum])
 
     # Get all help questions for this member in this event, newest first
-    ctx["list"] = HelpQuestion.objects.filter(member_id=r, assoc_id=ctx["a_id"], run_id=ctx["run"]).order_by("-created")
+    context["list"] = HelpQuestion.objects.filter(
+        member_id=r, assoc_id=context["a_id"], run_id=context["run"]
+    ).order_by("-created")
 
-    return render(request, "larpmanager/orga/users/questions_answer.html", ctx)
+    return render(request, "larpmanager/orga/users/questions_answer.html", context)
 
 
 @login_required
 def orga_questions_close(request: HttpRequest, s: str, r: str) -> HttpResponse:
     """Close a help question for an organization event."""
-    ctx = check_event_permission(request, s, "orga_questions")
+    context = check_event_permission(request, s, "orga_questions")
 
     # Get the most recent help question for this member and run
-    h = HelpQuestion.objects.filter(member_id=r, assoc_id=ctx["a_id"], run_id=ctx["run"]).order_by("-created").first()
+    h = (
+        HelpQuestion.objects.filter(member_id=r, assoc_id=context["a_id"], run_id=context["run"])
+        .order_by("-created")
+        .first()
+    )
 
     # Mark the question as closed and save
     h.closed = True
@@ -427,14 +433,14 @@ def orga_send_mail(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered template with form or redirect response after successful submission
     """
     # Check user permissions and build event context
-    ctx = check_event_permission(request, s, "orga_send_mail")
+    context = check_event_permission(request, s, "orga_send_mail")
 
     if request.method == "POST":
         # Process form submission for mail sending
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing using current run
-            send_mail_batch(request, run_id=ctx["run"].id)
+            send_mail_batch(request, run_id=context["run"].id)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
@@ -442,8 +448,8 @@ def orga_send_mail(request: HttpRequest, s: str) -> HttpResponse:
         form = SendMailForm()
 
     # Add form to context and render template
-    ctx["form"] = form
-    return render(request, "larpmanager/exe/users/send_mail.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/exe/users/send_mail.html", context)
 
 
 @login_required
@@ -461,11 +467,11 @@ def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered template with email archive data and pagination
     """
     # Check user permissions for accessing email archive
-    ctx = check_event_permission(request, s, "orga_archive_email")
+    context = check_event_permission(request, s, "orga_archive_email")
 
     # Define display fields for email archive table
     # Each tuple contains (field_name, display_label)
-    ctx.update(
+    context.update(
         {
             "fields": [
                 ("recipient", _("Recipient")),
@@ -486,7 +492,7 @@ def orga_archive_email(request: HttpRequest, s: str) -> HttpResponse:
     )
 
     # Return paginated email archive using the Email model
-    return orga_paginate(request, ctx, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
+    return orga_paginate(request, context, Email, "larpmanager/exe/users/archive_mail.html", "orga_read_mail")
 
 
 @login_required
@@ -502,12 +508,12 @@ def orga_read_mail(request: HttpRequest, s: str, nm: str) -> HttpResponse:
         Rendered template with email content.
     """
     # Check permissions and get event context
-    ctx = check_event_permission(request, s, "orga_archive_email")
+    context = check_event_permission(request, s, "orga_archive_email")
 
     # Retrieve the specific email for display
-    ctx["email"] = get_mail(request, ctx, nm)
+    context["email"] = get_mail(request, context, nm)
 
-    return render(request, "larpmanager/exe/users/read_mail.html", ctx)
+    return render(request, "larpmanager/exe/users/read_mail.html", context)
 
 
 @login_required
@@ -530,14 +536,14 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
         Displays only non-cancelled registrations and event staff members.
     """
     # Check user permissions for accessing sensitive data
-    ctx = check_event_permission(request, s, "orga_sensitive")
+    context = check_event_permission(request, s, "orga_sensitive")
 
     # Load all event-related cache data
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     # Build mapping of member IDs to their character assignments
     member_chars = {}
-    for _num, el in ctx["chars"].items():
+    for _num, el in context["chars"].items():
         if "player_id" not in el:
             continue
         if el["player_id"] not in member_chars:
@@ -546,17 +552,19 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
 
     # Collect all relevant member IDs (registered participants + staff)
     member_list = list(
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).values_list("member_id", flat=True)
+        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).values_list(
+            "member_id", flat=True
+        )
     )
-    member_list.extend([mb.id for mb in get_event_staffers(ctx["run"].event)])
+    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event)])
 
     # Define member model and fields to display
     member_cls: type[Member] = Member
     member_fields = ["name", "surname"] + sorted(request.assoc["members_fields"])
 
     # Query and process member data
-    ctx["list"] = Member.objects.filter(id__in=member_list).order_by("created")
-    for el in ctx["list"]:
+    context["list"] = Member.objects.filter(id__in=member_list).order_by("created")
+    for el in context["list"]:
         # Attach character assignments to each member
         if el.id in member_chars:
             el.chars = member_chars[el.id]
@@ -565,7 +573,7 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
         member_field_correct(el, member_fields)
 
     # Build field metadata for template display
-    ctx["fields"] = {}
+    context["fields"] = {}
     for field_name in member_fields:
         if not field_name:
             continue
@@ -573,12 +581,12 @@ def orga_sensitive(request: HttpRequest, s: str) -> HttpResponse:
         if field_name in ["diet", "safety", "profile", "newsletter", "language"]:
             continue
         # noinspection PyUnresolvedReferences, PyProtectedMember
-        ctx["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
+        context["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
 
     # Sort members by display name for consistent ordering
-    ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
+    context["list"] = sorted(context["list"], key=lambda x: x.display_member())
 
-    return render(request, "larpmanager/orga/users/sensitive.html", ctx)
+    return render(request, "larpmanager/orga/users/sensitive.html", context)
 
 
 def member_field_correct(member: object, member_fields: list[str]) -> None:

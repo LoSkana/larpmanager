@@ -73,26 +73,26 @@ def get_cache_assoc_role(ar_id: int) -> dict:
         PermissionError: If the association role cannot be found or accessed.
     """
     # Generate cache key for this association role
-    key = cache_assoc_role_key(ar_id)
+    cache_key = cache_assoc_role_key(ar_id)
 
     # Try to get cached result first
-    res = cache.get(key)
+    cached_result = cache.get(cache_key)
 
-    if res is None:
+    if cached_result is None:
         # Cache miss - fetch from database
         try:
-            ar = AssocRole.objects.get(pk=ar_id)
+            assoc_role = AssocRole.objects.get(pk=ar_id)
         except Exception as err:
             # Convert any database error to permission error
             raise PermissionError() from err
 
         # Process the association role data
-        res = get_assoc_role(ar)
+        cached_result = get_assoc_role(assoc_role)
 
         # Cache the result for future requests
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_result
 
 
 def remove_association_role_cache(association_role_id):
@@ -219,25 +219,25 @@ def get_cache_event_role(ev_id: int) -> dict:
         PermissionError: If the event role cannot be found or accessed.
     """
     # Generate cache key for this specific event role
-    key = cache_event_role_key(ev_id)
-    res = cache.get(key)
+    cache_key = cache_event_role_key(ev_id)
+    cached_result = cache.get(cache_key)
 
     # If not in cache, fetch from database
-    if res is None:
+    if cached_result is None:
         try:
             # Retrieve EventRole object from database
-            ar = EventRole.objects.get(pk=ev_id)
-        except Exception as err:
+            event_role = EventRole.objects.get(pk=ev_id)
+        except Exception as error:
             # Convert any database error to PermissionError
-            raise PermissionError() from err
+            raise PermissionError() from error
 
         # Process the event role data
-        res = get_event_role(ar)
+        cached_result = get_event_role(event_role)
 
         # Cache the result for future requests
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_result
 
 
 def remove_event_role_cache(assignment_role_id):
@@ -293,12 +293,12 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
     return is_organizer, permission_slugs, role_names
 
 
-def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permission_name=None) -> bool:
+def has_event_permission(request: HttpRequest, context: dict, event_slug: str, permission_name=None) -> bool:
     """Check if user has permission for a specific event.
 
     Args:
         request: Django HTTP request object containing user information
-        ctx: Context dictionary containing association role information
+        context: Context dictionary containing association role information
         event_slug: Event slug identifier
         permission_name: Permission name(s) to check. Can be string, list, or None
 
@@ -310,11 +310,15 @@ def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permi
         If permission_name is a list, returns True if user has any of the permissions.
     """
     # Early return if request is invalid or user lacks member attribute
-    if not request or not hasattr(request.user, "member") or check_managed(ctx, permission_name, is_association=False):
+    if (
+        not request
+        or not hasattr(request.user, "member")
+        or check_managed(context, permission_name, is_association=False)
+    ):
         return False
 
     # Check if user has admin role in association (role 1)
-    if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
+    if "assoc_role" in context and 1 in context["assoc_role"]:
         return True
 
     # Get event-specific roles and permissions for the user

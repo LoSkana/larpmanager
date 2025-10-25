@@ -164,8 +164,8 @@ class SelectNewAbility(forms.Form):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic choice field from context."""
         # Extract context parameters from kwargs
-        ctx = self.params = kwargs.pop("ctx")
+        context = self.params = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
         # Add selection field with choices from context
-        self.fields["sel"] = forms.ChoiceField(choices=ctx["list"])
+        self.fields["sel"] = forms.ChoiceField(choices=context["list"])

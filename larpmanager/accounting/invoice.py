@@ -31,7 +31,7 @@ from larpmanager.utils.common import clean, detect_delimiter
 from larpmanager.utils.tasks import notify_admins
 
 
-def invoice_verify(ctx: dict, csv_upload: InMemoryUploadedFile) -> int:
+def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
     """Verify and match payments from CSV upload against pending invoices.
 
     Processes a CSV file containing payment data and matches entries against
@@ -39,7 +39,7 @@ def invoice_verify(ctx: dict, csv_upload: InMemoryUploadedFile) -> int:
     Marks matching invoices as verified when payment amounts are sufficient.
 
     Args:
-        ctx (dict): Context dictionary containing 'todo' key with list of pending invoices
+        context (dict): Context dictionary containing 'todo' key with list of pending invoices
         csv_upload (InMemoryUploadedFile): Uploaded CSV file containing payment data with
             format [amount, causal, ...] where amount uses dot for thousands
             and comma for decimal separator
@@ -69,7 +69,7 @@ def invoice_verify(ctx: dict, csv_upload: InMemoryUploadedFile) -> int:
             continue
 
         # Check payment against all pending invoices
-        for el in ctx["todo"]:
+        for el in context["todo"]:
             # Skip already verified invoices
             if el.verified:
                 continue

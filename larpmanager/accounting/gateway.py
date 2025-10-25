@@ -54,7 +54,7 @@ from larpmanager.utils.tasks import my_send_mail, notify_admins
 logger = logging.getLogger(__name__)
 
 
-def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
+def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
     """Create Satispay payment form and initialize payment.
 
     Creates a new Satispay payment request using the provided invoice and amount,
@@ -63,7 +63,7 @@ def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: Paymen
 
     Args:
         request: Django HTTP request object used to build absolute URIs
-        ctx: Context dictionary containing payment configuration including
+        context: Context dictionary containing payment configuration including
             satispay_key_id, payment_currency, and other payment settings
         invoice: PaymentInvoice instance to be updated with payment ID
         amount: Payment amount in the base currency unit
@@ -76,11 +76,11 @@ def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: Paymen
         Http404: If Satispay API call fails or returns non-200 status code
     """
     # Build redirect and callback URLs for payment flow
-    ctx["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
-    ctx["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
+    context["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
+    context["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
 
     # Load Satispay authentication credentials
-    key_id = ctx["satispay_key_id"]
+    key_id = context["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
     # Future implementation for payment expiration
@@ -91,13 +91,13 @@ def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: Paymen
     # body_params = {
     #     "expire_date": expiration_date,
     #     "external_code": invoice.causal,
-    #     "redirect_url": ctx["redirect"],
-    #     "callback_url": ctx["callback"],
+    #     "redirect_url": context["redirect"],
+    #     "callback_url": context["callback"],
     # }
 
     # Create payment request with Satispay API (amount in cents)
     response = satispaython.create_payment(
-        key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], ctx["callback"]
+        key_id, rsa_key, math.ceil(amount * 100), context["payment_currency"], context["callback"]
     )
 
     # Validate API response and handle errors
@@ -113,19 +113,19 @@ def get_satispay_form(request: HttpRequest, ctx: dict[str, Any], invoice: Paymen
         invoice.save()
 
     # Add payment ID to context for form rendering
-    ctx["pay_id"] = aux["id"]
+    context["pay_id"] = aux["id"]
 
 
-def satispay_check(request, ctx):
+def satispay_check(request, context):
     """Check status of pending Satispay payments.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
+        context: Context dictionary with payment configuration
     """
-    update_payment_details(request, ctx)
+    update_payment_details(request, context)
 
-    if "satispay_key_id" not in ctx:
+    if "satispay_key_id" not in context:
         return
 
     que = PaymentInvoice.objects.filter(
@@ -209,12 +209,12 @@ def satispay_webhook(request):
     satispay_verify(request, cod)
 
 
-def get_paypal_form(request, ctx, invoice, amount):
+def get_paypal_form(request, context, invoice, amount):
     """Create PayPal payment form.
 
     Args:
         request: Django HTTP request object
-        ctx: Context dictionary with payment configuration
+        context: Context dictionary with payment configuration
         invoice: PaymentInvoice instance
         amount (float): Payment amount
 
@@ -222,9 +222,9 @@ def get_paypal_form(request, ctx, invoice, amount):
         dict: PayPal form context data
     """
     paypal_dict = {
-        "business": ctx["paypal_id"],
+        "business": context["paypal_id"],
         "amount": float(amount),
-        "currency_code": ctx["payment_currency"],
+        "currency_code": context["payment_currency"],
         "item_name": invoice.causal,
         "invoice": invoice.cod,
         "notify_url": request.build_absolute_uri(reverse("paypal-ipn")),
@@ -232,7 +232,7 @@ def get_paypal_form(request, ctx, invoice, amount):
         "cancel_return": request.build_absolute_uri(reverse("acc_cancelled")),
     }
     # logger.debug(f"PayPal dict: {paypal_dict}")
-    ctx["paypal_form"] = PayPalPaymentsForm(initial=paypal_dict)
+    context["paypal_form"] = PayPalPaymentsForm(initial=paypal_dict)
 
 
 def handle_valid_paypal_ipn(ipn_obj):
@@ -249,7 +249,7 @@ def handle_valid_paypal_ipn(ipn_obj):
         # Check that the receiver email is the same we previously
         # set on the `business` field. (The user could tamper with
         # that fields on the payment form before it goes to PayPal)
-        # ~ if ipn_obj.receiver_email != ctx['paypal_id']:
+        # ~ if ipn_obj.receiver_email != context['paypal_id']:
         # ~ # Not a valid payment
         # ~ return
 
@@ -276,7 +276,7 @@ def handle_invalid_paypal_ipn(ipn_obj):
     notify_admins("paypal ko", body)
 
 
-def get_stripe_form(request, ctx: dict, invoice, amount: float) -> None:
+def get_stripe_form(request, context: dict, invoice, amount: float) -> None:
     """Create Stripe payment form and session.
 
     Creates a Stripe product and price for the given invoice amount, then
@@ -285,16 +285,16 @@ def get_stripe_form(request, ctx: dict, invoice, amount: float) -> None:
 
     Args:
         request: Django HTTP request object for building absolute URLs
-        ctx: Context dictionary containing payment configuration including
+        context: Context dictionary containing payment configuration including
              'stripe_sk_api' (secret key) and 'payment_currency'
         invoice: PaymentInvoice instance to be paid
         amount: Payment amount in the configured currency
 
     Returns:
-        None: Updates ctx dictionary with 'stripe_ck' checkout session
+        None: Updates context dictionary with 'stripe_ck' checkout session
     """
     # Set Stripe API key from context configuration
-    stripe.api_key = ctx["stripe_sk_api"]
+    stripe.api_key = context["stripe_sk_api"]
 
     # Create a new Stripe product with invoice description
     prod = stripe.Product.create(name=invoice.causal)
@@ -303,7 +303,7 @@ def get_stripe_form(request, ctx: dict, invoice, amount: float) -> None:
     # Stripe requires amounts in smallest currency unit (cents for EUR/USD)
     price = stripe.Price.create(
         unit_amount=str(int(round(amount, 2) * 100)),
-        currency=ctx["payment_currency"],
+        currency=context["payment_currency"],
         product=prod.id,
     )
 
@@ -321,7 +321,7 @@ def get_stripe_form(request, ctx: dict, invoice, amount: float) -> None:
     )
 
     # Add checkout session to context for template rendering
-    ctx["stripe_ck"] = checkout_session
+    context["stripe_ck"] = checkout_session
 
     # Store price ID in invoice for payment tracking
     invoice.cod = price.id
@@ -337,12 +337,12 @@ def stripe_webhook(request):
     Returns:
         HttpResponse: Success or error response for webhook processing
     """
-    ctx = def_user_context(request)
-    update_payment_details(request, ctx)
-    stripe.api_key = ctx["stripe_sk_api"]
+    context = def_user_context(request)
+    update_payment_details(request, context)
+    stripe.api_key = context["stripe_sk_api"]
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
-    endpoint_secret = ctx["stripe_webhook_secret"]
+    endpoint_secret = context["stripe_webhook_secret"]
 
     try:
         event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
@@ -379,7 +379,7 @@ def stripe_webhook(request):
 
 
 def get_sumup_form(
-    request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
+    request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 
@@ -389,7 +389,7 @@ def get_sumup_form(
 
     Args:
         request: Django HTTP request object containing request metadata
-        ctx: Context dictionary containing SumUp payment configuration:
+        context: Context dictionary containing SumUp payment configuration:
             - sumup_client_id: SumUp API client ID
             - sumup_client_secret: SumUp API client secret
             - sumup_merchant_id: SumUp merchant identifier
@@ -398,7 +398,7 @@ def get_sumup_form(
         amount: Payment amount to charge (will be converted to float)
 
     Raises:
-        KeyError: If required configuration keys are missing from ctx
+        KeyError: If required configuration keys are missing from context
         requests.RequestException: If API requests fail
         json.JSONDecodeError: If API response is not valid JSON
     """
@@ -406,8 +406,8 @@ def get_sumup_form(
     auth_url = "https://api.sumup.com/token"
     auth_headers = {"Content-Type": "application/x-www-form-urlencoded"}
     auth_payload = {
-        "client_id": ctx["sumup_client_id"],
-        "client_secret": ctx["sumup_client_secret"],
+        "client_id": context["sumup_client_id"],
+        "client_secret": context["sumup_client_secret"],
         "grant_type": "client_credentials",
     }
 
@@ -424,8 +424,8 @@ def get_sumup_form(
         {
             "checkout_reference": invoice.cod,
             "amount": float(amount),
-            "currency": ctx["payment_currency"],
-            "merchant_code": ctx["sumup_merchant_id"],
+            "currency": context["payment_currency"],
+            "merchant_code": context["sumup_merchant_id"],
             "description": invoice.causal,
             # Configure callback URLs for payment flow
             "return_url": request.build_absolute_uri(reverse("acc_webhook_sumup")),
@@ -448,7 +448,7 @@ def get_sumup_form(
     checkout_data = json.loads(checkout_response.text)
 
     # Store checkout ID in context and update invoice for tracking
-    ctx["sumup_checkout_id"] = checkout_data["id"]
+    context["sumup_checkout_id"] = checkout_data["id"]
     invoice.cod = checkout_data["id"]
     invoice.save()
 
@@ -507,7 +507,7 @@ def redsys_invoice_cod() -> str:
     raise ValueError("Too many attempts to generate the code")
 
 
-def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentInvoice, amount: Decimal) -> None:
+def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create Redsys payment form with encrypted parameters.
 
     Generates a secure payment form for Redsys payment gateway by creating
@@ -515,19 +515,19 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
 
     Args:
         request: Django HTTP request object containing association data
-        ctx: Context dictionary with Redsys payment configuration including
+        context: Context dictionary with Redsys payment configuration including
              merchant code, terminal, currency, secret key, and sandbox flag
         invoice: PaymentInvoice instance to be updated with payment code
         amount: Payment amount in decimal format
 
     Returns:
-        None: Updates ctx dictionary in-place with 'redsys_form' key containing
+        None: Updates context dictionary in-place with 'redsys_form' key containing
               encrypted payment data ready for form submission
 
     Side Effects:
         - Updates invoice.cod with generated payment code
         - Saves invoice to database
-        - Adds 'redsys_form' to ctx dictionary
+        - Adds 'redsys_form' to context dictionary
     """
     # Generate unique invoice code and save to database
     invoice.cod = redsys_invoice_cod()
@@ -536,7 +536,7 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # Prepare basic payment parameters for Redsys gateway
     values = {
         "DS_MERCHANT_AMOUNT": float(amount),
-        "DS_MERCHANT_CURRENCY": int(ctx["redsys_merchant_currency"]),
+        "DS_MERCHANT_CURRENCY": int(context["redsys_merchant_currency"]),
         "DS_MERCHANT_ORDER": invoice.cod,
         "DS_MERCHANT_PRODUCTDESCRIPTION": invoice.causal,
         "DS_MERCHANT_TITULAR": request.assoc["name"],
@@ -545,9 +545,9 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # Add merchant identification and terminal configuration
     values.update(
         {
-            "DS_MERCHANT_MERCHANTCODE": ctx["redsys_merchant_code"],
+            "DS_MERCHANT_MERCHANTCODE": context["redsys_merchant_code"],
             "DS_MERCHANT_MERCHANTNAME": request.assoc["name"],
-            "DS_MERCHANT_TERMINAL": ctx["redsys_merchant_terminal"],
+            "DS_MERCHANT_TERMINAL": context["redsys_merchant_terminal"],
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Standard payment
         }
     )
@@ -562,22 +562,22 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     )
 
     # Add optional payment methods if configured
-    if "key" in ctx and ctx["key"]:
-        values["DS_MERCHANT_PAYMETHODS"] = ctx["key"]
+    if "key" in context and context["key"]:
+        values["DS_MERCHANT_PAYMETHODS"] = context["key"]
 
     # Determine sandbox mode from configuration
-    redsys_sandbox = int(ctx["redsys_sandbox"]) == 1
+    redsys_sandbox = int(context["redsys_sandbox"]) == 1
 
     # Initialize Redsys client with merchant credentials
     redsyspayment = RedSysClient(
-        business_code=ctx["redsys_merchant_code"],
-        secret_key=ctx["redsys_secret_key"],
+        business_code=context["redsys_merchant_code"],
+        secret_key=context["redsys_secret_key"],
         sandbox=redsys_sandbox,
     )
 
     # Generate encrypted form data and add to context
-    ctx["redsys_form"] = redsyspayment.redsys_generate_request(values)
-    # logger.debug(f"Redsys form: {ctx['redsys_form']}")
+    context["redsys_form"] = redsyspayment.redsys_generate_request(values)
+    # logger.debug(f"Redsys form: {context['redsys_form']}")
 
     # ~ values = {
     # ~ 'DS_MERCHANT_AMOUNT': 10.0,
@@ -622,11 +622,11 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # ~ msg = msg.encode('ascii')
     # ~ msg = base64.b64encode(msg)
     # logger.debug(f"Decoded message: {msg.decode('ascii')}")
-    # ~ ctx['merchant_parameters'] = msg.decode('ascii')
+    # ~ context['merchant_parameters'] = msg.decode('ascii')
 
     # ~ # 3DES encryption between the merchant key (decoded in BASE 64) and the order
-    # ~ #print(ctx['redsys_secret_key'])
-    # ~ key = base64.b64decode(ctx['redsys_secret_key'])
+    # ~ #print(context['redsys_secret_key'])
+    # ~ key = base64.b64decode(context['redsys_secret_key'])
     # ~ #print(key.hex())
     # ~ #print(key)
     # ~ code = invoice.cod
@@ -645,7 +645,7 @@ def get_redsys_form(request: HttpRequest, ctx: dict[str, Any], invoice: PaymentI
     # Print (Say)
     # ~ #sig = Sig.encode ('ASCII')
     # Print (sig.hex ())
-    # ~ ctx['signature'] = sig
+    # ~ context['signature'] = sig
 
 
 def redsys_webhook(request, ok: bool = True) -> bool:
@@ -662,8 +662,8 @@ def redsys_webhook(request, ok: bool = True) -> bool:
         bool: True if payment was successfully processed, False otherwise
     """
     # Initialize user context and update payment details
-    ctx = def_user_context(request)
-    update_payment_details(request, ctx)
+    context = def_user_context(request)
+    update_payment_details(request, context)
 
     # Extract RedSys parameters and signature from POST data
     # ver = request.POST["Ds_SignatureVersion"]  # Version not currently used
@@ -671,10 +671,10 @@ def redsys_webhook(request, ok: bool = True) -> bool:
     sig = request.POST["Ds_Signature"]
 
     # Initialize RedSys client with merchant credentials
-    redsyspayment = RedSysClient(business_code=ctx["redsys_merchant_code"], secret_key=ctx["redsys_secret_key"])
+    redsyspayment = RedSysClient(business_code=context["redsys_merchant_code"], secret_key=context["redsys_secret_key"])
 
     # Validate the webhook signature and extract order code
-    cod = redsyspayment.redsys_check_response(sig, pars, ctx)
+    cod = redsyspayment.redsys_check_response(sig, pars, context)
 
     # Process successful payment if signature validation passed
     if cod:
@@ -819,7 +819,7 @@ class RedSysClient:
             "Ds_Signature": signature,
         }
 
-    def redsys_check_response(self, signature: str, b64_merchant_parameters: str, ctx: dict) -> str | None:
+    def redsys_check_response(self, signature: str, b64_merchant_parameters: str, context: dict) -> str | None:
         """Verify Redsys payment response signature and extract order number.
 
         Validates the cryptographic signature of payment response from Redsys gateway
@@ -829,7 +829,7 @@ class RedSysClient:
         Args:
             signature: Received HMAC-SHA256 signature from Redsys
             b64_merchant_parameters: Base64-encoded JSON merchant parameters
-            ctx: Context dictionary containing association ID (a_id)
+            context: Context dictionary containing association ID (a_id)
 
         Returns:
             str: Order number if signature valid and payment successful
@@ -843,7 +843,7 @@ class RedSysClient:
         merchant_parameters = json.loads(base64.b64decode(b64_merchant_parameters).decode())
 
         # Get association for executive notifications
-        assoc = Association.objects.get(pk=ctx["a_id"])
+        assoc = Association.objects.get(pk=context["a_id"])
 
         # Validate response code presence
         if "Ds_Response" not in merchant_parameters:

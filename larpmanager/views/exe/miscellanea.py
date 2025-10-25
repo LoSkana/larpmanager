@@ -46,12 +46,12 @@ from larpmanager.utils.miscellanea import get_warehouse_optionals
 def exe_urlshortner(request: HttpRequest) -> HttpResponse:
     """Render URL shortener management page for association executives."""
     # Check user has permission to access URL shortener management
-    ctx = check_assoc_permission(request, "exe_urlshortner")
+    context = check_assoc_permission(request, "exe_urlshortner")
 
     # Get all URL shorteners for the current association
-    ctx["list"] = UrlShortner.objects.filter(assoc_id=request.assoc["id"])
+    context["list"] = UrlShortner.objects.filter(assoc_id=request.assoc["id"])
 
-    return render(request, "larpmanager/exe/url_shortner.html", ctx)
+    return render(request, "larpmanager/exe/url_shortner.html", context)
 
 
 @login_required
@@ -63,12 +63,12 @@ def exe_urlshortner_edit(request, num):
 def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
     """Display list of warehouse containers for the current association."""
     # Check user permissions for warehouse container management
-    ctx = check_assoc_permission(request, "exe_warehouse_containers")
+    context = check_assoc_permission(request, "exe_warehouse_containers")
 
     # Fetch all containers belonging to the current association
-    ctx["list"] = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"])
+    context["list"] = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"])
 
-    return render(request, "larpmanager/exe/warehouse/containers.html", ctx)
+    return render(request, "larpmanager/exe/warehouse/containers.html", context)
 
 
 @login_required
@@ -80,12 +80,12 @@ def exe_warehouse_containers_edit(request, num):
 def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
     """Display warehouse tags for the current organization."""
     # Check user has permission to view warehouse tags
-    ctx = check_assoc_permission(request, "exe_warehouse_tags")
+    context = check_assoc_permission(request, "exe_warehouse_tags")
 
     # Fetch all tags for the organization with related items
-    ctx["list"] = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("items")
+    context["list"] = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("items")
 
-    return render(request, "larpmanager/exe/warehouse/tags.html", ctx)
+    return render(request, "larpmanager/exe/warehouse/tags.html", context)
 
 
 @login_required
@@ -97,19 +97,19 @@ def exe_warehouse_tags_edit(request, num):
 def exe_warehouse_items(request) -> HttpResponse:
     """Display warehouse items for organization administrators."""
     # Check user permissions for warehouse management
-    ctx = check_assoc_permission(request, "exe_warehouse_items")
+    context = check_assoc_permission(request, "exe_warehouse_items")
 
     # Handle any bulk operations on items
-    handle_bulk_items(request, ctx)
+    handle_bulk_items(request, context)
 
     # Get warehouse items for current association with related data
-    ctx["list"] = WarehouseItem.objects.filter(assoc_id=request.assoc["id"])
-    ctx["list"] = ctx["list"].select_related("container").prefetch_related("tags")
+    context["list"] = WarehouseItem.objects.filter(assoc_id=request.assoc["id"])
+    context["list"] = context["list"].select_related("container").prefetch_related("tags")
 
     # Add optional warehouse context data
-    get_warehouse_optionals(ctx, [5])
+    get_warehouse_optionals(context, [5])
 
-    return render(request, "larpmanager/exe/warehouse/items.html", ctx)
+    return render(request, "larpmanager/exe/warehouse/items.html", context)
 
 
 @login_required
@@ -121,15 +121,15 @@ def exe_warehouse_items_edit(request, num):
 def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
     """Render warehouse movements list for association."""
     # Check permissions and initialize context
-    ctx = check_assoc_permission(request, "exe_warehouse_movements")
+    context = check_assoc_permission(request, "exe_warehouse_movements")
 
     # Fetch movements with item details
-    ctx["list"] = WarehouseMovement.objects.filter(assoc_id=request.assoc["id"]).select_related("item")
+    context["list"] = WarehouseMovement.objects.filter(assoc_id=request.assoc["id"]).select_related("item")
 
     # Add optional warehouse fields
-    get_warehouse_optionals(ctx, [3])
+    get_warehouse_optionals(context, [3])
 
-    return render(request, "larpmanager/exe/warehouse/movements.html", ctx)
+    return render(request, "larpmanager/exe/warehouse/movements.html", context)
 
 
 @login_required

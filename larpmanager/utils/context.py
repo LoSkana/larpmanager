@@ -40,22 +40,22 @@ def cache_association(request: HttpRequest) -> dict:
             - google_tag: Google Analytics tag ID from settings
             - hotjar_siteid: Hotjar site ID from settings
     """
-    ctx = {}
+    context = {}
 
     # Add association object if available in request
     if hasattr(request, "assoc"):
-        ctx["assoc"] = request.assoc
+        context["assoc"] = request.assoc
 
     # Set staging flag for staging environment
     if request.enviro == "staging":
-        ctx["staging"] = 1
+        context["staging"] = 1
 
     # Add language options for users without member association
     if not hasattr(request, "user") or not hasattr(request.user, "member"):
-        ctx["languages"] = conf_settings.LANGUAGES
+        context["languages"] = conf_settings.LANGUAGES
 
     # Add tracking and analytics configuration
-    ctx["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
-    ctx["hotjar_siteid"] = getattr(conf_settings, "HOTJAR_SITEID", None)
+    context["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
+    context["hotjar_siteid"] = getattr(conf_settings, "HOTJAR_SITEID", None)
 
-    return ctx
+    return context

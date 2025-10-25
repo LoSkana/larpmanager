@@ -272,7 +272,7 @@ def my_send_simple_mail(
 
             # Check if event has custom SMTP configuration
             event_smtp_host_user = get_event_config(
-                event.id, "mail_server_host_user", "", ctx=cache_context, bypass_cache=True
+                event.id, "mail_server_host_user", "", context=cache_context, bypass_cache=True
             )
 
             # Only apply event settings if SMTP host user is configured
@@ -282,16 +282,16 @@ def my_send_simple_mail(
 
                 # Create custom SMTP connection for event
                 smtp_connection = get_connection(
-                    host=get_event_config(event.id, "mail_server_host", "", ctx=cache_context, bypass_cache=True),
-                    port=get_event_config(event.id, "mail_server_port", "", ctx=cache_context, bypass_cache=True),
+                    host=get_event_config(event.id, "mail_server_host", "", context=cache_context, bypass_cache=True),
+                    port=get_event_config(event.id, "mail_server_port", "", context=cache_context, bypass_cache=True),
                     username=get_event_config(
-                        event.id, "mail_server_host_user", "", ctx=cache_context, bypass_cache=True
+                        event.id, "mail_server_host_user", "", context=cache_context, bypass_cache=True
                     ),
                     password=get_event_config(
-                        event.id, "mail_server_host_password", "", ctx=cache_context, bypass_cache=True
+                        event.id, "mail_server_host_password", "", context=cache_context, bypass_cache=True
                     ),
                     use_tls=get_event_config(
-                        event.id, "mail_server_use_tls", False, ctx=cache_context, bypass_cache=True
+                        event.id, "mail_server_use_tls", False, context=cache_context, bypass_cache=True
                     ),
                 )
                 event_settings_applied = True

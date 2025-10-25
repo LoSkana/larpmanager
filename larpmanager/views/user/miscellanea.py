@@ -76,16 +76,16 @@ def util(request, cod):
 def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
     """Redirect to help page for a specific run."""
     # Set up context with user data and association ID
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Get the run object or raise 404 if not found
     try:
-        ctx["run"] = Run.objects.get(pk=n, event__assoc_id=ctx["a_id"])
+        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["a_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
 
     # Redirect to help page with run slug
-    return redirect("help", s=ctx["run"].get_slug())
+    return redirect("help", s=context["run"].get_slug())
 
 
 @login_required
@@ -105,22 +105,22 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
     """
     # Initialize context based on whether this is event-specific or general help
     if s:
-        ctx = get_event_run(request, s, include_status=True)
+        context = get_event_run(request, s, include_status=True)
     else:
-        ctx = def_user_context(request)
-        ctx["a_id"] = request.assoc["id"]
+        context = def_user_context(request)
+        context["a_id"] = request.assoc["id"]
 
     # Handle form submission for new help questions
     if request.method == "POST":
-        form = HelpQuestionForm(request.POST, request.FILES, ctx=ctx)
+        form = HelpQuestionForm(request.POST, request.FILES, context=context)
         if form.is_valid():
             # Create help question instance without saving to database yet
             hp = form.save(commit=False)
             hp.member = request.user.member
 
             # Associate question with organization if context is available
-            if ctx["a_id"] != 0:
-                hp.assoc_id = ctx["a_id"]
+            if context["a_id"] != 0:
+                hp.assoc_id = context["a_id"]
 
             # Save question and redirect to prevent form resubmission
             hp.save()
@@ -128,19 +128,19 @@ def help(request: HttpRequest, s: Optional[str] = None) -> HttpResponse:
             return redirect(request.path_info)
     else:
         # Display empty form for GET requests
-        form = HelpQuestionForm(ctx=ctx)
+        form = HelpQuestionForm(context=context)
 
     # Prepare template context with form and user's question history
-    ctx["form"] = form
-    ctx["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
+    context["form"] = form
+    context["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
 
     # Filter questions by association context
-    if ctx["a_id"] != 0:
-        ctx["list"] = ctx["list"].filter(assoc_id=ctx["a_id"])
+    if context["a_id"] != 0:
+        context["list"] = context["list"].filter(assoc_id=context["a_id"])
     else:
-        ctx["list"] = ctx["list"].filter(assoc=None)
+        context["list"] = context["list"].filter(assoc=None)
 
-    return render(request, "larpmanager/member/help.html", ctx)
+    return render(request, "larpmanager/member/help.html", context)
 
 
 @login_required
@@ -162,7 +162,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         Http404: If HelpQuestion doesn't exist or user lacks permissions
     """
     # Get default user context with permissions
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Attempt to retrieve the help question by primary key
     try:
@@ -171,7 +171,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         raise Http404("HelpQuestion does not exist") from err
 
     # Check access permissions: owner or association role required
-    if hp.member != request.user.member and not ctx["assoc_role"]:
+    if hp.member != request.user.member and not context["assoc_role"]:
         raise Http404("illegal access")
 
     # Redirect to attachment URL for authorized users
@@ -190,12 +190,12 @@ def handout_ext(request: HttpRequest, s: str, cod: str) -> HttpResponse:
         PDF file response with the handout content
     """
     # Retrieve event/run context and fetch handout by code
-    ctx = get_event_run(request, s)
-    ctx["handout"] = get_object_or_404(Handout, event=ctx["event"], cod=cod)
+    context = get_event_run(request, s)
+    context["handout"] = get_object_or_404(Handout, event=context["event"], cod=cod)
 
     # Generate PDF and return as downloadable response
-    fp = print_handout(ctx)
-    return return_pdf(fp, str(ctx["handout"]))
+    fp = print_handout(context)
+    return return_pdf(fp, str(context["handout"]))
 
 
 def album_aux(request, context, parent_album):
@@ -234,16 +234,16 @@ def album_aux(request, context, parent_album):
 
 @login_required
 def album(request, s):
-    ctx = get_event_run(request, s)
-    return album_aux(request, ctx, None)
+    context = get_event_run(request, s)
+    return album_aux(request, context, None)
 
 
 @login_required
 def album_sub(request: HttpRequest, s: str, num: int) -> HttpResponse:
     """View handler for displaying a specific photo album within an event run."""
-    ctx = get_event_run(request, s)
-    get_album(ctx, num)
-    return album_aux(request, ctx, ctx["album"])
+    context = get_event_run(request, s)
+    get_album(context, num)
+    return album_aux(request, context, context["album"])
 
 
 @login_required
@@ -259,13 +259,13 @@ def workshops(request: HttpRequest, s: str) -> HttpResponse:
         HttpResponse: Rendered template with workshop list and completion status
     """
     # Get event context with signup and status validation
-    ctx = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, s, signup=True, include_status=True)
 
     # Initialize workshop list for template context
-    ctx["list"] = []
+    context["list"] = []
 
     # Process each workshop assigned to this event
-    for workshop in ctx["event"].workshops.select_related().all().order_by("number"):
+    for workshop in context["event"].workshops.select_related().all().order_by("number"):
         # Get workshop display data
         dt = workshop.show()
 
@@ -280,23 +280,23 @@ def workshops(request: HttpRequest, s: str) -> HttpResponse:
         )
 
         # Add workshop data to context list
-        ctx["list"].append(dt)
+        context["list"].append(dt)
 
-    return render(request, "larpmanager/event/workshops/index.html", ctx)
+    return render(request, "larpmanager/event/workshops/index.html", context)
 
 
-def valid_workshop_answer(request, ctx):
+def valid_workshop_answer(request, context):
     """Validate workshop quiz answers and determine pass/fail status.
 
     Args:
         request: HTTP request object containing quiz answers
-        ctx: Context dictionary containing workshop questions
+        context: Context dictionary containing workshop questions
 
     Returns:
         bool: True if all answers are correct, False otherwise
     """
     res = True
-    for el in ctx["list"]:
+    for el in context["list"]:
         el["correct"] = []
         el["answer"] = []
         for o in el["opt"]:
@@ -335,32 +335,32 @@ def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
         PermissionDenied: If user doesn't have access to the workshop
     """
     # Get event context and validate user access to workshop signup
-    ctx = get_event_run(request, s, signup=True, include_status=True)
-    get_workshop(ctx, m)
+    context = get_event_run(request, s, signup=True, include_status=True)
+    get_workshop(context, m)
 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in request.user.member.workshops.select_related().all()]
-    if ctx["workshop"].pk in completed:
+    if context["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
-        return redirect("workshops", s=ctx["run"].get_slug())
+        return redirect("workshops", s=context["run"].get_slug())
 
     # Build list of questions for the current workshop module
-    ctx["list"] = []
-    for question in ctx["workshop"].questions.select_related().all().order_by("number"):
-        ctx["list"].append(question.show())
+    context["list"] = []
+    for question in context["workshop"].questions.select_related().all().order_by("number"):
+        context["list"].append(question.show())
 
     # For GET requests, display the workshop question form
     if request.method != "POST":
-        return render(request, "larpmanager/event/workshops/answer.html", ctx)
+        return render(request, "larpmanager/event/workshops/answer.html", context)
 
     # Process POST request - validate submitted answers
-    if valid_workshop_answer(request, ctx):
+    if valid_workshop_answer(request, context):
         # Create completion record for this workshop module
-        WorkshopMemberRel.objects.create(member=request.user.member, workshop=ctx["workshop"])
+        WorkshopMemberRel.objects.create(member=request.user.member, workshop=context["workshop"])
 
         # Find remaining uncompleted workshop modules
         remaining = (
-            WorkshopModule.objects.filter(event=ctx["event"], number__gt=ctx["workshop"].number)
+            WorkshopModule.objects.filter(event=context["event"], number__gt=context["workshop"].number)
             .exclude(pk__in=completed)
             .order_by("number")
         )
@@ -370,16 +370,16 @@ def workshop_answer(request: HttpRequest, s: str, m: int) -> HttpResponse:
             messages.success(request, _("Completed module. Remaining: {number:d}").format(number=len(remaining)))
             return redirect(
                 "workshop_answer",
-                s=ctx["run"].get_slug(),
+                s=context["run"].get_slug(),
                 m=remaining.first().number,
             )
 
         # All modules completed - redirect to workshops overview
         messages.success(request, _("Well done, you've completed all modules!"))
-        return redirect("workshops", s=ctx["run"].get_slug())
+        return redirect("workshops", s=context["run"].get_slug())
 
     # Invalid answers - show failure page
-    return render(request, "larpmanager/event/workshops/failed.html", ctx)
+    return render(request, "larpmanager/event/workshops/failed.html", context)
 
 
 @login_required
@@ -395,8 +395,8 @@ def shuttle(request):
     check_assoc_feature(request, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
-    ctx = def_user_context(request)
-    ctx.update(
+    context = def_user_context(request)
+    context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
             .filter(assoc_id=request.assoc["id"])
@@ -409,7 +409,7 @@ def shuttle(request):
             ).order_by("status", "date", "time"),
         }
     )
-    return render(request, "larpmanager/general/shuttle.html", ctx)
+    return render(request, "larpmanager/general/shuttle.html", context)
 
 
 @login_required
@@ -423,17 +423,17 @@ def shuttle_new(request):
         Redirect to shuttle list on success or form template on GET/invalid POST
     """
     check_assoc_feature(request, "shuttle")
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     if request.method == "POST":
-        form = ShuttleServiceForm(request.POST, request=request, ctx=ctx)
+        form = ShuttleServiceForm(request.POST, request=request, context=context)
         if form.is_valid():
             el = form.save(commit=False)
             el.member = request.user.member
             el.save()
             return redirect("shuttle")
     else:
-        form = ShuttleServiceForm(request=request, ctx=ctx)
+        form = ShuttleServiceForm(request=request, context=context)
     return render(
         request,
         "larpmanager/general/writing.html",
@@ -453,16 +453,16 @@ def shuttle_edit(request, n):
         HttpResponse: Rendered edit form or redirect after successful update
     """
     check_assoc_feature(request, "shuttle")
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     shuttle = ShuttleService.objects.get(pk=n)
     if request.method == "POST":
-        form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, ctx=ctx)
+        form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, context=context)
         if form.is_valid():
             form.save()
             return redirect("shuttle")
     else:
-        form = ShuttleServiceEditForm(instance=shuttle, request=request, ctx=ctx)
+        form = ShuttleServiceEditForm(instance=shuttle, request=request, context=context)
     return render(
         request,
         "larpmanager/general/writing.html",

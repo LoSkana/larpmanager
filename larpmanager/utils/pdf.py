@@ -155,7 +155,7 @@ def link_callback(uri: str, rel: str) -> str:
     return path
 
 
-def add_pdf_instructions(ctx: dict) -> None:
+def add_pdf_instructions(context: dict) -> None:
     """Add PDF generation instructions to template context.
 
     Processes template variables and utility codes for PDF headers,
@@ -163,51 +163,53 @@ def add_pdf_instructions(ctx: dict) -> None:
     with processed PDF styling and content instructions.
 
     Args:
-        ctx: Template context dictionary containing event and character data.
+        context: Template context dictionary containing event and character data.
              Must include 'event' and 'sheet_char' keys.
 
     Returns:
         None: Modifies the context dictionary in-place.
 
     Side Effects:
-        - Updates ctx with 'page_css', 'header_content', 'footer_content' keys
+        - Updates context with 'page_css', 'header_content', 'footer_content' keys
         - Replaces template variables with actual values
         - Replaces utility codes with URLs
     """
     # Extract PDF configuration from event settings
     for instruction_key in ["page_css", "header_content", "footer_content"]:
-        ctx[instruction_key] = get_event_config(ctx["event"].id, instruction_key, "", ctx, bypass_cache=True)
+        context[instruction_key] = get_event_config(
+            context["event"].id, instruction_key, "", context, bypass_cache=True
+        )
 
     # Build replacement codes dictionary with event and character data
     replacement_codes = {
-        "<pdf:organization>": ctx["event"].assoc.name,
-        "<pdf:event>": ctx["event"].name,
+        "<pdf:organization>": context["event"].assoc.name,
+        "<pdf:event>": context["event"].name,
     }
 
     # Add character-specific replacement codes
     for character_field in ["number", "name", "title"]:
-        replacement_codes[f"<pdf:{character_field}>"] = str(ctx["sheet_char"][character_field])
+        replacement_codes[f"<pdf:{character_field}>"] = str(context["sheet_char"][character_field])
 
     # Replace character info placeholders in header and footer content
     for section_key in ["header_content", "footer_content"]:
-        if section_key not in ctx:
+        if section_key not in context:
             continue
         # Apply all code replacements to current section
         for placeholder, value in replacement_codes.items():
-            if placeholder not in ctx[section_key]:
+            if placeholder not in context[section_key]:
                 continue
-            ctx[section_key] = ctx[section_key].replace(placeholder, value)
+            context[section_key] = context[section_key].replace(placeholder, value)
 
     # Replace utility codes with actual URLs in all PDF sections
     for section_key in ["header_content", "footer_content", "page_css"]:
-        if section_key not in ctx:
+        if section_key not in context:
             continue
         # Find all utility codes in format #code# and replace with URLs
-        for utility_code_match in re.findall(r"(#[\w-]+#)", ctx[section_key]):
+        for utility_code_match in re.findall(r"(#[\w-]+#)", context[section_key]):
             utility_code = utility_code_match.replace("#", "")
             util = get_object_or_404(Util, cod=utility_code)
-            ctx[section_key] = ctx[section_key].replace(utility_code_match, util.util.url)
-        logger.debug(f"Processed PDF context for key '{section_key}': {len(ctx[section_key])} characters")
+            context[section_key] = context[section_key].replace(utility_code_match, util.util.url)
+        logger.debug(f"Processed PDF context for key '{section_key}': {len(context[section_key])} characters")
 
 
 def xhtml_pdf(context, template_path, output_filename):
@@ -482,13 +484,13 @@ def print_handout(context: dict, force: bool = True) -> Any:
     return return_pdf(file_path, f"{context['handout'].data['name']}")
 
 
-def print_volunteer_registry(ctx: dict) -> str:
+def print_volunteer_registry(context: dict) -> str:
     """Generate volunteer registry PDF and return file path."""
     # Build file path for volunteer registry PDF
-    fp = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{ctx['assoc'].slug}.pdf")
+    fp = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['assoc'].slug}.pdf")
 
     # Generate PDF from template
-    xhtml_pdf(ctx, "pdf/volunteer_registry.html", fp)
+    xhtml_pdf(context, "pdf/volunteer_registry.html", fp)
 
     return fp
 
@@ -661,10 +663,10 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created
 # ## TASKS
 
 
-def print_handout_go(ctx: HttpRequest, character: Character) -> HttpResponse:
+def print_handout_go(context: HttpRequest, character: Character) -> HttpResponse:
     """Retrieve character handout and generate printable version."""
-    get_handout(ctx, character)
-    return print_handout(ctx)
+    get_handout(context, character)
+    return print_handout(context)
 
 
 def get_fake_request(association_slug: str) -> HttpRequest:
@@ -688,8 +690,8 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 def print_handout_bkg(a: Association, s: str, c: Character) -> None:
     """Prints character handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(a)
-    ctx = get_event_run(request, s)
-    print_handout_go(ctx, c)
+    context = get_event_run(request, s)
+    print_handout_go(context, c)
 
 
 def print_character_go(context, character):
@@ -708,8 +710,8 @@ def print_character_go(context, character):
 def print_character_bkg(a: Association, s: str, c: Character) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(a)
-    ctx = get_event_run(request, s)
-    print_character_go(ctx, c)
+    context = get_event_run(request, s)
+    print_character_go(context, c)
 
 
 @background_auto(queue="pdf")
@@ -725,32 +727,32 @@ def print_run_bkg(a: Association, s: str) -> None:
     """
     # Create fake request context and get event run data
     request = get_fake_request(a)
-    ctx = get_event_run(request, s)
+    context = get_event_run(request, s)
 
     # Print gallery and character profiles
-    print_gallery(ctx)
-    print_profiles(ctx)
+    print_gallery(context)
+    print_profiles(context)
 
     # Print individual character sheets for all characters in the event
-    for ch in ctx["run"].event.get_elements(Character).values_list("number", flat=True):
-        print_character_go(ctx, ch)
+    for ch in context["run"].event.get_elements(Character).values_list("number", flat=True):
+        print_character_go(context, ch)
 
     # Print all handouts associated with the event
-    for h in ctx["run"].event.get_elements(Handout).values_list("number", flat=True):
-        print_handout_go(ctx, h)
+    for h in context["run"].event.get_elements(Handout).values_list("number", flat=True):
+        print_handout_go(context, h)
 
 
 # ## OLD PRINTING
 
 
-def odt_template(ctx: dict, char: object, fp: str, template: str, aux_template: str) -> None:
+def odt_template(context: dict, char: object, fp: str, template: str, aux_template: str) -> None:
     """Execute ODT template generation with retry mechanism.
 
     Attempts to execute ODT template generation with automatic retry
     on failure. Logs errors and implements exponential backoff.
 
     Args:
-        ctx: Context dictionary for template rendering
+        context: Context dictionary for template rendering
         char: Character object for template processing
         fp: File path for output generation
         template: Primary template identifier
@@ -770,7 +772,7 @@ def odt_template(ctx: dict, char: object, fp: str, template: str, aux_template: 
     while attempt < max_attempts:
         try:
             # Execute the main ODT template processing
-            exec_odt_template(ctx, char, fp, template, aux_template)
+            exec_odt_template(context, char, fp, template, aux_template)
             return
         except Exception as e:
             # Log detailed error information for debugging
@@ -847,7 +849,7 @@ def exec_odt_template(
 
 
 # translate html markup to odt
-def get_odt_content(ctx: dict, working_dir: str, aux_template) -> dict:
+def get_odt_content(context: dict, working_dir: str, aux_template) -> dict:
     """
     Extract ODT content from HTML template for PDF generation.
 
@@ -856,7 +858,7 @@ def get_odt_content(ctx: dict, working_dir: str, aux_template) -> dict:
     styles for further processing.
 
     Args:
-        ctx: Template context dictionary containing variables for rendering
+        context: Template context dictionary containing variables for rendering
         working_dir: Working directory path for temporary file operations
         aux_template: Django template object to be rendered and converted
 
@@ -870,7 +872,7 @@ def get_odt_content(ctx: dict, working_dir: str, aux_template) -> dict:
         ValueError: If required XML elements are not found in the ODT files
     """
     # Render the Django template with provided context
-    html = aux_template.render(ctx)
+    html = aux_template.render(context)
 
     # Write rendered HTML to temporary file for LibreOffice conversion
     o_html = os.path.join(working_dir, "auxiliary.html")
@@ -957,14 +959,14 @@ def replace_data(template_path, character_data):
         template_file.write(file_content)
 
 
-def update_content(ctx: Any, working_dir: str, zip_dir: str, char: Any, aux_template: str) -> None:
+def update_content(context: Any, working_dir: str, zip_dir: str, char: Any, aux_template: str) -> None:
     """Update PDF content for character sheets.
 
     Modifies LibreOffice document content with character data for PDF
     generation, handling template replacement and content formatting.
 
     Args:
-        ctx: Context object for processing
+        context: Context object for processing
         working_dir: Working directory path for temporary files
         zip_dir: Directory containing extracted ODT files
         char: Character object containing data for replacement
@@ -979,7 +981,7 @@ def update_content(ctx: Any, working_dir: str, zip_dir: str, char: Any, aux_temp
 
     # Parse content document and get template elements
     doc = lxml.etree.parse(content)
-    elements = get_odt_content(ctx, working_dir, aux_template)
+    elements = get_odt_content(context, working_dir, aux_template)
 
     # Find and clear automatic styles section
     styles_elements = doc.xpath('//*[local-name()="automatic-styles"]')

@@ -322,11 +322,11 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
     return start, length, order, filters
 
 
-def _prepare_data_json(ctx: dict, elements: list, view: str, edit: str, exe: bool = True) -> list[dict[str, str]]:
+def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe: bool = True) -> list[dict[str, str]]:
     """Prepare data for JSON response in DataTables format.
 
     Args:
-        ctx: Context dictionary containing fields, callbacks, and optionally run
+        context: Context dictionary containing fields, callbacks, and optionally run
         elements: List of model objects to process
         view: View name for generating edit URLs
         edit: Tooltip text for edit links
@@ -359,8 +359,8 @@ def _prepare_data_json(ctx: dict, elements: list, view: str, edit: str, exe: boo
     }
 
     # Allow custom field callbacks to override default mappings
-    if "callbacks" in ctx:
-        field_to_formatter.update(ctx["callbacks"])
+    if "callbacks" in context:
+        field_to_formatter.update(context["callbacks"])
 
     # Process each element and build row data
     for model_object in elements:
@@ -369,13 +369,13 @@ def _prepare_data_json(ctx: dict, elements: list, view: str, edit: str, exe: boo
             edit_url = reverse(view, args=[model_object.id])
         else:
             # For orga views, we need both slug and ID
-            edit_url = reverse(view, args=[ctx["run"].get_slug(), model_object.id])
+            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.id])
 
         # Start each row with edit link in column 0
         row_data = {"0": f'<a href="{edit_url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
 
         # Add data for each configured field, starting from column 1
-        for column_index, (field_name, _field_label) in enumerate(ctx["fields"], start=1):
+        for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
             row_data[str(column_index)] = field_to_formatter.get(field_name, lambda model_object: "")(model_object)
 
         table_rows_data.append(row_data)
@@ -383,11 +383,11 @@ def _prepare_data_json(ctx: dict, elements: list, view: str, edit: str, exe: boo
     return table_rows_data
 
 
-def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Model]) -> QuerySet:
+def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type[Model]) -> QuerySet:
     """Apply custom queries and optimizations based on model type.
 
     Args:
-        ctx: Context dictionary containing request data and parameters
+        context: Context dictionary containing request data and parameters
         elements: Base queryset to apply modifications to
         typ: Model class type to determine which optimizations to apply
 
@@ -421,7 +421,7 @@ def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Mod
 
         # Subquery to get the latest membership credit for each member
         latest_membership_subquery = Membership.objects.filter(
-            member_id=OuterRef("member_id"), assoc_id=ctx["a_id"]
+            member_id=OuterRef("member_id"), assoc_id=context["a_id"]
         ).order_by("id")[:1]
         elements = elements.annotate(credits=Subquery(latest_membership_subquery.values("credit")))
 
@@ -455,7 +455,7 @@ def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Mod
         elements = elements.order_by("-created")
 
     # Apply subtype-specific filters based on context
-    subtype = ctx.get("subtype")
+    subtype = context.get("subtype")
     if subtype == "credits":
         elements = elements.filter(oth=OtherChoices.CREDIT)
     elif subtype == "tokens":
@@ -464,9 +464,9 @@ def _apply_custom_queries(ctx: dict[str, Any], elements: QuerySet, typ: type[Mod
     return elements
 
 
-def exe_paginate(request, ctx, pagination_type, template_name, view_name):
-    return paginate(request, ctx, pagination_type, template_name, view_name, True)
+def exe_paginate(request, context, pagination_type, template_name, view_name):
+    return paginate(request, context, pagination_type, template_name, view_name, True)
 
 
-def orga_paginate(request, ctx, pagination_type, template_name, view_name):
-    return paginate(request, ctx, pagination_type, template_name, view_name, False)
+def orga_paginate(request, context, pagination_type, template_name, view_name):
+    return paginate(request, context, pagination_type, template_name, view_name, False)

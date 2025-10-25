@@ -251,7 +251,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
                 my_send_mail(subj, body, m, instance.event)
 
 
-def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
+def bring_friend_instructions(reg: Registration, context: dict) -> None:
     """Send friend invitation instructions to registered user.
 
     This function generates and sends an email to a registered user containing
@@ -260,7 +260,7 @@ def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
 
     Args:
         reg: Registration instance containing member and event information
-        ctx: Context dictionary containing discount amounts and event details.
+        context: Context dictionary containing discount amounts and event details.
              Expected keys: 'bring_friend_discount_to', 'bring_friend_discount_from'
 
     Returns:
@@ -289,14 +289,14 @@ def bring_friend_instructions(reg: Registration, ctx: dict) -> None:
             "receive %(amount_to)s %(currency)s off the ticket"
         )
         % {
-            "amount_to": ctx["bring_friend_discount_to"],
+            "amount_to": context["bring_friend_discount_to"],
             "currency": reg.run.event.assoc.get_currency_symbol(),
         }
         + ". "
         # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
         % {
-            "amount_from": ctx["bring_friend_discount_from"],
+            "amount_from": context["bring_friend_discount_from"],
             "currency": reg.run.event.assoc.get_currency_symbol(),
         }
         + "."

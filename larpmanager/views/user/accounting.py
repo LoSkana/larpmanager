@@ -106,35 +106,35 @@ def accounting(request: HttpRequest) -> HttpResponse:
         Redirects to home page if user has no associated organization (a_id == 0).
     """
     # Initialize base context and check for valid association
-    ctx = def_user_context(request)
-    if ctx["a_id"] == 0:
+    context = def_user_context(request)
+    if context["a_id"] == 0:
         return redirect("home")
 
     # Populate main user's accounting information
-    info_accounting(request, ctx)
+    info_accounting(request, context)
 
     # Initialize delegated members tracking
-    ctx["delegated_todo"] = False
+    context["delegated_todo"] = False
 
     # Process delegated members if feature is enabled
     if "delegated_members" in request.assoc["features"]:
         # Get all members delegated to current user
-        ctx["delegated"] = Member.objects.filter(parent=request.user.member)
+        context["delegated"] = Member.objects.filter(parent=request.user.member)
 
         # Process accounting info for each delegated member
-        for el in ctx["delegated"]:
-            del_ctx = {"member": el, "a_id": ctx["a_id"]}
+        for el in context["delegated"]:
+            del_ctx = {"member": el, "a_id": context["a_id"]}
             info_accounting(request, del_ctx)
 
             # Attach context to member object for template access
-            el.ctx = del_ctx
+            el.context = del_ctx
             # Track if any delegated member has pending payments
-            ctx["delegated_todo"] = ctx["delegated_todo"] or del_ctx["payments_todo"]
+            context["delegated_todo"] = context["delegated_todo"] or del_ctx["payments_todo"]
 
     # Load organization terms and conditions for display
-    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
+    context["assoc_terms_conditions"] = get_assoc_text(context["a_id"], AssocTextType.TOC)
 
-    return render(request, "larpmanager/member/accounting.html", ctx)
+    return render(request, "larpmanager/member/accounting.html", context)
 
 
 @login_required
@@ -155,26 +155,26 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         Only shows non-hidden accounting items for the user's current association.
     """
     # Initialize context with default user data
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Query for tokens given to the user (non-hidden, within current association)
     given_tokens = AccountingItemOther.objects.filter(
-        member=ctx["member"],
+        member=context["member"],
         hide=False,
         oth=OtherChoices.TOKEN,
-        assoc_id=ctx["a_id"],
+        assoc_id=context["a_id"],
     )
 
     # Query for tokens used by the user (non-hidden, within current association)
     used_tokens = AccountingItemPayment.objects.filter(
-        member=ctx["member"],
+        member=context["member"],
         hide=False,
         pay=PaymentChoices.TOKEN,
-        assoc_id=ctx["a_id"],
+        assoc_id=context["a_id"],
     )
 
     # Update context with token data
-    ctx.update(
+    context.update(
         {
             "given": given_tokens,
             "used": used_tokens,
@@ -182,7 +182,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
     )
 
     # Render and return the token accounting template
-    return render(request, "larpmanager/member/acc_tokens.html", ctx)
+    return render(request, "larpmanager/member/acc_tokens.html", context)
 
 
 @login_required
@@ -203,41 +203,41 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
             summary with expenses, given credits, used credits, and refunds.
     """
     # Get base user context with member and association info
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     # Add accounting data to context with filtered queries for current user/association
-    ctx.update(
+    context.update(
         {
             # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
-                member=ctx["member"], hide=False, is_approved=True, assoc_id=ctx["a_id"]
+                member=context["member"], hide=False, is_approved=True, assoc_id=context["a_id"]
             ),
             # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
-                member=ctx["member"],
+                member=context["member"],
                 hide=False,
                 oth=OtherChoices.CREDIT,
-                assoc_id=ctx["a_id"],
+                assoc_id=context["a_id"],
             ),
             # Payments made using credits by the user in current association
             "used": AccountingItemPayment.objects.filter(
-                member=ctx["member"],
+                member=context["member"],
                 hide=False,
                 pay=PaymentChoices.CREDIT,
-                assoc_id=ctx["a_id"],
+                assoc_id=context["a_id"],
             ),
             # Refunds issued to the user in current association
             "ref": AccountingItemOther.objects.filter(
-                member=ctx["member"],
+                member=context["member"],
                 hide=False,
                 oth=OtherChoices.REFUND,
-                assoc_id=ctx["a_id"],
+                assoc_id=context["a_id"],
             ),
         }
     )
 
     # Render the accounting credits template with populated context
-    return render(request, "larpmanager/member/acc_credits.html", ctx)
+    return render(request, "larpmanager/member/acc_credits.html", context)
 
 
 @login_required
@@ -262,23 +262,23 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "refund")
 
     # Initialize base context with user and association data
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
-    ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
+    context = def_user_context(request)
+    context["show_accounting"] = True
+    context.update({"member": request.user.member, "a_id": request.assoc["id"]})
 
     # Verify user membership in current association
-    get_user_membership(request.user.member, ctx["a_id"])
+    get_user_membership(request.user.member, context["a_id"])
 
     if request.method == "POST":
         # Process refund request form submission
-        form = RefundRequestForm(request.POST, member=ctx["member"])
+        form = RefundRequestForm(request.POST, member=context["member"])
 
         if form.is_valid():
             # Save refund request with transaction safety
             with transaction.atomic():
                 p = form.save(commit=False)
-                p.member = ctx["member"]
-                p.assoc_id = ctx["a_id"]
+                p.member = context["member"]
+                p.assoc_id = context["a_id"]
                 p.save()
 
             # Send notification to administrators about new refund request
@@ -291,11 +291,11 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
             return redirect("accounting")
     else:
         # Display empty form for GET request
-        form = RefundRequestForm(member=ctx["member"])
+        form = RefundRequestForm(member=context["member"])
 
     # Add form to context and render template
-    ctx["form"] = form
-    return render(request, "larpmanager/member/acc_refund.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/member/acc_refund.html", context)
 
 
 @login_required
@@ -322,20 +322,20 @@ def acc_pay(request: HttpRequest, s: str, method: Optional[str] = None) -> HttpR
     check_assoc_feature(request, "payment")
 
     # Get event context and validate user registration status
-    ctx = get_event_run(request, s, signup=True, include_status=True)
+    context = get_event_run(request, s, signup=True, include_status=True)
 
     # Verify user has valid registration for this event
-    if not ctx["run"].reg:
+    if not context["run"].reg:
         messages.warning(
             request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
         )
         return redirect("accounting")
     else:
-        reg = ctx["run"].reg
+        reg = context["run"].reg
 
     # Validate fiscal code if feature is enabled for this association
-    if "fiscal_code_check" in ctx["features"]:
-        result = calculate_fiscal_code(ctx["member"])
+    if "fiscal_code_check" in context["features"]:
+        result = calculate_fiscal_code(context["member"])
         # Redirect to profile if fiscal code has validation errors
         if "error_cf" in result:
             # Redirect to profile page if fiscal code has errors
@@ -385,8 +385,8 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
         raise Http404(f"registration not found {err}") from err
 
     # Get event context and mark as accounting page
-    ctx = get_event_run(request, reg.run.get_slug())
-    ctx["show_accounting"] = True
+    context = get_event_run(request, reg.run.get_slug())
+    context["show_accounting"] = True
 
     # Load membership status for permission checks
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
@@ -411,42 +411,42 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
         return redirect("gallery", s=reg.run.get_slug())
 
     # Verify membership approval if membership feature is enabled
-    if "membership" in ctx["features"] and not reg.membership.date:
+    if "membership" in context["features"] and not reg.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
         return redirect("gallery", s=reg.run.get_slug())
 
     # Add registration to context
-    ctx["reg"] = reg
+    context["reg"] = reg
 
     # Calculate payment quota - use installment quota if set, otherwise full balance
     if reg.quota:
-        ctx["quota"] = reg.quota
+        context["quota"] = reg.quota
     else:
-        ctx["quota"] = reg.tot_iscr - reg.tot_payed
+        context["quota"] = reg.tot_iscr - reg.tot_payed
 
     # Generate unique key for payment tracking
     key = f"{reg.id}_{reg.num_payments}"
 
     # Load association configuration for payment display
-    ctx["association"] = Association.objects.get(pk=ctx["a_id"])
-    ctx["hide_amount"] = ctx["association"].get_config("payment_hide_amount", False)
+    context["association"] = Association.objects.get(pk=context["a_id"])
+    context["hide_amount"] = context["association"].get_config("payment_hide_amount", False)
 
     # Pre-select payment method if specified
     if method:
-        ctx["def_method"] = method
+        context["def_method"] = method
 
     # Handle payment form submission
     if request.method == "POST":
-        form = PaymentForm(request.POST, reg=reg, ctx=ctx)
+        form = PaymentForm(request.POST, reg=reg, context=context)
         if form.is_valid():
             # Process payment through selected gateway
-            get_payment_form(request, form, PaymentType.REGISTRATION, ctx, key)
+            get_payment_form(request, form, PaymentType.REGISTRATION, context, key)
     else:
-        form = PaymentForm(reg=reg, ctx=ctx)
-    ctx["form"] = form
+        form = PaymentForm(reg=reg, context=context)
+    context["form"] = form
 
-    return render(request, "larpmanager/member/acc_reg.html", ctx)
+    return render(request, "larpmanager/member/acc_reg.html", context)
 
 
 @login_required
@@ -468,8 +468,8 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     """
     # Check if user has access to membership feature
     check_assoc_feature(request, "membership")
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
+    context = def_user_context(request)
+    context["show_accounting"] = True
 
     # Validate user membership status - must be accepted to pay dues
     memb = get_user_membership(request.user.member, request.assoc["id"])
@@ -487,27 +487,27 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
         pass
 
     # Set up context variables for template rendering
-    ctx["year"] = year
+    context["year"] = year
     key = f"{request.user.member.id}_{year}"
 
     # Set default payment method if provided
     if method:
-        ctx["def_method"] = method
+        context["def_method"] = method
 
     # Process form submission or render initial form
     if request.method == "POST":
-        form = MembershipForm(request.POST, ctx=ctx)
+        form = MembershipForm(request.POST, context=context)
         if form.is_valid():
             # Generate payment form for valid membership submission
-            get_payment_form(request, form, PaymentType.MEMBERSHIP, ctx, key)
+            get_payment_form(request, form, PaymentType.MEMBERSHIP, context, key)
     else:
-        form = MembershipForm(ctx=ctx)
+        form = MembershipForm(context=context)
 
     # Add form and membership fee to context for template
-    ctx["form"] = form
-    ctx["membership_fee"] = get_assoc(request).get_config("membership_fee")
+    context["form"] = form
+    context["membership_fee"] = get_assoc(request).get_config("membership_fee")
 
-    return render(request, "larpmanager/member/acc_membership.html", ctx)
+    return render(request, "larpmanager/member/acc_membership.html", context)
 
 
 @login_required
@@ -530,24 +530,24 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "donate")
 
     # Initialize base context with user data and accounting visibility
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
+    context = def_user_context(request)
+    context["show_accounting"] = True
 
     # Process form submission for donation payment
     if request.method == "POST":
-        form = DonateForm(request.POST, ctx=ctx)
+        form = DonateForm(request.POST, context=context)
         if form.is_valid():
             # Generate payment form for valid donation request
-            get_payment_form(request, form, PaymentType.DONATE, ctx)
+            get_payment_form(request, form, PaymentType.DONATE, context)
     else:
         # Display empty donation form for GET requests
-        form = DonateForm(ctx=ctx)
+        form = DonateForm(context=context)
 
     # Add form and donation flag to template context
-    ctx["form"] = form
-    ctx["donate"] = 1
+    context["form"] = form
+    context["donate"] = 1
 
-    return render(request, "larpmanager/member/acc_donate.html", ctx)
+    return render(request, "larpmanager/member/acc_donate.html", context)
 
 
 @login_required
@@ -571,8 +571,8 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
         DatabaseError: If the atomic transaction fails during collection creation.
     """
     # Initialize context with user defaults and enable accounting display
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
+    context = def_user_context(request)
+    context["show_accounting"] = True
 
     if request.method == "POST":
         # Process form submission for new collection
@@ -594,8 +594,8 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
         form = CollectionNewForm()
 
     # Add form to context and render template
-    ctx["form"] = form
-    return render(request, "larpmanager/member/acc_collection.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/member/acc_collection.html", context)
 
 
 @login_required
@@ -621,11 +621,11 @@ def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
         raise Http404("Collection not yours")
 
     # Initialize base user context and enable accounting display
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
+    context = def_user_context(request)
+    context["show_accounting"] = True
 
     # Add collection data and filtered accounting items to context
-    ctx.update(
+    context.update(
         {
             "coll": c,
             "list": AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"]),
@@ -633,7 +633,7 @@ def acc_collection_manage(request: HttpRequest, s: str) -> HttpResponse:
     )
 
     # Render and return the collection management template
-    return render(request, "larpmanager/member/acc_collection_manage.html", ctx)
+    return render(request, "larpmanager/member/acc_collection_manage.html", context)
 
 
 @login_required
@@ -654,9 +654,9 @@ def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
     c = get_collection_partecipate(request, s)
 
     # Initialize base context with user data and accounting flag
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
-    ctx["coll"] = c
+    context = def_user_context(request)
+    context["show_accounting"] = True
+    context["coll"] = c
 
     # Validate collection is open for participation
     if c.status != CollectionStatus.OPEN:
@@ -664,17 +664,17 @@ def acc_collection_participate(request: HttpRequest, s: str) -> HttpResponse:
 
     # Handle form submission for collection participation
     if request.method == "POST":
-        form = CollectionForm(request.POST, ctx=ctx)
+        form = CollectionForm(request.POST, context=context)
         # Process valid form and setup payment gateway
         if form.is_valid():
-            get_payment_form(request, form, PaymentType.COLLECTION, ctx)
+            get_payment_form(request, form, PaymentType.COLLECTION, context)
     else:
         # Initialize empty form for GET requests
-        form = CollectionForm(ctx=ctx)
+        form = CollectionForm(context=context)
 
     # Add form to context and render participation template
-    ctx["form"] = form
-    return render(request, "larpmanager/member/acc_collection_participate.html", ctx)
+    context["form"] = form
+    return render(request, "larpmanager/member/acc_collection_participate.html", context)
 
 
 @login_required
@@ -734,9 +734,9 @@ def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRed
     c = get_collection_redeem(request, s)
 
     # Initialize the context with default user context and accounting flag
-    ctx = def_user_context(request)
-    ctx["show_accounting"] = True
-    ctx["coll"] = c
+    context = def_user_context(request)
+    context["show_accounting"] = True
+    context["coll"] = c
 
     # Verify collection is in the correct status for redemption
     if c.status != CollectionStatus.DONE:
@@ -755,12 +755,12 @@ def acc_collection_redeem(request: HttpRequest, s: str) -> Union[HttpResponseRed
         return redirect("home")
 
     # For GET requests, prepare collection items list for display
-    ctx["list"] = AccountingItemCollection.objects.filter(
+    context["list"] = AccountingItemCollection.objects.filter(
         collection=c, collection__assoc_id=request.assoc["id"]
     ).select_related("member", "collection")
 
     # Render the redemption template with collection data
-    return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
+    return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
 def acc_webhook_paypal(request, s):

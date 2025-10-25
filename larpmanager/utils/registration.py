@@ -48,7 +48,7 @@ from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 
-def registration_available(run: Run, features: dict, ctx: dict | None = None) -> None:
+def registration_available(run: Run, features: dict, context: dict | None = None) -> None:
     """Check if registration is available based on capacity and rules.
 
     Validates registration availability considering maximum participants,
@@ -58,14 +58,14 @@ def registration_available(run: Run, features: dict, ctx: dict | None = None) ->
     Args:
         run: The run object containing event and status information
         features: Dictionary of enabled features for the event
-        ctx: Optional context dictionary containing cached data
+        context: Optional context dictionary containing cached data
 
     Returns:
         None: Function modifies run.status in-place
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
     # Skip advanced registration rules if no maximum participant limit is set
     if run.event.max_pg == 0:
@@ -73,7 +73,7 @@ def registration_available(run: Run, features: dict, ctx: dict | None = None) ->
         return
 
     # Get registration counts if not provided
-    registration_counts = ctx.get("reg_counts")
+    registration_counts = context.get("reg_counts")
     if registration_counts is None:
         registration_counts = get_reg_counts(run)
 
@@ -212,7 +212,7 @@ def registration_status_signed(
     member: Member,
     features: dict[str, Any],
     register_url: str,
-    ctx: dict | None = None,
+    context: dict | None = None,
 ) -> None:
     """
     Updates the registration status for a signed user based on membership and payment features.
@@ -223,7 +223,7 @@ def registration_status_signed(
         member: The member object for the registered user
         features: Dictionary of enabled features for the event
         register_url: URL for the registration page
-        ctx: Optional context dictionary containing cached data:
+        context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
 
@@ -234,18 +234,18 @@ def registration_status_signed(
         RewokedMembershipError: When membership status is revoked
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
     # Initialize character registration status for the run
-    registration_status_characters(run, features, ctx)
+    registration_status_characters(run, features, context)
 
     # Get user membership for the event's association
     mb = get_user_membership(member, run.event.assoc_id)
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(reg, features=features, event=run.event, ctx=ctx)
+    provisional = is_reg_provisional(reg, features=features, event=run.event, context=context)
 
     # Update message for provisional registrations
     if provisional:
@@ -278,7 +278,7 @@ def registration_status_signed(
     # Handle payment feature processing and related status updates
     if "payment" in features:
         # Process payment status and return if payment handling is complete
-        if _status_payment(register_text, run, ctx):
+        if _status_payment(register_text, run, context):
             return
 
     # Check for incomplete user profile and prompt completion
@@ -302,7 +302,7 @@ def registration_status_signed(
         run.status["text"] += " " + _("Thanks for your support") + "!"
 
 
-def _status_payment(register_text: str, run: Run, ctx: dict | None = None) -> bool:
+def _status_payment(register_text: str, run: Run, context: dict | None = None) -> bool:
     """Check payment status and update registration status text accordingly.
 
     Handles pending payments, wire transfers, and payment alerts with
@@ -311,17 +311,17 @@ def _status_payment(register_text: str, run: Run, ctx: dict | None = None) -> bo
     Args:
         register_text: Base registration status text to append to
         run: Registration run object containing registration and status info
-        ctx: Optional context dictionary containing cached data:
+        context: Optional context dictionary containing cached data:
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
-    payment_invoices_dict = ctx.get("payment_invoices_dict")
+    payment_invoices_dict = context.get("payment_invoices_dict")
 
     # Get payment invoices for this registration
     if payment_invoices_dict is not None:
@@ -396,7 +396,7 @@ def _status_payment(register_text: str, run: Run, ctx: dict | None = None) -> bo
 def registration_status(
     run: Run,
     user: User,
-    ctx: dict | None = None,
+    context: dict | None = None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -406,7 +406,7 @@ def registration_status(
     Args:
         run: Event run object to check registration status for
         user: User object attempting registration
-        ctx: Optional context dictionary containing cached data for efficiency:
+        context: Optional context dictionary containing cached data for efficiency:
             - my_regs: Pre-filtered user registrations
             - features_map: Cached features mapping
             - reg_counts: Pre-calculated registration counts dictionary
@@ -415,16 +415,16 @@ def registration_status(
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
-    registration_find(run, user, ctx)
+    registration_find(run, user, context)
 
-    features = _get_features_map(run, ctx)
+    features = _get_features_map(run, context)
 
-    registration_available(run, features, ctx)
+    registration_available(run, features, context)
     register_url = reverse("register", args=[run.get_slug()])
 
     if user.is_authenticated:
@@ -433,15 +433,15 @@ def registration_status(
             return
 
         if run.reg:
-            registration_status_signed(run, run.reg, user.member, features, register_url, ctx)
+            registration_status_signed(run, run.reg, user.member, features, register_url, context)
             return
 
     if run.end and get_time_diff_today(run.end) < 0:
         return
 
     # check pre-register
-    if get_event_config(run.event_id, "pre_register_active", False, ctx=ctx):
-        _status_preregister(run, user, ctx)
+    if get_event_config(run.event_id, "pre_register_active", False, context=context):
+        _status_preregister(run, user, context)
 
     current_datetime = datetime.today()
     # check registration open
@@ -479,7 +479,7 @@ def registration_status(
     )
 
 
-def _status_preregister(run, user, ctx: dict | None = None) -> None:
+def _status_preregister(run, user, context: dict | None = None) -> None:
     """Update run status based on user's pre-registration state.
 
     Sets the run status text to either confirm existing pre-registration
@@ -488,14 +488,14 @@ def _status_preregister(run, user, ctx: dict | None = None) -> None:
     Args:
         run: Event run object to update status for
         user: User object to check pre-registration status
-        ctx: Optional context dictionary containing cached pre-registration data
+        context: Optional context dictionary containing cached pre-registration data
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
     # Get cached pre-registrations dictionary from context
-    pre_registrations_dict = ctx.get("pre_registrations_dict")
+    pre_registrations_dict = context.get("pre_registrations_dict")
 
     # Check if user already has a pre-registration for this event
     has_pre_registration = False
@@ -543,7 +543,7 @@ def _get_features_map(run: Run, context: dict):
     return event_features
 
 
-def registration_find(run: Run, user: User, ctx: dict | None = None):
+def registration_find(run: Run, user: User, context: dict | None = None):
     """Find and attach registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
@@ -552,15 +552,15 @@ def registration_find(run: Run, user: User, ctx: dict | None = None):
     Args:
         run: The Run object to find registration for
         user: The User object to search registration for
-        ctx: Optional context dictionary containing cached data:
+        context: Optional context dictionary containing cached data:
             - my_regs: Pre-fetched registrations queryset for performance optimization
 
     Returns:
         None: Function modifies run.reg attribute in-place
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
     # Early return if user is not authenticated
     if not user.is_authenticated:
@@ -568,7 +568,7 @@ def registration_find(run: Run, user: User, ctx: dict | None = None):
         return
 
     # Use pre-fetched registrations if provided
-    cached_registrations = ctx.get("my_regs")
+    cached_registrations = context.get("my_regs")
     if cached_registrations is not None:
         run.reg = cached_registrations.get(run.id)
         return
@@ -604,7 +604,7 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
 
 
-def registration_status_characters(run: Run, features: dict, ctx: dict | None = None) -> None:
+def registration_status_characters(run: Run, features: dict, context: dict | None = None) -> None:
     """Update registration status with character assignment information.
 
     Displays assigned characters with approval status and provides links
@@ -613,17 +613,17 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
     Args:
         run: The run object containing registration information
         features: Dictionary of enabled event features
-        ctx: Optional context dictionary containing cached data:
+        context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
 
     Returns:
         None: Function modifies run.status["details"] in place
     """
     # Extract values from context dictionary if provided
-    if ctx is None:
-        ctx = {}
+    if context is None:
+        context = {}
 
-    character_rels_dict = ctx.get("character_rels_dict")
+    character_rels_dict = context.get("character_rels_dict")
 
     # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:
@@ -633,7 +633,7 @@ def registration_status_characters(run: Run, features: dict, ctx: dict | None = 
         rcrs = que.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
-    approval = get_event_config(run.event_id, "user_character_approval", False, ctx=ctx)
+    approval = get_event_config(run.event_id, "user_character_approval", False, context=context)
 
     # Build list of character links with names and approval status
     aux = []
