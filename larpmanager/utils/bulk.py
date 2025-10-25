@@ -39,7 +39,7 @@ from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot
 from larpmanager.utils.exceptions import ReturnNowError
 
 
-def _get_bulk_params(request, ctx) -> tuple[list[int], int, int]:
+def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
     """
     Extract and validate bulk operation parameters from request.
 
@@ -50,7 +50,7 @@ def _get_bulk_params(request, ctx) -> tuple[list[int], int, int]:
     ----------
     request : HttpRequest
         HTTP request object containing POST data with operation parameters
-    ctx : dict
+    context : dict
         Context dictionary containing event/run information and association ID
 
     Returns
@@ -92,9 +92,9 @@ def _get_bulk_params(request, ctx) -> tuple[list[int], int, int]:
         raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))
 
     # Determine entity ID for logging (use run ID if available, otherwise association ID)
-    entity_id_for_log = ctx["a_id"]
-    if "run" in ctx:
-        entity_id_for_log = ctx["run"].id
+    entity_id_for_log = context["a_id"]
+    if "run" in context:
+        entity_id_for_log = context["run"].id
 
     # Log the bulk operation attempt with all relevant parameters
     Log.objects.create(
@@ -168,7 +168,7 @@ def _get_inv_items(warehouse_item_ids, request):
 
 def exec_add_item_tag(
     request,
-    ctx,
+    context,
     target: int,
     ids: list[int],
 ) -> None:
@@ -177,7 +177,7 @@ def exec_add_item_tag(
     tag.items.add(*_get_inv_items(ids, request))
 
 
-def exec_del_item_tag(request: HttpRequest, ctx: dict[str, Any], target: int, ids: str) -> None:
+def exec_del_item_tag(request: HttpRequest, context: dict[str, Any], target: int, ids: str) -> None:
     """Remove items from a warehouse tag."""
     tag = WarehouseTag.objects.get(assoc_id=request.assoc["id"], pk=target)
     tag.items.remove(*_get_inv_items(ids, request))
@@ -185,7 +185,7 @@ def exec_del_item_tag(request: HttpRequest, ctx: dict[str, Any], target: int, id
 
 def exec_move_item_box(
     request,
-    ctx,
+    context,
     target: int,
     ids: list[int],
 ) -> None:
@@ -197,7 +197,7 @@ def exec_move_item_box(
     WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).update(container=container)
 
 
-def handle_bulk_items(request: HttpRequest, ctx: dict) -> None:
+def handle_bulk_items(request: HttpRequest, context: dict) -> None:
     """Handle bulk operations on warehouse items.
 
     This function processes bulk operations for warehouse items including adding/removing
@@ -207,7 +207,7 @@ def handle_bulk_items(request: HttpRequest, ctx: dict) -> None:
 
     Args:
         request: HTTP request object containing operation data and association info
-        ctx: Context dictionary to update with bulk operation choices
+        context: Context dictionary to update with bulk operation choices
 
     Raises:
         ReturnNowError: If POST request processed successfully with operation results
@@ -220,7 +220,7 @@ def handle_bulk_items(request: HttpRequest, ctx: dict) -> None:
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
         # Execute the bulk operation and raise ReturnNowError with results
-        raise ReturnNowError(exec_bulk(request, ctx, mapping))
+        raise ReturnNowError(exec_bulk(request, context, mapping))
 
     # Fetch available containers for the current association
     containers = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
@@ -228,97 +228,97 @@ def handle_bulk_items(request: HttpRequest, ctx: dict) -> None:
     tags = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
 
     # Populate context with bulk operation choices and their associated objects
-    ctx["bulk"] = [
+    context["bulk"] = [
         {"idx": Operations.MOVE_ITEM_BOX, "label": _("Move to container"), "objs": containers},
         {"idx": Operations.ADD_ITEM_TAG, "label": _("Add tag"), "objs": tags},
         {"idx": Operations.DEL_ITEM_TAG, "label": _("Remove tag"), "objs": tags},
     ]
 
 
-def _get_chars(ctx, character_ids):
-    return ctx["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
+def _get_chars(context, character_ids):
+    return context["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
-def exec_add_char_fact(request, ctx, target, ids) -> None:
+def exec_add_char_fact(request, context, target, ids) -> None:
     """Add characters to a faction."""
-    fact = ctx["event"].get_elements(Faction).get(pk=target)
-    fact.characters.add(*_get_chars(ctx, ids))
+    fact = context["event"].get_elements(Faction).get(pk=target)
+    fact.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_fact(request, ctx: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_fact(request, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a faction."""
-    fact = ctx["event"].get_elements(Faction).get(pk=target)
-    fact.characters.remove(*_get_chars(ctx, ids))
+    fact = context["event"].get_elements(Faction).get(pk=target)
+    fact.characters.remove(*_get_chars(context, ids))
 
 
-def exec_add_char_plot(request: HttpRequest, ctx: dict, target: int, ids: list[int]) -> None:
+def exec_add_char_plot(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Add characters to a plot element."""
-    plot = ctx["event"].get_elements(Plot).get(pk=target)
-    plot.characters.add(*_get_chars(ctx, ids))
+    plot = context["event"].get_elements(Plot).get(pk=target)
+    plot.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_plot(request, ctx: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_plot(request, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a plot element."""
-    plot = ctx["event"].get_elements(Plot).get(pk=target)
-    plot.characters.remove(*_get_chars(ctx, ids))
+    plot = context["event"].get_elements(Plot).get(pk=target)
+    plot.characters.remove(*_get_chars(context, ids))
 
 
 def exec_add_char_delivery(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     target: int | str,
     ids: list[int] | str,
 ) -> None:
     """Add characters to a delivery."""
-    delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
-    delivery.characters.add(*_get_chars(ctx, ids))
+    delivery = context["event"].get_elements(DeliveryPx).get(pk=target)
+    delivery.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_delivery(request, ctx: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_delivery(request, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from delivery."""
-    delivery = ctx["event"].get_elements(DeliveryPx).get(pk=target)
-    delivery.characters.remove(*_get_chars(ctx, ids))
+    delivery = context["event"].get_elements(DeliveryPx).get(pk=target)
+    delivery.characters.remove(*_get_chars(context, ids))
 
 
-def exec_add_char_prologue(request: HttpRequest, ctx: dict[str, Any], target: int, ids: list[int]) -> None:
+def exec_add_char_prologue(request: HttpRequest, context: dict[str, Any], target: int, ids: list[int]) -> None:
     """Add characters to a prologue."""
-    prologue = ctx["event"].get_elements(Prologue).get(pk=target)
-    prologue.characters.add(*_get_chars(ctx, ids))
+    prologue = context["event"].get_elements(Prologue).get(pk=target)
+    prologue.characters.add(*_get_chars(context, ids))
 
 
 def exec_del_char_prologue(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     target: int,
     ids: list[int],
 ) -> None:
     """Remove characters from a prologue."""
-    prologue = ctx["event"].get_elements(Prologue).get(pk=target)
-    prologue.characters.remove(*_get_chars(ctx, ids))
+    prologue = context["event"].get_elements(Prologue).get(pk=target)
+    prologue.characters.remove(*_get_chars(context, ids))
 
 
 def exec_set_char_progress(
     request,
-    ctx: dict,
+    context: dict,
     target: int,
     ids: list[int],
 ) -> None:
     """Update progress step for specified characters."""
-    progress_step = ctx["event"].get_elements(ProgressStep).get(pk=target)
-    ctx["event"].get_elements(Character).filter(pk__in=ids).update(progress=progress_step)
+    progress_step = context["event"].get_elements(ProgressStep).get(pk=target)
+    context["event"].get_elements(Character).filter(pk__in=ids).update(progress=progress_step)
 
 
-def exec_set_char_assigned(request: HttpRequest, ctx: dict[str, Any], target: str, ids: list[int]) -> None:
+def exec_set_char_assigned(request: HttpRequest, context: dict[str, Any], target: str, ids: list[int]) -> None:
     """Assign characters to a member."""
     member = Member.objects.get(pk=target)
-    ctx["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
+    context["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
-def exec_set_char_status(request, ctx, target, ids):
-    ctx["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
+def exec_set_char_status(request, context, target, ids):
+    context["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
 
 
-def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
+def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> None:
     """Process bulk operations on character objects.
 
     Handles mass character modifications, faction assignments, and other
@@ -326,11 +326,11 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
 
     Args:
         request: Django HTTP request object containing POST data with operation details.
-        ctx: Context dictionary containing event and selection data. Modified in-place
+        context: Context dictionary containing event and selection data. Modified in-place
             to include operation results and status messages.
 
     Returns:
-        None: Function modifies ctx in-place.
+        None: Function modifies context in-place.
 
     Raises:
         ReturnNowError: When POST request is processed, containing execution results.
@@ -352,15 +352,15 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
             Operations.SET_CHAR_STATUS: exec_set_char_status,
         }
         # Execute the bulk operation and raise exception to return result
-        raise ReturnNowError(exec_bulk(request, ctx, mapping))
+        raise ReturnNowError(exec_bulk(request, context, mapping))
 
     # Initialize bulk operations list for GET requests
-    ctx["bulk"] = []
+    context["bulk"] = []
 
     # Add faction-related operations if faction feature is enabled
-    if "faction" in ctx["features"]:
-        factions = ctx["event"].get_elements(Faction).values("id", "name").order_by("name")
-        ctx["bulk"].extend(
+    if "faction" in context["features"]:
+        factions = context["event"].get_elements(Faction).values("id", "name").order_by("name")
+        context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_FACT, "label": _("Add to faction"), "objs": factions},
                 {"idx": Operations.DEL_CHAR_FACT, "label": _("Remove from faction"), "objs": factions},
@@ -368,9 +368,9 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
         )
 
     # Add plot-related operations if plot feature is enabled
-    if "plot" in ctx["features"]:
-        plots = ctx["event"].get_elements(Plot).values("id", "name").order_by("name")
-        ctx["bulk"].extend(
+    if "plot" in context["features"]:
+        plots = context["event"].get_elements(Plot).values("id", "name").order_by("name")
+        context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
                 {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
@@ -378,9 +378,9 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
         )
 
     # Add prologue-related operations if prologue feature is enabled
-    if "prologue" in ctx["features"]:
-        prologues = ctx["event"].get_elements(Prologue).values("id", "name").order_by("name")
-        ctx["bulk"].extend(
+    if "prologue" in context["features"]:
+        prologues = context["event"].get_elements(Prologue).values("id", "name").order_by("name")
+        context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_PROLOGUE, "label": _("Add prologue"), "objs": prologues},
                 {"idx": Operations.DEL_CHAR_PROLOGUE, "label": _("Remove prologue"), "objs": prologues},
@@ -388,9 +388,9 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
         )
 
     # Add XP delivery operations if px feature is enabled
-    if "px" in ctx["features"]:
-        delivery = ctx["event"].get_elements(DeliveryPx).values("id", "name")
-        ctx["bulk"].extend(
+    if "px" in context["features"]:
+        delivery = context["event"].get_elements(DeliveryPx).values("id", "name")
+        context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
                 {"idx": Operations.DEL_CHAR_DELIVERY, "label": _("Remove from xp delivery"), "objs": delivery},
@@ -398,116 +398,116 @@ def handle_bulk_characters(request: HttpRequest, ctx: dict[str, Any]) -> None:
         )
 
     # Add progress step operation if progress feature is enabled
-    if "progress" in ctx["features"]:
-        progress_steps = ctx["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
-        ctx["bulk"].append(
+    if "progress" in context["features"]:
+        progress_steps = context["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
+        context["bulk"].append(
             {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps}
         )
 
     # Add staff assignment operation if assigned feature is enabled
-    if "assigned" in ctx["features"]:
+    if "assigned" in context["features"]:
         # Get event staff members using the same function used in writing utils
-        event_staff = get_event_staffers(ctx["event"])
+        event_staff = get_event_staffers(context["event"])
         staff_members = [{"id": m.id, "name": m.show_nick()} for m in event_staff]
-        ctx["bulk"].append(
+        context["bulk"].append(
             {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members}
         )
 
     # Add status assignment operation if enabled
-    if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
+    if get_event_config(context["event"].id, "user_character_approval", False, context):
         status_choices = [{"id": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
-        ctx["bulk"].append(
+        context["bulk"].append(
             {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices}
         )
 
 
 def exec_set_quest_type(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     target: int,
     ids: list[int],
 ) -> None:
     """Set quest type for multiple quests."""
-    quest_type = ctx["event"].get_elements(QuestType).get(pk=target)
-    ctx["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
+    quest_type = context["event"].get_elements(QuestType).get(pk=target)
+    context["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
 
 
-def handle_bulk_quest(request, ctx) -> None:
+def handle_bulk_quest(request, context) -> None:
     """Handle bulk operations for quest management.
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary containing event and other data
+        context: Context dictionary containing event and other data
     """
     # Handle POST request - execute bulk operations
     if request.POST:
-        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
     # Get available quest types for the event, ordered by name
-    quest_types = ctx["event"].get_elements(QuestType).values("id", "name").order_by("name")
+    quest_types = context["event"].get_elements(QuestType).values("id", "name").order_by("name")
 
     # Set up bulk operation options in context
-    ctx["bulk"] = [
+    context["bulk"] = [
         {"idx": Operations.SET_QUEST_TYPE, "label": _("Set quest type"), "objs": quest_types},
     ]
 
 
 def exec_set_quest(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     target: int,
     ids: list[int],
 ) -> None:
     """Assign a quest to multiple traits."""
     # Retrieve the target quest from the event
-    quest = ctx["event"].get_elements(Quest).get(pk=target)
+    quest = context["event"].get_elements(Quest).get(pk=target)
     # Update all specified traits to use this quest
-    ctx["event"].get_elements(Trait).filter(pk__in=ids).update(quest=quest)
+    context["event"].get_elements(Trait).filter(pk__in=ids).update(quest=quest)
 
 
-def handle_bulk_trait(request: HttpRequest, ctx: dict) -> None:
+def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
     """Handle bulk trait operations for quest assignment."""
     if request.POST:
         # Execute bulk operation for setting quest traits
-        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
 
     # Get available quests for the current event
-    quests = ctx["event"].get_elements(Quest).values("id", "name").order_by("name")
+    quests = context["event"].get_elements(Quest).values("id", "name").order_by("name")
 
     # Configure bulk operation options
-    ctx["bulk"] = [
+    context["bulk"] = [
         {"idx": Operations.SET_TRAIT_QUEST, "label": _("Set quest"), "objs": quests},
     ]
 
 
 def exec_set_ability_type(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     target: str | int,
     ids: list[int] | QuerySet,
 ) -> None:
     """Updates ability type for selected abilities in bulk."""
     # Get target ability type from event elements
-    typ = ctx["event"].get_elements(AbilityTypePx).get(pk=target)
+    typ = context["event"].get_elements(AbilityTypePx).get(pk=target)
     # Update all selected abilities with new type
-    ctx["event"].get_elements(AbilityPx).filter(pk__in=ids).update(typ=typ)
+    context["event"].get_elements(AbilityPx).filter(pk__in=ids).update(typ=typ)
 
 
-def handle_bulk_ability(request: HttpRequest, ctx: dict) -> None:
+def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     """Handle bulk operations for abilities.
 
     Args:
         request: HTTP request object
-        ctx: Context dictionary containing event data
+        context: Context dictionary containing event data
     """
     if request.POST:
         # Execute bulk operation and return early if POST request
-        raise ReturnNowError(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
     # Get ability types for the event, ordered by name
-    quests = ctx["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
+    quests = context["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
 
     # Setup bulk operations context
-    ctx["bulk"] = [
+    context["bulk"] = [
         {"idx": Operations.SET_ABILITY_TYPE, "label": _("Set ability type"), "objs": quests},
     ]

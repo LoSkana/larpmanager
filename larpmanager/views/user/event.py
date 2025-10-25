@@ -369,8 +369,8 @@ def carousel(request: HttpRequest) -> HttpResponse:
         Only includes events with valid end dates.
     """
     # Initialize context with default user data and empty list
-    ctx = def_user_context(request)
-    ctx.update({"list": []})
+    context = def_user_context(request)
+    context.update({"list": []})
 
     # Cache to track processed events and set reference date (3 days ago)
     cache = {}
@@ -397,12 +397,12 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
         # Mark event as 'coming' if it ends after reference date
         el["coming"] = run.end > ref
-        ctx["list"].append(el)
+        context["list"].append(el)
 
     # Convert event list to JSON for frontend use
-    ctx["json"] = json.dumps(ctx["list"])
+    context["json"] = json.dumps(context["list"])
 
-    return render(request, "larpmanager/general/carousel.html", ctx)
+    return render(request, "larpmanager/general/carousel.html", context)
 
 
 @login_required
@@ -415,7 +415,7 @@ def share(request):
     Returns:
         HttpResponse: Rendered template or redirect to home
     """
-    ctx = def_user_context(request)
+    context = def_user_context(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
     if el.status != MembershipStatus.EMPTY:
@@ -428,18 +428,18 @@ def share(request):
         messages.success(request, _("You have granted data sharing with this organisation!"))
         return redirect("home")
 
-    ctx["disable_join"] = True
+    context["disable_join"] = True
 
-    return render(request, "larpmanager/member/share.html", ctx)
+    return render(request, "larpmanager/member/share.html", context)
 
 
 @login_required
 def legal_notice(request: HttpRequest) -> HttpResponse:
     """Render legal notice page with association-specific text."""
     # Build context with user data and legal notice text
-    ctx = def_user_context(request)
-    ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
-    return render(request, "larpmanager/general/legal.html", ctx)
+    context = def_user_context(request)
+    context.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
+    return render(request, "larpmanager/general/legal.html", context)
 
 
 @login_required
@@ -453,10 +453,10 @@ def event_register(request, s):
     Returns:
         Redirect to single run registration or list of available runs
     """
-    ctx = get_event(request, s)
+    context = get_event(request, s)
     # check future runs
     runs = (
-        Run.objects.filter(event=ctx["event"], end__gte=datetime.now())
+        Run.objects.filter(event=context["event"], end__gte=datetime.now())
         .exclude(development=DevelopStatus.START)
         .exclude(event__visible=False)
         .order_by("end")
@@ -466,12 +466,12 @@ def event_register(request, s):
     elif len(runs) == 1:
         run = runs.first()
         return redirect("register", s=run.get_slug())
-    ctx["list"] = []
-    ctx_reg = {"features_map": {ctx["event"].id: ctx["features"]}}
+    context["list"] = []
+    ctx_reg = {"features_map": {context["event"].id: context["features"]}}
     for r in runs:
         registration_status(r, request.user, ctx_reg)
-        ctx["list"].append(r)
-    return render(request, "larpmanager/general/event_register.html", ctx)
+        context["list"].append(r)
+    return render(request, "larpmanager/general/event_register.html", context)
 
 
 def calendar_past(request: HttpRequest) -> HttpResponse:
@@ -490,8 +490,8 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
                      Template: 'larpmanager/general/past.html'
     """
     # Extract association ID and initialize user context
-    ctx = def_user_context(request)
-    aid = ctx["association_id"]
+    context = def_user_context(request)
+    aid = context["association_id"]
 
     # Get all past runs for this association
     runs = get_coming_runs(aid, future=False)
@@ -522,7 +522,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
 
     # Convert runs queryset to list and initialize context list
     runs_list = list(runs)
-    ctx["list"] = []
+    context["list"] = []
 
     ctx_reg = {
         "my_regs": my_regs_dict,
@@ -537,11 +537,11 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
         registration_status(run, request.user, ctx_reg)
 
         # Add processed run to context list
-        ctx["list"].append(run)
+        context["list"].append(run)
 
     # Set page identifier and render template
-    ctx["page"] = "calendar_past"
-    return render(request, "larpmanager/general/past.html", ctx)
+    context["page"] = "calendar_past"
+    return render(request, "larpmanager/general/past.html", context)
 
 
 def check_gallery_visibility(request, context):
@@ -593,36 +593,38 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
         Http404: If event or run not found (handled by get_event_run)
     """
     # Get event context and check if character feature is enabled
-    ctx = get_event_run(request, s, include_status=True)
-    if "character" not in ctx["features"]:
-        return redirect("event", s=ctx["run"].get_slug())
+    context = get_event_run(request, s, include_status=True)
+    if "character" not in context["features"]:
+        return redirect("event", s=context["run"].get_slug())
 
     # Initialize registration list for unassigned members
-    ctx["registration_list"] = []
+    context["registration_list"] = []
 
     # Get event features for permission checking
-    features = get_event_features(ctx["event"].id)
+    features = get_event_features(context["event"].id)
 
     # Check if user has permission to view gallery content
-    if check_gallery_visibility(request, ctx):
+    if check_gallery_visibility(request, context):
         # Load character cache if writing fields are visible or character display is forced
-        if not get_event_config(ctx["event"].id, "writing_field_visibility", False, ctx) or ctx.get("show_character"):
-            get_event_cache_all(ctx)
+        if not get_event_config(context["event"].id, "writing_field_visibility", False, context) or context.get(
+            "show_character"
+        ):
+            get_event_cache_all(context)
 
         # Check configuration for hiding uncasted players
-        hide_uncasted_players = get_event_config(ctx["event"].id, "gallery_hide_uncasted_players", False, ctx)
+        hide_uncasted_players = get_event_config(context["event"].id, "gallery_hide_uncasted_players", False, context)
         if not hide_uncasted_players:
             # Get registrations that have assigned characters
-            que = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id)
+            que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
 
             # Filter by character approval status if required
-            if get_event_config(ctx["event"].id, "user_character_approval", False, ctx):
+            if get_event_config(context["event"].id, "user_character_approval", False, context):
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 
             # Pre-filter ticket IDs to exclude from registration without character assigned
             excluded_ticket_ids = RegistrationTicket.objects.filter(
-                event_id=ctx["event"].id,
+                event_id=context["event"].id,
                 tier__in=[
                     TicketTier.WAITING,
                     TicketTier.STAFF,
@@ -633,15 +635,15 @@ def gallery(request: HttpRequest, s: str) -> HttpResponse:
             ).values_list("id", flat=True)
 
             # Get registrations without assigned characters
-            que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
+            que_reg = Registration.objects.filter(run_id=context["run"].id, cancellation_date__isnull=True)
             que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
 
             # Add non-provisional registered members to the display list
             for reg in que_reg.select_related("member"):
-                if not is_reg_provisional(reg, event=ctx["event"], features=features):
-                    ctx["registration_list"].append(reg.member)
+                if not is_reg_provisional(reg, event=context["event"], features=features):
+                    context["registration_list"].append(reg.member)
 
-    return render(request, "larpmanager/event/gallery.html", ctx)
+    return render(request, "larpmanager/event/gallery.html", context)
 
 
 def event(request: HttpRequest, s: str) -> HttpResponse:
@@ -662,26 +664,26 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
         - Sets no_robots flag based on development status and timing
     """
     # Get base context with event and run information
-    ctx = get_event_run(request, s, include_status=True)
-    ctx["coming"] = []
-    ctx["past"] = []
+    context = get_event_run(request, s, include_status=True)
+    context["coming"] = []
+    context["past"] = []
 
     # Retrieve user's registrations for this event if authenticated
     my_regs = []
     if request.user.is_authenticated:
         my_regs = Registration.objects.filter(
-            run__event=ctx["event"],
+            run__event=context["event"],
             redeem_code__isnull=True,
             cancellation_date__isnull=True,
             member=request.user.member,
         )
 
     # Get all runs for the event and set reference date (3 days ago)
-    runs = Run.objects.filter(event=ctx["event"])
+    runs = Run.objects.filter(event=context["event"])
     ref = datetime.now() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking
-    features_map = {ctx["event"].id: ctx["features"]}
+    features_map = {context["event"].id: context["features"]}
     ctx_reg = {"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map}
 
     # Process each run to determine registration status and categorize by timing
@@ -694,21 +696,21 @@ def event(request: HttpRequest, s: str) -> HttpResponse:
 
         # Categorize run as coming (recent) or past based on end date
         if r.end > ref.date():
-            ctx["coming"].append(r)
+            context["coming"].append(r)
         else:
-            ctx["past"].append(r)
+            context["past"].append(r)
 
     # Refresh event object to ensure latest data
-    ctx["event"] = Event.objects.get(pk=ctx["event"].pk)
+    context["event"] = Event.objects.get(pk=context["event"].pk)
 
     # Determine if search engines should index this page
-    ctx["no_robots"] = (
-        not ctx["run"].development == DevelopStatus.SHOW
-        or not ctx["run"].end
-        or datetime.today().date() > ctx["run"].end
+    context["no_robots"] = (
+        not context["run"].development == DevelopStatus.SHOW
+        or not context["run"].end
+        or datetime.today().date() > context["run"].end
     )
 
-    return render(request, "larpmanager/event/event.html", ctx)
+    return render(request, "larpmanager/event/event.html", context)
 
 
 def event_redirect(request, s):
@@ -734,21 +736,21 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
         and event configuration settings.
     """
     # Get event context and validate user access
-    ctx = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, s, include_status=True)
 
     # Check if gallery is visible and character display is enabled
-    if check_gallery_visibility(request, ctx) and ctx["show_character"]:
+    if check_gallery_visibility(request, context) and context["show_character"]:
         # Load all cached event data including characters
-        get_event_cache_all(ctx)
+        get_event_cache_all(context)
 
         # Get custom search text for this event
-        ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
+        context["search_text"] = get_event_text(context["event"].id, EventTextType.SEARCH)
 
         # Determine which writing fields should be visible
-        visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
+        visible_writing_fields(context, QuestionApplicable.CHARACTER)
 
         # Filter character fields based on visibility settings
-        for _character_number, character_data in ctx["chars"].items():
+        for _character_number, character_data in context["chars"].items():
             character_fields = character_data.get("fields")
             if not character_fields:
                 continue
@@ -757,19 +759,19 @@ def search(request: HttpRequest, s: str) -> HttpResponse:
             fields_to_remove = [
                 question_id
                 for question_id in list(character_fields)
-                if str(question_id) not in ctx.get("show_character", []) and "show_all" not in ctx
+                if str(question_id) not in context.get("show_character", []) and "show_all" not in context
             ]
             for question_id in fields_to_remove:
                 del character_fields[question_id]
 
     # Serialize context data to JSON for frontend consumption
     for context_key in ["chars", "factions", "questions", "options", "searchable"]:
-        if context_key not in ctx:
-            ctx[context_key] = {}
+        if context_key not in context:
+            context[context_key] = {}
         # Create JSON versions of each data structure
-        ctx[f"{context_key}_json"] = json.dumps(ctx[context_key])
+        context[f"{context_key}_json"] = json.dumps(context[context_key])
 
-    return render(request, "larpmanager/event/search.html", ctx)
+    return render(request, "larpmanager/event/search.html", context)
 
 
 def get_fact(factions_queryset) -> list[dict]:
@@ -795,13 +797,13 @@ def get_fact(factions_queryset) -> list[dict]:
     return factions_with_characters
 
 
-def get_factions(ctx: dict) -> None:
+def get_factions(context: dict) -> None:
     """Populate context with faction data organized by type."""
-    fcs = ctx["event"].get_elements(Faction)
+    fcs = context["event"].get_elements(Faction)
     # Get primary factions ordered by number
-    ctx["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
+    context["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
     # Get transversal factions ordered by number
-    ctx["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
+    context["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
 
 
 def check_visibility(context: dict, writing_type: str, writing_name: str) -> None:
@@ -831,15 +833,15 @@ def check_visibility(context: dict, writing_type: str, writing_name: str) -> Non
 def factions(request: HttpRequest, s: str) -> HttpResponse:
     """Render factions page for an event run."""
     # Get event run context and validate status
-    ctx = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, s, include_status=True)
 
     # Verify user has permission to view factions
-    check_visibility(ctx, "faction", _("Factions"))
+    check_visibility(context, "faction", _("Factions"))
 
     # Load all event cache data into context
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
-    return render(request, "larpmanager/event/factions.html", ctx)
+    return render(request, "larpmanager/event/factions.html", context)
 
 
 def faction(request, s, g):
@@ -853,24 +855,24 @@ def faction(request, s, g):
     Returns:
         HttpResponse: Rendered faction detail page
     """
-    ctx = get_event_run(request, s, include_status=True)
-    check_visibility(ctx, "faction", _("Factions"))
+    context = get_event_run(request, s, include_status=True)
+    check_visibility(context, "faction", _("Factions"))
 
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     typ = None
-    if g in ctx["factions"]:
-        ctx["faction"] = ctx["factions"][g]
-        typ = ctx["faction"]["typ"]
+    if g in context["factions"]:
+        context["faction"] = context["factions"][g]
+        typ = context["faction"]["typ"]
 
-    if "faction" not in ctx or typ == "g" or "id" not in ctx["faction"]:
+    if "faction" not in context or typ == "g" or "id" not in context["faction"]:
         raise Http404("Faction does not exist")
 
-    ctx["fact"] = get_writing_element_fields(
-        ctx, "faction", QuestionApplicable.FACTION, ctx["faction"]["id"], only_visible=True
+    context["fact"] = get_writing_element_fields(
+        context, "faction", QuestionApplicable.FACTION, context["faction"]["id"], only_visible=True
     )
 
-    return render(request, "larpmanager/event/faction.html", ctx)
+    return render(request, "larpmanager/event/faction.html", context)
 
 
 def quests(request: HttpRequest, s: str, g: str | None = None) -> HttpResponse:
@@ -885,23 +887,23 @@ def quests(request: HttpRequest, s: str, g: str | None = None) -> HttpResponse:
         HttpResponse: Rendered template with quest types or specific quests
     """
     # Get event context and verify user can view quests
-    ctx = get_event_run(request, s, include_status=True)
-    check_visibility(ctx, "quest", _("Quest"))
+    context = get_event_run(request, s, include_status=True)
+    check_visibility(context, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
     if not g:
-        ctx["list"] = QuestType.objects.filter(event=ctx["event"]).order_by("number").prefetch_related("quests")
-        return render(request, "larpmanager/event/quest_types.html", ctx)
+        context["list"] = QuestType.objects.filter(event=context["event"]).order_by("number").prefetch_related("quests")
+        return render(request, "larpmanager/event/quest_types.html", context)
 
     # Get specific quest type and build list of visible quests
-    get_element(ctx, g, "quest_type", QuestType, by_number=True)
-    ctx["list"] = []
+    get_element(context, g, "quest_type", QuestType, by_number=True)
+    context["list"] = []
 
     # Filter quests by event, visibility, and type, then add complete quest data
-    for el in Quest.objects.filter(event=ctx["event"], hide=False, typ=ctx["quest_type"]).order_by("number"):
-        ctx["list"].append(el.show_complete())
+    for el in Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"]).order_by("number"):
+        context["list"].append(el.show_complete())
 
-    return render(request, "larpmanager/event/quests.html", ctx)
+    return render(request, "larpmanager/event/quests.html", context)
 
 
 def quest(request, s, g):
@@ -915,22 +917,22 @@ def quest(request, s, g):
     Returns:
         HttpResponse: Rendered quest template
     """
-    ctx = get_event_run(request, s, include_status=True)
-    check_visibility(ctx, "quest", _("Quest"))
+    context = get_event_run(request, s, include_status=True)
+    check_visibility(context, "quest", _("Quest"))
 
-    get_element(ctx, g, "quest", Quest, by_number=True)
-    ctx["quest_fields"] = get_writing_element_fields(
-        ctx, "quest", QuestionApplicable.QUEST, ctx["quest"].id, only_visible=True
+    get_element(context, g, "quest", Quest, by_number=True)
+    context["quest_fields"] = get_writing_element_fields(
+        context, "quest", QuestionApplicable.QUEST, context["quest"].id, only_visible=True
     )
 
     traits = []
-    for el in ctx["quest"].traits.all():
-        res = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
+    for el in context["quest"].traits.all():
+        res = get_writing_element_fields(context, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
         res.update(el.show())
         traits.append(res)
-    ctx["traits"] = traits
+    context["traits"] = traits
 
-    return render(request, "larpmanager/event/quest.html", ctx)
+    return render(request, "larpmanager/event/quest.html", context)
 
 
 def limitations(request: HttpRequest, s: str) -> HttpResponse:
@@ -950,38 +952,38 @@ def limitations(request: HttpRequest, s: str) -> HttpResponse:
         discounts, and registration options with their current usage counts.
     """
     # Get event and run context with status validation
-    ctx = get_event_run(request, s, include_status=True)
+    context = get_event_run(request, s, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_reg_counts(ctx["run"])
+    counts = get_reg_counts(context["run"])
 
     # Build discounts list with visibility filtering
-    ctx["disc"] = []
-    for discount in ctx["run"].discounts.exclude(visible=False):
-        ctx["disc"].append(discount.show(ctx["run"]))
+    context["disc"] = []
+    for discount in context["run"].discounts.exclude(visible=False):
+        context["disc"].append(discount.show(context["run"]))
 
     # Build tickets list with availability and usage data
-    ctx["tickets"] = []
-    for ticket in RegistrationTicket.objects.filter(event=ctx["event"], max_available__gt=0, visible=True):
-        dt = ticket.show(ctx["run"])
+    context["tickets"] = []
+    for ticket in RegistrationTicket.objects.filter(event=context["event"], max_available__gt=0, visible=True):
+        dt = ticket.show(context["run"])
         key = f"tk_{ticket.id}"
         # Add usage count if available in registration counts
         if key in counts:
             dt["used"] = counts[key]
-        ctx["tickets"].append(dt)
+        context["tickets"].append(dt)
 
     # Build registration options list with availability constraints
-    ctx["opts"] = []
-    que = RegistrationOption.objects.filter(question__event=ctx["event"], max_available__gt=0)
+    context["opts"] = []
+    que = RegistrationOption.objects.filter(question__event=context["event"], max_available__gt=0)
     for option in que:
-        dt = option.show(ctx["run"])
+        dt = option.show(context["run"])
         key = f"option_{option.id}"
         # Add usage count if available in registration counts
         if key in counts:
             dt["used"] = counts[key]
-        ctx["opts"].append(dt)
+        context["opts"].append(dt)
 
-    return render(request, "larpmanager/event/limitations.html", ctx)
+    return render(request, "larpmanager/event/limitations.html", context)
 
 
 def export(request, s, t):
@@ -995,19 +997,19 @@ def export(request, s, t):
     Returns:
         JsonResponse: Exported elements data
     """
-    ctx = get_event(request, s)
+    context = get_event(request, s)
     if t == "char":
-        lst = ctx["event"].get_elements(Character).order_by("number")
+        lst = context["event"].get_elements(Character).order_by("number")
     elif t == "faction":
-        lst = ctx["event"].get_elements(Faction).order_by("number")
+        lst = context["event"].get_elements(Faction).order_by("number")
     elif t == "quest":
-        lst = Quest.objects.filter(event=ctx["event"]).order_by("number")
+        lst = Quest.objects.filter(event=context["event"]).order_by("number")
     elif t == "trait":
-        lst = Trait.objects.filter(quest__event=ctx["event"]).order_by("number")
+        lst = Trait.objects.filter(quest__event=context["event"]).order_by("number")
     else:
         raise Http404("wrong type")
-    # r = Run(event=ctx["event"])
+    # r = Run(event=context["event"])
     aux = {}
     for el in lst:
-        aux[el.number] = el.show(ctx["run"])
+        aux[el.number] = el.show(context["run"])
     return JsonResponse(aux)

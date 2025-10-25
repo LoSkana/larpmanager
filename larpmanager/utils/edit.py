@@ -226,7 +226,7 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
         raise Http404("not your association")
 
 
-def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: int) -> bool:
+def user_edit(request: HttpRequest, context: dict, form_type: type, nm: str, eid: int) -> bool:
     """Generic user data editing with validation.
 
     Handles both GET and POST requests for editing user data. On POST, validates
@@ -235,7 +235,7 @@ def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: in
 
     Args:
         request: HTTP request object containing method and POST data
-        ctx: Context dictionary containing model data and form instance
+        context: Context dictionary containing model data and form instance
         form_type: Django form class to use for data validation and editing
         nm: Name key for accessing the model instance in context dictionary
         eid: Entity ID for editing, used for form numbering (0 for new instances)
@@ -248,11 +248,11 @@ def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: in
         - Adds success message to request on successful save
         - Logs the operation using save_log function
         - Deletes instance if delete flag is set
-        - Updates ctx with 'saved', 'form', 'num', and optionally 'name' keys
+        - Updates context with 'saved', 'form', 'num', and optionally 'name' keys
     """
     if request.method == "POST":
         # Initialize form with POST data and files, bind to existing instance
-        form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
+        form = form_type(request.POST, request.FILES, instance=context[nm], context=context)
 
         if form.is_valid():
             # Save the form and get the updated instance
@@ -270,20 +270,20 @@ def user_edit(request: HttpRequest, ctx: dict, form_type: type, nm: str, eid: in
                 p.delete()
 
             # Store saved instance in context for template access
-            ctx["saved"] = p
+            context["saved"] = p
 
             return True
     else:
         # Initialize empty form for GET request, bind to existing instance
-        form = form_type(instance=ctx[nm], ctx=ctx)
+        form = form_type(instance=context[nm], context=context)
 
     # Add form and entity ID to context for template rendering
-    ctx["form"] = form
-    ctx["num"] = eid
+    context["form"] = form
+    context["num"] = eid
 
     # Add string representation of instance name for existing entities
     if eid != 0:
-        ctx["name"] = str(ctx[nm])
+        context["name"] = str(context[nm])
 
     return False
 
@@ -317,7 +317,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
 
 def backend_edit(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     form_type: type[ModelForm],
     element_id: Optional[int],
     additional_field: Optional[str] = None,
@@ -332,7 +332,7 @@ def backend_edit(
 
     Args:
         request: Django HTTP request object containing user and POST data
-        ctx: Context dictionary for template rendering and data sharing
+        context: Context dictionary for template rendering and data sharing
         form_type: Django ModelForm class for handling the specific model
         element_id: Element ID for editing existing objects, None for new objects
         additional_field: Optional additional field parameter for specialized handling
@@ -344,36 +344,36 @@ def backend_edit(
     """
     # Extract model type and set up basic context variables
     model_type = form_type.Meta.model
-    ctx["elementTyp"] = model_type
-    ctx["request"] = request
+    context["elementTyp"] = model_type
+    context["request"] = request
 
     # Handle association-based operations vs event-based operations
     if is_association_based:
-        ctx["exe"] = True
+        context["exe"] = True
         if element_id is None:
             element_id = request.assoc["id"]
-            ctx["nonum"] = True
+            context["nonum"] = True
     elif element_id is None:
-        element_id = ctx["event"].id
-        ctx["nonum"] = True
+        element_id = context["event"].id
+        context["nonum"] = True
 
     # Load existing element or set as None for new objects
     if element_id != 0:
-        backend_get(ctx, model_type, element_id, additional_field)
+        backend_get(context, model_type, element_id, additional_field)
     else:
-        ctx["el"] = None
+        context["el"] = None
 
     # Set up context for template rendering
-    ctx["num"] = element_id
-    ctx["type"] = ctx["elementTyp"].__name__.lower()
+    context["num"] = element_id
+    context["type"] = context["elementTyp"].__name__.lower()
 
     # Process POST request - form submission and validation
     if request.method == "POST":
-        ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
+        context["form"] = form_type(request.POST, request.FILES, instance=context["el"], context=context)
 
-        if ctx["form"].is_valid():
+        if context["form"].is_valid():
             # Save the form and show success message if not in quiet mode
-            saved_object = ctx["form"].save()
+            saved_object = context["form"].save()
             if not quiet:
                 messages.success(request, _("Operation completed") + "!")
 
@@ -384,20 +384,20 @@ def backend_edit(
                 saved_object.delete()
 
             # Store saved object in context and return success
-            ctx["saved"] = saved_object
+            context["saved"] = saved_object
             return True
     else:
         # GET request - initialize form with existing instance
-        ctx["form"] = form_type(instance=ctx["el"], ctx=ctx)
+        context["form"] = form_type(instance=context["el"], context=context)
 
     # Set display name for existing objects
     if element_id != 0:
-        ctx["name"] = str(ctx["el"])
+        context["name"] = str(context["el"])
 
     # Handle "add another" functionality for continuous adding
-    ctx["add_another"] = "add_another" not in ctx or ctx["add_another"]
-    if ctx["add_another"]:
-        ctx["continue_add"] = "continue" in request.POST
+    context["add_another"] = "add_another" not in context or context["add_another"]
+    if context["add_another"]:
+        context["continue_add"] = "continue" in request.POST
 
     return False
 
@@ -429,31 +429,31 @@ def orga_edit(
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context for the event
-    ctx = check_event_permission(request, event_slug, permission)
+    context = check_event_permission(request, event_slug, permission)
 
     # Merge any additional context provided by caller
     if additional_context:
-        ctx.update(additional_context)
+        context.update(additional_context)
 
     # Process the edit operation using backend edit handler
     # Returns True if edit was successful and should redirect
-    if backend_edit(request, ctx, form_type, entity_id, additional_field=None, is_association_based=False):
+    if backend_edit(request, context, form_type, entity_id, additional_field=None, is_association_based=False):
         # Set suggestion context for successful edit
-        set_suggestion(ctx, permission)
+        set_suggestion(context, permission)
 
         # Handle "continue editing" workflow - redirect to new object form
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
+            return redirect(request.resolver_match.view_name, s=context["run"].get_slug(), num=0)
 
         # Determine redirect target - use provided or default to permission name
         if not redirect_view:
             redirect_view = permission
 
         # Redirect to success page with event slug
-        return redirect(redirect_view, s=ctx["run"].get_slug())
+        return redirect(redirect_view, s=context["run"].get_slug())
 
     # Edit operation failed or is initial load - render edit form
-    return render(request, "larpmanager/orga/edit.html", ctx)
+    return render(request, "larpmanager/orga/edit.html", context)
 
 
 def exe_edit(
@@ -484,16 +484,18 @@ def exe_edit(
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context
-    ctx = check_assoc_permission(request, permission)
+    context = check_assoc_permission(request, permission)
 
     # Merge additional context if provided
     if additional_context:
-        ctx.update(additional_context)
+        context.update(additional_context)
 
     # Process the edit operation through backend handler
-    if backend_edit(request, ctx, form_type, entity_id, additional_field=additional_field, is_association_based=True):
+    if backend_edit(
+        request, context, form_type, entity_id, additional_field=additional_field, is_association_based=True
+    ):
         # Set permission suggestion for UI feedback
-        set_suggestion(ctx, permission)
+        set_suggestion(context, permission)
 
         # Handle "continue editing" workflow
         if "continue" in request.POST:
@@ -505,7 +507,7 @@ def exe_edit(
         return redirect(redirect_view)
 
     # Render edit template if edit operation was not successful
-    return render(request, "larpmanager/exe/edit.html", ctx)
+    return render(request, "larpmanager/exe/edit.html", context)
 
 
 def set_suggestion(context: dict, permission: str) -> None:
@@ -549,7 +551,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 
 def writing_edit(
     request: HttpRequest,
-    ctx: dict[str, Any],
+    context: dict[str, Any],
     form_type: type[forms.Form],
     element_name: str,
     element_type: str,
@@ -564,7 +566,7 @@ def writing_edit(
 
     Args:
         request: The HTTP request object containing method and form data
-        ctx: Context dictionary containing element data and template variables
+        context: Context dictionary containing element data and template variables
         form_type: Django form class to instantiate for editing the element
         element_name: Name key of the element in the context dictionary
         element_type: Type identifier for the writing element being edited
@@ -575,47 +577,47 @@ def writing_edit(
         to continue with template rendering
 
     Note:
-        Function modifies the ctx dictionary in-place to add form and display data.
+        Function modifies the context dictionary in-place to add form and display data.
     """
     # Set up element type metadata for template rendering
-    ctx["elementTyp"] = form_type.Meta.model
+    context["elementTyp"] = form_type.Meta.model
 
     # Configure element identification and naming
-    if element_name in ctx:
-        ctx["eid"] = ctx[element_name].id
-        ctx["name"] = str(ctx[element_name])
+    if element_name in context:
+        context["eid"] = context[element_name].id
+        context["name"] = str(context[element_name])
     else:
-        ctx[element_name] = None
+        context[element_name] = None
 
     # Set type information for template display
-    ctx["type"] = ctx["elementTyp"].__name__.lower()
-    ctx["label_typ"] = ctx["type"]
+    context["type"] = context["elementTyp"].__name__.lower()
+    context["label_typ"] = context["type"]
 
     # Handle form submission (POST request)
     if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=ctx[element_name], ctx=ctx)
+        form = form_type(request.POST, request.FILES, instance=context[element_name], context=context)
 
         # Process valid form data and potentially redirect
         if form.is_valid():
-            return _writing_save(ctx, form, form_type, element_name, redirect_url, request, element_type)
+            return _writing_save(context, form, form_type, element_name, redirect_url, request, element_type)
     else:
         # Initialize form for GET request
-        form = form_type(instance=ctx[element_name], ctx=ctx)
+        form = form_type(instance=context[element_name], context=context)
 
     # Configure template context for form rendering
-    ctx["nm"] = element_name
-    ctx["form"] = form
-    ctx["add_another"] = True
-    ctx["continue_add"] = "continue" in request.POST
+    context["nm"] = element_name
+    context["form"] = form
+    context["add_another"] = True
+    context["continue_add"] = "continue" in request.POST
 
     # Set auto-save behavior based on event configuration
-    ctx["auto_save"] = not get_event_config(ctx["event"].id, "writing_disable_auto", False, ctx)
-    ctx["download"] = 1
+    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", False, context)
+    context["download"] = 1
 
     # Set up character finder functionality for the element type
-    _setup_char_finder(ctx, ctx["elementTyp"])
+    _setup_char_finder(context, context["elementTyp"])
 
-    return render(request, "larpmanager/orga/writing/writing.html", ctx)
+    return render(request, "larpmanager/orga/writing/writing.html", context)
 
 
 def _setup_char_finder(context: dict, model_type: type) -> None:
@@ -653,7 +655,13 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
 
 def _writing_save(
-    ctx: dict, form: Any, form_type: type, nm: str, redr: Optional[Callable], request: HttpRequest, tp: Optional[str]
+    context: dict,
+    form: Any,
+    form_type: type,
+    nm: str,
+    redr: Optional[Callable],
+    request: HttpRequest,
+    tp: Optional[str],
 ) -> HttpResponse:
     """
     Save writing form data with AJAX and normal save handling.
@@ -663,7 +671,7 @@ def _writing_save(
     deletion via POST parameter and various redirect behaviors.
 
     Args:
-        ctx: Context dictionary containing element data and run information
+        context: Context dictionary containing element data and run information
         form: Validated form instance ready for saving
         form_type: Form class type used for logging operations
         nm: Name of the element in context (used for redirects)
@@ -677,8 +685,8 @@ def _writing_save(
     # Handle AJAX auto-save requests
     if "ajax" in request.POST:
         # Check if element exists in context before processing
-        if nm in ctx:
-            return writing_edit_save_ajax(form, request, ctx)
+        if nm in context:
+            return writing_edit_save_ajax(form, request, context)
         else:
             return JsonResponse({"res": "ko"})
 
@@ -706,22 +714,22 @@ def _writing_save(
 
     # Handle continue editing request
     if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name, s=ctx["run"].get_slug(), num=0)
+        return redirect(request.resolver_match.view_name, s=context["run"].get_slug(), num=0)
 
     # Handle custom redirect function if provided
     if redr:
-        ctx["element"] = p
-        return redr(ctx)
+        context["element"] = p
+        return redr(context)
 
     # Default redirect to list view
-    return redirect("orga_" + nm + "s", s=ctx["run"].get_slug())
+    return redirect("orga_" + nm + "s", s=context["run"].get_slug())
 
 
 def writing_edit_cache_key(eid, typ):
     return f"orga_edit_{eid}_{typ}"
 
 
-def writing_edit_save_ajax(form: Form, request: HttpRequest, ctx: dict) -> "JsonResponse":
+def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "JsonResponse":
     """Handle AJAX save requests for writing elements with locking validation.
 
     This function processes AJAX requests to save writing elements while validating
@@ -731,7 +739,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, ctx: dict) -> "Json
     Args:
         form: Django form instance containing the data to save
         request: HTTP request object containing POST data and user information
-        ctx: Context dictionary for additional data (currently unused)
+        context: Context dictionary for additional data (currently unused)
 
     Returns:
         JsonResponse: JSON response containing either success status or warning message

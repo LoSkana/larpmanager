@@ -1241,27 +1241,27 @@ class PreRegistrationForm(forms.Form):
 
         Args:
             *args: Variable length argument list passed to parent
-            **kwargs: Arbitrary keyword arguments including 'ctx' context data
+            **kwargs: Arbitrary keyword arguments including 'context' context data
         """
         super().__init__()
-        self.ctx = kwargs.pop("ctx")
+        self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
-        self.pre_reg = 1 + len(self.ctx["already"])
+        self.pre_reg = 1 + len(self.context["already"])
 
-        cho = [("", "----")] + [(c.id, c.name) for c in self.ctx["choices"]]
+        cho = [("", "----")] + [(c.id, c.name) for c in self.context["choices"]]
         self.fields["new_event"] = forms.ChoiceField(
             required=False, choices=cho, label=_("Event"), help_text=_("Select the event you wish to pre-register for")
         )
 
-        existing = [al.pref for al in self.ctx["already"]]
+        existing = [al.pref for al in self.context["already"]]
         max_existing = max(existing) if existing else 1
         prefs = [r for r in range(1, max_existing + 4) if r not in existing]
         cho_pref = [(r, r) for r in prefs]
 
         # Check if preference editing is disabled via config
-        if self.ctx.get("event") and get_assoc_config(
-            self.ctx["event"].assoc_id, "pre_reg_preferences", False, self.ctx
+        if self.context.get("event") and get_assoc_config(
+            self.context["event"].assoc_id, "pre_reg_preferences", False, self.context
         ):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,

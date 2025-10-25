@@ -460,19 +460,19 @@ def check_run_accounting(run: Run) -> None:
     RecordAccounting.objects.create(assoc=run.event.assoc, run=run, global_sum=run.balance, bank_sum=0)
 
 
-def assoc_accounting_data(ctx: dict, year: int | None = None) -> None:
+def assoc_accounting_data(context: dict, year: int | None = None) -> None:
     """Gather association accounting data for a specific year or all time.
 
     Aggregates all monetary flows (inflows, outflows, memberships, donations, etc.)
     for an association and populates the context dictionary with the sums.
 
     Args:
-        ctx: Context dictionary with 'a_id' (association ID) key. Will be updated
+        context: Context dictionary with 'a_id' (association ID) key. Will be updated
              with sum fields for various accounting categories
         year: Optional year to filter data. If None, uses all years (1990-2990)
 
     Side effects:
-        Updates ctx with the following keys:
+        Updates context with the following keys:
         - outflow_exec_sum: Executive outflows sum
         - inflow_exec_sum: Executive inflows sum
         - membership_sum: Total membership fees
@@ -496,77 +496,83 @@ def assoc_accounting_data(ctx: dict, year: int | None = None) -> None:
         end_date = date(2990, 1, 1)
 
     # Calculate executive-level outflows (not associated with any specific run)
-    ctx["outflow_exec_sum"] = get_sum(
+    context["outflow_exec_sum"] = get_sum(
         AccountingItemOutflow.objects.filter(
-            run=None, assoc_id=ctx["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
+            run=None, assoc_id=context["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
         )
     )
     # Calculate executive-level inflows (not associated with any specific run)
-    ctx["inflow_exec_sum"] = get_sum(
+    context["inflow_exec_sum"] = get_sum(
         AccountingItemInflow.objects.filter(
-            run=None, assoc_id=ctx["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
+            run=None, assoc_id=context["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
         )
     )
 
     # Calculate membership fees collected
-    ctx["membership_sum"] = get_sum(
-        AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], created__gte=start_date, created__lte=end_date)
+    context["membership_sum"] = get_sum(
+        AccountingItemMembership.objects.filter(
+            assoc_id=context["a_id"], created__gte=start_date, created__lte=end_date
+        )
     )
     # Calculate donations received
-    ctx["donations_sum"] = get_sum(
-        AccountingItemDonation.objects.filter(assoc_id=ctx["a_id"], created__gte=start_date, created__lte=end_date)
+    context["donations_sum"] = get_sum(
+        AccountingItemDonation.objects.filter(assoc_id=context["a_id"], created__gte=start_date, created__lte=end_date)
     )
     # Calculate collections (gifts/prepaid credits) received
-    ctx["collections_sum"] = get_sum(
-        AccountingItemCollection.objects.filter(assoc_id=ctx["a_id"], created__gte=start_date, created__lte=end_date)
+    context["collections_sum"] = get_sum(
+        AccountingItemCollection.objects.filter(
+            assoc_id=context["a_id"], created__gte=start_date, created__lte=end_date
+        )
     )
 
     # Calculate all inflows for the association
-    ctx["inflow_sum"] = get_sum(
+    context["inflow_sum"] = get_sum(
         AccountingItemInflow.objects.filter(
-            assoc_id=ctx["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
+            assoc_id=context["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
         )
     )
     # Calculate all outflows for the association
-    ctx["outflow_sum"] = get_sum(
+    context["outflow_sum"] = get_sum(
         AccountingItemOutflow.objects.filter(
-            assoc_id=ctx["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
+            assoc_id=context["a_id"], payment_date__gte=start_date, payment_date__lte=end_date
         )
     )
 
     # Calculate cash payments received (excluding online/bank transfers)
-    ctx["pay_money_sum"] = get_sum(
+    context["pay_money_sum"] = get_sum(
         AccountingItemPayment.objects.filter(
             pay=PaymentChoices.MONEY,
-            assoc_id=ctx["a_id"],
+            assoc_id=context["a_id"],
             created__gte=start_date,
             created__lte=end_date,
         )
     )
     # Calculate transaction fees charged by payment processors
-    ctx["transactions_sum"] = get_sum(
-        AccountingItemTransaction.objects.filter(assoc_id=ctx["a_id"], created__gte=start_date, created__lte=end_date)
+    context["transactions_sum"] = get_sum(
+        AccountingItemTransaction.objects.filter(
+            assoc_id=context["a_id"], created__gte=start_date, created__lte=end_date
+        )
     )
     # Calculate total refunds issued
-    ctx["refund_sum"] = get_sum(
+    context["refund_sum"] = get_sum(
         AccountingItemOther.objects.filter(
             oth=OtherChoices.REFUND,
-            assoc_id=ctx["a_id"],
+            assoc_id=context["a_id"],
             created__gte=start_date,
             created__lte=end_date,
         )
     )
 
     # Calculate net incoming and outgoing sums
-    ctx["in_sum"] = (
-        ctx["inflow_sum"]
-        + ctx["membership_sum"]
-        + ctx["donations_sum"]
-        + ctx["collections_sum"]
-        + ctx["pay_money_sum"]
-        - ctx["transactions_sum"]
+    context["in_sum"] = (
+        context["inflow_sum"]
+        + context["membership_sum"]
+        + context["donations_sum"]
+        + context["collections_sum"]
+        + context["pay_money_sum"]
+        - context["transactions_sum"]
     )
-    ctx["out_sum"] = ctx["outflow_sum"] + ctx["refund_sum"]
+    context["out_sum"] = context["outflow_sum"] + context["refund_sum"]
 
 
 def assoc_accounting(context: dict) -> None:

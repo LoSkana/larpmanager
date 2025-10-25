@@ -45,12 +45,12 @@ from larpmanager.utils.exceptions import ReturnNowError
 def orga_px_deliveries(request: HttpRequest, s: str) -> HttpResponse:
     """Display list of experience deliveries for an event."""
     # Verify user has permission and retrieve event context
-    ctx = check_event_permission(request, s, "orga_px_deliveries")
+    context = check_event_permission(request, s, "orga_px_deliveries")
 
     # Get all deliveries ordered by number
-    ctx["list"] = ctx["event"].get_elements(DeliveryPx).order_by("number")
+    context["list"] = context["event"].get_elements(DeliveryPx).order_by("number")
 
-    return render(request, "larpmanager/orga/px/deliveries.html", ctx)
+    return render(request, "larpmanager/orga/px/deliveries.html", context)
 
 
 @login_required
@@ -77,25 +77,25 @@ def orga_px_abilities(request: HttpRequest, s: str) -> HttpResponse:
         ReturnNowError: When file download is requested, triggers immediate file response
     """
     # Check user permissions and retrieve event context
-    ctx = check_event_permission(request, s, "orga_px_abilities")
+    context = check_event_permission(request, s, "orga_px_abilities")
 
     # Handle file export request if download parameter is present
     if request.POST and request.POST.get("download") == "1":
-        raise ReturnNowError(zip_exports(ctx, export_abilities(ctx), "Abilities"))
+        raise ReturnNowError(zip_exports(context, export_abilities(context), "Abilities"))
 
     # Process any bulk ability operations from form submission
-    handle_bulk_ability(request, ctx)
+    handle_bulk_ability(request, context)
 
     # Configure template context for file upload/download functionality
-    ctx["upload"] = "px_abilities"
-    ctx["download"] = 1
+    context["upload"] = "px_abilities"
+    context["download"] = 1
 
     # Retrieve event configuration for user PX management permissions
-    ctx["px_user"] = get_event_config(ctx["event"].id, "px_user", False, ctx)
+    context["px_user"] = get_event_config(context["event"].id, "px_user", False, context)
 
     # Query and prepare abilities list with optimized database access
-    ctx["list"] = (
-        ctx["event"]
+    context["list"] = (
+        context["event"]
         .get_elements(AbilityPx)
         .order_by("number")
         .select_related("typ")
@@ -103,7 +103,7 @@ def orga_px_abilities(request: HttpRequest, s: str) -> HttpResponse:
     )
 
     # Render the abilities management template with populated context
-    return render(request, "larpmanager/orga/px/abilities.html", ctx)
+    return render(request, "larpmanager/orga/px/abilities.html", context)
 
 
 @login_required
@@ -119,10 +119,10 @@ def orga_px_abilities_edit(request: HttpRequest, s: str, num: int) -> HttpRespon
         HTTP response for ability editing or redirect
     """
     # Check user permissions for PX abilities management
-    ctx = check_event_permission(request, s, "orga_px_abilities")
+    context = check_event_permission(request, s, "orga_px_abilities")
 
     # Validate that ability types exist before allowing ability creation
-    if not ctx["event"].get_elements(AbilityTypePx).exists():
+    if not context["event"].get_elements(AbilityTypePx).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
         return redirect("orga_px_ability_types_edit", s=s, num=0)
@@ -135,12 +135,12 @@ def orga_px_abilities_edit(request: HttpRequest, s: str, num: int) -> HttpRespon
 def orga_px_ability_types(request: HttpRequest, s: str) -> HttpResponse:
     """Display ability type list for experience management."""
     # Check user has permission to access ability types management
-    ctx = check_event_permission(request, s, "orga_px_ability_types")
+    context = check_event_permission(request, s, "orga_px_ability_types")
 
     # Retrieve and order ability types by number
-    ctx["list"] = ctx["event"].get_elements(AbilityTypePx).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTypePx).order_by("number")
 
-    return render(request, "larpmanager/orga/px/ability_types.html", ctx)
+    return render(request, "larpmanager/orga/px/ability_types.html", context)
 
 
 @login_required
@@ -152,9 +152,9 @@ def orga_px_ability_types_edit(request, s, num):
 def orga_px_rules(request: HttpRequest, s: str) -> HttpResponse:
     """Display experience rules for an event."""
     # Check permission and get event context
-    ctx = check_event_permission(request, s, "orga_px_rules")
-    ctx["list"] = ctx["event"].get_elements(RulePx).order_by("order")
-    return render(request, "larpmanager/orga/px/rules.html", ctx)
+    context = check_event_permission(request, s, "orga_px_rules")
+    context["list"] = context["event"].get_elements(RulePx).order_by("order")
+    return render(request, "larpmanager/orga/px/rules.html", context)
 
 
 @login_required
@@ -171,24 +171,24 @@ def orga_px_rules_order(
 ) -> HttpResponse:
     """Reorder PX rules for an event."""
     # Check permissions and get event context
-    ctx = check_event_permission(request, s, "orga_px_rules")
+    context = check_event_permission(request, s, "orga_px_rules")
 
     # Exchange rule order in database
-    exchange_order(ctx, RulePx, num, order)
+    exchange_order(context, RulePx, num, order)
 
-    return redirect("orga_px_rules", s=ctx["run"].get_slug())
+    return redirect("orga_px_rules", s=context["run"].get_slug())
 
 
 @login_required
 def orga_px_modifiers(request: HttpRequest, s: str) -> HttpResponse:
     """Display and manage experience modifiers for an event."""
     # Check permissions and get event context
-    ctx = check_event_permission(request, s, "orga_px_modifiers")
+    context = check_event_permission(request, s, "orga_px_modifiers")
 
     # Retrieve ordered list of experience modifiers
-    ctx["list"] = ctx["event"].get_elements(ModifierPx).order_by("order")
+    context["list"] = context["event"].get_elements(ModifierPx).order_by("order")
 
-    return render(request, "larpmanager/orga/px/modifiers.html", ctx)
+    return render(request, "larpmanager/orga/px/modifiers.html", context)
 
 
 @login_required
@@ -205,9 +205,9 @@ def orga_px_modifiers_order(
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
     # Check permissions and get context
-    ctx = check_event_permission(request, s, "orga_px_modifiers")
+    context = check_event_permission(request, s, "orga_px_modifiers")
 
     # Exchange modifier order
-    exchange_order(ctx, ModifierPx, num, order)
+    exchange_order(context, ModifierPx, num, order)
 
-    return redirect("orga_px_modifiers", s=ctx["run"].get_slug())
+    return redirect("orga_px_modifiers", s=context["run"].get_slug())

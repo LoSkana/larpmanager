@@ -202,7 +202,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         return redirect("exe_events_edit", num=0)
 
     # Redirect to quick setup if not completed
-    if not get_assoc_config(context["a_id"], "exe_quick_suggestion", False, ctx=context):
+    if not get_assoc_config(context["a_id"], "exe_quick_suggestion", False, context=context):
         setup_message = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization"
@@ -264,7 +264,7 @@ def _exe_suggestions(context):
     }
 
     for permission_key, suggestion_text in suggestions.items():
-        if get_assoc_config(context["a_id"], f"{permission_key}_suggestion", ctx=context):
+        if get_assoc_config(context["a_id"], f"{permission_key}_suggestion", context=context):
             continue
         _add_suggestion(context, suggestion_text, permission_key)
 
@@ -368,11 +368,11 @@ def _exe_users_actions(request, context, enabled_features):
         if not get_assoc_text(context["a_id"], AssocTextType.MEMBERSHIP):
             _add_priority(context, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", ctx=context)) == 0:
+        if len(get_assoc_config(request.assoc["id"], "membership_fee", "", context=context)) == 0:
             _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in enabled_features:
-        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", ctx=context):
+        if not get_assoc_config(request.assoc["id"], "vote_candidates", "", context=context):
             _add_priority(
                 context,
                 _("Set up the voting configuration"),
@@ -407,7 +407,7 @@ def _exe_accounting_actions(request, context, enabled_features):
             )
 
     if "organization_tax" in enabled_features:
-        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", ctx=context):
+        if not get_assoc_config(request.assoc["id"], "organization_tax_perc", "", context=context):
             _add_priority(
                 context,
                 _("Set up the organization tax configuration"),
@@ -416,8 +416,8 @@ def _exe_accounting_actions(request, context, enabled_features):
             )
 
     if "vat" in enabled_features:
-        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", ctx=context)
-        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", ctx=context)
+        vat_ticket = get_assoc_config(request.assoc["id"], "vat_ticket", "", context=context)
+        vat_options = get_assoc_config(request.assoc["id"], "vat_options", "", context=context)
         if not vat_ticket or not vat_options:
             _add_priority(
                 context,
@@ -453,7 +453,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("orga_run", s=event_slug)
 
     # Ensure quick setup is complete
-    if not get_event_config(context["event"].id, "orga_quick_suggestion", False, ctx=context):
+    if not get_event_config(context["event"].id, "orga_quick_suggestion", False, context=context):
         message = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
             "the features most useful for your event"
@@ -463,7 +463,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(context, request, event_slug)
-    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, ctx=context):
+    if get_assoc_config(request.assoc["id"], "interface_admin_links", False, context=context):
         get_index_assoc_permissions(context, request, request.assoc["id"], check=False)
 
     # Load registration status
@@ -492,7 +492,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     _compile(request, context)
 
     # Mobile shortcuts handling
-    if get_event_config(context["event"].id, "show_shortcuts_mobile", False, ctx=context):
+    if get_event_config(context["event"].id, "show_shortcuts_mobile", False, context=context):
         origin_id = request.GET.get("origin", "")
         should_open_shortcuts = False
         if origin_id:
@@ -551,7 +551,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
     # Check if user_character feature needs configuration
     if (
         "user_character" in enabled_features
-        and get_event_config(context["event"].id, "user_character_max", "", ctx=context) == ""
+        and get_event_config(context["event"].id, "user_character_max", "", context=context) == ""
     ):
         _add_priority(
             context,
@@ -578,7 +578,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, ctx=context):
+    if not get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, context=context):
         pending_expenses_count = AccountingItemExpense.objects.filter(run=context["run"], is_approved=False).count()
         if pending_expenses_count:
             _add_action(
@@ -660,7 +660,7 @@ def _orga_casting_actions(context, enabled_features):
     adding appropriate priority suggestions for event organizers.
     """
     if "casting" in enabled_features:
-        if not get_event_config(context["event"].id, "casting_min", 0, ctx=context):
+        if not get_event_config(context["event"].id, "casting_min", 0, context=context):
             _add_priority(
                 context,
                 _("Set the casting options in the configuration panel"),
@@ -715,7 +715,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         return
 
     # Check if experience points configuration is missing
-    if not get_event_config(context["event"].id, "px_start", 0, ctx=context):
+    if not get_event_config(context["event"].id, "px_start", 0, context=context):
         _add_priority(
             context,
             _("Set the experience points configuration"),
@@ -825,7 +825,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
 
     # Handle reduced tickets feature configuration
     if "reduced" in enabled_features:
-        if not get_event_config(context["event"].id, "reduced_ratio", 0, ctx=context):
+        if not get_event_config(context["event"].id, "reduced_ratio", 0, context=context):
             _add_priority(
                 context,
                 _("Set up configuration for Patron and Reduced tickets"),
@@ -864,7 +864,7 @@ def _orga_reg_actions(context, enabled_features):
     if "custom_character" in enabled_features:
         is_configured = False
         for field_name in ["pronoun", "song", "public", "private", "profile"]:
-            if get_event_config(context["event"].id, "custom_character_" + field_name, False, ctx=context):
+            if get_event_config(context["event"].id, "custom_character_" + field_name, False, context=context):
                 is_configured = True
 
         if not is_configured:
@@ -888,7 +888,7 @@ def _orga_suggestions(context):
     }
 
     for permission_slug, suggestion_text in priorities.items():
-        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, ctx=context):
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, context=context):
             continue
         _add_priority(context, suggestion_text, permission_slug)
 
@@ -903,7 +903,7 @@ def _orga_suggestions(context):
     }
 
     for permission_slug, suggestion_text in suggestions.items():
-        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, ctx=context):
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, context=context):
             continue
         _add_suggestion(context, suggestion_text, permission_slug)
 
@@ -924,28 +924,28 @@ def _add_item(context, list_name, message_text, permission_key, custom_link):
     context[list_name].append((message_text, permission_key, custom_link))
 
 
-def _add_priority(ctx, priority_text, permission_key, custom_link=None):
+def _add_priority(context, priority_text, permission_key, custom_link=None):
     """Add priority item to management dashboard.
 
     Args:
-        ctx: Context dictionary to modify
+        context: Context dictionary to modify
         priority_text: Priority message text
         permission_key: Permission key for the action
         custom_link: Optional custom link
     """
-    _add_item(ctx, "priorities_list", priority_text, permission_key, custom_link)
+    _add_item(context, "priorities_list", priority_text, permission_key, custom_link)
 
 
-def _add_action(ctx, action_text, permission_key, custom_link=None):
+def _add_action(context, action_text, permission_key, custom_link=None):
     """Add action item to management dashboard.
 
     Args:
-        ctx: Context dictionary to modify
+        context: Context dictionary to modify
         action_text: Action message text
         permission_key: Permission key for the action
         custom_link: Optional custom link
     """
-    _add_item(ctx, "actions_list", action_text, permission_key, custom_link)
+    _add_item(context, "actions_list", action_text, permission_key, custom_link)
 
 
 def _add_suggestion(context, suggestion_text, permission_key, custom_link=None):
@@ -1049,18 +1049,18 @@ def _compile(request, context):
 
 def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirect:
     """Close a suggestion and redirect to management page."""
-    ctx = check_assoc_permission(request, perm)
-    set_suggestion(ctx, perm)
+    context = check_assoc_permission(request, perm)
+    set_suggestion(context, perm)
     return redirect("manage")
 
 
 def orga_close_suggestion(request: HttpRequest, s: str, perm: EventPermission) -> HttpResponseRedirect:
     """Close a suggestion by setting its status and redirect to manage page."""
     # Check user has permission to access this event
-    ctx = check_event_permission(request, s, perm)
+    context = check_event_permission(request, s, perm)
 
     # Update suggestion status to closed
-    set_suggestion(ctx, perm)
+    set_suggestion(context, perm)
 
     return redirect("manage", s=s)
 
@@ -1118,11 +1118,11 @@ class WhatWouldYouLikeForm(Form):
 
         Args:
             *args: Variable length argument list passed to parent class.
-            **kwargs: Arbitrary keyword arguments. Must contain 'ctx' key which
+            **kwargs: Arbitrary keyword arguments. Must contain 'context' key which
                      is extracted and stored as instance variable.
         """
         # Extract context from kwargs and call parent constructor
-        self.ctx = kwargs.pop("ctx")
+        self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
         # Initialize empty choices list for dynamic population
@@ -1181,15 +1181,15 @@ class WhatWouldYouLikeForm(Form):
     def _add_dashboard_choices(self, choices: list[tuple[str, str]]) -> None:
         """Add dashboard choices for runs and associations accessible by user."""
         # Combine open and past runs into single dictionary
-        all_runs = {**self.ctx.get("open_runs", {}), **self.ctx.get("past_runs", {})}
+        all_runs = {**self.context.get("open_runs", {}), **self.context.get("past_runs", {})}
 
         # Add run dashboard choices for each accessible run
         for _run_id, run_data in all_runs.items():
             choices.append((f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard")))
 
         # Add association dashboard choice if user has association role
-        if self.ctx.get("assoc_role", None):
-            choices.append(("manage_exe|", self.ctx.get("name") + " - " + _("Dashboard")))
+        if self.context.get("assoc_role", None):
+            choices.append(("manage_exe|", self.context.get("name") + " - " + _("Dashboard")))
 
     def _add_function_choices(self, choices: list[tuple[str, str]]) -> None:
         """Add function choices to the provided choices list.
@@ -1207,7 +1207,7 @@ class WhatWouldYouLikeForm(Form):
 
         # Add to choices all links in the current interface
         for permission_type in ["event_pms", "assoc_pms"]:
-            all_permissions = self.ctx.get(permission_type, {})
+            all_permissions = self.context.get(permission_type, {})
 
             # Iterate through modules and their permission lists
             for _module, permission_list in all_permissions.items():
@@ -1244,7 +1244,7 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
     """
     if request.POST:
         # Process form submission with POST data
-        form = WhatWouldYouLikeForm(request.POST, ctx=context)
+        form = WhatWouldYouLikeForm(request.POST, context=context)
 
         if form.is_valid():
             # Extract user's choice from validated form
@@ -1260,18 +1260,18 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
                 raise RedirectError(request.path) from error
     else:
         # Display empty form for GET requests
-        form = WhatWouldYouLikeForm(ctx=context)
+        form = WhatWouldYouLikeForm(context=context)
 
     # Add form to template context
     context["form"] = form
 
 
-def _get_choice_redirect_url(choice, ctx):
+def _get_choice_redirect_url(choice, context):
     """Get the appropriate redirect URL based on the user's choice.
 
     Args:
         choice: The choice value from the form (format: "type#value")
-        ctx: Context dictionary containing association and event data
+        context: Context dictionary containing association and event data
 
     Returns:
         str: URL to redirect to
@@ -1294,7 +1294,7 @@ def _get_choice_redirect_url(choice, ctx):
 
     # Define redirect mapping
     redirect_handlers = {
-        "event_pms": lambda: _handle_event_pms_redirect(choice_value, ctx),
+        "event_pms": lambda: _handle_event_pms_redirect(choice_value, context),
         "assoc_pms": lambda: reverse(choice_value),
         "manage_orga": lambda: reverse("manage", args=[choice_value]),
         "tutorial": lambda: _handle_tutorial_redirect(choice_value),
@@ -1309,11 +1309,11 @@ def _get_choice_redirect_url(choice, ctx):
     return redirect_handler()
 
 
-def _handle_event_pms_redirect(choice_value, ctx):
+def _handle_event_pms_redirect(choice_value, context):
     """Handle event permissions redirect."""
-    if "run" not in ctx:
+    if "run" not in context:
         raise ValueError(_("Event context not available"))
-    return reverse(choice_value, args=[ctx["run"].get_slug()])
+    return reverse(choice_value, args=[context["run"].get_slug()])
 
 
 def _handle_tutorial_redirect(tutorial_choice_value):

@@ -160,8 +160,8 @@ def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
         FeatureError: If required feature is not enabled for the association
     """
     # Get base user context and validate permission
-    ctx = def_user_context(request)
-    if not has_assoc_permission(request, ctx, permission_slug):
+    context = def_user_context(request)
+    if not has_assoc_permission(request, context, permission_slug):
         raise PermissionError()
 
     # Retrieve feature configuration for this permission
@@ -172,22 +172,22 @@ def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
         raise FeatureError(path=request.path, feature=required_feature, run=0)
 
     # Set management context flags
-    ctx["manage"] = 1
-    ctx["exe_page"] = 1
+    context["manage"] = 1
+    context["exe_page"] = 1
 
     # Load association permissions and sidebar state
-    get_index_assoc_permissions(ctx, request, request.assoc["id"])
-    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
+    get_index_assoc_permissions(context, request, request.assoc["id"])
+    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Add tutorial information if not already present
-    if "tutorial" not in ctx:
-        ctx["tutorial"] = tutorial_identifier
+    if "tutorial" not in context:
+        context["tutorial"] = tutorial_identifier
 
     # Add configuration URL if user has config permissions
-    if config_slug and has_assoc_permission(request, ctx, "exe_config"):
-        ctx["config"] = reverse("exe_config", args=[config_slug])
+    if config_slug and has_assoc_permission(request, context, "exe_config"):
+        context["config"] = reverse("exe_config", args=[config_slug])
 
-    return ctx
+    return context
 
 
 def get_index_assoc_permissions(context: dict, request: HttpRequest, association_id: int, check: bool = True) -> None:
@@ -277,10 +277,10 @@ def get_index_permissions(
     return permissions_by_module
 
 
-def is_allowed_managed(ar: dict, ctx: dict) -> bool:
+def is_allowed_managed(ar: dict, context: dict) -> bool:
     """Check if user is allowed to access managed association features."""
     # Check if the association skin is managed and the user is not staff
-    if ctx.get("skin_managed", False) and not ctx.get("is_staff", False):
+    if context.get("skin_managed", False) and not context.get("is_staff", False):
         allowed = get_allowed_managed()
 
         # If the feature is a placeholder different than the management of events

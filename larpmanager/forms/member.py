@@ -822,10 +822,10 @@ class ExeMembershipFeeForm(forms.Form):
 
         Args:
             *args: Positional arguments passed to parent form class.
-            **kwargs: Keyword arguments including 'ctx' dict with association context.
+            **kwargs: Keyword arguments including 'context' dict with association context.
         """
         # Extract association context and initialize parent form
-        self.params = kwargs.pop("ctx", {})
+        self.params = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)
         assoc_id = self.params.get("a_id", None)
 
@@ -892,7 +892,7 @@ class ExeMembershipDocumentForm(forms.Form):
         and auto-increments card number based on existing memberships.
         """
         # Extract association context and initialize parent form
-        self.params = kwargs.pop("ctx", {})
+        self.params = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)
         self.assoc_id = self.params.get("a_id", None)
 

@@ -50,16 +50,16 @@ def character_pdf_sheet(request: HttpRequest, s: str, num: int) -> HttpResponse:
         HTTP response containing the PDF character sheet
     """
     # Get event run context with signup verification
-    ctx = get_event_run(request, s, signup=True)
+    context = get_event_run(request, s, signup=True)
 
     # Verify PDF printing permissions
-    check_print_pdf(ctx)
+    check_print_pdf(context)
 
     # Validate character access and retrieve character data
-    get_char_check(request, ctx, num, True)
+    get_char_check(request, context, num, True)
 
     # Generate and return the character PDF
-    return print_character(ctx)
+    return print_character(context)
 
 
 @login_required
@@ -75,16 +75,16 @@ def character_pdf_sheet_friendly(request: HttpRequest, s: str, num: int) -> Http
         HttpResponse containing the printer-friendly character PDF
     """
     # Get event run context and validate signup access
-    ctx = get_event_run(request, s, signup=True)
+    context = get_event_run(request, s, signup=True)
 
     # Verify PDF printing permissions
-    check_print_pdf(ctx)
+    check_print_pdf(context)
 
     # Retrieve and validate character access
-    get_char_check(request, ctx, num, True)
+    get_char_check(request, context, num, True)
 
     # Generate and return the printer-friendly PDF
-    return print_character_friendly(ctx)
+    return print_character_friendly(context)
 
 
 @login_required
@@ -100,25 +100,25 @@ def character_pdf_relationships(request: HttpRequest, s: str, num: int) -> HttpR
         PDF response with character relationships
     """
     # Get event/run context with signup validation
-    ctx = get_event_run(request, s, signup=True)
+    context = get_event_run(request, s, signup=True)
 
     # Verify PDF printing permissions
-    check_print_pdf(ctx)
+    check_print_pdf(context)
 
     # Validate character access and retrieve character data
-    get_char_check(request, ctx, num, True)
+    get_char_check(request, context, num, True)
 
     # Generate and return the relationships PDF
-    return print_character_rel(ctx)
+    return print_character_rel(context)
 
 
 @login_required
 def portraits(request, s):
-    ctx = get_event_run(request, s, signup=True)
-    return print_gallery(ctx)
+    context = get_event_run(request, s, signup=True)
+    return print_gallery(context)
 
 
 @login_required
 def profiles(request, s):
-    ctx = get_event_run(request, s, signup=True)
-    return print_profiles(ctx)
+    context = get_event_run(request, s, signup=True)
+    return print_profiles(context)

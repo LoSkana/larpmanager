@@ -295,11 +295,11 @@ class OrganizerCastingOptionsForm(forms.Form):
 
         Args:
             *args: Variable length argument list passed to parent form.
-            **kwargs: Arbitrary keyword arguments. Expects 'ctx' with event context.
+            **kwargs: Arbitrary keyword arguments. Expects 'context' with event context.
         """
         # Extract context parameters if provided
-        if "ctx" in kwargs:
-            self.params = kwargs.pop("ctx")
+        if "context" in kwargs:
+            self.params = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
         # Set default payment types (ticket, card, paypal)
@@ -417,7 +417,7 @@ class OrgaCopyForm(forms.Form):
             *args: Variable length argument list passed to parent form
             **kwargs: Arbitrary keyword arguments passed to parent form
         """
-        self.params = kwargs.pop("ctx")
+        self.params = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
         self.fields["parent"] = forms.ChoiceField(

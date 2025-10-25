@@ -117,7 +117,7 @@ def get_event_fields_cache(event_id: int) -> dict:
     return res
 
 
-def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visible: bool = True) -> None:
+def visible_writing_fields(context: dict, applicable: QuestionApplicable, only_visible: bool = True) -> None:
     """
     Filter and cache visible writing fields based on visibility settings.
 
@@ -126,29 +126,29 @@ def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visib
     and searchable fields.
 
     Args:
-        ctx: Context dictionary to store filtered results. Must contain 'writing_fields'.
+        context: Context dictionary to store filtered results. Must contain 'writing_fields'.
         applicable: QuestionApplicable enum value specifying the field type to process.
         only_visible: If True, includes only PUBLIC and SEARCHABLE fields. If False,
                      includes all fields regardless of visibility. Defaults to True.
 
     Returns:
-        None: Results are stored directly in the ctx dictionary under 'questions',
+        None: Results are stored directly in the context dictionary under 'questions',
               'options', and 'searchable' keys.
     """
     # Get the label key for the applicable question type
     applicable_type_key = QuestionApplicable(applicable).label
 
     # Initialize result containers in context
-    ctx["questions"] = {}
-    ctx["options"] = {}
-    ctx["searchable"] = {}
+    context["questions"] = {}
+    context["options"] = {}
+    context["searchable"] = {}
 
     # Early return if no writing fields or key not found
-    if "writing_fields" not in ctx or applicable_type_key not in ctx["writing_fields"]:
+    if "writing_fields" not in context or applicable_type_key not in context["writing_fields"]:
         return
 
     # Get the relevant writing fields data
-    writing_fields_data = ctx["writing_fields"][applicable_type_key]
+    writing_fields_data = context["writing_fields"][applicable_type_key]
 
     # Initialize tracking lists for question and searchable IDs
     visible_question_ids = []
@@ -162,7 +162,7 @@ def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visib
                 QuestionVisibility.PUBLIC,
                 QuestionVisibility.SEARCHABLE,
             ]:
-                ctx["questions"][question_id] = question_data
+                context["questions"][question_id] = question_data
                 visible_question_ids.append(question_data["id"])
 
             # Track searchable questions separately
@@ -174,10 +174,10 @@ def visible_writing_fields(ctx: dict, applicable: QuestionApplicable, only_visib
         for option_id, option_data in writing_fields_data["options"].items():
             # Include options for visible questions
             if option_data["question_id"] in visible_question_ids:
-                ctx["options"][option_id] = option_data
+                context["options"][option_id] = option_data
 
             # Build searchable options mapping by question ID
             if option_data["question_id"] in searchable_question_ids:
-                if option_data["question_id"] not in ctx["searchable"]:
-                    ctx["searchable"][option_data["question_id"]] = []
-                ctx["searchable"][option_data["question_id"]].append(option_data["id"])
+                if option_data["question_id"] not in context["searchable"]:
+                    context["searchable"][option_data["question_id"]] = []
+                context["searchable"][option_data["question_id"]].append(option_data["id"])

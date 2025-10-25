@@ -293,12 +293,12 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
     return is_organizer, permission_slugs, role_names
 
 
-def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permission_name=None) -> bool:
+def has_event_permission(request: HttpRequest, context: dict, event_slug: str, permission_name=None) -> bool:
     """Check if user has permission for a specific event.
 
     Args:
         request: Django HTTP request object containing user information
-        ctx: Context dictionary containing association role information
+        context: Context dictionary containing association role information
         event_slug: Event slug identifier
         permission_name: Permission name(s) to check. Can be string, list, or None
 
@@ -310,11 +310,15 @@ def has_event_permission(request: HttpRequest, ctx: dict, event_slug: str, permi
         If permission_name is a list, returns True if user has any of the permissions.
     """
     # Early return if request is invalid or user lacks member attribute
-    if not request or not hasattr(request.user, "member") or check_managed(ctx, permission_name, is_association=False):
+    if (
+        not request
+        or not hasattr(request.user, "member")
+        or check_managed(context, permission_name, is_association=False)
+    ):
         return False
 
     # Check if user has admin role in association (role 1)
-    if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
+    if "assoc_role" in context and 1 in context["assoc_role"]:
         return True
 
     # Get event-specific roles and permissions for the user

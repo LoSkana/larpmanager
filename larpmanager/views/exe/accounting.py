@@ -99,10 +99,10 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
     custom formatting callbacks for statement downloads and expense type display.
     """
     # Check user permissions and get base context for association
-    ctx = check_assoc_permission(request, "exe_outflows")
+    context = check_assoc_permission(request, "exe_outflows")
 
     # Configure context with field definitions and display options
-    ctx.update(
+    context.update(
         {
             # Define related fields for efficient database queries
             "selrel": ("run", "run__event"),
@@ -125,7 +125,7 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
 
     # Return paginated view with configured context and template
     return exe_paginate(
-        request, ctx, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
+        request, context, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
     )
 
 
@@ -166,11 +166,11 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks required association permissions.
     """
     # Check user permissions for association accounting inflows access
-    ctx = check_assoc_permission(request, "exe_inflows")
+    context = check_assoc_permission(request, "exe_inflows")
 
     # Configure pagination context with related field optimization
     # and display field definitions for inflow data
-    ctx.update(
+    context.update(
         {
             # Optimize database queries by selecting related event data
             "selrel": ("run", "run__event"),
@@ -191,7 +191,7 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 
     # Render paginated inflows list with edit functionality
     return exe_paginate(
-        request, ctx, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
+        request, context, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
     )
 
 
@@ -220,11 +220,11 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks required association permissions.
     """
     # Check user has permission to view donations for this association
-    ctx = check_assoc_permission(request, "exe_donations")
+    context = check_assoc_permission(request, "exe_donations")
 
     # Define table column headers and their corresponding field names
     # These will be displayed in the donations list template
-    ctx.update(
+    context.update(
         {
             "fields": [
                 ("member", _("Member")),  # Donation maker
@@ -237,7 +237,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 
     # Render paginated donations list using the accounting template
     return exe_paginate(
-        request, ctx, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
+        request, context, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
     )
 
 
@@ -262,10 +262,10 @@ def exe_credits(request: HttpRequest) -> dict:
               and pagination controls.
     """
     # Check user permissions for credits management
-    ctx = check_assoc_permission(request, "exe_credits")
+    context = check_assoc_permission(request, "exe_credits")
 
     # Configure display context with relationship selections and field definitions
-    ctx.update(
+    context.update(
         {
             # Define related model fields for efficient database queries
             "selrel": ("run", "run__event"),
@@ -283,7 +283,7 @@ def exe_credits(request: HttpRequest) -> dict:
 
     # Render paginated credits list with editing capabilities
     return exe_paginate(
-        request, ctx, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
+        request, context, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
     )
 
 
@@ -310,10 +310,10 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks 'exe_tokens' permission for the association.
     """
     # Check user permissions for token management at organization level
-    ctx = check_assoc_permission(request, "exe_tokens")
+    context = check_assoc_permission(request, "exe_tokens")
 
     # Configure context with table display settings and field definitions
-    ctx.update(
+    context.update(
         {
             # Define related field selections for optimized database queries
             "selrel": ("run", "run__event"),
@@ -330,7 +330,9 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
         }
     )
     # Render paginated view with AccountingItemOther model data
-    return exe_paginate(request, ctx, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit")
+    return exe_paginate(
+        request, context, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit"
+    )
 
 
 @login_required
@@ -353,11 +355,11 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered expenses page with paginated expense items
     """
     # Check user permissions for expense management
-    ctx = check_assoc_permission(request, "exe_expenses")
+    context = check_assoc_permission(request, "exe_expenses")
     approve = _("Approve")
 
     # Configure table display settings and field definitions
-    ctx.update(
+    context.update(
         {
             # Define related field selection for optimization
             "selrel": ("run", "run__event"),
@@ -388,7 +390,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 
     # Return paginated expense list with edit functionality
     return exe_paginate(
-        request, ctx, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
+        request, context, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
     )
 
 
@@ -447,7 +449,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with paginated payment data and context
     """
     # Check user permissions for accessing payments section
-    ctx = check_assoc_permission(request, "exe_payments")
+    context = check_assoc_permission(request, "exe_payments")
 
     # Define base fields to display in payments table
     fields = [
@@ -463,12 +465,12 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     ]
 
     # Add VAT-related fields if VAT feature is enabled for this organization
-    if "vat" in ctx["features"]:
+    if "vat" in context["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
     # Configure pagination context with field definitions and data callbacks
-    ctx.update(
+    context.update(
         {
             "selrel": ("reg__member", "reg__run", "inv", "inv__method"),  # Related fields to select
             "afield": "reg",  # Main field for filtering
@@ -487,7 +489,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
     # Return paginated view of AccountingItemPayment records
     return exe_paginate(
-        request, ctx, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
+        request, context, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
     )
 
 
@@ -510,11 +512,11 @@ def exe_invoices(request) -> HttpResponse:
         HttpResponse: Rendered template with invoice list and pagination
     """
     # Check user permissions for invoice management
-    ctx = check_assoc_permission(request, "exe_invoices")
+    context = check_assoc_permission(request, "exe_invoices")
     confirm = _("Confirm")
 
     # Update context with table configuration
-    ctx.update(
+    context.update(
         {
             # Define selectable relationships for filtering
             "selrel": ("method", "member"),
@@ -553,7 +555,9 @@ def exe_invoices(request) -> HttpResponse:
     )
 
     # Return paginated invoice list with edit functionality
-    return exe_paginate(request, ctx, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit")
+    return exe_paginate(
+        request, context, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit"
+    )
 
 
 @login_required
@@ -579,21 +583,21 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If invoice is already confirmed or in invalid status
     """
     # Check user permissions for invoice management
-    ctx = check_assoc_permission(request, "exe_invoices")
+    context = check_assoc_permission(request, "exe_invoices")
 
     # Retrieve the specific invoice by number
-    backend_get(ctx, PaymentInvoice, num)
+    backend_get(context, PaymentInvoice, num)
 
     # Validate current status allows confirmation
-    if ctx["el"].status == PaymentStatus.CREATED or ctx["el"].status == PaymentStatus.SUBMITTED:
+    if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
         # Update status to confirmed
-        ctx["el"].status = PaymentStatus.CONFIRMED
+        context["el"].status = PaymentStatus.CONFIRMED
     else:
         # Reject if invoice already processed
         raise Http404("already done")
 
     # Persist changes to database
-    ctx["el"].save()
+    context["el"].save()
 
     # Show success message and redirect to invoice list
     messages.success(request, _("Element approved") + "!")
@@ -604,14 +608,14 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
 def exe_collections(request: HttpRequest) -> HttpResponse:
     """Display collections list for association executives."""
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_collections")
+    context = check_assoc_permission(request, "exe_collections")
 
     # Fetch collections with related data, ordered by creation date
-    ctx["list"] = (
-        Collection.objects.filter(assoc_id=ctx["a_id"]).select_related("member", "organizer").order_by("-created")
+    context["list"] = (
+        Collection.objects.filter(assoc_id=context["a_id"]).select_related("member", "organizer").order_by("-created")
     )
 
-    return render(request, "larpmanager/exe/accounting/collections.html", ctx)
+    return render(request, "larpmanager/exe/accounting/collections.html", context)
 
 
 @login_required
@@ -636,11 +640,11 @@ def exe_refunds(request: HttpRequest) -> dict:
         PermissionDenied: If user lacks exe_refunds permission
     """
     # Check user permissions for refund management
-    ctx = check_assoc_permission(request, "exe_refunds")
+    context = check_assoc_permission(request, "exe_refunds")
     done = _("Done")
 
     # Define table column headers and their display names
-    ctx.update(
+    context.update(
         {
             "fields": [
                 ("details", _("Informations")),
@@ -663,7 +667,7 @@ def exe_refunds(request: HttpRequest) -> dict:
     )
 
     # Return paginated refund requests with template context
-    return exe_paginate(request, ctx, RefundRequest, "larpmanager/exe/accounting/refunds.html", "exe_refunds_edit")
+    return exe_paginate(request, context, RefundRequest, "larpmanager/exe/accounting/refunds.html", "exe_refunds_edit")
 
 
 @login_required
@@ -689,21 +693,21 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If the refund request is not in REQUEST status (already processed)
     """
     # Check user permissions for accessing refund management
-    ctx = check_assoc_permission(request, "exe_refunds")
+    context = check_assoc_permission(request, "exe_refunds")
 
     # Retrieve the specific refund request by number
-    backend_get(ctx, RefundRequest, num)
+    backend_get(context, RefundRequest, num)
 
     # Verify the refund request is in the correct status for confirmation
-    if ctx["el"].status == RefundStatus.REQUEST:
+    if context["el"].status == RefundStatus.REQUEST:
         # Update status to indicate the refund has been paid
-        ctx["el"].status = RefundStatus.PAYED
+        context["el"].status = RefundStatus.PAYED
     else:
         # Prevent duplicate processing of already confirmed requests
         raise Http404("already done")
 
     # Persist the status change to the database
-    ctx["el"].save()
+    context["el"].save()
 
     # Show success message to the user and redirect to refunds list
     messages.success(request, _("Element approved") + "!")
@@ -714,19 +718,19 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
 def exe_accounting(request: HttpRequest) -> HttpResponse:
     """Render organization-wide accounting dashboard."""
     # Check user permissions for accounting access
-    ctx = check_assoc_permission(request, "exe_accounting")
+    context = check_assoc_permission(request, "exe_accounting")
 
     # Populate context with accounting data
-    assoc_accounting(ctx)
+    assoc_accounting(context)
 
-    return render(request, "larpmanager/exe/accounting/accounting.html", ctx)
+    return render(request, "larpmanager/exe/accounting/accounting.html", context)
 
 
 @login_required
 def exe_year_accounting(request: HttpRequest) -> JsonResponse:
     """Get accounting data for a specific year."""
     # Check association permissions for accounting access
-    ctx = check_assoc_permission(request, "exe_accounting")
+    context = check_assoc_permission(request, "exe_accounting")
 
     # Parse and validate year parameter from POST data
     try:
@@ -735,7 +739,7 @@ def exe_year_accounting(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"error": "Invalid year parameter"}, status=400)
 
     # Build response with association ID and accounting data
-    res = {"a_id": ctx["a_id"]}
+    res = {"a_id": context["a_id"]}
     assoc_accounting_data(res, year)
     return JsonResponse({"res": res})
 
@@ -755,36 +759,36 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If run doesn't belong to user's association
     """
     # Check user has accounting permissions for this association
-    ctx = check_assoc_permission(request, "exe_accounting")
+    context = check_assoc_permission(request, "exe_accounting")
 
     # Get the run and verify ownership
-    ctx["run"] = Run.objects.get(pk=num)
-    if ctx["run"].event.assoc_id != ctx["a_id"]:
+    context["run"] = Run.objects.get(pk=num)
+    if context["run"].event.assoc_id != context["a_id"]:
         raise Http404("not your run")
 
     # Get accounting data for this run
-    ctx["dc"] = get_run_accounting(ctx["run"], ctx)
-    return render(request, "larpmanager/orga/accounting/accounting.html", ctx)
+    context["dc"] = get_run_accounting(context["run"], context)
+    return render(request, "larpmanager/orga/accounting/accounting.html", context)
 
 
 @login_required
 def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
     """Display accounting records for the organization."""
-    ctx = check_assoc_permission(request, "exe_accounting_rec")
+    context = check_assoc_permission(request, "exe_accounting_rec")
 
     # Get accounting records for the organization (not tied to specific runs)
-    ctx["list"] = RecordAccounting.objects.filter(assoc_id=ctx["a_id"], run__isnull=True).order_by("created")
+    context["list"] = RecordAccounting.objects.filter(assoc_id=context["a_id"], run__isnull=True).order_by("created")
 
     # If no records exist, create them and redirect
-    if len(ctx["list"]) == 0:
-        check_accounting(ctx["a_id"])
+    if len(context["list"]) == 0:
+        check_accounting(context["a_id"])
         return redirect("exe_accounting_rec")
 
     # Set date range based on first and last records
-    ctx["start"] = ctx["list"][0].created
-    ctx["end"] = ctx["list"].reverse()[0].created
+    context["start"] = context["list"][0].created
+    context["end"] = context["list"].reverse()[0].created
 
-    return render(request, "larpmanager/exe/accounting/accounting_rec.html", ctx)
+    return render(request, "larpmanager/exe/accounting/accounting_rec.html", context)
 
 
 def check_year(request: HttpRequest, context: dict) -> int:
@@ -849,47 +853,47 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks exe_balance permission
     """
     # Verify user has executive balance permission
-    ctx = check_assoc_permission(request, "exe_balance")
-    year = check_year(request, ctx)
+    context = check_assoc_permission(request, "exe_balance")
+    year = check_year(request, context)
 
     # Define date range for the selected year
     start = date(year, 1, 1)
     end = date(year + 1, 1, 1)
 
     # Calculate total membership fees for the year
-    ctx["memberships"] = get_sum(AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=year))
+    context["memberships"] = get_sum(AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=year))
 
     # Calculate total donations received in the year
-    ctx["donations"] = get_sum(
-        AccountingItemDonation.objects.filter(assoc_id=ctx["a_id"], created__gte=start, created__lt=end)
+    context["donations"] = get_sum(
+        AccountingItemDonation.objects.filter(assoc_id=context["a_id"], created__gte=start, created__lt=end)
     )
 
     # Calculate net ticket revenue (cash payments minus transaction fees)
-    ctx["tickets"] = get_sum(
+    context["tickets"] = get_sum(
         AccountingItemPayment.objects.filter(
-            assoc_id=ctx["a_id"],
+            assoc_id=context["a_id"],
             pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
         )
-    ) - get_sum(AccountingItemTransaction.objects.filter(assoc_id=ctx["a_id"], created__gte=start, created__lt=end))
+    ) - get_sum(AccountingItemTransaction.objects.filter(assoc_id=context["a_id"], created__gte=start, created__lt=end))
 
     # Calculate total inflows for the year
-    ctx["inflows"] = get_sum(
-        AccountingItemInflow.objects.filter(assoc_id=ctx["a_id"], payment_date__gte=start, payment_date__lt=end)
+    context["inflows"] = get_sum(
+        AccountingItemInflow.objects.filter(assoc_id=context["a_id"], payment_date__gte=start, payment_date__lt=end)
     )
 
     # Sum all incoming funds
-    ctx["in"] = ctx["memberships"] + ctx["donations"] + ctx["tickets"] + ctx["inflows"]
+    context["in"] = context["memberships"] + context["donations"] + context["tickets"] + context["inflows"]
 
     # Initialize expenditure tracking
-    ctx["expenditure"] = {}
-    ctx["out"] = 0
+    context["expenditure"] = {}
+    context["out"] = 0
 
     # Calculate total refunds/reimbursements for proportional distribution
-    ctx["rimb"] = get_sum(
+    context["rimb"] = get_sum(
         AccountingItemOther.objects.filter(
-            assoc_id=ctx["a_id"],
+            assoc_id=context["a_id"],
             created__gte=start,
             created__lt=end,
             oth=OtherChoices.REFUND,
@@ -898,48 +902,48 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     # Initialize expenditure categories with zero values
     for value, label in BalanceChoices.choices:
-        ctx["expenditure"][value] = {"name": label, "value": 0}
+        context["expenditure"][value] = {"name": label, "value": 0}
 
     # Aggregate approved personal expenses by balance category
     for el in (
         AccountingItemExpense.objects.filter(
-            assoc_id=ctx["a_id"], created__gte=start, created__lt=end, is_approved=True
+            assoc_id=context["a_id"], created__gte=start, created__lt=end, is_approved=True
         )
         .values("balance")
         .annotate(Sum("value"))
     ):
         value = el["value__sum"]
         bl = el["balance"]
-        ctx["expenditure"][bl]["value"] = value
-        ctx["out"] += value
+        context["expenditure"][bl]["value"] = value
+        context["out"] += value
 
     # Proportionally distribute reimbursements across expense categories
-    tot = ctx["out"]
-    ctx["out"] = 0
+    tot = context["out"]
+    context["out"] = 0
     if tot:
         # Recalculate each category's value based on proportion of total reimbursed
         for bl, _descr in BalanceChoices.choices:
-            v = ctx["expenditure"][bl]["value"]
+            v = context["expenditure"][bl]["value"]
             # Resample value based on actual reimbursements issued
-            v = (v / tot) * ctx["rimb"]
-            ctx["out"] += v
-            ctx["expenditure"][bl]["value"] = v
+            v = (v / tot) * context["rimb"]
+            context["out"] += v
+            context["expenditure"][bl]["value"] = v
 
     # Add association-level outflows to expenditure categories
     for el in (
-        AccountingItemOutflow.objects.filter(assoc_id=ctx["a_id"], payment_date__gte=start, payment_date__lt=end)
+        AccountingItemOutflow.objects.filter(assoc_id=context["a_id"], payment_date__gte=start, payment_date__lt=end)
         .values("balance")
         .annotate(Sum("value"))
     ):
         value = el["value__sum"]
         bl = el["balance"]
-        ctx["expenditure"][bl]["value"] += value
-        ctx["out"] += value
+        context["expenditure"][bl]["value"] += value
+        context["out"] += value
 
     # Calculate final balance
-    ctx["bal"] = ctx["in"] - ctx["out"]
+    context["bal"] = context["in"] - context["out"]
 
-    return render(request, "larpmanager/exe/accounting/balance.html", ctx)
+    return render(request, "larpmanager/exe/accounting/balance.html", context)
 
 
 @login_required
@@ -962,19 +966,19 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
         PermissionError: If user lacks required association permissions for verification
     """
     # Check user permissions and get association context
-    ctx = check_assoc_permission(request, "exe_verification")
+    context = check_assoc_permission(request, "exe_verification")
 
     # Query pending payment invoices excluding automated payment methods
     # Filter out created status and electronic payment methods that auto-verify
-    ctx["todo"] = (
-        PaymentInvoice.objects.filter(assoc_id=ctx["a_id"], verified=False)
+    context["todo"] = (
+        PaymentInvoice.objects.filter(assoc_id=context["a_id"], verified=False)
         .exclude(status=PaymentStatus.CREATED)
         .exclude(method__slug__in=["redsys", "satispay", "paypal", "stripe", "sumup"])
         .select_related("method")
     )
 
     # Extract registration payment IDs for further processing
-    check = [el.id for el in ctx["todo"] if el.typ == PaymentType.REGISTRATION]
+    check = [el.id for el in context["todo"] if el.typ == PaymentType.REGISTRATION]
 
     # Get accounting payment records for registration payments
     payments = AccountingItemPayment.objects.filter(inv_id__in=check)
@@ -993,7 +997,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     }
 
     # Attach registration codes to payment invoice objects
-    for el in ctx["todo"]:
+    for el in context["todo"]:
         el.reg_cod = cache.get(aux.get(el.id))
 
     # Handle file upload for payment verification
@@ -1001,7 +1005,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
         form = UploadElementsForm(request.POST, request.FILES, only_one=True)
         if form.is_valid():
             # Process uploaded verification file and count verified payments
-            counter = invoice_verify(ctx, request.FILES["first"])
+            counter = invoice_verify(context, request.FILES["first"])
             messages.success(request, _("Verified payments") + "!" + " " + str(counter))
             return redirect("exe_verification")
 
@@ -1009,9 +1013,9 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
         # Initialize empty form for GET requests
         form = UploadElementsForm(only_one=True)
 
-    ctx["form"] = form
+    context["form"] = form
 
-    return render(request, "larpmanager/exe/verification.html", ctx)
+    return render(request, "larpmanager/exe/verification.html", context)
 
 
 @login_required
@@ -1033,13 +1037,13 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If the invoice doesn't belong to the user's organization
     """
     # Check user has permission to access manual verification
-    ctx = check_assoc_permission(request, "exe_verification")
+    context = check_assoc_permission(request, "exe_verification")
 
     # Retrieve the invoice to verify
     invoice = PaymentInvoice.objects.get(pk=num)
 
     # Ensure invoice belongs to user's organization
-    if invoice.assoc_id != ctx["a_id"]:
+    if invoice.assoc_id != context["a_id"]:
         raise Http404("not your assoc!")
 
     # Check if payment is already verified to prevent duplicates

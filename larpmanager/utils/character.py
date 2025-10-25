@@ -46,7 +46,7 @@ from larpmanager.utils.experience import add_char_addit
 logger = logging.getLogger(__name__)
 
 
-def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
+def get_character_relationships(context: dict, restrict: bool = True) -> None:
     """Get character relationships with faction and player input data.
 
     Retrieves and processes character relationships from both system-defined
@@ -54,44 +54,44 @@ def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
     formatted relationship data including faction information and text content.
 
     Args:
-        ctx: Context dictionary containing character, event, run, chars, and factions data.
+        context: Context dictionary containing character, event, run, chars, and factions data.
             Must include 'character', 'event', 'run', and may include 'chars', 'factions'.
         restrict: Whether to filter out relationships with empty text content.
             Defaults to True.
 
     Returns:
-        None: Function modifies ctx in-place, adding 'rel' list and 'pr' dict.
+        None: Function modifies context in-place, adding 'rel' list and 'pr' dict.
 
     Side Effects:
-        - Updates ctx['rel'] with sorted list of relationship data
-        - Updates ctx['pr'] with player relationship objects
+        - Updates context['rel'] with sorted list of relationship data
+        - Updates context['pr'] with player relationship objects
     """
     relationship_text_by_character_id = {}
     character_data_by_id = {}
 
     # Process system-defined relationships from the database
     for target_character_number, relationship_text in Relationship.objects.values_list("target__number", "text").filter(
-        source=ctx["character"]
+        source=context["character"]
     ):
         # Check if character data is already cached in context
-        if "chars" in ctx and target_character_number in ctx["chars"]:
-            character_display_data = ctx["chars"][target_character_number]
+        if "chars" in context and target_character_number in context["chars"]:
+            character_display_data = context["chars"][target_character_number]
         else:
             # Fetch character data from database if not cached
             try:
                 target_character = Character.objects.select_related("event", "player").get(
-                    event=ctx["event"], number=target_character_number
+                    event=context["event"], number=target_character_number
                 )
-                character_display_data = target_character.show(ctx["run"])
+                character_display_data = target_character.show(context["run"])
             except ObjectDoesNotExist:
                 continue
 
         # Build faction list for display purposes
         character_display_data["factions_list"] = []
         for faction_number in character_display_data["factions"]:
-            if not faction_number or faction_number not in ctx["factions"]:
+            if not faction_number or faction_number not in context["factions"]:
                 continue
-            faction_data = ctx["factions"][faction_number]
+            faction_data = context["factions"][faction_number]
             # Skip empty names or secret factions
             if not faction_data["name"] or faction_data["typ"] == FactionType.SECRET:
                 continue
@@ -104,16 +104,16 @@ def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
 
     player_relationships_by_target_id = {}
     # Update with player-inputted relationship data
-    if "player_id" in ctx["char"]:
+    if "player_id" in context["char"]:
         for player_relationship in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-            reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"]
+            reg__member_id=context["char"]["player_id"], reg__run=context["run"]
         ):
             player_relationships_by_target_id[player_relationship.target_id] = player_relationship
             # Player input overrides system relationships
             relationship_text_by_character_id[player_relationship.target_id] = player_relationship.text
 
     # Build final relationship list sorted by text length
-    ctx["rel"] = []
+    context["rel"] = []
     for character_id in sorted(
         relationship_text_by_character_id, key=lambda k: len(relationship_text_by_character_id[k]), reverse=True
     ):
@@ -132,36 +132,36 @@ def get_character_relationships(ctx: dict, restrict: bool = True) -> None:
         # Add relationship text and calculate font size based on content length
         relationship_entry["text"] = relationship_text_by_character_id[character_id]
         relationship_entry["font_size"] = int(100 - ((len(relationship_entry["text"]) / 50) * 4))
-        ctx["rel"].append(relationship_entry)
+        context["rel"].append(relationship_entry)
 
     # Store player relationships for additional processing
-    ctx["pr"] = player_relationships_by_target_id
+    context["pr"] = player_relationships_by_target_id
 
 
-def get_character_sheet(ctx):
+def get_character_sheet(context):
     """Build complete character sheet data for display.
 
     Args:
-        ctx: Context dictionary with character data
+        context: Context dictionary with character data
 
     Returns:
         dict: Complete character sheet with all sections
     """
-    ctx["sheet_char"] = ctx["character"].show_complete()
+    context["sheet_char"] = context["character"].show_complete()
 
-    get_character_sheet_fields(ctx)
+    get_character_sheet_fields(context)
 
-    get_character_sheet_factions(ctx)
+    get_character_sheet_factions(context)
 
-    get_character_sheet_plots(ctx)
+    get_character_sheet_plots(context)
 
-    get_character_sheet_questbuilder(ctx)
+    get_character_sheet_questbuilder(context)
 
-    get_character_sheet_speedlarp(ctx)
+    get_character_sheet_speedlarp(context)
 
-    get_character_sheet_prologue(ctx)
+    get_character_sheet_prologue(context)
 
-    get_character_sheet_px(ctx)
+    get_character_sheet_px(context)
 
 
 def get_character_sheet_px(context: dict) -> None:
@@ -222,39 +222,39 @@ def get_character_sheet_speedlarp(context: dict) -> None:
         context["sheet_speedlarps"].append(speedlarp)
 
 
-def get_character_sheet_questbuilder(ctx):
+def get_character_sheet_questbuilder(context):
     """Build character sheet with quest and trait relationships.
 
     Args:
-        ctx: Context dictionary with character, quest, and trait data
+        context: Context dictionary with character, quest, and trait data
 
     Side effects:
-        Updates ctx with sheet_traits containing complete trait and quest information
+        Updates context with sheet_traits containing complete trait and quest information
     """
-    if "questbuilder" not in ctx["features"]:
+    if "questbuilder" not in context["features"]:
         return
 
-    if "char" not in ctx:
+    if "char" not in context:
         return
 
-    if "player_id" not in ctx["char"] or "traits" not in ctx["char"]:
+    if "player_id" not in context["char"] or "traits" not in context["char"]:
         return
 
-    ctx["sheet_traits"] = []
-    for trait_number in ctx["char"]["traits"]:
-        trait_element = ctx["traits"][trait_number]
-        trait_object = Trait.objects.get(event=ctx["event"], number=trait_element["number"])
+    context["sheet_traits"] = []
+    for trait_number in context["char"]["traits"]:
+        trait_element = context["traits"][trait_number]
+        trait_object = Trait.objects.get(event=context["event"], number=trait_element["number"])
         trait_data = trait_object.show_complete()
         trait_data["quest"] = trait_object.quest.show_complete()
 
         trait_data["rels"] = []
         for related_trait_number in trait_element["traits"]:
-            if related_trait_number not in ctx["traits"]:
+            if related_trait_number not in context["traits"]:
                 continue
-            character_number = ctx["traits"][related_trait_number]["char"]
-            trait_data["rels"].append(ctx["chars"][character_number])
+            character_number = context["traits"][related_trait_number]["char"]
+            trait_data["rels"].append(context["chars"][character_number])
 
-        ctx["sheet_traits"].append(trait_data)
+        context["sheet_traits"].append(trait_data)
 
 
 def get_character_sheet_plots(context: dict) -> None:
@@ -281,7 +281,7 @@ def get_character_sheet_plots(context: dict) -> None:
         context["sheet_plots"].append({"name": plot_relation.plot.name, "text": combined_text})
 
 
-def get_character_sheet_factions(ctx: dict[str, Any]) -> None:
+def get_character_sheet_factions(context: dict[str, Any]) -> None:
     """
     Retrieves and processes faction data for character sheet display.
 
@@ -289,37 +289,37 @@ def get_character_sheet_factions(ctx: dict[str, Any]) -> None:
     and choices, then adds the processed data to the context for rendering.
 
     Args:
-        ctx: Context dictionary containing character, event, features, and other
+        context: Context dictionary containing character, event, features, and other
              rendering data. Modified in-place to add 'sheet_factions' key.
 
     Returns:
-        None: Function modifies ctx dictionary in-place.
+        None: Function modifies context dictionary in-place.
     """
     # Early return if faction feature is not enabled
-    if "faction" not in ctx["features"]:
+    if "faction" not in context["features"]:
         return
 
     # Get the parent event that handles factions
-    faction_event = ctx["event"].get_class_parent("faction")
-    ctx["sheet_factions"] = []
+    faction_event = context["event"].get_class_parent("faction")
+    context["sheet_factions"] = []
 
     # Fetch all factions associated with the character
-    factions = list(ctx["character"].factions_list.filter(event=faction_event))
+    factions = list(context["character"].factions_list.filter(event=faction_event))
 
     # Early return if no factions found
     if not factions:
         return
 
     # Prepare writing fields query data for faction-applicable questions
-    visible_writing_fields(ctx, QuestionApplicable.FACTION, only_visible=False)
+    visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=False)
 
     # Determine which questions should be visible based on configuration
     visible_question_ids = []
-    if "questions" in ctx:
-        for question_id in ctx["questions"].keys():
+    if "questions" in context:
+        for question_id in context["questions"].keys():
             question_config_key = str(question_id)
             # Skip questions that are not configured to show for factions
-            if "show_all" not in ctx and question_config_key not in ctx.get("show_faction", {}):
+            if "show_all" not in context and question_config_key not in context.get("show_faction", {}):
                 continue
             visible_question_ids.append(question_id)
 
@@ -357,11 +357,15 @@ def get_character_sheet_factions(ctx: dict[str, Any]) -> None:
         # Merge in writing fields from pre-fetched bulk data
         faction_writing_fields = faction_answers_map.get(faction.id, {})
         faction_display_data.update(
-            {"questions": ctx.get("questions", {}), "options": ctx.get("options", {}), "fields": faction_writing_fields}
+            {
+                "questions": context.get("questions", {}),
+                "options": context.get("options", {}),
+                "fields": faction_writing_fields,
+            }
         )
 
         # Add processed faction data to context
-        ctx["sheet_factions"].append(faction_display_data)
+        context["sheet_factions"].append(faction_display_data)
 
 
 def get_character_sheet_fields(context: dict) -> None:
@@ -379,7 +383,7 @@ def get_character_sheet_fields(context: dict) -> None:
 
 
 def get_char_check(
-    request, ctx: dict, character_id: int, restrict_non_owners: bool = False, bypass_access_checks: bool = False
+    request, context: dict, character_id: int, restrict_non_owners: bool = False, bypass_access_checks: bool = False
 ) -> None:
     """Get character with access control checks.
 
@@ -388,37 +392,37 @@ def get_char_check(
 
     Args:
         request: Django HTTP request object containing user and session data
-        ctx: Context dictionary containing cached character and event data
+        context: Context dictionary containing cached character and event data
         character_id: Character number/ID to retrieve from the character cache
         restrict_non_owners: Whether to apply strict visibility restrictions for non-owners
         bypass_access_checks: Whether to bypass all access checks (admin override)
 
     Returns:
-        None: Modifies ctx in-place, adding 'char' and potentially 'check' keys
+        None: Modifies context in-place, adding 'char' and potentially 'check' keys
 
     Raises:
         NotFoundError: If character not found in cache or is hidden from user
         Http404: If character access is restricted and user lacks permission
     """
     # Load all event and character data into context cache
-    get_event_cache_all(ctx)
+    get_event_cache_all(context)
 
     # Check if requested character exists in the cached character data
-    if character_id not in ctx["chars"]:
+    if character_id not in context["chars"]:
         raise NotFoundError()
 
     # Set the current character in context for further processing
-    ctx["char"] = ctx["chars"][character_id]
+    context["char"] = context["chars"][character_id]
 
     # Allow access if bypassing checks or user has character access permissions
-    if bypass_access_checks or (request.user.is_authenticated and has_access_character(request, ctx)):
+    if bypass_access_checks or (request.user.is_authenticated and has_access_character(request, context)):
         # Load full character data and mark as having elevated access
-        get_char(ctx, character_id, True)
-        ctx["check"] = 1
+        get_char(context, character_id, True)
+        context["check"] = 1
         return
 
     # Block access to characters marked as hidden from public view
-    if ctx["char"].get("hide", False):
+    if context["char"].get("hide", False):
         raise NotFoundError()
 
     # Apply restriction check - deny access if restrict flag is set
@@ -480,14 +484,14 @@ def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[i
     return active_characters, extinct_characters
 
 
-def check_missing_mandatory(ctx):
+def check_missing_mandatory(context):
     """Check for missing mandatory character writing fields.
 
     Args:
-        ctx: Context dictionary containing character and event data.
-              Updates ctx with 'missing_fields' list.
+        context: Context dictionary containing character and event data.
+              Updates context with 'missing_fields' list.
     """
-    ctx["missing_fields"] = []
+    context["missing_fields"] = []
     missing_question_names = []
 
     question_type_to_model = {
@@ -495,10 +499,10 @@ def check_missing_mandatory(ctx):
         **{question_type: WritingChoice for question_type in BaseQuestionType.get_choice_types()},
     }
 
-    questions = ctx["event"].get_elements(WritingQuestion)
+    questions = context["event"].get_elements(WritingQuestion)
     for question in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
         model = question_type_to_model.get(question.typ)
-        if model and not model.objects.filter(element_id=ctx["char"]["id"], question=question).exists():
+        if model and not model.objects.filter(element_id=context["char"]["id"], question=question).exists():
             missing_question_names.append(question.name)
 
-    ctx["missing_fields"] = ", ".join(missing_question_names)
+    context["missing_fields"] = ", ".join(missing_question_names)
