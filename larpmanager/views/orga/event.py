@@ -68,8 +68,8 @@ from larpmanager.utils.upload import go_upload
 
 
 @login_required
-def orga_event(request, s):
-    context = check_event_permission(request, s, "orga_event")
+def orga_event(request, event_slug):
+    context = check_event_permission(request, event_slug, "orga_event")
     return full_event_edit(context, request, context["event"], context["run"], is_executive=False)
 
 
@@ -112,7 +112,7 @@ def full_event_edit(
             if is_executive:
                 return redirect("manage")
             else:
-                return redirect("manage", s=run.get_slug())
+                return redirect("manage", event_slug=run.get_slug())
     else:
         # Create empty forms for GET requests
         event_form = OrgaEventForm(instance=event, context=context, prefix="form1")
@@ -128,10 +128,10 @@ def full_event_edit(
 
 
 @login_required
-def orga_roles(request: HttpRequest, s: str) -> HttpResponse:
+def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle organization roles management for an event."""
     # Check if user has permission to manage roles for this event
-    context = check_event_permission(request, s, "orga_roles")
+    context = check_event_permission(request, event_slug, "orga_roles")
 
     def def_callback(event_context):
         # Create default "Organizer" role if none exist
@@ -189,53 +189,61 @@ def prepare_roles_list(context, permission_type, role_queryset, default_callback
 
 
 @login_required
-def orga_roles_edit(request, s, num):
-    return orga_edit(request, s, "orga_roles", OrgaEventRoleForm, num)
+def orga_roles_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, num)
 
 
 @login_required
-def orga_appearance(request, s):
+def orga_appearance(request, event_slug):
     return orga_edit(
-        request, s, "orga_appearance", OrgaAppearanceForm, None, "manage", additional_context={"add_another": False}
+        request,
+        event_slug,
+        "orga_appearance",
+        OrgaAppearanceForm,
+        None,
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
 @login_required
-def orga_run(request, s):
-    run = get_cache_run(request.assoc["id"], s)
-    return orga_edit(request, s, "orga_event", OrgaRunForm, run, "manage", additional_context={"add_another": False})
+def orga_run(request, event_slug):
+    run = get_cache_run(request.assoc["id"], event_slug)
+    return orga_edit(
+        request, event_slug, "orga_event", OrgaRunForm, run, "manage", additional_context={"add_another": False}
+    )
 
 
 @login_required
-def orga_texts(request: HttpRequest, s: str) -> HttpResponse:
+def orga_texts(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render event texts management page with texts ordered by type, default flag, and language."""
-    context = check_event_permission(request, s, "orga_texts")
+    context = check_event_permission(request, event_slug, "orga_texts")
     context["list"] = EventText.objects.filter(event_id=context["event"].id).order_by("typ", "default", "language")
     return render(request, "larpmanager/orga/texts.html", context)
 
 
 @login_required
-def orga_texts_edit(request, s, num):
-    return orga_edit(request, s, "orga_texts", OrgaEventTextForm, num)
+def orga_texts_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, num)
 
 
 @login_required
-def orga_buttons(request: HttpRequest, s: str) -> HttpResponse:
+def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display event buttons management page for organizers."""
-    context = check_event_permission(request, s, "orga_buttons")
+    context = check_event_permission(request, event_slug, "orga_buttons")
     context["list"] = EventButton.objects.filter(event_id=context["event"].id).order_by("number")
     return render(request, "larpmanager/orga/buttons.html", context)
 
 
 @login_required
-def orga_buttons_edit(request, s, num):
-    return orga_edit(request, s, "orga_buttons", OrgaEventButtonForm, num)
+def orga_buttons_edit(request, event_slug, num):
+    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, num)
 
 
 @login_required
 def orga_config(
     request: HttpRequest,
-    s: str,
+    event_slug: str,
     section: str | None = None,
 ) -> HttpResponse:
     """Configure organization settings with optional section navigation."""
@@ -244,30 +252,30 @@ def orga_config(
     add_ctx["add_another"] = False
 
     # Delegate to orga_edit with config form
-    return orga_edit(request, s, "orga_config", OrgaConfigForm, None, "manage", additional_context=add_ctx)
+    return orga_edit(request, event_slug, "orga_config", OrgaConfigForm, None, "manage", additional_context=add_ctx)
 
 
 @login_required
-def orga_features(request, s):
+def orga_features(request, event_slug):
     """Manage event features activation and configuration.
 
     Args:
         request: HTTP request object
-        s: Event slug
+        event_slug: Event slug
 
     Returns:
         HttpResponse: Rendered features form or redirect after activation
     """
-    context = check_event_permission(request, s, "orga_features")
+    context = check_event_permission(request, event_slug, "orga_features")
     context["add_another"] = False
     if backend_edit(request, context, OrgaFeatureForm, None, additional_field=None, is_association_based=False):
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features, after_link__isnull=False
         )
         if not context["new_features"]:
-            return redirect("manage", s=context["run"].get_slug())
+            return redirect("manage", event_slug=context["run"].get_slug())
         for el in context["new_features"]:
-            el.follow_link = _orga_feature_after_link(el, s)
+            el.follow_link = _orga_feature_after_link(el, event_slug)
         if len(context["new_features"]) == 1:
             feature = context["new_features"][0]
             msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
@@ -275,7 +283,7 @@ def orga_features(request, s):
             messages.success(request, msg)
             return redirect(feature.follow_link)
 
-        get_index_event_permissions(context, request, s)
+        get_index_event_permissions(context, request, event_slug)
         return render(request, "larpmanager/manage/features.html", context)
     return render(request, "larpmanager/orga/edit.html", context)
 
@@ -350,42 +358,42 @@ def _orga_feature_after_link(feature: Feature, event_slug: str) -> str:
 
     # Use reverse if after_link is a named URL pattern starting with "orga"
     if after_link and after_link.startswith("orga"):
-        return reverse(after_link, kwargs={"s": event_slug})
+        return reverse(after_link, kwargs={"event_slug": event_slug})
 
     # Otherwise append after_link as fragment to manage URL
-    return reverse("manage", kwargs={"s": event_slug}) + (after_link or "")
+    return reverse("manage", kwargs={"event_slug": event_slug}) + (after_link or "")
 
 
 @login_required
 def orga_features_on(
     request: HttpRequest,
-    s: str,
+    event_slug: str,
     slug: str,
 ) -> HttpResponseRedirect:
     """Toggle feature on for an event."""
     # Check user has permission to manage features
-    context = check_event_permission(request, s, "orga_features")
+    context = check_event_permission(request, event_slug, "orga_features")
 
     # Enable the feature
     feature = orga_features_go(request, context, slug, on=True)
 
     # Redirect to appropriate page
-    return redirect(_orga_feature_after_link(feature, s))
+    return redirect(_orga_feature_after_link(feature, event_slug))
 
 
 @login_required
-def orga_features_off(request: HttpRequest, s: str, slug: str) -> HttpResponse:
+def orga_features_off(request: HttpRequest, event_slug: str, slug: str) -> HttpResponse:
     """Disable a feature for an event."""
-    context = check_event_permission(request, s, "orga_features")
+    context = check_event_permission(request, event_slug, "orga_features")
     orga_features_go(request, context, slug, on=False)
-    return redirect("manage", s=s)
+    return redirect("manage", event_slug=event_slug)
 
 
 @login_required
-def orga_deadlines(request: HttpRequest, s: str) -> HttpResponse:
+def orga_deadlines(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display deadlines for a specific run."""
     # Check permissions and get event context
-    context = check_event_permission(request, s, "orga_deadlines")
+    context = check_event_permission(request, event_slug, "orga_deadlines")
 
     # Get deadline status for the run
     context["res"] = check_run_deadlines([context["run"]])[0]
@@ -394,23 +402,25 @@ def orga_deadlines(request: HttpRequest, s: str) -> HttpResponse:
 
 
 @login_required
-def orga_quick(request, s):
+def orga_quick(request, event_slug):
     return orga_edit(
-        request, s, "orga_quick", OrgaQuickSetupForm, None, "manage", additional_context={"add_another": False}
+        request, event_slug, "orga_quick", OrgaQuickSetupForm, None, "manage", additional_context={"add_another": False}
     )
 
 
 @login_required
-def orga_preferences(request, s):
+def orga_preferences(request, event_slug):
     m_id = request.user.member.id
-    return orga_edit(request, s, None, OrgaPreferencesForm, m_id, "manage", additional_context={"add_another": False})
+    return orga_edit(
+        request, event_slug, None, OrgaPreferencesForm, m_id, "manage", additional_context={"add_another": False}
+    )
 
 
 @login_required
-def orga_backup(request: HttpRequest, s: str) -> HttpResponse:
+def orga_backup(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Prepare event backup for download."""
     # Check user has event access
-    context = check_event_permission(request, s, "orga_event")
+    context = check_event_permission(request, event_slug, "orga_event")
 
     # Generate and return backup response
     return _prepare_backup(context)
@@ -475,7 +485,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
 
 
 @login_required
-def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
+def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse:
     """
     Handle file uploads for organizers with element processing.
 
@@ -485,7 +495,7 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing file data and POST parameters
-        s: Event slug identifier for the specific event
+        event_slug: Event slug identifier for the specific event
         typ: Type of elements to upload (e.g., 'characters', 'items')
 
     Returns:
@@ -495,7 +505,7 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
         Exception: Any error during file processing is caught and displayed to user
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s, f"orga_{typ}")
+    context = check_event_permission(request, event_slug, f"orga_{typ}")
     context["typ"] = typ.rstrip("s")
     context["name"] = context["typ"]
 
@@ -536,12 +546,12 @@ def orga_upload(request: HttpRequest, s: str, typ: str) -> HttpResponse:
 
 
 @login_required
-def orga_upload_template(request, s: str, typ: str) -> HttpResponse:
+def orga_upload_template(request, event_slug: str, typ: str) -> HttpResponse:
     """Generate and download template files for data upload.
 
     Args:
         request: HTTP request object containing user session and metadata
-        s: Event or run identifier string used to locate the specific event
+        event_slug: Event identifier string used to locate the specific event
         typ: Template type specifying which template to generate. Valid values:
             - 'writing': Character writing elements template
             - 'registration': Event registration template
@@ -556,7 +566,7 @@ def orga_upload_template(request, s: str, typ: str) -> HttpResponse:
         ValidationError: If template type is invalid or event not found
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, s)
+    context = check_event_permission(request, event_slug)
     context["typ"] = typ
 
     # Extract and set column names for template generation

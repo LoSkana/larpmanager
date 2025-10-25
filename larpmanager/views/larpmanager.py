@@ -326,7 +326,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
     return redirect(reverse(view_name))
 
 
-def activate_feature_event(request: HttpRequest, s: str, cod: str, p: str = None) -> HttpResponseRedirect:
+def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: str = None) -> HttpResponseRedirect:
     """Activate a feature for a specific event.
 
     Enables a non-overall feature for the specified event and redirects the user
@@ -334,7 +334,7 @@ def activate_feature_event(request: HttpRequest, s: str, cod: str, p: str = None
 
     Args:
         request: Django HTTP request object containing user and session data
-        s: Event slug identifier used to locate the target event
+        event_slug: Event slug identifier used to locate the target event
         cod: Feature slug/code identifying which feature to activate
         p: Optional URL path to redirect to after successful activation.
            If None, redirects to the feature's default event view.
@@ -354,7 +354,7 @@ def activate_feature_event(request: HttpRequest, s: str, cod: str, p: str = None
         raise Http404("feature overall")
 
     # Get event context and verify user has permission to manage features
-    context = get_event_run(request, s)
+    context = get_event_run(request, event_slug)
     if not has_event_permission(request, {}, context["event"].slug, "orga_features"):
         raise PermissionError()
 
@@ -371,7 +371,7 @@ def activate_feature_event(request: HttpRequest, s: str, cod: str, p: str = None
 
     # Get the first event permission's slug as the default view name
     view_name = feature.event_permissions.first().slug
-    return redirect(reverse(view_name, kwargs={"s": s}))
+    return redirect(reverse(view_name, kwargs={"event_slug": event_slug}))
 
 
 def toggle_sidebar(request):
@@ -418,7 +418,7 @@ def debug_mail(request):
     return redirect("home")
 
 
-def debug_slug(request, s=""):
+def debug_slug(request, assoc_slug=""):
     """Set debug slug in session for development testing.
 
     Only available in development and test environments.
@@ -426,7 +426,7 @@ def debug_slug(request, s=""):
 
     Args:
         request: Django HTTP request object
-        s: Debug slug to set in session
+        assoc_slug: Debug slug to set in session
 
     Returns:
         HttpResponseRedirect: Redirect to home page
@@ -437,11 +437,11 @@ def debug_slug(request, s=""):
     if request.enviro not in ["dev", "test"]:
         raise Http404()
 
-    request.session["debug_slug"] = s
+    request.session["debug_slug"] = assoc_slug
     return redirect("home")
 
 
-def ticket(request, s=""):
+def ticket(request, reason=""):
     """Handle support ticket creation and submission.
 
     Displays ticket form and processes ticket submissions.
@@ -449,19 +449,19 @@ def ticket(request, s=""):
 
     Args:
         request: Django HTTP request object
-        s: Optional reason/category for the ticket
+        reason: Optional reason/category for the ticket
 
     Returns:
         HttpResponse: Rendered ticket form or redirect after successful submission
     """
-    context = {"reason": s}
+    context = {"reason": reason}
     if request.POST:
         form = LarpManagerTicketForm(request.POST, request.FILES, request=request, context=context)
         if form.is_valid():
             lm_ticket = form.save(commit=False)
             lm_ticket.assoc_id = request.assoc["id"]
-            if s:
-                lm_ticket.reason = s
+            if reason:
+                lm_ticket.reason = reason
             if request.user.is_authenticated:
                 lm_ticket.member = request.user.member
             lm_ticket.save()

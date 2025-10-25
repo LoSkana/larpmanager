@@ -126,7 +126,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
             )
             messages.success(request, msg)
             # Redirect to quick setup page for new event
-            return redirect("orga_quick", s=context["saved"].slug)
+            return redirect("orga_quick", event_slug=context["saved"].slug)
         # Redirect back to events list after successful edit
         return redirect("exe_events")
 
