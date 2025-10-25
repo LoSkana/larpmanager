@@ -204,16 +204,18 @@ def _info_token_credit(context, member):
     token_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.TOKEN,
-        assoc_id=context["a_id"],
+        assoc_id=context["association_id"],
     )
     context["acc_tokens"] = token_queryset.count()
 
     # check if it had any credits
-    expense_queryset = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=context["a_id"])
+    expense_queryset = AccountingItemExpense.objects.filter(
+        member=member, is_approved=True, assoc_id=context["association_id"]
+    )
     credit_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.CREDIT,
-        assoc_id=context["a_id"],
+        assoc_id=context["association_id"],
     )
     context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
 
@@ -232,9 +234,9 @@ def _info_collections(context, member, request):
     if "collection" not in context["features"]:
         return
 
-    context["collections"] = Collection.objects.filter(organizer=member, assoc_id=context["a_id"])
+    context["collections"] = Collection.objects.filter(organizer=member, assoc_id=context["association_id"])
     context["collection_gifts"] = AccountingItemCollection.objects.filter(
-        member=member, collection__assoc_id=context["a_id"]
+        member=member, collection__assoc_id=context["association_id"]
     )
 
 
@@ -252,7 +254,7 @@ def _info_donations(context, member, request):
     if "donate" not in context["features"]:
         return
 
-    donation_queryset = AccountingItemDonation.objects.filter(member=member, assoc_id=context["a_id"])
+    donation_queryset = AccountingItemDonation.objects.filter(member=member, assoc_id=context["association_id"])
     context["donations"] = donation_queryset.order_by("-created")
 
 
@@ -289,9 +291,9 @@ def _info_membership(context: dict, member, request) -> None:
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
-    for membership_item in AccountingItemMembership.objects.filter(member=member, assoc_id=context["a_id"]).order_by(
-        "year"
-    ):
+    for membership_item in AccountingItemMembership.objects.filter(
+        member=member, assoc_id=context["association_id"]
+    ).order_by("year"):
         context["membership_fee"].append(membership_item.year)
 
     # Check if current year membership fee exists
@@ -310,10 +312,12 @@ def _info_membership(context: dict, member, request) -> None:
     context["year"] = current_year
 
     # Get membership day configuration (default: January 1st)
-    membership_day = get_assoc_config(context["a_id"], "membership_day", "01-01", context)
+    membership_day = get_assoc_config(context["association_id"], "membership_day", "01-01", context)
     if membership_day:
         # Get grace period in months (default: 0 months)
-        membership_grace_period_months = int(get_assoc_config(context["a_id"], "membership_grazing", "0", context))
+        membership_grace_period_months = int(
+            get_assoc_config(context["association_id"], "membership_grazing", "0", context)
+        )
 
         # Build full date string with current year
         membership_day += f"-{current_year}"

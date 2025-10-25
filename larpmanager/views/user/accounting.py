@@ -107,7 +107,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
     """
     # Initialize base context and check for valid association
     context = def_user_context(request)
-    if context["a_id"] == 0:
+    if context["association_id"] == 0:
         return redirect("home")
 
     # Populate main user's accounting information
@@ -123,7 +123,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
 
         # Process accounting info for each delegated member
         for el in context["delegated"]:
-            del_ctx = {"member": el, "a_id": context["a_id"]}
+            del_ctx = {"member": el, "association_id": context["association_id"]}
             info_accounting(request, del_ctx)
 
             # Attach context to member object for template access
@@ -132,7 +132,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
             context["delegated_todo"] = context["delegated_todo"] or del_ctx["payments_todo"]
 
     # Load organization terms and conditions for display
-    context["assoc_terms_conditions"] = get_assoc_text(context["a_id"], AssocTextType.TOC)
+    context["assoc_terms_conditions"] = get_assoc_text(context["association_id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/member/accounting.html", context)
 
@@ -162,7 +162,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         member=context["member"],
         hide=False,
         oth=OtherChoices.TOKEN,
-        assoc_id=context["a_id"],
+        assoc_id=context["association_id"],
     )
 
     # Query for tokens used by the user (non-hidden, within current association)
@@ -170,7 +170,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         member=context["member"],
         hide=False,
         pay=PaymentChoices.TOKEN,
-        assoc_id=context["a_id"],
+        assoc_id=context["association_id"],
     )
 
     # Update context with token data
@@ -210,28 +210,28 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
         {
             # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
-                member=context["member"], hide=False, is_approved=True, assoc_id=context["a_id"]
+                member=context["member"], hide=False, is_approved=True, assoc_id=context["association_id"]
             ),
             # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
                 member=context["member"],
                 hide=False,
                 oth=OtherChoices.CREDIT,
-                assoc_id=context["a_id"],
+                assoc_id=context["association_id"],
             ),
             # Payments made using credits by the user in current association
             "used": AccountingItemPayment.objects.filter(
                 member=context["member"],
                 hide=False,
                 pay=PaymentChoices.CREDIT,
-                assoc_id=context["a_id"],
+                assoc_id=context["association_id"],
             ),
             # Refunds issued to the user in current association
             "ref": AccountingItemOther.objects.filter(
                 member=context["member"],
                 hide=False,
                 oth=OtherChoices.REFUND,
-                assoc_id=context["a_id"],
+                assoc_id=context["association_id"],
             ),
         }
     )
@@ -264,10 +264,10 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     # Initialize base context with user and association data
     context = def_user_context(request)
     context["show_accounting"] = True
-    context.update({"member": request.user.member, "a_id": request.assoc["id"]})
+    context.update({"member": request.user.member, "association_id": context["association_id"]})
 
     # Verify user membership in current association
-    get_user_membership(request.user.member, context["a_id"])
+    get_user_membership(request.user.member, context["association_id"])
 
     if request.method == "POST":
         # Process refund request form submission
@@ -278,7 +278,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
             with transaction.atomic():
                 p = form.save(commit=False)
                 p.member = context["member"]
-                p.assoc_id = context["a_id"]
+                p.assoc_id = context["association_id"]
                 p.save()
 
             # Send notification to administrators about new refund request
@@ -389,7 +389,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     context["show_accounting"] = True
 
     # Load membership status for permission checks
-    reg.membership = get_user_membership(reg.member, request.assoc["id"])
+    reg.membership = get_user_membership(reg.member, context["association_id"])
 
     # Check if registration is already fully paid
     if reg.tot_iscr == reg.tot_payed:
@@ -429,7 +429,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     key = f"{reg.id}_{reg.num_payments}"
 
     # Load association configuration for payment display
-    context["association"] = Association.objects.get(pk=context["a_id"])
+    context["association"] = Association.objects.get(pk=context["association_id"])
     context["hide_amount"] = context["association"].get_config("payment_hide_amount", False)
 
     # Pre-select payment method if specified
@@ -472,7 +472,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     context["show_accounting"] = True
 
     # Validate user membership status - must be accepted to pay dues
-    memb = get_user_membership(request.user.member, request.assoc["id"])
+    memb = get_user_membership(request.user.member, context["association_id"])
     if memb.status != MembershipStatus.ACCEPTED:
         messages.success(request, _("It is not possible for you to pay dues at this time") + ".")
         return redirect("accounting")
@@ -480,7 +480,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     # Check if membership fee already paid for current year
     year = datetime.now().year
     try:
-        AccountingItemMembership.objects.get(year=year, member=request.user.member, assoc_id=request.assoc["id"])
+        AccountingItemMembership.objects.get(year=year, member=request.user.member, assoc_id=context["association_id"])
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
     except Exception:
@@ -583,7 +583,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
             with transaction.atomic():
                 p = form.save(commit=False)
                 p.organizer = request.user.member
-                p.assoc_id = request.assoc["id"]
+                p.assoc_id = context["association_id"]
                 p.save()
 
             # Show success message and redirect to collection management
@@ -628,7 +628,9 @@ def acc_collection_manage(request: HttpRequest, event_slug: str) -> HttpResponse
     context.update(
         {
             "coll": c,
-            "list": AccountingItemCollection.objects.filter(collection=c, collection__assoc_id=request.assoc["id"]),
+            "list": AccountingItemCollection.objects.filter(
+                collection=c, collection__assoc_id=context["association_id"]
+            ),
         }
     )
 

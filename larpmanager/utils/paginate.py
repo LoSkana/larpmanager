@@ -122,7 +122,7 @@ def _get_elements_query(cls, context: dict, request, model_type, is_executive: b
     start_index, page_length, order_params, filter_params = _get_query_params(request)
 
     # Start with base queryset filtered by association
-    query_elements = cls.filter(assoc_id=context["a_id"])
+    query_elements = cls.filter(assoc_id=context["association_id"])
 
     # Apply event-specific filtering for non-executive views
     if not is_executive and "run" in context:
@@ -421,7 +421,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
 
         # Subquery to get the latest membership credit for each member
         latest_membership_subquery = Membership.objects.filter(
-            member_id=OuterRef("member_id"), assoc_id=context["a_id"]
+            member_id=OuterRef("member_id"), assoc_id=context["association_id"]
         ).order_by("id")[:1]
         elements = elements.annotate(credits=Subquery(latest_membership_subquery.values("credit")))
 

@@ -35,7 +35,7 @@ from larpmanager.utils.auth import is_lm_admin
 logger = logging.getLogger(__name__)
 
 
-def cache_event_links(request: HttpRequest) -> dict:
+def cache_event_links(request: HttpRequest, context: dict) -> None:
     """Get cached event navigation links for authenticated user.
 
     Builds and caches navigation context including registrations, roles,
@@ -43,37 +43,37 @@ def cache_event_links(request: HttpRequest) -> dict:
 
     Args:
         request: Django HTTP request with authenticated user and association
+        context: Dict for context information
 
     Returns:
         Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
     """
     # Skip if not authenticated or no association
-    if not request.user.is_authenticated or request.assoc["id"] == 0:
+    if not request.user.is_authenticated or context["association_id"] == 0:
         return {}
 
     # Return cached data if available
-    navigation_context = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
-    if navigation_context:
-        return navigation_context
+    navigation_context = cache.get(get_cache_event_key(request.user.id, context["association_id"]))
+    if not navigation_context:
+        # Build navigation context from scratch
+        navigation_context = _build_navigation_context(request, context)
 
-    # Build navigation context from scratch
-    navigation_context = _build_navigation_context(request)
+        # Cache for 1 day
+        cache.set(
+            get_cache_event_key(request.user.id, context["association_id"]),
+            navigation_context,
+            timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
+        )
 
-    # Cache for 1 day
-    cache.set(
-        get_cache_event_key(request.user.id, request.assoc["id"]),
-        navigation_context,
-        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
-    )
-    return navigation_context
+    context.update(navigation_context)
 
 
-def _build_navigation_context(request: HttpRequest) -> dict:
+def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
     context = {}
     cutoff_date = (datetime.now() - timedelta(days=10)).date()
     member = request.user.member
-    association_id = request.assoc["id"]
+    association_id = context["association_id"]
 
     # Get user's active registrations for upcoming events
     active_registrations = Registration.objects.filter(

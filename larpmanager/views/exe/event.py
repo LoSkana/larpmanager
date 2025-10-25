@@ -28,6 +28,7 @@ from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.event import (
     ExeEventForm,
     ExeTemplateForm,
@@ -41,7 +42,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.utils.base import check_assoc_permission, def_user_context
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.common import get_event_template
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
@@ -58,7 +59,9 @@ def exe_events(request: HttpRequest) -> HttpResponse:
     context = check_assoc_permission(request, "exe_events")
 
     # Get all runs for the association, ordered by end date
-    context["list"] = Run.objects.filter(event__assoc_id=context["a_id"]).select_related("event").order_by("end")
+    context["list"] = (
+        Run.objects.filter(event__assoc_id=context["association_id"]).select_related("event").order_by("end")
+    )
 
     # Add registration status and counts to each run
     for run in context["list"]:
@@ -116,7 +119,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
             er.save()
 
             # Refresh cached event links for user navigation
-            reset_event_links(request.user.id, context["a_id"])
+            reset_event_links(request.user.id, context["association_id"])
 
             # Prepare success message encouraging quick setup completion
             msg = (
@@ -156,7 +159,7 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
     context = check_assoc_permission(request, "exe_templates")
 
     # Get all template events for the organization, ordered by last update
-    context["list"] = Event.objects.filter(assoc_id=context["a_id"], template=True).order_by("-updated")
+    context["list"] = Event.objects.filter(assoc_id=context["association_id"], template=True).order_by("-updated")
 
     # Ensure each template has at least one role (organizer by default)
     for el in context["list"]:
@@ -216,10 +219,10 @@ def exe_pre_registrations(request) -> HttpResponse:
     context["seen"] = []
 
     # Get preference configuration for the association
-    context["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
+    context["preferences"] = get_assoc_config(context["association_id"], "pre_reg_preferences", False)
 
     # Iterate through all non-template events for this association
-    for event in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
+    for event in Event.objects.filter(assoc_id=context["association_id"], template=False):
         # Skip events that don't have pre-registration active
         if not get_event_config(event.id, "pre_register_active", False):
             continue
@@ -252,7 +255,7 @@ def exe_deadlines(request: HttpRequest) -> HttpResponse:
     context = check_assoc_permission(request, "exe_deadlines")
 
     # Get upcoming runs and check their deadlines
-    runs = get_coming_runs(request.assoc["id"])
+    runs = get_coming_runs(context["association_id"])
     context["list"] = check_run_deadlines(runs)
 
     return render(request, "larpmanager/exe/deadlines.html", context)

@@ -357,7 +357,7 @@ class OrgaCharacterForm(CharacterForm):
         self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
-            self.fields["player"].widget.set_assoc(self.params["a_id"])
+            self.fields["player"].widget.set_assoc(self.params["association_id"])
         else:
             self.delete_field("player")
 

@@ -263,7 +263,7 @@ def _delete_optionals_warehouse(warehouse_form):
         Deletes form fields for warehouse options not enabled in config
     """
     for optional_field_name in WarehouseItem.get_optional_fields():
-        if not get_assoc_config(warehouse_form.params["a_id"], f"warehouse_{optional_field_name}", False):
+        if not get_assoc_config(warehouse_form.params["association_id"], f"warehouse_{optional_field_name}", False):
             warehouse_form.delete_field(optional_field_name)
 
 
@@ -406,7 +406,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
             self.initial["working"] = self.params["request"].user.member
 
         # Configure widget with association context
-        self.fields["working"].widget.set_assoc(self.params["a_id"])
+        self.fields["working"].widget.set_assoc(self.params["association_id"])
 
 
 class OrgaCopyForm(forms.Form):
@@ -422,11 +422,13 @@ class OrgaCopyForm(forms.Form):
 
         self.fields["parent"] = forms.ChoiceField(
             required=True,
-            choices=[(el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["a_id"], template=False)],
+            choices=[
+                (el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["association_id"], template=False)
+            ],
             help_text="The event from which you will copy the elements",
         )
         self.fields["parent"].widget = EventS2Widget()
-        self.fields["parent"].widget.set_assoc(self.params["a_id"])
+        self.fields["parent"].widget.set_assoc(self.params["association_id"])
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [

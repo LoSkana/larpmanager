@@ -30,6 +30,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, assoc_accounting_data, check_accounting, get_run_accounting
 from larpmanager.accounting.invoice import invoice_verify
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.accounting import (
     ExeCollectionForm,
     ExeCreditForm,
@@ -68,7 +69,6 @@ from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
 from larpmanager.utils.paginate import exe_paginate
 
@@ -414,7 +414,7 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
         Http404: If expense doesn't exist or doesn't belong to current organization
     """
     # Check user has permission to manage expenses
-    check_assoc_permission(request, "exe_expenses")
+    context = check_assoc_permission(request, "exe_expenses")
 
     # Retrieve the expense object, raise 404 if not found
     try:
@@ -423,7 +423,7 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
         raise Http404("no id expense") from err
 
     # Verify expense belongs to current organization
-    if exp.assoc_id != request.assoc["id"]:
+    if exp.assoc_id != context["association_id"]:
         raise Http404("not your orga")
 
     # Mark expense as approved and save changes
@@ -612,7 +612,9 @@ def exe_collections(request: HttpRequest) -> HttpResponse:
 
     # Fetch collections with related data, ordered by creation date
     context["list"] = (
-        Collection.objects.filter(assoc_id=context["a_id"]).select_related("member", "organizer").order_by("-created")
+        Collection.objects.filter(assoc_id=context["association_id"])
+        .select_related("member", "organizer")
+        .order_by("-created")
     )
 
     return render(request, "larpmanager/exe/accounting/collections.html", context)
@@ -739,7 +741,7 @@ def exe_year_accounting(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"error": "Invalid year parameter"}, status=400)
 
     # Build response with association ID and accounting data
-    res = {"a_id": context["a_id"]}
+    res = {"association_id": context["association_id"]}
     assoc_accounting_data(res, year)
     return JsonResponse({"res": res})
 
@@ -763,7 +765,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
 
     # Get the run and verify ownership
     context["run"] = Run.objects.get(pk=num)
-    if context["run"].event.assoc_id != context["a_id"]:
+    if context["run"].event.assoc_id != context["association_id"]:
         raise Http404("not your run")
 
     # Get accounting data for this run
@@ -777,11 +779,13 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
     context = check_assoc_permission(request, "exe_accounting_rec")
 
     # Get accounting records for the organization (not tied to specific runs)
-    context["list"] = RecordAccounting.objects.filter(assoc_id=context["a_id"], run__isnull=True).order_by("created")
+    context["list"] = RecordAccounting.objects.filter(assoc_id=context["association_id"], run__isnull=True).order_by(
+        "created"
+    )
 
     # If no records exist, create them and redirect
     if len(context["list"]) == 0:
-        check_accounting(context["a_id"])
+        check_accounting(context["association_id"])
         return redirect("exe_accounting_rec")
 
     # Set date range based on first and last records
@@ -809,7 +813,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
         Association.DoesNotExist: If association with given ID doesn't exist
     """
     # Get association and generate valid years range
-    association = Association.objects.get(pk=context["a_id"])
+    association = Association.objects.get(pk=context["association_id"])
     context["years"] = list(range(datetime.today().year, association.created.year - 1, -1))
 
     # Process POST data if present
@@ -861,26 +865,34 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     end = date(year + 1, 1, 1)
 
     # Calculate total membership fees for the year
-    context["memberships"] = get_sum(AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=year))
+    context["memberships"] = get_sum(
+        AccountingItemMembership.objects.filter(assoc_id=context["association_id"], year=year)
+    )
 
     # Calculate total donations received in the year
     context["donations"] = get_sum(
-        AccountingItemDonation.objects.filter(assoc_id=context["a_id"], created__gte=start, created__lt=end)
+        AccountingItemDonation.objects.filter(assoc_id=context["association_id"], created__gte=start, created__lt=end)
     )
 
     # Calculate net ticket revenue (cash payments minus transaction fees)
     context["tickets"] = get_sum(
         AccountingItemPayment.objects.filter(
-            assoc_id=context["a_id"],
+            assoc_id=context["association_id"],
             pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
         )
-    ) - get_sum(AccountingItemTransaction.objects.filter(assoc_id=context["a_id"], created__gte=start, created__lt=end))
+    ) - get_sum(
+        AccountingItemTransaction.objects.filter(
+            assoc_id=context["association_id"], created__gte=start, created__lt=end
+        )
+    )
 
     # Calculate total inflows for the year
     context["inflows"] = get_sum(
-        AccountingItemInflow.objects.filter(assoc_id=context["a_id"], payment_date__gte=start, payment_date__lt=end)
+        AccountingItemInflow.objects.filter(
+            assoc_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
+        )
     )
 
     # Sum all incoming funds
@@ -893,7 +905,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Calculate total refunds/reimbursements for proportional distribution
     context["rimb"] = get_sum(
         AccountingItemOther.objects.filter(
-            assoc_id=context["a_id"],
+            assoc_id=context["association_id"],
             created__gte=start,
             created__lt=end,
             oth=OtherChoices.REFUND,
@@ -907,7 +919,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Aggregate approved personal expenses by balance category
     for el in (
         AccountingItemExpense.objects.filter(
-            assoc_id=context["a_id"], created__gte=start, created__lt=end, is_approved=True
+            assoc_id=context["association_id"], created__gte=start, created__lt=end, is_approved=True
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -931,7 +943,9 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     # Add association-level outflows to expenditure categories
     for el in (
-        AccountingItemOutflow.objects.filter(assoc_id=context["a_id"], payment_date__gte=start, payment_date__lt=end)
+        AccountingItemOutflow.objects.filter(
+            assoc_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
+        )
         .values("balance")
         .annotate(Sum("value"))
     ):
@@ -971,7 +985,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     # Query pending payment invoices excluding automated payment methods
     # Filter out created status and electronic payment methods that auto-verify
     context["todo"] = (
-        PaymentInvoice.objects.filter(assoc_id=context["a_id"], verified=False)
+        PaymentInvoice.objects.filter(assoc_id=context["association_id"], verified=False)
         .exclude(status=PaymentStatus.CREATED)
         .exclude(method__slug__in=["redsys", "satispay", "paypal", "stripe", "sumup"])
         .select_related("method")
@@ -1043,7 +1057,7 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
     invoice = PaymentInvoice.objects.get(pk=num)
 
     # Ensure invoice belongs to user's organization
-    if invoice.assoc_id != context["a_id"]:
+    if invoice.assoc_id != context["association_id"]:
         raise Http404("not your assoc!")
 
     # Check if payment is already verified to prevent duplicates

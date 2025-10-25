@@ -206,7 +206,7 @@ def get_event_template(context, template_id):
         template_id: Event template ID
     """
     try:
-        context["event"] = Event.objects.get(pk=template_id, template=True, assoc_id=context["a_id"])
+        context["event"] = Event.objects.get(pk=template_id, template=True, assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise NotFoundError() from err
 
@@ -781,7 +781,7 @@ def get_payment_methods_ids(context):
     Returns:
         set: Set of payment method primary keys
     """
-    return set(Association.objects.get(pk=context["a_id"]).payment_methods.values_list("pk", flat=True))
+    return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):
@@ -892,7 +892,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
         - open_questions: List of open user-originated questions
     """
     # Filter questions by association ID
-    base_queryset = HelpQuestion.objects.filter(assoc_id=context["a_id"])
+    base_queryset = HelpQuestion.objects.filter(assoc_id=context["association_id"])
 
     # Add run filter if run context exists
     if "run" in context:

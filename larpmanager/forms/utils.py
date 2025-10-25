@@ -460,7 +460,7 @@ def get_run_choices(self, past=False):
         Sets initial value if run is in params
     """
     choices = [("", "-----")]
-    runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
+    runs = Run.objects.filter(event__assoc_id=self.params["association_id"]).select_related("event").order_by("-end")
     if past:
         reference_date = datetime.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])

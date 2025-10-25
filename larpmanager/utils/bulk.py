@@ -92,7 +92,7 @@ def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
         raise ReturnNowError(JsonResponse({"error": "no ids"}, status=400))
 
     # Determine entity ID for logging (use run ID if available, otherwise association ID)
-    entity_id_for_log = context["a_id"]
+    entity_id_for_log = context["association_id"]
     if "run" in context:
         entity_id_for_log = context["run"].id
 
@@ -160,8 +160,8 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
     return JsonResponse({"res": "ok"})
 
 
-def _get_inv_items(warehouse_item_ids, request):
-    return WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=warehouse_item_ids).values_list(
+def _get_inv_items(warehouse_item_ids, context):
+    return WarehouseItem.objects.filter(assoc_id=context["association_id"], pk__in=warehouse_item_ids).values_list(
         "pk", flat=True
     )
 
@@ -173,14 +173,14 @@ def exec_add_item_tag(
     ids: list[int],
 ) -> None:
     """Add items to a warehouse tag."""
-    tag = WarehouseTag.objects.get(assoc_id=request.assoc["id"], pk=target)
-    tag.items.add(*_get_inv_items(ids, request))
+    tag = WarehouseTag.objects.get(assoc_id=context["association_id"], pk=target)
+    tag.items.add(*_get_inv_items(ids, context))
 
 
 def exec_del_item_tag(request: HttpRequest, context: dict[str, Any], target: int, ids: str) -> None:
     """Remove items from a warehouse tag."""
-    tag = WarehouseTag.objects.get(assoc_id=request.assoc["id"], pk=target)
-    tag.items.remove(*_get_inv_items(ids, request))
+    tag = WarehouseTag.objects.get(assoc_id=context["association_id"], pk=target)
+    tag.items.remove(*_get_inv_items(ids, context))
 
 
 def exec_move_item_box(
@@ -191,10 +191,10 @@ def exec_move_item_box(
 ) -> None:
     """Move warehouse items to a target container."""
     # Retrieve the target container for the association
-    container = WarehouseContainer.objects.get(assoc_id=request.assoc["id"], pk=target)
+    container = WarehouseContainer.objects.get(assoc_id=context["association_id"], pk=target)
 
     # Update all specified items to the new container
-    WarehouseItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).update(container=container)
+    WarehouseItem.objects.filter(assoc_id=context["association_id"], pk__in=ids).update(container=container)
 
 
 def handle_bulk_items(request: HttpRequest, context: dict) -> None:
@@ -223,9 +223,11 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
         raise ReturnNowError(exec_bulk(request, context, mapping))
 
     # Fetch available containers for the current association
-    containers = WarehouseContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
+    containers = (
+        WarehouseContainer.objects.filter(assoc_id=context["association_id"]).values("id", "name").order_by("name")
+    )
     # Fetch available tags for the current association
-    tags = WarehouseTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
+    tags = WarehouseTag.objects.filter(assoc_id=context["association_id"]).values("id", "name").order_by("name")
 
     # Populate context with bulk operation choices and their associated objects
     context["bulk"] = [

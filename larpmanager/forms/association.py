@@ -215,7 +215,7 @@ class ExeAssocTextForm(MyForm):
                 self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
-        res = AssocText.objects.filter(assoc_id=self.params["a_id"], language=language, typ=typ)
+        res = AssocText.objects.filter(assoc_id=self.params["association_id"], language=language, typ=typ)
         if res.count() > 0:
             first = res.first()
             # Ensure we're not comparing against the current instance
@@ -247,7 +247,7 @@ class ExeAssocRoleForm(MyForm):
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure member widget with association context
-        self.fields["members"].widget.set_assoc(self.params["a_id"])
+        self.fields["members"].widget.set_assoc(self.params["association_id"])
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssocPermission)
 

@@ -315,7 +315,7 @@ def get_membership_request(context: dict) -> HttpResponse:
     template_context = {"member": context["member"]}
 
     # Retrieve association-specific membership template text
-    template = get_assoc_text(context["a_id"], AssocTextType.MEMBERSHIP)
+    template = get_assoc_text(context["association_id"], AssocTextType.MEMBERSHIP)
 
     # Generate PDF from template and return as HTTP response
     pdf_template(template_context, template, file_path, html=True)

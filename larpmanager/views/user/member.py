@@ -192,7 +192,7 @@ def profile(request):
         }
     )
 
-    context["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.PROFILE)
+    context["custom_text"] = get_assoc_text(context["association_id"], AssocTextType.PROFILE)
 
     # Add avatar form only if profile upload is enabled
     if "profile" in members_fields:
@@ -407,7 +407,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     context = def_user_context(request)
 
     # Get user's membership record for current association
-    el = get_user_membership(request.user.member, request.assoc["id"])
+    el = get_user_membership(request.user.member, context["association_id"])
 
     # Redirect to profile if membership compilation is incomplete
     if not el.compiled:
@@ -464,14 +464,14 @@ def membership(request: HttpRequest) -> HttpResponse:
 
     # Check if membership fee has been paid for current year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
-        assoc_id=request.assoc["id"],
+        assoc_id=context["association_id"],
         year=datetime.now().year,
         member_id=request.user.member.id,
     ).exists()
 
     # Add statute text for accepted memberships
     if el.status == MembershipStatus.ACCEPTED:
-        context["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
+        context["statute"] = get_assoc_text(context["association_id"], AssocTextType.STATUTE)
 
     # Disable join functionality for this view
     context["disable_join"] = True
@@ -518,24 +518,24 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
     context.update(get_member(n))
 
     # Verify member has membership in current association
-    if not Membership.objects.filter(member=context["member"], assoc_id=request.assoc["id"]).exists():
+    if not Membership.objects.filter(member=context["member"], assoc_id=context["association_id"]).exists():
         raise Http404("no membership")
 
     # Add badges if badge feature is enabled for association
     if "badge" in request.assoc["features"]:
         context["badges"] = []
-        for badge in context["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
+        for badge in context["member"].badges.filter(assoc_id=context["association_id"]).order_by("number"):
             context["badges"].append(badge.show(request.LANGUAGE_CODE))
 
     # Add LARP history if enabled in association configuration
-    assoc_id = context["a_id"]
+    assoc_id = context["association_id"]
     if get_assoc_config(assoc_id, "player_larp_history", False):
         # Fetch registrations with related run and event data
         context["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
                 member=context["member"],
-                run__event__assoc_id=request.assoc["id"],
+                run__event__assoc_id=context["association_id"],
             )
             .order_by("-run__end")
             .select_related("run", "run__event")
@@ -578,7 +578,11 @@ def chats(request: HttpRequest) -> HttpResponse:
 
     # Add user's contacts ordered by last message timestamp
     context.update(
-        {"list": Contact.objects.filter(me=request.user.member, assoc_id=request.assoc["id"]).order_by("-last_message")}
+        {
+            "list": Contact.objects.filter(me=request.user.member, assoc_id=context["association_id"]).order_by(
+                "-last_message"
+            )
+        }
     )
 
     return render(request, "larpmanager/member/chats.html", context)
@@ -652,7 +656,7 @@ def badges(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "badge")
 
     # Fetch and add badges to context, ordered by number
-    for badge in Badge.objects.filter(assoc_id=request.assoc["id"]).order_by("number"):
+    for badge in Badge.objects.filter(assoc_id=context["association_id"]).order_by("number"):
         context["badges"].append(badge.show(request.LANGUAGE_CODE))
 
     # Set page identifier and render template
@@ -702,7 +706,8 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     check_assoc_feature(request, "badge")
 
     # Get sorted list of members with their badge scores
-    member_list = get_leaderboard(request.assoc["id"])
+    context = def_user_context(request)
+    member_list = get_leaderboard(context["association_id"])
 
     # Configure pagination settings
     num_el = 25
@@ -714,7 +719,6 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     p = min(p, num_pages)
 
     # Build context with pagination data
-    context = def_user_context(request)
     context.update(
         {
             "pages": member_list[(p - 1) * num_el : p * num_el],
@@ -742,10 +746,10 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
     """
     # Build context with user and association information
     context = def_user_context(request)
-    context.update({"member": request.user.member, "a_id": request.assoc["id"]})
+    context.update({"member": request.user.member, "association_id": context["association_id"]})
 
     # Get user membership and update newsletter preference
-    mb = get_user_membership(context["member"], context["a_id"])
+    mb = get_user_membership(context["member"], context["association_id"])
     mb.newsletter = NewsletterChoices.NO
     mb.save()
 
@@ -774,26 +778,26 @@ def vote(request: HttpRequest) -> HttpResponse:
     # Verify user has access to voting feature
     check_assoc_feature(request, "vote")
     context = def_user_context(request)
-    context.update({"member": request.user.member, "a_id": request.assoc["id"]})
+    context.update({"member": request.user.member, "association_id": context["association_id"]})
 
     # Set current year for membership and voting validation
     context["year"] = datetime.now().year
 
     # Check if membership payment is required and completed
     if "membership" in request.assoc["features"]:
-        que = AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=context["year"])
+        que = AccountingItemMembership.objects.filter(assoc_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
             return redirect("acc_membership")
 
     # Check if user has already voted this year
-    que = Vote.objects.filter(member=context["member"], assoc_id=context["a_id"], year=context["year"])
+    que = Vote.objects.filter(member=context["member"], assoc_id=context["association_id"], year=context["year"])
     if que.count() > 0:
         context["done"] = True
         return render(request, "larpmanager/member/vote.html", context)
 
     # Retrieve voting configuration from association settings
-    assoc_id = context["a_id"]
+    assoc_id = context["association_id"]
 
     context["vote_open"] = get_assoc_config(assoc_id, "vote_open", False, context)
     context["vote_cands"] = get_assoc_config(assoc_id, "vote_candidates", "", context).split(",")
@@ -812,7 +816,7 @@ def vote(request: HttpRequest) -> HttpResponse:
             # Create vote record for each selected candidate
             Vote.objects.create(
                 member=context["member"],
-                assoc_id=context["a_id"],
+                assoc_id=context["association_id"],
                 year=context["year"],
                 number=cnt,
                 candidate_id=m_id,
@@ -915,7 +919,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
             user.member.save()
 
             # Mark membership as compiled for new delegated account
-            mb = get_user_membership(user.member, request.assoc["id"])
+            mb = get_user_membership(user.member, context["association_id"])
             mb.compiled = True
             mb.save()
 
@@ -929,7 +933,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
 
     # Add accounting information for each delegated account
     for el in context["list"]:
-        del_ctx = {"member": el, "a_id": context["a_id"]}
+        del_ctx = {"member": el, "association_id": context["association_id"]}
         info_accounting(request, del_ctx)
         el.context = del_ctx
     return render(request, "larpmanager/member/delegated.html", context)
@@ -957,23 +961,27 @@ def registrations(request: HttpRequest) -> HttpResponse:
             with status and related information.
     """
     nt = []
+    context = def_user_context(request)
 
     # Get user's registrations filtered by association for caching optimization
-    my_regs = Registration.objects.filter(member=request.user.member, run__event_id=request.assoc["id"])
+    my_regs = Registration.objects.filter(member=request.user.member, run__event_id=context["association_id"])
     my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
     # Prepare context data
-    ctx_reg = {
-        "pre_registrations_dict": get_pre_registrations_dict(request.assoc["id"], request.user.member),
-        "character_rels_dict": get_character_rels_dict(my_regs_dict, request.user.member),
-        "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, request.user.member),
-    }
+    context.update(
+        {
+            "pre_registrations_dict": get_pre_registrations_dict(context["association_id"], request.user.member),
+            "character_rels_dict": get_character_rels_dict(my_regs_dict, request.user.member),
+            "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, request.user.member),
+        }
+    )
 
     # Process each registration to calculate status and append to results
     for reg in my_regs:
         # Calculate registration status
-        registration_status(reg.run, request.user, ctx_reg)
+        registration_status(reg.run, request.user, context)
         nt.append(reg)
 
     # Render template with processed registration list
-    return render(request, "larpmanager/member/registrations.html", {"registration_list": nt})
+    context["registration_list"] = nt
+    return render(request, "larpmanager/member/registrations.html", context)

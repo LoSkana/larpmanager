@@ -110,7 +110,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     else:
         # Show all available events for pre-registration
         context = def_user_context(request)
-        context.update({"features": get_assoc_features(request.assoc["id"])})
+        context.update({"features": get_assoc_features(context["association_id"])})
 
     # Initialize event lists for template
     context["choices"] = []  # Events available for new pre-registration
@@ -118,17 +118,17 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     context["member"] = request.user.member
 
     # Check if preference ordering is enabled
-    context["preferences"] = get_assoc_config(request.assoc["id"], "pre_reg_preferences", False)
+    context["preferences"] = get_assoc_config(context["association_id"], "pre_reg_preferences", False)
 
     # Build set of already pre-registered event IDs
     ch = {}
-    que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=request.assoc["id"])
+    que = PreRegistration.objects.filter(member=request.user.member, event__assoc_id=context["association_id"])
     for el in que.order_by("pref"):
         ch[el.event_id] = True
         context["already"].append(el)
 
     # Find events available for pre-registration
-    for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
+    for r in Event.objects.filter(assoc_id=context["association_id"], template=False):
         # Skip if pre-registration not active for this event
         if not get_event_config(r.id, "pre_register_active", False):
             continue
@@ -443,7 +443,7 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
             run=context["run"],
             oth=OtherChoices.TOKEN,
             descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
-            assoc_id=context["a_id"],
+            assoc_id=context["association_id"],
             ref_addit=reg.id,
         )
 
@@ -454,7 +454,7 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
             run=context["run"],
             oth=OtherChoices.TOKEN,
             descr=_("Your friend code has been used") + f" - {request.user.member.display_member()} - {cod}",
-            assoc_id=context["a_id"],
+            assoc_id=context["association_id"],
             ref_addit=friend.id,
         )
 
@@ -480,7 +480,7 @@ def register_info(request, context, form, reg, dis):
     context["discount_apply"] = dis
     context["custom_text"] = get_event_text(context["event"].id, EventTextType.REGISTER)
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
-    context["assoc_terms_conditions"] = get_assoc_text(context["a_id"], AssocTextType.TOC)
+    context["assoc_terms_conditions"] = get_assoc_text(context["association_id"], AssocTextType.TOC)
     context["hide_unavailable"] = get_event_config(context["event"].id, "registration_hide_unavailable", False, context)
     context["no_provisional"] = get_event_config(context["event"].id, "payment_no_provisional", False, context)
 
@@ -498,7 +498,7 @@ def register_info(request, context, form, reg, dis):
         else:
             context["membership_fee"] = "todo"
 
-        context["membership_amount"] = get_assoc_config(request.assoc["id"], "membership_fee", 0)
+        context["membership_amount"] = get_assoc_config(context["association_id"], "membership_fee", 0)
 
 
 def init_form_submitted(context, form, request, registration=None):
@@ -563,7 +563,7 @@ def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "",
     _apply_ticket(context, tk)
 
     # Check if payment features are enabled for this association
-    context["payment_feature"] = "payment" in get_assoc_features(context["a_id"])
+    context["payment_feature"] = "payment" in get_assoc_features(context["association_id"])
 
     # Prepare new registration or load existing one
     new_reg = _register_prepare(context, context["run_reg"])
@@ -578,7 +578,7 @@ def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "",
     _add_bring_friend_discounts(context)
 
     # Verify user membership status and permissions
-    mb = get_user_membership(request.user.member, request.assoc["id"])
+    mb = get_user_membership(request.user.member, context["association_id"])
     if mb.status in [MembershipStatus.REWOKED]:
         raise RewokedMembershipError()
     context["member"] = request.user.member
@@ -752,7 +752,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
         context["event_text"] = get_event_text(context["event"].id, EventTextType.TOC)
 
     # Add association terms and conditions
-    context["assoc_text"] = get_assoc_text(request.assoc["id"], AssocTextType.TOC)
+    context["assoc_text"] = get_assoc_text(context["association_id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/event/register_conditions.html", context)
 
@@ -859,7 +859,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         expires=now + timedelta(minutes=15),
         disc=disc,
         run=run,
-        assoc_id=context["a_id"],
+        assoc_id=context["association_id"],
     )
 
     # Return success response with reservation confirmation
@@ -1033,7 +1033,7 @@ def unregister(request, event_slug):
 
     context["reg"] = reg
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
-    context["assoc_terms_conditions"] = get_assoc_text(context["a_id"], AssocTextType.TOC)
+    context["assoc_terms_conditions"] = get_assoc_text(context["association_id"], AssocTextType.TOC)
     return render(request, "larpmanager/event/unregister.html", context)
 
 
@@ -1225,7 +1225,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
         reg = Registration.objects.get(
             redeem_code=code,
             cancellation_date__isnull=True,
-            run__event__assoc_id=context["a_id"],
+            run__event__assoc_id=context["association_id"],
         )
     except Exception as err:
         raise Http404("registration not found") from err

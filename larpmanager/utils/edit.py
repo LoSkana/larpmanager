@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config, get_event_config
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
@@ -39,7 +40,6 @@ from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
-from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.exceptions import NotFoundError
@@ -223,7 +223,7 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
         return
 
     # Verify object belongs to current association
-    if element.assoc_id != context["a_id"]:
+    if element.assoc_id != context["association_id"]:
         raise Http404("not your association")
 
 
@@ -352,7 +352,7 @@ def backend_edit(
     if is_association_based:
         context["exe"] = True
         if element_id is None:
-            element_id = request.assoc["id"]
+            element_id = context["association_id"]
             context["nonum"] = True
     elif element_id is None:
         element_id = context["event"].id
@@ -527,7 +527,7 @@ def set_suggestion(context: dict, permission: str) -> None:
     if "event" in context:
         target_object = context["event"]
     else:
-        target_object = Association.objects.get(pk=context["a_id"])
+        target_object = Association.objects.get(pk=context["association_id"])
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"

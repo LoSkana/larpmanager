@@ -843,7 +843,7 @@ class RedSysClient:
         merchant_parameters = json.loads(base64.b64decode(b64_merchant_parameters).decode())
 
         # Get association for executive notifications
-        assoc = Association.objects.get(pk=context["a_id"])
+        assoc = Association.objects.get(pk=context["association_id"])
 
         # Validate response code presence
         if "Ds_Response" not in merchant_parameters:

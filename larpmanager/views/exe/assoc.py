@@ -29,6 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.role import check_assoc_permission, get_index_assoc_permissions
 from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
     ExeAppearanceForm,
@@ -45,7 +46,6 @@ from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
-from larpmanager.utils.base import check_assoc_permission, get_index_assoc_permissions
 from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
@@ -74,10 +74,12 @@ def exe_roles(request) -> HttpResponse:
 
     def def_callback(context):
         # Create default admin role for association
-        return AssocRole.objects.create(assoc_id=context["a_id"], number=1, name="Admin")
+        return AssocRole.objects.create(assoc_id=context["association_id"], number=1, name="Admin")
 
     # Prepare roles list with existing association roles
-    prepare_roles_list(context, AssocPermission, AssocRole.objects.filter(assoc_id=request.assoc["id"]), def_callback)
+    prepare_roles_list(
+        context, AssocPermission, AssocRole.objects.filter(assoc_id=context["association_id"]), def_callback
+    )
 
     return render(request, "larpmanager/exe/roles.html", context)
 
@@ -109,7 +111,9 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
     context = check_assoc_permission(request, "exe_texts")
 
     # Fetch and order association texts for display
-    context["list"] = AssocText.objects.filter(assoc_id=request.assoc["id"]).order_by("typ", "default", "language")
+    context["list"] = AssocText.objects.filter(assoc_id=context["association_id"]).order_by(
+        "typ", "default", "language"
+    )
 
     return render(request, "larpmanager/exe/texts.html", context)
 
@@ -180,7 +184,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
             return redirect(feature.follow_link)
 
         # Handle multiple features - show management page
-        get_index_assoc_permissions(context, request, request.assoc["id"])
+        get_index_assoc_permissions(context, request, context["association_id"])
         return render(request, "larpmanager/manage/features.html", context)
 
     # Render edit form for feature selection
@@ -278,7 +282,7 @@ def exe_larpmanager(request: HttpRequest) -> HttpResponse:
     context = check_assoc_permission(request, "exe_association")
 
     # Get all runs for the current association
-    que = Run.objects.filter(event__assoc_id=context["a_id"])
+    que = Run.objects.filter(event__assoc_id=context["association_id"])
     context["list"] = que.select_related("event").order_by("start")
 
     # Add payment information to each run

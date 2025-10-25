@@ -114,7 +114,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
             # Set required relationship fields from context and user
             exp.run = context["run"]
             exp.member = request.user.member
-            exp.assoc_id = request.assoc["id"]
+            exp.assoc_id = context["association_id"]
             exp.save()
 
             # Show success message to user

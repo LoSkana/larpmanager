@@ -302,7 +302,7 @@ def get_warehouse_optionals(context, default_columns):
     optionals = {}
     has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_assoc_config(context["a_id"], f"warehouse_{field}", False, context)
+        optionals[field] = get_assoc_config(context["association_id"], f"warehouse_{field}", False, context)
         if optionals[field]:
             has_active_optional = 1
     context["optionals"] = optionals

@@ -305,7 +305,7 @@ def get_payment_form(
         - May create new PaymentInvoice object in database
         - Modifies invoice gross fee calculations
     """
-    association_id: int = request.assoc["id"]
+    association_id: int = context["association_id"]
 
     # Extract and store payment details from form data
     payment_amount: Decimal = form.cleaned_data["amount"]

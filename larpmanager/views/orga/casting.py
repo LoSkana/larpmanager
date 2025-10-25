@@ -467,11 +467,11 @@ def _casting_prepare(context: dict, request, typ: str) -> tuple[int, dict[int, s
             - member_id_to_castings: Dictionary mapping member IDs to their list of casting objects
     """
     # Get the membership fee year for the current association
-    membership_fee_year = get_membership_fee_year(request.assoc["id"])
+    membership_fee_year = get_membership_fee_year(context["association_id"])
 
     # Build cache of member statuses for the association
     member_id_to_status = {}
-    membership_query = Membership.objects.filter(assoc_id=request.assoc["id"])
+    membership_query = Membership.objects.filter(assoc_id=context["association_id"])
     for membership in membership_query.values("member_id", "status"):
         member_id_to_status[membership["member_id"]] = membership["status"]
 

@@ -169,7 +169,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
             context["future"].append(run)  # Future runs (not yet open, not already registered)
 
     # Add association-specific homepage text to context
-    context["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
+    context["custom_text"] = get_assoc_text(context["association_id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", context)
 
@@ -379,7 +379,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
     for run in (
-        Run.objects.filter(event__assoc_id=request.assoc["id"])
+        Run.objects.filter(event__assoc_id=context["association_id"])
         .exclude(development=DevelopStatus.START)
         .exclude(development=DevelopStatus.CANC)
         .order_by("-end")
@@ -417,7 +417,7 @@ def share(request):
     """
     context = def_user_context(request)
 
-    el = get_user_membership(request.user.member, request.assoc["id"])
+    el = get_user_membership(request.user.member, context["association_id"])
     if el.status != MembershipStatus.EMPTY:
         messages.success(request, _("You have already granted data sharing with this organisation") + "!")
         return redirect("home")
@@ -438,7 +438,7 @@ def legal_notice(request: HttpRequest) -> HttpResponse:
     """Render legal notice page with association-specific text."""
     # Build context with user data and legal notice text
     context = def_user_context(request)
-    context.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
+    context.update({"text": get_assoc_text(context["association_id"], AssocTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", context)
 
 

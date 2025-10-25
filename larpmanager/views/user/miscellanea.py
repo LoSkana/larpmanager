@@ -80,7 +80,7 @@ def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
 
     # Get the run object or raise 404 if not found
     try:
-        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["a_id"])
+        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
 
@@ -108,7 +108,6 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
         context = get_event_run(request, event_slug, include_status=True)
     else:
         context = def_user_context(request)
-        context["a_id"] = request.assoc["id"]
 
     # Handle form submission for new help questions
     if request.method == "POST":
@@ -119,8 +118,8 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
             hp.member = request.user.member
 
             # Associate question with organization if context is available
-            if context["a_id"] != 0:
-                hp.assoc_id = context["a_id"]
+            if context["association_id"] != 0:
+                hp.assoc_id = context["association_id"]
 
             # Save question and redirect to prevent form resubmission
             hp.save()
@@ -135,8 +134,8 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
     context["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
 
     # Filter questions by association context
-    if context["a_id"] != 0:
-        context["list"] = context["list"].filter(assoc_id=context["a_id"])
+    if context["association_id"] != 0:
+        context["list"] = context["list"].filter(assoc_id=context["association_id"])
     else:
         context["list"] = context["list"].filter(assoc=None)
 
@@ -399,13 +398,13 @@ def shuttle(request):
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
-            .filter(assoc_id=request.assoc["id"])
+            .filter(assoc_id=context["association_id"])
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
                 created__gt=ref.date(),
                 status=ShuttleStatus.DONE,
-                assoc_id=request.assoc["id"],
+                assoc_id=context["association_id"],
             ).order_by("status", "date", "time"),
         }
     )

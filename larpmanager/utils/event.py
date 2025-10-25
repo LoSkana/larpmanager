@@ -32,7 +32,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache, get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
-from larpmanager.cache.role import get_event_roles, has_event_permission
+from larpmanager.cache.role import get_event_roles, get_index_permissions, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.event import Event, EventConfig, EventText, Run
@@ -48,7 +48,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.base import def_user_context, get_index_permissions
+from larpmanager.utils.base import def_user_context
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
@@ -79,11 +79,11 @@ def get_event(request, event_slug, run_number=None):
 
         get_run(context, event_slug)
 
-        if "a_id" in context:
-            if context["event"].assoc_id != context["a_id"]:
+        if "association_id" in context:
+            if context["event"].assoc_id != context["association_id"]:
                 raise Http404("wrong assoc")
         else:
-            context["a_id"] = context["event"].assoc_id
+            context["association_id"] = context["event"].assoc_id
 
         context["features"] = get_event_features(context["event"].id)
 
@@ -209,7 +209,7 @@ def get_run(context, event_slug):
         UnknowRunError: If run cannot be found
     """
     try:
-        res = get_cache_run(context["a_id"], event_slug)
+        res = get_cache_run(context["association_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
             "search",

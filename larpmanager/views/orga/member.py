@@ -203,7 +203,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     already.extend([mb.id for mb in get_event_staffers(context["event"])])
 
     # Get all active association members (exclude empty memberships)
-    members = Membership.objects.filter(assoc_id=context["a_id"])
+    members = Membership.objects.filter(assoc_id=context["association_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     # Build language-grouped email lists for newsletter subscribers
@@ -252,7 +252,7 @@ def orga_persuade(request, event_slug: str) -> HttpResponse:
     already.extend([mb.id for mb in get_event_staffers(context["event"])])
 
     # Get active association members
-    members = Membership.objects.filter(assoc_id=context["a_id"])
+    members = Membership.objects.filter(assoc_id=context["association_id"])
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     # Filter out already registered/staff members
@@ -335,7 +335,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
             hp = form.save(commit=False)
             hp.member = member
             hp.is_user = False  # Mark as organizer response
-            hp.assoc_id = context["a_id"]
+            hp.assoc_id = context["association_id"]
             hp.run = context["run"]
             hp.save()
 
@@ -370,7 +370,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(
-        member_id=r, assoc_id=context["a_id"], run_id=context["run"]
+        member_id=r, assoc_id=context["association_id"], run_id=context["run"]
     ).order_by("-created")
 
     return render(request, "larpmanager/orga/users/questions_answer.html", context)
@@ -383,7 +383,7 @@ def orga_questions_close(request: HttpRequest, event_slug: str, r: str) -> HttpR
 
     # Get the most recent help question for this member and run
     h = (
-        HelpQuestion.objects.filter(member_id=r, assoc_id=context["a_id"], run_id=context["run"])
+        HelpQuestion.objects.filter(member_id=r, assoc_id=context["association_id"], run_id=context["run"])
         .order_by("-created")
         .first()
     )

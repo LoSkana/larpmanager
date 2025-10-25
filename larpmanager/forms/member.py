@@ -745,14 +745,14 @@ class ExeVolunteerRegistryForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association ID."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].widget.set_assoc(self.params["association_id"])
 
     def clean_member(self) -> Member:
         """Validates member is not already registered as volunteer for this association."""
         member = self.cleaned_data["member"]
 
         # Check for existing volunteer entries for this member and association
-        lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
+        lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["association_id"])
         if lst.count() > 1:
             raise ValidationError("Volunteer entry already existing!")
 
@@ -827,7 +827,7 @@ class ExeMembershipFeeForm(forms.Form):
         # Extract association context and initialize parent form
         self.params = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)
-        assoc_id = self.params.get("a_id", None)
+        assoc_id = self.params.get("association_id", None)
 
         # Configure member field widget and queryset for the association
         self.fields["member"].widget.set_assoc(assoc_id)
@@ -894,7 +894,7 @@ class ExeMembershipDocumentForm(forms.Form):
         # Extract association context and initialize parent form
         self.params = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)
-        self.assoc_id = self.params.get("a_id", None)
+        self.assoc_id = self.params.get("association_id", None)
 
         # Configure member field with association-specific queryset and widget
         self.fields["member"].widget.set_assoc(self.assoc_id)
@@ -928,7 +928,7 @@ class ExeMembershipDocumentForm(forms.Form):
         card_number = self.cleaned_data["card_number"]
 
         # Check if another member already has this card number in the same association
-        if Membership.objects.filter(assoc_id=self.params["a_id"], card_number=card_number).exists():
+        if Membership.objects.filter(assoc_id=self.params["association_id"], card_number=card_number).exists():
             self.add_error("card_number", _("There is already a member with this number"))
 
         return card_number
@@ -950,7 +950,7 @@ class ExeBadgeForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
-        self.fields["members"].widget.set_assoc(self.params["a_id"])
+        self.fields["members"].widget.set_assoc(self.params["association_id"])
 
 
 class ExeProfileForm(MyForm):

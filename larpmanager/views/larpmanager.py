@@ -737,7 +737,7 @@ def privacy(request):
         HttpResponse: Rendered privacy policy page
     """
     context = get_lm_contact(request)
-    context.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
+    context.update({"text": get_assoc_text(context["association_id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", context)
 
 
