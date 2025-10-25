@@ -893,7 +893,7 @@ def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
 
 
 @login_required
-def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
+def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) -> HttpResponse:
     """Handle payment submission and invoice upload for user accounts.
 
     Processes different payment types (wire transfer, PayPal, any) and handles
@@ -901,8 +901,8 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing POST data and files
-        s: Payment submission type ('wire', 'paypal_nf', or 'any')
-        p: Redirect path for error cases
+        payment_method: Payment submission type ('wire', 'paypal_nf', or 'any')
+        redirect_path: Redirect path for error cases
 
     Returns:
         HttpResponse: Redirect response to accounting page or profile check
@@ -919,34 +919,34 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
     require_receipt = get_assoc_config(request.assoc["id"], "payment_require_receipt", False)
 
     # Select appropriate form based on payment type
-    if s in {"wire", "paypal_nf"}:
+    if payment_method in {"wire", "paypal_nf"}:
         form = WireInvoiceSubmitForm(request.POST, request.FILES, require_receipt=require_receipt)
-    elif s == "any":
+    elif payment_method == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
     else:
-        raise Http404("unknown value: " + s)
+        raise Http404("unknown value: " + payment_method)
 
     # Validate form data and uploaded files
     if not form.is_valid():
         # logger.debug(f"Form errors: {form.errors}")
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
-        return redirect("/" + p)
+        return redirect("/" + redirect_path)
 
     # Retrieve the payment invoice using form data
     try:
         inv = PaymentInvoice.objects.get(cod=form.cleaned_data["cod"], assoc_id=request.assoc["id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Error processing payment, contact us"))
-        return redirect("/" + p)
+        return redirect("/" + redirect_path)
 
     # Update invoice with submitted data atomically
     with transaction.atomic():
-        if s in {"wire", "paypal_nf"}:
+        if payment_method in {"wire", "paypal_nf"}:
             # Only set invoice if one was provided
             if form.cleaned_data.get("invoice"):
                 inv.invoice = form.cleaned_data["invoice"]
-        elif s == "any":
+        elif payment_method == "any":
             inv.text = form.cleaned_data["text"]
 
         # Mark as submitted and generate transaction ID
@@ -963,13 +963,13 @@ def acc_submit(request: HttpRequest, s: str, p: str) -> HttpResponse:
 
 
 @login_required
-def acc_confirm(request: HttpRequest, c: str) -> HttpResponse:
+def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     """
     Confirm accounting payment invoice with authorization checks.
 
     Args:
         request: HTTP request object with user authentication
-        c: Invoice confirmation code
+        invoice_cod: Invoice confirmation code
 
     Returns:
         HttpResponse: Redirect to home page with success/error message
@@ -980,7 +980,7 @@ def acc_confirm(request: HttpRequest, c: str) -> HttpResponse:
     """
     # Retrieve invoice by confirmation code and association ID
     try:
-        inv = PaymentInvoice.objects.get(cod=c, assoc_id=request.assoc["id"])
+        inv = PaymentInvoice.objects.get(cod=invoice_cod, assoc_id=request.assoc["id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Invoice not found"))
         return redirect("home")

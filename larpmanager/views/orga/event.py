@@ -358,10 +358,10 @@ def _orga_feature_after_link(feature: Feature, event_slug: str) -> str:
 
     # Use reverse if after_link is a named URL pattern starting with "orga"
     if after_link and after_link.startswith("orga"):
-        return reverse(after_link, kwargs={"s": event_slug})
+        return reverse(after_link, kwargs={"event_slug": event_slug})
 
     # Otherwise append after_link as fragment to manage URL
-    return reverse("manage", kwargs={"s": event_slug}) + (after_link or "")
+    return reverse("manage", kwargs={"event_slug": event_slug}) + (after_link or "")
 
 
 @login_required

@@ -344,12 +344,12 @@ urlpatterns = [
         name="acc_collection_redeem",
     ),
     path(
-        "accounting/submit/<slug:event_slug>/<path:p>/",
+        "accounting/submit/<slug:payment_method>/<path:redirect_path>/",
         views_ua.acc_submit,
         name="acc_submit",
     ),
     path(
-        "accounting/confirm/<slug:c>/",
+        "accounting/confirm/<slug:invoice_cod>/",
         views_ua.acc_confirm,
         name="acc_confirm",
     ),
