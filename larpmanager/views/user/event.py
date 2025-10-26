@@ -148,17 +148,19 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     if lang:
         context["lang"] = lang
 
-    registration_context = {
-        "my_regs": user_registrations_by_run_id,
-        "character_rels_dict": character_relations_by_registration_id,
-        "payment_invoices_dict": payment_invoices_by_registration_id,
-        "pre_registrations_dict": pre_registrations_by_event_id,
-    }
+    context.update(
+        {
+            "my_regs": user_registrations_by_run_id,
+            "character_rels_dict": character_relations_by_registration_id,
+            "payment_invoices_dict": payment_invoices_by_registration_id,
+            "pre_registrations_dict": pre_registrations_by_event_id,
+        }
+    )
 
     # Process each run to determine registration status and categorize
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, context["member"], registration_context)
+        registration_status(run, context["member"], context)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -466,9 +468,9 @@ def event_register(request: HttpRequest, event_slug: str):
         run = runs.first()
         return redirect("register", event_slug=run.get_slug())
     context["list"] = []
-    ctx_reg = {"features_map": {context["event"].id: context["features"]}}
+    context.update({"features_map": {context["event"].id: context["features"]}})
     for r in runs:
-        registration_status(r, context["member"], ctx_reg)
+        registration_status(r, context["member"], context)
         context["list"].append(r)
     return render(request, "larpmanager/general/event_register.html", context)
 
@@ -524,17 +526,19 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     runs_list = list(runs)
     context["list"] = []
 
-    ctx_reg = {
-        "my_regs": my_regs_dict,
-        "character_rels_dict": character_rels_dict,
-        "payment_invoices_dict": payment_invoices_dict,
-        "pre_registrations_dict": pre_registrations_dict,
-    }
+    context.update(
+        {
+            "my_regs": my_regs_dict,
+            "character_rels_dict": character_rels_dict,
+            "payment_invoices_dict": payment_invoices_dict,
+            "pre_registrations_dict": pre_registrations_dict,
+        }
+    )
 
     # Process each run to add registration status information
     for run in runs_list:
         # Update run object with registration status data
-        registration_status(run, context["member"], ctx_reg)
+        registration_status(run, context["member"], context)
 
         # Add processed run to context list
         context["list"].append(run)
@@ -684,7 +688,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
-    ctx_reg = {"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map}
+    context.update({"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map})
 
     # Process each run to determine registration status and categorize by timing
     for r in runs:
@@ -692,7 +696,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             continue
 
         # Update run with registration status information
-        registration_status(r, context["member"], ctx_reg)
+        registration_status(r, context["member"], context)
 
         # Categorize run as coming (recent) or past based on end date
         if r.end > ref.date():

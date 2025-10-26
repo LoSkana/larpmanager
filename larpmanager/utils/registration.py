@@ -395,7 +395,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
 def registration_status(
     run: Run,
     member: Member,
-    context: dict | None = None,
+    context: dict,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -405,7 +405,7 @@ def registration_status(
     Args:
         run: Event run object to check registration status for
         member: Member object attempting registration
-        context: Optional context dictionary containing cached data for efficiency:
+        context: Dict context dictionary, optionally containing cached data for efficiency:
             - my_regs: Pre-filtered user registrations
             - features_map: Cached features mapping
             - reg_counts: Pre-calculated registration counts dictionary

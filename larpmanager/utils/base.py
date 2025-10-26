@@ -355,7 +355,7 @@ def get_event_context(
 
     # Add registration status details to context
     if include_status:
-        registration_status(context["run"], context["member"])
+        registration_status(context["run"], context["member"], context)
 
     # Configure user permissions and sidebar for authorized users
     if has_event_permission(request, context, event_slug):
