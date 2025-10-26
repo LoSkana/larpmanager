@@ -72,7 +72,7 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
     context = {}
     cutoff_date = (datetime.now() - timedelta(days=10)).date()
-    member = request.user.member
+    member = context["member"]
     association_id = context["association_id"]
 
     # Get user's active registrations for upcoming events

@@ -405,7 +405,7 @@ def _exe_accounting_actions(request, context, enabled_features):
         enabled_features: Set of enabled features for the association
     """
     if "payment" in enabled_features:
-        if not request.assoc.get("methods", ""):
+        if not context.get("methods", ""):
             _add_priority(
                 context,
                 _("Set up payment methods"),
@@ -1073,7 +1073,7 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPerm
 
 def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     """Check if intro driver should be shown and update context."""
-    member = request.user.member
+    member = context["member"]
     config_key = "intro_driver"
 
     # Skip if user has already seen the intro driver

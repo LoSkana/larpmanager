@@ -143,13 +143,13 @@ def profile(request):
     including avatar management, membership status updates, and navigation
     to membership application process when required.
     """
-    if request.assoc["id"] == 0:
+    context = get_context(request)
+    if context["association_id"] == 0:
         return HttpResponseRedirect("/")
 
-    context = get_context(request)
     member = request.user.member
-    assoc_features = request.assoc["features"]
-    members_fields = request.assoc["members_fields"]
+    assoc_features = context["features"]
+    members_fields = context["members_fields"]
 
     # Handle POST request (form submission)
     if request.method == "POST":
@@ -522,7 +522,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
         raise Http404("no membership")
 
     # Add badges if badge feature is enabled for association
-    if "badge" in request.assoc["features"]:
+    if "badge" in context["features"]:
         context["badges"] = []
         for badge in context["member"].badges.filter(assoc_id=context["association_id"]).order_by("number"):
             context["badges"].append(badge.show(request.LANGUAGE_CODE))
@@ -571,10 +571,8 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 def chats(request: HttpRequest) -> HttpResponse:
     """Render chat list page for the current user."""
     # Check if user has access to chat feature
-    check_assoc_feature(request, "chat")
-
-    # Build base context for the user
     context = get_context(request)
+    check_assoc_feature(request, context, "chat")
 
     # Add user's contacts ordered by last message timestamp
     context.update(
@@ -595,7 +593,8 @@ def chat(request, n):
     Manages message exchange, conversation history, and chat permissions
     within the association context for member-to-member communication.
     """
-    check_assoc_feature(request, "chat")
+    context = get_context(request)
+    check_assoc_feature(request, context, "chat")
     mid = request.user.member.id
     if n == mid:
         messages.success(request, _("You can't send messages to yourself") + "!")
@@ -611,7 +610,7 @@ def chat(request, n):
                 receiver_id=yid,
                 channel=channel,
                 message=tx,
-                assoc_id=request.assoc["id"],
+                assoc_id=context["association_id"],
             ).save()
             your_contact = get_contact(yid, mid)
             if not your_contact:
@@ -619,7 +618,7 @@ def chat(request, n):
                     me_id=yid,
                     you_id=mid,
                     channel=get_channel(mid, yid),
-                    assoc_id=request.assoc["id"],
+                    assoc_id=context["association_id"],
                 )
             your_contact.num_unread += 1
             your_contact.last_message = datetime.now()
@@ -630,7 +629,7 @@ def chat(request, n):
                     me_id=mid,
                     you_id=yid,
                     channel=get_channel(mid, yid),
-                    assoc_id=request.assoc["id"],
+                    assoc_id=context["association_id"],
                 )
             mine_contact.last_message = datetime.now()
             mine_contact.save()
@@ -641,19 +640,19 @@ def chat(request, n):
     if mine_contact:
         mine_contact.num_unread = 0
         mine_contact.save()
-    context["list"] = ChatMessage.objects.filter(channel=channel, assoc_id=request.assoc["id"]).order_by("-created")
+    context["list"] = ChatMessage.objects.filter(channel=channel, assoc_id=context["association_id"]).order_by(
+        "-created"
+    )
     return render(request, "larpmanager/member/chat.html", context)
 
 
 @login_required
 def badges(request: HttpRequest) -> HttpResponse:
     """Display list of badges for the current association."""
-    # Initialize context with user data and empty badges list
-    context = get_context(request)
-    context.update({"badges": []})
-
     # Verify user has permission to view badges feature
-    check_assoc_feature(request, "badge")
+    context = get_context(request)
+    check_assoc_feature(request, context, "badge")
+    context.update({"badges": []})
 
     # Fetch and add badges to context, ordered by number
     for badge in Badge.objects.filter(assoc_id=context["association_id"]).order_by("number"):
@@ -667,11 +666,11 @@ def badges(request: HttpRequest) -> HttpResponse:
 @login_required
 def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
     """Display a badge with shuffled member list."""
-    check_assoc_feature(request, "badge")
-    badge = get_badge(n, request)
+    context = get_context(request)
+    check_assoc_feature(request, context, "badge")
+    badge = get_badge(n, context)
 
     # Initialize context with badge data
-    context = get_context(request)
     context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
 
     # Collect all badge members
@@ -703,10 +702,10 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
         PermissionDenied: If the 'badge' feature is not enabled for the association
     """
     # Check if badge feature is enabled for the association
-    check_assoc_feature(request, "badge")
+    context = get_context(request)
+    check_assoc_feature(request, context, "badge")
 
     # Get sorted list of members with their badge scores
-    context = get_context(request)
     member_list = get_leaderboard(context["association_id"])
 
     # Configure pagination settings
@@ -776,15 +775,14 @@ def vote(request: HttpRequest) -> HttpResponse:
         ValidationError: If voting configuration is invalid.
     """
     # Verify user has access to voting feature
-    check_assoc_feature(request, "vote")
     context = get_context(request)
-    context.update({"member": request.user.member, "association_id": context["association_id"]})
+    check_assoc_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
     context["year"] = datetime.now().year
 
     # Check if membership payment is required and completed
-    if "membership" in request.assoc["features"]:
+    if "membership" in context["features"]:
         que = AccountingItemMembership.objects.filter(assoc_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
@@ -863,8 +861,8 @@ def delegated(request: HttpRequest) -> HttpResponse:
         - Disconnects last login update signal temporarily
     """
     # Ensure delegated members feature is enabled
-    check_assoc_feature(request, "delegated_members")
     context = get_context(request)
+    check_assoc_feature(request, context, "delegated_members")
 
     # Disable last login update to avoid tracking when switching accounts
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")

@@ -492,7 +492,7 @@ def _prepare_writing_list(context, request):
         pass
 
     model_name = context["label_typ"].lower()
-    context["default_fields"] = request.user.member.get_config(f"open_{model_name}_{context['event'].id}", "[]")
+    context["default_fields"] = context["member"].get_config(f"open_{model_name}_{context['event'].id}", "[]")
     if context["default_fields"] == "[]":
         if model_name in context["writing_fields"]:
             question_field_list = [

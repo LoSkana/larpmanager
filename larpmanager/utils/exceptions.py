@@ -132,7 +132,7 @@ class MembershipError(Exception):
         self.assocs = assocs
 
 
-def check_assoc_feature(request: HttpRequest, feature_slug: str) -> None:
+def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) -> dict:
     """Check if association has required feature enabled.
 
     Validates that the specified feature is enabled for the association
@@ -141,8 +141,8 @@ def check_assoc_feature(request: HttpRequest, feature_slug: str) -> None:
     subscribed to or enabled.
 
     Args:
-        request: Django HTTP request object containing association context
-            with 'assoc' attribute that includes 'features' dictionary
+        request: Django HTTP request object
+        context: Dict context data
         feature_slug: Feature slug identifier to validate against enabled features
 
     Raises:
@@ -153,7 +153,7 @@ def check_assoc_feature(request: HttpRequest, feature_slug: str) -> None:
         check_assoc_feature(request, 'advanced_registration')
     """
     # Check if the requested feature slug exists in the association's enabled features
-    if feature_slug not in request.assoc["features"]:
+    if feature_slug not in context["features"]:
         # Raise error with feature slug, error code 0, and current request path
         raise FeatureError(feature_slug, 0, request.path)
 

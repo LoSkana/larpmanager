@@ -96,7 +96,7 @@ def get_context(request: HttpRequest) -> dict:
         get_index_assoc_permissions(context, request, context["association_id"], check=False)
 
         # Add user interface preferences and staff status
-        context["interface_collapse_sidebar"] = request.user.member.get_config("interface_collapse_sidebar", False)
+        context["interface_collapse_sidebar"] = context["member"].get_config("interface_collapse_sidebar", False)
         context["is_staff"] = request.user.is_staff
 
     # Add cached event links to context
@@ -183,7 +183,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     (required_feature, tutorial_identifier, config_slug) = get_assoc_permission_feature(permission_slug)
 
     # Check if required feature is enabled for this association
-    if required_feature != "def" and required_feature not in request.assoc["features"]:
+    if required_feature != "def" and required_feature not in context["features"]:
         raise FeatureError(path=request.path, feature=required_feature, run=0)
 
     # Set management context flags

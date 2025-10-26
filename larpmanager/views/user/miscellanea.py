@@ -114,7 +114,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
         if form.is_valid():
             # Create help question instance without saving to database yet
             hp = form.save(commit=False)
-            hp.member = request.user.member
+            hp.member = context["member"]
 
             # Associate question with organization if context is available
             if context["association_id"] != 0:
@@ -130,7 +130,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
     # Prepare template context with form and user's question history
     context["form"] = form
-    context["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
+    context["list"] = HelpQuestion.objects.filter(member=context["member"]).order_by("-created")
 
     # Filter questions by association context
     if context["association_id"] != 0:
@@ -169,7 +169,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         raise Http404("HelpQuestion does not exist") from err
 
     # Check access permissions: owner or association role required
-    if hp.member != request.user.member and not context["assoc_role"]:
+    if hp.member != context["member"] and not context["assoc_role"]:
         raise Http404("illegal access")
 
     # Redirect to attachment URL for authorized users
@@ -273,7 +273,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
 
         # Check if user has completed this workshop within the time limit
         dt["done"] = (
-            WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
+            WorkshopMemberRel.objects.filter(member=context["member"], workshop=workshop, created__gte=limit).count()
             >= 1
         )
 
@@ -337,7 +337,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
     get_workshop(context, m)
 
     # Check if user has already completed this workshop module
-    completed = [el.pk for el in request.user.member.workshops.select_related().all()]
+    completed = [el.pk for el in context["member"].workshops.select_related().all()]
     if context["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
         return redirect("workshops", event_slug=context["run"].get_slug())
@@ -354,7 +354,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
     # Process POST request - validate submitted answers
     if valid_workshop_answer(request, context):
         # Create completion record for this workshop module
-        WorkshopMemberRel.objects.create(member=request.user.member, workshop=context["workshop"])
+        WorkshopMemberRel.objects.create(member=context["member"], workshop=context["workshop"])
 
         # Find remaining uncompleted workshop modules
         remaining = (
@@ -390,10 +390,10 @@ def shuttle(request):
     Returns:
         Rendered shuttle template with active and recent requests
     """
-    check_assoc_feature(request, "shuttle")
+    context = get_context(request)
+    check_assoc_feature(request, context, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
-    context = get_context(request)
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
@@ -420,14 +420,14 @@ def shuttle_new(request):
     Returns:
         Redirect to shuttle list on success or form template on GET/invalid POST
     """
-    check_assoc_feature(request, "shuttle")
     context = get_context(request)
+    check_assoc_feature(request, context, "shuttle")
 
     if request.method == "POST":
         form = ShuttleServiceForm(request.POST, request=request, context=context)
         if form.is_valid():
             el = form.save(commit=False)
-            el.member = request.user.member
+            el.member = context["member"]
             el.save()
             return redirect("shuttle")
     else:
@@ -450,8 +450,8 @@ def shuttle_edit(request, n):
     Returns:
         HttpResponse: Rendered edit form or redirect after successful update
     """
-    check_assoc_feature(request, "shuttle")
     context = get_context(request)
+    check_assoc_feature(request, context, "shuttle")
 
     shuttle = ShuttleService.objects.get(pk=n)
     if request.method == "POST":

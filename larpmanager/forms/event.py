@@ -1575,7 +1575,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self.add_feature_extra(extra_config_fields, feature_fields)
 
         # Retrieve dynamic registration fields for current user and event
-        registration_fields = _get_registration_fields(self.params, self.params["request"].user.member)
+        registration_fields = _get_registration_fields(self.params, self.params["member"])
         field_name_max_length = 20
 
         # Add dynamic fields with truncated names if they exist

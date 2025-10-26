@@ -209,7 +209,7 @@ class ExeAssocTextForm(MyForm):
 
         # Check for duplicate default text of the same type
         if default:
-            res = AssocText.objects.filter(assoc_id=self.params["request"].assoc["id"], default=True, typ=typ)
+            res = AssocText.objects.filter(assoc_id=self.params["association_id"], default=True, typ=typ)
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")

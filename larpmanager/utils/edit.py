@@ -263,7 +263,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, nm: str, eid
             dl = "delete" in request.POST and request.POST["delete"] == "1"
 
             # Log the operation (save or delete)
-            save_log(request.user.member, form_type, p, dl)
+            save_log(context["member"], form_type, p, dl)
 
             # Delete the instance if deletion was requested
             if dl:
@@ -379,7 +379,7 @@ def backend_edit(
 
             # Handle deletion if delete flag is set in POST data
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(request.user.member, form_type, saved_object, should_delete)
+            save_log(context["member"], form_type, saved_object, should_delete)
             if should_delete:
                 saved_object.delete()
 
@@ -701,9 +701,9 @@ def _writing_save(
 
     # Create version history or log operation based on type parameter
     if tp:
-        save_version(p, tp, request.user.member, dl)
+        save_version(p, tp, context["member"], dl)
     else:
-        save_log(request.user.member, form_type, p)
+        save_log(context["member"], form_type, p)
 
     # Execute deletion if requested after logging/versioning
     if dl:

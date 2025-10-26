@@ -74,7 +74,7 @@ def orga_discounts_edit(request, event_slug, num):
 def orga_expenses_my(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display user's personal expenses for an event run."""
     context = check_event_context(request, event_slug, "orga_expenses_my")
-    context["list"] = AccountingItemExpense.objects.filter(run=context["run"], member=request.user.member).order_by(
+    context["list"] = AccountingItemExpense.objects.filter(run=context["run"], member=context["member"]).order_by(
         "-created"
     )
     return render(request, "larpmanager/orga/accounting/expenses_my.html", context)
@@ -113,7 +113,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
 
             # Set required relationship fields from context and user
             exp.run = context["run"]
-            exp.member = request.user.member
+            exp.member = context["member"]
             exp.assoc_id = context["association_id"]
             exp.save()
 

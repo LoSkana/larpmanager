@@ -539,14 +539,14 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
         "DS_MERCHANT_CURRENCY": int(context["redsys_merchant_currency"]),
         "DS_MERCHANT_ORDER": invoice.cod,
         "DS_MERCHANT_PRODUCTDESCRIPTION": invoice.causal,
-        "DS_MERCHANT_TITULAR": request.assoc["name"],
+        "DS_MERCHANT_TITULAR": context["name"],
     }
 
     # Add merchant identification and terminal configuration
     values.update(
         {
             "DS_MERCHANT_MERCHANTCODE": context["redsys_merchant_code"],
-            "DS_MERCHANT_MERCHANTNAME": request.assoc["name"],
+            "DS_MERCHANT_MERCHANTNAME": context["name"],
             "DS_MERCHANT_TERMINAL": context["redsys_merchant_terminal"],
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Standard payment
         }

@@ -376,7 +376,7 @@ def _orga_registrations_prepare(context, request):
     for ticket in RegistrationTicket.objects.filter(event=context["event"]).order_by("-price"):
         ticket.emails = []
         context["reg_tickets"][ticket.id] = ticket
-    context["reg_questions"] = _get_registration_fields(context, request.user.member)
+    context["reg_questions"] = _get_registration_fields(context, context["member"])
 
     context["no_grouping"] = get_event_config(context["event"].id, "registration_no_grouping", False, context)
 
@@ -553,7 +553,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         context["export"] = "registration"
 
     # Load user's saved column visibility preferences
-    context["default_fields"] = request.user.member.get_config(f"open_registration_{context['event'].id}", "[]")
+    context["default_fields"] = context["member"].get_config(f"open_registration_{context['event'].id}", "[]")
 
     return render(request, "larpmanager/orga/registration/registrations.html", context)
 
@@ -589,7 +589,7 @@ def orga_registration_form_list(request, event_slug):
     if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
-        if not organizer and request.user.member.id not in q.allowed_map:
+        if not organizer and context["member"].id not in q.allowed_map:
             return
 
     res = {}
@@ -653,7 +653,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
     if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
-        if not organizer and request.user.member.id not in q.allowed_map:
+        if not organizer and context["member"].id not in q.allowed_map:
             return
 
     res = {}
@@ -1283,7 +1283,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
 
     # Process and display configured member fields
     member_cls: type[Member] = Member
-    member_fields = sorted(request.assoc["members_fields"])
+    member_fields = sorted(context["members_fields"])
     member_field_correct(member, member_fields)
 
     # Iterate through each configured field and add to display

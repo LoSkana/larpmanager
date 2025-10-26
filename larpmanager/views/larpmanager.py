@@ -60,7 +60,7 @@ from larpmanager.models.larpmanager import (
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
-from larpmanager.utils.base import get_event_context
+from larpmanager.utils.base import get_context, get_event_context
 from larpmanager.utils.exceptions import MainPageError, PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
@@ -79,7 +79,7 @@ def lm_home(request):
     context = get_lm_contact(request)
     context["index"] = True
 
-    if request.assoc["base_domain"] == "ludomanager.it":
+    if context["base_domain"] == "ludomanager.it":
         return ludomanager(context, request)
 
     context.update(get_cache_lm_home())
@@ -298,6 +298,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         Http404: If feature doesn't exist or isn't marked as overall
         PermissionError: If user lacks exe_features permission for the association
     """
+    context = get_context(request)
     # Retrieve the feature by slug, ensuring it exists
     feature = get_object_or_404(Feature, slug=cod)
 
@@ -310,7 +311,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         raise PermissionError()
 
     # Get the association from request context and activate the feature
-    assoc = get_object_or_404(Association, pk=request.assoc["id"])
+    assoc = get_object_or_404(Association, pk=context["association_id"])
     assoc.features.add(feature)
     assoc.save()
 
@@ -454,12 +455,13 @@ def ticket(request, reason=""):
     Returns:
         HttpResponse: Rendered ticket form or redirect after successful submission
     """
-    context = {"reason": reason}
+    context = get_context(request)
+    context.update({"reason": reason})
     if request.POST:
         form = LarpManagerTicketForm(request.POST, request.FILES, request=request, context=context)
         if form.is_valid():
             lm_ticket = form.save(commit=False)
-            lm_ticket.assoc_id = request.assoc["id"]
+            lm_ticket.assoc_id = context["association_id"]
             if reason:
                 lm_ticket.reason = reason
             if request.user.is_authenticated:
@@ -573,7 +575,7 @@ def _join_form(context: dict, request) -> Association | None:
 
             # Create admin role for the new association and assign creator
             (admin_role, created) = AssocRole.objects.get_or_create(assoc=new_association, number=1, name="Admin")
-            admin_role.members.add(request.user.member)
+            admin_role.members.add(context["member"])
             admin_role.save()
 
             # Update membership status to joined for the creator
@@ -587,8 +589,8 @@ def _join_form(context: dict, request) -> Association | None:
                 body = _("Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s") % {
                     "name": new_association.name,
                     "slug": new_association.slug,
-                    "user": request.user.member,
-                    "email": request.user.member.email,
+                    "user": context["member"],
+                    "email": context["member"].email,
                 }
                 my_send_mail(subject, body, admin_email)
 

@@ -403,7 +403,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
 
         # Set default working member to current user if not already set
         if "working" not in self.initial or not self.initial["working"]:
-            self.initial["working"] = self.params["request"].user.member
+            self.initial["working"] = self.params["member"]
 
         # Configure widget with association context
         self.fields["working"].widget.set_assoc(self.params["association_id"])

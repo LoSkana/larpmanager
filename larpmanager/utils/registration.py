@@ -771,7 +771,7 @@ def get_player_signup(request: HttpRequest, context: dict) -> Registration | Non
     """Get active registration for current user in the given run context."""
     # Filter registrations for current run and user, excluding cancelled ones
     active_registrations = Registration.objects.filter(
-        run=context["run"], member=request.user.member, cancellation_date__isnull=True
+        run=context["run"], member=context["member"], cancellation_date__isnull=True
     )
 
     # Return first registration if exists
@@ -825,7 +825,7 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
         return
 
     # Get all characters belonging to this player for the event
-    characters = get_player_characters(request.user.member, context["event"])
+    characters = get_player_characters(context["member"], context["event"])
     if not characters:
         return
 

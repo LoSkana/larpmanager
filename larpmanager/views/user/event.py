@@ -52,7 +52,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     _get_writing_mapping,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -73,7 +73,7 @@ from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
-def calendar(request: HttpRequest, lang: str) -> HttpResponse:
+def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     """Display the event calendar with open and future runs for an association.
 
     This function retrieves upcoming runs for an association, checks user registration status,
@@ -83,6 +83,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     Args:
         request: HTTP request object containing user and association data. Must include
                 'assoc' key with association information and authenticated user data.
+        context: Dict context informations.
         lang: Language code for filtering events by language preference.
 
     Returns:
@@ -98,7 +99,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         Anonymous users cannot see START status runs at all.
     """
     # Extract association ID from request context
-    association_id = request.assoc["id"]
+    association_id = context["association_id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
     runs = get_coming_runs(association_id)
@@ -109,16 +110,18 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     payment_invoices_by_registration_id = {}
     pre_registrations_by_event_id = {}
 
-    if request.user.is_authenticated:
+    if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
         cutoff_date = datetime.now() - timedelta(days=3)
+
+        member = context["member"]
 
         # Fetch user's active registrations for upcoming runs
         user_registrations = Registration.objects.filter(
             run__event__assoc_id=association_id,
             cancellation_date__isnull=True,  # Exclude cancelled registrations
             redeem_code__isnull=True,  # Exclude redeemed registrations
-            member=request.user.member,
+            member=member,
             run__end__gte=cutoff_date.date(),  # Only future/recent runs
         ).select_related("ticket", "run")
 
@@ -130,13 +133,9 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=user_registered_run_ids))
 
         # Precompute character rels, payment invoices, and pre-registrations objects
-        character_relations_by_registration_id = get_character_rels_dict(
-            user_registrations_by_run_id, request.user.member
-        )
-        payment_invoices_by_registration_id = get_payment_invoices_dict(
-            user_registrations_by_run_id, request.user.member
-        )
-        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, request.user.member)
+        character_relations_by_registration_id = get_character_rels_dict(user_registrations_by_run_id, member)
+        payment_invoices_by_registration_id = get_payment_invoices_dict(user_registrations_by_run_id, member)
+        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
@@ -317,7 +316,7 @@ def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
     return runs
 
 
-def home_json(request: object, lang: str = "it") -> object:
+def home_json(request: HttpRequest, lang: str = "it") -> object:
     """
     Returns JSON response with upcoming events for the association.
 
@@ -329,7 +328,8 @@ def home_json(request: object, lang: str = "it") -> object:
         JsonResponse: JSON object containing list of upcoming events
     """
     # Extract association ID from request context
-    aid = request.assoc["id"]
+    context = get_context(request)
+    aid = context["association_id"]
 
     # Set language code if provided
     if lang:
@@ -416,7 +416,7 @@ def share(request):
     """
     context = get_context(request)
 
-    el = get_user_membership(request.user.member, context["association_id"])
+    el = context["membership"]
     if el.status != MembershipStatus.EMPTY:
         messages.success(request, _("You have already granted data sharing with this organisation") + "!")
         return redirect("home")
@@ -460,7 +460,7 @@ def event_register(request, event_slug):
         .exclude(event__visible=False)
         .order_by("end")
     )
-    if len(runs) == 0 and "pre_register" in request.assoc["features"]:
+    if len(runs) == 0 and "pre_register" in context["features"]:
         return redirect("pre_register", event_slug=event_slug)
     elif len(runs) == 1:
         run = runs.first()
@@ -502,22 +502,23 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     pre_registrations_dict = {}
 
     # Fetch user-specific registration data if authenticated
-    if request.user.is_authenticated:
+    if "member" in context:
+        member = context["member"]
         # Get all non-cancelled registrations for this user and association
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
             cancellation_date__isnull=True,
             redeem_code__isnull=True,
-            member=request.user.member,
+            member=member,
         ).select_related("ticket", "run")
 
         # Create dictionary mapping run_id to registration for quick lookup
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
         # Build related data dictionaries for character, payment, and pre-registration info
-        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
-        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
-        pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
+        character_rels_dict = get_character_rels_dict(my_regs_dict, member)
+        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, member)
+        pre_registrations_dict = get_pre_registrations_dict(aid, member)
 
     # Convert runs queryset to list and initialize context list
     runs_list = list(runs)
@@ -674,7 +675,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             run__event=context["event"],
             redeem_code__isnull=True,
             cancellation_date__isnull=True,
-            member=request.user.member,
+            member=context["member"],
         )
 
     # Get all runs for the event and set reference date (3 days ago)

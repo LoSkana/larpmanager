@@ -286,7 +286,7 @@ def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
     # ordered by preference to maintain selection order
     previous_choices = [
         casting.element
-        for casting in Casting.objects.filter(run=context["run"], member=request.user.member, typ=typ).order_by("pref")
+        for casting in Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by("pref")
     ]
 
     # Serialize casting choices as JSON for frontend consumption
@@ -304,7 +304,7 @@ def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
 
     # Attempt to retrieve avoidance preferences for this casting type
     try:
-        casting_avoidance = CastingAvoid.objects.get(run=context["run"], member=request.user.member, typ=typ)
+        casting_avoidance = CastingAvoid.objects.get(run=context["run"], member=context["member"], typ=typ)
         context["avoid"] = casting_avoidance.text
     except ObjectDoesNotExist:
         # No avoidance preferences found, continue without setting avoid context
@@ -323,7 +323,7 @@ def _check_already_done(context, request, assignment_type):
     else:
         try:
             assignment_trait = AssignmentTrait.objects.get(
-                run=context["run"], member=request.user.member, typ=assignment_type
+                run=context["run"], member=context["member"], typ=assignment_type
             )
             context["assigned"] = (
                 f"{assignment_trait.trait.quest.show()['name']} - {assignment_trait.trait.show()['name']}"
@@ -352,19 +352,19 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
         None: Function performs database operations and sends messages/emails.
     """
     # Clear all existing casting preferences for this user, run, and type
-    Casting.objects.filter(run=context["run"], member=request.user.member, typ=typ).delete()
+    Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
 
     # Create new casting preferences based on submitted data
     for preference_order, element_id in prefs.items():
         Casting.objects.create(
-            run=context["run"], member=request.user.member, typ=typ, element=element_id, pref=preference_order
+            run=context["run"], member=context["member"], typ=typ, element=element_id, pref=preference_order
         )
 
     # Handle casting avoidance preferences if feature is enabled
     avoidance_text = None
     if "casting_avoid" in context and context["casting_avoid"]:
         # Clear existing avoidance preferences
-        CastingAvoid.objects.filter(run=context["run"], member=request.user.member, typ=typ).delete()
+        CastingAvoid.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
 
         # Process new avoidance text from form submission
         avoidance_text = ""
@@ -375,14 +375,14 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
 
         # Create new avoidance record if text was provided
         if avoidance_text and len(avoidance_text) > 0:
-            CastingAvoid.objects.create(run=context["run"], member=request.user.member, typ=typ, text=avoidance_text)
+            CastingAvoid.objects.create(run=context["run"], member=context["member"], typ=typ, text=avoidance_text)
 
     # Show success message to user
     messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
     preference_names_list = []
-    for casting_preference in Casting.objects.filter(run=context["run"], member=request.user.member, typ=typ).order_by(
+    for casting_preference in Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by(
         "pref"
     ):
         if typ == 0:
@@ -396,8 +396,8 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
             preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
 
     # Send confirmation email with updated preferences
-    # mail_confirm_casting_bkg(request.user.member.id, context['run'].id, context['gl_name'], preference_names_list)
-    mail_confirm_casting(request.user.member, context["run"], context["gl_name"], preference_names_list, avoidance_text)
+    # mail_confirm_casting_bkg(context["member"].id, context['run'].id, context['gl_name'], preference_names_list)
+    mail_confirm_casting(context["member"], context["run"], context["gl_name"], preference_names_list, avoidance_text)
 
 
 def get_casting_preferences(

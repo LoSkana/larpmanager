@@ -283,7 +283,7 @@ def _info_membership(context: dict, member, request) -> None:
         - grazing: Boolean indicating if within grace period
     """
     # Early return if membership feature is not enabled
-    if "membership" not in request.assoc["features"]:
+    if "membership" not in context["features"]:
         return
 
     # Get current year for membership calculations

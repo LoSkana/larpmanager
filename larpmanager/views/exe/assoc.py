@@ -217,17 +217,17 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
 
     # Get feature ID and association object
     feature_id = context["feature"].id
-    association = Association.objects.get(pk=request.assoc["id"])
+    association = Association.objects.get(pk=context["association_id"])
 
     # Handle feature activation
     if on:
-        if slug not in request.assoc["features"]:
+        if slug not in context["features"]:
             association.features.add(feature_id)
             message = _("Feature %(name)s activated") + "!"
         else:
             message = _("Feature %(name)s already activated") + "!"
     # Handle feature deactivation
-    elif slug not in request.assoc["features"]:
+    elif slug not in context["features"]:
         message = _("Feature %(name)s already deactivated") + "!"
     else:
         association.features.remove(feature_id)

@@ -136,7 +136,7 @@ def has_access_character(request, context):
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
-    member_id = request.user.member.id
+    member_id = context["member"].id
 
     if "owner_id" in context["char"] and context["char"]["owner_id"] == member_id:
         return True

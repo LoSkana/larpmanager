@@ -324,22 +324,22 @@ urlpatterns = [
         name="acc_collection",
     ),
     path(
-        "accounting/collection/<slug:event_slug>/",
+        "accounting/collection/<slug:collection_code>/",
         views_ua.acc_collection_manage,
         name="acc_collection_manage",
     ),
     path(
-        "accounting/collection/<slug:event_slug>/participate/",
+        "accounting/collection/<slug:collection_code>/participate/",
         views_ua.acc_collection_participate,
         name="acc_collection_participate",
     ),
     path(
-        "accounting/collection/<slug:event_slug>/close/",
+        "accounting/collection/<slug:collection_code>/close/",
         views_ua.acc_collection_close,
         name="acc_collection_close",
     ),
     path(
-        "accounting/collection/<slug:event_slug>/redeem/",
+        "accounting/collection/<slug:collection_code>/redeem/",
         views_ua.acc_collection_redeem,
         name="acc_collection_redeem",
     ),

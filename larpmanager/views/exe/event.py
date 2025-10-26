@@ -114,7 +114,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
             if not er.name:
                 er.name = "Organizer"
             # Add current user's member profile to organizer role
-            er.members.add(request.user.member)
+            er.members.add(context["member"])
             er.save()
 
             # Refresh cached event links for user navigation

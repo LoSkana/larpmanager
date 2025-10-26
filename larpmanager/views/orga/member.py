@@ -560,7 +560,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Define member model and fields to display
     member_cls: type[Member] = Member
-    member_fields = ["name", "surname"] + sorted(request.assoc["members_fields"])
+    member_fields = ["name", "surname"] + sorted(context["members_fields"])
 
     # Query and process member data
     context["list"] = Member.objects.filter(id__in=member_list).order_by("created")

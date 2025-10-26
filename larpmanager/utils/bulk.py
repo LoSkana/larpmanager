@@ -98,7 +98,7 @@ def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
 
     # Log the bulk operation attempt with all relevant parameters
     Log.objects.create(
-        member=request.user.member,
+        member=context["member"],
         cls=f"bulk {operation_code} {target_code}",
         eid=entity_id_for_log,
         dct={"operation": operation_code, "target": target_code, "ids": entity_ids},

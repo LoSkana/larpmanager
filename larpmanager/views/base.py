@@ -32,6 +32,7 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
+from larpmanager.utils.base import get_context
 from larpmanager.utils.common import welcome_user
 from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.utils.tutorial_query import query_index
@@ -86,11 +87,12 @@ def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
         Association ID 0 is reserved for the main/default organization.
     """
     # Check if this is the default/main association (ID 0)
-    if request.assoc["id"] == 0:
+    context = get_context(request)
+    if context["association_id"] == 0:
         return lm_home(request)
 
     # For other associations, check Centauri handling or fallback to calendar
-    return check_centauri(request) or calendar(request, lang)
+    return check_centauri(request, context) or calendar(request, context, lang)
 
 
 def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:

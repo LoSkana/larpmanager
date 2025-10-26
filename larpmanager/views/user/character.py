@@ -377,7 +377,7 @@ def _update_character(context: dict, character: Character, form: Form, message: 
 
     # Assign player if not already set
     if not character.player:
-        character.player = request.user.member
+        character.player = context["member"]
 
     # Check if character approval is enabled for this event
     if get_event_config(context["event"].id, "user_character_approval", False, context):
@@ -555,7 +555,7 @@ def character_list(request, event_slug):
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
-    context["list"] = get_player_characters(request.user.member, context["event"])
+    context["list"] = get_player_characters(context["member"], context["event"])
     # add character configs
     char_add_addit(context)
     for el in context["list"]:
@@ -564,7 +564,7 @@ def character_list(request, event_slug):
             el.fields = res["fields"]
             context.update(res)
 
-    check, _max_chars = check_character_maximum(context["event"], request.user.member)
+    check, _max_chars = check_character_maximum(context["event"], context["member"])
     context["char_maximum"] = check
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
     context["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).count()
@@ -585,7 +585,7 @@ def character_create(request, event_slug):
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
-    check, _max_chars = check_character_maximum(context["event"], request.user.member)
+    check, _max_chars = check_character_maximum(context["event"], context["member"])
     if check:
         messages.success(request, _("You have reached the maximum number of characters that can be created"))
         return redirect("character_list", event_slug=event_slug)

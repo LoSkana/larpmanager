@@ -44,7 +44,6 @@ from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
 from larpmanager.models.accounting import AccountingItemMembership
@@ -452,37 +451,6 @@ class ResidenceField(forms.MultiValueField):
 
 
 class BaseProfileForm(MyForm):
-    def _get_cached_assoc(self, request):
-        """Get cached association object to avoid redundant database queries."""
-        association_id = request.assoc["id"]
-        if hasattr(request, "_cached_assoc") and request._cached_assoc.id == association_id:
-            return request._cached_assoc
-
-        association = Association.objects.get(pk=association_id)
-        request._cached_assoc = association
-        return association
-
-    def _get_cached_features(self, request, association_id=None):
-        """Get cached association features to avoid redundant function calls."""
-        if hasattr(request, "_cached_features"):
-            return request._cached_features
-
-        if association_id is None:
-            association_id = request.assoc["id"]
-
-        features = get_assoc_features(association_id)
-        request._cached_features = features
-        return features
-
-    def _get_cached_membership(self, member_instance, association_id):
-        """Get cached membership object to avoid redundant queries."""
-        if hasattr(member_instance, "_cached_membership"):
-            return member_instance._cached_membership
-
-        membership = get_user_membership(member_instance, association_id)
-        member_instance._cached_membership = membership
-        return membership
-
     def __init__(self, *args, **kwargs):
         """Initialize base profile form with field filtering based on association settings.
 
@@ -493,11 +461,10 @@ class BaseProfileForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Cache frequently accessed request data
-        request = self.params["request"]
-        self.allowed = request.assoc["members_fields"]
+        self.allowed = self.params["members_fields"]
 
         # Use cached association data
-        assoc = self._get_cached_assoc(request)
+        assoc = Association.objects.get(pk=self.params["association_id"])
 
         # Pre-split and cache field sets
         self.mandatory = set(assoc.mandatory_fields.split(","))
@@ -581,10 +548,6 @@ class ProfileForm(BaseProfileForm):
         """
         super().__init__(*args, **kwargs)
 
-        # Cache request data
-        request = self.params["request"]
-        assoc_id = request.assoc["id"]
-
         # Batch process mandatory field updates
         mandatory_asterisk = " (*)"
         fields_to_update = {}
@@ -608,7 +571,7 @@ class ProfileForm(BaseProfileForm):
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            vote_cands = get_assoc_config(self.params["request"].assoc["id"], "vote_candidates", "").split(",")
+            vote_cands = get_assoc_config(self.params["association_id"], "vote_candidates", "").split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
@@ -625,7 +588,7 @@ class ProfileForm(BaseProfileForm):
         # Membership checking
         share = False
         if self.instance.pk:
-            membership = self._get_cached_membership(self.instance, assoc_id)
+            membership = self.params["membership"]
             share = membership.compiled
 
         # Add consent field only if needed
@@ -647,11 +610,10 @@ class ProfileForm(BaseProfileForm):
         logger.debug(f"Validating birth date: {data}")
 
         # Use cached association
-        request = self.params["request"]
-        assoc_id = self.params["request"].assoc["id"]
+        assoc_id = self.params["association_id"]
 
         # Use cached features
-        features = self._get_cached_features(request, assoc_id)
+        features = self.params["features"]
 
         if "membership" in features:
             min_age = get_assoc_config(assoc_id, "membership_age", "")
