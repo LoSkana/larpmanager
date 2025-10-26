@@ -49,18 +49,19 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
     """
     # Skip if not authenticated or no association
-    if not request.user.is_authenticated or context["association_id"] == 0:
+    if not context["member"] or context["association_id"] == 0:
         return {}
 
     # Return cached data if available
-    navigation_context = cache.get(get_cache_event_key(request.user.id, context["association_id"]))
+    cache_links_key = get_cache_event_key(context["member"].id, context["association_id"])
+    navigation_context = cache.get(cache_links_key)
     if not navigation_context:
         # Build navigation context from scratch
         navigation_context = _build_navigation_context(request, context)
 
         # Cache for 1 day
         cache.set(
-            get_cache_event_key(request.user.id, context["association_id"]),
+            cache_links_key,
             navigation_context,
             timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
         )
@@ -70,7 +71,6 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
-    context = {}
     cutoff_date = (datetime.now() - timedelta(days=10)).date()
     member = context["member"]
     association_id = context["association_id"]

@@ -73,13 +73,6 @@ def get_context(request: HttpRequest) -> dict:
         MembershipError: When user lacks proper association membership or
                         when accessing home page without valid association.
     """
-    # Check if home page reached without valid association, redirect appropriately
-    if request.assoc["id"] == 0:
-        if hasattr(request, "user") and hasattr(request.user, "member"):
-            user_associations = [membership.assoc for membership in request.user.member.memberships.all()]
-            raise MembershipError(user_associations)
-        raise MembershipError()
-
     # Initialize result dictionary with association ID
     context = {"association_id": request.assoc["id"]}
 
@@ -87,20 +80,30 @@ def get_context(request: HttpRequest) -> dict:
     for assoc_key in request.assoc:
         context[assoc_key] = request.assoc[assoc_key]
 
-    # Add user-specific data if authenticated member exists
+    # Add member data
+    context["member"] = None
+    context["membership"] = None
     if hasattr(request, "user") and hasattr(request.user, "member"):
         context["member"] = request.user.member
         context["membership"] = get_user_membership(request.user.member, context["association_id"])
 
+    # Check if home page reached without valid association, redirect appropriately
+    if context["association_id"] == 0:
+        if context["member"]:
+            user_associations = [membership.assoc for membership in context["member"].memberships.all()]
+            raise MembershipError(user_associations)
+        raise MembershipError()
+
+    # Add cached event links to context
+    cache_event_links(request, context)
+
+    if context["member"]:
         # Get association permissions for the user
         get_index_assoc_permissions(context, request, context["association_id"], check=False)
 
         # Add user interface preferences and staff status
         context["interface_collapse_sidebar"] = context["member"].get_config("interface_collapse_sidebar", False)
         context["is_staff"] = request.user.is_staff
-
-    # Add cached event links to context
-    cache_event_links(request, context)
 
     # Set default names for token/credit system if feature enabled
     if "token_credit" in context["features"]:
