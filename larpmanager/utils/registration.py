@@ -22,7 +22,6 @@ import math
 from datetime import datetime
 from typing import Any
 
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.urls import reverse
@@ -395,7 +394,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
 
 def registration_status(
     run: Run,
-    user: User,
+    member: Member,
     context: dict | None = None,
 ) -> None:
     """Determine registration status and availability for users.
@@ -405,7 +404,7 @@ def registration_status(
 
     Args:
         run: Event run object to check registration status for
-        user: User object attempting registration
+        member: Member object attempting registration
         context: Optional context dictionary containing cached data for efficiency:
             - my_regs: Pre-filtered user registrations
             - features_map: Cached features mapping
@@ -420,20 +419,20 @@ def registration_status(
 
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
-    registration_find(run, user, context)
+    registration_find(run, member, context)
 
     features = _get_features_map(run, context)
 
     registration_available(run, features, context)
     register_url = reverse("register", args=[run.get_slug()])
 
-    if user.is_authenticated:
-        membership = get_user_membership(user.member, run.event.assoc_id)
+    if member:
+        membership = context["membership"]
         if membership.status in [MembershipStatus.REWOKED]:
             return
 
         if run.reg:
-            registration_status_signed(run, run.reg, user.member, features, register_url, context)
+            registration_status_signed(run, run.reg, member, features, register_url, context)
             return
 
     if run.end and get_time_diff_today(run.end) < 0:
@@ -441,7 +440,7 @@ def registration_status(
 
     # check pre-register
     if get_event_config(run.event_id, "pre_register_active", False, context=context):
-        _status_preregister(run, user, context)
+        _status_preregister(run, member, context)
 
     current_datetime = datetime.today()
     # check registration open
@@ -479,7 +478,7 @@ def registration_status(
     )
 
 
-def _status_preregister(run, user, context: dict | None = None) -> None:
+def _status_preregister(run: Run, member: Member, context: dict | None = None) -> None:
     """Update run status based on user's pre-registration state.
 
     Sets the run status text to either confirm existing pre-registration
@@ -487,7 +486,7 @@ def _status_preregister(run, user, context: dict | None = None) -> None:
 
     Args:
         run: Event run object to update status for
-        user: User object to check pre-registration status
+        member: Member object to check pre-registration status
         context: Optional context dictionary containing cached pre-registration data
     """
     # Extract values from context dictionary if provided
@@ -499,7 +498,7 @@ def _status_preregister(run, user, context: dict | None = None) -> None:
 
     # Check if user already has a pre-registration for this event
     has_pre_registration = False
-    if user.is_authenticated:
+    if member:
         # Use cached data if available, otherwise query database
         if pre_registrations_dict is not None:
             # Use cached data if available
@@ -507,7 +506,7 @@ def _status_preregister(run, user, context: dict | None = None) -> None:
         else:
             # Fallback to database query if no cache provided
             has_pre_registration = PreRegistration.objects.filter(
-                event_id=run.event_id, member=user.member, deleted__isnull=True
+                event_id=run.event_id, member=member, deleted__isnull=True
             ).exists()
 
     # Set status message based on pre-registration state
@@ -543,7 +542,7 @@ def _get_features_map(run: Run, context: dict):
     return event_features
 
 
-def registration_find(run: Run, user: User, context: dict | None = None):
+def registration_find(run: Run, member: Member, context: dict | None = None):
     """Find and attach registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
@@ -551,7 +550,7 @@ def registration_find(run: Run, user: User, context: dict | None = None):
 
     Args:
         run: The Run object to find registration for
-        user: The User object to search registration for
+        member: The Member object to search registration for
         context: Optional context dictionary containing cached data:
             - my_regs: Pre-fetched registrations queryset for performance optimization
 
@@ -563,7 +562,7 @@ def registration_find(run: Run, user: User, context: dict | None = None):
         context = {}
 
     # Early return if user is not authenticated
-    if not user.is_authenticated:
+    if not member:
         run.reg = None
         return
 
@@ -577,7 +576,7 @@ def registration_find(run: Run, user: User, context: dict | None = None):
     try:
         registration_queryset = Registration.objects.select_related("ticket")
         run.reg = registration_queryset.get(
-            run=run, member=user.member, redeem_code__isnull=True, cancellation_date__isnull=True
+            run=run, member=member, redeem_code__isnull=True, cancellation_date__isnull=True
         )
     except ObjectDoesNotExist:
         # No active registration found for this user and run

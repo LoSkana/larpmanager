@@ -467,7 +467,7 @@ def assoc_accounting_data(context: dict, year: int | None = None) -> None:
     for an association and populates the context dictionary with the sums.
 
     Args:
-        context: Context dictionary with 'a_id' (association ID) key. Will be updated
+        context: Context dictionary with 'association_id' (association ID) key. Will be updated
              with sum fields for various accounting categories
         year: Optional year to filter data. If None, uses all years (1990-2990)
 
@@ -585,7 +585,7 @@ def assoc_accounting(context: dict) -> None:
     flows to provide a complete financial overview.
 
     Args:
-        context: Context dictionary with 'a_id' (association ID) key
+        context: Context dictionary with 'association_id' (association ID) key
 
     Side effects:
         Updates context with the following keys:

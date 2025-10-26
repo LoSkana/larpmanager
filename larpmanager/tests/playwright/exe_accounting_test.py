@@ -181,7 +181,7 @@ def config(page, live_server):
     # activate payments
     go_to(page, live_server, "/manage/features/payment/on")
     # activate taxes
-    go_to(page, live_server, "/manage/featu res/vat/on")
+    go_to(page, live_server, "/manage/features/vat/on")
     # activate inflows
     go_to(page, live_server, "/manage/features/inflow/on")
     # activate organization tax

@@ -136,7 +136,7 @@ def language(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def profile(request):
+def profile(request: HttpRequest):
     """Display and manage user profile information.
 
     Handles profile editing, privacy settings, and personal information updates,
@@ -147,7 +147,7 @@ def profile(request):
     if context["association_id"] == 0:
         return HttpResponseRedirect("/")
 
-    member = request.user.member
+    member = context["member"]
     assoc_features = context["features"]
     members_fields = context["members_fields"]
 
@@ -962,22 +962,22 @@ def registrations(request: HttpRequest) -> HttpResponse:
     context = get_context(request)
 
     # Get user's registrations filtered by association for caching optimization
-    my_regs = Registration.objects.filter(member=request.user.member, run__event_id=context["association_id"])
+    my_regs = Registration.objects.filter(member=context["member"], run__event_id=context["association_id"])
     my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
     # Prepare context data
     context.update(
         {
-            "pre_registrations_dict": get_pre_registrations_dict(context["association_id"], request.user.member),
-            "character_rels_dict": get_character_rels_dict(my_regs_dict, request.user.member),
-            "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, request.user.member),
+            "pre_registrations_dict": get_pre_registrations_dict(context["association_id"], context["member"]),
+            "character_rels_dict": get_character_rels_dict(my_regs_dict, context["member"]),
+            "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, context["member"]),
         }
     )
 
     # Process each registration to calculate status and append to results
     for reg in my_regs:
         # Calculate registration status
-        registration_status(reg.run, request.user, context)
+        registration_status(reg.run, context["member"], context)
         nt.append(reg)
 
     # Render template with processed registration list

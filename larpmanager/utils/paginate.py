@@ -70,7 +70,7 @@ def paginate(
     if request.method != "POST":
         # Generate unique table name based on context
         if exe:
-            context["table_name"] = f"{model_name}_{context['a_id']}"
+            context["table_name"] = f"{model_name}_{context['association_id']}"
         else:
             context["table_name"] = f"{model_name}_{context['run'].get_slug()}"
 

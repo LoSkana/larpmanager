@@ -207,7 +207,7 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
 
     Args:
         element: Object to check or container object
-        context: Context dict containing association ID as 'a_id'
+        context: Context dict containing association ID as 'association_id'
         attribute_field: Optional field name to extract from element
 
     Raises:
@@ -519,7 +519,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 
     Args:
         context: Context dictionary containing either 'event' key with event object
-                 or 'a_id' key with association ID
+                 or 'association_id' key with association ID
         permission: Permission name to create suggestion flag for
     """
     # Determine the target object based on context

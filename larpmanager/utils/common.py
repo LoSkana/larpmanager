@@ -870,7 +870,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
 
     Args:
         context: Context dictionary containing association/run information.
-             Must include 'a_id' key, optionally includes 'run' key.
+             Must include 'association_id' key, optionally includes 'run' key.
         request: HTTP request object used to determine filtering behavior.
 
     Returns:
