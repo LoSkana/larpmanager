@@ -153,7 +153,7 @@ def profile(request):
 
     # Handle POST request (form submission)
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=member, request=request)
+        form = ProfileForm(request.POST, request.FILES, instance=member, context=context)
         if form.is_valid():
             prof = form.save()
 
@@ -182,7 +182,7 @@ def profile(request):
 
     # Handle GET request (display form)
     else:
-        form = ProfileForm(instance=member, request=request)
+        form = ProfileForm(instance=member, context=context)
 
     context.update(
         {
@@ -900,7 +900,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
             return redirect("home")
 
         # Handle creating a new delegated account
-        form = ProfileForm(request.POST, request=request)
+        form = ProfileForm(request.POST, ontext=context)
         if form.is_valid():
             data = form.cleaned_data
             # Generate unique username and email for delegated account
@@ -925,7 +925,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
             return redirect("delegated")
     else:
         # Display form for creating new delegated account
-        form = ProfileForm(request=request)
+        form = ProfileForm(context=context)
 
     context["form"] = form
 
