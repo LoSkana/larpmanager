@@ -74,26 +74,29 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     cutoff_date = (datetime.now() - timedelta(days=10)).date()
     member = context["member"]
     association_id = context["association_id"]
+    navigation_context = {}
 
     # Get user's active registrations for upcoming events
     active_registrations = Registration.objects.filter(
         member=member, run__end__gte=cutoff_date, cancellation_date__isnull=True, run__event__assoc_id=association_id
     ).select_related("run", "run__event")
-    context["reg_menu"] = [
+    navigation_context["reg_menu"] = [
         (registration.run.get_slug(), str(registration.run)) for registration in active_registrations
     ]
 
     # Collect roles
-    context["assoc_role"] = _get_assoc_roles(member, association_id, request)
-    context["event_role"] = _get_event_roles(member, association_id)
+    navigation_context["assoc_role"] = _get_assoc_roles(member, association_id, request)
+    navigation_context["event_role"] = _get_event_roles(member, association_id)
 
     # Build accessible runs
-    context.update(_get_accessible_runs(association_id, context["assoc_role"], context["event_role"]))
+    navigation_context.update(
+        _get_accessible_runs(association_id, navigation_context["assoc_role"], navigation_context["event_role"])
+    )
 
     # Determine if topbar should be shown
-    context["topbar"] = bool(context["event_role"] or context["assoc_role"])
+    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["assoc_role"])
 
-    return context
+    return navigation_context
 
 
 def _get_assoc_roles(member, assoc_id: int, request: HttpRequest) -> dict:
