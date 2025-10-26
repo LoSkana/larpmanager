@@ -307,7 +307,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         raise Http404("feature not overall")
 
     # Verify user has permission to manage association features
-    if not has_assoc_permission(request, {}, "exe_features"):
+    if not has_assoc_permission(request, context, "exe_features"):
         raise PermissionError()
 
     # Get the association from request context and activate the feature

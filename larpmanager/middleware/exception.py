@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.utils.base import get_context
 from larpmanager.utils.exceptions import (
     FeatureError,
     HiddenError,
@@ -157,7 +158,8 @@ class ExceptionHandlingMiddleware:
             Http404: If association skin is managed, or if feature/run objects are not found
         """
         # Check if association skin is managed - if so, deny access completely
-        if request.assoc["skin_managed"]:
+        context = get_context(request)
+        if context["skin_managed"]:
             raise Http404("not allowed")
 
         # Retrieve the feature object or raise 404 if not found
@@ -167,12 +169,12 @@ class ExceptionHandlingMiddleware:
             raise Http404("Feature not found") from error
 
         # Build base context with exception and feature data
-        context = {"exe": exception, "feature": feature}
+        context.update({"exe": exception, "feature": feature})
 
         # Handle permission checking based on feature scope
         if feature.overall:
             # For organization-wide features, check association permissions
-            context["permission"] = has_assoc_permission(request, {}, "exe_features")
+            context["permission"] = has_assoc_permission(request, context, "exe_features")
         else:
             # For event-specific features, retrieve run and check event permissions
             try:
@@ -182,7 +184,7 @@ class ExceptionHandlingMiddleware:
 
             # Add run context and check event-level permissions
             context["run"] = run
-            context["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
+            context["permission"] = has_event_permission(request, context, run.event.slug, "orga_features")
 
         # Render the feature error template with assembled context
         return render(request, "exception/feature.html", context)
