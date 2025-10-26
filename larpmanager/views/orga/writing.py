@@ -59,6 +59,7 @@ from larpmanager.models.writing import (
     TextVersion,
     TextVersionChoices,
 )
+from larpmanager.utils.base import check_event_context, get_event_context
 from larpmanager.utils.common import (
     exchange_order,
     get_element,
@@ -74,14 +75,13 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
-from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.pdf import print_handout, return_pdf
 from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
 @login_required
 def orga_plots(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_plots")
+    context = check_event_context(request, event_slug, "orga_plots")
     return writing_list(request, context, Plot, "plot")
 
 
@@ -89,7 +89,7 @@ def orga_plots(request, event_slug):
 def orga_plots_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View for displaying a specific plot in the organizer interface."""
     # Check user permissions for reading/managing plots
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_plots"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_plots"])
     get_plot(context, num)
 
     # Render the plot view with the retrieved context
@@ -109,7 +109,7 @@ def orga_plots_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResp
         HTTP response with the plot editing form
     """
     # Check user has permission to edit plots for this event
-    context = check_event_permission(request, event_slug, "orga_plots")
+    context = check_event_context(request, event_slug, "orga_plots")
 
     # Load existing plot if editing (num != 0)
     if num != 0:
@@ -123,7 +123,7 @@ def orga_plots_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResp
 def orga_plots_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponseRedirect:
     """Reorder plots in event's plot list."""
     # Verify user has permission to manage plots
-    context = check_event_permission(request, event_slug, "orga_plots")
+    context = check_event_context(request, event_slug, "orga_plots")
 
     # Swap plot order positions
     exchange_order(context, Plot, num, order)
@@ -149,7 +149,7 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, num: int, order
         Http404: If plot relationship not found or belongs to wrong event
     """
     # Check user permissions for plot management
-    context = check_event_permission(request, event_slug, "orga_plots")
+    context = check_event_context(request, event_slug, "orga_plots")
 
     # Retrieve the specific plot-character relationship
     try:
@@ -184,7 +184,7 @@ def orga_plots_versions(request: HttpRequest, event_slug: str, num: int) -> Http
         HttpResponse: Rendered versions page
     """
     # Check event permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_plots")
+    context = check_event_context(request, event_slug, "orga_plots")
 
     # Retrieve the specific plot
     get_plot(context, num)
@@ -195,7 +195,7 @@ def orga_plots_versions(request: HttpRequest, event_slug: str, num: int) -> Http
 
 @login_required
 def orga_factions(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_factions")
+    context = check_event_context(request, event_slug, "orga_factions")
     return writing_list(request, context, Faction, "faction")
 
 
@@ -203,7 +203,7 @@ def orga_factions(request, event_slug):
 def orga_factions_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View displaying a specific faction for organizers."""
     # Check permissions and setup context
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_factions"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_factions"])
 
     # Retrieve the faction element
     get_element(context, num, "faction", Faction)
@@ -224,7 +224,7 @@ def orga_factions_edit(request: HttpRequest, event_slug: str, num: int) -> HttpR
         Rendered faction editing page
     """
     # Check permissions and initialize context
-    context = check_event_permission(request, event_slug, "orga_factions")
+    context = check_event_context(request, event_slug, "orga_factions")
 
     # Load existing faction if editing (num != 0)
     if num != 0:
@@ -238,7 +238,7 @@ def orga_factions_edit(request: HttpRequest, event_slug: str, num: int) -> HttpR
 def orga_factions_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponseRedirect:
     """Reorder factions within an event run."""
     # Verify event access and permissions
-    context = check_event_permission(request, event_slug, "orga_factions")
+    context = check_event_context(request, event_slug, "orga_factions")
 
     # Exchange faction positions
     exchange_order(context, Faction, num, order)
@@ -259,7 +259,7 @@ def orga_factions_versions(request: HttpRequest, event_slug: str, num: int) -> H
         Rendered template showing faction text version history
     """
     # Check user has permission to manage factions for this event
-    context = check_event_permission(request, event_slug, "orga_factions")
+    context = check_event_context(request, event_slug, "orga_factions")
 
     # Load the faction object into context
     get_element(context, num, "faction", Faction)
@@ -270,7 +270,7 @@ def orga_factions_versions(request: HttpRequest, event_slug: str, num: int) -> H
 
 @login_required
 def orga_quest_types(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_quest_types")
+    context = check_event_context(request, event_slug, "orga_quest_types")
     return writing_list(request, context, QuestType, "quest_type")
 
 
@@ -278,7 +278,7 @@ def orga_quest_types(request, event_slug):
 def orga_quest_types_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View quest type details for organizers."""
     # Check permissions and get base context
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_quest_types"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_quest_types"])
 
     # Load specific quest type into context
     get_quest_type(context, num)
@@ -299,7 +299,7 @@ def orga_quest_types_edit(request: HttpRequest, event_slug: str, num: int) -> Ht
         Rendered writing edit form response
     """
     # Check user permissions for quest type management
-    context = check_event_permission(request, event_slug, "orga_quest_types")
+    context = check_event_context(request, event_slug, "orga_quest_types")
 
     # Load existing quest type if editing (num != 0)
     if num != 0:
@@ -326,7 +326,7 @@ def orga_quest_types_versions(
         Rendered template with quest type version history
     """
     # Verify user has permission to access quest types for this event
-    context = check_event_permission(request, event_slug, "orga_quest_types")
+    context = check_event_context(request, event_slug, "orga_quest_types")
 
     # Load the quest type and add it to context
     get_quest_type(context, num)
@@ -337,7 +337,7 @@ def orga_quest_types_versions(
 
 @login_required
 def orga_quests(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_quests")
+    context = check_event_context(request, event_slug, "orga_quests")
     return writing_list(request, context, Quest, "quest")
 
 
@@ -345,7 +345,7 @@ def orga_quests(request, event_slug):
 def orga_quests_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View for managing quest content in the organization interface."""
     # Check permissions and prepare context
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_quests"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_quests"])
 
     # Load specific quest data
     get_quest(context, num)
@@ -371,7 +371,7 @@ def orga_quests_edit(request: HttpRequest, event_slug: str, num: int) -> HttpRes
         Http404: If the specified quest number doesn't exist when num > 0
     """
     # Check user permissions for quest management on this event
-    context = check_event_permission(request, event_slug, "orga_quests")
+    context = check_event_context(request, event_slug, "orga_quests")
 
     # Verify that quest types are available before allowing quest creation
     if not context["event"].get_elements(QuestType).exists():
@@ -391,7 +391,7 @@ def orga_quests_edit(request: HttpRequest, event_slug: str, num: int) -> HttpRes
 def orga_quests_versions(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display version history for a quest."""
     # Check user has permission to access quest versions
-    context = check_event_permission(request, event_slug, "orga_quests")
+    context = check_event_context(request, event_slug, "orga_quests")
     get_quest(context, num)
     # Render versions page with quest-specific template
     return writing_versions(request, context, "quest", TextVersionChoices.QUEST)
@@ -399,14 +399,14 @@ def orga_quests_versions(request: HttpRequest, event_slug: str, num: int) -> Htt
 
 @login_required
 def orga_traits(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_traits")
+    context = check_event_context(request, event_slug, "orga_traits")
     return writing_list(request, context, Trait, "trait")
 
 
 @login_required
 def orga_traits_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display and manage trait details for event organizers."""
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_traits"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_traits"])
     get_trait(context, num)
     return writing_view(request, context, "trait")
 
@@ -431,7 +431,7 @@ def orga_traits_edit(request: HttpRequest, event_slug: str, num: int) -> HttpRes
         PermissionDenied: If user lacks orga_traits permission for the event
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_traits")
+    context = check_event_context(request, event_slug, "orga_traits")
 
     # Validate prerequisite: at least one quest must exist
     if not context["event"].get_elements(Quest).exists():
@@ -454,21 +454,21 @@ def orga_traits_versions(
     num: int,
 ) -> HttpResponse:
     """Display version history for a specific trait."""
-    context = check_event_permission(request, event_slug, "orga_traits")
+    context = check_event_context(request, event_slug, "orga_traits")
     get_trait(context, num)
     return writing_versions(request, context, "trait", TextVersionChoices.TRAIT)
 
 
 @login_required
 def orga_handouts(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_handouts")
+    context = check_event_context(request, event_slug, "orga_handouts")
     return writing_list(request, context, Handout, "handout")
 
 
 @login_required
 def orga_handouts_test(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Render a test preview of a handout PDF."""
-    context = check_event_permission(request, event_slug, "orga_handouts")
+    context = check_event_context(request, event_slug, "orga_handouts")
     get_handout(context, num)
     return render(request, "pdf/sheets/handout.html", context)
 
@@ -477,7 +477,7 @@ def orga_handouts_test(request: HttpRequest, event_slug: str, num: int) -> HttpR
 def orga_handouts_print(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Generate and return a PDF for a specific handout."""
     # Check permissions and initialize event context
-    context = check_event_permission(request, event_slug, "orga_handouts")
+    context = check_event_context(request, event_slug, "orga_handouts")
 
     # Retrieve handout data and add to context
     get_handout(context, num)
@@ -502,7 +502,7 @@ def orga_handouts_view(request: HttpRequest, event_slug: str, num: int) -> HttpR
         HTTP response with the rendered handout
     """
     # Check organizer permissions for handouts feature
-    context = check_event_permission(request, event_slug, "orga_handouts")
+    context = check_event_context(request, event_slug, "orga_handouts")
 
     # Fetch the requested handout and add to context
     get_handout(context, num)
@@ -531,7 +531,7 @@ def orga_handouts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpR
         PermissionDenied: If user lacks required event permissions
     """
     # Check user permissions for handout management
-    context = check_event_permission(request, event_slug, "orga_handouts")
+    context = check_event_context(request, event_slug, "orga_handouts")
 
     # Validate handout templates exist before allowing handout creation
     if not context["event"].get_elements(HandoutTemplate).exists():
@@ -550,14 +550,14 @@ def orga_handouts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpR
 @login_required
 def orga_handouts_versions(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Get version history for a specific handout."""
-    context = check_event_permission(request, event_slug, "orga_handouts")
+    context = check_event_context(request, event_slug, "orga_handouts")
     get_handout(context, num)
     return writing_versions(request, context, "handout", TextVersionChoices.HANDOUT)
 
 
 @login_required
 def orga_handout_templates(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_handout_templates")
+    context = check_event_context(request, event_slug, "orga_handout_templates")
     return writing_list(request, context, HandoutTemplate, "handout_template")
 
 
@@ -574,7 +574,7 @@ def orga_handout_templates_edit(request: HttpRequest, event_slug: str, num: int)
         Rendered handout template edit page
     """
     # Check user has permission to manage handout templates
-    context = check_event_permission(request, event_slug, "orga_handout_templates")
+    context = check_event_context(request, event_slug, "orga_handout_templates")
 
     # Load existing template if num is not 0 (new template)
     if num != 0:
@@ -585,7 +585,7 @@ def orga_handout_templates_edit(request: HttpRequest, event_slug: str, num: int)
 
 @login_required
 def orga_prologue_types(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_prologue_types")
+    context = check_event_context(request, event_slug, "orga_prologue_types")
     return writing_list(request, context, PrologueType, "prologue_type")
 
 
@@ -602,7 +602,7 @@ def orga_prologue_types_edit(request: HttpRequest, event_slug: str, num: int) ->
         HTTP response with prologue type edit form
     """
     # Check user has permission to manage prologue types
-    context = check_event_permission(request, event_slug, "orga_prologue_types")
+    context = check_event_context(request, event_slug, "orga_prologue_types")
 
     # Load existing prologue type if editing (num != 0)
     if num != 0:
@@ -614,7 +614,7 @@ def orga_prologue_types_edit(request: HttpRequest, event_slug: str, num: int) ->
 
 @login_required
 def orga_prologues(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_prologues")
+    context = check_event_context(request, event_slug, "orga_prologues")
     return writing_list(request, context, Prologue, "prologue")
 
 
@@ -622,7 +622,7 @@ def orga_prologues(request, event_slug):
 def orga_prologues_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Render prologue view for event organizers."""
     # Check organizer permissions for prologue/reading access
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_prologues"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_prologues"])
 
     # Load specific prologue into context
     get_prologue(context, num)
@@ -644,7 +644,7 @@ def orga_prologues_edit(request: HttpRequest, event_slug: str, num: int) -> Http
                      otherwise renders the prologue edit form
     """
     # Check user permissions for prologue management
-    context = check_event_permission(request, event_slug, "orga_prologues")
+    context = check_event_context(request, event_slug, "orga_prologues")
 
     # Verify that prologue types are configured before allowing prologue creation
     if not context["event"].get_elements(PrologueType).exists():
@@ -677,7 +677,7 @@ def orga_prologues_versions(
         HTTP response with prologue version history
     """
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_prologues")
+    context = check_event_context(request, event_slug, "orga_prologues")
 
     # Retrieve the prologue and add to context
     get_prologue(context, num)
@@ -688,14 +688,14 @@ def orga_prologues_versions(
 
 @login_required
 def orga_speedlarps(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_speedlarps")
+    context = check_event_context(request, event_slug, "orga_speedlarps")
     return writing_list(request, context, SpeedLarp, "speedlarp")
 
 
 @login_required
 def orga_speedlarps_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View a specific speedlarp for organizers."""
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_speedlarps"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_speedlarps"])
     get_speedlarp(context, num)
     return writing_view(request, context, "speedlarp")
 
@@ -704,7 +704,7 @@ def orga_speedlarps_view(request: HttpRequest, event_slug: str, num: int) -> Htt
 def orga_speedlarps_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Edit speedlarp writing content for an event."""
     # Check permissions and initialize context
-    context = check_event_permission(request, event_slug, "orga_speedlarps")
+    context = check_event_context(request, event_slug, "orga_speedlarps")
 
     # Load existing speedlarp if editing (num != 0 means edit mode)
     if num != 0:
@@ -718,7 +718,7 @@ def orga_speedlarps_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
 def orga_speedlarps_versions(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display version history for a speedlarp."""
     # Check permissions and load speedlarp
-    context = check_event_permission(request, event_slug, "orga_speedlarps")
+    context = check_event_context(request, event_slug, "orga_speedlarps")
     get_speedlarp(context, num)
 
     # Return version history view
@@ -728,14 +728,14 @@ def orga_speedlarps_versions(request: HttpRequest, event_slug: str, num: int) ->
 @login_required
 def orga_assignments(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check event permissions and populate context with event cache data
-    context = check_event_permission(request, event_slug, "orga_assignments")
+    context = check_event_context(request, event_slug, "orga_assignments")
     get_event_cache_all(context)
     return render(request, "larpmanager/orga/writing/assignments.html", context)
 
 
 @login_required
 def orga_progress_steps(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_progress_steps")
+    context = check_event_context(request, event_slug, "orga_progress_steps")
     return writing_list(request, context, ProgressStep, "progress_step")
 
 
@@ -753,7 +753,7 @@ def orga_progress_steps_order(
 ) -> HttpResponse:
     """Reorder progress steps for an event."""
     # Verify user has permission to modify progress steps
-    context = check_event_permission(request, event_slug, "orga_progress_steps")
+    context = check_event_context(request, event_slug, "orga_progress_steps")
 
     # Update the display order of the specified step
     exchange_order(context, ProgressStep, num, order)
@@ -798,7 +798,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
 
     # Handle registration-specific character filtering
     if class_name == "registrations":
-        context = check_event_permission(request, event_slug, "orga_registrations")
+        context = check_event_context(request, event_slug, "orga_registrations")
         # Get characters already assigned to registrations in this run
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id).values_list(
             "character_id", flat=True
@@ -815,7 +815,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
             perm = "orga_" + class_name + "s"
 
         # Check permissions for the event
-        context = check_event_permission(request, event_slug, perm)
+        context = check_event_context(request, event_slug, perm)
 
         # Get characters already assigned to the specific entity
         if eid:
@@ -854,7 +854,7 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
         return Http404()
 
     # Get event context from slug
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
 
     # Get all factions for this event, ordered by number
     context["list"] = context["event"].get_elements(Faction).order_by("number")
@@ -895,7 +895,7 @@ def orga_export(request: HttpRequest, event_slug: str, nm: str) -> HttpResponse:
     """
     # Check permissions for the specific model
     perm = f"orga_{nm}s"
-    context = check_event_permission(request, event_slug, perm)
+    context = check_event_context(request, event_slug, perm)
 
     # Get the model class dynamically
     model = apps.get_model("larpmanager", nm.capitalize())
@@ -923,7 +923,7 @@ def orga_version(request: HttpRequest, event_slug: str, nm: str, num: int) -> Ht
     """
     # Check organization permissions for text type access
     perm = f"orga_{nm}s"
-    context = check_event_permission(request, event_slug, perm)
+    context = check_event_context(request, event_slug, perm)
 
     # Find text type code matching the provided name
     tp = next(code for code, label in TextVersionChoices.choices if label.lower() == nm)
@@ -955,7 +955,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
         PermissionDenied: If user lacks organizer reading permissions for the event
     """
     # Check user permissions for organizer reading access
-    context = check_event_permission(request, event_slug, "orga_reading")
+    context = check_event_context(request, event_slug, "orga_reading")
 
     # Define text fields that need cache retrieval for performance
     text_fields = ["teaser", "text"]

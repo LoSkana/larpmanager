@@ -28,7 +28,6 @@ from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.event import (
     ExeEventForm,
     ExeTemplateForm,
@@ -42,7 +41,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.utils.base import def_user_context
+from larpmanager.utils.base import check_association_context, get_context
 from larpmanager.utils.common import get_event_template
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
@@ -56,7 +55,7 @@ from larpmanager.views.user.event import get_coming_runs
 def exe_events(request: HttpRequest) -> HttpResponse:
     """Display events for the current association with registration status and counts."""
     # Check permissions and get association context
-    context = check_assoc_permission(request, "exe_events")
+    context = check_association_context(request, "exe_events")
 
     # Get all runs for the association, ordered by end date
     context["list"] = (
@@ -92,7 +91,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If specified event number doesn't exist
     """
     # Check user has executive events permission for the association
-    context = check_assoc_permission(request, "exe_events")
+    context = check_association_context(request, "exe_events")
 
     if num:
         # Handle editing of existing event or run
@@ -156,7 +155,7 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
     creating default organizer role if none exist.
     """
     # Check user permissions for template management
-    context = check_assoc_permission(request, "exe_templates")
+    context = check_association_context(request, "exe_templates")
 
     # Get all template events for the organization, ordered by last update
     context["list"] = Event.objects.filter(assoc_id=context["association_id"], template=True).order_by("-updated")
@@ -179,7 +178,7 @@ def exe_templates_edit(request, num):
 def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
     """Configure templates for organization events."""
     # Initialize user context and get event template
-    add_ctx = def_user_context(request)
+    add_ctx = get_context(request)
     get_event_template(add_ctx, num)
 
     # Update context with event features and configuration
@@ -192,7 +191,7 @@ def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
 @login_required
 def exe_templates_roles(request: HttpRequest, eid: int, num: int | None) -> HttpResponse:
     """Edit or create template roles for an event."""
-    add_ctx = def_user_context(request)
+    add_ctx = get_context(request)
     get_event_template(add_ctx, eid)
     return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", additional_context=add_ctx)
 
@@ -213,7 +212,7 @@ def exe_pre_registrations(request) -> HttpResponse:
             with counts organized by preference level or total counts
     """
     # Check user permissions and initialize context
-    context = check_assoc_permission(request, "exe_pre_registrations")
+    context = check_association_context(request, "exe_pre_registrations")
     context["list"] = []
     context["pr"] = []
     context["seen"] = []
@@ -252,7 +251,7 @@ def exe_pre_registrations(request) -> HttpResponse:
 def exe_deadlines(request: HttpRequest) -> HttpResponse:
     """Display upcoming run deadlines for the association."""
     # Check user has permission to view deadlines
-    context = check_assoc_permission(request, "exe_deadlines")
+    context = check_association_context(request, "exe_deadlines")
 
     # Get upcoming runs and check their deadlines
     runs = get_coming_runs(context["association_id"])

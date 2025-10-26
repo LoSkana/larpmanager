@@ -8507,6 +8507,9 @@ msgstr ""
 msgid "No elements are currently available"
 msgstr ""
 
+msgid "Show available characters"
+msgstr ""
+
 msgid "Move to container"
 msgstr ""
 
@@ -8675,9 +8678,6 @@ msgid ""
 msgstr ""
 
 msgid "List of other users"
-msgstr ""
-
-msgid "Show available characters"
 msgstr ""
 
 msgid "Your registration ticket"

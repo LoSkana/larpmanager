@@ -30,7 +30,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, assoc_accounting_data, check_accounting, get_run_accounting
 from larpmanager.accounting.invoice import invoice_verify
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.accounting import (
     ExeCollectionForm,
     ExeCreditForm,
@@ -69,6 +68,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
+from larpmanager.utils.base import check_association_context
 from larpmanager.utils.edit import backend_get, exe_edit
 from larpmanager.utils.paginate import exe_paginate
 
@@ -99,7 +99,7 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
     custom formatting callbacks for statement downloads and expense type display.
     """
     # Check user permissions and get base context for association
-    context = check_assoc_permission(request, "exe_outflows")
+    context = check_association_context(request, "exe_outflows")
 
     # Configure context with field definitions and display options
     context.update(
@@ -166,7 +166,7 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks required association permissions.
     """
     # Check user permissions for association accounting inflows access
-    context = check_assoc_permission(request, "exe_inflows")
+    context = check_association_context(request, "exe_inflows")
 
     # Configure pagination context with related field optimization
     # and display field definitions for inflow data
@@ -220,7 +220,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks required association permissions.
     """
     # Check user has permission to view donations for this association
-    context = check_assoc_permission(request, "exe_donations")
+    context = check_association_context(request, "exe_donations")
 
     # Define table column headers and their corresponding field names
     # These will be displayed in the donations list template
@@ -262,7 +262,7 @@ def exe_credits(request: HttpRequest) -> dict:
               and pagination controls.
     """
     # Check user permissions for credits management
-    context = check_assoc_permission(request, "exe_credits")
+    context = check_association_context(request, "exe_credits")
 
     # Configure display context with relationship selections and field definitions
     context.update(
@@ -310,7 +310,7 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks 'exe_tokens' permission for the association.
     """
     # Check user permissions for token management at organization level
-    context = check_assoc_permission(request, "exe_tokens")
+    context = check_association_context(request, "exe_tokens")
 
     # Configure context with table display settings and field definitions
     context.update(
@@ -355,7 +355,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered expenses page with paginated expense items
     """
     # Check user permissions for expense management
-    context = check_assoc_permission(request, "exe_expenses")
+    context = check_association_context(request, "exe_expenses")
     approve = _("Approve")
 
     # Configure table display settings and field definitions
@@ -414,7 +414,7 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
         Http404: If expense doesn't exist or doesn't belong to current organization
     """
     # Check user has permission to manage expenses
-    context = check_assoc_permission(request, "exe_expenses")
+    context = check_association_context(request, "exe_expenses")
 
     # Retrieve the expense object, raise 404 if not found
     try:
@@ -449,7 +449,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with paginated payment data and context
     """
     # Check user permissions for accessing payments section
-    context = check_assoc_permission(request, "exe_payments")
+    context = check_association_context(request, "exe_payments")
 
     # Define base fields to display in payments table
     fields = [
@@ -512,7 +512,7 @@ def exe_invoices(request) -> HttpResponse:
         HttpResponse: Rendered template with invoice list and pagination
     """
     # Check user permissions for invoice management
-    context = check_assoc_permission(request, "exe_invoices")
+    context = check_association_context(request, "exe_invoices")
     confirm = _("Confirm")
 
     # Update context with table configuration
@@ -583,7 +583,7 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If invoice is already confirmed or in invalid status
     """
     # Check user permissions for invoice management
-    context = check_assoc_permission(request, "exe_invoices")
+    context = check_association_context(request, "exe_invoices")
 
     # Retrieve the specific invoice by number
     backend_get(context, PaymentInvoice, num)
@@ -608,7 +608,7 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
 def exe_collections(request: HttpRequest) -> HttpResponse:
     """Display collections list for association executives."""
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_collections")
+    context = check_association_context(request, "exe_collections")
 
     # Fetch collections with related data, ordered by creation date
     context["list"] = (
@@ -642,7 +642,7 @@ def exe_refunds(request: HttpRequest) -> dict:
         PermissionDenied: If user lacks exe_refunds permission
     """
     # Check user permissions for refund management
-    context = check_assoc_permission(request, "exe_refunds")
+    context = check_association_context(request, "exe_refunds")
     done = _("Done")
 
     # Define table column headers and their display names
@@ -695,7 +695,7 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If the refund request is not in REQUEST status (already processed)
     """
     # Check user permissions for accessing refund management
-    context = check_assoc_permission(request, "exe_refunds")
+    context = check_association_context(request, "exe_refunds")
 
     # Retrieve the specific refund request by number
     backend_get(context, RefundRequest, num)
@@ -720,7 +720,7 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
 def exe_accounting(request: HttpRequest) -> HttpResponse:
     """Render organization-wide accounting dashboard."""
     # Check user permissions for accounting access
-    context = check_assoc_permission(request, "exe_accounting")
+    context = check_association_context(request, "exe_accounting")
 
     # Populate context with accounting data
     assoc_accounting(context)
@@ -732,7 +732,7 @@ def exe_accounting(request: HttpRequest) -> HttpResponse:
 def exe_year_accounting(request: HttpRequest) -> JsonResponse:
     """Get accounting data for a specific year."""
     # Check association permissions for accounting access
-    context = check_assoc_permission(request, "exe_accounting")
+    context = check_association_context(request, "exe_accounting")
 
     # Parse and validate year parameter from POST data
     try:
@@ -761,7 +761,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If run doesn't belong to user's association
     """
     # Check user has accounting permissions for this association
-    context = check_assoc_permission(request, "exe_accounting")
+    context = check_association_context(request, "exe_accounting")
 
     # Get the run and verify ownership
     context["run"] = Run.objects.get(pk=num)
@@ -776,7 +776,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
 @login_required
 def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
     """Display accounting records for the organization."""
-    context = check_assoc_permission(request, "exe_accounting_rec")
+    context = check_association_context(request, "exe_accounting_rec")
 
     # Get accounting records for the organization (not tied to specific runs)
     context["list"] = RecordAccounting.objects.filter(assoc_id=context["association_id"], run__isnull=True).order_by(
@@ -857,7 +857,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks exe_balance permission
     """
     # Verify user has executive balance permission
-    context = check_assoc_permission(request, "exe_balance")
+    context = check_association_context(request, "exe_balance")
     year = check_year(request, context)
 
     # Define date range for the selected year
@@ -980,7 +980,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
         PermissionError: If user lacks required association permissions for verification
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_verification")
+    context = check_association_context(request, "exe_verification")
 
     # Query pending payment invoices excluding automated payment methods
     # Filter out created status and electronic payment methods that auto-verify
@@ -1051,7 +1051,7 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If the invoice doesn't belong to the user's organization
     """
     # Check user has permission to access manual verification
-    context = check_assoc_permission(request, "exe_verification")
+    context = check_association_context(request, "exe_verification")
 
     # Retrieve the invoice to verify
     invoice = PaymentInvoice.objects.get(pk=num)

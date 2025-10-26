@@ -32,7 +32,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config, get_event_config
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
@@ -40,8 +39,8 @@ from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
+from larpmanager.utils.base import check_association_context, check_event_context
 from larpmanager.utils.common import html_clean
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.exceptions import NotFoundError
 
 
@@ -430,7 +429,7 @@ def orga_edit(
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context for the event
-    context = check_event_permission(request, event_slug, permission)
+    context = check_event_context(request, event_slug, permission)
 
     # Merge any additional context provided by caller
     if additional_context:
@@ -485,7 +484,7 @@ def exe_edit(
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context
-    context = check_assoc_permission(request, permission)
+    context = check_association_context(request, permission)
 
     # Merge additional context if provided
     if additional_context:

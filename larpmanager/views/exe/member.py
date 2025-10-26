@@ -32,7 +32,6 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
 from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
@@ -74,6 +73,7 @@ from larpmanager.models.miscellanea import (
     HelpQuestion,
 )
 from larpmanager.models.registration import Registration
+from larpmanager.utils.base import check_association_context
 from larpmanager.utils.common import (
     _get_help_questions,
     format_email_body,
@@ -107,7 +107,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with membership data and statistics.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     # Get set of member IDs who have paid membership fees for current year
     fees = set(
@@ -193,7 +193,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
         HttpResponse: Rendered template with membership evaluation form
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     # Get member and their membership status
     member = Member.objects.get(pk=num)
@@ -262,7 +262,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 @login_required
 def exe_membership_request(request: HttpRequest, num: int) -> HttpResponse:
     """Handle membership request display for organization executives."""
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
     context.update(get_member(num))
     return get_membership_request(context)
 
@@ -281,7 +281,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with membership check report data.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership_check")
+    context = check_association_context(request, "exe_membership_check")
 
     # Get all members with active memberships (excluding empty/joined status)
     member_ids = set(
@@ -331,7 +331,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If member with given ID doesn't exist or user lacks permissions
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
     context.update(get_member(num))
 
     # Handle form submission for member profile updates
@@ -428,7 +428,7 @@ def exe_membership_status(request, num):
     Returns:
         Rendered membership editing form or redirect after successful update
     """
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
     context.update(get_member(num))
     context["membership"] = get_object_or_404(
         Membership, member_id=context["member"].id, assoc_id=context["association_id"]
@@ -466,7 +466,7 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
         containing members with card numbers, ordered by card number
     """
     # Check user permissions for accessing membership registry
-    context = check_assoc_permission(request, "exe_membership_registry")
+    context = check_association_context(request, "exe_membership_registry")
     split_two_names = 2
 
     # Initialize empty list for processed members
@@ -521,7 +521,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks 'exe_membership' permission (handled by decorator).
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     if request.method == "POST":
         # Initialize form with POST data and context
@@ -573,7 +573,7 @@ def exe_membership_document(request):
     Returns:
         Rendered form for document upload or redirect to membership list
     """
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     if request.method == "POST":
         form = ExeMembershipDocumentForm(request.POST, request.FILES, context=context)
@@ -615,7 +615,7 @@ def exe_enrolment(request) -> HttpResponse:
               and formatted names
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_enrolment")
+    context = check_association_context(request, "exe_enrolment")
     split_two_names = 2
 
     # Set current year and calculate year start date
@@ -673,7 +673,7 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
         Rendered volunteer registry template
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_volunteer_registry")
+    context = check_association_context(request, "exe_volunteer_registry")
 
     # Fetch volunteer registries with member info, ordered by start date and surname
     context["list"] = (
@@ -705,7 +705,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
         Association.DoesNotExist: If association not found.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_volunteer_registry")
+    context = check_association_context(request, "exe_volunteer_registry")
 
     # Retrieve the association object for the current context
     context["assoc"] = Association.objects.get(pk=context["association_id"])
@@ -746,7 +746,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
         Candidates are configured via 'vote_candidates' association config.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_vote")
+    context = check_association_context(request, "exe_vote")
     context["year"] = datetime.today().year
     assoc_id = context["association_id"]
 
@@ -786,7 +786,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 def exe_badges(request: HttpRequest) -> HttpResponse:
     """Display and manage association badges."""
     # Check user permissions for badge management
-    context = check_assoc_permission(request, "exe_badges")
+    context = check_association_context(request, "exe_badges")
 
     # Load all badges for the association with member relationships
     context["list"] = Badge.objects.filter(assoc_id=context["association_id"]).prefetch_related("members")
@@ -814,7 +814,7 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with form or redirect after successful submission.
     """
     # Check if user has permission to send mail for this association
-    context = check_assoc_permission(request, "exe_send_mail")
+    context = check_association_context(request, "exe_send_mail")
 
     if request.method == "POST":
         # Process form submission for mail sending
@@ -848,7 +848,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with paginated email archive
     """
     # Check user permissions for accessing email archive
-    context = check_assoc_permission(request, "exe_archive_email")
+    context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Define table columns for the email archive display
@@ -880,7 +880,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 def exe_read_mail(request: HttpRequest, nm: str) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
-    context = check_assoc_permission(request, "exe_archive_email")
+    context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Retrieve and add email data to context
@@ -903,7 +903,7 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
         Rendered template response with question lists and context data.
     """
     # Check user permissions for accessing executive questions feature
-    context = check_assoc_permission(request, "exe_questions")
+    context = check_association_context(request, "exe_questions")
 
     # Retrieve categorized help questions for the organization
     closed_q, open_q = _get_help_questions(context, request)
@@ -942,7 +942,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
         Member.DoesNotExist: If the member with the given ID doesn't exist
     """
     # Check executive permissions for question management
-    context = check_assoc_permission(request, "exe_questions")
+    context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
     member = Member.objects.get(pk=r)
@@ -987,7 +987,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 @login_required
 def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
     """Close a help question for a member."""
-    context = check_assoc_permission(request, "exe_questions")
+    context = check_association_context(request, "exe_questions")
 
     # Get the member and their most recent help question
     member = Member.objects.get(pk=r)
@@ -1010,7 +1010,7 @@ def exe_newsletter(request):
     Returns:
         HttpResponse: Rendered newsletter management page with subscriber lists by language
     """
-    context = check_assoc_permission(request, "exe_newsletter")
+    context = check_association_context(request, "exe_newsletter")
 
     context["lst"] = {}
     for el in (
@@ -1048,7 +1048,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
         PermissionDenied: If user lacks exe_newsletter permission for the association
     """
     # Check user permissions for newsletter export functionality
-    context = check_assoc_permission(request, "exe_newsletter")
+    context = check_association_context(request, "exe_newsletter")
 
     # Set up CSV response with appropriate headers for file download
     response = HttpResponse(

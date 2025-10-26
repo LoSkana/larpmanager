@@ -25,7 +25,7 @@ from django.utils import timezone
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.utils.event import prepare_run
+from larpmanager.utils.base import prepare_run
 from larpmanager.views.orga.event import _prepare_backup
 
 

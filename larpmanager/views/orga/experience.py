@@ -33,11 +33,11 @@ from larpmanager.forms.experience import (
     OrgaRulePxForm,
 )
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.bulk import handle_bulk_ability
 from larpmanager.utils.common import exchange_order
 from larpmanager.utils.download import export_abilities, zip_exports
 from larpmanager.utils.edit import orga_edit
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.exceptions import ReturnNowError
 
 
@@ -45,7 +45,7 @@ from larpmanager.utils.exceptions import ReturnNowError
 def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience deliveries for an event."""
     # Verify user has permission and retrieve event context
-    context = check_event_permission(request, event_slug, "orga_px_deliveries")
+    context = check_event_context(request, event_slug, "orga_px_deliveries")
 
     # Get all deliveries ordered by number
     context["list"] = context["event"].get_elements(DeliveryPx).order_by("number")
@@ -77,7 +77,7 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
         ReturnNowError: When file download is requested, triggers immediate file response
     """
     # Check user permissions and retrieve event context
-    context = check_event_permission(request, event_slug, "orga_px_abilities")
+    context = check_event_context(request, event_slug, "orga_px_abilities")
 
     # Handle file export request if download parameter is present
     if request.POST and request.POST.get("download") == "1":
@@ -119,7 +119,7 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> H
         HTTP response for ability editing or redirect
     """
     # Check user permissions for PX abilities management
-    context = check_event_permission(request, event_slug, "orga_px_abilities")
+    context = check_event_context(request, event_slug, "orga_px_abilities")
 
     # Validate that ability types exist before allowing ability creation
     if not context["event"].get_elements(AbilityTypePx).exists():
@@ -135,7 +135,7 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> H
 def orga_px_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display ability type list for experience management."""
     # Check user has permission to access ability types management
-    context = check_event_permission(request, event_slug, "orga_px_ability_types")
+    context = check_event_context(request, event_slug, "orga_px_ability_types")
 
     # Retrieve and order ability types by number
     context["list"] = context["event"].get_elements(AbilityTypePx).order_by("number")
@@ -152,7 +152,7 @@ def orga_px_ability_types_edit(request, event_slug, num):
 def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
     # Check permission and get event context
-    context = check_event_permission(request, event_slug, "orga_px_rules")
+    context = check_event_context(request, event_slug, "orga_px_rules")
     context["list"] = context["event"].get_elements(RulePx).order_by("order")
     return render(request, "larpmanager/orga/px/rules.html", context)
 
@@ -171,7 +171,7 @@ def orga_px_rules_order(
 ) -> HttpResponse:
     """Reorder PX rules for an event."""
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_px_rules")
+    context = check_event_context(request, event_slug, "orga_px_rules")
 
     # Exchange rule order in database
     exchange_order(context, RulePx, num, order)
@@ -183,7 +183,7 @@ def orga_px_rules_order(
 def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage experience modifiers for an event."""
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_px_modifiers")
+    context = check_event_context(request, event_slug, "orga_px_modifiers")
 
     # Retrieve ordered list of experience modifiers
     context["list"] = context["event"].get_elements(ModifierPx).order_by("order")
@@ -205,7 +205,7 @@ def orga_px_modifiers_order(
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
     # Check permissions and get context
-    context = check_event_permission(request, event_slug, "orga_px_modifiers")
+    context = check_event_context(request, event_slug, "orga_px_modifiers")
 
     # Exchange modifier order
     exchange_order(context, ModifierPx, num, order)

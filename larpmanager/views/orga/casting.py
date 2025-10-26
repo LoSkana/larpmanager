@@ -40,9 +40,9 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character, Faction, FactionType
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import get_element, get_time_diff_today
 from larpmanager.utils.deadlines import get_membership_fee_year
-from larpmanager.utils.event import check_event_permission
 from larpmanager.views.user.casting import (
     casting_details,
     casting_history_characters,
@@ -56,7 +56,7 @@ from larpmanager.views.user.casting import (
 def orga_casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
     """Handle casting preferences for characters or traits based on type."""
     # Check user permissions for casting preferences
-    context = check_event_permission(request, event_slug, "orga_casting_preferences")
+    context = check_event_context(request, event_slug, "orga_casting_preferences")
 
     # Get base casting details
     casting_details(context, typ)
@@ -83,7 +83,7 @@ def orga_casting_history(request: HttpRequest, event_slug: str, typ: int = 0) ->
         Rendered casting history template
     """
     # Check user permissions for casting history access
-    context = check_event_permission(request, event_slug, "orga_casting_history")
+    context = check_event_context(request, event_slug, "orga_casting_history")
 
     # Add casting details to context
     casting_details(context, typ)
@@ -621,7 +621,7 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
         Http404: When the submitted form is not valid
     """
     # Check user permissions for accessing casting functionality
-    context = check_event_permission(request, event_slug, "orga_casting")
+    context = check_event_context(request, event_slug, "orga_casting")
 
     # Redirect to default casting type if none specified
     if typ is None:
@@ -660,7 +660,7 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
 
 @login_required
 def orga_casting_toggle(request, event_slug, typ):
-    context = check_event_permission(request, event_slug, "orga_casting")
+    context = check_event_context(request, event_slug, "orga_casting")
     try:
         pid = request.POST["pid"]
         oid = request.POST["oid"]

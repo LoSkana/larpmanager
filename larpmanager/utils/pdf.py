@@ -49,9 +49,9 @@ from larpmanager.models.writing import (
     Character,
     Handout,
 )
+from larpmanager.utils.base import get_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import get_handout
-from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_assoc_text
@@ -690,7 +690,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 def print_handout_bkg(a: Association, event_slug: str, c: Character) -> None:
     """Prints character handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(a)
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     print_handout_go(context, c)
 
 
@@ -710,7 +710,7 @@ def print_character_go(context, character):
 def print_character_bkg(a: Association, event_slug: str, c: Character) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(a)
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     print_character_go(context, c)
 
 
@@ -727,7 +727,7 @@ def print_run_bkg(a: Association, event_slug: str) -> None:
     """
     # Create fake request context and get event run data
     request = get_fake_request(a)
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
 
     # Print gallery and character profiles
     print_gallery(context)

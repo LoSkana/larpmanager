@@ -29,8 +29,8 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
 from larpmanager.models.writing import Character
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.pdf import (
     add_pdf_instructions,
     print_character,
@@ -61,7 +61,7 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
         PermissionDenied: If user lacks 'orga_characters_pdf' permission for event
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Handle form submission for PDF configuration updates
     if request.method == "POST":
@@ -98,7 +98,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
         Redirect response to characters PDF page
     """
     # Check user permissions for PDF operations
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Get all characters associated with the event
     chs = context["event"].get_elements(Character)
@@ -127,7 +127,7 @@ def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -
         HTTP response containing the generated PDF
     """
     # Check organizer permissions for PDF access
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
     get_char_check(request, context, num, True)
@@ -149,7 +149,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) 
         Rendered PDF template response
     """
     # Check user permissions for character PDF generation
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character data
     get_char_check(request, context, num, True)
@@ -167,7 +167,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) 
 def orga_characters_friendly_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Generate friendly PDF for a character."""
     # Check permissions for PDF generation
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character
     get_char_check(request, context, num, True)
@@ -188,7 +188,7 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: in
         Rendered PDF template for friendly test sheet
     """
     # Verify user has permission to access character PDFs
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character, ensuring user has access
     get_char_check(request, context, num, True)
@@ -203,7 +203,7 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: in
 def orga_characters_relationships_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Generate PDF of character relationships for organization view."""
     # Verify event permissions for PDF generation
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
     get_char_check(request, context, num, False, True)
@@ -225,7 +225,7 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
         Rendered relationships template response
     """
     # Check organization permissions for character PDF access
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate character access and retrieve character data
     get_char_check(request, context, num, True)
@@ -239,17 +239,17 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
 
 @login_required
 def orga_gallery_pdf(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
     return print_gallery(context, True)
 
 
 @login_required
 def orga_gallery_test(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
     return render(request, "pdf/sheets/gallery.html", context)
 
 
 @login_required
 def orga_profiles_pdf(request, event_slug):
-    context = check_event_permission(request, event_slug, "orga_characters_pdf")
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
     return print_profiles(context, True)

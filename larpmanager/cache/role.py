@@ -21,11 +21,9 @@
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.http import HttpRequest
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import (
     get_assoc_permission_feature,
     get_cache_index_permission,
@@ -33,8 +31,7 @@ from larpmanager.cache.permission import (
 )
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.utils.auth import get_allowed_managed
-from larpmanager.utils.base import def_user_context
-from larpmanager.utils.exceptions import FeatureError, PermissionError
+from larpmanager.utils.exceptions import PermissionError
 
 
 def cache_assoc_role_key(assoc_role_id):
@@ -107,11 +104,12 @@ def remove_association_role_cache(association_role_id):
     cache.delete(key)
 
 
-def get_assoc_roles(request: HttpRequest) -> tuple[bool, dict[str, int], list[str]]:
+def get_assoc_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str, int], list[str]]:
     """Get association roles and permissions for the current user.
 
     Args:
         request: Django HTTP request object containing user information
+        context: Dict with context informations
 
     Returns:
         tuple: A 3-tuple containing:
@@ -126,13 +124,11 @@ def get_assoc_roles(request: HttpRequest) -> tuple[bool, dict[str, int], list[st
         return True, [], ["superuser"]
 
     # Get cached event context and role information
-    cached_context = def_user_context(request)
-    cache_event_links(request, cached_context)
     is_admin = False
     role_names = []
 
     # Process each association role assigned to the user
-    for role_number, role_data in cached_context["assoc_role"].items():
+    for role_number, role_data in context["assoc_role"].items():
         # Role number 1 indicates admin privileges
         if role_number == 1:
             is_admin = True
@@ -172,7 +168,7 @@ def has_assoc_permission(request: HttpRequest, context: dict, permission: str) -
         return False
 
     # Get user's association roles and permissions
-    (is_admin, user_permissions, role_names) = get_assoc_roles(request)
+    (is_admin, user_permissions, role_names) = get_assoc_roles(request, context)
 
     # Admin users have all permissions
     if is_admin:
@@ -184,61 +180,6 @@ def has_assoc_permission(request: HttpRequest, context: dict, permission: str) -
 
     # Check if user has the specific permission
     return permission in user_permissions
-
-
-def check_assoc_permission(request: HttpRequest, permission_slug: str) -> dict:
-    """Check and validate association permissions for a request.
-
-    Validates that the user has the required association permission and that
-    any necessary features are enabled. Sets up context data for rendering
-    the view with proper permission and feature information.
-
-    Args:
-        request: HTTP request object containing user and association data
-        permission_slug: Permission slug identifier to check against user permissions
-
-    Returns:
-        dict: Context dictionary containing:
-            - User context data from def_user_ctx
-            - manage: Set to 1 to indicate management mode
-            - exe_page: Set to 1 to indicate executive page
-            - is_sidebar_open: Sidebar state from session
-            - tutorial: Tutorial identifier if available
-            - config: Configuration URL if user has config permissions
-
-    Raises:
-        PermissionError: If user lacks the required association permission
-        FeatureError: If required feature is not enabled for the association
-    """
-    # Get base user context and validate permission
-    context = def_user_context(request)
-    if not has_assoc_permission(request, context, permission_slug):
-        raise PermissionError()
-
-    # Retrieve feature configuration for this permission
-    (required_feature, tutorial_identifier, config_slug) = get_assoc_permission_feature(permission_slug)
-
-    # Check if required feature is enabled for this association
-    if required_feature != "def" and required_feature not in request.assoc["features"]:
-        raise FeatureError(path=request.path, feature=required_feature, run=0)
-
-    # Set management context flags
-    context["manage"] = 1
-    context["exe_page"] = 1
-
-    # Load association permissions and sidebar state
-    get_index_assoc_permissions(context, request, context["association_id"])
-    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
-
-    # Add tutorial information if not already present
-    if "tutorial" not in context:
-        context["tutorial"] = tutorial_identifier
-
-    # Add configuration URL if user has config permissions
-    if config_slug and has_assoc_permission(request, context, "exe_config"):
-        context["config"] = reverse("exe_config", args=[config_slug])
-
-    return context
 
 
 def get_index_assoc_permissions(context: dict, request: HttpRequest, association_id: int, check: bool = True) -> None:
@@ -257,7 +198,7 @@ def get_index_assoc_permissions(context: dict, request: HttpRequest, association
         PermissionError: When user lacks permissions and check=True
     """
     # Get user role information and admin status
-    (is_admin, user_association_permissions, role_names) = get_assoc_roles(request)
+    (is_admin, user_association_permissions, role_names) = get_assoc_roles(request, context)
 
     # Check if user has any roles or admin privileges
     if not role_names and not is_admin:
@@ -346,11 +287,12 @@ def remove_event_role_cache(assignment_role_id):
     cache.delete(key)
 
 
-def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, int], list[str]]:
+def get_event_roles(request: HttpRequest, context, slug: str) -> tuple[bool, dict[str, int], list[str]]:
     """Get user's event roles and permissions for a specific event slug.
 
     Args:
         request: Django HTTP request object with authenticated user
+        context: Dict with context informations
         slug: Event slug identifier
 
     Returns:
@@ -369,9 +311,7 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
         return True, [], ["superuser"]
 
     # Get cached event context and check if user has roles for this event
-    event_context = def_user_context(request)
-    cache_event_links(request, event_context)
-    if slug not in event_context["event_role"]:
+    if slug not in context["event_role"]:
         return False, [], []
 
     # Initialize tracking variables for user's roles in this event
@@ -379,7 +319,7 @@ def get_event_roles(request: HttpRequest, slug: str) -> tuple[bool, dict[str, in
     role_names = []
 
     # Process each role the user has for this event
-    for role_number, role_element in event_context["event_role"][slug].items():
+    for role_number, role_element in context["event_role"][slug].items():
         # Role number 1 indicates organizer status
         if role_number == 1:
             is_organizer = True
@@ -424,7 +364,7 @@ def has_event_permission(request: HttpRequest, context: dict, event_slug: str, p
         return True
 
     # Get event-specific roles and permissions for the user
-    (is_organizer, user_permissions, role_names) = get_event_roles(request, event_slug)
+    (is_organizer, user_permissions, role_names) = get_event_roles(request, context, event_slug)
 
     # Organizer has all permissions
     if is_organizer:
@@ -440,6 +380,32 @@ def has_event_permission(request: HttpRequest, context: dict, event_slug: str, p
 
     # Check single permission
     return permission_name in user_permissions
+
+
+def get_index_event_permissions(context, request, event_slug, enforce_check=True):
+    """Load event permissions and roles for management interface.
+
+    Args:
+        context (dict): Context dictionary to update
+        request: Django HTTP request object
+        event_slug (str): Event slug
+        enforce_check (bool): Whether to enforce permission requirements
+
+    Side effects:
+        Updates context with role names and event permissions
+
+    Raises:
+        PermissionError: If enforce_check=True and user has no permissions
+    """
+    (is_organizer, user_event_permissions, role_names) = get_event_roles(request, context, event_slug)
+    if "assoc_role" in context and 1 in context["assoc_role"]:
+        is_organizer = True
+    if enforce_check and not role_names and not is_organizer:
+        raise PermissionError()
+    if role_names:
+        context["role_names"] = role_names
+    event_features = get_event_features(context["event"].id)
+    context["event_pms"] = get_index_permissions(context, event_features, is_organizer, user_event_permissions, "event")
 
 
 def check_managed(context: dict, permission: str, is_association: bool = True) -> bool:

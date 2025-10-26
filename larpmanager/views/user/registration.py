@@ -69,8 +69,7 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import my_uuid
-from larpmanager.utils.base import def_user_context
-from larpmanager.utils.event import get_event, get_event_run
+from larpmanager.utils.base import get_context, get_event, get_event_context
 from larpmanager.utils.exceptions import (
     RedirectError,
     RewokedMembershipError,
@@ -109,7 +108,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
         check_event_feature(request, context, "pre_register")
     else:
         # Show all available events for pre-registration
-        context = def_user_context(request)
+        context = get_context(request)
         context.update({"features": get_assoc_features(context["association_id"])})
 
     # Initialize event lists for template
@@ -549,7 +548,7 @@ def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "",
         RewokedMembershipError: When user membership has been revoked
     """
     # Get event and run context with status validation
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
     run = context["run"]
     event = context["event"]
 
@@ -726,7 +725,7 @@ def _register_prepare(context, registration):
 
 def register_reduced(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return count of available reduced-price tickets for an event run."""
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     # Count reduced tickets still available for this run
     ct = get_reduced_available_count(context["run"])
     return JsonResponse({"res": ct})
@@ -744,7 +743,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
         Rendered HTML response with terms and conditions
     """
     # Initialize base user context
-    context = def_user_context(request)
+    context = get_context(request)
 
     # Add event-specific context if event slug provided
     if event_slug:
@@ -824,7 +823,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         return JsonResponse({"res": "ko", "msg": msg})
 
     # Get event context and validate discount feature availability
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
 
     if "discount" not in context["features"]:
         return error(_("Not available, kiddo"))
@@ -977,7 +976,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
         JsonResponse containing a list of discount items with name, value, and expiration
     """
     # Get the event run context from the request and identifier
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     now = timezone_now()
 
     # Bulk delete expired discount items for this user and run
@@ -1017,7 +1016,7 @@ def unregister(request, event_slug):
     Returns:
         HttpResponse: Confirmation form or redirect to accounting page after cancellation
     """
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
 
     # check if user is actually registered
     try:
@@ -1058,7 +1057,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
         PermissionDenied: If registration is not open or user lacks permissions
     """
     # Get event context and verify registration access
-    context = get_event_run(request, event_slug, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
     check_registration_open(context, request)
 
     # Filter registrations for current user with redeem codes (gift registrations)
@@ -1117,7 +1116,7 @@ def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
         PermissionDenied: If user lacks permission to edit gift registrations
     """
     # Get event context and verify user has gift management permissions
-    context = get_event_run(request, event_slug, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
@@ -1213,7 +1212,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
                 and association constraints
     """
     # Get event context and validate user permissions for gift redemption
-    context = get_event_run(request, event_slug, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
 
     # Check if user is already registered for this event
     if context["run"].reg:

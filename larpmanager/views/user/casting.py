@@ -36,8 +36,9 @@ from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
+from larpmanager.utils.base import get_event_context
 from larpmanager.utils.common import get_element
-from larpmanager.utils.event import get_event_filter_characters, get_event_run
+from larpmanager.utils.event import get_event_filter_characters
 from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
 
@@ -201,11 +202,11 @@ def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse
         HttpResponse: Rendered casting form template or redirect response to appropriate page
 
     Raises:
-        Http404: If event or run is not found via get_event_run
+        Http404: If event or run is not found via get_event_context
         PermissionDenied: If user lacks required casting feature permissions
     """
     # Get event context and validate user access permissions
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
     check_event_feature(request, context, "casting")
 
     # Verify user has completed event registration
@@ -583,7 +584,7 @@ def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> 
                 when the user is not properly registered for the event
     """
     # Get event context and verify user signup status
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
     casting_details(context, typ)
 
     # Check if casting preferences are enabled for this event
@@ -770,7 +771,7 @@ def casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> Http
         Http404: If user is not registered for the event and not staff
     """
     # Get event context and verify user signup status
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
     casting_details(context, typ)
 
     # Check if casting history feature is enabled for this event

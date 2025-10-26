@@ -16,8 +16,8 @@ from larpmanager.cache.config import get_assoc_config, get_event_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import (
-    check_assoc_permission,
     get_index_assoc_permissions,
+    get_index_event_permissions,
     has_assoc_permission,
     has_event_permission,
 )
@@ -38,10 +38,9 @@ from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, Writ
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.base import def_user_context
+from larpmanager.utils.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.common import _get_help_questions, format_datetime
 from larpmanager.utils.edit import set_suggestion
-from larpmanager.utils.event import check_event_permission, get_event_run, get_index_event_permissions
 from larpmanager.utils.exceptions import RedirectError
 from larpmanager.utils.registration import registration_available
 from larpmanager.utils.text import get_assoc_text
@@ -179,7 +178,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         - To quick setup if not completed
     """
     # Initialize context and permissions for the current user and association
-    context = def_user_context(request)
+    context = get_context(request)
     get_index_assoc_permissions(context, request, context["association_id"])
     context["exe_page"] = 1
     context["manage"] = 1
@@ -446,7 +445,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
 
     # Set page context
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     context["orga_page"] = 1
     context["manage"] = 1
 
@@ -1056,7 +1055,7 @@ def _compile(request, context):
 
 def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirect:
     """Close a suggestion and redirect to management page."""
-    context = check_assoc_permission(request, perm)
+    context = check_association_context(request, perm)
     set_suggestion(context, perm)
     return redirect("manage")
 
@@ -1064,7 +1063,7 @@ def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirec
 def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPermission) -> HttpResponseRedirect:
     """Close a suggestion by setting its status and redirect to manage page."""
     # Check user has permission to access this event
-    context = check_event_permission(request, event_slug, perm)
+    context = check_event_context(request, event_slug, perm)
 
     # Update suggestion status to closed
     set_suggestion(context, perm)

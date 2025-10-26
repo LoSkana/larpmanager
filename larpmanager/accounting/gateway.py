@@ -47,7 +47,7 @@ from larpmanager.models.access import get_assoc_executives
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import def_user_context, update_payment_details
+from larpmanager.utils.base import get_context, update_payment_details
 from larpmanager.utils.common import generate_number
 from larpmanager.utils.tasks import my_send_mail, notify_admins
 
@@ -337,7 +337,7 @@ def stripe_webhook(request):
     Returns:
         HttpResponse: Success or error response for webhook processing
     """
-    context = def_user_context(request)
+    context = get_context(request)
     update_payment_details(request, context)
     stripe.api_key = context["stripe_sk_api"]
     payload = request.body
@@ -662,7 +662,7 @@ def redsys_webhook(request, ok: bool = True) -> bool:
         bool: True if payment was successfully processed, False otherwise
     """
     # Initialize user context and update payment details
-    context = def_user_context(request)
+    context = get_context(request)
     update_payment_details(request, context)
 
     # Extract RedSys parameters and signature from POST data

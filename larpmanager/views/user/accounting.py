@@ -69,13 +69,12 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.base import def_user_context
+from larpmanager.utils.base import check_event_context, get_context, get_event_context
 from larpmanager.utils.common import (
     get_assoc,
     get_collection_partecipate,
     get_collection_redeem,
 )
-from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.text import get_assoc_text
@@ -106,7 +105,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         Redirects to home page if user has no associated organization (a_id == 0).
     """
     # Initialize base context and check for valid association
-    context = def_user_context(request)
+    context = get_context(request)
     if context["association_id"] == 0:
         return redirect("home")
 
@@ -155,7 +154,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         Only shows non-hidden accounting items for the user's current association.
     """
     # Initialize context with default user data
-    context = def_user_context(request)
+    context = get_context(request)
 
     # Query for tokens given to the user (non-hidden, within current association)
     given_tokens = AccountingItemOther.objects.filter(
@@ -203,7 +202,7 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
             summary with expenses, given credits, used credits, and refunds.
     """
     # Get base user context with member and association info
-    context = def_user_context(request)
+    context = get_context(request)
 
     # Add accounting data to context with filtered queries for current user/association
     context.update(
@@ -262,7 +261,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "refund")
 
     # Initialize base context with user and association data
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
     context.update({"member": request.user.member, "association_id": context["association_id"]})
 
@@ -322,7 +321,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
     check_assoc_feature(request, "payment")
 
     # Get event context and validate user registration status
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
 
     # Verify user has valid registration for this event
     if not context["run"].reg:
@@ -385,7 +384,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
         raise Http404(f"registration not found {err}") from err
 
     # Get event context and mark as accounting page
-    context = get_event_run(request, reg.run.get_slug())
+    context = get_event_context(request, reg.run.get_slug())
     context["show_accounting"] = True
 
     # Load membership status for permission checks
@@ -468,7 +467,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     """
     # Check if user has access to membership feature
     check_assoc_feature(request, "membership")
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
 
     # Validate user membership status - must be accepted to pay dues
@@ -530,7 +529,7 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
     check_assoc_feature(request, "donate")
 
     # Initialize base context with user data and accounting visibility
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
 
     # Process form submission for donation payment
@@ -571,7 +570,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
         DatabaseError: If the atomic transaction fails during collection creation.
     """
     # Initialize context with user defaults and enable accounting display
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
 
     if request.method == "POST":
@@ -621,7 +620,7 @@ def acc_collection_manage(request: HttpRequest, event_slug: str) -> HttpResponse
         raise Http404("Collection not yours")
 
     # Initialize base user context and enable accounting display
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
 
     # Add collection data and filtered accounting items to context
@@ -656,7 +655,7 @@ def acc_collection_participate(request: HttpRequest, event_slug: str) -> HttpRes
     c = get_collection_partecipate(request, event_slug)
 
     # Initialize base context with user data and accounting flag
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
     context["coll"] = c
 
@@ -736,7 +735,7 @@ def acc_collection_redeem(request: HttpRequest, event_slug: str) -> Union[HttpRe
     c = get_collection_redeem(request, event_slug)
 
     # Initialize the context with default user context and accounting flag
-    context = def_user_context(request)
+    context = get_context(request)
     context["show_accounting"] = True
     context["coll"] = c
 
@@ -1008,7 +1007,7 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     if not found:
         if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
-            check_event_permission(request, reg.run.get_slug())
+            check_event_context(request, reg.run.get_slug())
 
     # Atomically update invoice status to confirmed
     with transaction.atomic():

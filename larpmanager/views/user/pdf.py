@@ -21,8 +21,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse
 
+from larpmanager.utils.base import get_event_context
 from larpmanager.utils.character import get_char_check
-from larpmanager.utils.event import get_event_run
 from larpmanager.utils.pdf import (
     print_character,
     print_character_friendly,
@@ -50,7 +50,7 @@ def character_pdf_sheet(request: HttpRequest, event_slug: str, num: int) -> Http
         HTTP response containing the PDF character sheet
     """
     # Get event run context with signup verification
-    context = get_event_run(request, event_slug, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
 
     # Verify PDF printing permissions
     check_print_pdf(context)
@@ -75,7 +75,7 @@ def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, num: int
         HttpResponse containing the printer-friendly character PDF
     """
     # Get event run context and validate signup access
-    context = get_event_run(request, event_slug, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
 
     # Verify PDF printing permissions
     check_print_pdf(context)
@@ -100,7 +100,7 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int)
         PDF response with character relationships
     """
     # Get event/run context with signup validation
-    context = get_event_run(request, event_slug, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
 
     # Verify PDF printing permissions
     check_print_pdf(context)
@@ -114,11 +114,11 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int)
 
 @login_required
 def portraits(request, event_slug):
-    context = get_event_run(request, event_slug, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
     return print_gallery(context)
 
 
 @login_required
 def profiles(request, event_slug):
-    context = get_event_run(request, event_slug, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
     return print_profiles(context)
