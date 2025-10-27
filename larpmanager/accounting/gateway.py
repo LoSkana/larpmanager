@@ -123,7 +123,7 @@ def satispay_check(request, context):
         request: Django HTTP request object
         context: Context dictionary with payment configuration
     """
-    update_payment_details(request, context)
+    update_payment_details(context)
 
     if "satispay_key_id" not in context:
         return
@@ -136,17 +136,17 @@ def satispay_check(request, context):
         return
 
     for invoice in que:
-        satispay_verify(request, invoice.cod)
+        satispay_verify(context, invoice.cod)
 
 
-def satispay_verify(request, payment_code: str) -> None:
+def satispay_verify(context: dict, payment_code: str) -> None:
     """Verify Satispay payment status and process if accepted.
 
     This function verifies a Satispay payment by checking the payment status
     through the Satispay API and processes the payment if it has been accepted.
 
     Args:
-        request: Django HTTP request object containing the current request context
+        context: Dict context information
         payment_code: Payment code/identifier to verify against Satispay API
 
     Returns:
@@ -157,8 +157,7 @@ def satispay_verify(request, payment_code: str) -> None:
         Only processes payments with status "ACCEPTED" from Satispay.
     """
     # Initialize context and update payment details from request
-    context = {}
-    update_payment_details(request, context)
+    update_payment_details(context)
 
     # Retrieve invoice by payment code, log and return if not found
     try:
@@ -206,7 +205,8 @@ def satispay_webhook(request):
         request: Django HTTP request with payment_id parameter
     """
     cod = request.GET.get("payment_id", "")
-    satispay_verify(request, cod)
+    context = get_context(request)
+    satispay_verify(context, cod)
 
 
 def get_paypal_form(request, context, invoice, amount):
@@ -338,7 +338,7 @@ def stripe_webhook(request):
         HttpResponse: Success or error response for webhook processing
     """
     context = get_context(request)
-    update_payment_details(request, context)
+    update_payment_details(context)
     stripe.api_key = context["stripe_sk_api"]
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
@@ -663,7 +663,7 @@ def redsys_webhook(request, ok: bool = True) -> bool:
     """
     # Initialize user context and update payment details
     context = get_context(request)
-    update_payment_details(request, context)
+    update_payment_details(context)
 
     # Extract RedSys parameters and signature from POST data
     # ver = request.POST["Ds_SignatureVersion"]  # Version not currently used

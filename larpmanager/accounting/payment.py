@@ -340,7 +340,7 @@ def get_payment_form(
         invoice.typ = payment_type
 
     # Update payment context and invoice data with current details
-    update_payment_details(request, context)
+    update_payment_details(context)
     set_data_invoice(request, context, invoice, form, association_id)
 
     # Calculate final amount including fees and update invoice
