@@ -73,7 +73,7 @@ from larpmanager.models.miscellanea import (
     HelpQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.utils.base import check_assoc_permission
+from larpmanager.utils.base import check_association_context
 from larpmanager.utils.common import (
     _get_help_questions,
     format_email_body,
@@ -107,18 +107,20 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with membership data and statistics.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     # Get set of member IDs who have paid membership fees for current year
     fees = set(
-        AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=datetime.now().year).values_list(
-            "member_id", flat=True
-        )
+        AccountingItemMembership.objects.filter(
+            assoc_id=context["association_id"], year=datetime.now().year
+        ).values_list("member_id", flat=True)
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__assoc_id=context["a_id"], end__gt=datetime.today()).values_list("pk", "search")
+        Run.objects.filter(event__assoc_id=context["association_id"], end__gt=datetime.today()).values_list(
+            "pk", "search"
+        )
     )
 
     # Get registrations for upcoming runs and group by member
@@ -131,7 +133,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
     # Query memberships excluding certain statuses, with priority sorting
     que = (
-        Membership.objects.filter(assoc_id=context["a_id"])
+        Membership.objects.filter(assoc_id=context["association_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED])
         .annotate(
@@ -191,11 +193,11 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
         HttpResponse: Rendered template with membership evaluation form
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     # Get member and their membership status
     member = Member.objects.get(pk=num)
-    get_user_membership(member, context["a_id"])
+    get_user_membership(member, context["association_id"])
 
     if request.method == "POST":
         # Process membership evaluation form submission
@@ -241,7 +243,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
     # Check for existing members with same normalized name/surname
     context["member_exists"] = False
-    que = Membership.objects.select_related("member").filter(assoc_id=context["a_id"])
+    que = Membership.objects.select_related("member").filter(assoc_id=context["association_id"])
     que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).exclude(member_id=member.id)
 
     # Compare normalized names to detect potential duplicates
@@ -260,9 +262,9 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 @login_required
 def exe_membership_request(request: HttpRequest, num: int) -> HttpResponse:
     """Handle membership request display for organization executives."""
-    context = check_assoc_permission(request, "exe_membership")
-    context.update(get_member(num))
-    return get_membership_request(context)
+    context = check_association_context(request, "exe_membership")
+    member_request = get_member(num)
+    return get_membership_request(context, member_request)
 
 
 @login_required
@@ -279,11 +281,11 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with membership check report data.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership_check")
+    context = check_association_context(request, "exe_membership_check")
 
     # Get all members with active memberships (excluding empty/joined status)
     member_ids = set(
-        Membership.objects.filter(assoc_id=context["a_id"])
+        Membership.objects.filter(assoc_id=context["association_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED])
         .values_list("member_id", flat=True)
@@ -304,7 +306,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
                 check["member"] = str(mb)
                 check["member_id"] = mb.id
                 check["email"] = mb.email
-                check["membership"] = get_user_membership(mb, context["a_id"])
+                check["membership"] = get_user_membership(mb, context["association_id"])
                 context["cf"].append(check)
 
     return render(request, "larpmanager/exe/users/membership_check.html", context)
@@ -329,63 +331,62 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
         Http404: If member with given ID doesn't exist or user lacks permissions
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
-    context.update(get_member(num))
+    context = check_association_context(request, "exe_membership")
+    member_edit = get_member(num)
 
     # Handle form submission for member profile updates
     if request.method == "POST":
-        form = ExeMemberForm(request.POST, request.FILES, instance=context["member"], request=request)
+        form = ExeMemberForm(request.POST, request.FILES, instance=member_edit, request=request)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
         # Initialize empty form for GET requests
-        form = ExeMemberForm(instance=context["member"], request=request)
+        form = ExeMemberForm(instance=member_edit, request=request)
     context["form"] = form
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
-        member=context["member"], run__event__assoc=request.assoc["id"]
+        member=member_edit, run__event__assoc=context["association_id"]
     ).select_related("run")
 
     # Add accounting payment items to context
-    member_add_accountingitempayment(context, request)
+    member_add_accountingitempayment(context, member_edit)
 
     # Add other accounting items to context
-    member_add_accountingitemother(context, request)
+    member_add_accountingitemother(context, member_edit)
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=context["member"], hide=False, assoc_id=request.assoc["id"]
+        member=member_edit, hide=False, assoc_id=context["association_id"]
     )
 
     # Process membership data and document paths
-    member = context["member"]
-    get_user_membership(member, context["a_id"])
+    get_user_membership(member_edit, context["association_id"])
 
     # Set document file paths if they exist
-    if member.membership.document:
-        context["doc_path"] = member.membership.get_document_filepath().lower()
+    if member_edit.membership.document:
+        context["doc_path"] = member_edit.membership.get_document_filepath().lower()
 
-    if member.membership.request:
-        context["req_path"] = member.membership.get_request_filepath().lower()
+    if member_edit.membership.request:
+        context["req_path"] = member_edit.membership.get_request_filepath().lower()
 
     # Add fiscal code validation if feature is enabled
     if "fiscal_code_check" in context["features"]:
-        context.update(calculate_fiscal_code(context["member"]))
+        context.update(calculate_fiscal_code(member_edit))
 
     return render(request, "larpmanager/exe/users/member.html", context)
 
 
-def member_add_accountingitempayment(context: dict, request: HttpRequest) -> dict:
+def member_add_accountingitempayment(context: dict, member: Member) -> dict:
     """Add accounting item payment information to context for a member.
 
     Retrieves non-hidden payments for the member and sets display type based on payment method.
     """
     # Fetch visible payments for the member in the current association
     context["pays"] = AccountingItemPayment.objects.filter(
-        member=context["member"], hide=False, assoc_id=request.assoc["id"]
+        member=member, hide=False, assoc_id=context["association_id"]
     ).select_related("reg")
 
     # Set display type based on payment method
@@ -398,11 +399,11 @@ def member_add_accountingitempayment(context: dict, request: HttpRequest) -> dic
             el.typ = el.get_pay_display()
 
 
-def member_add_accountingitemother(context: dict, request: HttpRequest) -> None:
+def member_add_accountingitemother(context: dict, member: Member) -> None:
     """Add accounting other items to member context with localized type labels."""
     # Query non-hidden accounting items for the member in current association
     context["others"] = AccountingItemOther.objects.filter(
-        member=context["member"], hide=False, assoc_id=request.assoc["id"]
+        member=member, hide=False, assoc_id=context["association_id"]
     ).select_related("run")
 
     # Set localized type labels based on item category
@@ -426,9 +427,9 @@ def exe_membership_status(request, num):
     Returns:
         Rendered membership editing form or redirect after successful update
     """
-    context = check_assoc_permission(request, "exe_membership")
-    context.update(get_member(num))
-    context["membership"] = get_object_or_404(Membership, member_id=context["member"].id, assoc_id=request.assoc["id"])
+    context = check_association_context(request, "exe_membership")
+    member_edit = get_member(num)
+    context["membership"] = get_object_or_404(Membership, member_id=member_edit.id, assoc_id=context["association_id"])
 
     if request.method == "POST":
         form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership"], request=request)
@@ -442,7 +443,7 @@ def exe_membership_status(request, num):
 
     context["num"] = num
 
-    context["form"].page_title = str(context["member"]) + " - " + _("Membership")
+    context["form"].page_title = str(member_edit) + " - " + _("Membership")
 
     return render(request, "larpmanager/exe/edit.html", context)
 
@@ -462,14 +463,14 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
         containing members with card numbers, ordered by card number
     """
     # Check user permissions for accessing membership registry
-    context = check_assoc_permission(request, "exe_membership_registry")
+    context = check_association_context(request, "exe_membership_registry")
     split_two_names = 2
 
     # Initialize empty list for processed members
     context["list"] = []
 
     # Query memberships with card numbers for current association
-    que = Membership.objects.filter(assoc_id=context["a_id"], card_number__isnull=False)
+    que = Membership.objects.filter(assoc_id=context["association_id"], card_number__isnull=False)
 
     # Process each membership and format member data
     for mb in que.select_related("member").order_by("card_number"):
@@ -517,7 +518,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
         PermissionDenied: If user lacks 'exe_membership' permission (handled by decorator).
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     if request.method == "POST":
         # Initialize form with POST data and context
@@ -526,7 +527,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Extract validated form data
             member = form.cleaned_data["member"]
-            assoc_id = context["a_id"]
+            assoc_id = context["association_id"]
 
             # Get membership fee amount from association configuration
             fee = get_assoc_config(assoc_id, "membership_fee", "0")
@@ -569,13 +570,13 @@ def exe_membership_document(request):
     Returns:
         Rendered form for document upload or redirect to membership list
     """
-    context = check_assoc_permission(request, "exe_membership")
+    context = check_association_context(request, "exe_membership")
 
     if request.method == "POST":
         form = ExeMembershipDocumentForm(request.POST, request.FILES, context=context)
         if form.is_valid():
             member = form.cleaned_data["member"]
-            membership = Membership.objects.get(assoc_id=context["a_id"], member=member)
+            membership = Membership.objects.get(assoc_id=context["association_id"], member=member)
             membership.document = form.cleaned_data["document"]
             membership.request = form.cleaned_data["request"]
             membership.card_number = form.cleaned_data["card_number"]
@@ -611,7 +612,7 @@ def exe_enrolment(request) -> HttpResponse:
               and formatted names
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_enrolment")
+    context = check_association_context(request, "exe_enrolment")
     split_two_names = 2
 
     # Set current year and calculate year start date
@@ -620,14 +621,16 @@ def exe_enrolment(request) -> HttpResponse:
 
     # Build cache of member enrollment dates from accounting items
     cache = {}
-    for el in AccountingItemMembership.objects.filter(assoc_id=context["a_id"], year=context["year"]).values_list(
-        "member_id", "created"
-    ):
+    for el in AccountingItemMembership.objects.filter(
+        assoc_id=context["association_id"], year=context["year"]
+    ).values_list("member_id", "created"):
         cache[el[0]] = el[1]
 
     # Query memberships with card numbers for enrolled members
     context["list"] = []
-    que = Membership.objects.filter(member_id__in=cache.keys(), assoc_id=context["a_id"], card_number__isnull=False)
+    que = Membership.objects.filter(
+        member_id__in=cache.keys(), assoc_id=context["association_id"], card_number__isnull=False
+    )
     que = que.select_related("member").order_by("card_number")
 
     # Process each membership and prepare member data
@@ -667,11 +670,11 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
         Rendered volunteer registry template
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_volunteer_registry")
+    context = check_association_context(request, "exe_volunteer_registry")
 
     # Fetch volunteer registries with member info, ordered by start date and surname
     context["list"] = (
-        VolunteerRegistry.objects.filter(assoc_id=context["a_id"])
+        VolunteerRegistry.objects.filter(assoc_id=context["association_id"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
@@ -699,10 +702,10 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
         Association.DoesNotExist: If association not found.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_volunteer_registry")
+    context = check_association_context(request, "exe_volunteer_registry")
 
     # Retrieve the association object for the current context
-    context["assoc"] = Association.objects.get(pk=context["a_id"])
+    context["assoc"] = Association.objects.get(pk=context["association_id"])
 
     # Query volunteer registry entries with member data, ordered by start date and surname
     context["list"] = (
@@ -740,9 +743,9 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
         Candidates are configured via 'vote_candidates' association config.
     """
     # Check user permissions and get association context
-    context = check_assoc_permission(request, "exe_vote")
+    context = check_association_context(request, "exe_vote")
     context["year"] = datetime.today().year
-    assoc_id = context["a_id"]
+    assoc_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
     idxs = []
@@ -757,7 +760,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 
     # Query vote counts grouped by candidate for current year and association
     votes = (
-        Vote.objects.filter(year=context["year"], assoc_id=context["a_id"])
+        Vote.objects.filter(year=context["year"], assoc_id=context["association_id"])
         .values("candidate_id")
         .annotate(total=Count("candidate_id"))
     )
@@ -770,7 +773,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 
     # Get list of members who have already voted this year
     context["voters"] = Member.objects.filter(
-        votes_given__year=context["year"], votes_given__assoc_id=context["a_id"]
+        votes_given__year=context["year"], votes_given__assoc_id=context["association_id"]
     ).distinct()
 
     return render(request, "larpmanager/exe/users/vote.html", context)
@@ -780,10 +783,10 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 def exe_badges(request: HttpRequest) -> HttpResponse:
     """Display and manage association badges."""
     # Check user permissions for badge management
-    context = check_assoc_permission(request, "exe_badges")
+    context = check_association_context(request, "exe_badges")
 
     # Load all badges for the association with member relationships
-    context["list"] = Badge.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("members")
+    context["list"] = Badge.objects.filter(assoc_id=context["association_id"]).prefetch_related("members")
 
     return render(request, "larpmanager/exe/users/badges.html", context)
 
@@ -808,14 +811,14 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with form or redirect after successful submission.
     """
     # Check if user has permission to send mail for this association
-    context = check_assoc_permission(request, "exe_send_mail")
+    context = check_association_context(request, "exe_send_mail")
 
     if request.method == "POST":
         # Process form submission for mail sending
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing
-            send_mail_batch(request, assoc_id=request.assoc["id"])
+            send_mail_batch(request, assoc_id=context["association_id"])
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
@@ -842,7 +845,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered template with paginated email archive
     """
     # Check user permissions for accessing email archive
-    context = check_assoc_permission(request, "exe_archive_email")
+    context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Define table columns for the email archive display
@@ -874,7 +877,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 def exe_read_mail(request: HttpRequest, nm: str) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
-    context = check_assoc_permission(request, "exe_archive_email")
+    context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Retrieve and add email data to context
@@ -897,7 +900,7 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
         Rendered template response with question lists and context data.
     """
     # Check user permissions for accessing executive questions feature
-    context = check_assoc_permission(request, "exe_questions")
+    context = check_association_context(request, "exe_questions")
 
     # Retrieve categorized help questions for the organization
     closed_q, open_q = _get_help_questions(context, request)
@@ -936,12 +939,13 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
         Member.DoesNotExist: If the member with the given ID doesn't exist
     """
     # Check executive permissions for question management
-    context = check_assoc_permission(request, "exe_questions")
+    context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
-    member = Member.objects.get(pk=r)
-    context["member"] = member
-    context["list"] = HelpQuestion.objects.filter(member=member, assoc_id=context["a_id"]).order_by("-created")
+    member_edit = get_member(r)
+    context["list"] = HelpQuestion.objects.filter(member=member_edit, assoc_id=context["association_id"]).order_by(
+        "-created"
+    )
 
     # Get the most recent question from this member
     last = context["list"].first()
@@ -958,9 +962,9 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
                 hp.run = last.run
 
             # Set answer metadata and save to database
-            hp.member = member
+            hp.member = member_edit
             hp.is_user = False
-            hp.assoc_id = context["a_id"]
+            hp.assoc_id = context["association_id"]
             hp.save()
 
             # Notify user of successful submission and redirect
@@ -979,11 +983,11 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 @login_required
 def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
     """Close a help question for a member."""
-    context = check_assoc_permission(request, "exe_questions")
+    context = check_association_context(request, "exe_questions")
 
     # Get the member and their most recent help question
     member = Member.objects.get(pk=r)
-    h = HelpQuestion.objects.filter(member=member, assoc_id=context["a_id"]).order_by("-created").first()
+    h = HelpQuestion.objects.filter(member=member, assoc_id=context["association_id"]).order_by("-created").first()
 
     # Mark the question as closed and save
     h.closed = True
@@ -1002,11 +1006,11 @@ def exe_newsletter(request):
     Returns:
         HttpResponse: Rendered newsletter management page with subscriber lists by language
     """
-    context = check_assoc_permission(request, "exe_newsletter")
+    context = check_association_context(request, "exe_newsletter")
 
     context["lst"] = {}
     for el in (
-        Membership.objects.filter(assoc_id=context["a_id"])
+        Membership.objects.filter(assoc_id=context["association_id"])
         .select_related("member")
         .values_list("member__email", "member__language", "newsletter")
     ):
@@ -1040,7 +1044,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
         PermissionDenied: If user lacks exe_newsletter permission for the association
     """
     # Check user permissions for newsletter export functionality
-    context = check_assoc_permission(request, "exe_newsletter")
+    context = check_association_context(request, "exe_newsletter")
 
     # Set up CSV response with appropriate headers for file download
     response = HttpResponse(
@@ -1049,7 +1053,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
     writer = csv.writer(response)
 
     # Iterate through all memberships for the current association
-    for el in Membership.objects.filter(assoc_id=context["a_id"]):
+    for el in Membership.objects.filter(assoc_id=context["association_id"]):
         m = el.member
 
         # Skip members who don't match the requested language

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {{ member.display_member }}
+    {{ member_public.display_member_public }}
 {% endblock title %}
 {% block content %}
     <div class="gallery single">
         <div class="el">
             <div class="icon">
-                {% if member.profile_thumb %}
-                    <img src="{{ member.profile_thumb.url }}" alt="player profile" />
+                {% if member_public.profile_thumb %}
+                    <img src="{{ member_public.profile_thumb.url }}" alt="player profile" />
                 {% else %}
                     <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
                          alt="player profile" />
@@ -16,29 +16,29 @@
             </div>
         </div>
         <div class="text">
-            {% if member.nick %}
+            {% if member_public.nick %}
                 <p>
-                    <b>Nick: </b> {{ member.nick }}
+                    <b>Nick: </b> {{ member_public.nick }}
                 </p>
             {% endif %}
             {% if 'chat' in assoc.features %}
                 <p>
-                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member.id %}">Chat</a>
+                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.id %}">Chat</a>
                 </p>
             {% endif %}
-            {% if member.pronoun %}
+            {% if member_public.pronoun %}
                 <p>
                     <b>{% trans "Pronouns" %}: </b>
-                    {{ member.pronoun }}
+                    {{ member_public.pronoun }}
                 </p>
             {% endif %}
-            {% if member.social_contact %}
+            {% if member_public.social_contact %}
                 <p>
                     <b>{% trans "Contact" %}: </b>
-                    {% if member.contact_url %}
-                        <a href="{{ member.social_contact }}">{{ member.social_contact }}</a>
+                    {% if member_public.contact_url %}
+                        <a href="{{ member_public.social_contact }}">{{ member_public.social_contact }}</a>
                     {% else %}
-                        {{ member.social_contact }}
+                        {{ member_public.social_contact }}
                     {% endif %}
                 </p>
             {% endif %}

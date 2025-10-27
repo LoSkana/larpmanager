@@ -52,7 +52,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     _get_writing_mapping,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -66,15 +66,14 @@ from larpmanager.models.writing import (
     FactionType,
 )
 from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import def_user_context
+from larpmanager.utils.base import get_context, get_event, get_event_context
 from larpmanager.utils.common import get_element
-from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
-def calendar(request: HttpRequest, lang: str) -> HttpResponse:
+def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     """Display the event calendar with open and future runs for an association.
 
     This function retrieves upcoming runs for an association, checks user registration status,
@@ -84,6 +83,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     Args:
         request: HTTP request object containing user and association data. Must include
                 'assoc' key with association information and authenticated user data.
+        context: Dict context informations.
         lang: Language code for filtering events by language preference.
 
     Returns:
@@ -99,7 +99,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         Anonymous users cannot see START status runs at all.
     """
     # Extract association ID from request context
-    association_id = request.assoc["id"]
+    association_id = context["association_id"]
 
     # Get upcoming runs with optimized queries using select_related and prefetch_related
     runs = get_coming_runs(association_id)
@@ -110,16 +110,18 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
     payment_invoices_by_registration_id = {}
     pre_registrations_by_event_id = {}
 
-    if request.user.is_authenticated:
+    if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
         cutoff_date = datetime.now() - timedelta(days=3)
+
+        member = context["member"]
 
         # Fetch user's active registrations for upcoming runs
         user_registrations = Registration.objects.filter(
             run__event__assoc_id=association_id,
             cancellation_date__isnull=True,  # Exclude cancelled registrations
             redeem_code__isnull=True,  # Exclude redeemed registrations
-            member=request.user.member,
+            member=member,
             run__end__gte=cutoff_date.date(),  # Only future/recent runs
         ).select_related("ticket", "run")
 
@@ -131,36 +133,34 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
         runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=user_registered_run_ids))
 
         # Precompute character rels, payment invoices, and pre-registrations objects
-        character_relations_by_registration_id = get_character_rels_dict(
-            user_registrations_by_run_id, request.user.member
-        )
-        payment_invoices_by_registration_id = get_payment_invoices_dict(
-            user_registrations_by_run_id, request.user.member
-        )
-        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, request.user.member)
+        character_relations_by_registration_id = get_character_rels_dict(user_registrations_by_run_id, member)
+        payment_invoices_by_registration_id = get_payment_invoices_dict(user_registrations_by_run_id, member)
+        pre_registrations_by_event_id = get_pre_registrations_dict(association_id, member)
     else:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
 
     # Initialize context with default user context and empty collections
-    context = def_user_context(request)
+    context = get_context(request)
     context.update({"open": [], "future": [], "langs": [], "page": "calendar"})
 
     # Add language filter to context if specified
     if lang:
         context["lang"] = lang
 
-    registration_context = {
-        "my_regs": user_registrations_by_run_id,
-        "character_rels_dict": character_relations_by_registration_id,
-        "payment_invoices_dict": payment_invoices_by_registration_id,
-        "pre_registrations_dict": pre_registrations_by_event_id,
-    }
+    context.update(
+        {
+            "my_regs": user_registrations_by_run_id,
+            "character_rels_dict": character_relations_by_registration_id,
+            "payment_invoices_dict": payment_invoices_by_registration_id,
+            "pre_registrations_dict": pre_registrations_by_event_id,
+        }
+    )
 
     # Process each run to determine registration status and categorize
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, request.user, registration_context)
+        registration_status(run, context["member"], context)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -169,7 +169,7 @@ def calendar(request: HttpRequest, lang: str) -> HttpResponse:
             context["future"].append(run)  # Future runs (not yet open, not already registered)
 
     # Add association-specific homepage text to context
-    context["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
+    context["custom_text"] = get_assoc_text(context["association_id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", context)
 
@@ -318,7 +318,7 @@ def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
     return runs
 
 
-def home_json(request: object, lang: str = "it") -> object:
+def home_json(request: HttpRequest, lang: str = "it") -> object:
     """
     Returns JSON response with upcoming events for the association.
 
@@ -330,7 +330,8 @@ def home_json(request: object, lang: str = "it") -> object:
         JsonResponse: JSON object containing list of upcoming events
     """
     # Extract association ID from request context
-    aid = request.assoc["id"]
+    context = get_context(request)
+    aid = context["association_id"]
 
     # Set language code if provided
     if lang:
@@ -369,7 +370,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
         Only includes events with valid end dates.
     """
     # Initialize context with default user data and empty list
-    context = def_user_context(request)
+    context = get_context(request)
     context.update({"list": []})
 
     # Cache to track processed events and set reference date (3 days ago)
@@ -379,7 +380,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
     for run in (
-        Run.objects.filter(event__assoc_id=request.assoc["id"])
+        Run.objects.filter(event__assoc_id=context["association_id"])
         .exclude(development=DevelopStatus.START)
         .exclude(development=DevelopStatus.CANC)
         .order_by("-end")
@@ -415,9 +416,9 @@ def share(request):
     Returns:
         HttpResponse: Rendered template or redirect to home
     """
-    context = def_user_context(request)
+    context = get_context(request)
 
-    el = get_user_membership(request.user.member, request.assoc["id"])
+    el = context["membership"]
     if el.status != MembershipStatus.EMPTY:
         messages.success(request, _("You have already granted data sharing with this organisation") + "!")
         return redirect("home")
@@ -437,13 +438,13 @@ def share(request):
 def legal_notice(request: HttpRequest) -> HttpResponse:
     """Render legal notice page with association-specific text."""
     # Build context with user data and legal notice text
-    context = def_user_context(request)
-    context.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
+    context = get_context(request)
+    context.update({"text": get_assoc_text(context["association_id"], AssocTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", context)
 
 
 @login_required
-def event_register(request, event_slug):
+def event_register(request: HttpRequest, event_slug: str):
     """Display event registration options for future runs.
 
     Args:
@@ -461,15 +462,15 @@ def event_register(request, event_slug):
         .exclude(event__visible=False)
         .order_by("end")
     )
-    if len(runs) == 0 and "pre_register" in request.assoc["features"]:
+    if len(runs) == 0 and "pre_register" in context["features"]:
         return redirect("pre_register", event_slug=event_slug)
     elif len(runs) == 1:
         run = runs.first()
         return redirect("register", event_slug=run.get_slug())
     context["list"] = []
-    ctx_reg = {"features_map": {context["event"].id: context["features"]}}
+    context.update({"features_map": {context["event"].id: context["features"]}})
     for r in runs:
-        registration_status(r, request.user, ctx_reg)
+        registration_status(r, context["member"], context)
         context["list"].append(r)
     return render(request, "larpmanager/general/event_register.html", context)
 
@@ -490,7 +491,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
                      Template: 'larpmanager/general/past.html'
     """
     # Extract association ID and initialize user context
-    context = def_user_context(request)
+    context = get_context(request)
     aid = context["association_id"]
 
     # Get all past runs for this association
@@ -503,38 +504,41 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     pre_registrations_dict = {}
 
     # Fetch user-specific registration data if authenticated
-    if request.user.is_authenticated:
+    if "member" in context:
+        member = context["member"]
         # Get all non-cancelled registrations for this user and association
         my_regs = Registration.objects.filter(
             run__event__assoc_id=aid,
             cancellation_date__isnull=True,
             redeem_code__isnull=True,
-            member=request.user.member,
+            member=member,
         ).select_related("ticket", "run")
 
         # Create dictionary mapping run_id to registration for quick lookup
         my_regs_dict = {reg.run_id: reg for reg in my_regs}
 
         # Build related data dictionaries for character, payment, and pre-registration info
-        character_rels_dict = get_character_rels_dict(my_regs_dict, request.user.member)
-        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, request.user.member)
-        pre_registrations_dict = get_pre_registrations_dict(aid, request.user.member)
+        character_rels_dict = get_character_rels_dict(my_regs_dict, member)
+        payment_invoices_dict = get_payment_invoices_dict(my_regs_dict, member)
+        pre_registrations_dict = get_pre_registrations_dict(aid, member)
 
     # Convert runs queryset to list and initialize context list
     runs_list = list(runs)
     context["list"] = []
 
-    ctx_reg = {
-        "my_regs": my_regs_dict,
-        "character_rels_dict": character_rels_dict,
-        "payment_invoices_dict": payment_invoices_dict,
-        "pre_registrations_dict": pre_registrations_dict,
-    }
+    context.update(
+        {
+            "my_regs": my_regs_dict,
+            "character_rels_dict": character_rels_dict,
+            "payment_invoices_dict": payment_invoices_dict,
+            "pre_registrations_dict": pre_registrations_dict,
+        }
+    )
 
     # Process each run to add registration status information
     for run in runs_list:
         # Update run object with registration status data
-        registration_status(run, request.user, ctx_reg)
+        registration_status(run, context["member"], context)
 
         # Add processed run to context list
         context["list"].append(run)
@@ -590,10 +594,10 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
         context data, or redirect to event page if character feature disabled
 
     Raises:
-        Http404: If event or run not found (handled by get_event_run)
+        Http404: If event or run not found (handled by get_event_context)
     """
     # Get event context and check if character feature is enabled
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
     if "character" not in context["features"]:
         return redirect("event", event_slug=context["run"].get_slug())
 
@@ -664,7 +668,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         - Sets no_robots flag based on development status and timing
     """
     # Get base context with event and run information
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
     context["coming"] = []
     context["past"] = []
 
@@ -675,7 +679,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             run__event=context["event"],
             redeem_code__isnull=True,
             cancellation_date__isnull=True,
-            member=request.user.member,
+            member=context["member"],
         )
 
     # Get all runs for the event and set reference date (3 days ago)
@@ -684,7 +688,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
-    ctx_reg = {"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map}
+    context.update({"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map})
 
     # Process each run to determine registration status and categorize by timing
     for r in runs:
@@ -692,7 +696,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             continue
 
         # Update run with registration status information
-        registration_status(r, request.user, ctx_reg)
+        registration_status(r, context["member"], context)
 
         # Categorize run as coming (recent) or past based on end date
         if r.end > ref.date():
@@ -736,7 +740,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         and event configuration settings.
     """
     # Get event context and validate user access
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
 
     # Check if gallery is visible and character display is enabled
     if check_gallery_visibility(request, context) and context["show_character"]:
@@ -833,7 +837,7 @@ def check_visibility(context: dict, writing_type: str, writing_name: str) -> Non
 def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render factions page for an event run."""
     # Get event run context and validate status
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
 
     # Verify user has permission to view factions
     check_visibility(context, "faction", _("Factions"))
@@ -855,7 +859,7 @@ def faction(request, event_slug, g):
     Returns:
         HttpResponse: Rendered faction detail page
     """
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "faction", _("Factions"))
 
     get_event_cache_all(context)
@@ -887,7 +891,7 @@ def quests(request: HttpRequest, event_slug: str, g: str | None = None) -> HttpR
         HttpResponse: Rendered template with quest types or specific quests
     """
     # Get event context and verify user can view quests
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
@@ -917,7 +921,7 @@ def quest(request, event_slug, g):
     Returns:
         HttpResponse: Rendered quest template
     """
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
     get_element(context, g, "quest", Quest, by_number=True)
@@ -952,7 +956,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
         discounts, and registration options with their current usage counts.
     """
     # Get event and run context with status validation
-    context = get_event_run(request, event_slug, include_status=True)
+    context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
     counts = get_reg_counts(context["run"])

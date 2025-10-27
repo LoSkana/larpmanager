@@ -46,10 +46,10 @@ from larpmanager.models.registration import (
     RegistrationSurcharge,
     RegistrationTicket,
 )
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import exchange_order
 from larpmanager.utils.download import orga_registration_form_download, orga_tickets_download
 from larpmanager.utils.edit import backend_edit, orga_edit, set_suggestion
-from larpmanager.utils.event import check_event_permission
 
 
 @login_required
@@ -68,7 +68,7 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
         HttpResponse: Rendered tickets template or download response
     """
     # Check user permissions for accessing registration tickets management
-    context = check_event_permission(request, event_slug, "orga_registration_tickets")
+    context = check_event_context(request, event_slug, "orga_registration_tickets")
 
     # Handle POST request for ticket download functionality
     if request.method == "POST" and request.POST.get("download") == "1":
@@ -94,7 +94,7 @@ def orga_registration_tickets_edit(request, event_slug, num):
 @login_required
 def orga_registration_tickets_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponse:
     """Reorder registration tickets for an event."""
-    context = check_event_permission(request, event_slug, "orga_registration_tickets")
+    context = check_event_context(request, event_slug, "orga_registration_tickets")
     exchange_order(context, RegistrationTicket, num, order)
     return redirect("orga_registration_tickets", event_slug=context["run"].get_slug())
 
@@ -103,7 +103,7 @@ def orga_registration_tickets_order(request: HttpRequest, event_slug: str, num: 
 def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display registration sections for an event."""
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_registration_sections")
+    context = check_event_context(request, event_slug, "orga_registration_sections")
 
     # Retrieve and order registration sections
     context["list"] = RegistrationSection.objects.filter(event=context["event"]).order_by("order")
@@ -135,7 +135,7 @@ def orga_registration_sections_order(
         Redirect to registration sections page
     """
     # Verify user has permission to manage registration sections
-    context = check_event_permission(request, event_slug, "orga_registration_sections")
+    context = check_event_context(request, event_slug, "orga_registration_sections")
 
     # Exchange order of sections and save changes
     exchange_order(context, RegistrationSection, num, order)
@@ -158,7 +158,7 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
         HttpResponse: Rendered registration form page or download response
     """
     # Check if user has permission to access the registration form management
-    context = check_event_permission(request, event_slug, "orga_registration_form")
+    context = check_event_context(request, event_slug, "orga_registration_form")
 
     # Handle download request for registration form data
     if request.method == "POST" and request.POST.get("download") == "1":
@@ -205,7 +205,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
     """
     # Check user permissions for registration form editing
     perm = "orga_registration_form"
-    context = check_event_permission(request, event_slug, perm)
+    context = check_event_context(request, event_slug, perm)
 
     # Process form submission using backend edit helper
     if backend_edit(request, context, OrgaRegistrationQuestionForm, num, is_association_based=False):
@@ -247,7 +247,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
 def orga_registration_form_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponse:
     """Reorders registration form questions for an event."""
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_registration_form")
+    context = check_event_context(request, event_slug, "orga_registration_form")
 
     # Update question order in database
     exchange_order(context, RegistrationQuestion, num, order)
@@ -271,7 +271,7 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, num: i
         HttpResponse: Rendered registration option edit page or redirect
     """
     # Check user permissions for registration form management
-    context = check_event_permission(request, event_slug, "orga_registration_form")
+    context = check_event_context(request, event_slug, "orga_registration_form")
 
     # Verify that registration questions exist before proceeding
     if not context["event"].get_elements(RegistrationQuestion).exists():
@@ -289,7 +289,7 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, num: i
 @login_required
 def orga_registration_options_new(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Create new registration option for specified question."""
-    context = check_event_permission(request, event_slug, "orga_registration_form")
+    context = check_event_context(request, event_slug, "orga_registration_form")
     context["question_id"] = num
     return registration_option_edit(context, 0, request)
 
@@ -334,7 +334,7 @@ def orga_registration_options_order(
         Redirect to the registration form edit page
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_registration_form")
+    context = check_event_context(request, event_slug, "orga_registration_form")
 
     # Exchange the order of registration options
     exchange_order(context, RegistrationOption, num, order)
@@ -349,7 +349,7 @@ def orga_registration_options_order(
 def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage registration quotas for an event."""
     # Check event permissions and build context
-    context = check_event_permission(request, event_slug, "orga_registration_quotas")
+    context = check_event_context(request, event_slug, "orga_registration_quotas")
 
     # Retrieve and order quotas by number
     context["list"] = RegistrationQuota.objects.filter(event=context["event"]).order_by("number")
@@ -377,7 +377,7 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
         Rendered installments management page
     """
     # Verify user has permission to access registration installment management
-    context = check_event_permission(request, event_slug, "orga_registration_installments")
+    context = check_event_context(request, event_slug, "orga_registration_installments")
 
     # Retrieve all installments for this event, ordered by sequence and amount
     context["list"] = RegistrationInstallment.objects.filter(event=context["event"]).order_by("order", "amount")
@@ -394,7 +394,7 @@ def orga_registration_installments_edit(request, event_slug, num):
 def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display registration surcharges for an event."""
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_registration_surcharges")
+    context = check_event_context(request, event_slug, "orga_registration_surcharges")
 
     # Fetch and order surcharges by number
     context["list"] = RegistrationSurcharge.objects.filter(event=context["event"]).order_by("number")

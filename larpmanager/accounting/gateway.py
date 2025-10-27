@@ -47,7 +47,7 @@ from larpmanager.models.access import get_assoc_executives
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import def_user_context, update_payment_details
+from larpmanager.utils.base import get_context, update_payment_details
 from larpmanager.utils.common import generate_number
 from larpmanager.utils.tasks import my_send_mail, notify_admins
 
@@ -337,7 +337,7 @@ def stripe_webhook(request):
     Returns:
         HttpResponse: Success or error response for webhook processing
     """
-    context = def_user_context(request)
+    context = get_context(request)
     update_payment_details(request, context)
     stripe.api_key = context["stripe_sk_api"]
     payload = request.body
@@ -539,14 +539,14 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
         "DS_MERCHANT_CURRENCY": int(context["redsys_merchant_currency"]),
         "DS_MERCHANT_ORDER": invoice.cod,
         "DS_MERCHANT_PRODUCTDESCRIPTION": invoice.causal,
-        "DS_MERCHANT_TITULAR": request.assoc["name"],
+        "DS_MERCHANT_TITULAR": context["name"],
     }
 
     # Add merchant identification and terminal configuration
     values.update(
         {
             "DS_MERCHANT_MERCHANTCODE": context["redsys_merchant_code"],
-            "DS_MERCHANT_MERCHANTNAME": request.assoc["name"],
+            "DS_MERCHANT_MERCHANTNAME": context["name"],
             "DS_MERCHANT_TERMINAL": context["redsys_merchant_terminal"],
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Standard payment
         }
@@ -662,7 +662,7 @@ def redsys_webhook(request, ok: bool = True) -> bool:
         bool: True if payment was successfully processed, False otherwise
     """
     # Initialize user context and update payment details
-    context = def_user_context(request)
+    context = get_context(request)
     update_payment_details(request, context)
 
     # Extract RedSys parameters and signature from POST data
@@ -843,7 +843,7 @@ class RedSysClient:
         merchant_parameters = json.loads(base64.b64decode(b64_merchant_parameters).decode())
 
         # Get association for executive notifications
-        assoc = Association.objects.get(pk=context["a_id"])
+        assoc = Association.objects.get(pk=context["association_id"])
 
         # Validate response code presence
         if "Ds_Response" not in merchant_parameters:

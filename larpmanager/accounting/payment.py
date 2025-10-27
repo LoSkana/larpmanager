@@ -127,7 +127,7 @@ def set_data_invoice(request: HttpRequest, context: dict, invoice: PaymentInvoic
         None: Function modifies the invoice object in place
     """
     # Get the real display name of the current user
-    member_real = request.user.member.display_real()
+    member_real = context["member"].display_real()
 
     # Handle registration payment type
     if invoice.typ == PaymentType.REGISTRATION:
@@ -305,7 +305,7 @@ def get_payment_form(
         - May create new PaymentInvoice object in database
         - Modifies invoice gross fee calculations
     """
-    association_id: int = request.assoc["id"]
+    association_id: int = context["association_id"]
 
     # Extract and store payment details from form data
     payment_amount: Decimal = form.cleaned_data["amount"]
@@ -332,7 +332,7 @@ def get_payment_form(
         invoice.cod = unique_invoice_cod()
         invoice.method = payment_method
         invoice.typ = payment_type
-        invoice.member = request.user.member
+        invoice.member = context["member"]
         invoice.assoc_id = association_id
     else:
         # Update existing invoice with current payment method and type

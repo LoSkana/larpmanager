@@ -63,6 +63,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersionChoices,
 )
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
     exchange_order,
@@ -70,7 +71,6 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import orga_character_form_download
 from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
@@ -130,7 +130,7 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
         Rendered character list template
     """
     # Check user permissions for character management
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
 
     # Load event data and configuration settings
     get_event_cache_all(context)
@@ -157,7 +157,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
         HttpResponse: Rendered character edit form page
     """
     # Check user permissions for character organization features
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
 
     # Load full event cache only when specific features require relationship data
     # This optimization avoids expensive cache operations for basic character editing
@@ -251,7 +251,7 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, num: in
         Rendered HTML response with character relationships
     """
     # Check user permissions for character management
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
 
     # Load character data into context
     get_char(context, num)
@@ -289,7 +289,7 @@ def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> Htt
         Rendered writing view for character
     """
     # Check permissions and initialize context
-    context = check_event_permission(request, event_slug, ["orga_reading", "orga_characters"])
+    context = check_event_context(request, event_slug, ["orga_reading", "orga_characters"])
 
     # Load character and event cache data
     get_char(context, num)
@@ -302,7 +302,7 @@ def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> Htt
 def orga_characters_versions(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Display version history for a character's writing content."""
     # Check event permission and get context
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
 
     # Retrieve the character and render version history
     get_char(context, num)
@@ -322,7 +322,7 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
         Rendered HTML response with character summary
     """
     # Check permissions and get base context
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
 
     # Retrieve character data and add to context
     get_char(context, num)
@@ -366,7 +366,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> J
         Http404: If question or event not found
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
     check_writing_form_type(context, typ)
     event = context["event"]
 
@@ -441,7 +441,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> 
         Http404: If event permission check fails or writing form type is invalid
     """
     # Check event permissions and validate writing form type
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
     check_writing_form_type(context, typ)
 
     # Get the parent event if this is a child event
@@ -553,7 +553,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpRe
         Http404: If the writing form type is invalid or event not found
     """
     # Verify user has permission to access character form organization features
-    context = check_event_permission(request, event_slug, "orga_character_form")
+    context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type parameter and add to context
     check_writing_form_type(context, typ)
@@ -610,7 +610,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
     """
     # Check user permissions for editing character forms
     perm = "orga_character_form"
-    context = check_event_permission(request, event_slug, perm)
+    context = check_event_context(request, event_slug, perm)
 
     # Validate the writing form type exists for this event
     check_writing_form_type(context, typ)
@@ -676,7 +676,7 @@ def orga_writing_form_order(
         Redirect to the writing form page.
     """
     # Verify user has permission to modify character forms
-    context = check_event_permission(request, event_slug, "orga_character_form")
+    context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists
     check_writing_form_type(context, typ)
@@ -702,7 +702,7 @@ def orga_writing_options_edit(request: HttpRequest, event_slug: str, typ: str, n
         HTTP response with the option edit form
     """
     # Verify user has character form permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_character_form")
+    context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists and is allowed
     check_writing_form_type(context, typ)
@@ -719,7 +719,7 @@ def orga_writing_options_new(request: HttpRequest, event_slug: str, typ: str, nu
     question type and number.
     """
     # Validate user has permission to edit character forms
-    context = check_event_permission(request, event_slug, "orga_character_form")
+    context = check_event_context(request, event_slug, "orga_character_form")
 
     # Ensure the writing form type is valid
     check_writing_form_type(context, typ)
@@ -765,7 +765,7 @@ def orga_writing_options_order(
         Redirect to the writing form edit page
     """
     # Check event permission and initialize context
-    context = check_event_permission(request, event_slug, "orga_character_form")
+    context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate writing form type exists in context
     check_writing_form_type(context, typ)
@@ -799,7 +799,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
         event setup integrity.
     """
     # Initialize context and validate user permissions for the event
-    context = check_event_permission(request, event_slug)
+    context = check_event_context(request, event_slug)
 
     # Initialize data structures for check results and caching
     checks = {}
@@ -996,7 +996,7 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
         JsonResponse with element number or error status.
     """
     # Check user permissions for the event
-    context = check_event_permission(request, event_slug, "orga_characters")
+    context = check_event_context(request, event_slug, "orga_characters")
     idx = request.POST.get("idx")
     type = request.POST.get("type")
 
@@ -1150,7 +1150,7 @@ def _get_excel_form(
         PermissionDenied: If user lacks required permissions for the operation
     """
     # Check user permissions and setup base context
-    context = check_event_permission(request, event_slug, f"orga_{element_type}s")
+    context = check_event_context(request, event_slug, f"orga_{element_type}s")
     if not is_submit:
         get_event_cache_all(context)
 

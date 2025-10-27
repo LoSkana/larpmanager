@@ -29,6 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.role import get_index_assoc_permissions
 from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
     ExeAppearanceForm,
@@ -45,7 +46,7 @@ from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
-from larpmanager.utils.base import check_assoc_permission, get_index_assoc_permissions
+from larpmanager.utils.base import check_association_context
 from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
@@ -70,14 +71,16 @@ def exe_roles(request) -> HttpResponse:
         Rendered roles management template
     """
     # Check user permissions for role management
-    context = check_assoc_permission(request, "exe_roles")
+    context = check_association_context(request, "exe_roles")
 
     def def_callback(context):
         # Create default admin role for association
-        return AssocRole.objects.create(assoc_id=context["a_id"], number=1, name="Admin")
+        return AssocRole.objects.create(assoc_id=context["association_id"], number=1, name="Admin")
 
     # Prepare roles list with existing association roles
-    prepare_roles_list(context, AssocPermission, AssocRole.objects.filter(assoc_id=request.assoc["id"]), def_callback)
+    prepare_roles_list(
+        context, AssocPermission, AssocRole.objects.filter(assoc_id=context["association_id"]), def_callback
+    )
 
     return render(request, "larpmanager/exe/roles.html", context)
 
@@ -106,10 +109,12 @@ def exe_profile(request):
 def exe_texts(request: HttpRequest) -> HttpResponse:
     """Display list of association texts grouped by type, default flag, and language."""
     # Check permission and get base context
-    context = check_assoc_permission(request, "exe_texts")
+    context = check_association_context(request, "exe_texts")
 
     # Fetch and order association texts for display
-    context["list"] = AssocText.objects.filter(assoc_id=request.assoc["id"]).order_by("typ", "default", "language")
+    context["list"] = AssocText.objects.filter(assoc_id=context["association_id"]).order_by(
+        "typ", "default", "language"
+    )
 
     return render(request, "larpmanager/exe/texts.html", context)
 
@@ -153,7 +158,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
                      to single feature's after-link based on activation results
     """
     # Check user permissions and get initial context
-    context = check_assoc_permission(request, "exe_features")
+    context = check_association_context(request, "exe_features")
     context["add_another"] = False
 
     # Process form submission and handle feature activation
@@ -180,7 +185,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
             return redirect(feature.follow_link)
 
         # Handle multiple features - show management page
-        get_index_assoc_permissions(context, request, request.assoc["id"])
+        get_index_assoc_permissions(context, request, context["association_id"])
         return render(request, "larpmanager/manage/features.html", context)
 
     # Render edit form for feature selection
@@ -203,7 +208,7 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
         Http404: If the feature is not an overall feature
     """
     # Check user permissions and retrieve feature context
-    context = check_assoc_permission(request, "exe_features")
+    context = check_association_context(request, "exe_features")
     get_feature(context, slug)
 
     # Ensure this is an overall feature (organization-wide)
@@ -212,17 +217,17 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
 
     # Get feature ID and association object
     feature_id = context["feature"].id
-    association = Association.objects.get(pk=request.assoc["id"])
+    association = Association.objects.get(pk=context["association_id"])
 
     # Handle feature activation
     if on:
-        if slug not in request.assoc["features"]:
+        if slug not in context["features"]:
             association.features.add(feature_id)
             message = _("Feature %(name)s activated") + "!"
         else:
             message = _("Feature %(name)s already activated") + "!"
     # Handle feature deactivation
-    elif slug not in request.assoc["features"]:
+    elif slug not in context["features"]:
         message = _("Feature %(name)s already deactivated") + "!"
     else:
         association.features.remove(feature_id)
@@ -275,10 +280,10 @@ def exe_features_off(request, slug):
 def exe_larpmanager(request: HttpRequest) -> HttpResponse:
     """Display association's run list with payment information."""
     # Check user permissions for association management
-    context = check_assoc_permission(request, "exe_association")
+    context = check_association_context(request, "exe_association")
 
     # Get all runs for the current association
-    que = Run.objects.filter(event__assoc_id=context["a_id"])
+    que = Run.objects.filter(event__assoc_id=context["association_id"])
     context["list"] = que.select_related("event").order_by("start")
 
     # Add payment information to each run

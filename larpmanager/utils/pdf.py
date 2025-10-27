@@ -43,15 +43,16 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
+from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     Handout,
 )
+from larpmanager.utils.base import get_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import get_handout
-from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_assoc_text
@@ -306,20 +307,20 @@ def pdf_template(context: dict, template_path: str, output_path: str, small: boo
 # ##print
 
 
-def get_membership_request(context: dict) -> HttpResponse:
+def get_membership_request(context: dict, member: Member) -> HttpResponse:
     """Generate and return a PDF membership registration document."""
     # Get the file path for the member's request document
-    file_path = context["member"].get_request_filepath()
+    file_path = member.get_request_filepath()
 
     # Prepare template context with member data
-    template_context = {"member": context["member"]}
+    template_context = {"member": member}
 
     # Retrieve association-specific membership template text
-    template = get_assoc_text(context["a_id"], AssocTextType.MEMBERSHIP)
+    template = get_assoc_text(context["association_id"], AssocTextType.MEMBERSHIP)
 
     # Generate PDF from template and return as HTTP response
     pdf_template(template_context, template, file_path, html=True)
-    return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": context["member"]})
+    return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": member})
 
 
 def print_character(context: dict, force: bool = False) -> dict:
@@ -690,7 +691,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 def print_handout_bkg(a: Association, event_slug: str, c: Character) -> None:
     """Prints character handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(a)
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     print_handout_go(context, c)
 
 
@@ -710,7 +711,7 @@ def print_character_go(context, character):
 def print_character_bkg(a: Association, event_slug: str, c: Character) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(a)
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     print_character_go(context, c)
 
 
@@ -727,7 +728,7 @@ def print_run_bkg(a: Association, event_slug: str) -> None:
     """
     # Create fake request context and get event run data
     request = get_fake_request(a)
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
 
     # Print gallery and character profiles
     print_gallery(context)

@@ -283,7 +283,7 @@ def _reg_load(request, context: dict, csv_row: dict, registration_questions: lis
 
     # Save registration and log the action
     registration.save()
-    save_log(request.user.member, Registration, registration)
+    save_log(context["member"], Registration, registration)
 
     # Generate appropriate status message
     if error_logs:
@@ -655,7 +655,7 @@ def element_load(request, context: dict, csv_row: dict, element_questions: list)
 
     # Save the element and log the operation
     element.save()
-    save_log(request.user.member, writing_model_class, element)
+    save_log(context["member"], writing_model_class, element)
 
     # Return appropriate status message based on processing results
     if error_logs:
@@ -1207,7 +1207,7 @@ def _ticket_load(request, context: dict, csv_row: dict) -> str:
 
     # Save the ticket and log the operation
     ticket.save()
-    save_log(request.user.member, RegistrationTicket, ticket)
+    save_log(context["member"], RegistrationTicket, ticket)
 
     # Return appropriate success message
     if was_created:
@@ -1306,7 +1306,7 @@ def _ability_load(request, context: dict, csv_row: dict) -> str:
     ability_element.save()
 
     # Log the operation for audit trail
-    save_log(request.user.member, AbilityPx, ability_element)
+    save_log(context["member"], AbilityPx, ability_element)
 
     # Return appropriate success message
     if was_created:

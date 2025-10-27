@@ -54,8 +54,8 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import copy_class
-from larpmanager.utils.event import check_event_permission
 
 
 def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
@@ -535,14 +535,14 @@ def orga_copy(request, event_slug):
     Returns:
         HttpResponse: Rendered copy form template or redirect after successful copy
     """
-    context = check_event_permission(request, event_slug, "orga_copy")
+    context = check_event_context(request, event_slug, "orga_copy")
 
     if request.method == "POST":
         form = OrgaCopyForm(request.POST, request.FILES, context=context)
         if form.is_valid():
             pt = form.cleaned_data["parent"]
             targets = form.cleaned_data["target"]
-            parent = Event.objects.get(pk=pt, assoc_id=context["a_id"])
+            parent = Event.objects.get(pk=pt, assoc_id=context["association_id"])
             event = context["event"]
             copy(request, context, parent, event, targets)
 

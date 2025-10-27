@@ -37,7 +37,6 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -152,19 +151,7 @@ def check_diff(self, old_text, new_text):
     self.diff = diff_engine.diff_prettyHtml(self.diff)
 
 
-def get_assoc(request):
-    """Get association from request context.
-
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        Association: Association instance from request context
-    """
-    return get_object_or_404(Association, pk=request.assoc["id"])
-
-
-def get_member(member_id):
+def get_member(member_id: int) -> Member:
     """Get member by ID with proper error handling.
 
     Args:
@@ -177,7 +164,7 @@ def get_member(member_id):
         Http404: If member does not exist
     """
     try:
-        return {"member": Member.objects.get(pk=member_id)}
+        return Member.objects.get(pk=member_id)
     except ObjectDoesNotExist as err:
         raise Http404("Member does not exist") from err
 
@@ -206,7 +193,7 @@ def get_event_template(context, template_id):
         template_id: Event template ID
     """
     try:
-        context["event"] = Event.objects.get(pk=template_id, template=True, assoc_id=context["a_id"])
+        context["event"] = Event.objects.get(pk=template_id, template=True, assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise NotFoundError() from err
 
@@ -360,23 +347,23 @@ def get_speedlarp(context, speedlarp_id):
     # ~ return ("UNASSIGNED", None)
 
 
-def get_badge(badge_id, request):
+def get_badge(badge_id, context):
     try:
-        return Badge.objects.get(pk=badge_id, assoc_id=request.assoc["id"])
+        return Badge.objects.get(pk=badge_id, assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Badge does not exist") from err
 
 
-def get_collection_partecipate(request, contribution_code):
+def get_collection_partecipate(context, contribution_code):
     try:
-        return Collection.objects.get(contribute_code=contribution_code, assoc_id=request.assoc["id"])
+        return Collection.objects.get(contribute_code=contribution_code, assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Collection does not exist") from err
 
 
-def get_collection_redeem(request, cod):
+def get_collection_redeem(context, cod):
     try:
-        return Collection.objects.get(redeem_code=cod, assoc_id=request.assoc["id"])
+        return Collection.objects.get(redeem_code=cod, assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Collection does not exist") from err
 
@@ -781,7 +768,7 @@ def get_payment_methods_ids(context):
     Returns:
         set: Set of payment method primary keys
     """
-    return set(Association.objects.get(pk=context["a_id"]).payment_methods.values_list("pk", flat=True))
+    return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):
@@ -883,7 +870,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
 
     Args:
         context: Context dictionary containing association/run information.
-             Must include 'a_id' key, optionally includes 'run' key.
+             Must include 'association_id' key, optionally includes 'run' key.
         request: HTTP request object used to determine filtering behavior.
 
     Returns:
@@ -892,7 +879,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
         - open_questions: List of open user-originated questions
     """
     # Filter questions by association ID
-    base_queryset = HelpQuestion.objects.filter(assoc_id=context["a_id"])
+    base_queryset = HelpQuestion.objects.filter(assoc_id=context["association_id"])
 
     # Add run filter if run context exists
     if "run" in context:

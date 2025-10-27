@@ -194,7 +194,7 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
         raise Http404("not found") from err
 
     # Verify email belongs to the requesting association
-    if email.assoc_id != request.assoc["id"]:
+    if email.assoc_id != context["association_id"]:
         raise Http404("not your assoc")
 
     # Check run-specific authorization if run context is provided

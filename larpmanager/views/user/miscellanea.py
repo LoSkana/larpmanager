@@ -48,9 +48,8 @@ from larpmanager.models.miscellanea import (
     WorkshopModule,
 )
 from larpmanager.models.writing import Handout
-from larpmanager.utils.base import def_user_context, is_shuttle
+from larpmanager.utils.base import get_context, get_event_context, is_shuttle
 from larpmanager.utils.common import get_album, get_workshop
-from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import check_assoc_feature
 from larpmanager.utils.pdf import (
     print_handout,
@@ -76,11 +75,11 @@ def util(request, util_cod):
 def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
     """Redirect to help page for a specific run."""
     # Set up context with user data and association ID
-    context = def_user_context(request)
+    context = get_context(request)
 
     # Get the run object or raise 404 if not found
     try:
-        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["a_id"])
+        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
 
@@ -105,10 +104,9 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
     """
     # Initialize context based on whether this is event-specific or general help
     if event_slug:
-        context = get_event_run(request, event_slug, include_status=True)
+        context = get_event_context(request, event_slug, include_status=True)
     else:
-        context = def_user_context(request)
-        context["a_id"] = request.assoc["id"]
+        context = get_context(request)
 
     # Handle form submission for new help questions
     if request.method == "POST":
@@ -116,11 +114,11 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
         if form.is_valid():
             # Create help question instance without saving to database yet
             hp = form.save(commit=False)
-            hp.member = request.user.member
+            hp.member = context["member"]
 
             # Associate question with organization if context is available
-            if context["a_id"] != 0:
-                hp.assoc_id = context["a_id"]
+            if context["association_id"] != 0:
+                hp.assoc_id = context["association_id"]
 
             # Save question and redirect to prevent form resubmission
             hp.save()
@@ -132,11 +130,11 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
     # Prepare template context with form and user's question history
     context["form"] = form
-    context["list"] = HelpQuestion.objects.filter(member=request.user.member).order_by("-created")
+    context["list"] = HelpQuestion.objects.filter(member=context["member"]).order_by("-created")
 
     # Filter questions by association context
-    if context["a_id"] != 0:
-        context["list"] = context["list"].filter(assoc_id=context["a_id"])
+    if context["association_id"] != 0:
+        context["list"] = context["list"].filter(assoc_id=context["association_id"])
     else:
         context["list"] = context["list"].filter(assoc=None)
 
@@ -162,7 +160,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         Http404: If HelpQuestion doesn't exist or user lacks permissions
     """
     # Get default user context with permissions
-    context = def_user_context(request)
+    context = get_context(request)
 
     # Attempt to retrieve the help question by primary key
     try:
@@ -171,7 +169,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         raise Http404("HelpQuestion does not exist") from err
 
     # Check access permissions: owner or association role required
-    if hp.member != request.user.member and not context["assoc_role"]:
+    if hp.member != context["member"] and not context["assoc_role"]:
         raise Http404("illegal access")
 
     # Redirect to attachment URL for authorized users
@@ -190,7 +188,7 @@ def handout_ext(request: HttpRequest, event_slug: str, cod: str) -> HttpResponse
         PDF file response with the handout content
     """
     # Retrieve event/run context and fetch handout by code
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     context["handout"] = get_object_or_404(Handout, event=context["event"], cod=cod)
 
     # Generate PDF and return as downloadable response
@@ -234,14 +232,14 @@ def album_aux(request, context, parent_album):
 
 @login_required
 def album(request, event_slug):
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     return album_aux(request, context, None)
 
 
 @login_required
 def album_sub(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View handler for displaying a specific photo album within an event run."""
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     get_album(context, num)
     return album_aux(request, context, context["album"])
 
@@ -259,7 +257,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
         HttpResponse: Rendered template with workshop list and completion status
     """
     # Get event context with signup and status validation
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
 
     # Initialize workshop list for template context
     context["list"] = []
@@ -275,7 +273,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
 
         # Check if user has completed this workshop within the time limit
         dt["done"] = (
-            WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
+            WorkshopMemberRel.objects.filter(member=context["member"], workshop=workshop, created__gte=limit).count()
             >= 1
         )
 
@@ -335,11 +333,11 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
         PermissionDenied: If user doesn't have access to the workshop
     """
     # Get event context and validate user access to workshop signup
-    context = get_event_run(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
     get_workshop(context, m)
 
     # Check if user has already completed this workshop module
-    completed = [el.pk for el in request.user.member.workshops.select_related().all()]
+    completed = [el.pk for el in context["member"].workshops.select_related().all()]
     if context["workshop"].pk in completed:
         messages.success(request, _("Workshop already done!"))
         return redirect("workshops", event_slug=context["run"].get_slug())
@@ -356,7 +354,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
     # Process POST request - validate submitted answers
     if valid_workshop_answer(request, context):
         # Create completion record for this workshop module
-        WorkshopMemberRel.objects.create(member=request.user.member, workshop=context["workshop"])
+        WorkshopMemberRel.objects.create(member=context["member"], workshop=context["workshop"])
 
         # Find remaining uncompleted workshop modules
         remaining = (
@@ -392,20 +390,20 @@ def shuttle(request):
     Returns:
         Rendered shuttle template with active and recent requests
     """
-    check_assoc_feature(request, "shuttle")
+    context = get_context(request)
+    check_assoc_feature(request, context, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
-    context = def_user_context(request)
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
-            .filter(assoc_id=request.assoc["id"])
+            .filter(assoc_id=context["association_id"])
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
                 created__gt=ref.date(),
                 status=ShuttleStatus.DONE,
-                assoc_id=request.assoc["id"],
+                assoc_id=context["association_id"],
             ).order_by("status", "date", "time"),
         }
     )
@@ -422,14 +420,14 @@ def shuttle_new(request):
     Returns:
         Redirect to shuttle list on success or form template on GET/invalid POST
     """
-    check_assoc_feature(request, "shuttle")
-    context = def_user_context(request)
+    context = get_context(request)
+    check_assoc_feature(request, context, "shuttle")
 
     if request.method == "POST":
         form = ShuttleServiceForm(request.POST, request=request, context=context)
         if form.is_valid():
             el = form.save(commit=False)
-            el.member = request.user.member
+            el.member = context["member"]
             el.save()
             return redirect("shuttle")
     else:
@@ -452,8 +450,8 @@ def shuttle_edit(request, n):
     Returns:
         HttpResponse: Rendered edit form or redirect after successful update
     """
-    check_assoc_feature(request, "shuttle")
-    context = def_user_context(request)
+    context = get_context(request)
+    check_assoc_feature(request, context, "shuttle")
 
     shuttle = ShuttleService.objects.get(pk=n)
     if request.method == "POST":

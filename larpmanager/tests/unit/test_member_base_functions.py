@@ -95,7 +95,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         """Test _info_token_credit with no tokens or credits"""
         member = self.get_member()
         assoc = self.get_association()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         _info_token_credit(context, member)
 
@@ -106,7 +106,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         """Test _info_token_credit with tokens"""
         member = self.get_member()
         assoc = self.get_association()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         # Create token items
         AccountingItemOther.objects.create(
@@ -122,7 +122,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         # Create credit items
         AccountingItemOther.objects.create(
@@ -141,7 +141,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         member = self.get_member()
         assoc = self.get_association()
         run = self.get_run()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         # Create both tokens and credits
         AccountingItemOther.objects.create(

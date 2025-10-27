@@ -35,7 +35,7 @@ from larpmanager.utils.auth import is_lm_admin
 logger = logging.getLogger(__name__)
 
 
-def cache_event_links(request: HttpRequest) -> dict:
+def cache_event_links(request: HttpRequest, context: dict) -> None:
     """Get cached event navigation links for authenticated user.
 
     Builds and caches navigation context including registrations, roles,
@@ -43,57 +43,60 @@ def cache_event_links(request: HttpRequest) -> dict:
 
     Args:
         request: Django HTTP request with authenticated user and association
+        context: Dict for context information
 
     Returns:
         Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
     """
     # Skip if not authenticated or no association
-    if not request.user.is_authenticated or request.assoc["id"] == 0:
+    if not context["member"] or context["association_id"] == 0:
         return {}
 
     # Return cached data if available
-    navigation_context = cache.get(get_cache_event_key(request.user.id, request.assoc["id"]))
-    if navigation_context:
-        return navigation_context
+    cache_links_key = get_cache_event_key(context["member"].id, context["association_id"])
+    navigation_context = cache.get(cache_links_key)
+    if not navigation_context:
+        # Build navigation context from scratch
+        navigation_context = _build_navigation_context(request, context)
 
-    # Build navigation context from scratch
-    navigation_context = _build_navigation_context(request)
+        # Cache for 1 day
+        cache.set(
+            cache_links_key,
+            navigation_context,
+            timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
+        )
 
-    # Cache for 1 day
-    cache.set(
-        get_cache_event_key(request.user.id, request.assoc["id"]),
-        navigation_context,
-        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
-    )
-    return navigation_context
+    context.update(navigation_context)
 
 
-def _build_navigation_context(request: HttpRequest) -> dict:
+def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
-    context = {}
     cutoff_date = (datetime.now() - timedelta(days=10)).date()
-    member = request.user.member
-    association_id = request.assoc["id"]
+    member = context["member"]
+    association_id = context["association_id"]
+    navigation_context = {}
 
     # Get user's active registrations for upcoming events
     active_registrations = Registration.objects.filter(
         member=member, run__end__gte=cutoff_date, cancellation_date__isnull=True, run__event__assoc_id=association_id
     ).select_related("run", "run__event")
-    context["reg_menu"] = [
+    navigation_context["reg_menu"] = [
         (registration.run.get_slug(), str(registration.run)) for registration in active_registrations
     ]
 
     # Collect roles
-    context["assoc_role"] = _get_assoc_roles(member, association_id, request)
-    context["event_role"] = _get_event_roles(member, association_id)
+    navigation_context["assoc_role"] = _get_assoc_roles(member, association_id, request)
+    navigation_context["event_role"] = _get_event_roles(member, association_id)
 
     # Build accessible runs
-    context.update(_get_accessible_runs(association_id, context["assoc_role"], context["event_role"]))
+    navigation_context.update(
+        _get_accessible_runs(association_id, navigation_context["assoc_role"], navigation_context["event_role"])
+    )
 
     # Determine if topbar should be shown
-    context["topbar"] = bool(context["event_role"] or context["assoc_role"])
+    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["assoc_role"])
 
-    return context
+    return navigation_context
 
 
 def _get_assoc_roles(member, assoc_id: int, request: HttpRequest) -> dict:

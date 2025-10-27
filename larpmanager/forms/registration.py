@@ -672,7 +672,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.event = self.params["run"].event
 
         # Configure member widget with association
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].widget.set_assoc(self.params["association_id"])
 
         self.allow_run_choice()
 

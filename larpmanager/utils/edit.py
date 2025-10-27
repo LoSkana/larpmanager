@@ -39,9 +39,8 @@ from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
-from larpmanager.utils.base import check_assoc_permission
+from larpmanager.utils.base import check_association_context, check_event_context
 from larpmanager.utils.common import html_clean
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.exceptions import NotFoundError
 
 
@@ -208,7 +207,7 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
 
     Args:
         element: Object to check or container object
-        context: Context dict containing association ID as 'a_id'
+        context: Context dict containing association ID as 'association_id'
         attribute_field: Optional field name to extract from element
 
     Raises:
@@ -223,7 +222,7 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
         return
 
     # Verify object belongs to current association
-    if element.assoc_id != context["a_id"]:
+    if element.assoc_id != context["association_id"]:
         raise Http404("not your association")
 
 
@@ -264,7 +263,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, nm: str, eid
             dl = "delete" in request.POST and request.POST["delete"] == "1"
 
             # Log the operation (save or delete)
-            save_log(request.user.member, form_type, p, dl)
+            save_log(context["member"], form_type, p, dl)
 
             # Delete the instance if deletion was requested
             if dl:
@@ -352,7 +351,7 @@ def backend_edit(
     if is_association_based:
         context["exe"] = True
         if element_id is None:
-            element_id = request.assoc["id"]
+            element_id = context["association_id"]
             context["nonum"] = True
     elif element_id is None:
         element_id = context["event"].id
@@ -380,7 +379,7 @@ def backend_edit(
 
             # Handle deletion if delete flag is set in POST data
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(request.user.member, form_type, saved_object, should_delete)
+            save_log(context["member"], form_type, saved_object, should_delete)
             if should_delete:
                 saved_object.delete()
 
@@ -430,7 +429,7 @@ def orga_edit(
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context for the event
-    context = check_event_permission(request, event_slug, permission)
+    context = check_event_context(request, event_slug, permission)
 
     # Merge any additional context provided by caller
     if additional_context:
@@ -485,7 +484,7 @@ def exe_edit(
         HttpResponse: Redirect response on successful edit, or rendered edit template
     """
     # Check user permissions and get base context
-    context = check_assoc_permission(request, permission)
+    context = check_association_context(request, permission)
 
     # Merge additional context if provided
     if additional_context:
@@ -520,14 +519,14 @@ def set_suggestion(context: dict, permission: str) -> None:
 
     Args:
         context: Context dictionary containing either 'event' key with event object
-                 or 'a_id' key with association ID
+                 or 'association_id' key with association ID
         permission: Permission name to create suggestion flag for
     """
     # Determine the target object based on context
     if "event" in context:
         target_object = context["event"]
     else:
-        target_object = Association.objects.get(pk=context["a_id"])
+        target_object = Association.objects.get(pk=context["association_id"])
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"
@@ -702,9 +701,9 @@ def _writing_save(
 
     # Create version history or log operation based on type parameter
     if tp:
-        save_version(p, tp, request.user.member, dl)
+        save_version(p, tp, context["member"], dl)
     else:
-        save_log(request.user.member, form_type, p)
+        save_log(context["member"], form_type, p)
 
     # Execute deletion if requested after logging/versioning
     if dl:

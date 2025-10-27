@@ -206,7 +206,7 @@ class MyForm(forms.ModelForm):
         return self.params["event"].get_class_parent(typ)
 
     def clean_assoc(self):
-        return Association.objects.get(pk=self.params["a_id"])
+        return Association.objects.get(pk=self.params["association_id"])
 
     def clean_name(self):
         return self._validate_unique_event("name")
@@ -1289,4 +1289,6 @@ class BaseAccForm(forms.Form):
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
         # Load payment fees configuration for the association
-        self.context["user_fees"] = get_assoc_config(self.context["a_id"], "payment_fees_user", False, self.context)
+        self.context["user_fees"] = get_assoc_config(
+            self.context["association_id"], "payment_fees_user", False, self.context
+        )

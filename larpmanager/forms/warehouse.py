@@ -68,8 +68,8 @@ class ExeWarehouseItemForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Configure widgets with association ID for proper filtering
-        self.fields["container"].widget.set_assoc(self.params["a_id"])
-        self.fields["tags"].widget.set_assoc(self.params["a_id"])
+        self.fields["container"].widget.set_assoc(self.params["association_id"])
+        self.fields["tags"].widget.set_assoc(self.params["association_id"])
 
         # Remove optional warehouse fields based on configuration
         _delete_optionals_warehouse(self)
@@ -104,7 +104,7 @@ class ExeWarehouseTagForm(MyForm):
 
         # Create dynamic items field filtered by association
         self.fields["items"] = forms.ModelMultipleChoiceField(
-            queryset=WarehouseItem.objects.filter(assoc_id=self.params["a_id"]),
+            queryset=WarehouseItem.objects.filter(assoc_id=self.params["association_id"]),
             label=_("Items"),
             widget=WarehouseItemS2WidgetMulti,
             required=False,
@@ -115,7 +115,7 @@ class ExeWarehouseTagForm(MyForm):
             self.initial["items"] = self.instance.items.values_list("pk", flat=True)
 
         # Configure widget with association context
-        self.fields["items"].widget.set_assoc(self.params["a_id"])
+        self.fields["items"].widget.set_assoc(self.params["association_id"])
 
 
 class ExeWarehouseMovementForm(MyForm):
@@ -135,7 +135,7 @@ class ExeWarehouseMovementForm(MyForm):
         """Initialize form and configure warehouse item field for association."""
         super().__init__(*args, **kwargs)
         # Configure item widget with association ID
-        self.fields["item"].widget.set_assoc(self.params["a_id"])
+        self.fields["item"].widget.set_assoc(self.params["association_id"])
 
         # Remove optional warehouse fields
         _delete_optionals_warehouse(self)
@@ -172,7 +172,7 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
 
         # Configure widget event and association contexts
         self.fields["area"].widget.set_event(self.params["event"])
-        self.fields["item"].widget.set_assoc(self.params["a_id"])
+        self.fields["item"].widget.set_assoc(self.params["association_id"])
 
         _delete_optionals_warehouse(self)
 

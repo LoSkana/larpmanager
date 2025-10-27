@@ -30,7 +30,7 @@ from zipfile import ZipFile
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
 from django.db import models
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from PIL import Image as PILImage
 from PIL import ImageOps
@@ -217,7 +217,7 @@ def zipdir(path, ziph):
             )
 
 
-def check_centauri(request) -> Optional[HttpResponse]:
+def check_centauri(request: HttpRequest, context: dict) -> Optional[HttpResponse]:
     """Check and display Centauri easter egg feature.
 
     Randomly triggers a special Centauri easter egg feature that displays custom content
@@ -227,6 +227,7 @@ def check_centauri(request) -> Optional[HttpResponse]:
     Args:
         request: Django HTTP request object containing user authentication and
                 association context with features configuration.
+        context: Dict context informations
 
     Returns:
         HttpResponse containing the rendered Centauri template if feature is triggered
@@ -237,48 +238,48 @@ def check_centauri(request) -> Optional[HttpResponse]:
         and a badge is configured for the association.
     """
     # Early return if Centauri feature is not enabled for this association
-    if "centauri" not in request.assoc["features"]:
+    if "centauri" not in context["features"]:
         return
 
     # Check random probability condition for triggering Centauri
-    if not _go_centauri(request):
+    if not _go_centauri(context):
         return
 
     # Build template context with association-specific Centauri content
     template_context = {}
     for config_key in ["centauri_descr", "centauri_content"]:
-        template_context[config_key] = get_assoc_config(request.assoc["id"], config_key, None, template_context)
+        template_context[config_key] = get_assoc_config(context["association_id"], config_key, None, template_context)
 
     # Award badge to user if configured for this association
-    badge_code = get_assoc_config(request.assoc["id"], "centauri_badge", None, template_context)
+    badge_code = get_assoc_config(context["association_id"], "centauri_badge", None, template_context)
     if badge_code:
         badge = Badge.objects.get(cod=badge_code)
-        badge.members.add(request.user.member)
+        badge.members.add(context["member"])
         badge.save()
 
     # Render and return the Centauri easter egg page
     return render(request, "larpmanager/general/centauri.html", template_context)
 
 
-def _go_centauri(request):
+def _go_centauri(context: dict) -> bool:
     """Determine if Centauri easter egg should be triggered.
 
     Args:
-        request: Django HTTP request with user and association context
+        context: Dict context data
 
     Returns:
         bool: True if Centauri should be displayed
     """
-    if not request.user.is_authenticated:
+    if "member" not in context:
         return False
 
-    if request.user.member.language == "en":
+    if context["member"].language == "en":
         return False
 
-    if "centauri_prob" not in request.assoc:
+    if "centauri_prob" not in context:
         return False
 
-    centauri_probability = int(request.assoc["centauri_prob"])
+    centauri_probability = int(context["centauri_prob"])
     if not centauri_probability:
         return False
 
@@ -302,7 +303,7 @@ def get_warehouse_optionals(context, default_columns):
     optionals = {}
     has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_assoc_config(context["a_id"], f"warehouse_{field}", False, context)
+        optionals[field] = get_assoc_config(context["association_id"], f"warehouse_{field}", False, context)
         if optionals[field]:
             has_active_optional = 1
     context["optionals"] = optionals

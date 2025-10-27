@@ -59,9 +59,9 @@ from larpmanager.models.miscellanea import (
     WorkshopQuestion,
 )
 from larpmanager.models.registration import Registration
+from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import get_album_cod, get_element
 from larpmanager.utils.edit import orga_edit
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.writing import writing_post
 
@@ -69,7 +69,7 @@ from larpmanager.utils.writing import writing_post
 @login_required
 def orga_albums(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display albums for an event run in the organizer dashboard."""
-    context = check_event_permission(request, event_slug, "orga_albums")
+    context = check_event_context(request, event_slug, "orga_albums")
     context["list"] = Album.objects.filter(run=context["run"]).order_by("-created")
     return render(request, "larpmanager/orga/albums.html", context)
 
@@ -95,7 +95,7 @@ def orga_albums_upload(request: HttpRequest, event_slug: str, a: str) -> HttpRes
         PermissionDenied: If user lacks orga_albums permission for the event
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_albums")
+    context = check_event_context(request, event_slug, "orga_albums")
 
     # Retrieve and validate the album using the provided code
     get_album_cod(context, a)
@@ -125,7 +125,7 @@ def orga_albums_upload(request: HttpRequest, event_slug: str, a: str) -> HttpRes
 @login_required
 def orga_utils(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render utility items management page for event organizers."""
-    context = check_event_permission(request, event_slug, "orga_utils")
+    context = check_event_context(request, event_slug, "orga_utils")
     context["list"] = Util.objects.filter(event=context["event"]).order_by("number")
     return render(request, "larpmanager/orga/utils.html", context)
 
@@ -152,7 +152,7 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
             with context containing workshop data and member completion info
     """
     # Check user permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_workshops")
+    context = check_event_context(request, event_slug, "orga_workshops")
 
     # Get all workshops for this event
     workshops = context["event"].workshops.all()
@@ -195,7 +195,7 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
         Rendered workshop modules page
     """
     # Check permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_workshop_modules")
+    context = check_event_context(request, event_slug, "orga_workshop_modules")
 
     # Retrieve and order workshop modules
     context["list"] = WorkshopModule.objects.filter(event=context["event"]).order_by("number")
@@ -212,7 +212,7 @@ def orga_workshop_modules_edit(request, event_slug, num):
 def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle workshop questions management for organizers."""
     # Check user permissions for workshop questions management
-    context = check_event_permission(request, event_slug, "orga_workshop_questions")
+    context = check_event_context(request, event_slug, "orga_workshop_questions")
 
     # Process POST requests for creating/updating questions
     if request.method == "POST":
@@ -243,7 +243,7 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
         Rendered template response or POST redirect
     """
     # Check user permissions for workshop options management
-    context = check_event_permission(request, event_slug, "orga_workshop_options")
+    context = check_event_context(request, event_slug, "orga_workshop_options")
 
     # Handle POST requests for creating/updating workshop options
     if request.method == "POST":
@@ -267,7 +267,7 @@ def orga_workshop_options_edit(request, event_slug, num):
 def orga_problems(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display filterable list of reported problems for an event."""
     # Check event access permissions
-    context = check_event_permission(request, event_slug, "orga_problems")
+    context = check_event_context(request, event_slug, "orga_problems")
 
     # Fetch problems ordered by status and severity
     context["list"] = Problem.objects.filter(event=context["event"]).order_by("status", "-severity")
@@ -284,7 +284,7 @@ def orga_problems_edit(request, event_slug, num):
 def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render warehouse area management page for event organizers."""
     # Check organizer permissions and get event context
-    context = check_event_permission(request, event_slug, "orga_warehouse_area")
+    context = check_event_context(request, event_slug, "orga_warehouse_area")
 
     # Retrieve all warehouse areas for the event
     context["list"] = context["event"].get_elements(WarehouseArea)
@@ -320,7 +320,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
         Http404: If warehouse area with specified ID does not exist
     """
     # Check user permissions and get base context with event and area data
-    context = check_event_permission(request, event_slug, "orga_warehouse_area")
+    context = check_event_context(request, event_slug, "orga_warehouse_area")
     get_element(context, num, "area", WarehouseArea)
 
     # Configure optional warehouse display settings for quantity columns
@@ -331,7 +331,9 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     # Retrieve all warehouse items for the association with prefetched tags
     item_all: dict[int, Any] = {}
     for item in (
-        WarehouseItem.objects.filter(assoc_id=context["a_id"]).prefetch_related("tags").select_related("container")
+        WarehouseItem.objects.filter(assoc_id=context["association_id"])
+        .prefetch_related("tags")
+        .select_related("container")
     ):
         # Set initial availability to item's total quantity
         item.available = item.quantity or 0
@@ -384,7 +386,7 @@ def orga_warehouse_checks(request, event_slug: str) -> HttpResponse:
         HttpResponse: Rendered template with warehouse items and their assignments
     """
     # Check user permissions for warehouse management in this event
-    context = check_event_permission(request, event_slug, "orga_warehouse_checks")
+    context = check_event_context(request, event_slug, "orga_warehouse_checks")
 
     # Initialize items dictionary to store warehouse items with assignments
     context["items"] = {}
@@ -428,7 +430,7 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
         PermissionDenied: If user lacks orga_warehouse_manifest permission
     """
     # Check user permissions and get base context for the event
-    context = check_event_permission(request, event_slug, "orga_warehouse_manifest")
+    context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
     # Initialize empty area list and get warehouse optional configurations
     context["area_list"] = {}
@@ -481,7 +483,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, event_slug: str) ->
         ObjectDoesNotExist: When assignment with given idx doesn't exist
     """
     # Check user permissions for warehouse manifest access
-    context = check_event_permission(request, event_slug, "orga_warehouse_manifest")
+    context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
     # Extract and validate POST parameters
     idx = request.POST.get("idx")
@@ -526,7 +528,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
         ValidationError: If required permissions are not met or area doesn't exist
     """
     # Check event permissions and retrieve the warehouse area
-    context = check_event_permission(request, event_slug, "orga_warehouse_manifest")
+    context = check_event_context(request, event_slug, "orga_warehouse_manifest")
     get_element(context, num, "area", WarehouseArea)
 
     # Extract assignment parameters from POST data
@@ -554,7 +556,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 @login_required
 def orga_onetimes(request, event_slug):
     """List all one-time contents for an event."""
-    context = check_event_permission(request, event_slug, "orga_onetimes")
+    context = check_event_context(request, event_slug, "orga_onetimes")
     context["list"] = OneTimeContent.objects.filter(event=context["event"]).order_by("-created")
     return render(request, "larpmanager/orga/onetimes.html", context)
 
@@ -577,7 +579,7 @@ def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
         Rendered template with token list
     """
     # Check user has permission to view one-time tokens for this event
-    context = check_event_permission(request, event_slug, "orga_onetimes")
+    context = check_event_context(request, event_slug, "orga_onetimes")
 
     # Fetch all tokens for the event, ordered by creation date
     context["list"] = OneTimeAccessToken.objects.filter(content__event=context["event"]).order_by("-created")

@@ -345,7 +345,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
     def test_assoc_accounting_data_basic(self):
         """Test basic association accounting data gathering"""
         assoc = self.get_association()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         assoc_accounting_data(context)
 
@@ -359,7 +359,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
     def test_assoc_accounting_data_with_year_filter(self):
         """Test association accounting data with year filter"""
         assoc = self.get_association()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         assoc_accounting_data(context, year=2024)
 
@@ -369,7 +369,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
     def test_assoc_accounting_calculates_totals(self):
         """Test association accounting calculates correct totals"""
         assoc = self.get_association()
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
 
         assoc_accounting(context)
 
@@ -390,7 +390,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         membership.credit = Decimal("30.00")
         membership.save()
 
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
         assoc_accounting(context)
 
         self.assertGreaterEqual(context["tokens_sum"], Decimal("50.00"))
@@ -404,7 +404,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         run.balance = Decimal("100.00")
         run.save()
 
-        context = {"a_id": assoc.id}
+        context = {"association_id": assoc.id}
         assoc_accounting(context)
 
         self.assertIn("runs", context)

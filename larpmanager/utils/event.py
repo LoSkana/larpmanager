@@ -18,22 +18,16 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
-from django.http import Http404
-from django.urls import reverse
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.button import event_button_key
-from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
-from larpmanager.cache.fields import clear_event_fields_cache, get_event_fields_cache
-from larpmanager.cache.permission import get_event_permission_feature
-from larpmanager.cache.role import get_event_roles, has_event_permission
-from larpmanager.cache.run import get_cache_config_run, get_cache_run
+from larpmanager.cache.fields import clear_event_fields_cache
+from larpmanager.cache.role import has_event_permission
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
@@ -48,192 +42,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.base import def_user_context, get_index_permissions
 from larpmanager.utils.common import copy_class
-from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
-from larpmanager.utils.registration import check_signup, registration_status
-
-
-def get_event(request, event_slug, run_number=None):
-    """Get event context from slug and number.
-
-    Args:
-        request: Django HTTP request object or None
-        event_slug (str): Event slug identifier
-        run_number (int, optional): Run number to append to slug
-
-    Returns:
-        dict: Event context with run, event, and features
-
-    Raises:
-        Http404: If event doesn't exist or belongs to wrong association
-    """
-    if request:
-        context = def_user_context(request)
-    else:
-        context = {}
-
-    try:
-        if run_number:
-            event_slug += f"-{run_number}"
-
-        get_run(context, event_slug)
-
-        if "a_id" in context:
-            if context["event"].assoc_id != context["a_id"]:
-                raise Http404("wrong assoc")
-        else:
-            context["a_id"] = context["event"].assoc_id
-
-        context["features"] = get_event_features(context["event"].id)
-
-        # paste as text tinymce
-        if "paste_text" in context["features"]:
-            conf_settings.TINYMCE_DEFAULT_CONFIG["paste_as_text"] = True
-
-        context["show_available_chars"] = _("Show available characters")
-
-        return context
-    except ObjectDoesNotExist as error:
-        raise Http404("Event does not exist") from error
-
-
-def get_event_run(
-    request, event_slug: str, signup: bool = False, feature_slug: str | None = None, include_status: bool = False
-) -> dict:
-    """Get comprehensive event run context with permissions and features.
-
-    Retrieves event context and enhances it with user permissions, feature access,
-    and registration status based on the provided parameters.
-
-    Args:
-        request: Django HTTP request object containing user and session data
-        event_slug: Event slug identifier for the target event
-        signup: Whether to check and validate signup eligibility for the user
-        feature_slug: Optional feature slug to verify user access permissions
-        include_status: Whether to include detailed registration status information
-
-    Returns:
-        Complete event context dictionary containing:
-            - Event and run objects
-            - User permissions and roles
-            - Feature access flags
-            - Registration status (if requested)
-            - Association configuration
-            - Staff permissions and sidebar state
-
-    Raises:
-        Http404: If event is not found or user lacks required permissions
-        PermissionDenied: If user cannot access requested features
-    """
-    # Get base event context with run information
-    context = get_event(request, event_slug)
-
-    # Validate user signup eligibility if requested
-    if signup:
-        check_signup(request, context)
-
-    # Verify feature access permissions for specific functionality
-    if feature_slug:
-        check_event_feature(request, context, feature_slug)
-
-    # Add registration status details to context
-    if include_status:
-        registration_status(context["run"], request.user)
-
-    # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, context, event_slug):
-        get_index_event_permissions(context, request, event_slug)
-        context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
-
-    # Set association slug from request or event object
-    if hasattr(request, "assoc"):
-        context["assoc_slug"] = request.assoc["slug"]
-    else:
-        context["assoc_slug"] = context["event"].assoc.slug
-
-    # Configure staff permissions for character management access
-    if has_event_permission(request, context, event_slug, "orga_characters"):
-        context["staff"] = "1"
-        context["skip"] = "1"
-
-    # Finalize run context preparation and return complete context
-    prepare_run(context)
-
-    return context
-
-
-def prepare_run(context):
-    """Prepare run context with visibility and field configurations.
-
-    Args:
-        context (dict): Event context to update
-
-    Side effects:
-        Updates context with run configuration, visibility settings, and writing fields
-    """
-    run_configuration = get_cache_config_run(context["run"])
-
-    if "staff" in context or not get_event_config(context["event"].id, "writing_field_visibility", False, context):
-        context["show_all"] = "1"
-
-        for writing_element in ["character", "faction", "quest", "trait"]:
-            visibility_config_name = f"show_{writing_element}"
-            if visibility_config_name not in run_configuration:
-                run_configuration[visibility_config_name] = {}
-            run_configuration[visibility_config_name].update({"name": 1, "teaser": 1, "text": 1})
-
-        for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
-            additional_config_name = "show_addit"
-            if additional_config_name not in run_configuration:
-                run_configuration[additional_config_name] = {}
-            if additional_feature in context["features"]:
-                run_configuration[additional_config_name][additional_feature] = True
-
-    context.update(run_configuration)
-
-    context["writing_fields"] = get_event_fields_cache(context["event"].id)
-
-
-def get_run(context, event_slug):
-    """Load run and event data from cache and database.
-
-    Args:
-        context (dict): Context dictionary to update
-        s (str): Run slug identifier
-
-    Side effects:
-        Updates context with run and event objects
-
-    Raises:
-        UnknowRunError: If run cannot be found
-    """
-    try:
-        res = get_cache_run(context["a_id"], event_slug)
-        que = Run.objects.select_related("event")
-        fields = [
-            "search",
-            "balance",
-            "event__tagline",
-            "event__where",
-            "event__authors",
-            "event__description",
-            "event__genre",
-            "event__cover",
-            "event__carousel_img",
-            "event__carousel_text",
-            "event__features",
-            "event__background",
-            "event__font",
-            "event__pri_rgb",
-            "event__sec_rgb",
-            "event__ter_rgb",
-        ]
-        que = que.defer(*fields)
-        context["run"] = que.get(pk=res)
-        context["event"] = context["run"].event
-    except Exception as err:
-        raise UnknowRunError() from err
 
 
 def get_character_filter(character, character_registrations, active_filters):
@@ -327,7 +136,7 @@ def has_access_character(request, context):
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
-    member_id = request.user.member.id
+    member_id = context["member"].id
 
     if "owner_id" in context["char"] and context["char"]["owner_id"] == member_id:
         return True
@@ -336,94 +145,6 @@ def has_access_character(request, context):
         return True
 
     return False
-
-
-def check_event_permission(request, event_slug: str, required_permission: str | list[str] | None = None) -> dict:
-    """Check event permissions and prepare management context.
-
-    Validates user permissions for event management operations and prepares
-    the necessary context including features, tutorials, and configuration links.
-
-    Args:
-        request: Django HTTP request object containing user and session data
-        event_slug: Event slug identifier for the target event
-        required_permission: Required permission(s). Can be a single permission string or list of permissions.
-            If None, only basic event access is checked.
-
-    Returns:
-        Dictionary containing event context with management permissions including:
-            - Event and run objects
-            - Available features
-            - Tutorial information
-            - Configuration links
-            - Management flags
-
-    Raises:
-        PermissionError: If user lacks required permissions for the event
-        FeatureError: If required feature is not enabled for the event
-    """
-    # Get basic event context and run information
-    context = get_event_run(request, event_slug)
-
-    # Verify user has the required permissions for this event
-    if not has_event_permission(request, context, event_slug, required_permission):
-        raise PermissionError()
-
-    # Process permission-specific features and configuration
-    if required_permission:
-        # Handle permission lists by taking the first permission
-        if isinstance(required_permission, list):
-            required_permission = required_permission[0]
-
-        # Get feature configuration for this permission
-        (feature_name, tutorial_key, config_section) = get_event_permission_feature(required_permission)
-
-        # Add tutorial information if not already present
-        if "tutorial" not in context:
-            context["tutorial"] = tutorial_key
-
-        # Add configuration link if user has config permissions
-        if config_section and has_event_permission(request, context, event_slug, "orga_config"):
-            context["config"] = reverse("orga_config", args=[context["run"].get_slug(), config_section])
-
-        # Verify required feature is enabled for this event
-        if feature_name != "def" and feature_name not in context["features"]:
-            raise FeatureError(path=request.path, feature=feature_name, run=context["run"].id)
-
-    # Load additional event permissions and management context
-    get_index_event_permissions(context, request, event_slug)
-
-    # Set management page flags
-    context["orga_page"] = 1
-    context["manage"] = 1
-
-    return context
-
-
-def get_index_event_permissions(context, request, event_slug, enforce_check=True):
-    """Load event permissions and roles for management interface.
-
-    Args:
-        context (dict): Context dictionary to update
-        request: Django HTTP request object
-        event_slug (str): Event slug
-        enforce_check (bool): Whether to enforce permission requirements
-
-    Side effects:
-        Updates context with role names and event permissions
-
-    Raises:
-        PermissionError: If enforce_check=True and user has no permissions
-    """
-    (is_organizer, user_event_permissions, role_names) = get_event_roles(request, event_slug)
-    if "assoc_role" in context and 1 in context["assoc_role"]:
-        is_organizer = True
-    if enforce_check and not role_names and not is_organizer:
-        raise PermissionError()
-    if role_names:
-        context["role_names"] = role_names
-    event_features = get_event_features(context["event"].id)
-    context["event_pms"] = get_index_permissions(context, event_features, is_organizer, user_event_permissions, "event")
 
 
 def update_run_plan_on_event_change(instance):

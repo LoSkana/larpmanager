@@ -216,7 +216,7 @@ class OrgaEventForm(MyForm):
     def init_campaign(self, dl: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
         # Set association for parent widget and exclude current instance if editing
-        self.fields["parent"].widget.set_assoc(self.params["a_id"])
+        self.fields["parent"].widget.set_assoc(self.params["association_id"])
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
@@ -1096,7 +1096,7 @@ class OrgaEventRoleForm(MyForm):
         """Initialize form and configure members widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure members widget with association ID from params
-        self.fields["members"].widget.set_assoc(self.params["a_id"])
+        self.fields["members"].widget.set_assoc(self.params["association_id"])
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
@@ -1153,11 +1153,14 @@ class OrgaRunForm(ConfigForm):
         if not self.instance.pk or not self.instance.event:
             event_field = forms.ChoiceField(
                 required=True,
-                choices=[(el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["a_id"], template=False)],
+                choices=[
+                    (el.id, el.name)
+                    for el in Event.objects.filter(assoc_id=self.params["association_id"], template=False)
+                ],
             )
             self.fields = {"event": event_field} | self.fields
             self.fields["event"].widget = EventS2Widget()
-            self.fields["event"].widget.set_assoc(self.params["a_id"])
+            self.fields["event"].widget.set_assoc(self.params["association_id"])
             self.fields["event"].help_text = _("Select the event of this new session")
             self.choose_event = True
             self.page_info = _("Manage new session for an existing event")
@@ -1315,7 +1318,7 @@ class ExeEventForm(OrgaEventForm):
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:
-            qs = Event.objects.filter(assoc_id=self.params["a_id"], template=True)
+            qs = Event.objects.filter(assoc_id=self.params["association_id"], template=True)
             self.fields["template_event"] = forms.ModelChoiceField(
                 required=False,
                 queryset=qs,
@@ -1326,7 +1329,7 @@ class ExeEventForm(OrgaEventForm):
                 widget=TemplateS2Widget(),
             )
 
-            self.fields["template_event"].widget.set_assoc(self.params["a_id"])
+            self.fields["template_event"].widget.set_assoc(self.params["association_id"])
 
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()
@@ -1394,7 +1397,7 @@ class ExeTemplateForm(FeatureForm):
 
         # Set association from params if not already set
         if not instance.assoc_id:
-            instance.assoc_id = self.params["a_id"]
+            instance.assoc_id = self.params["association_id"]
 
         # Save instance before processing features
         if not instance.pk:
@@ -1572,7 +1575,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         self.add_feature_extra(extra_config_fields, feature_fields)
 
         # Retrieve dynamic registration fields for current user and event
-        registration_fields = _get_registration_fields(self.params, self.params["request"].user.member)
+        registration_fields = _get_registration_fields(self.params, self.params["member"])
         field_name_max_length = 20
 
         # Add dynamic fields with truncated names if they exist

@@ -60,8 +60,8 @@ from larpmanager.models.larpmanager import (
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
-from larpmanager.utils.event import get_event_run
-from larpmanager.utils.exceptions import MainPageError, PermissionError
+from larpmanager.utils.base import get_context, get_event_context
+from larpmanager.utils.exceptions import PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 from larpmanager.views.user.member import get_user_backend
@@ -79,7 +79,7 @@ def lm_home(request):
     context = get_lm_contact(request)
     context["index"] = True
 
-    if request.assoc["base_domain"] == "ludomanager.it":
+    if context["base_domain"] == "ludomanager.it":
         return ludomanager(context, request)
 
     context.update(get_cache_lm_home())
@@ -298,6 +298,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         Http404: If feature doesn't exist or isn't marked as overall
         PermissionError: If user lacks exe_features permission for the association
     """
+    context = get_context(request)
     # Retrieve the feature by slug, ensuring it exists
     feature = get_object_or_404(Feature, slug=cod)
 
@@ -306,11 +307,11 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         raise Http404("feature not overall")
 
     # Verify user has permission to manage association features
-    if not has_assoc_permission(request, {}, "exe_features"):
+    if not has_assoc_permission(request, context, "exe_features"):
         raise PermissionError()
 
     # Get the association from request context and activate the feature
-    assoc = get_object_or_404(Association, pk=request.assoc["id"])
+    assoc = get_object_or_404(Association, pk=context["association_id"])
     assoc.features.add(feature)
     assoc.save()
 
@@ -354,7 +355,7 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
         raise Http404("feature overall")
 
     # Get event context and verify user has permission to manage features
-    context = get_event_run(request, event_slug)
+    context = get_event_context(request, event_slug)
     if not has_event_permission(request, {}, context["event"].slug, "orga_features"):
         raise PermissionError()
 
@@ -454,16 +455,17 @@ def ticket(request, reason=""):
     Returns:
         HttpResponse: Rendered ticket form or redirect after successful submission
     """
-    context = {"reason": reason}
+    context = get_context(request)
+    context.update({"reason": reason})
     if request.POST:
         form = LarpManagerTicketForm(request.POST, request.FILES, request=request, context=context)
         if form.is_valid():
             lm_ticket = form.save(commit=False)
-            lm_ticket.assoc_id = request.assoc["id"]
+            lm_ticket.assoc_id = context["association_id"]
             if reason:
                 lm_ticket.reason = reason
-            if request.user.is_authenticated:
-                lm_ticket.member = request.user.member
+            if context["member"]:
+                lm_ticket.member = context["member"]
             lm_ticket.save()
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
@@ -573,11 +575,11 @@ def _join_form(context: dict, request) -> Association | None:
 
             # Create admin role for the new association and assign creator
             (admin_role, created) = AssocRole.objects.get_or_create(assoc=new_association, number=1, name="Admin")
-            admin_role.members.add(request.user.member)
+            admin_role.members.add(context["member"])
             admin_role.save()
 
             # Update membership status to joined for the creator
-            membership = get_user_membership(request.user.member, new_association.id)
+            membership = get_user_membership(context["member"], new_association.id)
             membership.status = MembershipStatus.JOINED
             membership.save()
 
@@ -587,8 +589,8 @@ def _join_form(context: dict, request) -> Association | None:
                 body = _("Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s") % {
                     "name": new_association.name,
                     "slug": new_association.slug,
-                    "user": request.user.member,
-                    "email": request.user.member.email,
+                    "user": context["member"],
+                    "email": context["member"].email,
                 }
                 my_send_mail(subject, body, admin_email)
 
@@ -737,7 +739,7 @@ def privacy(request):
         HttpResponse: Rendered privacy policy page
     """
     context = get_lm_contact(request)
-    context.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
+    context.update({"text": get_assoc_text(context["association_id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", context)
 
 
@@ -788,9 +790,8 @@ def get_lm_contact(request, check_main_site=True):
     Raises:
         MainPageError: If check_main_site=True and user is on association site
     """
-    if check_main_site and request.assoc["id"] > 0:
-        raise MainPageError(request)
-    context = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
+    context = get_context(request, check_main_site=True)
+    context.update({"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"})
     return context
 
 
